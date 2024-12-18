@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -8,7 +8,7 @@ apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ include "argocd.notifications" . }}-slack-bot
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: notifications-slack-bot
   {{- if .Values.commonAnnotations }}
@@ -50,7 +50,7 @@ spec:
       priorityClassName: {{ .Values.notifications.bots.slack.priorityClassName | quote }}
       {{- end }}
       {{- if .Values.notifications.bots.slack.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.notifications.bots.slack.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.notifications.bots.slack.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       containers:
         - name: notifications-slack-bot
@@ -95,9 +95,8 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.notifications.bots.slack.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.notifications.bots.slack.livenessProbe.enabled }}
           livenessProbe:
-            httpGet:
+            tcpSocket:
               port: metrics
-              path: /metrics
             initialDelaySeconds: {{ .Values.notifications.bots.slack.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.notifications.bots.slack.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.notifications.bots.slack.livenessProbe.timeoutSeconds }}
@@ -132,14 +131,22 @@ spec:
           {{- end }}
           {{- if .Values.notifications.bots.slack.resources }}
           resources: {{- toYaml .Values.notifications.bots.slack.resources | nindent 12 }}
+          {{- else if ne .Values.notifications.bots.slack.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.notifications.bots.slack.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if .Values.notifications.bots.slack.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.notifications.bots.slack.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.notifications.bots.slack.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
           {{- if .Values.notifications.bots.slack.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.notifications.bots.slack.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         {{- if .Values.notifications.bots.slack.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.notifications.bots.slack.extraVolumes "context" $) | nindent 8 }}
         {{- end }}

@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -36,10 +36,10 @@ spec:
         {{- end }}
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
         {{- if .Values.redis.podAnnotations }}
-        {{- toYaml .Values.redis.podAnnotations | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.redis.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
         {{- if and .Values.metrics.enabled .Values.metrics.podAnnotations }}
-        {{- toYaml .Values.metrics.podAnnotations | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.metrics.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
     spec:
       hostNetwork: {{ .Values.redis.hostNetwork }}
@@ -48,9 +48,10 @@ spec:
       {{- end }}
       {{- include "redis-cluster.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ include "redis-cluster.serviceAccountName" . }}
+      automountServiceAccountToken: {{ .Values.redis.automountServiceAccountToken }}
       {{- if .Values.redis.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.redis.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -74,6 +75,9 @@ spec:
       {{- if .Values.redis.shareProcessNamespace }}
       shareProcessNamespace: {{ .Values.redis.shareProcessNamespace }}
       {{- end }}
+      {{- if .Values.redis.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.redis.terminationGracePeriodSeconds }}
+      {{- end }}
       {{- if .Values.redis.schedulerName }}
       schedulerName: {{ .Values.redis.schedulerName | quote }}
       {{- end }}
@@ -85,7 +89,7 @@ spec:
           image: {{ include "redis-cluster.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -268,8 +272,9 @@ spec:
           {{- end }}
           {{- end }}
           {{- if .Values.redis.resources }}
-          resources:
-          {{- include "common.tplvalues.render" (dict "value" .Values.redis.resources "context" $) | nindent 12 }}
+          resources: {{- toYaml .Values.redis.resources | nindent 12 }}
+          {{- else if ne .Values.redis.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.redis.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: scripts
@@ -284,8 +289,18 @@ spec:
             - name: default-config
               mountPath: /opt/bitnami/redis/etc/redis-default.conf
               subPath: redis-default.conf
-            - name: redis-tmp-conf
+            - name: empty-dir
               mountPath: /opt/bitnami/redis/etc/
+              subPath: app-conf-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/redis/tmp
+              subPath: app-tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/redis/logs
+              subPath: app-logs-dir
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             {{- if .Values.tls.enabled }}
             - name: redis-certificates
               mountPath: /opt/bitnami/redis/certs
@@ -299,7 +314,7 @@ spec:
           image: {{ template "redis-cluster.metrics.image" . }}
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
           {{- if .Values.metrics.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.metrics.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.metrics.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -340,11 +355,16 @@ spec:
             - name: REDIS_EXPORTER_TLS_CA_CERT_FILE
               value: {{ template "redis-cluster.tlsCACert" . }}
             {{- end }}
+            - name: REDIS_EXPORTER_WEB_LISTEN_ADDRESS
+              value: {{ printf ":%v" .Values.metrics.containerPorts.http }}
             {{- if .Values.metrics.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.metrics.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
           {{- if or .Values.usePasswordFile .Values.tls.enabled }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             {{- if .Values.usePasswordFile }}
             - name: redis-password
               mountPath: /opt/bitnami/redis/secrets/
@@ -357,9 +377,12 @@ spec:
           {{- end }}
           ports:
             - name: http-metrics
-              containerPort: 9121
-          resources:
-        {{- toYaml .Values.metrics.resources | nindent 12 }}
+              containerPort: {{ .Values.metrics.containerPorts.http }}
+          {{- if .Values.metrics.resources }}
+          resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
+          {{- else if ne .Values.metrics.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.metrics.resourcesPreset) | nindent 12 }}
+          {{- end }}
         {{- end }}
         {{- if .Values.redis.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.redis.sidecars "context" $ ) | nindent 8 }}
@@ -374,9 +397,15 @@ spec:
           command: ["/bin/chown", "-R", "{{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}", "{{ .Values.persistence.path }}"]
           securityContext:
             runAsUser: 0
-          resources:
-          {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- if .Values.volumePermissions.resources }}
+          resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
+          {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: redis-data
               mountPath: {{ .Values.persistence.path }}
               subPath: {{ .Values.persistence.subPath }}
@@ -385,17 +414,23 @@ spec:
         - name: init-sysctl
           image: {{ template "redis-cluster.sysctl.image" . }}
           imagePullPolicy: {{ default "" .Values.sysctlImage.pullPolicy | quote }}
-          resources:
-          {{- toYaml .Values.sysctlImage.resources | nindent 12 }}
+          {{- if .Values.sysctlImage.resources }}
+          resources: {{- toYaml .Values.sysctlImage.resources | nindent 12 }}
+          {{- else if ne .Values.sysctlImage.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.sysctlImage.resourcesPreset) | nindent 12 }}
+          {{- end }}
           {{- if .Values.sysctlImage.mountHostSys }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: host-sys
               mountPath: /host-sys
           {{- end }}
           command:
           {{- toYaml .Values.sysctlImage.command | nindent 12 }}
           {{- if .Values.sysctlImage.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.sysctlImage.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.sysctlImage.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
         {{- end }}
         {{- if .Values.redis.initContainers }}
@@ -423,7 +458,7 @@ spec:
           hostPath:
             path: /sys
         {{- end }}
-        - name: redis-tmp-conf
+        - name: empty-dir
           emptyDir: {}
         {{- if .Values.redis.extraVolumes }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.redis.extraVolumes "context" $ ) | nindent 8 }}
@@ -445,9 +480,14 @@ spec:
   {{- end }}
   {{- if .Values.persistence.enabled }}
   volumeClaimTemplates:
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         name: redis-data
         labels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 10 }}
+        {{- if .Values.persistence.labels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.persistence.labels "context" $) | nindent 10 }}
+        {{- end }}
         {{- if .Values.persistence.annotations }}
         annotations: {{- include "common.tplvalues.render" (dict "value" .Values.persistence.annotations "context" $) | nindent 10 }}
         {{- end }}

@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -42,6 +42,7 @@ spec:
       schedulerName: {{ .Values.configsvr.schedulerName | quote }}
       {{- end }}
       serviceAccountName: {{ include "mongodb-sharded.serviceAccountName" (dict "component" "configsvr" "value" .Values.configsvr.serviceAccount "context" $) }}
+      automountServiceAccountToken: {{ .Values.configsvr.automountServiceAccountToken }}
       {{- if .Values.configsvr.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.configsvr.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -66,7 +67,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.configsvr.topologySpreadConstraints "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.configsvr.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.configsvr.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.configsvr.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.configsvr.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.configsvr.terminationGracePeriodSeconds }}
@@ -87,13 +88,20 @@ spec:
               find {{ .Values.configsvr.persistence.mountPath }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs -r chown -R {{ .Values.configsvr.containerSecurityContext.runAsUser }}:{{ .Values.configsvr.podSecurityContext.fsGroup }}
           securityContext:
             runAsUser: 0
-          resources: {{ toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- if .Values.volumePermissions.resources }}
+          resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
+          {{- end }}
           volumeMounts:
             - name: datadir
               mountPath: {{ .Values.configsvr.persistence.mountPath }}
               {{- if .Values.configsvr.persistence.subPath }}
               subPath: {{ include "common.tplvalues.render" (dict "value" .Values.configsvr.persistence.subPath "context" $) }}
               {{- end }}
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
         {{- end }}
         {{- with .Values.configsvr.initContainers }}
         {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 8 }}
@@ -106,7 +114,7 @@ spec:
           image: {{ include "mongodb-sharded.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           {{- if .Values.configsvr.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.configsvr.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.configsvr.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           ports:
             - containerPort: {{ .Values.common.containerPorts.mongodb }}
@@ -247,6 +255,21 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" $.Values.configsvr.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/mongodb/conf
+              subPath: app-conf-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/mongodb/tmp
+              subPath: app-tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/mongodb/logs
+              subPath: app-logs-dir
+            - name: empty-dir
+              mountPath: /.mongodb
+              subPath: app-mongosh-dir
             - name: replicaset-entrypoint-configmap
               mountPath: /entrypoint
             - name: datadir
@@ -276,13 +299,17 @@ spec:
             {{- if .Values.configsvr.extraVolumeMounts }}
               {{- include "common.tplvalues.render" ( dict "value" .Values.configsvr.extraVolumeMounts "context" $ ) | nindent 12 }}
             {{- end }}
+          {{- if .Values.configsvr.resources }}
           resources: {{- toYaml .Values.configsvr.resources | nindent 12 }}
+          {{- else if ne .Values.configsvr.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.configsvr.resourcesPreset) | nindent 12 }}
+          {{- end }}
         {{- if .Values.metrics.enabled }}
         - name: metrics
           image: {{ include "mongodb-sharded.metrics.image" . }}
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
           {{- if .Values.metrics.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.metrics.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.metrics.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           env:
           {{- if .Values.auth.enabled }}
@@ -313,11 +340,14 @@ spec:
               {{- end }}
               /bin/mongodb_exporter --collect-all --compatible-mode --web.listen-address ":{{ .Values.metrics.containerPorts.metrics }}" --mongodb.uri mongodb://$(echo $MONGODB_ROOT_USER):$(echo $MONGODB_ROOT_PASSWORD | sed -r "s/@/%40/g;s/:/%3A/g")@localhost:{{ .Values.common.containerPorts.mongodb }}/admin{{ ternary "?ssl=true" "" $.Values.metrics.useTLS }} {{ .Values.metrics.extraArgs }}
           {{- end }}
-          {{- if .Values.auth.usePasswordFile }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            {{- if .Values.auth.usePasswordFile }}
             - name: secrets
               mountPath: /bitnami/mongodb/secrets/
-          {{- end }}
+            {{- end }}
           ports:
             - name: metrics
               containerPort: {{ .Values.metrics.containerPorts.metrics }}
@@ -326,8 +356,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.metrics.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metrics.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /metrics
+            tcpSocket:
               port: metrics
           {{- end }}
           {{- if .Values.metrics.customReadinessProbe }}
@@ -346,7 +375,11 @@ spec:
               port: metrics
           {{- end }}
           {{- end }}
-          resources: {{ toYaml .Values.metrics.resources | nindent 12 }}
+          {{- if .Values.metrics.resources }}
+          resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
+          {{- else if ne .Values.metrics.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.metrics.resourcesPreset) | nindent 12 }}
+          {{- end }}
         {{- end }}
         {{- with .Values.configsvr.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 8 }}
@@ -355,6 +388,8 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: replicaset-entrypoint-configmap
           configMap:
             name: {{ printf "%s-replicaset-entrypoint" (include "common.names.fullname" .) }}
@@ -386,9 +421,19 @@ spec:
         {{- if .Values.configsvr.extraVolumes }}
           {{- include "common.tplvalues.render" ( dict "value" .Values.configsvr.extraVolumes "context" $ ) | nindent 8 }}
         {{- end }}
-  {{- if and .Values.configsvr.persistence.enabled }}
+  {{- if not .Values.configsvr.persistence.enabled }}
+        - name: datadir
+          emptyDir: {}
+  {{- else }}
+  {{- if .Values.configsvr.persistentVolumeClaimRetentionPolicy.enabled }}
+  persistentVolumeClaimRetentionPolicy:
+    whenDeleted: {{ .Values.configsvr.persistentVolumeClaimRetentionPolicy.whenDeleted }}
+    whenScaled: {{ .Values.configsvr.persistentVolumeClaimRetentionPolicy.whenScaled }}
+  {{- end }}
   volumeClaimTemplates:
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         name: datadir
         {{- if or .Values.configsvr.persistence.annotations .Values.commonAnnotations .Values.configsvr.persistence.resourcePolicy }}
         {{- if or .Values.commonAnnotations .Values.configsvr.persistence.annotations .Values.configsvr.persistence.resourcePolicy }}
@@ -398,9 +443,6 @@ spec:
           {{- end }}
           {{- if .Values.configsvr.persistence.annotations }}
           {{- include "common.tplvalues.render" ( dict "value" .Values.configsvr.persistence.annotations "context" $) | nindent 10 }}
-          {{- end }}
-          {{- if .Values.configsvr.persistence.resourcePolicy }}
-            helm.sh/resource-policy: {{ .Values.configsvr.persistence.resourcePolicy | quote }}
           {{- end }}
         {{- end }}
         {{- end }}
@@ -413,8 +455,5 @@ spec:
           requests:
             storage: {{ .Values.configsvr.persistence.size | quote }}
         {{- include "common.storage.class" (dict "persistence" .Values.configsvr.persistence "global" .Values.global) | nindent 8 }}
-  {{- else }}
-        - name: datadir
-          emptyDir: {}
   {{- end }}
 {{- end }}

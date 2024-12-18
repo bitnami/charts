@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -34,6 +34,7 @@ spec:
         app.kubernetes.io/component: envoy
     spec:
       {{- include "common.images.pullSecrets" ( dict "images" (list .Values.contour.image .Values.envoy.image) "global" .Values.global) | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.envoy.automountServiceAccountToken }}
       {{- if .Values.envoy.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -58,7 +59,7 @@ spec:
       hostNetwork: {{ .Values.envoy.hostNetwork }}
       dnsPolicy: {{ .Values.envoy.dnsPolicy }}
       {{- if .Values.envoy.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.envoy.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.envoy.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       containers:
         {{- if .Values.envoy.shutdownManager.enabled }}
@@ -67,6 +68,7 @@ spec:
           args:
             - envoy
             - shutdown-manager
+            - --serve-port={{ .Values.envoy.shutdownManager.containerPorts.http }}
             {{- if .Values.envoy.shutdownManager.extraArgs }}
             {{- include "common.tplvalues.render" (dict "value" .Values.envoy.shutdownManager.extraArgs "context" $) | nindent 12 }}
             {{- end }}
@@ -88,7 +90,7 @@ spec:
             {{- end }}
           {{- end }}
           {{- if .Values.envoy.shutdownManager.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.envoy.shutdownManager.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.envoy.shutdownManager.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.envoy.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.lifecycleHooks "context" $) | nindent 12 }}
@@ -102,13 +104,60 @@ spec:
                   - shutdown
           {{- end }}
           name: shutdown-manager
+          {{- if .Values.envoy.shutdownManager.resources }}
           resources: {{- toYaml .Values.envoy.shutdownManager.resources | nindent 12 }}
-          volumeMounts:
-            - name: envoy-admin
-              mountPath: /admin
-          {{- if .Values.envoy.extraVolumeMounts }}
-            {{- include "common.tplvalues.render" ( dict "value" .Values.envoy.extraVolumeMounts "context" $ ) | nindent 12 }}
+          {{- else if ne .Values.envoy.shutdownManager.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.envoy.shutdownManager.resourcesPreset) | nindent 12 }}
           {{- end }}
+          {{- if .Values.envoy.shutdownManager.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.shutdownManager.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.envoy.shutdownManager.startupProbe.enabled }}
+          startupProbe:
+            exec:
+              command:
+                - pgrep
+                - contour
+            initialDelaySeconds: {{ .Values.envoy.shutdownManager.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.envoy.shutdownManager.startupProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.envoy.shutdownManager.startupProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.envoy.shutdownManager.startupProbe.successThreshold }}
+            failureThreshold: {{ .Values.envoy.shutdownManager.startupProbe.failureThreshold }}
+          {{- end }}
+          {{- if .Values.envoy.shutdownManager.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.shutdownManager.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.envoy.shutdownManager.livenessProbe.enabled }}
+          livenessProbe:
+            tcpSocket:
+              port: http-shutdown
+            initialDelaySeconds: {{ .Values.envoy.shutdownManager.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.envoy.shutdownManager.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.envoy.shutdownManager.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.envoy.shutdownManager.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.envoy.shutdownManager.livenessProbe.failureThreshold }}
+          {{- end }}
+          {{- if .Values.envoy.shutdownManager.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.shutdownManager.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.envoy.shutdownManager.readinessProbe.enabled }}
+          readinessProbe:
+            httpGet:
+              port: http-shutdown
+              path: /healthz
+            initialDelaySeconds: {{ .Values.envoy.shutdownManager.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.envoy.shutdownManager.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.envoy.shutdownManager.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.envoy.shutdownManager.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.envoy.shutdownManager.readinessProbe.failureThreshold }}
+          {{- end }}
+          ports:
+            - containerPort: {{ .Values.envoy.shutdownManager.containerPorts.http }}
+              name: http-shutdown
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /admin
+              subPath: app-admin-dir
+            {{- if .Values.envoy.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.envoy.extraVolumeMounts "context" $ ) | nindent 12 }}
+            {{- end }}
         {{- end }}
         - name: envoy
           {{- if .Values.envoy.command }}
@@ -133,7 +182,7 @@ spec:
           image: {{ include "common.images.image" ( dict "imageRoot" .Values.envoy.image "global" .Values.global ) }}
           imagePullPolicy: {{ .Values.envoy.image.pullPolicy }}
           {{- if .Values.envoy.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.envoy.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.envoy.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           env:
             - name: CONTOUR_NAMESPACE
@@ -162,8 +211,7 @@ spec:
           {{- end }}
           ports:
             - containerPort: {{ .Values.envoy.containerPorts.http }}
-              # Use of .Values.envoy.useHostPort as boolean is DEPRECATED. Support will be removed in upcoming versions.
-              {{- if or (and (kindIs "boolean" .Values.envoy.useHostPort) .Values.envoy.useHostPort) (and (kindIs "map" .Values.envoy.useHostPort) .Values.envoy.useHostPort.http) }}
+              {{- if .Values.envoy.useHostPort.http }}
               hostPort: {{ .Values.envoy.hostPorts.http }}
               {{- end }}
               {{- if .Values.envoy.useHostIP }}
@@ -172,8 +220,7 @@ spec:
               name: http
               protocol: TCP
             - containerPort: {{ .Values.envoy.containerPorts.https }}
-              # Use of .Values.envoy.useHostPort as boolean is DEPRECATED. Support will be removed in upcoming versions.
-              {{- if or (and (kindIs "boolean" .Values.envoy.useHostPort) .Values.envoy.useHostPort) (and (kindIs "map" .Values.envoy.useHostPort) .Values.envoy.useHostPort.https) }}
+              {{- if .Values.envoy.useHostPort.https }}
               hostPort: {{ .Values.envoy.hostPorts.https }}
               {{- end }}
               {{- if .Values.envoy.useHostIP }}
@@ -182,8 +229,7 @@ spec:
               name: https
               protocol: TCP
             - containerPort: {{ .Values.envoy.containerPorts.metrics }}
-              # Use of .Values.envoy.useHostPort as boolean is DEPRECATED. Support will be removed in upcoming versions.
-              {{- if or (and (kindIs "boolean" .Values.envoy.useHostPort) .Values.envoy.useHostPort) (and (kindIs "map" .Values.envoy.useHostPort) .Values.envoy.useHostPort.metrics) }}
+              {{- if .Values.envoy.useHostPort.metrics }}
               hostPort: {{ .Values.envoy.hostPorts.metrics }}
               {{- end }}
               {{- if .Values.envoy.useHostIP }}
@@ -191,7 +237,9 @@ spec:
               {{- end }}
               name: metrics
               protocol: TCP
-          {{- if .Values.envoy.readinessProbe.enabled }}
+          {{- if .Values.envoy.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.envoy.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
               path: /ready
@@ -204,8 +252,7 @@ spec:
           {{- end }}
           {{- if .Values.envoy.livenessProbe.enabled }}
           livenessProbe:
-            httpGet:
-              path: /ready
+            tcpSocket:
               port: {{ .Values.envoy.containerPorts.metrics }}
             initialDelaySeconds: {{ .Values.envoy.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.envoy.livenessProbe.periodSeconds }}
@@ -213,14 +260,21 @@ spec:
             successThreshold: {{ .Values.envoy.livenessProbe.successThreshold }}
             failureThreshold: {{ .Values.envoy.livenessProbe.failureThreshold }}
           {{- end }}
-          resources: {{ toYaml .Values.envoy.resources | nindent 12 }}
+          {{- if .Values.envoy.resources }}
+          resources: {{- toYaml .Values.envoy.resources | nindent 12 }}
+          {{- else if ne .Values.envoy.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.envoy.resourcesPreset) | nindent 12 }}
+          {{- end }}
           volumeMounts:
-            - name: envoy-config
+            - name: empty-dir
               mountPath: /config
+              subPath: app-conf-dir
             - name: envoycert
               mountPath: /certs
-            - name: envoy-admin
+              readOnly: true
+            - name: empty-dir
               mountPath: /admin
+              subPath: app-admin-dir
             {{- if .Values.envoy.extraVolumeMounts }}
               {{- include "common.tplvalues.render" ( dict "value" .Values.envoy.extraVolumeMounts "context" $ ) | nindent 12 }}
             {{- end }}
@@ -229,7 +283,7 @@ spec:
               {{- if .Values.envoy.shutdownManager.enabled }}
               httpGet:
                 path: /shutdown
-                port: {{ .Values.envoy.shutdownManager.port }}
+                port: {{ coalesce .Values.envoy.shutdownManager.port .Values.envoy.shutdownManager.containerPorts.http }}
                 scheme: HTTP
               {{- else }}
               exec:
@@ -259,15 +313,21 @@ spec:
           image: {{ include "common.images.image" ( dict "imageRoot" .Values.contour.image "global" .Values.global) }}
           imagePullPolicy: {{ .Values.contour.image.pullPolicy }}
           name: envoy-initconfig
+          {{- if .Values.envoy.resources }}
           resources: {{ toYaml .Values.envoy.resources | nindent 12 }}
+          {{- else if ne .Values.envoy.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.envoy.resourcesPreset) | nindent 12 }}
+          {{- end }}
           volumeMounts:
-            - name: envoy-config
+            - name: empty-dir
               mountPath: /config
+              subPath: app-conf-dir
             - name: envoycert
               mountPath: /certs
               readOnly: true
-            - name: envoy-admin
+            - name: empty-dir
               mountPath: /admin
+              subPath: app-admin-dir
             {{- if .Values.envoy.extraVolumeMounts }}
               {{- include "common.tplvalues.render" ( dict "value" .Values.envoy.extraVolumeMounts "context" $ ) | nindent 12 }}
             {{- end }}
@@ -291,17 +351,14 @@ spec:
             {{- end }}
           {{- end }}
           {{- if .Values.envoy.initConfig.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.envoy.initConfig.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.envoy.initConfig.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
       {{- if .Values.envoy.initContainers }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.envoy.initContainers "context" $ ) | nindent 8 }}
       {{- end }}
-      automountServiceAccountToken: {{ .Values.envoy.serviceAccount.automountServiceAccountToken }}
       serviceAccountName: {{ include "envoy.envoyServiceAccountName" . }}
       volumes:
-        - name: envoy-admin
-          emptyDir: {}
-        - name: envoy-config
+        - name: empty-dir
           emptyDir: {}
         - name: envoycert
           secret:

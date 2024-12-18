@@ -14,7 +14,7 @@ tracking:
       http: 80
   serviceAccount:
     create: true
-    automountServiceAccountToken: true
+  automountServiceAccountToken: true
   containerSecurityContext:
     enabled: true
     runAsUser: 1002

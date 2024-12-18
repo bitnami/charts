@@ -1,0 +1,28 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.aggregator.enabled .Values.aggregator.pdb.create }}
+apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "common.names.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: aggregator
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if .Values.aggregator.pdb.minAvailable }}
+  minAvailable: {{ .Values.aggregator.pdb.minAvailable }}
+  {{- end  }}
+  {{- if or .Values.aggregator.pdb.maxUnavailable (not .Values.aggregator.pdb.minAvailable) }}
+  maxUnavailable: {{ .Values.aggregator.pdb.maxUnavailable | default 1 }}
+  {{- end  }}
+  {{- $podLabels := include "common.tplvalues.merge" (dict "values" (list .Values.aggregator.podLabels .Values.commonLabels) "context" .) }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/component: aggregator
+{{- end }}

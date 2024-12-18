@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -18,6 +18,9 @@ spec:
   type: {{ .Values.service.type }}
   {{- if not (empty .Values.service.clusterIP) }}
   clusterIP: {{ .Values.service.clusterIP }}
+  {{- end }}
+  {{- if and (eq .Values.service.type "LoadBalancer") (not (empty .Values.service.loadBalancerClass)) }}
+  loadBalancerClass: {{ .Values.service.loadBalancerClass }}
   {{- end }}
   {{- if eq .Values.service.type "LoadBalancer" }}
   {{- if not (empty .Values.service.loadBalancerIP) }}

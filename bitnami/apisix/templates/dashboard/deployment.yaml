@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -47,6 +47,7 @@ spec:
     spec:
       serviceAccountName: {{ template "apisix.dashboard.serviceAccountName" . }}
       {{- include "apisix.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.dashboard.automountServiceAccountToken }}
       {{- if .Values.dashboard.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.dashboard.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -74,7 +75,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.dashboard.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.dashboard.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.dashboard.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.dashboard.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.dashboard.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.dashboard.terminationGracePeriodSeconds }}
@@ -90,7 +91,7 @@ spec:
           image: {{ template "apisix.dashboard.image" . }}
           imagePullPolicy: {{ .Values.dashboard.image.pullPolicy }}
           {{- if .Values.dashboard.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.dashboard.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.dashboard.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -123,6 +124,8 @@ spec:
             {{- end }}
           {{- if .Values.dashboard.resources }}
           resources: {{- toYaml .Values.dashboard.resources | nindent 12 }}
+          {{- else if ne .Values.dashboard.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.dashboard.resourcesPreset) | nindent 12 }}
           {{- end }}
           ports:
             - name: http
@@ -134,8 +137,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.dashboard.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.dashboard.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.dashboard.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /ping
+            tcpSocket:
               port: http
           {{- end }}
           {{- if .Values.dashboard.customReadinessProbe }}
@@ -159,12 +161,16 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.dashboard.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - name: rendered-config
+            - name: empty-dir
               mountPath: /bitnami/apisix/conf
-            - name: log-dir
+              subPath: app-conf-dir
+            - name: empty-dir
               mountPath: /opt/bitnami/apisix-dashboard/logs
+              subPath: app-logs-dir
+            {{- if .Values.dashboard.tls.enabled }}
             - name: certs
               mountPath: /bitnami/certs
+            {{- end }}
          {{- if .Values.dashboard.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.dashboard.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -185,9 +191,7 @@ spec:
           secret:
             secretName: {{ template "apisix.dashboard.tlsSecretName" . }}
         {{- end }}
-        - name: log-dir
-          emptyDir: {}
-        - name: rendered-config
+        - name: empty-dir
           emptyDir: {}
         {{- if .Values.dashboard.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.dashboard.extraVolumes "context" $) | nindent 8 }}

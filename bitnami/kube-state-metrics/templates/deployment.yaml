@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -28,6 +28,7 @@ spec:
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
     spec:
       {{- include "kube-state-metrics.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.automountServiceAccountToken }}
       {{- if .Values.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -56,7 +57,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
@@ -70,7 +71,7 @@ spec:
           image: {{ template "kube-state-metrics.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           {{- if .Values.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -109,6 +110,9 @@ spec:
             {{- end }}
             {{- if .Values.kubeResources.jobs }}
             - --resources=jobs
+            {{- end }}
+            {{- if .Values.kubeResources.leases }}
+            - --resources=leases
             {{- end }}
             {{- if .Values.kubeResources.limitranges }}
             - --resources=limitranges
@@ -170,6 +174,8 @@ spec:
             {{- if .Values.namespaces }}
             - --namespaces={{- include "common.tplvalues.render" ( dict "value" .Values.namespaces "context" $ ) }}
             {{- end }}
+            - --port={{ .Values.containerPorts.http }}
+            - --telemetry-port={{ coalesce .Values.selfMonitor.telemetryPort .Values.containerPorts.telemetry }}
             {{- range $key, $value := .Values.extraArgs }}
             {{- if $value }}
             - --{{ $key }}={{ $value }}
@@ -195,23 +201,22 @@ spec:
             {{- end }}
           {{- if .Values.resources }}
           resources: {{- toYaml .Values.resources | nindent 12 }}
+          {{- else if ne .Values.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.resourcesPreset) | nindent 12 }}
           {{- end }}
           ports:
             - name: http
-              containerPort: 8080
+              containerPort: {{ .Values.containerPorts.http }}
               protocol: TCP
-            {{- if .Values.selfMonitor.enabled }}
             - name: metrics
-              containerPort: {{ .Values.selfMonitor.telemetryPort | default 8081 }}
+              containerPort: {{ coalesce .Values.selfMonitor.telemetryPort .Values.containerPorts.telemetry }}
               protocol: TCP
-            {{- end }}   
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /healthz
+            tcpSocket:
               port: http
           {{- end }}
           {{- if .Values.customReadinessProbe }}
@@ -230,12 +235,19 @@ spec:
               port: http
           {{- end }}
           {{- end }}
-          {{- if .Values.extraVolumeMounts }}
-          volumeMounts: {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
-          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            {{- if .Values.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
         {{- if .Values.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
-      {{- if .Values.extraVolumes }}
-      volumes: {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
-      {{- end }}
+      volumes:
+        - name: empty-dir
+          emptyDir: {}
+        {{- if .Values.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}

@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -7,8 +7,8 @@ SPDX-License-Identifier: APACHE-2.0
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: {{ include "common.names.fullname" . }}-compactor
-  namespace: {{ .Release.Namespace | quote }}
+  name: {{ include "thanos.compactor.fullname" . }}
+  namespace: {{ include "common.names.namespace" . }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: compactor
   {{- if .Values.commonAnnotations }}
@@ -16,6 +16,7 @@ metadata:
   {{- end }}
 spec:
   replicas: 1
+  revisionHistoryLimit: {{ .Values.compactor.revisionHistoryLimit }}
   {{- if .Values.compactor.updateStrategy }}
   strategy: {{- toYaml .Values.compactor.updateStrategy | nindent 4 }}
   {{- end }}

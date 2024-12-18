@@ -1,12 +1,13 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
 {{- if and .Values.sourceController.enabled .Values.sourceController.rbac.create }}
+{{- $bindingKind := ternary "ClusterRoleBinding" "RoleBinding" .Values.sourceController.watchAllNamespaces }}
 {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.sourceController.image "chart" .Chart ) ) }}
 {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
-kind: ClusterRoleBinding
+kind: {{ $bindingKind }}
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 metadata:
   name: {{ printf "%s-manager" (include "flux.source-controller.fullname.namespace" .) | trunc 63 | trimSuffix "-" }}
@@ -25,7 +26,7 @@ subjects:
     name: {{ template "flux.source-controller.serviceAccountName" . }}
     namespace: {{ include "common.names.namespace" . | quote }}
 ---
-kind: ClusterRoleBinding
+kind: {{ $bindingKind }}
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 metadata:
   name: {{ printf "%s-bucket-editor" (include "flux.source-controller.fullname.namespace" .) | trunc 63 | trimSuffix "-" }}
@@ -44,7 +45,7 @@ subjects:
     name: {{ template "flux.source-controller.serviceAccountName" . }}
     namespace: {{ include "common.names.namespace" . | quote }}
 ---
-kind: ClusterRoleBinding
+kind: {{ $bindingKind }}
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 metadata:
   name: {{ printf "%s-bucket-viewer" (include "flux.source-controller.fullname.namespace" .) | trunc 63 | trimSuffix "-" }}
@@ -63,7 +64,7 @@ subjects:
     name: {{ template "flux.source-controller.serviceAccountName" . }}
     namespace: {{ include "common.names.namespace" . | quote }}
 ---
-kind: ClusterRoleBinding
+kind: {{ $bindingKind }}
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 metadata:
   name: {{ printf "%s-gitrepository-editor" (include "flux.source-controller.fullname.namespace" .) | trunc 63 | trimSuffix "-" }}
@@ -82,7 +83,7 @@ subjects:
     name: {{ template "flux.source-controller.serviceAccountName" . }}
     namespace: {{ include "common.names.namespace" . | quote }}
 ---
-kind: ClusterRoleBinding
+kind: {{ $bindingKind }}
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 metadata:
   name: {{ printf "%s-gitrepository-viewer" (include "flux.source-controller.fullname.namespace" .) | trunc 63 | trimSuffix "-" }}
@@ -101,7 +102,7 @@ subjects:
     name: {{ template "flux.source-controller.serviceAccountName" . }}
     namespace: {{ include "common.names.namespace" . | quote }}
 ---
-kind: ClusterRoleBinding
+kind: {{ $bindingKind }}
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 metadata:
   name: {{ printf "%s-helmchart-editor" (include "flux.source-controller.fullname.namespace" .) | trunc 63 | trimSuffix "-" }}
@@ -120,7 +121,7 @@ subjects:
     name: {{ template "flux.source-controller.serviceAccountName" . }}
     namespace: {{ include "common.names.namespace" . | quote }}
 ---
-kind: ClusterRoleBinding
+kind: {{ $bindingKind }}
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 metadata:
   name: {{ printf "%s-helmchart-viewer" (include "flux.source-controller.fullname.namespace" .) | trunc 63 | trimSuffix "-" }}
@@ -139,7 +140,7 @@ subjects:
     name: {{ template "flux.source-controller.serviceAccountName" . }}
     namespace: {{ include "common.names.namespace" . | quote }}
 ---
-kind: ClusterRoleBinding
+kind: {{ $bindingKind }}
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 metadata:
   name: {{ printf "%s-helmrepository-editor" (include "flux.source-controller.fullname.namespace" .) | trunc 63 | trimSuffix "-" }}
@@ -158,7 +159,7 @@ subjects:
     name: {{ template "flux.source-controller.serviceAccountName" . }}
     namespace: {{ include "common.names.namespace" . | quote }}
 ---
-kind: ClusterRoleBinding
+kind: {{ $bindingKind }}
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 metadata:
   name: {{ printf "%s-helmrepository-viewer" (include "flux.source-controller.fullname.namespace" .) | trunc 63 | trimSuffix "-" }}
@@ -177,7 +178,7 @@ subjects:
     name: {{ template "flux.source-controller.serviceAccountName" . }}
     namespace: {{ include "common.names.namespace" . | quote }}
 ---
-kind: ClusterRoleBinding
+kind: {{ $bindingKind }}
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 metadata:
   name: {{ printf "%s-ocirepository-editor" (include "flux.source-controller.fullname.namespace" .) | trunc 63 | trimSuffix "-" }}
@@ -196,7 +197,7 @@ subjects:
     name: {{ template "flux.source-controller.serviceAccountName" . }}
     namespace: {{ include "common.names.namespace" . | quote }}
 ---
-kind: ClusterRoleBinding
+kind: {{ $bindingKind }}
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 metadata:
   name: {{ printf "%s-ocirepository-viewer" (include "flux.source-controller.fullname.namespace" .) | trunc 63 | trimSuffix "-" }}

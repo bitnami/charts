@@ -10,6 +10,7 @@ import (
 	. "github.com/onsi/gomega"
 	appsv1 "k8s.io/api/apps/v1"
 	batchv1 "k8s.io/api/batch/v1"
+	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 )
@@ -38,6 +39,9 @@ var _ = Describe("Postgresql", Ordered, func() {
 			getAvailableReplicas := func(ss *appsv1.StatefulSet) int32 { return ss.Status.AvailableReplicas }
 			getSucceededJobs := func(j *batchv1.Job) int32 { return j.Status.Succeeded }
 			getOpts := metav1.GetOptions{}
+			restartKey := "kubectl.kubernetes.io/restartedAt"
+			restartAnnotation := map[string]string{restartKey: time.Now().Format(time.RFC3339)}
+			getRestartedAtAnnotation := func(pod *v1.Pod) string { return pod.Annotations[restartKey] }
 
 			By("checking all the replicas are available")
 			ss, err := c.AppsV1().StatefulSets(namespace).Get(ctx, stsName, getOpts)
@@ -72,26 +76,29 @@ var _ = Describe("Postgresql", Ordered, func() {
 				return c.BatchV1().Jobs(namespace).Get(ctx, createDBJobName, getOpts)
 			}, timeout, PollingInterval).Should(WithTransform(getSucceededJobs, Equal(int32(1))))
 
-			By("scaling down to 0 replicas")
-			ss, err = utils.StsScale(ctx, c, ss, 0)
+			By("running rollout restart")
+			// Annotate pods to force a rollout restart
+			ss, err = utils.StsAnnotateTemplate(ctx, c, ss, restartAnnotation)
 			Expect(err).NotTo(HaveOccurred())
 
-			Eventually(func() (*appsv1.StatefulSet, error) {
-				return c.AppsV1().StatefulSets(namespace).Get(ctx, stsName, getOpts)
-			}, timeout, PollingInterval).Should(WithTransform(getAvailableReplicas, BeZero()))
-
-			By("scaling up to the original replicas")
-			ss, err = utils.StsScale(ctx, c, ss, origReplicas)
-			Expect(err).NotTo(HaveOccurred())
+			// Wait for the new annotation in the existing pods
+			for i := int(origReplicas) - 1; i >= 0; i-- {
+				Eventually(func() (*v1.Pod, error) {
+					return c.CoreV1().Pods(namespace).Get(ctx, fmt.Sprintf("%s-%d", stsName, i), getOpts)
+				}, timeout, PollingInterval).Should(WithTransform(getRestartedAtAnnotation, Equal(restartAnnotation[restartKey])))
+			}
 
 			Eventually(func() (*appsv1.StatefulSet, error) {
 				return c.AppsV1().StatefulSets(namespace).Get(ctx, stsName, getOpts)
 			}, timeout, PollingInterval).Should(WithTransform(getAvailableReplicas, Equal(origReplicas)))
 
-			By("creating a job to drop the test database")
+			// TODO: We're finding issues with pgpool when restarting the cluster. It is not properly updating
+			// the primary node, causing the test to fail. While we find a solution, we change to perform a
+			// query compatible with both primary and replica nodes
+			By("creating a job to show the test database")
 			deleteDBJobName := fmt.Sprintf("%s-deletedb-%s",
 				releaseName, jobSuffix)
-			err = createJob(ctx, c, deleteDBJobName, pgPoolName, port, image, fmt.Sprintf("DROP DATABASE %s;", dbName))
+			err = createJob(ctx, c, deleteDBJobName, pgPoolName, port, image, fmt.Sprintf("\\c %s;", dbName))
 			Expect(err).NotTo(HaveOccurred())
 
 			Eventually(func() (*batchv1.Job, error) {

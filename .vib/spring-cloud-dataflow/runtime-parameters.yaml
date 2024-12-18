@@ -3,7 +3,8 @@ waitForBackends:
     enabled: true
     runAsUser: 1002
 server:
-  containerPort: 8081
+  containerPorts: 
+    http: 8081
   configuration:
     batchEnabled: true
     accountName: test_default
@@ -15,7 +16,8 @@ server:
     runAsUser: 1002
   service:
     type: LoadBalancer
-    port: 80
+    ports:
+      http: 80
 skipper:
   enabled: true
   podSecurityContext:
@@ -26,7 +28,8 @@ skipper:
     runAsUser: 1002
   service:
     type: ClusterIP
-    port: 80
+    ports: 
+      http: 80
 deployer:
   podSecurityContext:
     enabled: true

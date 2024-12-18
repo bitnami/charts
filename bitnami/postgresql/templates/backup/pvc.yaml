@@ -1,14 +1,14 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if and .Values.backup.enabled (not .Values.backup.cronjob.storage.existingClaim) -}}
+{{- if and .Values.backup.enabled .Values.backup.cronjob.storage.enabled (not .Values.backup.cronjob.storage.existingClaim) -}}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: {{ include "postgresql.v1.primary.fullname" . }}-pgdumpall
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.backup.cronjob.labels .Values.commonLabels ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: pg_dumpall

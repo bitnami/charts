@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -36,6 +36,7 @@ spec:
     spec:
       serviceAccountName: {{ template "grafana-mimir.serviceAccountName" . }}
       {{- include "grafana-mimir.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.querier.automountServiceAccountToken }}
       {{- if .Values.querier.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.querier.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -63,7 +64,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.querier.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.querier.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.querier.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.querier.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.querier.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.querier.terminationGracePeriodSeconds }}
@@ -77,7 +78,7 @@ spec:
           image: {{ template "grafana-mimir.image" . }}
           imagePullPolicy: {{ .Values.mimir.image.pullPolicy }}
           {{- if .Values.querier.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.querier.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.querier.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -124,6 +125,8 @@ spec:
             {{- end }}
           {{- if .Values.querier.resources }}
           resources: {{- toYaml .Values.querier.resources | nindent 12 }}
+          {{- else if ne .Values.querier.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.querier.resourcesPreset) | nindent 12 }}
           {{- end }}
           ports:
             - containerPort: {{ .Values.mimir.containerPorts.http }}
@@ -137,8 +140,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.querier.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.querier.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.querier.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /ready
+            tcpSocket:
               port: http
           {{- end }}
           {{- if .Values.querier.customReadinessProbe }}
@@ -161,6 +163,9 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.querier.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: mimir-config
               mountPath: {{ .Values.mimir.dataDir }}/conf
             - name: data
@@ -172,6 +177,8 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.querier.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: data
           emptyDir: {}
         - name: mimir-config

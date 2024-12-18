@@ -1,5 +1,5 @@
 {{/*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -83,7 +83,8 @@ Create the name of the service account to use
 {{- end -}}
 {{- else if .Values.externalRedis.host -}}
 {{- $port := printf "%v" .Values.externalRedis.port -}}
-{{- printf "redis://%s:%s" .Values.externalRedis.host $port -}}
+{{- $databaseIndex := printf "%v" .Values.externalRedis.databaseIndex -}}
+{{- printf "redis://%s:%s/%s" .Values.externalRedis.host $port $databaseIndex -}}
 {{- end -}}
 {{- end -}}
 

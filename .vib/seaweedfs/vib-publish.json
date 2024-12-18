@@ -1,0 +1,38 @@
+{
+  "phases": {
+    "package": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/seaweedfs"
+        }
+      },
+      "actions": [
+        {
+          "action_id": "helm-package"
+        },
+        {
+          "action_id": "helm-lint"
+        }
+      ]
+    },
+    "publish": {
+      "actions": [
+        {
+          "action_id": "helm-publish",
+          "params": {
+            "repository": {
+              "kind": "S3",
+              "url": "{VIB_ENV_S3_URL}",
+              "authn": {
+                "access_key_id": "{VIB_ENV_S3_ACCESS_KEY_ID}",
+                "secret_access_key": "{VIB_ENV_S3_SECRET_ACCESS_KEY}",
+                "role": "{VIB_ENV_S3_ROLE_ARN}"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

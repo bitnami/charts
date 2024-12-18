@@ -1,5 +1,5 @@
 /*
- * Copyright VMware, Inc.
+ * Copyright Broadcom, Inc. All Rights Reserved.
  * SPDX-License-Identifier: APACHE-2.0
  */
 
@@ -30,6 +30,6 @@ Cypress.Commands.add(
     cy.get('#user_password').type(`${password}{enter}`);
     // We click on Home to skip a welcome page
     cy.contains('a', 'Home').click();
-    cy.contains('Edit profile');
+    cy.contains('Administration');
   }
 );

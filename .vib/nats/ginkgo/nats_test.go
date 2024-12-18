@@ -10,6 +10,7 @@ import (
 	. "github.com/onsi/gomega"
 	appsv1 "k8s.io/api/apps/v1"
 	batchv1 "k8s.io/api/batch/v1"
+	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 )
@@ -32,8 +33,8 @@ var _ = Describe("NATS", Ordered, func() {
 
 	When("a bucket is created and is scaled down to 0 replicas and back up", func() {
 		It("should have access to the created database", func() {
-
 			getAvailableReplicas := func(ss *appsv1.StatefulSet) int32 { return ss.Status.AvailableReplicas }
+			getRestartedAtAnnotation := func(pod *v1.Pod) string { return pod.Annotations["kubectl.kubernetes.io/restartedAt"] }
 			getSucceededJobs := func(j *batchv1.Job) int32 { return j.Status.Succeeded }
 			getOpts := metav1.GetOptions{}
 
@@ -68,21 +69,54 @@ var _ = Describe("NATS", Ordered, func() {
 				return c.BatchV1().Jobs(namespace).Get(ctx, createDBJobName, getOpts)
 			}, timeout, PollingInterval).Should(WithTransform(getSucceededJobs, Equal(int32(1))))
 
-			By("scaling down to 0 replicas")
-			ss, err = utils.StsScale(ctx, c, ss, 0)
+			By("deleting the job once it has succeeded")
+			err = c.BatchV1().Jobs(namespace).Delete(ctx, createDBJobName, metav1.DeleteOptions{})
 			Expect(err).NotTo(HaveOccurred())
 
-			Eventually(func() (*appsv1.StatefulSet, error) {
-				return c.AppsV1().StatefulSets(namespace).Get(ctx, stsName, getOpts)
-			}, timeout, PollingInterval).Should(WithTransform(getAvailableReplicas, BeZero()))
-
-			By("scaling up to the original replicas")
-			ss, err = utils.StsScale(ctx, c, ss, origReplicas)
+			By("puting a value into a key")
+			putJobName := fmt.Sprintf("%s-putbc-%s",
+				stsName, jobSuffix)
+			err = createJob(ctx, c, putJobName, port, "put", bucketName, "testKey", "testValue")
 			Expect(err).NotTo(HaveOccurred())
+
+			Eventually(func() (*batchv1.Job, error) {
+				return c.BatchV1().Jobs(namespace).Get(ctx, putJobName, getOpts)
+			}, timeout, PollingInterval).Should(WithTransform(getSucceededJobs, Equal(int32(1))))
+
+			By("deleting the job once it has succeeded")
+			err = c.BatchV1().Jobs(namespace).Delete(ctx, putJobName, metav1.DeleteOptions{})
+			Expect(err).NotTo(HaveOccurred())
+
+			// Give the application some time to sync the data
+			time.Sleep(10 * time.Second)
+
+			By("rollout restart the statefulset")
+			_, err = utils.StsRolloutRestart(ctx, c, ss)
+			Expect(err).NotTo(HaveOccurred())
+
+			for i := int(origReplicas) - 1; i >= 0; i-- {
+				Eventually(func() (*v1.Pod, error) {
+					return c.CoreV1().Pods(namespace).Get(ctx, fmt.Sprintf("%s-%d", stsName, i), getOpts)
+				}, timeout, PollingInterval).Should(WithTransform(getRestartedAtAnnotation, Not(BeEmpty())))
+			}
 
 			Eventually(func() (*appsv1.StatefulSet, error) {
 				return c.AppsV1().StatefulSets(namespace).Get(ctx, stsName, getOpts)
 			}, timeout, PollingInterval).Should(WithTransform(getAvailableReplicas, Equal(origReplicas)))
+
+			By("creating a job to get a value for a key")
+			getJobName := fmt.Sprintf("%s-getbc-%s",
+				stsName, jobSuffix)
+			err = createJob(ctx, c, getJobName, port, "get", bucketName, "testKey")
+			Expect(err).NotTo(HaveOccurred())
+
+			Eventually(func() (*batchv1.Job, error) {
+				return c.BatchV1().Jobs(namespace).Get(ctx, getJobName, getOpts)
+			}, timeout, PollingInterval).Should(WithTransform(getSucceededJobs, Equal(int32(1))))
+
+			By("deleting the job once it has succeeded")
+			err = c.BatchV1().Jobs(namespace).Delete(ctx, getJobName, metav1.DeleteOptions{})
+			Expect(err).NotTo(HaveOccurred())
 
 			By("creating a job to get the test bucket")
 			deleteDBJobName := fmt.Sprintf("%s-delbc-%s",
@@ -93,6 +127,10 @@ var _ = Describe("NATS", Ordered, func() {
 			Eventually(func() (*batchv1.Job, error) {
 				return c.BatchV1().Jobs(namespace).Get(ctx, deleteDBJobName, getOpts)
 			}, timeout, PollingInterval).Should(WithTransform(getSucceededJobs, Equal(int32(1))))
+
+			By("deleting the job once it has succeeded")
+			err = c.BatchV1().Jobs(namespace).Delete(ctx, deleteDBJobName, metav1.DeleteOptions{})
+			Expect(err).NotTo(HaveOccurred())
 		})
 	})
 

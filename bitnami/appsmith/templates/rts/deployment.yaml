@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -32,6 +32,7 @@ spec:
     spec:
       serviceAccountName: {{ template "appsmith.serviceAccountName" . }}
       {{- include "appsmith.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.rts.automountServiceAccountToken }}
       {{- if .Values.rts.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.rts.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -59,7 +60,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.rts.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.rts.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.rts.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.rts.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.rts.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.rts.terminationGracePeriodSeconds }}
@@ -77,7 +78,7 @@ spec:
           image: {{ template "appsmith.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           {{- if .Values.rts.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.rts.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.rts.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -127,6 +128,8 @@ spec:
             {{- end }}
           {{- if .Values.rts.resources }}
           resources: {{- toYaml .Values.rts.resources | nindent 12 }}
+          {{- else if ne .Values.rts.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.rts.resourcesPreset) | nindent 12 }}
           {{- end }}
           ports:
             - name: http
@@ -136,8 +139,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.rts.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.rts.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.rts.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /rts-api/v1/health-check
+            tcpSocket:
               port: http
           {{- end }}
           {{- if .Values.rts.customReadinessProbe }}
@@ -161,6 +163,30 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.rts.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /opt/bitnami/appsmith/conf
+              subPath: app-conf-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/appsmith/logs
+              subPath: app-logs-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/appsmith/tmp
+              subPath: app-tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/nginx/conf
+              subPath: nginx-conf-dir
+            - name: empty-dir
+              mountPath: /certs
+              subPath: nginx-certs-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/nginx/tmp
+              subPath: nginx-tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/nginx/logs
+              subPath: nginx-logs-dir
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
           {{- if .Values.rts.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.rts.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -168,6 +194,8 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.rts.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         {{- if .Values.rts.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.rts.extraVolumes "context" $) | nindent 8 }}
         {{- end }}

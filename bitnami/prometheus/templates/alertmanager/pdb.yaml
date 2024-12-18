@@ -1,10 +1,9 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- $replicaCount := int .Values.alertmanager.replicaCount }}
-{{- if and .Values.alertmanager.enabled .Values.alertmanager.pdb.create (gt $replicaCount 1) }}
+{{- if and .Values.alertmanager.enabled .Values.alertmanager.pdb.create }}
 apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
 kind: PodDisruptionBudget
 metadata:
@@ -22,8 +21,8 @@ spec:
   {{- if .Values.alertmanager.pdb.minAvailable }}
   minAvailable: {{ .Values.alertmanager.pdb.minAvailable }}
   {{- end  }}
-  {{- if .Values.alertmanager.pdb.maxUnavailable }}
-  maxUnavailable: {{ .Values.alertmanager.pdb.maxUnavailable }}
+  {{- if or .Values.alertmanager.pdb.maxUnavailable (not .Values.alertmanager.pdb.minAvailable) }}
+  maxUnavailable: {{ .Values.alertmanager.pdb.maxUnavailable | default 1 }}
   {{- end  }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.alertmanager.podLabels .Values.commonLabels ) "context" . ) }}
   selector:

@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 ## @section Global parameters
@@ -9,7 +9,7 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
 ##
 global:
   imageRegistry: ""
@@ -18,8 +18,21 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass: ""
-
+  defaultStorageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: auto
 ## @section Common parameters
 ##
 
@@ -41,11 +54,9 @@ commonAnnotations: {}
 ## @param commonLabels Common labels to add to all Matomo resources (sub-charts are not considered). Evaluated as a template
 ##
 commonLabels: {}
-
 ## @param extraDeploy Array of extra objects to deploy with the release (evaluated as a template).
 ##
 extraDeploy: []
-
 ## @section Matomo parameters
 ##
 
@@ -62,10 +73,9 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/matomo
-  tag: 4.16.0-debian-11-r2
+  tag: 5.2.0-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -109,7 +119,7 @@ matomoWebsiteHost: https://example.org
 ##
 matomoSkipInstall: false
 ## @param customPostInitScripts Custom post-init.d user scripts
-## ref: https://github.com/bitnami/containers/tree/main/bitnami/dokuwiki
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/matomo
 ## NOTE: supported formats are `.sh` or `.php`
 ## NOTE: scripts are exclusively executed during the 1st boot of the container
 ## e.g:
@@ -152,6 +162,9 @@ schedulerName: ""
 ## The value is evaluated as a template
 ##
 topologySpreadConstraints: []
+## @param automountServiceAccountToken Mount Service Account token in pod
+##
+automountServiceAccountToken: true
 ## @param hostAliases [array] Add deployment host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
@@ -182,6 +195,16 @@ extraVolumeMounts: []
 ## @param initContainers Add additional init containers to the pod (evaluated as a template)
 ##
 initContainers: []
+## Pod Disruption Budget configuration
+## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+## @param pdb.create Enable/disable a Pod Disruption Budget creation
+## @param pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+## @param pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `pdb.minAvailable` and `pdb.maxUnavailable` are empty.
+##
+pdb:
+  create: true
+  minAvailable: ""
+  maxUnavailable: ""
 ## @param sidecars Attach additional containers to the pod (evaluated as a template)
 ##
 sidecars: []
@@ -213,7 +236,7 @@ smtpUser: ""
 smtpPassword: ""
 smtpProtocol: ""
 noreplyName: ""
-noreplyAddress: "" 
+noreplyAddress: ""
 ## @param smtpExistingSecret The name of an existing secret with SMTP credentials
 ## NOTE: Must contain key `smtp-password`
 ## NOTE: When it's set, the `smtpPassword` parameter is ignored
@@ -224,6 +247,13 @@ smtpExistingSecret: ""
 containerPorts:
   http: 8080
   https: 8443
+## @param extraContainerPorts Optionally specify extra list of additional ports for Matomo container(s)
+## e.g:
+## extraContainerPorts:
+##   - name: myservice
+##     containerPort: 9090
+##
+extraContainerPorts: []
 ## Enable persistence using Persistent Volume Claims
 ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
 ##
@@ -273,7 +303,6 @@ persistence:
   ##     app: my-app
   ##
   selector: {}
-
 ## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ##
@@ -315,32 +344,41 @@ nodeSelector: {}
 ## choice for the user. This also increases chances charts run on environments with little
 ## resources, such as Minikube. If you do want to specify resources, uncomment the following
 ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-## @param resources.limits The resources limits for Matomo containers
-## @param resources.requests The requested resources for Matomo containers
+## @param resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
+## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
 ##
-resources:
-  ## Example:
-  ## limits:
-  ##    cpu: 500m
-  ##    memory: 1Gi
-  limits: {}
-  ## Examples:
-  ## requests:
-  ##    cpu: 250m
-  ##    memory: 256Mi
-  requests: {}
+resourcesPreset: "micro"
+## @param resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+## Example:
+## resources:
+##   requests:
+##     cpu: 2
+##     memory: 512Mi
+##   limits:
+##     cpu: 3
+##     memory: 1024Mi
+##
+resources: {}
 ## Configure Pods Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param podSecurityContext.enabled Enable Matomo pods' Security Context
+## @param podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+## @param podSecurityContext.sysctls Set kernel settings using the sysctl interface
+## @param podSecurityContext.supplementalGroups Set filesystem extra groups
 ## @param podSecurityContext.fsGroup Matomo pods' group ID
 ##
 podSecurityContext:
   enabled: true
+  fsGroupChangePolicy: Always
+  sysctls: []
+  supplementalGroups: []
   fsGroup: 1001
 ## Configure Container Security Context (only main container)
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ## @param containerSecurityContext.enabled Enabled containers' Security Context
+## @param containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
 ## @param containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+## @param containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
 ## @param containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
 ## @param containerSecurityContext.privileged Set container's Security Context privileged
 ## @param containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -350,7 +388,9 @@ podSecurityContext:
 ##
 containerSecurityContext:
   enabled: true
+  seLinuxOptions: {}
   runAsUser: 1001
+  runAsGroup: 0
   runAsNonRoot: true
   privileged: false
   readOnlyRootFilesystem: false
@@ -382,13 +422,8 @@ startupProbe:
   failureThreshold: 5
   successThreshold: 1
 ## Configure extra options for liveness probe
-## Matomo core exposes / to unauthenticated requests, making it a good
-## default liveness and readiness path. However, that may not always be the
-## case. For example, if the image value is overridden to an image containing a
-## module that alters that route, or an image that does not auto-install Matomo.
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ## @param livenessProbe.enabled Enable livenessProbe
-## @param livenessProbe.path Request path for livenessProbe
 ## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
 ## @param livenessProbe.periodSeconds Period seconds for livenessProbe
 ## @param livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
@@ -397,7 +432,6 @@ startupProbe:
 ##
 livenessProbe:
   enabled: true
-  path: /matomo.php
   initialDelaySeconds: 600
   periodSeconds: 10
   timeoutSeconds: 5
@@ -405,7 +439,7 @@ livenessProbe:
   successThreshold: 1
 ## Configure extra options for readiness probe
 ## Matomo core exposes / to unauthenticated requests, making it a good
-## default liveness and readiness path. However, that may not always be the
+## default startup and readiness path. However, that may not always be the
 ## case. For example, if the image value is overridden to an image containing a
 ## module that alters that route, or an image that does not auto-install Matomo.
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
@@ -445,7 +479,6 @@ podAnnotations: {}
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##
 podLabels: {}
-
 ## @section Traffic Exposure Parameters
 ##
 
@@ -513,7 +546,6 @@ ingress:
   ## @param ingress.enabled Enable ingress controller resource
   ##
   enabled: false
-
   ## @param ingress.pathType Ingress Path type
   ##
   pathType: ImplementationSpecific
@@ -605,7 +637,6 @@ ingress:
   ##             name: http
   ##
   extraRules: []
-
 ## @section Database parameters
 ##
 
@@ -662,6 +693,27 @@ mariadb:
       size: 8Gi
       hostPath: ""
       existingClaim: ""
+    ## MariaDB primary container's resource requests and limits
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+    ## We usually recommend not to specify default resources and to leave this as a conscious
+    ## choice for the user. This also increases chances charts run on environments with little
+    ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+    ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ## @param mariadb.primary.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if primary.resources is set (primary.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+    ##
+    resourcesPreset: "micro"
+    ## @param mariadb.primary.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## Example:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    resources: {}
 ## External database configuration
 ## @param externalDatabase.host Host of the existing database
 ## @param externalDatabase.port Port of the existing database
@@ -677,7 +729,6 @@ externalDatabase:
   password: ""
   database: bitnami_matomo
   existingSecret: ""
-
 ## @section Volume Permissions parameters
 ##
 
@@ -698,7 +749,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r92
+    tag: 12-debian-12-r34
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -715,23 +766,21 @@ volumePermissions:
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param volumePermissions.resources.limits The resources limits for the container
-  ## @param volumePermissions.resources.requests The requested resources for the container
+  ## @param volumePermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    ## Example:
-    ## limits:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    ##
-    limits: {}
-    ## Examples:
-    ## requests:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    ##
-    requests: {}
-
+  resourcesPreset: "small"
+  ## @param volumePermissions.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
 ## @section Metrics parameters
 ##
 
@@ -751,7 +800,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 1.0.3-debian-11-r2
+    tag: 1.0.9-debian-12-r6
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -762,7 +811,19 @@ metrics:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-  ## @param metrics.resources Metrics exporter resource requests and limits
+  ## @param metrics.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if metrics.resources is set (metrics.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "small"
+  ## @param metrics.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ##
   resources: {}
@@ -772,7 +833,6 @@ metrics:
   podAnnotations:
     prometheus.io/scrape: "true"
     prometheus.io/port: "9117"
-
 ## @section Certificate injection parameters
 ##
 
@@ -822,10 +882,9 @@ certificates:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r92
+    tag: 12-debian-12-r34
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -834,107 +893,70 @@ certificates:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-
 ## @section NetworkPolicy parameters
 ##
 
-## Add networkpolicies
+## Network Policy configuration
+## ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
 ##
 networkPolicy:
-  ## @param networkPolicy.enabled Enable network policies
-  ## If ingress.enabled or metrics.enabled are true, configure networkPolicy.ingress and networkPolicy.metrics selectors respectively to allow communication
+  ## @param networkPolicy.enabled Specifies whether a NetworkPolicy should be created
   ##
-  enabled: false
-  ## @param networkPolicy.metrics.enabled Enable network policy for metrics (prometheus)
-  ## @param networkPolicy.metrics.namespaceSelector [object] Monitoring namespace selector labels. These labels will be used to identify the prometheus' namespace.
-  ## @param networkPolicy.metrics.podSelector [object] Monitoring pod selector labels. These labels will be used to identify the Prometheus pods.
+  enabled: true
+  ## @param networkPolicy.allowExternal Don't require server label for connections
+  ## The Policy model to apply. When set to false, only pods with the correct
+  ## server label will have network access to the ports server is listening
+  ## on. When true, server will accept connections from any source
+  ## (with the correct destination port).
   ##
-  metrics:
-    enabled: false
-    ## e.g:
-    ## podSelector:
-    ##   label: monitoring
-    ##
-    podSelector: {}
-    ## e.g:
-    ## namespaceSelector:
-    ##   label: monitoring
-    ##
-    namespaceSelector: {}
-  ## @param networkPolicy.ingress.enabled Enable network policy for Ingress Proxies
-  ## @param networkPolicy.ingress.namespaceSelector [object] Ingress Proxy namespace selector labels. These labels will be used to identify the Ingress Proxy's namespace.
-  ## @param networkPolicy.ingress.podSelector [object] Ingress Proxy pods selector labels. These labels will be used to identify the Ingress Proxy pods.
+  allowExternal: true
+  ## @param networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
   ##
-  ingress:
-    enabled: false
-    ## e.g:
-    ## podSelector:
-    ##   label: ingress
-    ##
-    podSelector: {}
-    ## e.g:
-    ## namespaceSelector:
-    ##   label: ingress
-    ##
-    namespaceSelector: {}
-  ## @param networkPolicy.ingressRules.backendOnlyAccessibleByFrontend Enable ingress rule that makes the backend (mariadb) only accessible by matomo's pods.
-  ## @param networkPolicy.ingressRules.customBackendSelector [object] Backend selector labels. These labels will be used to identify the backend pods.
-  ## @param networkPolicy.ingressRules.accessOnlyFrom.enabled Enable ingress rule that makes matomo only accessible from a particular origin
-  ## @param networkPolicy.ingressRules.accessOnlyFrom.namespaceSelector [object] Namespace selector label that is allowed to access matomo. This label will be used to identified the allowed namespace(s).
-  ## @param networkPolicy.ingressRules.accessOnlyFrom.podSelector [object] Pods selector label that is allowed to access matomo. This label will be used to identified the allowed pod(s).
-  ## @param networkPolicy.ingressRules.customRules [object] Custom network policy ingress rule
+  allowExternalEgress: true
+  ## @param networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+  ## e.g:
+  ## extraIngress:
+  ##   - ports:
+  ##       - port: 1234
+  ##     from:
+  ##       - podSelector:
+  ##           - matchLabels:
+  ##               - role: frontend
+  ##       - podSelector:
+  ##           - matchExpressions:
+  ##               - key: role
+  ##                 operator: In
+  ##                 values:
+  ##                   - frontend
+  extraIngress: []
+  ## @param networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+  ## e.g:
+  ## extraEgress:
+  ##   - ports:
+  ##       - port: 1234
+  ##     to:
+  ##       - podSelector:
+  ##           - matchLabels:
+  ##               - role: frontend
+  ##       - podSelector:
+  ##           - matchExpressions:
+  ##               - key: role
+  ##                 operator: In
+  ##                 values:
+  ##                   - frontend
   ##
-  ingressRules:
-    ## mariadb backend only can be accessed from matomo
-    ##
-    backendOnlyAccessibleByFrontend: false
-    customBackendSelector: {}
-    ## Allow only from the indicated:
-    ##
-    accessOnlyFrom:
-      enabled: false
-      ## e.g:
-      ## namespaceSelector:
-      ##   label: ingress
-      ##
-      namespaceSelector: {}
-      ## e.g:
-      ## podSelector:
-      ##   label: access
-      ##
-      podSelector: {}
-    ## custom ingress rules
-    ## e.g:
-    ## customRules:
-    ##   - from:
-    ##       - namespaceSelector:
-    ##           matchLabels:
-    ##             label: example
-    ##
-    customRules: {}
-  ## @param networkPolicy.egressRules.denyConnectionsToExternal Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).
-  ## @param networkPolicy.egressRules.customRules [object] Custom network policy rule
+  extraEgress: []
+  ## @param networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+  ## @param networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
   ##
-  egressRules:
-    # Deny connections to external. This is not compatible with an external database.
-    denyConnectionsToExternal: false
-    ## Additional custom egress rules
-    ## e.g:
-    ## customRules:
-    ##   - to:
-    ##       - namespaceSelector:
-    ##           matchLabels:
-    ##             label: example
-    ##
-    customRules: {}
-
+  ingressNSMatchLabels: {}
+  ingressNSPodMatchLabels: {}
 ## @section CronJob parameters
 ##
-
 cronjobs:
   ## DEPRECATED @param cronjobs.enabled Please use cronjobs.taskScheduler.enabled and/or cronjobs.archive.enabled
   ##
-  # enabled: true
+  # enabled: true
   taskScheduler:
     ## @param cronjobs.taskScheduler.enabled Whether to enable scheduled mail-to-task CronJob
     ##
@@ -942,12 +964,26 @@ cronjobs:
     ## @param cronjobs.taskScheduler.schedule Kubernetes CronJob schedule
     ##
     schedule: "*/5 * * * *"
+    ## @param cronjobs.taskScheduler.serviceAccountName Attach serviceAccountName to the pod of the CronJob
+    ##
+    serviceAccountName: ""
+    ## @param cronjobs.taskScheduler.automountServiceAccountToken Mount Service Account token in pod of the CronJob
+    ##
+    automountServiceAccountToken: true
     ## @param cronjobs.taskScheduler.suspend Whether to create suspended CronJob
     ##
     suspend: false
     ## @param cronjobs.taskScheduler.affinity Affinity for CronJob pod assignment
     ##
     affinity: {}
+    ## @param cronjobs.taskScheduler.nodeSelector Node labels for CronJob pod assignment. Evaluated as a template.
+    ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
+    ##
+    nodeSelector: {}
+    ## @param cronjobs.taskScheduler.tolerations Tolerations for CronJob pod assignment
+    ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+    ##
+    tolerations: []
     ## @param cronjobs.taskScheduler.command Override default container command (useful when using custom images)
     ##
     command: []
@@ -957,7 +993,9 @@ cronjobs:
     ## @param
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
     ## @param cronjobs.taskScheduler.containerSecurityContext.enabled Enabled containers' Security Context
+    ## @param cronjobs.taskScheduler.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
     ## @param cronjobs.taskScheduler.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+    ## @param cronjobs.taskScheduler.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
     ## @param cronjobs.taskScheduler.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
     ## @param cronjobs.taskScheduler.containerSecurityContext.privileged Set container's Security Context privileged
     ## @param cronjobs.taskScheduler.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -967,7 +1005,9 @@ cronjobs:
     ##
     containerSecurityContext:
       enabled: true
+      seLinuxOptions: {}
       runAsUser: 1001
+      runAsGroup: 0
       runAsNonRoot: true
       privileged: false
       readOnlyRootFilesystem: false
@@ -984,6 +1024,48 @@ cronjobs:
     ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
     ##
     podLabels: {}
+    ## @param cronjobs.taskScheduler.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## Example:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    resources: {}
+
+    ## Persistence using Persistent Volume Claims for the taskScheduler CronJob
+    ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
+    ## @param cronjobs.taskScheduler.persistence.enabled Enable persistence using Persistent Volume Claims
+    ## @param cronjobs.taskScheduler.persistence.existingClaim A manually managed Persistent Volume Claim
+    ##
+    persistence:
+      enabled: true
+      existingClaim: ""
+
+    ## Configure Pods Security Context for the taskScheduler CronJob
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+    ## @param cronjobs.taskScheduler.podSecurityContext.enabled Enable Task scheduler cronjob pods' Security Context
+    ## @param cronjobs.taskScheduler.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+    ## @param cronjobs.taskScheduler.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+    ## @param cronjobs.taskScheduler.podSecurityContext.supplementalGroups Set filesystem extra groups
+    ## @param cronjobs.taskScheduler.podSecurityContext.fsGroup Task scheduler cronjob pods' group ID
+    ##
+    podSecurityContext:
+      enabled: true
+      fsGroupChangePolicy: Always
+      sysctls: []
+      supplementalGroups: []
+      fsGroup: 1001
+
+    ## @param cronjobs.taskScheduler.extraEnvVars Extra environment variables for the taskScheduler CronJob
+    extraEnvVars: []
+
+    ## @param cronjobs.taskScheduler.initContainers Additional init containers for the taskScheduler CronJob
+    ##
+    initContainers: []
   archive:
     ## @param cronjobs.archive.enabled Whether to enable scheduled mail-to-task CronJob
     ##
@@ -991,12 +1073,26 @@ cronjobs:
     ## @param cronjobs.archive.schedule Kubernetes CronJob schedule
     ##
     schedule: "*/5 * * * *"
+    ## @param cronjobs.archive.serviceAccountName Attach serviceAccountName to the pod of the CronJob
+    ##
+    serviceAccountName: ""
+    ## @param cronjobs.archive.automountServiceAccountToken Mount Service Account token in pod of the CronJob
+    ##
+    automountServiceAccountToken: true
     ## @param cronjobs.archive.suspend Whether to create suspended CronJob
     ##
     suspend: false
     ## @param cronjobs.archive.affinity Affinity for CronJob pod assignment
     ##
     affinity: {}
+    ## @param cronjobs.archive.tolerations Tolerations for CronJob pod assignment
+    ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+    ##
+    tolerations: []
+    ## @param cronjobs.archive.nodeSelector Node labels for CronJob pod assignment. Evaluated as a template.
+    ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
+    ##
+    nodeSelector: {}
     ## @param cronjobs.archive.command Override default container command (useful when using custom images)
     ##
     command: []
@@ -1006,7 +1102,9 @@ cronjobs:
     ## @param
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
     ## @param cronjobs.archive.containerSecurityContext.enabled Enabled containers' Security Context
+    ## @param cronjobs.archive.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
     ## @param cronjobs.archive.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+    ## @param cronjobs.archive.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
     ## @param cronjobs.archive.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
     ## @param cronjobs.archive.containerSecurityContext.privileged Set container's Security Context privileged
     ## @param cronjobs.archive.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -1016,7 +1114,9 @@ cronjobs:
     ##
     containerSecurityContext:
       enabled: true
+      seLinuxOptions: {}
       runAsUser: 1001
+      runAsGroup: 0
       runAsNonRoot: true
       privileged: false
       readOnlyRootFilesystem: false
@@ -1028,8 +1128,53 @@ cronjobs:
     ## @param cronjobs.archive.podAnnotations Additional pod annotations
     ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
     ##
-    podAnnotations: { }
+    podAnnotations: {}
     ## @param cronjobs.archive.podLabels Additional pod labels
     ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
     ##
-    podLabels: { }
+    podLabels: {}
+
+    ## @param cronjobs.archive.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+    # NOTE: If not defined, this will fallback to the main resources request/limit to preserve backwards compatibility. This behaviour might be DEPRECATED
+    # in upcoming versions of the chart
+    ## Example:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    resources: {}
+
+    ## Persistence using Persistent Volume Claims for the archive CronJob
+    ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
+    ## @param cronjobs.archive.persistence.enabled Enable persistence using Persistent Volume Claims
+    ## @param cronjobs.archive.persistence.existingClaim A manually managed Persistent Volume Claim
+    ##
+    persistence:
+      enabled: true
+      existingClaim: ""
+
+    ## Configure Pods Security Context for the archive CronJob
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+    ## @param cronjobs.archive.podSecurityContext.enabled Enable Archive cronjob pods' Security Context
+    ## @param cronjobs.archive.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+    ## @param cronjobs.archive.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+    ## @param cronjobs.archive.podSecurityContext.supplementalGroups Set filesystem extra groups
+    ## @param cronjobs.archive.podSecurityContext.fsGroup Archive cronjob pods' group ID
+    ##
+    podSecurityContext:
+      enabled: true
+      fsGroupChangePolicy: Always
+      sysctls: []
+      supplementalGroups: []
+      fsGroup: 1001
+
+    ## @param cronjobs.archive.extraEnvVars Extra environment variables for the archive CronJob
+    extraEnvVars: []
+
+    ## @param cronjobs.archive.initContainers Additional init containers for the archive CronJob
+    ##
+    initContainers: []

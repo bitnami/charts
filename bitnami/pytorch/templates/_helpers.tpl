@@ -1,5 +1,5 @@
 {{/*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -51,12 +51,23 @@ Return the proper securityContext when enabled by the deprecated or new params
 {{- define "pytorch.securityContext" -}}
 {{- if .Values.securityContext }}
 {{- if .Values.securityContext.enabled }}
-      securityContext: {{- omit .Values.securityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.securityContext "context" $) | nindent 8 }}
 {{- end }}
 {{- else }}
 {{- if .Values.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.podSecurityContext "context" $) | nindent 8 }}
 {{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+ Create the name of the service account to use
+ */}}
+{{- define "pytorch.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create -}}
+    {{ default (include "common.names.fullname" .) .Values.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.serviceAccount.name }}
 {{- end -}}
 {{- end -}}
 

@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -7,8 +7,8 @@ SPDX-License-Identifier: APACHE-2.0
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "common.names.fullname" . }}-ruler
-  namespace: {{ .Release.Namespace | quote }}
+  name: {{ include "thanos.ruler.fullname" . }}
+  namespace: {{ include "common.names.namespace" . }}
   {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.ruler.service.labels .Values.commonLabels ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: ruler
@@ -32,7 +32,7 @@ spec:
   loadBalancerSourceRanges: {{- toYaml .Values.ruler.service.loadBalancerSourceRanges | nindent 4 }}
   {{- end }}
   ports:
-    - port: {{ if .Values.ruler.service.http }}{{ coalesce .Values.ruler.service.ports.http .Values.ruler.service.http.port }}{{ else }}{{ .Values.ruler.service.ports.http }}{{ end }}
+    - port: {{ .Values.ruler.service.ports.http }}
       targetPort: http
       protocol: TCP
       name: http
@@ -41,7 +41,7 @@ spec:
       {{- else if eq .Values.ruler.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
-    - port: {{ if .Values.ruler.service.grpc }}{{ coalesce .Values.ruler.service.ports.grpc .Values.ruler.service.grpc.port }}{{ else }}{{ .Values.ruler.service.ports.grpc }}{{ end }}
+    - port: {{ .Values.ruler.service.ports.grpc }}
       targetPort: grpc
       protocol: TCP
       name: grpc

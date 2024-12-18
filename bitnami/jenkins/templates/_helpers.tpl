@@ -1,5 +1,5 @@
 {{/*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -93,8 +93,58 @@ Return the Jenkins JKS password secret name
 {{- end -}}
 
 {{/*
+ We need to adapt the basic Kubernetes resource object to Jenkins agent configuration
+*/}}
+{{- define "jenkins.agent.resources" -}}
+{{ $resources := (dict "limits" (dict) "requests" (dict)) }}
+{{- if .Values.agent.resources -}}
+    {{ $resources = .Values.agent.resources -}}
+{{- else if ne .Values.agent.resourcesPreset "none" -}}
+    {{ $resources = include "common.resources.preset" (dict "type" .Values.agent.resourcesPreset) | fromYaml -}}
+{{- end -}}
+{{- if $resources.limits }}
+{{- if $resources.limits.cpu }}
+resourceLimitCpu: {{ $resources.limits.cpu }}
+{{- end }}
+{{- if $resources.limits.memory }}
+resourceLimitMemory: {{ $resources.limits.memory }}
+{{- end }}
+{{- end }}
+{{- if $resources.requests }}
+{{- if $resources.requests.cpu }}
+resourceRequestCpu: {{ $resources.requests.cpu }}
+{{- end }}
+{{- if $resources.requests.memory }}
+resourceRequestMemory: {{ $resources.requests.memory }}
+{{- end }}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Check if there are rolling tags in the images
 */}}
 {{- define "jenkins.checkRollingTags" -}}
 {{- include "common.warnings.rollingTag" .Values.image }}
+{{- end -}}
+
+{{/*
+Get the initialization scripts ConfigMap name.
+*/}}
+{{- define "jenkins.initScriptsName" -}}
+{{- if .Values.initScriptsCM -}}
+  {{- printf "%s" (tpl .Values.initScriptsCM $) -}}
+{{- else -}}
+  {{- printf "%s-init-scripts" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Get the initialization hook scripts ConfigMap name.
+*/}}
+{{- define "jenkins.initHookScriptsName" -}}
+{{- if .Values.initHookScriptsCM -}}
+  {{- printf "%s" (tpl .Values.initHookScriptsCM $) -}}
+{{- else -}}
+  {{- printf "%s-init-hook-scripts" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
 {{- end -}}

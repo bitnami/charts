@@ -1,0 +1,131 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.defrag.enabled }}
+apiVersion: {{ include "common.capabilities.cronjob.apiVersion" . }}
+kind: CronJob
+metadata:
+  name: {{ printf "%s-defrag" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  namespace: {{ .Release.Namespace | quote }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.defrag.cronjob.labels .Values.commonLabels ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+  {{- if or .Values.defrag.cronjob.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.defrag.cronjob.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if .Values.defrag.cronjob.startingDeadlineSeconds }}
+  startingDeadlineSeconds: {{ .Values.defrag.cronjob.startingDeadlineSeconds }}
+  {{- end }}
+  concurrencyPolicy: {{ .Values.defrag.cronjob.concurrencyPolicy }}
+  schedule: {{ .Values.defrag.cronjob.schedule | quote }}
+  suspend: {{ .Values.defrag.cronjob.suspend }}
+  successfulJobsHistoryLimit: {{ .Values.defrag.cronjob.successfulJobsHistoryLimit }}
+  failedJobsHistoryLimit: {{ .Values.defrag.cronjob.failedJobsHistoryLimit }}
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          {{- $mergedLabels := mergeOverwrite (dict) .Values.commonLabels .Values.defrag.cronjob.podLabels }}
+          labels: {{- include "common.labels.standard" ( dict "customLabels" $mergedLabels "context" $ ) | nindent 12 }}
+          {{- if .Values.defrag.cronjob.podAnnotations }}
+          annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.defrag.cronjob.podAnnotations "context" $) | nindent 12 }}
+          {{- end }}
+        spec:
+          {{- if .Values.defrag.cronjob.activeDeadlineSeconds }}
+          activeDeadlineSeconds: {{ .Values.defrag.cronjob.activeDeadlineSeconds }}
+          {{- end }}
+          restartPolicy: {{ .Values.defrag.cronjob.restartPolicy }}
+          {{- if .Values.defrag.cronjob.podSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.defrag.cronjob.podSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.defrag.cronjob.nodeSelector }}
+          nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.defrag.cronjob.nodeSelector "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.defrag.cronjob.tolerations }}
+          tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.defrag.cronjob.tolerations "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.defrag.cronjob.serviceAccountName }}
+          serviceAccountName: {{ .Values.defrag.cronjob.serviceAccountName | quote }}
+          {{- end }}
+          containers:
+            - name: etcd-defrag
+              image: {{ include "etcd.image" . }}
+              imagePullPolicy: "IfNotPresent"
+              {{- if .Values.defrag.cronjob.containerSecurityContext.enabled }}
+              securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.defrag.cronjob.containerSecurityContext "context" $) | nindent 16 }}
+              {{- end }}
+              env:
+                - name: BITNAMI_DEBUG
+                  value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
+                {{- if and .Values.auth.rbac.create .Values.auth.token.enabled }}
+                {{- if eq .Values.auth.token.type "simple" }}
+                - name: ETCD_ROOT_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ include "etcd.secretName" . }}
+                      key: {{ include "etcd.secretPasswordKey" . }}
+                {{- else }}
+                {{- fail "defragmention and auth.token = jwt is not supported by the helm chart"   }}
+                {{- end }}
+                - name: ETCDCTL_USER
+                  value: "root:$(ETCD_ROOT_PASSWORD)"
+                {{- end }}
+                {{- if or .Values.auth.client.enableAuthentication (and .Values.auth.client.secureTransport (not .Values.auth.client.useAutoTLS )) }}
+                - name: ETCDCTL_CA_FILE
+                  value: "/opt/bitnami/etcd/certs/client/{{ .Values.auth.client.caFilename | default "ca.crt" }}"
+                - name: ETCDCTL_KEY_FILE
+                  value: "/opt/bitnami/etcd/certs/client/{{ .Values.auth.client.certKeyFilename }}"
+                - name: ETCDCTL_CERT_FILE
+                  value: "/opt/bitnami/etcd/certs/client/{{ .Values.auth.client.certFilename }}"
+                {{- end }}
+              {{- if .Values.defrag.cronjob.command }}
+              command: {{ .Values.defrag.cronjob.command | toYaml | nindent 16 }}
+              {{- else }}
+              command: ["etcdctl"]
+              {{- end }}
+              {{- if .Values.defrag.cronjob.args }}
+              args: {{ .Values.defrag.cronjob.args | toYaml | nindent 16 }}
+              {{- else }}
+              args:
+                - defrag
+                - --cluster
+                {{- $etcdFullname := include "common.names.fullname" . }}
+                {{- $etcdHeadlessServiceName := (printf "%s-%s" $etcdFullname "headless" | trunc 63 | trimSuffix "-") }}
+                {{- $namespace := .Release.Namespace }}
+                {{- $clusterDomain := .Values.clusterDomain }}
+                {{- $port := int .Values.service.ports.client }}
+                {{- $endpointStr := "--endpoints=[" }}
+                {{- $replicaCount := (int .Values.replicaCount) }}
+                {{- $releaseNamespace := .Release.Namespace }}
+                {{- range $iEndpoint, $e := until $replicaCount }}
+                {{- $endpoint := printf "http://%s-%d.%s.%s.svc.%s:%d" $etcdFullname $iEndpoint $etcdHeadlessServiceName $namespace $clusterDomain $port }}
+                {{- $endpointStr = printf "%s%s" $endpointStr $endpoint }}
+                {{- if ne $iEndpoint (sub $replicaCount 1) }}
+                {{- $endpointStr = printf "%s," $endpointStr }}
+                {{- end }}
+                {{- end }}
+                {{- $endpointStr = printf "%s]" $endpointStr }}
+                - {{ $endpointStr }}
+              {{- end }}
+              {{- if .Values.defrag.cronjob.resources }}
+              resources: {{- toYaml .Values.defrag.cronjob.resources | nindent 16 }}
+              {{- else if ne .Values.defrag.cronjob.resourcesPreset "none" }}
+              resources: {{- include "common.resources.preset" (dict "type" .Values.defrag.cronjob.resourcesPreset) | nindent 16 }}
+              {{- end }}
+              {{- if or .Values.auth.client.enableAuthentication (and .Values.auth.client.secureTransport (not .Values.auth.client.useAutoTLS )) }}
+              volumeMounts:
+                - name: etcd-client-certs
+                  mountPath: /opt/bitnami/etcd/certs/client/
+                  readOnly: true
+              {{- end }}
+          {{- if or .Values.auth.client.enableAuthentication (and .Values.auth.client.secureTransport (not .Values.auth.client.useAutoTLS )) }}
+          volumes:
+            - name: etcd-client-certs
+              secret:
+                secretName: {{ required "A secret containing the client certificates is required" (tpl .Values.auth.client.existingSecret .) }}
+                defaultMode: 256
+          {{- end }}
+{{- end }}

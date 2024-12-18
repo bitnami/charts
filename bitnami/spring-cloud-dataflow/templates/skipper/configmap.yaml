@@ -1,25 +1,25 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if (include "scdf.skipper.createConfigmap" .) }}
+{{- if and (include "scdf.skipper.createConfigmap" .) (.Values.skipper.enabled) }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "scdf.fullname" . }}-skipper
+  name: {{ include "scdf.skipper.fullname" . }}
   {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.skipper.image "chart" .Chart ) ) }}
   {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: skipper
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 data:
   application.yaml: |-
     {{- if .Values.metrics.enabled }}
-    {{- $fullname := include "scdf.fullname" . }}
+    {{- $fullname := include "common.names.fullname" . }}
     {{- $rsocketPort := int (coalesce .Values.metrics.service.ports.rsocket .Values.metrics.service.rsocketPort) }}
     management:
       metrics:
@@ -49,15 +49,20 @@ data:
                       - SPRING_RABBITMQ_HOST={{ $rabbitmqHost }}
                       - SPRING_RABBITMQ_PORT={{ $rabbitmqPort }}
                       - SPRING_RABBITMQ_USERNAME={{ $rabbitmqUser }}
-                      - SPRING_RABBITMQ_PASSWORD=${rabbitmq-password}
                       - SPRING_RABBITMQ_VIRTUAL_HOST={{ $rabbitmqVhost }}
+                      {{- $secretName := coalesce .Values.externalRabbitmq.existingSecret .Values.externalRabbitmq.existingPasswordSecret -}}
+                      {{- if and (not .Values.rabbitmq.enabled) .Values.externalRabbitmq.enabled $secretName .Values.externalRabbitmq.existingSecretPasswordKey }}
+                      - SPRING_RABBITMQ_PASSWORD={{ printf "${%s}" .Values.externalRabbitmq.existingSecretPasswordKey }}
+                      {{- else }}
+                      - SPRING_RABBITMQ_PASSWORD=${rabbitmq-password}
+                      {{- end }}
                       {{- if $environmentVariables }}
                       {{- $environmentVariables | nindent 22 }}
                       {{- end }}
                     {{- else if .Values.kafka.enabled }}
                     environmentVariables:
-                      - SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=${{ printf "{" }}{{ .Release.Name }}_KAFKA_SERVICE_HOST}:${{ printf "{" }}{{ .Release.Name }}_KAFKA_SERVICE_PORT}
-                      - SPRING_CLOUD_STREAM_KAFKA_BINDER_ZK_NODES=${{ printf "{" }}{{ .Release.Name }}_ZOOKEEPER_SERVICE_HOST}:${{ printf "{" }}{{ .Release.Name }}_ZOOKEEPER_SERVICE_PORT}
+                      - SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=${{ printf "{" }}{{ regexReplaceAll "\\W+" (upper .Release.Name) "_" }}_KAFKA_SERVICE_HOST}:${{ printf "{" }}{{ regexReplaceAll "\\W+" (upper .Release.Name) "_" }}_KAFKA_SERVICE_PORT}
+                      - SPRING_CLOUD_STREAM_KAFKA_BINDER_ZK_NODES=${{ printf "{" }}{{ regexReplaceAll "\\W+" (upper .Release.Name) "_" }}_ZOOKEEPER_SERVICE_HOST}:${{ printf "{" }}{{ regexReplaceAll "\\W+" (upper .Release.Name) "_" }}_ZOOKEEPER_SERVICE_PORT}
                       {{- if $environmentVariables }}
                       {{- $environmentVariables | nindent 22 }}
                       {{- end }}
@@ -98,7 +103,7 @@ data:
                     volumes: {{- include "common.tplvalues.render" (dict "value" .Values.deployer.volumes "context" $) | nindent 22 }}
                     {{- end }}
                     {{- if .Values.deployer.podSecurityContext.enabled }}
-                    podSecurityContext: {{- omit .Values.deployer.podSecurityContext "enabled" | toYaml | nindent 22 }}
+                    podSecurityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.deployer.podSecurityContext "context" $) | nindent 22 }}
                     {{- end }}
                     {{- if .Values.deployer.imagePullSecrets }}
                     imagePullSecrets: {{- include "common.tplvalues.render" (dict "value" .Values.deployer.imagePullSecrets "context" $) | nindent 22 }}
@@ -122,10 +127,14 @@ data:
         url: '{{ include "scdf.database.skipper.url" . }}'
         driverClassName: {{ include "scdf.database.driver" . }}
         username: {{ include "scdf.database.skipper.user" . }}
-        {{ if .Values.externalDatabase.existingPasswordSecret }}
-        password: {{ .Values.externalDatabase.existingPasswordKey | default "datasource-password" | printf "${%s}" }}
-        {{- else -}}
+        {{- $secretName := coalesce .Values.externalDatabase.skipper.existingSecret .Values.externalDatabase.existingPasswordSecret -}}
+        {{- $secretPasswordKey := coalesce .Values.externalDatabase.skipper.existingSecretPasswordKey .Values.externalDatabase.existingPasswordKey -}}
+        {{- if .Values.mariadb.enabled }}
         password: ${mariadb-password}
+        {{- else if and $secretName $secretPasswordKey }}
+        password: {{ printf "${%s}" $secretPasswordKey }}
+        {{- else }}
+        password: ${datasource-password}
         {{- end }}
         testOnBorrow: true
         validationQuery: "SELECT 1"

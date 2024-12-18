@@ -1,15 +1,15 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "scdf.fullname" . }}-server
+  name: {{ include "scdf.server.fullname" . }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: server
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   {{- if or .Values.server.service.annotations .Values.commonAnnotations }}
   {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.server.service.annotations .Values.commonAnnotations ) "context" . ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
@@ -36,7 +36,7 @@ spec:
   {{- end }}
   ports:
     - name: http
-      port: {{ .Values.server.service.port }}
+      port: {{ coalesce .Values.server.service.ports.http .Values.server.service.port }}
       targetPort: http
       {{- if (and (or (eq .Values.server.service.type "NodePort") (eq .Values.server.service.type "LoadBalancer")) (not (empty .Values.server.service.nodePort))) }}
       nodePort: {{ .Values.server.service.nodePort }}

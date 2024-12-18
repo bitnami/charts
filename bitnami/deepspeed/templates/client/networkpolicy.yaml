@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -24,6 +24,10 @@ spec:
   policyTypes:
     - Ingress
     - Egress
+  {{- if .Values.client.networkPolicy.allowExternalEgress }}
+  egress:
+    - {}    
+  {{- else }}
   egress:
     # Allow dns resolution
     - ports:
@@ -31,10 +35,15 @@ spec:
           protocol: UDP
         - port: 53
           protocol: TCP
+        {{- if (eq .Values.source.type "git") }}
+        # Setting standard git ports for cloning
+        - port: 22
+        - port: 80
+        - port: 443
+        {{- end }}
     # Allow outbound connections to other cluster pods
     - ports:
         - port: {{ .Values.worker.containerPorts.ssh }}
-        - port: {{ .Values.worker.externalAccess.service.ports.ssh }}
       to:
         {{- $workerPodLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.worker.podLabels .Values.commonLabels ) "context" . ) }}
         - podSelector:
@@ -44,6 +53,7 @@ spec:
     {{- if .Values.client.networkPolicy.extraEgress }}
     {{- include "common.tplvalues.render" (dict "value" .Values.client.networkPolicy.extraEgress "context" $) | nindent 4 }}
     {{- end }}
+  {{- end }}
   ingress:
     # By default, the client is not setting any port
     {{- if .Values.client.networkPolicy.extraIngress }}

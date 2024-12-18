@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -71,22 +71,15 @@ data:
                     envVars: {{- include "common.tplvalues.render" (dict "value" .Values.agent.containerExtraEnvVars "context" $) | nindent 22 }}
                     {{- end }}
                     image: {{ include "jenkins.agent.image" . }}
-                    {{- if .Values.agent.resources.limits.cpu }}
-                    resourceLimitCpu: {{ .Values.agent.resources.limits.cpu }}
-                    {{- end}}
-                    {{- if .Values.agent.resources.limits.memory }}
-                    resourceLimitMemory: {{ .Values.agent.resources.limits.memory }}
-                    {{- end}}
-                    {{- if .Values.agent.resources.requests.cpu }}
-                    resourceRequestCpu: {{ .Values.agent.resources.requests.cpu }}
-                    {{- end}}
-                    {{- if .Values.agent.resources.requests.memory }}
-                    resourceRequestMemory: {{ .Values.agent.resources.requests.memory }}
-                    {{- end}}
+                    {{- if or .Values.agent.resources (ne .Values.agent.resourcesPreset "none") }}
+                    {{- include "jenkins.agent.resources" . | nindent 16 }}
+                    {{- end }}
                     {{- if .Values.agent.containerSecurityContext.enabled }}
                     privileged: {{ .Values.agent.containerSecurityContext.privileged }}
+                    {{- if not (or (eq .Values.global.compatibility.openshift.adaptSecurityContext "force") (and (eq .Values.global.compatibility.openshift.adaptSecurityContext "auto") (include "common.compatibility.isOpenshift" .))) }}
                     runAsUser: {{ .Values.agent.containerSecurityContext.runAsUser }}
                     runAsGroup: {{ .Values.agent.containerSecurityContext.runAsGroup }}
+                    {{- end }}
                     {{- end }}
                   {{- if .Values.agent.sidecars }}
                   {{- include "common.tplvalues.render" ( dict "value" .Values.agent.sidecars "context" $) | nindent 18 }}

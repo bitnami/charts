@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 ## @section Global parameters
@@ -9,7 +9,8 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
+## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ##
 global:
   imageRegistry: ""
@@ -18,8 +19,22 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  defaultStorageClass: ""
   storageClass: ""
-
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: auto
 ## @section Common parameters
 ##
 
@@ -47,7 +62,6 @@ clusterDomain: cluster.local
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
-
 ## Enable diagnostic mode in the deployment
 ##
 diagnosticMode:
@@ -62,7 +76,6 @@ diagnosticMode:
   ##
   args:
     - infinity
-
 ## @section Kustomize Controller Parameters
 ##
 kustomizeController:
@@ -72,6 +85,9 @@ kustomizeController:
   ## @param kustomizeController.installCRDs Flag to install Kustomize Controller CRDs
   ##
   installCRDs: true
+  ## @param kustomizeController.watchAllNamespaces Watch for custom resources in all namespaces
+  ##
+  watchAllNamespaces: true
   ## Bitnami Kustomize Controller image
   ## ref: https://hub.docker.com/r/bitnami/fluxcd-kustomize-controller/tags/
   ## @param kustomizeController.image.registry [default: REGISTRY_NAME] Kustomize Controller image registry
@@ -85,10 +101,9 @@ kustomizeController:
   image:
     registry: docker.io
     repository: bitnami/fluxcd-kustomize-controller
-    tag: 1.2.1-debian-11-r2
+    tag: 1.4.0-debian-12-r4
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -112,6 +127,64 @@ kustomizeController:
   containerPorts:
     metrics: 8080
     health: 9440
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param kustomizeController.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param kustomizeController.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param kustomizeController.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param kustomizeController.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
+    ##
+    kubeAPIServerPorts: [443, 6443, 8443]
+    ## @param kustomizeController.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param kustomizeController.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param kustomizeController.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param kustomizeController.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
   ## Configure extra options for Kustomize Controller containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param kustomizeController.livenessProbe.enabled Enable livenessProbe on Kustomize Controller containers
@@ -167,24 +240,41 @@ kustomizeController:
   customStartupProbe: {}
   ## Kustomize Controller resource requests and limits
   ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param kustomizeController.resources.limits The resources limits for the Kustomize Controller containers
-  ## @param kustomizeController.resources.requests The requested resources for the Kustomize Controller containers
+  ## @param kustomizeController.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if kustomizeController.resources is set (kustomizeController.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "nano"
+  ## @param kustomizeController.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param kustomizeController.podSecurityContext.enabled Enabled Kustomize Controller pods' Security Context
+  ## @param kustomizeController.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param kustomizeController.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param kustomizeController.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param kustomizeController.podSecurityContext.fsGroup Set Kustomize Controller pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param kustomizeController.containerSecurityContext.enabled Enabled Kustomize Controller containers' Security Context
-  ## @param kustomizeController.containerSecurityContext.runAsUser Set Kustomize Controller containers' Security Context runAsUser
+  ## @param kustomizeController.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param kustomizeController.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param kustomizeController.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param kustomizeController.containerSecurityContext.runAsNonRoot Set Kustomize Controller containers' Security Context runAsNonRoot
   ## @param kustomizeController.containerSecurityContext.privileged Set Kustomize Controller containers' Security Context privileged
   ## @param kustomizeController.containerSecurityContext.readOnlyRootFilesystem Set Kustomize Controller containers' Security Context runAsNonRoot
@@ -194,7 +284,9 @@ kustomizeController:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: true
@@ -203,13 +295,15 @@ kustomizeController:
       drop: ["ALL"]
     seccompProfile:
       type: RuntimeDefault
-
   ## @param kustomizeController.command Override default container command (useful when using custom images)
   ##
   command: []
   ## @param kustomizeController.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param kustomizeController.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param kustomizeController.hostAliases Kustomize Controller pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -237,8 +331,8 @@ kustomizeController:
   ## @param kustomizeController.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
   ## Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
@@ -292,7 +386,6 @@ kustomizeController:
     ## Can be set to RollingUpdate or OnDelete
     ##
     type: RollingUpdate
-
   ## @param kustomizeController.priorityClassName Kustomize Controller pods' priorityClassName
   ##
   priorityClassName: ""
@@ -351,7 +444,6 @@ kustomizeController:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
-
   ## @section Kustomize Controller RBAC Parameters
   ##
 
@@ -373,7 +465,6 @@ kustomizeController:
     ##       - list
     ##
     rules: []
-
   ## ServiceAccount configuration
   ##
   serviceAccount:
@@ -389,8 +480,7 @@ kustomizeController:
     annotations: {}
     ## @param kustomizeController.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
-    automountServiceAccountToken: true
-
+    automountServiceAccountToken: false
   ## @section Kustomize Controller Metrics Parameters
   ##
 
@@ -500,7 +590,6 @@ kustomizeController:
       ##   prometheus: my-prometheus
       ##
       selector: {}
-
 ## @section Helm Controller Parameters
 ##
 helmController:
@@ -510,6 +599,9 @@ helmController:
   ## @param helmController.installCRDs Flag to install Helm Controller CRDs
   ##
   installCRDs: true
+  ## @param helmController.watchAllNamespaces Watch for custom resources in all namespaces
+  ##
+  watchAllNamespaces: true
   ## Bitnami Helm Controller image
   ## ref: https://hub.docker.com/r/bitnami/fluxcd-helm-controller/tags/
   ## @param helmController.image.registry [default: REGISTRY_NAME] Helm Controller image registry
@@ -523,10 +615,9 @@ helmController:
   image:
     registry: docker.io
     repository: bitnami/fluxcd-helm-controller
-    tag: 0.37.2-debian-11-r1
+    tag: 1.1.0-debian-12-r5
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -550,6 +641,64 @@ helmController:
   containerPorts:
     metrics: 8080
     health: 9440
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param helmController.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param helmController.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param helmController.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param helmController.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
+    ##
+    kubeAPIServerPorts: [443, 6443, 8443]
+    ## @param helmController.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param helmController.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param helmController.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param helmController.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
   ## Configure extra options for Helm Controller containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param helmController.livenessProbe.enabled Enable livenessProbe on Helm Controller containers
@@ -605,24 +754,41 @@ helmController:
   customStartupProbe: {}
   ## Helm Controller resource requests and limits
   ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param helmController.resources.limits The resources limits for the Helm Controller containers
-  ## @param helmController.resources.requests The requested resources for the Helm Controller containers
+  ## @param helmController.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if helmController.resources is set (helmController.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "nano"
+  ## @param helmController.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param helmController.podSecurityContext.enabled Enabled Helm Controller pods' Security Context
+  ## @param helmController.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param helmController.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param helmController.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param helmController.podSecurityContext.fsGroup Set Helm Controller pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param helmController.containerSecurityContext.enabled Enabled Helm Controller containers' Security Context
-  ## @param helmController.containerSecurityContext.runAsUser Set Helm Controller containers' Security Context runAsUser
+  ## @param helmController.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param helmController.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param helmController.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param helmController.containerSecurityContext.runAsNonRoot Set Helm Controller containers' Security Context runAsNonRoot
   ## @param helmController.containerSecurityContext.privileged Set Helm Controller containers' Security Context privileged
   ## @param helmController.containerSecurityContext.readOnlyRootFilesystem Set Helm Controller containers' Security Context runAsNonRoot
@@ -632,7 +798,9 @@ helmController:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: true
@@ -641,13 +809,15 @@ helmController:
       drop: ["ALL"]
     seccompProfile:
       type: RuntimeDefault
-
   ## @param helmController.command Override default container command (useful when using custom images)
   ##
   command: []
   ## @param helmController.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param helmController.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param helmController.hostAliases Helm Controller pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -675,8 +845,8 @@ helmController:
   ## @param helmController.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
   ## Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
@@ -730,7 +900,6 @@ helmController:
     ## Can be set to RollingUpdate or OnDelete
     ##
     type: RollingUpdate
-
   ## @param helmController.priorityClassName Helm Controller pods' priorityClassName
   ##
   priorityClassName: ""
@@ -789,7 +958,6 @@ helmController:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
-
   ## @section Helm Controller RBAC Parameters
   ##
 
@@ -811,7 +979,6 @@ helmController:
     ##       - list
     ##
     rules: []
-
   ## ServiceAccount configuration
   ##
   serviceAccount:
@@ -827,8 +994,7 @@ helmController:
     annotations: {}
     ## @param helmController.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
-    automountServiceAccountToken: true
-
+    automountServiceAccountToken: false
   ## @section Helm Controller Metrics Parameters
   ##
 
@@ -938,7 +1104,6 @@ helmController:
       ##   prometheus: my-prometheus
       ##
       selector: {}
-
 ## @section Source Controller Parameters
 ##
 sourceController:
@@ -948,6 +1113,9 @@ sourceController:
   ## @param sourceController.installCRDs Flag to install Source Controller CRDs
   ##
   installCRDs: true
+  ## @param sourceController.watchAllNamespaces Watch for custom resources in all namespaces
+  ##
+  watchAllNamespaces: true
   ## Bitnami Source Controller image
   ## ref: https://hub.docker.com/r/bitnami/fluxcd-helm-controller/tags/
   ## @param sourceController.image.registry [default: REGISTRY_NAME] Source Controller image registry
@@ -961,10 +1129,9 @@ sourceController:
   image:
     registry: docker.io
     repository: bitnami/fluxcd-source-controller
-    tag: 1.2.3-debian-11-r1
+    tag: 1.4.1-debian-12-r5
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -990,6 +1157,64 @@ sourceController:
     http: 9090
     metrics: 8080
     health: 9440
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param sourceController.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param sourceController.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param sourceController.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param sourceController.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
+    ##
+    kubeAPIServerPorts: [443, 6443, 8443]
+    ## @param sourceController.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param sourceController.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param sourceController.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param sourceController.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
   ## Configure extra options for Source Controller containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param sourceController.livenessProbe.enabled Enable livenessProbe on Source Controller containers
@@ -1045,24 +1270,41 @@ sourceController:
   customStartupProbe: {}
   ## Source Controller resource requests and limits
   ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param sourceController.resources.limits The resources limits for the Source Controller containers
-  ## @param sourceController.resources.requests The requested resources for the Source Controller containers
+  ## @param sourceController.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if sourceController.resources is set (sourceController.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "nano"
+  ## @param sourceController.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param sourceController.podSecurityContext.enabled Enabled Source Controller pods' Security Context
+  ## @param sourceController.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param sourceController.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param sourceController.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param sourceController.podSecurityContext.fsGroup Set Source Controller pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param sourceController.containerSecurityContext.enabled Enabled Source Controller containers' Security Context
-  ## @param sourceController.containerSecurityContext.runAsUser Set Source Controller containers' Security Context runAsUser
+  ## @param sourceController.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param sourceController.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param sourceController.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param sourceController.containerSecurityContext.runAsNonRoot Set Source Controller containers' Security Context runAsNonRoot
   ## @param sourceController.containerSecurityContext.privileged Set Source Controller containers' Security Context privileged
   ## @param sourceController.containerSecurityContext.readOnlyRootFilesystem Set Source Controller containers' Security Context runAsNonRoot
@@ -1072,7 +1314,9 @@ sourceController:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     readOnlyRootFilesystem: true
     privileged: false
@@ -1081,13 +1325,15 @@ sourceController:
       drop: ["ALL"]
     seccompProfile:
       type: RuntimeDefault
-
   ## @param sourceController.command Override default container command (useful when using custom images)
   ##
   command: []
   ## @param sourceController.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param sourceController.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param sourceController.hostAliases Source Controller pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1115,8 +1361,8 @@ sourceController:
   ## @param sourceController.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
   ## Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
@@ -1170,7 +1416,6 @@ sourceController:
     ## Can be set to RollingUpdate or OnDelete
     ##
     type: RollingUpdate
-
   ## @param sourceController.priorityClassName Source Controller pods' priorityClassName
   ##
   priorityClassName: ""
@@ -1229,7 +1474,6 @@ sourceController:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
-
   ## @section Source Controller service parameters
   ##
   service:
@@ -1285,66 +1529,6 @@ sourceController:
     ##     timeoutSeconds: 300
     ##
     sessionAffinityConfig: {}
-
-  ## NetworkPolicy parameters
-  ##
-  networkPolicy:
-    ## @param sourceController.networkPolicy.enabled Enable the default NetworkPolicy policy
-    ##
-    enabled: false
-    ## @param sourceController.networkPolicy.allowExternal Don't require client label for connections
-    ## When set to false, only pods with the correct client label will have network access to the port MinIO&reg; is
-    ## listening on. When true, MinIO&reg; will accept connections from any source (with the correct destination port).
-    ##
-    allowExternal: true
-    ## @param sourceController.networkPolicy.extraFromClauses Allows to add extra 'from' clauses to the NetworkPolicy
-    ##
-    extraFromClauses: []
-    ## Example
-    ## extraFromClauses:
-    ## - podSelector:
-    ##     matchLabels:
-    ##       a: b
-    ##
-    ## @param sourceController.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
-    ## e.g:
-    ## extraIngress:
-    ##   - ports:
-    ##       - port: 1234
-    ##     from:
-    ##       - podSelector:
-    ##           - matchLabels:
-    ##               - role: frontend
-    ##       - podSelector:
-    ##           - matchExpressions:
-    ##               - key: role
-    ##                 operator: In
-    ##                 values:
-    ##                   - frontend
-    ##
-    extraIngress: []
-    ## @param sourceController.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
-    ## e.g:
-    ## extraEgress:
-    ##   - ports:
-    ##       - port: 1234
-    ##     to:
-    ##       - podSelector:
-    ##           - matchLabels:
-    ##               - role: frontend
-    ##       - podSelector:
-    ##           - matchExpressions:
-    ##               - key: role
-    ##                 operator: In
-    ##                 values:
-    ##                   - frontend
-    ##
-    extraEgress: []
-    ## @param sourceController.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
-    ## @param sourceController.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
-    ##
-    ingressNSMatchLabels: {}
-    ingressNSPodMatchLabels: {}
   ## @section Source Conttroller Persistence Parameters
   ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ##
@@ -1387,7 +1571,6 @@ sourceController:
     ## @param sourceController.persistence.existingClaim The name of an existing PVC to use for persistence
     ##
     existingClaim: ""
-
   ## @section Source Controller RBAC Parameters
   ##
 
@@ -1409,7 +1592,6 @@ sourceController:
     ##       - list
     ##
     rules: []
-
   ## ServiceAccount configuration
   ##
   serviceAccount:
@@ -1425,8 +1607,7 @@ sourceController:
     annotations: {}
     ## @param sourceController.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
-    automountServiceAccountToken: true
-
+    automountServiceAccountToken: false
   ## @section Source Controller Metrics Parameters
   ##
 
@@ -1536,7 +1717,6 @@ sourceController:
       ##   prometheus: my-prometheus
       ##
       selector: {}
-
 ## @section Notification Controller Parameters
 ##
 notificationController:
@@ -1546,6 +1726,9 @@ notificationController:
   ## @param notificationController.installCRDs Flag to install Notification Controller CRDs
   ##
   installCRDs: true
+  ## @param notificationController.watchAllNamespaces Watch for custom resources in all namespaces
+  ##
+  watchAllNamespaces: true
   ## Bitnami Notification Controller image
   ## ref: https://hub.docker.com/r/bitnami/fluxcd-notification-controller/tags/
   ## @param notificationController.image.registry [default: REGISTRY_NAME] Notification Controller image registry
@@ -1559,10 +1742,9 @@ notificationController:
   image:
     registry: docker.io
     repository: bitnami/fluxcd-notification-controller
-    tag: 1.2.3-debian-11-r0
+    tag: 1.4.0-debian-12-r5
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -1581,11 +1763,73 @@ notificationController:
   ##
   replicaCount: 1
   ## @param notificationController.containerPorts.metrics Notification Controller metrics container port
+  ## @param notificationController.containerPorts.receiver Notification Controller receiver container port
   ## @param notificationController.containerPorts.health Notification Controller health container port
+  ## @param notificationController.containerPorts.webhook Notification Controller webhook container port
   ##
   containerPorts:
     metrics: 8080
+    receiver: 9090
     health: 9440
+    webhook: 9292
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param notificationController.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param notificationController.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param notificationController.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param notificationController.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
+    ##
+    kubeAPIServerPorts: [443, 6443, 8443]
+    ## @param notificationController.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param notificationController.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param notificationController.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param notificationController.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
   ## Configure extra options for Notification Controller containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param notificationController.livenessProbe.enabled Enable livenessProbe on Notification Controller containers
@@ -1641,24 +1885,41 @@ notificationController:
   customStartupProbe: {}
   ## Notification Controller resource requests and limits
   ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param notificationController.resources.limits The resources limits for the Notification Controller containers
-  ## @param notificationController.resources.requests The requested resources for the Notification Controller containers
+  ## @param notificationController.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if notificationController.resources is set (notificationController.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "nano"
+  ## @param notificationController.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param notificationController.podSecurityContext.enabled Enabled Notification Controller pods' Security Context
+  ## @param notificationController.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param notificationController.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param notificationController.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param notificationController.podSecurityContext.fsGroup Set Notification Controller pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param notificationController.containerSecurityContext.enabled Enabled Notification Controller containers' Security Context
-  ## @param notificationController.containerSecurityContext.runAsUser Set Notification Controller containers' Security Context runAsUser
+  ## @param notificationController.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param notificationController.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param notificationController.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param notificationController.containerSecurityContext.runAsNonRoot Set Notification Controller containers' Security Context runAsNonRoot
   ## @param notificationController.containerSecurityContext.readOnlyRootFilesystem Set Notification Controller containers' Security Context runAsNonRoot
   ## @param notificationController.containerSecurityContext.privileged Set Notification Controller containers' Security Context privileged
@@ -1668,7 +1929,9 @@ notificationController:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: true
@@ -1677,13 +1940,15 @@ notificationController:
       drop: ["ALL"]
     seccompProfile:
       type: RuntimeDefault
-
   ## @param notificationController.command Override default container command (useful when using custom images)
   ##
   command: []
   ## @param notificationController.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param notificationController.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param notificationController.hostAliases Notification Controller pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1711,8 +1976,8 @@ notificationController:
   ## @param notificationController.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
   ## Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
@@ -1766,7 +2031,6 @@ notificationController:
     ## Can be set to RollingUpdate or OnDelete
     ##
     type: RollingUpdate
-
   ## @param notificationController.priorityClassName Notification Controller pods' priorityClassName
   ##
   priorityClassName: ""
@@ -1825,7 +2089,114 @@ notificationController:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
-
+  ## @section Notification Controller Traffic Exposure Parameters
+  service:
+    ## Notification Controller Receiver service parameters
+    ##
+    receiver:
+      ## @param notificationController.service.receiver.type Notification Controller service type
+      ##
+      type: ClusterIP
+      ## @param notificationController.service.receiver.ports.http Notification Controller service receiver port
+      ##
+      ports:
+        http: 80
+      ## Node ports to expose
+      ## @param notificationController.service.receiver.nodePorts.http Node port for HTTP
+      ## NOTE: choose port between <30000-32767>
+      ##
+      nodePorts:
+        http: ""
+      ## @param notificationController.service.receiver.clusterIP Notification Controller service Cluster IP
+      ## e.g.:
+      ## clusterIP: None
+      ##
+      clusterIP: ""
+      ## @param notificationController.service.receiver.loadBalancerIP Notification Controller service Load Balancer IP
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+      ##
+      loadBalancerIP: ""
+      ## @param notificationController.service.receiver.loadBalancerSourceRanges Notification Controller service Load Balancer sources
+      ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+      ## e.g:
+      ## loadBalancerSourceRanges:
+      ##   - 10.10.10.0/24
+      ##
+      loadBalancerSourceRanges: []
+      ## @param notificationController.service.receiver.externalTrafficPolicy Notification Controller service external traffic policy
+      ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+      ##
+      externalTrafficPolicy: Cluster
+      ## @param notificationController.service.receiver.annotations [object] Additional custom annotations for Notification Controller service
+      ##
+      annotations: {}
+      ## @param notificationController.service.receiver.extraPorts Extra ports to expose in Notification Controller service (normally used with the `sidecars` value)
+      ##
+      extraPorts: []
+      ## @param notificationController.service.receiver.sessionAffinity Control where client requests go, to the same pod or round-robin
+      ## Values: ClientIP or None
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
+      ##
+      sessionAffinity: None
+      ## @param notificationController.service.receiver.sessionAffinityConfig Additional settings for the sessionAffinity
+      ## sessionAffinityConfig:
+      ##   clientIP:
+      ##     timeoutSeconds: 300
+      ##
+      sessionAffinityConfig: {}
+    ## Notification Controller webhook service parameters
+    ##
+    webhook:
+      ## @param notificationController.service.webhook.type Notification Controller service type
+      ##
+      type: ClusterIP
+      ## @param notificationController.service.webhook.ports.http Notification Controller service webhook port
+      ##
+      ports:
+        http: 80
+      ## Node ports to expose
+      ## @param notificationController.service.webhook.nodePorts.http Node port for HTTP
+      ## NOTE: choose port between <30000-32767>
+      ##
+      nodePorts:
+        http: ""
+      ## @param notificationController.service.webhook.clusterIP Notification Controller service Cluster IP
+      ## e.g.:
+      ## clusterIP: None
+      ##
+      clusterIP: ""
+      ## @param notificationController.service.webhook.loadBalancerIP Notification Controller service Load Balancer IP
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+      ##
+      loadBalancerIP: ""
+      ## @param notificationController.service.webhook.loadBalancerSourceRanges Notification Controller service Load Balancer sources
+      ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+      ## e.g:
+      ## loadBalancerSourceRanges:
+      ##   - 10.10.10.0/24
+      ##
+      loadBalancerSourceRanges: []
+      ## @param notificationController.service.webhook.externalTrafficPolicy Notification Controller service external traffic policy
+      ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+      ##
+      externalTrafficPolicy: Cluster
+      ## @param notificationController.service.webhook.annotations [object] Additional custom annotations for Notification Controller service
+      ##
+      annotations: {}
+      ## @param notificationController.service.webhook.extraPorts Extra ports to expose in Notification Controller service (normally used with the `sidecars` value)
+      ##
+      extraPorts: []
+      ## @param notificationController.service.webhook.sessionAffinity Control where client requests go, to the same pod or round-robin
+      ## Values: ClientIP or None
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
+      ##
+      sessionAffinity: None
+      ## @param notificationController.service.webhook.sessionAffinityConfig Additional settings for the sessionAffinity
+      ## sessionAffinityConfig:
+      ##   clientIP:
+      ##     timeoutSeconds: 300
+      ##
+      sessionAffinityConfig: {}
   ## @section Notification Controller RBAC Parameters
   ##
 
@@ -1847,7 +2218,6 @@ notificationController:
     ##       - list
     ##
     rules: []
-
   ## ServiceAccount configuration
   ##
   serviceAccount:
@@ -1863,8 +2233,7 @@ notificationController:
     annotations: {}
     ## @param notificationController.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
-    automountServiceAccountToken: true
-
+    automountServiceAccountToken: false
   ## @section Notification Controller Metrics Parameters
   ##
 
@@ -1974,7 +2343,6 @@ notificationController:
       ##   prometheus: my-prometheus
       ##
       selector: {}
-
 ## @section Image Automation Controller Parameters
 ##
 imageAutomationController:
@@ -1984,6 +2352,9 @@ imageAutomationController:
   ## @param imageAutomationController.installCRDs Flag to install Image Automation Controller CRDs
   ##
   installCRDs: true
+  ## @param imageAutomationController.watchAllNamespaces Watch for custom resources in all namespaces
+  ##
+  watchAllNamespaces: true
   ## Bitnami Image Automation Controller image
   ## ref: https://hub.docker.com/r/bitnami/fluxcd-image-automation-controller/tags/
   ## @param imageAutomationController.image.registry [default: REGISTRY_NAME] Image Automation Controller image registry
@@ -1997,10 +2368,9 @@ imageAutomationController:
   image:
     registry: docker.io
     repository: bitnami/fluxcd-image-automation-controller
-    tag: 0.37.0-debian-11-r0
+    tag: 0.39.0-debian-12-r4
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -2024,6 +2394,64 @@ imageAutomationController:
   containerPorts:
     metrics: 8080
     health: 9440
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param imageAutomationController.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param imageAutomationController.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param imageAutomationController.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param imageAutomationController.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
+    ##
+    kubeAPIServerPorts: [443, 6443, 8443]
+    ## @param imageAutomationController.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param imageAutomationController.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param imageAutomationController.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param imageAutomationController.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
   ## Configure extra options for Image Automation Controller containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param imageAutomationController.livenessProbe.enabled Enable livenessProbe on Image Automation Controller containers
@@ -2079,24 +2507,41 @@ imageAutomationController:
   customStartupProbe: {}
   ## Image Automation Controller resource requests and limits
   ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param imageAutomationController.resources.limits The resources limits for the Image Automation Controller containers
-  ## @param imageAutomationController.resources.requests The requested resources for the Image Automation Controller containers
+  ## @param imageAutomationController.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if imageAutomationController.resources is set (imageAutomationController.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "nano"
+  ## @param imageAutomationController.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param imageAutomationController.podSecurityContext.enabled Enabled Image Automation Controller pods' Security Context
+  ## @param imageAutomationController.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param imageAutomationController.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param imageAutomationController.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param imageAutomationController.podSecurityContext.fsGroup Set Image Automation Controller pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param imageAutomationController.containerSecurityContext.enabled Enabled Image Automation Controller containers' Security Context
-  ## @param imageAutomationController.containerSecurityContext.runAsUser Set Image Automation Controller containers' Security Context runAsUser
+  ## @param imageAutomationController.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param imageAutomationController.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param imageAutomationController.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param imageAutomationController.containerSecurityContext.runAsNonRoot Set Image Automation Controller containers' Security Context runAsNonRoot
   ## @param imageAutomationController.containerSecurityContext.readOnlyRootFilesystem Set Image Automation Controller containers' Security Context runAsNonRoot
   ## @param imageAutomationController.containerSecurityContext.privileged Set Image Automation Controller containers' Security Context privileged
@@ -2106,7 +2551,9 @@ imageAutomationController:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     readOnlyRootFilesystem: true
     privileged: false
@@ -2115,13 +2562,15 @@ imageAutomationController:
       drop: ["ALL"]
     seccompProfile:
       type: RuntimeDefault
-
   ## @param imageAutomationController.command Override default container command (useful when using custom images)
   ##
   command: []
   ## @param imageAutomationController.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param imageAutomationController.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param imageAutomationController.hostAliases Image Automation Controller pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -2149,8 +2598,8 @@ imageAutomationController:
   ## @param imageAutomationController.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
   ## Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
@@ -2204,7 +2653,6 @@ imageAutomationController:
     ## Can be set to RollingUpdate or OnDelete
     ##
     type: RollingUpdate
-
   ## @param imageAutomationController.priorityClassName Image Automation Controller pods' priorityClassName
   ##
   priorityClassName: ""
@@ -2263,7 +2711,6 @@ imageAutomationController:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
-
   ## @section Image Automation Controller RBAC Parameters
   ##
 
@@ -2285,7 +2732,6 @@ imageAutomationController:
     ##       - list
     ##
     rules: []
-
   ## ServiceAccount configuration
   ##
   serviceAccount:
@@ -2301,8 +2747,7 @@ imageAutomationController:
     annotations: {}
     ## @param imageAutomationController.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
-    automountServiceAccountToken: true
-
+    automountServiceAccountToken: false
   ## @section Image Automation Controller Metrics Parameters
   ##
 
@@ -2412,7 +2857,6 @@ imageAutomationController:
       ##   prometheus: my-prometheus
       ##
       selector: {}
-
 ## @section Image Reflector Controller Parameters
 ##
 imageReflectorController:
@@ -2422,6 +2866,9 @@ imageReflectorController:
   ## @param imageReflectorController.installCRDs Flag to install Image Reflector Controller CRDs
   ##
   installCRDs: true
+  ## @param imageReflectorController.watchAllNamespaces Watch for custom resources in all namespaces
+  ##
+  watchAllNamespaces: true
   ## Bitnami Image Reflector Controller image
   ## ref: https://hub.docker.com/r/bitnami/fluxcd-helm-controller/tags/
   ## @param imageReflectorController.image.registry [default: REGISTRY_NAME] Image Reflector Controller image registry
@@ -2435,10 +2882,9 @@ imageReflectorController:
   image:
     registry: docker.io
     repository: bitnami/fluxcd-image-reflector-controller
-    tag: 0.31.1-debian-11-r0
+    tag: 0.33.0-debian-12-r4
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -2462,6 +2908,64 @@ imageReflectorController:
   containerPorts:
     metrics: 8080
     health: 9440
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param imageReflectorController.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param imageReflectorController.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param imageReflectorController.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param imageReflectorController.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
+    ##
+    kubeAPIServerPorts: [443, 6443, 8443]
+    ## @param imageReflectorController.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param imageReflectorController.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param imageReflectorController.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param imageReflectorController.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
   ## Configure extra options for Image Reflector Controller containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param imageReflectorController.livenessProbe.enabled Enable livenessProbe on Image Reflector Controller containers
@@ -2517,24 +3021,41 @@ imageReflectorController:
   customStartupProbe: {}
   ## Image Reflector Controller resource requests and limits
   ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param imageReflectorController.resources.limits The resources limits for the Image Reflector Controller containers
-  ## @param imageReflectorController.resources.requests The requested resources for the Image Reflector Controller containers
+  ## @param imageReflectorController.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if imageReflectorController.resources is set (imageReflectorController.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "nano"
+  ## @param imageReflectorController.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param imageReflectorController.podSecurityContext.enabled Enabled Image Reflector Controller pods' Security Context
+  ## @param imageReflectorController.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param imageReflectorController.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param imageReflectorController.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param imageReflectorController.podSecurityContext.fsGroup Set Image Reflector Controller pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param imageReflectorController.containerSecurityContext.enabled Enabled Image Reflector Controller containers' Security Context
-  ## @param imageReflectorController.containerSecurityContext.runAsUser Set Image Reflector Controller containers' Security Context runAsUser
+  ## @param imageReflectorController.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param imageReflectorController.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param imageReflectorController.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param imageReflectorController.containerSecurityContext.runAsNonRoot Set Image Reflector Controller containers' Security Context runAsNonRoot
   ## @param imageReflectorController.containerSecurityContext.privileged Set Image Reflector Controller containers' Security Context privileged
   ## @param imageReflectorController.containerSecurityContext.readOnlyRootFilesystem Set Image Reflector Controller containers' Security Context runAsNonRoot
@@ -2544,7 +3065,9 @@ imageReflectorController:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: true
@@ -2553,13 +3076,15 @@ imageReflectorController:
       drop: ["ALL"]
     seccompProfile:
       type: RuntimeDefault
-
   ## @param imageReflectorController.command Override default container command (useful when using custom images)
   ##
   command: []
   ## @param imageReflectorController.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param imageReflectorController.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param imageReflectorController.hostAliases Image Reflector Controller pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -2587,8 +3112,8 @@ imageReflectorController:
   ## @param imageReflectorController.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
   ## Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
@@ -2642,7 +3167,6 @@ imageReflectorController:
     ## Can be set to RollingUpdate or OnDelete
     ##
     type: RollingUpdate
-
   ## @param imageReflectorController.priorityClassName Image Reflector Controller pods' priorityClassName
   ##
   priorityClassName: ""
@@ -2701,7 +3225,6 @@ imageReflectorController:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
-
   ## @section Image Reflector Conttroller Persistence Parameters
   ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ##
@@ -2744,7 +3267,6 @@ imageReflectorController:
     ## @param imageReflectorController.persistence.existingClaim The name of an existing PVC to use for persistence
     ##
     existingClaim: ""
-
   ## @section Image Reflector Controller RBAC Parameters
   ##
 
@@ -2766,7 +3288,6 @@ imageReflectorController:
     ##       - list
     ##
     rules: []
-
   ## ServiceAccount configuration
   ##
   serviceAccount:
@@ -2782,8 +3303,7 @@ imageReflectorController:
     annotations: {}
     ## @param imageReflectorController.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
-    automountServiceAccountToken: true
-
+    automountServiceAccountToken: false
   ## @section Image Reflector Controller Metrics Parameters
   ##
 
@@ -2893,7 +3413,6 @@ imageReflectorController:
       ##   prometheus: my-prometheus
       ##
       selector: {}
-
 ## 'volumePermissions' init container parameters
 ## Changes the owner and group of the persistent volume mount point to runAsUser:fsGroup values
 ##   based on the podSecurityContext/containerSecurityContext parameters
@@ -2914,7 +3433,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag:  11-debian-11-r93
+    tag: 12-debian-12-r33
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -2927,17 +3446,28 @@ volumePermissions:
     pullSecrets: []
   ## Init container's resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param volumePermissions.resources.limits The resources limits for the init container
-  ## @param volumePermissions.resources.requests The requested resources for the init container
+  ## @param volumePermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "nano"
+  ## @param volumePermissions.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Init container Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param volumePermissions.containerSecurityContext.enabled Enable init container's Security Context
+  ## @param volumePermissions.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param volumePermissions.containerSecurityContext.runAsUser Set init container's Security Context runAsUser
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 0

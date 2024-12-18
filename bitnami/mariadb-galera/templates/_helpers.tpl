@@ -1,5 +1,5 @@
 {{/*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -31,7 +31,7 @@ Return the secret with MariaDB credentials
 */}}
 {{- define "mariadb-galera.secretName" -}}
     {{- if .Values.existingSecret -}}
-        {{- printf "%s" .Values.existingSecret -}}
+        {{- printf "%s" (tpl .Values.existingSecret $) -}}
     {{- else -}}
         {{- printf "%s" (include "common.names.fullname" .) -}}
     {{- end -}}

@@ -1,16 +1,16 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 file:
   /opt/bitnami/schema-registry/etc/schema-registry/schema-registry.properties:
-    mode: "0664"
+    mode: "0644"
     filetype: file
     exists: true
     contents:
       - "listeners = {{ .Vars.listeners }}"
-      - "avro.compatibility.level = {{ .Vars.avroCompatibilityLevel }}"
+      - "schema.compatibility.level = {{ .Vars.avroCompatibilityLevel }}"
 command:
-  {{ if and .Vars.serviceAccount.create .Vars.serviceAccount.automountServiceAccountToken }}
+  {{ if and .Vars.serviceAccount.create .Vars.automountServiceAccountToken }}
   check-sa:
     exec: cat /var/run/secrets/kubernetes.io/serviceaccount/token | cut -d '.' -f 2 | xargs -I '{}' echo '{}====' | fold -w 4 | sed '$ d' | tr -d '\n' | base64 -d
     exit-status: 0

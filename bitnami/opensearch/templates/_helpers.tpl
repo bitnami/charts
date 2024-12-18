@@ -1,5 +1,5 @@
 {{/*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -45,7 +45,93 @@ Return the proper sysctl image name
     runAsUser: 0
   {{- if .Values.sysctlImage.resources }}
   resources: {{- toYaml .Values.sysctlImage.resources | nindent 12 }}
+  {{- else if ne .Values.sysctlImage.resourcesPreset "none" }}
+  resources: {{- include "common.resources.preset" (dict "type" .Values.sysctlImage.resourcesPreset) | nindent 12 }}
   {{- end }}
+{{- end -}}
+
+{{/*
+Return the copy plugins init container definition
+*/}}
+{{- define "opensearch.copy-default-plugins.initContainer" -}}
+{{- $block := index .context.Values .component }}
+- name: copy-default-plugins
+  image: {{ include "opensearch.image" .context }}
+  imagePullPolicy: {{ .context.Values.image.pullPolicy | quote }}
+  {{- if $block.containerSecurityContext.enabled }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" $block.containerSecurityContext "context" .context) | nindent 12 }}
+  {{- end }}
+  {{- if $block.resources }}
+  resources: {{- toYaml $block.resources | nindent 12 }}
+  {{- else if ne $block.resourcesPreset "none" }}
+  resources: {{- include "common.resources.preset" (dict "type" $block.resourcesPreset) | nindent 12 }}
+  {{- end }}
+  command:
+    - /bin/bash
+  args:
+    - -ec
+    - |
+        . /opt/bitnami/scripts/liblog.sh
+        . /opt/bitnami/scripts/libfs.sh
+        . /opt/bitnami/scripts/opensearch-env.sh
+
+        mkdir -p /emptydir/app-conf-dir /emptydir/app-plugins-dir
+        info "Copying directories to empty dir"
+
+        if ! is_dir_empty "$DB_DEFAULT_CONF_DIR"; then
+            info "Copying default configuration"
+            cp -nr --preserve=mode "$DB_DEFAULT_CONF_DIR"/* /emptydir/app-conf-dir
+        fi
+        if ! is_dir_empty "$DB_DEFAULT_PLUGINS_DIR"; then
+            info "Copying default plugins"
+            cp -nr "$DB_DEFAULT_PLUGINS_DIR"/* /emptydir/app-plugins-dir
+        fi
+
+        info "Copy operation completed"
+  volumeMounts:
+    - name: empty-dir
+      mountPath: /emptydir
+{{- end -}}
+
+{{/*
+Return the copy plugins init container definition
+*/}}
+{{- define "opensearch.dashboards.copy-default-plugins.initContainer" -}}
+- name: copy-default-plugins
+  image: {{ include "opensearch.dashboards.image" . }}
+  imagePullPolicy: {{ .Values.dashboards.image.pullPolicy | quote }}
+  {{- if .Values.dashboards.containerSecurityContext.enabled }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.dashboards.containerSecurityContext "context" $) | nindent 12 }}
+  {{- end }}
+  {{- if .Values.dashboards.resources }}
+  resources: {{- toYaml .Values.dashboards.resources | nindent 12 }}
+  {{- else if ne .Values.dashboards.resourcesPreset "none" }}
+  resources: {{- include "common.resources.preset" (dict "type" .Values.dashboards.resourcesPreset) | nindent 12 }}
+  {{- end }}
+  command:
+    - /bin/bash
+  args:
+    - -ec
+    - |
+        #!/bin/bash
+
+        . /opt/bitnami/scripts/libfs.sh
+        . /opt/bitnami/scripts/opensearch-dashboards-env.sh
+
+        if ! is_dir_empty "$SERVER_DEFAULT_PLUGINS_DIR"; then
+            cp -nr "$SERVER_DEFAULT_PLUGINS_DIR"/* /plugins
+        fi
+  volumeMounts:
+    - name: empty-dir
+      mountPath: /plugins
+      subPath: app-plugins-dir
+{{- end -}}
+
+{{/*
+Set Elasticsearch PVC.
+*/}}
+{{- define "opensearch.dashboards.pvc" -}}
+{{- .Values.dashboards.persistence.existingClaim | default (include "opensearch.dashboards.fullname" .) -}}
 {{- end -}}
 
 {{/*
@@ -59,7 +145,6 @@ Return the proper image name (for the init container volume-permissions image)
 {{/*
 Name for the Opensearch service
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-Required for the Kibana subchart to find Opensearch service.
 */}}
 {{- define "opensearch.service.name" -}}
     {{- printf "%s" ( include "common.names.fullname" . )  | trunc 63 | trimSuffix "-" -}}
@@ -67,7 +152,6 @@ Required for the Kibana subchart to find Opensearch service.
 
 {{/*
 Port number for the Opensearch service REST API port
-Required for the Kibana subchart to find Opensearch service.
 */}}
 {{- define "opensearch.service.ports.restAPI" -}}
 {{- printf "%d" (int .Values.service.ports.restAPI) -}}
@@ -424,7 +508,11 @@ Return true if an authentication credentials secret object should be created
 Return the Opensearch authentication credentials secret name
 */}}
 {{- define "opensearch.secretName" -}}
-{{- default (include "common.names.fullname" .) .Values.security.existingSecret  -}}
+{{- if .Values.security.existingSecret -}}
+    {{- printf "%s" (tpl .Values.security.existingSecret $) -}}
+{{- else -}}
+    {{- printf "%s" (include "common.names.fullname" .) -}}
+{{- end -}}
 {{- end -}}
 
 {{/*
@@ -440,7 +528,11 @@ Return true if a TLS password secret object should be created
 Return the Opensearch TLS password secret name
 */}}
 {{- define "opensearch.tlsPasswordsSecret" -}}
-{{- default (printf "%s-tls-pass" (include "common.names.fullname" .)) .Values.security.tls.passwordsSecret -}}
+{{- if .Values.security.tls.passwordsSecret -}}
+    {{- printf "%s" (tpl .Values.security.tls.passwordsSecret $) -}}
+{{- else -}}
+    {{- printf "%s-tls-pass" (include "common.names.fullname" .) -}}
+{{- end -}}
 {{- end -}}
 
 {{/*
@@ -664,8 +756,8 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 */}}
 {{- define "opensearch.dashboards.fullname" -}}
 {{- $name := default "dashboards" .Values.dashboards.nameOverride -}}
-{{- if .Values.data.fullnameOverride -}}
-{{- .Values.data.fullnameOverride | trunc 63 | trimSuffix "-" -}}
+{{- if .Values.dashboards.fullnameOverride -}}
+{{- .Values.dashboards.fullnameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
 {{- printf "%s-%s" (include "common.names.fullname" .) $name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
@@ -729,4 +821,45 @@ Return true if a TLS credentials secret object should be created
 {{- if and .Values.dashboards.tls.enabled .Values.dashboards.tls.autoGenerated (not .Values.dashboards.tls.existingSecret) }}
     {{- true -}}
 {{- end -}}
+{{- end -}}
+
+{{/*
+Create a default fully qualified snapshots name.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+*/}}
+{{- define "opensearch.snapshots.fullname" -}}
+{{- $name := default "snapshots" .Values.snapshots.nameOverride -}}
+{{- if .Values.snapshots.fullnameOverride -}}
+{{- .Values.snapshots.fullnameOverride | trunc 63 | trimSuffix "-" -}}
+{{- else -}}
+{{- printf "%s-%s" (include "common.names.fullname" .) $name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create a global mount path for snapshots volume based on repo path
+*/}}
+{{- define "opensearch.snapshots.mountPath" -}}
+{{- required "Value snapshotRepoPath must be set!" $.Values.snapshotRepoPath -}}
+{{- end -}}
+
+{{/*
+Create name for snapshot API repo data ConfigMap
+*/}}
+{{- define "opensearch.snapshots.repoDataConfigMap" -}}
+{{- printf "%s-repo-data" (include "opensearch.snapshots.fullname" $) -}}
+{{- end -}}
+
+{{/*
+Create name for snapshot API policy data ConfigMap
+*/}}
+{{- define "opensearch.snapshots.policyDataConfigMap" -}}
+{{- printf "%s-policy-data" (include "opensearch.snapshots.fullname" $) -}}
+{{- end -}}
+
+{{/*
+Return the proper Opensearch Snapshots image name
+*/}}
+{{- define "opensearch.snapshots.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.snapshots.image "global" .Values.global) }}
 {{- end -}}

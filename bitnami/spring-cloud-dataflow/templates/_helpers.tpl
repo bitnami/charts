@@ -1,30 +1,37 @@
 {{/*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
 {{/* vim: set filetype=mustache: */}}
 
 {{/*
-Create a default fully qualified app name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-If release name contains chart name it will be used as a full name.
+Return the proper server fullname
 */}}
-{{- define "scdf.fullname" -}}
-{{- include "common.names.fullname" . -}}
-{{- end }}
+{{- define "scdf.server.fullname" -}}
+{{- printf "%s-%s" (include "common.names.fullname" .) "server" | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
+Return the proper skipper fullname
+*/}}
+{{- define "scdf.skipper.fullname" -}}
+{{- printf "%s-%s" (include "common.names.fullname" .) "skipper" | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
+Return the proper prometheus-proxy fullname
+*/}}
+{{- define "scdf.prometheus-proxy.fullname" -}}
+{{- printf "%s-%s" (include "common.names.fullname" .) "prometheus-proxy" | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
 
 {{/*
 Create a default fully qualified app name for MariaDB subchart
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
 {{- define "scdf.mariadb.fullname" -}}
-{{- if .Values.mariadb.fullnameOverride -}}
-{{- .Values.mariadb.fullnameOverride | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- $name := default "mariadb" .Values.mariadb.nameOverride -}}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
+{{- include "common.names.dependency.fullname" (dict "chartName" "mariadb" "chartValues" .Values.mariadb "context" $) -}}
 {{- end -}}
 
 {{/*
@@ -83,7 +90,7 @@ Create the name of the Service Account to use
 */}}
 {{- define "scdf.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create }}
-    {{- default (include "scdf.fullname" .) .Values.serviceAccount.name }}
+    {{- default (include "common.names.fullname" .) .Values.serviceAccount.name }}
 {{- else }}
     {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
@@ -96,7 +103,7 @@ Return the Spring Cloud Dataflow Server configuration configmap.
 {{- if .Values.server.existingConfigmap -}}
     {{- printf "%s" (tpl .Values.server.existingConfigmap $) -}}
 {{- else -}}
-    {{- printf "%s-server" (include "scdf.fullname" .) -}}
+    {{- include "scdf.server.fullname" . -}}
 {{- end -}}
 {{- end -}}
 
@@ -117,7 +124,7 @@ Return the Spring Cloud Skipper configuration configmap.
 {{- if .Values.skipper.existingConfigmap -}}
     {{- printf "%s" (tpl .Values.skipper.existingConfigmap $) -}}
 {{- else -}}
-    {{- printf "%s-skipper" (include "scdf.fullname" .) -}}
+    {{- include "scdf.skipper.fullname" . -}}
 {{- end -}}
 {{- end -}}
 
@@ -201,7 +208,7 @@ Return the database scheme
 Return the JDBC URL parameters
 */}}
 {{- define "scdf.database.jdbc.parameters" -}}
-  {{- if .Values.mariadb.enabled -}}
+  {{- if and .Values.mariadb.enabled .Values.mariadb.jdbcParameter.useMysqlMetadata -}}
     {{- printf "?useMysqlMetadata=true" -}}
   {{- else -}}
     {{- printf "" -}}
@@ -231,6 +238,20 @@ Return the Data Flow Database User
 {{- end -}}
 
 {{/*
+Return the Data Flow Database secret name
+*/}}
+{{- define "scdf.database.server.secretName" -}}
+{{- $secretName := coalesce .Values.externalDatabase.dataflow.existingSecret .Values.externalDatabase.existingPasswordSecret -}}
+{{- if $secretName -}}
+    {{- printf "%s" $secretName -}}
+{{- else if .Values.mariadb.enabled }}
+    {{- printf "%s" (include "scdf.mariadb.fullname" .) -}}
+{{- else -}}
+    {{- printf "%s-externaldb" (include "scdf.server.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the Skipper Database Name
 */}}
 {{- define "scdf.database.skipper.name" -}}
@@ -253,15 +274,28 @@ Return the Skipper Database User
 {{- end -}}
 
 {{/*
-Return the Database secret name
+Return the Skipper Database secret name
 */}}
-{{- define "scdf.database.secretName" -}}
-{{- if .Values.externalDatabase.existingPasswordSecret -}}
-    {{- printf "%s" .Values.externalDatabase.existingPasswordSecret -}}
+{{- define "scdf.database.skipper.secretName" -}}
+{{- $secretName := coalesce .Values.externalDatabase.skipper.existingSecret .Values.externalDatabase.existingPasswordSecret -}}
+{{- if $secretName -}}
+    {{- printf "%s" $secretName -}}
 {{- else if .Values.mariadb.enabled }}
     {{- printf "%s" (include "scdf.mariadb.fullname" .) -}}
 {{- else -}}
-    {{- printf "%s-%s" (include "scdf.fullname" .) "externaldb" -}}
+    {{- printf "%s-externaldb" (include "scdf.skipper.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the Kafka Port
+*/}}
+{{- define "scdf.kafka.port" -}}
+{{- if .Values.kafka.enabled }}
+    {{- printf "%d" (.Values.kafka.service.ports.client | int ) -}}
+{{- else -}}
+    {{- $port := regexFind ":[0-9]+" .Values.externalKafka.brokers | trimPrefix ":" | default "9092" | int -}}
+    {{- printf "%d" $port -}}
 {{- end -}}
 {{- end -}}
 
@@ -302,12 +336,13 @@ Return the RabbitMQ username
 Return the RabbitMQ secret name
 */}}
 {{- define "scdf.rabbitmq.secretName" -}}
-{{- if .Values.externalRabbitmq.existingPasswordSecret -}}
-    {{- printf "%s" .Values.externalRabbitmq.existingPasswordSecret -}}
+{{- $secretName := coalesce .Values.externalRabbitmq.existingSecret .Values.externalRabbitmq.existingPasswordSecret -}}
+{{- if $secretName -}}
+    {{- printf "%s" $secretName -}}
 {{- else if .Values.rabbitmq.enabled }}
     {{- printf "%s" (include "scdf.rabbitmq.fullname" .) -}}
 {{- else -}}
-    {{- printf "%s-%s" (include "scdf.fullname" .) "externalrabbitmq" -}}
+    {{- printf "%s-externalrabbitmq" (include "common.names.fullname" .) -}}
 {{- end -}}
 {{- end -}}
 

@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -41,12 +41,14 @@ spec:
   loadBalancerClass: {{ .Values.service.loadBalancerClass }}
   {{- end }}
   ports:
+    {{- if .Values.containerPorts.http }}
     - name: http
       port: {{ .Values.service.ports.http }}
       targetPort: {{ .Values.service.targetPort.http }}
       {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.http)) }}
       nodePort: {{ .Values.service.nodePorts.http }}
       {{- end }}
+    {{- end }}
     {{- if .Values.containerPorts.https }}
     - name: https
       port: {{ .Values.service.ports.https }}

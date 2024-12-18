@@ -1,5 +1,5 @@
 {{/*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -141,7 +141,7 @@ Get the password secret.
 */}}
 {{- define "redis-cluster.secretName" -}}
 {{- if .Values.existingSecret -}}
-{{- printf "%s" .Values.existingSecret -}}
+{{- printf "%s" (tpl .Values.existingSecret $) -}}
 {{- else -}}
 {{- printf "%s" (include "common.names.fullname" .) -}}
 {{- end -}}

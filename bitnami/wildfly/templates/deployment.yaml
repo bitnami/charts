@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -28,12 +28,11 @@ spec:
         {{- end }}
     spec:
       {{- include "wildfly.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.automountServiceAccountToken }}
       {{- if .Values.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
       {{- end }}
-      {{- if .Values.serviceAccountName }}
-      serviceAccountName: {{ .Values.serviceAccountName }}
-      {{- end }}
+      serviceAccountName: {{ include "wildfly.serviceAccountName" .}}
       {{- if .Values.priorityClassName }}
       priorityClassName: {{ .Values.priorityClassName }}
       {{- end }}
@@ -52,9 +51,30 @@ spec:
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       initContainers:
+        - name: prepare-writable-files
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          image: {{ template "wildfly.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          command:
+            - /bin/bash
+          args:
+            - -ec
+            - |
+              #!/bin/bash
+              . /opt/bitnami/scripts/liblog.sh
+              # We need the standalone.conf to be writable but not the rest of the bin folder
+              info "Copying standalone.conf"
+              cp /opt/bitnami/wildfly/bin/standalone.conf /app-standalone-conf-dir
+              info "Writable files successfully copied"
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /app-standalone-conf-dir
+              subPath: app-standalone-conf-dir
         {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
         - name: volume-permissions
           image: {{ template "wildfly.volumePermissions.image" . }}
@@ -71,6 +91,8 @@ spec:
           {{- end }}
           {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: data
@@ -84,7 +106,7 @@ spec:
           image: {{ template "wildfly.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -111,6 +133,8 @@ spec:
                   key: wildfly-password
             - name: WILDFLY_HTTP_PORT_NUMBER
               value: {{ .Values.containerPorts.http | quote }}
+            - name: WILDFLY_HTTPS_PORT_NUMBER
+              value: {{ .Values.containerPorts.https | quote }}
             - name: WILDFLY_MANAGEMENT_PORT_NUMBER
               value: {{ .Values.containerPorts.mgmt | quote }}
             - name: WILDFLY_SERVER_LISTEN_ADDRESS
@@ -134,6 +158,8 @@ spec:
           ports:
             - name: http
               containerPort: {{ .Values.containerPorts.http }}
+            - name: https
+              containerPort: {{ .Values.containerPorts.https }}
             - name: mgmt
               containerPort: {{ .Values.containerPorts.mgmt }}
             {{- if .Values.extraContainerPorts }}
@@ -158,8 +184,25 @@ spec:
           {{- end }}
           {{- if .Values.resources }}
           resources: {{- toYaml .Values.resources | nindent 12 }}
+          {{- else if ne .Values.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /opt/bitnami/wildfly/standalone
+              subPath: app-standalone-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/wildfly/bin/standalone.conf
+              subPath: app-standalone-conf-dir/standalone.conf
+            - name: empty-dir
+              mountPath: /opt/bitnami/wildfly/tmp
+              subPath: app-tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/wildfly/domain/configuration
+              subPath: app-domain-conf-dir
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: data
               mountPath: /bitnami/wildfly
             {{- if .Values.extraVolumeMounts }}
@@ -169,6 +212,8 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: data
           {{- if .Values.persistence.enabled }}
           persistentVolumeClaim:

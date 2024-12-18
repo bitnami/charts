@@ -25,7 +25,7 @@
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
-            "name": "M4"
+            "name": "L4"
           }
         }
       },
@@ -35,6 +35,9 @@
           "params": {
             "resources": {
               "path": "/.vib"
+            },
+            "wait": {
+              "file": "mlflow/goss/goss-wait.yaml"
             },
             "tests_file": "mlflow/goss/goss.yaml",
             "vars_file": "mlflow/runtime-parameters.yaml",
@@ -57,6 +60,12 @@
               "username": "vib-user",
               "password": "ComplicatedPassword123!4"
             }
+          }
+        },
+        {
+          "action_id": "kubescape",
+          "params": {
+            "threshold": {VIB_ENV_KUBESCAPE_SCORE_THRESHOLD}
           }
         }
       ]

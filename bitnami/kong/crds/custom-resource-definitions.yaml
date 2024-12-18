@@ -1,10 +1,12 @@
-# CRDs source: https://github.com/Kong/charts/blob/main/charts/kong/crds/custom-resource-definitions.yaml (version 2.31.0)
-# generated using: kubectl kustomize 'github.com/kong/kubernetes-ingress-controller/config/crd?ref=v3.0.0'
+# Source: https://github.com/kong/kubernetes-ingress-controller/config/crd?ref=v{version}
+# Version: 3.3.1
+# VersionOf: kong-ingress-controller
+# UseKustomize: true
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.13.0
+    controller-gen.kubebuilder.io/version: v0.16.1
   name: ingressclassparameterses.configuration.konghq.com
 spec:
   group: configuration.konghq.com
@@ -22,14 +24,19 @@ spec:
           API.
         properties:
           apiVersion:
-            description: 'APIVersion defines the versioned schema of this representation
-              of an object. Servers should convert recognized schemas to the latest
-              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
             type: string
           kind:
-            description: 'Kind is a string value representing the REST resource this
-              object represents. Servers may infer this from the endpoint the client
-              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
             type: string
           metadata:
             type: object
@@ -38,10 +45,10 @@ spec:
             properties:
               enableLegacyRegexDetection:
                 default: false
-                description: EnableLegacyRegexDetection automatically detects if ImplementationSpecific
-                  Ingress paths are regular expression paths using the legacy 2.x
-                  heuristic. The controller adds the "~" prefix to those paths if
-                  the Kong version is 3.0 or higher.
+                description: |-
+                  EnableLegacyRegexDetection automatically detects if ImplementationSpecific Ingress paths are regular expression
+                  paths using the legacy 2.x heuristic. The controller adds the "~" prefix to those paths if the Kong version is
+                  3.0 or higher.
                 type: boolean
               serviceUpstream:
                 default: false
@@ -56,7 +63,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.13.0
+    controller-gen.kubebuilder.io/version: v0.16.1
   name: kongclusterplugins.configuration.konghq.com
 spec:
   group: configuration.konghq.com
@@ -99,25 +106,28 @@ spec:
         description: KongClusterPlugin is the Schema for the kongclusterplugins API.
         properties:
           apiVersion:
-            description: 'APIVersion defines the versioned schema of this representation
-              of an object. Servers should convert recognized schemas to the latest
-              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
             type: string
           config:
-            description: Config contains the plugin configuration. It's a list of
-              keys and values required to configure the plugin. Please read the documentation
-              of the plugin being configured to set values in here. For any plugin
-              in Kong, anything that goes in the `config` JSON key in the Admin API
-              request, goes into this property. Only one of `config` or `configFrom`
-              may be used in a KongClusterPlugin, not both at once.
+            description: |-
+              Config contains the plugin configuration. It's a list of keys and values
+              required to configure the plugin.
+              Please read the documentation of the plugin being configured to set values
+              in here. For any plugin in Kong, anything that goes in the `config` JSON
+              key in the Admin API request, goes into this property.
+              Only one of `config` or `configFrom` may be used in a KongClusterPlugin, not both at once.
             type: object
             x-kubernetes-preserve-unknown-fields: true
           configFrom:
-            description: ConfigFrom references a secret containing the plugin configuration.
-              This should be used when the plugin configuration contains sensitive
-              information, such as AWS credentials in the Lambda plugin or the client
-              secret in the OIDC plugin. Only one of `config` or `configFrom` may
-              be used in a KongClusterPlugin, not both at once.
+            description: |-
+              ConfigFrom references a secret containing the plugin configuration.
+              This should be used when the plugin configuration contains sensitive information,
+              such as AWS credentials in the Lambda plugin or the client secret in the OIDC plugin.
+              Only one of `config` or `configFrom` may be used in a KongClusterPlugin, not both at once.
             properties:
               secretKeyRef:
                 description: Specifies a name, a namespace, and a key of a secret
@@ -137,7 +147,55 @@ spec:
                 - name
                 - namespace
                 type: object
+            required:
+            - secretKeyRef
             type: object
+          configPatches:
+            description: |-
+              ConfigPatches represents JSON patches to the configuration of the plugin.
+              Each item means a JSON patch to add something in the configuration,
+              where path is specified in `path` and value is in `valueFrom` referencing
+              a key in a secret.
+              When Config is specified, patches will be applied to the configuration in Config.
+              Otherwise, patches will be applied to an empty object.
+            items:
+              description: |-
+                NamespacedConfigPatch is a JSON patch to add values from secrets to KongClusterPlugin
+                to the generated configuration of plugin in Kong.
+              properties:
+                path:
+                  description: Path is the JSON path to add the patch.
+                  type: string
+                valueFrom:
+                  description: ValueFrom is the reference to a key of a secret where
+                    the patched value comes from.
+                  properties:
+                    secretKeyRef:
+                      description: Specifies a name, a namespace, and a key of a secret
+                        to refer to.
+                      properties:
+                        key:
+                          description: The key containing the value.
+                          type: string
+                        name:
+                          description: The secret containing the key.
+                          type: string
+                        namespace:
+                          description: The namespace containing the secret.
+                          type: string
+                      required:
+                      - key
+                      - name
+                      - namespace
+                      type: object
+                  required:
+                  - secretKeyRef
+                  type: object
+              required:
+              - path
+              - valueFrom
+              type: object
+            type: array
           consumerRef:
             description: ConsumerRef is a reference to a particular consumer.
             type: string
@@ -145,25 +203,27 @@ spec:
             description: Disabled set if the plugin is disabled or not.
             type: boolean
           instance_name:
-            description: InstanceName is an optional custom name to identify an instance
-              of the plugin. This is useful when running the same plugin in multiple
-              contexts, for example, on multiple services.
+            description: |-
+              InstanceName is an optional custom name to identify an instance of the plugin. This is useful when running the
+              same plugin in multiple contexts, for example, on multiple services.
             type: string
           kind:
-            description: 'Kind is a string value representing the REST resource this
-              object represents. Servers may infer this from the endpoint the client
-              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
             type: string
           metadata:
             type: object
           ordering:
-            description: 'Ordering overrides the normal plugin execution order. It''s
-              only available on Kong Enterprise. `<phase>` is a request processing
-              phase (for example, `access` or `body_filter`) and `<plugin>` is the
-              name of the plugin that will run before or after the KongPlugin. For
-              example, a KongPlugin with `plugin: rate-limiting` and `before.access:
-              ["key-auth"]` will create a rate limiting plugin that limits requests
-              _before_ they are authenticated.'
+            description: |-
+              Ordering overrides the normal plugin execution order. It's only available on Kong Enterprise.
+              `<phase>` is a request processing phase (for example, `access` or `body_filter`) and
+              `<plugin>` is the name of the plugin that will run before or after the KongPlugin.
+              For example, a KongPlugin with `plugin: rate-limiting` and `before.access: ["key-auth"]`
+              will create a rate limiting plugin that limits requests _before_ they are authenticated.
             properties:
               after:
                 additionalProperties:
@@ -187,11 +247,13 @@ spec:
               config.
             type: string
           protocols:
-            description: Protocols configures plugin to run on requests received on
-              specific protocols.
+            description: |-
+              Protocols configures plugin to run on requests received on specific
+              protocols.
             items:
-              description: KongProtocol is a valid Kong protocol. This alias is necessary
-                to deal with https://github.com/kubernetes-sigs/controller-tools/issues/342
+              description: |-
+                KongProtocol is a valid Kong protocol.
+                This alias is necessary to deal with https://github.com/kubernetes-sigs/controller-tools/issues/342
               enum:
               - http
               - https
@@ -203,8 +265,9 @@ spec:
               type: string
             type: array
           run_on:
-            description: RunOn configures the plugin to run on the first or the second
-              or both nodes in case of a service mesh deployment.
+            description: |-
+              RunOn configures the plugin to run on the first or the second or both
+              nodes in case of a service mesh deployment.
             enum:
             - first
             - second
@@ -221,46 +284,42 @@ spec:
                   reason: Pending
                   status: Unknown
                   type: Programmed
-                description: "Conditions describe the current conditions of the KongClusterPluginStatus.
-                  \n Known condition types are: \n * \"Programmed\""
+                description: |-
+                  Conditions describe the current conditions of the KongClusterPluginStatus.
+
+                  Known condition types are:
+
+                  * "Programmed"
                 items:
-                  description: "Condition contains details for one aspect of the current
-                    state of this API Resource. --- This struct is intended for direct
-                    use as an array at the field path .status.conditions.  For example,
-                    \n type FooStatus struct{ // Represents the observations of a
-                    foo's current state. // Known .status.conditions.type are: \"Available\",
-                    \"Progressing\", and \"Degraded\" // +patchMergeKey=type // +patchStrategy=merge
-                    // +listType=map // +listMapKey=type Conditions []metav1.Condition
-                    `json:\"conditions,omitempty\" patchStrategy:\"merge\" patchMergeKey:\"type\"
-                    protobuf:\"bytes,1,rep,name=conditions\"` \n // other fields }"
+                  description: Condition contains details for one aspect of the current
+                    state of this API Resource.
                   properties:
                     lastTransitionTime:
-                      description: lastTransitionTime is the last time the condition
-                        transitioned from one status to another. This should be when
-                        the underlying condition changed.  If that is not known, then
-                        using the time when the API field changed is acceptable.
+                      description: |-
+                        lastTransitionTime is the last time the condition transitioned from one status to another.
+                        This should be when the underlying condition changed.  If that is not known, then using the time when the API field changed is acceptable.
                       format: date-time
                       type: string
                     message:
-                      description: message is a human readable message indicating
-                        details about the transition. This may be an empty string.
+                      description: |-
+                        message is a human readable message indicating details about the transition.
+                        This may be an empty string.
                       maxLength: 32768
                       type: string
                     observedGeneration:
-                      description: observedGeneration represents the .metadata.generation
-                        that the condition was set based upon. For instance, if .metadata.generation
-                        is currently 12, but the .status.conditions[x].observedGeneration
-                        is 9, the condition is out of date with respect to the current
-                        state of the instance.
+                      description: |-
+                        observedGeneration represents the .metadata.generation that the condition was set based upon.
+                        For instance, if .metadata.generation is currently 12, but the .status.conditions[x].observedGeneration is 9, the condition is out of date
+                        with respect to the current state of the instance.
                       format: int64
                       minimum: 0
                       type: integer
                     reason:
-                      description: reason contains a programmatic identifier indicating
-                        the reason for the condition's last transition. Producers
-                        of specific condition types may define expected values and
-                        meanings for this field, and whether the values are considered
-                        a guaranteed API. The value should be a CamelCase string.
+                      description: |-
+                        reason contains a programmatic identifier indicating the reason for the condition's last transition.
+                        Producers of specific condition types may define expected values and meanings for this field,
+                        and whether the values are considered a guaranteed API.
+                        The value should be a CamelCase string.
                         This field may not be empty.
                       maxLength: 1024
                       minLength: 1
@@ -275,10 +334,6 @@ spec:
                       type: string
                     type:
                       description: type of condition in CamelCase or in foo.example.com/CamelCase.
-                        --- Many .condition.type values are consistent across resources
-                        like Available, but because arbitrary conditions can be useful
-                        (see .node.status.conditions), the ability to deconflict is
-                        important. The regex it matches is (dns1123SubdomainFmt/)?(qualifiedNameFmt)
                       maxLength: 316
                       pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
                       type: string
@@ -298,6 +353,13 @@ spec:
         required:
         - plugin
         type: object
+        x-kubernetes-validations:
+        - message: Using both config and configFrom fields is not allowed.
+          rule: '!(has(self.config) && has(self.configFrom))'
+        - message: Using both configFrom and configPatches fields is not allowed.
+          rule: '!(has(self.configFrom) && has(self.configPatches))'
+        - message: The plugin field is immutable
+          rule: self.plugin == oldSelf.plugin
     served: true
     storage: true
     subresources:
@@ -307,7 +369,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.13.0
+    controller-gen.kubebuilder.io/version: v0.16.1
   name: kongconsumergroups.configuration.konghq.com
 spec:
   group: configuration.konghq.com
@@ -336,19 +398,24 @@ spec:
         description: KongConsumerGroup is the Schema for the kongconsumergroups API.
         properties:
           apiVersion:
-            description: 'APIVersion defines the versioned schema of this representation
-              of an object. Servers should convert recognized schemas to the latest
-              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
             type: string
           kind:
-            description: 'Kind is a string value representing the REST resource this
-              object represents. Servers may infer this from the endpoint the client
-              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
             type: string
           metadata:
             type: object
           status:
-            description: Status represents the current status of the KongConsumer
+            description: Status represents the current status of the KongConsumerGroup
               resource.
             properties:
               conditions:
@@ -358,46 +425,42 @@ spec:
                   reason: Pending
                   status: Unknown
                   type: Programmed
-                description: "Conditions describe the current conditions of the KongConsumerGroup.
-                  \n Known condition types are: \n * \"Programmed\""
+                description: |-
+                  Conditions describe the current conditions of the KongConsumerGroup.
+
+                  Known condition types are:
+
+                  * "Programmed"
                 items:
-                  description: "Condition contains details for one aspect of the current
-                    state of this API Resource. --- This struct is intended for direct
-                    use as an array at the field path .status.conditions.  For example,
-                    \n type FooStatus struct{ // Represents the observations of a
-                    foo's current state. // Known .status.conditions.type are: \"Available\",
-                    \"Progressing\", and \"Degraded\" // +patchMergeKey=type // +patchStrategy=merge
-                    // +listType=map // +listMapKey=type Conditions []metav1.Condition
-                    `json:\"conditions,omitempty\" patchStrategy:\"merge\" patchMergeKey:\"type\"
-                    protobuf:\"bytes,1,rep,name=conditions\"` \n // other fields }"
+                  description: Condition contains details for one aspect of the current
+                    state of this API Resource.
                   properties:
                     lastTransitionTime:
-                      description: lastTransitionTime is the last time the condition
-                        transitioned from one status to another. This should be when
-                        the underlying condition changed.  If that is not known, then
-                        using the time when the API field changed is acceptable.
+                      description: |-
+                        lastTransitionTime is the last time the condition transitioned from one status to another.
+                        This should be when the underlying condition changed.  If that is not known, then using the time when the API field changed is acceptable.
                       format: date-time
                       type: string
                     message:
-                      description: message is a human readable message indicating
-                        details about the transition. This may be an empty string.
+                      description: |-
+                        message is a human readable message indicating details about the transition.
+                        This may be an empty string.
                       maxLength: 32768
                       type: string
                     observedGeneration:
-                      description: observedGeneration represents the .metadata.generation
-                        that the condition was set based upon. For instance, if .metadata.generation
-                        is currently 12, but the .status.conditions[x].observedGeneration
-                        is 9, the condition is out of date with respect to the current
-                        state of the instance.
+                      description: |-
+                        observedGeneration represents the .metadata.generation that the condition was set based upon.
+                        For instance, if .metadata.generation is currently 12, but the .status.conditions[x].observedGeneration is 9, the condition is out of date
+                        with respect to the current state of the instance.
                       format: int64
                       minimum: 0
                       type: integer
                     reason:
-                      description: reason contains a programmatic identifier indicating
-                        the reason for the condition's last transition. Producers
-                        of specific condition types may define expected values and
-                        meanings for this field, and whether the values are considered
-                        a guaranteed API. The value should be a CamelCase string.
+                      description: |-
+                        reason contains a programmatic identifier indicating the reason for the condition's last transition.
+                        Producers of specific condition types may define expected values and meanings for this field,
+                        and whether the values are considered a guaranteed API.
+                        The value should be a CamelCase string.
                         This field may not be empty.
                       maxLength: 1024
                       minLength: 1
@@ -412,10 +475,6 @@ spec:
                       type: string
                     type:
                       description: type of condition in CamelCase or in foo.example.com/CamelCase.
-                        --- Many .condition.type values are consistent across resources
-                        like Available, but because arbitrary conditions can be useful
-                        (see .node.status.conditions), the ability to deconflict is
-                        important. The regex it matches is (dns1123SubdomainFmt/)?(qualifiedNameFmt)
                       maxLength: 316
                       pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
                       type: string
@@ -442,7 +501,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.13.0
+    controller-gen.kubebuilder.io/version: v0.16.1
   name: kongconsumers.configuration.konghq.com
 spec:
   group: configuration.konghq.com
@@ -475,30 +534,40 @@ spec:
         description: KongConsumer is the Schema for the kongconsumers API.
         properties:
           apiVersion:
-            description: 'APIVersion defines the versioned schema of this representation
-              of an object. Servers should convert recognized schemas to the latest
-              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
             type: string
           consumerGroups:
-            description: ConsumerGroups are references to consumer groups (that consumer
-              wants to be part of) provisioned in Kong.
+            description: |-
+              ConsumerGroups are references to consumer groups (that consumer wants to be part of)
+              provisioned in Kong.
             items:
               type: string
             type: array
+            x-kubernetes-list-type: set
           credentials:
-            description: Credentials are references to secrets containing a credential
-              to be provisioned in Kong.
+            description: |-
+              Credentials are references to secrets containing a credential to be
+              provisioned in Kong.
             items:
               type: string
             type: array
+            x-kubernetes-list-type: set
           custom_id:
-            description: CustomID is a Kong cluster-unique existing ID for the consumer
-              - useful for mapping Kong with users in your existing database.
+            description: |-
+              CustomID is a Kong cluster-unique existing ID for the consumer - useful for mapping
+              Kong with users in your existing database.
             type: string
           kind:
-            description: 'Kind is a string value representing the REST resource this
-              object represents. Servers may infer this from the endpoint the client
-              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
             type: string
           metadata:
             type: object
@@ -513,46 +582,42 @@ spec:
                   reason: Pending
                   status: Unknown
                   type: Programmed
-                description: "Conditions describe the current conditions of the KongConsumer.
-                  \n Known condition types are: \n * \"Programmed\""
+                description: |-
+                  Conditions describe the current conditions of the KongConsumer.
+
+                  Known condition types are:
+
+                  * "Programmed"
                 items:
-                  description: "Condition contains details for one aspect of the current
-                    state of this API Resource. --- This struct is intended for direct
-                    use as an array at the field path .status.conditions.  For example,
-                    \n type FooStatus struct{ // Represents the observations of a
-                    foo's current state. // Known .status.conditions.type are: \"Available\",
-                    \"Progressing\", and \"Degraded\" // +patchMergeKey=type // +patchStrategy=merge
-                    // +listType=map // +listMapKey=type Conditions []metav1.Condition
-                    `json:\"conditions,omitempty\" patchStrategy:\"merge\" patchMergeKey:\"type\"
-                    protobuf:\"bytes,1,rep,name=conditions\"` \n // other fields }"
+                  description: Condition contains details for one aspect of the current
+                    state of this API Resource.
                   properties:
                     lastTransitionTime:
-                      description: lastTransitionTime is the last time the condition
-                        transitioned from one status to another. This should be when
-                        the underlying condition changed.  If that is not known, then
-                        using the time when the API field changed is acceptable.
+                      description: |-
+                        lastTransitionTime is the last time the condition transitioned from one status to another.
+                        This should be when the underlying condition changed.  If that is not known, then using the time when the API field changed is acceptable.
                       format: date-time
                       type: string
                     message:
-                      description: message is a human readable message indicating
-                        details about the transition. This may be an empty string.
+                      description: |-
+                        message is a human readable message indicating details about the transition.
+                        This may be an empty string.
                       maxLength: 32768
                       type: string
                     observedGeneration:
-                      description: observedGeneration represents the .metadata.generation
-                        that the condition was set based upon. For instance, if .metadata.generation
-                        is currently 12, but the .status.conditions[x].observedGeneration
-                        is 9, the condition is out of date with respect to the current
-                        state of the instance.
+                      description: |-
+                        observedGeneration represents the .metadata.generation that the condition was set based upon.
+                        For instance, if .metadata.generation is currently 12, but the .status.conditions[x].observedGeneration is 9, the condition is out of date
+                        with respect to the current state of the instance.
                       format: int64
                       minimum: 0
                       type: integer
                     reason:
-                      description: reason contains a programmatic identifier indicating
-                        the reason for the condition's last transition. Producers
-                        of specific condition types may define expected values and
-                        meanings for this field, and whether the values are considered
-                        a guaranteed API. The value should be a CamelCase string.
+                      description: |-
+                        reason contains a programmatic identifier indicating the reason for the condition's last transition.
+                        Producers of specific condition types may define expected values and meanings for this field,
+                        and whether the values are considered a guaranteed API.
+                        The value should be a CamelCase string.
                         This field may not be empty.
                       maxLength: 1024
                       minLength: 1
@@ -567,10 +632,6 @@ spec:
                       type: string
                     type:
                       description: type of condition in CamelCase or in foo.example.com/CamelCase.
-                        --- Many .condition.type values are consistent across resources
-                        like Available, but because arbitrary conditions can be useful
-                        (see .node.status.conditions), the ability to deconflict is
-                        important. The regex it matches is (dns1123SubdomainFmt/)?(qualifiedNameFmt)
                       maxLength: 316
                       pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
                       type: string
@@ -591,6 +652,9 @@ spec:
             description: Username is a Kong cluster-unique username of the consumer.
             type: string
         type: object
+        x-kubernetes-validations:
+        - message: Need to provide either username or custom_id
+          rule: has(self.username) || has(self.custom_id)
     served: true
     storage: true
     subresources:
@@ -600,7 +664,189 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.13.0
+    controller-gen.kubebuilder.io/version: v0.16.1
+  name: kongcustomentities.configuration.konghq.com
+spec:
+  group: configuration.konghq.com
+  names:
+    categories:
+    - kong-ingress-controller
+    kind: KongCustomEntity
+    listKind: KongCustomEntityList
+    plural: kongcustomentities
+    shortNames:
+    - kce
+    singular: kongcustomentity
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns:
+    - description: type of the Kong entity
+      jsonPath: .spec.type
+      name: Entity Type
+      type: string
+    - description: Age
+      jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    - jsonPath: .status.conditions[?(@.type=="Programmed")].status
+      name: Programmed
+      type: string
+    name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: KongCustomEntity defines a "custom" Kong entity that KIC cannot
+          support the entity type directly.
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            properties:
+              controllerName:
+                description: ControllerName specifies the controller that should reconcile
+                  it, like ingress class.
+                type: string
+              fields:
+                description: Fields defines the fields of the Kong entity itself.
+                x-kubernetes-preserve-unknown-fields: true
+              parentRef:
+                description: |-
+                  ParentRef references the kubernetes resource it attached to when its scope is "attached".
+                  Currently only KongPlugin/KongClusterPlugin allowed. This will make the custom entity to be attached
+                  to the entity(service/route/consumer) where the plugin is attached.
+                properties:
+                  group:
+                    type: string
+                  kind:
+                    type: string
+                  name:
+                    type: string
+                  namespace:
+                    description: Empty namespace means the same namespace of the owning
+                      object.
+                    type: string
+                required:
+                - name
+                type: object
+              type:
+                description: EntityType is the type of the Kong entity. The type is
+                  used in generating declarative configuration.
+                type: string
+            required:
+            - controllerName
+            - fields
+            - type
+            type: object
+          status:
+            description: Status stores the reconciling status of the resource.
+            properties:
+              conditions:
+                default:
+                - lastTransitionTime: "1970-01-01T00:00:00Z"
+                  message: Waiting for controller
+                  reason: Pending
+                  status: Unknown
+                  type: Programmed
+                description: |-
+                  Conditions describe the current conditions of the KongCustomEntityStatus.
+
+                  Known condition types are:
+
+                  * "Programmed"
+                items:
+                  description: Condition contains details for one aspect of the current
+                    state of this API Resource.
+                  properties:
+                    lastTransitionTime:
+                      description: |-
+                        lastTransitionTime is the last time the condition transitioned from one status to another.
+                        This should be when the underlying condition changed.  If that is not known, then using the time when the API field changed is acceptable.
+                      format: date-time
+                      type: string
+                    message:
+                      description: |-
+                        message is a human readable message indicating details about the transition.
+                        This may be an empty string.
+                      maxLength: 32768
+                      type: string
+                    observedGeneration:
+                      description: |-
+                        observedGeneration represents the .metadata.generation that the condition was set based upon.
+                        For instance, if .metadata.generation is currently 12, but the .status.conditions[x].observedGeneration is 9, the condition is out of date
+                        with respect to the current state of the instance.
+                      format: int64
+                      minimum: 0
+                      type: integer
+                    reason:
+                      description: |-
+                        reason contains a programmatic identifier indicating the reason for the condition's last transition.
+                        Producers of specific condition types may define expected values and meanings for this field,
+                        and whether the values are considered a guaranteed API.
+                        The value should be a CamelCase string.
+                        This field may not be empty.
+                      maxLength: 1024
+                      minLength: 1
+                      pattern: ^[A-Za-z]([A-Za-z0-9_,:]*[A-Za-z0-9_])?$
+                      type: string
+                    status:
+                      description: status of the condition, one of True, False, Unknown.
+                      enum:
+                      - "True"
+                      - "False"
+                      - Unknown
+                      type: string
+                    type:
+                      description: type of condition in CamelCase or in foo.example.com/CamelCase.
+                      maxLength: 316
+                      pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
+                      type: string
+                  required:
+                  - lastTransitionTime
+                  - message
+                  - reason
+                  - status
+                  - type
+                  type: object
+                maxItems: 8
+                type: array
+                x-kubernetes-list-map-keys:
+                - type
+                x-kubernetes-list-type: map
+            required:
+            - conditions
+            type: object
+        required:
+        - spec
+        type: object
+        x-kubernetes-validations:
+        - message: The spec.type field is immutable
+          rule: self.spec.type == oldSelf.spec.type
+        - message: The spec.type field cannot be known Kong entity types
+          rule: '!(self.spec.type in [''services'',''routes'',''upstreams'',''targets'',''plugins'',''consumers'',''consumer_groups''])'
+    served: true
+    storage: true
+    subresources:
+      status: {}
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.16.1
   name: kongingresses.configuration.konghq.com
 spec:
   group: configuration.konghq.com
@@ -621,37 +867,43 @@ spec:
         description: KongIngress is the Schema for the kongingresses API.
         properties:
           apiVersion:
-            description: 'APIVersion defines the versioned schema of this representation
-              of an object. Servers should convert recognized schemas to the latest
-              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
             type: string
           kind:
-            description: 'Kind is a string value representing the REST resource this
-              object represents. Servers may infer this from the endpoint the client
-              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
             type: string
           metadata:
             type: object
           proxy:
-            description: Proxy defines additional connection options for the routes
-              to be configured in the Kong Gateway, e.g. `connection_timeout`, `retries`,
-              etc.
+            description: |-
+              Proxy defines additional connection options for the routes to be configured in the
+              Kong Gateway, e.g. `connection_timeout`, `retries`, etc.
             properties:
               connect_timeout:
                 description: "The timeout in milliseconds for\testablishing a connection
-                  to the upstream server. Deprecated: use Service's \"konghq.com/connect-timeout\"
+                  to the upstream server.\nDeprecated: use Service's \"konghq.com/connect-timeout\"
                   annotation instead."
                 minimum: 0
                 type: integer
               path:
-                description: '(optional) The path to be used in requests to the upstream
-                  server. Deprecated: use Service''s "konghq.com/path" annotation
-                  instead.'
+                description: |-
+                  (optional) The path to be used in requests to the upstream server.
+                  Deprecated: use Service's "konghq.com/path" annotation instead.
                 pattern: ^/.*$
                 type: string
               protocol:
-                description: 'The protocol used to communicate with the upstream.
-                  Deprecated: use Service''s "konghq.com/protocol" annotation instead.'
+                description: |-
+                  The protocol used to communicate with the upstream.
+                  Deprecated: use Service's "konghq.com/protocol" annotation instead.
                 enum:
                 - http
                 - https
@@ -662,73 +914,81 @@ spec:
                 - udp
                 type: string
               read_timeout:
-                description: 'The timeout in milliseconds between two successive read
-                  operations for transmitting a request to the upstream server. Deprecated:
-                  use Service''s "konghq.com/read-timeout" annotation instead.'
+                description: |-
+                  The timeout in milliseconds between two successive read operations
+                  for transmitting a request to the upstream server.
+                  Deprecated: use Service's "konghq.com/read-timeout" annotation instead.
                 minimum: 0
                 type: integer
               retries:
-                description: 'The number of retries to execute upon failure to proxy.
-                  Deprecated: use Service''s "konghq.com/retries" annotation instead.'
+                description: |-
+                  The number of retries to execute upon failure to proxy.
+                  Deprecated: use Service's "konghq.com/retries" annotation instead.
                 minimum: 0
                 type: integer
               write_timeout:
-                description: 'The timeout in milliseconds between two successive write
-                  operations for transmitting a request to the upstream server. Deprecated:
-                  use Service''s "konghq.com/write-timeout" annotation instead.'
+                description: |-
+                  The timeout in milliseconds between two successive write operations
+                  for transmitting a request to the upstream server.
+                  Deprecated: use Service's "konghq.com/write-timeout" annotation instead.
                 minimum: 0
                 type: integer
             type: object
           route:
-            description: Route define rules to match client requests. Each Route is
-              associated with a Service, and a Service may have multiple Routes associated
-              to it.
+            description: |-
+              Route define rules to match client requests.
+              Each Route is associated with a Service,
+              and a Service may have multiple Routes associated to it.
             properties:
               headers:
                 additionalProperties:
                   items:
                     type: string
                   type: array
-                description: 'Headers contains one or more lists of values indexed
-                  by header name that will cause this Route to match if present in
-                  the request. The Host header cannot be used with this attribute.
-                  Deprecated: use Ingress'' "konghq.com/headers" annotation instead.'
+                description: |-
+                  Headers contains one or more lists of values indexed by header name
+                  that will cause this Route to match if present in the request.
+                  The Host header cannot be used with this attribute.
+                  Deprecated: use Ingress' "konghq.com/headers" annotation instead.
                 type: object
               https_redirect_status_code:
-                description: 'HTTPSRedirectStatusCode is the status code Kong responds
-                  with when all properties of a Route match except the protocol. Deprecated:
-                  use Ingress'' "ingress.kubernetes.io/force-ssl-redirect" or "konghq.com/https-redirect-status-code"
-                  annotations instead.'
+                description: |-
+                  HTTPSRedirectStatusCode is the status code Kong responds with
+                  when all properties of a Route match except the protocol.
+                  Deprecated: use Ingress' "ingress.kubernetes.io/force-ssl-redirect" or
+                  "konghq.com/https-redirect-status-code" annotations instead.
                 type: integer
               methods:
-                description: 'Methods is a list of HTTP methods that match this Route.
-                  Deprecated: use Ingress'' "konghq.com/methods" annotation instead.'
+                description: |-
+                  Methods is a list of HTTP methods that match this Route.
+                  Deprecated: use Ingress' "konghq.com/methods" annotation instead.
                 items:
                   type: string
                 type: array
               path_handling:
-                description: 'PathHandling controls how the Service path, Route path
-                  and requested path are combined when sending a request to the upstream.
-                  Deprecated: use Ingress'' "konghq.com/path-handling" annotation
-                  instead.'
+                description: |-
+                  PathHandling controls how the Service path, Route path and requested path
+                  are combined when sending a request to the upstream.
+                  Deprecated: use Ingress' "konghq.com/path-handling" annotation instead.
                 enum:
                 - v0
                 - v1
                 type: string
               preserve_host:
-                description: 'PreserveHost sets When matching a Route via one of the
-                  hosts domain names, use the request Host header in the upstream
-                  request headers. If set to false, the upstream Host header will
-                  be that of the Service’s host. Deprecated: use Ingress'' "konghq.com/preserve-host"
-                  annotation instead.'
+                description: |-
+                  PreserveHost sets When matching a Route via one of the hosts domain names,
+                  use the request Host header in the upstream request headers.
+                  If set to false, the upstream Host header will be that of the Service’s host.
+                  Deprecated: use Ingress' "konghq.com/preserve-host" annotation instead.
                 type: boolean
               protocols:
-                description: 'Protocols is an array of the protocols this Route should
-                  allow. Deprecated: use Ingress'' "konghq.com/protocols" annotation
-                  instead.'
+                description: |-
+                  Protocols is an array of the protocols this Route should allow.
+                  Deprecated: use Ingress' "konghq.com/protocols" annotation instead.
                 items:
-                  description: KongProtocol is a valid Kong protocol. This alias is
-                    necessary to deal with https://github.com/kubernetes-sigs/controller-tools/issues/342
+                  description: |-
+                    KongProtocol is a valid Kong protocol.
+                    This alias is necessary to deal with https://github.com/kubernetes-sigs/controller-tools/issues/342
                   enum:
                   - http
                   - https
@@ -740,43 +1000,45 @@ spec:
                   type: string
                 type: array
               regex_priority:
-                description: 'RegexPriority is a number used to choose which route
-                  resolves a given request when several routes match it using regexes
-                  simultaneously. Deprecated: use Ingress'' "konghq.com/regex-priority"
-                  annotation instead.'
+                description: |-
+                  RegexPriority is a number used to choose which route resolves a given request
+                  when several routes match it using regexes simultaneously.
+                  Deprecated: use Ingress' "konghq.com/regex-priority" annotation instead.
                 type: integer
               request_buffering:
-                description: 'RequestBuffering sets whether to enable request body
-                  buffering or not. Deprecated: use Ingress'' "konghq.com/request-buffering"
-                  annotation instead.'
+                description: |-
+                  RequestBuffering sets whether to enable request body buffering or not.
+                  Deprecated: use Ingress' "konghq.com/request-buffering" annotation instead.
                 type: boolean
               response_buffering:
-                description: 'ResponseBuffering sets whether to enable response body
-                  buffering or not. Deprecated: use Ingress'' "konghq.com/response-buffering"
-                  annotation instead.'
+                description: |-
+                  ResponseBuffering sets whether to enable response body buffering or not.
+                  Deprecated: use Ingress' "konghq.com/response-buffering" annotation instead.
                 type: boolean
               snis:
-                description: 'SNIs is a list of SNIs that match this Route when using
-                  stream routing. Deprecated: use Ingress'' "konghq.com/snis" annotation
-                  instead.'
+                description: |-
+                  SNIs is a list of SNIs that match this Route when using stream routing.
+                  Deprecated: use Ingress' "konghq.com/snis" annotation instead.
                 items:
                   type: string
                 type: array
               strip_path:
-                description: 'StripPath sets When matching a Route via one of the
-                  paths strip the matching prefix from the upstream request URL. Deprecated:
-                  use Ingress'' "konghq.com/strip-path" annotation instead.'
+                description: |-
+                  StripPath sets When matching a Route via one of the paths
+                  strip the matching prefix from the upstream request URL.
+                  Deprecated: use Ingress' "konghq.com/strip-path" annotation instead.
                 type: boolean
             type: object
           upstream:
-            description: Upstream represents a virtual hostname and can be used to
-              loadbalance incoming requests over multiple targets (e.g. Kubernetes
-              `Services` can be a target, OR `Endpoints` can be targets).
+            description: |-
+              Upstream represents a virtual hostname and can be used to loadbalance
+              incoming requests over multiple targets (e.g. Kubernetes `Services` can
+              be a target, OR `Endpoints` can be targets).
             properties:
               algorithm:
-                description: 'Algorithm is the load balancing algorithm to use. Accepted
-                  values are: "round-robin", "consistent-hashing", "least-connections",
-                  "latency".'
+                description: |-
+                  Algorithm is the load balancing algorithm to use.
+                  Accepted values are: "round-robin", "consistent-hashing", "least-connections", "latency".
                 enum:
                 - round-robin
                 - consistent-hashing
@@ -784,14 +1046,15 @@ spec:
                 - latency
                 type: string
               hash_fallback:
-                description: 'HashFallback defines What to use as hashing input if
-                  the primary hash_on does not return a hash. Accepted values are:
-                  "none", "consumer", "ip", "header", "cookie".'
+                description: |-
+                  HashFallback defines What to use as hashing input
+                  if the primary hash_on does not return a hash.
+                  Accepted values are: "none", "consumer", "ip", "header", "cookie".
                 type: string
               hash_fallback_header:
-                description: HashFallbackHeader is the header name to take the value
-                  from as hash input. Only required when "hash_fallback" is set to
-                  "header".
+                description: |-
+                  HashFallbackHeader is the header name to take the value from as hash input.
+                  Only required when "hash_fallback" is set to "header".
                 type: string
               hash_fallback_query_arg:
                 description: HashFallbackQueryArg is the "hash_fallback" version of
@@ -802,29 +1065,33 @@ spec:
                   of HashOnURICapture.
                 type: string
               hash_on:
-                description: 'HashOn defines what to use as hashing input. Accepted
-                  values are: "none", "consumer", "ip", "header", "cookie", "path",
-                  "query_arg", "uri_capture".'
+                description: |-
+                  HashOn defines what to use as hashing input.
+                  Accepted values are: "none", "consumer", "ip", "header", "cookie", "path", "query_arg", "uri_capture".
                 type: string
               hash_on_cookie:
-                description: The cookie name to take the value from as hash input.
+                description: |-
+                  The cookie name to take the value from as hash input.
                   Only required when "hash_on" or "hash_fallback" is set to "cookie".
                 type: string
               hash_on_cookie_path:
-                description: The cookie path to set in the response headers. Only
-                  required when "hash_on" or "hash_fallback" is set to "cookie".
+                description: |-
+                  The cookie path to set in the response headers.
+                  Only required when "hash_on" or "hash_fallback" is set to "cookie".
                 type: string
               hash_on_header:
-                description: HashOnHeader defines the header name to take the value
-                  from as hash input. Only required when "hash_on" is set to "header".
+                description: |-
+                  HashOnHeader defines the header name to take the value from as hash input.
+                  Only required when "hash_on" is set to "header".
                 type: string
               hash_on_query_arg:
                 description: HashOnQueryArg is the query string parameter whose value
                   is the hash input when "hash_on" is set to "query_arg".
                 type: string
               hash_on_uri_capture:
-                description: HashOnURICapture is the name of the capture group whose
-                  value is the hash input when "hash_on" is set to "uri_capture".
+                description: |-
+                  HashOnURICapture is the name of the capture group whose value is the hash input when "hash_on" is set to
+                  "uri_capture".
                 type: string
               healthchecks:
                 description: Healthchecks defines the health check configurations
@@ -844,8 +1111,9 @@ spec:
                           type: array
                         type: object
                       healthy:
-                        description: Healthy configures thresholds and HTTP status
-                          codes to mark targets healthy for an upstream.
+                        description: |-
+                          Healthy configures thresholds and HTTP status codes
+                          to mark targets healthy for an upstream.
                         properties:
                           http_statuses:
                             items:
@@ -871,8 +1139,9 @@ spec:
                       type:
                         type: string
                       unhealthy:
-                        description: Unhealthy configures thresholds and HTTP status
-                          codes to mark targets unhealthy.
+                        description: |-
+                          Unhealthy configures thresholds and HTTP status codes
+                          to mark targets unhealthy.
                         properties:
                           http_failures:
                             minimum: 0
@@ -893,12 +1162,14 @@ spec:
                         type: object
                     type: object
                   passive:
-                    description: PassiveHealthcheck configures passive checks around
+                    description: |-
+                      PassiveHealthcheck configures passive checks around
                       passive health checks.
                     properties:
                       healthy:
-                        description: Healthy configures thresholds and HTTP status
-                          codes to mark targets healthy for an upstream.
+                        description: |-
+                          Healthy configures thresholds and HTTP status codes
+                          to mark targets healthy for an upstream.
                         properties:
                           http_statuses:
                             items:
@@ -914,8 +1185,9 @@ spec:
                       type:
                         type: string
                       unhealthy:
-                        description: Unhealthy configures thresholds and HTTP status
-                          codes to mark targets unhealthy.
+                        description: |-
+                          Unhealthy configures thresholds and HTTP status codes
+                          to mark targets unhealthy.
                         properties:
                           http_failures:
                             minimum: 0
@@ -939,7 +1211,8 @@ spec:
                     type: number
                 type: object
               host_header:
-                description: HostHeader is The hostname to be used as Host header
+                description: |-
+                  HostHeader is The hostname to be used as Host header
                   when proxying requests through Kong.
                 type: string
               slots:
@@ -964,7 +1237,205 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.13.0
+    controller-gen.kubebuilder.io/version: v0.16.1
+  name: konglicenses.configuration.konghq.com
+spec:
+  group: configuration.konghq.com
+  names:
+    categories:
+    - kong-ingress-controller
+    kind: KongLicense
+    listKind: KongLicenseList
+    plural: konglicenses
+    shortNames:
+    - kl
+    singular: konglicense
+  scope: Cluster
+  versions:
+  - additionalPrinterColumns:
+    - description: Age
+      jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    - description: Enabled to configure on Kong gateway instances
+      jsonPath: .enabled
+      name: Enabled
+      type: boolean
+    name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: KongLicense stores a Kong enterprise license to apply to managed
+          Kong gateway instances.
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          enabled:
+            default: true
+            description: |-
+              Enabled is set to true to let controllers (like KIC or KGO) to reconcile it.
+              Default value is true to apply the license by default.
+            type: boolean
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          rawLicenseString:
+            description: RawLicenseString is a string with the raw content of the
+              license.
+            type: string
+          status:
+            description: Status is the status of the KongLicense being processed by
+              controllers.
+            properties:
+              controllers:
+                items:
+                  description: |-
+                    KongLicenseControllerStatus is the status of owning KongLicense being processed
+                    identified by the controllerName field.
+                  properties:
+                    conditions:
+                      default:
+                      - lastTransitionTime: "1970-01-01T00:00:00Z"
+                        message: Waiting for controller
+                        reason: Pending
+                        status: Unknown
+                        type: Programmed
+                      description: Conditions describe the current conditions of the
+                        KongLicense on the controller.
+                      items:
+                        description: Condition contains details for one aspect of
+                          the current state of this API Resource.
+                        properties:
+                          lastTransitionTime:
+                            description: |-
+                              lastTransitionTime is the last time the condition transitioned from one status to another.
+                              This should be when the underlying condition changed.  If that is not known, then using the time when the API field changed is acceptable.
+                            format: date-time
+                            type: string
+                          message:
+                            description: |-
+                              message is a human readable message indicating details about the transition.
+                              This may be an empty string.
+                            maxLength: 32768
+                            type: string
+                          observedGeneration:
+                            description: |-
+                              observedGeneration represents the .metadata.generation that the condition was set based upon.
+                              For instance, if .metadata.generation is currently 12, but the .status.conditions[x].observedGeneration is 9, the condition is out of date
+                              with respect to the current state of the instance.
+                            format: int64
+                            minimum: 0
+                            type: integer
+                          reason:
+                            description: |-
+                              reason contains a programmatic identifier indicating the reason for the condition's last transition.
+                              Producers of specific condition types may define expected values and meanings for this field,
+                              and whether the values are considered a guaranteed API.
+                              The value should be a CamelCase string.
+                              This field may not be empty.
+                            maxLength: 1024
+                            minLength: 1
+                            pattern: ^[A-Za-z]([A-Za-z0-9_,:]*[A-Za-z0-9_])?$
+                            type: string
+                          status:
+                            description: status of the condition, one of True, False,
+                              Unknown.
+                            enum:
+                            - "True"
+                            - "False"
+                            - Unknown
+                            type: string
+                          type:
+                            description: type of condition in CamelCase or in foo.example.com/CamelCase.
+                            maxLength: 316
+                            pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
+                            type: string
+                        required:
+                        - lastTransitionTime
+                        - message
+                        - reason
+                        - status
+                        - type
+                        type: object
+                      maxItems: 8
+                      type: array
+                      x-kubernetes-list-map-keys:
+                      - type
+                      x-kubernetes-list-type: map
+                    controllerName:
+                      description: |-
+                        ControllerName is an identifier of the controller to reconcile this KongLicense.
+                        Should be unique in the list of controller statuses.
+                      type: string
+                    controllerRef:
+                      description: |-
+                        ControllerRef is the reference of the controller to reconcile this KongLicense.
+                        It is usually the name of (KIC/KGO) pod that reconciles it.
+                      properties:
+                        group:
+                          description: |-
+                            Group is the group of referent.
+                            It should be empty if the referent is in "core" group (like pod).
+                          maxLength: 253
+                          pattern: ^$|^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
+                          type: string
+                        kind:
+                          description: |-
+                            Kind is the kind of the referent.
+                            By default the nil kind means kind Pod.
+                          maxLength: 63
+                          minLength: 1
+                          pattern: ^[a-zA-Z]([-a-zA-Z0-9]*[a-zA-Z0-9])?$
+                          type: string
+                        name:
+                          description: Name is the name of the referent.
+                          maxLength: 253
+                          minLength: 1
+                          type: string
+                        namespace:
+                          description: |-
+                            Namespace is the namespace of the referent.
+                            It should be empty if the referent is cluster scoped.
+                          maxLength: 63
+                          minLength: 1
+                          pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?$
+                          type: string
+                      required:
+                      - name
+                      type: object
+                  required:
+                  - controllerName
+                  type: object
+                type: array
+                x-kubernetes-list-map-keys:
+                - controllerName
+                x-kubernetes-list-type: map
+            type: object
+        required:
+        - enabled
+        - rawLicenseString
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.16.1
   name: kongplugins.configuration.konghq.com
 spec:
   group: configuration.konghq.com
@@ -1007,25 +1478,28 @@ spec:
         description: KongPlugin is the Schema for the kongplugins API.
         properties:
           apiVersion:
-            description: 'APIVersion defines the versioned schema of this representation
-              of an object. Servers should convert recognized schemas to the latest
-              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
             type: string
           config:
-            description: Config contains the plugin configuration. It's a list of
-              keys and values required to configure the plugin. Please read the documentation
-              of the plugin being configured to set values in here. For any plugin
-              in Kong, anything that goes in the `config` JSON key in the Admin API
-              request, goes into this property. Only one of `config` or `configFrom`
-              may be used in a KongPlugin, not both at once.
+            description: |-
+              Config contains the plugin configuration. It's a list of keys and values
+              required to configure the plugin.
+              Please read the documentation of the plugin being configured to set values
+              in here. For any plugin in Kong, anything that goes in the `config` JSON
+              key in the Admin API request, goes into this property.
+              Only one of `config` or `configFrom` may be used in a KongPlugin, not both at once.
             type: object
             x-kubernetes-preserve-unknown-fields: true
           configFrom:
-            description: ConfigFrom references a secret containing the plugin configuration.
-              This should be used when the plugin configuration contains sensitive
-              information, such as AWS credentials in the Lambda plugin or the client
-              secret in the OIDC plugin. Only one of `config` or `configFrom` may
-              be used in a KongPlugin, not both at once.
+            description: |-
+              ConfigFrom references a secret containing the plugin configuration.
+              This should be used when the plugin configuration contains sensitive information,
+              such as AWS credentials in the Lambda plugin or the client secret in the OIDC plugin.
+              Only one of `config` or `configFrom` may be used in a KongPlugin, not both at once.
             properties:
               secretKeyRef:
                 description: Specifies a name and a key of a secret to refer to. The
@@ -1041,7 +1515,54 @@ spec:
                 - key
                 - name
                 type: object
+            required:
+            - secretKeyRef
             type: object
+          configPatches:
+            description: |-
+              ConfigPatches represents JSON patches to the configuration of the plugin.
+              Each item means a JSON patch to add something in the configuration,
+              where path is specified in `path` and value is in `valueFrom` referencing
+              a key in a secret.
+              When Config is specified, patches will be applied to the configuration in Config.
+              Otherwise, patches will be applied to an empty object.
+            items:
+              description: |-
+                ConfigPatch is a JSON patch (RFC6902) to add values from Secret to the generated configuration.
+                It is an equivalent of the following patch:
+                `{"op": "add", "path": {.Path}, "value": {.ComputedValueFrom}}`.
+              properties:
+                path:
+                  description: Path is the JSON-Pointer value (RFC6901) that references
+                    a location within the target configuration.
+                  type: string
+                valueFrom:
+                  description: ValueFrom is the reference to a key of a secret where
+                    the patched value comes from.
+                  properties:
+                    secretKeyRef:
+                      description: Specifies a name and a key of a secret to refer
+                        to. The namespace is implicitly set to the one of referring
+                        object.
+                      properties:
+                        key:
+                          description: The key containing the value.
+                          type: string
+                        name:
+                          description: The secret containing the key.
+                          type: string
+                      required:
+                      - key
+                      - name
+                      type: object
+                  required:
+                  - secretKeyRef
+                  type: object
+              required:
+              - path
+              - valueFrom
+              type: object
+            type: array
           consumerRef:
             description: ConsumerRef is a reference to a particular consumer.
             type: string
@@ -1049,25 +1570,27 @@ spec:
             description: Disabled set if the plugin is disabled or not.
             type: boolean
           instance_name:
-            description: InstanceName is an optional custom name to identify an instance
-              of the plugin. This is useful when running the same plugin in multiple
-              contexts, for example, on multiple services.
+            description: |-
+              InstanceName is an optional custom name to identify an instance of the plugin. This is useful when running the
+              same plugin in multiple contexts, for example, on multiple services.
             type: string
           kind:
-            description: 'Kind is a string value representing the REST resource this
-              object represents. Servers may infer this from the endpoint the client
-              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
             type: string
           metadata:
             type: object
           ordering:
-            description: 'Ordering overrides the normal plugin execution order. It''s
-              only available on Kong Enterprise. `<phase>` is a request processing
-              phase (for example, `access` or `body_filter`) and `<plugin>` is the
-              name of the plugin that will run before or after the KongPlugin. For
-              example, a KongPlugin with `plugin: rate-limiting` and `before.access:
-              ["key-auth"]` will create a rate limiting plugin that limits requests
-              _before_ they are authenticated.'
+            description: |-
+              Ordering overrides the normal plugin execution order. It's only available on Kong Enterprise.
+              `<phase>` is a request processing phase (for example, `access` or `body_filter`) and
+              `<plugin>` is the name of the plugin that will run before or after the KongPlugin.
+              For example, a KongPlugin with `plugin: rate-limiting` and `before.access: ["key-auth"]`
+              will create a rate limiting plugin that limits requests _before_ they are authenticated.
             properties:
               after:
                 additionalProperties:
@@ -1091,11 +1614,13 @@ spec:
               config.
             type: string
           protocols:
-            description: Protocols configures plugin to run on requests received on
-              specific protocols.
+            description: |-
+              Protocols configures plugin to run on requests received on specific
+              protocols.
             items:
-              description: KongProtocol is a valid Kong protocol. This alias is necessary
-                to deal with https://github.com/kubernetes-sigs/controller-tools/issues/342
+              description: |-
+                KongProtocol is a valid Kong protocol.
+                This alias is necessary to deal with https://github.com/kubernetes-sigs/controller-tools/issues/342
               enum:
               - http
               - https
@@ -1107,8 +1632,9 @@ spec:
               type: string
             type: array
           run_on:
-            description: RunOn configures the plugin to run on the first or the second
-              or both nodes in case of a service mesh deployment.
+            description: |-
+              RunOn configures the plugin to run on the first or the second or both
+              nodes in case of a service mesh deployment.
             enum:
             - first
             - second
@@ -1124,46 +1650,42 @@ spec:
                   reason: Pending
                   status: Unknown
                   type: Programmed
-                description: "Conditions describe the current conditions of the KongPluginStatus.
-                  \n Known condition types are: \n * \"Programmed\""
+                description: |-
+                  Conditions describe the current conditions of the KongPluginStatus.
+
+                  Known condition types are:
+
+                  * "Programmed"
                 items:
-                  description: "Condition contains details for one aspect of the current
-                    state of this API Resource. --- This struct is intended for direct
-                    use as an array at the field path .status.conditions.  For example,
-                    \n type FooStatus struct{ // Represents the observations of a
-                    foo's current state. // Known .status.conditions.type are: \"Available\",
-                    \"Progressing\", and \"Degraded\" // +patchMergeKey=type // +patchStrategy=merge
-                    // +listType=map // +listMapKey=type Conditions []metav1.Condition
-                    `json:\"conditions,omitempty\" patchStrategy:\"merge\" patchMergeKey:\"type\"
-                    protobuf:\"bytes,1,rep,name=conditions\"` \n // other fields }"
+                  description: Condition contains details for one aspect of the current
+                    state of this API Resource.
                   properties:
                     lastTransitionTime:
-                      description: lastTransitionTime is the last time the condition
-                        transitioned from one status to another. This should be when
-                        the underlying condition changed.  If that is not known, then
-                        using the time when the API field changed is acceptable.
+                      description: |-
+                        lastTransitionTime is the last time the condition transitioned from one status to another.
+                        This should be when the underlying condition changed.  If that is not known, then using the time when the API field changed is acceptable.
                       format: date-time
                       type: string
                     message:
-                      description: message is a human readable message indicating
-                        details about the transition. This may be an empty string.
+                      description: |-
+                        message is a human readable message indicating details about the transition.
+                        This may be an empty string.
                       maxLength: 32768
                       type: string
                     observedGeneration:
-                      description: observedGeneration represents the .metadata.generation
-                        that the condition was set based upon. For instance, if .metadata.generation
-                        is currently 12, but the .status.conditions[x].observedGeneration
-                        is 9, the condition is out of date with respect to the current
-                        state of the instance.
+                      description: |-
+                        observedGeneration represents the .metadata.generation that the condition was set based upon.
+                        For instance, if .metadata.generation is currently 12, but the .status.conditions[x].observedGeneration is 9, the condition is out of date
+                        with respect to the current state of the instance.
                       format: int64
                       minimum: 0
                       type: integer
                     reason:
-                      description: reason contains a programmatic identifier indicating
-                        the reason for the condition's last transition. Producers
-                        of specific condition types may define expected values and
-                        meanings for this field, and whether the values are considered
-                        a guaranteed API. The value should be a CamelCase string.
+                      description: |-
+                        reason contains a programmatic identifier indicating the reason for the condition's last transition.
+                        Producers of specific condition types may define expected values and meanings for this field,
+                        and whether the values are considered a guaranteed API.
+                        The value should be a CamelCase string.
                         This field may not be empty.
                       maxLength: 1024
                       minLength: 1
@@ -1178,10 +1700,6 @@ spec:
                       type: string
                     type:
                       description: type of condition in CamelCase or in foo.example.com/CamelCase.
-                        --- Many .condition.type values are consistent across resources
-                        like Available, but because arbitrary conditions can be useful
-                        (see .node.status.conditions), the ability to deconflict is
-                        important. The regex it matches is (dns1123SubdomainFmt/)?(qualifiedNameFmt)
                       maxLength: 316
                       pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
                       type: string
@@ -1201,6 +1719,13 @@ spec:
         required:
         - plugin
         type: object
+        x-kubernetes-validations:
+        - message: Using both config and configFrom fields is not allowed.
+          rule: '!(has(self.config) && has(self.configFrom))'
+        - message: Using both configFrom and configPatches fields is not allowed.
+          rule: '!(has(self.configFrom) && has(self.configPatches))'
+        - message: The plugin field is immutable
+          rule: self.plugin == oldSelf.plugin
     served: true
     storage: true
     subresources:
@@ -1210,7 +1735,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.13.0
+    controller-gen.kubebuilder.io/version: v0.16.1
   labels:
     gateway.networking.k8s.io/policy: direct
   name: kongupstreampolicies.configuration.konghq.com
@@ -1230,33 +1755,40 @@ spec:
   - name: v1beta1
     schema:
       openAPIV3Schema:
-        description: "KongUpstreamPolicy allows configuring algorithm that should
-          be used for load balancing traffic between Kong Upstream's Targets. It also
-          allows configuring health checks for Kong Upstream's Targets. \n Its configuration
-          is similar to Kong Upstream object (https://docs.konghq.com/gateway/latest/admin-api/#upstream-object),
-          and it is applied to Kong Upstream objects created by the controller. \n
-          It can be attached to Services. To attach it to a Service, it has to be
-          annotated with `konghq.com/upstream-policy: <name>`, where `<name>` is the
-          name of the KongUpstreamPolicy object in the same namespace as the Service.
-          \n When attached to a Service, it will affect all Kong Upstreams created
-          for the Service. \n When attached to a Service used in a Gateway API *Route
-          rule with multiple BackendRefs, all of its Services MUST be configured with
-          the same KongUpstreamPolicy. Otherwise, the controller will *ignore* the
-          KongUpstreamPolicy. \n Note: KongUpstreamPolicy doesn't implement Gateway
-          API's GEP-713 strictly. In particular, it doesn't use the TargetRef for
-          attaching to Services and Gateway API *Routes - annotations are used instead.
-          This is to allow reusing the same KongUpstreamPolicy for multiple Services
-          and Gateway API *Routes."
+        description: |-
+          KongUpstreamPolicy allows configuring algorithm that should be used for load balancing traffic between Kong
+          Upstream's Targets. It also allows configuring health checks for Kong Upstream's Targets.
+
+          Its configuration is similar to Kong Upstream object (https://docs.konghq.com/gateway/latest/admin-api/#upstream-object),
+          and it is applied to Kong Upstream objects created by the controller.
+
+          It can be attached to Services. To attach it to a Service, it has to be annotated with
+          `konghq.com/upstream-policy: <name>`, where `<name>` is the name of the KongUpstreamPolicy
+          object in the same namespace as the Service.
+
+          When attached to a Service, it will affect all Kong Upstreams created for the Service.
+
+          When attached to a Service used in a Gateway API *Route rule with multiple BackendRefs, all of its Services MUST
+          be configured with the same KongUpstreamPolicy. Otherwise, the controller will *ignore* the KongUpstreamPolicy.
+
+          Note: KongUpstreamPolicy doesn't implement Gateway API's GEP-713 strictly.
+          In particular, it doesn't use the TargetRef for attaching to Services and Gateway API *Routes - annotations are
+          used instead. This is to allow reusing the same KongUpstreamPolicy for multiple Services and Gateway API *Routes.
         properties:
           apiVersion:
-            description: 'APIVersion defines the versioned schema of this representation
-              of an object. Servers should convert recognized schemas to the latest
-              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
             type: string
           kind:
-            description: 'Kind is a string value representing the REST resource this
-              object represents. Servers may infer this from the endpoint the client
-              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
             type: string
           metadata:
             type: object
@@ -1264,9 +1796,9 @@ spec:
             description: Spec contains the configuration of the Kong upstream.
             properties:
               algorithm:
-                description: 'Algorithm is the load balancing algorithm to use. Accepted
-                  values are: "round-robin", "consistent-hashing", "least-connections",
-                  "latency".'
+                description: |-
+                  Algorithm is the load balancing algorithm to use.
+                  Accepted values are: "round-robin", "consistent-hashing", "least-connections", "latency".
                 enum:
                 - round-robin
                 - consistent-hashing
@@ -1274,9 +1806,9 @@ spec:
                 - latency
                 type: string
               hashOn:
-                description: HashOn defines how to calculate hash for consistent-hashing
-                  load balancing algorithm. Algorithm must be set to "consistent-hashing"
-                  for this field to have effect.
+                description: |-
+                  HashOn defines how to calculate hash for consistent-hashing load balancing algorithm.
+                  Algorithm must be set to "consistent-hashing" for this field to have effect.
                 properties:
                   cookie:
                     description: Cookie is the name of the cookie to use as hash input.
@@ -1289,9 +1821,9 @@ spec:
                     description: Header is the name of the header to use as hash input.
                     type: string
                   input:
-                    description: Input allows using one of the predefined inputs (ip,
-                      consumer, path). For other parametrized inputs, use one of the
-                      fields below.
+                    description: |-
+                      Input allows using one of the predefined inputs (ip, consumer, path).
+                      For other parametrized inputs, use one of the fields below.
                     enum:
                     - ip
                     - consumer
@@ -1307,9 +1839,10 @@ spec:
                     type: string
                 type: object
               hashOnFallback:
-                description: HashOnFallback defines how to calculate hash for consistent-hashing
-                  load balancing algorithm if the primary hash function fails. Algorithm
-                  must be set to "consistent-hashing" for this field to have effect.
+                description: |-
+                  HashOnFallback defines how to calculate hash for consistent-hashing load balancing algorithm if the primary hash
+                  function fails.
+                  Algorithm must be set to "consistent-hashing" for this field to have effect.
                 properties:
                   cookie:
                     description: Cookie is the name of the cookie to use as hash input.
@@ -1322,9 +1855,9 @@ spec:
                     description: Header is the name of the header to use as hash input.
                     type: string
                   input:
-                    description: Input allows using one of the predefined inputs (ip,
-                      consumer, path). For other parametrized inputs, use one of the
-                      fields below.
+                    description: |-
+                      Input allows using one of the predefined inputs (ip, consumer, path).
+                      For other parametrized inputs, use one of the fields below.
                     enum:
                     - ip
                     - consumer
@@ -1402,8 +1935,8 @@ spec:
                         minimum: 0
                         type: integer
                       type:
-                        description: Type determines whether to perform active health
-                          checks using HTTP or HTTPS, or just attempt a TCP connection.
+                        description: |-
+                          Type determines whether to perform active health checks using HTTP or HTTPS, or just attempt a TCP connection.
                           Accepted values are "http", "https", "tcp", "grpc", "grpcs".
                         enum:
                         - http
@@ -1477,10 +2010,10 @@ spec:
                             type: integer
                         type: object
                       type:
-                        description: Type determines whether to perform passive health
-                          checks interpreting HTTP/HTTPS statuses, or just check for
-                          TCP connection success. Accepted values are "http", "https",
-                          "tcp", "grpc", "grpcs".
+                        description: |-
+                          Type determines whether to perform passive health checks interpreting HTTP/HTTPS statuses,
+                          or just check for TCP connection success.
+                          Accepted values are "http", "https", "tcp", "grpc", "grpcs".
                         enum:
                         - http
                         - https
@@ -1525,17 +2058,314 @@ spec:
                         type: object
                     type: object
                   threshold:
-                    description: Threshold is the minimum percentage of the upstream’s
-                      targets’ weight that must be available for the whole upstream
-                      to be considered healthy.
+                    description: |-
+                      Threshold is the minimum percentage of the upstream’s targets’ weight that must be available for the whole
+                      upstream to be considered healthy.
                     type: integer
                 type: object
               slots:
-                description: Slots is the number of slots in the load balancer algorithm.
+                description: |-
+                  Slots is the number of slots in the load balancer algorithm.
                   If not set, the default value in Kong for the algorithm is used.
                 maximum: 65536
                 minimum: 10
                 type: integer
+            type: object
+          status:
+            description: Status defines the current state of KongUpstreamPolicy
+            properties:
+              ancestors:
+                description: |-
+                  Ancestors is a list of ancestor resources (usually Gateways) that are
+                  associated with the policy, and the status of the policy with respect to
+                  each ancestor. When this policy attaches to a parent, the controller that
+                  manages the parent and the ancestors MUST add an entry to this list when
+                  the controller first sees the policy and SHOULD update the entry as
+                  appropriate when the relevant ancestor is modified.
+
+                  Note that choosing the relevant ancestor is left to the Policy designers;
+                  an important part of Policy design is designing the right object level at
+                  which to namespace this status.
+
+                  Note also that implementations MUST ONLY populate ancestor status for
+                  the Ancestor resources they are responsible for. Implementations MUST
+                  use the ControllerName field to uniquely identify the entries in this list
+                  that they are responsible for.
+
+                  Note that to achieve this, the list of PolicyAncestorStatus structs
+                  MUST be treated as a map with a composite key, made up of the AncestorRef
+                  and ControllerName fields combined.
+
+                  A maximum of 16 ancestors will be represented in this list. An empty list
+                  means the Policy is not relevant for any ancestors.
+
+                  If this slice is full, implementations MUST NOT add further entries.
+                  Instead they MUST consider the policy unimplementable and signal that
+                  on any related resources such as the ancestor that would be referenced
+                  here. For example, if this list was full on BackendTLSPolicy, no
+                  additional Gateways would be able to reference the Service targeted by
+                  the BackendTLSPolicy.
+                items:
+                  description: |-
+                    PolicyAncestorStatus describes the status of a route with respect to an
+                    associated Ancestor.
+
+                    Ancestors refer to objects that are either the Target of a policy or above it
+                    in terms of object hierarchy. For example, if a policy targets a Service, the
+                    Policy's Ancestors are, in order, the Service, the HTTPRoute, the Gateway, and
+                    the GatewayClass. Almost always, in this hierarchy, the Gateway will be the most
+                    useful object to place Policy status on, so we recommend that implementations
+                    SHOULD use Gateway as the PolicyAncestorStatus object unless the designers
+                    have a _very_ good reason otherwise.
+
+                    In the context of policy attachment, the Ancestor is used to distinguish which
+                    resource results in a distinct application of this policy. For example, if a policy
+                    targets a Service, it may have a distinct result per attached Gateway.
+
+                    Policies targeting the same resource may have different effects depending on the
+                    ancestors of those resources. For example, different Gateways targeting the same
+                    Service may have different capabilities, especially if they have different underlying
+                    implementations.
+
+                    For example, in BackendTLSPolicy, the Policy attaches to a Service that is
+                    used as a backend in a HTTPRoute that is itself attached to a Gateway.
+                    In this case, the relevant object for status is the Gateway, and that is the
+                    ancestor object referred to in this status.
+
+                    Note that a parent is also an ancestor, so for objects where the parent is the
+                    relevant object for status, this struct SHOULD still be used.
+
+                    This struct is intended to be used in a slice that's effectively a map,
+                    with a composite key made up of the AncestorRef and the ControllerName.
+                  properties:
+                    ancestorRef:
+                      description: |-
+                        AncestorRef corresponds with a ParentRef in the spec that this
+                        PolicyAncestorStatus struct describes the status of.
+                      properties:
+                        group:
+                          default: gateway.networking.k8s.io
+                          description: |-
+                            Group is the group of the referent.
+                            When unspecified, "gateway.networking.k8s.io" is inferred.
+                            To set the core API group (such as for a "Service" kind referent),
+                            Group must be explicitly set to "" (empty string).
+
+                            Support: Core
+                          maxLength: 253
+                          pattern: ^$|^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
+                          type: string
+                        kind:
+                          default: Gateway
+                          description: |-
+                            Kind is kind of the referent.
+
+                            There are two kinds of parent resources with "Core" support:
+
+                            * Gateway (Gateway conformance profile)
+                            * Service (Mesh conformance profile, ClusterIP Services only)
+
+                            Support for other resources is Implementation-Specific.
+                          maxLength: 63
+                          minLength: 1
+                          pattern: ^[a-zA-Z]([-a-zA-Z0-9]*[a-zA-Z0-9])?$
+                          type: string
+                        name:
+                          description: |-
+                            Name is the name of the referent.
+
+                            Support: Core
+                          maxLength: 253
+                          minLength: 1
+                          type: string
+                        namespace:
+                          description: |-
+                            Namespace is the namespace of the referent. When unspecified, this refers
+                            to the local namespace of the Route.
+
+                            Note that there are specific rules for ParentRefs which cross namespace
+                            boundaries. Cross-namespace references are only valid if they are explicitly
+                            allowed by something in the namespace they are referring to. For example:
+                            Gateway has the AllowedRoutes field, and ReferenceGrant provides a
+                            generic way to enable any other kind of cross-namespace reference.
+
+                            <gateway:experimental:description>
+                            ParentRefs from a Route to a Service in the same namespace are "producer"
+                            routes, which apply default routing rules to inbound connections from
+                            any namespace to the Service.
+
+                            ParentRefs from a Route to a Service in a different namespace are
+                            "consumer" routes, and these routing rules are only applied to outbound
+                            connections originating from the same namespace as the Route, for which
+                            the intended destination of the connections are a Service targeted as a
+                            ParentRef of the Route.
+                            </gateway:experimental:description>
+
+                            Support: Core
+                          maxLength: 63
+                          minLength: 1
+                          pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?$
+                          type: string
+                        port:
+                          description: |-
+                            Port is the network port this Route targets. It can be interpreted
+                            differently based on the type of parent resource.
+
+                            When the parent resource is a Gateway, this targets all listeners
+                            listening on the specified port that also support this kind of Route(and
+                            select this Route). It's not recommended to set `Port` unless the
+                            networking behaviors specified in a Route must apply to a specific port
+                            as opposed to a listener(s) whose port(s) may be changed. When both Port
+                            and SectionName are specified, the name and port of the selected listener
+                            must match both specified values.
+
+                            <gateway:experimental:description>
+                            When the parent resource is a Service, this targets a specific port in the
+                            Service spec. When both Port (experimental) and SectionName are specified,
+                            the name and port of the selected port must match both specified values.
+                            </gateway:experimental:description>
+
+                            Implementations MAY choose to support other parent resources.
+                            Implementations supporting other types of parent resources MUST clearly
+                            document how/if Port is interpreted.
+
+                            For the purpose of status, an attachment is considered successful as
+                            long as the parent resource accepts it partially. For example, Gateway
+                            listeners can restrict which Routes can attach to them by Route kind,
+                            namespace, or hostname. If 1 of 2 Gateway listeners accept attachment
+                            from the referencing Route, the Route MUST be considered successfully
+                            attached. If no Gateway listeners accept attachment from this Route,
+                            the Route MUST be considered detached from the Gateway.
+
+                            Support: Extended
+                          format: int32
+                          maximum: 65535
+                          minimum: 1
+                          type: integer
+                        sectionName:
+                          description: |-
+                            SectionName is the name of a section within the target resource. In the
+                            following resources, SectionName is interpreted as the following:
+
+                            * Gateway: Listener name. When both Port (experimental) and SectionName
+                            are specified, the name and port of the selected listener must match
+                            both specified values.
+                            * Service: Port name. When both Port (experimental) and SectionName
+                            are specified, the name and port of the selected listener must match
+                            both specified values.
+
+                            Implementations MAY choose to support attaching Routes to other resources.
+                            If that is the case, they MUST clearly document how SectionName is
+                            interpreted.
+
+                            When unspecified (empty string), this will reference the entire resource.
+                            For the purpose of status, an attachment is considered successful if at
+                            least one section in the parent resource accepts it. For example, Gateway
+                            listeners can restrict which Routes can attach to them by Route kind,
+                            namespace, or hostname. If 1 of 2 Gateway listeners accept attachment from
+                            the referencing Route, the Route MUST be considered successfully
+                            attached. If no Gateway listeners accept attachment from this Route, the
+                            Route MUST be considered detached from the Gateway.
+
+                            Support: Core
+                          maxLength: 253
+                          minLength: 1
+                          pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
+                          type: string
+                      required:
+                      - name
+                      type: object
+                    conditions:
+                      description: Conditions describes the status of the Policy with
+                        respect to the given Ancestor.
+                      items:
+                        description: Condition contains details for one aspect of
+                          the current state of this API Resource.
+                        properties:
+                          lastTransitionTime:
+                            description: |-
+                              lastTransitionTime is the last time the condition transitioned from one status to another.
+                              This should be when the underlying condition changed.  If that is not known, then using the time when the API field changed is acceptable.
+                            format: date-time
+                            type: string
+                          message:
+                            description: |-
+                              message is a human readable message indicating details about the transition.
+                              This may be an empty string.
+                            maxLength: 32768
+                            type: string
+                          observedGeneration:
+                            description: |-
+                              observedGeneration represents the .metadata.generation that the condition was set based upon.
+                              For instance, if .metadata.generation is currently 12, but the .status.conditions[x].observedGeneration is 9, the condition is out of date
+                              with respect to the current state of the instance.
+                            format: int64
+                            minimum: 0
+                            type: integer
+                          reason:
+                            description: |-
+                              reason contains a programmatic identifier indicating the reason for the condition's last transition.
+                              Producers of specific condition types may define expected values and meanings for this field,
+                              and whether the values are considered a guaranteed API.
+                              The value should be a CamelCase string.
+                              This field may not be empty.
+                            maxLength: 1024
+                            minLength: 1
+                            pattern: ^[A-Za-z]([A-Za-z0-9_,:]*[A-Za-z0-9_])?$
+                            type: string
+                          status:
+                            description: status of the condition, one of True, False,
+                              Unknown.
+                            enum:
+                            - "True"
+                            - "False"
+                            - Unknown
+                            type: string
+                          type:
+                            description: type of condition in CamelCase or in foo.example.com/CamelCase.
+                            maxLength: 316
+                            pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
+                            type: string
+                        required:
+                        - lastTransitionTime
+                        - message
+                        - reason
+                        - status
+                        - type
+                        type: object
+                      maxItems: 8
+                      minItems: 1
+                      type: array
+                      x-kubernetes-list-map-keys:
+                      - type
+                      x-kubernetes-list-type: map
+                    controllerName:
+                      description: |-
+                        ControllerName is a domain/path string that indicates the name of the
+                        controller that wrote this status. This corresponds with the
+                        controllerName field on GatewayClass.
+
+                        Example: "example.net/gateway-controller".
+
+                        The format of this field is DOMAIN "/" PATH, where DOMAIN and PATH are
+                        valid Kubernetes names
+                        (https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names).
+
+                        Controllers MUST populate this field when writing status. Controllers should ensure that
+                        entries to status populated with their ControllerName are cleaned up when they are no
+                        longer necessary.
+                      maxLength: 253
+                      minLength: 1
+                      pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*\/[A-Za-z0-9\/\-._~%!$&'()*+,;=:]+$
+                      type: string
+                  required:
+                  - ancestorRef
+                  - controllerName
+                  type: object
+                maxItems: 16
+                type: array
+            required:
+            - ancestors
             type: object
         type: object
         x-kubernetes-validations:
@@ -1591,7 +2421,189 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.13.0
+    controller-gen.kubebuilder.io/version: v0.16.1
+  name: kongvaults.configuration.konghq.com
+spec:
+  group: configuration.konghq.com
+  names:
+    categories:
+    - kong-ingress-controller
+    kind: KongVault
+    listKind: KongVaultList
+    plural: kongvaults
+    shortNames:
+    - kv
+    singular: kongvault
+  scope: Cluster
+  versions:
+  - additionalPrinterColumns:
+    - description: Name of the backend of the vault
+      jsonPath: .spec.backend
+      name: Backend Type
+      type: string
+    - description: Prefix of vault URI to reference the values in the vault
+      jsonPath: .spec.prefix
+      name: Prefix
+      type: string
+    - description: Age
+      jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    - description: Description
+      jsonPath: .spec.description
+      name: Description
+      priority: 1
+      type: string
+    - jsonPath: .status.conditions[?(@.type=="Programmed")].status
+      name: Programmed
+      type: string
+    name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: |-
+          KongVault is the schema for kongvaults API which defines a custom Kong vault.
+          A Kong vault is a storage to store sensitive data, where the values can be referenced in configuration of plugins.
+          See: https://docs.konghq.com/gateway/latest/kong-enterprise/secrets-management/
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: KongVaultSpec defines specification of a custom Kong vault.
+            properties:
+              backend:
+                description: |-
+                  Backend is the type of the backend storing the secrets in the vault.
+                  The supported backends of Kong is listed here:
+                  https://docs.konghq.com/gateway/latest/kong-enterprise/secrets-management/backends/
+                minLength: 1
+                type: string
+              config:
+                description: Config is the configuration of the vault. Varies for
+                  different backends.
+                x-kubernetes-preserve-unknown-fields: true
+              description:
+                description: Description is the additional information about the vault.
+                type: string
+              prefix:
+                description: |-
+                  Prefix is the prefix of vault URI for referencing values in the vault.
+                  It is immutable after created.
+                minLength: 1
+                type: string
+            required:
+            - backend
+            - prefix
+            type: object
+          status:
+            description: KongVaultStatus represents the current status of the KongVault
+              resource.
+            properties:
+              conditions:
+                default:
+                - lastTransitionTime: "1970-01-01T00:00:00Z"
+                  message: Waiting for controller
+                  reason: Pending
+                  status: Unknown
+                  type: Programmed
+                description: |-
+                  Conditions describe the current conditions of the KongVaultStatus.
+
+                  Known condition types are:
+
+                  * "Programmed"
+                items:
+                  description: Condition contains details for one aspect of the current
+                    state of this API Resource.
+                  properties:
+                    lastTransitionTime:
+                      description: |-
+                        lastTransitionTime is the last time the condition transitioned from one status to another.
+                        This should be when the underlying condition changed.  If that is not known, then using the time when the API field changed is acceptable.
+                      format: date-time
+                      type: string
+                    message:
+                      description: |-
+                        message is a human readable message indicating details about the transition.
+                        This may be an empty string.
+                      maxLength: 32768
+                      type: string
+                    observedGeneration:
+                      description: |-
+                        observedGeneration represents the .metadata.generation that the condition was set based upon.
+                        For instance, if .metadata.generation is currently 12, but the .status.conditions[x].observedGeneration is 9, the condition is out of date
+                        with respect to the current state of the instance.
+                      format: int64
+                      minimum: 0
+                      type: integer
+                    reason:
+                      description: |-
+                        reason contains a programmatic identifier indicating the reason for the condition's last transition.
+                        Producers of specific condition types may define expected values and meanings for this field,
+                        and whether the values are considered a guaranteed API.
+                        The value should be a CamelCase string.
+                        This field may not be empty.
+                      maxLength: 1024
+                      minLength: 1
+                      pattern: ^[A-Za-z]([A-Za-z0-9_,:]*[A-Za-z0-9_])?$
+                      type: string
+                    status:
+                      description: status of the condition, one of True, False, Unknown.
+                      enum:
+                      - "True"
+                      - "False"
+                      - Unknown
+                      type: string
+                    type:
+                      description: type of condition in CamelCase or in foo.example.com/CamelCase.
+                      maxLength: 316
+                      pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
+                      type: string
+                  required:
+                  - lastTransitionTime
+                  - message
+                  - reason
+                  - status
+                  - type
+                  type: object
+                maxItems: 8
+                type: array
+                x-kubernetes-list-map-keys:
+                - type
+                x-kubernetes-list-type: map
+            required:
+            - conditions
+            type: object
+        required:
+        - spec
+        type: object
+        x-kubernetes-validations:
+        - message: The spec.prefix field is immutable
+          rule: self.spec.prefix == oldSelf.spec.prefix
+    served: true
+    storage: true
+    subresources:
+      status: {}
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.16.1
   name: tcpingresses.configuration.konghq.com
 spec:
   group: configuration.konghq.com
@@ -1619,14 +2631,19 @@ spec:
         description: TCPIngress is the Schema for the tcpingresses API.
         properties:
           apiVersion:
-            description: 'APIVersion defines the versioned schema of this representation
-              of an object. Servers should convert recognized schemas to the latest
-              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
             type: string
           kind:
-            description: 'Kind is a string value representing the REST resource this
-              object represents. Servers may infer this from the endpoint the client
-              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
             type: string
           metadata:
             type: object
@@ -1636,13 +2653,14 @@ spec:
               rules:
                 description: A list of rules used to configure the Ingress.
                 items:
-                  description: IngressRule represents a rule to apply against incoming
-                    requests. Matching is performed based on an (optional) SNI and
-                    port.
+                  description: |-
+                    IngressRule represents a rule to apply against incoming requests.
+                    Matching is performed based on an (optional) SNI and port.
                   properties:
                     backend:
-                      description: Backend defines the referenced service endpoint
-                        to which the traffic will be forwarded to.
+                      description: |-
+                        Backend defines the referenced service endpoint to which the traffic
+                        will be forwarded to.
                       properties:
                         serviceName:
                           description: Specifies the name of the referenced service.
@@ -1659,19 +2677,20 @@ spec:
                       - servicePort
                       type: object
                     host:
-                      description: Host is the fully qualified domain name of a network
-                        host, as defined by RFC 3986. If a Host is not specified,
-                        then port-based TCP routing is performed. Kong doesn't care
-                        about the content of the TCP stream in this case. If a Host
-                        is specified, the protocol must be TLS over TCP. A plain-text
-                        TCP request cannot be routed based on Host. It can only be
-                        routed based on Port.
+                      description: |-
+                        Host is the fully qualified domain name of a network host, as defined
+                        by RFC 3986.
+                        If a Host is not specified, then port-based TCP routing is performed. Kong
+                        doesn't care about the content of the TCP stream in this case.
+                        If a Host is specified, the protocol must be TLS over TCP.
+                        A plain-text TCP request cannot be routed based on Host. It can only
+                        be routed based on Port.
                       type: string
                     port:
-                      description: Port is the port on which to accept TCP or TLS
-                        over TCP sessions and route. It is a required field. If a
-                        Host is not specified, the requested are routed based only
-                        on Port.
+                      description: |-
+                        Port is the port on which to accept TCP or TLS over TCP sessions and
+                        route. It is a required field. If a Host is not specified, the requested
+                        are routed based only on Port.
                       format: int32
                       maximum: 65535
                       minimum: 1
@@ -1682,19 +2701,22 @@ spec:
                   type: object
                 type: array
               tls:
-                description: TLS configuration. This is similar to the `tls` section
-                  in the Ingress resource in networking.v1beta1 group. The mapping
-                  of SNIs to TLS cert-key pair defined here will be used for HTTP
-                  Ingress rules as well. Once can define the mapping in this resource
-                  or the original Ingress resource, both have the same effect.
+                description: |-
+                  TLS configuration. This is similar to the `tls` section in the
+                  Ingress resource in networking.v1beta1 group.
+                  The mapping of SNIs to TLS cert-key pair defined here will be
+                  used for HTTP Ingress rules as well. Once can define the mapping in
+                  this resource or the original Ingress resource, both have the same
+                  effect.
                 items:
                   description: IngressTLS describes the transport layer security.
                   properties:
                     hosts:
-                      description: Hosts are a list of hosts included in the TLS certificate.
-                        The values in this list must match the name/s used in the
-                        tlsSecret. Defaults to the wildcard host setting for the loadbalancer
-                        controller fulfilling this Ingress, if left unspecified.
+                      description: |-
+                        Hosts are a list of hosts included in the TLS certificate. The values in
+                        this list must match the name/s used in the tlsSecret. Defaults to the
+                        wildcard host setting for the loadbalancer controller fulfilling this
+                        Ingress, if left unspecified.
                       items:
                         type: string
                       type: array
@@ -1712,37 +2734,47 @@ spec:
                 description: LoadBalancer contains the current status of the load-balancer.
                 properties:
                   ingress:
-                    description: Ingress is a list containing ingress points for the
-                      load-balancer. Traffic intended for the service should be sent
-                      to these ingress points.
+                    description: |-
+                      Ingress is a list containing ingress points for the load-balancer.
+                      Traffic intended for the service should be sent to these ingress points.
                     items:
-                      description: 'LoadBalancerIngress represents the status of a
-                        load-balancer ingress point: traffic intended for the service
-                        should be sent to an ingress point.'
+                      description: |-
+                        LoadBalancerIngress represents the status of a load-balancer ingress point:
+                        traffic intended for the service should be sent to an ingress point.
                       properties:
                         hostname:
-                          description: Hostname is set for load-balancer ingress points
-                            that are DNS based (typically AWS load-balancers)
+                          description: |-
+                            Hostname is set for load-balancer ingress points that are DNS based
+                            (typically AWS load-balancers)
                           type: string
                         ip:
-                          description: IP is set for load-balancer ingress points
-                            that are IP based (typically GCE or OpenStack load-balancers)
+                          description: |-
+                            IP is set for load-balancer ingress points that are IP based
+                            (typically GCE or OpenStack load-balancers)
+                          type: string
+                        ipMode:
+                          description: |-
+                            IPMode specifies how the load-balancer IP behaves, and may only be specified when the ip field is specified.
+                            Setting this to "VIP" indicates that traffic is delivered to the node with
+                            the destination set to the load-balancer's IP and port.
+                            Setting this to "Proxy" indicates that traffic is delivered to the node or pod with
+                            the destination set to the node's IP and node port or the pod's IP and port.
+                            Service implementations may use this information to adjust traffic routing.
                           type: string
                         ports:
-                          description: Ports is a list of records of service ports
-                            If used, every port defined in the service should have
-                            an entry in it
+                          description: |-
+                            Ports is a list of records of service ports
+                            If used, every port defined in the service should have an entry in it
                           items:
                             properties:
                               error:
-                                description: 'Error is to record the problem with
-                                  the service port The format of the error shall comply
-                                  with the following rules: - built-in error values
-                                  shall be specified in this file and those shall
-                                  use CamelCase names - cloud provider specific error
-                                  values must have names that comply with the format
-                                  foo.example.com/CamelCase. --- The regex it matches
-                                  is (dns1123SubdomainFmt/)?(qualifiedNameFmt)'
+                                description: |-
+                                  Error is to record the problem with the service port
+                                  The format of the error shall comply with the following rules:
+                                  - built-in error values shall be specified in this file and those shall use
+                                    CamelCase names
+                                  - cloud provider specific error values must have names that comply with the
+                                    format foo.example.com/CamelCase.
                                 maxLength: 316
                                 pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
                                 type: string
@@ -1752,12 +2784,12 @@ spec:
                                 format: int32
                                 type: integer
                               protocol:
-                                default: TCP
-                                description: 'Protocol is the protocol of the service
-                                  port of which status is recorded here The supported
-                                  values are: "TCP", "UDP", "SCTP"'
+                                description: |-
+                                  Protocol is the protocol of the service port of which status is recorded here
+                                  The supported values are: "TCP", "UDP", "SCTP"
                                 type: string
                             required:
+                            - error
                             - port
                             - protocol
                             type: object
@@ -1765,6 +2797,7 @@ spec:
                           x-kubernetes-list-type: atomic
                       type: object
                     type: array
+                    x-kubernetes-list-type: atomic
                 type: object
             type: object
         type: object
@@ -1777,7 +2810,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.13.0
+    controller-gen.kubebuilder.io/version: v0.16.1
   name: udpingresses.configuration.konghq.com
 spec:
   group: configuration.konghq.com
@@ -1805,14 +2838,19 @@ spec:
         description: UDPIngress is the Schema for the udpingresses API.
         properties:
           apiVersion:
-            description: 'APIVersion defines the versioned schema of this representation
-              of an object. Servers should convert recognized schemas to the latest
-              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
             type: string
           kind:
-            description: 'Kind is a string value representing the REST resource this
-              object represents. Servers may infer this from the endpoint the client
-              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
             type: string
           metadata:
             type: object
@@ -1822,13 +2860,15 @@ spec:
               rules:
                 description: A list of rules used to configure the Ingress.
                 items:
-                  description: UDPIngressRule represents a rule to apply against incoming
-                    requests wherein no Host matching is available for request routing,
-                    only the port is used to match requests.
+                  description: |-
+                    UDPIngressRule represents a rule to apply against incoming requests
+                    wherein no Host matching is available for request routing, only the port
+                    is used to match requests.
                   properties:
                     backend:
-                      description: Backend defines the Kubernetes service which accepts
-                        traffic from the listening Port defined above.
+                      description: |-
+                        Backend defines the Kubernetes service which accepts traffic from the
+                        listening Port defined above.
                       properties:
                         serviceName:
                           description: Specifies the name of the referenced service.
@@ -1845,9 +2885,9 @@ spec:
                       - servicePort
                       type: object
                     port:
-                      description: Port indicates the port for the Kong proxy to accept
-                        incoming traffic on, which will then be routed to the service
-                        Backend.
+                      description: |-
+                        Port indicates the port for the Kong proxy to accept incoming traffic
+                        on, which will then be routed to the service Backend.
                       format: int32
                       maximum: 65535
                       minimum: 1
@@ -1865,37 +2905,47 @@ spec:
                 description: LoadBalancer contains the current status of the load-balancer.
                 properties:
                   ingress:
-                    description: Ingress is a list containing ingress points for the
-                      load-balancer. Traffic intended for the service should be sent
-                      to these ingress points.
+                    description: |-
+                      Ingress is a list containing ingress points for the load-balancer.
+                      Traffic intended for the service should be sent to these ingress points.
                     items:
-                      description: 'LoadBalancerIngress represents the status of a
-                        load-balancer ingress point: traffic intended for the service
-                        should be sent to an ingress point.'
+                      description: |-
+                        LoadBalancerIngress represents the status of a load-balancer ingress point:
+                        traffic intended for the service should be sent to an ingress point.
                       properties:
                         hostname:
-                          description: Hostname is set for load-balancer ingress points
-                            that are DNS based (typically AWS load-balancers)
+                          description: |-
+                            Hostname is set for load-balancer ingress points that are DNS based
+                            (typically AWS load-balancers)
                           type: string
                         ip:
-                          description: IP is set for load-balancer ingress points
-                            that are IP based (typically GCE or OpenStack load-balancers)
+                          description: |-
+                            IP is set for load-balancer ingress points that are IP based
+                            (typically GCE or OpenStack load-balancers)
+                          type: string
+                        ipMode:
+                          description: |-
+                            IPMode specifies how the load-balancer IP behaves, and may only be specified when the ip field is specified.
+                            Setting this to "VIP" indicates that traffic is delivered to the node with
+                            the destination set to the load-balancer's IP and port.
+                            Setting this to "Proxy" indicates that traffic is delivered to the node or pod with
+                            the destination set to the node's IP and node port or the pod's IP and port.
+                            Service implementations may use this information to adjust traffic routing.
                           type: string
                         ports:
-                          description: Ports is a list of records of service ports
-                            If used, every port defined in the service should have
-                            an entry in it
+                          description: |-
+                            Ports is a list of records of service ports
+                            If used, every port defined in the service should have an entry in it
                           items:
                             properties:
                               error:
-                                description: 'Error is to record the problem with
-                                  the service port The format of the error shall comply
-                                  with the following rules: - built-in error values
-                                  shall be specified in this file and those shall
-                                  use CamelCase names - cloud provider specific error
-                                  values must have names that comply with the format
-                                  foo.example.com/CamelCase. --- The regex it matches
-                                  is (dns1123SubdomainFmt/)?(qualifiedNameFmt)'
+                                description: |-
+                                  Error is to record the problem with the service port
+                                  The format of the error shall comply with the following rules:
+                                  - built-in error values shall be specified in this file and those shall use
+                                    CamelCase names
+                                  - cloud provider specific error values must have names that comply with the
+                                    format foo.example.com/CamelCase.
                                 maxLength: 316
                                 pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
                                 type: string
@@ -1905,12 +2955,12 @@ spec:
                                 format: int32
                                 type: integer
                               protocol:
-                                default: TCP
-                                description: 'Protocol is the protocol of the service
-                                  port of which status is recorded here The supported
-                                  values are: "TCP", "UDP", "SCTP"'
+                                description: |-
+                                  Protocol is the protocol of the service port of which status is recorded here
+                                  The supported values are: "TCP", "UDP", "SCTP"
                                 type: string
                             required:
+                            - error
                             - port
                             - protocol
                             type: object
@@ -1918,6 +2968,7 @@ spec:
                           x-kubernetes-list-type: atomic
                       type: object
                     type: array
+                    x-kubernetes-list-type: atomic
                 type: object
             type: object
         type: object

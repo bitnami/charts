@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -17,6 +17,31 @@ spec:
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
   podSelector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+  policyTypes:
+    - Ingress
+    - Egress
+  {{- if .Values.networkPolicy.allowExternalEgress }}
+  egress:
+    - {}
+  {{- else }}
+  egress:
+    # Allow dns resolution
+    - ports:
+        - port: 53
+          protocol: UDP
+    # Allow outbound connections to other cluster pods
+    - ports:
+        - port: {{ .Values.containerPorts.api }}
+        - port: {{ .Values.containerPorts.console }}
+        - port: {{ .Values.service.ports.api }}
+        - port: {{ .Values.service.ports.console }}
+      to:
+        - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 14 }}
+    {{- if .Values.networkPolicy.extraEgress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- end }}
   ingress:
     # Allow inbound connections
     - ports:
@@ -29,8 +54,30 @@ spec:
               {{ include "common.names.fullname" . }}-client: "true"
         - podSelector:
             matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 14 }}
-        {{- if .Values.networkPolicy.extraFromClauses }}
-        {{- toYaml .Values.networkPolicy.extraFromClauses | nindent 8 }}
+        {{- if or .Values.networkPolicy.ingressNSMatchLabels .Values.networkPolicy.ingressNSPodMatchLabels }}
+        - namespaceSelector:
+            matchLabels:
+              {{- if .Values.networkPolicy.ingressNSMatchLabels }}
+                {{- range $key, $value := .Values.networkPolicy.ingressNSMatchLabels }}
+                {{ $key | quote }}: {{ $value | quote }}
+                {{- end }}
+              {{ else }}
+                {}
+              {{- end }}
+          {{- if .Values.networkPolicy.ingressNSPodMatchLabels }}
+          podSelector:
+            matchLabels:
+              {{- range $key, $value := .Values.networkPolicy.ingressNSPodMatchLabels }}
+              {{ $key | quote }}: {{ $value | quote }}
+              {{- end }}
+          {{- end }}
+        {{- end }}
+        {{- $extraIngress := coalesce .Values.networkPolicy.extraIngress .Values.networkPolicy.extraFromClauses }}
+        {{- if $extraIngress }}
+        {{- toYaml $extraIngress | nindent 8 }}
         {{- end }}
       {{- end }}
+    {{- if .Values.networkPolicy.extraIngress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
+    {{- end }}
 {{- end }}

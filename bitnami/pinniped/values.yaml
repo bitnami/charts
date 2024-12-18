@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 ## @section Global parameters
@@ -9,7 +9,8 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
+## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ##
 global:
   imageRegistry: ""
@@ -18,8 +19,22 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  defaultStorageClass: ""
   storageClass: ""
-
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: auto
 ## @section Common parameters
 ##
 
@@ -47,7 +62,6 @@ clusterDomain: cluster.local
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
-
 ## Bitnami Pinniped image
 ## ref: https://hub.docker.com/r/bitnami/pinniped/tags/
 ## @param image.registry [default: REGISTRY_NAME] Pinniped image registry
@@ -60,10 +74,9 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/pinniped
-  tag: 0.28.0-debian-11-r1
+  tag: 0.36.0-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -75,7 +88,6 @@ image:
   ##   - myRegistryKeySecretName
   ##
   pullSecrets: []
-
 ## @section Concierge Parameters
 ##
 ##
@@ -92,7 +104,6 @@ concierge:
   containerPorts:
     api: 10250
     proxy: 8444
-
   ## @param concierge.configurationPorts.aggregatedAPIServerPort Concierge API configuration port
   ## @param concierge.configurationPorts.impersonationProxyServerPort Concierge Proxy configuration port
   ##
@@ -103,15 +114,12 @@ concierge:
   configurationPorts:
     aggregatedAPIServerPort: 10250
     impersonationProxyServerPort: 8444
-
   ## @param concierge.hostNetwork Concierge API and Proxy container hostNetwork
   ##
   hostNetwork: false
-
   ## @param concierge.dnsPolicy Concierge API and Proxy container dnsPolicy
   ##
   dnsPolicy: ""
-
   ## @param concierge.configuration [string] Concierge pinniped.yaml configuration file
   ##
   configuration: |
@@ -209,24 +217,41 @@ concierge:
   customStartupProbe: {}
   ## Concierge resource requests and limits
   ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param concierge.resources.limits The resources limits for the Concierge containers
-  ## @param concierge.resources.requests The requested resources for the Concierge containers
+  ## @param concierge.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if concierge.resources is set (concierge.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "nano"
+  ## @param concierge.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param concierge.podSecurityContext.enabled Enabled Concierge pods' Security Context
+  ## @param concierge.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param concierge.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param concierge.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param concierge.podSecurityContext.fsGroup Set Concierge pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param concierge.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param concierge.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param concierge.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param concierge.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param concierge.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param concierge.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param concierge.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -236,16 +261,17 @@ concierge:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
-
   ## @param concierge.existingConfigmap The name of an existing ConfigMap with your custom configuration for Concierge
   ##
   existingConfigmap: ""
@@ -258,6 +284,9 @@ concierge:
   ## @param concierge.deployAPIService Deploy the APIService objects
   ##
   deployAPIService: true
+  ## @param concierge.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param concierge.hostAliases Concierge pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -316,7 +345,6 @@ concierge:
     ## Can be set to RollingUpdate or OnDelete
     ##
     type: RollingUpdate
-
   ## @param concierge.priorityClassName Concierge pods' priorityClassName
   ##
   priorityClassName: ""
@@ -375,14 +403,22 @@ concierge:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
-
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param concierge.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param concierge.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param concierge.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `concierge.pdb.minAvailable` and `concierge.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
   ## @section Concierge RBAC settings
   ##
   rbac:
     ## @param concierge.rbac.create Create Concierge RBAC objects
     ##
     create: true
-
   serviceAccount:
     ## @param concierge.serviceAccount.concierge.name Name of an existing Service Account for the Concierge Deployment
     ## @param concierge.serviceAccount.concierge.create Create a Service Account for the Concierge Deployment
@@ -392,7 +428,7 @@ concierge:
     concierge:
       name: ""
       create: true
-      automountServiceAccountToken: true
+      automountServiceAccountToken: false
       annotations: {}
     ## @param concierge.serviceAccount.impersonationProxy.name Name of an existing Service Account for the Concierge Impersonator
     ## @param concierge.serviceAccount.impersonationProxy.create Create a Service Account for the Concierge Impersonator
@@ -402,7 +438,7 @@ concierge:
     impersonationProxy:
       name: ""
       create: true
-      automountServiceAccountToken: true
+      automountServiceAccountToken: false
       annotations: {}
     ## @param concierge.serviceAccount.kubeCertAgentService.name Name of an existing Service Account for the Concierge kube-cert-agent-service
     ## @param concierge.serviceAccount.kubeCertAgentService.create Create a Service Account for the Concierge kube-cert-agent-service
@@ -412,9 +448,8 @@ concierge:
     kubeCertAgentService:
       name: ""
       create: true
-      automountServiceAccountToken: true
+      automountServiceAccountToken: false
       annotations: {}
-
   ## @section Concierge Traffic Exposure Parameters
   ##
   ## Concierge proxy service parameters
@@ -473,7 +508,64 @@ concierge:
     ##     timeoutSeconds: 300
     ##
     sessionAffinityConfig: {}
-
+    ## Network Policies
+    ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+    ##
+  networkPolicy:
+    ## @param concierge.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param concierge.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
+    ##
+    kubeAPIServerPorts: [443, 6443, 8443]
+    ## @param concierge.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param concierge.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param concierge.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param concierge.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param concierge.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param concierge.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
 ## @section Supervisor Parameters
 ##
 ##
@@ -484,9 +576,11 @@ supervisor:
   ## @param supervisor.replicaCount Number of Supervisor replicas to deploy
   ##
   replicaCount: 1
-  ## @param supervisor.containerPorts.https Supervisor HTTP container port
+  ## @param supervisor.containerPorts.api Supervisor API container port
+  ## @param supervisor.containerPorts.https Supervisor HTTPS container port
   ##
   containerPorts:
+    api: 10250
     https: 8443
   ## @param supervisor.deployAPIService Deploy the APIService objects
   ##
@@ -500,7 +594,6 @@ supervisor:
       apiService: {{ template "pinniped.supervisor.api.fullname" . }}
     labels: {"app.kubernetes.io/part-of":"pinniped", "app.kubernetes.io/component": "supervisor", "app.kubernetes.io/instance": "{{ .Release.Name }}"}
     insecureAcceptExternalUnencryptedHttpRequests: false
-
   ## Configure extra options for Supervisor containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param supervisor.livenessProbe.enabled Enable livenessProbe on Supervisor containers
@@ -556,24 +649,41 @@ supervisor:
   customStartupProbe: {}
   ## Supervisor resource requests and limits
   ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param supervisor.resources.limits The resources limits for the Supervisor containers
-  ## @param supervisor.resources.requests The requested resources for the Supervisor containers
+  ## @param supervisor.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if supervisor.resources is set (supervisor.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "nano"
+  ## @param supervisor.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param supervisor.podSecurityContext.enabled Enabled Supervisor pods' Security Context
+  ## @param supervisor.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param supervisor.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param supervisor.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param supervisor.podSecurityContext.fsGroup Set Supervisor pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param supervisor.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param supervisor.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param supervisor.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param supervisor.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param supervisor.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param supervisor.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param supervisor.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -583,16 +693,17 @@ supervisor:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
-
   ## @param supervisor.existingConfigmap The name of an existing ConfigMap with your custom configuration for Supervisor
   ##
   existingConfigmap: ""
@@ -602,6 +713,9 @@ supervisor:
   ## @param supervisor.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param supervisor.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param supervisor.hostAliases Supervisor pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -660,7 +774,6 @@ supervisor:
     ## Can be set to RollingUpdate or OnDelete
     ##
     type: RollingUpdate
-
   ## @param supervisor.priorityClassName Supervisor pods' priorityClassName
   ##
   priorityClassName: ""
@@ -719,14 +832,22 @@ supervisor:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
-
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param supervisor.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param supervisor.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param supervisor.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `supervisor.pdb.minAvailable` and `supervisor.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
   ## @section Supervisor RBAC settings
   ##
   rbac:
     ## @param supervisor.rbac.create Create Supervisor RBAC objects
     ##
     create: true
-
   serviceAccount:
     ## @param supervisor.serviceAccount.name Name of an existing Service Account for the Supervisor Deployment
     ## @param supervisor.serviceAccount.create Create a Service Account for the Supervisor Deployment
@@ -735,9 +856,8 @@ supervisor:
     ##
     name: ""
     create: true
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
     annotations: {}
-
   ## @section Supervisor Traffic Exposure Parameters
   ##
   ## Supervisor proxy service parameters
@@ -802,7 +922,6 @@ supervisor:
       ##     timeoutSeconds: 300
       ##
       sessionAffinityConfig: {}
-
     public:
       ## @param supervisor.service.public.type Supervisor user-facing service type
       ##
@@ -857,7 +976,61 @@ supervisor:
       ##     timeoutSeconds: 300
       ##
       sessionAffinityConfig: {}
-
+  networkPolicy:
+    ## @param supervisor.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param supervisor.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
+    ##
+    kubeAPIServerPorts: [443, 6443, 8443]
+    ## @param supervisor.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param supervisor.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param supervisor.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param supervisor.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param supervisor.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param supervisor.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
   ## Configure the ingress resource that allows you to access the Pinniped Supervisor installation
   ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
   ##

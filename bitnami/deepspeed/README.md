@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/deepspeed
 ```
 
-Looking to use DeepSpeed in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use DeepSpeed in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -54,15 +54,141 @@ helm delete my-release
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
 
+## Configuration and installation details
+
+### Resource requests and limits
+
+Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
+
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcesPreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+
+### [Rolling VS Immutable tags](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+### Deploy as Job
+
+By default, the chart will deploy the client container (the one that connects to the Deepspeed workers) as a Deployment. This allows you to enter the container via `kubectl exec` and perform operations. In case you want to deploy it as a Kubernetes job, set the `client.useJob=true` value.
+
+### Loading your files
+
+The DeepSpeed chart supports three different ways to load your files. In order of priority, they are:
+
+1. Existing config map
+2. Add files in the values.yaml
+3. Cloning a git repository
+
+This means that if you specify a config map with your files, it won't check the files defined in `values.yaml` directory nor the git repository.
+
+In order to use an existing config map, set the `source.existingConfigMap=my-config-map` parameter.
+
+To add your files in the values.yaml file, set the `source.configmap` object with the files.
+
+Finally, if you want to clone a git repository you can use those parameters:
+
+```console
+source.type=git
+source.git.repository=https://github.com/my-user/oci://REGISTRY_NAME/REPOSITORY_NAME
+source.git.revision=master
+```
+
+### Setting Pod's affinity
+
+This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+
+### Additional environment variables
+
+In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property inside each of the subsections: `client`, `worker`.
+
+```yaml
+client:
+  extraEnvVars:
+    - name: LOG_LEVEL
+      value: error
+
+worker:
+  extraEnvVars:
+    - name: LOG_LEVEL
+      value: error
+```
+
+Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` values.
+
+### Sidecars
+
+If additional containers are needed in the same pod as Milvus (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter.
+
+```yaml
+sidecars:
+- name: your-image-name
+  image: your-image
+  imagePullPolicy: Always
+  ports:
+  - name: portname
+    containerPort: 1234
+```
+
+If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter (where available), as shown in the example below:
+
+```yaml
+service:
+  extraPorts:
+  - name: extraPort
+    port: 11311
+    targetPort: 11311
+```
+
+> NOTE: This Helm chart already includes sidecar containers for the Prometheus exporters (where applicable). These can be activated by adding the `--enable-metrics=true` parameter at deployment time. The `sidecars` parameter should therefore only be used for any extra sidecar containers.
+
+If additional init containers are needed in the same pod, they can be defined using the `initContainers` parameter. Here is an example:
+
+```yaml
+initContainers:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+      - name: portname
+        containerPort: 1234
+```
+
+Learn more about [sidecar containers](https://kubernetes.io/docs/concepts/workloads/pods/) and [init containers](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/).
+
+### Backup and restore
+
+To back up and restore Helm chart deployments on Kubernetes, you need to back up the persistent volumes from the source deployment and attach them to a new deployment using [Velero](https://velero.io/), a Kubernetes backup/restore tool. Find the instructions for using Velero in [this guide](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-backup-restore-deployments-velero-index.html).
+
+## Persistence
+
+The [Bitnami DeepSpeed](https://github.com/bitnami/containers/tree/main/bitnami/deepspeed) image can persist data. If enabled, the persisted path is `/bitnami/deepspeed/data` by default.
+
+The chart mounts a [Persistent Volume](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) at this location. The volume is created using dynamic volume provisioning.
+
+### Adjust permissions of persistent volume mountpoint
+
+As the image run as non-root by default, it is necessary to adjust the ownership of the persistent volume so that the container can write data into it.
+
+By default, the chart is configured to use Kubernetes Security Context to automatically change the ownership of the volume. However, this feature does not work in all Kubernetes distributions.
+As an alternative, this chart supports using an initContainer to change the ownership of the volume before mounting it in the final destination.
+
+You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
+
 ## Parameters
 
 ### Global parameters
 
-| Name                      | Description                                     | Value |
-| ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
-| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value   |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`    |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`    |
+| `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`    |
+| `global.storageClass`                                 | DEPRECATED: use global.defaultStorageClass instead                                                                                                                                                                                                                                                                                                                  | `""`    |
+| `global.security.allowInsecureImages`                 | Allows skipping image verification                                                                                                                                                                                                                                                                                                                                  | `false` |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto`  |
 
 ### Common parameters
 
@@ -109,174 +235,188 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Client Deployment Parameters
 
-| Name                                                       | Description                                                                                      | Value            |
-| ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------ | ---------------- |
-| `client.enabled`                                           | Enable Client deployment                                                                         | `true`           |
-| `client.useJob`                                            | Deploy as job                                                                                    | `false`          |
-| `client.backoffLimit`                                      | set backoff limit of the job                                                                     | `10`             |
-| `client.extraEnvVars`                                      | Array with extra environment variables to add to client nodes                                    | `[]`             |
-| `client.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars for client nodes                            | `""`             |
-| `client.extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars for client nodes                               | `""`             |
-| `client.annotations`                                       | Annotations for the client deployment                                                            | `{}`             |
-| `client.command`                                           | Override default container command (useful when using custom images)                             | `[]`             |
-| `client.args`                                              | Override default container args (useful when using custom images)                                | `[]`             |
-| `client.terminationGracePeriodSeconds`                     | Client termination grace period (in seconds)                                                     | `""`             |
-| `client.livenessProbe.enabled`                             | Enable livenessProbe on Client nodes                                                             | `true`           |
-| `client.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                          | `5`              |
-| `client.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                 | `30`             |
-| `client.livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                | `20`             |
-| `client.livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                              | `5`              |
-| `client.livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                              | `1`              |
-| `client.readinessProbe.enabled`                            | Enable readinessProbe on Client nodes                                                            | `true`           |
-| `client.readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                         | `5`              |
-| `client.readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                | `30`             |
-| `client.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                               | `20`             |
-| `client.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                             | `5`              |
-| `client.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                             | `1`              |
-| `client.startupProbe.enabled`                              | Enable startupProbe on Client containers                                                         | `false`          |
-| `client.startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                           | `5`              |
-| `client.startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                  | `30`             |
-| `client.startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                 | `5`              |
-| `client.startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                               | `5`              |
-| `client.startupProbe.successThreshold`                     | Success threshold for startupProbe                                                               | `1`              |
-| `client.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                              | `{}`             |
-| `client.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                             | `{}`             |
-| `client.customStartupProbe`                                | Custom startupProbe that overrides the default one                                               | `{}`             |
-| `client.resources.limits`                                  | The resources limits for the client containers                                                   | `{}`             |
-| `client.resources.requests`                                | The requested resources for the client containers                                                | `{}`             |
-| `client.podSecurityContext.enabled`                        | Enabled Client pods' Security Context                                                            | `true`           |
-| `client.podSecurityContext.fsGroup`                        | Set Client pod's Security Context fsGroup                                                        | `1001`           |
-| `client.containerSecurityContext.enabled`                  | Enabled Client containers' Security Context                                                      | `true`           |
-| `client.containerSecurityContext.runAsUser`                | Set Client containers' Security Context runAsUser                                                | `1001`           |
-| `client.containerSecurityContext.runAsGroup`               | Set Client containers' Security Context runAsGroup                                               | `1001`           |
-| `client.containerSecurityContext.runAsNonRoot`             | Set Client containers' Security Context runAsNonRoot                                             | `true`           |
-| `client.containerSecurityContext.readOnlyRootFilesystem`   | Set Client containers' Security Context runAsNonRoot                                             | `true`           |
-| `client.containerSecurityContext.privileged`               | Set Client containers' Security Context privileged                                               | `false`          |
-| `client.containerSecurityContext.allowPrivilegeEscalation` | Set Client container's privilege escalation                                                      | `false`          |
-| `client.containerSecurityContext.capabilities.drop`        | Set Client container's Security Context runAsNonRoot                                             | `["ALL"]`        |
-| `client.containerSecurityContext.seccompProfile.type`      | Set Client container's Security Context seccomp profile                                          | `RuntimeDefault` |
-| `client.lifecycleHooks`                                    | for the client container(s) to automate configuration before or after startup                    | `{}`             |
-| `client.runtimeClassName`                                  | Name of the runtime class to be used by pod(s)                                                   | `""`             |
-| `client.hostAliases`                                       | client pods host aliases                                                                         | `[]`             |
-| `client.labels`                                            | Extra labels for the client deployment                                                           | `{}`             |
-| `client.podLabels`                                         | Extra labels for client pods                                                                     | `{}`             |
-| `client.podAnnotations`                                    | Annotations for client pods                                                                      | `{}`             |
-| `client.podAffinityPreset`                                 | Pod affinity preset. Ignored if `client.affinity` is set. Allowed values: `soft` or `hard`       | `""`             |
-| `client.podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `client.affinity` is set. Allowed values: `soft` or `hard`  | `soft`           |
-| `client.nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `client.affinity` is set. Allowed values: `soft` or `hard` | `""`             |
-| `client.nodeAffinityPreset.key`                            | Node label key to match. Ignored if `client.affinity` is set                                     | `""`             |
-| `client.nodeAffinityPreset.values`                         | Node label values to match. Ignored if `client.affinity` is set                                  | `[]`             |
-| `client.affinity`                                          | Affinity for Client pods assignment                                                              | `{}`             |
-| `client.nodeSelector`                                      | Node labels for Client pods assignment                                                           | `{}`             |
-| `client.tolerations`                                       | Tolerations for Client pods assignment                                                           | `[]`             |
-| `client.topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains  | `[]`             |
-| `client.priorityClassName`                                 | Client pods' priorityClassName                                                                   | `""`             |
-| `client.schedulerName`                                     | Kubernetes pod scheduler registry                                                                | `""`             |
-| `client.updateStrategy.type`                               | Client statefulset strategy type                                                                 | `RollingUpdate`  |
-| `client.updateStrategy.rollingUpdate`                      | Client statefulset rolling update configuration parameters                                       | `{}`             |
-| `client.extraVolumes`                                      | Optionally specify extra list of additional volumes for the Client pod(s)                        | `[]`             |
-| `client.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Client container(s)             | `[]`             |
-| `client.sidecars`                                          | Add additional sidecar containers to the Client pod(s)                                           | `[]`             |
-| `client.enableDefaultInitContainers`                       | Deploy default init containers                                                                   | `true`           |
-| `client.initContainers`                                    | Add additional init containers to the Client pod(s)                                              | `[]`             |
-| `client.networkPolicy.enabled`                             | Enable creation of NetworkPolicy resources                                                       | `false`          |
-| `client.networkPolicy.extraIngress`                        | Add extra ingress rules to the NetworkPolicy                                                     | `[]`             |
-| `client.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy                                                     | `[]`             |
-| `client.serviceAccount.create`                             | Enable creation of ServiceAccount for Client pods                                                | `false`          |
-| `client.serviceAccount.name`                               | The name of the ServiceAccount to use                                                            | `""`             |
-| `client.serviceAccount.automountServiceAccountToken`       | Allows auto mount of ServiceAccountToken on the serviceAccount created                           | `false`          |
-| `client.serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                             | `{}`             |
+| Name                                                       | Description                                                                                                                                                                                                                     | Value            |
+| ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
+| `client.enabled`                                           | Enable Client deployment                                                                                                                                                                                                        | `true`           |
+| `client.useJob`                                            | Deploy as job                                                                                                                                                                                                                   | `false`          |
+| `client.backoffLimit`                                      | set backoff limit of the job                                                                                                                                                                                                    | `10`             |
+| `client.extraEnvVars`                                      | Array with extra environment variables to add to client nodes                                                                                                                                                                   | `[]`             |
+| `client.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars for client nodes                                                                                                                                                           | `""`             |
+| `client.extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars for client nodes                                                                                                                                                              | `""`             |
+| `client.annotations`                                       | Annotations for the client deployment                                                                                                                                                                                           | `{}`             |
+| `client.command`                                           | Override default container command (useful when using custom images)                                                                                                                                                            | `[]`             |
+| `client.args`                                              | Override default container args (useful when using custom images)                                                                                                                                                               | `[]`             |
+| `client.terminationGracePeriodSeconds`                     | Client termination grace period (in seconds)                                                                                                                                                                                    | `""`             |
+| `client.livenessProbe.enabled`                             | Enable livenessProbe on Client nodes                                                                                                                                                                                            | `true`           |
+| `client.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                                                                                                                         | `5`              |
+| `client.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                                                                                                                                | `30`             |
+| `client.livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                                                                                                                                               | `20`             |
+| `client.livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                                                                                                                                             | `5`              |
+| `client.livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                                                                                                                                             | `1`              |
+| `client.readinessProbe.enabled`                            | Enable readinessProbe on Client nodes                                                                                                                                                                                           | `true`           |
+| `client.readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                                                                                                                                        | `5`              |
+| `client.readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                                                                                                                                               | `30`             |
+| `client.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                                                                                                                                              | `30`             |
+| `client.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                                                                                                                                            | `5`              |
+| `client.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                                                                                                                                            | `1`              |
+| `client.startupProbe.enabled`                              | Enable startupProbe on Client containers                                                                                                                                                                                        | `false`          |
+| `client.startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                                                                                                                                                          | `5`              |
+| `client.startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                                                                                                                                                 | `30`             |
+| `client.startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                                                                                                                                                | `5`              |
+| `client.startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                                                                                                                                              | `5`              |
+| `client.startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                                                                                                                                              | `1`              |
+| `client.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                                                                                                                             | `{}`             |
+| `client.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                                                                                                                            | `{}`             |
+| `client.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                                                                                                                              | `{}`             |
+| `client.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if client.resources is set (client.resources is recommended for production). | `medium`         |
+| `client.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                               | `{}`             |
+| `client.podSecurityContext.enabled`                        | Enabled Client pods' Security Context                                                                                                                                                                                           | `true`           |
+| `client.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                                                                              | `Always`         |
+| `client.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                                                                                                                                  | `[]`             |
+| `client.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                                                                                     | `[]`             |
+| `client.podSecurityContext.fsGroup`                        | Set Client pod's Security Context fsGroup                                                                                                                                                                                       | `1001`           |
+| `client.containerSecurityContext.enabled`                  | Enabled Client containers' Security Context                                                                                                                                                                                     | `true`           |
+| `client.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                                | `{}`             |
+| `client.containerSecurityContext.runAsUser`                | Set Client containers' Security Context runAsUser                                                                                                                                                                               | `1001`           |
+| `client.containerSecurityContext.runAsGroup`               | Set Client containers' Security Context runAsGroup                                                                                                                                                                              | `1001`           |
+| `client.containerSecurityContext.runAsNonRoot`             | Set Client containers' Security Context runAsNonRoot                                                                                                                                                                            | `true`           |
+| `client.containerSecurityContext.readOnlyRootFilesystem`   | Set Client containers' Security Context runAsNonRoot                                                                                                                                                                            | `true`           |
+| `client.containerSecurityContext.privileged`               | Set Client containers' Security Context privileged                                                                                                                                                                              | `false`          |
+| `client.containerSecurityContext.allowPrivilegeEscalation` | Set Client container's privilege escalation                                                                                                                                                                                     | `false`          |
+| `client.containerSecurityContext.capabilities.drop`        | Set Client container's Security Context runAsNonRoot                                                                                                                                                                            | `["ALL"]`        |
+| `client.containerSecurityContext.seccompProfile.type`      | Set Client container's Security Context seccomp profile                                                                                                                                                                         | `RuntimeDefault` |
+| `client.lifecycleHooks`                                    | for the client container(s) to automate configuration before or after startup                                                                                                                                                   | `{}`             |
+| `client.runtimeClassName`                                  | Name of the runtime class to be used by pod(s)                                                                                                                                                                                  | `""`             |
+| `client.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                                                                                                                              | `false`          |
+| `client.hostAliases`                                       | client pods host aliases                                                                                                                                                                                                        | `[]`             |
+| `client.labels`                                            | Extra labels for the client deployment                                                                                                                                                                                          | `{}`             |
+| `client.podLabels`                                         | Extra labels for client pods                                                                                                                                                                                                    | `{}`             |
+| `client.podAnnotations`                                    | Annotations for client pods                                                                                                                                                                                                     | `{}`             |
+| `client.podAffinityPreset`                                 | Pod affinity preset. Ignored if `client.affinity` is set. Allowed values: `soft` or `hard`                                                                                                                                      | `""`             |
+| `client.podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `client.affinity` is set. Allowed values: `soft` or `hard`                                                                                                                                 | `soft`           |
+| `client.nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `client.affinity` is set. Allowed values: `soft` or `hard`                                                                                                                                | `""`             |
+| `client.nodeAffinityPreset.key`                            | Node label key to match. Ignored if `client.affinity` is set                                                                                                                                                                    | `""`             |
+| `client.nodeAffinityPreset.values`                         | Node label values to match. Ignored if `client.affinity` is set                                                                                                                                                                 | `[]`             |
+| `client.affinity`                                          | Affinity for Client pods assignment                                                                                                                                                                                             | `{}`             |
+| `client.nodeSelector`                                      | Node labels for Client pods assignment                                                                                                                                                                                          | `{}`             |
+| `client.tolerations`                                       | Tolerations for Client pods assignment                                                                                                                                                                                          | `[]`             |
+| `client.topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains                                                                                                                                 | `[]`             |
+| `client.priorityClassName`                                 | Client pods' priorityClassName                                                                                                                                                                                                  | `""`             |
+| `client.schedulerName`                                     | Kubernetes pod scheduler registry                                                                                                                                                                                               | `""`             |
+| `client.updateStrategy.type`                               | Client statefulset strategy type                                                                                                                                                                                                | `RollingUpdate`  |
+| `client.updateStrategy.rollingUpdate`                      | Client statefulset rolling update configuration parameters                                                                                                                                                                      | `{}`             |
+| `client.extraVolumes`                                      | Optionally specify extra list of additional volumes for the Client pod(s)                                                                                                                                                       | `[]`             |
+| `client.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Client container(s)                                                                                                                                            | `[]`             |
+| `client.sidecars`                                          | Add additional sidecar containers to the Client pod(s)                                                                                                                                                                          | `[]`             |
+| `client.enableDefaultInitContainers`                       | Deploy default init containers                                                                                                                                                                                                  | `true`           |
+| `client.initContainers`                                    | Add additional init containers to the Client pod(s)                                                                                                                                                                             | `[]`             |
+| `client.networkPolicy.enabled`                             | Enable creation of NetworkPolicy resources                                                                                                                                                                                      | `true`           |
+| `client.networkPolicy.allowExternalEgress`                 | Allow the pod to access any range of port and all destinations.                                                                                                                                                                 | `true`           |
+| `client.networkPolicy.extraIngress`                        | Add extra ingress rules to the NetworkPolicy                                                                                                                                                                                    | `[]`             |
+| `client.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy                                                                                                                                                                                    | `[]`             |
+| `client.serviceAccount.create`                             | Enable creation of ServiceAccount for Client pods                                                                                                                                                                               | `true`           |
+| `client.serviceAccount.name`                               | The name of the ServiceAccount to use                                                                                                                                                                                           | `""`             |
+| `client.serviceAccount.automountServiceAccountToken`       | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                                                                                                                          | `false`          |
+| `client.serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                                                                                                                                                            | `{}`             |
 
 ### Deepspeed Client persistence paramaters
 
-| Name                               | Description                                                             | Value                     |
-| ---------------------------------- | ----------------------------------------------------------------------- | ------------------------- |
-| `client.persistence.enabled`       | Use a PVC to persist data                                               | `false`                   |
-| `client.persistence.storageClass`  | discourse & sidekiq data Persistent Volume Storage Class                | `""`                      |
-| `client.persistence.existingClaim` | Use a existing PVC which must be created manually before bound          | `""`                      |
-| `client.persistence.mountPath`     | Path to mount the volume at                                             | `/bitnami/deepspeed/data` |
-| `client.persistence.accessModes`   | Persistent Volume Access Mode                                           | `["ReadWriteOnce"]`       |
-| `client.persistence.dataSource`    | Custom PVC data source                                                  | `{}`                      |
-| `client.persistence.selector`      | Selector to match an existing Persistent Volume for the client data PVC | `{}`                      |
-| `client.persistence.size`          | Size of data volume                                                     | `8Gi`                     |
-| `client.persistence.labels`        | Persistent Volume labels                                                | `{}`                      |
-| `client.persistence.annotations`   | Persistent Volume annotations                                           | `{}`                      |
+| Name                               | Description                                                                                                                                                  | Value                     |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------- |
+| `client.persistence.enabled`       | Use a PVC to persist data                                                                                                                                    | `false`                   |
+| `client.persistence.storageClass`  | discourse & sidekiq data Persistent Volume Storage Class                                                                                                     | `""`                      |
+| `client.persistence.existingClaim` | Use a existing PVC which must be created manually before bound                                                                                               | `""`                      |
+| `client.persistence.mountPath`     | Path to mount the volume at                                                                                                                                  | `/bitnami/deepspeed/data` |
+| `client.persistence.accessModes`   | Persistent Volume Access Mode                                                                                                                                | `["ReadWriteOnce"]`       |
+| `client.persistence.dataSource`    | Custom PVC data source                                                                                                                                       | `{}`                      |
+| `client.persistence.selector`      | Selector to match an existing Persistent Volume for the client data PVC                                                                                      | `{}`                      |
+| `client.persistence.size`          | Size of data volume                                                                                                                                          | `8Gi`                     |
+| `client.persistence.labels`        | Persistent Volume labels                                                                                                                                     | `{}`                      |
+| `client.persistence.annotations`   | Persistent Volume annotations                                                                                                                                | `{}`                      |
+| `client.pdb.create`                | Enable/disable a Pod Disruption Budget creation                                                                                                              | `true`                    |
+| `client.pdb.minAvailable`          | Minimum number/percentage of pods that should remain scheduled                                                                                               | `""`                      |
+| `client.pdb.maxUnavailable`        | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `client.pdb.minAvailable` and `client.pdb.maxUnavailable` are empty. | `""`                      |
 
 ### Worker Deployment Parameters
 
-| Name                                                       | Description                                                                                        | Value            |
-| ---------------------------------------------------------- | -------------------------------------------------------------------------------------------------- | ---------------- |
-| `worker.enabled`                                           | Enable Worker deployment                                                                           | `true`           |
-| `worker.slotsPerNode`                                      | Number of slots available per worker node                                                          | `1`              |
-| `worker.extraEnvVars`                                      | Array with extra environment variables to add to client nodes                                      | `[]`             |
-| `worker.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars for client nodes                              | `""`             |
-| `worker.extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars for client nodes                                 | `""`             |
-| `worker.command`                                           | Override default container command (useful when using custom images)                               | `[]`             |
-| `worker.args`                                              | Override default container args (useful when using custom images)                                  | `[]`             |
-| `worker.replicaCount`                                      | Number of Worker replicas to deploy                                                                | `3`              |
-| `worker.terminationGracePeriodSeconds`                     | Worker termination grace period (in seconds)                                                       | `""`             |
-| `worker.containerPorts.ssh`                                | SSH port for Worker                                                                                | `2222`           |
-| `worker.livenessProbe.enabled`                             | Enable livenessProbe on Worker nodes                                                               | `true`           |
-| `worker.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                            | `5`              |
-| `worker.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                   | `30`             |
-| `worker.livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                  | `5`              |
-| `worker.livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                | `5`              |
-| `worker.livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                | `1`              |
-| `worker.readinessProbe.enabled`                            | Enable readinessProbe on Worker nodes                                                              | `true`           |
-| `worker.readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                           | `5`              |
-| `worker.readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                  | `30`             |
-| `worker.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                 | `5`              |
-| `worker.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                               | `5`              |
-| `worker.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                               | `1`              |
-| `worker.startupProbe.enabled`                              | Enable startupProbe on Worker containers                                                           | `false`          |
-| `worker.startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                             | `5`              |
-| `worker.startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                    | `30`             |
-| `worker.startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                   | `5`              |
-| `worker.startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                 | `5`              |
-| `worker.startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                 | `1`              |
-| `worker.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                | `{}`             |
-| `worker.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                               | `{}`             |
-| `worker.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                 | `{}`             |
-| `worker.resources.limits`                                  | The resources limits for the client containers                                                     | `{}`             |
-| `worker.resources.requests`                                | The requested resources for the client containers                                                  | `{}`             |
-| `worker.podSecurityContext.enabled`                        | Enabled Worker pods' Security Context                                                              | `true`           |
-| `worker.podSecurityContext.fsGroup`                        | Set Worker pod's Security Context fsGroup                                                          | `1001`           |
-| `worker.containerSecurityContext.enabled`                  | Enabled Worker containers' Security Context                                                        | `true`           |
-| `worker.containerSecurityContext.runAsUser`                | Set Worker containers' Security Context runAsUser                                                  | `1001`           |
-| `worker.containerSecurityContext.runAsGroup`               | Set Worker containers' Security Context runAsGroup                                                 | `1001`           |
-| `worker.containerSecurityContext.runAsNonRoot`             | Set Worker containers' Security Context runAsNonRoot                                               | `true`           |
-| `worker.containerSecurityContext.readOnlyRootFilesystem`   | Set Worker containers' Security Context runAsNonRoot                                               | `true`           |
-| `worker.containerSecurityContext.allowPrivilegeEscalation` | Set Worker container's privilege escalation                                                        | `false`          |
-| `worker.containerSecurityContext.capabilities.drop`        | Set Worker container's Security Context runAsNonRoot                                               | `["ALL"]`        |
-| `worker.containerSecurityContext.seccompProfile.type`      | Set Worker container's Security Context seccomp profile                                            | `RuntimeDefault` |
-| `worker.containerSecurityContext.privileged`               | Set Worker container's Security Context privileged                                                 | `false`          |
-| `worker.lifecycleHooks`                                    | for the client container(s) to automate configuration before or after startup                      | `{}`             |
-| `worker.runtimeClassName`                                  | Name of the runtime class to be used by pod(s)                                                     | `""`             |
-| `worker.hostAliases`                                       | client pods host aliases                                                                           | `[]`             |
-| `worker.labels`                                            | Labels for the worker deployment                                                                   | `{}`             |
-| `worker.annotations`                                       | Annotations for the worker deployment                                                              | `{}`             |
-| `worker.podLabels`                                         | Extra labels for client pods                                                                       | `{}`             |
-| `worker.podAnnotations`                                    | Annotations for client pods                                                                        | `{}`             |
-| `worker.podAffinityPreset`                                 | Pod affinity preset. Ignored if `client.affinity` is set. Allowed values: `soft` or `hard`         | `""`             |
-| `worker.podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `client.affinity` is set. Allowed values: `soft` or `hard`    | `soft`           |
-| `worker.nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `client.affinity` is set. Allowed values: `soft` or `hard`   | `""`             |
-| `worker.nodeAffinityPreset.key`                            | Node label key to match. Ignored if `client.affinity` is set                                       | `""`             |
-| `worker.nodeAffinityPreset.values`                         | Node label values to match. Ignored if `client.affinity` is set                                    | `[]`             |
-| `worker.affinity`                                          | Affinity for Worker pods assignment                                                                | `{}`             |
-| `worker.nodeSelector`                                      | Node labels for Worker pods assignment                                                             | `{}`             |
-| `worker.tolerations`                                       | Tolerations for Worker pods assignment                                                             | `[]`             |
-| `worker.topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains    | `[]`             |
-| `worker.podManagementPolicy`                               | Statefulset Pod management policy, it needs to be Parallel to be able to complete the cluster join | `Parallel`       |
-| `worker.priorityClassName`                                 | Worker pods' priorityClassName                                                                     | `""`             |
-| `worker.schedulerName`                                     | Kubernetes pod scheduler registry                                                                  | `""`             |
-| `worker.updateStrategy.type`                               | Worker statefulset strategy type                                                                   | `RollingUpdate`  |
-| `worker.updateStrategy.rollingUpdate`                      | Worker statefulset rolling update configuration parameters                                         | `{}`             |
-| `worker.extraVolumes`                                      | Optionally specify extra list of additional volumes for the Worker pod(s)                          | `[]`             |
-| `worker.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Worker container(s)               | `[]`             |
-| `worker.sidecars`                                          | Add additional sidecar containers to the Worker pod(s)                                             | `[]`             |
-| `worker.enableDefaultInitContainers`                       | Deploy default init containers                                                                     | `true`           |
-| `worker.initContainers`                                    | Add additional init containers to the Worker pod(s)                                                | `[]`             |
-| `worker.headlessServiceAnnotations`                        | Annotations for the headless service                                                               | `{}`             |
+| Name                                                       | Description                                                                                                                                                                                                                     | Value            |
+| ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
+| `worker.enabled`                                           | Enable Worker deployment                                                                                                                                                                                                        | `true`           |
+| `worker.slotsPerNode`                                      | Number of slots available per worker node                                                                                                                                                                                       | `1`              |
+| `worker.extraEnvVars`                                      | Array with extra environment variables to add to client nodes                                                                                                                                                                   | `[]`             |
+| `worker.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars for client nodes                                                                                                                                                           | `""`             |
+| `worker.extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars for client nodes                                                                                                                                                              | `""`             |
+| `worker.command`                                           | Override default container command (useful when using custom images)                                                                                                                                                            | `[]`             |
+| `worker.args`                                              | Override default container args (useful when using custom images)                                                                                                                                                               | `[]`             |
+| `worker.replicaCount`                                      | Number of Worker replicas to deploy                                                                                                                                                                                             | `3`              |
+| `worker.terminationGracePeriodSeconds`                     | Worker termination grace period (in seconds)                                                                                                                                                                                    | `""`             |
+| `worker.containerPorts.ssh`                                | SSH port for Worker                                                                                                                                                                                                             | `2222`           |
+| `worker.livenessProbe.enabled`                             | Enable livenessProbe on Worker nodes                                                                                                                                                                                            | `true`           |
+| `worker.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                                                                                                                         | `5`              |
+| `worker.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                                                                                                                                | `30`             |
+| `worker.livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                                                                                                                                               | `5`              |
+| `worker.livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                                                                                                                                             | `5`              |
+| `worker.livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                                                                                                                                             | `1`              |
+| `worker.readinessProbe.enabled`                            | Enable readinessProbe on Worker nodes                                                                                                                                                                                           | `true`           |
+| `worker.readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                                                                                                                                        | `5`              |
+| `worker.readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                                                                                                                                               | `30`             |
+| `worker.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                                                                                                                                              | `5`              |
+| `worker.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                                                                                                                                            | `5`              |
+| `worker.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                                                                                                                                            | `1`              |
+| `worker.startupProbe.enabled`                              | Enable startupProbe on Worker containers                                                                                                                                                                                        | `false`          |
+| `worker.startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                                                                                                                                                          | `5`              |
+| `worker.startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                                                                                                                                                 | `30`             |
+| `worker.startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                                                                                                                                                | `5`              |
+| `worker.startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                                                                                                                                              | `5`              |
+| `worker.startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                                                                                                                                              | `1`              |
+| `worker.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                                                                                                                             | `{}`             |
+| `worker.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                                                                                                                            | `{}`             |
+| `worker.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                                                                                                                              | `{}`             |
+| `worker.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if worker.resources is set (worker.resources is recommended for production). | `medium`         |
+| `worker.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                               | `{}`             |
+| `worker.podSecurityContext.enabled`                        | Enabled Worker pods' Security Context                                                                                                                                                                                           | `true`           |
+| `worker.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                                                                              | `Always`         |
+| `worker.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                                                                                                                                  | `[]`             |
+| `worker.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                                                                                     | `[]`             |
+| `worker.podSecurityContext.fsGroup`                        | Set Worker pod's Security Context fsGroup                                                                                                                                                                                       | `1001`           |
+| `worker.containerSecurityContext.enabled`                  | Enabled Worker containers' Security Context                                                                                                                                                                                     | `true`           |
+| `worker.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                                | `{}`             |
+| `worker.containerSecurityContext.runAsUser`                | Set Worker containers' Security Context runAsUser                                                                                                                                                                               | `1001`           |
+| `worker.containerSecurityContext.runAsGroup`               | Set Worker containers' Security Context runAsGroup                                                                                                                                                                              | `1001`           |
+| `worker.containerSecurityContext.runAsNonRoot`             | Set Worker containers' Security Context runAsNonRoot                                                                                                                                                                            | `true`           |
+| `worker.containerSecurityContext.readOnlyRootFilesystem`   | Set Worker containers' Security Context runAsNonRoot                                                                                                                                                                            | `true`           |
+| `worker.containerSecurityContext.allowPrivilegeEscalation` | Set Worker container's privilege escalation                                                                                                                                                                                     | `false`          |
+| `worker.containerSecurityContext.capabilities.drop`        | Set Worker container's Security Context runAsNonRoot                                                                                                                                                                            | `["ALL"]`        |
+| `worker.containerSecurityContext.seccompProfile.type`      | Set Worker container's Security Context seccomp profile                                                                                                                                                                         | `RuntimeDefault` |
+| `worker.containerSecurityContext.privileged`               | Set Worker container's Security Context privileged                                                                                                                                                                              | `false`          |
+| `worker.lifecycleHooks`                                    | for the client container(s) to automate configuration before or after startup                                                                                                                                                   | `{}`             |
+| `worker.runtimeClassName`                                  | Name of the runtime class to be used by pod(s)                                                                                                                                                                                  | `""`             |
+| `worker.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                                                                                                                              | `false`          |
+| `worker.hostAliases`                                       | client pods host aliases                                                                                                                                                                                                        | `[]`             |
+| `worker.labels`                                            | Labels for the worker deployment                                                                                                                                                                                                | `{}`             |
+| `worker.annotations`                                       | Annotations for the worker deployment                                                                                                                                                                                           | `{}`             |
+| `worker.podLabels`                                         | Extra labels for client pods                                                                                                                                                                                                    | `{}`             |
+| `worker.podAnnotations`                                    | Annotations for client pods                                                                                                                                                                                                     | `{}`             |
+| `worker.podAffinityPreset`                                 | Pod affinity preset. Ignored if `client.affinity` is set. Allowed values: `soft` or `hard`                                                                                                                                      | `""`             |
+| `worker.podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `client.affinity` is set. Allowed values: `soft` or `hard`                                                                                                                                 | `soft`           |
+| `worker.nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `client.affinity` is set. Allowed values: `soft` or `hard`                                                                                                                                | `""`             |
+| `worker.nodeAffinityPreset.key`                            | Node label key to match. Ignored if `client.affinity` is set                                                                                                                                                                    | `""`             |
+| `worker.nodeAffinityPreset.values`                         | Node label values to match. Ignored if `client.affinity` is set                                                                                                                                                                 | `[]`             |
+| `worker.affinity`                                          | Affinity for Worker pods assignment                                                                                                                                                                                             | `{}`             |
+| `worker.nodeSelector`                                      | Node labels for Worker pods assignment                                                                                                                                                                                          | `{}`             |
+| `worker.tolerations`                                       | Tolerations for Worker pods assignment                                                                                                                                                                                          | `[]`             |
+| `worker.topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains                                                                                                                                 | `[]`             |
+| `worker.podManagementPolicy`                               | Statefulset Pod management policy, it needs to be Parallel to be able to complete the cluster join                                                                                                                              | `Parallel`       |
+| `worker.priorityClassName`                                 | Worker pods' priorityClassName                                                                                                                                                                                                  | `""`             |
+| `worker.schedulerName`                                     | Kubernetes pod scheduler registry                                                                                                                                                                                               | `""`             |
+| `worker.updateStrategy.type`                               | Worker statefulset strategy type                                                                                                                                                                                                | `RollingUpdate`  |
+| `worker.updateStrategy.rollingUpdate`                      | Worker statefulset rolling update configuration parameters                                                                                                                                                                      | `{}`             |
+| `worker.extraVolumes`                                      | Optionally specify extra list of additional volumes for the Worker pod(s)                                                                                                                                                       | `[]`             |
+| `worker.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Worker container(s)                                                                                                                                            | `[]`             |
+| `worker.sidecars`                                          | Add additional sidecar containers to the Worker pod(s)                                                                                                                                                                          | `[]`             |
+| `worker.enableDefaultInitContainers`                       | Deploy default init containers                                                                                                                                                                                                  | `true`           |
+| `worker.initContainers`                                    | Add additional init containers to the Worker pod(s)                                                                                                                                                                             | `[]`             |
+| `worker.headlessServiceAnnotations`                        | Annotations for the headless service                                                                                                                                                                                            | `{}`             |
 
 ### Worker Traffic Exposure Parameters
 
@@ -297,12 +437,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `worker.externalAccess.service.labels`                   | Additional custom labels for Worker service                                                                                               | `{}`        |
 | `worker.externalAccess.service.annotations`              | Additional custom annotations for Worker service                                                                                          | `{}`        |
 | `worker.externalAccess.service.extraPorts`               | Extra ports to expose in the Worker service                                                                                               | `[]`        |
-| `worker.serviceAccount.create`                           | Enable creation of ServiceAccount for Data Coordinator pods                                                                               | `false`     |
+| `worker.serviceAccount.create`                           | Enable creation of ServiceAccount for Data Coordinator pods                                                                               | `true`      |
 | `worker.serviceAccount.name`                             | The name of the ServiceAccount to use                                                                                                     | `""`        |
 | `worker.serviceAccount.automountServiceAccountToken`     | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                                    | `false`     |
 | `worker.serviceAccount.annotations`                      | Additional custom annotations for the ServiceAccount                                                                                      | `{}`        |
-| `worker.networkPolicy.enabled`                           | Enable creation of NetworkPolicy resources                                                                                                | `false`     |
+| `worker.networkPolicy.enabled`                           | Enable creation of NetworkPolicy resources                                                                                                | `true`      |
 | `worker.networkPolicy.allowExternal`                     | The Policy model to apply                                                                                                                 | `true`      |
+| `worker.networkPolicy.allowExternalEgress`               | Allow the pod to access any range of port and all destinations.                                                                           | `true`      |
 | `worker.networkPolicy.extraIngress`                      | Add extra ingress rules to the NetworkPolicy                                                                                              | `[]`        |
 | `worker.networkPolicy.extraEgress`                       | Add extra ingress rules to the NetworkPolicy                                                                                              | `[]`        |
 | `worker.networkPolicy.ingressNSMatchLabels`              | Labels to match to allow traffic from other namespaces                                                                                    | `{}`        |
@@ -310,31 +451,34 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Deepspeed Worker persistence paramaters
 
-| Name                                   | Description                                                                                                                       | Value                      |
-| -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
-| `worker.persistence.enabled`           | Use a PVC to persist data                                                                                                         | `false`                    |
-| `worker.persistence.storageClass`      | discourse & sidekiq data Persistent Volume Storage Class                                                                          | `""`                       |
-| `worker.persistence.existingClaim`     | Use a existing PVC which must be created manually before bound                                                                    | `""`                       |
-| `worker.persistence.mountPath`         | Path to mount the volume at                                                                                                       | `/bitnami/deepspeed/data`  |
-| `worker.persistence.accessModes`       | Persistent Volume Access Mode                                                                                                     | `["ReadWriteOnce"]`        |
-| `worker.persistence.selector`          | Selector to match an existing Persistent Volume for the worker data PVC                                                           | `{}`                       |
-| `worker.persistence.dataSource`        | Custom PVC data source                                                                                                            | `{}`                       |
-| `worker.persistence.size`              | Size of data volume                                                                                                               | `8Gi`                      |
-| `worker.persistence.labels`            | Persistent Volume labels                                                                                                          | `{}`                       |
-| `worker.persistence.annotations`       | Persistent Volume annotations                                                                                                     | `{}`                       |
-| `gitImage.registry`                    | Git image registry                                                                                                                | `REGISTRY_NAME`            |
-| `gitImage.repository`                  | Git image repository                                                                                                              | `REPOSITORY_NAME/git`      |
-| `gitImage.digest`                      | Git image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                               | `""`                       |
-| `gitImage.pullPolicy`                  | Git image pull policy                                                                                                             | `IfNotPresent`             |
-| `gitImage.pullSecrets`                 | Specify docker-registry secret names as an array                                                                                  | `[]`                       |
-| `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory                                                       | `false`                    |
-| `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                  | `REGISTRY_NAME`            |
-| `volumePermissions.image.repository`   | Init container volume-permissions image repository                                                                                | `REPOSITORY_NAME/os-shell` |
-| `volumePermissions.image.digest`       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
-| `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`             |
-| `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                  | `[]`                       |
-| `volumePermissions.resources.limits`   | The resources limits for the container                                                                                            | `{}`                       |
-| `volumePermissions.resources.requests` | The requested resources for the container                                                                                         | `{}`                       |
+| Name                                  | Description                                                                                                                                                                                                                                           | Value                      |
+| ------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| `worker.persistence.enabled`          | Use a PVC to persist data                                                                                                                                                                                                                             | `false`                    |
+| `worker.persistence.storageClass`     | discourse & sidekiq data Persistent Volume Storage Class                                                                                                                                                                                              | `""`                       |
+| `worker.persistence.existingClaim`    | Use a existing PVC which must be created manually before bound                                                                                                                                                                                        | `""`                       |
+| `worker.persistence.mountPath`        | Path to mount the volume at                                                                                                                                                                                                                           | `/bitnami/deepspeed/data`  |
+| `worker.persistence.accessModes`      | Persistent Volume Access Mode                                                                                                                                                                                                                         | `["ReadWriteOnce"]`        |
+| `worker.persistence.selector`         | Selector to match an existing Persistent Volume for the worker data PVC                                                                                                                                                                               | `{}`                       |
+| `worker.persistence.dataSource`       | Custom PVC data source                                                                                                                                                                                                                                | `{}`                       |
+| `worker.persistence.size`             | Size of data volume                                                                                                                                                                                                                                   | `8Gi`                      |
+| `worker.persistence.labels`           | Persistent Volume labels                                                                                                                                                                                                                              | `{}`                       |
+| `worker.persistence.annotations`      | Persistent Volume annotations                                                                                                                                                                                                                         | `{}`                       |
+| `worker.pdb.create`                   | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                                       | `true`                     |
+| `worker.pdb.minAvailable`             | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                                        | `""`                       |
+| `worker.pdb.maxUnavailable`           | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `worker.pdb.minAvailable` and `worker.pdb.maxUnavailable` are empty.                                                                                          | `""`                       |
+| `gitImage.registry`                   | Git image registry                                                                                                                                                                                                                                    | `REGISTRY_NAME`            |
+| `gitImage.repository`                 | Git image repository                                                                                                                                                                                                                                  | `REPOSITORY_NAME/git`      |
+| `gitImage.digest`                     | Git image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                                                                   | `""`                       |
+| `gitImage.pullPolicy`                 | Git image pull policy                                                                                                                                                                                                                                 | `IfNotPresent`             |
+| `gitImage.pullSecrets`                | Specify docker-registry secret names as an array                                                                                                                                                                                                      | `[]`                       |
+| `volumePermissions.enabled`           | Enable init container that changes volume permissions in the data directory                                                                                                                                                                           | `false`                    |
+| `volumePermissions.image.registry`    | Init container volume-permissions image registry                                                                                                                                                                                                      | `REGISTRY_NAME`            |
+| `volumePermissions.image.repository`  | Init container volume-permissions image repository                                                                                                                                                                                                    | `REPOSITORY_NAME/os-shell` |
+| `volumePermissions.image.digest`      | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                                     | `""`                       |
+| `volumePermissions.image.pullPolicy`  | Init container volume-permissions image pull policy                                                                                                                                                                                                   | `IfNotPresent`             |
+| `volumePermissions.image.pullSecrets` | Specify docker-registry secret names as an array                                                                                                                                                                                                      | `[]`                       |
+| `volumePermissions.resourcesPreset`   | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production). | `nano`                     |
+| `volumePermissions.resources`         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                                     | `{}`                       |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -357,86 +501,24 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/deeps
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/deepspeed/values.yaml)
 
-## Configuration and installation details
-
-### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
-
-It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
-
-Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
-### Deploy as Job
-
-By default, the chart will deploy the client container (the one that connects to the Deepspeed workers) as a Deployment. This allows you to enter the container via `kubectl exec` and perform operations. In case you want to deploy it as a Kubernetes job, set the `client.useJob=true` value.
-
-### Loading your files
-
-The DeepSpeed chart supports three different ways to load your files. In order of priority, they are:
-
-1. Existing config map
-2. Add files in the values.yaml
-3. Cloning a git repository
-
-This means that if you specify a config map with your files, it won't check the files defined in `values.yaml` directory nor the git repository.
-
-In order to use an existing config map, set the `source.existingConfigMap=my-config-map` parameter.
-
-To add your files in the values.yaml file, set the `source.configmap` object with the files.
-
-Finally, if you want to clone a git repository you can use those parameters:
-
-```console
-source.type=git
-source.git.repository=https://github.com/my-user/oci://REGISTRY_NAME/REPOSITORY_NAME
-source.git.revision=master
-```
-
-## Persistence
-
-The [Bitnami DeepSpeed](https://github.com/bitnami/containers/tree/main/bitnami/deepspeed) image can persist data. If enabled, the persisted path is `/bitnami/deepspeed/data` by default.
-
-The chart mounts a [Persistent Volume](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) at this location. The volume is created using dynamic volume provisioning.
-
-### Adjust permissions of persistent volume mountpoint
-
-As the image run as non-root by default, it is necessary to adjust the ownership of the persistent volume so that the container can write data into it.
-
-By default, the chart is configured to use Kubernetes Security Context to automatically change the ownership of the volume. However, this feature does not work in all Kubernetes distributions.
-As an alternative, this chart supports using an initContainer to change the ownership of the volume before mounting it in the final destination.
-
-You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
-
-### Setting Pod's affinity
-
-This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
-
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
-
-### Additional environment variables
-
-In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property inside each of the subsections: `client`, `worker`.
-
-```yaml
-client:
-  extraEnvVars:
-    - name: LOG_LEVEL
-      value: error
-
-worker:
-  extraEnvVars:
-    - name: LOG_LEVEL
-      value: error
-```
-
-Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` values.
-
-### Sidecars
-
-If additional containers are needed in the same pod as milvus (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter inside each of the subsections: `client`, `worker`. If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter. [Learn more about configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/infrastructure/deepspeed/configuration/configure-sidecar-init-containers/).
-
 ## Troubleshooting
 
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+
+## Upgrading
+
+### To 2.3.0
+
+This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
+
+### To 2.0.0
+
+This major bump changes the following security defaults:
+
+- `resourcesPreset` is changed from `none` to the minimum size working in our test suites (NOTE: `resourcesPreset` is not meant for production usage, but `resources` adapted to your use case).
+- `global.compatibility.openshift.adaptSecurityContext` is changed from `disabled` to `auto`.
+
+This could potentially break any customization or init scripts used in your deployment. If this is the case, change the default values to the previous ones.
 
 ## License
 

@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -7,7 +7,7 @@ apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ include "argocd.server" . }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: server
   {{- if .Values.commonAnnotations }}
@@ -32,6 +32,7 @@ spec:
     spec:
       serviceAccountName: {{ include "argocd.server.serviceAccountName" . }}
       {{- include "argocd.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.server.automountServiceAccountToken }}
       {{- if .Values.server.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.server.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -65,7 +66,7 @@ spec:
       runtimeClassName: {{ .Values.server.runtimeClassName }}
       {{- end }}
       {{- if .Values.server.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.server.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.server.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       initContainers:
         {{- if .Values.server.initContainers }}
@@ -77,9 +78,9 @@ spec:
           imagePullPolicy: {{ .Values.redis.image.pullPolicy | quote }}
           {{- if .Values.redisWait.securityContext }}
           # Deprecated: use redisWait.containerSecurityContext
-          securityContext: {{- toYaml .Values.redisWait.securityContext | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.redisWait.securityContext "context" $) | nindent 12 }}
           {{- else if .Values.redisWait.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.redisWait.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.redisWait.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           command:
             - /bin/bash
@@ -126,7 +127,7 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.server.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.server.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.server.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.server.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.server.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.server.command "context" $) | nindent 12 }}
@@ -139,10 +140,10 @@ spec:
             - --staticassets
             - /opt/bitnami/argo-cd/app
             - --repo-server
-            - {{ include "argocd.repo-server" . }}:{{ .Values.repoServer.service.port }}
+            - {{ include "argocd.repo-server" . }}:{{ coalesce .Values.repoServer.service.port .Values.repoServer.service.ports.repoServer }}
             {{- if .Values.dex.enabled }}
             - --dex-server
-            - https://{{ include "argocd.dex" . }}:{{ .Values.dex.service.ports.http }}
+            - https://{{ include "argocd.dex" . }}:{{ coalesce .Values.dex.service.port .Values.dex.service.ports.http }}
             {{- end }}
             - --logformat
             - {{ .Values.server.logFormat }}
@@ -154,6 +155,8 @@ spec:
             {{- if .Values.server.insecure }}
             - --insecure
             {{- end }}
+            - --port={{ .Values.server.containerPorts.http }}
+            - --metrics-port={{ .Values.server.containerPorts.metrics }}
             {{- if .Values.server.extraArgs }}
             {{- include "common.tplvalues.render" (dict "value" .Values.server.extraArgs "context" $) | nindent 12 }}
             {{- end }}
@@ -162,18 +165,30 @@ spec:
             - name: http
               containerPort: {{ .Values.server.containerPorts.http }}
               protocol: TCP
-            {{- if .Values.server.metrics.enabled }}
             - name: metrics
               containerPort: {{ .Values.server.containerPorts.metrics }}
               protocol: TCP
-            {{- end }}
           env:
+            {{- if gt (int .Values.server.replicaCount) 1 }}
+            - name: ARGOCD_API_SERVER_REPLICAS
+              value: {{ .Values.server.replicaCount | quote }}
+            {{- end }}
             {{- if and .Values.redis.enabled (include "argocd.redis.auth.enabled" .) }}
             - name: REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "argocd.redis.secretName" . }}
                   key: {{ include "argocd.redis.secretPasswordKey" . }}
+            {{- else if .Values.externalRedis.enabled }}
+            - name: REDIS_PASSWORD
+              {{- if not ( eq "" .Values.externalRedis.password ) }}
+              value: {{ .Values.externalRedis.password }}
+              {{- else }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.externalRedis.existingSecret }}
+                  key: {{ .Values.externalRedis.existingSecretPasswordKey }}
+              {{- end }}
             {{- end }}
             {{- if .Values.server.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.server.extraEnvVars "context" $) | nindent 12 }}
@@ -189,6 +204,8 @@ spec:
             {{- end }}
           {{- if .Values.server.resources }}
           resources: {{- toYaml .Values.server.resources | nindent 12 }}
+          {{- else if ne .Values.server.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.server.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if .Values.server.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.server.customStartupProbe "context" $) | nindent 12 }}
@@ -208,7 +225,7 @@ spec:
           {{- else if .Values.server.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
-              path: /healthz
+              path: /healthz?full=true
               port: {{ .Values.server.containerPorts.http }}
             initialDelaySeconds: {{ .Values.server.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.server.livenessProbe.periodSeconds }}
@@ -230,6 +247,9 @@ spec:
             failureThreshold: {{ .Values.server.readinessProbe.failureThreshold }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             # Mounting into a path that will be read by Argo CD
             # Ref: https://argoproj.github.io/argo-cd/operator-manual/declarative-setup/#ssh-known-host-public-keys
             - name: ssh-known-hosts
@@ -257,6 +277,8 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.server.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: ssh-known-hosts
           configMap:
             name: argocd-ssh-known-hosts-cm

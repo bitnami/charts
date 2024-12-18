@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 addr:
@@ -24,7 +24,7 @@ file:
     contents:
       - /http_listen_port.*{{ .Vars.tempo.containerPorts.web }}/
       - /override_config.*\/bitnami\/grafana-tempo\/conf\/overrides.yaml/
-      - /cache.*memcached/
+      - /host.*grafana-tempo-memcached/
   /bitnami/grafana-tempo/conf/overrides.yaml:
     exists: true
     filetype: file
@@ -32,7 +32,7 @@ file:
     owner: root
 command:
   vulture-registered-traces:
-    exec: tempo-cli query api search-tags http://grafana-tempo-query-frontend:{{ .Vars.queryFrontend.service.ports.http }}
+    exec: tempo-cli query api search-tags grafana-tempo-query-frontend:{{ .Vars.queryFrontend.service.ports.http }}
     exit-status: 0
     stdout:
       - "vulture"

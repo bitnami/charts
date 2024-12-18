@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -34,10 +34,12 @@ spec:
       annotations: {{- include "common.tplvalues.render" (dict "value" .Values.helmController.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/part-of: flux
         app.kubernetes.io/component: helm-controller
     spec:
       serviceAccountName: {{ template "flux.helm-controller.serviceAccountName" . }}
       {{- include "flux.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.helmController.automountServiceAccountToken }}
       {{- if .Values.helmController.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.helmController.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -65,7 +67,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.helmController.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.helmController.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.helmController.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.helmController.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.helmController.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.helmController.terminationGracePeriodSeconds }}
@@ -79,7 +81,7 @@ spec:
           image: {{ template "flux.helm-controller.image" . }}
           imagePullPolicy: {{ .Values.helmController.image.pullPolicy }}
           {{- if .Values.helmController.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.helmController.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.helmController.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -92,7 +94,7 @@ spec:
           args: {{- include "common.tplvalues.render" (dict "value" .Values.helmController.args "context" $) | nindent 12 }}
           {{- else }}
           args:
-            - --watch-all-namespaces
+            - --watch-all-namespaces={{ .Values.helmController.watchAllNamespaces }}
             {{- if .Values.helmController.image.debug }}
             - --log-level=debug
             {{- else }}
@@ -122,6 +124,8 @@ spec:
             {{- end }}
           {{- if .Values.helmController.resources }}
           resources: {{- toYaml .Values.helmController.resources | nindent 12 }}
+          {{- else if ne .Values.helmController.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.helmController.resourcesPreset) | nindent 12 }}
           {{- end }}
           ports:
             - name: http-metrics
@@ -158,8 +162,9 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.helmController.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - name: tmp
+            - name: empty-dir
               mountPath: /tmp
+              subPath: tmp-dir
           {{- if .Values.helmController.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.helmController.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -167,7 +172,7 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.helmController.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
-        - name: tmp
+        - name: empty-dir
           emptyDir: {}
         {{- if .Values.helmController.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.helmController.extraVolumes "context" $) | nindent 8 }}

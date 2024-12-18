@@ -1,0 +1,80 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.compactor.enabled .Values.compactor.networkPolicy.enabled }}
+kind: NetworkPolicy
+apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
+metadata:
+  name: {{ template "thanos.compactor.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: compactor
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.compactor.podLabels .Values.commonLabels ) "context" . ) }}
+  podSelector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/component: compactor
+  policyTypes:
+    - Ingress
+    - Egress
+  {{- if .Values.compactor.networkPolicy.allowExternalEgress }}
+  egress:
+    - {}
+  {{- else }}
+  egress:
+    # Allow dns resolution
+    - ports:
+        - port: 53
+          protocol: UDP
+        - port: 53
+          protocol: TCP
+    {{- if .Values.minio.enabled }}
+    # Communicate with minio
+    - ports:
+        - port: {{ .Values.minio.service.ports.api }}
+        - port: {{ .Values.minio.service.ports.api }}
+      to: 
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: minio
+              app.kubernetes.io/instance: {{ .Release.Name }}            
+    {{- end }}
+    {{- if .Values.compactor.networkPolicy.extraEgress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.compactor.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+  ingress:
+    - ports:
+        - port: {{ .Values.compactor.containerPorts.http }}
+        - port: {{ .Values.compactor.service.ports.http }}
+      {{- if not .Values.compactor.networkPolicy.allowExternal }}
+      from:
+        - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
+        - podSelector:
+            matchLabels:
+              {{ template "thanos.compactor.fullname" . }}-client: "true"
+        {{- if .Values.compactor.networkPolicy.ingressNSMatchLabels }}
+        - namespaceSelector:
+            matchLabels:
+              {{- range $key, $value := .Values.compactor.networkPolicy.ingressNSMatchLabels }}
+              {{ $key | quote }}: {{ $value | quote }}
+              {{- end }}
+          {{- if .Values.compactor.networkPolicy.ingressNSPodMatchLabels }}
+          podSelector:
+            matchLabels:
+              {{- range $key, $value := .Values.compactor.networkPolicy.ingressNSPodMatchLabels }}
+              {{ $key | quote }}: {{ $value | quote }}
+              {{- end }}
+          {{- end }}
+        {{- end }}
+      {{- end }}
+    {{- if .Values.compactor.networkPolicy.extraIngress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.compactor.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
+    {{- end }}
+{{- end }}

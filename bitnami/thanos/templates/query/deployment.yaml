@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -7,8 +7,8 @@ SPDX-License-Identifier: APACHE-2.0
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: {{ include "common.names.fullname" . }}-query
-  namespace: {{ .Release.Namespace | quote }}
+  name: {{ include "thanos.query.fullname" . }}
+  namespace: {{ include "common.names.namespace" . }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: query
   {{- if .Values.commonAnnotations }}
@@ -18,6 +18,7 @@ spec:
   {{- if not .Values.query.autoscaling.enabled }}
   replicas: {{ .Values.query.replicaCount }}
   {{- end }}
+  revisionHistoryLimit: {{ .Values.query.revisionHistoryLimit }}
   {{- if .Values.query.updateStrategy }}
   strategy: {{- toYaml .Values.query.updateStrategy | nindent 4 }}
   {{- end }}
@@ -29,10 +30,10 @@ spec:
     metadata:
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: query
-      {{- if or (include "thanos.query.createSDConfigmap" .) .Values.query.existingSDConfigmap .Values.query.podAnnotations }}
+      {{- if or .Values.query.podAnnotations (include "thanos.query.createSDConfigmap" .) }}
       annotations:
-        {{- if or (include "thanos.query.createSDConfigmap" .) .Values.query.existingSDConfigmap }}
-        checksum/ruler-configuration: {{ include (print $.Template.BasePath "/query/sd-configmap.yaml") . | sha256sum }}
+        {{- if (include "thanos.query.createSDConfigmap" .) }}
+        checksum/query-sd-configuration: {{ include "thanos.querySDConfigMap" . | sha256sum }}
         {{- end }}
         {{- if .Values.query.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.query.podAnnotations "context" $) | nindent 8 }}
@@ -40,7 +41,7 @@ spec:
       {{- end }}
     spec:
       {{- include "thanos.imagePullSecrets" . | nindent 6 }}
-      serviceAccountName: {{ include "thanos.serviceAccountName" (dict "component" "query" "context" $) }}
+      serviceAccountName: {{ include "thanos.query.serviceAccountName" . }}
       automountServiceAccountToken: {{ .Values.query.automountServiceAccountToken }}
       {{- if .Values.query.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.query.hostAliases "context" $) | nindent 8 }}
@@ -72,7 +73,7 @@ spec:
       schedulerName: {{ .Values.query.schedulerName }}
       {{- end }}
       {{- if .Values.query.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.query.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.query.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.query.topologySpreadConstraints }}
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.query.topologySpreadConstraints "context" $) | nindent 8 }}
@@ -88,7 +89,7 @@ spec:
           image: {{ include "thanos.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.query.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.query.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.query.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.query.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.query.command "context" $) | nindent 12 }}
@@ -120,23 +121,35 @@ spec:
             {{- end }}
             {{- if and .Values.storegateway.enabled .Values.storegateway.sharded.enabled }}
             {{- $shards := int 0 }}
+            {{- $hashShards := int 1 }}
+            {{- $timeShards := int 1 }}
             {{- if .Values.storegateway.sharded.hashPartitioning.shards }}
-            {{- $shards = int .Values.storegateway.sharded.hashPartitioning.shards }}
-            {{- else }}
-            {{- $shards = len .Values.storegateway.sharded.timePartitioning }}
+            {{- $hashShards = int .Values.storegateway.sharded.hashPartitioning.shards }}
             {{- end }}
+            {{- if not (empty .Values.storegateway.sharded.timePartitioning) }}
+            {{- $timeShards = len .Values.storegateway.sharded.timePartitioning }}
+            {{- end }}
+            {{- $shards = mul $hashShards $timeShards | int }}
             {{- range $index, $_ := until $shards }}
+            {{- if $.Values.storegateway.useEndpointGroup }}
+            - --endpoint-group={{ include "common.names.fullname" $ }}-storegateway-{{ toString $index }}.{{ $.Release.Namespace }}.svc.{{ $.Values.clusterDomain }}:{{ $.Values.storegateway.service.ports.grpc }}
+            {{- else }}
             - --endpoint=dnssrv+_grpc._tcp.{{ include "common.names.fullname" $ }}-storegateway-{{ toString $index }}.{{ $.Release.Namespace }}.svc.{{ $.Values.clusterDomain }}
             {{- end }}
             {{- end }}
+            {{- end }}
             {{- if and .Values.storegateway.enabled .Values.query.dnsDiscovery.enabled (not .Values.storegateway.sharded.enabled ) }}
-            - --endpoint=dnssrv+_grpc._tcp.{{ include "common.names.fullname" . }}-storegateway{{ if .Values.storegateway.service.additionalHeadless }}-headless{{ end }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
+            {{- if .Values.storegateway.useEndpointGroup }}
+            - --endpoint-group={{ include "thanos.storegateway.fullname" . }}{{ if .Values.storegateway.service.additionalHeadless }}-headless{{ end }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}:{{ .Values.storegateway.service.ports.grpc }}
+            {{- else }}
+            - --endpoint=dnssrv+_grpc._tcp.{{ include "thanos.storegateway.fullname" . }}{{ if .Values.storegateway.service.additionalHeadless }}-headless{{ end }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
+            {{- end }}
             {{- end }}
             {{- if and .Values.ruler.enabled .Values.query.dnsDiscovery.enabled }}
-            - --endpoint=dnssrv+_grpc._tcp.{{ include "common.names.fullname" . }}-ruler{{ if .Values.ruler.service.additionalHeadless }}-headless{{ end }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
+            - --endpoint=dnssrv+_grpc._tcp.{{ include "thanos.ruler.fullname" . }}{{ if .Values.ruler.service.additionalHeadless }}-headless{{ end }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
             {{- end }}
             {{- if and .Values.receive.enabled .Values.query.dnsDiscovery.enabled }}
-            - --endpoint=dnssrv+_grpc._tcp.{{ include "common.names.fullname" . }}-receive{{ if .Values.receive.service.additionalHeadless }}-headless{{ end }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
+            - --endpoint=dnssrv+_grpc._tcp.{{ include "thanos.receive.fullname" . }}{{ if .Values.receive.service.additionalHeadless }}-headless{{ end }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
             {{- end }}
             {{- range .Values.query.stores }}
             - --endpoint={{ . }}
@@ -144,7 +157,9 @@ spec:
             {{- if .Values.query.grpc.server.tls.enabled }}
             - --grpc-server-tls-cert=/certs/server/{{ include "common.secrets.key" (dict "existingSecret" .Values.query.grpc.server.tls.existingSecret "key" "tls-cert") }}
             - --grpc-server-tls-key=/certs/server/{{ include "common.secrets.key" (dict "existingSecret" .Values.query.grpc.server.tls.existingSecret "key" "tls-key") }}
+            {{- if .Values.query.grpc.server.tls.clientAuthEnabled }}
             - --grpc-server-tls-client-ca=/certs/server/{{ include "common.secrets.key" (dict "existingSecret" .Values.query.grpc.server.tls.existingSecret "key" "ca-cert") }}
+            {{- end }}
             {{- end }}
             {{- if .Values.query.grpc.client.tls.enabled }}
             - --grpc-client-tls-secure
@@ -158,9 +173,7 @@ spec:
             {{- if .Values.query.grpc.client.serverName }}
             - --grpc-client-server-name={{ .Values.query.grpc.client.serverName }}
             {{- end }}
-            {{- if and .Values.queryFrontend.enabled .Values.queryFrontend.ingress.enabled .Values.queryFrontend.ingress.hostname .Values.queryFrontend.ingress.overrideAlertQueryURL }}
-            - --alert.query-url=http://{{ tpl .Values.queryFrontend.ingress.hostname . }}
-            {{- end }}
+            - --alert.query-url={{- template "thanos.ruler.queryURL" .}}
             {{- if .Values.query.extraFlags }}
             {{- include "common.tplvalues.render" (dict "value" .Values.query.extraFlags "context" $) | nindent 12 }}
             {{- end }}
@@ -233,6 +246,8 @@ spec:
           {{- end }}
           {{- if .Values.query.resources }}
           resources: {{- toYaml .Values.query.resources | nindent 12 }}
+          {{- else if ne .Values.query.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.query.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             {{- if (include "thanos.httpConfigEnabled" .) }}

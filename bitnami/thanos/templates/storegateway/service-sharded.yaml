@@ -1,24 +1,28 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
 {{- if and .Values.storegateway.enabled .Values.storegateway.sharded.enabled }}
 
 {{- $shards := int 0 }}
+{{- $hashShards := int 1 }}
+{{- $timeShards := int 1 }}
 {{- if .Values.storegateway.sharded.hashPartitioning.shards }}
-  {{- $shards = int .Values.storegateway.sharded.hashPartitioning.shards }}
-{{- else }}
-  {{- $shards = len .Values.storegateway.sharded.timePartitioning }}
+  {{- $hashShards = int .Values.storegateway.sharded.hashPartitioning.shards }}
 {{- end }}
+{{- if not (empty .Values.storegateway.sharded.timePartitioning) }}
+  {{- $timeShards = len .Values.storegateway.sharded.timePartitioning }}
+{{- end }}
+{{- $shards = mul $hashShards $timeShards | int }}
 
 {{- range $index, $_ := until $shards }}
 apiVersion: v1
 kind: Service
 metadata:
-  {{- $svcNamePrefix := printf "%s-storegateway" (include "common.names.fullname" $) | trunc 61 | trimSuffix "-" }}
+  {{- $svcNamePrefix := include "thanos.storegateway.fullname" $ }}
   name: {{ printf "%s-%s" $svcNamePrefix (toString $index) }}
-  namespace: {{ $.Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" $ }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $.Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: storegateway
     shard: {{ $index | quote }}
@@ -44,7 +48,7 @@ spec:
   loadBalancerSourceRanges: {{- toYaml $.Values.storegateway.service.loadBalancerSourceRanges | nindent 4 }}
   {{- end }}
   ports:
-    - port: {{ if $.Values.storegateway.service.http }}{{ coalesce $.Values.storegateway.service.ports.http $.Values.storegateway.service.http.port }}{{ else }}{{ $.Values.storegateway.service.ports.http }}{{ end }}
+    - port: {{ $.Values.storegateway.service.ports.http }}
       targetPort: http
       protocol: TCP
       name: http
@@ -53,7 +57,7 @@ spec:
       {{- else if eq $.Values.storegateway.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
-    - port: {{ if $.Values.storegateway.service.grpc }}{{ coalesce $.Values.storegateway.service.ports.grpc $.Values.storegateway.service.grpc.port }}{{ else }}{{ $.Values.storegateway.service.ports.grpc }}{{ end }}
+    - port: {{ $.Values.storegateway.service.ports.grpc }}
       targetPort: grpc
       protocol: TCP
       name: grpc

@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -75,10 +75,14 @@ spec:
       {{- if .Values.grafana.updateStrategy }}
       strategy: {{ toYaml .Values.grafana.updateStrategy | nindent 8 }}
       {{- end }}
+      {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.grafana.podLabels .Values.commonLabels ) "context" . ) }}
       template:
         metadata:
-          labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 12 }}
+          labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 12 }}
             app.kubernetes.io/component: grafana
+          {{- if .Values.grafana.podAnnotations }}
+          annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.grafana.podAnnotations "context" $ ) | nindent 12 }}
+          {{- end }}
         spec:
           {{- include "common.images.pullSecrets" (dict "images" (list .Values.grafana.image) "global" .Values.global) | nindent 10 }}
           {{- if .Values.grafana.affinity }}
@@ -96,15 +100,20 @@ spec:
             {{- end }}
           {{- end }}
           {{- if .Values.grafana.podSecurityContext.enabled }}
-          securityContext: {{- omit .Values.grafana.podSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.grafana.podSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.grafana.tolerations }}
           tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.tolerations "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.grafana.topologySpreadConstraints }}
+          topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.topologySpreadConstraints "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.grafana.nodeSelector }}
           nodeSelector: {{ toYaml .Values.grafana.nodeSelector | nindent 12 }}
           {{- end }}
           volumes:
+            - name: empty-dir
+              emptyDir: {}
             - name: grafana-data
               {{- if .Values.grafana.persistence.enabled }}
               persistentVolumeClaim:
@@ -126,14 +135,20 @@ spec:
             - name: grafana
               image: {{ include "common.images.image" (dict "imageRoot" .Values.grafana.image "global" .Values.global) }}
               imagePullPolicy: {{ .Values.grafana.image.pullPolicy }}
+              {{- if .Values.grafana.extraEnvVars }}
+              env: 
+                {{- include "common.tplvalues.render" (dict "value" .Values.grafana.extraEnvVars "context" $) | nindent 16 }}
+              {{- end }}
               {{- if .Values.grafana.envFrom }}
               envFrom: {{- toYaml .Values.grafana.envFrom | nindent 16 }}
               {{- end }}
               {{- if .Values.grafana.containerSecurityContext.enabled }}
-              securityContext: {{- omit .Values.grafana.containerSecurityContext "enabled" | toYaml | nindent 16 }}
+              securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.grafana.containerSecurityContext "context" $) | nindent 16 }}
               {{- end }}
               {{- if .Values.grafana.resources }}
               resources: {{- toYaml .Values.grafana.resources | nindent 16 }}
+              {{- else if ne .Values.grafana.resourcesPreset "none" }}
+              resources: {{- include "common.resources.preset" (dict "type" .Values.grafana.resourcesPreset) | nindent 16 }}
               {{- end }}
               {{- if .Values.grafana.livenessProbe.enabled }}
               livenessProbe:
@@ -142,10 +157,8 @@ spec:
                 timeoutSeconds: {{ .Values.grafana.livenessProbe.timeoutSeconds }}
                 successThreshold: {{ .Values.grafana.livenessProbe.successThreshold }}
                 failureThreshold: {{ .Values.grafana.livenessProbe.failureThreshold }}
-                httpGet:
-                  path: /api/health
+                tcpSocket:
                   port: 3000
-                  scheme: HTTP
               {{- end }}
               {{- if .Values.grafana.readinessProbe.enabled }}
               readinessProbe:
@@ -159,10 +172,19 @@ spec:
                   port: 3000
                   scheme: HTTP
               {{- end }}
-              {{- if .Values.grafana.extraVolumeMounts }}
               volumeMounts:
+                - name: empty-dir
+                  mountPath: /tmp
+                  subPath: tmp-dir
+                - name: empty-dir
+                  mountPath: /opt/bitnami/grafana/conf
+                  subPath: app-conf-dir
+                - name: empty-dir
+                  mountPath: /opt/bitnami/grafana/tmp
+                  subPath: app-tmp-dir
+                {{- if .Values.grafana.extraVolumeMounts }}
                 {{- include "common.tplvalues.render" (dict "value" .Values.grafana.extraVolumeMounts "context" $) | nindent 16 }}
-              {{- end }}
+                {{- end }}
             {{- if .Values.grafana.sidecars }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.grafana.sidecars "context" $) | nindent 12 }}
             {{- end }}

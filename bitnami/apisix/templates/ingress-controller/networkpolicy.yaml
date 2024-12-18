@@ -1,0 +1,98 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.ingressController.enabled .Values.ingressController.networkPolicy.enabled }}
+kind: NetworkPolicy
+apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
+metadata:
+  name: {{ template "apisix.ingress-controller.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: apisix
+    app.kubernetes.io/component: ingress-controller
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.ingressController.podLabels .Values.commonLabels ) "context" . ) }}
+  podSelector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/part-of: apisix
+      app.kubernetes.io/component: ingress-controller
+  policyTypes:
+    - Ingress
+    - Egress
+  {{- if .Values.ingressController.networkPolicy.allowExternalEgress }}
+  egress:
+    - {}
+  {{- else }}
+  egress:
+    - ports:
+        # Allow dns resolution
+        - port: 53
+          protocol: UDP
+        - port: 53
+          protocol: TCP
+        # Allow access to kube-apiserver
+        {{- range $port := .Values.ingressController.networkPolicy.kubeAPIServerPorts }}
+        - port: {{ $port }}
+        {{- end }}
+    # Allow outbound connections to control plane
+    - ports:
+        - port: {{ .Values.controlPlane.containerPorts.adminAPI }}
+        - port: {{ .Values.controlPlane.containerPorts.configServer }}
+        - port: {{ .Values.controlPlane.containerPorts.control }}
+        - port: {{ .Values.controlPlane.containerPorts.metrics }}
+      to: 
+        - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
+              app.kubernetes.io/part-of: apisix
+              app.kubernetes.io/component: control-plane
+    # Allow outbound connections to data plane
+    - ports:
+        - port: {{ .Values.dataPlane.containerPorts.http }}
+        - port: {{ .Values.dataPlane.containerPorts.https }}
+        - port: {{ .Values.dataPlane.containerPorts.control }}
+        - port: {{ .Values.dataPlane.containerPorts.metrics }}
+      to: 
+        - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
+              app.kubernetes.io/part-of: apisix
+              app.kubernetes.io/component: data-plane
+    {{- if .Values.ingressController.networkPolicy.extraEgress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.ingressController.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+  ingress:
+    - ports:
+        - port: {{ .Values.ingressController.containerPorts.http }}
+        - port: {{ .Values.ingressController.containerPorts.https }}
+      {{- if not .Values.ingressController.networkPolicy.allowExternal }}
+      from:
+        - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
+              app.kubernetes.io/part-of: apisix
+        - podSelector:
+            matchLabels:
+              {{ template "apisix.ingress-controller.fullname" . }}-client: "true"
+        {{- if .Values.ingressController.networkPolicy.ingressNSMatchLabels }}
+        - namespaceSelector:
+            matchLabels:
+              {{- range $key, $value := .Values.ingressController.networkPolicy.ingressNSMatchLabels }}
+              {{ $key | quote }}: {{ $value | quote }}
+              {{- end }}
+          {{- if .Values.ingressController.networkPolicy.ingressNSPodMatchLabels }}
+          podSelector:
+            matchLabels:
+              {{- range $key, $value := .Values.ingressController.networkPolicy.ingressNSPodMatchLabels }}
+              {{ $key | quote }}: {{ $value | quote }}
+              {{- end }}
+          {{- end }}
+        {{- end }}
+      {{- end }}
+    {{- if .Values.ingressController.networkPolicy.extraIngress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.ingressController.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
+    {{- end }}
+{{- end }}

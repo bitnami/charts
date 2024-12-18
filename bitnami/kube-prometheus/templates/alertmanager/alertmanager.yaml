@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -18,6 +18,7 @@ spec:
   serviceAccountName: {{ template "kube-prometheus.alertmanager.serviceAccountName" . }}
   {{- if .Values.alertmanager.image }}
   image: {{ template "kube-prometheus.alertmanager.image" . }}
+  imagePullPolicy: {{ .Values.alertmanager.image.pullPolicy }}
   {{- end }}
   listenLocal: {{ .Values.alertmanager.listenLocal }}
   {{- if index .Values.alertmanager "externalUrl" }}
@@ -32,16 +33,26 @@ spec:
   logFormat: {{ .Values.alertmanager.logFormat }}
   logLevel: {{ .Values.alertmanager.logLevel }}
   retention: {{ .Values.alertmanager.retention }}
+  {{- if .Values.alertmanager.enableFeatures }}
+  enableFeatures:
+    {{- range .Values.alertmanager.enableFeatures }}
+    - {{ . | quote }}
+    {{- end }}
+  {{- end }}
   {{- if .Values.alertmanager.secrets }}
   secrets: {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.secrets "context" $) | nindent 4 }}
   {{- end }}
   {{- if .Values.alertmanager.configMaps }}
   configMaps: {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.configMaps "context" $) | nindent 4 }}
   {{- end }}
+  {{- if .Values.alertmanager.resources }}
   resources: {{- toYaml .Values.alertmanager.resources | nindent 4 }}
+  {{- else if ne .Values.alertmanager.resourcesPreset "none" }}
+  resources: {{- include "common.resources.preset" (dict "type" .Values.alertmanager.resourcesPreset) | nindent 4 }}
+  {{- end }}
   routePrefix: "{{ .Values.alertmanager.routePrefix }}"
   {{- if .Values.alertmanager.podSecurityContext.enabled }}
-  securityContext: {{- omit .Values.alertmanager.podSecurityContext "enabled" | toYaml | nindent 4 }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.alertmanager.podSecurityContext "context" $) | nindent 4 }}
   {{- end }}
   {{- if .Values.alertmanager.storageSpec }}
   storage: {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.storageSpec "context" $) | nindent 4 }}
@@ -49,6 +60,7 @@ spec:
   {{- if .Values.alertmanager.persistence.enabled }}
   storage:
     volumeClaimTemplate:
+      {{- if or .Values.alertmanager.persistence.annotations .Values.commonAnnotations .Values.commonLabels }}
       metadata:
         {{- if or .Values.alertmanager.persistence.annotations .Values.commonAnnotations }}
         {{- $claimAnnotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.alertmanager.persistence.annotations .Values.commonAnnotations ) "context" . ) }}
@@ -57,6 +69,7 @@ spec:
         {{- if .Values.commonLabels }}
         labels: {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 10 }}
         {{- end }}
+      {{- end }}
       spec:
         accessModes:
           {{- range .Values.alertmanager.persistence.accessModes }}
@@ -93,13 +106,20 @@ spec:
   {{- if .Values.alertmanager.tolerations }}
   tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.tolerations "context" $) | nindent 4 }}
   {{- end }}
-  {{- if .Values.alertmanager.volumes }}
-  volumes: {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.volumes "context" $) | nindent 4 }}
-  {{- end }}
-  {{- if .Values.alertmanager.volumeMounts }}
-  volumeMounts: {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.volumeMounts "context" $) | nindent 4 }}
-  {{- end }}
-{{- include "kube-prometheus.imagePullSecrets" . | indent 2 }}
+  volumes:
+    - name: empty-dir
+      emptyDir: {}
+    {{- if .Values.alertmanager.volumes }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.volumes "context" $) | nindent 4 }}
+    {{- end }}
+  volumeMounts:
+    - name: empty-dir
+      mountPath: /tmp
+      subPath: tmp-dir
+    {{- if .Values.alertmanager.volumeMounts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.volumeMounts "context" $) | nindent 4 }}
+    {{- end }}
+{{- include "kube-prometheus.imagePullSecrets" . | nindent 2 }}
   {{- if or .Values.alertmanager.containers .Values.alertmanager.containerSecurityContext.enabled .Values.operator.prometheusConfigReloader.containerSecurityContext.enabled }}
   containers:
     {{- if or .Values.alertmanager.containerSecurityContext.enabled .Values.alertmanager.livenessProbe.enabled .Values.alertmanager.readinessProbe.enabled }}
@@ -110,7 +130,7 @@ spec:
     ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/user-guides/strategic-merge-patch.md
     - name: alertmanager
       {{- if .Values.alertmanager.containerSecurityContext.enabled }}
-      securityContext: {{- omit .Values.alertmanager.containerSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.alertmanager.containerSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.alertmanager.livenessProbe.enabled }}
       livenessProbe:
@@ -145,7 +165,7 @@ spec:
     ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/user-guides/strategic-merge-patch.md
     - name: config-reloader
       {{- if .Values.operator.prometheusConfigReloader.containerSecurityContext.enabled }}
-      securityContext: {{- omit .Values.operator.prometheusConfigReloader.containerSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.operator.prometheusConfigReloader.containerSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.operator.prometheusConfigReloader.livenessProbe.enabled }}
       livenessProbe:

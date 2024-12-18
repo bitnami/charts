@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -33,6 +33,8 @@ spec:
         {{- end }}
     spec:
       {{- include "nats.imagePullSecrets" . | nindent 6 }}
+      serviceAccountName: {{ include "nats.serviceAccountName" . }}
+      automountServiceAccountToken: {{ .Values.automountServiceAccountToken }}
       {{- if .Values.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -60,7 +62,7 @@ spec:
       schedulerName: {{ .Values.schedulerName | quote }}
       {{- end }}
       {{- if .Values.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.initContainers }}
       initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
@@ -70,7 +72,7 @@ spec:
           image: {{ template "nats.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           {{- if .Values.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -122,7 +124,7 @@ spec:
           {{- else if .Values.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
-              path: /
+              path: /healthz
               port: monitoring
           {{- end }}
           {{- if .Values.customStartupProbe }}
@@ -138,8 +140,22 @@ spec:
           {{- end }}
           {{- if .Values.resources }}
           resources: {{- toYaml .Values.resources | nindent 12 }}
+          {{- else if ne .Values.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/nats/conf
+              subPath: app-conf-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/nats/tmp
+              subPath: app-tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/nats/logs
+              subPath: app-logs-dir
             - name: config
               mountPath: /bitnami/nats/conf/{{ .Values.natsFilename }}.conf
               subPath: {{ .Values.natsFilename }}.conf
@@ -157,31 +173,41 @@ spec:
           args: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.flags "context" $) | nindent 12 }}
             - "http://localhost:{{ .Values.containerPorts.monitoring }}"
           {{- end }}
+          {{- if not .Values.diagnosticMode.enabled }}
           ports:
             - name: metrics
-              containerPort: {{ .Values.metrics.containerPort }}
-          {{- if not .Values.diagnosticMode.enabled }}
-          livenessProbe:
+              containerPort: {{ coalesce .Values.metrics.containerPorts.http .Values.metrics.containerPort }}
+
+          {{- if .Values.metrics.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.metrics.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metrics.livenessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /metrics
               port: metrics
-            initialDelaySeconds: 15
-            timeoutSeconds: 5
-          readinessProbe:
+          {{- end }}
+          {{- if .Values.metrics.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.metrics.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metrics.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /metrics
               port: metrics
-            initialDelaySeconds: 5
-            timeoutSeconds: 1
+          {{- end }}
+
           {{- end }}
           {{- if .Values.metrics.resources }}
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
+          {{- else if ne .Values.metrics.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.metrics.resourcesPreset) | nindent 12 }}
           {{- end }}
         {{- end }}
         {{- if .Values.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: config
           secret:
             secretName: {{ include "nats.secretName" . }}

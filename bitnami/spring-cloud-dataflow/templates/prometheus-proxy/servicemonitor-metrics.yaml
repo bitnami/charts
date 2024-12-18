@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -7,7 +7,7 @@ SPDX-License-Identifier: APACHE-2.0
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: {{ include "scdf.fullname" . }}-prometheus-proxy
+  name: {{ include "scdf.prometheus-proxy.fullname" . }}
   {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.metrics.serviceMonitor.labels .Values.commonLabels ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: prometheus-proxy

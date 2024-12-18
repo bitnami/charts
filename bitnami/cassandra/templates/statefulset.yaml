@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -7,7 +7,7 @@ apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
   name: {{ include "common.names.fullname" . }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
@@ -34,6 +34,7 @@ spec:
       {{- end }}
     spec:
       {{- include "cassandra.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.automountServiceAccountToken }}
       {{- if .Values.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -59,7 +60,7 @@ spec:
       priorityClassName: {{ .Values.priorityClassName | quote }}
       {{- end }}
       {{- if .Values.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.topologySpreadConstraints }}
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.topologySpreadConstraints "context" $) | nindent 8 }}
@@ -123,10 +124,15 @@ spec:
           {{- end }}
           {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: data
               mountPath: {{ .Values.persistence.mountPath }}
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             {{- if .Values.persistence.commitLogMountPath }}
             - name: commitlog
               mountPath: {{ .Values.persistence.commitLogMountPath }}
@@ -137,7 +143,7 @@ spec:
           image: {{ include "cassandra.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           command:
           - /bin/bash
@@ -195,12 +201,17 @@ spec:
             {{- end }}
           {{- if .Values.tls.resources }}
           resources: {{- toYaml .Values.tls.resources | nindent 12 }}
+          {{- else if ne .Values.tls.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.tls.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
-          - name: certs
-            mountPath: /certs
-          - name: certs-shared
-            mountPath: /opt/bitnami/cassandra/certs
+            - name: certs
+              mountPath: /certs
+            - name: certs-shared
+              mountPath: /opt/bitnami/cassandra/certs
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
         {{- end }}
         {{- if .Values.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
@@ -237,7 +248,7 @@ spec:
           image: {{ include "cassandra.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           env:
             - name: BITNAMI_DEBUG
@@ -295,13 +306,13 @@ spec:
             {{- end }}
             - name: CASSANDRA_RACK
               value: {{ .Values.cluster.rack }}
-            {{- if .Values.jvm.maxHeapSize }}
+            {{- if or .Values.jvm.maxHeapSize (include "cassandra.memory.getLimitInM" .) }}
             - name: MAX_HEAP_SIZE
-              value: {{ .Values.jvm.maxHeapSize | quote }}
+              value: {{ include "cassandra.memory.calculateMaxHeapSize" . | quote }}
             {{- end }}
-            {{- if .Values.jvm.newHeapSize }}
+            {{- if or .Values.jvm.newHeapSize (include "cassandra.memory.getLimitInM" .) }}
             - name: HEAP_NEWSIZE
-              value: {{ .Values.jvm.newHeapSize | quote }}
+              value: {{ include "cassandra.memory.calculateNewHeapSize" . | quote }}
             {{- end }}
             {{- if .Values.jvm.extraOpts }}
             - name: JVM_EXTRA_OPTS
@@ -412,6 +423,7 @@ spec:
               {{- else if .Values.hostPorts.intra }}
               hostPort: {{ .Values.hostPorts.intra }}
               {{- end }}
+            {{- if (ne (include "cassandra.internode.tlsEncryption" .) "none") }}
             - name: tls
               containerPort: {{ .Values.containerPorts.tls | default "7001" }}
               {{- if .Values.hostNetwork }}
@@ -419,6 +431,7 @@ spec:
               {{- else if .Values.hostPorts.tls }}
               hostPort: {{ .Values.hostPorts.tls }}
               {{- end }}
+            {{- end }}
             - name: jmx
               containerPort: {{ .Values.containerPorts.jmx | default "7199" }}
               {{- if .Values.hostNetwork }}
@@ -435,6 +448,8 @@ spec:
               {{- end }}
           {{- if .Values.resources }}
           resources: {{ toYaml .Values.resources | nindent 12 }}
+          {{- else if ne .Values.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: data
@@ -447,7 +462,7 @@ spec:
             - name: certs-shared
               mountPath: /opt/bitnami/cassandra/certs
             {{- end }}
-            {{- if .Values.initDBConfigMap }}
+            {{- if or .Values.initDBConfigMap .Values.initDB }}
             - name: init-db-cm
               mountPath: /docker-entrypoint-initdb.d/configmap
             {{- end }}
@@ -459,6 +474,18 @@ spec:
             - name: configurations
               mountPath: {{ .Values.persistence.mountPath }}/conf
             {{- end }}
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/cassandra/conf
+              subPath: app-conf-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/cassandra/tmp
+              subPath: app-tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/cassandra/logs
+              subPath: app-logs-dir
             {{- if .Values.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
@@ -488,6 +515,8 @@ spec:
               {{- end }}
           {{- if .Values.metrics.resources }}
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
+          {{- else if ne .Values.metrics.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.metrics.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
           livenessProbe:
@@ -507,6 +536,9 @@ spec:
             - name: metrics-conf
               mountPath: /opt/bitnami/cassandra-exporter/config.yml
               subPath: config.yml
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
           {{- if .Values.metrics.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.metrics.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -532,10 +564,12 @@ spec:
           configMap:
             name: {{ tpl .Values.existingConfiguration $ }}
         {{- end }}
-        {{- if .Values.initDBConfigMap }}
+        - name: empty-dir
+          emptyDir: {}
+        {{- if or .Values.initDB .Values.initDBConfigMap }}
         - name: init-db-cm
           configMap:
-            name: {{ tpl .Values.initDBConfigMap $ }}
+            name: {{ ternary (printf "%s-init-scripts" (include "common.names.fullname" .)) (tpl .Values.initDBConfigMap $) (empty .Values.initDBConfigMap) }}
         {{- end }}
         {{- if .Values.initDBSecret }}
         - name: init-db-secret

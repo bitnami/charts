@@ -1,0 +1,136 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.networkPolicy.enabled }}
+kind: NetworkPolicy
+apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
+metadata:
+  name: {{ include "common.names.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: clickhouse
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
+  podSelector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/component: clickhouse
+  policyTypes:
+    - Ingress
+    - Egress
+  {{- if .Values.networkPolicy.allowExternalEgress }}
+  egress:
+    - {}
+  {{- else }}
+  egress:
+    # Allow dns resolution
+    - ports:
+        - port: 53
+          protocol: UDP
+        - port: 53
+          protocol: TCP
+    # Allow outbound connections to other cluster pods
+    - ports:
+        - port: {{ .Values.service.ports.http }}
+        {{- if .Values.tls.enabled }}
+        - port: {{ .Values.service.ports.https }}
+        {{- end }}
+        - port: {{ .Values.service.ports.tcp }}
+        {{- if .Values.tls.enabled }}
+        - port: {{ .Values.service.ports.tcpSecure }}
+        {{- end }}
+        {{- if .Values.keeper.enabled }}
+        - port: {{ .Values.service.ports.keeper }}
+        - port: {{ .Values.service.ports.keeperInter }}
+        {{- if .Values.tls.enabled }}
+        - port: {{ .Values.service.ports.keeperSecure }}
+        {{- end }}
+        {{- end }}
+        - port: {{ .Values.service.ports.mysql }}
+        - port: {{ .Values.service.ports.postgresql }}
+        - port: {{ .Values.service.ports.interserver }}
+        {{- if .Values.metrics.enabled }}
+        - port: {{ .Values.service.ports.metrics }}
+        {{- end }}
+      {{- if $.Values.externalAccess.enabled }}
+        - port: {{ $.Values.externalAccess.service.ports.http }}
+        {{- if $.Values.tls.enabled }}
+        - port: {{ $.Values.externalAccess.service.ports.https }}
+        {{- end }}
+        {{- if $.Values.metrics.enabled }}
+        - port: {{ $.Values.externalAccess.service.ports.metrics }}
+        {{- end }}
+        - port: {{ $.Values.externalAccess.service.ports.tcp }}
+        {{- if $.Values.tls.enabled }}
+        - port: {{ $.Values.externalAccess.service.ports.tcpSecure }}
+        {{- end }}
+        {{- if $.Values.keeper.enabled }}
+        - port: {{ $.Values.externalAccess.service.ports.keeper }}
+        - port: {{ $.Values.externalAccess.service.ports.keeperInter }}
+        {{- if $.Values.tls.enabled }}
+        - port: {{ $.Values.externalAccess.service.ports.keeperSecure }}
+        {{- end }}
+        {{- end }}
+        - port: {{ $.Values.externalAccess.service.ports.mysql }}
+        - port: {{ $.Values.externalAccess.service.ports.postgresql }}
+        - port: {{ $.Values.externalAccess.service.ports.interserver }}
+      {{- end }}
+      to:
+        - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
+    {{- if .Values.networkPolicy.extraEgress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+  ingress:
+    - ports:
+        - port: {{ $.Values.containerPorts.http }}
+        - port: {{ $.Values.containerPorts.tcp }}
+        - port: {{ $.Values.containerPorts.mysql }}
+        - port: {{ $.Values.containerPorts.postgresql }}
+        - port: {{ $.Values.containerPorts.interserver }}
+        {{- if $.Values.tls.enabled }}
+        - port: {{ $.Values.containerPorts.tcpSecure }}
+        - port: {{ $.Values.containerPorts.https }}
+        {{- end }}
+        {{- if $.Values.keeper.enabled }}
+        - port: {{ $.Values.containerPorts.keeper }}
+        - port: {{ $.Values.containerPorts.keeperInter }}
+        {{- if $.Values.tls.enabled }}
+        - port : {{ $.Values.containerPorts.keeperSecure }}
+        {{- end }}
+        {{- end }}
+        {{- if $.Values.metrics.enabled }}
+        - port: {{ $.Values.containerPorts.metrics }}
+        {{- end }}
+      {{- if not .Values.networkPolicy.allowExternal }}
+      from:
+        - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 14 }}
+              app.kubernetes.io/component: clickhouse
+        - podSelector:
+            matchLabels:
+              {{ include "common.names.fullname" . }}-client: "true"
+        {{- if .Values.networkPolicy.ingressNSMatchLabels }}
+        - namespaceSelector:
+            matchLabels:
+              {{- range $key, $value := .Values.networkPolicy.ingressNSMatchLabels }}
+              {{ $key | quote }}: {{ $value | quote }}
+              {{- end }}
+          {{- if .Values.networkPolicy.ingressNSPodMatchLabels }}
+          podSelector:
+            matchLabels:
+              {{- range $key, $value := .Values.networkPolicy.ingressNSPodMatchLabels }}
+              {{ $key | quote }}: {{ $value | quote }}
+              {{- end }}
+          {{- end }}
+        {{- end }}
+      {{- end }}
+    {{- if .Values.networkPolicy.extraIngress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
+    {{- end }}
+{{- end }}

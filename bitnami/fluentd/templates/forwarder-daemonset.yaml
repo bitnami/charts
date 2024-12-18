@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -35,6 +35,7 @@ spec:
         {{- end }}
     spec:
       {{- include "fluentd.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.forwarder.automountServiceAccountToken }}
       {{- if .Values.forwarder.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.forwarder.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -61,41 +62,79 @@ spec:
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.forwarder.tolerations "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.forwarder.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.forwarder.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.forwarder.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       initContainers:
         {{- if .Values.forwarder.extraGems }}
         - name: install-extra-gems
-          image: {{ include "fluentd.forwarder.image" . }}
+          image: {{ include "fluentd.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           command:
             - sh
             - -c
           args:
             - |-
+              set -e
               cd /tmp
 
               # install extra gems
-              {{- range $gem := .Values.forwarder.extraGems }} --no-document
+              {{- range $gem := .Values.forwarder.extraGems }}
               {{- if kindIs "string" $gem }}
-              fluent-gem install {{ $gem }}
+              fluent-gem install {{ $gem }} --no-document
               {{- else }}
               fluent-gem install {{ $gem.name }}{{ if $gem.version }} -v {{ $gem.version }}{{ end }} --no-document
               {{- end }}
               {{- end }}
 
               # copy installed gems to shared dir
+              cp -r /opt/bitnami/fluentd/extensions/* /extensions/
               cp -r /opt/bitnami/fluentd/gems/* /gems/
               cp -r /opt/bitnami/fluentd/specifications/* /specifications/
+          {{- if .Values.forwarder.initResources }}
+          resources: {{- toYaml .Values.forwarder.initResources | nindent 12 }}
+          {{- else if ne .Values.forwarder.initResourcePresets "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.forwarder.initResourcePresets) | nindent 12 }}
+          {{- end }}
           securityContext:
             allowPrivilegeEscalation: false
             runAsUser: 0
           volumeMounts:
-            - name: gems
+            - name: empty-dir
+              mountPath: /extensions
+              subPath: app-extensions-dir
+            - name: empty-dir
               mountPath: /gems
-            - name: specifications
+              subPath: app-gems-dir
+            - name: empty-dir
               mountPath: /specifications
+              subPath: app-specifications-dir
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
         {{- end }}
+        # Source: https://github.com/fluent/fluentd-kubernetes-daemonset/issues/1393
+        - name: tmp-dir-permissions
+          image: {{ include "fluentd.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          command:
+            - sh
+            - -c
+          args:
+            - |-
+              #!/bin/sh
+              chmod o-rwx /tmp
+          {{- if .Values.forwarder.initResources }}
+          resources: {{- toYaml .Values.forwarder.initResources | nindent 12 }}
+          {{- else if ne .Values.forwarder.initResourcePresets "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.forwarder.initResourcePresets) | nindent 12 }}
+          {{- end }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsUser: 0
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
         {{- if .Values.forwarder.initContainers }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.forwarder.initContainers "context" $ ) | nindent 8 }}
         {{- end }}
@@ -106,10 +145,10 @@ spec:
       {{- end }}
       containers:
         - name: fluentd
-          image: {{ include "fluentd.forwarder.image" . }}
+          image: {{ include "fluentd.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           {{- if .Values.forwarder.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.forwarder.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.forwarder.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.forwarder.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" ( dict "value" .Values.forwarder.lifecycleHooks "context" $ ) | nindent 12 }}
@@ -137,7 +176,7 @@ spec:
             - name: FLUENTD_DAEMON_GROUP
               value: {{ .Values.forwarder.daemonGroup | quote }}
             {{- if .Values.forwarder.extraEnvVars }}
-            {{- toYaml .Values.forwarder.extraEnvVars | nindent 12 }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.forwarder.extraEnvVars "context" $ ) | nindent 12 }}
             {{- end }}
           envFrom:
             {{- if .Values.forwarder.extraEnvVarsCM }}
@@ -150,6 +189,8 @@ spec:
             {{- end }}
           {{- if .Values.forwarder.resources }}
           resources: {{- toYaml .Values.forwarder.resources | nindent 12 }}
+          {{- else if ne .Values.forwarder.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.forwarder.resourcesPreset) | nindent 12 }}
           {{- end }}
           ports:
             {{- if .Values.forwarder.containerPorts }}
@@ -178,9 +219,8 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.forwarder.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.forwarder.livenessProbe.enabled }}
           livenessProbe:
-            httpGet:
-              path: {{ .Values.forwarder.livenessProbe.httpGet.path }}
-              port: {{ .Values.forwarder.livenessProbe.httpGet.port }}
+            tcpSocket:
+              port: {{ .Values.forwarder.livenessProbe.tcpSocket.port }}
             initialDelaySeconds: {{ .Values.forwarder.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.forwarder.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.forwarder.livenessProbe.timeoutSeconds }}
@@ -212,10 +252,15 @@ spec:
               mountPath: /opt/bitnami/fluentd/logs/buffers
             {{- end }}
             {{- if .Values.forwarder.extraGems }}
-            - name: gems
+            - name: empty-dir
+              mountPath: /opt/bitnami/fluentd/extensions/
+              subPath: app-extensions-dir
+            - name: empty-dir
               mountPath: /opt/bitnami/fluentd/gems/
-            - name: specifications
+              subPath: app-gems-dir
+            - name: empty-dir
               mountPath: /opt/bitnami/fluentd/specifications/
+              subPath: app-specifications-dir
             {{- end }}
             {{- if .Values.tls.enabled }}
             - name: fluentd-forwarder-certificates
@@ -239,6 +284,9 @@ spec:
             - name: varlibdockercontainers
               mountPath: /var/lib/docker/containers
               readOnly: true
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             {{- if .Values.forwarder.extraVolumeMounts }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.forwarder.extraVolumeMounts "context" $ ) | nindent 12 }}
             {{- end }}
@@ -246,17 +294,13 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.forwarder.sidecars "context" $ ) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         {{- if .Values.tls.enabled }}
         - name: fluentd-forwarder-certificates
           secret:
             secretName: {{ include "fluentd.forwarder.tlsSecretName" . }}
             defaultMode: 256
-        {{- end }}
-        {{- if .Values.forwarder.extraGems }}
-        - name: gems
-          emptyDir: {}
-        - name: specifications
-          emptyDir: {}
         {{- end }}
         {{- if .Values.forwarder.initScripts }}
         - name: custom-init-scripts

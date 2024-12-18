@@ -1,5 +1,5 @@
 {{/*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -58,13 +58,6 @@ Return the proper image name (for the init container volume-permissions image)
 {{- end -}}
 
 {{/*
-Return the proper Kafka exporter image name
-*/}}
-{{- define "kafka.metrics.kafka.image" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.metrics.kafka.image "global" .Values.global) }}
-{{- end -}}
-
-{{/*
 Return the proper JMX exporter image name
 */}}
 {{- define "kafka.metrics.jmx.image" -}}
@@ -75,26 +68,7 @@ Return the proper JMX exporter image name
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "kafka.imagePullSecrets" -}}
-{{ include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.externalAccess.autoDiscovery.image .Values.volumePermissions.image .Values.metrics.kafka.image .Values.metrics.jmx.image) "global" .Values.global) }}
-{{- end -}}
-
-{{/*
-Create a default fully qualified Kafka exporter name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-*/}}
-{{- define "kafka.metrics.kafka.fullname" -}}
-  {{- printf "%s-exporter" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
-{{- end -}}
-
-{{/*
- Create the name of the service account to use for Kafka exporter pods
- */}}
-{{- define "kafka.metrics.kafka.serviceAccountName" -}}
-{{- if .Values.metrics.kafka.serviceAccount.create -}}
-    {{ default (include "kafka.metrics.kafka.fullname" .) .Values.metrics.kafka.serviceAccount.name }}
-{{- else -}}
-    {{ default "default" .Values.metrics.kafka.serviceAccount.name }}
-{{- end -}}
+{{ include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.externalAccess.autoDiscovery.image .Values.volumePermissions.image .Values.metrics.jmx.image) "global" .Values.global) }}
 {{- end -}}
 
 {{/*
@@ -448,23 +422,6 @@ Return the Kafka log4j ConfigMap name.
 {{- end -}}
 
 {{/*
-Return the SASL mechanism to use for the Kafka exporter to access Kafka
-The exporter uses a different nomenclature so we need to do this hack
-*/}}
-{{- define "kafka.metrics.kafka.saslMechanism" -}}
-{{- $saslMechanisms := .Values.sasl.enabledMechanisms }}
-{{- if contains "OAUTHBEARER" (upper $saslMechanisms) }}
-    {{- print "oauthbearer" -}}
-{{- else if contains "SCRAM-SHA-512" (upper $saslMechanisms) }}
-    {{- print "scram-sha512" -}}
-{{- else if contains "SCRAM-SHA-256" (upper $saslMechanisms) }}
-    {{- print "scram-sha256" -}}
-{{- else if contains "PLAIN" (upper $saslMechanisms) }}
-    {{- print "plain" -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
 Return the Kafka configuration configmap
 */}}
 {{- define "kafka.metrics.jmx.configmapName" -}}
@@ -501,6 +458,9 @@ Returns the Kafka listeners settings based on the listeners.* object
   {{- else -}}
   {{- $listeners = append $listeners .context.Values.listeners.controller -}}
   {{- end -}}
+  {{- end -}}
+  {{- range $i := .context.Values.listeners.extraListeners -}}
+  {{- $listeners = append $listeners $i -}}
   {{- end -}}
   {{- $res := list -}}
   {{- range $listener := $listeners -}}
@@ -676,11 +636,6 @@ Zookeeper connection section of the server.properties
 {{- define "kafka.zookeeperConfig" -}}
 zookeeper.connect={{ include "kafka.zookeeperConnect" . }}
 #broker.id=
-{{- if .Values.sasl.zookeeper.user }}
-sasl.jaas.config=org.apache.kafka.common.security.plain.PlainLoginModule required \
-    username="{{ .Values.sasl.zookeeper.user }}" \
-    password="zookeeper-password-placeholder";
-{{- end }}
 {{- if and .Values.tls.zookeeper.enabled .Values.tls.zookeeper.existingSecret }}
 zookeeper.clientCnxnSocket=org.apache.zookeeper.ClientCnxnSocketNetty
 zookeeper.ssl.client.enable=true
@@ -739,7 +694,7 @@ Init container definition for Kafka initialization
   image: {{ include "kafka.image" .context }}
   imagePullPolicy: {{ .context.Values.image.pullPolicy }}
   {{- if $roleSettings.containerSecurityContext.enabled }}
-  securityContext: {{- omit $roleSettings.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" $roleSettings.containerSecurityContext "context" .context) | nindent 4 }}
   {{- end }}
   {{- if $roleSettings.initContainerResources }}
   resources: {{- toYaml $roleSettings.initContainerResources | nindent 4 }}  
@@ -965,10 +920,12 @@ Init container definition for waiting for Kubernetes autodiscovery
     - name: AUTODISCOVERY_SERVICE_TYPE
       value: {{ $externalAccessService.service.type | quote }}
   {{- if .context.Values.externalAccess.autoDiscovery.containerSecurityContext.enabled }}
-  securityContext: {{- omit .context.Values.externalAccess.autoDiscovery.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .context.Values.externalAccess.autoDiscovery.containerSecurityContext "context" .context) | nindent 4 }}
   {{- end }}
   {{- if .context.Values.externalAccess.autoDiscovery.resources }}
   resources: {{- toYaml .context.Values.externalAccess.autoDiscovery.resources | nindent 12 }}
+  {{- else if ne .context.Values.externalAccess.autoDiscovery.resourcesPreset "none" }}
+  resources: {{- include "common.resources.preset" (dict "type" .context.Values.externalAccess.autoDiscovery.resourcesPreset) | nindent 12 }}
   {{- end }}
   volumeMounts:
     - name: scripts
@@ -984,7 +941,6 @@ Check if there are rolling tags in the images
 {{- define "kafka.checkRollingTags" -}}
 {{- include "common.warnings.rollingTag" .Values.image }}
 {{- include "common.warnings.rollingTag" .Values.externalAccess.autoDiscovery.image }}
-{{- include "common.warnings.rollingTag" .Values.metrics.kafka.image }}
 {{- include "common.warnings.rollingTag" .Values.metrics.jmx.image }}
 {{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
 {{- end -}}
@@ -1131,6 +1087,20 @@ kafka: rbac.create
     K8s API. Please note this initContainer requires specific RBAC resources. You can create them
     by specifying "--set rbac.create=true".
 {{- end -}}
+{{- if and .Values.externalAccess.enabled .Values.externalAccess.autoDiscovery.enabled (gt (int .Values.controller.replicaCount) 0) (not .Values.controller.automountServiceAccountToken) }}
+kafka: controller-automountServiceAccountToken
+    By specifying "externalAccess.enabled=true" and "externalAccess.autoDiscovery.enabled=true"
+    an initContainer will be used to auto-detect the external IPs/ports by querying the
+    K8s API. Please note this initContainer requires the service account token. Please set controller.automountServiceAccountToken=true
+    and broker.automountServiceAccountToken=true.
+{{- end -}}
+{{- if and .Values.externalAccess.enabled .Values.externalAccess.autoDiscovery.enabled (gt (int .Values.broker.replicaCount) 0) (not .Values.broker.automountServiceAccountToken) }}
+kafka: broker-automountServiceAccountToken
+    By specifying "externalAccess.enabled=true" and "externalAccess.autoDiscovery.enabled=true"
+    an initContainer will be used to auto-detect the external IPs/ports by querying the
+    K8s API. Please note this initContainer requires the service account token. Please set controller.automountServiceAccountToken=true
+    and broker.automountServiceAccountToken=true.
+{{- end -}}
 {{- end -}}
 
 {{/* Validate values of Kafka - LoadBalancerIPs or LoadBalancerNames should be set when autoDiscovery is disabled */}}
@@ -1250,5 +1220,12 @@ kafka: Zookeeper mode - Controller nodes not supported
 kafka: Missing KRaft or Zookeeper mode settings
     The Kafka chart has been deployed but neither KRaft or Zookeeper modes have been enabled.
     Please configure 'kraft.enabled', 'zookeeper.enabled' or `externalZookeeper.servers` before proceeding.
+{{- end -}}
+{{- end -}}
+
+{{/* Render key, value as proprties format */}}
+{{- define "kafka.properties.render" -}}
+{{- range $key, $value := . }}
+{{ $key }}={{ include "common.tplvalues.render" (dict "value" $value "context" $) }}
 {{- end -}}
 {{- end -}}

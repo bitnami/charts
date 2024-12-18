@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -8,9 +8,7 @@ kind: StatefulSet
 metadata:
   name: {{ template "grafana-loki.querier.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
-  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.loki.image "chart" .Chart ) ) }}  
-  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
-  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: grafana-loki
     app.kubernetes.io/component: querier
     loki-gossip-member: "true"
@@ -23,7 +21,7 @@ spec:
   updateStrategy: {{- toYaml .Values.querier.updateStrategy | nindent 4 }}
   {{- end }}
   podManagementPolicy: {{ .Values.querier.podManagementPolicy }}
-  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.querier.podLabels .Values.commonLabels $versionLabel ) "context" . ) }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.querier.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/part-of: grafana-loki
@@ -44,6 +42,7 @@ spec:
     spec:
       serviceAccountName: {{ template "grafana-loki.serviceAccountName" . }}
       {{- include "grafana-loki.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.querier.automountServiceAccountToken }}
       {{- if .Values.querier.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.querier.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -71,8 +70,9 @@ spec:
       schedulerName: {{ .Values.querier.schedulerName }}
       {{- end }}
       {{- if .Values.querier.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.querier.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.querier.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
+      enableServiceLinks: {{ .Values.querier.enableServiceLinks }}
       initContainers:
         {{- if .Values.querier.initContainers }}
           {{- include "common.tplvalues.render" (dict "value" .Values.querier.initContainers "context" $) | nindent 8 }}
@@ -96,18 +96,23 @@ spec:
           securityContext: {{- .Values.volumePermissions.containerSecurityContext | toYaml | nindent 12 }}
           {{- end }}
           {{- if .Values.volumePermissions.resources }}
-          resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.volumePermissions.resources "context" $) | nindent 12 }}
+          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: data
               mountPath: {{ .Values.loki.dataDir }}
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
         {{- end }}
       containers:
         - name: grafana-loki-querier
           image: {{ template "grafana-loki.image" . }}
           imagePullPolicy: {{ .Values.loki.image.pullPolicy }}
           {{- if .Values.querier.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.querier.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.querier.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -149,7 +154,9 @@ spec:
             - containerPort: {{ .Values.loki.containerPorts.grpc }}
               name: grpc
           {{- if .Values.querier.resources }}
-          resources: {{- toYaml .Values.querier.resources | nindent 12 }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.querier.resources "context" $) | nindent 12 }}
+          {{- else if ne .Values.querier.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.querier.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.querier.customLivenessProbe }}
@@ -163,7 +170,8 @@ spec:
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.querier.customReadinessProbe "context" $) | nindent 12 }}
           {{- else if .Values.querier.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.querier.readinessProbe "enabled") "context" $) | nindent 12 }}
-            tcpSocket:
+            httpGet:
+              path: /ready
               port: http
           {{- end }}
           {{- if .Values.querier.customStartupProbe }}
@@ -178,6 +186,9 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.querier.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: loki-config
               mountPath: {{ .Values.loki.dataDir }}/conf/loki.yaml
               subPath: loki.yaml
@@ -190,6 +201,8 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.querier.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: loki-config
           configMap:
             name: {{ template "grafana-loki.loki.configmapName" . }}

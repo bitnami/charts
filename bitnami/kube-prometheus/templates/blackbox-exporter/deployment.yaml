@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -31,6 +31,7 @@ spec:
     spec:
       serviceAccountName: {{ template "kube-prometheus.blackboxExporter.serviceAccountName" . }}
       {{- include "kube-prometheus.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.blackboxExporter.automountServiceAccountToken }}
       {{- if .Values.blackboxExporter.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.blackboxExporter.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -59,7 +60,7 @@ spec:
       schedulerName: {{ .Values.blackboxExporter.schedulerName }}
       {{- end }}
       {{- if .Values.blackboxExporter.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.blackboxExporter.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.blackboxExporter.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.blackboxExporter.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.blackboxExporter.terminationGracePeriodSeconds }}
@@ -73,7 +74,7 @@ spec:
           image: {{ template "kube-prometheus.blackboxExporter.image" . }}
           imagePullPolicy: {{ .Values.blackboxExporter.image.pullPolicy }}
           {{- if .Values.blackboxExporter.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.blackboxExporter.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.blackboxExporter.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.blackboxExporter.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.blackboxExporter.command "context" $) | nindent 12 }}
@@ -102,12 +103,14 @@ spec:
               name: http
           {{- if .Values.blackboxExporter.resources }}
           resources: {{- toYaml .Values.blackboxExporter.resources | nindent 12 }}
+          {{- else if ne .Values.blackboxExporter.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.blackboxExporter.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if .Values.blackboxExporter.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.blackboxExporter.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.blackboxExporter.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.blackboxExporter.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
+            tcpSocket:
               port: http
           {{- end }}
           {{- if .Values.blackboxExporter.customReadinessProbe }}
@@ -130,6 +133,9 @@ spec:
           volumeMounts:
             - name: blackbox-exporter-config
               mountPath: /bitnami/blackbox-exporter/conf
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
           {{- if .Values.blackboxExporter.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.blackboxExporter.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -137,6 +143,8 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.blackboxExporter.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: blackbox-exporter-config
           configMap:
             name: {{ template "kube-prometheus.blackboxExporter.configmapName" . }}

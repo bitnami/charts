@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -8,8 +8,9 @@ apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
   name: {{ include "mariadb.secondary.fullname" . }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: mariadb
     app.kubernetes.io/component: secondary
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
@@ -20,8 +21,9 @@ spec:
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.secondary.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/part-of: mariadb
       app.kubernetes.io/component: secondary
-  serviceName: {{ include "mariadb.secondary.fullname" . }}
+  serviceName: {{ printf "%s-headless" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   podManagementPolicy: {{ .Values.secondary.podManagementPolicy }}
   {{- if .Values.secondary.updateStrategy }}
   updateStrategy: {{- toYaml .Values.secondary.updateStrategy | nindent 4 }}
@@ -32,10 +34,14 @@ spec:
         {{- if (include "mariadb.secondary.createConfigmap" .) }}
         checksum/configuration: {{ include (print $.Template.BasePath "/secondary/configmap.yaml") . | sha256sum }}
         {{- end }}
+        {{- if .Values.passwordUpdateJob.enabled }}
+        charts.bitnami.com/password-last-update: {{ now | date "20060102150405" | quote }}
+        {{- end }}
         {{- if .Values.secondary.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.secondary.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/part-of: mariadb
         app.kubernetes.io/component: secondary
     spec:
       {{- include "mariadb.imagePullSecrets" . | nindent 6 }}
@@ -43,6 +49,7 @@ spec:
       schedulerName: {{ (coalesce .Values.secondary.schedulerName .Values.schedulerName) | quote }}
       {{- end }}
       serviceAccountName: {{ template "mariadb.serviceAccountName" . }}
+      automountServiceAccountToken: {{ .Values.secondary.automountServiceAccountToken }}
       {{- if .Values.secondary.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.secondary.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -74,13 +81,35 @@ spec:
       runtimeClassName: {{ .Values.runtimeClassName | quote }}
       {{- end }}
       {{- if .Values.secondary.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.secondary.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.secondary.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
-      {{- if or .Values.secondary.initContainers (and .Values.secondary.podSecurityContext.enabled .Values.volumePermissions.enabled .Values.secondary.persistence.enabled) }}
       initContainers:
-        {{- if .Values.secondary.initContainers }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.secondary.initContainers "context" $) | nindent 8 }}
-        {{- end }}
+        - name: preserve-logs-symlinks
+          image: {{ include "mariadb.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.secondary.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.primary.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.secondary.resources }}
+          resources: {{ toYaml .Values.secondary.resources | nindent 12 }}
+          {{- else if ne .Values.secondary.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.secondary.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          command:
+            - /bin/bash
+          args:
+            - -ec
+            - |
+              #!/bin/bash
+
+              . /opt/bitnami/scripts/libfs.sh
+              # We copy the logs folder because it has symlinks to stdout and stderr
+              if ! is_dir_empty /opt/bitnami/mariadb/logs; then
+                cp -r /opt/bitnami/mariadb/logs /emptydir/app-logs-dir
+              fi
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /emptydir
         {{- if and .Values.secondary.podSecurityContext.enabled .Values.volumePermissions.enabled .Values.secondary.persistence.enabled }}
         - name: volume-permissions
           image: {{ include "mariadb.volumePermissions.image" . }}
@@ -94,6 +123,8 @@ spec:
             runAsUser: 0
           {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: data
@@ -101,14 +132,19 @@ spec:
               {{- if .Values.secondary.persistence.subPath }}
               subPath: {{ .Values.secondary.persistence.subPath }}
               {{- end }}
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
         {{- end }}
-      {{- end }}
+        {{- if .Values.secondary.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.secondary.initContainers "context" $) | nindent 8 }}
+        {{- end }}
       containers:
         - name: mariadb
           image: {{ include "mariadb.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.secondary.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.secondary.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.secondary.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -166,6 +202,12 @@ spec:
             - name: MARIADB_STARTUP_WAIT_SLEEP_TIME
               value: "{{ .Values.secondary.startupWaitOptions.sleepTime | default 2 }}"
             {{- end }}
+            - name: MARIADB_ENABLE_SSL
+              value: {{ ternary "yes" "no" .Values.tls.enabled | quote }}
+            {{- if and .Values.tls.enabled (include "mariadb.tlsCACert" .) }}
+            - name: MYSQL_CLIENT_CA_FILE
+              value: {{ include "mariadb.tlsCACert" . | quote }}
+            {{- end }}
             {{- if .Values.secondary.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.secondary.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
@@ -182,7 +224,7 @@ spec:
           {{- end }}
           ports:
             - name: mysql
-              containerPort: 3306
+              containerPort: {{ .Values.secondary.containerPorts.mysql }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.secondary.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.secondary.customStartupProbe "context" $) | nindent 12 }}
@@ -197,7 +239,7 @@ spec:
                   if [[ -f "${MARIADB_MASTER_ROOT_PASSWORD_FILE:-}" ]]; then
                       password_aux=$(cat "$MARIADB_MASTER_ROOT_PASSWORD_FILE")
                   fi
-                  mysqladmin status -uroot -p"${password_aux}"
+                  mariadb-admin ping -uroot -p"${password_aux}"
           {{- end }}
           {{- if .Values.secondary.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.secondary.customLivenessProbe "context" $) | nindent 12 }}
@@ -212,7 +254,7 @@ spec:
                   if [[ -f "${MARIADB_MASTER_ROOT_PASSWORD_FILE:-}" ]]; then
                       password_aux=$(cat "$MARIADB_MASTER_ROOT_PASSWORD_FILE")
                   fi
-                  mysqladmin status -uroot -p"${password_aux}"
+                  mariadb-admin status -uroot -p"${password_aux}"
           {{- end }}
           {{- if .Values.secondary.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.secondary.customReadinessProbe "context" $) | nindent 12 }}
@@ -227,11 +269,13 @@ spec:
                   if [[ -f "${MARIADB_MASTER_ROOT_PASSWORD_FILE:-}" ]]; then
                       password_aux=$(cat "$MARIADB_MASTER_ROOT_PASSWORD_FILE")
                   fi
-                  mysqladmin status -uroot -p"${password_aux}"
+                  mariadb-admin ping -uroot -p"${password_aux}"
           {{- end }}
           {{- end }}
           {{- if .Values.secondary.resources }}
           resources: {{ toYaml .Values.secondary.resources | nindent 12 }}
+          {{- else if ne .Values.secondary.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.secondary.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: data
@@ -251,12 +295,28 @@ spec:
             {{- if .Values.secondary.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.secondary.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/mariadb/conf
+              subPath: app-conf-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/mariadb/tmp
+              subPath: app-tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/mariadb/logs
+              subPath: app-logs-dir
+            {{- if .Values.tls.enabled }}
+            - name: cert
+              mountPath: /opt/bitnami/mariadb/certs
+            {{- end }}
         {{- if .Values.metrics.enabled }}
         - name: metrics
           image: {{ include "mariadb.metrics.image" . }}
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
           {{- if .Values.metrics.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.metrics.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.metrics.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           env:
             {{- if .Values.auth.usePasswordFiles }}
@@ -281,11 +341,11 @@ spec:
               if [[ -f "${MARIADB_ROOT_PASSWORD_FILE:-}" ]]; then
                   password_aux=$(cat "$MARIADB_ROOT_PASSWORD_FILE")
               fi
-              MYSQLD_EXPORTER_PASSWORD=${password_aux} /bin/mysqld_exporter --mysqld.address=localhost:3306 --mysqld.username=root {{- range .Values.metrics.extraArgs.primary }} {{ . }} {{- end }}
+              MYSQLD_EXPORTER_PASSWORD=${password_aux} /bin/mysqld_exporter --mysqld.address=localhost:{{ .Values.secondary.containerPorts.mysql }} --mysqld.username=root --web.listen-address=:{{ .Values.metrics.containerPorts.http }} {{- range .Values.metrics.extraArgs.primary }} {{ . }} {{- end }}
           {{- end }}
           ports:
             - name: metrics
-              containerPort: 9104
+              containerPort: {{ .Values.metrics.containerPorts.http }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.metrics.livenessProbe.enabled }}
           livenessProbe: {{- omit .Values.metrics.livenessProbe "enabled" | toYaml | nindent 12 }}
@@ -302,12 +362,17 @@ spec:
           {{- end }}
           {{- if .Values.metrics.resources }}
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
+          {{- else if ne .Values.metrics.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.metrics.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
           {{- if and .Values.auth.usePasswordFiles (not .Values.auth.customPasswordFiles) }}
             - name: mariadb-credentials
               mountPath: /opt/bitnami/mysqld-exporter/secrets/
           {{- end }}
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: app-tmp-dir
           {{- if .Values.metrics.extraVolumeMounts.secondary }}
           {{- include "common.tplvalues.render" (dict "value" .Values.metrics.extraVolumeMounts.secondary "context" $) | nindent 12 }}
           {{- end }}
@@ -331,6 +396,14 @@ spec:
               - key: mariadb-replication-password
                 path: mariadb-replication-password
         {{- end }}
+        {{- if .Values.tls.enabled }}
+        - name: cert
+          secret:
+            secretName: {{ include "mariadb.tlsSecretName" . }}
+            defaultMode: 256
+        {{- end }}
+        - name: empty-dir
+          emptyDir: {}
         {{- if .Values.secondary.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.secondary.extraVolumes "context" $) | nindent 8 }}
         {{- end }}

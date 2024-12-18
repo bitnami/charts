@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -48,6 +48,7 @@ spec:
       hostNetwork: {{ .Values.dataPlane.hostNetwork }}
       {{- end }}
       {{- include "apisix.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.dataPlane.automountServiceAccountToken }}
       {{- if .Values.dataPlane.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.dataPlane.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -75,7 +76,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.dataPlane.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.dataPlane.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.dataPlane.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.dataPlane.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.dataPlane.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.dataPlane.terminationGracePeriodSeconds }}
@@ -93,7 +94,7 @@ spec:
           image: {{ template "apisix.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           {{- if .Values.dataPlane.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.dataPlane.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.dataPlane.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -129,6 +130,8 @@ spec:
             {{- end }}
           {{- if .Values.dataPlane.resources }}
           resources: {{- toYaml .Values.dataPlane.resources | nindent 12 }}
+          {{- else if ne .Values.dataPlane.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.dataPlane.resourcesPreset) | nindent 12 }}
           {{- end }}
           ports:
             - name: http
@@ -137,15 +140,16 @@ spec:
               containerPort: {{ .Values.dataPlane.containerPorts.https }}
             - name: http-control
               containerPort: {{ .Values.dataPlane.containerPorts.control }}
+            {{- if .Values.dataPlane.metrics.enabled }}
             - name: http-metrics
               containerPort: {{ .Values.dataPlane.containerPorts.metrics }}
+            {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.dataPlane.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.dataPlane.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.dataPlane.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.dataPlane.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /v1/healthcheck
+            tcpSocket:
               port: http-control
          {{- end }}
           {{- if .Values.dataPlane.customReadinessProbe }}
@@ -169,13 +173,17 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.dataPlane.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - name: apisix-dir
+            - name: empty-dir
               mountPath: /usr/local/apisix
-            - name: tmp
+              subPath: app-tmp-dir
+            - name: empty-dir
               mountPath: /tmp
+              subPath: tmp-dir
+           {{- if .Values.dataPlane.tls.enabled }}
             - name: certs
               mountPath: /bitnami/certs
-           {{- if or .Values.controlPlane.enabled .Values.controlPlane.tls.enabled}}
+           {{- end }}
+           {{- if and .Values.controlPlane.enabled .Values.controlPlane.tls.enabled}}
             - name: control-plane-certs
               mountPath: /etc/ssl/certs/{{ .Values.controlPlane.tls.certCAFilename }}
               subPath: {{ .Values.controlPlane.tls.certCAFilename }}
@@ -200,15 +208,13 @@ spec:
           secret:
             secretName: {{ template "apisix.data-plane.tlsSecretName" . }}
         {{- end }}
-        - name: apisix-dir
+        - name: empty-dir
           emptyDir: {}
-        {{- if or .Values.controlPlane.enabled .Values.controlPlane.tls.enabled }}
+        {{- if and .Values.controlPlane.enabled .Values.controlPlane.tls.enabled }}
         - name: control-plane-certs
           secret:
             secretName: {{ template "apisix.control-plane.tlsSecretName" . }}
         {{- end }}
-        - name: tmp
-          emptyDir: {}
         {{- if .Values.dataPlane.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.dataPlane.extraVolumes "context" $) | nindent 8 }}
         {{- end }}

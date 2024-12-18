@@ -1,4 +1,4 @@
-## Copyright VMware, Inc.
+## Copyright Broadcom, Inc. All Rights Reserved.
 ## SPDX-License-Identifier: APACHE-2.0
 
 ## @section Global parameters
@@ -9,7 +9,8 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
+## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ##
 global:
   imageRegistry: ""
@@ -18,8 +19,22 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  defaultStorageClass: ""
   storageClass: ""
-
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: auto
 ## @section Common parameters
 ##
 
@@ -44,7 +59,6 @@ clusterDomain: cluster.local
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
-
 ## Enable diagnostic mode in the deployments/statefulsets
 ##
 diagnosticMode:
@@ -59,7 +73,6 @@ diagnosticMode:
   ##
   args:
     - infinity
-
 ## @section Source code parameters
 
 ## Bitnami Deepspeed image version
@@ -74,10 +87,9 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/deepspeed
-  tag: 0.12.3-debian-11-r2
+  tag: 0.16.1-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -89,7 +101,6 @@ image:
   ##   - myRegistryKeySecretName
   ##
   pullSecrets: []
-
 ## Source code parameters
 ##
 source:
@@ -120,7 +131,6 @@ source:
     ##     mountPath: /.ssh/
     ##
     extraVolumeMounts: []
-
 ## Configuration parameters
 ##
 config:
@@ -131,15 +141,12 @@ config:
     {{- range $i, $e := until $workers }}
     {{ include "deepspeed.v0.worker.fullname" $ }}-{{ $i }}.{{ printf "%s-headless" (include "deepspeed.v0.worker.fullname" $) }} slots={{ $.Values.worker.slotsPerNode }}
     {{- end }}
-
   ## @param config.overrideHostFile Override default host file with the content in this value
   ##
   overrideHostFile: ""
-
   ## @param config.existingHostFileConfigMap Name of a ConfigMap containing the hostfile
   ##
   existingHostFileConfigMap: ""
-
   ## @param config.defaultSSHClient [string] Default SSH client configuration for the client node (only edit if you know what you are doing)
   ##
   defaultSSHClient: |
@@ -150,11 +157,9 @@ config:
       IdentityFile /bitnami/ssh/client-private-key/id_rsa
       StrictHostKeyChecking no
     {{- end }}
-
   ## @param config.overrideSSHClient Override default SSH cliient configuration with the content in this value
   ##
   overrideSSHClient: ""
-
   ## @param config.existingSSHClientConfigMap Name of a ConfigMap containing the SSH client configuration
   ##
   existingSSHClientConfigMap: ""
@@ -165,22 +170,18 @@ config:
     PasswordAuthentication no
     UsePAM no
     PermitUserEnvironment yes
-
   ## @param config.overrideSSHServer Overidde SSH Server configuration with the content in this value
   ##
   overrideSSHServer: ""
-
   ## @param config.existingSSHServerConfigMap Name of a ConfigMap with with the SSH Server configuration
   ##
   existingSSHServerConfigMap: ""
-
   ## @param config.sshPrivateKey Private key for the client node to connect to the worker nodes
   ##
   sshPrivateKey: ""
   ## @param config.existingSSHKeySecret Name of a secret containing the ssh private key
   ##
   existingSSHKeySecret: ""
-
 ## @section Client Deployment Parameters
 ##
 client:
@@ -245,7 +246,7 @@ client:
     enabled: true
     initialDelaySeconds: 5
     periodSeconds: 30
-    timeoutSeconds: 20
+    timeoutSeconds: 30
     failureThreshold: 5
     successThreshold: 1
   ## @param client.startupProbe.enabled Enable startupProbe on Client containers
@@ -273,23 +274,39 @@ client:
   customStartupProbe: {}
   ## client resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param client.resources.limits The resources limits for the client containers
-  ## @param client.resources.requests The requested resources for the client containers
+  ## @param client.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if client.resources is set (client.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "medium"
+  ## @param client.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param client.podSecurityContext.enabled Enabled Client pods' Security Context
+  ## @param client.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param client.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param client.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param client.podSecurityContext.fsGroup Set Client pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param client.containerSecurityContext.enabled Enabled Client containers' Security Context
+  ## @param client.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param client.containerSecurityContext.runAsUser Set Client containers' Security Context runAsUser
   ## @param client.containerSecurityContext.runAsGroup Set Client containers' Security Context runAsGroup
   ## @param client.containerSecurityContext.runAsNonRoot Set Client containers' Security Context runAsNonRoot
@@ -301,6 +318,7 @@ client:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsGroup: 1001
     runAsNonRoot: true
@@ -318,6 +336,9 @@ client:
   ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
   ##https://github.com/microsoft/DeepSpeedExamples
   runtimeClassName: ""
+  ## @param client.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param client.hostAliases client pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -426,7 +447,10 @@ client:
   networkPolicy:
     ## @param client.networkPolicy.enabled Enable creation of NetworkPolicy resources
     ##
-    enabled: false
+    enabled: true
+    ## @param client.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
     ## @param client.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
@@ -467,7 +491,7 @@ client:
   serviceAccount:
     ## @param client.serviceAccount.create Enable creation of ServiceAccount for Client pods
     ##
-    create: false
+    create: true
     ## @param client.serviceAccount.name The name of the ServiceAccount to use
     ## If not set and create is true, a name is generated using the common.names.fullname template
     ##
@@ -525,8 +549,16 @@ client:
     ## @param client.persistence.annotations Persistent Volume annotations
     ##
     annotations: {}
-
-
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param client.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param client.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param client.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `client.pdb.minAvailable` and `client.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
 ## @section Worker Deployment Parameters
 ##
 worker:
@@ -620,23 +652,39 @@ worker:
   customStartupProbe: {}
   ## client resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param worker.resources.limits The resources limits for the client containers
-  ## @param worker.resources.requests The requested resources for the client containers
+  ## @param worker.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if worker.resources is set (worker.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "medium"
+  ## @param worker.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param worker.podSecurityContext.enabled Enabled Worker pods' Security Context
+  ## @param worker.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param worker.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param worker.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param worker.podSecurityContext.fsGroup Set Worker pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param worker.containerSecurityContext.enabled Enabled Worker containers' Security Context
+  ## @param worker.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param worker.containerSecurityContext.runAsUser Set Worker containers' Security Context runAsUser
   ## @param worker.containerSecurityContext.runAsGroup Set Worker containers' Security Context runAsGroup
   ## @param worker.containerSecurityContext.runAsNonRoot Set Worker containers' Security Context runAsNonRoot
@@ -648,6 +696,7 @@ worker:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsGroup: 1001
     runAsNonRoot: true
@@ -665,6 +714,9 @@ worker:
   ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
   ##
   runtimeClassName: ""
+  ## @param worker.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param worker.hostAliases client pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -774,11 +826,9 @@ worker:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
-
   ## @param worker.headlessServiceAnnotations Annotations for the headless service
   ##
   headlessServiceAnnotations: {}
-
   ## @section Worker Traffic Exposure Parameters
   ##
   externalAccess:
@@ -854,11 +904,10 @@ worker:
       ## @param worker.externalAccess.service.extraPorts Extra ports to expose in the Worker service
       ##
       extraPorts: []
-
   serviceAccount:
     ## @param worker.serviceAccount.create Enable creation of ServiceAccount for Data Coordinator pods
     ##
-    create: false
+    create: true
     ## @param worker.serviceAccount.name The name of the ServiceAccount to use
     ## If not set and create is true, a name is generated using the common.names.fullname template
     ##
@@ -870,19 +919,21 @@ worker:
     ## @param worker.serviceAccount.annotations Additional custom annotations for the ServiceAccount
     ##
     annotations: {}
-
   ## Network Policy configuration
   ## ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
   ##
   networkPolicy:
     ## @param worker.networkPolicy.enabled Enable creation of NetworkPolicy resources
     ##
-    enabled: false
+    enabled: true
     ## @param worker.networkPolicy.allowExternal The Policy model to apply
-    ## When set to false, only pods with the correct client label will have network access to the ports Keycloak is
-    ## listening on. When true, Keycloak will accept connections from any source (with the correct destination port).
+    ## When set to false, only pods with the correct client label will have network access to the ports Deepspeed is
+    ## listening on. When true, Deepspeed will accept connections from any source (with the correct destination port).
     ##
     allowExternal: true
+    ## @param worker.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
     ## @param worker.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
@@ -968,7 +1019,16 @@ worker:
     ## @param worker.persistence.annotations Persistent Volume annotations
     ##
     annotations: {}
-
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param worker.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param worker.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param worker.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `worker.pdb.minAvailable` and `worker.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
 ## Bitnami git image version
 ## ref: https://hub.docker.com/r/bitnami/git/tags/
 ## @param gitImage.registry [default: REGISTRY_NAME] Git image registry
@@ -981,7 +1041,7 @@ worker:
 gitImage:
   registry: docker.io
   repository: bitnami/git
-  tag: 2.43.0-debian-11-r0
+  tag: 2.47.1-debian-12-r0
   digest: ""
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -992,7 +1052,6 @@ gitImage:
   ##   - myRegistryKeySecretName
   ##
   pullSecrets: []
-
 ## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
 ##
 volumePermissions:
@@ -1009,7 +1068,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r91
+    tag: 12-debian-12-r33
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1026,17 +1085,18 @@ volumePermissions:
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param volumePermissions.resources.limits The resources limits for the container
-  ## @param volumePermissions.resources.requests The requested resources for the container
+  ## @param volumePermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    ## Example:
-    ## limits:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    limits: {}
-    ## Examples:
-    ## requests:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    requests: {}
+  resourcesPreset: "nano"
+  ## @param volumePermissions.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}

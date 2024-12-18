@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -7,7 +7,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ include "harbor.registry" . }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.registry.server.image "chart" .Chart ) ) }}
   {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
@@ -81,6 +81,9 @@ data:
         {{- end }}
         {{- if .Values.persistence.imageChartStorage.s3.storageClass }}
         storageclass: {{ .Values.persistence.imageChartStorage.s3.storageClass }}
+        {{- end }}
+        {{- if .Values.persistence.imageChartStorage.s3.multipartcopythresholdsize }}
+        multipartcopythresholdsize: {{ .Values.persistence.imageChartStorage.s3.multipartcopythresholdsize }}
         {{- end }}
       {{- else if eq .Values.persistence.imageChartStorage.type "swift" }}
       swift:
@@ -164,7 +167,9 @@ data:
       {{- if ne "" (include "harbor.redis.sentinel.masterSet" .) }}
       sentinelMasterSet: "{{ template "harbor.redis.sentinel.masterSet" . }}"
       {{- end }}
+      {{- if and (eq .Values.externalRedis.sentinel.enabled false) (eq .Values.redis.sentinel.enabled false) }}
       db: {{ template "harbor.redis.registryDatabaseIndex" . }}
+      {{- end }}
     http:
       relativeurls: {{ .Values.registry.relativeurls }}
       addr: :{{ ternary .Values.registry.server.containerPorts.https .Values.registry.server.containerPorts.http .Values.internalTLS.enabled }}

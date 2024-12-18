@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -7,11 +7,15 @@ SPDX-License-Identifier: APACHE-2.0
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "common.names.fullname" . }}-receive
-  namespace: {{ .Release.Namespace | quote }}
+  name: {{ include "thanos.receive.fullname" . }}
+  namespace: {{ include "common.names.namespace" . }}
   {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.receive.service.labels .Values.commonLabels ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    {{- if eq .Values.receive.mode "dual-mode" }}
+    app.kubernetes.io/component: receive-distributor
+    {{ else }}
     app.kubernetes.io/component: receive
+    {{ end }}
     {{- include "thanos.servicemonitor.matchLabels" . | nindent 4 -}}
   {{- if or .Values.receive.service.annotations .Values.commonAnnotations }}
   {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.receive.service.annotations .Values.commonAnnotations ) "context" . ) }}
@@ -32,7 +36,7 @@ spec:
   loadBalancerSourceRanges: {{- toYaml .Values.receive.service.loadBalancerSourceRanges | nindent 4 }}
   {{- end }}
   ports:
-    - port: {{ if .Values.receive.service.http }}{{ coalesce .Values.receive.service.ports.http .Values.receive.service.http.port }}{{ else }}{{ .Values.receive.service.ports.http }}{{ end }}
+    - port: {{ .Values.receive.service.ports.http }}
       targetPort: http
       protocol: TCP
       name: http
@@ -41,7 +45,7 @@ spec:
       {{- else if eq .Values.receive.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
-    - port: {{ if .Values.receive.service.grpc }}{{ coalesce .Values.receive.service.ports.grpc .Values.receive.service.grpc.port }}{{ else }}{{ .Values.receive.service.ports.grpc }}{{ end }}
+    - port: {{ .Values.receive.service.ports.grpc }}
       targetPort: grpc
       protocol: TCP
       name: grpc
@@ -50,7 +54,7 @@ spec:
       {{- else if eq .Values.receive.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
-    - port: {{ if .Values.receive.service.remoteWrite }}{{ coalesce .Values.receive.service.ports.remote .Values.receive.service.remoteWrite.port }}{{ else }}{{ .Values.receive.service.ports.remote }}{{ end }}
+    - port: {{ .Values.receive.service.ports.remote }}
       targetPort: remote-write
       protocol: TCP
       name: remote

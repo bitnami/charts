@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 ## @section Global parameters
@@ -9,7 +9,8 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
+## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ##
 global:
   imageRegistry: ""
@@ -18,8 +19,22 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  defaultStorageClass: ""
   storageClass: ""
-
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: disabled
 ## @section Common parameters
 ##
 
@@ -44,7 +59,6 @@ clusterDomain: cluster.local
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
-
 ## @section Tomcat parameters
 ##
 
@@ -61,10 +75,9 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/tomcat
-  tag: 10.1.18-debian-11-r0
+  tag: 10.1.34-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -79,6 +92,9 @@ image:
   ## Set to true if you would like to see extra information on logs
   ##
   debug: false
+## @param automountServiceAccountToken Mount Service Account token in pod
+##
+automountServiceAccountToken: false
 ## @param hostAliases Deployment pod host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
@@ -91,6 +107,15 @@ tomcatUsername: user
 ## ref: https://github.com/bitnami/containers/tree/main/bitnami/tomcat#creating-a-custom-user
 ##
 tomcatPassword: ""
+## @param existingSecret Use existing secret for credentials details (`tomcatUsername` and `tomcatPassword` will be ignored and picked up from this secret)
+##
+existingSecret: ""
+## @param secretKeys.adminUsernameKey Name of key in existing secret to use instead of default `tomcat-username` key to provide Tomcat admin username (overrides `tomcatUsername`). Only used when `existingSecret` is set
+## @param secretKeys.adminPasswordKey Name of key in existing secret to use instead of default `tomcat-password` key to provide Tomcat admin password (overrides `tomcatPassword`). Only used when `existingSecret` is set
+##
+secretKeys:
+  adminUsernameKey: ""
+  adminPasswordKey: ""
 ## @param tomcatAllowRemoteManagement Enable remote access to management interface
 ## ref: https://github.com/bitnami/charts/tree/main/bitnami/tomcat#configuration
 ##
@@ -117,7 +142,6 @@ extraEnvVarsCM: ""
 ## @param extraEnvVarsSecret Name of existing Secret containing extra environment variables
 ##
 extraEnvVarsSecret: ""
-
 ## @section Tomcat deployment parameters
 ##
 
@@ -152,15 +176,23 @@ containerExtraPorts: []
 ## Tomcat pods' Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ## @param podSecurityContext.enabled Enable Tomcat pods' Security Context
+## @param podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+## @param podSecurityContext.sysctls Set kernel settings using the sysctl interface
+## @param podSecurityContext.supplementalGroups Set filesystem extra groups
 ## @param podSecurityContext.fsGroup Set Tomcat pod's Security Context fsGroup
 ##
 podSecurityContext:
   enabled: true
+  fsGroupChangePolicy: Always
+  sysctls: []
+  supplementalGroups: []
   fsGroup: 1001
 ## Tomcat containers' SecurityContext
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param containerSecurityContext.enabled Enabled containers' Security Context
+## @param containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
 ## @param containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+## @param containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
 ## @param containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
 ## @param containerSecurityContext.privileged Set container's Security Context privileged
 ## @param containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -170,10 +202,12 @@ podSecurityContext:
 ##
 containerSecurityContext:
   enabled: true
+  seLinuxOptions: {}
   runAsUser: 1001
+  runAsGroup: 1001
   runAsNonRoot: true
   privileged: false
-  readOnlyRootFilesystem: false
+  readOnlyRootFilesystem: true
   allowPrivilegeEscalation: false
   capabilities:
     drop: ["ALL"]
@@ -185,19 +219,21 @@ containerSecurityContext:
 ## choice for the user. This also increases chances charts run on environments with little
 ## resources, such as Minikube. If you do want to specify resources, uncomment the following
 ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-## @param resources.limits The resources limits for the Tomcat container
-## @param resources.requests [object] The requested resources for the Tomcat container
+## @param resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
+## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
 ##
-resources:
-  ## Example:
-  ## limits:
-  ##    cpu: 500m
-  ##    memory: 1Gi
-  ##
-  limits: {}
-  requests:
-    cpu: 300m
-    memory: 512Mi
+resourcesPreset: "micro"
+## @param resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+## Example:
+## resources:
+##   requests:
+##     cpu: 2
+##     memory: 512Mi
+##   limits:
+##     cpu: 3
+##     memory: 1024Mi
+##
+resources: {}
 ## Configure extra options for liveness probe
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ## @param livenessProbe.enabled Enable livenessProbe
@@ -341,6 +377,16 @@ extraVolumeMounts: []
 ##         containerPort: 1234
 ##
 initContainers: []
+## Pod Disruption Budget configuration
+## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+## @param pdb.create Enable/disable a Pod Disruption Budget creation
+## @param pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+## @param pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `pdb.minAvailable` and `pdb.maxUnavailable` are empty.
+##
+pdb:
+  create: true
+  minAvailable: ""
+  maxUnavailable: ""
 ## @param sidecars Add sidecars to the Tomcat pods.
 ## Example:
 ## sidecars:
@@ -384,31 +430,79 @@ persistence:
   ## Applicable when deployment.type is statefulset
   ##
   selectorLabels: {}
+## Network Policy configuration
+## ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+##
 networkPolicy:
-  ## @param networkPolicy.enabled Enable creation of NetworkPolicy resources. Only Ingress traffic is filtered for now.
+  ## @param networkPolicy.enabled Specifies whether a NetworkPolicy should be created
   ##
-  enabled: false
-  ## @param networkPolicy.allowExternal Don't require client label for connections
+  enabled: true
+  ## @param networkPolicy.allowExternal Don't require server label for connections
   ## The Policy model to apply. When set to false, only pods with the correct
-  ## client label will have network access to every tomcat port defined on containerPort and containerExtraPorts.
-  ## When true, tomcat will accept connections from any source
+  ## server label will have network access to the ports server is listening
+  ## on. When true, server will accept connections from any source
   ## (with the correct destination port).
   ##
   allowExternal: true
-  ## @param networkPolicy.explicitNamespacesSelector A Kubernetes LabelSelector to explicitly select namespaces from which traffic could be allowed
-  ## If explicitNamespacesSelector is missing or set to {}, only client Pods that are in the networkPolicy's namespace
-  ## and that match other criteria, the ones that have the good label, can reach the tomcat.
-  ## But sometimes, we want the tomcat to be accessible to clients from other namespaces, in this case, we can use this
-  ## LabelSelector to select these namespaces, note that the networkPolicy's namespace should also be explicitly added.
+  ## @param networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
   ##
-  ## Example:
-  ## explicitNamespacesSelector:
-  ##   matchLabels:
-  ##     role: frontend
-  ##   matchExpressions:
-  ##    - {key: role, operator: In, values: [frontend]}
+  allowExternalEgress: true
+  ## @param networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+  ## e.g:
+  ## extraIngress:
+  ##   - ports:
+  ##       - port: 1234
+  ##     from:
+  ##       - podSelector:
+  ##           - matchLabels:
+  ##               - role: frontend
+  ##       - podSelector:
+  ##           - matchExpressions:
+  ##               - key: role
+  ##                 operator: In
+  ##                 values:
+  ##                   - frontend
+  extraIngress: []
+  ## @param networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+  ## e.g:
+  ## extraEgress:
+  ##   - ports:
+  ##       - port: 1234
+  ##     to:
+  ##       - podSelector:
+  ##           - matchLabels:
+  ##               - role: frontend
+  ##       - podSelector:
+  ##           - matchExpressions:
+  ##               - key: role
+  ##                 operator: In
+  ##                 values:
+  ##                   - frontend
   ##
-  explicitNamespacesSelector: {}
+  extraEgress: []
+  ## @param networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+  ## @param networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+  ##
+  ingressNSMatchLabels: {}
+  ingressNSPodMatchLabels: {}
+## Service Account
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+##
+serviceAccount:
+  ## @param serviceAccount.create Enable creation of ServiceAccount for Tomcat pod
+  ##
+  create: true
+  ## @param serviceAccount.name The name of the ServiceAccount to use.
+  ## If not set and create is true, a name is generated using the common.names.fullname template
+  ##
+  name: ""
+  ## @param serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
+  ## Can be set to false if pods using this serviceAccount do not need to use K8s API
+  ##
+  automountServiceAccountToken: false
+  ## @param serviceAccount.annotations Additional custom annotations for the ServiceAccount
+  ##
+  annotations: {}
 ## @section Traffic Exposure parameters
 ##
 
@@ -576,7 +670,6 @@ ingress:
   ## @param ingress.pathType Ingress path type
   ##
   pathType: ImplementationSpecific
-
 ## @section Volume Permissions parameters
 ##
 
@@ -597,7 +690,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r93
+    tag: 12-debian-12-r34
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -614,23 +707,21 @@ volumePermissions:
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param volumePermissions.resources.limits Init container volume-permissions resource  limits
-  ## @param volumePermissions.resources.requests Init container volume-permissions resource  requests
+  ## @param volumePermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    ## Example:
-    ## limits:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    ##
-    limits: {}
-    ## Examples:
-    ## requests:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    ##
-    requests: {}
-
+  resourcesPreset: "none"
+  ## @param volumePermissions.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
 ## @section Metrics parameters
 
 ## Prometheus Exporters / Metrics
@@ -657,10 +748,9 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/jmx-exporter
-      tag: 0.20.0-debian-11-r3
+      tag: 1.0.1-debian-12-r10
       digest: ""
       ## Specify a imagePullPolicy
-      ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
       ##
       pullPolicy: IfNotPresent
@@ -684,7 +774,9 @@ metrics:
     ## Prometheus JMX exporter containers' Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
     ## @param metrics.jmx.containerSecurityContext.enabled Enabled containers' Security Context
+    ## @param metrics.jmx.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
     ## @param metrics.jmx.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+    ## @param metrics.jmx.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
     ## @param metrics.jmx.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
     ## @param metrics.jmx.containerSecurityContext.privileged Set container's Security Context privileged
     ## @param metrics.jmx.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -693,10 +785,12 @@ metrics:
     ## @param metrics.jmx.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
     containerSecurityContext:
       enabled: true
+      seLinuxOptions: {}
       runAsUser: 1001
+      runAsGroup: 1001
       runAsNonRoot: true
       privileged: false
-      readOnlyRootFilesystem: false
+      readOnlyRootFilesystem: true
       allowPrivilegeEscalation: false
       capabilities:
         drop: ["ALL"]
@@ -708,20 +802,21 @@ metrics:
     ## choice for the user. This also increases chances charts run on environments with little
     ## resources, such as Minikube. If you do want to specify resources, uncomment the following
     ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    ## @param metrics.jmx.resources.limits JMX Exporter container resource limits
-    ## @param metrics.jmx.resources.requests JMX Exporter container resource requests
+    ## @param metrics.jmx.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if metrics.jmx.resources is set (metrics.jmx.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
     ##
-    resources:
-      ## Example:
-      ## limits:
-      ##    cpu: 100m
-      ##    memory: 128Mi
-      limits: {}
-      ## Examples:
-      ## requests:
-      ##    cpu: 100m
-      ##    memory: 128Mi
-      requests: {}
+    resourcesPreset: "none"
+    ## @param metrics.jmx.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## Example:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    resources: {}
     ## @param metrics.jmx.ports.metrics JMX Exporter container metrics ports
     ##
     ports:

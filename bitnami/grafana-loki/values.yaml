@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 ## @section Global parameters
@@ -9,7 +9,8 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
+## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ##
 global:
   imageRegistry: ""
@@ -18,8 +19,22 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  defaultStorageClass: ""
   storageClass: ""
-
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: auto
 ## @section Common parameters
 ##
 
@@ -44,7 +59,6 @@ clusterDomain: cluster.local
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
-
 ## Enable diagnostic mode in the deployments/statefulsets
 ##
 diagnosticMode:
@@ -59,7 +73,6 @@ diagnosticMode:
   ##
   args:
     - infinity
-
 ## @section Common Grafana Loki Parameters
 ##
 loki:
@@ -75,10 +88,9 @@ loki:
   image:
     registry: docker.io
     repository: bitnami/grafana-loki
-    tag: 2.9.3-debian-11-r1
+    tag: 3.3.1-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -90,7 +102,6 @@ loki:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-
   ## @param loki.configuration [string] Loki components configuration
   ##
   configuration: |
@@ -98,7 +109,7 @@ loki:
 
     server:
       http_listen_port: {{ .Values.loki.containerPorts.http }}
-
+      grpc_listen_port: {{ .Values.loki.containerPorts.grpc }}
     common:
       compactor_address: http://{{ include "grafana-loki.compactor.fullname" . }}:{{ .Values.compactor.service.ports.http }}
 
@@ -121,16 +132,16 @@ loki:
       chunk_block_size: 262144
       chunk_encoding: snappy
       chunk_retain_period: 1m
-      max_transfer_retries: 0
       wal:
         dir: {{ .Values.loki.dataDir }}/wal
 
     limits_config:
-      enforce_metric_name: false
+      retention_period: 336h
       reject_old_samples: true
       reject_old_samples_max_age: 168h
       max_cache_freshness_per_query: 10m
       split_queries_by_interval: 15m
+      allow_structured_metadata: true
 
     schema_config:
       configs:
@@ -141,10 +152,23 @@ loki:
         index:
           prefix: index_
           period: 24h
+      - from: 2024-03-12
+        store: tsdb
+        object_store: filesystem
+        schema: v12
+        index:
+          period: 24h
+          prefix: index_
+      - from: 2024-04-23
+        object_store: filesystem
+        store: tsdb
+        schema: v13
+        index:
+          prefix: index_
+          period: 24h
 
     storage_config:
       boltdb_shipper:
-        shared_store: filesystem
         active_index_directory: {{ .Values.loki.dataDir }}/loki/index
         cache_location: {{ .Values.loki.dataDir }}/loki/cache
         cache_ttl: 168h
@@ -164,9 +188,21 @@ loki:
           addresses: dns+{{ include "grafana-loki.memcached-index-queries.host" . }}
           service: http
         {{- end }}
+      tsdb_shipper:
+        active_index_directory: {{ .Values.loki.dataDir }}/loki/tsdb-index
+        cache_location: {{ .Values.loki.dataDir }}/loki/tsdb-cache
+        {{- if .Values.indexGateway.enabled }}
+        index_gateway_client:
+          server_address: {{ (printf "dns:///%s:9095" (include "grafana-loki.index-gateway.fullname" .)) }}
+        {{- end }}
+
+    query_scheduler:
+      max_outstanding_requests_per_tenant: 32768
+
+    querier:
+      max_concurrent: 16
 
     chunk_store_config:
-      max_look_back_period: 0s
       {{- if .Values.memcachedchunks.enabled }}
       chunk_cache_config:
         memcached:
@@ -204,10 +240,10 @@ loki:
             timeout: 500ms
             update_interval: 1m
           {{- else }}
-          embedded-cache:
+          embedded_cache:
             enabled: true
-            max_size_items: 1024
-            validity: 24h
+            max_size_mb: 4096
+            ttl: 24h
           {{- end }}
     {{- if not .Values.queryScheduler.enabled }}
     frontend_worker:
@@ -220,7 +256,12 @@ loki:
       tail_proxy_url: http://{{ include "grafana-loki.querier.fullname" . }}:{{ .Values.querier.service.ports.http }}
 
     compactor:
-      shared_store: filesystem
+      working_directory: {{ .Values.loki.dataDir }}/loki/retention
+      compaction_interval: 10m
+      retention_enabled: true
+      retention_delete_delay: 2h
+      retention_delete_worker_count: 150
+      delete_request_store: filesystem
 
     ruler:
       storage:
@@ -242,11 +283,9 @@ loki:
   ## @param loki.existingConfigmap Name of a ConfigMap with the Loki configuration
   ##
   existingConfigmap: ""
-
   ## @param loki.dataDir path to the Loki data directory
   ##
   dataDir: "/bitnami/grafana-loki"
-
   ## @param loki.containerPorts.http Loki components web container port
   ## @param loki.containerPorts.grpc Loki components GRPC container port
   ## @param loki.containerPorts.gossipRing Loki components Gossip Ring container port
@@ -268,7 +307,6 @@ loki:
       ## @param loki.gossipRing.service.annotations Additional custom annotations for Gossip Ring headless service
       ##
       annotations: {}
-
 ## @section Compactor Deployment Parameters
 ##
 compactor:
@@ -355,36 +393,67 @@ compactor:
   customStartupProbe: {}
   ## compactor resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param compactor.resources.limits The resources limits for the compactor containers
-  ## @param compactor.resources.requests The requested resources for the compactor containers
+  ## @param compactor.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if compactor.resources is set (compactor.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "nano"
+  ## @param compactor.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param compactor.podSecurityContext.enabled Enabled Compactor pods' Security Context
+  ## @param compactor.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param compactor.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param compactor.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param compactor.podSecurityContext.fsGroup Set Compactor pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param compactor.containerSecurityContext.enabled Enabled Compactor containers' Security Context
-  ## @param compactor.containerSecurityContext.runAsUser Set Compactor containers' Security Context runAsUser
-  ## @param compactor.containerSecurityContext.runAsNonRoot Set Compactor containers' Security Context runAsNonRoot
+  ## @param compactor.containerSecurityContext.enabled Enable containers' Security Context
+  ## @param compactor.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param compactor.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param compactor.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+  ## @param compactor.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param compactor.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param compactor.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param compactor.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param compactor.containerSecurityContext.capabilities.drop List of capabilities to be dropped
   ## @param compactor.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
   ## @param compactor.lifecycleHooks for the compactor container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
+  ## @param compactor.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param compactor.hostAliases compactor pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -480,7 +549,16 @@ compactor:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
-
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param compactor.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param compactor.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param compactor.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `compactor.pdb.minAvailable` and `compactor.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
   ## Enable persistence using Persistent Volume Claims
   ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ##
@@ -520,7 +598,11 @@ compactor:
     ## @param compactor.persistence.dataSource PVC data source
     ##
     dataSource: {}
-
+  ## @param compactor.enableServiceLinks Whether information about services should be injected into pod's environment variable
+  ## The environment variables injected by service links are not used, but can lead to slow boot times or slow running of the scripts when there are many services in the current namespace.
+  ## If you experience slow pod startups or slow running of the scripts you probably want to set this to `false`.
+  ##
+  enableServiceLinks: true
   ## @section Compactor Traffic Exposure Parameters
   ##
 
@@ -531,9 +613,11 @@ compactor:
     ##
     type: ClusterIP
     ## @param compactor.service.ports.http Compactor HTTP service port
+    ## @param compactor.service.ports.grpc Compactor gRPC service port
     ##
     ports:
       http: 3100
+      grpc: 9095
     ## Node ports to expose
     ## NOTE: choose port between <30000-32767>
     ## @param compactor.service.nodePorts.http Node port for HTTP
@@ -577,14 +661,76 @@ compactor:
     ## @param compactor.service.extraPorts Extra ports to expose in the Compactor service
     ##
     extraPorts: []
-
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param compactor.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param compactor.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param compactor.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param compactor.networkPolicy.addExternalClientAccess Allow access from pods with client label set to "true". Ignored if `compactor.networkPolicy.allowExternal` is true.
+    ##
+    addExternalClientAccess: true
+    ## @param compactor.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param compactor.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param compactor.networkPolicy.ingressPodMatchLabels [object] Labels to match to allow traffic from other pods. Ignored if `compactor.networkPolicy.allowExternal` is true.
+    ## e.g:
+    ## ingressPodMatchLabels:
+    ##   my-client: "true"
+    #
+    ingressPodMatchLabels: {}
+    ## @param compactor.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces. Ignored if `compactor.networkPolicy.allowExternal` is true.
+    ## @param compactor.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces. Ignored if `compactor.networkPolicy.allowExternal` is true.
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
 ## @section Gateway Deployment Parameters
 ##
 gateway:
   ## @param gateway.enabled Enable Gateway deployment
   ##
   enabled: true
-
   ## Bitnami Nginx image
   ## ref: https://hub.docker.com/r/bitnami/grafana-nginx/tags/
   ## @param gateway.image.registry [default: REGISTRY_NAME] Nginx image registry
@@ -598,10 +744,9 @@ gateway:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.25.3-debian-11-r3
+    tag: 1.27.3-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -614,7 +759,6 @@ gateway:
     ##
     pullSecrets: []
     debug: false
-
   ## @param gateway.extraEnvVars Array with extra environment variables to add to gateway nodes
   ## e.g:
   ## extraEnvVars:
@@ -712,36 +856,67 @@ gateway:
     http: 8080
   ## gateway resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param gateway.resources.limits The resources limits for the gateway containers
-  ## @param gateway.resources.requests The requested resources for the gateway containers
+  ## @param gateway.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if gateway.resources is set (gateway.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "nano"
+  ## @param gateway.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param gateway.podSecurityContext.enabled Enabled Gateway pods' Security Context
+  ## @param gateway.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param gateway.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param gateway.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param gateway.podSecurityContext.fsGroup Set Gateway pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param gateway.containerSecurityContext.enabled Enabled Gateway containers' Security Context
-  ## @param gateway.containerSecurityContext.runAsUser Set Gateway containers' Security Context runAsUser
-  ## @param gateway.containerSecurityContext.runAsNonRoot Set Gateway containers' Security Context runAsNonRoot
+  ## @param gateway.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param gateway.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param gateway.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param gateway.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+  ## @param gateway.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param gateway.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param gateway.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param gateway.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param gateway.containerSecurityContext.capabilities.drop List of capabilities to be dropped
   ## @param gateway.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
   ## @param gateway.lifecycleHooks for the gateway container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
+  ## @param gateway.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param gateway.hostAliases gateway pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -827,6 +1002,16 @@ gateway:
   ##         containerPort: 1234
   ##
   sidecars: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param gateway.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param gateway.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param gateway.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `gateway.pdb.minAvailable` and `gateway.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
   ## @param gateway.initContainers Add additional init containers to the Gateway pod(s)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
@@ -837,7 +1022,11 @@ gateway:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
-
+  ## @param gateway.enableServiceLinks Whether information about services should be injected into pod's environment variable
+  ## The environment variables injected by service links are not used, but can lead to slow boot times or slow running of the scripts when there are many services in the current namespace.
+  ## If you experience slow pod startups or slow running of the scripts you probably want to set this to `false`.
+  ##
+  enableServiceLinks: true
   ## @section Gateway Traffic Exposure Parameters
   ##
 
@@ -894,7 +1083,70 @@ gateway:
     ## @param gateway.service.extraPorts Extra ports to expose in the Gateway service
     ##
     extraPorts: []
-
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param gateway.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param gateway.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param gateway.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param gateway.networkPolicy.addExternalClientAccess Allow access from pods with client label set to "true". Ignored if `gateway.networkPolicy.allowExternal` is true.
+    ##
+    addExternalClientAccess: true
+    ## @param gateway.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param gateway.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param gateway.networkPolicy.ingressPodMatchLabels [object] Labels to match to allow traffic from other pods. Ignored if `gateway.networkPolicy.allowExternal` is true.
+    ## e.g:
+    ## ingressPodMatchLabels:
+    ##   my-client: "true"
+    #
+    ingressPodMatchLabels: {}
+    ## @param gateway.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces. Ignored if `gateway.networkPolicy.allowExternal` is true.
+    ## @param gateway.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces. Ignored if `gateway.networkPolicy.allowExternal` is true.
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
   ## Configure the ingress resource that allows you to access the Loki Gateway installation
   ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
@@ -988,7 +1240,6 @@ gateway:
     ##       -----END CERTIFICATE-----
     ##
     secrets: []
-
 ## @section index-gateway Deployment Parameters
 ##
 indexGateway:
@@ -1079,36 +1330,67 @@ indexGateway:
   customStartupProbe: {}
   ## indexGateway resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param indexGateway.resources.limits The resources limits for the indexGateway containers
-  ## @param indexGateway.resources.requests The requested resources for the indexGateway containers
+  ## @param indexGateway.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if indexGateway.resources is set (indexGateway.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "nano"
+  ## @param indexGateway.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param indexGateway.podSecurityContext.enabled Enabled index-gateway pods' Security Context
+  ## @param indexGateway.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param indexGateway.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param indexGateway.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param indexGateway.podSecurityContext.fsGroup Set index-gateway pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param indexGateway.containerSecurityContext.enabled Enabled index-gateway containers' Security Context
-  ## @param indexGateway.containerSecurityContext.runAsUser Set index-gateway containers' Security Context runAsUser
-  ## @param indexGateway.containerSecurityContext.runAsNonRoot Set index-gateway containers' Security Context runAsNonRoot
+  ## @param indexGateway.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param indexGateway.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param indexGateway.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param indexGateway.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+  ## @param indexGateway.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param indexGateway.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param indexGateway.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param indexGateway.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param indexGateway.containerSecurityContext.capabilities.drop List of capabilities to be dropped
   ## @param indexGateway.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
   ## @param indexGateway.lifecycleHooks for the indexGateway container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
+  ## @param indexGateway.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param indexGateway.hostAliases indexGateway pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1204,7 +1486,60 @@ indexGateway:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
+  ## @param indexGateway.enableServiceLinks Whether information about services should be injected into pod's environment variable
+  ## The environment variables injected by service links are not used, but can lead to slow boot times or slow running of the scripts when there are many services in the current namespace.
+  ## If you experience slow pod startups or slow running of the scripts you probably want to set this to `false`.
+  ##
+  enableServiceLinks: true
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param indexGateway.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param indexGateway.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param indexGateway.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `indexGateway.pdb.minAvailable` and `indexGateway.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
+  ## @section index-gateway Persistence Parameters
+  ##
 
+  ## Enable persistence using Persistent Volume Claims
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
+  ##
+  persistence:
+    ## @param indexGateway.persistence.enabled Enable persistence in index-gateway instances
+    ##
+    enabled: false
+    ## @param indexGateway.persistence.storageClass PVC Storage Class for index-gateway's data volume
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
+    storageClass: ""
+    ## @param indexGateway.persistence.subPath The subdirectory of the volume to mount to
+    ##
+    subPath: ""
+    ## @param indexGateway.persistence.accessModes PVC Access modes
+    ##
+    accessModes:
+      - ReadWriteOnce
+    ## @param indexGateway.persistence.size PVC Storage Request for index-gateway's data volume
+    ##
+    size: 8Gi
+    ## @param indexGateway.persistence.annotations Additional PVC annotations
+    ##
+    annotations: {}
+    ## @param indexGateway.persistence.selector Selector to match an existing Persistent Volume for index-gateway's data PVC
+    ## If set, the PVC can't have a PV dynamically provisioned for it
+    ## E.g.
+    ## selector:
+    ##   matchLabels:
+    ##     app: my-app
+    ##
+    selector: {}
   ## @section index-gateway Traffic Exposure Parameters
   ##
 
@@ -1265,7 +1600,70 @@ indexGateway:
     ## @param indexGateway.service.extraPorts Extra ports to expose in the index-gateway service
     ##
     extraPorts: []
-
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param indexGateway.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param indexGateway.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param indexGateway.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param indexGateway.networkPolicy.addExternalClientAccess Allow access from pods with client label set to "true". Ignored if `indexGateway.networkPolicy.allowExternal` is true.
+    ##
+    addExternalClientAccess: true
+    ## @param indexGateway.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param indexGateway.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param indexGateway.networkPolicy.ingressPodMatchLabels [object] Labels to match to allow traffic from other pods. Ignored if `indexGateway.networkPolicy.allowExternal` is true.
+    ## e.g:
+    ## ingressPodMatchLabels:
+    ##   my-client: "true"
+    #
+    ingressPodMatchLabels: {}
+    ## @param indexGateway.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces. Ignored if `indexGateway.networkPolicy.allowExternal` is true.
+    ## @param indexGateway.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces. Ignored if `indexGateway.networkPolicy.allowExternal` is true.
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
 ## @section Distributor Deployment Parameters
 ##
 distributor:
@@ -1349,36 +1747,67 @@ distributor:
   customStartupProbe: {}
   ## distributor resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param distributor.resources.limits The resources limits for the distributor containers
-  ## @param distributor.resources.requests The requested resources for the distributor containers
+  ## @param distributor.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if distributor.resources is set (distributor.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "nano"
+  ## @param distributor.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param distributor.podSecurityContext.enabled Enabled Distributor pods' Security Context
+  ## @param distributor.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param distributor.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param distributor.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param distributor.podSecurityContext.fsGroup Set Distributor pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param distributor.containerSecurityContext.enabled Enabled Distributor containers' Security Context
-  ## @param distributor.containerSecurityContext.runAsUser Set Distributor containers' Security Context runAsUser
-  ## @param distributor.containerSecurityContext.runAsNonRoot Set Distributor containers' Security Context runAsNonRoot
+  ## @param distributor.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param distributor.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param distributor.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param distributor.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+  ## @param distributor.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param distributor.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param distributor.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param distributor.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param distributor.containerSecurityContext.capabilities.drop List of capabilities to be dropped
   ## @param distributor.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
   ## @param distributor.lifecycleHooks for the distributor container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
+  ## @param distributor.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param distributor.hostAliases distributor pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1474,7 +1903,21 @@ distributor:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
-
+  ## @param distributor.enableServiceLinks Whether information about services should be injected into pod's environment variable
+  ## The environment variables injected by service links are not used, but can lead to slow boot times or slow running of the scripts when there are many services in the current namespace.
+  ## If you experience slow pod startups or slow running of the scripts you probably want to set this to `false`.
+  ##
+  enableServiceLinks: true
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param distributor.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param distributor.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param distributor.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `distributor.pdb.minAvailable` and `distributor.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
   ## @section Distributor Traffic Exposure Parameters
   ##
 
@@ -1535,7 +1978,70 @@ distributor:
     ## @param distributor.service.extraPorts Extra ports to expose in the Distributor service
     ##
     extraPorts: []
-
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param distributor.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param distributor.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param distributor.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param distributor.networkPolicy.addExternalClientAccess Allow access from pods with client label set to "true". Ignored if `distributor.networkPolicy.allowExternal` is true.
+    ##
+    addExternalClientAccess: true
+    ## @param distributor.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param distributor.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param distributor.networkPolicy.ingressPodMatchLabels [object] Labels to match to allow traffic from other pods. Ignored if `distributor.networkPolicy.allowExternal` is true.
+    ## e.g:
+    ## ingressPodMatchLabels:
+    ##   my-client: "true"
+    #
+    ingressPodMatchLabels: {}
+    ## @param distributor.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces. Ignored if `distributor.networkPolicy.allowExternal` is true.
+    ## @param distributor.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces. Ignored if `distributor.networkPolicy.allowExternal` is true.
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
 ## @section Ingester Deployment Parameters
 ##
 ingester:
@@ -1622,33 +2128,64 @@ ingester:
   lifecycleHooks: {}
   ## ingester resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param ingester.resources.limits The resources limits for the Ingester containers
-  ## @param ingester.resources.requests The requested resources for the Ingester containers
+  ## @param ingester.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if ingester.resources is set (ingester.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "micro"
+  ## @param ingester.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param ingester.podSecurityContext.enabled Enabled Ingester pods' Security Context
+  ## @param ingester.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param ingester.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param ingester.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param ingester.podSecurityContext.fsGroup Set Ingester pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param ingester.containerSecurityContext.enabled Enabled Ingester containers' Security Context
-  ## @param ingester.containerSecurityContext.runAsUser Set Ingester containers' Security Context runAsUser
-  ## @param ingester.containerSecurityContext.runAsNonRoot Set Ingester containers' Security Context runAsNonRoot
+  ## @param ingester.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param ingester.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param ingester.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param ingester.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+  ## @param ingester.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param ingester.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param ingester.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param ingester.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param ingester.containerSecurityContext.capabilities.drop List of capabilities to be dropped
   ## @param ingester.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
+  ## @param ingester.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param ingester.hostAliases ingester pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1748,7 +2285,21 @@ ingester:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
-
+  ## @param ingester.enableServiceLinks Whether information about services should be injected into pod's environment variable
+  ## The environment variables injected by service links are not used, but can lead to slow boot times or slow running of the scripts when there are many services in the current namespace.
+  ## If you experience slow pod startups or slow running of the scripts you probably want to set this to `false`.
+  ##
+  enableServiceLinks: true
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param ingester.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param ingester.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param ingester.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `ingester.pdb.minAvailable` and `ingester.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
   ## @section Ingester Persistence Parameters
   ##
 
@@ -1788,7 +2339,6 @@ ingester:
     ##     app: my-app
     ##
     selector: {}
-
   ## @section Ingester Traffic Exposure Parameters
   ##
 
@@ -1849,7 +2399,70 @@ ingester:
     ## @param ingester.service.extraPorts Extra ports to expose in the Ingester service
     ##
     extraPorts: []
-
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param ingester.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param ingester.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param ingester.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param ingester.networkPolicy.addExternalClientAccess Allow access from pods with client label set to "true". Ignored if `ingester.networkPolicy.allowExternal` is true.
+    ##
+    addExternalClientAccess: true
+    ## @param ingester.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param ingester.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param ingester.networkPolicy.ingressPodMatchLabels [object] Labels to match to allow traffic from other pods. Ignored if `ingester.networkPolicy.allowExternal` is true.
+    ## e.g:
+    ## ingressPodMatchLabels:
+    ##   my-client: "true"
+    #
+    ingressPodMatchLabels: {}
+    ## @param ingester.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces. Ignored if `ingester.networkPolicy.allowExternal` is true.
+    ## @param ingester.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces. Ignored if `ingester.networkPolicy.allowExternal` is true.
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
 ## @section Querier Deployment Parameters
 ##
 querier:
@@ -1937,36 +2550,67 @@ querier:
   customStartupProbe: {}
   ## querier resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param querier.resources.limits The resources limits for the Querier containers
-  ## @param querier.resources.requests The requested resources for the Querier containers
+  ## @param querier.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if querier.resources is set (querier.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "nano"
+  ## @param querier.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param querier.podSecurityContext.enabled Enabled Querier pods' Security Context
+  ## @param querier.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param querier.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param querier.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param querier.podSecurityContext.fsGroup Set Querier pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param querier.containerSecurityContext.enabled Enabled Querier containers' Security Context
-  ## @param querier.containerSecurityContext.runAsUser Set Querier containers' Security Context runAsUser
-  ## @param querier.containerSecurityContext.runAsNonRoot Set Querier containers' Security Context runAsNonRoot
+  ## @param querier.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param querier.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param querier.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param querier.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+  ## @param querier.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param querier.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param querier.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param querier.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param querier.containerSecurityContext.capabilities.drop List of capabilities to be dropped
   ## @param querier.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
   ## @param querier.lifecycleHooks for the Querier container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
+  ## @param querier.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param querier.hostAliases querier pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -2062,7 +2706,21 @@ querier:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
-
+  ## @param querier.enableServiceLinks Whether information about services should be injected into pod's environment variable
+  ## The environment variables injected by service links are not used, but can lead to slow boot times or slow running of the scripts when there are many services in the current namespace.
+  ## If you experience slow pod startups or slow running of the scripts you probably want to set this to `false`.
+  ##
+  enableServiceLinks: true
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param querier.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param querier.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param querier.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `querier.pdb.minAvailable` and `querier.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
   ## @section Querier Persistence Parameters
   ##
 
@@ -2102,7 +2760,6 @@ querier:
     ##     app: my-app
     ##
     selector: {}
-
   ## @section Querier Traffic Exposure Parameters
   ##
 
@@ -2163,7 +2820,70 @@ querier:
     ## @param querier.service.extraPorts Extra ports to expose in the Querier service
     ##
     extraPorts: []
-
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param querier.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param querier.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param querier.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param querier.networkPolicy.addExternalClientAccess Allow access from pods with client label set to "true". Ignored if `querier.networkPolicy.allowExternal` is true.
+    ##
+    addExternalClientAccess: true
+    ## @param querier.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param querier.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param querier.networkPolicy.ingressPodMatchLabels [object] Labels to match to allow traffic from other pods. Ignored if `querier.networkPolicy.allowExternal` is true.
+    ## e.g:
+    ## ingressPodMatchLabels:
+    ##   my-client: "true"
+    #
+    ingressPodMatchLabels: {}
+    ## @param querier.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces. Ignored if `querier.networkPolicy.allowExternal` is true.
+    ## @param querier.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces. Ignored if `querier.networkPolicy.allowExternal` is true.
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
 ## @section Query Frontend Deployment Parameters
 ##
 queryFrontend:
@@ -2247,36 +2967,67 @@ queryFrontend:
   customStartupProbe: {}
   ## queryFrontend resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param queryFrontend.resources.limits The resources limits for the queryFrontend containers
-  ## @param queryFrontend.resources.requests The requested resources for the queryFrontend containers
+  ## @param queryFrontend.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if queryFrontend.resources is set (queryFrontend.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "nano"
+  ## @param queryFrontend.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param queryFrontend.podSecurityContext.enabled Enabled queryFrontend pods' Security Context
+  ## @param queryFrontend.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param queryFrontend.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param queryFrontend.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param queryFrontend.podSecurityContext.fsGroup Set queryFrontend pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param queryFrontend.containerSecurityContext.enabled Enabled queryFrontend containers' Security Context
-  ## @param queryFrontend.containerSecurityContext.runAsUser Set queryFrontend containers' Security Context runAsUser
-  ## @param queryFrontend.containerSecurityContext.runAsNonRoot Set queryFrontend containers' Security Context runAsNonRoot
+  ## @param queryFrontend.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param queryFrontend.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param queryFrontend.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param queryFrontend.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+  ## @param queryFrontend.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param queryFrontend.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param queryFrontend.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param queryFrontend.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param queryFrontend.containerSecurityContext.capabilities.drop List of capabilities to be dropped
   ## @param queryFrontend.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
   ## @param queryFrontend.lifecycleHooks for the queryFrontend container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
+  ## @param queryFrontend.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param queryFrontend.hostAliases queryFrontend pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -2372,7 +3123,21 @@ queryFrontend:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
-
+  ## @param queryFrontend.enableServiceLinks Whether information about services should be injected into pod's environment variable
+  ## The environment variables injected by service links are not used, but can lead to slow boot times or slow running of the scripts when there are many services in the current namespace.
+  ## If you experience slow pod startups or slow running of the scripts you probably want to set this to `false`.
+  ##
+  enableServiceLinks: true
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param queryFrontend.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param queryFrontend.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param queryFrontend.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `queryFrontend.pdb.minAvailable` and `queryFrontend.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
   ## @section Query Frontend Traffic Exposure Parameters
   ##
 
@@ -2439,6 +3204,70 @@ queryFrontend:
       ## @param queryFrontend.service.headless.annotations Annotations for the headless service.
       ##
       annotations: {}
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param queryFrontend.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param queryFrontend.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param queryFrontend.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param queryFrontend.networkPolicy.addExternalClientAccess Allow access from pods with client label set to "true". Ignored if `queryFrontend.networkPolicy.allowExternal` is true.
+    ##
+    addExternalClientAccess: true
+    ## @param queryFrontend.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param queryFrontend.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param queryFrontend.networkPolicy.ingressPodMatchLabels [object] Labels to match to allow traffic from other pods. Ignored if `queryFrontend.networkPolicy.allowExternal` is true.
+    ## e.g:
+    ## ingressPodMatchLabels:
+    ##   my-client: "true"
+    #
+    ingressPodMatchLabels: {}
+    ## @param queryFrontend.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces. Ignored if `queryFrontend.networkPolicy.allowExternal` is true.
+    ## @param queryFrontend.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces. Ignored if `queryFrontend.networkPolicy.allowExternal` is true.
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
 ## @section Query Scheduler Deployment Parameters
 ##
 queryScheduler:
@@ -2483,11 +3312,9 @@ queryScheduler:
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 1
-
   ## @param queryScheduler.minReadySeconds Minimum time to wait before performing readiness check
   ##
   minReadySeconds: 10
-
   ## @param queryScheduler.readinessProbe.enabled Enable readinessProbe on queryScheduler nodes
   ## @param queryScheduler.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
   ## @param queryScheduler.readinessProbe.periodSeconds Period seconds for readinessProbe
@@ -2527,36 +3354,67 @@ queryScheduler:
   customStartupProbe: {}
   ## queryScheduler resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param queryScheduler.resources.limits The resources limits for the queryScheduler containers
-  ## @param queryScheduler.resources.requests The requested resources for the queryScheduler containers
+  ## @param queryScheduler.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if queryScheduler.resources is set (queryScheduler.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "nano"
+  ## @param queryScheduler.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param queryScheduler.podSecurityContext.enabled Enabled queryScheduler pods' Security Context
+  ## @param queryScheduler.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param queryScheduler.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param queryScheduler.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param queryScheduler.podSecurityContext.fsGroup Set queryScheduler pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param queryScheduler.containerSecurityContext.enabled Enabled queryScheduler containers' Security Context
-  ## @param queryScheduler.containerSecurityContext.runAsUser Set queryScheduler containers' Security Context runAsUser
-  ## @param queryScheduler.containerSecurityContext.runAsNonRoot Set queryScheduler containers' Security Context runAsNonRoot
+  ## @param queryScheduler.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param queryScheduler.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param queryScheduler.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param queryScheduler.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+  ## @param queryScheduler.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param queryScheduler.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param queryScheduler.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param queryScheduler.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param queryScheduler.containerSecurityContext.capabilities.drop List of capabilities to be dropped
   ## @param queryScheduler.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
   ## @param queryScheduler.lifecycleHooks for the queryScheduler container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
+  ## @param queryScheduler.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param queryScheduler.hostAliases queryScheduler pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -2652,7 +3510,21 @@ queryScheduler:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
-
+  ## @param queryScheduler.enableServiceLinks Whether information about services should be injected into pod's environment variable
+  ## The environment variables injected by service links are not used, but can lead to slow boot times or slow running of the scripts when there are many services in the current namespace.
+  ## If you experience slow pod startups or slow running of the scripts you probably want to set this to `false`.
+  ##
+  enableServiceLinks: true
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param queryScheduler.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param queryScheduler.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param queryScheduler.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `queryScheduler.pdb.minAvailable` and `queryScheduler.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
   ## @section Query Scheduler Traffic Exposure Parameters
   ##
 
@@ -2713,7 +3585,70 @@ queryScheduler:
     ## @param queryScheduler.service.extraPorts Extra ports to expose in the queryScheduler service
     ##
     extraPorts: []
-
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param queryScheduler.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param queryScheduler.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param queryScheduler.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param queryScheduler.networkPolicy.addExternalClientAccess Allow access from pods with client label set to "true". Ignored if `queryScheduler.networkPolicy.allowExternal` is true.
+    ##
+    addExternalClientAccess: true
+    ## @param queryScheduler.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param queryScheduler.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param queryScheduler.networkPolicy.ingressPodMatchLabels [object] Labels to match to allow traffic from other pods. Ignored if `queryScheduler.networkPolicy.allowExternal` is true.
+    ## e.g:
+    ## ingressPodMatchLabels:
+    ##   my-client: "true"
+    #
+    ingressPodMatchLabels: {}
+    ## @param queryScheduler.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces. Ignored if `queryScheduler.networkPolicy.allowExternal` is true.
+    ## @param queryScheduler.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces. Ignored if `queryScheduler.networkPolicy.allowExternal` is true.
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
 ## @section Ruler Deployment Parameters
 ##
 ruler:
@@ -2807,33 +3742,64 @@ ruler:
   lifecycleHooks: {}
   ## ruler resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param ruler.resources.limits The resources limits for the Ruler containers
-  ## @param ruler.resources.requests The requested resources for the Ruler containers
+  ## @param ruler.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if ruler.resources is set (ruler.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "nano"
+  ## @param ruler.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param ruler.podSecurityContext.enabled Enabled Ruler pods' Security Context
+  ## @param ruler.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param ruler.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param ruler.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param ruler.podSecurityContext.fsGroup Set Ruler pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param ruler.containerSecurityContext.enabled Enabled Ruler containers' Security Context
-  ## @param ruler.containerSecurityContext.runAsUser Set Ruler containers' Security Context runAsUser
-  ## @param ruler.containerSecurityContext.runAsNonRoot Set Ruler containers' Security Context runAsNonRoot
+  ## @param ruler.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param ruler.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param ruler.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param ruler.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+  ## @param ruler.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param ruler.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param ruler.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param ruler.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param ruler.containerSecurityContext.capabilities.drop List of capabilities to be dropped
   ## @param ruler.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
+  ## @param ruler.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param ruler.hostAliases ruler pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -2929,7 +3895,21 @@ ruler:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
-
+  ## @param ruler.enableServiceLinks Whether information about services should be injected into pod's environment variable
+  ## The environment variables injected by service links are not used, but can lead to slow boot times or slow running of the scripts when there are many services in the current namespace.
+  ## If you experience slow pod startups or slow running of the scripts you probably want to set this to `false`.
+  ##
+  enableServiceLinks: true
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param ruler.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param ruler.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param ruler.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `ruler.pdb.minAvailable` and `ruler.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
   ## @section Ruler Persistence Parameters
   ##
 
@@ -2969,7 +3949,6 @@ ruler:
     ##     app: my-app
     ##
     selector: {}
-
   ## @section Ruler Traffic Exposure Parameters
   ##
 
@@ -3030,7 +4009,70 @@ ruler:
     ## @param ruler.service.extraPorts Extra ports to expose in the Ruler service
     ##
     extraPorts: []
-
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param ruler.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param ruler.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param ruler.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param ruler.networkPolicy.addExternalClientAccess Allow access from pods with client label set to "true". Ignored if `ruler.networkPolicy.allowExternal` is true.
+    ##
+    addExternalClientAccess: true
+    ## @param ruler.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param ruler.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param ruler.networkPolicy.ingressPodMatchLabels [object] Labels to match to allow traffic from other pods. Ignored if `ruler.networkPolicy.allowExternal` is true.
+    ## e.g:
+    ## ingressPodMatchLabels:
+    ##   my-client: "true"
+    #
+    ingressPodMatchLabels: {}
+    ## @param ruler.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces. Ignored if `ruler.networkPolicy.allowExternal` is true.
+    ## @param ruler.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces. Ignored if `ruler.networkPolicy.allowExternal` is true.
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
 ## @section table-manager Deployment Parameters
 ##
 tableManager:
@@ -3117,36 +4159,67 @@ tableManager:
   customStartupProbe: {}
   ## tableManager resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param tableManager.resources.limits The resources limits for the tableManager containers
-  ## @param tableManager.resources.requests The requested resources for the tableManager containers
+  ## @param tableManager.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if tableManager.resources is set (tableManager.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "nano"
+  ## @param tableManager.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param tableManager.podSecurityContext.enabled Enabled table-manager pods' Security Context
+  ## @param tableManager.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param tableManager.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param tableManager.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param tableManager.podSecurityContext.fsGroup Set table-manager pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param tableManager.containerSecurityContext.enabled Enabled table-manager containers' Security Context
-  ## @param tableManager.containerSecurityContext.runAsUser Set table-manager containers' Security Context runAsUser
-  ## @param tableManager.containerSecurityContext.runAsNonRoot Set table-manager containers' Security Context runAsNonRoot
+  ## @param tableManager.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param tableManager.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param tableManager.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param tableManager.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+  ## @param tableManager.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param tableManager.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param tableManager.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param tableManager.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param tableManager.containerSecurityContext.capabilities.drop List of capabilities to be dropped
   ## @param tableManager.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
   ## @param tableManager.lifecycleHooks for the tableManager container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
+  ## @param tableManager.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param tableManager.hostAliases tableManager pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -3242,7 +4315,21 @@ tableManager:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
-
+  ## @param tableManager.enableServiceLinks Whether information about services should be injected into pod's environment variable
+  ## The environment variables injected by service links are not used, but can lead to slow boot times or slow running of the scripts when there are many services in the current namespace.
+  ## If you experience slow pod startups or slow running of the scripts you probably want to set this to `false`.
+  ##
+  enableServiceLinks: true
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param tableManager.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param tableManager.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param tableManager.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `tableManager.pdb.minAvailable` and `tableManager.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
   ## @section table-manager Traffic Exposure Parameters
   ##
 
@@ -3303,7 +4390,70 @@ tableManager:
     ## @param tableManager.service.extraPorts Extra ports to expose in the table-manager service
     ##
     extraPorts: []
-
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param tableManager.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param tableManager.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param tableManager.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param tableManager.networkPolicy.addExternalClientAccess Allow access from pods with client label set to "true". Ignored if `tableManager.networkPolicy.allowExternal` is true.
+    ##
+    addExternalClientAccess: true
+    ## @param tableManager.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param tableManager.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param tableManager.networkPolicy.ingressPodMatchLabels [object] Labels to match to allow traffic from other pods. Ignored if `tableManager.networkPolicy.allowExternal` is true.
+    ## e.g:
+    ## ingressPodMatchLabels:
+    ##   my-client: "true"
+    #
+    ingressPodMatchLabels: {}
+    ## @param tableManager.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces. Ignored if `tableManager.networkPolicy.allowExternal` is true.
+    ## @param tableManager.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces. Ignored if `tableManager.networkPolicy.allowExternal` is true.
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
 ## @section Promtail Deployment Parameters
 ##
 promtail:
@@ -3322,10 +4472,9 @@ promtail:
   image:
     registry: docker.io
     repository: bitnami/promtail
-    tag: 2.9.3-debian-11-r0
+    tag: 3.3.1-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -3337,7 +4486,6 @@ promtail:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-
   ## @param promtail.extraEnvVars Array with extra environment variables to add to promtail nodes
   ## e.g:
   ## extraEnvVars:
@@ -3360,12 +4508,12 @@ promtail:
   ## @param promtail.extraArgs Additional container args (will be concatenated to args, unless diagnosticMode is enabled)
   ##
   extraArgs: []
-
   ## @param promtail.containerPorts.http Promtail HTTP port
+  ## @param promtail.containerPorts.grpc Promtail HTTP port
   ##
   containerPorts:
     http: 8080
-
+    grpc: 9095
   ## Configure extra options for Promtail containers' liveness, readiness and startup probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
   ## @param promtail.livenessProbe.enabled Enable livenessProbe on Promtail nodes
@@ -3424,33 +4572,64 @@ promtail:
   lifecycleHooks: {}
   ## promtail resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param promtail.resources.limits The resources limits for the Promtail containers
-  ## @param promtail.resources.requests The requested resources for the Promtail containers
+  ## @param promtail.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if promtail.resources is set (promtail.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "nano"
+  ## @param promtail.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param promtail.podSecurityContext.enabled Enabled Promtail pods' Security Context
+  ## @param promtail.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param promtail.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param promtail.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param promtail.podSecurityContext.fsGroup Set Promtail pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 0
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param promtail.containerSecurityContext.enabled Enabled Promtail containers' Security Context
-  ## @param promtail.containerSecurityContext.runAsUser Set Promtail containers' Security Context runAsUser
-  ## @param promtail.containerSecurityContext.runAsNonRoot Set Promtail containers' Security Context runAsNonRoot
+  ## @param promtail.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param promtail.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param promtail.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param promtail.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+  ## @param promtail.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param promtail.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param promtail.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param promtail.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param promtail.containerSecurityContext.capabilities.drop List of capabilities to be dropped
   ## @param promtail.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 0
+    runAsGroup: 0
     runAsNonRoot: false
+    privileged: false
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
+  ## @param promtail.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param promtail.hostAliases promtail pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -3546,13 +4725,18 @@ promtail:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
-
+  ## @param promtail.enableServiceLinks Whether information about services should be injected into pod's environment variable
+  ## The environment variables injected by service links are not used, but can lead to slow boot times or slow running of the scripts when there are many services in the current namespace.
+  ## If you experience slow pod startups or slow running of the scripts you probably want to set this to `false`.
+  ##
+  enableServiceLinks: true
   ## @param promtail.configuration [string] Promtail configuration
   ##
   configuration: |
     server:
       log_level: {{ .Values.promtail.logLevel }}
       http_listen_port: {{ .Values.promtail.containerPorts.http }}
+      grpc_listen_port: {{ .Values.promtail.containerPorts.grpc }}
 
     clients:
       - url: http://{{ include "grafana-loki.gateway.fullname" . }}:{{ .Values.gateway.service.ports.http }}/loki/api/v1/push
@@ -3634,11 +4818,9 @@ promtail:
   ## @param promtail.existingSecret Name of a Secret that contains the Promtail configuration
   ##
   existingSecret: ""
-
   ## @param promtail.logLevel Promtail logging level
   ##
   logLevel: info
-
   ## @section Promtail Traffic Exposure Parameters
   ##
 
@@ -3649,9 +4831,11 @@ promtail:
     ##
     type: ClusterIP
     ## @param promtail.service.ports.http Promtail HTTP service port
+    ## @param promtail.service.ports.grpc Promtail gRPC service port
     ##
     ports:
       http: 3100
+      grpc: 9095
     ## Node ports to expose
     ## NOTE: choose port between <30000-32767>
     ## @param promtail.service.nodePorts.http Node port for HTTP
@@ -3695,7 +4879,73 @@ promtail:
     ## @param promtail.service.extraPorts Extra ports to expose in the Promtail service
     ##
     extraPorts: []
-
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param promtail.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param promtail.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param promtail.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param promtail.networkPolicy.addExternalClientAccess Allow access from pods with client label set to "true". Ignored if `promtail.networkPolicy.allowExternal` is true.
+    ##
+    addExternalClientAccess: true
+    ## @param promtail.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
+    ##
+    kubeAPIServerPorts: [443, 6443, 8443]
+    ## @param promtail.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param promtail.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param promtail.networkPolicy.ingressPodMatchLabels [object] Labels to match to allow traffic from other pods. Ignored if `promtail.networkPolicy.allowExternal` is true.
+    ## e.g:
+    ## ingressPodMatchLabels:
+    ##   my-client: "true"
+    #
+    ingressPodMatchLabels: {}
+    ## @param promtail.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces. Ignored if `promtail.networkPolicy.allowExternal` is true.
+    ## @param promtail.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces. Ignored if `promtail.networkPolicy.allowExternal` is true.
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
   ## Create RBAC
   ## @param promtail.rbac.create Create RBAC rules
   ##
@@ -3715,11 +4965,10 @@ promtail:
     ## @param promtail.serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the promtail.serviceAccount.created
     ## Can be set to false if pods using this promtail.serviceAccount.do not need to use K8s API
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
     ## @param promtail.serviceAccount.annotations Additional custom annotations for the ServiceAccount
     ##
     annotations: {}
-
 ## @section Init Container Parameters
 ##
 
@@ -3743,7 +4992,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r93
+    tag: 12-debian-12-r33
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -3756,14 +5005,24 @@ volumePermissions:
     pullSecrets: []
   ## Init container's resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param volumePermissions.resources.limits The resources limits for the init container
-  ## @param volumePermissions.resources.requests The requested resources for the init container
+  ## @param volumePermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "nano"
+  ## @param volumePermissions.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Init container Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param volumePermissions.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param volumePermissions.containerSecurityContext.runAsUser Set init container's Security Context runAsUser
   ## @param volumePermissions.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ## NOTE: when runAsUser is set to special value "auto", init container will try to chown the
@@ -3771,10 +5030,10 @@ volumePermissions:
   ##   "auto" is especially useful for OpenShift which has scc with dynamic user ids (and 0 is not allowed)
   ##
   containerSecurityContext:
+    seLinuxOptions: {}
     runAsUser: 0
     seccompProfile:
       type: "RuntimeDefault"
-
 ## @section Other Parameters
 ##
 
@@ -3784,7 +5043,7 @@ volumePermissions:
 serviceAccount:
   ## @param serviceAccount.create Enable creation of ServiceAccount for Loki pods
   ##
-  create: false
+  create: true
   ## @param serviceAccount.name The name of the ServiceAccount to use
   ## If not set and create is true, a name is generated using the common.names.fullname template
   ##
@@ -3792,11 +5051,10 @@ serviceAccount:
   ## @param serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
   ## Can be set to false if pods using this serviceAccount do not need to use K8s API
   ##
-  automountServiceAccountToken: true
+  automountServiceAccountToken: false
   ## @param serviceAccount.annotations Additional custom annotations for the ServiceAccount
   ##
   annotations: {}
-
 ## @section Metrics Parameters
 ## Prometheus Exporter / Metrics
 ##
@@ -3840,7 +5098,6 @@ metrics:
     ## @param metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
     ##
     jobLabel: ""
-
 ## @section External Memcached (Chunks) Parameters
 ##
 externalMemcachedChunks:
@@ -3850,7 +5107,6 @@ externalMemcachedChunks:
   ## @param externalMemcachedChunks.port Port of a running external memcached instance
   ##
   port: 11211
-
 ## @section Memcached Sub-chart Parameters (Chunks)
 ## Memcached sub-chart (Chunks)
 ##
@@ -3858,18 +5114,6 @@ memcachedchunks:
   ## @param memcachedchunks.enabled Deploy memcached sub-chart
   ##
   enabled: true
-  ## Bitnami Memcached image version
-  ## ref: https://hub.docker.com/r/bitnami/memcached/tags/
-  ## @param memcachedchunks.image.registry [default: REGISTRY_NAME] Memcached image registry
-  ## @param memcachedchunks.image.repository [default: REPOSITORY_NAME/memcached] Memcached image repository
-  ## @skip memcachedchunks.image.tag Memcached image tag (immutable tags are recommended)
-  ## @param memcachedchunks.image.digest Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
-  ##
-  image:
-    registry: docker.io
-    repository: bitnami/memcached
-    tag: 1.6.22-debian-11-r2
-    digest: ""
   ## @param memcachedchunks.nameOverride override the subchart name
   ##
   nameOverride: ""
@@ -3881,7 +5125,23 @@ memcachedchunks:
   service:
     ports:
       memcached: 11211
-
+  ## Memcached resource requests and limits
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param memcachedchunks.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "nano"
+  ## @param memcachedchunks.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
 ## @section External Memcached (Frontend) Parameters
 ##
 externalMemcachedFrontend:
@@ -3891,7 +5151,6 @@ externalMemcachedFrontend:
   ## @param externalMemcachedFrontend.port Port of a running external memcached instance
   ##
   port: 11211
-
 ## @section Memcached Sub-chart Parameters (Frontend)
 ## Memcached sub-chart (Frontend)
 ##
@@ -3899,18 +5158,6 @@ memcachedfrontend:
   ## @param memcachedfrontend.enabled Deploy memcached sub-chart
   ##
   enabled: true
-  ## Bitnami Memcached image version
-  ## ref: https://hub.docker.com/r/bitnami/memcached/tags/
-  ## @param memcachedfrontend.image.registry [default: REGISTRY_NAME] Memcached image registry
-  ## @param memcachedfrontend.image.repository [default: REPOSITORY_NAME/memcached] Memcached image repository
-  ## @skip memcachedfrontend.image.tag Memcached image tag (immutable tags are recommended)
-  ## @param memcachedfrontend.image.digest Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
-  ##
-  image:
-    registry: docker.io
-    repository: bitnami/memcached
-    tag: 1.6.22-debian-11-r2
-    digest: ""
   ## @param memcachedfrontend.architecture Memcached architecture
   ##
   architecture: high-availability
@@ -3922,7 +5169,23 @@ memcachedfrontend:
   service:
     ports:
       memcached: 11211
-
+  ## Memcached resource requests and limits
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param memcachedfrontend.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "nano"
+  ## @param memcachedfrontend.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
 ## @section External Memcached (Index-Queries) Parameters
 ##
 externalMemcachedIndexQueries:
@@ -3932,27 +5195,13 @@ externalMemcachedIndexQueries:
   ## @param externalMemcachedIndexQueries.port Port of a running external memcached instance
   ##
   port: 11211
-
 ## @section Memcached Sub-chart Parameters (Index-Queries)
 ## Memcached sub-chart (Index-Queries)
 ##
 memcachedindexqueries:
   ## @param memcachedindexqueries.enabled Deploy memcached sub-chart
   ##
-  enabled: true
-
-  ## Bitnami Memcached image version
-  ## ref: https://hub.docker.com/r/bitnami/memcached/tags/
-  ## @param memcachedindexqueries.image.registry [default: REGISTRY_NAME] Memcached image registry
-  ## @param memcachedindexqueries.image.repository [default: REPOSITORY_NAME/memcached] Memcached image repository
-  ## @skip memcachedindexqueries.image.tag Memcached image tag (immutable tags are recommended)
-  ## @param memcachedindexqueries.image.digest Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
-  ##
-  image:
-    registry: docker.io
-    repository: bitnami/memcached
-    tag: 1.6.22-debian-11-r2
-    digest: ""
+  enabled: false
   ## @param memcachedindexqueries.architecture Memcached architecture
   ##
   architecture: high-availability
@@ -3964,7 +5213,23 @@ memcachedindexqueries:
   service:
     ports:
       memcached: 11211
-
+  ## Memcached resource requests and limits
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param memcachedindexqueries.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "nano"
+  ## @param memcachedindexqueries.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
 ## @section External Memcached (IndexWrites) Parameters
 ##
 externalMemcachedIndexWrites:
@@ -3974,7 +5239,6 @@ externalMemcachedIndexWrites:
   ## @param externalMemcachedIndexWrites.port Port of a running external memcached instance
   ##
   port: 11211
-
 ## @section Memcached Sub-chart Parameters (Index-Writes)
 ## Memcached sub-chart (Index-Writes)
 ##
@@ -3982,18 +5246,6 @@ memcachedindexwrites:
   ## @param memcachedindexwrites.enabled Deploy memcached sub-chart
   ##
   enabled: false
-  ## Bitnami Memcached image version
-  ## ref: https://hub.docker.com/r/bitnami/memcached/tags/
-  ## @param memcachedindexwrites.image.registry [default: REGISTRY_NAME] Memcached image registry
-  ## @param memcachedindexwrites.image.repository [default: REPOSITORY_NAME/memcached] Memcached image repository
-  ## @skip memcachedindexwrites.image.tag Memcached image tag (immutable tags are recommended)
-  ## @param memcachedindexwrites.image.digest Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
-  ##
-  image:
-    registry: docker.io
-    repository: bitnami/memcached
-    tag: 1.6.22-debian-11-r2
-    digest: ""
   ## @param memcachedindexwrites.architecture Memcached architecture
   ##
   architecture: high-availability
@@ -4005,3 +5257,20 @@ memcachedindexwrites:
   service:
     ports:
       memcached: 11211
+  ## Memcached resource requests and limits
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param memcachedindexwrites.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "nano"
+  ## @param memcachedindexwrites.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}

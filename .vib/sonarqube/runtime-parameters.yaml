@@ -16,7 +16,7 @@ containerSecurityContext:
   runAsUser: 1002
 serviceAccount:
   create: true
-  automountServiceAccountToken: true
+automountServiceAccountToken: true
 postgresql:
   enabled: true
   service:

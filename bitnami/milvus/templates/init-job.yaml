@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -13,6 +13,7 @@ metadata:
   {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: milvus
+    app.kubernetes.io/component: init
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.initJob.annotations "context" $ ) | nindent 4 }}
     {{- if .Values.commonAnnotations }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
@@ -23,6 +24,7 @@ spec:
     metadata:
       {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.initJob.podLabels .Values.commonLabels $versionLabel ) "context" . ) }}
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/part-of: milvus
         app.kubernetes.io/component: init
       {{- if .Values.initJob.podAnnotations }}
       annotations: {{- include "common.tplvalues.render" (dict "value" .Values.initJob.podAnnotations "context" $) | nindent 8 }}
@@ -31,8 +33,9 @@ spec:
       {{- include "milvus.imagePullSecrets" . | nindent 6 }}
       restartPolicy: OnFailure
       {{- if .Values.initJob.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.initJob.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.initJob.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
+      automountServiceAccountToken: {{ .Values.initJob.automountServiceAccountToken }}
       {{- if .Values.initJob.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.initJob.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -113,7 +116,44 @@ spec:
                   key: {{ include "milvus.secretPasswordKey" . }}
             {{- end }}
           {{- if .Values.initJob.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.initJob.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.initJob.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.initJob.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.initJob.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.initJob.livenessProbe.enabled }}
+          livenessProbe:
+            exec:
+              command:
+                - pgrep
+                - python
+            initialDelaySeconds: {{ .Values.initJob.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.initJob.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.initJob.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.initJob.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.initJob.livenessProbe.failureThreshold }}
+          {{- end }}
+          {{- if .Values.initJob.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.initJob.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.initJob.readinessProbe.enabled }}
+          readinessProbe:
+            exec:
+              command:
+                - pgrep
+                - python
+            initialDelaySeconds: {{ .Values.initJob.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.initJob.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.initJob.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.initJob.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.initJob.readinessProbe.failureThreshold }}
+          {{- end }}
+          {{- if .Values.initJob.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.initJob.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.initJob.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.initJob.startupProbe "enabled") "context" $) | nindent 12 }}
+            exec:
+              command:
+                - pgrep
+                - python
           {{- end }}
           {{- if or .Values.initJob.extraEnvVarsCM .Values.initJob.extraEnvVarsSecret }}
           envFrom:
@@ -127,8 +167,9 @@ spec:
             {{- end }}
           {{- end }}
           volumeMounts:
-            - name: tmp
+            - name: empty-dir
               mountPath: /tmp
+              subPath: tmp-dir
             {{- if and (ne (int .Values.proxy.tls.mode) 0) (not (empty .Values.initJob.tls.existingSecret)) }}
             - name: milvus-client-certs
               mountPath: /opt/bitnami/milvus/configs/cert/milvus/client
@@ -139,9 +180,11 @@ spec:
           {{- end }}
           {{- if .Values.initJob.resources }}
           resources: {{- toYaml .Values.initJob.resources | nindent 12 }}
+          {{- else if ne .Values.initJob.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.initJob.resourcesPreset) | nindent 12 }}
           {{- end }}
       volumes:
-        - name: tmp
+        - name: empty-dir
           emptyDir: {}
         {{- if and (ne (int .Values.proxy.tls.mode) 0) (not (empty .Values.initJob.tls.existingSecret)) }}
         - name: milvus-client-certs

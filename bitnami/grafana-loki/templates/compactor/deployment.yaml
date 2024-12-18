@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -9,9 +9,7 @@ kind: Deployment
 metadata:
   name: {{ template "grafana-loki.compactor.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
-  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.loki.image "chart" .Chart ) ) }}
-  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
-  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: grafana-loki
     app.kubernetes.io/component: compactor
   {{- if .Values.commonAnnotations }}
@@ -22,7 +20,7 @@ spec:
   {{- if .Values.compactor.updateStrategy }}
   strategy: {{- toYaml .Values.compactor.updateStrategy | nindent 4 }}
   {{- end }}
-  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.compactor.podLabels .Values.commonLabels $versionLabel ) "context" . ) }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.compactor.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/part-of: grafana-loki
@@ -41,6 +39,7 @@ spec:
     spec:
       serviceAccountName: {{ template "grafana-loki.serviceAccountName" . }}
       {{- include "grafana-loki.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.compactor.automountServiceAccountToken }}
       {{- if .Values.compactor.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.compactor.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -68,8 +67,9 @@ spec:
       schedulerName: {{ .Values.compactor.schedulerName }}
       {{- end }}
       {{- if .Values.compactor.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.compactor.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.compactor.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
+      enableServiceLinks: {{ .Values.compactor.enableServiceLinks }}
       initContainers:
         {{- if .Values.compactor.initContainers }}
           {{- include "common.tplvalues.render" (dict "value" .Values.compactor.initContainers "context" $) | nindent 8 }}
@@ -79,7 +79,7 @@ spec:
           image: {{ template "grafana-loki.image" . }}
           imagePullPolicy: {{ .Values.loki.image.pullPolicy }}
           {{- if .Values.compactor.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.compactor.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.compactor.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -94,7 +94,7 @@ spec:
           args:
             - -target=compactor
             - -config.file={{ .Values.loki.dataDir }}/conf/loki.yaml
-            - -boltdb.shipper.compactor.working-directory={{ .Values.loki.dataDir }}/loki/compactor
+            - -compactor.working-directory={{ .Values.loki.dataDir }}/loki/compactor
           {{- if .Values.compactor.extraArgs }}
           {{- include "common.tplvalues.render" (dict "value" .Values.compactor.extraArgs "context" $) | nindent 12 }}
           {{- end }}
@@ -116,16 +116,19 @@ spec:
               name: http
             - containerPort: {{ .Values.loki.containerPorts.gossipRing }}
               name: http-memberlist
+            - containerPort: {{ .Values.loki.containerPorts.grpc }}
+              name: grpc
           {{- if .Values.compactor.resources }}
-          resources: {{- toYaml .Values.compactor.resources | nindent 12 }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.compactor.resources "context" $) | nindent 12 }}
+          {{- else if ne .Values.compactor.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.compactor.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.compactor.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.compactor.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.compactor.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.compactor.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /ready
+            tcpSocket:
               port: http
           {{- end }}
           {{- if .Values.compactor.customReadinessProbe }}
@@ -148,6 +151,12 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.compactor.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /bitnami/grafana-loki/chunks
+              subPath: app-chunks-dir
             - name: loki-config
               mountPath: {{ .Values.loki.dataDir }}/conf/loki.yaml
               subPath: loki.yaml
@@ -160,6 +169,8 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.compactor.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: data
           {{- if .Values.compactor.persistence.enabled }}
           persistentVolumeClaim:

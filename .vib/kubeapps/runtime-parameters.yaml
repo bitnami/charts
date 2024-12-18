@@ -24,6 +24,8 @@ apprepository:
   initialRepos:
     - name: bitnami
       url: https://charts.bitnami.com/bitnami
+      filterRule:
+        jq: .name == "nginx"
   watchAllNamespaces: false
 authProxy:
   enabled: false

@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -28,6 +28,14 @@ rules:
       - update
       - watch
       - delete
+  - apiGroups:
+      - ""
+    resources:
+      - configmaps
+    verbs:
+      - get
+      - list
+      - watch
   - apiGroups:
       - config.supervisor.pinniped.dev
     resources:
@@ -104,6 +112,22 @@ rules:
       - idp.supervisor.pinniped.dev
     resources:
       - activedirectoryidentityproviders/status
+    verbs:
+      - get
+      - patch
+      - update
+  - apiGroups:
+      - idp.supervisor.pinniped.dev
+    resources:
+      - githubidentityproviders
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - idp.supervisor.pinniped.dev
+    resources:
+      - githubidentityproviders/status
     verbs:
       - get
       - patch
@@ -224,6 +248,8 @@ rules:
     resources:
       - validatingwebhookconfigurations
       - mutatingwebhookconfigurations
+      - validatingadmissionpolicies
+      - validatingadmissionpolicybindings
     verbs:
       - get
       - list

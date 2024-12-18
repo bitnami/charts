@@ -1,5 +1,5 @@
 {{/*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -35,7 +35,7 @@ Return the proper Schema Registry image name
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "schema-registry.imagePullSecrets" -}}
-{{ include "common.images.pullSecrets" (dict "images" (list .Values.image) "global" .Values.global) }}
+{{ include "common.images.renderPullSecrets" (dict "images" (list .Values.image) "context" $) }}
 {{- end -}}
 
 {{/*
@@ -103,6 +103,17 @@ SSL
 SASL_SSL
 {{- else if eq .protocol "sasl" -}}
 SASL_PLAINTEXT
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return kafka port
+*/}}
+{{- define "schema-registry.kafka.port" -}}
+{{- if .Values.kafka.enabled -}}
+    {{- int .Values.kafka.service.ports.client -}}
+{{- else -}}
+    {{- regexFind ":[0-9]+" (join "," .Values.externalKafka.brokers) | trimPrefix ":" | default "9092" | int -}}
 {{- end -}}
 {{- end -}}
 

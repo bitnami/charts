@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 ## @section Global parameters
@@ -9,7 +9,8 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
+## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ##
 global:
   imageRegistry: ""
@@ -18,8 +19,22 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  defaultStorageClass: ""
   storageClass: ""
-
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: auto
 ## @section Common parameters
 ##
 
@@ -44,7 +59,6 @@ clusterDomain: cluster.local
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
-
 ## Enable diagnostic mode in the deployment
 ##
 diagnosticMode:
@@ -59,7 +73,6 @@ diagnosticMode:
   ##
   args:
     - infinity
-
 ## @section HashiCorp Consul parameters
 ##
 
@@ -76,10 +89,9 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/consul
-  tag: 1.17.1-debian-11-r4
+  tag: 1.20.1-debian-12-r4
   digest: ""
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -115,6 +127,9 @@ gossipKey: ""
 ## tlsEncryptionSecretName: your-already-created-secret
 ##
 tlsEncryptionSecretName: ""
+## @param automountServiceAccountToken Mount Service Account token in pod
+##
+automountServiceAccountToken: false
 ## @param hostAliases Deployment pod host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
@@ -202,6 +217,7 @@ extraEnvVarsSecret: ""
 ## @param containerPorts.rpc Port to open for RPC in Consul
 ## @param containerPorts.rpcServer Port to open for RPC Server in Consul
 ## @param containerPorts.serfLAN Port to open for Serf LAN in Consul
+## @param containerPorts.serfWAN Port to open for Serf WAN in Consul
 ##
 containerPorts:
   http: 8500
@@ -209,11 +225,10 @@ containerPorts:
   rpc: 8400
   rpcServer: 8300
   serfLAN: 8301
-
+  serfWAN: 8302
 ## @param lifecycleHooks Add lifecycle hooks to the deployment
 ##
 lifecycleHooks: {}
-
 ## @section Statefulset parameters
 ##
 
@@ -275,25 +290,35 @@ tolerations: []
 ## Pod security context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param podSecurityContext.enabled Enable security context for HashiCorp Consul pods
+## @param podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+## @param podSecurityContext.sysctls Set kernel settings using the sysctl interface
+## @param podSecurityContext.supplementalGroups Set filesystem extra groups
 ## @param podSecurityContext.fsGroup Group ID for the volumes of the pod
 ##
 podSecurityContext:
   enabled: true
+  fsGroupChangePolicy: Always
+  sysctls: []
+  supplementalGroups: []
   fsGroup: 1001
 ## Container security context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ## @param containerSecurityContext.enabled Enabled Consul containers' Security Context
+## @param containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
 ## @param containerSecurityContext.runAsUser Set Consul containers' Security Context runAsUser
+## @param containerSecurityContext.runAsGroup Set Consul containers' Security Context runAsGroup
 ## @param containerSecurityContext.allowPrivilegeEscalation Set Consul containers' Security Context allowPrivilegeEscalation
-## @param containerSecurityContext.capabilities.drop Set Argo CD containers' repo server Security Context capabilities to be dropped
-## @param containerSecurityContext.readOnlyRootFilesystem Set Argo CD containers' repo server Security Context readOnlyRootFilesystem
+## @param containerSecurityContext.capabilities.drop Set containers' repo server Security Context capabilities to be dropped
+## @param containerSecurityContext.readOnlyRootFilesystem Set containers' repo server Security Context readOnlyRootFilesystem
 ## @param containerSecurityContext.runAsNonRoot Set Consul containers' Security Context runAsNonRoot
 ## @param containerSecurityContext.privileged Set container's Security Context privileged
 ## @param containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
 ##
 containerSecurityContext:
   enabled: true
+  seLinuxOptions: {}
   runAsUser: 1001
+  runAsGroup: 1001
   runAsNonRoot: true
   privileged: false
   allowPrivilegeEscalation: false
@@ -301,29 +326,28 @@ containerSecurityContext:
     drop: ["ALL"]
   seccompProfile:
     type: "RuntimeDefault"
-  readOnlyRootFilesystem: false
+  readOnlyRootFilesystem: true
 ## Container's resource requests and limits
 ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
 ## We usually recommend not to specify default resources and to leave this as a conscious
 ## choice for the user. This also increases chances charts run on environments with little
 ## resources, such as Minikube. If you do want to specify resources, uncomment the following
 ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-## @param resources.limits The resources limits for HashiCorp Consul containers
-## @param resources.requests The requested resources for HashiCorp Consul containers
+## @param resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
+## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
 ##
-resources:
-  ## Example:
-  ## limits:
-  ##    cpu: 100m
-  ##    memory: 128Mi
-  ##
-  limits: {}
-  ## Examples:
-  ## requests:
-  ##    cpu: 100m
-  ##    memory: 128Mi
-  ##
-  requests: {}
+resourcesPreset: "nano"
+## @param resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+## Example:
+## resources:
+##   requests:
+##     cpu: 2
+##     memory: 512Mi
+##   limits:
+##     cpu: 3
+##     memory: 1024Mi
+##
+resources: {}
 ## Configure extra options for HashiCorp Consul containers' liveness and readiness probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ## @param livenessProbe.enabled Enable livenessProbe
@@ -397,14 +421,31 @@ sidecars: []
 pdb:
   ## @param pdb.create Enable/disable a Pod Disruption Budget creation
   ##
-  create: false
+  create: true
   ## @param pdb.minAvailable Minimum number of pods that must still be available after the eviction
   ##
-  minAvailable: 1
+  minAvailable: ""
   ## @param pdb.maxUnavailable Max number of pods that can be unavailable after the eviction
   ##
   maxUnavailable: ""
-
+## Service Account
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+##
+serviceAccount:
+  ## @param serviceAccount.create Enable creation of ServiceAccount for HashiCorp Consul pod
+  ##
+  create: true
+  ## @param serviceAccount.name The name of the ServiceAccount to use.
+  ## If not set and create is true, a name is generated using the common.names.fullname template
+  ##
+  name: ""
+  ## @param serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
+  ## Can be set to false if pods using this serviceAccount do not need to use K8s API
+  ##
+  automountServiceAccountToken: false
+  ## @param serviceAccount.annotations Additional custom annotations for the ServiceAccount
+  ##
+  annotations: {}
 ## @section Exposure parameters
 ##
 
@@ -474,6 +515,61 @@ service:
     ## @param service.headless.annotations Annotations for the headless service.
     ##
     annotations: {}
+## Network Policies
+## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+##
+networkPolicy:
+  ## @param networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+  ##
+  enabled: true
+  ## @param networkPolicy.allowExternal Don't require server label for connections
+  ## The Policy model to apply. When set to false, only pods with the correct
+  ## server label will have network access to the ports server is listening
+  ## on. When true, server will accept connections from any source
+  ## (with the correct destination port).
+  ##
+  allowExternal: true
+  ## @param networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+  ##
+  allowExternalEgress: true
+  ## @param networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+  ## e.g:
+  ## extraIngress:
+  ##   - ports:
+  ##       - port: 1234
+  ##     from:
+  ##       - podSelector:
+  ##           - matchLabels:
+  ##               - role: frontend
+  ##       - podSelector:
+  ##           - matchExpressions:
+  ##               - key: role
+  ##                 operator: In
+  ##                 values:
+  ##                   - frontend
+  extraIngress: []
+  ## @param networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy (ignored if allowExternalEgress=true)
+  ## e.g:
+  ## extraEgress:
+  ##   - ports:
+  ##       - port: 1234
+  ##     to:
+  ##       - podSelector:
+  ##           - matchLabels:
+  ##               - role: frontend
+  ##       - podSelector:
+  ##           - matchExpressions:
+  ##               - key: role
+  ##                 operator: In
+  ##                 values:
+  ##                   - frontend
+  ##
+  extraEgress: []
+  ## @param networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+  ## @param networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+  ##
+  ingressNSMatchLabels: {}
+  ingressNSPodMatchLabels: {}
 ## Configure the ingress resource that allows you to access the Consul UI
 ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
 ##
@@ -580,7 +676,6 @@ ingress:
   ##             name: http
   ##
   extraRules: []
-
 ## @section Persistence parameters
 ##
 
@@ -609,7 +704,6 @@ persistence:
   ## @param persistence.size PVC Storage Request for HashiCorp Consul data volume
   ##
   size: 8Gi
-
 ## @section Volume Permissions parameters
 ##
 
@@ -632,7 +726,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r93
+    tag: 12-debian-12-r33
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -645,23 +739,21 @@ volumePermissions:
     pullSecrets: []
   ## Init container' resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param volumePermissions.resources.limits The resources limits for the container
-  ## @param volumePermissions.resources.requests The requested resources for the container
+  ## @param volumePermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    ## Example:
-    ## limits:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    ##
-    limits: {}
-    ## Examples:
-    ## requests:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    ##
-    requests: {}
-
+  resourcesPreset: "nano"
+  ## @param volumePermissions.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
 ## @section Metrics parameters
 ##
 
@@ -683,7 +775,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/consul-exporter
-    tag: 0.11.0-debian-11-r0
+    tag: 0.13.0-debian-12-r3
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -696,14 +788,30 @@ metrics:
     pullSecrets: []
   ## Container security context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param metrics.containerSecurityContext.enabled HashiCorp Consul Prometheus Exporter securityContext
-  ## @param metrics.containerSecurityContext.runAsUser User ID for the HashiCorp Consul Prometheus Exporter
-  ## @param metrics.containerSecurityContext.runAsNonRoot Force the container to be run as non root
+  ## @param metrics.containerSecurityContext.enabled Enabled Consul containers' Security Context
+  ## @param metrics.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param metrics.containerSecurityContext.runAsUser Set Consul containers' Security Context runAsUser
+  ## @param metrics.containerSecurityContext.runAsGroup Set Consul containers' Security Context runAsGroup
+  ## @param metrics.containerSecurityContext.allowPrivilegeEscalation Set Consul containers' Security Context allowPrivilegeEscalation
+  ## @param metrics.containerSecurityContext.capabilities.drop Set containers' repo server Security Context capabilities to be dropped
+  ## @param metrics.containerSecurityContext.readOnlyRootFilesystem Set containers' repo server Security Context readOnlyRootFilesystem
+  ## @param metrics.containerSecurityContext.runAsNonRoot Set Consul containers' Security Context runAsNonRoot
+  ## @param metrics.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param metrics.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
+    privileged: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
+    readOnlyRootFilesystem: true
   ## Consul Prometheus exporter service type
   ##
   service:
@@ -729,22 +837,21 @@ metrics:
     prometheus.io/port: "9107"
   ## HashiCorp Consul Prometheus exporter resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param metrics.resources.limits The resources limits for the container
-  ## @param metrics.resources.requests The requested resources for the container
+  ## @param metrics.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if metrics.resources is set (metrics.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    ## Example:
-    ## limits:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    ##
-    limits: {}
-    ## Examples:
-    ## requests:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    ##
-    requests: {}
+  resourcesPreset: "nano"
+  ## @param metrics.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Prometheus Service Monitor
   ## ref: https://github.com/coreos/prometheus-operator
   ##

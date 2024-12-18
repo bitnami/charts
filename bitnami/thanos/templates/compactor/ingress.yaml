@@ -1,14 +1,14 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if .Values.compactor.ingress.enabled -}}
+{{- if and .Values.compactor.enabled .Values.compactor.ingress.enabled -}}
 apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
 kind: Ingress
 metadata:
-  name: {{ include "common.names.fullname" . }}-compactor
-  namespace: {{ .Release.Namespace | quote }}
+  name: {{ include "thanos.compactor.fullname" . }}
+  namespace: {{ include "common.names.namespace" . }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: compactor
   {{- if or .Values.compactor.ingress.annotations .Values.commonAnnotations }}

@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 name: '[CI/CD] CD Pipeline'
@@ -21,7 +21,7 @@ jobs:
       chart: ${{ steps.get-chart.outputs.chart }}
       result: ${{ steps.get-chart.outputs.result }}
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           path: charts
           fetch-depth: 2 # to be able to obtain files changed in the latest commit
@@ -34,7 +34,7 @@ jobs:
           charts_dirs_changed="$(echo "$files_changed" | xargs dirname | grep -o "bitnami/[^/]*" | sort | uniq || true)"
           # Using grep -c as a better alternative to wc -l when dealing with empty strings."
           num_charts_changed="$(echo "$charts_dirs_changed" | grep -c "bitnami" || true)"
-          num_version_bumps="$(echo "$files_changed" | grep Chart.yaml | xargs git show | grep -c "+version" || true)"
+          num_version_bumps="$(echo "$files_changed" | grep  "bitnami/[^/]*/Chart.yaml" | xargs git show | grep -c "+version" || true)"
 
           if [[ "$num_charts_changed" -ne "$num_version_bumps" ]]; then
             # Changes done in charts but version not bumped -> ERROR
@@ -67,11 +67,11 @@ jobs:
     permissions:
       contents: read
     env:
-      CSP_API_URL: https://console.cloud.vmware.com
+      CSP_API_URL: https://console.tanzu.broadcom.com
       CSP_API_TOKEN: ${{ secrets.CSP_API_TOKEN }}
       VIB_PUBLIC_URL: https://cp.bromelia.vmware.com
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         name: Checkout Repository
         with:
           path: charts
@@ -82,35 +82,42 @@ jobs:
           config: charts/.vib/
         env:
           VIB_ENV_S3_URL: s3://${{ secrets.AWS_S3_BUCKET }}/bitnami
-          VIB_ENV_S3_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          VIB_ENV_S3_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  update-index:
+          VIB_ENV_S3_ACCESS_KEY_ID: ${{ secrets.AWS_PUBLISH_ACCESS_KEY_ID }}
+          VIB_ENV_S3_SECRET_ACCESS_KEY: ${{ secrets.AWS_PUBLISH_SECRET_ACCESS_KEY }}
+          VIB_ENV_S3_ROLE_ARN: ${{ secrets.AWS_PUBLISH_ROLE_ARN }}
+  update-deprecated-index:
     runs-on: ubuntu-latest
     needs:
       - vib-publish
-    name: Update charts index
+    name: Update branch deprecated-index
     steps:
-      - uses: actions/download-artifact@9bc31d5ccc31df68ecc42ccf4149144866c47d8a
+      - uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16
         with:
           path: ~/artifacts
       # If we perform a checkout of the main branch, we will find conflicts with the submodules
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
-          ref: 'index'
-          path: index
+          ref: 'deprecated-index'
+          path: 'deprecated-index'
           # The token is persisted in the local git config and enables scripts to run authenticated git commands.
           token: ${{ secrets.BITNAMI_BOT_TOKEN }}
       - name: Install helm
         run: |
           HELM_TARBALL="helm-v3.8.1-linux-amd64.tar.gz"
           curl -SsLfO "https://get.helm.sh/${HELM_TARBALL}" && sudo tar xf "$HELM_TARBALL" --strip-components 1 -C /usr/local/bin
-      - id: update-index
-        name: Fetch chart and update index
-        env: 
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          # Install file plugin
+          helm plugin add https://github.com/zoobab/helm_file_repo
+      - id: update-deprecated-index
+        name: Fetch chart and update depreacted-index
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_PUBLISH_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_PUBLISH_SECRET_ACCESS_KEY }}
+          AWS_ASSUME_ROLE_ARN: ${{ secrets.AWS_PUBLISH_ROLE_ARN }}
+          AWS_MAX_ATTEMPTS: 3
           AWS_DEFAULT_REGION: us-east-1
         run: |
+          # Configure AWS account
+          export $(printf "AWS_ACCESS_KEY_ID=%s AWS_SECRET_ACCESS_KEY=%s AWS_SESSION_TOKEN=%s" $(aws sts assume-role --role-arn ${AWS_ASSUME_ROLE_ARN} --role-session-name GitHubCharts --query "Credentials.[AccessKeyId,SecretAccessKey,SessionToken]" --output text))
           # Extract chart release metadata from the publish report file
           vib_publish_report_file=$(find ~/artifacts -name "report.json" -print -quit)
           chart_name=$(jq -re '.actions|map(select(.action_id == "helm-publish"))[0] | .application.name' $vib_publish_report_file)
@@ -119,7 +126,7 @@ jobs:
           mkdir download
           aws s3 cp s3://${{ secrets.AWS_S3_BUCKET }}/bitnami/${chart_name}-${chart_version}.tgz download/
 
-          cd index
+          cd deprecated-index
           git config user.name "Bitnami Containers"
           git config user.email "bitnami-bot@vmware.com"
 
@@ -128,59 +135,33 @@ jobs:
           is_index_updated=0
           while [[ $attempts -lt $max_attempts && $is_index_updated -eq 0 ]]; do
             attempts=$((attempts + 1))
-            git fetch origin index
-            git reset --hard origin/index
+
+            # Pull changes from remote
+            git fetch origin deprecated-index
+            current_commit_id=$(git rev-parse origin/deprecated-index)
+            git reset --hard $(git commit-tree origin/deprecated-index^{tree} -m "Update index.yaml")
 
             # Rebuild index
             helm repo index --url https://charts.bitnami.com/bitnami --merge bitnami/index.yaml ../download
+            # Compare size of files
+            if [[ $(stat -c%s bitnami/index.yaml) -gt $(stat -c%s ../download/index.yaml) ]]; then
+              echo "New index.yaml file is shorter than the current one"
+              exit 1
+            fi
+            # Adding tmp file as a helm repo
+            if ! helm repo add cache file://../download/ ; then
+              echo "New index.yaml file can't be indexed"
+              exit 1
+            fi
+
             cp ../download/index.yaml bitnami/index.yaml
+
             # Push changes
-            git add bitnami/index.yaml && git commit -m "${chart_name}-${chart_version}: Update index.yaml" -s
-            git push && is_index_updated=1 || echo "Failed to push during attempt $attempts"
+            git add bitnami/index.yaml && git commit --signoff --amend --no-edit
+            git push origin deprecated-index --force-with-lease=deprecated-index:${current_commit_id} && is_index_updated=1 || echo "Failed to push during attempt $attempts"
           done
 
           if [[ $is_index_updated -ne 1 ]]; then
             echo "Could not update the index after $max_attempts attempts"
             exit 1
           fi
-  # If the CD Pipeline does not succeed we should notify the interested agents
-  slack-notif:
-    runs-on: ubuntu-latest
-    needs:
-      - vib-publish
-      - update-index
-    if: always()
-    name: Notify unsuccessful CD run
-    steps:
-      - name: Notify in Slack channel
-        if: ${{ needs.update-index.result != 'success' }}
-        uses: slackapi/slack-github-action@e28cf165c92ffef168d23c5c9000cffc8a25e117
-        with:
-          channel-id: ${{ secrets.CD_SLACK_CHANNEL_ID }}
-          payload: |
-            {
-              "attachments": [
-                {
-                  "color": "#CC0000",
-                  "fallback": "Unsuccessful bitnami/charts CD pipeline",
-                  "blocks": [
-                    {
-                      "type": "section",
-                      "text": {
-                        "type": "mrkdwn",
-                        "text": "*Unsuccessful `bitnami/charts` CD pipeline*"
-                      }
-                    },
-                    {
-                      "type": "section",
-                      "text": {
-                        "type": "mrkdwn",
-                        "text": "The CD pipeline for <${{ github.event.head_commit.url }}|bitnami/charts@${{ github.event.head_commit.id }}> did not succeed. Check the related <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|action run> for more information."
-                      }
-                    }
-                  ]
-                }
-              ]
-            }
-        env:
-          SLACK_BOT_TOKEN: ${{ secrets.CD_SLACK_BOT_TOKEN }}

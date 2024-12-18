@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -7,8 +7,8 @@ SPDX-License-Identifier: APACHE-2.0
 apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
 kind: PodDisruptionBudget
 metadata:
-  name: {{ include "common.names.fullname" . }}-receive
-  namespace: {{ .Release.Namespace | quote }}
+  name: {{ include "thanos.receive.fullname" . }}
+  namespace: {{ include "common.names.namespace" . }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: receive
   {{- if .Values.commonAnnotations }}
@@ -18,8 +18,8 @@ spec:
   {{- if .Values.receive.pdb.minAvailable }}
   minAvailable: {{ .Values.receive.pdb.minAvailable }}
   {{- end }}
-  {{- if .Values.receive.pdb.maxUnavailable }}
-  maxUnavailable: {{ .Values.receive.pdb.maxUnavailable }}
+  {{- if or .Values.receive.pdb.maxUnavailable ( not .Values.receive.pdb.minAvailable ) }}
+  maxUnavailable: {{ .Values.receive.pdb.maxUnavailable | default 1 }}
   {{- end }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.receive.podLabels .Values.commonLabels ) "context" . ) }}
   selector:

@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -37,6 +37,7 @@ spec:
       spec:
         {{- include "kuberay.imagePullSecrets" . | nindent 8 }}
         serviceAccountName: {{ template "kuberay.cluster.serviceAccountName" . }}
+        automountServiceAccountToken: {{ .Values.cluster.head.automountServiceAccountToken }}
         {{- if .Values.cluster.head.hostAliases }}
         hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.cluster.head.hostAliases "context" $) | nindent 10 }}
         {{- end }}
@@ -64,7 +65,7 @@ spec:
         topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.cluster.head.topologySpreadConstraints "context" .) | nindent 10 }}
         {{- end }}
         {{- if .Values.cluster.head.podSecurityContext.enabled }}
-        securityContext: {{- omit .Values.cluster.head.podSecurityContext "enabled" | toYaml | nindent 10 }}
+        securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.cluster.head.podSecurityContext "context" $) | nindent 10 }}
         {{- end }}
         {{- if .Values.cluster.head.terminationGracePeriodSeconds }}
         terminationGracePeriodSeconds: {{ .Values.cluster.head.terminationGracePeriodSeconds }}
@@ -77,7 +78,7 @@ spec:
             image: {{ template "kuberay.ray.image" . }}
             imagePullPolicy: {{ .Values.rayImage.pullPolicy }}
             {{- if .Values.cluster.head.containerSecurityContext.enabled }}
-            securityContext: {{- omit .Values.cluster.head.containerSecurityContext "enabled" | toYaml | nindent 14 }}
+            securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.cluster.head.containerSecurityContext "context" $) | nindent 14 }}
             {{- end }}
             {{- if .Values.diagnosticMode.enabled }}
             command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 14 }}
@@ -103,6 +104,8 @@ spec:
               {{- end }}
             {{- if .Values.cluster.head.resources }}
             resources: {{- toYaml .Values.cluster.head.resources | nindent 14 }}
+            {{- else if ne .Values.cluster.head.resourcesPreset "none" }}
+            resources: {{- include "common.resources.preset" (dict "type" .Values.cluster.head.resourcesPreset) | nindent 14 }}
             {{- end }}
             {{- if .Values.cluster.head.lifecycleHooks }}
             lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.cluster.head.lifecycleHooks "context" $) | nindent 14 }}
@@ -192,7 +195,7 @@ spec:
           {{- end }}
           {{- $podSecurityContext := coalesce .podSecurityContext $.Values.cluster.worker.common.podSecurityContext }}
           {{- if $podSecurityContext.enabled }}
-          securityContext: {{- omit $podSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" $podSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- $terminationGracePeriodSeconds := coalesce .terminationGracePeriodSeconds $.Values.cluster.worker.common.terminationGracePeriodSeconds }}
           {{- if $terminationGracePeriodSeconds }}
@@ -208,7 +211,7 @@ spec:
               imagePullPolicy: {{ $.Values.rayImage.pullPolicy }}
               {{- $containerSecurityContext := coalesce .containerSecurityContext $.Values.cluster.worker.common.containerSecurityContext }}
               {{- if $containerSecurityContext.enabled }}
-              securityContext: {{- omit $containerSecurityContext "enabled" | toYaml | nindent 16 }}
+              securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" $containerSecurityContext "context" $) | nindent 16 }}
               {{- end }}
               {{- $command := coalesce .command $.Values.cluster.worker.common.command }}
               {{- if $.Values.diagnosticMode.enabled }}

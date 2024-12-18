@@ -8,13 +8,12 @@ rts:
   service:
     ports:
       http: 8085
-serviceAccount:
-  automountServiceAccountToken: true
 client:
   service:
     type: LoadBalancer
     ports:
       http: 80
+  automountServiceAccountToken: true
   containerSecurityContext:
     runAsUser: 1002
   podSecurityContext:

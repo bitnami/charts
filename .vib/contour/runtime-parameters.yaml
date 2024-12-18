@@ -3,7 +3,7 @@ contour:
   manageCRDs: true
   serviceAccount:
     create: true
-    automountServiceAccountToken: true
+  automountServiceAccountToken: true
   podSecurityContext:
     enabled: true
     fsGroup: 1002
@@ -16,6 +16,13 @@ contour:
     ports:
       xds: 8002
     type: ClusterIP
+  extraVolumes:
+    - name: empty-dir
+      emptyDir: {}
+  extraVolumeMounts:
+    - name: empty-dir
+      mountPath: /tmp
+      subPath: tmp-dir
 envoy:
   enabled: true
   containerPorts:
@@ -51,6 +58,15 @@ extraDeploy:
         containers:
         - image: bitnami/apache
           name: apache
+          securityContext:
+            runAsNonRoot: true
+            privileged: false
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+            seccompProfile:
+              type: "RuntimeDefault"
+
 - apiVersion: v1
   kind: Service
   metadata:

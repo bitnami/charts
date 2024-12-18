@@ -1,5 +1,5 @@
 /*
- * Copyright VMware, Inc.
+ * Copyright Broadcom, Inc. All Rights Reserved.
  * SPDX-License-Identifier: APACHE-2.0
  */
 
@@ -20,7 +20,7 @@ for (const command of ['click']) {
 Cypress.Commands.add(
   'login',
   (username = Cypress.env('email'), password = Cypress.env('password')) => {
-    cy.visit('/');
+    cy.visit('/', {timeout: 120000});
     cy.get('#login').type(username);
     cy.get('#password').type(password);
     cy.contains('button', 'Log in').click();

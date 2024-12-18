@@ -25,4 +25,4 @@ sidecars:
        containerPort: 9200
 serviceAccount:
   create: true
-  automountServiceAccountToken: true
+automountServiceAccountToken: true

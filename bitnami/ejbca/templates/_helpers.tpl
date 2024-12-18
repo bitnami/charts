@@ -1,5 +1,5 @@
 {{/*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -23,6 +23,17 @@ Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "ejbca.imagePullSecrets" -}}
 {{ include "common.images.pullSecrets" (dict "images" (list .Values.image) "global" .Values.global) }}
+{{- end -}}
+
+{{/*
+ Create the name of the service account to use
+ */}}
+{{- define "ejbca.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create -}}
+    {{ default (include "common.names.fullname" .) .Values.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.serviceAccount.name }}
+{{- end -}}
 {{- end -}}
 
 {{/*

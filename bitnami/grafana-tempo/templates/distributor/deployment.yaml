@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -35,6 +35,7 @@ spec:
     spec:
       serviceAccountName: {{ template "grafana-tempo.serviceAccountName" . }}
       {{- include "grafana-tempo.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.distributor.automountServiceAccountToken }}
       {{- if .Values.distributor.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.distributor.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -62,8 +63,9 @@ spec:
       schedulerName: {{ .Values.distributor.schedulerName }}
       {{- end }}
       {{- if .Values.distributor.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.distributor.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.distributor.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
+      enableServiceLinks: {{ .Values.distributor.enableServiceLinks }}
       initContainers:
         {{- if .Values.distributor.initContainers }}
           {{- include "common.tplvalues.render" (dict "value" .Values.distributor.initContainers "context" $) | nindent 8 }}
@@ -73,7 +75,7 @@ spec:
           image: {{ template "grafana-tempo.image" . }}
           imagePullPolicy: {{ .Values.tempo.image.pullPolicy }}
           {{- if .Values.distributor.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.distributor.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.distributor.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -135,7 +137,7 @@ spec:
               protocol: TCP
             {{- end }}
             {{- if .Values.tempo.traces.otlp.http }}
-            - containerPort: 55681
+            - containerPort: 4318
               name: otlp-http
               protocol: TCP
             {{- end }}
@@ -150,15 +152,16 @@ spec:
               protocol: TCP
             {{- end }}
           {{- if .Values.distributor.resources }}
-          resources: {{- toYaml .Values.distributor.resources | nindent 12 }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.distributor.resources "context" $) | nindent 12 }}
+          {{- else if ne .Values.distributor.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.distributor.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.distributor.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.distributor.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.distributor.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.distributor.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /ready
+            tcpSocket:
               port: {{ .Values.tempo.containerPorts.web }}
           {{- end }}
           {{- if .Values.distributor.customReadinessProbe }}
@@ -181,6 +184,12 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.distributor.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+            # NOTE: The upstream chart does not create a PVC for this, we assume that it is just for tmp data
+            - name: empty-dir
+              mountPath: /bitnami/grafana-tempo/data
+              subPath: app-data-dir
             - name: tempo-config
               mountPath: /bitnami/grafana-tempo/conf/tempo.yaml
               subPath: tempo.yaml
@@ -194,6 +203,8 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.distributor.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: tempo-config
           configMap:
             name: {{ template "grafana-tempo.tempoConfigmapName" . }}

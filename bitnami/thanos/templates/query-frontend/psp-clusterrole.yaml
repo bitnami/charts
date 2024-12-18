@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -7,7 +7,7 @@ SPDX-License-Identifier: APACHE-2.0
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
 metadata:
-  name: {{ include "common.names.fullname" . }}-query-frontend
+  name: {{ include "thanos.query-frontend.fullname" . }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: query-frontend
   {{- if .Values.commonAnnotations }}
@@ -18,7 +18,7 @@ rules:
     resources: ['podsecuritypolicies']
     verbs:     ['use']
     resourceNames:
-      - {{ include "common.names.fullname" . }}-query-frontend
+      - {{ include "thanos.query-frontend.fullname" . }}
   {{- if .Values.queryFrontend.rbac.rules }}
   {{- include "common.tplvalues.render" ( dict "value" .Values.queryFrontend.rbac.rules "context" $ ) | nindent 2 }}
   {{- end }}

@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -32,6 +32,7 @@ spec:
     spec:
       serviceAccountName: {{ template "appsmith.serviceAccountName" . }}
       {{- include "appsmith.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.backend.automountServiceAccountToken }}
       {{- if .Values.backend.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.backend.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -59,7 +60,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.backend.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.backend.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.backend.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.backend.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.backend.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.backend.terminationGracePeriodSeconds }}
@@ -77,24 +78,53 @@ spec:
               find {{ .Values.backend.persistence.mountPath }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs chown -R {{ .Values.backend.containerSecurityContext.runAsUser }}:{{ .Values.backend.podSecurityContext.fsGroup }}
           securityContext:
             runAsUser: 0
+          {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
+          {{- end }}
           volumeMounts:
             - name: data
               mountPath: {{ .Values.backend.persistence.mountPath }}
               subPath: {{ .Values.backend.persistence.subPath }}
         {{- end }}
+        - name: preserve-logs-symlinks
+          image: {{ include "appsmith.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.backend.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.backend.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.backend.resources }}
+          resources: {{- toYaml .Values.backend.resources | nindent 12 }}
+          {{- else if ne .Values.backend.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.backend.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          command:
+            - /bin/bash
+          args:
+            - -ec
+            - |
+              #!/bin/bash
+              . /opt/bitnami/scripts/libfs.sh
+              # We copy the logs folder because it has symlinks to stdout and stderr
+              if ! is_dir_empty /opt/bitnami/nginx/logs; then
+                cp -r /opt/bitnami/nginx/logs /emptydir/nginx-logs-dir
+              fi
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /emptydir
         {{- if not .Values.diagnosticMode.enabled }}
         {{- include "appsmith.waitForDBInitContainer" . | nindent 8 }}
         {{- end }}
         {{- if .Values.backend.initContainers }}
-          {{- include "common.tplvalues.render" (dict "value" .Values.backend.initContainers "context" $) | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.backend.initContainers "context" $) | nindent 8 }}
         {{- end }}
       containers:
         - name: appsmith
           image: {{ template "appsmith.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           {{- if .Values.backend.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.backend.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.backend.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -174,6 +204,8 @@ spec:
             {{- end }}
           {{- if .Values.backend.resources }}
           resources: {{- toYaml .Values.backend.resources | nindent 12 }}
+          {{- else if ne .Values.backend.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.backend.resourcesPreset) | nindent 12 }}
           {{- end }}
           ports:
             - name: http
@@ -183,8 +215,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.backend.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.backend.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.backend.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /api/v1/users/me
+            tcpSocket:
               port: http
           {{- end }}
           {{- if .Values.backend.customReadinessProbe }}
@@ -192,7 +223,7 @@ spec:
           {{- else if .Values.backend.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.backend.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
-              path: /api/v1/users/me
+              path: /api/v1/health
               port: http
           {{- end }}
           {{- if .Values.backend.customStartupProbe }}
@@ -200,7 +231,7 @@ spec:
           {{- else if .Values.backend.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.backend.startupProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
-              path: /api/v1/users/me
+              path: /api/v1/health
               port: http
           {{- end }}
           {{- end }}
@@ -208,18 +239,123 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.backend.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /opt/bitnami/appsmith/conf
+              subPath: app-conf-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/appsmith/logs
+              subPath: app-logs-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/appsmith/tmp
+              subPath: app-tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/nginx/conf
+              subPath: nginx-conf-dir
+            - name: empty-dir
+              mountPath: /certs
+              subPath: nginx-certs-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/nginx/tmp
+              subPath: nginx-tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/nginx/logs
+              subPath: nginx-logs-dir
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: data
               mountPath: {{ .Values.backend.persistence.mountPath }}
               {{- if .Values.backend.persistence.subPath }}
               subPath: {{ .Values.backend.persistence.subPath }}
               {{- end }}
-          {{- if .Values.backend.extraVolumeMounts }}
-          {{- include "common.tplvalues.render" (dict "value" .Values.backend.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- if .Values.backend.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.backend.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
+        - name: rts-redirect
+          image: {{ template "appsmith.redirect.image" . }}
+          imagePullPolicy: {{ .Values.backend.redirectAmbassador.image.pullPolicy }}
+          {{- if .Values.backend.redirectAmbassador.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.backend.redirectAmbassador.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.backend.redirectAmbassador.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.backend.redirectAmbassador.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.backend.redirectAmbassador.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.backend.redirectAmbassador.args "context" $) | nindent 12 }}
+          {{- end }}
+          env:
+            {{- if .Values.backend.redirectAmbassador.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.backend.redirectAmbassador.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- if .Values.backend.redirectAmbassador.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.backend.redirectAmbassador.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.backend.redirectAmbassador.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.backend.redirectAmbassador.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- if .Values.backend.redirectAmbassador.resources }}
+          resources: {{- toYaml .Values.backend.redirectAmbassador.resources | nindent 12 }}
+          {{- else if ne .Values.backend.redirectAmbassador.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.backend.redirectAmbassador.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          ports:
+            # This port needs to be hardcoded because of Appsmith code
+            # https://github.com/appsmithorg/appsmith/blob/021b4177eac01a445cacf8bfb4688de449366701/app/server/appsmith-server/src/main/java/com/appsmith/server/configurations/CommonConfig.java#L136
+            - name: http-redirect
+              containerPort: 8080
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.backend.redirectAmbassador.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.backend.redirectAmbassador.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.backend.redirectAmbassador.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.backend.redirectAmbassador.livenessProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: http-redirect
+          {{- end }}
+          {{- if .Values.backend.redirectAmbassador.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.backend.redirectAmbassador.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.backend.redirectAmbassador.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.backend.redirectAmbassador.readinessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /rts-api/v1/health-check
+              port: http-redirect
+          {{- end }}
+          {{- if .Values.backend.redirectAmbassador.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.backend.redirectAmbassador.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.backend.redirectAmbassador.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.backend.redirectAmbassador.startupProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /rts-api/v1/health-check
+              port: http-redirect
+          {{- end }}
+          {{- end }}
+          {{- if .Values.backend.redirectAmbassador.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.backend.redirectAmbassador.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: haproxy-conf
+              mountPath: /bitnami/haproxy/conf
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            {{- if .Values.backend.redirectAmbassador.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.backend.redirectAmbassador.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
         {{- if .Values.backend.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.backend.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
+        - name: haproxy-conf
+          configMap:
+            name: {{ include "appsmith.redirect.fullname" . }}
         - name: data
         {{- if .Values.backend.persistence.enabled }}
           persistentVolumeClaim:

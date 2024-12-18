@@ -1,0 +1,108 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+http:
+  http://127.0.0.1:{{ .Vars.dremio.containerPorts.web }}:
+    status: 200
+    body:
+      - /dremio/
+  http://127.0.0.1:{{ .Vars.dremio.containerPorts.web }}/apiv2/login:
+    status: 200
+    method: POST
+    request-headers:
+      - "Content-Type: application/json"
+    request-body: '{"userName": "{{ .Vars.dremio.auth.username }}", "password": "{{ .Vars.dremio.auth.password }}"}'
+    body:
+      - /{{ .Vars.dremio.auth.username }}/
+      - /{{ .Vars.dremio.auth.email }}/
+      - /{{ .Vars.dremio.auth.firstName }}/
+      - /{{ .Vars.dremio.auth.lastName }}/
+  http://dremio:{{ .Vars.service.ports.web }}:
+    status: 200
+    body:
+      - /dremio/
+  http://dremio:{{ .Vars.service.ports.web }}/apiv2/login:
+    status: 200
+    method: POST
+    request-headers:
+      - "Content-Type: application/json"
+    request-body: '{"userName": "{{ .Vars.dremio.auth.username }}", "password": "{{ .Vars.dremio.auth.password }}"}'
+    body:
+      - /{{ .Vars.dremio.auth.username }}/
+      - /{{ .Vars.dremio.auth.email }}/
+      - /{{ .Vars.dremio.auth.firstName }}/
+      - /{{ .Vars.dremio.auth.lastName }}/
+  {{- if .Vars.metrics.enabled }}
+  http://127.0.0.1:{{ .Vars.metrics.containerPorts.metrics }}/metrics:
+    status: 200
+    timeout: 30000
+    body:
+      - /metrics_dremio/
+  {{- /* Not testing the body output because it is causing a CancelTimeoutError from time to time (probably because of the resource preset we are using) */}}
+  http://dremio-metrics:{{ .Vars.metrics.service.ports.metrics }}/metrics:
+    status: 200
+    timeout: 30000
+  {{- end }}
+addr:
+  tcp://dremio-master-coordinator-0.dremio-headless:{{ .Vars.dremio.containerPorts.liveness }}:
+    reachable: true
+    timeout: 10000
+  tcp://127.0.0.1:{{ .Vars.dremio.containerPorts.conduit }}:
+    reachable: true
+    timeout: 10000
+  {{- if .Vars.metrics.enabled }}
+  tcp://127.0.0.1:{{ .Vars.dremio.containerPorts.jmx }}:
+    reachable: true
+    timeout: 10000
+  {{- end }}
+  tcp://dremio-coordinator-0.dremio-headless:{{ .Vars.dremio.containerPorts.client }}:
+    reachable: true
+    timeout: 10000
+  tcp://dremio-coordinator-0.dremio-headless:{{ .Vars.dremio.containerPorts.fabric }}:
+    reachable: true
+    timeout: 10000
+  tcp://dremio:{{ .Vars.service.ports.client }}:
+    reachable: true
+    timeout: 10000
+  tcp://dremio:{{ .Vars.service.ports.flight }}:
+    reachable: true
+    timeout: 10000
+file:
+  {{ .Vars.masterCoordinator.persistence.mountPath }}:
+    exists: true
+    filetype: directory
+    mode: '2775'
+    owner: root
+  /opt/bitnami/dremio/conf/dremio.conf:
+    exists: true
+    contents:
+      - /services.coordinator.web.tokens.cache.size.*{{ .Vars.masterCoordinator.dremioConf.configOverrides.services.coordinator.web.tokens.cache.size }}/
+      - /services.conduit.ssl.trustStorePassword.*{{ .Vars.masterCoordinator.dremioConf.secretConfigOverrides.services.conduit.ssl.trustStorePassword }}/
+      - /services.fabric.memory.reservation.*{{ .Vars.dremio.dremioConf.configOverrides.services.fabric.memory.reservation }}/
+      - /services.coordinator.web.ssl.trustStorePassword.*{{ .Vars.dremio.dremioConf.secretConfigOverrides.services.coordinator.web.ssl.trustStorePassword }}/
+      - /services.web-admin.port.*{{ .Vars.dremio.containerPorts.liveness }}/
+      - /services.coordinator.web.port.*{{ .Vars.dremio.containerPorts.web }}/
+      - /services.conduit.port.*{{ .Vars.dremio.containerPorts.conduit }}/
+      - /services.fabric.port.*{{ .Vars.dremio.containerPorts.fabric }}/
+      - /services.flight.port.*{{ .Vars.dremio.containerPorts.flight }}/
+  /opt/bitnami/dremio/conf/core-site.xml:
+    exists: true
+    contents:
+      - /fs.s3a.endpoint.region/
+      - /us-east-1/
+  /opt/bitnami/dremio/conf/vib.conf:
+    exists: true
+    contents:
+      - /IT WORKS/
+  /opt/bitnami/dremio/conf/vib_secret.conf:
+    exists: true
+    contents:
+      - /IT SECRETLY WORKS/
+command:
+  {{- $uid := .Vars.masterCoordinator.containerSecurityContext.runAsUser }}
+  {{- $gid := .Vars.masterCoordinator.podSecurityContext.fsGroup }}
+  check-user-info:
+    # The UID and GID should always be either the one specified as vars (always a bigger number that the default)
+    # or the one randomly defined by openshift (larger values). Otherwise, the chart is still using the default value.
+    exec: if [ $(id -u) -lt {{ $uid }} ] || [ $(id -G | awk '{print $2}') -lt {{ $gid }} ]; then exit 1; fi
+    exit-status: 0

@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -50,6 +50,7 @@ spec:
     spec:
       serviceAccountName: {{ template "elasticsearch.data.serviceAccountName" . }}
       {{- include "elasticsearch.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.data.automountServiceAccountToken }}
       {{- if .Values.data.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.data.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -77,12 +78,12 @@ spec:
       priorityClassName: {{ .Values.data.priorityClassName | quote }}
       {{- end }}
       {{- if .Values.data.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.data.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.data.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.data.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.data.terminationGracePeriodSeconds }}
       {{- end }}
-      {{- if or .Values.data.initContainers .Values.sysctlImage.enabled (and .Values.volumePermissions.enabled .Values.data.persistence.enabled) }}
+      {{- if or (or .Values.initContainers .Values.data.initContainers) .Values.security.enabled .Values.sysctlImage.enabled (and .Values.volumePermissions.enabled .Values.data.persistence.enabled) }}
       initContainers:
         {{- if .Values.sysctlImage.enabled }}
         ## Image that performs the sysctl operation to modify Kernel settings (needed sometimes to avoid boot errors)
@@ -100,6 +101,8 @@ spec:
             runAsUser: 0
           {{- if .Values.sysctlImage.resources }}
           resources: {{- toYaml .Values.sysctlImage.resources | nindent 12 }}
+          {{- else if ne .Values.sysctlImage.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.sysctlImage.resourcesPreset) | nindent 12 }}
           {{- end }}
         {{- end }}
         {{- if and .Values.volumePermissions.enabled .Values.data.persistence.enabled }}
@@ -117,11 +120,81 @@ spec:
             runAsUser: 0
           {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: data
               mountPath: /bitnami/elasticsearch/data
         {{- end }}
+        {{- if .Values.security.enabled }}
+        - name: copy-tls-certificates
+          image: {{ include "elasticsearch.copyTlsCerts.image" . }}
+          imagePullPolicy: {{ .Values.copyTlsCerts.image.pullPolicy | quote }}
+          command:
+            - /bin/sh
+            - -c
+            - |
+              ls -l /
+              ls -l /certs
+              for file in /certs/*; do
+                  if [ -f "$file" ]; then
+                      filename=$(basename "$file")
+                      dst_file="/tmp/$filename"
+                      cat "$file" > "$dst_file"
+                      echo "Copied $file to $dst_file"
+                  fi
+              done
+              echo "All files have been copied." 
+          volumeMounts:
+            - name: elasticsearch-certificates
+              mountPath: /certs
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: certs
+          {{- if .Values.data.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.data.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.copyTlsCerts.resources }}
+          resources: {{- toYaml .Values.copyTlsCerts.resources | nindent 12 }}
+          {{- else if ne .Values.copyTlsCerts.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.copyTlsCerts.resourcesPreset) | nindent 12 }}
+          {{- end }}
+        {{- end }}
+        - name: copy-default-plugins
+          image: {{ include "elasticsearch.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.data.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.data.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.data.resources }}
+          resources: {{- toYaml .Values.data.resources | nindent 12 }}
+          {{- else if ne .Values.data.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.data.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          command:
+            - /bin/bash
+          args:
+            - -ec
+            - |
+              #!/bin/bash
+
+              . /opt/bitnami/scripts/libfs.sh
+              . /opt/bitnami/scripts/elasticsearch-env.sh
+
+              if ! is_dir_empty "$DB_DEFAULT_PLUGINS_DIR"; then
+                  cp -nr "$DB_DEFAULT_PLUGINS_DIR"/* /plugins
+              fi
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /plugins
+              subPath: app-plugins-dir
         {{- if .Values.data.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.data.initContainers "context" $) | nindent 8 }}
         {{- end }}
@@ -134,7 +207,7 @@ spec:
           image: {{ include "elasticsearch.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.data.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.data.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.data.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -158,9 +231,8 @@ spec:
                   fieldPath: metadata.name
             - name: ELASTICSEARCH_IS_DEDICATED_NODE
               value: "yes"
-            {{- $roles := ternary "data" (list "data" .Values.data.extraRoles) (empty .Values.data.extraRoles) }}
             - name: ELASTICSEARCH_NODE_ROLES
-              value: {{ join "," $roles | quote }}
+              value: {{ prepend .Values.data.extraRoles "data" | join "," | quote }}
             - name: ELASTICSEARCH_TRANSPORT_PORT_NUMBER
               value: {{ .Values.containerPorts.transport | quote }}
             - name: ELASTICSEARCH_HTTP_PORT_NUMBER
@@ -250,8 +322,25 @@ spec:
           {{- end }}
           {{- if .Values.data.resources }}
           resources: {{- toYaml .Values.data.resources | nindent 12 }}
+          {{- else if ne .Values.data.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.data.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/elasticsearch/config
+              subPath: app-conf-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/elasticsearch/tmp
+              subPath: app-tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/elasticsearch/logs
+              subPath: app-logs-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/elasticsearch/plugins
+              subPath: app-plugins-dir
             - name: data
               mountPath: /bitnami/elasticsearch/data
             {{- if .Values.config }}
@@ -265,9 +354,9 @@ spec:
               subPath: my_elasticsearch.yml
             {{- end }}
             {{- if .Values.security.enabled }}
-            - name: elasticsearch-certificates
+            - name: empty-dir
               mountPath: /opt/bitnami/elasticsearch/config/certs
-              readOnly: true
+              subPath: certs
             {{- end }}
             {{- if .Values.initScripts }}
             - name: custom-init-scripts
@@ -294,6 +383,8 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         {{- if or .Values.config .Values.extraConfig }}
         - name: config
           configMap:
@@ -335,8 +426,15 @@ spec:
           persistentVolumeClaim:
             claimName: {{ .Values.data.persistence.existingClaim }}
   {{- else }}
+  {{- if .Values.data.persistentVolumeClaimRetentionPolicy.enabled }}
+  persistentVolumeClaimRetentionPolicy:
+    whenDeleted: {{ .Values.data.persistentVolumeClaimRetentionPolicy.whenDeleted }}
+    whenScaled: {{ .Values.data.persistentVolumeClaimRetentionPolicy.whenScaled }}
+  {{- end }}
   volumeClaimTemplates:
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         name: "data"
         {{- if or .Values.data.persistence.annotations .Values.commonAnnotations }}
         {{- $claimAnnotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.data.persistence.annotations .Values.commonAnnotations ) "context" . ) }}

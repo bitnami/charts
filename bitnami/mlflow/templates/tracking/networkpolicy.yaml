@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -24,6 +24,10 @@ spec:
   policyTypes:
     - Ingress
     - Egress
+  {{- if .Values.tracking.networkPolicy.allowExternalEgress }}
+  egress:
+    - {}
+  {{- else }}
   egress:
     # Allow dns resolution
     - ports:
@@ -31,20 +35,44 @@ spec:
           protocol: UDP
         - port: 53
           protocol: TCP
+        # Allow connection to these sources for downloading models
+        - port: 80
+        - port: 443
+        - port: 22
     # Allow outbound connections to other pods
     - ports:
         - port: {{ .Values.tracking.containerPorts.http }}
         - port: {{ include "mlflow.v0.tracking.port" . }}
-        - port: {{ include "mlflow.v0.database.port" . }}
-        - port: {{ include "mlflow.v0.s3.port" . }}
       to:
         - podSelector:
             matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 14 }}
               app.kubernetes.io/part-of: mlflow
               app.kubernetes.io/component: tracking
+    # Allow outbound connections to the database
+    - ports:
+        - port: {{ include "mlflow.v0.database.port" . }}
+      {{- if .Values.postgresql.enabled }}
+      to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: postgresql
+              app.kubernetes.io/instance: {{ .Release.Name }}
+      {{- end }}
+    # Allow outbound connections to the S3 backend
+    - ports:
+        - port: {{ include "mlflow.v0.s3.port" . }}
+      {{- if .Values.minio.enabled }}
+        - port: {{ .Values.minio.containerPorts.api }}
+      to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: minio
+              app.kubernetes.io/instance: {{ .Release.Name }}
+      {{- end }}
     {{- if .Values.tracking.networkPolicy.extraEgress }}
     {{- include "common.tplvalues.render" (dict "value" .Values.tracking.networkPolicy.extraEgress "context" $) | nindent 4 }}
     {{- end }}
+  {{- end }}
   ingress:
     - ports:
         - port: {{ .Values.tracking.containerPorts.http }}

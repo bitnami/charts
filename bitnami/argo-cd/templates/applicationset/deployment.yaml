@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -8,7 +8,7 @@ apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ include "argocd.applicationSet" . }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: applicationSet
   {{- if .Values.commonAnnotations }}
@@ -19,7 +19,6 @@ spec:
   {{- if .Values.applicationSet.updateStrategy }}
   strategy: {{- toYaml .Values.applicationSet.updateStrategy | nindent 4 }}
   {{- end }}
-  selector:
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.applicationSet.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
@@ -33,6 +32,7 @@ spec:
         app.kubernetes.io/component: applicationSet
     spec:
       serviceAccountName: {{ include "argocd.applicationSet.serviceAccountName" . }}
+      automountServiceAccountToken: {{ .Values.applicationSet.serviceAccount.automountServiceAccountToken }}
       {{- include "argocd.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.applicationSet.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.applicationSet.nodeSelector "context" $) | nindent 8 }}
@@ -52,7 +52,7 @@ spec:
       priorityClassName: {{ .Values.applicationSet.priorityClassName | quote }}
       {{- end }}
       {{- if .Values.applicationSet.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.applicationSet.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.applicationSet.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       containers:
         - name: applicationset-controller
@@ -75,7 +75,7 @@ spec:
             - --probe-addr
             - ":{{ .Values.applicationSet.containerPorts.probe }}"
             - --argocd-repo-server
-            - {{ include "argocd.repo-server" . }}:{{ .Values.repoServer.service.port }}
+            - {{ include "argocd.repo-server" . }}:{{ coalesce .Values.repoServer.service.port .Values.repoServer.service.ports.repoServer }}
             - --policy
             - {{ .Values.applicationSet.defaultArgs.policy | quote }}
             {{- if or (gt ( .Values.applicationSet.replicaCount | int64) 1) .Values.applicationSet.defaultArgs.enableLeaderElection }}
@@ -118,8 +118,11 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.applicationSet.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.applicationSet.livenessProbe.enabled }}
           livenessProbe:
-            tcpSocket:
-              port: probe
+            exec:
+              command:
+                - pgrep
+                - -f
+                - argocd-applicationset-controller
             initialDelaySeconds: {{ .Values.applicationSet.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.applicationSet.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.applicationSet.livenessProbe.timeoutSeconds }}
@@ -140,9 +143,11 @@ spec:
           {{- end }}
           {{- if .Values.applicationSet.resources }}
           resources: {{- toYaml .Values.applicationSet.resources | nindent 12 }}
+          {{- else if ne .Values.applicationSet.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.applicationSet.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if .Values.applicationSet.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.applicationSet.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.applicationSet.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - mountPath: /app/config/ssh
@@ -159,10 +164,12 @@ spec:
             - mountPath: /app/config/rbac
               name: rbac
             {{- end }}
-            - mountPath: /app/config/gpg/keys
-              name: gpg-keyring
-            - mountPath: /tmp
-              name: tmp
+            - name: empty-dir
+              mountPath: /app/config/gpg/keys
+              subPath: app-keys-dir
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
           {{- if .Values.applicationSet.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.applicationSet.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -185,9 +192,7 @@ spec:
           configMap:
             name: argocd-rbac-cm
         {{- end }}
-        - name: gpg-keyring
-          emptyDir: {}
-        - name: tmp
+        - name: empty-dir
           emptyDir: {}
         {{- if .Values.applicationSet.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.applicationSet.extraVolumes "context" $) | nindent 8 }}

@@ -1,8 +1,8 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 http:
-  http://spring-cloud-dataflow-skipper:{{ .Vars.skipper.service.port }}:
+  http://spring-cloud-dataflow-skipper:{{ .Vars.skipper.service.ports.http }}:
     status: 200
 file:
   /opt/bitnami/spring-cloud-dataflow/conf/application.yml:

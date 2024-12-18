@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -12,10 +12,11 @@ metadata:
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
 spec:
   podManagementPolicy: {{ .Values.podManagementPolicy }}
   replicas: {{ .Values.replicaCount }}
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
@@ -42,6 +43,7 @@ spec:
     spec:
       serviceAccountName: {{ include "solr.serviceAccountName" . }}
       {{- include "solr.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.automountServiceAccountToken }}
       {{- if .Values.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -69,10 +71,39 @@ spec:
       schedulerName: {{ .Values.schedulerName }}
       {{- end }}
       {{- if .Values.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       enableServiceLinks: {{ .Values.enableServiceLinks }}
       initContainers:
+        - name: prepare-server-dir
+          image: {{ include "solr.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.resources }}
+          resources: {{- toYaml .Values.resources | nindent 12 }}
+          {{- else if ne .Values.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          command:
+            - /bin/bash
+          args:
+            - -ec
+            - |
+              #!/bin/bash
+
+              . /opt/bitnami/scripts/liblog.sh
+
+              info "Copying server dir to empty dir"
+              # In order to not break the application functionality (such as upgrades or plugins) we need
+              # to make the base directory writable, so we need to copy it to an empty dir volume
+              cp -r --preserve=mode /opt/bitnami/solr/server /emptydir/app-server-dir
+
+              info "Copy operation completed"
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /emptydir
         {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
         - name: volume-permissions
           image: {{ include "solr.volumePermissions.image" . }}
@@ -83,12 +114,15 @@ spec:
             - -ec
             - |
               mkdir -p /bitnami/solr
+              chown -R {{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }} /bitnami/solr
               find /bitnami/solr -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs -r chown -R {{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}
           {{- if .Values.volumePermissions.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.volumePermissions.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.volumePermissions.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: data
@@ -99,7 +133,7 @@ spec:
           image: {{ include "solr.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           command:
             - /scripts/init-certs.sh
@@ -121,15 +155,21 @@ spec:
                   key: truststore-password
           {{- if .Values.tls.resources }}
           resources: {{- toYaml .Values.tls.resources | nindent 12 }}
+          {{- else if ne .Values.tls.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.tls.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: scripts
               mountPath: /scripts/init-certs.sh
               subPath: init-certs.sh
             - name: certs
-              mountPath: '/certs'
-            - name: shared-certs
-              mountPath: '/opt/bitnami/solr/certs'
+              mountPath: /certs
+            - name: empty-dir
+              mountPath: /opt/bitnami/solr/certs
+              subPath: app-certs-dir
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
         {{- end }}
         {{- if .Values.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
@@ -139,7 +179,7 @@ spec:
           image: {{ include "solr.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -243,6 +283,8 @@ spec:
               containerPort: {{ .Values.containerPorts.http }}
           {{- if .Values.resources }}
           resources: {{- toYaml .Values.resources | nindent 12 }}
+          {{- else if ne .Values.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.customLivenessProbe }}
@@ -254,7 +296,7 @@ spec:
               - /bin/bash
               - -ec
               - |
-                curl --silent --connect-timeout 15000 {{ ternary "--user ${SOLR_ADMIN_USERNAME}:${SOLR_ADMIN_PASSWORD}" "" .Values.auth.enabled }} http://localhost:${SOLR_PORT_NUMBER}/api/node/health | grep --quiet  '\"status\":\"OK\"'
+                curl --silent --connect-timeout 15000 {{ ternary "--user ${SOLR_ADMIN_USERNAME}:${SOLR_ADMIN_PASSWORD}" "" .Values.auth.enabled }} http://localhost:${SOLR_PORT_NUMBER}/solr/admin/info/system | grep --quiet  '\"status\":0'
           {{- end }}
           {{- if .Values.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
@@ -283,6 +325,18 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/solr/server
+              subPath: app-server-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/solr/logs
+              subPath: app-logs-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/solr/tmp
+              subPath: app-tmp-dir
             - name: scripts
               mountPath: /scripts/setup.sh
               subPath: setup.sh
@@ -294,8 +348,9 @@ spec:
               subPathExpr: {{ .Values.persistence.subPathExpr }}
             {{- end }}
             {{- if .Values.tls.enabled }}
-            - name: shared-certs
-              mountPath: '/opt/bitnami/solr/certs'
+            - name: empty-dir
+              mountPath: /opt/bitnami/solr/certs
+              subPath: app-certs-dir
             {{- end }}
             {{- if .Values.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
@@ -304,6 +359,8 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: scripts
           configMap:
             name: {{ printf "%s-scripts" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
@@ -320,15 +377,15 @@ spec:
         - name: certs
           secret:
             secretName: {{ include "solr.tlsSecretName" . }}
-        - name: shared-certs
-          emptyDir: {}
         {{- end }}
         {{- if .Values.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
   {{- if and .Values.persistence.enabled (not .Values.persistence.existingClaim) }}
   volumeClaimTemplates:
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         name: data
         annotations:
           {{- if .Values.persistence.annotations }}

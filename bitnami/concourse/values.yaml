@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 ## @section Global parameters
@@ -7,7 +7,8 @@
 ## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
+## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ##
 global:
   imageRegistry: ""
@@ -16,8 +17,22 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  defaultStorageClass: ""
   storageClass: ""
-
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: disabled
 ## @section Common parameters
 
 ## @param kubeVersion Override Kubernetes version
@@ -41,7 +56,6 @@ commonAnnotations: {}
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
-
 ## Enable diagnostic mode in the deployment(s)/statefulset(s)
 ##
 diagnosticMode:
@@ -56,7 +70,6 @@ diagnosticMode:
   ##
   args:
     - infinity
-
 ## @section Common Concourse Parameters
 
 ## Bitnami Concourse image
@@ -71,10 +84,9 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/concourse
-  tag: 7.11.0-debian-11-r11
+  tag: 7.12.0-debian-12-r14
   digest: ""
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -86,7 +98,6 @@ image:
   ##   - myRegistryKeySecretName
   ##
   pullSecrets: []
-
 ## For managing secrets using Helm
 ##
 secrets:
@@ -146,9 +157,7 @@ secrets:
   ## @param secrets.workerAdditionalCerts Additional certificates to add to the worker nodes
   ##
   workerAdditionalCerts: ""
-
 ## @section Concourse Web parameters
-
 web:
   ## @param web.enabled Enable Concourse web component
   ##
@@ -297,6 +306,64 @@ web:
     https: 8443
     tsa: 2222
     pprof: 2221
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param web.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param web.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param web.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param web.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
+    ##
+    kubeAPIServerPorts: [443, 6443, 8443]
+    ## @param web.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param web.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy (ignored if allowExternalEgress=true)
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param web.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param web.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
   ## Configure extra options for Concourse web containers' liveness, readiness and startup probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
   ## @param web.livenessProbe.enabled Enable livenessProbe on Concourse web containers
@@ -352,31 +419,64 @@ web:
   customStartupProbe: {}
   ## Concourse web resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param web.resources.limits The resources limits for the Concourse web containers
-  ## @param web.resources.requests The requested resources for the Concourse web containers
+  ## @param web.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if web.resources is set (web.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "nano"
+  ## @param web.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param web.podSecurityContext.enabled Enabled web pods' Security Context
+  ## @param web.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param web.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param web.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param web.podSecurityContext.fsGroup Set web pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param web.containerSecurityContext.enabled Enabled web containers' Security Context
-  ## @param web.containerSecurityContext.runAsUser Set web containers' Security Context runAsUser
+  ## @param web.containerSecurityContext.enabled web container securityContext
+  ## @param web.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param web.containerSecurityContext.runAsUser User ID for the web container
+  ## @param web.containerSecurityContext.runAsGroup Group ID for the web container
+  ## @param web.containerSecurityContext.runAsNonRoot Set web container's Security Context runAsNonRoot
+  ## @param web.containerSecurityContext.privileged Set web container's Security Context privileged
+  ## @param web.containerSecurityContext.allowPrivilegeEscalation Set web container's Security Context allowPrivilegeEscalation
+  ## @param web.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param web.containerSecurityContext.capabilities.drop List of capabilities to be dropped
   ## @param web.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    privileged: false
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
+    capabilities:
+      drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
+  ## @param web.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param web.hostAliases Concourse web pod host aliases
   ##
   hostAliases: []
@@ -478,6 +578,17 @@ web:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/disruptions/
+  ##
+  pdb:
+    create: true
+    ## @param web.pdb.create Create Pod disruption budget object for Concourse worker nodes
+    ## @param web.pdb.minAvailable Minimum number / percentage of Concourse worker pods that should remain scheduled
+    ## @param web.pdb.maxUnavailable Maximum number/percentage of Concourse worker pods that may be made unavailable
+    ##
+    minAvailable: ""
+    maxUnavailable: ""
   ## @param web.psp.create Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later
   ##
   psp:
@@ -513,11 +624,10 @@ web:
     ## @param web.serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
     ## Can be set to false if pods using this serviceAccount do not need to use K8s API
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
     ## @param web.serviceAccount.annotations Additional custom annotations for the ServiceAccount
     ##
     annotations: {}
-
 ## @section Concourse Worker parameters
 ##
 worker:
@@ -585,6 +695,64 @@ worker:
     health: 8888
     baggageclaim: 7788
     pprof: 7787
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param worker.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param worker.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param worker.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param worker.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
+    ##
+    kubeAPIServerPorts: [443, 6443, 8443]
+    ## @param worker.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param worker.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy (ignored if allowExternalEgress=true)
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param worker.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param worker.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
   ## Configure extra options for Concourse worker containers' liveness, readiness and startup probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
   ## @param worker.livenessProbe.enabled Enable livenessProbe on Concourse worker containers
@@ -640,33 +808,64 @@ worker:
   customStartupProbe: {}
   ## Concourse worker resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param worker.resources.limits The resources limits for the Concourse worker containers
-  ## @param worker.resources.requests The requested resources for the Concourse worker containers
+  ## @param worker.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if worker.resources is set (worker.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "nano"
+  ## @param worker.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param worker.podSecurityContext.enabled Enabled worker pods' Security Context
+  ## @param worker.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param worker.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param worker.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param worker.podSecurityContext.fsGroup Set worker pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param worker.containerSecurityContext.enabled Enabled worker containers' Security Context
-  ## @param worker.containerSecurityContext.privileged Set worker containers' Security Context with privileged or not
-  ## @param worker.containerSecurityContext.runAsUser Set worker containers' Security Context user
+  ## @param worker.containerSecurityContext.enabled worker container securityContext
+  ## @param worker.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param worker.containerSecurityContext.runAsUser User ID for the worker container
+  ## @param worker.containerSecurityContext.runAsGroup Group ID for the worker container
+  ## @param worker.containerSecurityContext.runAsNonRoot Set worker container's Security Context runAsNonRoot
+  ## @param worker.containerSecurityContext.privileged Set worker container's Security Context privileged
+  ## @param worker.containerSecurityContext.allowPrivilegeEscalation Set worker container's Security Context allowPrivilegeEscalation
+  ## @param worker.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param worker.containerSecurityContext.capabilities.drop List of capabilities to be dropped
   ## @param worker.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
-    privileged: true
+    seLinuxOptions: {}
     runAsUser: 0
+    runAsGroup: 0
+    runAsNonRoot: false
+    privileged: true
+    allowPrivilegeEscalation: true
+    readOnlyRootFilesystem: false
+    capabilities:
+      drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
+  ## @param worker.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param worker.hostAliases Concourse worker pod host aliases
   ##
   hostAliases: []
@@ -888,14 +1087,11 @@ worker:
     ## @param worker.serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
     ## Can be set to false if pods using this serviceAccount do not need to use K8s API
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
     ## @param worker.serviceAccount.annotations Additional custom annotations for the ServiceAccount
     ##
     annotations: {}
-
-
 ## @section Traffic exposure parameters
-
 service:
   ## Concourse web service parameters
   ##
@@ -1111,7 +1307,6 @@ ingress:
   ##             name: http
   ##
   extraRules: []
-
 ## @section Init Container Parameters
 
 ## Init containers parameters:
@@ -1131,7 +1326,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r93
+    tag: 12-debian-12-r34
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1144,23 +1339,33 @@ volumePermissions:
     pullSecrets: []
   ## Init container resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param volumePermissions.resources.limits Init container volume-permissions resource limits
-  ## @param volumePermissions.resources.requests Init container volume-permissions resource requests
+  ## @param volumePermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "nano"
+  ## @param volumePermissions.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Init container' Security Context
   ## @param volumePermissions.containerSecurityContext.enabled Enabled init container Security Context
+  ## @param volumePermissions.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param volumePermissions.containerSecurityContext.runAsUser User ID for the init container
   ## @param volumePermissions.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 0
     seccompProfile:
       type: "RuntimeDefault"
-
 ## @section Concourse database parameters
 
 ## PostgreSQL chart configuration
@@ -1182,7 +1387,24 @@ postgresql:
     database: bitnami_concourse
     existingSecret: ""
   architecture: standalone
-
+  primary:
+    ## PostgreSQL Primary resource requests and limits
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+    ## @param postgresql.primary.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if primary.resources is set (primary.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+    ##
+    resourcesPreset: "nano"
+    ## @param postgresql.primary.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## Example:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    resources: {}
 ## @section External PostgreSQL configuration
 ## All of these values are only used when postgresql.enabled is set to false
 ## @param externalDatabase.host Database host

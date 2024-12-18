@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -7,8 +7,8 @@ SPDX-License-Identifier: APACHE-2.0
 apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
-  name: {{ include "common.names.fullname" . }}-receive
-  namespace: {{ .Release.Namespace | quote }}
+  name: {{ include "thanos.receive.fullname" . }}
+  namespace: {{ include "common.names.namespace" . }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: receive
     {{- if .Values.receive.statefulsetLabels }}
@@ -21,8 +21,9 @@ spec:
   {{- if not .Values.receive.autoscaling.enabled }}
   replicas: {{ .Values.receive.replicaCount }}
   {{- end }}
+  revisionHistoryLimit: {{ .Values.receive.revisionHistoryLimit }}
   podManagementPolicy: {{ .Values.receive.podManagementPolicy }}
-  serviceName: {{ include "common.names.fullname" . }}-receive-headless
+  serviceName: {{ include "thanos.receive.fullname" . }}-headless
   {{- if .Values.receive.updateStrategy }}
   updateStrategy: {{- toYaml .Values.receive.updateStrategy | nindent 4 }}
   {{- end }}
@@ -35,17 +36,21 @@ spec:
     metadata:
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: receive
+      {{- if or .Values.receive.podAnnotations (include "thanos.receive.createConfigmap" $) (include "thanos.createObjstoreSecret" $) }}
       annotations:
-        checksum/objstore-configuration: {{ include (print $.Template.BasePath "/objstore-secret.yaml") . | sha256sum }}
+        {{- if (include "thanos.createObjstoreSecret" .) }}
+        checksum/objstore-configuration: {{ include "thanos.objstoreConfig" . | sha256sum }}
+        {{- end }}
         {{- if (include "thanos.receive.createConfigmap" .) }}
-        checksum/receive-configuration: {{ include (print $.Template.BasePath "/receive/configmap.yaml") . | sha256sum }}
+        checksum/receive-configuration: {{ include "thanos.receiveConfigMap" . | sha256sum }}
         {{- end }}
         {{- if .Values.receive.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.receive.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
+      {{- end }}
     spec:
       {{- include "thanos.imagePullSecrets" . | nindent 6 }}
-      serviceAccountName: {{ include "thanos.serviceAccountName" (dict "component" "receive" "context" $) }}
+      serviceAccountName: {{ include "thanos.receive.serviceAccountName" . }}
       automountServiceAccountToken: {{ .Values.receive.automountServiceAccountToken }}
       {{- if .Values.receive.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.receive.hostAliases "context" $) | nindent 8 }}
@@ -77,7 +82,10 @@ spec:
       schedulerName: {{ .Values.receive.schedulerName }}
       {{- end }}
       {{- if .Values.receive.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.receive.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.receive.podSecurityContext "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.receive.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.receive.terminationGracePeriodSeconds }}
       {{- end }}
       {{- if .Values.receive.topologySpreadConstraints }}
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.receive.topologySpreadConstraints "context" $) | nindent 8 }}
@@ -112,7 +120,7 @@ spec:
           image: {{ include "thanos.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.receive.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.receive.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.receive.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.receive.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.receive.command "context" $) | nindent 12 }}
@@ -124,23 +132,27 @@ spec:
             - receive
             - --log.level={{ .Values.receive.logLevel }}
             - --log.format={{ .Values.receive.logFormat }}
-            - --grpc-address=0.0.0.0:10901
-            - --http-address=0.0.0.0:10902
-            - --remote-write.address=0.0.0.0:19291
+            - --grpc-address=0.0.0.0:{{ .Values.receive.containerPorts.grpc }}
+            - --http-address=0.0.0.0:{{ .Values.receive.containerPorts.http }}
+            - --remote-write.address=0.0.0.0:{{ .Values.receive.containerPorts.remote }}
             {{- if or .Values.objstoreConfig .Values.existingObjstoreSecret }}
             - --objstore.config=$(OBJSTORE_CONFIG)
             {{- end }}
             {{- if (include "thanos.httpConfigEnabled" .) }}
             - --http.config=/conf/http/http-config.yml
             {{- end }}
+            {{- if .Values.receive.tsdbPath }}
+            - --tsdb.path={{ .Values.receive.tsdbPath }}
+            {{- else }}
             - --tsdb.path=/var/thanos/receive
+            {{- end }}
             - --label={{ .Values.receive.replicaLabel }}="$(NAME)"
             - --label=receive="true"
             - --tsdb.retention={{ .Values.receive.tsdbRetention }}
             {{- if not .Values.receive.service.additionalHeadless }}
-            - --receive.local-endpoint=127.0.0.1:10901
+            - --receive.local-endpoint=127.0.0.1:{{ .Values.receive.containerPorts.grpc }}
             {{- else }}
-            - --receive.local-endpoint=$(NAME).{{ include "common.names.fullname" . }}-receive-headless.$(NAMESPACE).svc.{{ .Values.clusterDomain }}:10901
+            - --receive.local-endpoint=$(NAME).{{ include "thanos.receive.fullname" . }}-headless.$(NAMESPACE).svc.{{ .Values.clusterDomain }}:10901
             {{- end }}
             {{- if eq .Values.receive.mode "standalone" }}
             - --receive.hashrings-file=/var/lib/thanos-receive/hashrings.json
@@ -149,7 +161,9 @@ spec:
             {{- if .Values.receive.grpc.server.tls.enabled }}
             - --grpc-server-tls-cert=/certs/{{ include "common.secrets.key" (dict "existingSecret" .Values.receive.grpc.server.tls.existingSecret "key" "tls-cert") }}
             - --grpc-server-tls-key=/certs/{{ include "common.secrets.key" (dict "existingSecret" .Values.receive.grpc.server.tls.existingSecret "key" "tls-key") }}
+            {{- if .Values.receive.grpc.server.tls.clientAuthEnabled }}
             - --grpc-server-tls-client-ca=/certs/{{ include "common.secrets.key" (dict "existingSecret" .Values.receive.grpc.server.tls.existingSecret "key" "ca-cert") }}
+            {{- end }}
             {{- end }}
             {{- if .Values.receive.extraFlags }}
             {{- include "common.tplvalues.render" (dict "value" .Values.receive.extraFlags "context" $) | nindent 12 }}
@@ -186,13 +200,13 @@ spec:
             {{- end }}
           {{- end }}
           ports:
-            - containerPort: 10901
+            - containerPort: {{ .Values.receive.containerPorts.grpc }}
               name: grpc
               protocol: TCP
-            - containerPort: 10902
+            - containerPort: {{ .Values.receive.containerPorts.http }}
               name: http
               protocol: TCP
-            - containerPort: 19291
+            - containerPort: {{ .Values.receive.containerPorts.remote }}
               name: remote-write
               protocol: TCP
           {{- if .Values.receive.customLivenessProbe }}
@@ -242,6 +256,8 @@ spec:
           {{- end }}
           {{- if .Values.receive.resources }}
           resources: {{- toYaml .Values.receive.resources | nindent 12 }}
+          {{- else if ne .Values.receive.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.receive.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             {{- if (include "thanos.httpConfigEnabled" .) }}
@@ -293,11 +309,23 @@ spec:
         - name: data
           emptyDir: {}
   {{- else if and .Values.receive.persistence.enabled (not .Values.receive.persistence.existingClaim) }}
+  {{- if semverCompare ">=1.23-0" (include "common.capabilities.kubeVersion" .) -}}
+  {{- if .Values.receive.persistentVolumeClaimRetentionPolicy.enabled }}
+  persistentVolumeClaimRetentionPolicy:
+    whenDeleted: {{ .Values.receive.persistentVolumeClaimRetentionPolicy.whenDeleted }}
+    whenScaled: {{ .Values.receive.persistentVolumeClaimRetentionPolicy.whenScaled }}
+  {{- end }}
+  {{- end }}
   volumeClaimTemplates:
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         name: data
         {{- if .Values.receive.persistence.annotations }}
         annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.receive.persistence.annotations "context" $) | nindent 10 }}
+        {{- end }}
+        {{- if .Values.receive.persistence.labels }}
+        labels: {{- include "common.tplvalues.render" ( dict "value" .Values.receive.persistence.labels "context" $) | nindent 10 }}
         {{- end }}
       spec:
         accessModes:

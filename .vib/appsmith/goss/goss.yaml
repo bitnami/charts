@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 http:
@@ -19,7 +19,7 @@ http:
   http://appsmith-rts:{{ .Vars.rts.service.ports.http }}/rts-api/v1/health-check:
     status: 200
 command:
-  {{ if .Vars.serviceAccount.automountServiceAccountToken }}
+  {{ if .Vars.client.automountServiceAccountToken }}
   check-sa:
     exec: cat /var/run/secrets/kubernetes.io/serviceaccount/token | cut -d '.' -f 2 | xargs -I '{}' echo '{}====' | fold -w 4 | sed '$ d' | tr -d '\n' | base64 -d
     exit-status: 0

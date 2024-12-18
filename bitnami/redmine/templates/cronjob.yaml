@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -35,7 +35,7 @@ spec:
           priorityClassName: {{ .Values.mailReceiver.priorityClassName | quote }}
           {{- end }}
           {{- if .Values.mailReceiver.podSecurityContext.enabled }}
-          securityContext: {{- omit .Values.mailReceiver.podSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.mailReceiver.podSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           initContainers:
             {{- if .Values.mailReceiver.initContainers }}
@@ -60,7 +60,7 @@ spec:
               image: {{ template "redmine.image" . }}
               imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
               {{- if .Values.mailReceiver.containerSecurityContext.enabled }}
-              securityContext: {{- omit .Values.mailReceiver.containerSecurityContext "enabled" | toYaml | nindent 16 }}
+              securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.mailReceiver.containerSecurityContext "context" $) | nindent 16 }}
               {{- end }}
               {{- if .Values.diagnosticMode.enabled }}
               command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 16 }}

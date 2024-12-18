@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -7,12 +7,12 @@ SPDX-License-Identifier: APACHE-2.0
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "scdf.fullname" . }}-skipper
+  name: {{ include "scdf.skipper.fullname" . }}
   {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.skipper.image "chart" .Chart ) ) }}
   {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: skipper
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   {{- if or .Values.skipper.service.annotations .Values.commonAnnotations }}
   {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.skipper.service.annotations .Values.commonAnnotations ) "context" . ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
@@ -39,7 +39,7 @@ spec:
   {{- end }}
   ports:
     - name: http
-      port: {{ .Values.skipper.service.port }}
+      port: {{ coalesce .Values.skipper.service.ports.http .Values.skipper.service.port }}
       targetPort: http
       {{- if (and (or (eq .Values.skipper.service.type "NodePort") (eq .Values.skipper.service.type "LoadBalancer")) (not (empty .Values.skipper.service.nodePort))) }}
       nodePort: {{ .Values.skipper.service.nodePort }}

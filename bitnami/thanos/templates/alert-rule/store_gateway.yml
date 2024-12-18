@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -10,7 +10,7 @@ Generated from https://github.com/thanos-io/thanos/blob/main/examples/alerts/ale
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
-  name: {{ template "common.names.fullname" . }}-store-gateway
+  name: {{ include "thanos.storegateway.fullname" . }}
   namespace: {{ default .Release.Namespace .Values.metrics.prometheusRule.namespace | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- if .Values.metrics.prometheusRule.additionalLabels }}

@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -7,10 +7,10 @@ SPDX-License-Identifier: APACHE-2.0
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: {{ include "scdf.fullname" . }}-prometheus-proxy
+  name: {{ include "scdf.prometheus-proxy.fullname" . }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: prometheus-proxy
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -33,6 +33,7 @@ spec:
     spec:
       {{- include "scdf.imagePullSecrets" . | nindent 6 }}
       serviceAccountName: {{ include "scdf.serviceAccountName" . }}
+      automountServiceAccountToken: {{ .Values.metrics.automountServiceAccountToken }}
       {{- if .Values.metrics.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -57,20 +58,20 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.metrics.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.metrics.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.metrics.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.metrics.priorityClassName }}
       priorityClassName: {{ .Values.metrics.priorityClassName | quote }}
       {{- end }}
       {{- if .Values.metrics.initContainers }}
-        initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.initContainers "context" $) | trim | nindent 8 }}
+      initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.initContainers "context" $) | trim | nindent 8 }}
       {{- end }}
       containers:
         - name: prometheus-proxy
           image: {{ include "scdf.metrics.image" . }}
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
           {{- if .Values.metrics.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.metrics.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.metrics.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.metrics.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.command "context" $) | nindent 12 }}
@@ -106,13 +107,14 @@ spec:
           {{- end }}
           {{- if .Values.metrics.resources }}
           resources: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.resources "context" $) | nindent 12 }}
+          {{- else if ne .Values.metrics.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.metrics.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if .Values.metrics.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.metrics.livenessProbe.enabled }}
           livenessProbe:
-            httpGet:
-              path: /actuator/health
+            tcpSocket:
               port: http
             initialDelaySeconds: {{ .Values.metrics.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.metrics.livenessProbe.periodSeconds }}
@@ -149,7 +151,10 @@ spec:
       {{- if .Values.metrics.sidecars }}
         {{- include "common.tplvalues.render" (dict "value" .Values.metrics.sidecars "context" $) | trim | nindent 8 }}
       {{- end }}
-      {{- if .Values.metrics.extraVolumes }}
-      volumes: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.extraVolumes "context" $) | nindent 8 }}
-      {{- end }}
+      volumes:
+        - name: empty-dir
+          emptyDir: {}
+        {{- if .Values.metrics.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.metrics.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
 {{- end }}

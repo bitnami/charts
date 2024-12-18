@@ -1,20 +1,20 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
   category: Infrastructure
   licenses: Apache-2.0
   images: |
-    - name: rabbitmq-cluster-operator
-      image: docker.io/bitnami/rabbitmq-cluster-operator:2.6.0-debian-11-r3
     - name: rabbitmq
-      image: docker.io/bitnami/rabbitmq:3.12.12-debian-11-r0
+      image: docker.io/bitnami/rabbitmq:4.0.4-debian-12-r1
+    - name: rabbitmq-cluster-operator
+      image: docker.io/bitnami/rabbitmq-cluster-operator:2.11.0-debian-12-r4
     - name: rmq-default-credential-updater
-      image: docker.io/bitnami/rmq-default-credential-updater:1.0.4-debian-11-r5
+      image: docker.io/bitnami/rmq-default-credential-updater:1.0.4-debian-12-r31
     - name: rmq-messaging-topology-operator
-      image: docker.io/bitnami/rmq-messaging-topology-operator:1.12.2-debian-11-r1
+      image: docker.io/bitnami/rmq-messaging-topology-operator:1.15.0-debian-12-r2
 apiVersion: v2
-appVersion: 2.6.0
+appVersion: 2.11.0
 dependencies:
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
@@ -32,9 +32,9 @@ keywords:
 - AMQP
 kubeVersion: '>= 1.19.0-0'
 maintainers:
-- name: VMware, Inc.
+- name: Broadcom, Inc. All Rights Reserved.
   url: https://github.com/bitnami/charts
 name: rabbitmq-cluster-operator
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/rabbitmq-cluster-operator
-version: 3.10.10
+version: 4.4.0

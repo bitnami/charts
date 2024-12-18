@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -8,7 +8,7 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: {{ include "argocd.dex" . }}
-  namespace: {{ default .Release.Namespace .Values.dex.metrics.serviceMonitor.namespace | quote }}
+  namespace: {{ default ( include "common.names.namespace" . ) .Values.dex.metrics.serviceMonitor.namespace | quote }}
   {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.dex.image "chart" .Chart ) ) }}
   {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
@@ -37,11 +37,11 @@ spec:
       metricRelabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.dex.metrics.serviceMonitor.metricRelabelings "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.dex.metrics.serviceMonitor.relabelings }}
-      relabelings: {- include "common.tplvalues.render" ( dict "value" .Values.dex.metrics.serviceMonitor.relabelings "context" $) | nindent 8 }}
+      relabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.dex.metrics.serviceMonitor.relabelings "context" $) | nindent 8 }}
       {{- end }}
   namespaceSelector:
     matchNames:
-      - {{ .Release.Namespace }}
+      - {{ include "common.names.namespace" . }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: dex

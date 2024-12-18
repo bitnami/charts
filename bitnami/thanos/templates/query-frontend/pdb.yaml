@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -7,8 +7,8 @@ SPDX-License-Identifier: APACHE-2.0
 apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
 kind: PodDisruptionBudget
 metadata:
-  name: {{ include "common.names.fullname" . }}-query-frontend
-  namespace: {{ .Release.Namespace | quote }}
+  name: {{ include "thanos.query-frontend.fullname" . }}
+  namespace: {{ include "common.names.namespace" . }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: query-frontend
   {{- if .Values.commonAnnotations }}
@@ -18,8 +18,8 @@ spec:
   {{- if .Values.queryFrontend.pdb.minAvailable }}
   minAvailable: {{ .Values.queryFrontend.pdb.minAvailable }}
   {{- end }}
-  {{- if .Values.queryFrontend.pdb.maxUnavailable }}
-  maxUnavailable: {{ .Values.queryFrontend.pdb.maxUnavailable }}
+  {{- if or .Values.queryFrontend.pdb.maxUnavailable ( not .Values.queryFrontend.pdb.minAvailable ) }}
+  maxUnavailable: {{ .Values.queryFrontend.pdb.maxUnavailable | default 1 }}
   {{- end }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.queryFrontend.podLabels .Values.commonLabels ) "context" . ) }}
   selector:

@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -16,6 +16,7 @@ metadata:
   {{- end }}
 spec:
   replicas: {{ .Values.clusterOperator.replicaCount }}
+  revisionHistoryLimit: {{ .Values.clusterOperator.revisionHistoryLimit }}
   {{- if .Values.clusterOperator.updateStrategy }}
   strategy: {{- toYaml .Values.clusterOperator.updateStrategy | nindent 4 }}
   {{- end }}
@@ -37,6 +38,7 @@ spec:
       {{- if .Values.clusterOperator.schedulerName }}
       schedulerName: {{ .Values.clusterOperator.schedulerName | quote }}
       {{- end }}
+      automountServiceAccountToken: {{ .Values.clusterOperator.automountServiceAccountToken }}
       {{- if .Values.clusterOperator.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.clusterOperator.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -61,7 +63,7 @@ spec:
       priorityClassName: {{ .Values.clusterOperator.priorityClassName | quote }}
       {{- end }}
       {{- if .Values.clusterOperator.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.clusterOperator.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.clusterOperator.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.clusterOperator.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.clusterOperator.terminationGracePeriodSeconds }}
@@ -75,7 +77,7 @@ spec:
           image: {{ template "rmqco.clusterOperator.image" . }}
           imagePullPolicy: {{ .Values.clusterOperator.image.pullPolicy }}
           {{- if .Values.clusterOperator.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.clusterOperator.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.clusterOperator.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.clusterOperator.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.clusterOperator.command "context" $) | nindent 12 }}
@@ -94,6 +96,11 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
+            {{- if not .Values.clusterOperator.watchAllNamespaces }}
+            {{- $watchNamespaces := default (list (include "common.names.namespace" .)) .Values.clusterOperator.watchNamespaces }}
+            - name: OPERATOR_SCOPE_NAMESPACE
+              value: {{ join "," $watchNamespaces | quote }}
+            {{- end }}
             - name: DEFAULT_RABBITMQ_IMAGE
               value: {{ include "rmqco.rabbitmq.image" . }}
             - name: DEFAULT_USER_UPDATER_IMAGE
@@ -116,14 +123,15 @@ spec:
             {{- end }}
           {{- if .Values.clusterOperator.resources }}
           resources: {{- toYaml .Values.clusterOperator.resources | nindent 12 }}
+          {{- else if ne .Values.clusterOperator.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.clusterOperator.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.clusterOperator.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.clusterOperator.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.clusterOperator.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.clusterOperator.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /metrics
+            tcpSocket:
               port: http
           {{- end }}
           {{- if .Values.clusterOperator.customReadinessProbe }}

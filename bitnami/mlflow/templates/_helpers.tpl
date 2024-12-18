@@ -1,5 +1,5 @@
 {{/*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -28,7 +28,7 @@ Return the proper image name (for the init container wait-permissions image)
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "mlflow.v0.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.waitContainer.image .Values.volumePermissions.image) "global" .Values.global) -}}
+{{- include "common.images.renderPullSecrets" (dict "images" (list .Values.image .Values.waitContainer.image .Values.volumePermissions.image) "context" $) -}}
 {{- end -}}
 
 {{/*
@@ -121,7 +121,7 @@ Init container definition for copying the certificates
   image: {{ include "mlflow.v0.image" . }}
   imagePullPolicy: {{ .Values.image.pullPolicy }}
   {{- if .Values.tracking.containerSecurityContext.enabled }}
-  securityContext: {{- omit .Values.tracking.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.tracking.containerSecurityContext "context" $) | nindent 4 }}
   {{- end }}
   command:
     - bash
@@ -147,7 +147,7 @@ Init container definition for waiting for the database to be ready
   image: {{ include "mlflow.v0.image" . }}
   imagePullPolicy: {{ .Values.image.pullPolicy }}
   {{- if .Values.tracking.containerSecurityContext.enabled }}
-  securityContext: {{- omit .Values.tracking.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.tracking.containerSecurityContext "context" $) | nindent 4 }}
   {{- end }}
   command:
     - bash
@@ -164,7 +164,7 @@ Init container definition for waiting for the database to be ready
   image: {{ include "mlflow.v0.waitContainer.image" . }}
   imagePullPolicy: {{ .Values.waitContainer.image.pullPolicy }}
   {{- if .Values.tracking.containerSecurityContext.enabled }}
-  securityContext: {{- omit .Values.tracking.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.tracking.containerSecurityContext "context" $) | nindent 4 }}
   {{- end }}
   command:
     - bash
@@ -234,7 +234,7 @@ Init container definition for upgrading the database
   image: {{ include "mlflow.v0.image" . }}
   imagePullPolicy: {{ .Values.image.pullPolicy }}
   {{- if .Values.tracking.containerSecurityContext.enabled }}
-  securityContext: {{- omit .Values.tracking.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.tracking.containerSecurityContext "context" $) | nindent 4 }}
   {{- end }}
   command:
     - mlflow
@@ -261,7 +261,7 @@ Init container definition for upgrading the database
   image: {{ include "mlflow.v0.image" . }}
   imagePullPolicy: {{ .Values.image.pullPolicy }}
   {{- if .Values.tracking.containerSecurityContext.enabled }}
-  securityContext: {{- omit .Values.tracking.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.tracking.containerSecurityContext "context" $) | nindent 4 }}
   {{- end }}
   command:
     - python
@@ -393,6 +393,17 @@ Return the PostgreSQL Hostname
 {{- end -}}
 
 {{/*
+Return the Database Dialect(+Driver)
+*/}}
+{{- define "mlflow.v0.database.dialectDriver" -}}
+{{- if .Values.postgresql.enabled -}}
+    {{- print "postgresql" -}}
+{{- else -}}
+    {{- print .Values.externalDatabase.dialectDriver -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the PostgreSQL Hostname
 */}}
 {{- define "mlflow.v0.database.host" -}}
@@ -492,14 +503,14 @@ Retrieve key of the PostgreSQL secret
 Retrieve the URI of the database
 */}}
 {{- define "mlflow.v0.database.uri" -}}
-{{- printf "postgresql://%s:$(MLFLOW_DATABASE_PASSWORD)@%s:%v/%s" (include "mlflow.v0.database.user" .) (include "mlflow.v0.database.host" .) (include "mlflow.v0.database.port" .) (include "mlflow.v0.database.name" .) -}}
+{{- printf "%s://%s:$(MLFLOW_DATABASE_PASSWORD)@%s:%v/%s" (include "mlflow.v0.database.dialectDriver" .) (include "mlflow.v0.database.user" .) (include "mlflow.v0.database.host" .) (include "mlflow.v0.database.port" .) (include "mlflow.v0.database.name" .) -}}
 {{- end -}}
 
 {{/*
 Retrieve the URI of the auth database
 */}}
 {{- define "mlflow.v0.database-auth.uri" -}}
-{{- printf "postgresql://%s:$(MLFLOW_DATABASE_PASSWORD)@%s:%v/%s" (include "mlflow.v0.database.user" .) (include "mlflow.v0.database.host" .) (include "mlflow.v0.database.port" .) (include "mlflow.v0.database-auth.name" .) -}}
+{{- printf "%s://%s:$(MLFLOW_DATABASE_PASSWORD)@%s:%v/%s" (include "mlflow.v0.database.dialectDriver" .) (include "mlflow.v0.database.user" .) (include "mlflow.v0.database.host" .) (include "mlflow.v0.database.port" .) (include "mlflow.v0.database-auth.name" .) -}}
 {{- end -}}
 
 {{/*
@@ -519,10 +530,12 @@ Return the volume-permissions init container
       chown {{ .Values.volumePermissions.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }} {{ .Values.persistence.mountPath }}
       find {{ .Values.persistence.mountPath }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs chown -R {{ .Values.volumePermissions.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}
   {{- if .Values.volumePermissions.containerSecurityContext.enabled }}
-  securityContext: {{- omit .Values.volumePermissions.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.volumePermissions.containerSecurityContext "context" $) | nindent 4 }}
   {{- end }}
   {{- if .Values.volumePermissions.resources }}
   resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+  {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+  resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
   {{- end }}
   volumeMounts:
     - name: data
@@ -531,12 +544,18 @@ Return the volume-permissions init container
       mountPath: /tmp
 {{- end -}}
 
+
+{{/*
+Deal with external artifact storage
+*/}}
+
 {{/*
 Return MinIO(TM) fullname
 */}}
 {{- define "mlflow.v0.minio.fullname" -}}
 {{- include "common.names.dependency.fullname" (dict "chartName" "minio" "chartValues" .Values.minio "context" $) -}}
 {{- end -}}
+
 
 {{/*
 Return whether S3 is enabled
@@ -635,6 +654,24 @@ Return the S3 secret access key inside the secret
     {{- end -}}
 {{- end -}}
 
+{{/*
+Return whether GCS is enabled
+*/}}
+{{- define "mlflow.v0.gcs.enabled" -}}
+    {{- if and (not .Values.minio.enabled) (not .Values.externalS3.host) (not .Values.externalAzureBlob.storageAccount) .Values.externalGCS.bucket -}}
+        {{- true }}
+    {{- end -}}
+{{- end -}}
+
+
+{{/*
+Return whether Azure Blob is enabled
+*/}}
+{{- define "mlflow.v0.azureBlob.enabled" -}}
+    {{- if and (not .Values.minio.enabled) (not .Values.externalS3.host) (not .Values.externalGCS.bucket) .Values.externalAzureBlob.storageAccount -}}
+        {{- true }}
+    {{- end -}}
+{{- end -}}
 
 {{/*
 Return the proper git image name
@@ -660,7 +697,7 @@ Return the definition of the git clone init container
       [[ -f "/opt/bitnami/scripts/git/entrypoint.sh" ]] && source "/opt/bitnami/scripts/git/entrypoint.sh"
       git clone {{ .Values.run.source.git.repository }} {{ if .Values.run.source.git.revision }}--branch {{ .Values.run.source.git.revision }}{{ end }} /app
   {{- if .Values.run.containerSecurityContext.enabled }}
-  securityContext: {{- omit .Values.run.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.run.containerSecurityContext "context" $) | nindent 4 }}
   {{- end }}
   volumeMounts:
     - name: source
@@ -683,7 +720,7 @@ Init container definition for waiting for the database to be ready
   image: {{ include "mlflow.v0.waitContainer.image" .context }}
   imagePullPolicy: {{ .context.Values.waitContainer.image.pullPolicy }}
   {{- if .context.Values.waitContainer.containerSecurityContext.enabled }}
-  securityContext: {{- omit .context.Values.waitContainer.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .context.Values.waitContainer.containerSecurityContext "context" .context) | nindent 4 }}
   {{- end }}
   command:
     - bash

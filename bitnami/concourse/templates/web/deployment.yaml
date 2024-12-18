@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -8,7 +8,7 @@ apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ template "concourse.web.fullname" . }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: web
   {{- if .Values.commonAnnotations }}
@@ -32,6 +32,7 @@ spec:
         app.kubernetes.io/component: web
     spec:
       {{- include "concourse.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.web.automountServiceAccountToken }}
       {{- if .Values.web.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.web.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -62,7 +63,7 @@ spec:
       terminationGracePeriodSeconds: {{ .Values.web.terminationGracePeriodSeconds }}
       {{- end }}
       {{- if .Values.web.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.web.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.web.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ template "concourse.web.serviceAccountName" . }}
       initContainers:
@@ -100,7 +101,7 @@ spec:
                   info "Connected to the PostgreSQL instance"
               fi
           {{- if .Values.web.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.web.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.web.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           env:
             - name: POSTGRESQL_CLIENT_DATABASE_HOST
@@ -125,6 +126,9 @@ spec:
           args:
             - migrate
             - --migrate-to-latest-version
+          {{- if .Values.web.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.web.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
           env:
             - name: CONCOURSE_POSTGRES_PASSWORD
               valueFrom:
@@ -150,7 +154,7 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.web.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.web.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.web.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.web.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -211,8 +215,6 @@ spec:
             {{- end }}
             - name: CONCOURSE_EXTERNAL_URL
               value: {{ include "concourse.host" . | quote }}
-            - name: CONCOURSE_BIND_PORT
-              value: {{ .Values.web.containerPorts.http | quote }}
             {{- if .Values.web.peerAddress }}
             - name: CONCOURSE_PEER_ADDRESS
               value: {{ .Values.web.peerAddress | quote }}
@@ -349,12 +351,14 @@ spec:
             - name: https
               containerPort: {{ .Values.web.containerPorts.https }}
             {{- end }}
-            {{- if .Values.web.containerPorts.tsa }}
+            {{- if .Values.web.containerPorts.pprof }}
             - name: http-debug
-              containerPort: {{ .Values.web.containerPorts.tsa }}
+              containerPort: {{ .Values.web.containerPorts.pprof }}
             {{- end }}
           {{- if .Values.web.resources }}
           resources: {{- toYaml .Values.web.resources | nindent 12 }}
+          {{- else if ne .Values.web.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.web.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.web.customStartupProbe }}
@@ -368,8 +372,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.web.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.web.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.web.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: {{ .Values.web.baseUrl | trimSuffix "/" }}/api/v1/info
+            tcpSocket:
               port: http
           {{- end }}
           {{- if .Values.web.customReadinessProbe }}
@@ -382,6 +385,9 @@ spec:
           {{- end }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: concourse-keys
               mountPath: /bitnami/concourse/concourse-keys
               readOnly: true
@@ -402,6 +408,8 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.web.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: concourse-configuration
           configMap:
             name: {{ include "concourse.web.configmapName" . }}

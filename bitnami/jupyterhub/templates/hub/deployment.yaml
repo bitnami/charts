@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -41,6 +41,7 @@ spec:
     spec:
       serviceAccountName: {{ template "jupyterhub.hubServiceAccountName" . }}
       {{- include "jupyterhub.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.hub.automountServiceAccountToken }}
       {{- if .Values.hub.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hub.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -68,13 +69,13 @@ spec:
       schedulerName: {{ .Values.hub.schedulerName }}
       {{- end }}
       {{- if .Values.hub.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.hub.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.hub.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.hub.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.hub.terminationGracePeriodSeconds }}
       {{- end }}
+      {{- if .Values.postgresql.enabled }} 
       initContainers:
-        {{- if .Values.postgresql.enabled }}
         # NOTE: The value postgresql.image is not available unless postgresql.enabled is not set. We could change this to use os-shell if
         # it had the binary wait-for-port.
         # This init container is for avoiding CrashLoopback errors in the Hub container because the PostgreSQL container is not ready
@@ -108,13 +109,13 @@ spec:
                   info "Connected to the PostgreSQL instance"
               fi
           {{- if .Values.hub.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.hub.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.hub.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           env:
             - name: POSTGRESQL_CLIENT_DATABASE_HOST
               value: {{ ternary (include "jupyterhub.postgresql.fullname" .) .Values.externalDatabase.host .Values.postgresql.enabled }}
             - name: POSTGRESQL_CLIENT_DATABASE_NAME
-              value: {{ ternary .Values.postgresql.auth.database .Values.externalDatabase.port .Values.postgresql.enabled }}
+              value: {{ ternary .Values.postgresql.auth.database .Values.externalDatabase.database .Values.postgresql.enabled }}
             - name: POSTGRESQL_CLIENT_DATABASE_PORT_NUMBER
               value: {{ ternary "5432" .Values.externalDatabase.port .Values.postgresql.enabled | quote }}
             - name: POSTGRESQL_CLIENT_CREATE_DATABASE_PASSWORD
@@ -123,11 +124,11 @@ spec:
                   name: {{ include "jupyterhub.databaseSecretName" . }}
                   key: {{ include "jupyterhub.databaseSecretKey" . }}
             - name: POSTGRESQL_CLIENT_POSTGRES_USER
-              value: {{ ternary .Values.postgresql.auth.username .Values.externalDatabase.host .Values.postgresql.enabled | quote }}
-        {{- end }}
+              value: {{ ternary .Values.postgresql.auth.username .Values.externalDatabase.user .Values.postgresql.enabled | quote }}
         {{- if .Values.hub.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.hub.initContainers "context" $) | nindent 8 }}
         {{- end }}
+      {{- end }}
       containers:
         - name: hub
           image: {{ template "jupyterhub.hub.image" . }}
@@ -136,7 +137,7 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.hub.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.hub.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.hub.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.hub.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -161,16 +162,16 @@ spec:
           {{- end }}
           ports:
             - name: http
-              containerPort: {{ coalesce .Values.hub.containerPorts.http .Values.hub.containerPort }}
+              containerPort: {{ .Values.hub.containerPorts.http }}
           env:
             - name: PYTHONUNBUFFERED
               value: "1"
             - name: HELM_RELEASE_NAME
               value: {{ .Release.Name | quote }}
             - name: PROXY_API_SERVICE_PORT
-              value: {{ coalesce .Values.proxy.service.api.ports.http .Values.proxy.service.api.port | quote }}
+              value: {{ .Values.proxy.service.api.ports.http | quote }}
             - name: HUB_SERVICE_PORT
-              value: {{  coalesce .Values.hub.service.ports.http .Values.hub.service.port  | quote }}
+              value: {{ .Values.hub.service.ports.http | quote }}
             - name: POD_NAMESPACE
               valueFrom:
                 fieldRef:
@@ -199,6 +200,8 @@ spec:
             {{- end }}
           {{- if .Values.hub.resources }}
           resources: {{- toYaml .Values.hub.resources | nindent 12 }}
+          {{- else if ne .Values.hub.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.hub.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.hub.customStartupProbe }}
@@ -213,8 +216,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.hub.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.hub.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.hub.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: {{ .Values.hub.baseUrl | trimSuffix "/" }}/hub/health
+            tcpSocket:
               port: http
           {{- end }}
           {{- if .Values.hub.customReadinessProbe }}
@@ -227,6 +229,9 @@ spec:
           {{- end }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - mountPath: /etc/jupyterhub/jupyterhub_config.py
               subPath: jupyterhub_config.py
               name: config
@@ -235,13 +240,15 @@ spec:
               name: config
             - mountPath: /usr/local/etc/jupyterhub/secret/
               name: secret
-          {{- if .Values.hub.extraVolumeMounts }}
-          {{- include "common.tplvalues.render" (dict "value" .Values.hub.extraVolumeMounts "context" $) | nindent 12 }}
-          {{- end }}
+            {{- if .Values.hub.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.hub.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
         {{- if .Values.hub.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.hub.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: config
           configMap:
             name: {{ include "jupyterhub.hubConfigmapName" . }}

@@ -11,4 +11,4 @@ controller:
         - ALL
   serviceAccount:
     create: true
-    automountServiceAccountToken: true
+  automountServiceAccountToken: true

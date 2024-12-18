@@ -1,0 +1,124 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.metricsGenerator.networkPolicy.enabled }}
+kind: NetworkPolicy
+apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
+metadata:
+  name: {{ template "grafana-tempo.metrics-generator.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: metrics-generator
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.metricsGenerator.podLabels .Values.commonLabels ) "context" . ) }}
+  podSelector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/component: metrics-generator
+  policyTypes:
+    - Ingress
+    - Egress
+  {{- if .Values.metricsGenerator.networkPolicy.allowExternalEgress }}
+  egress:
+    - {}
+  {{- else }}
+  egress:
+    # Allow dns resolution
+    - ports:
+        - port: 53
+          protocol: UDP
+        - port: 53
+          protocol: TCP
+    # Allow outbound connections to tempo cluster
+    - ports:
+        - port: {{ .Values.tempo.containerPorts.web }}
+        - port: {{ .Values.tempo.containerPorts.gossipRing }}
+        - port: {{ .Values.tempo.containerPorts.grpc }}
+        {{/* The following ports are hardcoded in grafana-tempo */}}
+        {{- if .Values.tempo.traces.jaeger.thriftCompact }}
+        - port: 6831
+          protocol: UDP
+        {{- end }}
+        {{- if .Values.tempo.traces.jaeger.thriftBinary }}
+        - port: 6832
+          protocol: UDP
+        {{- end }}
+        {{- if .Values.tempo.traces.jaeger.thriftHttp }}
+        - port: 14268
+        {{- end }}
+        {{- if .Values.tempo.traces.jaeger.grpc }}
+        - port: 14250
+        {{- end }}
+        {{- if .Values.tempo.traces.zipkin }}
+        - port: 9411
+        {{- end }}
+        {{- if .Values.tempo.traces.otlp.http }}
+        - port: 4318
+        {{- end }}
+        {{- if .Values.tempo.traces.otlp.grpc }}
+        - port: 4317
+        {{- end }}
+        {{- if .Values.tempo.traces.opencensus }}
+        - port: 55678
+        {{- end }}
+      to:
+        - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
+    {{- if .Values.vulture.enabled }}
+    # Allow outbound connections to vulture
+    - ports:
+        - port: {{ .Values.vulture.containerPorts.http }}
+      to:
+        - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
+              app.kubernetes.io/component: vulture
+    {{- end }}
+    # Allow outbound connections to Memcached
+    - ports:
+      {{- if .Values.memcached.enabled }}
+        - port: {{ .Values.memcached.containerPorts.memcached }}
+      to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: memcached
+              app.kubernetes.io/instance: {{ .Release.Name }}              
+      {{- else }}
+        - port: {{ .Values.externalMemcached.port }}
+      {{- end }}
+    {{- if .Values.metricsGenerator.networkPolicy.extraEgress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.metricsGenerator.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+  ingress:
+    - ports:
+        - port: {{ .Values.tempo.containerPorts.web }}
+        - port: {{ .Values.tempo.containerPorts.gossipRing }}
+        - port: {{ .Values.tempo.containerPorts.grpc }}
+      {{- if not .Values.metricsGenerator.networkPolicy.allowExternal }}
+      from:
+        {{- if .Values.metricsGenerator.networkPolicy.addExternalClientAccess }}
+        - podSelector:
+            matchLabels:
+              {{ template "grafana-tempo.metrics-generator.fullname" . }}-metrics-generator: "true"
+        {{- end }}
+        {{- if .Values.metricsGenerator.networkPolicy.ingressPodMatchLabels }}
+        - podSelector:
+            matchLabels: {{- include "common.tplvalues.render" (dict "value" .Values.metricsGenerator.networkPolicy.ingressPodMatchLabels "context" $ ) | nindent 14 }}
+        {{- end }}
+        {{- if .Values.metricsGenerator.networkPolicy.ingressNSMatchLabels }}
+        - namespaceSelector:
+            matchLabels: {{- include "common.tplvalues.render" (dict "value" .Values.metricsGenerator.networkPolicy.ingressNSMatchLabels "context" $ ) | nindent 14 }}
+          {{- if .Values.metricsGenerator.networkPolicy.ingressNSPodMatchLabels }}
+          podSelector:
+            matchLabels: {{- include "common.tplvalues.render" (dict "value" .Values.metricsGenerator.networkPolicy.ingressNSPodMatchLabels "context" $ ) | nindent 14 }}
+          {{- end }}
+        {{- end }}
+      {{- end }}
+    {{- if .Values.metricsGenerator.networkPolicy.extraIngress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.metricsGenerator.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
+    {{- end }}
+{{- end }}

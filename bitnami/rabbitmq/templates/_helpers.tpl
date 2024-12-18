@@ -1,5 +1,5 @@
 {{/*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -38,13 +38,24 @@ Return the proper Docker Image Registry Secret Names
 {{- end -}}
 
 {{/*
-Get the password secret.
+Get RabbitMQ password secret name.
 */}}
 {{- define "rabbitmq.secretPasswordName" -}}
     {{- if .Values.auth.existingPasswordSecret -}}
         {{- printf "%s" (tpl .Values.auth.existingPasswordSecret $) -}}
     {{- else -}}
         {{- printf "%s" (include "common.names.fullname" .) -}}
+    {{- end -}}
+{{- end -}}
+
+{{/*
+Get the password key to be retrieved from RabbitMQ secret.
+*/}}
+{{- define "rabbitmq.secretPasswordKey" -}}
+    {{- if and .Values.auth.existingPasswordSecret .Values.auth.existingSecretPasswordKey -}}
+        {{- printf "%s" (tpl .Values.auth.existingSecretPasswordKey $) -}}
+    {{- else -}}
+        {{- printf "rabbitmq-password" -}}
     {{- end -}}
 {{- end -}}
 
@@ -56,6 +67,17 @@ Get the erlang secret.
         {{- printf "%s" (tpl .Values.auth.existingErlangSecret $) -}}
     {{- else -}}
         {{- printf "%s" (include "common.names.fullname" .) -}}
+    {{- end -}}
+{{- end -}}
+
+{{/*
+Get the erlang cookie key to be retrieved from RabbitMQ secret.
+*/}}
+{{- define "rabbitmq.secretErlangKey" -}}
+    {{- if and .Values.auth.existingErlangSecret .Values.auth.existingSecretErlangKey -}}
+        {{- printf "%s" (tpl .Values.auth.existingSecretErlangKey $) -}}
+    {{- else -}}
+        {{- printf "rabbitmq-erlang-cookie" -}}
     {{- end -}}
 {{- end -}}
 
@@ -95,38 +117,44 @@ Return the proper RabbitMQ plugin list
 
 {{/*
 Return the number of bytes given a value
-following a base 2 o base 10 number system.
+following a base 2 or base 10 number system.
+Input can be: b | B | k | K | m | M | g | G | Ki | Mi | Gi
+Or number without suffix (then the number gets interpreted as bytes)
 Usage:
 {{ include "rabbitmq.toBytes" .Values.path.to.the.Value }}
 */}}
 {{- define "rabbitmq.toBytes" -}}
-{{- $value := int (regexReplaceAll "([0-9]+).*" . "${1}") }}
-{{- $unit := regexReplaceAll "[0-9]+(.*)" . "${1}" }}
-{{- if eq $unit "Ki" }}
-    {{- mul $value 1024 }}
-{{- else if eq $unit "Mi" }}
-    {{- mul $value 1024 1024 }}
-{{- else if eq $unit "Gi" }}
-    {{- mul $value 1024 1024 1024 }}
-{{- else if eq $unit "Ti" }}
-    {{- mul $value 1024 1024 1024 1024 }}
-{{- else if eq $unit "Pi" }}
-    {{- mul $value 1024 1024 1024 1024 1024 }}
-{{- else if eq $unit "Ei" }}
-    {{- mul $value 1024 1024 1024 1024 1024 1024 }}
-{{- else if eq $unit "K" }}
-    {{- mul $value 1000 }}
-{{- else if eq $unit "M" }}
-    {{- mul $value 1000 1000 }}
-{{- else if eq $unit "G" }}
-    {{- mul $value 1000 1000 1000 }}
-{{- else if eq $unit "T" }}
-    {{- mul $value 1000 1000 1000 1000 }}
-{{- else if eq $unit "P" }}
-    {{- mul $value 1000 1000 1000 1000 1000 }}
-{{- else if eq $unit "E" }}
-    {{- mul $value 1000 1000 1000 1000 1000 1000 }}
-{{- end }}
+    {{- $si := . -}}
+    {{- if not (typeIs "string" . ) -}}
+        {{- $si = int64 $si | toString -}}
+    {{- end -}}
+    {{- $bytes := 0 -}}
+    {{- if or (hasSuffix "B" $si) (hasSuffix "b" $si) -}}
+        {{- $bytes = $si | trimSuffix "B" | trimSuffix "b" | float64 | floor -}}
+    {{- else if or (hasSuffix "K" $si) (hasSuffix "k" $si) -}}
+        {{- $raw := $si | trimSuffix "K" | trimSuffix "k" | float64 -}}
+        {{- $bytes = mulf $raw (mul 1000) | floor -}}
+    {{- else if or (hasSuffix "M" $si) (hasSuffix "m" $si) -}}
+        {{- $raw := $si | trimSuffix "M" | trimSuffix "m" | float64 -}}
+        {{- $bytes = mulf $raw (mul 1000 1000) | floor -}}
+    {{- else if or (hasSuffix "G" $si) (hasSuffix "g" $si) -}}
+        {{- $raw := $si | trimSuffix "G" | trimSuffix "g" | float64 -}}
+        {{- $bytes = mulf $raw (mul 1000 1000 1000) | floor -}}
+    {{- else if hasSuffix "Ki" $si -}}
+        {{- $raw := $si | trimSuffix "Ki" | float64 -}}
+        {{- $bytes = mulf $raw (mul 1024) | floor -}}
+    {{- else if hasSuffix "Mi" $si -}}
+        {{- $raw := $si | trimSuffix "Mi" | float64 -}}
+        {{- $bytes = mulf $raw (mul 1024 1024) | floor -}}
+    {{- else if hasSuffix "Gi" $si -}}
+        {{- $raw := $si | trimSuffix "Gi" | float64 -}}
+        {{- $bytes = mulf $raw (mul 1024 1024 1024) | floor -}}
+    {{- else if (mustRegexMatch "^[0-9]+$" $si) -}}
+        {{- $bytes = $si -}}
+    {{- else -}}
+        {{- printf "\n%s is invalid SI quantity\nSuffixes can be: b | B | k | K | m | M | g | G | Ki | Mi | Gi or without any Suffixes" $si | fail -}}
+    {{- end -}}
+    {{- $bytes | int64 -}}
 {{- end -}}
 
 {{/*
@@ -174,7 +202,7 @@ Validate values of rabbitmq - Memory high watermark
 rabbitmq: memoryHighWatermark.type
     Invalid Memory high watermark type. Valid values are "absolute" and
     "relative". Please set a valid mode (--set memoryHighWatermark.type="xxxx")
-{{- else if and .Values.memoryHighWatermark.enabled (not .Values.resources.limits.memory) (eq .Values.memoryHighWatermark.type "relative") }}
+{{- else if and .Values.memoryHighWatermark.enabled (eq .Values.memoryHighWatermark.type "relative") (not (dig "limits" "memory" "" .Values.resources)) }}
 rabbitmq: memoryHighWatermark
     You enabled configuring memory high watermark using a relative limit. However,
     no memory limits were defined at POD level. Define your POD limits as shown below:
@@ -233,37 +261,12 @@ Get the initialization scripts volume name.
 {{- end -}}
 
 {{/*
-Returns the available value for certain key in an existing secret (if it exists),
-otherwise it generates a random value.
-*/}}
-{{- define "getValueFromSecret" }}
-    {{- $len := (default 16 .Length) | int -}}
-    {{- $obj := (lookup "v1" "Secret" .Namespace .Name).data -}}
-    {{- if $obj }}
-        {{- index $obj .Key | b64dec -}}
-    {{- else -}}
-        {{- randAlphaNum $len -}}
-    {{- end -}}
-{{- end }}
-
-{{/*
 Get the extraConfigurationExistingSecret secret.
 */}}
 {{- define "rabbitmq.extraConfiguration" -}}
 {{- if not (empty .Values.extraConfigurationExistingSecret) -}}
-    {{- include "getValueFromSecret" (dict "Namespace" .Release.Namespace "Name" .Values.extraConfigurationExistingSecret "Length" 10 "Key" "extraConfiguration")  -}}
+    {{- include "common.secrets.lookup" (dict "secret" .Values.extraConfigurationExistingSecret "key" "extraConfiguration" "context" $) | b64dec -}}
 {{- else -}}
     {{- tpl .Values.extraConfiguration . -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Get the TLS.sslOptions.Password secret.
-*/}}
-{{- define "rabbitmq.tlsSslOptionsPassword" -}}
-{{- if not (empty .Values.auth.tls.sslOptionsPassword.password) -}}
-    {{- .Values.auth.tls.sslOptionsPassword.password -}}
-{{- else -}}
-    {{- include "getValueFromSecret" (dict "Namespace" .Release.Namespace "Name" .Values.auth.tls.sslOptionsPassword.existingSecret "Length" 10 "Key" .Values.auth.tls.sslOptionsPassword.key)  -}}
 {{- end -}}
 {{- end -}}

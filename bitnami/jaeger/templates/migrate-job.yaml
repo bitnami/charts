@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -28,7 +28,7 @@ spec:
       {{- include "jaeger.imagePullSecrets" . | nindent 6 }}
       restartPolicy: OnFailure
       {{- if .Values.migration.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.migration.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.migration.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       initContainers:
         - name: jaeger-cassandra-schema-grabber
@@ -38,7 +38,12 @@ spec:
             - name: cassandra-schema
               mountPath: "/cassandra-schema"
           {{- if .Values.migration.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.migration.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.migration.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.migration.initContainer.resources }}
+          resources: {{- toYaml .Values.migration.initContainer.resources | nindent 12 }}
+          {{- else if ne .Values.migration.initContainer.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.migration.initContainer.resourcesPreset) | nindent 12 }}
           {{- end }}
       containers:
         - name: jaeger-cassandra-migrator
@@ -71,7 +76,7 @@ spec:
                 /cassandra-schema/docker.sh
               fi
           {{- if .Values.migration.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.migration.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.migration.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           env:
             - name: CQLSH
@@ -108,11 +113,13 @@ spec:
           volumeMounts:
             - name: cassandra-schema
               mountPath: "/cassandra-schema"
-          {{- if .Values.migration.extraVolumeMounts }}
+            {{- if .Values.migration.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.migration.extraVolumeMounts "context" $) | nindent 12 }}
-          {{- end }}
+            {{- end }}
           {{- if .Values.migration.resources }}
           resources: {{- toYaml .Values.migration.resources | nindent 12 }}
+          {{- else if ne .Values.migration.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.migration.resourcesPreset) | nindent 12 }}
           {{- end }}
       volumes:
         - name: cassandra-schema

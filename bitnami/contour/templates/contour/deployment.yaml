@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -46,6 +46,7 @@ spec:
       {{- if .Values.contour.priorityClassName }}
       priorityClassName: {{ .Values.contour.priorityClassName | quote }}
       {{- end }}
+      automountServiceAccountToken: {{ .Values.contour.automountServiceAccountToken }}
       {{- if .Values.contour.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.contour.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -110,7 +111,12 @@ spec:
             - --ingress-status-address={{ .Values.contour.ingressStatusAddress }}
             {{- else }}
             - --envoy-service-namespace={{ default .Release.Namespace .Values.contour.envoyServiceNamespace }}
-            - --envoy-service-name={{ default (printf "%s-envoy" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-") .Values.contour.envoyServiceName }}
+            {{- $envoyServiceName := coalesce .Values.envoy.service.name .Values.contour.envoyServiceName }}
+            {{- if .Values.envoy.service.multiAz.enabled }}
+            - --envoy-service-name={{ default (printf "%s-%s-envoy" (include "common.names.fullname" .) (index .Values.envoy.service.multiAz.zones 0).name | trunc 63 | trimSuffix "-")  $envoyServiceName }}
+            {{- else }}
+            - --envoy-service-name={{ default (printf "%s-envoy" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-") $envoyServiceName }}
+            {{- end }}
             {{- end }}
             - --leader-election-resource-name={{ default (printf "%s-%s" (include "common.names.namespace" .) (printf "%s-contour" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-")) .Values.contour.leaderElectionResourceName }}
             {{- if .Values.contour.debug }}
@@ -145,8 +151,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.contour.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.contour.livenessProbe.enabled }}
           livenessProbe:
-            httpGet:
-              path: /healthz
+            tcpSocket:
               port: {{ .Values.contour.containerPorts.metrics }}
             initialDelaySeconds: {{ .Values.contour.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.contour.livenessProbe.periodSeconds }}
@@ -181,7 +186,11 @@ spec:
             failureThreshold: {{ .Values.contour.startupProbe.failureThreshold }}
           {{- end }}
           {{- end }}
+          {{- if .Values.contour.resources }}
           resources: {{ toYaml .Values.contour.resources | nindent 12 }}
+          {{- else if ne .Values.contour.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.contour.resourcesPreset) | nindent 12 }}
+          {{- end }}
           volumeMounts:
             - name: contourcert
               mountPath: /certs
@@ -220,7 +229,7 @@ spec:
             {{- end }}
           {{- end }}
           {{- if .Values.contour.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.contour.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.contour.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
         {{- if .Values.contour.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.contour.sidecars "context" $) | nindent 8 }}
@@ -228,7 +237,7 @@ spec:
       dnsPolicy: ClusterFirst
       serviceAccountName: {{ include "contour.contourServiceAccountName" . }}
       {{- if .Values.contour.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.contour.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.contour.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       volumes:
         - name: contourcert

@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -18,8 +18,8 @@ spec:
   {{- if .Values.dashboards.pdb.minAvailable }}
   minAvailable: {{ .Values.dashboards.pdb.minAvailable }}
   {{- end }}
-  {{- if .Values.dashboards.pdb.maxUnavailable }}
-  maxUnavailable: {{ .Values.dashboards.pdb.maxUnavailable }}
+  {{- if or .Values.dashboards.pdb.maxUnavailable (not .Values.dashboards.pdb.minAvailable) }}
+  maxUnavailable: {{ .Values.dashboards.pdb.maxUnavailable | default 1 }}
   {{- end }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.dashboards.podLabels .Values.commonLabels ) "context" . ) }}
   selector:

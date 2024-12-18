@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -12,8 +12,10 @@ metadata:
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: kafka-provisioning
   annotations:
+    {{- if .Values.provisioning.useHelmHooks }}
     helm.sh/hook: post-install,post-upgrade
     helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+    {{- end }}
     {{- if .Values.commonAnnotations }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
     {{- end }}
@@ -28,13 +30,14 @@ spec:
       {{- end }}
     spec:
       serviceAccountName: {{ template "kafka.provisioning.serviceAccountName" . }}
+      automountServiceAccountToken: {{ .Values.provisioning.automountServiceAccountToken }}
       enableServiceLinks: {{ .Values.provisioning.enableServiceLinks }}
       {{- include "kafka.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.provisioning.schedulerName }}
       schedulerName: {{ .Values.provisioning.schedulerName | quote }}
       {{- end }}
       {{- if .Values.provisioning.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.provisioning.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.provisioning.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       restartPolicy: OnFailure
       terminationGracePeriodSeconds: 0
@@ -51,7 +54,7 @@ spec:
           image: {{ include "kafka.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.provisioning.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.provisioning.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.provisioning.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           command:
             - /bin/bash
@@ -66,6 +69,8 @@ spec:
               echo "Kafka is available";
           {{- if .Values.provisioning.resources }}
           resources: {{- toYaml .Values.provisioning.resources | nindent 12 }}
+          {{- else if ne .Values.provisioning.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.provisioning.resourcesPreset) | nindent 12 }}
           {{- end }}
         {{- end }}
         {{- if .Values.provisioning.initContainers }}
@@ -77,7 +82,7 @@ spec:
           image: {{ include "kafka.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.provisioning.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.provisioning.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.provisioning.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -93,7 +98,7 @@ spec:
           args: {{- include "common.tplvalues.render" (dict "value" .Values.provisioning.args "context" $) | nindent 12 }}
           {{- else }}
           args:
-            - -ec
+            - -efc
             - |
               echo "Configuring environment"
               . /opt/bitnami/scripts/libkafka.sh
@@ -239,6 +244,8 @@ spec:
           {{- end }}
           {{- if .Values.provisioning.resources }}
           resources: {{- toYaml .Values.provisioning.resources | nindent 12 }}
+          {{- else if ne .Values.provisioning.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.provisioning.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             {{- if or .Values.log4j .Values.existingLog4jConfigMap }}

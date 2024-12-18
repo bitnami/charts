@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -65,7 +65,7 @@ spec:
       schedulerName: {{ .Values.proxy.schedulerName }}
       {{- end }}
       {{- if .Values.proxy.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.proxy.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.proxy.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.proxy.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.proxy.terminationGracePeriodSeconds }}
@@ -81,7 +81,7 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.proxy.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.proxy.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.proxy.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.proxy.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -98,8 +98,8 @@ spec:
             - "--ip=::"
             - "--api-ip=::"
             - --api-port={{ .Values.proxy.containerPort.api }}
-            - --default-target=http://{{ template "common.names.fullname" . }}-hub:{{ coalesce .Values.hub.service.ports.http .Values.hub.service.port }}
-            - --error-target=http://{{ template "common.names.fullname" . }}-hub:{{ coalesce .Values.hub.service.ports.http .Values.hub.service.port }}/hub/error
+            - --default-target=http://{{ template "common.names.fullname" . }}-hub:{{ .Values.hub.service.ports.http }}
+            - --error-target=http://{{ template "common.names.fullname" . }}-hub:{{ .Values.hub.service.ports.http }}/hub/error
             - --port={{ .Values.proxy.containerPort.http }}
             {{- if .Values.proxy.metrics.serviceMonitor.enabled }}
             - "--metrics-ip=::"
@@ -141,6 +141,8 @@ spec:
             {{- end }}
           {{- if .Values.proxy.resources }}
           resources: {{- toYaml .Values.proxy.resources | nindent 12 }}
+          {{- else if ne .Values.proxy.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.proxy.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.proxy.customStartupProbe }}
@@ -155,8 +157,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.proxy.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.proxy.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.proxy.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /_chp_healthz
+            tcpSocket:
               port: http
           {{- end }}
           {{- if .Values.proxy.customReadinessProbe }}
@@ -169,12 +170,18 @@ spec:
           {{- end }}
           {{- end }}
           volumeMounts:
-          {{- if .Values.proxy.extraVolumeMounts }}
-          {{- include "common.tplvalues.render" (dict "value" .Values.proxy.extraVolumeMounts "context" $) | nindent 12 }}
-          {{- end }}
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            {{- if .Values.proxy.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.proxy.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
         {{- if .Values.proxy.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.proxy.sidecars "context" $) | nindent 8 }}
         {{- end }}
-      {{- if .Values.proxy.extraVolumes }}
-      volumes: {{- include "common.tplvalues.render" (dict "value" .Values.proxy.extraVolumes "context" $) | nindent 8 }}
-      {{- end }}
+      volumes:
+        - name: empty-dir
+          emptyDir: {}
+        {{- if .Values.proxy.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.proxy.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}

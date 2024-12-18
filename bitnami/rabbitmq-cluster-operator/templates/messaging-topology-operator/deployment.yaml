@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -19,6 +19,7 @@ metadata:
   {{- end }}
 spec:
   replicas: {{ .Values.msgTopologyOperator.replicaCount }}
+  revisionHistoryLimit: {{ .Values.msgTopologyOperator.revisionHistoryLimit }}
   {{- if .Values.msgTopologyOperator.updateStrategy }}
   strategy: {{- toYaml .Values.msgTopologyOperator.updateStrategy | nindent 4 }}
   {{- end }}
@@ -37,6 +38,7 @@ spec:
     spec:
       serviceAccountName: {{ template "rmqco.msgTopologyOperator.serviceAccountName" . }}
       {{- include "rmqco.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.msgTopologyOperator.automountServiceAccountToken }}
       {{- if .Values.msgTopologyOperator.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.msgTopologyOperator.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -64,7 +66,7 @@ spec:
       priorityClassName: {{ .Values.msgTopologyOperator.priorityClassName | quote }}
       {{- end }}
       {{- if .Values.msgTopologyOperator.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.msgTopologyOperator.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.msgTopologyOperator.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.msgTopologyOperator.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.msgTopologyOperator.terminationGracePeriodSeconds }}
@@ -84,7 +86,7 @@ spec:
           image: {{ template "rmqco.msgTopologyOperator.image" . }}
           imagePullPolicy: {{ .Values.msgTopologyOperator.image.pullPolicy }}
           {{- if .Values.msgTopologyOperator.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.msgTopologyOperator.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.msgTopologyOperator.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.msgTopologyOperator.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.msgTopologyOperator.command "context" $) | nindent 12 }}
@@ -103,6 +105,11 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
+            {{- if not .Values.msgTopologyOperator.watchAllNamespaces }}
+            {{- $watchNamespaces := default (list (include "common.names.namespace" .)) .Values.msgTopologyOperator.watchNamespaces }}
+            - name: OPERATOR_SCOPE_NAMESPACE
+              value: {{ join "," $watchNamespaces | quote }}
+            {{- end }}
             {{- if .Values.msgTopologyOperator.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.msgTopologyOperator.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
@@ -117,9 +124,11 @@ spec:
             {{- end }}
           {{- if .Values.msgTopologyOperator.resources }}
           resources: {{- toYaml .Values.msgTopologyOperator.resources | nindent 12 }}
+          {{- else if ne .Values.msgTopologyOperator.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.msgTopologyOperator.resourcesPreset) | nindent 12 }}
           {{- end }}
           ports:
-            - name: http-webhook
+            - name: https-webhook
               containerPort: 9443
               protocol: TCP
             - name: http-metrics
@@ -130,8 +139,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.msgTopologyOperator.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.msgTopologyOperator.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.msgTopologyOperator.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /metrics
+            tcpSocket:
               port: http-metrics
           {{- end }}
           {{- if .Values.msgTopologyOperator.customReadinessProbe }}

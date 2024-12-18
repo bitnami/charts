@@ -1,0 +1,92 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.repoServer.networkPolicy.enabled }}
+kind: NetworkPolicy
+apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
+metadata:
+  name: {{ template "argocd.repo-server" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: repo-server
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.repoServer.podLabels .Values.commonLabels ) "context" . ) }}
+  podSelector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/component: repo-server
+  policyTypes:
+    - Ingress
+    - Egress
+  {{- if .Values.repoServer.networkPolicy.allowExternalEgress }}
+  egress:
+    - {}
+  {{- else }}
+  egress:
+    - ports:
+        # Allow dns resolution
+        - port: 53
+          protocol: UDP
+        - port: 53
+          protocol: TCP
+        # Allow access to kube-apicontroller
+        {{- range $port := .Values.repoServer.networkPolicy.kubeAPIServerPorts }}
+        - port: {{ $port }}
+        {{- end }}
+    # Allow connection to Redis
+    - ports:
+        - port: {{ include "argocd.redisPort" . | int }}
+      {{- if .Values.redis.enabled }}
+        - port: {{ .Values.redis.master.containerPorts.redis }}
+      to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: redis
+              app.kubernetes.io/instance: {{ .Release.Name }}
+      {{- else if .Values.externalRedis.enabled }}
+        - port: {{ .Values.externalRedis.port }}
+      to:
+        - podSelector:
+            matchLabels:
+              {{- toYaml .Values.externalRedis.selector | nindent 14 }}
+      {{- end }}
+    {{- if .Values.repoServer.networkPolicy.extraEgress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.repoServer.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+  ingress:
+    - ports:
+        - port: {{ .Values.repoServer.containerPorts.repoServer }}
+        {{- if .Values.repoServer.metrics.enabled }}
+        - port: {{ .Values.repoServer.containerPorts.metrics }}
+        {{- end }}
+      {{- if not .Values.repoServer.networkPolicy.allowExternal }}
+      from:
+        - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
+        - podSelector:
+            matchLabels:
+              {{ template "argocd.repo-server" . }}-client: "true"
+        {{- if .Values.repoServer.networkPolicy.ingressNSMatchLabels }}
+        - namespaceSelector:
+            matchLabels:
+              {{- range $key, $value := .Values.repoServer.networkPolicy.ingressNSMatchLabels }}
+              {{ $key | quote }}: {{ $value | quote }}
+              {{- end }}
+          {{- if .Values.repoServer.networkPolicy.ingressNSPodMatchLabels }}
+          podSelector:
+            matchLabels:
+              {{- range $key, $value := .Values.repoServer.networkPolicy.ingressNSPodMatchLabels }}
+              {{ $key | quote }}: {{ $value | quote }}
+              {{- end }}
+          {{- end }}
+        {{- end }}
+      {{- end }}
+    {{- if .Values.repoServer.networkPolicy.extraIngress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.repoServer.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
+    {{- end }}
+{{- end }}

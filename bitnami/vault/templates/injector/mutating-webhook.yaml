@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -28,7 +28,9 @@ webhooks:
         name: {{ include "vault.injector.fullname" . }}
         namespace: {{ include "common.names.namespace" . | quote }}
         path: "/mutate"
-      caBundle: ""
+      {{- if and .Values.injector.webhook.clientConfig (hasKey .Values.injector.webhook.clientConfig "caBundle") }}
+      caBundle: {{ .Values.injector.webhook.clientConfig.caBundle }}
+      {{- end }}
     rules:
       - operations: ["CREATE", "UPDATE"]
         apiGroups: [""]
@@ -40,4 +42,7 @@ webhooks:
           operator: NotIn
           values:
             - injector
+    {{- if .Values.injector.webhook.namespaceSelector }}
+    namespaceSelector: {{- include "common.tplvalues.render" (dict "value" .Values.injector.webhook.namespaceSelector  "context" $) | nindent 6 }}
+    {{- end}}
 {{- end }}

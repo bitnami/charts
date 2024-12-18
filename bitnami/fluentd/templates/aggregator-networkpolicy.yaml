@@ -1,0 +1,98 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.aggregator.enabled .Values.aggregator.networkPolicy.enabled }}
+kind: NetworkPolicy
+apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
+metadata:
+  name: {{ printf "%s-aggregator" (include "common.names.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: aggregator
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  policyTypes:
+    - Ingress
+    - Egress
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.aggregator.podLabels .Values.commonLabels ) "context" . ) }}
+  podSelector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/component: aggregator
+  {{- if .Values.aggregator.networkPolicy.allowExternalEgress }}
+  egress:
+    - {}
+  {{- else }}
+  egress:
+    # Allow dns resolution
+    - ports:
+        - port: 53
+          protocol: UDP
+        - port: 53
+          protocol: TCP
+    # Allow connection to other aggregator pods
+    - ports:
+        {{- range .Values.aggregator.containerPorts }}
+        - port: {{ .containerPort }}
+        {{- end }}
+      to:
+        - podSelector:
+            {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.aggregator.podLabels .Values.commonLabels ) "context" . ) }}
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 14 }}
+              app.kubernetes.io/component: aggregator
+    # Allow connection to other forwarder pods
+    - ports:
+        {{- range .Values.forwarder.containerPorts }}
+        - port: {{ .containerPort }}
+        {{- end }}
+      to:
+        - podSelector:
+            {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.forwarder.podLabels .Values.commonLabels ) "context" . ) }}
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 14 }}
+              app.kubernetes.io/component: forwarder
+    {{- if .Values.aggregator.networkPolicy.extraEgress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.aggregator.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+  ingress:
+    # Allow inbound connections
+    - ports:
+        {{- range .Values.aggregator.containerPorts }}
+        - port: {{ .containerPort }}
+        {{- end }}
+        {{- if .Values.aggregator.port }}
+        - port: {{ .Values.aggregator.port }}
+        {{- end }}
+        {{- if .Values.metrics.enabled }}
+        {{/* With the current design, there is no containerPort for metrics, it has to be the same as the service port */}}
+        - port: {{ .Values.metrics.service.port }}
+        {{- end }}
+      {{- if not .Values.aggregator.networkPolicy.allowExternal }}
+      from:
+        - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
+        {{- if .Values.aggregator.networkPolicy.extraFromClauses }}
+        {{- include "commot.tplvalues.render" ( dict "value" .Values.aggregator.networkPolicy.extraFromClauses "context" $ )| nindent 8 }}
+        {{- end }}
+        {{- if .Values.aggregator.networkPolicy.ingressNSMatchLabels }}
+        - namespaceSelector:
+            matchLabels:
+              {{- range $key, $value := .Values.aggregator.networkPolicy.ingressNSMatchLabels }}
+              {{ $key | quote }}: {{ $value | quote }}
+              {{- end }}
+          {{- if .Values.aggregator.networkPolicy.ingressNSPodMatchLabels }}
+          podSelector:
+            matchLabels:
+              {{- range $key, $value := .Values.aggregator.networkPolicy.ingressNSPodMatchLabels }}
+              {{ $key | quote }}: {{ $value | quote }}
+              {{- end }}
+          {{- end }}
+        {{- end }}
+      {{- end }}
+    {{- if .Values.aggregator.networkPolicy.extraIngress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.aggregator.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
+    {{- end }}
+{{- end }}

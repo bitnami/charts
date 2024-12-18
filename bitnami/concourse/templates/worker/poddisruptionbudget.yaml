@@ -1,14 +1,14 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if and .Values.worker.enabled .Values.worker.pdb.create -}}
+{{- if and .Values.worker.enabled (or (not .Values.web.enabled) (include "concourse.host" .)) .Values.worker.pdb.create }}
 apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
 kind: PodDisruptionBudget
 metadata:
   name: {{ template "concourse.worker.fullname" . }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: worker
   {{- if .Values.commonAnnotations }}
@@ -18,8 +18,8 @@ spec:
   {{- if .Values.worker.pdb.minAvailable }}
   minAvailable: {{ .Values.worker.pdb.minAvailable }}
   {{- end }}
-  {{- if .Values.worker.pdb.maxUnavailable }}
-  maxUnavailable: {{ .Values.worker.pdb.maxUnavailable }}
+  {{- if or .Values.worker.pdb.maxUnavailable ( not .Values.worker.pdb.minAvailable ) }}
+  maxUnavailable: {{ .Values.worker.pdb.maxUnavailable | default 1 }}
   {{- end }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.worker.podLabels .Values.commonLabels ) "context" . ) }}
   selector:

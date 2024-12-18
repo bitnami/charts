@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -16,6 +16,7 @@ metadata:
   {{- end }}
 spec:
   replicas: {{ .Values.replicaCount }}
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
   podManagementPolicy: {{ .Values.podManagementPolicy }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
@@ -46,6 +47,7 @@ spec:
       enableServiceLinks: {{ .Values.enableServiceLinks }}
       serviceAccountName: {{ template "zookeeper.serviceAccountName" . }}
       {{- include "zookeeper.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.automountServiceAccountToken }}
       {{- if .Values.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -73,7 +75,7 @@ spec:
       schedulerName: {{ .Values.schedulerName }}
       {{- end }}
       {{- if .Values.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.dnsPolicy  }}
       dnsPolicy: {{ .Values.dnsPolicy }}
@@ -100,12 +102,17 @@ spec:
               find {{ .Values.dataLogDir }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs -r chown -R {{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}
               {{- end }}
           {{- if .Values.volumePermissions.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.volumePermissions.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.volumePermissions.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: data
               mountPath: /bitnami/zookeeper
             {{- if .Values.dataLogDir }}
@@ -118,7 +125,7 @@ spec:
           image: {{ include "zookeeper.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           command:
             - /scripts/init-certs.sh
@@ -154,8 +161,13 @@ spec:
             {{- end }}
           {{- if .Values.tls.resources }}
           resources: {{- toYaml .Values.tls.resources | nindent 12 }}
+          {{- else if ne .Values.tls.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.tls.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: scripts
               mountPath: /scripts/init-certs.sh
               subPath: init-certs.sh
@@ -180,7 +192,7 @@ spec:
           image: {{ template "zookeeper.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -194,6 +206,8 @@ spec:
           {{- end }}
           {{- if .Values.resources }}
           resources: {{- toYaml .Values.resources | nindent 12 }}
+          {{- else if ne .Values.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.resourcesPreset) | nindent 12 }}
           {{- end }}
           env:
             - name: BITNAMI_DEBUG
@@ -233,7 +247,11 @@ spec:
               {{- $zookeeperFullname := include "common.names.fullname" . }}
               {{- $zookeeperHeadlessServiceName := printf "%s-%s" $zookeeperFullname "headless" | trunc 63  }}
               {{- $clusterDomain := .Values.clusterDomain }}
+              {{- if .Values.zooServers }}
+              value: {{ include "common.tplvalues.render" (dict "value" .Values.zooServers "context" $) | quote }}
+              {{- else }}
               value: {{ range $i, $e := until $replicaCount }}{{ $zookeeperFullname }}-{{ $e }}.{{ $zookeeperHeadlessServiceName }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ $followerPort }}:{{ $electionPort }}::{{ add $e $minServerId }} {{ end }}
+              {{- end }}
             - name: ZOO_ENABLE_AUTH
               value: {{ ternary "yes" "no" .Values.auth.client.enabled | quote }}
             {{- if .Values.auth.client.enabled }}
@@ -284,7 +302,7 @@ spec:
             - name: ZOO_ENABLE_PROMETHEUS_METRICS
               value: "yes"
             - name: ZOO_PROMETHEUS_METRICS_PORT_NUMBER
-              value: {{ .Values.metrics.containerPort | quote }}
+              value: {{ coalesce .Values.metrics.containerPort .Values.containerPorts.metrics | quote }}
             {{- end }}
             {{- if .Values.tls.client.enabled }}
             - name: ZOO_TLS_PORT_NUMBER
@@ -341,6 +359,8 @@ spec:
                 fieldRef:
                   apiVersion: v1
                   fieldPath: metadata.name
+            - name: ZOO_ADMIN_SERVER_PORT_NUMBER
+              value: {{ .Values.containerPorts.adminServer | quote }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
@@ -364,14 +384,19 @@ spec:
             - name: client-tls
               containerPort: {{ .Values.containerPorts.tls }}
             {{- end }}
+            {{- if gt (int .Values.replicaCount) 1 }}
+            {{- /* These ports are only open when there are more than 1 replica */}}
             - name: follower
               containerPort: {{ .Values.containerPorts.follower }}
             - name: election
               containerPort: {{ .Values.containerPorts.election }}
+            {{- end }}
             {{- if .Values.metrics.enabled }}
             - name: metrics
-              containerPort: {{ .Values.metrics.containerPort }}
+              containerPort: {{ coalesce .Values.metrics.containerPort .Values.containerPorts.metrics }}
             {{- end }}
+            - name: http-admin
+              containerPort: {{ .Values.containerPorts.adminServer }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
@@ -409,6 +434,15 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/zookeeper/conf
+              subPath: app-conf-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/zookeeper/logs
+              subPath: app-logs-dir
             - name: scripts
               mountPath: /scripts/setup.sh
               subPath: setup.sh
@@ -440,6 +474,8 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.sidecars "context" $ ) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: scripts
           configMap:
             name: {{ printf "%s-scripts" (include "common.names.fullname" .) }}
@@ -487,7 +523,9 @@ spec:
   {{- if and .Values.persistence.enabled (not (and .Values.persistence.existingClaim .Values.persistence.dataLogDir.existingClaim) ) }}
   volumeClaimTemplates:
     {{- if not .Values.persistence.existingClaim }}
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         name: data
         {{- if .Values.persistence.annotations }}
         annotations: {{- include "common.tplvalues.render" (dict "value" .Values.persistence.annotations "context" $) | nindent 10 }}
@@ -509,7 +547,9 @@ spec:
         {{- end }}
     {{- end }}
     {{- if and (not .Values.persistence.dataLogDir.existingClaim) .Values.dataLogDir }}
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         name: data-log
         {{- if .Values.persistence.annotations }}
         annotations: {{- include "common.tplvalues.render" (dict "value" .Values.persistence.annotations "context" $) | nindent 10 }}

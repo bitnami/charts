@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -39,6 +39,7 @@ spec:
         {{- end }}
     spec:
       {{- include "grafana-loki.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.gateway.automountServiceAccountToken }}
       {{- if .Values.gateway.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.gateway.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -66,8 +67,9 @@ spec:
       schedulerName: {{ .Values.gateway.schedulerName }}
       {{- end }}
       {{- if .Values.gateway.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.gateway.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.gateway.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
+      enableServiceLinks: {{ .Values.gateway.enableServiceLinks }}
       {{- if .Values.gateway.initContainers }}
       initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.gateway.initContainers "context" $) | nindent 8 }}
       {{- end }}
@@ -76,7 +78,7 @@ spec:
           image: {{ include "grafana-loki.gateway.image" . }}
           imagePullPolicy: {{ .Values.gateway.image.pullPolicy | quote }}
           {{- if .Values.gateway.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.gateway.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.gateway.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -132,8 +134,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.gateway.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.gateway.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.gateway.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /
+            tcpSocket:
               port: http
           {{- end }}
           {{- if .Values.gateway.customReadinessProbe }}
@@ -146,9 +147,17 @@ spec:
           {{- end }}
           {{- end }}
           {{- if .Values.gateway.resources }}
-          resources: {{- toYaml .Values.gateway.resources | nindent 12 }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.gateway.resources "context" $) | nindent 12 }}
+          {{- else if ne .Values.gateway.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.gateway.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/nginx/conf
+              subPath: app-conf-dir
             - name: config
               mountPath: /opt/bitnami/nginx/conf/nginx.conf
               subPath: nginx.conf
@@ -163,6 +172,8 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.gateway.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: config
           configMap:
             name: {{ include "grafana-loki.gateway.fullname" . }}

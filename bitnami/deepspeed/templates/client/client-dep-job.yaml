@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -49,6 +49,7 @@ spec:
     spec:
       {{- include "deepspeed.v0.imagePullSecrets" . | nindent 6 }}
       serviceAccountName: {{ template "deepspeed.v0.client.serviceAccountName" . }}
+      automountServiceAccountToken: {{ .Values.client.automountServiceAccountToken }}
       {{- if .Values.client.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.client.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -67,7 +68,7 @@ spec:
       runtimeClassName: {{ .Values.client.runtimeClassName | quote }}
       {{- end }}
       {{- if .Values.client.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.client.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.client.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.client.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.client.tolerations "context" .) | nindent 8 }}
@@ -103,7 +104,7 @@ spec:
           image: {{ include "deepspeed.v0.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.client.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.client.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.client.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -147,6 +148,8 @@ spec:
             {{- end }}
           {{- if .Values.client.resources }}
           resources: {{- toYaml .Values.client.resources | nindent 12 }}
+          {{- else if ne .Values.client.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.client.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.client.customLivenessProbe }}
@@ -155,9 +158,8 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.client.livenessProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command:
-                - python
-                - -c
-                - import deepspeed; deepspeed.__version__
+                - deepspeed
+                - --help
           {{- end }}
           {{- if .Values.client.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.client.customReadinessProbe "context" $) | nindent 12 }}
@@ -186,23 +188,27 @@ spec:
           volumeMounts:
             - name: source
               mountPath: /app
-            - name: ssh-config
+            - name: empty-dir
               mountPath: /etc/ssh/ssh_config
-              subPath: ssh_config
+              subPath: ssh-conf-dir/ssh_config
             - name: ssh-client-config
               mountPath: /etc/ssh/ssh_config.d
             - name: hostfile
               mountPath: /job
-            - name: deepspeed-local
+            - name: empty-dir
               mountPath: /home/deepspeed/.local
-            - name: ssh-local-folder
+              subPath: app-local-dir
+            - name: empty-dir
               mountPath: /home/deepspeed/.ssh
+              subPath: app-ssh-dir
             - name: ssh-client-private-key
               mountPath: /bitnami/ssh/client-private-key
-            - name: tmp
+            - name: empty-dir
               mountPath: /tmp
-            - name: deepspeed-cache
+              subPath: tmp-dir
+            - name: empty-dir
               mountPath: /home/deepspeed/.cache
+              subPath: app-cache-dir
             - name: data
               mountPath: {{ .Values.client.persistence.mountPath }}
             {{- if .Values.client.extraVolumeMounts }}
@@ -212,6 +218,8 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.client.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         # SSH client settings for connecting to the worker nodes
         - name: ssh-client-config
           configMap:
@@ -232,12 +240,6 @@ spec:
           configMap:
             name: {{ include "deepspeed.v0.hostfileConfigMapName" . }}
         # These folders are necessary for building and pip install operations
-        - name: deepspeed-cache
-          emptyDir: {}
-        - name: deepspeed-local
-          emptyDir: {}
-        - name: ssh-config
-          emptyDir: {}
         # Optional data folder in case the application requires storing data
         - name: data
           {{- if .Values.client.persistence.enabled }}
@@ -247,10 +249,6 @@ spec:
           emptyDir: {}
           {{- end }}
         # Temporary folders: /tmp and .ssh
-        - name: ssh-local-folder
-          emptyDir: {}
-        - name: tmp
-          emptyDir: {}
         {{- if .Values.client.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.client.extraVolumes "context" $) | nindent 8 }}
         {{- end }}

@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -26,6 +26,10 @@ spec:
   policyTypes:
     - Ingress
     - Egress
+  {{- if .Values.attu.networkPolicy.allowExternalEgress }}
+  egress:
+    - {}
+  {{- else }}
   egress:
     # Allow dns resolution
     - ports:
@@ -33,35 +37,30 @@ spec:
           protocol: UDP
         - port: 53
           protocol: TCP
-    # Allow outbound connections to other cluster pods
+    # Allow outbound connections to Milvus Proxy
     - ports:
-        - port: {{ .Values.attu.service.ports.http }}
-        - port: {{ .Values.queryCoord.service.ports.grpc }}
-        - port: {{ .Values.dataCoord.service.ports.grpc }}
-        - port: {{ .Values.indexCoord.service.ports.grpc }}
-        - port: {{ .Values.rootCoord.service.ports.grpc }}
-        - port: {{ .Values.queryNode.service.ports.grpc }}
-        - port: {{ .Values.dataNode.service.ports.grpc }}
-        - port: {{ .Values.indexNode.service.ports.grpc }}
-        - port: {{ .Values.proxy.service.ports.grpc }}
-        - port: {{ include "milvus.etcd.port" . }}
-        - port: {{ include "milvus.s3.port" . }}
-        - port: {{ include "milvus.kafka.port" . }}
-      to:
+        - port: {{ .Values.proxy.containerPorts.grpc }}
+        - port: {{ .Values.proxy.containerPorts.grpcInternal }}
+      to: 
         - podSelector:
             matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
+              app.kubernetes.io/part-of: milvus
+              app.kubernetes.io/component: proxy
     {{- if .Values.attu.networkPolicy.extraEgress }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.attu.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
     {{- end }}
+  {{- end }}
   ingress:
     - ports:
-        - port: {{ .Values.attu.service.ports.http }}
+        - port: {{ .Values.attu.containerPorts.http }}
       {{- if not .Values.attu.networkPolicy.allowExternal }}
       from:
         - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 14 }}
+              app.kubernetes.io/part-of: milvus
+        - podSelector:
             matchLabels:
               {{ template "common.names.fullname" . }}-client: "true"
-      {{- end }}
         {{- if .Values.attu.networkPolicy.ingressNSMatchLabels }}
         - namespaceSelector:
             matchLabels:
@@ -76,6 +75,7 @@ spec:
               {{- end }}
           {{- end }}
         {{- end }}
+      {{- end }}
     {{- if .Values.attu.networkPolicy.extraIngress }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.attu.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
     {{- end }}

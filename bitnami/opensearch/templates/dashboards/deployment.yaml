@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -35,6 +35,7 @@ spec:
     spec:
       serviceAccountName: {{ template "opensearch.dashboards.serviceAccountName" . }}
       {{- include "opensearch.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.dashboards.automountServiceAccountToken }}
       {{- if .Values.dashboards.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.dashboards.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -62,17 +63,22 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.dashboards.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.dashboards.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.dashboards.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.dashboards.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.dashboards.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.dashboards.terminationGracePeriodSeconds }}
       {{- end }}
+      initContainers:
+        {{- include "opensearch.dashboards.copy-default-plugins.initContainer" . | nindent 8 }} 
+        {{- if .Values.dashboards.initContainers }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.dashboards.initContainers "context" $) | nindent 8 }}
+        {{- end }}
       containers:
         - name: {{ include "opensearch.dashboards.fullname" . }}
           image: {{ template "opensearch.dashboards.image" . }}
           imagePullPolicy: {{ .Values.dashboards.image.pullPolicy }}
           {{- if .Values.dashboards.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.dashboards.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.dashboards.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -116,6 +122,8 @@ spec:
             {{- end }}
           {{- if .Values.dashboards.resources }}
           resources: {{- toYaml .Values.dashboards.resources | nindent 12 }}
+          {{- else if ne .Values.dashboards.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.dashboards.resourcesPreset) | nindent 12 }}
           {{- end }}
           ports:
             - name: http
@@ -125,8 +133,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.dashboards.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.dashboards.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.dashboards.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: "/"
+            tcpSocket:
               port: {{ .Values.dashboards.containerPorts.http }}
           {{- end }}
           {{- if .Values.dashboards.customReadinessProbe }}
@@ -150,6 +157,23 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.dashboards.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/opensearch-dashboards/config
+              subPath: app-conf-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/opensearch-dashboards/tmp
+              subPath: app-tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/opensearch-dashboards/logs
+              subPath: app-logs-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/opensearch-dashboards/plugins
+              subPath: app-plugins-dir
+            - name: dashboards-data
+              mountPath: /bitnami/opensearch-dashboards
             {{- if .Values.security.enabled }}
             - name: opensearch-certificates
               mountPath: /opt/bitnami/opensearch-dashboards/config/certs/opensearch
@@ -167,6 +191,15 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.dashboards.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
+        - name: dashboards-data
+        {{- if .Values.dashboards.persistence.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ include "opensearch.dashboards.pvc" . }}
+        {{- else }}
+          emptyDir: {}
+        {{ end }}
         {{- if .Values.security.enabled }}
         - name: opensearch-certificates
           secret:

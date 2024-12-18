@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -16,7 +16,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.webhook.podLabels .Values.commonLabels $versionLabel ) "context" . ) }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.cainjector.podLabels .Values.commonLabels $versionLabel ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: cainjector
@@ -34,7 +34,7 @@ spec:
     spec:
       {{- include "certmanager.cainjector.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.cainjector.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.cainjector.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.cainjector.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.cainjector.schedulerName }}
       schedulerName: {{ .Values.cainjector.schedulerName }}
@@ -62,6 +62,7 @@ spec:
       {{- if .Values.cainjector.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.cainjector.tolerations "context" $) | nindent 8 }}
       {{- end }}
+      automountServiceAccountToken: {{ .Values.cainjector.automountServiceAccountToken }}
       {{- if .Values.cainjector.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.cainjector.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -88,7 +89,7 @@ spec:
             {{- end }}
           {{- end }}
           {{- if .Values.cainjector.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.cainjector.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.cainjector.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           env:
             - name: BITNAMI_DEBUG
@@ -159,6 +160,8 @@ spec:
           {{- end }}
           {{- if .Values.cainjector.resources }}
           resources: {{- toYaml .Values.cainjector.resources | nindent 12 }}
+          {{- else if ne .Values.cainjector.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.cainjector.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             {{- if .Values.cainjector.extraVolumeMounts }}

@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -115,7 +115,7 @@ data:
 
     # hub_bind_url configures what the JupyterHub process within the hub pod's
     # container should listen to.
-    hub_container_port = {{ coalesce .Values.hub.containerPorts.http .Values.hub.containerPort }}
+    hub_container_port = {{ .Values.hub.containerPorts.http }}
     c.JupyterHub.hub_bind_url = f"http://:{hub_container_port}"
 
     # hub_connect_url is the URL for connecting to the hub for use by external
@@ -166,6 +166,7 @@ data:
         ("uid", None),
         ("fs_gid", None),
         ("service_account", "serviceAccountName"),
+        ("automount_service_account_token", None),
         ("storage_extra_labels", "storage.extraLabels"),
         # ("tolerations", "extraTolerations"), # Managed manually below
         ("node_selector", None),
@@ -175,6 +176,8 @@ data:
         ("pod_affinity_preferred", "extraPodAffinity.preferred"),
         ("pod_anti_affinity_required", "extraPodAntiAffinity.required"),
         ("pod_anti_affinity_preferred", "extraPodAntiAffinity.preferred"),
+        ("pod_security_context", None),
+        ("container_security_context", None),
         ("lifecycle_hooks", None),
         ("init_containers", None),
         ("extra_containers", None),

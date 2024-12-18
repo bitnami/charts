@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -30,7 +30,7 @@ spec:
       hostNetwork: true
       serviceAccountName: {{ include "multus-cni.serviceAccountName" . }}
       {{- if .Values.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.affinity "context" $) | nindent 8 }}
@@ -53,6 +53,7 @@ spec:
       {{- if .Values.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
       {{- end }}
+      automountServiceAccountToken: {{ .Values.automountServiceAccountToken }}
       {{- if .Values.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -69,7 +70,7 @@ spec:
             - "/usr/src/multus-cni/bin/multus"
             - "{{ .Values.CNIMountPath }}/opt/cni/bin/"
           {{- if .Values.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: cni-bin-dir
@@ -83,12 +84,15 @@ spec:
             - "--type"
             - "thin"
           {{- if .Values.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: cni-bin-dir
               mountPath: {{ .Values.CNIMountPath }}/opt/cni/bin
               mountPropagation: Bidirectional
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
       containers:
         - name: multus-cni
           image: {{ template "multus-cni.image" . }}
@@ -109,7 +113,7 @@ spec:
           args:
             - "--multus-conf-file=auto"
             - "--cni-conf-dir={{ .Values.CNIMountPath }}/etc/cni/net.d"
-            - "--multus-autoconfig-dir={{ .Values.CNIMountPath }}/etc/cni/net.d"
+            - "--multus-cni-conf-dir={{ .Values.CNIMountPath }}/etc/cni/net.d"
             - "--cni-bin-dir={{ .Values.CNIMountPath }}/opt/cni/bin"
             {{- if .Values.image.debug }}
             - "--multus-log-level=debug"
@@ -118,7 +122,7 @@ spec:
             {{- end }}
           {{- end }}
           {{- if .Values.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           env:
             - name: BITNAMI_DEBUG
@@ -184,8 +188,13 @@ spec:
           {{- end }}
           {{- if .Values.resources }}
           resources: {{- toYaml .Values.resources | nindent 12 }}
+          {{- else if ne .Values.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: cni-net-dir
               mountPath: {{ .Values.CNIMountPath }}/etc/cni/net.d
             - name: cni-bin-dir
@@ -197,6 +206,8 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: cni-bin-dir
           hostPath:
             path: {{ .Values.hostCNIBinDir }}

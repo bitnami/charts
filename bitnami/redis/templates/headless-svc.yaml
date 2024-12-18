@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -9,12 +9,14 @@ metadata:
   name: {{ printf "%s-headless" (include "common.names.fullname" .) }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- if or .Values.sentinel.service.headless.annotations .Values.commonAnnotations (include "redis.externalDNS.annotations" .) }}
   annotations:
     {{- if or .Values.sentinel.service.headless.annotations .Values.commonAnnotations }}
     {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.sentinel.service.headless.annotations .Values.commonAnnotations ) "context" . ) }}
     {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
     {{- end }}
     {{- include "redis.externalDNS.annotations" . | nindent 4 }}
+  {{- end }}
 spec:
   type: ClusterIP
   clusterIP: None
@@ -29,5 +31,8 @@ spec:
     - name: tcp-sentinel
       port: {{ .Values.sentinel.service.ports.sentinel }}
       targetPort: redis-sentinel
+    {{- end }}
+    {{- if .Values.sentinel.service.headless.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.sentinel.service.headless.extraPorts "context" $) | nindent 4 }} 
     {{- end }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}

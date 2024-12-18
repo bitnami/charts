@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -8,7 +8,7 @@ apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ template "kubeapps.apprepository.fullname" . }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.apprepository.image "chart" .Chart ) ) }}
   {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
@@ -33,8 +33,9 @@ spec:
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: apprepository
     spec:
-      {{- include "kubeapps.imagePullSecrets" . | indent 6 }}
+      {{- include "kubeapps.imagePullSecrets" . | nindent 6 }}
       serviceAccountName: {{ template "kubeapps.apprepository.serviceAccountName" . }}
+      automountServiceAccountToken: {{ .Values.apprepository.automountServiceAccountToken }}
       {{- if .Values.apprepository.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.apprepository.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -62,7 +63,7 @@ spec:
       priorityClassName: {{ .Values.apprepository.priorityClassName | quote }}
       {{- end }}
       {{- if .Values.apprepository.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.apprepository.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.apprepository.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.apprepository.initContainers }}
       initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.apprepository.initContainers "context" $) | trim | nindent 8 }}
@@ -72,7 +73,7 @@ spec:
           image: {{ include "kubeapps.apprepository.image" . }}
           imagePullPolicy: {{ .Values.apprepository.image.pullPolicy | quote }}
           {{- if .Values.apprepository.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.apprepository.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.apprepository.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.apprepository.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.apprepository.lifecycleHooks "context" $) | nindent 12 }}
@@ -141,16 +142,25 @@ spec:
             - secretRef:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.apprepository.extraEnvVarsSecret "context" $) }}
             {{- end }}
-          {{- if .Values.apprepository.extraVolumeMounts }}
-          volumeMounts: {{- include "common.tplvalues.render" (dict "value" .Values.apprepository.extraVolumeMounts "context" $) | nindent 12 }}
-          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            {{- if .Values.apprepository.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.apprepository.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
           {{- if .Values.apprepository.resources }}
           resources: {{- toYaml .Values.apprepository.resources | nindent 12 }}
+          {{- else if ne .Values.apprepository.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.apprepository.resourcesPreset) | nindent 12 }}
           {{- end }}
         {{- if .Values.apprepository.sidecars }}
         {{- include "common.tplvalues.render" (dict "value" .Values.apprepository.sidecars "context" $) | trim | nindent 8 }}
         {{- end }}
-      {{- if .Values.apprepository.extraVolumes }}
-      volumes: {{- include "common.tplvalues.render" (dict "value" .Values.apprepository.extraVolumes "context" $) | nindent 8 }}
-      {{- end }}
+      volumes:
+        - name: empty-dir
+          emptyDir: {}
+        {{- if .Values.apprepository.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.apprepository.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
 {{- end }}

@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -39,7 +39,7 @@ spec:
       restartPolicy: OnFailure
       terminationGracePeriodSeconds: 0
       {{- if .Values.provisioning.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.provisioning.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.provisioning.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ template "minio.serviceAccountName" . }}
       initContainers:
@@ -47,7 +47,7 @@ spec:
           image: {{ include "minio.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.provisioning.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.provisioning.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.provisioning.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           command:
             - /bin/bash
@@ -63,13 +63,15 @@ spec:
               echo "Minio is available";
           {{- if .Values.provisioning.resources }}
           resources: {{- toYaml .Values.provisioning.resources | nindent 12 }}
+          {{- else if ne .Values.provisioning.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.provisioning.resourcesPreset) | nindent 12 }}
           {{- end }}
       containers:
         - name: minio
           image: {{ include "minio.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.provisioning.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.provisioning.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.provisioning.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.provisioning.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.provisioning.command "context" $) | nindent 12 }}
@@ -77,7 +79,7 @@ spec:
           command:
             - /bin/bash
             - -c
-            - >-
+            - |-
               set -e;
               echo "Start Minio provisioning";
 
@@ -139,7 +141,19 @@ spec:
               mc admin config set {{ $minioAlias }} {{ $config.name }} {{ $options }};
               {{- end }}
 
-              mc admin service restart {{ $minioAlias }};
+              mc admin service restart {{ $minioAlias }} --wait --json;
+
+              # Adding a sleep to ensure that the check below does not cause
+              # a race condition. We check for the MinIO port because the
+              # "mc admin service restart --wait" command is not working as expected
+              sleep {{ .Values.provisioning.sleepTime | default 5 }};
+              echo "Waiting for Minio to be available after restart";
+              wait-for-port \
+                --host={{ include "common.names.fullname" . }} \
+                --state=inuse \
+                --timeout=120 \
+                {{ .Values.service.ports.api | int64 }};
+              echo "Minio is available. Executing provisioning commands";
 
               {{- range $policy := .Values.provisioning.policies }}
               mc admin policy create {{ $minioAlias }} {{ $policy.name }} /etc/ilm/policy-{{ $policy.name }}.json;
@@ -174,7 +188,6 @@ spec:
               mc admin group {{ $groupStatus }} {{ $minioAlias }} {{ $group.name }};
               {{- end }}
 
-              {{- $isDistributedMode := (eq .Values.mode "distributed") }}
               {{- range $bucket := .Values.provisioning.buckets }}
               {{- $target := printf "%s/%s" $minioAlias $bucket.name }}
               {{- $region := ternary (printf "--region=%s" $bucket.region) ("") (not (empty $bucket.region)) }}
@@ -193,7 +206,6 @@ spec:
               {{- end }}
               {{- end }}
 
-              {{- if $isDistributedMode }}
               {{- if (or ((empty $bucket.withLock)) (not $bucket.withLock)) }}
               {{- $versioning := default "Suspended" $bucket.versioning }}
               {{- if kindIs "bool" $bucket.versioning }}
@@ -207,7 +219,6 @@ spec:
               {{- fail (printf "Invalid value '%s' for versioning of bucket '%s'" $versioning $bucket.name) }}
               {{- end }}
               {{- end }}
-              {{- end }}
 
               {{- if $bucket.tags }}
               {{- $target := printf "%s/%s" $minioAlias $bucket.name }}
@@ -215,7 +226,7 @@ spec:
               {{- range $name, $value := $bucket.tags }}
               {{- $tags = (printf "%s=%s" $name $value) | append $tags }}
               {{- end }}
-              {{- $tags := join "&" $tags | quote }}
+              {{- $tags = join "&" $tags | quote }}
               mc tag set {{ $target }} {{ $tags }};
               {{- end }}
               {{- end }}
@@ -235,22 +246,19 @@ spec:
             {{- if .Values.auth.useCredentialsFiles }}
             - name: MINIO_ROOT_USER_FILE
               value: "/opt/bitnami/minio/secrets/root-user"
+            - name: MINIO_ROOT_PASSWORD_FILE
+              value: "/opt/bitnami/minio/secrets/root-password"
             {{- else }}
             - name: MINIO_ROOT_USER
               valueFrom:
                 secretKeyRef:
                   name: {{ include "minio.secretName" . }}
-                  key: root-user
-            {{- end }}
-            {{- if .Values.auth.useCredentialsFiles }}
-            - name: MINIO_ROOT_PASSWORD_FILE
-              value: "/opt/bitnami/minio/secrets/root-password"
-            {{- else }}
+                  key: {{ include "minio.rootUserKey" . }}
             - name: MINIO_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "minio.secretName" . }}
-                  key: root-password
+                  key: {{ include "minio.rootPasswordKey" . }}
             {{- end }}
             {{- if .Values.tls.mountPath }}
             - name: MINIO_CERTS_DIR
@@ -267,8 +275,19 @@ spec:
             {{- end }}
           {{- if .Values.provisioning.resources }}
           resources: {{- toYaml .Values.provisioning.resources | nindent 12 }}
+          {{- else if ne .Values.provisioning.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.provisioning.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /.mc
+              subPath: app-mc-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/minio/tmp
+              subPath: app-tmp-dir
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             {{- if .Values.provisioning.enabled }}
             - name: minio-provisioning
               mountPath: /etc/ilm
@@ -297,6 +316,8 @@ spec:
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.provisioning.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         {{- if .Values.provisioning.enabled }}
         - name: minio-provisioning
           configMap:

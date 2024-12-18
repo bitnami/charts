@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 ## @section Global parameters
@@ -9,7 +9,8 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
+## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ##
 global:
   imageRegistry: ""
@@ -18,8 +19,22 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  defaultStorageClass: ""
   storageClass: ""
-
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: auto
 ## @section Common parameters
 ##
 
@@ -47,7 +62,6 @@ clusterDomain: cluster.local
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
-
 ## @section ASP.NET Core parameters
 ##
 
@@ -64,10 +78,9 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/aspnet-core
-  tag: 8.0.1-debian-11-r0
+  tag: 8.0.11-debian-12-r3
   digest: ""
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -102,7 +115,6 @@ extraEnvVarsCM: ""
 ## @param extraEnvVarsSecret Secret with extra environment variables
 ##
 extraEnvVarsSecret: ""
-
 ## @section ASP.NET Core deployment parameters
 ##
 
@@ -122,6 +134,9 @@ priorityClassName: ""
 ## The value is evaluated as a template
 ##
 topologySpreadConstraints: []
+## @param automountServiceAccountToken Mount Service Account token in pod
+##
+automountServiceAccountToken: false
 ## @param hostAliases ASP.NET Core pod host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
@@ -175,7 +190,6 @@ podAnnotations: {}
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##
 podLabels: {}
-
 ## @param updateStrategy.type Deployment strategy type
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
 ##
@@ -184,7 +198,6 @@ updateStrategy:
   ## Can be set to RollingUpdate or OnDelete
   ##
   type: RollingUpdate
-
 ## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ##
@@ -229,54 +242,77 @@ tolerations: []
 ## choice for the user. This also increases chances charts run on environments with little
 ## resources, such as Minikube. If you do want to specify resources, uncomment the following
 ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-## @param resources.limits The resources limits for the ASP.NET Core container
-## @param resources.requests The requested resources for the ASP.NET Core container
+## @param resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
+## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
 ##
-resources:
-  ## Example:
-  ## limits:
-  ##    cpu: 100m
-  ##    memory: 128Mi
-  ##
-  limits: {}
-  ## Examples:
-  ## requests:
-  ##    cpu: 100m
-  ##    memory: 128Mi
-  ##
-  requests: {}
+resourcesPreset: "micro"
+## @param resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+## Example:
+## resources:
+##   requests:
+##     cpu: 2
+##     memory: 512Mi
+##   limits:
+##     cpu: 3
+##     memory: 1024Mi
+##
+resources: {}
 ## @param containerPorts.http Port to expose at ASP.NET Core container level
 ##
 containerPorts:
   http: 8080
+## @param extraContainerPorts Optionally specify extra list of additional ports for WordPress container(s)
+## e.g:
+## extraContainerPorts:
+##   - name: myservice
+##     containerPort: 9090
+##
+extraContainerPorts: []
 ## Configure Pods Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param podSecurityContext.enabled Enabled ASP.NET Core pods' Security Context
 ## @param podSecurityContext.sysctls Set namespaced sysctls for the ASP.NET Core pods
+## @param podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+## @param podSecurityContext.supplementalGroups Set filesystem extra groups
 ## @param podSecurityContext.fsGroup Set Security Context fsGroup
 ##
 podSecurityContext:
-  enabled: false
+  enabled: true
   ## e.g:
   ## sysctls:
   ##   - name: net.core.somaxconn
   ##     value: "10000"
   ##
   sysctls: []
+  fsGroupChangePolicy: Always
+  supplementalGroups: []
   fsGroup: 0
 ## Configure Container Security Context (only main container)
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-## @param containerSecurityContext.enabled Enabled ASP.NET Core containers' Security Context
-## @param containerSecurityContext.runAsUser Set ASP.NET Core container's Security Context runAsUser
-## @param containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+## @param containerSecurityContext.enabled Enable Container Security Context
+## @param containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+## @param containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+## @param containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+## @param containerSecurityContext.runAsNonRoot Set containers' Security Context runAsNonRoot
+## @param containerSecurityContext.readOnlyRootFilesystem Set containers' Security Context readOnlyRootFilesystem
+## @param containerSecurityContext.allowPrivilegeEscalation Set container's privilege escalation
+## @param containerSecurityContext.capabilities.add Set container's Security Context allowed kernel capabilities
+## @param containerSecurityContext.capabilities.drop Set container's Security Context dropped kernel capabilities
 ## @param containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
 ##
 containerSecurityContext:
   enabled: true
-  runAsUser: 0
-  runAsNonRoot: false
+  seLinuxOptions: {}
+  runAsUser: 1001
+  runAsGroup: 1001
+  runAsNonRoot: true
+  readOnlyRootFilesystem: true
+  allowPrivilegeEscalation: false
+  capabilities:
+    add: ["NET_BIND_SERVICE"]
+    drop: ["ALL"]
   seccompProfile:
-    type: "RuntimeDefault"
+    type: RuntimeDefault
 ## Configure extra options for ASP.NET Core containers' liveness and readiness probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ## @param livenessProbe.enabled Enable livenessProbe
@@ -339,8 +375,8 @@ customReadinessProbe: {}
 ## @param pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
 ##
 pdb:
-  create: false
-  minAvailable: 1
+  create: true
+  minAvailable: ""
   maxUnavailable: ""
 ## ASP.NET Core Autoscaling parameters.
 ## @param autoscaling.enabled Enable autoscaling for ASP.NET Core
@@ -355,7 +391,6 @@ autoscaling:
   maxReplicas: 11
   targetCPU: ""
   targetMemory: ""
-
 ## @section Custom ASP.NET Core application parameters
 ##
 
@@ -379,10 +414,9 @@ appFromExternalRepo:
     image:
       registry: docker.io
       repository: bitnami/git
-      tag: 2.43.0-debian-11-r5
+      tag: 2.47.0-debian-12-r2
       digest: ""
       ## Specify a imagePullPolicy
-      ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
       ##
       pullPolicy: IfNotPresent
@@ -400,6 +434,9 @@ appFromExternalRepo:
     ## @param appFromExternalRepo.clone.revision Git revision to checkout
     ##
     revision: main
+    ## @param appFromExternalRepo.clone.depth Depth of the repo to checkout (full clone if empty)
+    ##
+    depth: 1
     ## @param appFromExternalRepo.clone.extraVolumeMounts Add extra volume mounts for the GIT container
     ## Useful to mount keys to connect through ssh. (normally used with extraVolumes)
     ## e.g:
@@ -421,10 +458,9 @@ appFromExternalRepo:
     image:
       registry: docker.io
       repository: bitnami/dotnet-sdk
-      tag: 8.0.100-debian-11-r3
+      tag: 8.0.404-debian-12-r1
       digest: ""
       ## Specify a imagePullPolicy
-      ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
       ##
       pullPolicy: IfNotPresent
@@ -455,7 +491,6 @@ appFromExistingPVC:
   ## PVC must be created manually before volume will be bound. The value is evaluated as a template
   ##
   existingClaim: ""
-
 ## @section Traffic Exposure Parameters
 ##
 
@@ -566,7 +601,6 @@ ingress:
   ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
   ##
   ingressClassName: ""
-
   ## @param ingress.extraHosts An array with additional hostname(s) to be covered with the ingress record
   ## e.g:
   ## extraHosts:
@@ -709,7 +743,61 @@ healthIngress:
   ##             name: http
   ##
   extraRules: []
-
+## Network Policy configuration
+## ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+##
+networkPolicy:
+  ## @param networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+  ##
+  enabled: true
+  ## @param networkPolicy.allowExternal Don't require server label for connections
+  ## The Policy model to apply. When set to false, only pods with the correct
+  ## server label will have network access to the ports server is listening
+  ## on. When true, server will accept connections from any source
+  ## (with the correct destination port).
+  ##
+  allowExternal: true
+  ## @param networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+  ##
+  allowExternalEgress: true
+  ## @param networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+  ## e.g:
+  ## extraIngress:
+  ##   - ports:
+  ##       - port: 1234
+  ##     from:
+  ##       - podSelector:
+  ##           - matchLabels:
+  ##               - role: frontend
+  ##       - podSelector:
+  ##           - matchExpressions:
+  ##               - key: role
+  ##                 operator: In
+  ##                 values:
+  ##                   - frontend
+  extraIngress: []
+  ## @param networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+  ## e.g:
+  ## extraEgress:
+  ##   - ports:
+  ##       - port: 1234
+  ##     to:
+  ##       - podSelector:
+  ##           - matchLabels:
+  ##               - role: frontend
+  ##       - podSelector:
+  ##           - matchExpressions:
+  ##               - key: role
+  ##                 operator: In
+  ##                 values:
+  ##                   - frontend
+  ##
+  extraEgress: []
+  ## @param networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+  ## @param networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+  ##
+  ingressNSMatchLabels: {}
+  ingressNSPodMatchLabels: {}
 ## @section RBAC parameters
 ##
 
@@ -732,4 +820,4 @@ serviceAccount:
   extraLabels: {}
   ## @param serviceAccount.automountServiceAccountToken Automount service account token
   ##
-  automountServiceAccountToken: true
+  automountServiceAccountToken: false

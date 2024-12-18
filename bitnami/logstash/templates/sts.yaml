@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -33,6 +33,7 @@ spec:
     spec:
       {{- include "logstash.imagePullSecrets" . | nindent 6 }}
       serviceAccountName: {{ template "logstash.serviceAccountName" . }}
+      automountServiceAccountToken: {{ .Values.automountServiceAccountToken }}
       {{- if .Values.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -63,7 +64,7 @@ spec:
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
       {{- end }}
       {{- if .Values.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       initContainers:
         {{- if and .Values.persistence.enabled .Values.volumePermissions.enabled }}
@@ -80,6 +81,8 @@ spec:
           securityContext: {{ .Values.volumePermissions.securityContext | toYaml | nindent 12 }}
           {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: data
@@ -93,7 +96,7 @@ spec:
           image: {{ include "logstash.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -137,16 +140,26 @@ spec:
             - secretRef:
                 name: {{ .Values.extraEnvVarsSecret }}
             {{- end }}
-          {{- if .Values.containerPorts }}
-          ports: {{ toYaml .Values.containerPorts | nindent 12 }}
+          {{- if or .Values.containerPorts .Values.extraContainerPorts .Values.enableMonitoringAPI }}
+          ports:
+            {{- if .Values.containerPorts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.containerPorts "context" $) | nindent 12 }}
+            {{- end }}
+            {{- if .Values.extraContainerPorts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraContainerPorts "context" $) | nindent 12 }}
+            {{- end }}
+            {{- if .Values.enableMonitoringAPI }}
+            - name: monitoring
+              containerPort: {{ .Values.monitoringAPIPort }}
+              protocol: TCP
+            {{- end }}
           {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /
+            tcpSocket:
               port: monitoring
           {{- end }}
           {{- if .Values.customReadinessProbe }}
@@ -167,12 +180,21 @@ spec:
           {{- end }}
           {{- if .Values.resources }}
           resources: {{- toYaml .Values.resources | nindent 12 }}
+          {{- else if ne .Values.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
-            {{- if .Values.persistence.enabled }}
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/logstash/config
+              subPath: app-conf-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/logstash/pipeline
+              subPath: app-pipeline-dir
             - name: data
               mountPath: {{ .Values.persistence.mountPath }}
-            {{- end }}
             {{- if or .Values.input .Values.filter .Values.output .Values.existingConfiguration }}
             - name: configurations
               mountPath: /bitnami/logstash/config
@@ -184,15 +206,19 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         {{- if or .Values.input .Values.filter .Values.output .Values.existingConfiguration }}
         - name: configurations
           configMap:
             name: {{ include "logstash.configmapName" . }}
         {{- end }}
-        {{- if and .Values.persistence.enabled }}
         - name: data
+        {{- if and .Values.persistence.enabled }}
           persistentVolumeClaim:
             claimName: {{ .Values.persistence.existingClaim | default (include "common.names.fullname" .) }}
+        {{- else }}
+          emptyDir: {}
         {{- end }}
         {{- if .Values.extraVolumes }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.extraVolumes "context" $ ) | nindent 8 }}

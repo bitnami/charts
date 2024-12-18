@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -45,6 +45,7 @@ spec:
       {{- end }}
       serviceAccountName: {{ template "milvus.query-node.serviceAccountName" . }}
       {{- include "milvus.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.queryNode.automountServiceAccountToken }}
       {{- if .Values.queryNode.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.queryNode.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -75,7 +76,7 @@ spec:
       schedulerName: {{ .Values.queryNode.schedulerName }}
       {{- end }}
       {{- if .Values.queryNode.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.queryNode.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.queryNode.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       initContainers:
         {{- if .Values.queryNode.enableDefaultInitContainers }}
@@ -92,7 +93,7 @@ spec:
           image: {{ template "milvus.image" . }}
           imagePullPolicy: {{ .Values.milvus.image.pullPolicy }}
           {{- if .Values.queryNode.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.queryNode.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.queryNode.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -130,14 +131,15 @@ spec:
               name: http-metrics
           {{- if .Values.queryNode.resources }}
           resources: {{- toYaml .Values.queryNode.resources | nindent 12 }}
+          {{- else if ne .Values.queryNode.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.queryNode.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.queryNode.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.queryNode.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.queryNode.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.queryNode.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /healthz
+            tcpSocket:
               port: http-metrics
           {{- end }}
           {{- if .Values.queryNode.customReadinessProbe }}
@@ -160,18 +162,32 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.queryNode.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - name: rendered-config
+            - name: empty-dir
               mountPath: /opt/bitnami/milvus/configs
-            - name: tmp
+              subPath: app-rendered-conf-dir
+            - name: empty-dir
               mountPath: /tmp
-            - name: tmp-milvus
+              subPath: tmp-dir
+            - name: empty-dir
               mountPath: /opt/bitnami/milvus/tmp
+              subPath: app-tmp-dir
               # We are using a s3 backend, so this data dir is temporary
-            - name: tmp-data-milvus
+            - name: empty-dir
               mountPath: /bitnami/milvus/data
-            {{- if and .Values.externalEtcd.tls.enabled (not (empty .Values.externalEtcd.tls.existingSecret)) }}
+              subPath: app-data-dir
+            {{- if and (not .Values.etcd.enabled) .Values.externalEtcd.tls.enabled .Values.externalEtcd.tls.existingSecret }}
             - name: etcd-client-certs
               mountPath: /opt/bitnami/milvus/configs/cert/etcd/client
+              readOnly: true
+            {{- end }}
+            {{- if and (not .Values.kafka.enabled) .Values.externalKafka.tls.enabled .Values.externalKafka.tls.existingSecret }}
+            - name: kafka-client-certs
+              mountPath: /opt/bitnami/milvus/configs/cert/kafka/client
+              readOnly: true
+            {{- end }}
+            {{- if and (not .Values.minio.enabled) .Values.externalS3.tls.enabled .Values.externalS3.tls.existingSecret }}
+            - name: minio-client-certs
+              mountPath: /opt/bitnami/milvus/configs/cert/minio/client
               readOnly: true
             {{- end }}
           {{- if .Values.queryNode.extraVolumeMounts }}
@@ -181,11 +197,7 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.queryNode.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
-        - name: tmp-data-milvus
-          emptyDir: {}
-        - name: tmp-milvus
-          emptyDir: {}
-        - name: tmp
+        - name: empty-dir
           emptyDir: {}
         - name: config-common
           configMap:
@@ -203,14 +215,24 @@ spec:
           configMap:
             name: {{ template "milvus.query-node.extraConfigmapName" . }}
         {{- end }}
-        {{- if and .Values.externalEtcd.tls.enabled (not (empty .Values.externalEtcd.tls.existingSecret)) }}
+        {{- if and (not .Values.etcd.enabled) .Values.externalEtcd.tls.enabled .Values.externalEtcd.tls.existingSecret }}
         - name: etcd-client-certs
           secret:
             secretName: {{ .Values.externalEtcd.tls.existingSecret }}
             defaultMode: 256
         {{- end }}
-        - name: rendered-config
-          emptyDir: {}
+        {{- if and (not .Values.kafka.enabled) .Values.externalKafka.tls.enabled .Values.externalKafka.tls.existingSecret }}
+        - name: kafka-client-certs
+          secret:
+            secretName: {{ .Values.externalKafka.tls.existingSecret }}
+            defaultMode: 256
+        {{- end }}
+        {{- if and (not .Values.minio.enabled) .Values.externalS3.tls.enabled .Values.externalS3.tls.existingSecret }}
+        - name: minio-client-certs
+          secret:
+            secretName: {{ .Values.externalS3.tls.existingSecret }}
+            defaultMode: 256
+        {{- end }}
         {{- if .Values.queryNode.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.queryNode.extraVolumes "context" $) | nindent 8 }}
         {{- end }}

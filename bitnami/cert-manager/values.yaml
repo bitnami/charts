@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 ## Global Docker image parameters
@@ -7,13 +7,28 @@
 ## @section Global parameters
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
+## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ##
 global:
   imageRegistry: ""
   imagePullSecrets: []
+  defaultStorageClass: ""
   storageClass: ""
-
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: auto
 ## @section Common parameters
 
 ## @param kubeVersion Override Kubernetes version
@@ -50,7 +65,6 @@ installCRDs: false
 ## @param replicaCount Number of cert-manager replicas
 ##
 replicaCount: 1
-
 ## @section Controller deployment parameters
 
 ## Controller deployment parameters
@@ -72,10 +86,9 @@ controller:
   image:
     registry: docker.io
     repository: bitnami/cert-manager
-    tag: 1.13.3-debian-11-r2
+    tag: 1.16.2-debian-12-r1
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     ##
@@ -103,10 +116,9 @@ controller:
     image:
       registry: docker.io
       repository: bitnami/acmesolver
-      tag: 1.13.3-debian-11-r2
+      tag: 1.16.2-debian-12-r0
       digest: ""
       ## Specify a imagePullPolicy
-      ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
       ##
       pullPolicy: IfNotPresent
@@ -123,24 +135,41 @@ controller:
       debug: false
   ## Controller containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param controller.resources.limits The resources limits for the Controller container
-  ## @param controller.resources.requests The requested resources for the Controller container
+  ## @param controller.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if controller.resources is set (controller.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "nano"
+  ## @param controller.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## controller pods' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param controller.podSecurityContext.enabled Enabled Controller pods' Security Context
+  ## @param controller.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param controller.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param controller.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param controller.podSecurityContext.fsGroup Set Controller pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## controller containers' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param controller.containerSecurityContext.enabled Enabled controller containers' Security Context
+  ## @param controller.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param controller.containerSecurityContext.runAsUser Set controller containers' Security Context runAsUser
+  ## @param controller.containerSecurityContext.runAsGroup Set controller containers' Security Context runAsGroup
   ## @param controller.containerSecurityContext.runAsNonRoot Set controller containers' Security Context runAsNonRoot
   ## @param controller.containerSecurityContext.readOnlyRootFilesystem Set read only root file system pod's Security Conte
   ## @param controller.containerSecurityContext.privileged Set controller container's Security Context privileged
@@ -150,7 +179,9 @@ controller:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
     allowPrivilegeEscalation: false
@@ -158,7 +189,7 @@ controller:
       drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
   ## @param controller.podAffinityPreset Pod affinity preset. Ignored if `controller.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
@@ -192,9 +223,12 @@ controller:
   ##
   nodeSelector: {}
   ## Controller Container port
-  ## @param controller.containerPort Controller container port
+  ## @param controller.containerPorts.http Controller HTTP container port
+  ## @param controller.containerPorts.health Controller Health container port
   ##
-  containerPort: 9402
+  containerPorts:
+    http: 9402
+    health: 9403
   ## @param controller.command Override Controller default command
   ##
   command: []
@@ -217,6 +251,9 @@ controller:
   ## The value is evaluated as a template
   ##
   topologySpreadConstraints: []
+  ## @param controller.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param controller.hostAliases Custom host aliases for Controller pods
   ## ref: https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -372,8 +409,73 @@ controller:
     annotations: {}
     ## @param controller.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
-    automountServiceAccountToken: true
-
+    automountServiceAccountToken: false
+  ## Controller Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param controller.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param controller.networkPolicy.allowExternal Don't require client label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## client label will have network access to the ports Cert Manager Controller is listening
+    ## on. When true, Cert Manager Controller will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param controller.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param controller.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
+    ##
+    kubeAPIServerPorts: [443, 6443, 8443]
+    ## @param controller.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param controller.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param controller.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param controller.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
+  ## @param controller.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param controller.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param controller.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `controller.pdb.minAvailable` and `controller.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
 ## @section Webhook deployment parameters
 
 ## Webhook deployment parameters
@@ -395,10 +497,9 @@ webhook:
   image:
     registry: docker.io
     repository: bitnami/cert-manager-webhook
-    tag: 1.13.3-debian-11-r2
+    tag: 1.16.2-debian-12-r1
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -415,26 +516,41 @@ webhook:
     debug: false
   ## Webhook containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param webhook.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if controller.resources is set (controller.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    ## @param webhook.resources.limits The resources limits for the Webhook container
-    ##
-    limits: {}
-    ## @param webhook.resources.requests The requested resources for the Webhook container
-    ##
-    requests: {}
+  resourcesPreset: "nano"
+  ## @param webhook.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## webhook pods' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param webhook.podSecurityContext.enabled Enabled Webhook pods' Security Context
+  ## @param webhook.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param webhook.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param webhook.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param webhook.podSecurityContext.fsGroup Set Webhook pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## webhook containers' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param webhook.containerSecurityContext.enabled Enabled webhook containers' Security Context
+  ## @param webhook.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param webhook.containerSecurityContext.runAsUser Set webhook containers' Security Context runAsUser
+  ## @param webhook.containerSecurityContext.runAsGroup Set webhook containers' Security Context runAsGroup
   ## @param webhook.containerSecurityContext.runAsNonRoot Set webhook containers' Security Context runAsNonRoot
   ## @param webhook.containerSecurityContext.readOnlyRootFilesystem Set read only root file system pod's Security Conte
   ## @param webhook.containerSecurityContext.privileged Set webhook container's Security Context privileged
@@ -444,7 +560,9 @@ webhook:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
     allowPrivilegeEscalation: false
@@ -452,7 +570,7 @@ webhook:
       drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
   ## @param webhook.podAffinityPreset Pod affinity preset. Ignored if `webhook.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
@@ -486,13 +604,18 @@ webhook:
   ##
   nodeSelector: {}
   ## Webhook Container port
-  ## @param webhook.containerPort Webhook container port
+  ## @param webhook.containerPorts.https Webhook HTTPS container port
+  ## @param webhook.containerPorts.health Webhook health container port
   ##
-  containerPort: 10250
+  containerPorts:
+    https: 10250
+    health: 6080
   ## Webhook https port
-  ## @param webhook.httpsPort Webhook container port
+  ## @param webhook.service.ports.https Webhook HTTPS service port
   ##
-  httpsPort: 443
+  service:
+    ports:
+      https: 443
   ## @param webhook.command Override Webhook default command
   ##
   command: []
@@ -559,6 +682,9 @@ webhook:
   ## The value is evaluated as a template
   ##
   topologySpreadConstraints: []
+  ## @param webhook.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param webhook.hostAliases Custom host aliases for Webhook pods
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -647,10 +773,76 @@ webhook:
     annotations: {}
     ## @param webhook.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
   ##  @param webhook.hostNetwork Specifies hostNetwork value
   ##
   hostNetwork: false
+  ## Webhook Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param webhook.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param webhook.networkPolicy.allowExternal Don't require client label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## client label will have network access to the ports Cert Manager Webhook is listening
+    ## on. When true, Cert Manager Webhook will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param webhook.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param webhook.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
+    ##
+    kubeAPIServerPorts: [443, 6443, 8443]
+    ## @param webhook.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param webhook.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param webhook.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param webhook.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
+  ## @param webhook.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param webhook.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param webhook.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `webhook.pdb.minAvailable` and `webhook.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
 ## @section CAInjector deployment parameters
 
 ## CAInjector deployment parameters
@@ -659,7 +851,6 @@ cainjector:
   ## @param cainjector.replicaCount Number of CAInjector replicas
   ##
   replicaCount: 1
-
   ## Bitnami CAInjector image
   ## ref: https://hub.docker.com/r/bitnami/cainjector/tags/
   ## @param cainjector.image.registry [default: REGISTRY_NAME] CAInjector image registry
@@ -673,10 +864,9 @@ cainjector:
   image:
     registry: docker.io
     repository: bitnami/cainjector
-    tag: 1.13.3-debian-11-r2
+    tag: 1.16.2-debian-12-r1
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -694,25 +884,41 @@ cainjector:
   ## CAInjector containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ##
-  resources:
-    ## @param cainjector.resources.limits The resources limits for the CAInjector container
-    ##
-    limits: {}
-    ## @param cainjector.resources.requests The requested resources for the CAInjector container
-    ##
-    requests: {}
+  ## @param cainjector.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if cloneHtdocsFromGit.resources is set (cloneHtdocsFromGit.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "nano"
+  ## @param cainjector.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## cainjector pods' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param cainjector.podSecurityContext.enabled Enabled CAInjector pods' Security Context
+  ## @param cainjector.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param cainjector.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param cainjector.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param cainjector.podSecurityContext.fsGroup Set CAInjector pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## cainjector containers' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param cainjector.containerSecurityContext.enabled Enabled cainjector containers' Security Context
+  ## @param cainjector.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param cainjector.containerSecurityContext.runAsUser Set cainjector containers' Security Context runAsUser
+  ## @param cainjector.containerSecurityContext.runAsGroup Set cainjector containers' Security Context runAsGroup
   ## @param cainjector.containerSecurityContext.runAsNonRoot Set cainjector containers' Security Context runAsNonRoot
   ## @param cainjector.containerSecurityContext.readOnlyRootFilesystem Set read only root file system pod's Security Conte
   ## @param cainjector.containerSecurityContext.privileged Set cainjector container's Security Context privileged
@@ -722,7 +928,9 @@ cainjector:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
     allowPrivilegeEscalation: false
@@ -730,7 +938,7 @@ cainjector:
       drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ## @param cainjector.podAffinityPreset Pod affinity preset. Ignored if `cainjector.affinity` is set. Allowed values: `soft` or `hard`
   ##
@@ -785,6 +993,9 @@ cainjector:
   ## The value is evaluated as a template
   ##
   topologySpreadConstraints: []
+  ## @param cainjector.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param cainjector.hostAliases Custom host aliases for CAInjector pods
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -926,10 +1137,56 @@ cainjector:
     annotations: {}
     ## @param cainjector.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
-    automountServiceAccountToken: true
-
+    automountServiceAccountToken: false
+  networkPolicy:
+    ## @param cainjector.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param cainjector.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param cainjector.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param cainjector.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+  ## @param cainjector.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param cainjector.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param cainjector.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `cainjector.pdb.minAvailable` and `cainjector.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
 ## @section Metrics Parameters
-
 metrics:
   ## @param metrics.enabled Start metrics
   ##
@@ -944,8 +1201,7 @@ metrics:
   podAnnotations:
     prometheus.io/path: "/metrics"
     prometheus.io/scrape: "true"
-    prometheus.io/port: "{{ .Values.controller.containerPort }}"
-
+    prometheus.io/port: "{{ .Values.controller.containerPorts.http }}"
   ## Prometheus Operator ServiceMonitor resource
   ##
   serviceMonitor:
@@ -998,7 +1254,6 @@ metrics:
     ## @param metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
     ##
     honorLabels: false
-
 ## @section Other Parameters
 
 ## RBAC configuration

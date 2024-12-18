@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 ## @section Global parameters
@@ -9,7 +9,8 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
+## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ##
 global:
   imageRegistry: ""
@@ -18,8 +19,22 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  defaultStorageClass: ""
   storageClass: ""
-
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: auto
 ## @section Common parameters
 ##
 
@@ -47,7 +62,6 @@ clusterDomain: cluster.local
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
-
 ## Enable diagnostic mode in the deployment
 ##
 diagnosticMode:
@@ -62,7 +76,6 @@ diagnosticMode:
   ##
   args:
     - infinity
-
 ## @section ClickHouse Parameters
 ##
 
@@ -79,10 +92,9 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/clickhouse
-  tag: 23.12.2-debian-11-r0
+  tag: 24.11.1-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -97,15 +109,16 @@ image:
   ## Enable debug mode
   ##
   debug: false
+## @param clusterName ClickHouse cluster name
+##
+clusterName: default
 ## @param shards Number of ClickHouse shards to deploy
 ##
 shards: 2
-
 ## @param replicaCount Number of ClickHouse replicas per shard to deploy
 ## if keeper enable, same as keeper count, keeper cluster by shards.
 ##
 replicaCount: 3
-
 ## @param distributeReplicasByZone Schedules replicas of the same shard to different availability zones
 ##
 distributeReplicasByZone: false
@@ -188,25 +201,42 @@ customReadinessProbe: {}
 customStartupProbe: {}
 ## ClickHouse resource requests and limits
 ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-## @param resources.limits The resources limits for the ClickHouse containers
-## @param resources.requests The requested resources for the ClickHouse containers
+## @param resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
+## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
 ##
-resources:
-  limits: {}
-  requests: {}
+resourcesPreset: "small"
+## @param resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+## Example:
+## resources:
+##   requests:
+##     cpu: 2
+##     memory: 512Mi
+##   limits:
+##     cpu: 3
+##     memory: 1024Mi
+##
+resources: {}
 ## Configure Pods Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param podSecurityContext.enabled Enabled ClickHouse pods' Security Context
+## @param podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+## @param podSecurityContext.sysctls Set kernel settings using the sysctl interface
+## @param podSecurityContext.supplementalGroups Set filesystem extra groups
 ## @param podSecurityContext.fsGroup Set ClickHouse pod's Security Context fsGroup
 ## If you are using Kubernetes 1.18, the following code needs to be commented out.
 ##
 podSecurityContext:
   enabled: true
+  fsGroupChangePolicy: Always
+  sysctls: []
+  supplementalGroups: []
   fsGroup: 1001
 ## Configure Container Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ## @param containerSecurityContext.enabled Enable containers' Security Context
+## @param containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
 ## @param containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+## @param containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
 ## @param containerSecurityContext.runAsNonRoot Set containers' Security Context runAsNonRoot
 ## @param containerSecurityContext.readOnlyRootFilesystem Set read only root file system pod's
 ## @param containerSecurityContext.privileged Set contraller container's Security Context privileged
@@ -216,16 +246,17 @@ podSecurityContext:
 ##
 containerSecurityContext:
   enabled: true
+  seLinuxOptions: {}
   runAsUser: 1001
+  runAsGroup: 1001
   runAsNonRoot: true
   privileged: false
   allowPrivilegeEscalation: false
-  readOnlyRootFilesystem: false
+  readOnlyRootFilesystem: true
   capabilities:
     drop: ["ALL"]
   seccompProfile:
     type: "RuntimeDefault"
-
 ## Authentication
 ## @param auth.username ClickHouse Admin username
 ## @param auth.password ClickHouse Admin password
@@ -237,17 +268,14 @@ auth:
   password: ""
   existingSecret: ""
   existingSecretKey: ""
-
 ## @param logLevel Logging level
 ##
 logLevel: information
-
 ## @section ClickHouse keeper configuration parameters
 ## @param keeper.enabled Deploy ClickHouse keeper. Support is experimental.
 ##
 keeper:
   enabled: false
-
 ## @param defaultConfigurationOverrides [string] Default configuration overrides (evaluated as a template)
 ##
 defaultConfigurationOverrides: |
@@ -265,7 +293,7 @@ defaultConfigurationOverrides: |
     {{- if or (ne (int .Values.shards) 1) (ne (int .Values.replicaCount) 1)}}
     <!-- Cluster configuration - Any update of the shards and replicas requires helm upgrade -->
     <remote_servers>
-      <default>
+      <{{ .Values.clusterName }}>
         {{- $shards := $.Values.shards | int }}
         {{- range $shard, $e := until $shards }}
         <shard>
@@ -280,7 +308,7 @@ defaultConfigurationOverrides: |
             {{- end }}
         </shard>
         {{- end }}
-      </default>
+      </{{ .Values.clusterName }}>
     </remote_servers>
     {{- end }}
     {{- if .Values.keeper.enabled }}
@@ -388,35 +416,27 @@ defaultConfigurationOverrides: |
     </prometheus>
     {{- end }}
   </clickhouse>
-
 ## @param existingOverridesConfigmap The name of an existing ConfigMap with your custom configuration for ClickHouse
 ##
 existingOverridesConfigmap: ""
-
 ## @param extraOverrides Extra configuration overrides (evaluated as a template) apart from the default
 ##
 extraOverrides: ""
-
 ## @param extraOverridesConfigmap The name of an existing ConfigMap with extra configuration for ClickHouse
 ##
 extraOverridesConfigmap: ""
-
 ## @param extraOverridesSecret The name of an existing ConfigMap with your custom configuration for ClickHouse
 ##
 extraOverridesSecret: ""
-
 ## @param usersExtraOverrides Users extra configuration overrides (evaluated as a template) apart from the default
 ##
 usersExtraOverrides: ""
-
 ## @param usersExtraOverridesConfigmap The name of an existing ConfigMap with users extra configuration for ClickHouse
 ##
 usersExtraOverridesConfigmap: ""
-
 ## @param usersExtraOverridesSecret The name of an existing ConfigMap with your custom users configuration for ClickHouse
 ##
 usersExtraOverridesSecret: ""
-
 ## @param initdbScripts Dictionary of initdb scripts
 ## Specify dictionary of scripts to be run at first boot
 ## Example:
@@ -429,7 +449,6 @@ initdbScripts: {}
 ## @param initdbScriptsSecret ConfigMap with the initdb scripts (Note: Overrides `initdbScripts`)
 ##
 initdbScriptsSecret: ""
-
 ## @param startdbScripts Dictionary of startdb scripts
 ## Specify dictionary of scripts to be run on every start
 ## Example:
@@ -442,14 +461,16 @@ startdbScripts: {}
 ## @param startdbScriptsSecret ConfigMap with the startdb scripts (Note: Overrides `startdbScripts`)
 ##
 startdbScriptsSecret: ""
-
 ## @param command Override default container command (useful when using custom images)
 ##
 command:
-    - /scripts/setup.sh
+  - /scripts/setup.sh
 ## @param args Override default container args (useful when using custom images)
 ##
 args: []
+## @param automountServiceAccountToken Mount Service Account token in pod
+##
+automountServiceAccountToken: false
 ## @param hostAliases ClickHouse pods host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
@@ -508,12 +529,10 @@ updateStrategy:
   ## Can be set to RollingUpdate or OnDelete
   ##
   type: RollingUpdate
-
 ## @param podManagementPolicy Statefulset Pod management policy, it needs to be Parallel to be able to complete the cluster join
 ## Ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
 ##
 podManagementPolicy: Parallel
-
 ## @param priorityClassName ClickHouse pods' priorityClassName
 ##
 priorityClassName: ""
@@ -575,7 +594,16 @@ sidecars: []
 ##    command: ['sh', '-c', 'echo "hello world"']
 ##
 initContainers: []
-
+## Pod Disruption Budget configuration
+## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+## @param pdb.create Enable/disable a Pod Disruption Budget creation
+## @param pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+## @param pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `pdb.minAvailable` and `pdb.maxUnavailable` are empty.
+##
+pdb:
+  create: true
+  minAvailable: ""
+  maxUnavailable: ""
 ## TLS configuration
 ##
 tls:
@@ -599,7 +627,6 @@ tls:
   ## ref: https://www.postgresql.org/docs/9.6/auth-methods.html
   ##
   certCAFilename: ""
-
 ## @section Traffic Exposure Parameters
 ##
 
@@ -702,7 +729,6 @@ service:
     ## @param service.headless.annotations Annotations for the headless service.
     ##
     annotations: {}
-
 ## External Access to ClickHouse  configuration
 ##
 externalAccess:
@@ -800,7 +826,6 @@ externalAccess:
     ## @param externalAccess.service.extraPorts Extra ports to expose in the ClickHouse external service
     ##
     extraPorts: []
-
 ## ClickHouse ingress parameters
 ## ref: http://kubernetes.io/docs/concepts/services-networking/ingress/
 ##
@@ -905,7 +930,6 @@ ingress:
   ##             name: http
   ##
   extraRules: []
-
 ## @section Persistence Parameters
 ##
 
@@ -973,7 +997,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r93
+    tag: 12-debian-12-r33
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -985,22 +1009,32 @@ volumePermissions:
     pullSecrets: []
   ## Init container's resource requests and limits
   ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param volumePermissions.resources.limits The resources limits for the init container
-  ## @param volumePermissions.resources.requests The requested resources for the init container
+  ## @param volumePermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "nano"
+  ## @param volumePermissions.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Init container Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param volumePermissions.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param volumePermissions.containerSecurityContext.runAsUser Set init container's Security Context runAsUser
   ## NOTE: when runAsUser is set to special value "auto", init container will try to chown the
   ##   data folder to auto-determined user&group, using commands: `id -u`:`id -G | cut -d" " -f2`
   ##   "auto" is especially useful for OpenShift which has scc with dynamic user ids (and 0 is not allowed)
   ##
   containerSecurityContext:
+    seLinuxOptions: {}
     runAsUser: 0
-
 ## @section Other Parameters
 ##
 
@@ -1019,8 +1053,7 @@ serviceAccount:
   annotations: {}
   ## @param serviceAccount.automountServiceAccountToken Automount service account token for the server service account
   ##
-  automountServiceAccountToken: true
-
+  automountServiceAccountToken: false
 ## Prometheus metrics
 ##
 metrics:
@@ -1077,7 +1110,6 @@ metrics:
     ##   prometheus: my-prometheus
     ##
     selector: {}
-
   ## Prometheus Operator PrometheusRule configuration
   ##
   prometheusRule:
@@ -1099,7 +1131,6 @@ metrics:
     ##    labels:
     ##      severity: warning
     rules: []
-
 ## @section External Zookeeper paramaters
 ##
 externalZookeeper:
@@ -1108,7 +1139,6 @@ externalZookeeper:
   ##
   servers: []
   port: 2888
-
 ## @section Zookeeper subchart parameters
 ##
 ## @param zookeeper.enabled Deploy Zookeeper subchart
@@ -1117,18 +1147,79 @@ externalZookeeper:
 ##
 zookeeper:
   enabled: true
-  ## Override zookeeper default image as 3.9 is not supported https://github.com/ClickHouse/ClickHouse/issues/53749
-  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/zookeeper
-  ## @param zookeeper.image.registry [default: REGISTRY_NAME] Zookeeper image registry
-  ## @param zookeeper.image.repository [default: REPOSITORY_NAME/zookeeper] Zookeeper image repository
-  ## @skip zookeeper.image.tag Zookeeper image tag (immutable tags are recommended)
-  ## @param zookeeper.image.pullPolicy Zookeeper image pull policy
-  image:
-    registry: docker.io
-    repository: bitnami/zookeeper
-    tag: 3.8.3-debian-11-r4
-    pullPolicy: IfNotPresent
   replicaCount: 3
   service:
     ports:
       client: 2181
+  ## ZooKeeper resource requests and limits
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param zookeeper.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "micro"
+  ## @param zookeeper.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
+## @section Network Policies
+## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+##
+networkPolicy:
+  ## @param networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+  ##
+  enabled: true
+  ## @param networkPolicy.allowExternal Don't require client label for connections
+  ## The Policy model to apply. When set to false, only pods with the correct
+  ## client label will have network access to the ports Clickhouse is listening
+  ## on. When true, Clickhouse will accept connections from any source
+  ## (with the correct destination port).
+  ##
+  allowExternal: true
+  ## @param networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+  ##
+  allowExternalEgress: true
+  ## @param networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+  ## e.g:
+  ## extraIngress:
+  ##   - ports:
+  ##       - port: 1234
+  ##     from:
+  ##       - podSelector:
+  ##           - matchLabels:
+  ##               - role: frontend
+  ##       - podSelector:
+  ##           - matchExpressions:
+  ##               - key: role
+  ##                 operator: In
+  ##                 values:
+  ##                   - frontend
+  extraIngress: []
+  ## @param networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+  ## e.g:
+  ## extraEgress:
+  ##   - ports:
+  ##       - port: 1234
+  ##     to:
+  ##       - podSelector:
+  ##           - matchLabels:
+  ##               - role: frontend
+  ##       - podSelector:
+  ##           - matchExpressions:
+  ##               - key: role
+  ##                 operator: In
+  ##                 values:
+  ##                   - frontend
+  ##
+  extraEgress: []
+  ## @param networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+  ## @param networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+  ##
+  ingressNSMatchLabels: {}
+  ingressNSPodMatchLabels: {}

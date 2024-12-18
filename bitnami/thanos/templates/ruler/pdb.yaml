@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -7,8 +7,8 @@ SPDX-License-Identifier: APACHE-2.0
 apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
 kind: PodDisruptionBudget
 metadata:
-  name: {{ include "common.names.fullname" . }}-ruler
-  namespace: {{ .Release.Namespace | quote }}
+  name: {{ include "thanos.ruler.fullname" . }}
+  namespace: {{ include "common.names.namespace" . }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: ruler
   {{- if .Values.commonAnnotations }}
@@ -18,8 +18,8 @@ spec:
   {{- if .Values.ruler.pdb.minAvailable }}
   minAvailable: {{ .Values.ruler.pdb.minAvailable }}
   {{- end }}
-  {{- if .Values.ruler.pdb.maxUnavailable }}
-  maxUnavailable: {{ .Values.ruler.pdb.maxUnavailable }}
+  {{- if or .Values.ruler.pdb.maxUnavailable ( not .Values.ruler.pdb.minAvailable ) }}
+  maxUnavailable: {{ .Values.ruler.pdb.maxUnavailable | default 1 }}
   {{- end }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.ruler.podLabels .Values.commonLabels ) "context" . ) }}
   selector:

@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -41,6 +41,7 @@ spec:
         {{- end }}
     spec:
       {{- include "etcd.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.automountServiceAccountToken }}
       {{- if .Values.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -74,7 +75,7 @@ spec:
       runtimeClassName: {{ .Values.runtimeClassName }}
       {{- end }}
       {{- if .Values.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.shareProcessNamespace }}
       shareProcessNamespace: {{ .Values.shareProcessNamespace }}
@@ -98,10 +99,15 @@ spec:
             runAsUser: 0
           {{- if .Values.volumePermissions.resources }}
           resources: {{- include "common.tplvalues.render" (dict "value" .Values.volumePermissions.resources "context" $) | nindent 12 }}
+          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: data
               mountPath: /bitnami/etcd
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
         {{- end }}
       {{- end }}
       containers:
@@ -117,7 +123,7 @@ spec:
           image: {{ include "etcd.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -282,9 +288,10 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.livenessProbe.enabled }}
           livenessProbe:
-            exec:
-              command:
-                - /opt/bitnami/scripts/etcd/healthcheck.sh
+            httpGet:
+              port: {{ .Values.containerPorts.client }} 
+              path: /livez
+              scheme: {{ ternary "HTTPS" "HTTP" .Values.auth.client.secureTransport | quote }}
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
@@ -329,8 +336,21 @@ spec:
           {{- end }}
           {{- if .Values.resources }}
           resources: {{- include "common.tplvalues.render" (dict "value" .Values.resources "context" $) | nindent 12 }}
+          {{- else if ne .Values.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            {{- if or .Values.configuration .Values.existingConfigmap }}
+            - name: configuration
+              mountPath: /opt/bitnami/etcd/conf/
+            {{- else }}
+            - name: empty-dir
+              mountPath: /opt/bitnami/etcd/conf/
+              subPath: app-conf-dir
+            {{- end }}
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: data
               mountPath: /bitnami/etcd
             {{- if and (eq .Values.auth.token.enabled true) (eq .Values.auth.token.type "jwt") }}
@@ -349,10 +369,6 @@ spec:
               subPath: {{ .Values.disasterRecovery.pvc.subPath }}
               {{- end }}
             {{- end }}
-            {{- if or .Values.configuration .Values.existingConfigmap }}
-            - name: etcd-config
-              mountPath: /opt/bitnami/etcd/conf/
-            {{- end }}
             {{- if or .Values.auth.client.enableAuthentication (and .Values.auth.client.secureTransport (not .Values.auth.client.useAutoTLS )) }}
             - name: etcd-client-certs
               mountPath: /opt/bitnami/etcd/certs/client/
@@ -370,6 +386,13 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
+        {{- if or .Values.configuration .Values.existingConfigmap }}
+        - name: configuration
+          configMap:
+            name: {{ include "etcd.configmapName" . }}
+        {{- end }}
         {{- if and (eq .Values.auth.token.enabled true) (eq .Values.auth.token.type "jwt") }}
         - name: etcd-jwt-token
           secret:
@@ -385,11 +408,6 @@ spec:
         - name: snapshot-volume
           persistentVolumeClaim:
             claimName: {{ include "etcd.disasterRecovery.pvc.name" . }}
-        {{- end }}
-        {{- if or .Values.configuration .Values.existingConfigmap }}
-        - name: etcd-config
-          configMap:
-            name: {{ include "etcd.configmapName" . }}
         {{- end }}
         {{- if or .Values.auth.client.enableAuthentication (and .Values.auth.client.secureTransport (not .Values.auth.client.useAutoTLS )) }}
         - name: etcd-client-certs

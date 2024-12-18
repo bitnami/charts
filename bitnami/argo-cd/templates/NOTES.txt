@@ -2,6 +2,8 @@ CHART NAME: {{ .Chart.Name }}
 CHART VERSION: {{ .Chart.Version }}
 APP VERSION: {{ .Chart.AppVersion }}
 
+Did you know there are enterprise versions of the Bitnami catalog? For enhanced secure software supply chain features, unlimited pulls from Docker, LTS support, or application customization, see Bitnami Premium or Tanzu Application Catalog. See https://www.arrow.com/globalecs/na/vendors/bitnami for more information.
+
 ** Please be patient while the chart is being deployed **
 
 1. Access your Argo CD installation:
@@ -16,17 +18,17 @@ APP VERSION: {{ .Chart.AppVersion }}
 {{- else }}
   Execute the following commands:
 {{- if contains "NodePort" .Values.server.service.type }}
-  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "argocd.server" . }})
-  export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+  export NODE_PORT=$(kubectl get --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "argocd.server" . }})
+  export NODE_IP=$(kubectl get nodes --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.items[0].status.addresses[0].address}")
   export URL="http://${NODE_IP}:${NODE_PORT}/"
   echo "Argo CD URL: http://$NODE_IP:$NODE_PORT/"
 
 {{- else if contains "LoadBalancer" .Values.server.service.type }}
 
 ** Please ensure an external IP is associated to the {{ include "argocd.server" . }} service before proceeding **
-** Watch the status using: kubectl get svc --namespace {{ .Release.Namespace }} -w {{ include "argocd.server" . }} **
+** Watch the status using: kubectl get svc --namespace {{ include "common.names.namespace" . }} -w {{ include "argocd.server" . }} **
 
-  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "argocd.server" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
+  export SERVICE_IP=$(kubectl get svc --namespace {{ include "common.names.namespace" . }} {{ include "argocd.server" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
 
 {{- $port:=.Values.server.service.ports.http | toString }}
   export URL="http://${SERVICE_IP}{{- if ne $port "80" }}:{{ .Values.server.service.ports.http }}{{ end }}"
@@ -34,7 +36,7 @@ APP VERSION: {{ .Chart.AppVersion }}
 
 {{- else if contains "ClusterIP" .Values.server.service.type }}
 
-  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "argocd.server" . }} 8080:{{ .Values.server.service.ports.http }} &
+  kubectl port-forward --namespace {{ include "common.names.namespace" . }} svc/{{ include "argocd.server" . }} 8080:{{ .Values.server.service.ports.http }} &
   export URL=http://127.0.0.1:8080/
   echo "Argo CD URL: http://127.0.0.1:8080/"
 {{- end }}
@@ -43,7 +45,7 @@ APP VERSION: {{ .Chart.AppVersion }}
 2. Execute the following commands to obtain the Argo CD credentials:
 
   echo "Username: \"admin\""
-  echo "Password: $(kubectl -n {{ .Release.Namespace }} get secret argocd-secret -o jsonpath="{.data.clearPassword}" | base64 -d)"
+  echo "Password: $(kubectl -n {{ include "common.names.namespace" . }} get secret argocd-secret -o jsonpath="{.data.clearPassword}" | base64 -d)"
 
 {{- if not .Values.server.configEnabled -}}
 WARNING: server.configEnabled is disabled, a config map called "argocd-cm" must exist in your namespace
@@ -58,3 +60,6 @@ WARNING: config.createExtraKnownHosts is disabled, a secret called "argocd-ssh-k
 {{- include "common.warnings.rollingTag" .Values.redis.image }}
 
 {{- include "argocd.validateValues" . }}
+{{- include "common.warnings.resources" (dict "sections" (list "applicationSet" "controller" "dex" "notifications.bots.slack" "notifications" "repoServer" "server" "volumePermissions") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.dex.image .Values.volumePermissions.image .Values.redis.image) "context" $) }}
+{{- include "common.errors.insecureImages" (dict "images" (list .Values.image .Values.dex.image .Values.volumePermissions.image .Values.redis.image) "context" $) }}

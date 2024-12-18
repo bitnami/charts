@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -28,6 +28,9 @@ spec:
   {{ if eq .Values.service.type "LoadBalancer" }}
   loadBalancerSourceRanges: {{ .Values.service.loadBalancerSourceRanges }}
   {{- end }}
+  {{- if (and (eq .Values.service.type "LoadBalancer") (not (empty .Values.service.loadBalancerClass))) }}
+  loadBalancerClass: {{ .Values.service.loadBalancerClass }}
+  {{- end }}
   {{- if (and (eq .Values.service.type "LoadBalancer") (not (empty .Values.service.loadBalancerIP))) }}
   loadBalancerIP: {{ .Values.service.loadBalancerIP }}
   {{- end }}
@@ -43,6 +46,11 @@ spec:
       {{- else if eq .Values.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
+    {{- if .Values.metrics.serviceMonitor.enabled }}
+    - port: {{ .Values.metrics.serviceMonitor.port.number }}
+      name: {{ .Values.metrics.serviceMonitor.port.name }}
+      targetPort: 8081
+    {{- end }} 
     {{- if .Values.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}

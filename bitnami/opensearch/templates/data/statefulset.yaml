@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -50,6 +50,7 @@ spec:
     spec:
       serviceAccountName: {{ template "opensearch.data.serviceAccountName" . }}
       {{- include "opensearch.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.data.automountServiceAccountToken }}
       {{- if .Values.data.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.data.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -77,12 +78,11 @@ spec:
       priorityClassName: {{ .Values.data.priorityClassName | quote }}
       {{- end }}
       {{- if .Values.data.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.data.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.data.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.data.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.data.terminationGracePeriodSeconds }}
       {{- end }}
-      {{- if or .Values.data.initContainers .Values.sysctlImage.enabled (and .Values.volumePermissions.enabled .Values.data.persistence.enabled) }}
       initContainers:
         {{- if .Values.sysctlImage.enabled }}
           {{- include "opensearch.sysctl.initContainer" .  | nindent 8}}
@@ -102,24 +102,26 @@ spec:
             runAsUser: 0
           {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: data
               mountPath: /bitnami/opensearch/data
         {{- end }}
+        {{- include "opensearch.copy-default-plugins.initContainer" (dict "component" "data" "context" $) | nindent 8 }} 
         {{- if .Values.data.initContainers }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.data.initContainers "context" $) | nindent 8 }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.data.initContainers "context" $) | nindent 8 }}
         {{- end }}
         {{- if .Values.initContainers }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
         {{- end }}
-      {{- end }}
       containers:
         - name: opensearch
           image: {{ include "opensearch.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.data.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.data.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.data.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -143,9 +145,8 @@ spec:
                   fieldPath: metadata.name
             - name: OPENSEARCH_IS_DEDICATED_NODE
               value: "yes"
-            {{- $roles := ternary "data" (list "data" .Values.data.extraRoles) (empty .Values.data.extraRoles) }}
             - name: OPENSEARCH_NODE_ROLES
-              value: {{ join "," $roles | quote }}
+              value: {{ prepend .Values.data.extraRoles "data" | join "," | quote }}
             - name: OPENSEARCH_TRANSPORT_PORT_NUMBER
               value: {{ .Values.containerPorts.transport | quote }}
             - name: OPENSEARCH_HTTP_PORT_NUMBER
@@ -235,8 +236,25 @@ spec:
           {{- end }}
           {{- if .Values.data.resources }}
           resources: {{- toYaml .Values.data.resources | nindent 12 }}
+          {{- else if ne .Values.data.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.data.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/opensearch/config
+              subPath: app-conf-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/opensearch/tmp
+              subPath: app-tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/opensearch/logs
+              subPath: app-logs-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/opensearch/plugins
+              subPath: app-plugins-dir
             - name: data
               mountPath: /bitnami/opensearch/data
             {{- if .Values.config }}
@@ -266,6 +284,10 @@ spec:
             - name: custom-init-scripts-secret
               mountPath: /docker-entrypoint-initdb.d/init-scripts-secret
             {{- end }}
+            {{- if .Values.snapshots.persistence.enabled }}
+            - name: snapshots
+              mountPath: {{ include "opensearch.snapshots.mountPath" . }}
+            {{- end }}
             {{- if .Values.data.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.data.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
@@ -279,6 +301,8 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         {{- if or .Values.config .Values.extraConfig }}
         - name: config
           configMap:
@@ -312,6 +336,11 @@ spec:
             secretName: {{ template "opensearch.initScriptsSecret" . }}
             defaultMode: 0755
         {{- end }}
+        {{- if .Values.snapshots.persistence.enabled }}
+        - name: snapshots
+          persistentVolumeClaim:
+            claimName: {{ include "opensearch.snapshots.fullname" . }}
+        {{- end }}
         {{- if .Values.data.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.data.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
@@ -327,11 +356,13 @@ spec:
             claimName: {{ .Values.data.persistence.existingClaim }}
   {{- else }}
   volumeClaimTemplates:
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         name: "data"
         {{- if or .Values.data.persistence.annotations .Values.commonAnnotations }}
         {{- $claimAnnotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.data.persistence.annotations .Values.commonAnnotations ) "context" . ) }}
-        annotations: {{- include "common.tplvalues.render" ( dict "value" $claimAnnotations "context" $) | nindent 4 }}
+        annotations: {{- include "common.tplvalues.render" ( dict "value" $claimAnnotations "context" $) | nindent 10 }}
         {{- end }}
         {{- if .Values.commonLabels }}
         labels: {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 10 }}

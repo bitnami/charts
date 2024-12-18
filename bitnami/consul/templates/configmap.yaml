@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -14,7 +14,8 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 data:
-  config.json: {{- include "common.tplvalues.render" ( dict "value" .Values.configuration "context" $ ) | nindent 4 }}
+  config.json: |
+    {{- include "common.tplvalues.render" ( dict "value" .Values.configuration "context" $ ) | nindent 4 }}
   connection.json: |
     {
       "retry_join": ["{{ include "consul.retryjoin.endpoint" . }}"]

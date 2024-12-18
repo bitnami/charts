@@ -1,7 +1,7 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
-{{- $auth := printf "REDISCLI_AUTH=%s" .Vars.auth.password }}
+{{- $auth := printf "REDISCLI_AUTH='%s'" .Vars.auth.password }}
 {{- $master_endpoint := printf "-h redis-master -p %d" .Vars.master.service.ports.redis }}
 {{- $replicas_endpoint := printf "-h redis-replicas -p %d" .Vars.replica.service.ports.redis }}
 {{- $replicas := .Vars.replica.replicaCount }}
@@ -38,7 +38,7 @@ command:
     # or the one randomly defined by openshift (larger values). Otherwise, the chart is still using the default value.
     exec: if [ $(id -u) -lt {{ $uid }} ] || [ $(id -G | awk '{print $2}') -lt {{ $gid }} ]; then exit 1; fi
     exit-status: 0
-  {{ if .Vars.serviceAccount.automountServiceAccountToken }}
+  {{ if .Vars.master.automountServiceAccountToken }}
   check-sa:
     exec: cat /var/run/secrets/kubernetes.io/serviceaccount/token | cut -d '.' -f 2 | xargs -I '{}' echo '{}====' | fold -w 4 | sed '$ d' | tr -d '\n' | base64 -d
     exit-status: 0

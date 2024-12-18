@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -43,6 +43,7 @@ spec:
       {{- end }}
       serviceAccountName: {{ template "milvus.attu.serviceAccountName" . }}
       {{- include "milvus.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.attu.automountServiceAccountToken }}
       {{- if .Values.attu.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.attu.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -73,7 +74,7 @@ spec:
       schedulerName: {{ .Values.attu.schedulerName }}
       {{- end }}
       {{- if .Values.attu.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.attu.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.attu.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       initContainers:
         {{- if .Values.attu.enableDefaultInitContainers }}
@@ -87,7 +88,7 @@ spec:
           image: {{ template "milvus.attu.image" . }}
           imagePullPolicy: {{ .Values.attu.image.pullPolicy }}
           {{- if .Values.attu.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.attu.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.attu.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -119,14 +120,15 @@ spec:
               name: http
           {{- if .Values.attu.resources }}
           resources: {{- toYaml .Values.attu.resources | nindent 12 }}
+          {{- else if ne .Values.attu.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.attu.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.attu.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.attu.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.attu.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.attu.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /
+            tcpSocket:
               port: http
           {{- end }}
           {{- if .Values.attu.customReadinessProbe }}
@@ -149,14 +151,18 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.attu.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - name: tmp
+            - name: empty-dir
               mountPath: /tmp
-            - name: tmp-npm
+              subPath: tmp-dir
+            - name: empty-dir
               mountPath: /.npm
-            - name: tmp-yarn
+              subPath: npm-tmp-dir
+            - name: empty-dir
               mountPath: /.yarn
-            - name: tmp-yarn-cache
-              mountPath: /.cache/yarn
+              subPath: yarn-dir
+            - name: empty-dir
+              mountPath: /.cache
+              subPath: yarn-cache-dir
           {{- if .Values.attu.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.attu.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -164,13 +170,7 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.attu.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
-        - name: tmp-yarn
-          emptyDir: {}
-        - name: tmp-yarn-cache
-          emptyDir: {}
-        - name: tmp-npm
-          emptyDir: {}
-        - name: tmp
+        - name: empty-dir
           emptyDir: {}
         {{- if .Values.attu.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.attu.extraVolumes "context" $) | nindent 8 }}

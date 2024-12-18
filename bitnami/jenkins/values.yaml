@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 ## @section Global parameters
@@ -8,7 +8,8 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
+## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ##
 global:
   imageRegistry: ""
@@ -17,8 +18,22 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  defaultStorageClass: ""
   storageClass: ""
-
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: auto
 ## @section Common parameters
 
 ## @param kubeVersion Override Kubernetes version
@@ -30,6 +45,9 @@ nameOverride: ""
 ## @param fullnameOverride String to fully override common.names.fullname
 ##
 fullnameOverride: ""
+## @param replicaCount Number of container replicas
+##
+replicaCount: 1
 ## @param commonLabels Labels to add to all deployed objects
 ##
 commonLabels: {}
@@ -56,7 +74,6 @@ diagnosticMode:
   ##
   args:
     - infinity
-
 ## @section Jenkins Image parameters
 
 ## Bitnami Jenkins image
@@ -72,10 +89,9 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/jenkins
-  tag: 2.426.2-debian-11-r0
+  tag: 2.479.2-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -90,7 +106,6 @@ image:
   ## Enable debug mode
   ##
   debug: false
-
 ## @section Jenkins Configuration parameters
 ## Jenkins settings based on environment variables
 ## ref: https://github.com/bitnami/containers/tree/main/bitnami/jenkins#configuration
@@ -133,7 +148,6 @@ extraEnvVarsCM: ""
 ## @param extraEnvVarsSecret Name of existing Secret containing extra env vars
 ##
 extraEnvVarsSecret: ""
-
 ## @param plugins List of plugins to be installed during Jenkins first boot.
 ## Note: For this value to take effect on already initialized pods, set overridePlugins=true.
 ## plugins:
@@ -191,7 +205,6 @@ initHookScriptsCM: ""
 ## @param initHookScriptsSecret Secret containing `$JENKINS_HOME/init.groovy.d` scripts to be executed at initialization time that contain sensitive data. Evaluated as a template.
 ##
 initHookScriptsSecret: ""
-
 ## @section Jenkins TLS configuration
 ##
 tls:
@@ -217,23 +230,21 @@ tls:
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param tls.resources.limits Init container generate-tls-certs resource limits
-  ## @param tls.resources.requests Init container generate-tls-certs resource requests
+  ## @param tls.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if tls.resources is set (tls.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    ## Example:
-    ## limits:
-    ##   cpu: 100m
-    ##   memory: 128Mi
-    ##
-    limits: {}
-    ## Examples:
-    ## requests:
-    ##   cpu: 100m
-    ##   memory: 128Mi
-    ##
-    requests: {}
-
+  resourcesPreset: "nano"
+  ## @param tls.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
 ## @section Jenkins Configuration as Code plugin settings (EXPERIMENTAL)
 ## The values under this section require that the plugin 'configuration-as-code' is installed.
 ## All the configuration-as-code values are rendered as a template.
@@ -313,7 +324,9 @@ configAsCode:
     ## Configure Container Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
     ## @param configAsCode.autoReload.containerSecurityContext.enabled Enabled containers' Security Context
+    ## @param configAsCode.autoReload.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
     ## @param configAsCode.autoReload.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+    ## @param configAsCode.autoReload.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
     ## @param configAsCode.autoReload.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
     ## @param configAsCode.autoReload.containerSecurityContext.privileged Set container's Security Context privileged
     ## @param configAsCode.autoReload.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -323,16 +336,34 @@ configAsCode:
     ##
     containerSecurityContext:
       enabled: true
+      seLinuxOptions: {}
       runAsUser: 1001
+      runAsGroup: 1001
       runAsNonRoot: true
       privileged: false
-      readOnlyRootFilesystem: false
+      readOnlyRootFilesystem: true
       allowPrivilegeEscalation: false
       capabilities:
         drop: ["ALL"]
       seccompProfile:
         type: "RuntimeDefault"
-
+    ## Jenkins containers' resource requests and limits
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+    ## @param configAsCode.autoReload.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if configAsCode.autoReload.resources is set (configAsCode.autoReload.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+    ##
+    resourcesPreset: "none"
+    ## @param configAsCode.autoReload.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## Example:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    resources: {}
 ## Jenkins agents (EXPERIMENTAL)
 ## This feature won't take effect if ConfigAsCode is not enabled.
 ## NOTE: Values under this field may use Jenkins syntax instead of Kubernetes syntax
@@ -354,10 +385,9 @@ agent:
   image:
     registry: docker.io
     repository: bitnami/jenkins-agent
-    tag: 0.3198.0-debian-11-r0
+    tag: 0.3283.0-debian-12-r1
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -372,7 +402,6 @@ agent:
     ## Enable debug mode
     ##
     debug: false
-
   ## @param agent.templateLabel Label for the Kubernetes agent template
   ##
   templateLabel: "kubernetes-agent"
@@ -405,27 +434,35 @@ agent:
   extraTemplates: []
   ## Jenkins containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param agent.resources.limits The resources limits for the Jenkins container
-  ## @param agent.resources.requests [object] The requested resources for the Jenkins container
+  ## @param agent.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if agent.resources is set (agent.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests:
-      memory: 512Mi
-      cpu: 300m
+  resourcesPreset: "small"
+  ## @param agent.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Container securityContext
   ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param agent.containerSecurityContext.enabled Enable container security context
+  ## @param agent.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param agent.containerSecurityContext.runAsUser User ID for the agent container
   ## @param agent.containerSecurityContext.runAsGroup User ID for the agent container
   ## @param agent.containerSecurityContext.privileged Decide if the container runs privileged.
   ##
   containerSecurityContext:
     enabled: false
+    seLinuxOptions: {}
     runAsUser: ""
     runAsGroup: ""
     privileged: false
-
 ## @section Jenkins deployment parameters
 
 ## @param updateStrategy.type Jenkins deployment strategy type
@@ -440,7 +477,6 @@ agent:
 ##
 updateStrategy:
   type: RollingUpdate
-
 ## @param priorityClassName Jenkins pod priority class name
 ##
 priorityClassName: ""
@@ -453,6 +489,9 @@ schedulerName: ""
 ## The value is evaluated as a template
 ##
 topologySpreadConstraints: []
+## @param automountServiceAccountToken Mount Service Account token in pod
+##
+automountServiceAccountToken: true
 ## @param hostAliases Jenkins pod host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
@@ -486,6 +525,16 @@ sidecars: []
 ##        containerPort: 1234
 ##
 initContainers: []
+## Pod Disruption Budget configuration
+## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+## @param pdb.create Enable/disable a Pod Disruption Budget creation
+## @param pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+## @param pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `pdb.minAvailable` and `pdb.maxUnavailable` are empty.
+##
+pdb:
+  create: true
+  minAvailable: ""
+  maxUnavailable: ""
 ## @param lifecycleHooks Add lifecycle hooks to the Jenkins deployment
 ##
 lifecycleHooks: {}
@@ -537,14 +586,21 @@ nodeSelector: {}
 tolerations: []
 ## Jenkins containers' resource requests and limits
 ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-## @param resources.limits The resources limits for the Jenkins container
-## @param resources.requests [object] The requested resources for the Jenkins container
+## @param resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
+## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
 ##
-resources:
-  limits: {}
-  requests:
-    memory: 512Mi
-    cpu: 300m
+resourcesPreset: "medium"
+## @param resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+## Example:
+## resources:
+##   requests:
+##     cpu: 2
+##     memory: 512Mi
+##   limits:
+##     cpu: 3
+##     memory: 1024Mi
+##
+resources: {}
 ## Container ports
 ## @param containerPorts.http Jenkins HTTP container port
 ## @param containerPorts.https Jenkins HTTPS container port
@@ -557,15 +613,23 @@ containerPorts:
 ## Configure Pods Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param podSecurityContext.enabled Enabled Jenkins pods' Security Context
+## @param podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+## @param podSecurityContext.sysctls Set kernel settings using the sysctl interface
+## @param podSecurityContext.supplementalGroups Set filesystem extra groups
 ## @param podSecurityContext.fsGroup Set Jenkins pod's Security Context fsGroup
 ##
 podSecurityContext:
   enabled: true
+  fsGroupChangePolicy: Always
+  sysctls: []
+  supplementalGroups: []
   fsGroup: 1001
 ## Configure Container Security Context (only main container)
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ## @param containerSecurityContext.enabled Enabled containers' Security Context
+## @param containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
 ## @param containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+## @param containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
 ## @param containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
 ## @param containerSecurityContext.privileged Set container's Security Context privileged
 ## @param containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -575,10 +639,12 @@ podSecurityContext:
 ##
 containerSecurityContext:
   enabled: true
+  seLinuxOptions: {}
   runAsUser: 1001
+  runAsGroup: 1001
   runAsNonRoot: true
   privileged: false
-  readOnlyRootFilesystem: false
+  readOnlyRootFilesystem: true
   allowPrivilegeEscalation: false
   capabilities:
     drop: ["ALL"]
@@ -637,7 +703,6 @@ customLivenessProbe: {}
 ## @param customReadinessProbe Custom readinessProbe that overrides the default one
 #
 customReadinessProbe: {}
-
 ## @section Traffic Exposure Parameters
 
 ## Jenkins service parameters
@@ -697,7 +762,64 @@ service:
   ##     timeoutSeconds: 300
   ##
   sessionAffinityConfig: {}
-
+## Network Policies
+## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+##
+networkPolicy:
+  ## @param networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+  ##
+  enabled: true
+  ## @param networkPolicy.allowExternal Don't require server label for connections
+  ## The Policy model to apply. When set to false, only pods with the correct
+  ## server label will have network access to the ports server is listening
+  ## on. When true, server will accept connections from any source
+  ## (with the correct destination port).
+  ##
+  allowExternal: true
+  ## @param networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+  ##
+  allowExternalEgress: true
+  ## @param networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
+  ##
+  kubeAPIServerPorts: [443, 6443, 8443]
+  ## @param networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+  ## e.g:
+  ## extraIngress:
+  ##   - ports:
+  ##       - port: 1234
+  ##     from:
+  ##       - podSelector:
+  ##           - matchLabels:
+  ##               - role: frontend
+  ##       - podSelector:
+  ##           - matchExpressions:
+  ##               - key: role
+  ##                 operator: In
+  ##                 values:
+  ##                   - frontend
+  extraIngress: []
+  ## @param networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+  ## e.g:
+  ## extraEgress:
+  ##   - ports:
+  ##       - port: 1234
+  ##     to:
+  ##       - podSelector:
+  ##           - matchLabels:
+  ##               - role: frontend
+  ##       - podSelector:
+  ##           - matchExpressions:
+  ##               - key: role
+  ##                 operator: In
+  ##                 values:
+  ##                   - frontend
+  ##
+  extraEgress: []
+  ## @param networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+  ## @param networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+  ##
+  ingressNSMatchLabels: {}
+  ingressNSPodMatchLabels: {}
 ## Jenkins agent listener service parameters
 ## NOTE: ignored if agent.enabled=false
 ##
@@ -755,7 +877,6 @@ agentListenerService:
   ##     timeoutSeconds: 300
   ##
   sessionAffinityConfig: {}
-
 ## Configure the ingress resource that allows you to access the Jenkins installation
 ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
 ##
@@ -863,7 +984,6 @@ ingress:
   ##             name: http
   ##
   extraRules: []
-
 ## @section Persistence Parameters
 
 ## Persistence Parameters
@@ -920,7 +1040,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r92
+    tag: 12-debian-12-r33
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -933,22 +1053,32 @@ volumePermissions:
     pullSecrets: []
   ## Init container's resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param volumePermissions.resources.limits The resources limits for the init container
-  ## @param volumePermissions.resources.requests The requested resources for the init container
+  ## @param volumePermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "nano"
+  ## @param volumePermissions.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Init container Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param volumePermissions.securityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param volumePermissions.securityContext.runAsUser Set init container's Security Context runAsUser
   ## NOTE: when runAsUser is set to special value "auto", init container will try to chown the
   ##   data folder to auto-determined user&group, using commands: `id -u`:`id -G | cut -d" " -f2`
   ##   "auto" is especially useful for OpenShift which has scc with dynamic user ids (and 0 is not allowed)
   ##
   securityContext:
+    seLinuxOptions: {}
     runAsUser: 0
-
 ## @section Other Parameters
 ##
 
@@ -970,7 +1100,6 @@ rbac:
   ##       - list
   ##
   rules: []
-
 ## ServiceAccount configuration
 ##
 serviceAccount:
@@ -986,4 +1115,4 @@ serviceAccount:
   annotations: {}
   ## @param serviceAccount.automountServiceAccountToken Automount service account token for the server service account
   ##
-  automountServiceAccountToken: true
+  automountServiceAccountToken: false

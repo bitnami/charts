@@ -1,5 +1,5 @@
 {{/*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -177,7 +177,7 @@ Add environment variables to configure database values
 */}}
 {{- define "keycloak.databaseSecretPasswordKey" -}}
 {{- if .Values.postgresql.enabled -}}
-    {{- print "password" -}}
+    {{- printf "%s" (.Values.postgresql.auth.secretKeys.userPasswordKey | default "password") -}}
 {{- else -}}
     {{- if .Values.externalDatabase.existingSecret -}}
         {{- if .Values.externalDatabase.existingSecretPasswordKey -}}
@@ -209,14 +209,14 @@ Add environment variables to configure database values
     {{- if .Values.externalDatabase.existingSecretUserKey -}}
         {{- printf "%s" .Values.externalDatabase.existingSecretUserKey -}}
     {{- else -}}
-        {{- print "db-port" -}}
+        {{- print "db-user" -}}
     {{- end -}}
 {{- end -}}
 {{- define "keycloak.databaseSecretDatabaseKey" -}}
     {{- if .Values.externalDatabase.existingSecretDatabaseKey -}}
         {{- printf "%s" .Values.externalDatabase.existingSecretDatabaseKey -}}
     {{- else -}}
-        {{- print "db-port" -}}
+        {{- print "db-database" -}}
     {{- end -}}
 {{- end -}}
 
@@ -340,7 +340,7 @@ keycloak: tls.enabled
 
 {{/* Validate values of Keycloak - Production mode enabled */}}
 {{- define "keycloak.validateValues.production" -}}
-{{- if and .Values.production (not .Values.tls.enabled) (not (eq .Values.proxy "edge")) -}}
+{{- if and .Values.production (not .Values.tls.enabled) (not (eq .Values.proxy "edge")) (empty .Values.proxyHeaders) -}}
 keycloak: production
     In order to enable Production mode, you also need to enable HTTPS/TLS
     using the value 'tls.enabled' and providing an existing secret containing the Keystore and Trustore.

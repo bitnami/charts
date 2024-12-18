@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -35,6 +35,7 @@ spec:
     spec:
       serviceAccountName: {{ template "grafana-tempo.serviceAccountName" . }}
       {{- include "grafana-tempo.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.metricsGenerator.automountServiceAccountToken }}
       {{- if .Values.metricsGenerator.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.metricsGenerator.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -62,8 +63,9 @@ spec:
       schedulerName: {{ .Values.metricsGenerator.schedulerName }}
       {{- end }}
       {{- if .Values.metricsGenerator.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.metricsGenerator.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.metricsGenerator.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
+      enableServiceLinks: {{ .Values.metricsGenerator.enableServiceLinks }}
       initContainers:
         {{- if .Values.metricsGenerator.initContainers }}
           {{- include "common.tplvalues.render" (dict "value" .Values.metricsGenerator.initContainers "context" $) | nindent 8 }}
@@ -73,7 +75,7 @@ spec:
           image: {{ template "grafana-tempo.image" . }}
           imagePullPolicy: {{ .Values.tempo.image.pullPolicy }}
           {{- if .Values.metricsGenerator.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.metricsGenerator.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.metricsGenerator.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -110,15 +112,16 @@ spec:
             - containerPort: {{ .Values.tempo.containerPorts.grpc }}
               name: grpc
           {{- if .Values.metricsGenerator.resources }}
-          resources: {{- toYaml .Values.metricsGenerator.resources | nindent 12 }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.metricsGenerator.resources "context" $) | nindent 12 }}
+          {{- else if ne .Values.metricsGenerator.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.metricsGenerator.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.metricsGenerator.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metricsGenerator.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.metricsGenerator.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metricsGenerator.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /ready
+            tcpSocket:
               port: {{ .Values.tempo.containerPorts.web }}
           {{- end }}
           {{- if .Values.metricsGenerator.customReadinessProbe }}
@@ -141,6 +144,9 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.metricsGenerator.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: tempo-config
               mountPath: /bitnami/grafana-tempo/conf/tempo.yaml
               subPath: tempo.yaml
@@ -156,6 +162,8 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.metricsGenerator.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: data
           emptyDir: {}
         - name: tempo-config

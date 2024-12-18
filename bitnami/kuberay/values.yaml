@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 ## @section Global parameters
@@ -9,7 +9,8 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
+## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ##
 global:
   imageRegistry: ""
@@ -18,8 +19,22 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  defaultStorageClass: ""
   storageClass: ""
-
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: auto
 ## @section Common parameters
 ##
 
@@ -47,7 +62,6 @@ clusterDomain: cluster.local
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
-
 ## Enable diagnostic mode in the deployment
 ##
 diagnosticMode:
@@ -62,7 +76,6 @@ diagnosticMode:
   ##
   args:
     - infinity
-
 ## Bitnami Ray Image
 ## ref: https://hub.docker.com/r/bitnami/ray/tags/
 ## @param rayImage.registry [default: REGISTRY_NAME] Ray registry
@@ -76,10 +89,9 @@ diagnosticMode:
 rayImage:
   registry: docker.io
   repository: bitnami/ray
-  tag: 2.8.1-debian-11-r1
+  tag: 2.39.0-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -94,7 +106,6 @@ rayImage:
   ## Enable debug mode
   ##
   debug: false
-
 ## @section Kuberay Operator Parameters
 ##
 operator:
@@ -114,10 +125,9 @@ operator:
   image:
     registry: docker.io
     repository: bitnami/kuberay-operator
-    tag: 1.0.0-debian-11-r4
+    tag: 1.2.2-debian-12-r5
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -205,24 +215,41 @@ operator:
   enableBatchScheduler: false
   ## Kuberay Operator resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
-  ## @param operator.resources.limits The resources limits for the Kuberay Operator containers
-  ## @param operator.resources.requests The requested resources for the Kuberay Operator containers
+  ## @param operator.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if operator.resources is set (operator.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "nano"
+  ## @param operator.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param operator.podSecurityContext.enabled Enabled Kuberay Operator pods' Security Context
+  ## @param operator.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param operator.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param operator.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param operator.podSecurityContext.fsGroup Set Kuberay Operator pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param operator.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param operator.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param operator.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param operator.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param operator.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param operator.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param operator.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -232,7 +259,9 @@ operator:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: true
@@ -241,13 +270,15 @@ operator:
       drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
-
   ## @param operator.command Override default container command (useful when using custom images)
   ##
   command: []
   ## @param operator.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param operator.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param operator.hostAliases Kuberay Operator pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -275,8 +306,8 @@ operator:
   ## @param operator.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
   ## Node server.affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
@@ -316,7 +347,6 @@ operator:
     ## Can be set to RollingUpdate or OnDelete
     ##
     type: RollingUpdate
-
   ## @param operator.priorityClassName Kuberay Operator pods' priorityClassName
   ##
   priorityClassName: ""
@@ -375,7 +405,6 @@ operator:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
-
   ## Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
   ##
@@ -419,7 +448,6 @@ operator:
       ## @param operator.autoscaling.hpa.targetMemory Target Memory utilization percentage
       ##
       targetMemory: ""
-
   ## @section Kuberay Operator Traffic Exposure Parameters
   ##
   service:
@@ -473,7 +501,64 @@ operator:
     ##     timeoutSeconds: 300
     ##
     sessionAffinityConfig: {}
-
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param operator.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param operator.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
+    ##
+    kubeAPIServerPorts: [443, 6443, 8443]
+    ## @param operator.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param operator.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param operator.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param operator.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param operator.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param operator.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
   ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
@@ -577,7 +662,6 @@ operator:
     ##             name: http
     ##
     extraRules: []
-
   ## @section Kuberay Operator RBAC Parameters
   ##
 
@@ -599,7 +683,6 @@ operator:
     ##       - list
     ##
     rules: []
-
   ## ServiceAccount configuration
   ##
   serviceAccount:
@@ -615,8 +698,7 @@ operator:
     annotations: {}
     ## @param operator.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
-    automountServiceAccountToken: true
-
+    automountServiceAccountToken: false
   ## @section Kuberay Operator Metrics Parameters
   ##
 
@@ -675,7 +757,6 @@ operator:
       ##   prometheus: my-prometheus
       ##
       selector: {}
-
 ## @section Kuberay API Server Parameters
 ##
 apiserver:
@@ -695,10 +776,9 @@ apiserver:
   image:
     registry: docker.io
     repository: bitnami/kuberay-apiserver
-    tag: 1.0.0-debian-11-r2
+    tag: 1.2.2-debian-12-r5
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -783,24 +863,41 @@ apiserver:
   watchNamespaces: []
   ## Kuberay API Server resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
-  ## @param apiserver.resources.limits The resources limits for the Kuberay API Server containers
-  ## @param apiserver.resources.requests The requested resources for the Kuberay API Server containers
+  ## @param apiserver.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if apiserver.resources is set (apiserver.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "nano"
+  ## @param apiserver.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param apiserver.podSecurityContext.enabled Enabled Kuberay API Server pods' Security Context
+  ## @param apiserver.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param apiserver.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param apiserver.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param apiserver.podSecurityContext.fsGroup Set Kuberay API Server pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param apiserver.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param apiserver.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param apiserver.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param apiserver.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param apiserver.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param apiserver.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param apiserver.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -810,7 +907,9 @@ apiserver:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: true
@@ -819,13 +918,15 @@ apiserver:
       drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
-
   ## @param apiserver.command Override default container command (useful when using custom images)
   ##
   command: []
   ## @param apiserver.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param apiserver.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param apiserver.hostAliases Kuberay API Server pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -853,8 +954,8 @@ apiserver:
   ## @param apiserver.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
   ## Node server.affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
@@ -894,7 +995,6 @@ apiserver:
     ## Can be set to RollingUpdate or OnDelete
     ##
     type: RollingUpdate
-
   ## @param apiserver.priorityClassName Kuberay API Server pods' priorityClassName
   ##
   priorityClassName: ""
@@ -996,7 +1096,6 @@ apiserver:
       ## @param apiserver.autoscaling.hpa.targetMemory Target Memory utilization percentage
       ##
       targetMemory: ""
-
   ## @section Kuberay API Server Traffic Exposure Parameters
   ##
   service:
@@ -1054,7 +1153,64 @@ apiserver:
     ##     timeoutSeconds: 300
     ##
     sessionAffinityConfig: {}
-
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param apiserver.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param apiserver.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
+    ##
+    kubeAPIServerPorts: [443, 6443, 8443]
+    ## @param apiserver.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param apiserver.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param apiserver.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param apiserver.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param apiserver.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param apiserver.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
   ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
@@ -1158,7 +1314,6 @@ apiserver:
     ##             name: http
     ##
     extraRules: []
-
   ## @section Kuberay API Server RBAC Parameters
   ##
 
@@ -1180,7 +1335,6 @@ apiserver:
     ##       - list
     ##
     rules: []
-
   ## ServiceAccount configuration
   ##
   serviceAccount:
@@ -1196,8 +1350,7 @@ apiserver:
     annotations: {}
     ## @param apiserver.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
-    automountServiceAccountToken: true
-
+    automountServiceAccountToken: false
   ## @section Kuberay API Server Metrics Parameters
   ##
 
@@ -1256,8 +1409,6 @@ apiserver:
       ##   prometheus: my-prometheus
       ##
       selector: {}
-
-
 ## @section Ray Cluster Parameters
 ##
 cluster:
@@ -1275,24 +1426,41 @@ cluster:
     rayStartParams: {}
     ## Ray Cluster Worker (common) resource requests and limits
     ## ref: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
-    ## @param cluster.head.resources.limits The resources limits for the Ray Cluster Worker (common) containers
-    ## @param cluster.head.resources.requests The requested resources for the Ray Cluster Worker (common) containers
+    ## @param cluster.head.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if cluster.head.resources is set (cluster.head.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
     ##
-    resources:
-      limits: {}
-      requests: {}
+    resourcesPreset: "medium"
+    ## @param cluster.head.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## Example:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    resources: {}
     ## Configure Pods Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
     ## @param cluster.head.podSecurityContext.enabled Enabled Ray Cluster Worker (common) pods' Security Context
+    ## @param cluster.head.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+    ## @param cluster.head.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+    ## @param cluster.head.podSecurityContext.supplementalGroups Set filesystem extra groups
     ## @param cluster.head.podSecurityContext.fsGroup Set Ray Cluster Worker (common) pod's Security Context fsGroup
     ##
     podSecurityContext:
       enabled: true
+      fsGroupChangePolicy: Always
+      sysctls: []
+      supplementalGroups: []
       fsGroup: 1001
     ## Configure Container Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
     ## @param cluster.head.containerSecurityContext.enabled Enabled containers' Security Context
+    ## @param cluster.head.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
     ## @param cluster.head.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+    ## @param cluster.head.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
     ## @param cluster.head.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
     ## @param cluster.head.containerSecurityContext.privileged Set container's Security Context privileged
     ## @param cluster.head.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -1302,7 +1470,9 @@ cluster:
     ##
     containerSecurityContext:
       enabled: true
+      seLinuxOptions: {}
       runAsUser: 1001
+      runAsGroup: 1001
       runAsNonRoot: true
       privileged: false
       readOnlyRootFilesystem: true
@@ -1317,6 +1487,9 @@ cluster:
     ## @param cluster.head.args Override default container args (useful when using custom images)
     ##
     args: []
+    ## @param cluster.head.automountServiceAccountToken Mount Service Account token in pod
+    ##
+    automountServiceAccountToken: false
     ## @param cluster.head.hostAliases Ray Cluster Worker (common) pods host aliases
     ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
     ##
@@ -1367,7 +1540,6 @@ cluster:
     ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
     ##
     tolerations: []
-
     ## @param cluster.head.priorityClassName Ray Cluster Worker (common) pods' priorityClassName
     ##
     priorityClassName: ""
@@ -1456,24 +1628,41 @@ cluster:
       customStartupProbe: {}
       ## Ray Cluster Worker (common) resource requests and limits
       ## ref: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
-      ## @param cluster.worker.common.resources.limits The resources limits for the Ray Cluster Worker (common) containers
-      ## @param cluster.worker.common.resources.requests The requested resources for the Ray Cluster Worker (common) containers
+      ## @param cluster.worker.common.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if cluster.worker.common.resources is set (cluster.worker.common.resources is recommended for production).
+      ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
       ##
-      resources:
-        limits: {}
-        requests: {}
+      resourcesPreset: "small"
+      ## @param cluster.worker.common.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+      ## Example:
+      ## resources:
+      ##   requests:
+      ##     cpu: 2
+      ##     memory: 512Mi
+      ##   limits:
+      ##     cpu: 3
+      ##     memory: 1024Mi
+      ##
+      resources: {}
       ## Configure Pods Security Context
       ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
       ## @param cluster.worker.common.podSecurityContext.enabled Enabled Ray Cluster Worker (common) pods' Security Context
+      ## @param cluster.worker.common.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+      ## @param cluster.worker.common.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+      ## @param cluster.worker.common.podSecurityContext.supplementalGroups Set filesystem extra groups
       ## @param cluster.worker.common.podSecurityContext.fsGroup Set Ray Cluster Worker (common) pod's Security Context fsGroup
       ##
       podSecurityContext:
         enabled: true
+        fsGroupChangePolicy: Always
+        sysctls: []
+        supplementalGroups: []
         fsGroup: 1001
       ## Configure Container Security Context
       ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
       ## @param cluster.worker.common.containerSecurityContext.enabled Enabled containers' Security Context
+      ## @param cluster.worker.common.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
       ## @param cluster.worker.common.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+      ## @param cluster.worker.common.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
       ## @param cluster.worker.common.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
       ## @param cluster.worker.common.containerSecurityContext.privileged Set container's Security Context privileged
       ## @param cluster.worker.common.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -1483,7 +1672,9 @@ cluster:
       ##
       containerSecurityContext:
         enabled: true
+        seLinuxOptions: {}
         runAsUser: 1001
+        runAsGroup: 1001
         runAsNonRoot: true
         privileged: false
         readOnlyRootFilesystem: true
@@ -1498,6 +1689,9 @@ cluster:
       ## @param cluster.worker.common.args Override default container args (useful when using custom images)
       ##
       args: []
+      ## @param cluster.worker.common.automountServiceAccountToken Mount Service Account token in pod
+      ##
+      automountServiceAccountToken: false
       ## @param cluster.worker.common.hostAliases Ray Cluster Worker (common) pods host aliases
       ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
       ##
@@ -1548,7 +1742,6 @@ cluster:
       ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
       ##
       tolerations: []
-
       ## @param cluster.worker.common.priorityClassName Ray Cluster Worker (common) pods' priorityClassName
       ##
       priorityClassName: ""

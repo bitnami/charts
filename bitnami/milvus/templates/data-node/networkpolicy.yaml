@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -24,6 +24,10 @@ spec:
   policyTypes:
     - Ingress
     - Egress
+  {{- if .Values.dataNode.networkPolicy.allowExternalEgress }}
+  egress:
+    - {}
+  {{- else }}
   egress:
     # Allow dns resolution
     - ports:
@@ -33,32 +37,67 @@ spec:
           protocol: TCP
     # Allow outbound connections to other cluster pods
     - ports:
-        - port: {{ .Values.queryCoord.service.ports.grpc }}
-        - port: {{ .Values.dataCoord.service.ports.grpc }}
-        - port: {{ .Values.indexCoord.service.ports.grpc }}
-        - port: {{ .Values.rootCoord.service.ports.grpc }}
-        - port: {{ .Values.queryNode.service.ports.grpc }}
-        - port: {{ .Values.dataNode.service.ports.grpc }}
-        - port: {{ .Values.indexNode.service.ports.grpc }}
-        - port: {{ .Values.proxy.service.ports.grpc }}
-        - port: {{ include "milvus.etcd.port" . }}
-        - port: {{ include "milvus.s3.port" . }}
-        - port: {{ include "milvus.kafka.port" . }}
+        - port: {{ .Values.queryCoord.containerPorts.grpc }}
+        - port: {{ .Values.dataCoord.containerPorts.grpc }}
+        - port: {{ .Values.indexCoord.containerPorts.grpc }}
+        - port: {{ .Values.rootCoord.containerPorts.grpc }}
+        - port: {{ .Values.queryNode.containerPorts.grpc }}
+        - port: {{ .Values.dataNode.containerPorts.grpc }}
+        - port: {{ .Values.indexNode.containerPorts.grpc }}
+        - port: {{ .Values.proxy.containerPorts.grpc }}
+        - port: {{ .Values.proxy.containerPorts.grpcInternal }}
       to:
         - podSelector:
             matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
+    # Allow outbound connections to S3
+    - ports:
+        - port: {{ include "milvus.s3.port" . }}
+      {{- if .Values.minio.enabled }}
+        - port: {{ .Values.minio.containerPorts.api }}
+      to: 
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: minio
+              app.kubernetes.io/instance: {{ .Release.Name }}
+        {{- end }}
+    # Allow outbound connections to etcd
+    - ports:
+        - port: {{ include "milvus.etcd.port" . }}
+      to: 
+        {{- if .Values.etcd.enabled }}
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: etcd
+              app.kubernetes.io/instance: {{ .Release.Name }}
+        {{- end }}
+    # Allow outbound connections to kafka
+    - ports:
+        - port: {{ include "milvus.kafka.port" . }}
+      to: 
+        {{- if .Values.kafka.enabled }}
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: kafka
+              app.kubernetes.io/instance: {{ .Release.Name }}
+        {{- end }}
     {{- if .Values.dataNode.networkPolicy.extraEgress }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.dataNode.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
     {{- end }}
+  {{- end }}
   ingress:
     - ports:
-        - port: {{ .Values.dataNode.service.ports.grpc }}
+        - port: {{ .Values.dataNode.containerPorts.grpc }}
+        {{- if .Values.dataNode.metrics.enabled }}
+        - port: {{ .Values.dataNode.containerPorts.metrics }}
+        {{- end }}
       {{- if not .Values.dataNode.networkPolicy.allowExternal }}
       from:
         - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 14 }}
+              app.kubernetes.io/part-of: milvus
+        - podSelector:
             matchLabels:
               {{ template "common.names.fullname" . }}-client: "true"
-      {{- end }}
         {{- if .Values.dataNode.networkPolicy.ingressNSMatchLabels }}
         - namespaceSelector:
             matchLabels:
@@ -73,10 +112,7 @@ spec:
               {{- end }}
           {{- end }}
         {{- end }}
-    {{- if .Values.dataNode.metrics.enabled }}
-    - ports:
-        - port: {{ .Values.dataNode.service.ports.metrics }}
-    {{- end }}
+      {{- end }}
     {{- if .Values.dataNode.networkPolicy.extraIngress }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.dataNode.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
     {{- end }}

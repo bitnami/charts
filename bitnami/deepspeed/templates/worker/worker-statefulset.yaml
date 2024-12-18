@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -47,6 +47,7 @@ spec:
     spec:
       serviceAccountName: {{ template "deepspeed.v0.worker.serviceAccountName" . }}
       {{- include "deepspeed.v0.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.worker.automountServiceAccountToken }}
       {{- if .Values.worker.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.worker.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -74,7 +75,7 @@ spec:
       schedulerName: {{ .Values.worker.schedulerName | quote }}
       {{- end }}
       {{- if .Values.worker.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.worker.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.worker.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.worker.topologySpreadConstraints }}
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.worker.topologySpreadConstraints "context" .) | nindent 8 }}
@@ -100,7 +101,7 @@ spec:
           image: {{ include "deepspeed.v0.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.worker.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.worker.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.worker.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -145,14 +146,19 @@ spec:
             {{- end }}
           {{- if .Values.worker.resources }}
           resources: {{- toYaml .Values.worker.resources | nindent 12 }}
+          {{- else if ne .Values.worker.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.worker.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.worker.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.worker.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.worker.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.worker.livenessProbe "enabled") "context" $) | nindent 12 }}
-            tcpSocket:
-              port: tcp-ssh
+            exec:
+              command:
+                - pgrep
+                - -f
+                - sshd
           {{- end }}
           {{- if .Values.worker.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.worker.customReadinessProbe "context" $) | nindent 12 }}
@@ -175,21 +181,31 @@ spec:
           volumeMounts:
             - name: ssh-server-config
               mountPath: /etc/ssh/sshd_config.d
-            - name: sshd-config
+            - name: empty-dir
               mountPath: /etc/ssh/sshd_config
-              subPath: sshd_config
-            - name: ssh-worker-private-key
+              subPath: sshd-conf-dir/sshd_config
+            # As we are disabling host key verification from the client, we can
+            # auto-generate the worker private key
+            - name: empty-dir
               mountPath: /bitnami/ssh/server-private-key
-            - name: worker-home
-              mountPath: /home/
-            - name: tmp
+              subPath: app-worker-private-key-dir
+            # We need to use /home because of the permission
+            # limitations of sshd
+            - name: empty-dir
+              mountPath: /home
+              subPath: home-dir
+            - name: empty-dir
               mountPath: /tmp
-            - name: run
+              subPath: tmp-dir
+            - name: empty-dir
               mountPath: /run
-            - name: deepspeed-cache
+              subPath: run-dir
+            - name: empty-dir
               mountPath: /home/deepspeed/.cache
-            - name: deepspeed-local
+              subPath: app-cache-dir
+            - name: empty-dir
               mountPath: /home/deepspeed/.local
+              subPath: app-local-dir
             - name: source
               mountPath: /app
             {{- if .Values.worker.extraVolumeMounts }}
@@ -199,6 +215,8 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.worker.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         # Depending on the application, the source needs to be in the worker host
         - name: source
           {{- if or (.Values.source.existingConfigMap) (include "deepspeed.v0.source.createConfigMap" .) }}
@@ -211,29 +229,10 @@ spec:
         - name: ssh-client-private-key
           secret:
             secretName: {{ include "deepspeed.v0.ssh.keySecretName" . }}
-        # As we are disabling host key verification from the client, we can
-        # auto-generate the worker private key
-        - name: ssh-worker-private-key
-          emptyDir: {}
         # SSH Server configuration
         - name: ssh-server-config
           configMap:
             name: {{ include "deepspeed.v0.ssh.serverConfigMapName" . }}
-        - name: sshd-config
-          emptyDir: {}
-        # We need to use /home because of the permission
-        # limitations of sshd
-        - name: worker-home
-          emptyDir: {}
-        # Temporary folders
-        - name: tmp
-          emptyDir: {}
-        - name: run
-          emptyDir: {}
-        - name: deepspeed-cache
-          emptyDir: {}
-        - name: deepspeed-local
-          emptyDir: {}
         {{- if .Values.worker.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.worker.extraVolumes "context" $) | nindent 8 }}
         {{- end }}

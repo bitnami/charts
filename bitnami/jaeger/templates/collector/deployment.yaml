@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -32,6 +32,10 @@ spec:
       {{- end }}
     spec:
       {{- include "jaeger.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.collector.automountServiceAccountToken }}
+      {{- if .Values.collector.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.collector.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.collector.schedulerName }}
       schedulerName: {{ .Values.collector.schedulerName }}
       {{- end }}
@@ -45,7 +49,7 @@ spec:
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.collector.nodeAffinityPreset.type "key" .Values.collector.nodeAffinityPreset.key "values" .Values.collector.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.collector.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.collector.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.collector.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.collector.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.collector.nodeSelector "context" $) | nindent 8 }}
@@ -66,7 +70,7 @@ spec:
           image: {{ include "jaeger.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.collector.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.collector.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.collector.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -79,6 +83,8 @@ spec:
           args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
           {{- else if .Values.collector.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.collector.args "context" $) | nindent 12 }}
+          {{- else }}
+          args: ["--cassandra.basic.allowed-authenticators=org.apache.cassandra.auth.PasswordAuthenticator"]
           {{- end }}
           {{- if .Values.collector.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.collector.lifecycleHooks "context" $) | nindent 12 }}
@@ -92,6 +98,10 @@ spec:
               containerPort: {{ .Values.collector.containerPorts.grpc }}
             - name: admin
               containerPort: {{ .Values.collector.containerPorts.admin }}
+            - name: grpc-otlp
+              containerPort: {{ .Values.collector.containerPorts.otlp.grpc }}
+            - name: http-otlp
+              containerPort: {{ .Values.collector.containerPorts.otlp.http }}
           env:
             - name: CASSANDRA_SERVERS
               value: {{ include "jaeger.cassandra.host" . }}
@@ -147,8 +157,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.collector.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.collector.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.collector.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /
+            tcpSocket:
               port: admin
           {{- end }}
           {{- if .Values.collector.customReadinessProbe }}
@@ -162,9 +171,11 @@ spec:
           {{- end }}
           {{- if .Values.query.resources }}
           resources: {{- toYaml .Values.collector.resources | nindent 12 }}
+          {{- else if ne .Values.collector.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.collector.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if .Values.collector.extraVolumeMounts }}
-            {{- include "common.tplvalues.render" ( dict "value" .Values.collector.extraVolumeMounts "context" $) | nindent 12 }}
+          volumeMounts: {{- include "common.tplvalues.render" ( dict "value" .Values.collector.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
         {{- if .Values.collector.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.collector.sidecars "context" $) | nindent 8 }}

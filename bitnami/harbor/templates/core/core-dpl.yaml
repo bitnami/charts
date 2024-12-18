@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -7,7 +7,7 @@ apiVersion: {{ template "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ include "harbor.core" . }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.core.image "chart" .Chart ) ) }}
   {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
@@ -69,18 +69,40 @@ spec:
       {{- if .Values.core.schedulerName }}
       schedulerName: {{ .Values.core.schedulerName }}
       {{- end }}
+      serviceAccountName: {{ include "harbor.core.serviceAccountName" . }}
       {{- if .Values.core.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.core.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.core.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
-      {{- if .Values.core.initContainers }}
-      initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.core.initContainers "context" $) | nindent 8 }}
-      {{- end }}
+      initContainers:
+        {{- if .Values.core.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.core.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+        - name: certificate-volume
+          image: {{ include "harbor.core.image" . }}
+          imagePullPolicy: {{ .Values.core.image.pullPolicy | quote }}
+          command:
+            - /bin/bash
+          args:
+            - -ec
+            - cp -r /etc/ssl/certs/* /certs
+          {{- if .Values.core.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.core.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.certificateVolume.resources }}
+          resources: {{- toYaml .Values.certificateVolume.resources | nindent 12 }}
+          {{- else if ne .Values.certificateVolume.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.certificateVolume.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /certs
+              subPath: etc-ssl-certs
       containers:
         - name: core
           image: {{ include "harbor.core.image" . }}
           imagePullPolicy: {{ .Values.core.image.pullPolicy | quote }}
           {{- if .Values.core.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.core.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.core.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -175,9 +197,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.core.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.core.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.core.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /api/v2.0/ping
-              scheme: {{ ternary "https" "http" .Values.internalTLS.enabled | upper }}
+            tcpSocket:
               port: {{ ternary "https" "http" .Values.internalTLS.enabled }}
           {{- end }}
           {{- if .Values.core.customReadinessProbe }}
@@ -195,8 +215,16 @@ spec:
           {{- end }}
           {{- if .Values.core.resources }}
           resources: {{- toYaml .Values.core.resources | nindent 12 }}
+          {{- else if ne .Values.core.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.core.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /etc/ssl/certs
+              subPath: etc-ssl-certs
             - name: config
               mountPath: /etc/core/app.conf
               subPath: app.conf
@@ -231,6 +259,8 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.core.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: config
           configMap:
             name: {{ include "harbor.core" . }}

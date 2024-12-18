@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -7,7 +7,7 @@ apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ include "common.names.fullname" . }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: influxdb
   {{- if .Values.commonAnnotations }}
@@ -56,7 +56,7 @@ spec:
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.influxdb.tolerations "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.influxdb.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.influxdb.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.influxdb.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ include "influxdb.serviceAccountName" . }}
       initContainers:
@@ -84,6 +84,9 @@ spec:
           volumeMounts:
             - name: data
               mountPath: /bitnami/influxdb
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
         {{- end }}
         {{- if .Values.influxdb.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.influxdb.initContainers "context" $) | trim | nindent 8 }}
@@ -93,7 +96,7 @@ spec:
           image: {{ include "influxdb.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.influxdb.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.influxdb.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.influxdb.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -251,21 +254,9 @@ spec:
           {{- else if .Values.influxdb.livenessProbe.enabled }}
           {{- $livenessTimeout := sub (int .Values.influxdb.livenessProbe.timeoutSeconds) 1 }}
           livenessProbe: {{- omit .Values.influxdb.livenessProbe "enabled" | toYaml | nindent 12 }}
-            exec:
-              command:
-                - bash
-                - -c
-                - |
-                  . /opt/bitnami/scripts/libinfluxdb.sh
-
-                  influxdb_env
-
-                  {{- if .Values.auth.enabled }}
-                  export INFLUX_USERNAME="$INFLUXDB_ADMIN_USER"
-                  export INFLUX_PASSWORD="$INFLUXDB_ADMIN_USER_PASSWORD"
-                  {{- end }}
-
-                  timeout {{ $livenessTimeout }}s influx ping --host http://$POD_IP:{{ .Values.influxdb.containerPorts.http }}
+            httpGet:
+              port: http
+              path: /
           {{- end }}
           {{- if .Values.influxdb.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.influxdb.customReadinessProbe "context" $) | nindent 12 }}
@@ -291,11 +282,20 @@ spec:
           {{- end }}
           {{- if .Values.influxdb.resources }}
           resources: {{- toYaml .Values.influxdb.resources | nindent 12 }}
+          {{- else if ne .Values.influxdb.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.influxdb.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             {{- if or .Values.influxdb.configuration .Values.influxdb.existingConfiguration  }}
             - name: influxdb-config
               mountPath: /opt/bitnami/influxdb/etc
+            {{- else }}
+            - name: empty-dir
+              mountPath: /opt/bitnami/influxdb/etc
+              subPath: app-conf-dir
             {{- end }}
             {{- if or .Values.influxdb.initdbScripts .Values.influxdb.initdbScriptsCM }}
             - name: custom-init-scripts
@@ -320,6 +320,8 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.influxdb.sidecars "context" $) | trim | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         {{- if or .Values.influxdb.configuration .Values.influxdb.existingConfiguration }}
         - name: influxdb-config
           configMap:

@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -46,6 +46,7 @@ spec:
       schedulerName: {{ .Values.mongos.schedulerName | quote }}
       {{- end }}
       serviceAccountName: {{ include "mongodb-sharded.serviceAccountName" (dict "component" "mongos" "value" $.Values.mongos.serviceAccount "context" $) }}
+      automountServiceAccountToken: {{ .Values.mongos.automountServiceAccountToken }}
       {{- if .Values.mongos.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.mongos.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -70,7 +71,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.mongos.topologySpreadConstraints "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.mongos.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.mongos.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.mongos.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.mongos.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.mongos.terminationGracePeriodSeconds }}
@@ -90,7 +91,7 @@ spec:
           image: {{ include "mongodb-sharded.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.mongos.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.mongos.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.mongos.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           env:
             - name: MONGODB_ENABLE_NUMACTL
@@ -206,9 +207,8 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.mongos.livenessProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command:
-                - /bin/sh 
-                - -c 
-                - mongosh --port $MONGODB_PORT_NUMBER --eval "db.adminCommand('ping')"
+                - pgrep
+                - mongos
           {{- end }}
           {{- if .Values.mongos.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.mongos.customReadinessProbe "context" $) | nindent 12 }}
@@ -216,8 +216,8 @@ spec:
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.mongos.readinessProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command:
-                - /bin/sh 
-                - -c 
+                - /bin/sh
+                - -c
                 - mongosh --port $MONGODB_PORT_NUMBER --eval "db.adminCommand('ping')"
           {{- end }}
           {{- if .Values.mongos.customStartupProbe }}
@@ -225,13 +225,28 @@ spec:
           {{- else if .Values.mongos.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.mongos.startupProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
-              port: mongodb 
+              port: mongodb
           {{- end }}
           {{- end }}
           {{- if .Values.mongos.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.mongos.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/mongodb/conf
+              subPath: app-conf-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/mongodb/tmp
+              subPath: app-tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/mongodb/logs
+              subPath: app-logs-dir
+            - name: empty-dir
+              mountPath: /.mongodb
+              subPath: app-mongosh-dir
             {{- if .Values.auth.usePasswordFile }}
             - name: secrets
               mountPath: /bitnami/mongodb/secrets/
@@ -246,13 +261,17 @@ spec:
             {{- if $.Values.mongos.extraVolumeMounts }}
               {{- include "common.tplvalues.render" ( dict "value" $.Values.mongos.extraVolumeMounts "context" $ ) | nindent 12 }}
             {{- end }}
+          {{- if .Values.mongos.resources }}
           resources: {{- toYaml .Values.mongos.resources | nindent 12 }}
+          {{- else if ne .Values.mongos.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.mongos.resourcesPreset) | nindent 12 }}
+          {{- end }}
         {{- if .Values.metrics.enabled }}
         - name: metrics
           image: {{ include "mongodb-sharded.metrics.image" . }}
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
           {{- if .Values.metrics.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.metrics.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.metrics.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           env:
           {{- if $.Values.auth.enabled }}
@@ -283,11 +302,14 @@ spec:
               {{- end }}
               /bin/mongodb_exporter --collect-all --compatible-mode --web.listen-address ":{{ .Values.metrics.containerPorts.metrics }}" --mongodb.uri mongodb://$(echo $MONGODB_ROOT_USER):$(echo $MONGODB_ROOT_PASSWORD | sed -r "s/@/%40/g;s/:/%3A/g")@localhost:{{ .Values.common.containerPorts.mongodb }}/admin{{ ternary "?ssl=true" "" $.Values.metrics.useTLS }} {{ .Values.metrics.extraArgs }}
           {{- end }}
-          {{- if .Values.auth.usePasswordFile }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            {{- if .Values.auth.usePasswordFile }}
             - name: secrets
               mountPath: /bitnami/mongodb/secrets/
-          {{- end }}
+            {{- end }}
           ports:
             - name: metrics
               containerPort: {{ .Values.metrics.containerPorts.metrics }}
@@ -296,8 +318,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.metrics.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metrics.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /metrics
+            tcpSocket:
               port: metrics
           {{- end }}
           {{- if .Values.metrics.customReadinessProbe }}
@@ -316,15 +337,21 @@ spec:
               port: metrics
           {{- end }}
           {{- end }}
+          {{- if .Values.metrics.resources }}
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
+          {{- else if ne .Values.metrics.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.metrics.resourcesPreset) | nindent 12 }}
+          {{- end }}
         {{- end }}
-        {{- with $.Values.mongos.sidecars }}
+        {{- with .Values.mongos.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 8 }}
         {{- end }}
-        {{- with $.Values.common.sidecars }}
+        {{- with .Values.common.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         {{- if .Values.auth.usePasswordFile }}
         - name: secrets
           secret:

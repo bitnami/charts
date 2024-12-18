@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -20,9 +20,6 @@ metadata:
     {{- if .Values.server.secure }}
     ingress.kubernetes.io/protocol: https # Traefik
     nginx.ingress.kubernetes.io/backend-protocol: https # Nginx
-    {{- end }}
-    {{- if .Values.ingress.certManager }}
-    kubernetes.io/tls-acme: "true"
     {{- end }}
     {{- if or .Values.controller.service.annotations .Values.commonAnnotations }}
     {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.controller.service.annotations .Values.commonAnnotations ) "context" . ) }}

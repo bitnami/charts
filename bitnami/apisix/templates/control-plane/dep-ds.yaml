@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -48,6 +48,7 @@ spec:
       hostNetwork: {{ .Values.controlPlane.hostNetwork }}
       {{- end }}
       {{- include "apisix.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.controlPlane.automountServiceAccountToken }}
       {{- if .Values.controlPlane.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.controlPlane.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -75,7 +76,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.controlPlane.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.controlPlane.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.controlPlane.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.controlPlane.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.controlPlane.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.controlPlane.terminationGracePeriodSeconds }}
@@ -91,7 +92,7 @@ spec:
           image: {{ template "apisix.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           {{- if .Values.controlPlane.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.controlPlane.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.controlPlane.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -127,6 +128,8 @@ spec:
             {{- end }}
           {{- if .Values.controlPlane.resources }}
           resources: {{- toYaml .Values.controlPlane.resources | nindent 12 }}
+          {{- else if ne .Values.controlPlane.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.controlPlane.resourcesPreset) | nindent 12 }}
           {{- end }}
           ports:
             - name: {{ ternary "https" "http" .Values.controlPlane.tls.enabled }}-admin-api
@@ -135,15 +138,16 @@ spec:
               containerPort: {{ .Values.controlPlane.containerPorts.configServer }}
             - name: http-control
               containerPort: {{ .Values.controlPlane.containerPorts.control }}
+            {{- if .Values.controlPlane.metrics.enabled }}
             - name: http-metrics
               containerPort: {{ .Values.controlPlane.containerPorts.metrics }}
+            {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.controlPlane.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.controlPlane.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.controlPlane.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.controlPlane.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /v1/healthcheck
+            tcpSocket:
               port: http-control
           {{- end }}
           {{- if .Values.controlPlane.customReadinessProbe }}
@@ -167,12 +171,16 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.controlPlane.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - name: apisix-dir
+            - name: empty-dir
               mountPath: /usr/local/apisix
-            - name: tmp
+              subPath: app-tmp-dir
+            - name: empty-dir
               mountPath: /tmp
+              subPath: tmp-dir
+            {{- if .Values.controlPlane.tls.enabled }}
             - name: certs
               mountPath: /bitnami/certs
+            {{- end }}
           {{- if .Values.controlPlane.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.controlPlane.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -193,9 +201,7 @@ spec:
           secret:
             secretName: {{ template "apisix.control-plane.tlsSecretName" . }}
         {{- end }}
-        - name: apisix-dir
-          emptyDir: {}
-        - name: tmp
+        - name: empty-dir
           emptyDir: {}
         {{- if .Values.controlPlane.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.controlPlane.extraVolumes "context" $) | nindent 8 }}

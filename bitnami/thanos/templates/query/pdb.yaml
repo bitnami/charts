@@ -1,28 +1,27 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- $query := (include "thanos.query.values" . | fromYaml) -}}
-{{- if and $query.enabled $query.pdb.create }}
+{{- if and .Values.query.enabled .Values.query.pdb.create }}
 apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
 kind: PodDisruptionBudget
 metadata:
-  name: {{ include "common.names.fullname" . }}-query
-  namespace: {{ .Release.Namespace | quote }}
+  name: {{ include "thanos.query.fullname" . }}
+  namespace: {{ include "common.names.namespace" . }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: query
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  {{- if $query.pdb.minAvailable }}
-  minAvailable: {{ $query.pdb.minAvailable }}
+  {{- if .Values.query.pdb.minAvailable }}
+  minAvailable: {{ .Values.query.pdb.minAvailable }}
   {{- end }}
-  {{- if $query.pdb.maxUnavailable }}
-  maxUnavailable: {{ $query.pdb.maxUnavailable }}
+  {{- if or .Values.query.pdb.maxUnavailable ( not .Values.query.pdb.minAvailable ) }}
+  maxUnavailable: {{ .Values.query.pdb.maxUnavailable | default 1 }}
   {{- end }}
-  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list $query.podLabels .Values.commonLabels ) "context" . ) }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.query.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: query

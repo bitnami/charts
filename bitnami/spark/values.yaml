@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 ## @section Global parameters
@@ -9,7 +9,8 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
+## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ##
 global:
   imageRegistry: ""
@@ -18,8 +19,22 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  defaultStorageClass: ""
   storageClass: ""
-
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: auto
 ## @section Common parameters
 ##
 
@@ -78,7 +93,6 @@ diagnosticMode:
   ##
   args:
     - infinity
-
 ## @section Spark parameters
 ##
 
@@ -95,10 +109,9 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/spark
-  tag: 3.5.0-debian-11-r17
+  tag: 3.5.3-debian-12-r3
   digest: ""
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -118,7 +131,6 @@ image:
 ## If hostNetwork is true, then dnsPolicy is set to ClusterFirstWithHostNet
 ##
 hostNetwork: false
-
 ## @section Spark master parameters
 ##
 
@@ -136,6 +148,9 @@ master:
     http: 8080
     https: 8480
     cluster: 7077
+  ## @param master.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param master.hostAliases Deployment pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -170,21 +185,23 @@ master:
   ## Kubernetes Pods Security Context
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param master.podSecurityContext.enabled Enable security context
+  ## @param master.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param master.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param master.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param master.podSecurityContext.fsGroup Set master pod's Security Context Group ID
-  ## @param master.podSecurityContext.runAsUser Set master pod's Security Context User ID
-  ## @param master.podSecurityContext.runAsGroup Set master pod's Security Context Group ID
-  ## @param master.podSecurityContext.seLinuxOptions Set master pod's Security Context SELinux options
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
-    runAsUser: 1001
-    runAsGroup: 0
-    seLinuxOptions: {}
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param master.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param master.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param master.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param master.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param master.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param master.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param master.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -194,10 +211,12 @@ master:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
@@ -299,22 +318,21 @@ master:
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param master.resources.limits The resources limits for the container
-  ## @param master.resources.requests The requested resources for the container
+  ## @param master.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if master.resources is set (master.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    ## Example:
-    ## limits:
-    ##    cpu: 250m
-    ##    memory: 256Mi
-    ##
-    limits: {}
-    ## Examples:
-    ## requests:
-    ##    cpu: 250m
-    ##    memory: 256Mi
-    ##
-    requests: {}
+  resourcesPreset: "small"
+  ## @param master.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure extra options for liveness probe
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param master.livenessProbe.enabled Enable livenessProbe
@@ -371,6 +389,61 @@ master:
   ## @param master.customStartupProbe Custom startupProbe that overrides the default one
   ##
   customStartupProbe: {}
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param master.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param master.networkPolicy.allowExternal Don't require client label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## client label will have network access to the ports the application is listening
+    ## on. When true, the app will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param master.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param master.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param master.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param master.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param master.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
   ## @param master.sidecars Add additional sidecar containers to the master pod(s)
   ## e.g:
   ## sidecars:
@@ -393,7 +466,16 @@ master:
   ##         containerPort: 1234
   ##
   initContainers: []
-
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param master.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param master.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param master.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `master.pdb.minAvailable` and `master.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
 ## @section Spark worker parameters
 ##
 
@@ -411,6 +493,9 @@ worker:
     http: 8080
     https: 8480
     cluster: ""
+  ## @param worker.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param worker.hostAliases Add deployment host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -460,17 +545,25 @@ worker:
   ## Kubernetes Pods Security Context
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param worker.podSecurityContext.enabled Enable security context
+  ## @param worker.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param worker.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param worker.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param worker.podSecurityContext.fsGroup Group ID for the container
-  ## @param worker.podSecurityContext.seLinuxOptions SELinux options for the container
+  ## @param worker.podSecurityContext.seLinuxOptions [object,nullable] SELinux options for the container
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
     seLinuxOptions: {}
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param worker.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param worker.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param worker.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param worker.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param worker.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param worker.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param worker.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -480,10 +573,12 @@ worker:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
@@ -589,22 +684,21 @@ worker:
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param worker.resources.limits The resources limits for the container
-  ## @param worker.resources.requests The requested resources for the container
+  ## @param worker.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if worker.resources is set (worker.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    ## Example:
-    ## limits:
-    ##    cpu: 250m
-    ##    memory: 256Mi
-    ##
-    limits: {}
-    ## Examples:
-    ## requests:
-    ##    cpu: 250m
-    ##    memory: 256Mi
-    ##
-    requests: {}
+  resourcesPreset: "small"
+  ## @param worker.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure extra options for liveness probe
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param worker.livenessProbe.enabled Enable livenessProbe
@@ -661,6 +755,61 @@ worker:
   ## @param worker.customStartupProbe Custom startupProbe that overrides the default one
   ##
   customStartupProbe: {}
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param worker.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param worker.networkPolicy.allowExternal Don't require client label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## client label will have network access to the ports the application is listening
+    ## on. When true, the app will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param worker.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param worker.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param worker.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param worker.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param worker.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
   ## @param worker.sidecars Add additional sidecar containers to the worker pod(s)
   ## e.g:
   ## sidecars:
@@ -683,6 +832,16 @@ worker:
   ##         containerPort: 1234
   ##
   initContainers: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param worker.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param worker.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param worker.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `worker.pdb.minAvailable` and `worker.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
   ## Autoscaling parameters
   ## @param worker.autoscaling.enabled Enable replica autoscaling depending on CPU
   ## @param worker.autoscaling.minReplicas Minimum number of worker replicas
@@ -696,7 +855,6 @@ worker:
     maxReplicas: 5
     targetCPU: 50
     targetMemory: ""
-
 ## @section Security parameters
 ##
 
@@ -754,23 +912,21 @@ security:
     ## choice for the user. This also increases chances charts run on environments with little
     ## resources, such as Minikube. If you do want to specify resources, uncomment the following
     ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    ## @param security.ssl.resources.limits The resources limits for the container
-    ## @param security.ssl.resources.requests The requested resources for the container
+    ## @param security.ssl.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if security.ssl.resources is set (security.ssl.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
     ##
-    resources:
-      ## Example:
-      ## limits:
-      ##    cpu: 100m
-      ##    memory: 128Mi
-      ##
-      limits: {}
-      ## Examples:
-      ## requests:
-      ##    cpu: 100m
-      ##    memory: 128Mi
-      ##
-      requests: {}
-
+    resourcesPreset: "small"
+    ## @param security.ssl.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## Example:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    resources: {}
 ## @section Traffic Exposure parameters
 ##
 
@@ -940,7 +1096,6 @@ ingress:
   ##             name: http
   ##
   extraRules: []
-
 ## @section Other parameters
 ##
 
@@ -961,7 +1116,6 @@ serviceAccount:
   ## @param serviceAccount.automountServiceAccountToken Automount API credentials for a service account.
   ##
   automountServiceAccountToken: false
-
 ## @section Metrics parameters
 ##
 

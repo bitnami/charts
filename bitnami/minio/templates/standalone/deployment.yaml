@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -58,11 +58,15 @@ spec:
       {{- if .Values.priorityClassName }}
       priorityClassName: {{ .Values.priorityClassName | quote }}
       {{- end }}
+      {{- if .Values.runtimeClassName }}
+      runtimeClassName: {{ .Values.runtimeClassName | quote }}
+      {{- end}}
+      automountServiceAccountToken: {{ .Values.automountServiceAccountToken }}
       {{- if .Values.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
@@ -84,8 +88,13 @@ spec:
           securityContext: {{- .Values.volumePermissions.containerSecurityContext | toYaml | nindent 12 }}
           {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: data
               mountPath: {{ .Values.persistence.mountPath }}
         {{- end }}
@@ -95,7 +104,7 @@ spec:
           image: {{ include "minio.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.command "context" $) | nindent 12 }}
@@ -110,25 +119,24 @@ spec:
               value: {{ ternary "https" "http" .Values.tls.enabled | quote }}
             - name: MINIO_FORCE_NEW_KEYS
               value: {{ ternary "yes" "no" .Values.auth.forceNewKeys | quote }}
+            - name: MINIO_API_PORT_NUMBER
+              value: {{ .Values.containerPorts.api | quote }}
             {{- if .Values.auth.useCredentialsFiles }}
             - name: MINIO_ROOT_USER_FILE
               value: "/opt/bitnami/minio/secrets/root-user"
+            - name: MINIO_ROOT_PASSWORD_FILE
+              value: "/opt/bitnami/minio/secrets/root-password"
             {{- else }}
             - name: MINIO_ROOT_USER
               valueFrom:
                 secretKeyRef:
                   name: {{ include "minio.secretName" . }}
-                  key: root-user
-            {{- end }}
-            {{- if .Values.auth.useCredentialsFiles }}
-            - name: MINIO_ROOT_PASSWORD_FILE
-              value: "/opt/bitnami/minio/secrets/root-password"
-            {{- else }}
+                  key: {{ include "minio.rootUserKey" . }}
             - name: MINIO_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "minio.secretName" . }}
-                  key: root-password
+                  key: {{ include "minio.rootPasswordKey" . }}
             {{- end }}
             {{- if .Values.defaultBuckets }}
             - name: MINIO_DEFAULT_BUCKETS
@@ -143,6 +151,10 @@ spec:
             {{- if .Values.tls.mountPath }}
             - name: MINIO_CERTS_DIR
               value: {{ .Values.tls.mountPath | quote }}
+            {{- end }}
+            {{- if .Values.persistence.mountPath }}
+            - name: MINIO_DATA_DIR
+              value: {{ .Values.persistence.mountPath | quote }}
             {{- end }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
@@ -203,12 +215,23 @@ spec:
           {{- end }}
           {{- if .Values.resources }}
           resources: {{- toYaml .Values.resources | nindent 12 }}
+          {{- else if ne .Values.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if .Values.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
-            {{- if .Values.auth.useCredentialsFiles }}
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/minio/tmp
+              subPath: app-tmp-dir
+            - name: empty-dir
+              mountPath: /.mc
+              subPath: app-mc-dir
+            {{- if and .Values.auth.useSecret .Values.auth.useCredentialsFiles }}
             - name: minio-credentials
               mountPath: /opt/bitnami/minio/secrets/
             {{- end }}
@@ -225,7 +248,9 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
-        {{- if .Values.auth.useCredentialsFiles }}
+        - name: empty-dir
+          emptyDir: {}
+        {{- if and .Values.auth.useSecret .Values.auth.useCredentialsFiles }}
         - name: minio-credentials
           secret:
             secretName: {{ include "minio.secretName" . }}

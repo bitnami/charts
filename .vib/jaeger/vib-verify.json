@@ -25,7 +25,8 @@
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
-            "name": "M4"
+            "name": "S4",
+            "worker_nodes_instance_count": 3
           }
         }
       },
@@ -40,7 +41,7 @@
             "vars_file": "jaeger/runtime-parameters.yaml",
             "remote": {
               "pod": {
-                "workload": "deploy-jaeger--agent"
+                "workload": "deploy-jaeger-collector"
               }
             }
           }
@@ -53,6 +54,12 @@
             },
             "endpoint": "lb-jaeger-query-api",
             "app_protocol": "HTTP"
+          }
+        },
+        {
+          "action_id": "kubescape",
+          "params": {
+            "threshold": {VIB_ENV_KUBESCAPE_SCORE_THRESHOLD}
           }
         }
       ]

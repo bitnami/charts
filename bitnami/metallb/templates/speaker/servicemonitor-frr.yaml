@@ -1,0 +1,47 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.speaker.enabled .Values.speaker.frr.metrics.serviceMonitor.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ printf "%s-speaker-frr" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  namespace: {{ default .Release.Namespace .Values.speaker.frr.metrics.serviceMonitor.namespace | quote }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.speaker.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.speaker.frr.metrics.serviceMonitor.labels .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: speaker
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  jobLabel: {{ .Values.speaker.frr.metrics.serviceMonitor.jobLabel | quote }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/component: speaker
+      {{- if .Values.speaker.frr.metrics.serviceMonitor.selector }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.speaker.frr.metrics.serviceMonitor.selector "context" $) | nindent 6 }}
+      {{- end }}
+  namespaceSelector:
+    matchNames:
+    - {{ include "common.names.namespace" .| quote }}
+  endpoints:
+    - port: frrmetrics
+      {{- if .Values.speaker.frr.metrics.serviceMonitor.interval }}
+      interval: {{ .Values.speaker.frr.metrics.serviceMonitor.interval }}
+      {{- end }}
+      {{- if .Values.speaker.frr.metrics.serviceMonitor.scrapeTimeout }}
+      scrapeTimeout: {{ .Values.speaker.frr.metrics.serviceMonitor.scrapeTimeout }}
+      {{- end }}
+      {{- if .Values.speaker.frr.metrics.serviceMonitor.honorLabels }}
+      honorLabels: {{ .Values.speaker.frr.metrics.serviceMonitor.honorLabels }}
+      {{- end }}
+      {{- if .Values.speaker.frr.metrics.serviceMonitor.metricRelabelings }}
+      metricRelabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.speaker.frr.metrics.serviceMonitor.metricRelabelings "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.speaker.frr.metrics.serviceMonitor.relabelings }}
+      relabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.speaker.frr.metrics.serviceMonitor.relabelings "context" $) | nindent 8 }}
+      {{- end }}
+{{- end -}}

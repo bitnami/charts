@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -7,7 +7,7 @@ SPDX-License-Identifier: APACHE-2.0
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: {{ printf "%s-dashboard" (include "common.names.fullname" .) }}
+  name: {{ include "parse.dashboard.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.dashboard.image "chart" .Chart ) ) }}
   {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
@@ -35,6 +35,7 @@ spec:
     spec:
       serviceAccountName: {{ template "parse.serviceAccountName" . }}
       {{- include "parse.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.dashboard.automountServiceAccountToken }}
       {{- if .Values.dashboard.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.dashboard.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -62,20 +63,49 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.dashboard.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.dashboard.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.dashboard.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.dashboard.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.dashboard.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.dashboard.terminationGracePeriodSeconds }}
       {{- end }}
-      {{- if .Values.dashboard.initContainers }}
-      initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.dashboard.initContainers "context" $) | nindent 8 }}
-      {{- end }}
+      initContainers:
+        - name: create-default-config
+          image: {{ include "parse.dashboard.image" . }}
+          imagePullPolicy: {{ .Values.dashboard.image.pullPolicy | quote }}
+          {{- if .Values.dashboard.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.dashboard.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          command:
+            - /bin/bash
+          args:
+            - -ec
+            - |
+              #!/bin/bash
+
+              # HACK: We need to create this file in the emptyDir volume to make it writable
+              # in the
+              touch /default-conf/config.json
+          {{- if .Values.dashboard.resources }}
+          resources: {{- toYaml .Values.dashboard.resources | nindent 12 }}
+          {{- else if ne .Values.dashboard.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.dashboard.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /default-conf
+              subPath: app-default-conf-dir
+        {{- if .Values.dashboard.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.dashboard.initContainers "context" $) | nindent 8 }}
+        {{- end }}
       containers:
         - name: parse-dashboard
           image: {{ include "parse.dashboard.image" . }}
           imagePullPolicy: {{ .Values.dashboard.image.pullPolicy | quote }}
           {{- if .Values.dashboard.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.dashboard.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.dashboard.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -114,6 +144,8 @@ spec:
                   key: master-key
             - name: PARSE_DASHBOARD_APP_NAME
               value: {{ .Values.dashboard.appName | quote }}
+            - name: PARSE_FORCE_OVERWRITE_CONF_FILE
+              value: {{ ternary "yes" "no" .Values.server.forceOverwriteConfFile | quote }}
             {{- if .Values.dashboard.extraEnvVars }}
               {{- include "common.tplvalues.render" ( dict "value" .Values.dashboard.extraEnvVars "context" $ ) | nindent 12 }}
             {{- end }}
@@ -130,6 +162,8 @@ spec:
           {{- end }}
           {{- if .Values.dashboard.resources }}
           resources: {{- toYaml .Values.dashboard.resources | nindent 12 }}
+          {{- else if ne .Values.dashboard.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.dashboard.resourcesPreset) | nindent 12 }}
           {{- end }}
           ports:
             - name: http-dashboard
@@ -139,8 +173,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.dashboard.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.dashboard.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.dashboard.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /
+            tcpSocket:
               port: http-dashboard
           {{- end }}
           {{- if .Values.dashboard.customReadinessProbe }}
@@ -164,10 +197,25 @@ spec:
           {{- end }}
           {{- if .Values.dashboard.resources }}
           resources: {{- toYaml .Values.dashboard.resources | nindent 12 }}
+          {{- else if ne .Values.dashboard.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.dashboard.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - name: parse-dashboard-data
+            - name: empty-dir
               mountPath: /bitnami/parse-dashboard
+              subPath: app-data-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/parse-dashboard/config.json
+              subPath: app-default-conf-dir/config.json
+            - name: empty-dir
+              mountPath: /opt/bitnami/parse-dashboard/tmp
+              subPath: app-tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/parse-dashboard/logs
+              subPath: app-logs-dir
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
           {{- if .Values.dashboard.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.dashboard.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -175,7 +223,7 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.dashboard.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
-        - name: parse-dashboard-data
+        - name: empty-dir
           emptyDir: {}
         {{- if .Values.dashboard.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.dashboard.extraVolumes "context" $) | nindent 8 }}

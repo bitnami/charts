@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -31,6 +31,8 @@ spec:
         app.kubernetes.io/component: image-puller
     spec:
       {{- include "jupyterhub.imagePullSecrets" . | nindent 6 }}
+      serviceAccountName: {{ template "jupyterhub.imagePullerServiceAccountName" . }}
+      automountServiceAccountToken: {{ .Values.imagePuller.automountServiceAccountToken }}
       {{- if .Values.imagePuller.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.imagePuller.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -58,7 +60,7 @@ spec:
       schedulerName: {{ .Values.imagePuller.schedulerName }}
       {{- end }}
       {{- if .Values.imagePuller.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.imagePuller.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.imagePuller.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.imagePuller.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.imagePuller.terminationGracePeriodSeconds }}
@@ -70,13 +72,15 @@ spec:
           imagePullPolicy: {{ .pullPolicy }}
           {{- if $.Values.imagePuller.resources }}
           resources: {{- toYaml $.Values.imagePuller.resources | nindent 12 }}
+          {{- else if ne $.Values.imagePuller.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" $.Values.imagePuller.resourcesPreset) | nindent 12 }}
           {{- end }}
           command:
             - /bin/sh
             - -c
             - echo "Pulling complete"
           {{- if $.Values.imagePuller.containerSecurityContext.enabled }}
-          securityContext: {{- omit $.Values.imagePuller.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" $.Values.imagePuller.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
       {{- end }}
       {{- if .Values.imagePuller.initContainers }}
@@ -90,7 +94,7 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.imagePuller.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.imagePuller.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.imagePuller.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.imagePuller.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -121,9 +125,11 @@ spec:
             {{- end }}
           {{- if .Values.imagePuller.resources }}
           resources: {{- toYaml .Values.imagePuller.resources | nindent 12 }}
+          {{- else if ne .Values.imagePuller.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.imagePuller.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if .Values.imagePuller.customStartupProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.imagePuller.customStartupProbe "context" $) | nindent 12 }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.imagePuller.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.imagePuller.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.imagePuller.customLivenessProbe "context" $) | nindent 12 }}
@@ -133,12 +139,18 @@ spec:
           {{- end }}
           {{- if .Values.imagePuller.extraVolumeMounts }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             {{- include "common.tplvalues.render" (dict "value" .Values.imagePuller.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
         {{- if .Values.imagePuller.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.imagePuller.sidecars "context" $) | nindent 8 }}
         {{- end }}
-      {{- if .Values.imagePuller.extraVolumes }}
-      volumes: {{- include "common.tplvalues.render" (dict "value" .Values.imagePuller.extraVolumes "context" $) | nindent 8 }}
-      {{- end }}
+      volumes:
+        - name: empty-dir
+          emptyDir: {}
+        {{- if .Values.imagePuller.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.imagePuller.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
 {{- end }}

@@ -92,7 +92,7 @@ extraDeploy:
       interval: 5m
       url: https://github.com/mdhont/podinfo
       ref:
-        branch: master
+        branch: '{{ ternary "openshift" "master" (.Capabilities.APIVersions.Has "security.openshift.io/v1") }}'
   - apiVersion: kustomize.toolkit.fluxcd.io/v1
     kind: Kustomization
     metadata:
@@ -125,7 +125,7 @@ extraDeploy:
   - apiVersion: helm.toolkit.fluxcd.io/v2beta2
     kind: HelmRelease
     metadata:
-      name: vib-dokuwiki
+      name: vib-nginx
       namespace: '{{ include "common.names.namespace" . }}'
       annotations:
         "helm.sh/hook": post-install
@@ -133,19 +133,19 @@ extraDeploy:
       interval: 5m
       chart:
         spec:
-          chart: ./bitnami/dokuwiki
+          chart: ./bitnami/nginx
           sourceRef:
             kind: GitRepository
             name: vib-bitnami-charts
             namespace: '{{ include "common.names.namespace" . }}'
           interval: 1m
       values:
-        fullnameOverride: vib-dokuwiki
+        global:
+          compatibility:
+            openshift:
+              adaptSecurityContext: auto
+        fullnameOverride: vib-nginx
         persistence:
-          enabled: false
-        podSecurityContext:
-          enabled: false
-        containerSecurityContext:
           enabled: false
   # This is for image-notification-controller. We will use the metrics to ensure that it is consumed
   # and therefore RBAC is correct. The values do not need to be correct
@@ -172,7 +172,7 @@ extraDeploy:
   # This is for image-reflector-controller. We will use the metrics to ensure that it is consumed
   # and therefore RBAC is correct. The values do not need to be correct
   # Source: https://fluxcd.io/flux/components/image/imagerepositories/
-  - apiVersion: image.toolkit.fluxcd.io/v1beta1
+  - apiVersion: image.toolkit.fluxcd.io/v1beta2
     kind: ImageRepository
     metadata:
       name: vib-image-rep-podinfo

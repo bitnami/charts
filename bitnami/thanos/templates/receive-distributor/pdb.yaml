@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -7,10 +7,10 @@ SPDX-License-Identifier: APACHE-2.0
 apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
 kind: PodDisruptionBudget
 metadata:
-  name: {{ include "common.names.fullname" . }}-receive-distributor
-  namespace: {{ .Release.Namespace | quote }}
+  name: {{ include "thanos.receive-distributor.fullname" . }}
+  namespace: {{ include "common.names.namespace" . }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
-    app.kubernetes.io/component: receive
+    app.kubernetes.io/component: receive-distributor
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -18,8 +18,8 @@ spec:
   {{- if .Values.receiveDistributor.pdb.minAvailable }}
   minAvailable: {{ .Values.receiveDistributor.pdb.minAvailable }}
   {{- end }}
-  {{- if .Values.receiveDistributor.pdb.maxUnavailable }}
-  maxUnavailable: {{ .Values.receiveDistributor.pdb.maxUnavailable }}
+  {{- if or .Values.receiveDistributor.pdb.maxUnavailable ( not .Values.receiveDistributor.pdb.minAvailable ) }}
+  maxUnavailable: {{ .Values.receiveDistributor.pdb.maxUnavailable | default 1 }}
   {{- end }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.receiveDistributor.podLabels .Values.commonLabels ) "context" . ) }}
   selector:

@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -31,7 +31,7 @@ spec:
             {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
             pathType: {{ .Values.ingress.dashboard.pathType }}
             {{- end }}
-            backend: {{- include "common.ingress.backend" (dict "serviceName" (printf "%s-dashboard" (include "common.names.fullname" $)) "servicePort" "http-dashboard" "context" $)  | nindent 14 }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "parse.dashboard.fullname" .) "servicePort" "http-dashboard" "context" $)  | nindent 14 }}
     {{- end }}
     {{- range .Values.ingress.dashboard.extraHosts }}
     - host: {{ .name | quote }}
@@ -41,7 +41,7 @@ spec:
             {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
             pathType: {{ default "ImplementationSpecific" .pathType }}
             {{- end }}
-            backend: {{- include "common.ingress.backend" (dict "serviceName" (printf "%s-dashboard" (include "common.names.fullname" $)) "servicePort" "http-dashboard" "context" $) | nindent 14 }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "parse.dashboard.fullname" .) "servicePort" "http-dashboard" "context" $) | nindent 14 }}
     {{- end }}
   {{- end }}
   {{- if .Values.ingress.server.hostname }}

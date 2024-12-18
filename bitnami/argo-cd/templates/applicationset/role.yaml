@@ -1,14 +1,14 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if and .Values.rbac.create .Values.applicationSet.enabled }}
+{{- if and .Values.applicationSet.enabled .Values.rbac.create }}
 kind: Role
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 metadata:
   name: {{ include "argocd.applicationSet" . }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
@@ -43,6 +43,8 @@ rules:
     - appprojects
     verbs:
     - get
+    - list
+    - watch
   - apiGroups:
     - ""
     resources:

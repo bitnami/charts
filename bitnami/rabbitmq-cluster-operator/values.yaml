@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 ## @section Global parameters
@@ -9,7 +9,8 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
+## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ##
 global:
   imageRegistry: ""
@@ -18,8 +19,22 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  defaultStorageClass: ""
   storageClass: ""
-
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: auto
 ## @section Common parameters
 ##
 
@@ -50,7 +65,6 @@ diagnosticMode:
   ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled)
   ##
   enabled: false
-
 ## @section RabbitMQ Cluster Operator Parameters
 ##
 
@@ -65,7 +79,7 @@ diagnosticMode:
 rabbitmqImage:
   registry: docker.io
   repository: bitnami/rabbitmq
-  tag: 3.12.12-debian-11-r0
+  tag: 4.0.4-debian-12-r1
   digest: ""
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
@@ -75,7 +89,6 @@ rabbitmqImage:
   ##   - myRegistryKeySecretName
   ##
   pullSecrets: []
-
 ## Bitnami RabbitMQ Default User Credential Updater Image
 ## ref: https://hub.docker.com/r/bitnami/rmq-default-credential-updater/tags/
 ## @param credentialUpdaterImage.registry [default: REGISTRY_NAME] RabbitMQ Default User Credential Updater image registry
@@ -87,7 +100,7 @@ rabbitmqImage:
 credentialUpdaterImage:
   registry: docker.io
   repository: bitnami/rmq-default-credential-updater
-  tag: 1.0.4-debian-11-r5
+  tag: 1.0.4-debian-12-r31
   digest: ""
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
@@ -97,7 +110,6 @@ credentialUpdaterImage:
   ##   - myRegistryKeySecretName
   ##
   pullSecrets: []
-
 clusterOperator:
   ## Bitnami RabbitMQ Cluster Operator image
   ## ref: https://hub.docker.com/r/bitnami/rabbitmq-cluster-operator/tags/
@@ -111,10 +123,9 @@ clusterOperator:
   image:
     registry: docker.io
     repository: bitnami/rabbitmq-cluster-operator
-    tag: 2.6.0-debian-11-r3
+    tag: 2.11.0-debian-12-r4
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -126,7 +137,15 @@ clusterOperator:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-
+  ## @param clusterOperator.revisionHistoryLimit sets number of replicaset to keep in k8s
+  ##
+  revisionHistoryLimit: 10
+  ## @param clusterOperator.watchAllNamespaces Watch for resources in all namespaces
+  ##
+  watchAllNamespaces: true
+  ## @param clusterOperator.watchNamespaces [array] Watch for resources in the given namespaces (ignored if watchAllNamespaces=true)
+  ##
+  watchNamespaces: []
   ## @param clusterOperator.replicaCount Number of RabbitMQ Cluster Operator replicas to deploy
   ##
   replicaCount: 1
@@ -186,7 +205,6 @@ clusterOperator:
     timeoutSeconds: 5
     successThreshold: 1
     failureThreshold: 5
-
   ## @param clusterOperator.customLivenessProbe Custom livenessProbe that overrides the default one
   ##
   customLivenessProbe: {}
@@ -196,28 +214,53 @@ clusterOperator:
   ## @param clusterOperator.customStartupProbe Custom startupProbe that overrides the default one
   ##
   customStartupProbe: {}
-
   ## RabbitMQ Cluster Operator resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param clusterOperator.resources.limits The resources limits for the RabbitMQ Cluster Operator containers
-  ## @param clusterOperator.resources.requests The requested resources for the RabbitMQ Cluster Operator containers
+  ## @param clusterOperator.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if clusterOperator.resources is set (clusterOperator.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
-
+  resourcesPreset: "nano"
+  ## @param clusterOperator.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+  ## @param clusterOperator.pdb.create Enable a Pod Disruption Budget creation
+  ## @param clusterOperator.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param clusterOperator.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param clusterOperator.podSecurityContext.enabled Enabled RabbitMQ Cluster Operator pods' Security Context
+  ## @param clusterOperator.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param clusterOperator.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param clusterOperator.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param clusterOperator.podSecurityContext.fsGroup Set RabbitMQ Cluster Operator pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param clusterOperator.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param clusterOperator.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param clusterOperator.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param clusterOperator.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param clusterOperator.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param clusterOperator.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param clusterOperator.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -227,7 +270,9 @@ clusterOperator:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: true
@@ -236,14 +281,15 @@ clusterOperator:
       drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
-
-
   ## @param clusterOperator.command Override default container command (useful when using custom images)
   ##
   command: []
   ## @param clusterOperator.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param clusterOperator.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param clusterOperator.hostAliases RabbitMQ Cluster Operator pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -308,12 +354,10 @@ clusterOperator:
   ## @param clusterOperator.lifecycleHooks for the RabbitMQ Cluster Operator container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
-
   ## @param clusterOperator.containerPorts.metrics RabbitMQ Cluster Operator container port (used for metrics)
   ##
   containerPorts:
     metrics: 9782
-
   ## @param clusterOperator.extraEnvVars Array with extra environment variables to add to RabbitMQ Cluster Operator nodes
   ## e.g:
   ## extraEnvVars:
@@ -354,7 +398,64 @@ clusterOperator:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
-
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param clusterOperator.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param clusterOperator.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
+    ##
+    kubeAPIServerPorts: [443, 6443, 8443]
+    ## @param clusterOperator.networkPolicy.allowExternal Don't require injector label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## injector label will have network access to the ports injector is listening
+    ## on. When true, injector will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param clusterOperator.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param clusterOperator.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param clusterOperator.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param clusterOperator.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param clusterOperator.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
   ## RBAC configuration
   ##
   rbac:
@@ -372,7 +473,14 @@ clusterOperator:
       ##   - resources: A list of resource names (e.g., ["configmaps", "pods"]).
       ##   - verbs: A list of allowed access verbs (e.g., ["create", "get", "list"]).
       customRules: []
-
+      ## @param clusterOperator.rbac.clusterRole.extraRules Define extra access rules for the ClusterRole. This has no effect if customerRules is a non-empty array.
+      ## ref: https://kubernetes.io/docs/reference/access-authn-authz/rbac/#role-and-clusterrole
+      ## e.g:
+      ## extraRules:
+      ##   - apiGroups: A list of API groups (e.g., [""], ["apps"]).
+      ##   - resources: A list of resource names (e.g., ["configmaps", "pods"]).
+      ##   - verbs: A list of allowed access verbs (e.g., ["create", "get", "list"]).
+      extraRules: []
   ## ServiceAccount configuration
   ##
   serviceAccount:
@@ -388,8 +496,7 @@ clusterOperator:
     annotations: {}
     ## @param clusterOperator.serviceAccount.automountServiceAccountToken Automount API credentials for a service account.
     ##
-    automountServiceAccountToken: true
-
+    automountServiceAccountToken: false
   ## @section RabbitMQ Cluster Operator Metrics parameters
   ##
   metrics:
@@ -483,7 +590,6 @@ clusterOperator:
       ## @param clusterOperator.metrics.serviceMonitor.interval Scrape interval. If not set, the Prometheus default scrape interval is used
       ##
       interval: ""
-
       ## DEPRECATED: Use clusterOperator.metrics.serviceMonitor.labels instead
       ## This value will be removed in a future release
       ## additionalLabels: {}
@@ -559,10 +665,9 @@ msgTopologyOperator:
   image:
     registry: docker.io
     repository: bitnami/rmq-messaging-topology-operator
-    tag: 1.12.2-debian-11-r1
+    tag: 1.15.0-debian-12-r2
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -574,7 +679,15 @@ msgTopologyOperator:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-
+  ## @param msgTopologyOperator.revisionHistoryLimit sets number of replicaset to keep in k8s
+  ##
+  revisionHistoryLimit: 10
+  ## @param msgTopologyOperator.watchAllNamespaces Watch for resources in all namespaces
+  ##
+  watchAllNamespaces: true
+  ## @param msgTopologyOperator.watchNamespaces [array] Watch for resources in the given namespaces   ## @param clusterOperator.watchNamespaces [array] Watch for resources in the given namespaces (ignored if watchAllNamespaces=true)
+  ##
+  watchNamespaces: []
   ## @param msgTopologyOperator.replicaCount Number of RabbitMQ Messaging Topology Operator replicas to deploy
   ##
   replicaCount: 1
@@ -640,7 +753,6 @@ msgTopologyOperator:
     timeoutSeconds: 5
     successThreshold: 1
     failureThreshold: 5
-
   ## @param msgTopologyOperator.customLivenessProbe Custom livenessProbe that overrides the default one
   ##
   customLivenessProbe: {}
@@ -650,36 +762,62 @@ msgTopologyOperator:
   ## @param msgTopologyOperator.customStartupProbe Custom startupProbe that overrides the default one
   ##
   customStartupProbe: {}
-
+  ## @param msgTopologyOperator.skipCreateAdmissionWebhookConfig skip creation of ValidationWebhookConfiguration
+  ##
+  skipCreateAdmissionWebhookConfig: false
   ## @param msgTopologyOperator.existingWebhookCertSecret name of a secret containing the certificates (use it to avoid certManager creating one)
   ##
   existingWebhookCertSecret: ""
-
   ## @param msgTopologyOperator.existingWebhookCertCABundle PEM-encoded CA Bundle of the existing secret provided in existingWebhookCertSecret (only if useCertManager=false)
   ##
   existingWebhookCertCABundle: ""
-
   ## RabbitMQ Messaging Topology Operator resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param msgTopologyOperator.resources.limits The resources limits for the RabbitMQ Messaging Topology Operator containers
-  ## @param msgTopologyOperator.resources.requests The requested resources for the RabbitMQ Messaging Topology Operator containers
+  ## @param msgTopologyOperator.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if msgTopologyOperator.resources is set (msgTopologyOperator.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
-
+  resourcesPreset: "nano"
+  ## @param msgTopologyOperator.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+  ## @param msgTopologyOperator.pdb.create Enable a Pod Disruption Budget creation
+  ## @param msgTopologyOperator.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param msgTopologyOperator.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param msgTopologyOperator.podSecurityContext.enabled Enabled RabbitMQ Messaging Topology Operator pods' Security Context
+  ## @param msgTopologyOperator.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param msgTopologyOperator.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param msgTopologyOperator.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param msgTopologyOperator.podSecurityContext.fsGroup Set RabbitMQ Messaging Topology Operator pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param msgTopologyOperator.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param msgTopologyOperator.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param msgTopologyOperator.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param msgTopologyOperator.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param msgTopologyOperator.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param msgTopologyOperator.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param msgTopologyOperator.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -689,7 +827,9 @@ msgTopologyOperator:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: true
@@ -698,17 +838,18 @@ msgTopologyOperator:
       drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
-
   ## @param msgTopologyOperator.fullnameOverride String to fully override rmqco.msgTopologyOperator.fullname template
   ##
   fullnameOverride: ""
-
   ## @param msgTopologyOperator.command Override default container command (useful when using custom images)
   ##
   command: []
   ## @param msgTopologyOperator.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param msgTopologyOperator.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param msgTopologyOperator.hostAliases RabbitMQ Messaging Topology Operator pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -773,12 +914,10 @@ msgTopologyOperator:
   ## @param msgTopologyOperator.lifecycleHooks for the RabbitMQ Messaging Topology Operator container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
-
   ## @param msgTopologyOperator.containerPorts.metrics RabbitMQ Messaging Topology Operator container port (used for metrics)
   ##
   containerPorts:
     metrics: 8080
-
   ## @param msgTopologyOperator.extraEnvVars Array with extra environment variables to add to RabbitMQ Messaging Topology Operator nodes
   ## e.g:
   ## extraEnvVars:
@@ -819,7 +958,6 @@ msgTopologyOperator:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
-
   ## Webhook service parameters
   ##
   service:
@@ -873,14 +1011,89 @@ msgTopologyOperator:
     ##     timeoutSeconds: 300
     ##
     sessionAffinityConfig: {}
-
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param msgTopologyOperator.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param msgTopologyOperator.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
+    ##
+    kubeAPIServerPorts: [443, 6443, 8443]
+    ## @param msgTopologyOperator.networkPolicy.allowExternal Don't require injector label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## injector label will have network access to the ports injector is listening
+    ## on. When true, injector will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param msgTopologyOperator.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param msgTopologyOperator.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param msgTopologyOperator.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param msgTopologyOperator.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param msgTopologyOperator.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
   ## RBAC configuration
   ##
   rbac:
     ## @param msgTopologyOperator.rbac.create Specifies whether RBAC resources should be created
     ##
     create: true
-
+    ## ClusterRole parameters
+    ##
+    clusterRole:
+      ## @param msgTopologyOperator.rbac.clusterRole.customRules Define custom access rules for the ClusterRole
+      ## ref: https://kubernetes.io/docs/reference/access-authn-authz/rbac/#role-and-clusterrole
+      ## e.g:
+      ## customRules:
+      ##   - apiGroups: A list of API groups (e.g., [""], ["apps"]).
+      ##   - resources: A list of resource names (e.g., ["configmaps", "pods"]).
+      ##   - verbs: A list of allowed access verbs (e.g., ["create", "get", "list"]).
+      customRules: []
+      ## @param msgTopologyOperator.rbac.clusterRole.extraRules Define extra access rules for the ClusterRole. This has no effect if customerRules is a non-empty array.
+      ## ref: https://kubernetes.io/docs/reference/access-authn-authz/rbac/#role-and-clusterrole
+      ## e.g:
+      ## extraRules:
+      ##   - apiGroups: A list of API groups (e.g., [""], ["apps"]).
+      ##   - resources: A list of resource names (e.g., ["configmaps", "pods"]).
+      ##   - verbs: A list of allowed access verbs (e.g., ["create", "get", "list"]).
+      extraRules: []
   ## ServiceAccount configuration
   ##
   serviceAccount:
@@ -896,8 +1109,7 @@ msgTopologyOperator:
     annotations: {}
     ## @param msgTopologyOperator.serviceAccount.automountServiceAccountToken Automount API credentials for a service account.
     ##
-    automountServiceAccountToken: true
-
+    automountServiceAccountToken: false
   ## @section RabbitMQ Messaging Topology Operator parameters
   ##
   metrics:
@@ -971,7 +1183,6 @@ msgTopologyOperator:
       ## @param msgTopologyOperator.metrics.serviceMonitor.jobLabel Specify the jobLabel to use for the prometheus-operator
       ##
       jobLabel: app.kubernetes.io/name
-
       ## DEPRECATED: Use msgTopologyOperator.metrics.serviceMonitor.labels instead.
       ## This value will be removed in a future release
       ## additionalLabels: {}

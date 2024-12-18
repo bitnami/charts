@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -43,6 +43,7 @@ spec:
       {{- if .Values.priorityClassName }}
       priorityClassName: {{ .Values.priorityClassName | quote }}
       {{- end }}
+      automountServiceAccountToken: {{ .Values.automountServiceAccountToken }}
       {{- if .Values.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -61,7 +62,7 @@ spec:
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       hostNetwork: {{ .Values.hostNetwork }}
       {{- if .Values.topologySpreadConstraints }}
@@ -72,15 +73,42 @@ spec:
       {{- end }}
       serviceAccountName: {{ template "nginx-ingress-controller.serviceAccountName" . }}
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
-      {{- if .Values.initContainers }}
-      initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
-      {{- end }}
+      initContainers:
+        - name: prepare-nginx-folder
+          image: {{ include "nginx-ingress-controller.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.resources }}
+          resources: {{- toYaml .Values.resources | nindent 12 }}
+          {{- else if ne .Values.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          command:
+            - /bin/bash
+          args:
+            - -ec
+            - |
+              #!/bin/bash
+              cp -r /etc/nginx/* /nginx
+              cp -r /etc/ingress-controller/* /ingress-controller
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /nginx
+              subPath: app-nginx-dir
+            - name: empty-dir
+              mountPath: /ingress-controller
+              subPath: app-controller-dir
+        {{- if .Values.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
+        {{- end }}
       containers:
         - name: controller
           image: {{ include "nginx-ingress-controller.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.lifecycleHooks "context" $) | nindent 12 }}
@@ -96,6 +124,13 @@ spec:
           {{- if .Values.publishService.enabled }}
             - --publish-service={{ include "nginx-ingress-controller.publishServicePath" . }}
           {{- end }}
+            - --http-port={{ .Values.containerPorts.http }}
+            - --https-port={{ .Values.containerPorts.https }}
+            - --default-server-port={{ .Values.containerPorts.defaultServer }}
+            - --healthz-port={{ .Values.containerPorts.metrics }}
+            - --profiler-port={{ .Values.containerPorts.profiler }}
+            - --status-port={{ .Values.containerPorts.status }}
+            - --stream-port={{ .Values.containerPorts.stream }}
             - --election-id={{ .Values.electionID }}
             - --controller-class={{ .Values.ingressClassResource.controllerClass }}
             - --configmap={{ default "$(POD_NAMESPACE)" .Values.configMapNamespace }}/{{ include "common.names.fullname" . }}
@@ -150,10 +185,8 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /healthz
-              port: 10254
-              scheme: HTTP
+            tcpSocket:
+              port: metrics
           {{- end }}
           {{- if .Values.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
@@ -161,7 +194,7 @@ spec:
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /healthz
-              port: 10254
+              port: metrics
               scheme: HTTP
           {{- end }}
           {{- if .Values.customStartupProbe }}
@@ -169,7 +202,7 @@ spec:
           {{- else if .Values.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.startupProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
-              port: 10254
+              port: metrics
           {{- end }}
           ports:
             - name: http
@@ -178,11 +211,21 @@ spec:
             - name: https
               containerPort: {{ .Values.containerPorts.https }}
               protocol: TCP
-            {{- if .Values.metrics.enabled }}
+            - name: default-server
+              containerPort: {{ .Values.containerPorts.defaultServer }}
+              protocol: TCP
             - name: metrics
               containerPort: {{ .Values.containerPorts.metrics }}
               protocol: TCP
-            {{- end }}
+            - name: profiler
+              containerPort: {{ .Values.containerPorts.profiler }}
+              protocol: TCP
+            - name: status
+              containerPort: {{ .Values.containerPorts.status }}
+              protocol: TCP
+            - name: stream
+              containerPort: {{ .Values.containerPorts.stream }}
+              protocol: TCP
             {{- range $key, $value := .Values.tcp }}
             - name: "{{ $key }}-tcp"
               containerPort: {{ $key }}
@@ -195,6 +238,8 @@ spec:
             {{- end }}
           {{- if .Values.resources }}
           resources: {{- toYaml .Values.resources | nindent 12 }}
+          {{- else if ne .Values.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             {{- if .Values.customTemplate.configMapName }}
@@ -202,12 +247,26 @@ spec:
               name: nginx-template-volume
               readOnly: true
             {{- end }}
+            - name: empty-dir
+              mountPath: /etc/nginx
+              subPath: app-nginx-dir
+            - name: empty-dir
+              mountPath: /etc/ingress-controller
+              subPath: app-controller-dir
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /tmp/nginx
+              subPath: app-tmp-dir
             {{- if .Values.maxmindLicenseKey }}
-            - name: geoip
+            - name: empty-dir
               mountPath: /etc/ingress-controller/geoip
+              subPath: app-geoip-dir
             {{- end }}
-            - name: telemetry
+            - name: empty-dir
               mountPath: /etc/ingress-controller/telemetry
+              subPath: app-telemetry-dir
             {{- if .Values.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
@@ -223,11 +282,7 @@ spec:
               - key: {{ .Values.customTemplate.configMapKey }}
                 path: nginx.tmpl
         {{- end }}
-        {{- if .Values.maxmindLicenseKey }}
-        - name: geoip
-          emptyDir: {}
-        {{- end }}
-        - name: telemetry
+        - name: empty-dir
           emptyDir: {}
         {{- if .Values.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}

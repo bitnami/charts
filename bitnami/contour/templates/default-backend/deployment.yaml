@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -56,7 +56,7 @@ spec:
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.tolerations "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.defaultBackend.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.defaultBackend.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.defaultBackend.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       automountServiceAccountToken: false
       serviceAccountName: {{ include "envoy.envoyServiceAccountName" . }}
@@ -77,7 +77,7 @@ spec:
           image: {{ include "common.images.image" ( dict "imageRoot" .Values.defaultBackend.image "global" .Values.global) }}
           imagePullPolicy: {{ .Values.defaultBackend.image.pullPolicy | quote }}
           {{- if .Values.defaultBackend.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.defaultBackend.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.defaultBackend.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.defaultBackend.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.command "context" $) | nindent 12 }}
@@ -115,10 +115,8 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.defaultBackend.livenessProbe.enabled }}
           livenessProbe:
-            httpGet:
-              path: /
+            tcpSocket:
               port: http
-              scheme: HTTP
             initialDelaySeconds: {{ .Values.defaultBackend.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.defaultBackend.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.defaultBackend.livenessProbe.timeoutSeconds }}
@@ -159,14 +157,16 @@ spec:
               protocol: TCP
           {{- if .Values.defaultBackend.resources }}
           resources: {{- toYaml .Values.defaultBackend.resources | nindent 12 }}
-          {{- if .Values.defaultBackend.extraVolumeMounts }}
-          volumeMounts: {{- include "common.tplvalues.render" ( dict "value" .Values.contour.extraVolumeMounts "context" $ ) | nindent 12 }}
+          {{- else if ne .Values.defaultBackend.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.defaultBackend.resourcesPreset) | nindent 12 }}
           {{- end }}
+          {{- if .Values.defaultBackend.extraVolumeMounts }}
+          volumeMounts: {{- include "common.tplvalues.render" ( dict "value" .Values.defaultBackend.extraVolumeMounts "context" $ ) | nindent 12 }}
           {{- end }}
         {{- if .Values.defaultBackend.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.defaultBackend.sidecars "context" $) | nindent 8 }}
         {{- end }}
-        {{- if .Values.defaultBackend.extraVolumes }}
-        volumes: {{- include "common.tplvalues.render" ( dict "value" .Values.defaultBackend.extraVolumes "context" $ ) | nindent 8 }}
-        {{- end }}
+      {{- if .Values.defaultBackend.extraVolumes }}
+      volumes: {{- include "common.tplvalues.render" ( dict "value" .Values.defaultBackend.extraVolumes "context" $ ) | nindent 6 }}
+      {{- end }}
 {{- end }}

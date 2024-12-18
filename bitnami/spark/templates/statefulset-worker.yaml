@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -48,6 +48,7 @@ spec:
         podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.worker.podAntiAffinityPreset "component" "worker" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.worker.nodeAffinityPreset.type "key" .Values.worker.nodeAffinityPreset.key "values" .Values.worker.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
+      automountServiceAccountToken: {{ .Values.worker.automountServiceAccountToken }}
       {{- if .Values.worker.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.worker.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -67,7 +68,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.worker.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.worker.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.worker.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.worker.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.worker.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.worker.terminationGracePeriodSeconds }}
@@ -137,12 +138,17 @@ spec:
                   key: ssl-truststore-password
           {{- if .Values.security.ssl.resources }}
           resources: {{- toYaml .Values.security.ssl.resources | nindent 12 }}
+          {{- else if ne .Values.security.ssl.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.security.ssl.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
-          - name: certs
-            mountPath: /certs
-          - name: shared-certs
-            mountPath: /opt/bitnami/spark/conf/certs
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: certs
+              mountPath: /certs
+            - name: shared-certs
+              mountPath: /opt/bitnami/spark/conf/certs
         {{- end }}
       {{- end }}
       containers:
@@ -150,7 +156,7 @@ spec:
           image: {{ include "spark.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.worker.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.worker.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.worker.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -180,6 +186,21 @@ spec:
             {{- include "common.tplvalues.render" (dict "value" .Values.worker.extraContainerPorts "context" $) | nindent 12 }}
             {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/spark/conf
+              subPath: app-conf-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/spark/tmp
+              subPath: app-tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/spark/logs
+              subPath: app-logs-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/spark/work
+              subPath: app-work-dir
             {{- if .Values.worker.existingConfigmap }}
             - name: config
               mountPath: '/bitnami/spark/conf/'
@@ -306,8 +327,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.worker.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.worker.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.worker.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /
+            tcpSocket:
               port: {{ .Values.worker.containerPorts.http }}
           {{- end }}
           {{- if .Values.worker.customReadinessProbe }}
@@ -332,11 +352,15 @@ spec:
           {{- end }}
           {{- if .Values.worker.resources }}
           resources: {{- toYaml .Values.worker.resources | nindent 12 }}
+          {{- else if ne .Values.worker.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.worker.resourcesPreset) | nindent 12 }}
           {{- end }}
         {{- if .Values.worker.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.worker.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         {{- if .Values.worker.existingConfigmap }}
         - name: config
           configMap:

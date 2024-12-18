@@ -2,13 +2,54 @@ CHART NAME: {{ .Chart.Name }}
 CHART VERSION: {{ .Chart.Version }}
 APP VERSION: {{ .Chart.AppVersion }}
 
+Did you know there are enterprise versions of the Bitnami catalog? For enhanced secure software supply chain features, unlimited pulls from Docker, LTS support, or application customization, see Bitnami Premium or Tanzu Application Catalog. See https://www.arrow.com/globalecs/na/vendors/bitnami for more information.
+
 ** Please be patient while the chart is being deployed **
 
 Watch the RabbitMQ Cluster Operator and RabbitMQ Messaging Topology Operator Deployment status using the command:
 
     kubectl get deploy -w --namespace {{ include "common.names.namespace" . }} -l app.kubernetes.io/name={{ include "common.names.name" . }},app.kubernetes.io/instance={{ .Release.Name }}
 
+{{- if .Values.clusterOperator.rbac.create }}
+{{- if .Values.clusterOperator.watchAllNamespaces }}
+WARNING: RabbitMQ Cluster Operator can access all secrets in the cluster. This could pose a security risk if the application gets compromised.
+
+You can limit allowed namespaces by setting clusterOperator.watchAllNamespaces = false and configuring clusterOperator.watchNamespaces
+{{- else }}
+
+RabbitMQ Cluster Operator can ONLY access resources in the following namespaces:
+{{ $namespaces := .Values.clusterOperator.watchAllNamespaces | default (list (include "common.names.namespace" .)) }}
+{{- range $namespace := $namespaces }}
+  - {{ $namespace }}
+{{- end }}
+
+RabbitMQ Cluster Operator won't be able to access resources in other namespaces. You can configure this behavior by setting clusterOperator.watchNamespaces
+
+{{- end }}
+{{- end }}
+
+{{- if .Values.msgTopologyOperator.rbac.create }}
+{{- if .Values.msgTopologyOperator.watchAllNamespaces }}
+WARNING: RabbitMQ Messaging Topology Operator can access all secrets in the cluster. This could pose a security risk if the application gets compromised.
+
+You can limit allowed namespaces by setting msgTopologyOperator.watchAllNamespaces = false and configuring msgTopologyOperator.watchNamespaces
+{{- else }}
+
+RabbitMQ Messaging Topology Operator can ONLY access resources in the following namespaces:
+{{ $namespaces := .Values.msgTopologyOperator.watchAllNamespaces | default (list (include "common.names.namespace" .)) }}
+{{- range $namespace := $namespaces }}
+  - {{ $namespace }}
+{{- end }}
+
+RabbitMQ Messaging Topology Operator won't be able to access resources in other namespaces. You can configure this behavior by setting msgTopologyOperator.watchNamespaces
+
+{{- end }}
+{{- end }}
+
 {{ include "common.warnings.rollingTag" .Values.clusterOperator.image }}
 {{ include "common.warnings.rollingTag" .Values.msgTopologyOperator.image }}
 {{ include "common.warnings.rollingTag" .Values.credentialUpdaterImage }}
 {{ include "common.warnings.rollingTag" .Values.rabbitmqImage }}
+{{- include "common.warnings.resources" (dict "sections" (list "clusterOperator" "msgTopologyOperator") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.rabbitmqImage .Values.credentialUpdaterImage .Values.clusterOperator.image .Values.msgTopologyOperator.image) "context" $) }}
+{{- include "common.errors.insecureImages" (dict "images" (list .Values.rabbitmqImage .Values.credentialUpdaterImage .Values.clusterOperator.image .Values.msgTopologyOperator.image) "context" $) }}

@@ -23,4 +23,4 @@ mysql:
     password: bitnami_test_password
 serviceAccount:
   create: true
-  automountServiceAccountToken: true
+automountServiceAccountToken: true

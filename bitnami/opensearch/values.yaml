@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 ## @section Global parameters
@@ -8,7 +8,8 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
+## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ##
 global:
   imageRegistry: ""
@@ -17,8 +18,22 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  defaultStorageClass: ""
   storageClass: ""
-
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: auto
 ## @section Common parameters
 
 ## @param kubeVersion Override Kubernetes version
@@ -45,7 +60,6 @@ extraDeploy: []
 ## @param namespaceOverride String to fully override common.names.namespace
 ##
 namespaceOverride: ""
-
 ## Enable diagnostic mode in the deployment
 ##
 diagnosticMode:
@@ -60,7 +74,6 @@ diagnosticMode:
   ##
   args:
     - infinity
-
 ## @section OpenSearch cluster Parameters
 
 ## @param clusterName OpenSearch cluster name
@@ -166,7 +179,6 @@ initContainers: []
 ## @param useIstioLabels Use this variable to add Istio labels to all pods
 ##
 useIstioLabels: true
-
 ## Bitnami OpenSearch image
 ## @param image.registry [default: REGISTRY_NAME] OpenSearch image registry
 ## @param image.repository [default: REPOSITORY_NAME/opensearch] OpenSearch image repository
@@ -179,10 +191,9 @@ useIstioLabels: true
 image:
   registry: docker.io
   repository: bitnami/opensearch
-  tag: 2.11.1-debian-11-r2
+  tag: 2.18.0-debian-12-r2
   digest: ""
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -197,7 +208,6 @@ image:
   ## Enable debug mode
   ##
   debug: false
-
 ## X-Pack security parameters
 ## Note: TLS configuration is required in order to configure password authentication
 ##
@@ -335,7 +345,6 @@ security:
     ## @param security.tls.adminDN A comma separated list of DN for admins
     ##
     adminDN: ""
-
 ## @section Traffic Exposure Parameters
 ##
 
@@ -396,7 +405,6 @@ service:
   ##     timeoutSeconds: 300
   ##
   sessionAffinityConfig: {}
-
 ## OpenSearch ingress parameters
 ## ref: http://kubernetes.io/docs/concepts/services-networking/ingress/
 ##
@@ -501,9 +509,7 @@ ingress:
   ##             name: http
   ##
   extraRules: []
-
 ## @section Master-eligible nodes parameters
-
 master:
   ## @param master.masterOnly Deploy the OpenSearch master-eligible nodes as master-only nodes. Recommended for high-demand deployments.
   ## If you are
@@ -511,22 +517,19 @@ master:
   ## @param master.replicaCount Number of master-eligible replicas to deploy
   ##
   replicaCount: 2
-
   ## @param master.extraRoles Append extra roles to the node role
   ##
   extraRoles: []
-
   ## Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param master.pdb.create Enable/disable a Pod Disruption Budget creation
   ## @param master.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
-  ## @param master.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ## @param master.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `master.pdb.minAvailable` and `master.pdb.maxUnavailable` are empty.
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
-
   ## @param master.nameOverride String to partially override opensearch.master.fullname
   ##
   nameOverride: ""
@@ -550,20 +553,21 @@ master:
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param master.resources.limits The resources limits for opensearch containers
-  ## @param master.resources.requests The requested resources for opensearch containers
+  ## @param master.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if master.resources is set (master.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    ## Example:
-    ## limits:
-    ##    cpu: 500m
-    ##    memory: 1Gi
-    limits: {}
-    ## Examples:
-    ## requests:
-    ##    cpu: 250m
-    ##    memory: 256Mi
-    requests: {}
+  resourcesPreset: "small"
+  ## @param master.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## @param master.heapSize OpenSearch master-eligible node heap size.
   ## Note: The recommended heapSize is half of the container's memory.
   ## If omitted, it will be automatically set.
@@ -574,15 +578,23 @@ master:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param master.podSecurityContext.enabled Enabled master-eligible pods' Security Context
+  ## @param master.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param master.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param master.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param master.podSecurityContext.fsGroup Set master-eligible pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param master.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param master.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param master.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param master.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param master.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param master.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param master.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -592,15 +604,20 @@ master:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
+  ## @param master.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param master.hostAliases master-eligible pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -829,12 +846,15 @@ master:
   networkPolicy:
     ## @param master.networkPolicy.enabled Enable creation of NetworkPolicy resources
     ##
-    enabled: false
+    enabled: true
     ## @param master.networkPolicy.allowExternal The Policy model to apply
-    ## When set to false, only pods with the correct client label will have network access to the ports Keycloak is
-    ## listening on. When true, Keycloak will accept connections from any source (with the correct destination port).
+    ## When set to false, only pods with the correct client label will have network access to the ports OpenSearch is
+    ## listening on. When true, OpenSearch will accept connections from any source (with the correct destination port).
     ##
     allowExternal: true
+    ## @param master.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
     ## @param master.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
@@ -914,29 +934,125 @@ master:
       ## @param master.autoscaling.hpa.targetMemory Target Memory utilization percentage
       ##
       targetMemory: ""
-
+  ## Metrics configuration for master-eligible node
+  ##
+  metrics:
+    ## @param master.metrics.enabled Enable master-eligible node metrics
+    ##
+    enabled: false
+    service:
+      ## @param master.metrics.service.ports.metrics master-eligible node metrics service port
+      ##
+      ports:
+        metrics: 80
+      ## @param master.metrics.service.clusterIP master-eligible node metrics service Cluster IP
+      ## e.g.:
+      ## clusterIP: None
+      ##
+      clusterIP: ""
+    ## master-eligible node metrics service monitor configuration
+    ##
+    serviceMonitor:
+      ## @param master.metrics.serviceMonitor.enabled Create ServiceMonitor Resource for scraping metrics using PrometheusOperator
+      ##
+      enabled: false
+      ## @param master.metrics.serviceMonitor.namespace Namespace which Prometheus is running in
+      ## e.g:
+      ## namespace: monitoring
+      ##
+      namespace: ""
+      ## @param master.metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
+      ##
+      jobLabel: ""
+      ## @param master.metrics.serviceMonitor.interval Interval at which metrics should be scraped
+      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+      ##
+      interval: 30s
+      ## @param master.metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
+      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+      ##
+      scrapeTimeout: 10s
+      ## @param master.metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping
+      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
+      ##
+      relabelings: []
+      ## @param master.metrics.serviceMonitor.metricRelabelings MetricRelabelConfigs to apply to samples before ingestion
+      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
+      ##
+      metricRelabelings: []
+      ## @param master.metrics.serviceMonitor.selector ServiceMonitor selector labels
+      ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
+      ##
+      ## selector:
+      ##   prometheus: my-prometheus
+      ##
+      selector: {}
+      ## @param master.metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
+      ##
+      honorLabels: false
+    ## Rules for PrometheusRule object if enabled
+    ##
+    ## E.g.
+    ## @param master.metrics.rules.enabled Enable render extra rules for PrometheusRule object
+    ## @param master.metrics.rules.spec Rules to render into the PrometheusRule object
+    ## @param master.metrics.rules.selector Selector for the PrometheusRule object
+    ## @param master.metrics.rules.namespace Namespace where to create the PrometheusRule object
+    ## @param master.metrics.rules.additionalLabels Additional lables to add to the PrometheusRule object
+    ##
+    rules:
+      enabled: false
+      ## E.g
+      ## - alert: ArgoAppMissing
+      ##   expr: |
+      ##     absent(argocd_app_info)
+      ##   for: 15m
+      ##   labels:
+      ##     severity: critical
+      ##   annotations:
+      ##     summary: "[ArgoCD] No reported applications"
+      ##     description: >
+      ##       ArgoCD has not reported any applications data for the past 15 minutes which
+      ##       means that it must be down or not functioning properly.  This needs to be
+      ##       resolved for this cloud to continue to maintain state.
+      ## - alert: ArgoAppNotSynced
+      ##   expr: |
+      ##     argocd_app_info{sync_status!="Synced"} == 1
+      ##   for: 12h
+      ##   labels:
+      ##     severity: warning
+      ##   annotations:
+      ##     summary: "[{{`{{ $labels.name }}`}}] Application not synchronized"
+      ##     description: >
+      ##       The application [{{`{{ $labels.name }}`}} has not been synchronized for over
+      ##       12 hours which means that the state of this cloud has drifted away from the
+      ##       state inside Git.
+      ##
+      spec: []
+      ## E.g
+      ## selector:
+      ##   prometheus: kube-prometheus
+      ##
+      selector: {}
+      namespace: monitoring
+      additionalLabels: {}
 ## @section Data-only nodes parameters
-
 data:
   ## @param data.replicaCount Number of data-only replicas to deploy
   ##
   replicaCount: 2
-
   ## @param data.extraRoles Append extra roles to the node role
   ##
   extraRoles: []
-
   ## Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param data.pdb.create Enable/disable a Pod Disruption Budget creation
   ## @param data.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
-  ## @param data.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ## @param data.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `data.pdb.minAvailable` and `data.pdb.maxUnavailable` are empty.
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
-
   ## @param data.nameOverride String to partially override opensearch.data.fullname
   ##
   nameOverride: ""
@@ -956,14 +1072,21 @@ data:
     type: RollingUpdate
   ## OpenSearch resource requests and limits
   ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param data.resources.limits The resources limits for the data containers
-  ## @param data.resources.requests [object] The requested resources for the data containers
+  ## @param data.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if data.resources is set (data.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests:
-      cpu: 25m
-      memory: 2048Mi
+  resourcesPreset: "medium"
+  ## @param data.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## @param data.heapSize OpenSearch data node heap size.
   ## Note: The recommended heapSize is half of the container's memory.
   ## If omitted, it will be automatically set.
@@ -974,15 +1097,23 @@ data:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param data.podSecurityContext.enabled Enabled data pods' Security Context
+  ## @param data.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param data.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param data.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param data.podSecurityContext.fsGroup Set data pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param data.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param data.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param data.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param data.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param data.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param data.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param data.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -992,15 +1123,20 @@ data:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
+  ## @param data.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param data.hostAliases data pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1229,12 +1365,15 @@ data:
   networkPolicy:
     ## @param data.networkPolicy.enabled Enable creation of NetworkPolicy resources
     ##
-    enabled: false
+    enabled: true
     ## @param data.networkPolicy.allowExternal The Policy model to apply
-    ## When set to false, only pods with the correct client label will have network access to the ports Keycloak is
-    ## listening on. When true, Keycloak will accept connections from any source (with the correct destination port).
+    ## When set to false, only pods with the correct client label will have network access to the ports OpenSearch is
+    ## listening on. When true, OpenSearch will accept connections from any source (with the correct destination port).
     ##
     allowExternal: true
+    ## @param data.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
     ## @param data.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
@@ -1314,30 +1453,126 @@ data:
       ## @param data.autoscaling.hpa.targetMemory Target Memory utilization percentage
       ##
       targetMemory: ""
-
+  ## Metrics configuration for data node
+  ##
+  metrics:
+    ## @param data.metrics.enabled Enable data node metrics
+    ##
+    enabled: false
+    service:
+      ## @param data.metrics.service.ports.metrics data node metrics service port
+      ##
+      ports:
+        metrics: 80
+      ## @param data.metrics.service.clusterIP data node metrics service Cluster IP
+      ## e.g.:
+      ## clusterIP: None
+      ##
+      clusterIP: ""
+    ## data node metrics service monitor configuration
+    ##
+    serviceMonitor:
+      ## @param data.metrics.serviceMonitor.enabled Create ServiceMonitor Resource for scraping metrics using PrometheusOperator
+      ##
+      enabled: false
+      ## @param data.metrics.serviceMonitor.namespace Namespace which Prometheus is running in
+      ## e.g:
+      ## namespace: monitoring
+      ##
+      namespace: ""
+      ## @param data.metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
+      ##
+      jobLabel: ""
+      ## @param data.metrics.serviceMonitor.interval Interval at which metrics should be scraped
+      ## ref: https://github.com/coreos/prometheus-operator/blob/data/Documentation/api.md#endpoint
+      ##
+      interval: 30s
+      ## @param data.metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
+      ## ref: https://github.com/coreos/prometheus-operator/blob/data/Documentation/api.md#endpoint
+      ##
+      scrapeTimeout: 10s
+      ## @param data.metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping
+      ## ref: https://github.com/coreos/prometheus-operator/blob/data/Documentation/api.md#relabelconfig
+      ##
+      relabelings: []
+      ## @param data.metrics.serviceMonitor.metricRelabelings MetricRelabelConfigs to apply to samples before ingestion
+      ## ref: https://github.com/coreos/prometheus-operator/blob/data/Documentation/api.md#relabelconfig
+      ##
+      metricRelabelings: []
+      ## @param data.metrics.serviceMonitor.selector ServiceMonitor selector labels
+      ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
+      ##
+      ## selector:
+      ##   prometheus: my-prometheus
+      ##
+      selector: {}
+      ## @param data.metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
+      ##
+      honorLabels: false
+    ## Rules for PrometheusRule object if enabled
+    ##
+    ## E.g.
+    ## @param data.metrics.rules.enabled Enable render extra rules for PrometheusRule object
+    ## @param data.metrics.rules.spec Rules to render into the PrometheusRule object
+    ## @param data.metrics.rules.selector Selector for the PrometheusRule object
+    ## @param data.metrics.rules.namespace Namespace where to create the PrometheusRule object
+    ## @param data.metrics.rules.additionalLabels Additional lables to add to the PrometheusRule object
+    ##
+    rules:
+      enabled: false
+      ## E.g
+      ## - alert: ArgoAppMissing
+      ##   expr: |
+      ##     absent(argocd_app_info)
+      ##   for: 15m
+      ##   labels:
+      ##     severity: critical
+      ##   annotations:
+      ##     summary: "[ArgoCD] No reported applications"
+      ##     description: >
+      ##       ArgoCD has not reported any applications data for the past 15 minutes which
+      ##       means that it must be down or not functioning properly.  This needs to be
+      ##       resolved for this cloud to continue to maintain state.
+      ## - alert: ArgoAppNotSynced
+      ##   expr: |
+      ##     argocd_app_info{sync_status!="Synced"} == 1
+      ##   for: 12h
+      ##   labels:
+      ##     severity: warning
+      ##   annotations:
+      ##     summary: "[{{`{{ $labels.name }}`}}] Application not synchronized"
+      ##     description: >
+      ##       The application [{{`{{ $labels.name }}`}} has not been synchronized for over
+      ##       12 hours which means that the state of this cloud has drifted away from the
+      ##       state inside Git.
+      ##
+      spec: []
+      ## E.g
+      ## selector:
+      ##   prometheus: kube-prometheus
+      ##
+      selector: {}
+      namespace: monitoring
+      additionalLabels: {}
 ## @section Coordinating-only nodes parameters
-
 coordinating:
   ## @param coordinating.replicaCount Number of coordinating-only replicas to deploy
   ##
   replicaCount: 2
-
   ## @param coordinating.extraRoles Append extra roles to the node role
   ## NOTE: In OpenSearch, all nodes act as coordinators, coordinating-only nodes do not have any other role by default.
   ##
   extraRoles: []
-
   ## Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param coordinating.pdb.create Enable/disable a Pod Disruption Budget creation
   ## @param coordinating.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
-  ## @param coordinating.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ## @param coordinating.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `coordinating.pdb.minAvailable` and `coodinating.pdb.maxUnavailable` are empty.
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
-
   ## @param coordinating.nameOverride String to partially override opensearch.coordinating.fullname
   ##
   nameOverride: ""
@@ -1357,14 +1592,21 @@ coordinating:
     type: RollingUpdate
   ## OpenSearch resource requests and limits
   ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param coordinating.resources.limits The resources limits for the coordinating-only containers
-  ## @param coordinating.resources.requests [object] The requested resources for the coordinating-only containers
+  ## @param coordinating.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if coordinating.resources is set (coordinating.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests:
-      cpu: 25m
-      memory: 256Mi
+  resourcesPreset: "small"
+  ## @param coordinating.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## @param coordinating.heapSize OpenSearch coordinating node heap size.
   ## Note: The recommended heapSize is half of the container's memory.
   ## If omitted, it will be automatically set.
@@ -1375,15 +1617,23 @@ coordinating:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param coordinating.podSecurityContext.enabled Enabled coordinating-only pods' Security Context
+  ## @param coordinating.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param coordinating.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param coordinating.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param coordinating.podSecurityContext.fsGroup Set coordinating-only pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param coordinating.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param coordinating.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param coordinating.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param coordinating.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param coordinating.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param coordinating.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param coordinating.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -1393,15 +1643,20 @@ coordinating:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
+  ## @param coordinating.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param coordinating.hostAliases coordinating-only pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1591,12 +1846,15 @@ coordinating:
   networkPolicy:
     ## @param coordinating.networkPolicy.enabled Enable creation of NetworkPolicy resources
     ##
-    enabled: false
+    enabled: true
     ## @param coordinating.networkPolicy.allowExternal The Policy model to apply
-    ## When set to false, only pods with the correct client label will have network access to the ports Keycloak is
-    ## listening on. When true, Keycloak will accept connections from any source (with the correct destination port).
+    ## When set to false, only pods with the correct client label will have network access to the ports OpenSearch is
+    ## listening on. When true, OpenSearch will accept connections from any source (with the correct destination port).
     ##
     allowExternal: true
+    ## @param coordinating.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
     ## @param coordinating.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
@@ -1676,9 +1934,108 @@ coordinating:
       ## @param coordinating.autoscaling.hpa.targetMemory Target Memory utilization percentage
       ##
       targetMemory: ""
-
+  ## Metrics configuration for coordinating node
+  ##
+  metrics:
+    ## @param coordinating.metrics.enabled Enable coordinating node metrics
+    ##
+    enabled: false
+    service:
+      ## @param coordinating.metrics.service.ports.metrics coordinating node metrics service port
+      ##
+      ports:
+        metrics: 80
+      ## @param coordinating.metrics.service.clusterIP coordinating node metrics service Cluster IP
+      ## e.g.:
+      ## clusterIP: None
+      ##
+      clusterIP: ""
+    ## coordinating node metrics service monitor configuration
+    ##
+    serviceMonitor:
+      ## @param coordinating.metrics.serviceMonitor.enabled Create ServiceMonitor Resource for scraping metrics using PrometheusOperator
+      ##
+      enabled: false
+      ## @param coordinating.metrics.serviceMonitor.namespace Namespace which Prometheus is running in
+      ## e.g:
+      ## namespace: monitoring
+      ##
+      namespace: ""
+      ## @param coordinating.metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
+      ##
+      jobLabel: ""
+      ## @param coordinating.metrics.serviceMonitor.interval Interval at which metrics should be scraped
+      ## ref: https://github.com/coreos/prometheus-operator/blob/coordinating/Documentation/api.md#endpoint
+      ##
+      interval: 30s
+      ## @param coordinating.metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
+      ## ref: https://github.com/coreos/prometheus-operator/blob/coordinating/Documentation/api.md#endpoint
+      ##
+      scrapeTimeout: 10s
+      ## @param coordinating.metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping
+      ## ref: https://github.com/coreos/prometheus-operator/blob/coordinating/Documentation/api.md#relabelconfig
+      ##
+      relabelings: []
+      ## @param coordinating.metrics.serviceMonitor.metricRelabelings MetricRelabelConfigs to apply to samples before ingestion
+      ## ref: https://github.com/coreos/prometheus-operator/blob/coordinating/Documentation/api.md#relabelconfig
+      ##
+      metricRelabelings: []
+      ## @param coordinating.metrics.serviceMonitor.selector ServiceMonitor selector labels
+      ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
+      ##
+      ## selector:
+      ##   prometheus: my-prometheus
+      ##
+      selector: {}
+      ## @param coordinating.metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
+      ##
+      honorLabels: false
+    ## Rules for PrometheusRule object if enabled
+    ##
+    ## E.g.
+    ## @param coordinating.metrics.rules.enabled Enable render extra rules for PrometheusRule object
+    ## @param coordinating.metrics.rules.spec Rules to render into the PrometheusRule object
+    ## @param coordinating.metrics.rules.selector Selector for the PrometheusRule object
+    ## @param coordinating.metrics.rules.namespace Namespace where to create the PrometheusRule object
+    ## @param coordinating.metrics.rules.additionalLabels Additional lables to add to the PrometheusRule object
+    ##
+    rules:
+      enabled: false
+      ## E.g
+      ## - alert: ArgoAppMissing
+      ##   expr: |
+      ##     absent(argocd_app_info)
+      ##   for: 15m
+      ##   labels:
+      ##     severity: critical
+      ##   annotations:
+      ##     summary: "[ArgoCD] No reported applications"
+      ##     description: >
+      ##       ArgoCD has not reported any applications data for the past 15 minutes which
+      ##       means that it must be down or not functioning properly.  This needs to be
+      ##       resolved for this cloud to continue to maintain state.
+      ## - alert: ArgoAppNotSynced
+      ##   expr: |
+      ##     argocd_app_info{sync_status!="Synced"} == 1
+      ##   for: 12h
+      ##   labels:
+      ##     severity: warning
+      ##   annotations:
+      ##     summary: "[{{`{{ $labels.name }}`}}] Application not synchronized"
+      ##     description: >
+      ##       The application [{{`{{ $labels.name }}`}} has not been synchronized for over
+      ##       12 hours which means that the state of this cloud has drifted away from the
+      ##       state inside Git.
+      ##
+      spec: []
+      ## E.g
+      ## selector:
+      ##   prometheus: kube-prometheus
+      ##
+      selector: {}
+      namespace: monitoring
+      additionalLabels: {}
 ## @section Ingest-only nodes parameters
-
 ingest:
   ## @param ingest.enabled Enable ingest nodes
   ##
@@ -1686,22 +2043,19 @@ ingest:
   ## @param ingest.replicaCount Number of ingest-only replicas to deploy
   ##
   replicaCount: 2
-
   ## @param ingest.extraRoles Append extra roles to the node role
   ##
   extraRoles: []
-
   ## Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param ingest.pdb.create Enable/disable a Pod Disruption Budget creation
   ## @param ingest.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
-  ## @param ingest.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ## @param ingest.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `ingest.pdb.minAvailable` and `ingest.pdb.maxUnavailable` are empty.
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
-
   ## @param ingest.nameOverride String to partially override opensearch.ingest.fullname
   ##
   nameOverride: ""
@@ -1721,14 +2075,21 @@ ingest:
     type: RollingUpdate
   ## OpenSearch resource requests and limits
   ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param ingest.resources.limits The resources limits for the ingest-only containers
-  ## @param ingest.resources.requests [object] The requested resources for the ingest-only containers
+  ## @param ingest.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if ingest.resources is set (ingest.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests:
-      cpu: 25m
-      memory: 256Mi
+  resourcesPreset: "small"
+  ## @param ingest.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## @param ingest.heapSize OpenSearch ingest-only node heap size.
   ## Note: The recommended heapSize is half of the container's memory.
   ## If omitted, it will be automatically set.
@@ -1739,15 +2100,23 @@ ingest:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param ingest.podSecurityContext.enabled Enabled ingest-only pods' Security Context
+  ## @param ingest.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param ingest.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param ingest.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param ingest.podSecurityContext.fsGroup Set ingest-only pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param ingest.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param ingest.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param ingest.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param ingest.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param ingest.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param ingest.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param ingest.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -1757,15 +2126,20 @@ ingest:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
+  ## @param ingest.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param ingest.hostAliases ingest-only pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1955,12 +2329,15 @@ ingest:
   networkPolicy:
     ## @param ingest.networkPolicy.enabled Enable creation of NetworkPolicy resources
     ##
-    enabled: false
+    enabled: true
     ## @param ingest.networkPolicy.allowExternal The Policy model to apply
-    ## When set to false, only pods with the correct client label will have network access to the ports Keycloak is
-    ## listening on. When true, Keycloak will accept connections from any source (with the correct destination port).
+    ## When set to false, only pods with the correct client label will have network access to the ports OpenSearch is
+    ## listening on. When true, OpenSearch will accept connections from any source (with the correct destination port).
     ##
     allowExternal: true
+    ## @param ingest.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
     ## @param ingest.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
@@ -2040,7 +2417,6 @@ ingest:
       ## @param ingest.autoscaling.hpa.targetMemory Target Memory utilization percentage
       ##
       targetMemory: ""
-
   ## OpenSearch Ingest-only Service
   ## Recommended for heavy ingestion, improves performance by sending ingest traffic directly into the ingest nodes.
   ## NOTE: Ingest nodes will only accept index requests with an associated pipeline, any other request won't be rerouted.
@@ -2207,7 +2583,107 @@ ingest:
     ##             name: http
     ##
     extraRules: []
-
+  ## Metrics configuration for ingest node
+  ##
+  metrics:
+    ## @param ingest.metrics.enabled Enable ingest node metrics
+    ##
+    enabled: false
+    service:
+      ## @param ingest.metrics.service.ports.metrics ingest node metrics service port
+      ##
+      ports:
+        metrics: 80
+      ## @param ingest.metrics.service.clusterIP ingest node metrics service Cluster IP
+      ## e.g.:
+      ## clusterIP: None
+      ##
+      clusterIP: ""
+    ## ingest node metrics service monitor configuration
+    ##
+    serviceMonitor:
+      ## @param ingest.metrics.serviceMonitor.enabled Create ServiceMonitor Resource for scraping metrics using PrometheusOperator
+      ##
+      enabled: false
+      ## @param ingest.metrics.serviceMonitor.namespace Namespace which Prometheus is running in
+      ## e.g:
+      ## namespace: monitoring
+      ##
+      namespace: ""
+      ## @param ingest.metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
+      ##
+      jobLabel: ""
+      ## @param ingest.metrics.serviceMonitor.interval Interval at which metrics should be scraped
+      ## ref: https://github.com/coreos/prometheus-operator/blob/ingest/Documentation/api.md#endpoint
+      ##
+      interval: 30s
+      ## @param ingest.metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
+      ## ref: https://github.com/coreos/prometheus-operator/blob/ingest/Documentation/api.md#endpoint
+      ##
+      scrapeTimeout: 10s
+      ## @param ingest.metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping
+      ## ref: https://github.com/coreos/prometheus-operator/blob/ingest/Documentation/api.md#relabelconfig
+      ##
+      relabelings: []
+      ## @param ingest.metrics.serviceMonitor.metricRelabelings MetricRelabelConfigs to apply to samples before ingestion
+      ## ref: https://github.com/coreos/prometheus-operator/blob/ingest/Documentation/api.md#relabelconfig
+      ##
+      metricRelabelings: []
+      ## @param ingest.metrics.serviceMonitor.selector ServiceMonitor selector labels
+      ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
+      ##
+      ## selector:
+      ##   prometheus: my-prometheus
+      ##
+      selector: {}
+      ## @param ingest.metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
+      ##
+      honorLabels: false
+    ## Rules for PrometheusRule object if enabled
+    ##
+    ## E.g.
+    ## @param ingest.metrics.rules.enabled Enable render extra rules for PrometheusRule object
+    ## @param ingest.metrics.rules.spec Rules to render into the PrometheusRule object
+    ## @param ingest.metrics.rules.selector Selector for the PrometheusRule object
+    ## @param ingest.metrics.rules.namespace Namespace where to create the PrometheusRule object
+    ## @param ingest.metrics.rules.additionalLabels Additional lables to add to the PrometheusRule object
+    ##
+    rules:
+      enabled: false
+      ## E.g
+      ## - alert: ArgoAppMissing
+      ##   expr: |
+      ##     absent(argocd_app_info)
+      ##   for: 15m
+      ##   labels:
+      ##     severity: critical
+      ##   annotations:
+      ##     summary: "[ArgoCD] No reported applications"
+      ##     description: >
+      ##       ArgoCD has not reported any applications data for the past 15 minutes which
+      ##       means that it must be down or not functioning properly.  This needs to be
+      ##       resolved for this cloud to continue to maintain state.
+      ## - alert: ArgoAppNotSynced
+      ##   expr: |
+      ##     argocd_app_info{sync_status!="Synced"} == 1
+      ##   for: 12h
+      ##   labels:
+      ##     severity: warning
+      ##   annotations:
+      ##     summary: "[{{`{{ $labels.name }}`}}] Application not synchronized"
+      ##     description: >
+      ##       The application [{{`{{ $labels.name }}`}} has not been synchronized for over
+      ##       12 hours which means that the state of this cloud has drifted away from the
+      ##       state inside Git.
+      ##
+      spec: []
+      ## E.g
+      ## selector:
+      ##   prometheus: kube-prometheus
+      ##
+      selector: {}
+      namespace: monitoring
+      additionalLabels: {}
 ## @section Init Container Parameters
 
 ## 'volumePermissions' init container parameters
@@ -2228,7 +2704,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r92
+    tag: 12-debian-12-r34
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -2245,21 +2721,21 @@ volumePermissions:
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param volumePermissions.resources.limits The resources limits for the container
-  ## @param volumePermissions.resources.requests The requested resources for the container
+  ## @param volumePermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    ## Example:
-    ## limits:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    limits: {}
-    ## Examples:
-    ## requests:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    requests: {}
-
+  resourcesPreset: "nano"
+  ## @param volumePermissions.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
 ## Kernel settings modifier image
 ##
 sysctlImage:
@@ -2275,10 +2751,9 @@ sysctlImage:
   ##
   registry: docker.io
   repository: bitnami/os-shell
-  tag: 11-debian-11-r92
+  tag: 12-debian-12-r34
   digest: ""
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -2296,23 +2771,22 @@ sysctlImage:
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param sysctlImage.resources.limits The resources limits for the container
-  ## @param sysctlImage.resources.requests The requested resources for the container
+  ## @param sysctlImage.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if sysctlImage.resources is set (sysctlImage.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    ## Example:
-    ## limits:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    limits: {}
-    ## Examples:
-    ## requests:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    requests: {}
-
+  resourcesPreset: "nano"
+  ## @param sysctlImage.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
 ## @section OpenSearch Dashboards Parameters
-
 dashboards:
   ## @param dashboards.enabled Enables OpenSearch Dashboards deployment
   ##
@@ -2329,10 +2803,9 @@ dashboards:
   image:
     registry: docker.io
     repository: bitnami/opensearch-dashboards
-    tag: 2.11.0-debian-11-r2
+    tag: 2.18.0-debian-12-r2
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -2518,11 +2991,11 @@ dashboards:
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param dashboards.pdb.create Enable/disable a Pod Disruption Budget creation
   ## @param dashboards.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
-  ## @param dashboards.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ## @param dashboards.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `dashboards.pdb.minAvailable` and `dashboards.pdb.maxUnavailable` are empty.
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
   ## @param dashboards.nameOverride String to partially override opensearch.dashboards.fullname
   ##
@@ -2540,14 +3013,21 @@ dashboards:
     type: RollingUpdate
   ## OpenSearch resource requests and limits
   ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param dashboards.resources.limits The resources limits for the data containers
-  ## @param dashboards.resources.requests [object] The requested resources for the data containers
+  ## @param dashboards.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if dashboards.resources is set (dashboards.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests:
-      cpu: 25m
-      memory: 2048Mi
+  resourcesPreset: "small"
+  ## @param dashboards.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## @param dashboards.heapSize OpenSearch data node heap size.
   ## Note: The recommended heapSize is half of the container's memory.
   ## If omitted, it will be automatically set.
@@ -2558,15 +3038,23 @@ dashboards:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param dashboards.podSecurityContext.enabled Enabled data pods' Security Context
+  ## @param dashboards.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param dashboards.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param dashboards.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param dashboards.podSecurityContext.fsGroup Set dashboards pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param dashboards.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param dashboards.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param dashboards.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param dashboards.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param dashboards.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param dashboards.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param dashboards.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -2576,15 +3064,20 @@ dashboards:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
+  ## @param dashboards.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param dashboards.hostAliases data pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -2770,12 +3263,15 @@ dashboards:
   networkPolicy:
     ## @param dashboards.networkPolicy.enabled Enable creation of NetworkPolicy resources
     ##
-    enabled: false
+    enabled: true
     ## @param dashboards.networkPolicy.allowExternal The Policy model to apply
-    ## When set to false, only pods with the correct client label will have network access to the ports Keycloak is
-    ## listening on. When true, Keycloak will accept connections from any source (with the correct destination port).
+    ## When set to false, only pods with the correct client label will have network access to the ports OpenSearch is
+    ## listening on. When true, OpenSearch will accept connections from any source (with the correct destination port).
     ##
     allowExternal: true
+    ## @param dashboards.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
     ## @param dashboards.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
@@ -2869,3 +3365,226 @@ dashboards:
     ## Otherwise, the new node certs won't match the existing certs.
     ##
     autoGenerated: true
+  ## Enable persistence using Persistent Volume Claims
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
+  ##
+  persistence:
+    ## @param dashboards.persistence.enabled Enable persistence using Persistent Volume Claims
+    ##
+    enabled: false
+    ## @param dashboards.persistence.mountPath Path to mount the volume at.
+    ##
+    mountPath: /bitnami/opensearch-dashboards
+    ## @param dashboards.persistence.subPath The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services
+    ##
+    subPath: ""
+    ## @param dashboards.persistence.storageClass Storage class of backing PVC
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
+    storageClass: ""
+    ## @param dashboards.persistence.annotations Persistent Volume Claim annotations
+    ##
+    annotations: {}
+    ## @param dashboards.persistence.accessModes Persistent Volume Access Modes
+    ##
+    accessModes:
+      - ReadWriteOnce
+    ## @param dashboards.persistence.size Size of data volume
+    ##
+    size: 8Gi
+    ## @param dashboards.persistence.existingClaim The name of an existing PVC to use for persistence
+    ##
+    existingClaim: ""
+    ## @param dashboards.persistence.selector Selector to match an existing Persistent Volume for OpenSearch data PVC
+    ## If set, the PVC can't have a PV dynamically provisioned for it
+    ## E.g.
+    ## selector:
+    ##   matchLabels:
+    ##     app: my-app
+    ##
+    selector: {}
+    ## @param dashboards.persistence.dataSource Custom PVC data source
+    ##
+    dataSource: {}
+
+## @section OpenSearch Snapshots Parameters
+snapshots:
+  ## @param snapshots.enabled Enable automatic setup of repositories and snapshot policies
+  ##
+  enabled: false
+  ## @param snapshots.command Override default container command (useful when using custom images)
+  ##
+  command:
+    - /usr/bin/curl
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param snapshots.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param snapshots.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param snapshots.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param snapshots.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+  ## @param snapshots.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param snapshots.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param snapshots.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param snapshots.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param snapshots.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param snapshots.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
+  ##
+  containerSecurityContext:
+    enabled: true
+    seLinuxOptions: null
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
+  ## @param snapshots.fullnameOverride String to fully override opensearch.snapshots.fullname
+  ##
+  fullnameOverride: ""
+  ## Bitnami OpenSearch Snapshots image
+  ## @param snapshots.image.registry [default: REGISTRY_NAME] OpenSearch Snapshots image registry
+  ## @param snapshots.image.repository [default: REPOSITORY_NAME/os-shell] OpenSearch Snapshots image repository
+  ## @skip snapshots.image.tag OpenSearch Snapshots image tag (immutable tags are recommended)
+  ## @param snapshots.image.digest OpenSearch Snapshots image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param snapshots.image.pullPolicy OpenSearch Snapshots image pull policy
+  ## @param snapshots.image.pullSecrets OpenSearch Snapshots image pull secrets
+  ## @param snapshots.image.debug Enable OpenSearch Snapshots image debug mode
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/os-shell
+    tag: 12-debian-12-r34
+    digest: ""
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+    ## Enable debug mode
+    ##
+    debug: false
+  ## @param snapshots.nameOverride String to partially override common.names.fullname
+  ##
+  nameOverride: ""
+  ## Enable persistence using Persistent Volume Claims
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
+  ##
+  persistence:
+    ## @param snapshots.persistence.enabled Enable persistence using Persistent Volume Claims
+    ##
+    enabled: false
+    ## @param snapshots.persistence.accessModes Persistent Volume Access Modes
+    ##
+    accessModes:
+      - ReadWriteMany
+    ## @param snapshots.persistence.annotations Persistent Volume Claim annotations
+    ##
+    annotations: {}
+    ## @param snapshots.persistence.dataSource Custom PVC data source
+    ##
+    dataSource: {}
+    ## @param snapshots.persistence.existingClaim The name of an existing PVC to use for persistence
+    ##
+    existingClaim: ""
+    ## @param snapshots.persistence.labels Extra labels for the Persistent Volume Claim
+    ##
+    labels: {}
+    ## @param snapshots.persistence.selector Selector to match an existing Persistent Volume for OpenSearch data PVC
+    ## If set, the PVC can't have a PV dynamically provisioned for it
+    ## E.g.
+    ## selector:
+    ##   matchLabels:
+    ##     app: my-app
+    ##
+    selector: {}
+    ## @param snapshots.persistence.size Size of data volume
+    ##
+    size: 8Gi
+    ## @param snapshots.persistence.storageClass Storage class of backing PVC
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
+    storageClass: ""
+    ## @param snapshots.persistence.subPath The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services
+    ##
+    subPath: ""
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param snapshots.podSecurityContext.enabled Enabled data pods' Security Context
+  ## @param snapshots.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param snapshots.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param snapshots.podSecurityContext.supplementalGroups Set filesystem extra groups
+  ## @param snapshots.podSecurityContext.fsGroup Set snapshots pod's Security Context fsGroup
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
+    fsGroup: 1001
+  ## @param snapshots.policies [default: SNAPSHOT_POLICY_API_BODY] Each object represents a snapshot policy in YAML form, which will be converted to JSON and then passed as the HTTP body data to the OpenSearch REST API.
+  ## NOTE: The field `snapshot_config.repository` in each policy must match a repo name in `snapshots.repositories`.
+  ##
+  policies:
+    default:
+      creation:
+        schedule:
+          cron:
+            expression: "0 20 * * *"
+            timezone: UTC
+      deletion:
+        condition:
+          max_age: 7d
+          min_count: 1
+        schedule:
+          cron:
+            expression: 0 20 * * *
+            timezone: UTC
+      description: Default snapshot policy
+      enabled: true
+      snapshot_config:
+        repository: default
+  ## @param snapshots.repositories [default: SNAPSHOT_REPO_API_BODY] Each object represents a snapshot repository in YAML form, which will be converted to JSON and then passed as the HTTP body data to the OpenSearch REST API.
+  ## NOTE: The field `settings.location` in each repo must match the snapshot repo path configured in `snapshotRepoPath`, if its `type` is `fs`.
+  ##
+  repositories:
+    default:
+      settings:
+        location: /snapshots
+      type: fs
+  ## OpenSearch resource requests and limits
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param snapshots.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if snapshots.resources is set (snapshots.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "nano"
+  ## @param snapshots.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 100m
+  ##     memory: 10Mi
+  ##   limits:
+  ##     cpu: 200m
+  ##     memory: 20Mi
+  ##
+  resources: {}

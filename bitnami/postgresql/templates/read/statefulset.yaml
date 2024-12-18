@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -9,7 +9,7 @@ apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
   name: {{ include "postgresql.v1.readReplica.fullname" . }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.readReplicas.labels .Values.commonLabels ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: read
@@ -32,10 +32,13 @@ spec:
       name: {{ include "postgresql.v1.readReplica.fullname" . }}
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: read
-      {{- if or (include "postgresql.v1.readReplicas.createExtendedConfigmap" .) .Values.readReplicas.podAnnotations }}
+      {{- if or .Values.passwordUpdateJob.enabled (include "postgresql.v1.readReplicas.createExtendedConfigmap" .) .Values.readReplicas.podAnnotations }}
       annotations:
         {{- if (include "postgresql.v1.readReplicas.createExtendedConfigmap" .) }}
         checksum/extended-configuration: {{ pick (include (print $.Template.BasePath "/primary/extended-configmap.yaml") . | fromYaml) "data" | toYaml | sha256sum }}
+        {{- end }}
+        {{- if .Values.passwordUpdateJob.enabled }}
+        charts.bitnami.com/password-last-update: {{ now | date "20060102150405" | quote }}
         {{- end }}
         {{- if .Values.readReplicas.podAnnotations }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.readReplicas.podAnnotations "context" $ ) | nindent 8 }}
@@ -47,6 +50,7 @@ spec:
       {{- end }}
       serviceAccountName: {{ include "postgresql.v1.serviceAccountName" . }}
       {{- include "postgresql.v1.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.readReplicas.automountServiceAccountToken }}
       {{- if .Values.readReplicas.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.readReplicas.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -77,7 +81,7 @@ spec:
       terminationGracePeriodSeconds: {{ .Values.readReplicas.terminationGracePeriodSeconds }}
       {{- end }}
       {{- if .Values.readReplicas.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.readReplicas.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.readReplicas.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       hostNetwork: {{ .Values.readReplicas.hostNetwork }}
       hostIPC: {{ .Values.readReplicas.hostIPC }}
@@ -89,10 +93,12 @@ spec:
           imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
           {{- if .Values.readReplicas.resources }}
           resources: {{- toYaml .Values.readReplicas.resources | nindent 12 }}
+          {{- else if ne .Values.readReplicas.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.readReplicas.resourcesPreset) | nindent 12 }}
           {{- end }}
           # We don't require a privileged container in this case
           {{- if .Values.readReplicas.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.readReplicas.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.readReplicas.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           command:
             - /bin/sh
@@ -101,6 +107,9 @@ spec:
               cp /tmp/certs/* /opt/bitnami/postgresql/certs/
               chmod 600 {{ include "postgresql.v1.tlsCertKey" . }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: raw-certificates
               mountPath: /tmp/certs
             - name: postgresql-certificates
@@ -111,6 +120,8 @@ spec:
           imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
           {{- if .Values.readReplicas.resources }}
           resources: {{- toYaml .Values.readReplicas.resources | nindent 12 }}
+          {{- else if ne .Values.readReplicas.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.readReplicas.resourcesPreset) | nindent 12 }}
           {{- end }}
           command:
             - /bin/sh
@@ -149,13 +160,14 @@ spec:
           securityContext: {{- .Values.volumePermissions.containerSecurityContext | toYaml | nindent 12 }}
           {{- end }}
           volumeMounts:
-            {{ if .Values.readReplicas.persistence.enabled }}
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: data
               mountPath: {{ .Values.readReplicas.persistence.mountPath }}
               {{- if .Values.readReplicas.persistence.subPath }}
               subPath: {{ .Values.readReplicas.persistence.subPath }}
               {{- end }}
-            {{- end }}
             {{- if .Values.shmVolume.enabled }}
             - name: dshm
               mountPath: /dev/shm
@@ -176,7 +188,7 @@ spec:
           image: {{ include "postgresql.v1.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.readReplicas.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.readReplicas.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.readReplicas.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -368,11 +380,22 @@ spec:
           {{- end }}
           {{- if .Values.readReplicas.resources }}
           resources: {{- toYaml .Values.readReplicas.resources | nindent 12 }}
+          {{- else if ne .Values.readReplicas.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.readReplicas.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if .Values.readReplicas.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.readReplicas.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/postgresql/conf
+              subPath: app-conf-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/postgresql/tmp
+              subPath: app-tmp-dir
             {{- if .Values.auth.usePasswordFiles }}
             - name: postgresql-password
               mountPath: /opt/bitnami/postgresql/secrets/
@@ -390,13 +413,11 @@ spec:
             - name: dshm
               mountPath: /dev/shm
             {{- end }}
-            {{- if .Values.readReplicas.persistence.enabled }}
             - name: data
               mountPath: {{ .Values.readReplicas.persistence.mountPath }}
               {{- if .Values.readReplicas.persistence.subPath }}
               subPath: {{ .Values.readReplicas.persistence.subPath }}
               {{- end }}
-            {{- end }}
             {{- if .Values.readReplicas.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.readReplicas.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
@@ -405,27 +426,33 @@ spec:
           image: {{ include "postgresql.v1.metrics.image" . }}
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
           {{- if .Values.metrics.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.metrics.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.metrics.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
-          {{- else if .Values.metrics.customMetrics }}
-          args: [ "--extend.query-path", "/conf/custom-metrics.yaml" ]
+          {{- else if or .Values.metrics.customMetrics .Values.metrics.collectors }}
+          args:
+            {{- if .Values.metrics.customMetrics }}
+            - --extend.query-path
+            - /conf/custom-metrics.yaml
+            {{- end }}
+            {{- range $name, $enabled := .Values.metrics.collectors }}
+            - --{{ if not $enabled }}no-{{ end }}collector.{{ $name }}
+            {{- end }}
           {{- end }}
           env:
-          {{- $database := required "In order to enable metrics you need to specify a database (.Values.auth.database or .Values.global.postgresql.auth.database)" (include "postgresql.v1.database" .) }}
             - name: DATA_SOURCE_URI
-              value: {{ printf "127.0.0.1:%d/%s?sslmode=disable" (int (include "postgresql.v1.service.port" .)) $database }}
+              value: {{ printf "127.0.0.1:%d/postgres?sslmode=disable" (int (include "postgresql.v1.service.port" .)) }}
             {{- if .Values.auth.usePasswordFiles }}
             - name: DATA_SOURCE_PASS_FILE
-              value: {{ printf "/opt/bitnami/postgresql/secrets/%s" (include "postgresql.v1.userPasswordKey" .) }}
+              value: {{ printf "/opt/bitnami/postgresql/secrets/%s" (include (ternary "postgresql.v1.adminPasswordKey" "postgresql.v1.userPasswordKey" (empty $customUser)) .) }}
             {{- else }}
             - name: DATA_SOURCE_PASS
               valueFrom:
                 secretKeyRef:
                   name: {{ include "postgresql.v1.secretName" . }}
-                  key: {{ include "postgresql.v1.userPasswordKey" . }}
+                  key: {{ include (ternary "postgresql.v1.adminPasswordKey" "postgresql.v1.userPasswordKey" (empty $customUser)) . }}
             {{- end }}
             - name: DATA_SOURCE_USER
               value: {{ default "postgres" $customUser | quote }}
@@ -461,6 +488,9 @@ spec:
           {{- end }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             {{- if .Values.auth.usePasswordFiles }}
             - name: postgresql-password
               mountPath: /opt/bitnami/postgresql/secrets/
@@ -472,6 +502,8 @@ spec:
             {{- end }}
           {{- if .Values.metrics.resources }}
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
+          {{- else if ne .Values.metrics.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.metrics.resourcesPreset) | nindent 12 }}
           {{- end }}
         {{- end }}
         {{- if .Values.readReplicas.sidecars }}
@@ -508,6 +540,8 @@ spec:
             sizeLimit: {{ .Values.shmVolume.sizeLimit }}
             {{- end }}
         {{- end }}
+        - name: empty-dir
+          emptyDir: {}
         {{- if .Values.readReplicas.extraVolumes }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.readReplicas.extraVolumes "context" $ ) | nindent 8 }}
         {{- end }}
@@ -525,7 +559,9 @@ spec:
     whenScaled: {{ .Values.readReplicas.persistentVolumeClaimRetentionPolicy.whenScaled }}
   {{- end }}
   volumeClaimTemplates:
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         name: data
         {{- if .Values.readReplicas.persistence.annotations }}
         annotations: {{- include "common.tplvalues.render" (dict "value" .Values.readReplicas.persistence.annotations "context" $) | nindent 10 }}
@@ -540,6 +576,9 @@ spec:
         {{- end }}
         {{- if .Values.readReplicas.persistence.dataSource }}
         dataSource: {{- include "common.tplvalues.render" (dict "value" .Values.readReplicas.persistence.dataSource "context" $) | nindent 10 }}
+        {{- end }}
+        {{- if .Values.readReplicas.persistence.storageClass }}
+        storageClassName: {{ .Values.readReplicas.persistence.storageClass }}
         {{- end }}
         resources:
           requests:

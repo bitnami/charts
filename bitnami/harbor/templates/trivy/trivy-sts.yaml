@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -8,7 +8,7 @@ apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
   name: {{ include "harbor.trivy" . }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.trivy.image "chart" .Chart ) ) }}
   {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
@@ -39,6 +39,7 @@ spec:
         {{- end }}
     spec:
       {{- include "harbor.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.trivy.automountServiceAccountToken }}
       {{- if .Values.trivy.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.trivy.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -65,10 +66,10 @@ spec:
       {{- if .Values.trivy.schedulerName }}
       schedulerName: {{ .Values.trivy.schedulerName }}
       {{- end }}
+      serviceAccountName: {{ include "harbor.trivy.serviceAccountName" . }}
       {{- if .Values.trivy.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.trivy.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.trivy.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
-      automountServiceAccountToken: {{ .Values.trivy.automountServiceAccountToken }}
       initContainers:
         {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
         - name: volume-permissions
@@ -82,15 +83,40 @@ spec:
               mkdir -p {{ .Values.trivy.cacheDir }} {{ .Values.trivy.cacheDir }}/trivy {{ .Values.trivy.cacheDir }}/reports
               find {{ .Values.trivy.cacheDir }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs -r chown -R {{ .Values.trivy.containerSecurityContext.runAsUser }}:{{ .Values.trivy.podSecurityContext.fsGroup }}
           {{- if .Values.volumePermissions.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.volumePermissions.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.volumePermissions.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: data
               mountPath: {{ .Values.trivy.cacheDir }}
         {{- end }}
+        - name: certificate-volume
+          image: {{ include "harbor.trivy.image" . }}
+          imagePullPolicy: {{ .Values.trivy.image.pullPolicy | quote }}
+          command:
+            - /bin/bash
+          args:
+            - -ec
+            - cp -r /etc/ssl/certs/* /certs
+          {{- if .Values.trivy.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.trivy.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.certificateVolume.resources }}
+          resources: {{- toYaml .Values.certificateVolume.resources | nindent 12 }}
+          {{- else if ne .Values.certificateVolume.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.certificateVolume.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /certs
+              subPath: etc-ssl-certs
         {{- if .Values.trivy.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.trivy.initContainers "context" $) | nindent 8 }}
         {{- end }}
@@ -99,7 +125,7 @@ spec:
           image: {{ include "harbor.trivy.image" . }}
           imagePullPolicy: {{ .Values.trivy.image.pullPolicy | quote }}
           {{- if .Values.trivy.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.trivy.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.trivy.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -121,7 +147,11 @@ spec:
             - configMapRef:
                 name: {{ printf "%s-envvars" (include "harbor.trivy" .) }}
             - secretRef:
+                {{- with .Values.trivy.existingEnvVarsSecret }}
+                name: {{ . }}
+                {{- else }}
                 name: {{ printf "%s-envvars" (include "harbor.trivy" .) }}
+                {{- end }}
             {{- if .Values.trivy.extraEnvVarsCM }}
             - configMapRef:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.trivy.extraEnvVarsCM "context" $) }}
@@ -165,8 +195,16 @@ spec:
           {{- end }}
           {{- if .Values.trivy.resources }}
           resources: {{- toYaml .Values.trivy.resources | nindent 12 }}
+          {{- else if ne .Values.trivy.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.trivy.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /etc/ssl/certs
+              subPath: etc-ssl-certs
             - name: data
               mountPath: {{ .Values.trivy.cacheDir }}
               readOnly: false
@@ -184,6 +222,8 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.trivy.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
       {{- if .Values.internalTLS.enabled }}
         - name: internal-tls-certs
           secret:

@@ -1,38 +1,9 @@
 {{/*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
 {{/* vim: set filetype=mustache: */}}
-{{/*
-Validate PostgreSQL required passwords are not empty.
-
-Usage:
-{{ include "common.validations.values.postgresql.passwords" (dict "secret" "secretName" "subchart" false "context" $) }}
-Params:
-  - secret - String - Required. Name of the secret where postgresql values are stored, e.g: "postgresql-passwords-secret"
-  - subchart - Boolean - Optional. Whether postgresql is used as subchart or not. Default: false
-*/}}
-{{- define "common.validations.values.postgresql.passwords" -}}
-  {{- $existingSecret := include "common.postgresql.values.existingSecret" . -}}
-  {{- $enabled := include "common.postgresql.values.enabled" . -}}
-  {{- $valueKeyPostgresqlPassword := include "common.postgresql.values.key.postgressPassword" . -}}
-  {{- $valueKeyPostgresqlReplicationEnabled := include "common.postgresql.values.key.replicationPassword" . -}}
-  {{- if and (or (not $existingSecret) (eq $existingSecret "\"\"")) (eq $enabled "true") -}}
-    {{- $requiredPasswords := list -}}
-    {{- $requiredPostgresqlPassword := dict "valueKey" $valueKeyPostgresqlPassword "secret" .secret "field" "postgresql-password" -}}
-    {{- $requiredPasswords = append $requiredPasswords $requiredPostgresqlPassword -}}
-
-    {{- $enabledReplication := include "common.postgresql.values.enabled.replication" . -}}
-    {{- if (eq $enabledReplication "true") -}}
-        {{- $requiredPostgresqlReplicationPassword := dict "valueKey" $valueKeyPostgresqlReplicationEnabled "secret" .secret "field" "postgresql-replication-password" -}}
-        {{- $requiredPasswords = append $requiredPasswords $requiredPostgresqlReplicationPassword -}}
-    {{- end -}}
-
-    {{- include "common.validations.values.multiple.empty" (dict "required" $requiredPasswords "context" .context) -}}
-  {{- end -}}
-{{- end -}}
-
 {{/*
 Auxiliary function to decide whether evaluate global values.
 

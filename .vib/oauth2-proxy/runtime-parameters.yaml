@@ -11,7 +11,7 @@ configuration:
     oidc_issuer_url = "http://vmware-oauth2-proxy.my:5556/dex"
     redirect_url = "http://vmware-oauth2-proxy.my/oauth2/callback"
     cookie_secure = false
-    skip_auth_routes = [ "^\/dex\/.*" ]
+    skip_auth_routes = [ "^/dex/.*" ]
     upstreams = [ "file:///bitnami/oauth2-proxy/conf/", "http://vmware-oauth2-proxy.my:5556/dex/" ]
 containerPort: 4181
 hostAliases:
@@ -26,7 +26,7 @@ containerSecurityContext:
   runAsUser: 1002
 serviceAccount:
   create: true
-  automountServiceAccountToken: true
+automountServiceAccountToken: true
 redis:
   enabled: true
   auth:

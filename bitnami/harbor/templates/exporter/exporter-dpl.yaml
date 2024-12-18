@@ -1,14 +1,14 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if .Values.metrics.enabled}}
+{{- if .Values.metrics.enabled }}
 apiVersion: {{ template "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ include "harbor.exporter" . }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.exporter.image "chart" .Chart ) ) }}
   {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
@@ -67,21 +67,40 @@ spec:
       {{- if .Values.exporter.schedulerName }}
       schedulerName: {{ .Values.exporter.schedulerName }}
       {{- end }}
-      {{- if .Values.exporter.serviceAccountName }}
-      serviceAccountName: {{ .Values.exporter.serviceAccountName }}
-      {{- end }}
+      serviceAccountName: {{ include "harbor.exporter.serviceAccountName" .}}
       {{- if .Values.exporter.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.exporter.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.exporter.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
-      {{- if .Values.exporter.initContainers }}
-      initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.exporter.initContainers "context" $) | nindent 8 }}
-      {{- end }}
+      initContainers:
+        {{- if .Values.exporter.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.exporter.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+        - name: certificate-volume
+          image: {{ include "harbor.exporter.image" . }}
+          imagePullPolicy: {{ .Values.exporter.image.pullPolicy | quote }}
+          command:
+            - /bin/bash
+          args:
+            - -ec
+            - cp -r /etc/ssl/certs/* /certs
+          {{- if .Values.exporter.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.exporter.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.certificateVolume.resources }}
+          resources: {{- toYaml .Values.certificateVolume.resources | nindent 12 }}
+          {{- else if ne .Values.certificateVolume.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.certificateVolume.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /certs
+              subPath: etc-ssl-certs
       containers:
         - name: exporter
           image: {{ include "harbor.exporter.image" . }}
           imagePullPolicy: {{ .Values.exporter.image.pullPolicy | quote }}
           {{- if .Values.exporter.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.exporter.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.exporter.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -99,8 +118,8 @@ spec:
             - name: HARBOR_DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  {{- if .Values.exporter.existingEnvVarsSecret }}
-                  name: {{ .Values.exporter.existingEnvVarsSecret }}
+                  {{- if .Values.core.existingEnvVarsSecret }}
+                  name: {{ .Values.core.existingEnvVarsSecret }}
                   {{- else }}
                   name: {{ printf "%s-envvars" (include "harbor.core" .) }}
                   {{- end }}
@@ -108,8 +127,8 @@ spec:
             - name: HARBOR_ADMIN_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  {{- if .Values.exporter.existingEnvVarsSecret }}
-                  name: {{ .Values.exporter.existingEnvVarsSecret }}
+                  {{- if .Values.core.existingEnvVarsSecret }}
+                  name: {{ .Values.core.existingEnvVarsSecret }}
                   {{- else }}
                   name: {{ printf "%s-envvars" (include "harbor.core" .) }}
                   {{- end }}
@@ -144,10 +163,8 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.exporter.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.exporter.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.exporter.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: {{ .Values.metrics.path | quote }}
+            tcpSocket:
               port: metrics
-              scheme: HTTP
           {{- end }}
           {{- if .Values.exporter.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.exporter.customReadinessProbe "context" $) | nindent 12 }}
@@ -164,8 +181,16 @@ spec:
           {{- end }}
           {{- if .Values.exporter.resources }}
           resources: {{- toYaml .Values.exporter.resources | nindent 12 }}
+          {{- else if ne .Values.exporter.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.exporter.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /etc/ssl/certs
+              subPath: etc-ssl-certs
             {{- if .Values.internalTLS.enabled }}
             - name: internal-tls-certs
               mountPath: /etc/harbor/ssl/exporter
@@ -180,6 +205,8 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.exporter.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         {{- if .Values.internalTLS.enabled }}
         - name: internal-tls-certs
           secret:

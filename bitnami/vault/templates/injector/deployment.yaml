@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -40,6 +40,7 @@ spec:
     spec:
       serviceAccountName: {{ template "vault.injector.serviceAccountName" . }}
       {{- include "vault.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.injector.automountServiceAccountToken }}
       {{- if .Values.injector.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.injector.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -67,7 +68,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.injector.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.injector.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.injector.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.injector.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.injector.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.injector.terminationGracePeriodSeconds }}
@@ -81,7 +82,7 @@ spec:
           image: {{ template "vault.injector.image" . }}
           imagePullPolicy: {{ .Values.injector.image.pullPolicy }}
           {{- if .Values.injector.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.injector.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.injector.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -104,7 +105,7 @@ spec:
             - name: AGENT_INJECT_LISTEN
               value: :{{ .Values.injector.containerPorts.https }}
             - name: AGENT_INJECT_VAULT_ADDR
-              value: http://{{ include "vault.server.fullname" . }}:{{ .Values.server.service.general.ports.http }}
+              value: http://{{ include "vault.server.fullname" . }}.{{ include "common.names.namespace" . }}.svc:{{ .Values.server.service.general.ports.http }}
             - name: AGENT_INJECT_VAULT_AUTH_PATH
               value: auth/kubernetes
             - name: AGENT_INJECT_VAULT_IMAGE
@@ -133,6 +134,8 @@ spec:
             {{- end }}
           {{- if .Values.injector.resources }}
           resources: {{- toYaml .Values.injector.resources | nindent 12 }}
+          {{- else if ne .Values.injector.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.injector.resourcesPreset) | nindent 12 }}
           {{- end }}
           ports:
             - name: https
@@ -142,10 +145,8 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.injector.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.injector.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.injector.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /health/ready
+            tcpSocket:
               port: https
-              scheme: HTTPS
           {{- end }}
           {{- if .Values.injector.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.injector.customReadinessProbe "context" $) | nindent 12 }}

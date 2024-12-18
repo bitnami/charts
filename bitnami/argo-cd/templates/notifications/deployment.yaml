@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -8,7 +8,7 @@ apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ include "argocd.notifications" . }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: notifications
   {{- if .Values.commonAnnotations }}
@@ -32,6 +32,7 @@ spec:
     spec:
       serviceAccountName: {{ include "argocd.notifications.serviceAccountName" . }}
       {{- include "argocd.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.notifications.automountServiceAccountToken }}
       {{- if .Values.notifications.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.notifications.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
@@ -50,7 +51,7 @@ spec:
       priorityClassName: {{ .Values.notifications.priorityClassName | quote }}
       {{- end }}
       {{- if .Values.notifications.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.notifications.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.notifications.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       containers:
         - name: notifications
@@ -71,7 +72,7 @@ spec:
             - --metrics-port
             - {{ .Values.notifications.containerPorts.metrics | quote }}
             - --argocd-repo-server
-            - {{ include "argocd.repo-server" . }}:{{ .Values.repoServer.service.port }}
+            - {{ include "argocd.repo-server" . }}:{{ coalesce .Values.repoServer.service.port .Values.repoServer.service.ports.repoServer }}
           {{- if .Values.notifications.extraArgs }}
           {{- include "common.tplvalues.render" (dict "value" .Values.notifications.extraArgs "context" $) | nindent 12 }}
           {{- end }}
@@ -97,9 +98,8 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.notifications.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.notifications.livenessProbe.enabled }}
           livenessProbe:
-            httpGet:
+            tcpSocket:
               port: metrics
-              path: /metrics
             initialDelaySeconds: {{ .Values.notifications.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.notifications.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.notifications.livenessProbe.timeoutSeconds }}
@@ -134,9 +134,11 @@ spec:
           {{- end }}
           {{- if .Values.notifications.resources }}
           resources: {{- toYaml .Values.notifications.resources | nindent 12 }}
+          {{- else if ne .Values.notifications.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.notifications.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if .Values.notifications.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.notifications.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.notifications.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
             {{- if .Values.config.tlsCerts }}
@@ -145,10 +147,15 @@ spec:
             {{- end }}
             - mountPath: /app/config/server/tls
               name: argocd-repo-server-tls
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
           {{- if .Values.notifications.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.notifications.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         {{- if .Values.config.tlsCerts }}
         - name: tls-certs
           configMap:

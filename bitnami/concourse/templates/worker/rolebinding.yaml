@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -9,7 +9,7 @@ apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: RoleBinding
 metadata:
   name: {{ include "concourse.worker.fullname.namespace" . }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: worker
   {{- if .Values.commonAnnotations }}
@@ -22,7 +22,7 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: {{ include "concourse.worker.serviceAccountName" . }}
-    namespace: {{ .Release.Namespace | quote }}
+    namespace: {{ include "common.names.namespace" . | quote }}
 {{- end }}
 {{- $pspAvailable := (semverCompare "<1.25-0" (include "common.capabilities.kubeVersion" .)) }}
 {{- if and $pspAvailable .Values.worker.psp.create }}
@@ -31,7 +31,7 @@ apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: RoleBinding
 metadata:
   name: {{ printf "%s-psp" (include "concourse.worker.fullname.namespace" .) }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: worker
   {{- if .Values.commonAnnotations }}
@@ -44,6 +44,6 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: {{ include "concourse.worker.serviceAccountName" . }}
-    namespace: {{ .Release.Namespace | quote }}
+    namespace: {{ include "common.names.namespace" . | quote }}
 {{- end }}
 {{- end }}

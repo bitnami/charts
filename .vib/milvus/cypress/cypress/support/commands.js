@@ -1,5 +1,5 @@
 /*
- * Copyright VMware, Inc.
+ * Copyright Broadcom, Inc. All Rights Reserved.
  * SPDX-License-Identifier: APACHE-2.0
  */
 
@@ -23,9 +23,10 @@ Cypress.Commands.add(
    host = Cypress.env('host')) => {
      cy.visit('/?#/connect');
      cy.get('[data-cy="address"]').should('be.enabled').clear({force: true}).type(host);
+     cy.get('span.MuiSwitch-root').eq(0).find('input').click();
      cy.get('[data-cy="username"]').should('be.enabled').type(username);
      cy.get('[data-cy="password"]').should('be.enabled').type(`${password}{enter}`);
-     cy.contains('Overview');
+     cy.contains('Welcome to Milvus');
    }
 );
 
@@ -34,11 +35,12 @@ Cypress.on('uncaught:exception', (err) => {
     return false;
   }
   // We expect an error "Failed to execute 'observe' on 'IntersectionObserver'"
-  // during the installation of a template so we add an exception
+  // or "Network Error" during the installation of a template so we add an exception
   if (err.message.includes("Failed to execute 'observe' on 'IntersectionObserver'")) {
     return false;
+  } else if (err.message.includes("Network Error")) {
+    return false;
   }
-
   // we still want to ensure there are no other unexpected
   // errors, so we let them fail the test
 })

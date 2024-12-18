@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -24,6 +24,10 @@ spec:
   policyTypes:
     - Ingress
     - Egress
+  {{- if .Values.worker.networkPolicy.allowExternalEgress }}
+  egress:
+    - {}    
+  {{- else }}
   egress:
     # Allow dns resolution
     - ports:
@@ -31,11 +35,14 @@ spec:
           protocol: UDP
         - port: 53
           protocol: TCP
-    # Allow outbound connections to other cluster pods
-    - ports:
-        - port: {{ .Values.worker.containerPorts.ssh }}
-        - port: {{ .Values.worker.externalAccess.service.ports.ssh }}
-      to:
+        {{- if (eq .Values.source.type "git") }}
+        # Setting standard git ports for cloning
+        - port: 22
+        - port: 80
+        - port: 443
+        {{- end }}
+    # Allow complete connection to other worker pods (we cannot predict the ports the application creates)
+    - to:
         - podSelector:
             matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 14 }}
               app.kubernetes.io/part-of: deepspeed
@@ -43,10 +50,16 @@ spec:
     {{- if .Values.worker.networkPolicy.extraEgress }}
     {{- include "common.tplvalues.render" (dict "value" .Values.worker.networkPolicy.extraEgress "context" $) | nindent 4 }}
     {{- end }}
+  {{- end }}
   ingress:
+    # Allow complete connection from other worker pods (we cannot predict the ports the application creates)
+    - from:
+        - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 14 }}
+              app.kubernetes.io/part-of: deepspeed
+              app.kubernetes.io/component: worker 
     - ports:
         - port: {{ .Values.worker.containerPorts.ssh }}
-        - port: {{ .Values.worker.externalAccess.service.ports.ssh }}
       from:
       {{- if not .Values.worker.networkPolicy.allowExternal }}
         - podSelector:

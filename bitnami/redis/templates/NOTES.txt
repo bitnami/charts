@@ -2,6 +2,8 @@ CHART NAME: {{ .Chart.Name }}
 CHART VERSION: {{ .Chart.Version }}
 APP VERSION: {{ .Chart.AppVersion }}
 
+Did you know there are enterprise versions of the Bitnami catalog? For enhanced secure software supply chain features, unlimited pulls from Docker, LTS support, or application customization, see Bitnami Premium or Tanzu Application Catalog. See https://www.arrow.com/globalecs/na/vendors/bitnami for more information.
+
 ** Please be patient while the chart is being deployed **
 
 {{- if .Values.diagnosticMode.enabled }}
@@ -51,6 +53,22 @@ For Redis Sentinel:
 -------------------------------------------------------------------------------
 {{- end }}
 {{- end }}
+{{- end }}
+
+{{- if and .Values.auth.usePasswordFiles (not .Values.auth.usePasswordFileFromSecret) (or (empty .Values.master.initContainers) (empty .Values.replica.initContainers)) }}
+
+-------------------------------------------------------------------------------
+ WARNING
+
+    By specifying ".Values.auth.usePasswordFiles=true" and ".Values.auth.usePasswordFileFromSecret=false"
+    Redis is expecting that the password is mounted as a file in each pod
+    (by default in /opt/bitnami/redis/secrets/redis-password)
+
+    Ensure that you specify the respective initContainers in
+    both .Values.master.initContainers and .Values.replica.initContainers
+    in order to populate the contents of this file.
+
+-------------------------------------------------------------------------------
 {{- end }}
 
 {{- if eq .Values.architecture "replication" }}
@@ -189,3 +207,10 @@ No need to upgrade, ports and nodeports have been set from values
 YOU NEED TO PERFORM AN UPGRADE FOR THE SERVICES AND WORKLOAD TO BE CREATED
 {{- end }}
 {{- end }}
+{{- $resourceSections := list "metrics" "replica" "sentinel" "sysctl" "volumePermissions" }}
+{{- if not (and (eq .Values.architecture "replication") .Values.sentinel.enabled) }}
+  {{- $resourceSections = append $resourceSections "master" -}}
+{{- end }}
+{{- include "common.warnings.resources" (dict "sections" $resourceSections "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.sentinel.image .Values.metrics.image .Values.volumePermissions.image .Values.kubectl.image .Values.sysctl.image) "context" $) }}
+{{- include "common.errors.insecureImages" (dict "images" (list .Values.image .Values.sentinel.image .Values.metrics.image .Values.volumePermissions.image .Values.kubectl.image .Values.sysctl.image) "context" $) }}

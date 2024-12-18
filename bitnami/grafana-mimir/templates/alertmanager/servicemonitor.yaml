@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -27,7 +27,7 @@ spec:
       app.kubernetes.io/part-of: grafana-mimir
       app.kubernetes.io/component: alertmanager
   endpoints:
-    - port: tcp-metrics
+    - port: http
       path: "/metrics"
       {{- if .Values.metrics.serviceMonitor.interval }}
       interval: {{ .Values.metrics.serviceMonitor.interval }}

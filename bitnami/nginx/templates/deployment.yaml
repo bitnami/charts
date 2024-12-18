@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -36,11 +36,14 @@ spec:
         {{- if and .Values.serverBlock (not .Values.existingServerBlockConfigmap) }}
         checksum/server-block-configuration: {{ include (print $.Template.BasePath "/server-block-configmap.yaml") . | sha256sum }}
         {{- end }}
+        {{- if and .Values.streamServerBlock (not .Values.existingServerBlockConfigmap) }}
+        checksum/stream-server-block-configuration: {{ include (print $.Template.BasePath "/stream-server-block-configmap.yaml") . | sha256sum }}
+        {{- end }}
     spec:
       {{- include "nginx.imagePullSecrets" . | nindent 6 }}
-      automountServiceAccountToken: {{ .Values.serviceAccount.automountServiceAccountToken }}
       shareProcessNamespace: {{ .Values.sidecarSingleProcessNamespace }}
       serviceAccountName: {{ template "nginx.serviceAccountName" . }}
+      automountServiceAccountToken: {{ .Values.automountServiceAccountToken }}
       {{- if .Values.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -53,6 +56,12 @@ spec:
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       hostNetwork: {{ .Values.hostNetwork }}
+      {{- if .Values.dnsPolicy  }}
+      dnsPolicy: {{ .Values.dnsPolicy }}
+      {{- end }}
+      {{- if .Values.dnsConfig }}
+      dnsConfig: {{- include "common.tplvalues.render" (dict "value" .Values.dnsConfig "context" $) | nindent 8 }}
+      {{- end }}
       hostIPC: {{ .Values.hostIPC }}
       {{- if .Values.priorityClassName }}
       priorityClassName: {{ .Values.priorityClassName | quote }}
@@ -70,18 +79,47 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
       {{- end }}
+      {{- if or .Values.containerSecurityContext.readOnlyRootFilesystem .Values.cloneStaticSiteFromGit.enabled .Values.initContainers }}
       initContainers:
+      {{- if .Values.containerSecurityContext.readOnlyRootFilesystem }}
+        - name: preserve-logs-symlinks
+          image: {{ include "nginx.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.resources }}
+          resources: {{- toYaml .Values.resources | nindent 12 }}
+          {{- else if ne .Values.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          command:
+            - /bin/bash
+          args:
+            - -ec
+            - |
+              #!/bin/bash
+              . /opt/bitnami/scripts/libfs.sh
+              # We copy the logs folder because it has symlinks to stdout and stderr
+              if ! is_dir_empty /opt/bitnami/nginx/logs; then
+                cp -r /opt/bitnami/nginx/logs /emptydir/app-logs-dir
+              fi
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /emptydir
+      {{- end }}        
+      {{- if or .Values.cloneStaticSiteFromGit.enabled .Values.initContainers }}
         {{- if .Values.cloneStaticSiteFromGit.enabled }}
         - name: git-clone-repository
           image: {{ include "nginx.cloneStaticSiteFromGit.image" . }}
           imagePullPolicy: {{ .Values.cloneStaticSiteFromGit.image.pullPolicy | quote }}
           {{- if .Values.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.cloneStaticSiteFromGit.gitClone.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.cloneStaticSiteFromGit.gitClone.command "context" $) | nindent 12 }}
@@ -98,6 +136,15 @@ spec:
           args: {{- include "common.tplvalues.render" (dict "value" .Values.cloneStaticSiteFromGit.gitClone.args "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /etc/ssh
+              subPath: etc-ssh-dir
+            - name: empty-dir
+              mountPath: /.ssh
+              subPath: ssh-dir
             - name: staticsite
               mountPath: /app
             {{- if .Values.cloneStaticSiteFromGit.extraVolumeMounts }}
@@ -115,13 +162,15 @@ spec:
         {{- if .Values.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
         {{- end }}
+      {{- end }}
+      {{- end }}
       containers:
         {{- if .Values.cloneStaticSiteFromGit.enabled }}
         - name: git-repo-syncer
           image: {{ include "nginx.cloneStaticSiteFromGit.image" . }}
           imagePullPolicy: {{ .Values.cloneStaticSiteFromGit.image.pullPolicy | quote }}
           {{- if .Values.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.cloneStaticSiteFromGit.gitSync.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.cloneStaticSiteFromGit.gitSync.command "context" $) | nindent 12 }}
@@ -141,8 +190,19 @@ spec:
           {{- end }}
           {{- if .Values.cloneStaticSiteFromGit.gitSync.resources }}
           resources: {{- toYaml .Values.cloneStaticSiteFromGit.gitSync.resources | nindent 12 }}
+          {{- else if ne .Values.cloneStaticSiteFromGit.gitSync.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.cloneStaticSiteFromGit.gitSync.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /etc/ssh
+              subPath: etc-ssh-dir
+            - name: empty-dir
+              mountPath: /.ssh
+              subPath: ssh-dir
             - name: staticsite
               mountPath: /app
             {{- if .Values.cloneStaticSiteFromGit.extraVolumeMounts }}
@@ -161,7 +221,7 @@ spec:
           image: {{ include "nginx.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -179,11 +239,17 @@ spec:
           env:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" .Values.image.debug | quote }}
+            {{- if .Values.containerPorts.http }}
             - name: NGINX_HTTP_PORT_NUMBER
               value: {{ .Values.containerPorts.http | quote }}
+            {{- end }}
             {{- if .Values.containerPorts.https }}
             - name: NGINX_HTTPS_PORT_NUMBER
               value: {{ .Values.containerPorts.https | quote }}
+            {{- end }}
+            {{- if or .Values.streamServerBlock .Values.existingStreamServerBlockConfigmap }}
+            - name: NGINX_ENABLE_STREAM
+              value: "true"
             {{- end }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
@@ -198,8 +264,10 @@ spec:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.extraEnvVarsSecret "context" $) }}
             {{- end }}
           ports:
+            {{- if .Values.containerPorts.http }}
             - name: http
               containerPort: {{ .Values.containerPorts.http }}
+            {{- end }}
             {{- if .Values.containerPorts.https }}
             - name: https
               containerPort: {{ .Values.containerPorts.https }}
@@ -213,34 +281,61 @@ spec:
           {{- else if .Values.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.livenessProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
-              port: http
+              port: {{ ternary "https" "http" (and (empty .Values.containerPorts.http) (not (empty .Values.containerPorts.https))) }}
           {{- end }}
           {{- if .Values.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
           {{- else if .Values.readinessProbe.enabled }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.readinessProbe "enabled") "context" $) | nindent 12 }}
-            tcpSocket:
-              port: http
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.readinessProbe "enabled" "path") "context" $) | nindent 12 }}
+            httpGet:
+              path: {{ .Values.readinessProbe.path }}
+              port: {{ ternary "https" "http" (and (empty .Values.containerPorts.http) (not (empty .Values.containerPorts.https))) }}
           {{- end }}
           {{- if .Values.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customStartupProbe "context" $) | nindent 12 }}
           {{- else if .Values.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.startupProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
-              port: http
+              port: {{ ternary "https" "http" (and (empty .Values.containerPorts.http) (not (empty .Values.containerPorts.https))) }}
           {{- end }}
           {{- end }}
           {{- if .Values.resources }}
           resources: {{- toYaml .Values.resources | nindent 12 }}
+          {{- else if ne .Values.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/nginx/conf
+              subPath: app-conf-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/nginx/logs
+              subPath: app-logs-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/nginx/tmp
+              subPath: app-tmp-dir
             {{- if or .Values.serverBlock .Values.existingServerBlockConfigmap }}
             - name: nginx-server-block
               mountPath: /opt/bitnami/nginx/conf/server_blocks
             {{- end }}
+            {{- if or .Values.streamServerBlock .Values.existingStreamServerBlockConfigmap }}
+            - name: nginx-stream-server-block
+              mountPath: /opt/bitnami/nginx/conf/stream_server_blocks
+            {{- end }}
             {{- if (include "nginx.useStaticSite" .) }}
             - name: staticsite
               mountPath: /app
+            {{- end }}
+            {{- if .Values.tls.enabled }}
+            - name: certificate
+              mountPath: /certs
+            {{- else }}
+            - name: empty-dir
+              mountPath: /certs
+              subPath: app-tls-dir
             {{- end }}
             {{- if .Values.extraVolumeMounts }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
@@ -250,7 +345,7 @@ spec:
           image: {{ include "nginx.metrics.image" . }}
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
           {{- if .Values.metrics.securityContext.enabled }}
-          securityContext: {{- omit .Values.metrics.securityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.metrics.securityContext "context" $) | nindent 12 }}
           {{- end }}
           command:
             - exporter
@@ -279,16 +374,39 @@ spec:
             timeoutSeconds: 1
           {{- if .Values.metrics.resources }}
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
+          {{- else if ne .Values.metrics.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.metrics.resourcesPreset) | nindent 12 }}
           {{- end }}
         {{- end }}
         {{- if .Values.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
+        {{- if .Values.tls.enabled }}
+        - name: certificate
+          secret:
+            {{- if .Values.tls.existingSecret }}
+            secretName: {{ .Values.tls.existingSecret }}
+            {{- else }}
+            secretName: {{ printf "%s-tls" (include "common.names.fullname" .) }}
+            items:
+              - key: tls.crt
+                path: server.crt
+              - key: tls.key
+                path: server.key
+            {{- end }}
+        {{- end }}
         {{- if or .Values.serverBlock .Values.existingServerBlockConfigmap }}
         - name: nginx-server-block
           configMap:
             name: {{ include "nginx.serverBlockConfigmapName" . }}
+        {{- end }}
+        {{- if or .Values.streamServerBlock .Values.existingStreamServerBlockConfigmap }}
+        - name: nginx-stream-server-block
+          configMap:
+            name: {{ include "nginx.streamServerBlockConfigmapName" . }}
         {{- end }}
         {{- if (include "nginx.useStaticSite" .) }}
         - name: staticsite

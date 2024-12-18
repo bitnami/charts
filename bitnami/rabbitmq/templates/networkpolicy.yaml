@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -17,26 +17,76 @@ spec:
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
   podSelector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
-  ingress:
-    # Allow inbound connections
+  policyTypes:
+    - Ingress
+    - Egress
+  {{- if .Values.networkPolicy.allowExternalEgress }}
+  egress:
+    - {}
+  {{- else }}
+  egress:
+    # Allow dns resolution
     - ports:
-        - port: {{ .Values.service.ports.epmd }}  # EPMD
+        - port: 53
+          protocol: UDP
+        - port: 53
+          protocol: TCP
+        {{- if .Values.rbac.create }}
+        # Allow access to kube-apiserver
+        {{- range $port := .Values.networkPolicy.kubeAPIServerPorts }}
+        - port: {{ $port }}
+        {{- end }}
+        {{- end }}
+    # Allow internal communications between nodes
+    - ports:
+        - port: {{ .Values.service.ports.epmd }}
         - port: {{ .Values.service.ports.amqp }}
         - port: {{ .Values.service.ports.amqpTls }}
         - port: {{ .Values.service.ports.dist }}
         - port: {{ .Values.service.ports.manager }}
+      to:
+        - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
+    {{- if .Values.networkPolicy.extraEgress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.rts.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+  ingress:
+    # Allow inbound connections to RabbitMQ
+    - ports:
+        - port: {{ .Values.containerPorts.epmd }}
+        - port: {{ .Values.containerPorts.amqp }}
+        - port: {{ .Values.containerPorts.amqpTls }}
+        - port: {{ .Values.containerPorts.dist }}
+        - port: {{ .Values.containerPorts.manager }}
+        {{- if .Values.metrics.enabled }}
+        - port: {{ .Values.containerPorts.metrics }}
+        {{- end }}
       {{- if not .Values.networkPolicy.allowExternal }}
       from:
         - podSelector:
-            matchLabels:
-              {{ printf "%s-client" (include "common.names.fullname" .) }}: "true"
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
         - podSelector:
             matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 14 }}
-        {{- if .Values.networkPolicy.additionalRules }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.networkPolicy.additionalRules "context" $) | nindent 8 }}
+        {{- if .Values.networkPolicy.addExternalClientAccess }}
+        - podSelector:
+            matchLabels:
+              {{ template "common.names.fullname" . }}-client: "true"
+        {{- end }}
+        {{- if .Values.networkPolicy.ingressPodMatchLabels }}
+        - podSelector:
+            matchLabels: {{- include "common.tplvalues.render" (dict "value" .Values.networkPolicy.ingressPodMatchLabels "context" $ ) | nindent 14 }}
+        {{- end }}
+        {{- if .Values.networkPolicy.ingressNSMatchLabels }}
+        - namespaceSelector:
+            matchLabels: {{- include "common.tplvalues.render" (dict "value" .Values.networkPolicy.ingressNSMatchLabels "context" $ ) | nindent 14 }}
+          {{- if .Values.networkPolicy.ingressNSPodMatchLabels }}
+          podSelector:
+            matchLabels: {{- include "common.tplvalues.render" (dict "value" .Values.networkPolicy.ingressNSPodMatchLabels "context" $ ) | nindent 14 }}
+          {{- end }}
         {{- end }}
       {{- end }}
-    # Allow prometheus scrapes
-    - ports:
-        - port: {{ .Values.service.ports.metrics }}
+    {{- if .Values.networkPolicy.extraIngress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
+    {{- end }}
 {{- end }}

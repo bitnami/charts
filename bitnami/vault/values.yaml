@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 ## @section Global parameters
@@ -9,7 +9,8 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
+## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ##
 global:
   imageRegistry: ""
@@ -18,8 +19,22 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  defaultStorageClass: ""
   storageClass: ""
-
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: auto
 ## @section Common parameters
 ##
 
@@ -47,7 +62,6 @@ clusterDomain: cluster.local
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
-
 ## Enable diagnostic mode in the deployment
 ##
 diagnosticMode:
@@ -62,8 +76,6 @@ diagnosticMode:
   ##
   args:
     - infinity
-
-
 ## @section Vault Server Parameters
 ##
 server:
@@ -83,10 +95,9 @@ server:
   image:
     registry: docker.io
     repository: bitnami/vault
-    tag: 1.15.4-debian-11-r2
+    tag: 1.18.2-debian-12-r1
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -170,24 +181,41 @@ server:
   customStartupProbe: {}
   ## Vault Server resource requests and limits
   ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param server.resources.limits The resources limits for the Vault Server containers
-  ## @param server.resources.requests The requested resources for the Vault Server containers
+  ## @param server.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if server.resources is set (server.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "nano"
+  ## @param server.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param server.podSecurityContext.enabled Enabled Vault Server pods' Security Context
+  ## @param server.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param server.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param server.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param server.podSecurityContext.fsGroup Set Vault Server pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param server.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param server.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param server.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param server.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param server.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param server.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param server.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -197,7 +225,9 @@ server:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: true
@@ -206,13 +236,15 @@ server:
       drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
-
   ## @param server.command Override default container command (useful when using custom images)
   ##
   command: []
   ## @param server.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param server.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param server.hostAliases Vault Server pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -238,11 +270,9 @@ server:
     }
 
     service_registration "kubernetes" {}
-
   ## @param server.existingConfigMap name of a ConfigMap with existing configuration for the server
   ##
   existingConfigMap: ""
-
   ## @param server.podLabels Extra labels for Vault Server pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
@@ -263,11 +293,11 @@ server:
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param server.pdb.create Enable/disable a Pod Disruption Budget creation
   ## @param server.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
-  ## @param server.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ## @param server.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `server.pdb.minAvailable` and `server.pdb.maxUnavailable` are empty.
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
   ## Node server.affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
@@ -307,7 +337,6 @@ server:
     ## Can be set to RollingUpdate or OnDelete
     ##
     type: RollingUpdate
-
   ## @param server.priorityClassName Vault Server pods' priorityClassName
   ##
   priorityClassName: ""
@@ -345,6 +374,10 @@ server:
   ## @param server.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Vault Server container(s)
   ##
   extraVolumeMounts: []
+  ## e.g.
+  ##- name: plugin
+  ##  mountPath: /tmp
+
   ## @param server.sidecars Add additional sidecar containers to the Vault Server pod(s)
   ## e.g:
   ## sidecars:
@@ -366,7 +399,6 @@ server:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
-
   ## @section Vault Server Traffic Exposure Parameters
   ##
   service:
@@ -480,7 +512,64 @@ server:
       ##     timeoutSeconds: 300
       ##
       sessionAffinityConfig: {}
-
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param server.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param server.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
+    ##
+    kubeAPIServerPorts: [443, 6443, 8443]
+    ## @param server.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param server.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param server.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param server.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param server.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param server.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
   ## ref: http://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
@@ -514,12 +603,12 @@ server:
     ##   cert-manager.io/cluster-issuer: cluster-issuer-name
     ##
     annotations: {}
-    ## @param server.ingress.tls Enable TLS configuration for the host defined at `client.ingress.hostname` parameter
+    ## @param server.ingress.tls Enable TLS configuration for the host defined at `server.ingress.hostname` parameter
     ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.ingress.hostname }}`
     ## You can:
-    ##   - Use the `client.ingress.secrets` parameter to create this TLS secret
+    ##   - Use the `server.ingress.secrets` parameter to create this TLS secret
     ##   - Rely on cert-manager to create it by setting the corresponding annotations
-    ##   - Rely on Helm to create self-signed certificates by setting `client.ingress.selfSigned=true`
+    ##   - Rely on Helm to create self-signed certificates by setting `server.ingress.selfSigned=true`
     ##
     tls: false
     ## @param server.ingress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
@@ -584,9 +673,6 @@ server:
     ##             name: http
     ##
     extraRules: []
-
-
-
   ## @section Vault Server RBAC Parameters
   ##
 
@@ -596,7 +682,6 @@ server:
     ## @param server.rbac.create Specifies whether RBAC resources should be created
     ##
     create: true
-
   ## ServiceAccount configuration
   ##
   serviceAccount:
@@ -612,9 +697,8 @@ server:
     annotations: {}
     ## @param server.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
-    automountServiceAccountToken: true
-
-  ## @section Source Conttroller Persistence Parameters
+    automountServiceAccountToken: false
+  ## @section Source Controller Persistence Parameters
   ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ##
   persistence:
@@ -652,7 +736,20 @@ server:
     ## @param server.persistence.existingClaim The name of an existing PVC to use for persistence
     ##
     existingClaim: ""
-
+    ## @param server.persistence.extraVolumeClaimTemplates  Add additional VolumeClaimTemplates for enabling any plugins or any other purpose to the Vault Server pod(s)
+    ##
+    extraVolumeClaimTemplates: []
+    ## e.g:
+    ##- metadata:
+    ##    name: plugin
+    ##    annotations:
+    ##  spec:
+    ##    accessModes:
+    ##      - "ReadWriteOnce"
+    ##    resources:
+    ##      requests:
+    ##        storage: "10Gi"
+    ##    storageClassName: nfs-client
 
   ## @section Vault Server Metrics Parameters
   ##
@@ -712,8 +809,6 @@ server:
       ##   prometheus: my-prometheus
       ##
       selector: {}
-
-
 ## @section Vault CSI Provider Parameters
 ##
 csiProvider:
@@ -734,10 +829,9 @@ csiProvider:
   image:
     registry: docker.io
     repository: bitnami/vault-csi-provider
-    tag: 1.4.1-debian-11-r5
+    tag: 1.5.0-debian-12-r7
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -752,7 +846,6 @@ csiProvider:
     ## Enable debug mode
     ##
     debug: false
-
   ## @param csiProvider.config [string] Vault CSI Provider configuration (evaluated as a template)
   ##
   config: |
@@ -766,15 +859,15 @@ csiProvider:
         address = "/var/run/vault/agent.sock"
         tls_disable = true
     }
-
   ## @param csiProvider.existingConfigMap name of a ConfigMap with existing configuration for the CSI Provider
   ##
   existingConfigMap: ""
-
   ## @param csiProvider.secretStoreHostPath Path to the host CSI Provider folder
   ##
   secretStoreHostPath: "/etc/kubernetes/secrets-store-csi-providers"
-
+  ## @param csiProvider.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param csiProvider.hostAliases Vault CSI Provider pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -833,7 +926,6 @@ csiProvider:
     ## Can be set to RollingUpdate or OnDelete
     ##
     type: RollingUpdate
-
   ## @param csiProvider.priorityClassName Vault CSI Provider pods' priorityClassName
   ##
   priorityClassName: ""
@@ -873,16 +965,66 @@ csiProvider:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
-
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param csiProvider.podSecurityContext.enabled Enabled CSI Provider pods' Security Context
+  ## @param csiProvider.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param csiProvider.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param csiProvider.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param csiProvider.podSecurityContext.fsGroup Set CSI Provider pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
-
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param csiProvider.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param csiProvider.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
+    ##
+    kubeAPIServerPorts: [443, 6443, 8443]
+    ## @param csiProvider.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param csiProvider.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param csiProvider.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
   provider:
     ## @param csiProvider.provider.containerPorts.health CSI Provider health container port
     ##
@@ -943,16 +1085,27 @@ csiProvider:
     customStartupProbe: {}
     ## CSI Provider resource requests and limits
     ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-    ## @param csiProvider.provider.resources.limits The resources limits for the CSI Provider container
-    ## @param csiProvider.provider.resources.requests The requested resources for the CSI Provider container
+    ## @param csiProvider.provider.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if csiProvider.provider.resources is set (csiProvider.provider.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
     ##
-    resources:
-      limits: {}
-      requests: {}
+    resourcesPreset: "nano"
+    ## @param csiProvider.provider.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## Example:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    resources: {}
     ## Configure Container Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
     ## @param csiProvider.provider.containerSecurityContext.enabled Enabled containers' Security Context
+    ## @param csiProvider.provider.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
     ## @param csiProvider.provider.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+    ## @param csiProvider.provider.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
     ## @param csiProvider.provider.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
     ## @param csiProvider.provider.containerSecurityContext.privileged Set container's Security Context privileged
     ## @param csiProvider.provider.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -962,7 +1115,9 @@ csiProvider:
     ##
     containerSecurityContext:
       enabled: true
+      seLinuxOptions: {}
       runAsUser: 1001
+      runAsGroup: 1001
       runAsNonRoot: true
       privileged: false
       readOnlyRootFilesystem: true
@@ -971,14 +1126,12 @@ csiProvider:
         drop: ["ALL"]
       seccompProfile:
         type: "RuntimeDefault"
-
     ## @param csiProvider.provider.command Override default container command (useful when using custom images)
     ##
     command: []
     ## @param csiProvider.provider.args Override default container args (useful when using custom images)
     ##
     args: []
-
     ## @param csiProvider.provider.lifecycleHooks for the CSI Provider container(s) to automate configuration before or after startup
     ##
     lifecycleHooks: {}
@@ -995,11 +1148,9 @@ csiProvider:
     ## @param csiProvider.provider.extraEnvVarsSecret Name of existing Secret containing extra env vars for CSI Provider nodes
     ##
     extraEnvVarsSecret: ""
-
     ## @param csiProvider.provider.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Vault CSI Provider container
     ##
     extraVolumeMounts: []
-
   agent:
     ## @param csiProvider.agent.containerPorts.tcp CSI Provider Agent metrics container port
     ##
@@ -1061,7 +1212,9 @@ csiProvider:
     ## Configure Container Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
     ## @param csiProvider.agent.containerSecurityContext.enabled Enabled containers' Security Context
+    ## @param csiProvider.agent.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
     ## @param csiProvider.agent.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+    ## @param csiProvider.agent.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
     ## @param csiProvider.agent.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
     ## @param csiProvider.agent.containerSecurityContext.privileged Set container's Security Context privileged
     ## @param csiProvider.agent.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -1071,7 +1224,9 @@ csiProvider:
     ##
     containerSecurityContext:
       enabled: true
+      seLinuxOptions: {}
       runAsUser: 1001
+      runAsGroup: 1001
       runAsNonRoot: true
       privileged: false
       readOnlyRootFilesystem: true
@@ -1082,20 +1237,27 @@ csiProvider:
         type: "RuntimeDefault"
     ## CSI Provider Agent resource requests and limits
     ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-    ## @param csiProvider.agent.resources.limits The resources limits for the CSI Provider Agent container
-    ## @param csiProvider.agent.resources.requests The requested resources for the CSI Provider Agent container
+    ## @param csiProvider.agent.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if csiProvider.agent.resources is set (csiProvider.agent.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
     ##
-    resources:
-      limits: {}
-      requests: {}
-
+    resourcesPreset: "nano"
+    ## @param csiProvider.agent.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## Example:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    resources: {}
     ## @param csiProvider.agent.command Override default container command (useful when using custom images)
     ##
     command: []
     ## @param csiProvider.agent.args Override default container args (useful when using custom images)
     ##
     args: []
-
     ## @param csiProvider.agent.lifecycleHooks for the CSI Provider Agent container(s) to automate configuration before or after startup
     ##
     lifecycleHooks: {}
@@ -1112,11 +1274,9 @@ csiProvider:
     ## @param csiProvider.agent.extraEnvVarsSecret Name of existing Secret containing extra env vars for CSI Provider Agent nodes
     ##
     extraEnvVarsSecret: ""
-
     ## @param csiProvider.agent.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the CSI Provider container(s)
     ##
     extraVolumeMounts: []
-
   ## @section Vault CSI Provider RBAC Parameters
   ##
 
@@ -1138,7 +1298,6 @@ csiProvider:
     ##       - list
     ##
     rules: []
-
   ## ServiceAccount configuration
   ##
   serviceAccount:
@@ -1154,9 +1313,7 @@ csiProvider:
     annotations: {}
     ## @param csiProvider.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
-    automountServiceAccountToken: true
-
-
+    automountServiceAccountToken: false
 ## @section Vault Kubernetes Injector Parameters
 ##
 injector:
@@ -1176,10 +1333,9 @@ injector:
   image:
     registry: docker.io
     repository: bitnami/vault-k8s
-    tag: 1.3.1-debian-11-r5
+    tag: 1.5.0-debian-12-r3
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -1256,24 +1412,41 @@ injector:
   customStartupProbe: {}
   ## Vault Kubernetes Injector resource requests and limits
   ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param injector.resources.limits The resources limits for the Vault Kubernetes Injector containers
-  ## @param injector.resources.requests The requested resources for the Vault Kubernetes Injector containers
+  ## @param injector.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if injector.resources is set (injector.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "nano"
+  ## @param injector.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param injector.podSecurityContext.enabled Enabled Vault Kubernetes Injector pods' Security Context
+  ## @param injector.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param injector.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param injector.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param injector.podSecurityContext.fsGroup Set Vault Kubernetes Injector pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param injector.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param injector.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param injector.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param injector.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param injector.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param injector.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param injector.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -1283,7 +1456,9 @@ injector:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: true
@@ -1292,13 +1467,15 @@ injector:
       drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
-
   ## @param injector.command Override default container command (useful when using custom images)
   ##
   command: []
   ## @param injector.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param injector.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param injector.hostAliases Vault Kubernetes Injector pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1323,11 +1500,11 @@ injector:
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param injector.pdb.create Enable/disable a Pod Disruption Budget creation
   ## @param injector.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
-  ## @param injector.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ## @param injector.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `injector.pdb.minAvailable` and `injector.pdb.maxUnavailable` are empty.
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
   ## Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
@@ -1381,7 +1558,6 @@ injector:
     ## Can be set to RollingUpdate or OnDelete
     ##
     type: RollingUpdate
-
   ## @param injector.priorityClassName Vault Kubernetes Injector pods' priorityClassName
   ##
   priorityClassName: ""
@@ -1440,7 +1616,6 @@ injector:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
-
   ## @section Vault Kubernetes Injector Traffic Exposure Parameters
   ##
   service:
@@ -1494,8 +1669,64 @@ injector:
     ##     timeoutSeconds: 300
     ##
     sessionAffinityConfig: {}
-
-
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param injector.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param injector.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
+    ##
+    kubeAPIServerPorts: [443, 6443, 8443]
+    ## @param injector.networkPolicy.allowExternal Don't require injector label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## injector label will have network access to the ports injector is listening
+    ## on. When true, injector will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param injector.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param injector.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param injector.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param injector.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param injector.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
   ## @section Vault Kubernetes Injector RBAC Parameters
   ##
 
@@ -1517,7 +1748,6 @@ injector:
     ##       - list
     ##
     rules: []
-
   ## ServiceAccount configuration
   ##
   serviceAccount:
@@ -1533,7 +1763,22 @@ injector:
     annotations: {}
     ## @param injector.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
+
+  ## @param injector.webhook.namespaceSelector Enabling specify which namespace you want to work with webhook
+  ## Example:
+  ##   namespaceSelector:
+  ##     matchExpressions:
+  ##     - key: kubernetes.io/metadata.name
+  ##       operator: In
+  ##       values:
+  ##         - "{{ .Release.Namespace }}"
+  webhook:
+    namespaceSelector: {}
+    clientConfig:
+      ## @param injector.webhook.clientConfig.caBundle is a PEM encoded CA bundle which will be used to validate the webhook's server certificate. If unspecified, system trust roots on theapiserver are used.
+      ##
+      caBundle: ""
 
 ## 'volumePermissions' init container parameters
 ## Changes the owner and group of the persistent volume mount point to runAsUser:fsGroup values
@@ -1555,7 +1800,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r93
+    tag: 12-debian-12-r33
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1568,17 +1813,28 @@ volumePermissions:
     pullSecrets: []
   ## Init container's resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param volumePermissions.resources.limits The resources limits for the init container
-  ## @param volumePermissions.resources.requests The requested resources for the init container
+  ## @param volumePermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "nano"
+  ## @param volumePermissions.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Init container Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param volumePermissions.containerSecurityContext.enabled Enable init container's Security Context
+  ## @param volumePermissions.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param volumePermissions.containerSecurityContext.runAsUser Set init container's Security Context runAsUser
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 0

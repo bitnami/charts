@@ -1,23 +1,21 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
   category: Infrastructure
   licenses: Apache-2.0
   images: |
-    - name: kong-ingress-controller
-      image: docker.io/bitnami/kong-ingress-controller:3.0.1-debian-11-r1
     - name: kong
-      image: docker.io/bitnami/kong:3.4.2-debian-11-r1
-    - name: postgresql
-      image: docker.io/bitnami/postgresql:14.10.0-debian-11-r18
+      image: docker.io/bitnami/kong:3.8.1-debian-12-r3
+    - name: kong-ingress-controller
+      image: docker.io/bitnami/kong-ingress-controller:3.3.1-debian-12-r7
 apiVersion: v2
-appVersion: 3.4.2
+appVersion: 3.8.1
 dependencies:
 - condition: postgresql.enabled
   name: postgresql
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 13.x.x
+  version: 16.x.x
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
   tags:
@@ -26,7 +24,7 @@ dependencies:
 - condition: cassandra.enabled
   name: cassandra
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 10.x.x
+  version: 12.x.x
 description: Kong is an open source Microservice API gateway and platform designed for managing microservices requests of high-availability, fault-tolerance, and distributed systems.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/kong/img/kong-stack-220x234.png
@@ -40,9 +38,9 @@ keywords:
 - www
 - reverse proxy
 maintainers:
-- name: VMware, Inc.
+- name: Broadcom, Inc. All Rights Reserved.
   url: https://github.com/bitnami/charts
 name: kong
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/kong
-version: 10.2.0
+version: 15.1.0

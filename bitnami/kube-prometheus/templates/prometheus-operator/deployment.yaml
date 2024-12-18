@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -30,11 +30,12 @@ spec:
       schedulerName: {{ .Values.operator.schedulerName | quote }}
       {{- end }}
       {{- if .Values.operator.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.operator.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.operator.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.operator.priorityClassName }}
       priorityClassName: {{ .Values.operator.priorityClassName }}
       {{- end }}
+      automountServiceAccountToken: {{ .Values.operator.automountServiceAccountToken }}
       {{- if .Values.operator.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.operator.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -67,7 +68,7 @@ spec:
           image: {{ template "kube-prometheus.image" . }}
           imagePullPolicy: {{ .Values.operator.image.pullPolicy }}
           {{- if .Values.operator.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.operator.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.operator.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.operator.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.operator.command "context" $) | nindent 12 }}
@@ -139,10 +140,8 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.operator.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.operator.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.operator.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /metrics
+            tcpSocket:
               port: http
-              scheme: HTTP
           {{- end }}
           {{- if .Values.operator.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.operator.customReadinessProbe "context" $) | nindent 12 }}
@@ -164,14 +163,23 @@ spec:
           {{- end }}
           {{- if .Values.operator.resources }}
           resources: {{- toYaml .Values.operator.resources | nindent 12 }}
+          {{- else if ne .Values.operator.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.operator.resourcesPreset) | nindent 12 }}
           {{- end }}
-          {{- if .Values.operator.extraVolumeMounts }}
-          volumeMounts: {{- include "common.tplvalues.render" (dict "value" .Values.operator.extraVolumeMounts "context" $) | nindent 12 }}
-          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            {{- if .Values.operator.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.operator.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
         {{- if .Values.operator.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.operator.sidecars "context" $) | nindent 8 }}
         {{- end }}
-      {{- if .Values.operator.extraVolumes }}
-      volumes: {{- include "common.tplvalues.render" (dict "value" .Values.operator.extraVolumes "context" $) | nindent 8 }}
-      {{- end }}
+      volumes:
+        - name: empty-dir
+          emptyDir: {}
+        {{- if .Values.operator.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.operator.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
 {{- end }}

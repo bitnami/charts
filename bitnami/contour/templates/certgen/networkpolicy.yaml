@@ -1,0 +1,46 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.contour.enabled (include "contour.contour-certgen.enabled" .) .Values.contour.certgen.networkPolicy.enabled }}
+kind: NetworkPolicy
+apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
+metadata:
+  name: {{ printf "%s-contour-certgen" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: contour-certgen
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
+  podSelector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/component: contour-certgen
+  policyTypes:
+    - Ingress
+    - Egress
+  {{- if .Values.contour.certgen.networkPolicy.allowExternalEgress }}
+  egress:
+    - {}
+  {{- else }}
+  egress: 
+    - ports:
+        - port: 53
+          protocol: UDP
+        - port: 53
+          protocol: TCP
+        {{- range $port := .Values.contour.certgen.networkPolicy.kubeAPIServerPorts }}
+        - port: {{ $port }}
+        {{- end }}
+    {{- if .Values.contour.certgen.networkPolicy.extraEgress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.contour.certgen.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+  ingress:
+    {{- if .Values.contour.certgen.networkPolicy.extraIngress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.contour.certgen.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
+    {{- end }}
+{{- end }}

@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -38,7 +38,7 @@ spec:
   {{- end }}
   ports:
     - name: http
-      port: {{ coalesce .Values.proxy.service.api.ports.http .Values.proxy.service.api.port }}
+      port: {{ .Values.proxy.service.api.ports.http }}
       targetPort: api
       protocol: TCP
       {{- if (and (or (eq .Values.proxy.service.api.type "NodePort") (eq .Values.proxy.service.api.type "LoadBalancer")) (not (empty .Values.proxy.service.api.nodePorts.http))) }}

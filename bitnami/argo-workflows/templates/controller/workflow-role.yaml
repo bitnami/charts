@@ -1,12 +1,12 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
 {{- if .Values.workflows.rbac.create }}
 {{- $namespaces := list .Release.Namespace }}
 {{- if and (not .Values.rbac.singleNamespace) .Values.controller.workflowNamespaces }}
-{{- $namespaces := .Values.controller.workflowNamespaces }}
+{{- $namespaces = .Values.controller.workflowNamespaces }}
 {{- end }}
 {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.controller.image "chart" .Chart ) ) }}
 {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
@@ -25,15 +25,29 @@ metadata:
   {{- end }}
 rules:
   - apiGroups:
+      - argoproj.io
+    resources:
+      - workflowtaskresults
+    verbs:
+      - create
+      - patch
+  - apiGroups:
       - ""
     resources:
-      - pods
       - configmaps
     verbs:
       - list
       - get
       - watch
       - patch
+  - apiGroups:
+      - ""
+    resources:
+      - pods
+    verbs:
+      - list
+      - get
+      - watch
   - apiGroups:
       - ""
     resources:

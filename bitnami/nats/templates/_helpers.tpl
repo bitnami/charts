@@ -1,5 +1,5 @@
 {{/*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -40,6 +40,17 @@ Return true if a NATS configuration secret object should be created
 {{- define "nats.createSecret" -}}
 {{- if and .Values.configuration (not .Values.existingSecret) }}
     {{- true -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+ Create the name of the service account to use
+ */}}
+{{- define "nats.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create -}}
+    {{ default (include "common.names.fullname" .) .Values.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.serviceAccount.name }}
 {{- end -}}
 {{- end -}}
 

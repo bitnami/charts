@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -8,7 +8,7 @@ apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
   name: {{ include "common.names.fullname" . }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: aggregator
     ## Istio Labels: https://istio.io/docs/ops/deployment/requirements/
@@ -40,12 +40,13 @@ spec:
         {{- end }}
     spec:
       {{- include "fluentd.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.aggregator.automountServiceAccountToken }}
       {{- if .Values.aggregator.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.aggregator.hostAliases "context" $) | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ template "fluentd.aggregator.serviceAccountName" . }}
       {{- if .Values.aggregator.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.aggregator.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.aggregator.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.aggregator.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.aggregator.affinity "context" $) | nindent 8 }}
@@ -73,13 +74,14 @@ spec:
       initContainers:
         {{- if .Values.aggregator.extraGems }}
         - name: install-extra-gems
-          image: {{ include "fluentd.aggregator.image" . }}
+          image: {{ include "fluentd.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           command:
             - sh
             - -c
           args:
             - |-
+              set -e
               cd /tmp
 
               # install extra gems
@@ -92,27 +94,64 @@ spec:
               {{- end }}
 
               # copy installed gems to shared dir
+              cp -r /opt/bitnami/fluentd/extensions/* /extensions/
               cp -r /opt/bitnami/fluentd/gems/* /gems/
               cp -r /opt/bitnami/fluentd/specifications/* /specifications/
+          {{- if .Values.aggregator.initResources }}
+          resources: {{- toYaml .Values.aggregator.initResources | nindent 12 }}
+          {{- else if ne .Values.aggregator.initResourcePresets "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.aggregator.initResourcePresets) | nindent 12 }}
+          {{- end }}
           securityContext:
             allowPrivilegeEscalation: false
             runAsUser: 0
           volumeMounts:
-            - name: gems
+            - name: empty-dir
+              mountPath: /extensions
+              subPath: app-extensions-dir
+            - name: empty-dir
               mountPath: /gems
-            - name: specifications
+              subPath: app-gems-dir
+            - name: empty-dir
               mountPath: /specifications
+              subPath: app-specifications-dir
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
         {{- end }}
+        # Source: https://github.com/fluent/fluentd-kubernetes-daemonset/issues/1393
+        - name: tmp-dir-permissions
+          image: {{ include "fluentd.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          command:
+            - sh
+            - -c
+          args:
+            - |-
+              #!/bin/sh
+              chmod o-rwx /tmp
+          {{- if .Values.aggregator.initResources }}
+          resources: {{- toYaml .Values.aggregator.initResources | nindent 12 }}
+          {{- else if ne .Values.aggregator.initResourcePresets "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.aggregator.initResourcePresets) | nindent 12 }}
+          {{- end }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsUser: 0
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
         {{- if .Values.aggregator.initContainers }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.aggregator.initContainers "context" $ ) | nindent 8 }}
         {{- end }}
       terminationGracePeriodSeconds: {{ .Values.aggregator.terminationGracePeriodSeconds }}
       containers:
         - name: fluentd
-          image: {{ include "fluentd.aggregator.image" . }}
+          image: {{ include "fluentd.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.aggregator.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.aggregator.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.aggregator.containerSecurityContext "context" $) | nindent 12 }}
           {{ end }}
           {{- if .Values.aggregator.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" ( dict "value" .Values.aggregator.lifecycleHooks "context" $ ) | nindent 12 }}
@@ -136,7 +175,7 @@ spec:
             - name: FLUENTD_OPT
               value: {{ .Values.aggregator.extraArgs | quote }}
             {{- if .Values.aggregator.extraEnvVars }}
-            {{- toYaml .Values.aggregator.extraEnvVars | nindent 12 }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.aggregator.extraEnvVars "context" $ ) | nindent 12 }}
             {{- end }}
           envFrom:
             {{- if .Values.aggregator.extraEnvVarsCM }}
@@ -149,6 +188,8 @@ spec:
             {{- end }}
           {{- if .Values.aggregator.resources }}
           resources: {{- toYaml .Values.aggregator.resources | nindent 12 }}
+          {{- else if ne .Values.aggregator.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.aggregator.resourcesPreset) | nindent 12 }}
           {{- end }}
           ports:
             {{- if .Values.aggregator.port }}
@@ -182,9 +223,8 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.aggregator.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.aggregator.livenessProbe.enabled }}
           livenessProbe:
-            httpGet:
-              path: {{ .Values.aggregator.livenessProbe.httpGet.path }}
-              port: {{ .Values.aggregator.livenessProbe.httpGet.port }}
+            tcpSocket:
+              port: {{ .Values.aggregator.livenessProbe.tcpSocket.port }}
             initialDelaySeconds: {{ .Values.aggregator.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.aggregator.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.aggregator.livenessProbe.timeoutSeconds }}
@@ -216,10 +256,15 @@ spec:
               mountPath: /opt/bitnami/fluentd/logs/buffers
             {{- end }}
             {{- if .Values.aggregator.extraGems }}
-            - name: gems
+            - name: empty-dir
+              mountPath: /opt/bitnami/fluentd/extensions/
+              subPath: app-extensions-dir
+            - name: empty-dir
               mountPath: /opt/bitnami/fluentd/gems/
-            - name: specifications
+              subPath: app-gems-dir
+            - name: empty-dir
               mountPath: /opt/bitnami/fluentd/specifications/
+              subPath: app-specifications-dir
             {{- end }}
             {{- if .Values.tls.enabled }}
             - name: fluentd-aggregator-certificates
@@ -238,6 +283,9 @@ spec:
             - name: custom-init-scripts-secret
               mountPath: /docker-entrypoint-initdb.d/init-scripts-secret
             {{- end }}
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             {{- if .Values.aggregator.extraVolumeMounts }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.aggregator.extraVolumeMounts "context" $ ) | nindent 12 }}
             {{- end }}
@@ -245,6 +293,8 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.aggregator.sidecars "context" $ ) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         {{- if .Values.tls.enabled }}
         - name: fluentd-aggregator-certificates
           secret:
@@ -256,12 +306,6 @@ spec:
             name: {{ template "fluentd.aggregator.configMap" . }}
         {{- if not .Values.aggregator.persistence.enabled }}
         - name: buffer
-          emptyDir: {}
-        {{- end }}
-        {{- if .Values.aggregator.extraGems }}
-        - name: gems
-          emptyDir: {}
-        - name: specifications
           emptyDir: {}
         {{- end }}
         {{- if .Values.aggregator.initScripts }}

@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -30,9 +30,11 @@ spec:
         {{- end }}
     spec:
       {{- include "ejbca.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.automountServiceAccountToken }}
       {{- if .Values.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
       {{- end }}
+      serviceAccountName: {{ include "ejbca.serviceAccountName" .}}
       {{- if .Values.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.affinity "context" $) | nindent 8 }}
       {{- else }}
@@ -55,15 +57,40 @@ spec:
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
+      initContainers:
+        - name: prepare-writable-files
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          image: {{ template "ejbca.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          command:
+            - /bin/bash
+          args:
+            - -ec
+            - |
+              #!/bin/bash
+
+              . /opt/bitnami/scripts/liblog.sh
+
+              # We need the standalone.conf to be writable but not the rest of the bin folder
+              info "Copying standalone.conf"
+              cp /opt/bitnami/wildfly/bin/standalone.conf /wildfly-standalone-conf-dir
+              info "Writable files successfully copied"
+
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /wildfly-standalone-conf-dir
+              subPath: wildfly-standalone-conf-dir
       {{- if .Values.initContainers }}
-      initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
       {{- end }}
       containers:
         - name: ejbca
           {{- if .Values.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           image: {{ template "ejbca.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
@@ -149,6 +176,14 @@ spec:
               containerPort: {{ .Values.containerPorts.http }}
             - name: https
               containerPort: {{ .Values.containerPorts.https }}
+            {{- /* Currently hardcoded in EJBCA logic: https://github.com/bitnami/containers/blob/main/bitnami/ejbca/8/debian-12/rootfs/opt/bitnami/scripts/libejbca.sh#L212 */}}
+            - name: https-pub
+              containerPort: 8442
+            - name: ajp
+              containerPort: 8009
+            {{- if .Values.extraContainerPorts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraContainerPorts "context" $) | nindent 12 }}
+            {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customStartupProbe "context" $) | nindent 12 }}
@@ -172,8 +207,7 @@ spec:
             timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.livenessProbe.successThreshold }}
             failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
-            httpGet:
-              path: /ejbca/doc
+            tcpSocket:
               port: http
           {{- end }}
           {{- if .Values.customReadinessProbe }}
@@ -191,6 +225,27 @@ spec:
           {{- end }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /opt/bitnami/wildfly/standalone
+              subPath: wildfly-standalone-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/wildfly/bin/standalone.conf
+              subPath: wildfly-standalone-conf-dir/standalone.conf
+            - name: empty-dir
+              mountPath: /opt/bitnami/wildfly/tmp
+              subPath: wildfly-tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/ejbca/tmp
+              subPath: app-tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/wildfly/domain/configuration
+              subPath: wildfly-domain-conf-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/ejbca/conf
+              subPath: app-conf-dir
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: ejbca-data
               mountPath: /bitnami/wildfly
               subPath: wildfly
@@ -204,11 +259,15 @@ spec:
             {{- end }}
           {{- if .Values.resources }}
           resources: {{- toYaml .Values.resources | nindent 12 }}
+          {{- else if ne .Values.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.resourcesPreset) | nindent 12 }}
           {{- end }}
         {{- if .Values.sidecars }}
         {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
           {{- if .Values.ejbcaKeystoreExistingSecret }}
         - name: ejbca-keystore
           secret:

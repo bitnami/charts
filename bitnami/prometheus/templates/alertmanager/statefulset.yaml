@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -41,6 +41,7 @@ spec:
     spec:
       serviceAccountName: {{ template "prometheus.alertmanager.serviceAccountName" . }}
       {{- include "prometheus.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.alertmanager.automountServiceAccountToken }}
       {{- if .Values.alertmanager.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -68,7 +69,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.alertmanager.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.alertmanager.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.alertmanager.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.alertmanager.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.alertmanager.terminationGracePeriodSeconds }}
@@ -85,12 +86,17 @@ spec:
               mkdir -p {{ .Values.alertmanager.persistence.mountPath }}
               find {{ .Values.alertmanager.persistence.mountPath }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs -r chown -R {{ .Values.alertmanager.containerSecurityContext.runAsUser }}:{{ .Values.alertmanager.podSecurityContext.fsGroup }}
           {{- if .Values.alertmanager.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.alertmanager.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.alertmanager.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.volumePermissions.resources }}
-          resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.volumePermissions.resources "context" $) | nindent 12 }}
+          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: data
               mountPath: {{ .Values.alertmanager.persistence.mountPath }}
               {{- if .Values.alertmanager.persistence.subPath }}
@@ -105,7 +111,7 @@ spec:
           image: {{ template "prometheus.alertmanager.image" . }}
           imagePullPolicy: {{ .Values.alertmanager.image.pullPolicy }}
           {{- if .Values.alertmanager.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.alertmanager.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.alertmanager.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -152,7 +158,9 @@ spec:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.alertmanager.extraEnvVarsSecret "context" $) }}
             {{- end }}
           {{- if .Values.alertmanager.resources }}
-          resources: {{- toYaml .Values.alertmanager.resources | nindent 12 }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.resources "context" $) | nindent 12 }}
+          {{- else if ne .Values.alertmanager.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.alertmanager.resourcesPreset) | nindent 12 }}
           {{- end }}
           ports:
             - name: http
@@ -192,6 +200,9 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: config
               mountPath: /opt/bitnami/alertmanager/conf
               readOnly: true
@@ -204,6 +215,8 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.alertmanager.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: config
           configMap:
             name: {{ include "prometheus.alertmanager.configmapName" . }}
@@ -216,7 +229,9 @@ spec:
         {{- end }}
   {{- if .Values.alertmanager.persistence.enabled }}
   volumeClaimTemplates:
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         name: data
         {{- if or .Values.alertmanager.persistence.annotations .Values.commonAnnotations }}
         {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.alertmanager.persistence.annotations .Values.commonAnnotations ) "context" . ) }}

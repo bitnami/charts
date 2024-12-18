@@ -1,0 +1,50 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.snapshots.enabled }}
+---
+apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
+kind: NetworkPolicy
+metadata:
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: opensearch
+    app.kubernetes.io/component: snapshots
+  name: {{ template "opensearch.snapshots.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+spec:
+  podSelector:
+    matchLabels:
+      batch.kubernetes.io/job-name: {{ template "opensearch.snapshots.fullname" . }}
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress: []
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+          podSelector:
+            matchLabels:
+              k8s-app: kube-dns
+      ports:
+        - port: 53
+          protocol: TCP
+        - port: 53
+          protocol: UDP
+    - to:
+        - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
+              {{- if (include "opensearch.coordinating.enabled" .) }}
+              app.kubernetes.io/component: coordinating-only
+              {{- else }}
+              app.kubernetes.io/component: master
+              {{- end }}
+      ports:
+        - port: {{ include "opensearch.service.ports.restAPI" $ }}
+{{- end }}

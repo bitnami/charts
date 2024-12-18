@@ -2,6 +2,8 @@ CHART NAME: {{ .Chart.Name }}
 CHART VERSION: {{ .Chart.Version }}
 APP VERSION: {{ .Chart.AppVersion }}
 
+Did you know there are enterprise versions of the Bitnami catalog? For enhanced secure software supply chain features, unlimited pulls from Docker, LTS support, or application customization, see Bitnami Premium or Tanzu Application Catalog. See https://www.arrow.com/globalecs/na/vendors/bitnami for more information.
+
 {{- $cassandraPasswordKey := ( include "common.secrets.key" (dict "existingSecret" .Values.dbUser.existingSecret "key" "cassandra-password") ) -}}
 {{- $cassandraSecretName := ( include "common.secrets.name" (dict "existingSecret" .Values.dbUser.existingSecret "context" $) ) -}}
 
@@ -15,11 +17,11 @@ The chart has been deployed in diagnostic mode. All probes have been disabled an
 
 Get the list of pods by executing:
 
-  kubectl get pods --namespace {{ .Release.Namespace }} -l app.kubernetes.io/instance={{ .Release.Name }}
+  kubectl get pods --namespace {{ include "common.names.namespace" . }} -l app.kubernetes.io/instance={{ .Release.Name }}
 
 Access the pod you want to debug by executing
 
-  kubectl exec --namespace {{ .Release.Namespace }} -ti <NAME OF THE POD> -- bash
+  kubectl exec --namespace {{ include "common.names.namespace" . }} -ti <NAME OF THE POD> -- bash
 
 In order to replicate the container startup scripts execute this command:
 
@@ -29,7 +31,7 @@ In order to replicate the container startup scripts execute this command:
 
 Cassandra can be accessed through the following URLs from within the cluster:
 
-  - CQL: {{ include "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}:{{ .Values.service.ports.cql }}
+  - CQL: {{ include "common.names.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}:{{ .Values.service.ports.cql }}
 
 To get your password run:
 
@@ -37,13 +39,13 @@ To get your password run:
 
 Check the cluster status by running:
 
-   kubectl exec -it --namespace {{ .Release.Namespace }} $(kubectl get pods --namespace {{ .Release.Namespace }} -l app.kubernetes.io/name={{ include "common.names.name" . }},app.kubernetes.io/instance={{ .Release.Name }} -o jsonpath='{.items[0].metadata.name}') nodetool status
+   kubectl exec -it --namespace {{ include "common.names.namespace" . }} $(kubectl get pods --namespace {{ include "common.names.namespace" . }} -l app.kubernetes.io/name={{ include "common.names.name" . }},app.kubernetes.io/instance={{ .Release.Name }} -o jsonpath='{.items[0].metadata.name}') nodetool status
 
 To connect to your Cassandra cluster using CQL:
 
 1. Run a Cassandra pod that you can use as a client:
 
-   kubectl run --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }}-client --rm --tty -i --restart='Never' \
+   kubectl run --namespace {{ include "common.names.namespace" . }} {{ include "common.names.fullname" . }}-client --rm --tty -i --restart='Never' \
    --env CASSANDRA_PASSWORD=$CASSANDRA_PASSWORD \
    {{ if and (.Values.networkPolicy.enabled) (not .Values.networkPolicy.allowExternal) }}--labels="{{ include "common.names.name" . }}-client=true"{{ end }} \
    --image {{ include "cassandra.image" . }} -- bash
@@ -63,22 +65,22 @@ To connect to your database from outside the cluster execute the following comma
 
 {{- if contains "NodePort" .Values.service.type }}
 
-   export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
-   export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "common.names.fullname" . }})
+   export NODE_IP=$(kubectl get nodes --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.items[0].status.addresses[0].address}")
+   export NODE_PORT=$(kubectl get --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "common.names.fullname" . }})
 
    cqlsh -u {{ .Values.dbUser.user }} -p $CASSANDRA_PASSWORD $NODE_IP $NODE_PORT
 
 {{- else if contains "LoadBalancer" .Values.service.type }}
 
    NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-         Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ include "common.names.fullname" . }}'
+         Watch the status with: 'kubectl get svc --namespace {{ include "common.names.namespace" . }} -w {{ include "common.names.fullname" . }}'
 
-   export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
+   export SERVICE_IP=$(kubectl get svc --namespace {{ include "common.names.namespace" . }} {{ include "common.names.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
    cqlsh -u {{ .Values.dbUser.user }} -p $CASSANDRA_PASSWORD $SERVICE_IP
 
 {{- else if contains "ClusterIP" .Values.service.type }}
 
-   kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "common.names.fullname" . }} {{ .Values.service.ports.cql }}:{{ .Values.service.ports.cql }} &
+   kubectl port-forward --namespace {{ include "common.names.namespace" . }} svc/{{ include "common.names.fullname" . }} {{ .Values.service.ports.cql }}:{{ .Values.service.ports.cql }} &
    cqlsh -u {{ .Values.dbUser.user }} -p $CASSANDRA_PASSWORD 127.0.0.1 {{ .Values.service.ports.cql }}
 
 {{- end }}
@@ -89,3 +91,6 @@ To connect to your database from outside the cluster execute the following comma
 {{- include "common.warnings.rollingTag" .Values.metrics.image }}
 {{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
 {{- include "cassandra.validateValues" . }}
+{{- include "common.warnings.resources" (dict "sections" (list "metrics" "" "tls" "volumePermissions") "context" $) }}
+{{- include "cassandra.warnings.jvm" . }}{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.volumePermissions.image .Values.metrics.image) "context" $) }}
+{{- include "common.errors.insecureImages" (dict "images" (list .Values.image .Values.volumePermissions.image .Values.metrics.image) "context" $) }}

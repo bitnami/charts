@@ -1,5 +1,5 @@
 {{/*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -16,7 +16,7 @@ Return the proper ES image name
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "elasticsearch.imagePullSecrets" -}}
-{{ include "common.images.renderPullSecrets" (dict "images" (list .Values.image .Values.metrics.image .Values.sysctlImage .Values.volumePermissions.image) "context" $) }}
+{{ include "common.images.renderPullSecrets" (dict "images" (list .Values.image .Values.copyTlsCerts.image .Values.metrics.image .Values.sysctlImage .Values.volumePermissions.image) "context" $) }}
 {{- end -}}
 
 {{/*
@@ -40,6 +40,12 @@ Return the proper image name (for the init container volume-permissions image)
 {{ include "common.images.image" (dict "imageRoot" .Values.volumePermissions.image "global" .Values.global) }}
 {{- end -}}
 
+{{/*
+Return the proper Copy TLS Certificates image name
+*/}}
+{{- define "elasticsearch.copyTlsCerts.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.copyTlsCerts.image "global" .Values.global) }}
+{{- end -}}
 
 {{/*
 Name for the Elasticsearch service
@@ -318,6 +324,17 @@ Get the initialization scripts Secret name.
     {{ default (include "elasticsearch.ingest.fullname" .) .Values.ingest.serviceAccount.name }}
 {{- else -}}
     {{ default "default" .Values.ingest.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+ Create the name of the metrics service account to use
+ */}}
+{{- define "elasticsearch.metrics.serviceAccountName" -}}
+{{- if .Values.metrics.serviceAccount.create -}}
+    {{ default (include "elasticsearch.metrics.fullname" .) .Values.metrics.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.metrics.serviceAccount.name }}
 {{- end -}}
 {{- end -}}
 

@@ -13,7 +13,8 @@ client:
     runAsGroup: 1002
   serviceAccount:
     create: true
-    automountServiceAccountToken: true
+  automountServiceAccountToken: true
+  resourcesPreset: large
   persistence:
     enabled: true
     mountPath: /bitnami/deepspeed/vib-test

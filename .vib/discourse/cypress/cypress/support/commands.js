@@ -1,5 +1,5 @@
 /*
- * Copyright VMware, Inc.
+ * Copyright Broadcom, Inc. All Rights Reserved.
  * SPDX-License-Identifier: APACHE-2.0
  */
 
@@ -33,9 +33,16 @@ Cypress.Commands.add(
     // In Discourse, logging is not considered as completed until the home page is visible.
     // Navigating to any other site before that will lead to a 404 error
     cy.contains('a', 'Unread');
+    // First time login shows a welcome popup
     cy.get('body').then(($body) => {
-      if ($body.text().includes('Skip these tips')) {
-        cy.contains('Skip these tips').click();
+      if ($body.text().includes('Got it')) {
+        cy.contains('Got it').click();
+      }
+    });
+    // A "Your first notification" popup will also show
+    cy.get('body').then(($body) => {
+      if ($body.text().includes('Got it')) {
+        cy.contains('Got it').click();
       }
     });
   }

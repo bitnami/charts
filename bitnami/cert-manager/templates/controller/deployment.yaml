@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -16,7 +16,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.webhook.podLabels .Values.commonLabels $versionLabel ) "context" . ) }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.controller.podLabels .Values.commonLabels $versionLabel ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: controller
@@ -38,7 +38,7 @@ spec:
     spec:
       {{- include "certmanager.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.controller.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.controller.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.controller.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.controller.schedulerName }}
       schedulerName: {{ .Values.controller.schedulerName }}
@@ -66,6 +66,7 @@ spec:
       {{- if .Values.controller.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.controller.tolerations "context" $) | nindent 8 }}
       {{- end }}
+      automountServiceAccountToken: {{ .Values.controller.automountServiceAccountToken }}
       {{- if .Values.controller.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.controller.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -86,6 +87,8 @@ spec:
           {{- else }}
           args:
             - --v={{ .Values.logLevel }}
+            - --metrics-listen-address=0.0.0.0:{{ .Values.controller.containerPorts.http }}
+            - --internal-healthz-listen-address=0.0.0.0:{{ .Values.controller.containerPorts.health }}
             {{- if .Values.controller.extraArgs }}
             {{- include "common.tplvalues.render" (dict "value" .Values.controller.extraArgs "context" $) | nindent 12 }}
             {{- end }}
@@ -98,7 +101,7 @@ spec:
             - --acme-http01-solver-image={{ template "certmanager.acmesolver.image" . }}
           {{- end }}
           {{- if .Values.controller.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.controller.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.controller.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           env:
             - name: BITNAMI_DEBUG
@@ -125,14 +128,16 @@ spec:
           ports:
             - name: http
               protocol: TCP
-              containerPort: {{ .Values.controller.containerPort }}
+              containerPort: {{ coalesce .Values.controller.containerPort .Values.controller.containerPorts.http }}
+            - name: health
+              protocol: TCP
+              containerPort: {{ .Values.controller.containerPorts.health }}
           {{- if .Values.controller.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.controller.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.controller.livenessProbe.enabled }}
           livenessProbe:
-            httpGet:
+            tcpSocket:
               port: http
-              path: /metrics
             initialDelaySeconds: {{ .Values.controller.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.controller.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.controller.livenessProbe.timeoutSeconds }}
@@ -167,6 +172,8 @@ spec:
           {{- end }}
           {{- if .Values.controller.resources }}
           resources: {{- toYaml .Values.controller.resources | nindent 12 }}
+          {{- else if ne .Values.controller.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.controller.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             {{- if .Values.controller.extraVolumeMounts }}

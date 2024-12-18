@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -15,23 +15,65 @@ metadata:
   {{- end }}
 spec:
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
-  podSelector:     
+  podSelector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+  policyTypes:
+    - Ingress
+    - Egress
+  {{- if .Values.networkPolicy.allowExternalEgress }}
+  egress:
+    - {}
+  {{- else }}
+  egress:
+    # Allow dns resolution
+    - ports:
+        - port: 53
+          protocol: UDP
+        - port: 53
+          protocol: TCP
+    # Allow connection to other cluster pods
+    - ports:
+        - port: {{ .Values.containerPorts.client }}
+        - port: {{ .Values.containerPorts.cluster }}
+        - port: {{ .Values.containerPorts.monitoring }}
+      to:
+        - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
+    {{- if .Values.networkPolicy.extraEgress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.rts.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- end }}
   ingress:
     - ports:
-        - port: {{ .Values.service.ports.client }}
+        - port: {{ .Values.containerPorts.client }}
+        - port: {{ .Values.containerPorts.cluster }}
+        - port: {{ .Values.containerPorts.monitoring }}
+      {{- if .Values.metrics.enabled }}
+        - port: {{ coalesce .Values.metrics.containerPorts.http .Values.metrics.containerPort }}
+      {{- end }}
       {{- if not .Values.networkPolicy.allowExternal }}
       from:
         - podSelector:
             matchLabels:
               {{ template "common.names.fullname" . }}-client: "true"
+        - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
+        {{- if .Values.networkPolicy.ingressNSMatchLabels }}
+        - namespaceSelector:
+            matchLabels:
+              {{- range $key, $value := .Values.networkPolicy.ingressNSMatchLabels }}
+              {{ $key | quote }}: {{ $value | quote }}
+              {{- end }}
+          {{- if .Values.networkPolicy.ingressNSPodMatchLabels }}
+          podSelector:
+            matchLabels:
+              {{- range $key, $value := .Values.networkPolicy.ingressNSPodMatchLabels }}
+              {{ $key | quote }}: {{ $value | quote }}
+              {{- end }}
+          {{- end }}
+        {{- end }}
       {{- end }}
-    - ports:
-        - port: {{ .Values.service.ports.cluster }}
-    - ports:
-        - port: {{ .Values.service.ports.monitoring }}
-    {{- if .Values.metrics.enabled }}
-    - ports:
-        - port: {{ .Values.metrics.service.port }}
+    {{- if .Values.networkPolicy.extraIngress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
     {{- end }}
 {{- end }}

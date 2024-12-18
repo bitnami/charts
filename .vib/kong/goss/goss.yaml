@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 http:
@@ -14,7 +14,6 @@ file:
     exists: true
     filetype: file
     mode: '0644'
-    owner: root
     contents:
       - /pg_user.*{{ .Vars.postgresql.auth.username }}/
       - /pg_database.*{{ .Vars.postgresql.auth.database }}/

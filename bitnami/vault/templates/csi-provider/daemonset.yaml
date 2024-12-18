@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -37,6 +37,7 @@ spec:
     spec:
       serviceAccountName: {{ template "vault.csi-provider.serviceAccountName" . }}
       {{- include "vault.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.csiProvider.automountServiceAccountToken }}
       {{- if .Values.csiProvider.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.csiProvider.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -64,7 +65,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.csiProvider.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.csiProvider.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.csiProvider.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.csiProvider.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.csiProvider.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.csiProvider.terminationGracePeriodSeconds }}
@@ -78,7 +79,7 @@ spec:
           image: {{ template "vault.csi-provider.image" . }}
           imagePullPolicy: {{ .Values.csiProvider.image.pullPolicy }}
           {{- if .Values.csiProvider.provider.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.csiProvider.provider.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.csiProvider.provider.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -112,6 +113,8 @@ spec:
             {{- end }}
           {{- if .Values.csiProvider.provider.resources }}
           resources: {{- toYaml .Values.csiProvider.provider.resources | nindent 12 }}
+          {{- else if ne .Values.csiProvider.provider.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.csiProvider.provider.resourcesPreset) | nindent 12 }}
           {{- end }}
           ports:
             - name: http-health
@@ -121,8 +124,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.csiProvider.provider.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.csiProvider.provider.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.csiProvider.provider.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /health/ready
+            tcpSocket:
               port: http-health
           {{- end }}
           {{- if .Values.csiProvider.provider.customReadinessProbe }}
@@ -157,7 +159,7 @@ spec:
           image: {{ template "vault.csi-provider.image" . }}
           imagePullPolicy: {{ .Values.csiProvider.image.pullPolicy }}
           {{- if .Values.csiProvider.agent.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.csiProvider.agent.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.csiProvider.agent.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -191,6 +193,8 @@ spec:
             {{- end }}
           {{- if .Values.csiProvider.agent.resources }}
           resources: {{- toYaml .Values.csiProvider.agent.resources | nindent 12 }}
+          {{- else if ne .Values.csiProvider.agent.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.csiProvider.agent.resourcesPreset) | nindent 12 }}
           {{- end }}
           ports:
             - name: tcp

@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -21,6 +21,26 @@ spec:
       app.kubernetes.io/component: controller
   policyTypes:
     - Ingress
+    - Egress
+  {{- if .Values.networkPolicy.allowExternalEgress }}
+  egress:
+    - {}
+  {{- else }}
+  egress:
+    # Allow dns resolution
+    - ports:
+        - port: 53
+          protocol: UDP
+        - port: 53
+          protocol: TCP
+        # Allow access to kube-apiserver
+        {{- range $port := .Values.networkPolicy.kubeAPIServerPorts }}
+        - port: {{ $port }}
+        {{- end }}
+    {{- if .Values.networkPolicy.extraEgress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.rts.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- end }}
   ingress:
     # Allow prometheus scrapes for metrics and webhook traffic
     - ports:
@@ -28,8 +48,14 @@ spec:
           protocol: TCP
         - port: 9443
           protocol: TCP
-      {{- if .Values.networkPolicy.ingressNSMatchLabels }}
+      {{- if not .Values.networkPolicy.allowExternal }}
       from:
+        - podSelector:
+            matchLabels:
+              {{ template "common.names.fullname" . }}-client: "true"
+        - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
+        {{- if .Values.networkPolicy.ingressNSMatchLabels }}
         - namespaceSelector:
             matchLabels:
               {{- range $key, $value := .Values.networkPolicy.ingressNSMatchLabels }}
@@ -42,5 +68,9 @@ spec:
               {{ $key | quote }}: {{ $value | quote }}
               {{- end }}
           {{- end }}
+        {{- end }}
       {{- end }}
+    {{- if .Values.networkPolicy.extraIngress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
+    {{- end }}
 {{- end }}

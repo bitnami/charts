@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -7,12 +7,12 @@ SPDX-License-Identifier: APACHE-2.0
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: {{ include "scdf.fullname" . }}-skipper
+  name: {{ include "scdf.skipper.fullname" . }}
   {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.skipper.image "chart" .Chart ) ) }}
   {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: skipper
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -41,6 +41,7 @@ spec:
     spec:
       {{- include "scdf.imagePullSecrets" . | nindent 6 }}
       serviceAccountName: {{ include "scdf.serviceAccountName" . }}
+      automountServiceAccountToken: {{ .Values.skipper.automountServiceAccountToken }}
       {{- if .Values.skipper.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.skipper.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -68,7 +69,7 @@ spec:
       priorityClassName: {{ .Values.skipper.priorityClassName | quote }}
       {{- end }}
       {{- if .Values.skipper.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.skipper.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.skipper.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if or .Values.skipper.initContainers .Values.waitForBackends.enabled }}
       initContainers:
@@ -79,12 +80,17 @@ spec:
           command:
             - /scripts/wait-for-backends.sh
           {{- if .Values.waitForBackends.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.waitForBackends.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.waitForBackends.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.waitForBackends.resources }}
           resources: {{- include "common.tplvalues.render" (dict "value" .Values.waitForBackends.resources "context" $) | nindent 12 }}
+          {{- else if ne .Values.waitForBackends.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.waitForBackends.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: scripts
               mountPath: /scripts/wait-for-backends.sh
               subPath: wait-for-backends.sh
@@ -98,7 +104,7 @@ spec:
           image: {{ include "scdf.skipper.image" . }}
           imagePullPolicy: {{ .Values.skipper.image.pullPolicy | quote }}
           {{- if .Values.skipper.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.skipper.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.skipper.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.skipper.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.skipper.command "context" $) | nindent 12 }}
@@ -113,7 +119,7 @@ spec:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" .Values.skipper.image.debug | quote }}
             - name: SERVER_PORT
-              value: "7577"
+              value: {{ .Values.skipper.containerPorts.http | quote }}
             - name: SPRING_CLOUD_CONFIG_ENABLED
               value: "false"
             - name: SPRING_CLOUD_KUBERNETES_CONFIG_ENABLE_API
@@ -130,7 +136,7 @@ spec:
               value: {{ ternary "true" "false" .Values.skipper.configuration.trustK8sCerts | quote }}
             {{- if .Values.skipper.jdwp.enabled }}
             - name: JAVA_TOOL_OPTIONS
-              value: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address={{ .Values.skipper.jdwp.port }}"
+              value: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address={{ coalesce .Values.skipper.containerPorts.jdwp .Values.skipper.jdwp.port }}"
             {{- end }}
             {{- range $key, $value := .Values.skipper.extraEnvVars }}
             - name: {{ $value.name }}
@@ -149,11 +155,11 @@ spec:
           {{- end }}
           ports:
             - name: http
-              containerPort: 7577
+              containerPort: {{ .Values.skipper.containerPorts.http }}
               protocol: TCP
             {{- if .Values.skipper.jdwp.enabled }}
             - name: jdwp
-              containerPort: {{ .Values.skipper.jdwp.port }}
+              containerPort: {{ coalesce .Values.skipper.containerPorts.jdwp .Values.skipper.jdwp.port }}
               protocol: TCP
             {{- end }}
           {{- if .Values.skipper.customStartupProbe }}
@@ -173,8 +179,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.skipper.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.skipper.livenessProbe.enabled }}
           livenessProbe:
-            httpGet:
-              path: /actuator/health
+            tcpSocket:
               port: http
             initialDelaySeconds: {{ .Values.skipper.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.skipper.livenessProbe.periodSeconds }}
@@ -197,8 +202,13 @@ spec:
           {{- end }}
           {{- if .Values.skipper.resources }}
           resources: {{- include "common.tplvalues.render" (dict "value" .Values.skipper.resources "context" $) | nindent 12 }}
+          {{- else if ne .Values.skipper.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.skipper.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: database
               mountPath: /etc/secrets/database
               readOnly: true
@@ -217,9 +227,11 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.skipper.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: database
           secret:
-            secretName: {{ include "scdf.database.secretName" . }}
+            secretName: {{ include "scdf.database.skipper.secretName" . }}
         - name: config
           configMap:
             name: {{ include "scdf.skipper.configmapName" . }}
@@ -234,7 +246,7 @@ spec:
         {{- if .Values.waitForBackends.enabled }}
         - name: scripts
           configMap:
-            name: {{ include "scdf.fullname" . }}-scripts
+            name: {{ include "common.names.fullname" . }}-scripts
             defaultMode: 0755
         {{- end }}
         {{- if .Values.skipper.extraVolumes }}

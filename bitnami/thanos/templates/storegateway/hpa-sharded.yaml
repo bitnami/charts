@@ -1,23 +1,27 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
 {{- if and .Values.storegateway.enabled .Values.storegateway.autoscaling.enabled .Values.storegateway.sharded.enabled }}
 
 {{- $shards := int 0 }}
+{{- $hashShards := int 1 }}
+{{- $timeShards := int 1 }}
 {{- if .Values.storegateway.sharded.hashPartitioning.shards }}
-  {{- $shards = int .Values.storegateway.sharded.hashPartitioning.shards }}
-{{- else }}
-  {{- $shards = len .Values.storegateway.sharded.timePartitioning }}
+  {{- $hashShards = int .Values.storegateway.sharded.hashPartitioning.shards }}
 {{- end }}
+{{- if not (empty .Values.storegateway.sharded.timePartitioning) }}
+  {{- $timeShards = len .Values.storegateway.sharded.timePartitioning }}
+{{- end }}
+{{- $shards = mul $hashShards $timeShards }}
 
 {{- range $index, $_ := until $shards }}
 apiVersion: {{ include "common.capabilities.hpa.apiVersion" ( dict "context" $ ) }}
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ printf "%s-storegateway-%s" (include "common.names.fullname" $) (toString $index) | trunc 63 | trimSuffix "-" }}
-  namespace: {{ $.Release.Namespace | quote }}
+  name: {{ printf "%s-%s" (include "thanos.storegateway.fullname" $) (toString $index) | trunc 63 | trimSuffix "-" }}
+  namespace: {{ include "common.names.namespace" $ }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $.Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: storegateway
     shard: {{ $index | quote }}
@@ -28,7 +32,7 @@ spec:
   scaleTargetRef:
     apiVersion: {{ include "common.capabilities.statefulset.apiVersion" $ }}
     kind: StatefulSet
-    name: {{ printf "%s-storegateway-%s" (include "common.names.fullname" $) (toString $index) | trunc 63 | trimSuffix "-" }}
+    name: {{ printf "%s-%s" (include "thanos.storegateway.fullname" $) (toString $index) | trunc 63 | trimSuffix "-" }}
   minReplicas: {{ $.Values.storegateway.autoscaling.minReplicas }}
   maxReplicas: {{ $.Values.storegateway.autoscaling.maxReplicas }}
   metrics:

@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -61,6 +61,9 @@ spec:
     {{- if and .Values.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.ingress.annotations )) .Values.ingress.selfSigned (not (empty .Values.ingress.secrets))) }}
     - hosts:
         - {{ .Values.ingress.hostname | quote }}
+        {{- if and (or (.Values.ingress.tlsWwwPrefix) (eq (index .Values.ingress.annotations "nginx.ingress.kubernetes.io/from-to-www-redirect") "true" )) (not (contains "www." .Values.ingress.hostname))  }}
+        - {{ printf "www.%s" (tpl .Values.ingress.hostname $) | quote }}
+        {{- end }}
       secretName: {{ printf "%s-tls" .Values.ingress.hostname }}
     {{- end }}
     {{- if .Values.ingress.extraTls }}

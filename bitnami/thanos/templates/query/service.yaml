@@ -1,55 +1,54 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- $query := (include "thanos.query.values" . | fromYaml) -}}
-{{- if $query.enabled -}}
+{{- if .Values.query.enabled -}}
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "common.names.fullname" . }}-query
-  namespace: {{ .Release.Namespace | quote }}
-  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list $query.service.labels .Values.commonLabels ) "context" . ) }}
+  name: {{ include "thanos.query.fullname" . }}
+  namespace: {{ include "common.names.namespace" . }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.query.service.labels .Values.commonLabels ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: query
     {{- include "thanos.servicemonitor.matchLabels" . | nindent 4 -}}
-  {{- if or $query.service.annotations .Values.commonAnnotations }}
-  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list $query.service.annotations .Values.commonAnnotations ) "context" . ) }}
+  {{- if or .Values.query.service.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.query.service.annotations .Values.commonAnnotations ) "context" . ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
-  type: {{ $query.service.type }}
-  {{- if and $query.service.clusterIP (eq $query.service.type "ClusterIP") }}
-  clusterIP: {{ $query.service.clusterIP }}
+  type: {{ .Values.query.service.type }}
+  {{- if and .Values.query.service.clusterIP (eq .Values.query.service.type "ClusterIP") }}
+  clusterIP: {{ .Values.query.service.clusterIP }}
   {{- end }}
-  {{- if ne $query.service.type "ClusterIP" }}
-  externalTrafficPolicy: {{ $query.service.externalTrafficPolicy }}
+  {{- if ne .Values.query.service.type "ClusterIP" }}
+  externalTrafficPolicy: {{ .Values.query.service.externalTrafficPolicy }}
   {{- end }}
-  {{- if and $query.service.loadBalancerIP (eq $query.service.type "LoadBalancer") }}
-  loadBalancerIP: {{ $query.service.loadBalancerIP }}
+  {{- if and .Values.query.service.loadBalancerIP (eq .Values.query.service.type "LoadBalancer") }}
+  loadBalancerIP: {{ .Values.query.service.loadBalancerIP }}
   {{- end }}
-  {{- if and (eq $query.service.type "LoadBalancer") $query.service.loadBalancerSourceRanges }}
-  loadBalancerSourceRanges: {{- toYaml $query.service.loadBalancerSourceRanges | nindent 4 }}
+  {{- if and (eq .Values.query.service.type "LoadBalancer") .Values.query.service.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges: {{- toYaml .Values.query.service.loadBalancerSourceRanges | nindent 4 }}
   {{- end }}
   ports:
-    - port: {{ $query.service.ports.http }}
+    - port: {{ .Values.query.service.ports.http }}
       targetPort: http
       protocol: TCP
       name: http
-      {{- if and (or (eq $query.service.type "NodePort") (eq $query.service.type "LoadBalancer")) $query.service.nodePorts.http }}
-      nodePort: {{ $query.service.nodePorts.http }}
-      {{- else if eq $query.service.type "ClusterIP" }}
+      {{- if and (or (eq .Values.query.service.type "NodePort") (eq .Values.query.service.type "LoadBalancer")) .Values.query.service.nodePorts.http }}
+      nodePort: {{ .Values.query.service.nodePorts.http }}
+      {{- else if eq .Values.query.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
-    {{- if $query.service.extraPorts }}
-    {{- include "common.tplvalues.render" (dict "value" $query.service.extraPorts "context" $) | nindent 4 }}
+    {{- if .Values.query.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.query.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}
   selector:
-    {{- if $query.service.labelSelectorsOverride }}
-    {{- include "common.tplvalues.render" (dict "value" $query.service.labelSelectorsOverride "context" $) | nindent 4 }}
+    {{- if .Values.query.service.labelSelectorsOverride }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.query.service.labelSelectorsOverride "context" $) | nindent 4 }}
     {{- else }}
-    {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list $query.podLabels .Values.commonLabels ) "context" . ) }}
+    {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.query.podLabels .Values.commonLabels ) "context" . ) }}
     {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: query
     {{- end }}

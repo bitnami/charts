@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/ghost
 ```
 
-Looking to use Ghost in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Ghost in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -45,25 +45,180 @@ The command deploys Ghost on the Kubernetes cluster in the default configuration
 
 > **Tip**: List all releases using `helm list`
 
-## Uninstalling the Chart
+## Configuration and installation details
 
-To uninstall/delete the `my-release` deployment:
+### Resource requests and limits
 
-```console
-helm delete my-release
+Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
+
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcesPreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+
+### [Rolling VS Immutable tags](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+### External database support
+
+You may want to have Ghost connect to an external database rather than installing one inside your cluster. Typical reasons for this are to use a managed database service, or to share a common database server for all your applications. To achieve this, the chart allows you to specify credentials for an external database with the [`externalDatabase` parameter](#database-parameters). You should also disable the MySQL installation with the `mysql.enabled` option. Here is an example:
+
+```text
+mysql.enabled=false
+externalDatabase.host=myexternalhost
+externalDatabase.user=myuser
+externalDatabase.password=mypassword
+externalDatabase.database=mydatabase
+externalDatabase.port=3306
 ```
 
-The command removes all the Kubernetes components associated with the chart and deletes the release.
+### Update credentials
+
+Bitnami charts configure credentials at first boot. Any further change in the secrets or credentials require manual intervention. Follow these instructions:
+
+- Update the user password following [the upstream documentation](https://ghost.org/help/how-do-i-reset-my-password/)
+- Update the password secret with the new values (replace the SECRET_NAME, PASSWORD and SMTP_PASSWORD placeholders)
+
+```shell
+kubectl create secret generic SECRET_NAME --from-literal=ghost-password=PASSWORD --from-literal=smtp-password=SMTP_PASSWORD --dry-run -o yaml | kubectl apply -f -
+```
+
+### Configure Ingress
+
+This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.To enable Ingress integration, set `ingress.enabled` to `true`.
+
+The most common scenario is to have one host name mapped to the deployment. In this case, the `ingress.hostname` property can be used to set the host name. The `ingress.tls` parameter can be used to add the TLS configuration for this host.
+
+However, it is also possible to have more than one host. To facilitate this, the `ingress.extraHosts` parameter (if available) can be set with the host names specified as an array. The `ingress.extraTLS` parameter (if available) can also be used to add the TLS configuration for extra hosts.
+
+> NOTE: For each host specified in the `ingress.extraHosts` parameter, it is necessary to set a name, path, and any annotations that the Ingress controller should know about. Not all annotations are supported by all Ingress controllers, but [this annotation reference document](https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md) lists the annotations supported by many popular Ingress controllers.
+
+Adding the TLS parameter (where available) will cause the chart to generate HTTPS URLs, and the  application will be available on port 443. The actual TLS secrets do not have to be generated by this chart. However, if TLS is enabled, the Ingress record will not work until the TLS secret exists.
+
+[Learn more about Ingress controllers](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/).
+
+### Configure TLS Secrets for use with Ingress
+
+This chart facilitates the creation of TLS secrets for use with the Ingress controller (although this is not mandatory). There are several common use cases:
+
+- Generate certificate secrets based on chart parameters.
+- Enable externally generated certificates.
+- Manage application certificates via an external service (like [cert-manager](https://github.com/jetstack/cert-manager/)).
+- Create self-signed certificates within the chart (if supported).
+
+In the first two cases, a certificate and a key are needed. Files are expected in `.pem` format.
+
+Here is an example of a certificate file:
+
+> NOTE: There may be more than one certificate if there is a certificate chain.
+
+```text
+-----BEGIN CERTIFICATE-----
+MIID6TCCAtGgAwIBAgIJAIaCwivkeB5EMA0GCSqGSIb3DQEBCwUAMFYxCzAJBgNV
+...
+jScrvkiBO65F46KioCL9h5tDvomdU1aqpI/CBzhvZn1c0ZTf87tGQR8NK7v7
+-----END CERTIFICATE-----
+```
+
+Here is an example of a certificate key:
+
+```text
+-----BEGIN RSA PRIVATE KEY-----
+MIIEogIBAAKCAQEAvLYcyu8f3skuRyUgeeNpeDvYBCDcgq+LsWap6zbX5f8oLqp4
+...
+wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
+-----END RSA PRIVATE KEY-----
+```
+
+- If using Helm to manage the certificates based on the parameters, copy these values into the `certificate` and `key` values for a given `*.ingress.secrets` entry.
+- If managing TLS secrets separately, it is necessary to create a TLS secret with name `INGRESS_HOSTNAME-tls` (where INGRESS_HOSTNAME is a placeholder to be replaced with the hostname you set using the `*.ingress.hostname` parameter).
+- If your cluster has a [cert-manager](https://github.com/jetstack/cert-manager) add-on to automate the management and issuance of TLS certificates, add to `*.ingress.annotations` the [corresponding ones](https://cert-manager.io/docs/usage/ingress/#supported-annotations) for cert-manager.
+- If using self-signed certificates created by Helm, set both `*.ingress.tls` and `*.ingress.selfSigned` to `true`.
+
+### Configure extra environment variables
+
+To add extra environment variables (useful for advanced operations like custom init scripts), use the `extraEnvVars` property.
+
+```yaml
+extraEnvVars:
+  - name: LOG_LEVEL
+    value: DEBUG
+```
+
+Alternatively, use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` values.
+
+### Configure Sidecars and Init Containers
+
+If additional containers are needed in the same pod as Ghost (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter.
+
+```yaml
+sidecars:
+- name: your-image-name
+  image: your-image
+  imagePullPolicy: Always
+  ports:
+  - name: portname
+    containerPort: 1234
+```
+
+If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter (where available), as shown in the example below:
+
+```yaml
+service:
+  extraPorts:
+  - name: extraPort
+    port: 11311
+    targetPort: 11311
+```
+
+> NOTE: This Helm chart already includes sidecar containers for the Prometheus exporters (where applicable). These can be activated by adding the `--enable-metrics=true` parameter at deployment time. The `sidecars` parameter should therefore only be used for any extra sidecar containers.
+
+If additional init containers are needed in the same pod, they can be defined using the `initContainers` parameter. Here is an example:
+
+```yaml
+initContainers:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+      - name: portname
+        containerPort: 1234
+```
+
+Learn more about [sidecar containers](https://kubernetes.io/docs/concepts/workloads/pods/) and [init containers](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/).
+
+### Deploy extra resources
+
+There are cases where you may want to deploy extra objects, such a ConfigMap containing your app's configuration or some extra deployment with a micro service used by your app. For covering this case, the chart allows adding the full specification of other objects using the `extraDeploy` parameter.
+
+### Set Pod affinity
+
+This chart allows you to set custom Pod affinity using the `affinity` parameter(s). Find more information about Pod affinity in the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+
+### Backup and restore
+
+To back up and restore Helm chart deployments on Kubernetes, you need to back up the persistent volumes from the source deployment and attach them to a new deployment using [Velero](https://velero.io/), a Kubernetes backup/restore tool. Find the instructions for using Velero in [this guide](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-backup-restore-deployments-velero-index.html).
+
+## Persistence
+
+The [Bitnami Ghost](https://github.com/bitnami/containers/tree/main/bitnami/ghost) image stores the Ghost data and configurations at the `/bitnami/ghost` and `/bitnami/apache` paths of the container.
+
+Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
+See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
 
 ## Parameters
 
 ### Global parameters
 
-| Name                      | Description                                     | Value |
-| ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
-| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value   |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`    |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`    |
+| `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`    |
+| `global.security.allowInsecureImages`                 | Allows skipping image verification                                                                                                                                                                                                                                                                                                                                  | `false` |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto`  |
 
 ### Common parameters
 
@@ -120,63 +275,73 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Ghost deployment parameters
 
-| Name                                                | Description                                                                               | Value            |
-| --------------------------------------------------- | ----------------------------------------------------------------------------------------- | ---------------- |
-| `replicaCount`                                      | Number of Ghost replicas to deploy                                                        | `1`              |
-| `updateStrategy.type`                               | Ghost deployment strategy type                                                            | `RollingUpdate`  |
-| `priorityClassName`                                 | Ghost pod priority class name                                                             | `""`             |
-| `schedulerName`                                     | Name of the k8s scheduler (other than default)                                            | `""`             |
-| `topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment                                            | `[]`             |
-| `hostAliases`                                       | Ghost pod host aliases                                                                    | `[]`             |
-| `extraVolumes`                                      | Optionally specify extra list of additional volumes for Ghost pods                        | `[]`             |
-| `extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for Ghost container(s)           | `[]`             |
-| `sidecars`                                          | Add additional sidecar containers to the Ghost pod                                        | `[]`             |
-| `initContainers`                                    | Add additional init containers to the Ghost pods                                          | `[]`             |
-| `lifecycleHooks`                                    | Add lifecycle hooks to the Ghost deployment                                               | `{}`             |
-| `podLabels`                                         | Extra labels for Ghost pods                                                               | `{}`             |
-| `podAnnotations`                                    | Annotations for Ghost pods                                                                | `{}`             |
-| `podAffinityPreset`                                 | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`             |
-| `podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`           |
-| `nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`             |
-| `nodeAffinityPreset.key`                            | Node label key to match. Ignored if `affinity` is set                                     | `""`             |
-| `nodeAffinityPreset.values`                         | Node label values to match. Ignored if `affinity` is set                                  | `[]`             |
-| `affinity`                                          | Affinity for pod assignment                                                               | `{}`             |
-| `nodeSelector`                                      | Node labels for pod assignment                                                            | `{}`             |
-| `tolerations`                                       | Tolerations for pod assignment                                                            | `[]`             |
-| `resources.limits`                                  | The resources limits for the Ghost container                                              | `{}`             |
-| `resources.requests`                                | The requested resources for the Ghost container                                           | `{}`             |
-| `containerPorts.http`                               | Ghost HTTP container port                                                                 | `2368`           |
-| `containerPorts.https`                              | Ghost HTTPS container port                                                                | `2368`           |
-| `podSecurityContext.enabled`                        | Enabled Ghost pods' Security Context                                                      | `true`           |
-| `podSecurityContext.fsGroup`                        | Set Ghost pod's Security Context fsGroup                                                  | `1001`           |
-| `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                      | `true`           |
-| `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                | `1001`           |
-| `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                             | `true`           |
-| `containerSecurityContext.privileged`               | Set container's Security Context privileged                                               | `false`          |
-| `containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                   | `false`          |
-| `containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                 | `false`          |
-| `containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                        | `["ALL"]`        |
-| `containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                          | `RuntimeDefault` |
-| `startupProbe.enabled`                              | Enable startupProbe                                                                       | `false`          |
-| `startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                    | `120`            |
-| `startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                           | `10`             |
-| `startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                          | `5`              |
-| `startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                        | `6`              |
-| `startupProbe.successThreshold`                     | Success threshold for startupProbe                                                        | `1`              |
-| `livenessProbe.enabled`                             | Enable livenessProbe                                                                      | `true`           |
-| `livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                   | `120`            |
-| `livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                          | `10`             |
-| `livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                         | `5`              |
-| `livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                       | `6`              |
-| `livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                       | `1`              |
-| `readinessProbe.enabled`                            | Enable readinessProbe                                                                     | `true`           |
-| `readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                  | `30`             |
-| `readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                         | `5`              |
-| `readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                        | `3`              |
-| `readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                      | `6`              |
-| `readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                      | `1`              |
-| `customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                       | `{}`             |
-| `customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                      | `{}`             |
+| Name                                                | Description                                                                                                                                                                                                       | Value            |
+| --------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
+| `replicaCount`                                      | Number of Ghost replicas to deploy                                                                                                                                                                                | `1`              |
+| `updateStrategy.type`                               | Ghost deployment strategy type                                                                                                                                                                                    | `RollingUpdate`  |
+| `priorityClassName`                                 | Ghost pod priority class name                                                                                                                                                                                     | `""`             |
+| `schedulerName`                                     | Name of the k8s scheduler (other than default)                                                                                                                                                                    | `""`             |
+| `topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment                                                                                                                                                                    | `[]`             |
+| `automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                                                                                                                | `false`          |
+| `hostAliases`                                       | Ghost pod host aliases                                                                                                                                                                                            | `[]`             |
+| `extraVolumes`                                      | Optionally specify extra list of additional volumes for Ghost pods                                                                                                                                                | `[]`             |
+| `extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for Ghost container(s)                                                                                                                                   | `[]`             |
+| `sidecars`                                          | Add additional sidecar containers to the Ghost pod                                                                                                                                                                | `[]`             |
+| `initContainers`                                    | Add additional init containers to the Ghost pods                                                                                                                                                                  | `[]`             |
+| `pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                   | `true`           |
+| `pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                    | `""`             |
+| `pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `pdb.minAvailable` and `pdb.maxUnavailable` are empty.                                                                    | `""`             |
+| `lifecycleHooks`                                    | Add lifecycle hooks to the Ghost deployment                                                                                                                                                                       | `{}`             |
+| `podLabels`                                         | Extra labels for Ghost pods                                                                                                                                                                                       | `{}`             |
+| `podAnnotations`                                    | Annotations for Ghost pods                                                                                                                                                                                        | `{}`             |
+| `podAffinityPreset`                                 | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                                               | `""`             |
+| `podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                                          | `soft`           |
+| `nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                                         | `""`             |
+| `nodeAffinityPreset.key`                            | Node label key to match. Ignored if `affinity` is set                                                                                                                                                             | `""`             |
+| `nodeAffinityPreset.values`                         | Node label values to match. Ignored if `affinity` is set                                                                                                                                                          | `[]`             |
+| `affinity`                                          | Affinity for pod assignment                                                                                                                                                                                       | `{}`             |
+| `nodeSelector`                                      | Node labels for pod assignment                                                                                                                                                                                    | `{}`             |
+| `tolerations`                                       | Tolerations for pod assignment                                                                                                                                                                                    | `[]`             |
+| `resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production). | `micro`          |
+| `resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                 | `{}`             |
+| `containerPorts.http`                               | Ghost HTTP container port                                                                                                                                                                                         | `2368`           |
+| `containerPorts.https`                              | Ghost HTTPS container port                                                                                                                                                                                        | `2368`           |
+| `extraContainerPorts`                               | Optionally specify extra list of additional ports for WordPress container(s)                                                                                                                                      | `[]`             |
+| `podSecurityContext.enabled`                        | Enabled Ghost pods' Security Context                                                                                                                                                                              | `true`           |
+| `podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                                                                | `Always`         |
+| `podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                                                                                                                    | `[]`             |
+| `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                                                                       | `[]`             |
+| `podSecurityContext.fsGroup`                        | Set Ghost pod's Security Context fsGroup                                                                                                                                                                          | `1001`           |
+| `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                              | `true`           |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                  | `{}`             |
+| `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                        | `1001`           |
+| `containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                       | `1001`           |
+| `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                                     | `true`           |
+| `containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                                       | `false`          |
+| `containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                           | `true`           |
+| `containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                                                                                                         | `false`          |
+| `containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                                                                                                                | `["ALL"]`        |
+| `containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                                                                  | `RuntimeDefault` |
+| `startupProbe.enabled`                              | Enable startupProbe                                                                                                                                                                                               | `false`          |
+| `startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                                                                                                                                            | `120`            |
+| `startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                                                                                                                                   | `10`             |
+| `startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                                                                                                                                  | `5`              |
+| `startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                                                                                                                                | `6`              |
+| `startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                                                                                                                                | `1`              |
+| `livenessProbe.enabled`                             | Enable livenessProbe                                                                                                                                                                                              | `true`           |
+| `livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                                                                                                           | `120`            |
+| `livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                                                                                                                  | `10`             |
+| `livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                                                                                                                                 | `5`              |
+| `livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                                                                                                                               | `6`              |
+| `livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                                                                                                                               | `1`              |
+| `readinessProbe.enabled`                            | Enable readinessProbe                                                                                                                                                                                             | `true`           |
+| `readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                                                                                                                          | `30`             |
+| `readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                                                                                                                                 | `5`              |
+| `readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                                                                                                                                | `3`              |
+| `readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                                                                                                                              | `6`              |
+| `readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                                                                                                                              | `1`              |
+| `customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                                                                                                               | `{}`             |
+| `customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                                                                                                              | `{}`             |
 
 ### Traffic Exposure Parameters
 
@@ -212,69 +377,67 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Persistence Parameters
 
-| Name                                          | Description                                                                                                        | Value                      |
-| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | -------------------------- |
-| `persistence.enabled`                         | Enable persistence using Persistent Volume Claims                                                                  | `true`                     |
-| `persistence.storageClass`                    | Persistent Volume storage class                                                                                    | `""`                       |
-| `persistence.annotations`                     | Additional custom annotations for the PVC                                                                          | `{}`                       |
-| `persistence.accessModes`                     | Persistent Volume access modes                                                                                     | `[]`                       |
-| `persistence.size`                            | Persistent Volume size                                                                                             | `8Gi`                      |
-| `persistence.existingClaim`                   | The name of an existing PVC to use for persistence                                                                 | `""`                       |
-| `persistence.subPath`                         | The name of a volume's sub path to mount for persistence                                                           | `""`                       |
-| `volumePermissions.enabled`                   | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                    | `false`                    |
-| `volumePermissions.image.registry`            | OS Shell + Utility image registry                                                                                  | `REGISTRY_NAME`            |
-| `volumePermissions.image.repository`          | OS Shell + Utility image repository                                                                                | `REPOSITORY_NAME/os-shell` |
-| `volumePermissions.image.digest`              | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
-| `volumePermissions.image.pullPolicy`          | OS Shell + Utility image pull policy                                                                               | `IfNotPresent`             |
-| `volumePermissions.image.pullSecrets`         | OS Shell + Utility image pull secrets                                                                              | `[]`                       |
-| `volumePermissions.resources.limits`          | The resources limits for the init container                                                                        | `{}`                       |
-| `volumePermissions.resources.requests`        | The requested resources for the init container                                                                     | `{}`                       |
-| `volumePermissions.securityContext.runAsUser` | Set init container's Security Context runAsUser                                                                    | `0`                        |
+| Name                                               | Description                                                                                                                                                                                                                                           | Value                      |
+| -------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| `persistence.enabled`                              | Enable persistence using Persistent Volume Claims                                                                                                                                                                                                     | `true`                     |
+| `persistence.storageClass`                         | Persistent Volume storage class                                                                                                                                                                                                                       | `""`                       |
+| `persistence.annotations`                          | Additional custom annotations for the PVC                                                                                                                                                                                                             | `{}`                       |
+| `persistence.accessModes`                          | Persistent Volume access modes                                                                                                                                                                                                                        | `[]`                       |
+| `persistence.size`                                 | Persistent Volume size                                                                                                                                                                                                                                | `8Gi`                      |
+| `persistence.existingClaim`                        | The name of an existing PVC to use for persistence                                                                                                                                                                                                    | `""`                       |
+| `persistence.subPath`                              | The name of a volume's sub path to mount for persistence                                                                                                                                                                                              | `""`                       |
+| `volumePermissions.enabled`                        | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                                                                                                                                                       | `false`                    |
+| `volumePermissions.image.registry`                 | OS Shell + Utility image registry                                                                                                                                                                                                                     | `REGISTRY_NAME`            |
+| `volumePermissions.image.repository`               | OS Shell + Utility image repository                                                                                                                                                                                                                   | `REPOSITORY_NAME/os-shell` |
+| `volumePermissions.image.digest`                   | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                                                    | `""`                       |
+| `volumePermissions.image.pullPolicy`               | OS Shell + Utility image pull policy                                                                                                                                                                                                                  | `IfNotPresent`             |
+| `volumePermissions.image.pullSecrets`              | OS Shell + Utility image pull secrets                                                                                                                                                                                                                 | `[]`                       |
+| `volumePermissions.resourcesPreset`                | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production). | `none`                     |
+| `volumePermissions.resources`                      | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                                     | `{}`                       |
+| `volumePermissions.securityContext.seLinuxOptions` | Set SELinux options in container                                                                                                                                                                                                                      | `{}`                       |
+| `volumePermissions.securityContext.runAsUser`      | Set init container's Security Context runAsUser                                                                                                                                                                                                       | `0`                        |
 
 ### Database Parameters
 
-| Name                                     | Description                                                             | Value           |
-| ---------------------------------------- | ----------------------------------------------------------------------- | --------------- |
-| `mysql.enabled`                          | Deploy a MySQL server to satisfy the applications database requirements | `true`          |
-| `mysql.architecture`                     | MySQL architecture. Allowed values: `standalone` or `replication`       | `standalone`    |
-| `mysql.auth.rootPassword`                | MySQL root password                                                     | `""`            |
-| `mysql.auth.database`                    | MySQL custom database                                                   | `bitnami_ghost` |
-| `mysql.auth.username`                    | MySQL custom user name                                                  | `bn_ghost`      |
-| `mysql.auth.password`                    | MySQL custom user password                                              | `""`            |
-| `mysql.auth.existingSecret`              | Existing secret with MySQL credentials                                  | `""`            |
-| `mysql.primary.persistence.enabled`      | Enable persistence on MySQL using PVC(s)                                | `true`          |
-| `mysql.primary.persistence.storageClass` | Persistent Volume storage class                                         | `""`            |
-| `mysql.primary.persistence.accessModes`  | Persistent Volume access modes                                          | `[]`            |
-| `mysql.primary.persistence.size`         | Persistent Volume size                                                  | `8Gi`           |
-| `externalDatabase.host`                  | External Database server host                                           | `localhost`     |
-| `externalDatabase.port`                  | External Database server port                                           | `3306`          |
-| `externalDatabase.user`                  | External Database username                                              | `bn_ghost`      |
-| `externalDatabase.password`              | External Database user password                                         | `""`            |
-| `externalDatabase.database`              | External Database database name                                         | `bitnami_ghost` |
-| `externalDatabase.existingSecret`        | The name of an existing secret with database credentials                | `""`            |
-| `externalDatabase.ssl`                   | External Database ssl                                                   | `false`         |
-| `externalDatabase.sslCaFile`             | External Database ssl CA filepath                                       | `""`            |
+| Name                                     | Description                                                                                                                                                                                                                | Value           |
+| ---------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
+| `mysql.enabled`                          | Deploy a MySQL server to satisfy the applications database requirements                                                                                                                                                    | `true`          |
+| `mysql.architecture`                     | MySQL architecture. Allowed values: `standalone` or `replication`                                                                                                                                                          | `standalone`    |
+| `mysql.auth.rootPassword`                | MySQL root password                                                                                                                                                                                                        | `""`            |
+| `mysql.auth.database`                    | MySQL custom database                                                                                                                                                                                                      | `bitnami_ghost` |
+| `mysql.auth.username`                    | MySQL custom user name                                                                                                                                                                                                     | `bn_ghost`      |
+| `mysql.auth.password`                    | MySQL custom user password                                                                                                                                                                                                 | `""`            |
+| `mysql.auth.existingSecret`              | Existing secret with MySQL credentials                                                                                                                                                                                     | `""`            |
+| `mysql.primary.persistence.enabled`      | Enable persistence on MySQL using PVC(s)                                                                                                                                                                                   | `true`          |
+| `mysql.primary.persistence.storageClass` | Persistent Volume storage class                                                                                                                                                                                            | `""`            |
+| `mysql.primary.persistence.accessModes`  | Persistent Volume access modes                                                                                                                                                                                             | `[]`            |
+| `mysql.primary.persistence.size`         | Persistent Volume size                                                                                                                                                                                                     | `8Gi`           |
+| `mysql.primary.resourcesPreset`          | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if primary.resources is set (primary.resources is recommended for production). | `small`         |
+| `mysql.primary.resources`                | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                          | `{}`            |
+| `externalDatabase.host`                  | External Database server host                                                                                                                                                                                              | `localhost`     |
+| `externalDatabase.port`                  | External Database server port                                                                                                                                                                                              | `3306`          |
+| `externalDatabase.user`                  | External Database username                                                                                                                                                                                                 | `bn_ghost`      |
+| `externalDatabase.password`              | External Database user password                                                                                                                                                                                            | `""`            |
+| `externalDatabase.database`              | External Database database name                                                                                                                                                                                            | `bitnami_ghost` |
+| `externalDatabase.existingSecret`        | The name of an existing secret with database credentials                                                                                                                                                                   | `""`            |
+| `externalDatabase.ssl`                   | External Database ssl                                                                                                                                                                                                      | `false`         |
+| `externalDatabase.sslCaFile`             | External Database ssl CA filepath                                                                                                                                                                                          | `""`            |
 
 ### NetworkPolicy parameters
 
-| Name                                                          | Description                                                                                                               | Value   |
-| ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `networkPolicy.enabled`                                       | Enable network policies                                                                                                   | `false` |
-| `networkPolicy.ingress.enabled`                               | Enable network policy for Ingress Proxies                                                                                 | `false` |
-| `networkPolicy.ingress.namespaceSelector`                     | Ingress Proxy namespace selector labels. These labels will be used to identify the Ingress Proxy's namespace.             | `{}`    |
-| `networkPolicy.ingress.podSelector`                           | Ingress Proxy pods selector labels. These labels will be used to identify the Ingress Proxy pods.                         | `{}`    |
-| `networkPolicy.ingressRules.backendOnlyAccessibleByFrontend`  | Enable ingress rule that makes the backend (mysql) only accessible by Ghost's pods.                                       | `false` |
-| `networkPolicy.ingressRules.customBackendSelector`            | Backend selector labels. These labels will be used to identify the backend pods.                                          | `{}`    |
-| `networkPolicy.ingressRules.accessOnlyFrom.enabled`           | Enable ingress rule that makes Ghost only accessible from a particular origin                                             | `false` |
-| `networkPolicy.ingressRules.accessOnlyFrom.namespaceSelector` | Namespace selector label that is allowed to access Ghost. This label will be used to identified the allowed namespace(s). | `{}`    |
-| `networkPolicy.ingressRules.accessOnlyFrom.podSelector`       | Pods selector label that is allowed to access Ghost. This label will be used to identified the allowed pod(s).            | `{}`    |
-| `networkPolicy.ingressRules.customRules`                      | Custom network policy ingress rule                                                                                        | `{}`    |
-| `networkPolicy.egressRules.denyConnectionsToExternal`         | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).                            | `false` |
-| `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                                | `{}`    |
-| `serviceAccount.create`                                       | Specifies whether a ServiceAccount should be created                                                                      | `true`  |
-| `serviceAccount.name`                                         | Name of the service account to use. If not set and create is true, a name is generated using the fullname template.       | `""`    |
-| `serviceAccount.automountServiceAccountToken`                 | Automount service account token for the server service account                                                            | `false` |
-| `serviceAccount.annotations`                                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                                | `{}`    |
+| Name                                          | Description                                                                                                         | Value   |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ------- |
+| `networkPolicy.enabled`                       | Specifies whether a NetworkPolicy should be created                                                                 | `true`  |
+| `networkPolicy.allowExternal`                 | Don't require server label for connections                                                                          | `true`  |
+| `networkPolicy.allowExternalEgress`           | Allow the pod to access any range of port and all destinations.                                                     | `true`  |
+| `networkPolicy.extraIngress`                  | Add extra ingress rules to the NetworkPolicy                                                                        | `[]`    |
+| `networkPolicy.extraEgress`                   | Add extra ingress rules to the NetworkPolicy                                                                        | `[]`    |
+| `networkPolicy.ingressNSMatchLabels`          | Labels to match to allow traffic from other namespaces                                                              | `{}`    |
+| `networkPolicy.ingressNSPodMatchLabels`       | Pod labels to match to allow traffic from other namespaces                                                          | `{}`    |
+| `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                                | `true`  |
+| `serviceAccount.name`                         | Name of the service account to use. If not set and create is true, a name is generated using the fullname template. | `""`    |
+| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                      | `false` |
+| `serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                          | `{}`    |
 
 The above parameters map to the env variables defined in [bitnami/ghost](https://github.com/bitnami/containers/tree/main/bitnami/ghost). For more information please refer to the [bitnami/ghost](https://github.com/bitnami/containers/tree/main/bitnami/ghost) image documentation.
 
@@ -315,79 +478,41 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/ghost
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/ghost/values.yaml)
 
-## Configuration and installation details
-
-### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
-
-It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
-
-Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
-### External database support
-
-You may want to have Ghost connect to an external database rather than installing one inside your cluster. Typical reasons for this are to use a managed database service, or to share a common database server for all your applications. To achieve this, the chart allows you to specify credentials for an external database with the [`externalDatabase` parameter](#database-parameters). You should also disable the MySQL installation with the `mysql.enabled` option. Here is an example:
-
-```console
-mysql.enabled=false
-externalDatabase.host=myexternalhost
-externalDatabase.user=myuser
-externalDatabase.password=mypassword
-externalDatabase.database=mydatabase
-externalDatabase.port=3306
-```
-
-Refer to the [documentation on using an external database with Ghost](https://docs.bitnami.com/kubernetes/apps/ghost/configuration/use-external-database/) for more information.
-
-### Configure Ingress
-
-This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.
-
-To enable Ingress integration, set `ingress.enabled` to `true`. The `ingress.hostname` property can be used to set the host name. The `ingress.tls` parameter can be used to add the TLS configuration for this host. It is also possible to have more than one host, with a separate TLS configuration for each host. [Learn more about configuring and using Ingress](https://docs.bitnami.com/kubernetes/apps/ghost/configuration/configure-ingress/).
-
-### Configure TLS Secrets for use with Ingress
-
-The chart also facilitates the creation of TLS secrets for use with the Ingress controller, with different options for certificate management. [Learn more about TLS secrets](https://docs.bitnami.com/kubernetes/apps/ghost/administration/enable-tls-ingress/).
-
-### Configure extra environment variables
-
-To add extra environment variables (useful for advanced operations like custom init scripts), use the `extraEnvVars` property.
-
-```yaml
-extraEnvVars:
-  - name: LOG_LEVEL
-    value: DEBUG
-```
-
-Alternatively, use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` values.
-
-### Configure Sidecars and Init Containers
-
-If additional containers are needed in the same pod as Ghost (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter. Similarly, you can add extra init containers using the `initContainers` parameter.
-
-[Learn more about configuring and using sidecar and init containers](https://docs.bitnami.com/kubernetes/apps/ghost/configuration/configure-sidecar-init-containers/).
-
-### Deploy extra resources
-
-There are cases where you may want to deploy extra objects, such a ConfigMap containing your app's configuration or some extra deployment with a micro service used by your app. For covering this case, the chart allows adding the full specification of other objects using the `extraDeploy` parameter.
-
-### Set Pod affinity
-
-This chart allows you to set custom Pod affinity using the `affinity` parameter(s). Find more information about Pod affinity in the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
-
-As an alternative, you can use the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
-
-## Persistence
-
-The [Bitnami Ghost](https://github.com/bitnami/containers/tree/main/bitnami/ghost) image stores the Ghost data and configurations at the `/bitnami/ghost` and `/bitnami/apache` paths of the container.
-
-Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
-See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
-
 ## Troubleshooting
 
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 22.1.0
+
+This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
+
+### To 22.0.0
+
+This major bump updates the MySQL subchart to version 12.0.0. This subchart updates the StatefulSet objects `serviceName` to use a headless service, as the current non-headless service attached to it was not providing DNS entries. This will cause an upgrade issue because it changes "immutable fields". To workaround it, delete the StatefulSet objects as follows (replace the RELEASE_NAME placeholder):
+
+```shell
+kubectl delete sts RELEASE_NAME-mysql --cascade=false
+```
+
+Then execute `helm upgrade` as usual.
+
+### To 21.0.0
+
+This major updates the MySQL subchart to its newest major, 11.0.0. For more information on this subchart's major, please refer to [Mysql upgrade notes](https://github.com/bitnami/charts/blob/main/bitnami/mysql/README.md#user-content-to-1100).
+
+### To 20.0.0
+
+This major bump changes the following security defaults:
+
+- `runAsGroup` is changed from `0` to `1001`
+- `readOnlyRootFilesystem` is set to `true`
+- `resourcesPreset` is changed from `none` to the minimum size working in our test suites (NOTE: `resourcesPreset` is not meant for production usage, but `resources` adapted to your use case).
+- `global.compatibility.openshift.adaptSecurityContext` is changed from `disabled` to `auto`.
+- The `networkPolicy` section has been normalized amongst all Bitnami charts. Compared to the previous approach, the values section has been simplified (check the Parameters section) and now it set to `enabled=true` by default. Egress traffic is allowed by default and ingress traffic is allowed by all pods but only to the ports set in `containerPorts` and `extraContainerPorts`.
+
+This could potentially break any customization or init scripts used in your deployment. If this is the case, change the default values to the previous ones.
 
 ### To 19.0.0
 
@@ -448,7 +573,7 @@ Please read the update notes carefully.
 
 ##### Useful links
 
-- <https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/>
+- <https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-resolve-helm2-helm3-post-migration-issues-index.html>
 - <https://helm.sh/docs/topics/v2_v3_migration/>
 - <https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/>
 

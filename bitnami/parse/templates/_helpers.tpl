@@ -1,5 +1,5 @@
 {{/*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -18,6 +18,7 @@ Return the proper Parse dashboard image name
 {{- define "parse.dashboard.image" -}}
 {{ include "common.images.image" (dict "imageRoot" .Values.dashboard.image "global" .Values.global) }}
 {{- end -}}
+
 
 {{/*
 Return the proper image name (for the init container volume-permissions image)
@@ -38,10 +39,24 @@ Create the name of the service account to use
 */}}
 {{- define "parse.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create -}}
-    {{ default (printf "%s-server" (include "common.names.fullname" .)) .Values.serviceAccount.name }}
+    {{ default (include "parse.server.fullname" .) .Values.serviceAccount.name }}
 {{- else -}}
     {{ default "default" .Values.serviceAccount.name }}
 {{- end -}}
+{{- end -}}
+
+{{/*
+Return the proper server fullname
+*/}}
+{{- define "parse.server.fullname" -}}
+{{- printf "%s-%s" (include "common.names.fullname" .) "server" | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
+Return the proper dashboard fullname
+*/}}
+{{- define "parse.dashboard.fullname" -}}
+{{- printf "%s-%s" (include "common.names.fullname" .) "dashboard" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*

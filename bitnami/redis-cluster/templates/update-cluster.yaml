@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -28,6 +28,7 @@ spec:
       {{- end }}
     spec:
       {{- include "redis-cluster.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.updateJob.automountServiceAccountToken }}
       {{- if .Values.updateJob.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.updateJob.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -49,7 +50,7 @@ spec:
       priorityClassName: {{ .Values.updateJob.priorityClassName }}
       {{- end }}
       {{- if .Values.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ include "redis-cluster.serviceAccountName" . }}
       {{- if .Values.updateJob.initContainers }}
@@ -60,7 +61,7 @@ spec:
           image: {{ include "redis-cluster.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -230,9 +231,14 @@ spec:
           {{- end }}
           {{- if .Values.updateJob.resources }}
           resources: {{- toYaml .Values.updateJob.resources | nindent 12 }}
+          {{- else if ne .Values.updateJob.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.updateJob.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if or .Values.tls.enabled .Values.updateJob.extraVolumeMounts }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             {{- if .Values.tls.enabled }}
             - name: redis-certificates
               mountPath: /opt/bitnami/redis/certs
@@ -245,6 +251,8 @@ spec:
       restartPolicy: OnFailure
       {{- if or .Values.tls.enabled .Values.updateJob.extraVolumes }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
       {{- if .Values.tls.enabled }}
         - name: redis-certificates
           secret:

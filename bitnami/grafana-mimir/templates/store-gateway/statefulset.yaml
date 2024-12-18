@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -38,6 +38,7 @@ spec:
     spec:
       serviceAccountName: {{ template "grafana-mimir.serviceAccountName" . }}
       {{- include "grafana-mimir.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.storeGateway.automountServiceAccountToken }}
       {{- if .Values.storeGateway.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.storeGateway.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -65,7 +66,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.storeGateway.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.storeGateway.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.storeGateway.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.storeGateway.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.storeGateway.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.storeGateway.terminationGracePeriodSeconds }}
@@ -94,8 +95,13 @@ spec:
           {{- end }}
           {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: data
               mountPath: {{ .Values.mimir.dataDir }}
         {{- end }}
@@ -104,7 +110,7 @@ spec:
           image: {{ template "grafana-mimir.image" . }}
           imagePullPolicy: {{ .Values.mimir.image.pullPolicy }}
           {{- if .Values.storeGateway.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.storeGateway.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.storeGateway.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -151,6 +157,8 @@ spec:
             {{- end }}
           {{- if .Values.storeGateway.resources }}
           resources: {{- toYaml .Values.storeGateway.resources | nindent 12 }}
+          {{- else if ne .Values.storeGateway.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.storeGateway.resourcesPreset) | nindent 12 }}
           {{- end }}
           ports:
             - name: http
@@ -164,8 +172,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.storeGateway.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.storeGateway.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.storeGateway.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /ready
+            tcpSocket:
               port: http
           {{- end }}
           {{- if .Values.storeGateway.customReadinessProbe }}
@@ -188,6 +195,9 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.storeGateway.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: mimir-config
               mountPath: {{ .Values.mimir.dataDir }}/conf
             - name: data
@@ -199,6 +209,8 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.storeGateway.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: mimir-config
           configMap:
             name: {{ template "grafana-mimir.mimir.configmapName" . }}

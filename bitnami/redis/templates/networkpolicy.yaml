@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -18,8 +18,11 @@ spec:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 6 }}
   policyTypes:
     - Ingress
-  {{- if or (eq .Values.architecture "replication") .Values.networkPolicy.extraEgress }}
     - Egress
+  {{- if .Values.networkPolicy.allowExternalEgress }}
+  egress:
+    - {}
+  {{- else }}
   egress:
     {{- if eq .Values.architecture "replication" }}
     # Allow dns resolution
@@ -76,7 +79,7 @@ spec:
     {{- if .Values.metrics.enabled }}
     # Allow prometheus scrapes for metrics
     - ports:
-        - port: 9121
+        - port: {{ .Values.metrics.containerPorts.http }}
       {{- if not .Values.networkPolicy.metrics.allowExternal }}
       from:
         {{- if or .Values.networkPolicy.metrics.ingressNSMatchLabels .Values.networkPolicy.metrics.ingressNSPodMatchLabels }}

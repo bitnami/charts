@@ -7,6 +7,10 @@ service:
   ports:
     http: 80
 readinessProbe:
-  initialDelaySeconds: 90
+  initialDelaySeconds: 120
 cronjobs:
-  enabled: false
+  archive:
+    enabled: false
+  taskScheduler:
+    enabled: false
+

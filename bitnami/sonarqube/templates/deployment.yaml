@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -7,7 +7,7 @@ apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ include "common.names.fullname" . }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
@@ -36,6 +36,7 @@ spec:
     spec:
       serviceAccountName: {{ include "sonarqube.serviceAccountName" . }}
       {{- include "sonarqube.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.automountServiceAccountToken }}
       {{- if .Values.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -60,10 +61,38 @@ spec:
       schedulerName: {{ .Values.schedulerName | quote }}
       {{- end }}
       {{- if .Values.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
-      {{- if or .Values.initContainers .Values.caCerts.enabled .Values.plugins.install .Values.sysctl.enabled (and .Values.volumePermissions.enabled .Values.persistence.enabled) }}
       initContainers:
+        - name: prepare-base-dir
+          image: {{ include "sonarqube.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.resources }}
+          resources: {{- toYaml .Values.resources | nindent 12 }}
+          {{- else if ne .Values.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          command:
+            - /bin/bash
+          args:
+            - -ec
+            - |
+              #!/bin/bash
+
+              . /opt/bitnami/scripts/liblog.sh
+
+              info "Copying base dir to empty dir"
+              # In order to not break the application functionality (such as upgrades or plugins) we need
+              # to make the base directory writable, so we need to copy it to an empty dir volume
+              cp -r --preserve=mode /opt/bitnami/sonarqube /emptydir/app-base-dir
+
+              info "Copy operation completed"
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /emptydir
         {{- if .Values.plugins.install }}
         - name: {{ printf "%s-install-plugins-initcontainer" (include "common.names.fullname" .) }}
           image: {{ include "sonarqube.plugins.image" . }}
@@ -77,8 +106,17 @@ spec:
             - name: provisioning
               mountPath: {{ .Values.provisioningFolder }}/extensions/plugins/
               subPath: extensions/plugins
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+          {{- if .Values.plugins.resources }}
           resources: {{- toYaml .Values.plugins.resources | nindent 12 }}
-          securityContext: {{- .Values.plugins.containerSecurityContext | toYaml | nindent 12 }}
+          {{- else if ne .Values.plugins.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.plugins.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.plugins.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.plugins.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
         {{- end }}
         {{- if .Values.caCerts.enabled }}
         - name:  {{ printf "%s-ca-certs-initcontainer" (include "common.names.fullname" .) }}
@@ -92,8 +130,17 @@ spec:
               subPath: certs
             - mountPath: /tmp/secrets/ca-certs
               name: ca-certs
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+          {{- if .Values.caCerts.resources }}
           resources: {{- toYaml .Values.caCerts.resources | nindent 12 }}
-          securityContext: {{- .Values.caCerts.containerSecurityContext | toYaml | nindent 12 }}
+          {{- else if ne .Values.caCerts.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.caCerts.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.caCerts.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.caCerts.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
         {{- end }}
         {{- if .Values.sysctl.enabled }}
         ## Image that performs the sysctl operation to modify Kernel settings (needed sometimes to avoid boot errors)
@@ -106,11 +153,13 @@ spec:
             - |
               {{- include "sonarqube.sysctl.ifLess" (dict "key" "vm.max_map_count" "value" "262144") | nindent 14 }}
               {{- include "sonarqube.sysctl.ifLess" (dict "key" "fs.file-max" "value" "65536") | nindent 14 }}
-          securityContext:
-            privileged: true
-            runAsUser: 0
+          {{- if .Values.sysctl.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.sysctl.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
           {{- if .Values.sysctl.resources }}
           resources: {{- toYaml .Values.sysctl.resources | nindent 12 }}
+          {{- else if ne .Values.sysctl.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.sysctl.resourcesPreset) | nindent 12 }}
           {{- end }}
         {{- end }}
         {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
@@ -124,26 +173,29 @@ spec:
             - |
               find /bitnami/sonarqube -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs -r chown -R {{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}
           {{- if .Values.volumePermissions.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.volumePermissions.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.volumePermissions.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: sonarqube
               mountPath: /bitnami/sonarqube
-              subPath: data
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
         {{- end }}
         {{- if .Values.initContainers }}
           {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
         {{- end }}
-      {{- end }}
       containers:
         - name: sonarqube
           image: {{ include "sonarqube.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           {{- if .Values.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -313,6 +365,8 @@ spec:
             {{- end }}
           {{- if .Values.resources }}
           resources: {{- toYaml .Values.resources | nindent 12 }}
+          {{- else if ne .Values.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.resourcesPreset) | nindent 12 }}
           {{- end }}
           ports:
             - name: http
@@ -324,8 +378,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /
+            tcpSocket:
               port: http
           {{- end }}
           {{- if .Values.customReadinessProbe }}
@@ -348,6 +401,12 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /opt/bitnami/sonarqube
+              subPath: app-base-dir
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - mountPath: /bitnami/sonarqube
               name: sonarqube
             {{- if or .Values.plugins.install .Values.caCerts.enabled }}
@@ -362,7 +421,7 @@ spec:
           image: {{ include "sonarqube.metrics.jmx.image" . }}
           imagePullPolicy: {{ .Values.metrics.jmx.image.pullPolicy | quote }}
           {{- if .Values.metrics.jmx.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.metrics.jmx.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.metrics.jmx.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -382,8 +441,13 @@ spec:
               containerPort: {{ .Values.metrics.jmx.containerPorts.metrics }}
           {{- if .Values.metrics.jmx.resources }}
           resources: {{- toYaml .Values.metrics.jmx.resources | nindent 12 }}
+          {{- else if ne .Values.metrics.jmx.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.metrics.jmx.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: jmx-config
               mountPath: /etc/jmx
         {{- end }}
@@ -391,6 +455,8 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         {{- if or .Values.plugins.install .Values.caCerts.enabled }}
         - name: provisioning
           emptyDir: {}

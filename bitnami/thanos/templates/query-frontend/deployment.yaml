@@ -1,15 +1,14 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- $query := (include "thanos.query.values" . | fromYaml) -}}
 {{- if .Values.queryFrontend.enabled }}
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: {{ include "common.names.fullname" . }}-query-frontend
-  namespace: {{ .Release.Namespace | quote }}
+  name: {{ include "thanos.query-frontend.fullname" . }}
+  namespace: {{ include "common.names.namespace" . }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: query-frontend
   {{- if .Values.commonAnnotations }}
@@ -19,6 +18,7 @@ spec:
   {{- if not .Values.queryFrontend.autoscaling.enabled }}
   replicas: {{ .Values.queryFrontend.replicaCount }}
   {{- end }}
+  revisionHistoryLimit: {{ .Values.queryFrontend.revisionHistoryLimit }}
   {{- if .Values.queryFrontend.updateStrategy }}
   strategy: {{- toYaml .Values.queryFrontend.updateStrategy | nindent 4 }}
   {{- end }}
@@ -33,7 +33,7 @@ spec:
       {{- if or .Values.queryFrontend.podAnnotations (include "thanos.queryFrontend.createConfigmap" .) }}
       annotations:
         {{- if (include "thanos.queryFrontend.createConfigmap" .) }}
-        checksum/query-frontend-configuration: {{ include (print $.Template.BasePath "/query-frontend/configmap.yaml") . | sha256sum }}
+        checksum/query-frontend-configuration: {{ include "thanos.queryFrontendConfigMap" . | sha256sum }}
         {{- end }}
         {{- if .Values.queryFrontend.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.podAnnotations "context" $) | nindent 8 }}
@@ -41,7 +41,7 @@ spec:
       {{- end }}
     spec:
       {{- include "thanos.imagePullSecrets" . | nindent 6 }}
-      serviceAccountName: {{ include "thanos.serviceAccountName" (dict "component" "query-frontend" "context" $) }}
+      serviceAccountName: {{ include "thanos.query-frontend.serviceAccountName" . }}
       automountServiceAccountToken: {{ .Values.queryFrontend.automountServiceAccountToken }}
       {{- if .Values.queryFrontend.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.hostAliases "context" $) | nindent 8 }}
@@ -73,7 +73,7 @@ spec:
       schedulerName: {{ .Values.queryFrontend.schedulerName }}
       {{- end }}
       {{- if .Values.queryFrontend.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.queryFrontend.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.queryFrontend.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.queryFrontend.topologySpreadConstraints }}
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.topologySpreadConstraints "context" $) | nindent 8 }}
@@ -89,7 +89,7 @@ spec:
           image: {{ include "thanos.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.queryFrontend.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.queryFrontend.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.queryFrontend.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.queryFrontend.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.command "context" $) | nindent 12 }}
@@ -101,8 +101,8 @@ spec:
             - query-frontend
             - --log.level={{ .Values.queryFrontend.logLevel }}
             - --log.format={{ .Values.queryFrontend.logFormat }}
-            - --http-address=0.0.0.0:10902
-            - --query-frontend.downstream-url=http://{{ include "common.names.fullname" . }}-query:{{ if $query.service.http }}{{ coalesce $query.service.ports.http $query.service.http.port }}{{ else }}{{ $query.service.ports.http }}{{ end }}
+            - --http-address=0.0.0.0:{{ .Values.queryFrontend.containerPorts.http }}
+            - --query-frontend.downstream-url={{ ternary "https" "http" .Values.https.enabled }}://{{ include "thanos.query.fullname" . }}:{{ .Values.query.service.ports.http }}
             {{- if (include "thanos.httpConfigEnabled" .) }}
             - --http.config=/conf/http/http-config.yml
             {{- end }}
@@ -129,7 +129,7 @@ spec:
           {{- end }}
           ports:
             - name: http
-              containerPort: 10902
+              containerPort: {{ .Values.queryFrontend.containerPorts.http }}
               protocol: TCP
           {{- if .Values.queryFrontend.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.customLivenessProbe "context" $) | nindent 12 }}
@@ -178,6 +178,8 @@ spec:
           {{- end }}
           {{- if .Values.queryFrontend.resources }}
           resources: {{- toYaml .Values.queryFrontend.resources | nindent 12 }}
+          {{- else if ne .Values.queryFrontend.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.queryFrontend.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             {{- if or .Values.queryFrontend.config .Values.queryFrontend.existingConfigmap }}

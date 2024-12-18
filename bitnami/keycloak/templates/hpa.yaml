@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -46,4 +46,21 @@ spec:
           averageUtilization: {{ .Values.autoscaling.targetMemory }}
         {{- end }}
     {{- end }}
+  {{- if or .Values.autoscaling.behavior.scaleDown.policies .Values.autoscaling.behavior.scaleUp.policies }}
+  behavior:
+    {{- if .Values.autoscaling.behavior.scaleDown.policies }}
+    scaleDown:
+      stabilizationWindowSeconds: {{ .Values.autoscaling.behavior.scaleDown.stabilizationWindowSeconds }}
+      selectPolicy: {{ .Values.autoscaling.behavior.scaleDown.selectPolicy }}
+      policies:
+        {{- toYaml .Values.autoscaling.behavior.scaleDown.policies | nindent 8 }}
+    {{- end }}
+    {{- if .Values.autoscaling.behavior.scaleUp.policies }}
+    scaleUp:
+      stabilizationWindowSeconds: {{ .Values.autoscaling.behavior.scaleUp.stabilizationWindowSeconds }}
+      selectPolicy: {{ .Values.autoscaling.behavior.scaleUp.selectPolicy }}
+      policies:
+       {{- toYaml .Values.autoscaling.behavior.scaleUp.policies | nindent 8 }}
+    {{- end }}
+  {{- end }}
 {{- end }}

@@ -1,10 +1,10 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
 {{- if and  (not .Values.daemonset.enable)  .Values.autoscaling.hpa.enabled  }}
-apiVersion: {{ include "common.capabilities.hpa.apiVersion" . }}
+apiVersion: {{ include "common.capabilities.hpa.apiVersion" ( dict "context" $ ) }}
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ include "common.names.fullname" . }}

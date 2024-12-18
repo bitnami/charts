@@ -1,0 +1,52 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- $replicaCount := int .Values.controller.replicaCount }}
+{{- if and .Values.kraft.enabled (gt $replicaCount 0) .Values.controller.autoscaling.hpa.enabled }}
+apiVersion: {{ include "common.capabilities.hpa.apiVersion" ( dict "context" $ ) }}
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ printf "%s-controller" (include "common.names.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: controller
+    app.kubernetes.io/part-of: kafka
+  {{- if or .Values.controller.autoscaling.hpa.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.controller.autoscaling.hpa.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  scaleTargetRef:
+    apiVersion: {{ template "common.capabilities.statefulset.apiVersion" . }}
+    kind: StatefulSet
+    name: {{ printf "%s-controller" (include "common.names.fullname" .) }}
+  minReplicas: {{ .Values.controller.autoscaling.hpa.minReplicas }}
+  maxReplicas: {{ .Values.controller.autoscaling.hpa.maxReplicas }}
+  metrics:
+    {{- if .Values.controller.autoscaling.hpa.targetCPU }}
+    - type: Resource
+      resource:
+        name: cpu
+        {{- if semverCompare "<1.23-0" (include "common.capabilities.kubeVersion" .) }}
+        targetAverageUtilization: {{ .Values.controller.autoscaling.hpa.targetCPU }}
+        {{- else }}
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.controller.autoscaling.hpa.targetCPU }}
+        {{- end }}
+    {{- end }}
+    {{- if .Values.controller.autoscaling.hpa.targetMemory }}
+    - type: Resource
+      resource:
+        name: memory
+        {{- if semverCompare "<1.23-0" (include "common.capabilities.kubeVersion" .) }}
+        targetAverageUtilization: {{ .Values.controller.autoscaling.hpa.targetMemory }}
+        {{- else }}
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.controller.autoscaling.hpa.targetMemory }}
+        {{- end }}
+    {{- end }}
+{{- end }}

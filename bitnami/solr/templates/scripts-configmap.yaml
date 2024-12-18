@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -7,7 +7,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ printf "%s-scripts" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: solr
   {{- if .Values.commonAnnotations }}
@@ -49,5 +49,5 @@ data:
     fi
     {{- end }}
     # Use hostname instead of IP to register in ZooKeeper
-    export SOLR_HOST="${MY_POD_NAME}.{{ printf "%s-headless" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
+    export SOLR_HOST="${MY_POD_NAME}.{{ printf "%s-headless" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}"
     /opt/bitnami/scripts/solr/entrypoint.sh /opt/bitnami/scripts/solr/run.sh

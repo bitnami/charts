@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -8,7 +8,7 @@ apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ include "argocd.dex" . }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.dex.image "chart" .Chart ) ) }}
   {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
@@ -35,6 +35,7 @@ spec:
     spec:
       serviceAccountName: {{ include "argocd.dex.serviceAccountName" . }}
       {{- include "argocd.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.dex.automountServiceAccountToken }}
       {{- if .Values.dex.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.dex.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -68,7 +69,7 @@ spec:
       runtimeClassName: {{ .Values.dex.runtimeClassName }}
       {{- end }}
       {{- if .Values.dex.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.dex.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.dex.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       initContainers:
         {{- if .Values.volumePermissions.enabled }}
@@ -85,12 +86,16 @@ spec:
             runAsUser: {{ .Values.volumePermissions.containerSecurityContext.runAsUser }}
           {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - name: static-files
+            - name: empty-dir
               mountPath: /shared
-            - name: tmp-dir
+              subPath: app-static-dir
+            - name: empty-dir
               mountPath: /tmp
+              subPath: tmp-dir
         {{- end }}
         - name: copyutil
           image: {{ include "argocd.image" . }}
@@ -99,7 +104,7 @@ spec:
           resources:  {{- toYaml .Values.dex.resources | nindent 12 }}
           {{- end }}
           {{- if .Values.dex.containerSecurityContext }}
-          securityContext: {{- omit .Values.dex.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.dex.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           command:
             - cp
@@ -107,8 +112,12 @@ spec:
             - /opt/bitnami/argo-cd/bin/argocd
             - /shared/argocd-dex
           volumeMounts:
-            - mountPath: /shared
-              name: static-files
+            - name: empty-dir
+              mountPath: /shared
+              subPath: app-static-dir
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
         {{- if .Values.dex.initContainers }}
           {{- include "common.tplvalues.render" (dict "value" .Values.dex.initContainers "context" $) | nindent 8 }}
         {{- end }}
@@ -120,7 +129,7 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.dex.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.dex.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.dex.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.dex.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.dex.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.dex.command "context" $) | nindent 12 }}
@@ -162,6 +171,8 @@ spec:
             {{- end }}
           {{- if .Values.dex.resources }}
           resources: {{- toYaml .Values.dex.resources | nindent 12 }}
+          {{- else if ne .Values.dex.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.dex.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if .Values.dex.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.dex.customStartupProbe "context" $) | nindent 12 }}
@@ -203,10 +214,12 @@ spec:
             failureThreshold: {{ .Values.dex.readinessProbe.failureThreshold }}
           {{- end }}
           volumeMounts:
-            - name: static-files
+            - name: empty-dir
               mountPath: /shared
-            - name: tmp-dir
+              subPath: app-static-dir
+            - name: empty-dir
               mountPath: /tmp
+              subPath: tmp-dir
           {{- if .Values.dex.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.dex.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -214,9 +227,7 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.dex.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
-        - name: tmp-dir
-          emptyDir: {}
-        - name: static-files
+        - name: empty-dir
           emptyDir: {}
         {{- if .Values.dex.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.dex.extraVolumes "context" $) | nindent 8 }}

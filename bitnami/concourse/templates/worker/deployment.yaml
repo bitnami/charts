@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -9,7 +9,7 @@ apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ template "concourse.worker.fullname" . }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: worker
   {{- if .Values.commonAnnotations }}
@@ -34,6 +34,7 @@ spec:
     spec:
       serviceAccountName: {{ template "concourse.worker.serviceAccountName" . }}
       {{- include "concourse.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.worker.automountServiceAccountToken }}
       {{- if .Values.worker.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.worker.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -64,7 +65,7 @@ spec:
       terminationGracePeriodSeconds: {{ .Values.worker.terminationGracePeriodSeconds }}
       {{- end }}
       {{- if .Values.worker.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.worker.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.worker.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       initContainers:
         {{- if .Values.worker.initContainers }}
@@ -78,7 +79,7 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.worker.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.worker.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.worker.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.worker.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -179,6 +180,8 @@ spec:
             {{- end }}
           {{- if .Values.worker.resources }}
           resources: {{- toYaml .Values.worker.resources | nindent 12 }}
+          {{- else if ne .Values.worker.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.worker.resourcesPreset) | nindent 12 }}
           {{- end }}
           ports:
             - name: http
@@ -197,8 +200,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.worker.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.worker.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.worker.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /
+            tcpSocket:
               port: healthz
           {{- end }}
           {{- if .Values.worker.customReadinessProbe }}
@@ -211,8 +213,16 @@ spec:
           {{- end }}
           {{- end }}
           volumeMounts:
-            - name: concourse-work-dir
+            # In this kind of deployment, the state is ephemeral
+            - name: empty-dir
               mountPath: /bitnami/concourse/workdir
+              subPath: app-work-dir
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /var/run/containerd
+              subPath: containerd-dir
             - name: concourse-keys
               mountPath: /bitnami/concourse/concourse-keys
               readOnly: true
@@ -223,8 +233,7 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.worker.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
-        # In this kind of deployment, the state is ephemeral
-        - name: concourse-work-dir
+        - name: empty-dir
           emptyDir: {}
         - name: concourse-keys
           secret:

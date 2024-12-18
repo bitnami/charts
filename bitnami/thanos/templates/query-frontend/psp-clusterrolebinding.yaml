@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -7,7 +7,7 @@ SPDX-License-Identifier: APACHE-2.0
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRoleBinding
 metadata:
-  name: {{ include "common.names.fullname" . }}-query-frontend
+  name: {{ include "thanos.query-frontend.fullname" . }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: query-frontend
   {{- if .Values.commonAnnotations }}
@@ -15,10 +15,10 @@ metadata:
   {{- end }}
 roleRef:
   kind: ClusterRole
-  name: {{ include "common.names.fullname" . }}-query-frontend
+  name: {{ include "thanos.query-frontend.fullname" . }}
   apiGroup: rbac.authorization.k8s.io
 subjects:
   - kind: ServiceAccount
-    name: {{ include "thanos.serviceAccountName" (dict "component" "query-frontend" "context" $) }}
-    namespace: {{ .Release.Namespace | quote }}
+    name: {{ include "thanos.query-frontend.serviceAccountName" . }}
+    namespace: {{ include "common.names.namespace" . }}
 {{- end }}

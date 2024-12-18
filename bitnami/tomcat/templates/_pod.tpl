@@ -1,5 +1,5 @@
 {{/*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -8,6 +8,7 @@ Pod Spec
 */}}
 {{- define "tomcat.pod" -}}
 {{- include "tomcat.imagePullSecrets" . }}
+automountServiceAccountToken: {{ .Values.automountServiceAccountToken }}
 {{- if .Values.hostAliases }}
 hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 2 }}
 {{- end }}
@@ -20,6 +21,7 @@ affinity:
   podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "customLabels" $podLabels "context" $) | nindent 4 }}
   nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 4 }}
 {{- end }}
+serviceAccountName: {{ include "tomcat.serviceAccountName" . }}
 {{- if .Values.schedulerName }}
 schedulerName: {{ .Values.schedulerName | quote }}
 {{- end }}
@@ -30,7 +32,7 @@ nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.nodeS
 tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" .) | nindent 2 }}
 {{- end }}
 {{- if .Values.podSecurityContext.enabled }}
-securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 2 }}
+securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.podSecurityContext "context" $) | nindent 2 }}
 {{- end }}
 {{- if .Values.topologySpreadConstraints }}
 topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.topologySpreadConstraints "context" $) | nindent 2 }}
@@ -49,6 +51,8 @@ initContainers:
       runAsUser: 0
     {{- if .Values.volumePermissions.resources }}
     resources: {{- toYaml .Values.volumePermissions.resources | nindent 6 }}
+    {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+    resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 6 }}
     {{- end }}
     volumeMounts:
       - name: data
@@ -62,7 +66,7 @@ containers:
     image: {{ template "tomcat.image" . }}
     imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
     {{- if .Values.containerSecurityContext.enabled }}
-    securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 6 }}
+    securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 6 }}
     {{- end }}
     {{- if .Values.command }}
     command: {{- include "common.tplvalues.render" (dict "value" .Values.command "context" $) | nindent 6 }}
@@ -74,14 +78,19 @@ containers:
       - name: BITNAMI_DEBUG
         value: {{ ternary "true" "false" .Values.image.debug | quote }}
       - name: TOMCAT_USERNAME
-        value: {{ .Values.tomcatUsername | quote }}
+        valueFrom:
+          secretKeyRef:
+            name: {{ include "tomcat.secretName" . }}
+            key: {{ include "tomcat.adminUsernameKey" . }}
       - name: TOMCAT_PASSWORD
         valueFrom:
           secretKeyRef:
-            name: {{ template "common.names.fullname" . }}
-            key: tomcat-password
+            name: {{ include "tomcat.secretName" . }}
+            key: {{ include "tomcat.adminPasswordKey" . }}
       - name: TOMCAT_ALLOW_REMOTE_MANAGEMENT
         value: {{ .Values.tomcatAllowRemoteManagement | quote }}
+      - name: TOMCAT_HTTP_PORT_NUMBER
+        value: {{ .Values.containerPorts.http | quote }}
       {{- if or .Values.catalinaOpts .Values.metrics.jmx.enabled }}
       - name: CATALINA_OPTS
         value: {{ include "tomcat.catalinaOpts" . | quote }}
@@ -113,8 +122,7 @@ containers:
     livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 6 }}
     {{- else if .Values.livenessProbe.enabled }}
     livenessProbe:
-      httpGet:
-        path: /
+      tcpSocket:
         port: http
         {{- include "common.tplvalues.render" (dict "value" (omit .Values.livenessProbe "enabled") "context" $) | nindent 6 }}
     {{- end }}
@@ -138,10 +146,27 @@ containers:
     {{- end }}
     {{- if .Values.resources }}
     resources: {{- toYaml .Values.resources | nindent 6 }}
+    {{- else if ne .Values.resourcesPreset "none" }}
+    resources: {{- include "common.resources.preset" (dict "type" .Values.resourcesPreset) | nindent 6 }}
     {{- end }}
     volumeMounts:
       - name: data
         mountPath: /bitnami/tomcat
+      - name: empty-dir
+        mountPath: /opt/bitnami/tomcat/temp
+        subPath: app-tmp-dir
+      - name: empty-dir
+        mountPath: /opt/bitnami/tomcat/conf
+        subPath: app-conf-dir
+      - name: empty-dir
+        mountPath: /opt/bitnami/tomcat/logs
+        subPath: app-logs-dir
+      - name: empty-dir
+        mountPath: /opt/bitnami/tomcat/work
+        subPath: app-work-dir
+      - name: empty-dir
+        mountPath: /tmp
+        subPath: tmp-dir
       {{- if .Values.extraVolumeMounts }}
       {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 6 }}
       {{- end }}
@@ -150,7 +175,7 @@ containers:
     image: {{ template "tomcat.metrics.jmx.image" . }}
     imagePullPolicy: {{ .Values.metrics.jmx.image.pullPolicy | quote }}
     {{- if .Values.metrics.jmx.containerSecurityContext.enabled }}
-    securityContext: {{- omit .Values.metrics.jmx.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+    securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.metrics.jmx.containerSecurityContext "context" $) | nindent 12 }}
     {{- end }}
     command:
       - java
@@ -168,15 +193,22 @@ containers:
     {{- end }}
     {{- if .Values.metrics.jmx.resources }}
     resources: {{- toYaml .Values.metrics.jmx.resources | nindent 6 }}
+    {{- else if ne .Values.metrics.jmx.resourcesPreset "none" }}
+    resources: {{- include "common.resources.preset" (dict "type" .Values.metrics.jmx.resourcesPreset) | nindent 6 }}
     {{- end }}
     volumeMounts:
       - name: jmx-config
         mountPath: /etc/jmx-tomcat
+      - name: empty-dir
+        mountPath: /tmp
+        subPath: tmp-dir
   {{- end }}
   {{- if .Values.sidecars }}
   {{- include "common.tplvalues.render" ( dict "value" .Values.sidecars "context" $) | nindent 2 }}
   {{- end }}
 volumes:
+  - name: empty-dir
+    emptyDir: {}
   {{- if (eq .Values.deployment.type "deployment") }}
   {{- if and .Values.persistence.enabled }}
   - name: data

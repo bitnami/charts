@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -10,7 +10,7 @@ Generated from https://github.com/thanos-io/thanos/blob/main/examples/alerts/ale
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
-  name: {{ template "common.names.fullname" . }}-query
+  name: {{ include "thanos.query.fullname" . }}
   namespace: {{ default .Release.Namespace .Values.metrics.prometheusRule.namespace | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- if .Values.metrics.prometheusRule.additionalLabels }}
@@ -34,9 +34,9 @@ spec:
         summary: Thanos Query is failing to handle requests.
       expr: |
         (
-          sum by (job) (rate(http_requests_total{code=~"5..", job=~".*thanos-query.*", handler="query"}[5m]))
+          sum by (job) (rate(http_requests_total{code=~"5..", job=~".*{{ include "thanos.query.fullname" . }}.*", handler="query"}[5m]))
         /
-          sum by (job) (rate(http_requests_total{job=~".*thanos-query.*", handler="query"}[5m]))
+          sum by (job) (rate(http_requests_total{job=~".*{{ include "thanos.query.fullname" . }}.*", handler="query"}[5m]))
         ) * 100 > 5
       for: 5m
       labels:
@@ -56,9 +56,9 @@ spec:
         summary: Thanos Query is failing to handle requests.
       expr: |
         (
-          sum by (job) (rate(http_requests_total{code=~"5..", job=~".*thanos-query.*", handler="query_range"}[5m]))
+          sum by (job) (rate(http_requests_total{code=~"5..", job=~".*{{ include "thanos.query.fullname" . }}.*", handler="query_range"}[5m]))
         /
-          sum by (job) (rate(http_requests_total{job=~".*thanos-query.*", handler="query_range"}[5m]))
+          sum by (job) (rate(http_requests_total{job=~".*{{ include "thanos.query.fullname" . }}.*", handler="query_range"}[5m]))
         ) * 100 > 5
       for: 5m
       labels:
@@ -78,9 +78,9 @@ spec:
         summary: Thanos Query is failing to handle requests.
       expr: |
         (
-          sum by (job) (rate(grpc_server_handled_total{grpc_code=~"Unknown|ResourceExhausted|Internal|Unavailable|DataLoss|DeadlineExceeded", job=~".*thanos-query.*"}[5m]))
+          sum by (job) (rate(grpc_server_handled_total{grpc_code=~"Unknown|ResourceExhausted|Internal|Unavailable|DataLoss|DeadlineExceeded", job=~".*{{ include "thanos.query.fullname" . }}.*"}[5m]))
         /
-          sum by (job) (rate(grpc_server_started_total{job=~".*thanos-query.*"}[5m]))
+          sum by (job) (rate(grpc_server_started_total{job=~".*{{ include "thanos.query.fullname" . }}.*"}[5m]))
         * 100 > 5
         )
       for: 5m
@@ -101,9 +101,9 @@ spec:
         summary: Thanos Query is failing to send requests.
       expr: |
         (
-          sum by (job) (rate(grpc_client_handled_total{grpc_code!="OK", job=~".*thanos-query.*"}[5m]))
+          sum by (job) (rate(grpc_client_handled_total{grpc_code!="OK", job=~".*{{ include "thanos.query.fullname" . }}.*"}[5m]))
         /
-          sum by (job) (rate(grpc_client_started_total{job=~".*thanos-query.*"}[5m]))
+          sum by (job) (rate(grpc_client_started_total{job=~".*{{ include "thanos.query.fullname" . }}.*"}[5m]))
         ) * 100 > 5
       for: 5m
       labels:
@@ -123,9 +123,9 @@ spec:
         summary: Thanos Query is having high number of DNS failures.
       expr: |
         (
-          sum by (job) (rate(thanos_query_store_apis_dns_failures_total{job=~".*thanos-query.*"}[5m]))
+          sum by (job) (rate(thanos_query_store_apis_dns_failures_total{job=~".*{{ include "thanos.query.fullname" . }}.*"}[5m]))
         /
-          sum by (job) (rate(thanos_query_store_apis_dns_lookups_total{job=~".*thanos-query.*"}[5m]))
+          sum by (job) (rate(thanos_query_store_apis_dns_lookups_total{job=~".*{{ include "thanos.query.fullname" . }}.*"}[5m]))
         ) * 100 > 1
       for: 15m
       labels:
@@ -145,9 +145,9 @@ spec:
         summary: Thanos Query has high latency for queries.
       expr: |
         (
-          histogram_quantile(0.99, sum by (job, le) (rate(http_request_duration_seconds_bucket{job=~".*thanos-query.*", handler="query"}[5m]))) > 40
+          histogram_quantile(0.99, sum by (job, le) (rate(http_request_duration_seconds_bucket{job=~".*{{ include "thanos.query.fullname" . }}.*", handler="query"}[5m]))) > 40
         and
-          sum by (job) (rate(http_request_duration_seconds_bucket{job=~".*thanos-query.*", handler="query"}[5m])) > 0
+          sum by (job) (rate(http_request_duration_seconds_bucket{job=~".*{{ include "thanos.query.fullname" . }}.*", handler="query"}[5m])) > 0
         )
       for: 10m
       labels:
@@ -167,9 +167,9 @@ spec:
         summary: Thanos Query has high latency for queries.
       expr: |
         (
-          histogram_quantile(0.99, sum by (job, le) (rate(http_request_duration_seconds_bucket{job=~".*thanos-query.*", handler="query_range"}[5m]))) > 90
+          histogram_quantile(0.99, sum by (job, le) (rate(http_request_duration_seconds_bucket{job=~".*{{ include "thanos.query.fullname" . }}.*", handler="query_range"}[5m]))) > 90
         and
-          sum by (job) (rate(http_request_duration_seconds_count{job=~".*thanos-query.*", handler="query_range"}[5m])) > 0
+          sum by (job) (rate(http_request_duration_seconds_count{job=~".*{{ include "thanos.query.fullname" . }}.*", handler="query_range"}[5m])) > 0
         )
       for: 10m
       labels:
@@ -184,7 +184,7 @@ spec:
         {{- if .Values.commonAnnotations }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
         {{- end }}
-        description: Thanos Query {{`{{`}} $labels.job {{`}}`}} has been overloaded for more than 15 minutes. This may be a symptom of excessive simultanous complex requests, low performance of the Prometheus API, or failures within these components. Assess the health of the Thanos query instances, the connnected Prometheus instances, look for potential senders of these requests and then contact support.
+        description: Thanos Query {{`{{`}} $labels.job {{`}}`}} has been overloaded for more than 15 minutes. This may be a symptom of excessive simultaneous complex requests, low performance of the Prometheus API, or failures within these components. Assess the health of the Thanos query instances, the connected Prometheus instances, look for potential senders of these requests and then contact support.
         runbook_url: {{ .Values.metrics.prometheusRule.runbookUrl }}thanosqueryoverload
         summary: Thanos query reaches its maximum capacity serving concurrent requests.
       expr: |

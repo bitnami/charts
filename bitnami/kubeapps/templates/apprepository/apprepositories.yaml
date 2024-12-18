@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -41,11 +41,11 @@ spec:
               value: {{ $.Values.apprepository.initialReposProxy.noProxy }}
       {{- end }}
       {{- if $.Values.apprepository.containerSecurityContext.enabled }}
-          securityContext: {{- omit $.Values.apprepository.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" $.Values.apprepository.containerSecurityContext "context" $) | nindent 12 }}
       {{- end }}
       {{- end }}
       {{- if $.Values.apprepository.podSecurityContext.enabled }}
-      securityContext: {{- omit $.Values.apprepository.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" $.Values.apprepository.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .nodeSelector }}
       nodeSelector: {{- toYaml .nodeSelector | nindent 8 }}

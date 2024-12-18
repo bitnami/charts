@@ -1,22 +1,24 @@
 {{/*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
 {{/* vim: set filetype=mustache: */}}
 {{/*
-Return the proper image name
-{{ include "common.images.image" ( dict "imageRoot" .Values.path.to.the.image "global" .Values.global ) }}
+Return the proper image name.
+If image tag and digest are not defined, termination fallbacks to chart appVersion.
+{{ include "common.images.image" ( dict "imageRoot" .Values.path.to.the.image "global" .Values.global "chart" .Chart ) }}
 */}}
 {{- define "common.images.image" -}}
-{{- $registryName := .imageRoot.registry -}}
+{{- $registryName := default .imageRoot.registry ((.global).imageRegistry) -}}
 {{- $repositoryName := .imageRoot.repository -}}
 {{- $separator := ":" -}}
 {{- $termination := .imageRoot.tag | toString -}}
-{{- if .global }}
-    {{- if .global.imageRegistry }}
-     {{- $registryName = .global.imageRegistry -}}
-    {{- end -}}
+
+{{- if not .imageRoot.tag }}
+  {{- if .chart }}
+    {{- $termination = .chart.AppVersion | toString -}}
+  {{- end -}}
 {{- end -}}
 {{- if .imageRoot.digest }}
     {{- $separator = "@" -}}
@@ -36,14 +38,12 @@ Return the proper Docker Image Registry Secret Names (deprecated: use common.ima
 {{- define "common.images.pullSecrets" -}}
   {{- $pullSecrets := list }}
 
-  {{- if .global }}
-    {{- range .global.imagePullSecrets -}}
-      {{- if kindIs "map" . -}}
-        {{- $pullSecrets = append $pullSecrets .name -}}
-      {{- else -}}
-        {{- $pullSecrets = append $pullSecrets . -}}
-      {{- end }}
-    {{- end -}}
+  {{- range ((.global).imagePullSecrets) -}}
+    {{- if kindIs "map" . -}}
+      {{- $pullSecrets = append $pullSecrets .name -}}
+    {{- else -}}
+      {{- $pullSecrets = append $pullSecrets . -}}
+    {{- end }}
   {{- end -}}
 
   {{- range .images -}}
@@ -56,7 +56,7 @@ Return the proper Docker Image Registry Secret Names (deprecated: use common.ima
     {{- end -}}
   {{- end -}}
 
-  {{- if (not (empty $pullSecrets)) }}
+  {{- if (not (empty $pullSecrets)) -}}
 imagePullSecrets:
     {{- range $pullSecrets | uniq }}
   - name: {{ . }}
@@ -72,13 +72,11 @@ Return the proper Docker Image Registry Secret Names evaluating values as templa
   {{- $pullSecrets := list }}
   {{- $context := .context }}
 
-  {{- if $context.Values.global }}
-    {{- range $context.Values.global.imagePullSecrets -}}
-      {{- if kindIs "map" . -}}
-        {{- $pullSecrets = append $pullSecrets (include "common.tplvalues.render" (dict "value" .name "context" $context)) -}}
-      {{- else -}}
-        {{- $pullSecrets = append $pullSecrets (include "common.tplvalues.render" (dict "value" . "context" $context)) -}}
-      {{- end -}}
+  {{- range (($context.Values.global).imagePullSecrets) -}}
+    {{- if kindIs "map" . -}}
+      {{- $pullSecrets = append $pullSecrets (include "common.tplvalues.render" (dict "value" .name "context" $context)) -}}
+    {{- else -}}
+      {{- $pullSecrets = append $pullSecrets (include "common.tplvalues.render" (dict "value" . "context" $context)) -}}
     {{- end -}}
   {{- end -}}
 
@@ -92,7 +90,7 @@ Return the proper Docker Image Registry Secret Names evaluating values as templa
     {{- end -}}
   {{- end -}}
 
-  {{- if (not (empty $pullSecrets)) }}
+  {{- if (not (empty $pullSecrets)) -}}
 imagePullSecrets:
     {{- range $pullSecrets | uniq }}
   - name: {{ . }}

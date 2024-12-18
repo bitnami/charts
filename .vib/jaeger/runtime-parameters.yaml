@@ -1,40 +1,20 @@
 query:
-  service:
-    type: LoadBalancer
-    ports:
-      admin: 16688
-      api: 80
-collector:
-  service:
-    ports:
-      admin: 14270
-agent:
-  service:
-    ports:
-      admin: 14272
-  containerPorts:
-    config: 5779
-    admin: 14272
-  podSecurityContext:
-    enabled: true
-    fsGroup: 1002
-  containerSecurityContext:
-    enabled: true
-    runAsUser: 1002
-  serviceAccount:
-    create: true
-    automountServiceAccountToken: true
-  sidecars:
+  sidecars: |-
     - name: hotrod-example
-      image: davidbhlm/example-hotrod:1.39
-      args:
-        - all
+      image: jaegertracing/example-hotrod:latest
+      args: ['all']
+      env:
+        - name: OTEL_EXPORTER_OTLP_ENDPOINT
+          value: http://jaeger-collector:4318
       securityContext:
         runAsNonRoot: true
         privileged: false
         allowPrivilegeEscalation: false
+        {{- if not (.Capabilities.APIVersions.Has "security.openshift.io/v1") }}
+        runAsUser: 1001
+        {{- end }}
         capabilities:
-          drop: ["ALL"]
+          drop: [ "ALL" ]
         seccompProfile:
           type: "RuntimeDefault"
     - name: trace-generator
@@ -54,10 +34,36 @@ agent:
         privileged: false
         allowPrivilegeEscalation: false
         capabilities:
-          drop: ["ALL"]
+          drop: [ "ALL" ]
         seccompProfile:
           type: "RuntimeDefault"
-
+  service:
+    type: LoadBalancer
+    ports:
+      admin: 16688
+      api: 80
+collector:
+  service:
+    ports:
+      admin: 14270
+  containerPorts:
+    admin: 14771
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1002
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1002
+  serviceAccount:
+    create: true
+    automountServiceAccountToken: true
+  extraVolumes:
+    - name: empty-dir
+      emptyDir: {}
+  extraVolumeMounts:
+    - name: empty-dir
+      mountPath: /tmp
+      subPath: tmp-dir
 cassandra:
   enabled: true
   keyspace: bitnami_test_jaeger

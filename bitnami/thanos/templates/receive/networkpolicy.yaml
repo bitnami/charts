@@ -1,0 +1,126 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.receive.enabled .Values.receive.networkPolicy.enabled }}
+kind: NetworkPolicy
+apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
+metadata:
+  name: {{ template "thanos.receive.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: receive
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list  .Values.receive.podLabels .Values.commonLabels ) "context" . ) }}
+  podSelector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/component: receive
+  policyTypes:
+    - Ingress
+    - Egress
+  {{- if .Values.receive.networkPolicy.allowExternalEgress }}
+  egress:
+    - {}
+  {{- else }}
+  egress:
+    # Allow dns resolution
+    - ports:
+        - port: 53
+          protocol: UDP
+        - port: 53
+          protocol: TCP
+    - ports:
+        - port: {{ .Values.receive.containerPorts.http }}
+        - port: {{ .Values.receive.service.ports.http }}
+        - port: {{ .Values.receive.containerPorts.grpc }}
+        - port: {{ .Values.receive.service.ports.grpc }}
+    # Communicate with other receive instances via headless service
+    - ports:
+        - port: {{ .Values.receive.containerPorts.http }}
+        - port: {{ .Values.receive.containerPorts.grpc }}
+        - port: {{ .Values.receive.containerPorts.remote }}
+      to:
+        - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 14 }}
+              {{- if eq .Values.receive.mode "dual-mode" }}
+              app.kubernetes.io/component: receive-distributor
+              {{ else }}
+              app.kubernetes.io/component: receive
+              {{ end }}
+    {{- if .Values.minio.enabled }}
+    # Communicate with minio
+    - ports:
+        - port: {{ .Values.minio.service.ports.api }}
+        - port: {{ .Values.minio.service.ports.api }}
+      to: 
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: minio
+              app.kubernetes.io/instance: {{ .Release.Name }}            
+    {{- end }}
+    {{- if .Values.queryFrontend.enabled }}
+    # Communicate with query-frontend
+    - ports:
+        - port: {{ .Values.queryFrontend.service.ports.http }}
+        - port: {{ .Values.queryFrontend.containerPorts.http }}
+      to:
+        - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 14 }}
+              app.kubernetes.io/component: query-frontend
+
+    {{- end }}
+    {{- if .Values.query.enabled }}
+    # Communicate with query
+    - ports:
+        - port: {{ .Values.query.service.ports.http }}
+        - port: {{ .Values.query.containerPorts.http }}
+        - port: {{ .Values.query.serviceGrpc.ports.grpc }}
+        - port: {{ .Values.query.containerPorts.grpc }}
+      to:
+        - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 14 }}
+              app.kubernetes.io/component: query
+
+    {{- end }}
+    {{- if .Values.receive.networkPolicy.extraEgress }}
+    {{- include "common.tplvalues.render" ( dict "value"  .Values.receive.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+  ingress:
+    - ports:
+        - port: {{ .Values.receive.containerPorts.http }}
+        - port: {{ .Values.receive.service.ports.http }}
+        - port: {{ .Values.receive.containerPorts.grpc }}
+        - port: {{ .Values.receive.service.ports.grpc }}
+        - port: {{ .Values.receive.containerPorts.remote }}
+        - port: {{ .Values.receive.service.ports.remote }}
+      {{- if not  .Values.receive.networkPolicy.allowExternal }}
+      from:
+        - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
+        - podSelector:
+            matchLabels:
+              {{ template "thanos.receive.fullname" . }}-client: "true"
+        {{- if .Values.receive.networkPolicy.ingressNSMatchLabels }}
+        - namespaceSelector:
+            matchLabels:
+              {{- range $key, $value := .Values.receive.networkPolicy.ingressNSMatchLabels }}
+              {{ $key | quote }}: {{ $value | quote }}
+              {{- end }}
+          {{- if .Values.receive.networkPolicy.ingressNSPodMatchLabels }}
+          podSelector:
+            matchLabels:
+              {{- range $key, $value := .Values.receive.networkPolicy.ingressNSPodMatchLabels }}
+              {{ $key | quote }}: {{ $value | quote }}
+              {{- end }}
+          {{- end }}
+        {{- end }}
+      {{- end }}
+    {{- if .Values.receive.networkPolicy.extraIngress }}
+    {{- include "common.tplvalues.render" ( dict "value"  .Values.receive.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
+    {{- end }}
+{{- end }}

@@ -1,14 +1,13 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- $query := (include "thanos.query.values" . | fromYaml) -}}
-{{- if and (include "common.capabilities.psp.supported" .) $query.enabled $query.pspEnabled $query.rbac.create }}
+{{- if and (include "common.capabilities.psp.supported" .) .Values.query.enabled .Values.query.pspEnabled .Values.query.rbac.create }}
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRoleBinding
 metadata:
-  name: {{ include "common.names.fullname" . }}-query
+  name: {{ include "thanos.query.fullname" . }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: query
   {{- if .Values.commonAnnotations }}
@@ -16,10 +15,10 @@ metadata:
   {{- end }}
 roleRef:
   kind: ClusterRole
-  name: {{ include "common.names.fullname" . }}-query
+  name: {{ include "thanos.query.fullname" . }}
   apiGroup: rbac.authorization.k8s.io
 subjects:
   - kind: ServiceAccount
-    name: {{ include "thanos.serviceAccountName" (dict "component" "query" "context" $) }}
-    namespace: {{ .Release.Namespace | quote }}
+    name: {{ include "thanos.query.serviceAccountName" . }}
+    namespace: {{ include "common.names.namespace" . }}
 {{- end }}

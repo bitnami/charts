@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -7,8 +7,8 @@ SPDX-License-Identifier: APACHE-2.0
 apiVersion: {{ include "common.capabilities.hpa.apiVersion" ( dict "context" $ ) }}
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ include "common.names.fullname" . }}-query-frontend
-  namespace: {{ .Release.Namespace | quote }}
+  name: {{ include "thanos.query-frontend.fullname" . }}
+  namespace: {{ include "common.names.namespace" . }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: query-frontend
   {{- if .Values.commonAnnotations }}
@@ -18,7 +18,7 @@ spec:
   scaleTargetRef:
     apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
     kind: Deployment
-    name: {{ include "common.names.fullname" . }}-query-frontend
+    name: {{ include "thanos.query-frontend.fullname" . }}
   minReplicas: {{ .Values.queryFrontend.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.queryFrontend.autoscaling.maxReplicas }}
   metrics:

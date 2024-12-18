@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -9,6 +9,7 @@ SPDX-License-Identifier: APACHE-2.0
 {{- $replicaCount := .Values.controller.replicaCount | int }}
 {{- range $i := until $replicaCount }}
 {{- $targetPod := printf "%s-controller-%d" $fullname $i }}
+{{- $_ := set $ "targetPod" $targetPod }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -31,6 +32,10 @@ metadata:
 spec:
   type: {{ $.Values.externalAccess.controller.service.type }}
   {{- if eq $.Values.externalAccess.controller.service.type "LoadBalancer" }}
+  allocateLoadBalancerNodePorts: {{  $.Values.externalAccess.controller.service.allocateLoadBalancerNodePorts }}
+  {{- if (not (empty $.Values.externalAccess.controller.service.loadBalancerClass)) }}
+  loadBalancerClass: {{ $.Values.externalAccess.controller.service.loadBalancerClass }}
+  {{- end }}
   {{- if and (not (empty $.Values.externalAccess.controller.service.loadBalancerIPs)) (eq (len $.Values.externalAccess.controller.service.loadBalancerIPs) $replicaCount) }}
   loadBalancerIP: {{ index $.Values.externalAccess.controller.service.loadBalancerIPs $i }}
   {{- end }}

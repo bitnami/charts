@@ -1,7 +1,0 @@
-{
-  "baseUrl": "http://localhost/",
-  "defaultCommandTimeout": 30000,
-  "env": {
-    "expectedWorkers": 2
-  }
-}

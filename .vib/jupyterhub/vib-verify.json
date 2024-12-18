@@ -25,7 +25,7 @@
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
-            "name": "S4"
+            "name": "M4"
           }
         }
       },
@@ -57,6 +57,12 @@
               "username": "test_user",
               "password": "ComplicatedPassword123!4"
             }
+          }
+        },
+        {
+          "action_id": "kubescape",
+          "params": {
+            "threshold": {VIB_ENV_KUBESCAPE_SCORE_THRESHOLD}
           }
         }
       ]

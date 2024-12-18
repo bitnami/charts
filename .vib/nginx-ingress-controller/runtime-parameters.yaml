@@ -1,6 +1,6 @@
 containerPorts:
-  http: 80
-  https: 443
+  http: 8080
+  https: 8443
 ingressClassResource:
   name: nginx
   enabled: true
@@ -33,7 +33,7 @@ service:
   type: LoadBalancer
 serviceAccount:
   create: true
-  automountServiceAccountToken: true
+automountServiceAccountToken: true
 rbac:
   create: true
 extraDeploy:
@@ -56,6 +56,14 @@ extraDeploy:
         containers:
         - image: docker.io/bitnami/dokuwiki:latest
           name: dokuwiki
+          securityContext:
+            runAsNonRoot: true
+            privileged: false
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+            seccompProfile:
+              type: "RuntimeDefault"
 - apiVersion: v1
   kind: Service
   metadata:
@@ -70,7 +78,7 @@ extraDeploy:
       name: http
     - port: 443
       protocol: TCP
-      targetPort: 443
+      targetPort: 8443
       name: https
     selector:
       app: dokuwiki

@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -46,8 +46,9 @@ spec:
       {{- end }}
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
     spec:
-      {{- include "schema-registry.imagePullSecrets" . | indent 6 }}
+      {{- include "schema-registry.imagePullSecrets" . | nindent 6 }}
       serviceAccountName: {{ include "schema-registry.serviceAccountName" . }}
+      automountServiceAccountToken: {{ .Values.automountServiceAccountToken }}
       {{- if .Values.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -75,7 +76,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
@@ -88,7 +89,7 @@ spec:
           image: {{ include "schema-registry.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -103,13 +104,20 @@ spec:
               ID="${MY_POD_NAME#"{{ $fullname }}-"}"
               if [[ -f "/certs/schema-registry.truststore.jks" ]] && [[ -f "/certs/schema-registry-${ID}.keystore.jks" ]]; then
                   mkdir -p /opt/bitnami/schema-registry/certs
-                  cp "/certs/schema-registry.truststore.jks" "/opt/bitnami/schema-registry/certs/schema-registry.truststore.jks"
-                  cp "/certs/schema-registry-${ID}.keystore.jks" "/opt/bitnami/schema-registry/certs/schema-registry.keystore.jks"
+                  [[ -f "/opt/bitnami/schema-registry/certs/schema-registry.truststore.jks" ]] || cp "/certs/schema-registry.truststore.jks" "/opt/bitnami/schema-registry/certs/schema-registry.truststore.jks"
+                  [[ -f "/opt/bitnami/schema-registry/certs/schema-registry.keystore.jks" ]] || cp "/certs/schema-registry-${ID}.keystore.jks" "/opt/bitnami/schema-registry/certs/schema-registry.keystore.jks"
               else
                   echo "Couldn't find the expected Java Key Stores (JKS) files! They are mandatory when encryption via TLS is enabled with Kafka brokers."
                   exit 1
               fi
               {{- end }}
+              if [[ -f "/certs/ssl.keystore.jks" ]]; then
+                  mkdir -p /opt/bitnami/schema-registry/certs
+                  [[ -f "/opt/bitnami/schema-registry/certs/ssl.keystore.jks" ]] || cp "/certs/ssl.keystore.jks" "/opt/bitnami/schema-registry/certs/ssl.keystore.jks"
+              fi
+              if [[ -f "/certs/ssl.truststore.jks" ]]; then
+                  [[ -f "/opt/bitnami/schema-registry/certs/ssl.truststore.jks" ]] || cp "/certs/ssl.truststore.jks" "/opt/bitnami/schema-registry/certs/ssl.truststore.jks"
+              fi
               exec /opt/bitnami/scripts/schema-registry/entrypoint.sh /opt/bitnami/scripts/schema-registry/run.sh
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
@@ -216,25 +224,37 @@ spec:
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
           {{- else if .Values.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.readinessProbe "enabled") "context" $) | nindent 12 }}
-            tcpSocket:
+            httpGet:
               port: http
+              path: /
           {{- end }}
           {{- if .Values.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customStartupProbe "context" $) | nindent 12 }}
           {{- else if .Values.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.startupProbe "enabled") "context" $) | nindent 12 }}
-            tcpSocket:
+            httpGet:
               port: http
+              path: /
           {{- end }}
           {{- end }}
           {{- if .Values.resources }}
           resources: {{- toYaml .Values.resources | nindent 12 }}
+          {{- else if ne .Values.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if .Values.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
-          {{- if or .Values.configuration .Values.existingConfigmap  .Values.log4j .Values.existingLog4jConfigMap (contains "SSL" $kafkaProtocol) .Values.extraVolumes }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/schema-registry/etc
+              subPath: app-conf-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/schema-registry/logs
+              subPath: app-logs-dir
             {{- if or .Values.configuration .Values.existingConfigmap }}
             - name: configuration
               mountPath: /bitnami/schema-registry/etc/schema-registry/schema-registry.properties
@@ -253,12 +273,12 @@ spec:
           {{- if .Values.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
-          {{- end }}
         {{- if .Values.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
-      {{- if or .Values.configuration .Values.existingConfigmap  .Values.log4j .Values.existingLog4jConfigMap (contains "SSL" $kafkaProtocol) .Values.auth.tls.enabled .Values.extraVolumes }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         {{- if or .Values.configuration .Values.existingConfigmap }}
         - name: configuration
           configMap:
@@ -286,4 +306,3 @@ spec:
         {{- if .Values.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
-      {{- end }}

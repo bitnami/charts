@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 http:
@@ -11,10 +11,6 @@ http:
     body:
       - milvus_num_node
   http://milvus-root-coordinator:{{ .Vars.rootCoord.service.ports.metrics }}/metrics:
-    status: 200
-    body:
-      - milvus_num_node
-  http://milvus-index-coordinator:{{ .Vars.indexCoord.service.ports.metrics }}/metrics:
     status: 200
     body:
       - milvus_num_node
@@ -48,9 +44,6 @@ addr:
     reachable: true
     timeout: 500
   tcp://milvus-root-coordinator:{{ .Vars.rootCoord.service.ports.grpc }}:
-    reachable: true
-    timeout: 500
-  tcp://milvus-index-coordinator:{{ .Vars.indexCoord.service.ports.grpc }}:
     reachable: true
     timeout: 500
   tcp://milvus-data-node:{{ .Vars.dataNode.service.ports.grpc }}:
@@ -95,7 +88,7 @@ command:
     - "CapBnd:	0000000000000000"
     - "CapAmb:	0000000000000000"
   {{- end }}
-  {{ if .Vars.proxy.serviceAccount.automountServiceAccountToken }}
+  {{ if .Vars.proxy.automountServiceAccountToken }}
   check-sa:
     exec: cat /var/run/secrets/kubernetes.io/serviceaccount/token | cut -d '.' -f 2 | xargs -I '{}' echo '{}====' | fold -w 4 | sed '$ d' | tr -d '\n' | base64 -d
     exit-status: 0

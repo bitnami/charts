@@ -1,5 +1,5 @@
 {{/*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -98,7 +98,7 @@ Return the PostgreSQL Secret Name
         {{- default (include "odoo.postgresql.fullname" .) (tpl .Values.postgresql.auth.existingSecret $) -}}
     {{- end -}}
 {{- else -}}
-    {{- default (printf "%s-externaldb" .Release.Name | trunc 63 | trimSuffix "-") (tpl .Values.externalDatabase.existingSecret $) -}}
+    {{- default (printf "%s-externaldb" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-") (tpl .Values.externalDatabase.existingSecret $) -}}
 {{- end -}}
 {{- end -}}
 

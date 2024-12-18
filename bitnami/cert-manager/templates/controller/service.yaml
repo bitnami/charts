@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -17,10 +17,10 @@ spec:
   type: ClusterIP
   ports:
     - name: controller
-      port: {{ .Values.controller.containerPort }}
+      port: {{ coalesce .Values.controller.containerPort .Values.controller.containerPorts.http }}
       protocol: TCP
       targetPort: {{ .Values.metrics.serviceMonitor.targetPort }}
-  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.webhook.podLabels .Values.commonLabels ) "context" . ) }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.controller.podLabels .Values.commonLabels ) "context" . ) }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: controller
 {{- end }}

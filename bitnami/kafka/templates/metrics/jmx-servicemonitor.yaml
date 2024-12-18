@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -27,7 +27,7 @@ spec:
       app.kubernetes.io/component: metrics
   endpoints:
     - port: http-metrics
-      path: "/"
+      path: {{ .Values.metrics.serviceMonitor.path }}
       {{- if .Values.metrics.serviceMonitor.interval }}
       interval: {{ .Values.metrics.serviceMonitor.interval }}
       {{- end }}

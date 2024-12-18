@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -37,12 +37,14 @@ spec:
         {{- end }}
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: controller
+        app.kubernetes.io/part-of: argo-workflows
     spec:
       {{- if .Values.controller.schedulerName }}
       schedulerName: {{ .Values.controller.schedulerName | quote }}
       {{- end }}
       serviceAccountName: {{ include "argo-workflows.controller.serviceAccountName" . }}
       {{- include "argo-workflows.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.controller.automountServiceAccountToken }}
       {{- if .Values.controller.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.controller.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -67,7 +69,7 @@ spec:
       priorityClassName: {{ .Values.controller.priorityClassName | quote }}
       {{- end }}
       {{- if .Values.controller.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.controller.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.controller.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.controller.initContainers }}
       initContainers:
@@ -78,7 +80,7 @@ spec:
           image: {{ include "argo-workflows.controller.image" . }}
           imagePullPolicy: {{ .Values.controller.image.pullPolicy }}
           {{- if .Values.controller.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.controller.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.controller.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.controller.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.controller.command "context" $) | nindent 12 }}
@@ -140,6 +142,8 @@ spec:
               containerPort: 6060
           {{- if .Values.controller.resources }}
           resources: {{- toYaml .Values.controller.resources | nindent 12 }}
+          {{- else if ne .Values.controller.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.controller.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if .Values.controller.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.controller.customLivenessProbe "context" $) | nindent 12 }}

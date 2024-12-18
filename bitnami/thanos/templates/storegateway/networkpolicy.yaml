@@ -1,0 +1,90 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.storegateway.enabled .Values.storegateway.networkPolicy.enabled }}
+kind: NetworkPolicy
+apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
+metadata:
+  name: {{ template "thanos.storegateway.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: storegateway
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.storegateway.podLabels .Values.commonLabels ) "context" . ) }}
+  podSelector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/component: storegateway
+  policyTypes:
+    - Ingress
+    - Egress
+  {{- if .Values.storegateway.networkPolicy.allowExternalEgress }}
+  egress:
+    - {}
+  {{- else }}
+  egress:
+    # Allow dns resolution
+    - ports:
+        - port: 53
+          protocol: UDP
+        - port: 53
+          protocol: TCP
+    # Communicate with other storegateway instances via headless service
+    - ports:
+        - port: {{ .Values.storegateway.containerPorts.http }}
+        - port: {{ .Values.storegateway.containerPorts.grpc }}
+      to:
+        - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 14 }}
+              app.kubernetes.io/component: storegateway
+    {{- if .Values.minio.enabled }}
+    # Communicate with minio
+    - ports:
+        - port: {{ .Values.minio.service.ports.api }}
+        - port: {{ .Values.minio.containerPorts.api }}
+      to: 
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: minio
+              app.kubernetes.io/instance: {{ .Release.Name }}            
+    {{- end }}
+    {{- if .Values.storegateway.networkPolicy.extraEgress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.storegateway.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+  ingress:
+    - ports:
+        - port: {{ .Values.storegateway.containerPorts.http }}
+        - port: {{ .Values.storegateway.service.ports.http }}
+        - port: {{ .Values.storegateway.containerPorts.grpc }}
+        - port: {{ .Values.storegateway.service.ports.grpc }}
+      {{- if not .Values.storegateway.networkPolicy.allowExternal }}
+      from:
+        - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
+        - podSelector:
+            matchLabels:
+              {{ template "thanos.storegateway.fullname" . }}-client: "true"
+        {{- if .Values.storegateway.networkPolicy.ingressNSMatchLabels }}
+        - namespaceSelector:
+            matchLabels:
+              {{- range $key, $value := .Values.storegateway.networkPolicy.ingressNSMatchLabels }}
+              {{ $key | quote }}: {{ $value | quote }}
+              {{- end }}
+          {{- if .Values.storegateway.networkPolicy.ingressNSPodMatchLabels }}
+          podSelector:
+            matchLabels:
+              {{- range $key, $value := .Values.storegateway.networkPolicy.ingressNSPodMatchLabels }}
+              {{ $key | quote }}: {{ $value | quote }}
+              {{- end }}
+          {{- end }}
+        {{- end }}
+      {{- end }}
+    {{- if .Values.storegateway.networkPolicy.extraIngress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.storegateway.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
+    {{- end }}
+{{- end }}

@@ -1,5 +1,5 @@
 {{/*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -325,7 +325,7 @@ Init container definition for waiting for the database to be ready
   {{- $block = index .context.Values "controlPlane" }}
   {{- end }}
   {{- if $block.containerSecurityContext.enabled }}
-  securityContext: {{- omit $block.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" $block.containerSecurityContext "context" .context) | nindent 4 }}
   {{- end }}
   command:
     - bash
@@ -353,6 +353,7 @@ Init container definition for waiting for the database to be ready
   env:
     - name: BITNAMI_DEBUG
       value: {{ ternary "true" "false" (or .context.Values.image.debug .context.Values.diagnosticMode.enabled) | quote }}
+    {{- if .context.Values.controlPlane.enabled }}
     - name: APISIX_ADMIN_API_TOKEN
       valueFrom:
         secretKeyRef:
@@ -363,6 +364,7 @@ Init container definition for waiting for the database to be ready
         secretKeyRef:
           name: {{ include "apisix.control-plane.secretName" .context }}
           key: {{ include "apisix.control-plane.viewerTokenKey" .context }}
+    {{- end }}
     {{- if (include "apisix.etcd.authEnabled" .context) }}
     - name: APISIX_ETCD_USER
       value: {{ include "apisix.etcd.user" .context }}
@@ -373,7 +375,7 @@ Init container definition for waiting for the database to be ready
           key: {{ include "apisix.etcd.secretPasswordKey" .context }}
     {{- end }}
     {{- if $block.extraEnvVars }}
-    {{- include "common.tplvalues.render" (dict "value" $block.extraEnvVars "context" $) | nindent 4 }}
+    {{- include "common.tplvalues.render" (dict "value" $block.extraEnvVars "context" .context) | nindent 4 }}
     {{- end }}
   envFrom:
     {{- if $block.extraEnvVarsCM }}
@@ -382,15 +384,17 @@ Init container definition for waiting for the database to be ready
     {{- end }}
     {{- if $block.extraEnvVarsSecret }}
     - secretRef:
-        name: {{ include "common.tplvalues.render" (dict "value" $block.extraEnvVarsSecret "context" $) }}
+        name: {{ include "common.tplvalues.render" (dict "value" $block.extraEnvVarsSecret "context" .context) }}
     {{- end }}
   volumeMounts:
-    - name: apisix-dir
+    - name: empty-dir
       mountPath: /usr/local/apisix
+      subPath: app-tmp-dir
     - name: config
       mountPath: /bitnami/apisix/conf/00_default
-    - name: tmp
+    - name: empty-dir
       mountPath: /tmp
+      subPath: tmp-dir
     {{- if or $block.extraConfig $block.extraConfigExistingConfigMap }}
     - name: extra-config
       mountPath: /bitnami/apisix/conf/01_extra
@@ -409,7 +413,7 @@ Init container definition for waiting for the database to be ready
   image: {{ template "apisix.wait-container.image" . }}
   imagePullPolicy: {{ .Values.waitContainer.image.pullPolicy }}
   {{- if .Values.waitContainer.containerSecurityContext.enabled }}
-  securityContext: {{- omit .Values.waitContainer.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.waitContainer.containerSecurityContext "context" $) | nindent 4 }}
   {{- end }}
   command:
     - bash
@@ -441,8 +445,13 @@ Init container definition for waiting for the database to be ready
       )
 
       check_etcd() {
+          local curl_options=()
+          {{- if and .Values.etcd.auth.client.secureTransport .Values.etcd.auth.client.useAutoTLS }}
+          curl_options=("--insecure" ${curl_options[*]})
+          {{- end }}
+
           local -r etcd_host="${1:-?missing etcd}"
-          if curl --max-time 5 "${etcd_host}/version" | grep etcdcluster; then
+          if curl "${curl_options[@]}" --max-time 5 "${etcd_host}/version" | grep etcdcluster; then
              return 0
           else
              return 1
@@ -471,7 +480,7 @@ Init container definition for waiting for the database to be ready
   image: {{ template "apisix.wait-container.image" . }}
   imagePullPolicy: {{ .Values.waitContainer.image.pullPolicy }}
   {{- if .Values.waitContainer.containerSecurityContext.enabled }}
-  securityContext: {{- omit .Values.waitContainer.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.waitContainer.containerSecurityContext "context" $) | nindent 4 }}
   {{- end }}
   command:
     - bash
@@ -543,7 +552,7 @@ Render configuration for the dashboard and ingress-controller components
   {{- $block = index .context.Values "dashboard" }}
   {{- end }}
   {{- if $block.containerSecurityContext.enabled }}
-  securityContext: {{- omit $block.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" $block.containerSecurityContext "context" .context) | nindent 4 }}
   {{- end }}
   command:
     - bash
@@ -558,6 +567,7 @@ Render configuration for the dashboard and ingress-controller components
   env:
     - name: BITNAMI_DEBUG
       value: {{ ternary "true" "false" (or .context.Values.image.debug .context.Values.diagnosticMode.enabled) | quote }}
+    {{- if .context.Values.controlPlane.enabled }}
     - name: APISIX_ADMIN_API_TOKEN
       valueFrom:
         secretKeyRef:
@@ -568,6 +578,7 @@ Render configuration for the dashboard and ingress-controller components
         secretKeyRef:
           name: {{ include "apisix.control-plane.secretName" .context }}
           key: {{ include "apisix.control-plane.viewerTokenKey" .context }}
+    {{- end }}
     {{- if (include "apisix.etcd.authEnabled" .context) }}
     - name: APISIX_ETCD_USER
       value: {{ include "apisix.etcd.user" .context }}
@@ -599,8 +610,9 @@ Render configuration for the dashboard and ingress-controller components
         name: {{ include "common.tplvalues.render" (dict "value" $block.extraEnvVarsSecret "context" $) }}
     {{- end }}
   volumeMounts:
-    - name: rendered-config
+    - name: empty-dir
       mountPath: /bitnami/apisix/rendered-conf
+      subPath: app-conf-dir
     - name: config
       mountPath: /bitnami/apisix/conf/00_default
     {{- if or $block.extraConfig $block.extraConfigExistingConfigMap }}

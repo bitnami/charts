@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -38,7 +38,7 @@ spec:
   ports:
     - name: tcp-rpc
       port: {{ .Values.jobmanager.service.ports.rpc }}
-      targetPort: {{ .Values.jobmanager.containerPorts.rpc }}
+      targetPort: rpc
       {{- if and (or (eq .Values.jobmanager.service.type "NodePort") (eq .Values.jobmanager.service.type "LoadBalancer")) (not (empty .Values.jobmanager.service.nodePorts.rpc)) }}
       nodePort: {{ .Values.jobmanager.service.nodePorts.rpc }}
       {{- else if eq .Values.jobmanager.service.type "ClusterIP" }}
@@ -46,7 +46,7 @@ spec:
       {{- end }}
     - name: http
       port: {{ .Values.jobmanager.service.ports.http }}
-      targetPort: {{ .Values.jobmanager.containerPorts.http }}
+      targetPort: http
       {{- if and (or (eq .Values.jobmanager.service.type "NodePort") (eq .Values.jobmanager.service.type "LoadBalancer")) (not (empty .Values.jobmanager.service.nodePorts.http)) }}
       nodePort: {{ .Values.jobmanager.service.nodePorts.http }}
       {{- else if eq .Values.jobmanager.service.type "ClusterIP" }}
@@ -54,7 +54,7 @@ spec:
       {{- end }}
     - name: tcp-blob
       port: {{ .Values.jobmanager.service.ports.blob }}
-      targetPort: {{ .Values.jobmanager.containerPorts.blob }}
+      targetPort: blob
       {{- if and (or (eq .Values.jobmanager.service.type "NodePort") (eq .Values.jobmanager.service.type "LoadBalancer")) (not (empty .Values.jobmanager.service.nodePorts.blob)) }}
       nodePort: {{ .Values.jobmanager.service.nodePorts.blob }}
       {{- else if eq .Values.jobmanager.service.type "ClusterIP" }}

@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -31,6 +31,7 @@ spec:
         app.kubernetes.io/component: server
     spec:
       {{- include "kiam.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.server.automountServiceAccountToken }}
       {{- if .Values.server.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.server.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -61,7 +62,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.server.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.server.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.server.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.server.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.server.initContainers }}
       initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.server.initContainers "context" $) | nindent 8 }}
@@ -74,7 +75,7 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.server.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.server.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.server.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.server.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -144,6 +145,8 @@ spec:
             {{- end }}
           {{- if .Values.server.resources }}
           resources: {{- toYaml .Values.server.resources | nindent 12 }}
+          {{- else if ne .Values.server.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.server.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.server.customStartupProbe }}
@@ -170,8 +173,8 @@ spec:
                 - --key=/bitnami/kiam/tls/{{ .Values.server.tlsCerts.keyFileName }}
                 - --ca=/bitnami/kiam/tls/{{ .Values.server.tlsCerts.caFileName }}
                 - --server-address=127.0.0.1:{{ .Values.server.containerPort }}
-                - --server-address-refresh=2s
-                - --timeout=5s
+                - --server-address-refresh=4s
+                - --timeout=10s
                 - --gateway-timeout-creation={{ .Values.server.gatewayTimeoutCreation }}
             initialDelaySeconds: {{ .Values.server.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.server.livenessProbe.periodSeconds }}
@@ -202,6 +205,9 @@ spec:
           {{- end }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - mountPath: /bitnami/kiam/tls
               name: tls
             {{- if .Values.server.sslCertHostPath }}
@@ -216,6 +222,8 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.server.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: tls
           secret:
             {{- if .Values.server.tlsSecret }}

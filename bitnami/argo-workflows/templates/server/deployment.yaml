@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -37,6 +37,7 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
         {{- end }}
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/part-of: argo-workflows
         app.kubernetes.io/component: server
     spec:
       {{- if .Values.server.schedulerName }}
@@ -44,6 +45,7 @@ spec:
       {{- end }}
       serviceAccountName: {{ include "argo-workflows.server.serviceAccountName" . }}
       {{- include "argo-workflows.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.server.automountServiceAccountToken }}
       {{- if .Values.server.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.server.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -68,7 +70,7 @@ spec:
       priorityClassName: {{ .Values.server.priorityClassName | quote }}
       {{- end }}
       {{- if .Values.server.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.server.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.server.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       initContainers:
         {{- if .Values.server.initContainers }}
@@ -79,7 +81,7 @@ spec:
           image: {{ include "argo-workflows.server.image" . }}
           imagePullPolicy: {{ .Values.server.image.pullPolicy }}
           {{- if .Values.server.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.server.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.server.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.server.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.server.command "context" $) | nindent 12 }}
@@ -131,17 +133,15 @@ spec:
             {{- end }}
           {{- if .Values.server.resources }}
           resources: {{- toYaml .Values.server.resources | nindent 12 }}
+          {{- else if ne .Values.server.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.server.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if .Values.server.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.server.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.server.livenessProbe.enabled }}
           livenessProbe:
-            httpGet:
-              path: /
+            tcpSocket:
               port: {{ .Values.server.containerPorts.web }}
-              {{- if .Values.server.secure }}
-              scheme: HTTPS
-              {{- end }}
             initialDelaySeconds: {{ .Values.server.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.server.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.server.livenessProbe.timeoutSeconds }}
@@ -181,8 +181,9 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.server.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - name: tmp
+            - name: empty-dir
               mountPath: /tmp
+              subPath: tmp-dir
           {{- if .Values.server.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.server.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -190,7 +191,7 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.server.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
-        - name: tmp
+        - name: empty-dir
           emptyDir: {}
         {{- if .Values.server.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.server.extraVolumes "context" $) | nindent 8 }}

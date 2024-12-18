@@ -1,10 +1,10 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
 {{- $replicaCount := int .Values.broker.replicaCount }}
-{{- if gt $replicaCount 0 }}
+{{- if or (gt $replicaCount 0) .Values.broker.autoscaling.enabled }}
 apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
@@ -18,7 +18,9 @@ metadata:
   {{- end }}
 spec:
   podManagementPolicy: {{ .Values.broker.podManagementPolicy }}
+  {{- if not .Values.broker.autoscaling.enabled }}
   replicas: {{ .Values.broker.replicaCount }}
+  {{- end }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.broker.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
@@ -52,6 +54,7 @@ spec:
         {{- end }}
     spec:
       {{- include "kafka.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.broker.automountServiceAccountToken }}
       {{- if .Values.broker.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.broker.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -87,7 +90,7 @@ spec:
       runtimeClassName: {{ .Values.controller.runtimeClassName }}
       {{- end }}
       {{- if .Values.broker.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.broker.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.broker.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ include "kafka.serviceAccountName" . }}
       enableServiceLinks: {{ .Values.broker.enableServiceLinks }}
@@ -112,6 +115,8 @@ spec:
           {{- end }}
           {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: data
@@ -134,7 +139,7 @@ spec:
           image: {{ include "kafka.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.broker.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.broker.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.broker.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -269,8 +274,11 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.broker.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.broker.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.broker.livenessProbe "enabled") "context" $) | nindent 12 }}
-            tcpSocket:
-              port: "client"
+            exec:
+              command:
+                - pgrep
+                - -f
+                - kafka
           {{- end }}
           {{- if .Values.broker.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.broker.customReadinessProbe "context" $) | nindent 12 }}
@@ -292,6 +300,8 @@ spec:
           {{- end }}
           {{- if .Values.broker.resources }}
           resources: {{- toYaml .Values.broker.resources | nindent 12 }}
+          {{- else if ne .Values.broker.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.broker.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: data
@@ -301,6 +311,11 @@ spec:
             - name: kafka-config
               mountPath: /opt/bitnami/kafka/config/server.properties
               subPath: server.properties
+            {{- if .Values.sasl.zookeeper.user }}
+            - name: kafka-config
+              mountPath: /opt/bitnami/kafka/config/kafka_jaas.conf
+              subPath: kafka_jaas.conf
+            {{- end }}
             - name: tmp
               mountPath: /tmp
             {{- if or .Values.log4j .Values.existingLog4jConfigMap }}
@@ -324,7 +339,7 @@ spec:
           image: {{ include "kafka.metrics.jmx.image" . }}
           imagePullPolicy: {{ .Values.metrics.jmx.image.pullPolicy | quote }}
           {{- if .Values.metrics.jmx.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.metrics.jmx.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.metrics.jmx.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -337,7 +352,7 @@ spec:
             - -XshowSettings:vm
             - -jar
             - jmx_prometheus_httpserver.jar
-            - "5556"
+            - {{ .Values.metrics.jmx.containerPorts.metrics | quote }}
             - /etc/jmx-kafka/jmx-kafka-prometheus.yml
           {{- end }}
           ports:
@@ -345,6 +360,8 @@ spec:
               containerPort: {{ .Values.metrics.jmx.containerPorts.metrics }}
           {{- if .Values.metrics.jmx.resources }}
           resources: {{- toYaml .Values.metrics.jmx.resources | nindent 12 }}
+          {{- else if ne .Values.metrics.jmx.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.metrics.jmx.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: jmx-config
@@ -436,7 +453,9 @@ spec:
   {{- if or (and .Values.broker.persistence.enabled (not .Values.broker.persistence.existingClaim)) (and .Values.broker.logPersistence.enabled (not .Values.broker.logPersistence.existingClaim)) }}
   volumeClaimTemplates:
     {{- if and .Values.broker.persistence.enabled (not .Values.broker.persistence.existingClaim) }}
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         name: data
         {{- if .Values.broker.persistence.annotations }}
         annotations: {{- include "common.tplvalues.render" (dict "value" .Values.broker.persistence.annotations "context" $) | nindent 10 }}
@@ -458,7 +477,9 @@ spec:
         {{- end -}}
     {{- end }}
     {{- if and .Values.broker.logPersistence.enabled (not .Values.broker.logPersistence.existingClaim) }}
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         name: logs
         {{- if .Values.broker.logPersistence.annotations }}
         annotations: {{- include "common.tplvalues.render" (dict "value" .Values.broker.logPersistence.annotations "context" $) | nindent 10 }}

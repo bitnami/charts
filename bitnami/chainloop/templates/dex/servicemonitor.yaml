@@ -1,0 +1,49 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.development .Values.dex.metrics.enabled .Values.dex.metrics.serviceMonitor.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "chainloop.dex" . }}
+  namespace: {{ default include ( "common.names.namespace" . ) .Values.dex.metrics.serviceMonitor.namespace | quote }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.dex.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    {{- if .Values.dex.metrics.serviceMonitor.selector }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.dex.metrics.serviceMonitor.selector "context" $) | nindent 4 }}
+    {{- end }}
+    app.kubernetes.io/component: dex
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  jobLabel: {{ .Values.dex.metrics.serviceMonitor.jobLabel | quote }}
+  endpoints:
+    - port: http-metrics
+      path: /metrics
+      {{- if .Values.dex.metrics.serviceMonitor.interval }}
+      interval: {{ .Values.dex.metrics.serviceMonitor.interval }}
+      {{- end }}
+      {{- if .Values.dex.metrics.serviceMonitor.scrapeTimeout }}
+      scrapeTimeout: {{ .Values.dex.metrics.serviceMonitor.scrapeTimeout }}
+      {{- end }}
+      {{- if .Values.dex.metrics.serviceMonitor.honorLabels }}
+      honorLabels: {{ .Values.dex.metrics.serviceMonitor.honorLabels }}
+      {{- end }}
+      {{- if .Values.dex.metrics.serviceMonitor.metricRelabelings }}
+      metricRelabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.dex.metrics.serviceMonitor.metricRelabelings "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.dex.metrics.serviceMonitor.relabelings }}
+      relabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.dex.metrics.serviceMonitor.relabelings "context" $) | nindent 8 }}
+      {{- end }}
+  namespaceSelector:
+    matchNames:
+      - {{ include "common.names.namespace" . }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/component: dex
+{{- end }}
+

@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 ## @section Global parameters
@@ -9,7 +9,7 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
 ##
 global:
   imageRegistry: ""
@@ -18,8 +18,21 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass: ""
-
+  defaultStorageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: auto
 ## @section Common Parameters
 ##
 
@@ -58,7 +71,6 @@ diagnosticMode:
   ##
   args:
     - infinity
-
 ## @section Parse server parameters
 ##
 
@@ -79,10 +91,9 @@ server:
   image:
     registry: docker.io
     repository: bitnami/parse
-    tag: 6.4.0-debian-11-r3
+    tag: 7.3.0-debian-12-r3
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -97,6 +108,9 @@ server:
     ## Enable debug mode
     ##
     debug: false
+  ## @param server.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param server.hostAliases Deployment pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -109,18 +123,29 @@ server:
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
+  ## @param server.forceOverwriteConfFile Overwrite config.json configuration file on each run (set to false if mounting a custom configuration file)
+  ##
+  forceOverwriteConfFile: true
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param server.podSecurityContext.enabled Enabled Parse Dashboard pods' Security Context
+  ## @param server.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param server.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param server.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param server.podSecurityContext.fsGroup Set Parse Dashboard pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param server.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param server.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param server.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param server.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param server.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param server.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param server.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -130,16 +155,17 @@ server:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
-
   ## @param server.command Override default container command (useful when using custom images)
   ##
   command: []
@@ -163,6 +189,10 @@ server:
   ## ref: https://github.com/bitnami/containers/tree/main/bitnami/parse#configuration
   ##
   masterKey: ""
+  ## @param server.masterKeyIps Parse server Master setting an allowed IP address
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/parse#configuration
+  ##
+  masterKeyIps: "0.0.0.0/0"
   ## @param server.extraEnvVars An array to add extra env vars
   ## For example:
   ## extraEnvVars:
@@ -203,7 +233,16 @@ server:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
-
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param server.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param server.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param server.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `server.pdb.minAvailable` and `server.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
   ## @param server.enableCloudCode Enable Parse Cloud Code
   ## ref: https://github.com/bitnami/containers/tree/main/bitnami/parse#how-to-deploy-your-cloud-functions-with-parse-cloud-code
   ##
@@ -223,7 +262,19 @@ server:
   ## NOTE: This will override cloudCodeScripts
   ##
   existingCloudCodeScriptsCM: ""
-  ## @param server.resources Parse Server pods' resource requests and limits
+  ## @param server.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if server.resources is set (server.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "nano"
+  ## @param server.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ##
   resources: {}
@@ -282,7 +333,6 @@ server:
   ## @param server.customStartupProbe Custom startupProbe that overrides the default one
   ##
   customStartupProbe: {}
-
   ## @param server.podAffinityPreset Parse server pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
@@ -403,10 +453,63 @@ server:
     ##     timeoutSeconds: 300
     ##
     sessionAffinityConfig: {}
-
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param server.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param server.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param server.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param server.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param server.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param server.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param server.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
 ## @section Dashboard Parameters
 ##
-
 dashboard:
   ## @param dashboard.enabled Enable parse dashboard
   ##
@@ -424,10 +527,9 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/parse-dashboard
-    tag: 5.3.0-debian-11-r2
+    tag: 6.0.0-debian-12-r2
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -449,6 +551,9 @@ dashboard:
   ##
   containerPorts:
     http: 4040
+  ## @param dashboard.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param dashboard.hostAliases Deployment pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -456,15 +561,23 @@ dashboard:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param dashboard.podSecurityContext.enabled Enabled Parse Dashboard pods' Security Context
+  ## @param dashboard.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param dashboard.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param dashboard.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param dashboard.podSecurityContext.fsGroup Set Parse Dashboard pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param dashboard.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param dashboard.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param dashboard.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param dashboard.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param dashboard.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param dashboard.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param dashboard.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -474,16 +587,17 @@ dashboard:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
-
   ## @param dashboard.command Override default container command (useful when using custom images)
   ##
   command: []
@@ -503,7 +617,19 @@ dashboard:
   ## ref: https://github.com/bitnami/containers/tree/main/bitnami/parse-dashboard#configuration
   ##
   appName: MyDashboard
-  ## @param dashboard.resources Parse Dashboard pods' resource requests and limits
+  ## @param dashboard.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if dashboard.resources is set (dashboard.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "nano"
+  ## @param dashboard.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ##
   resources: {}
@@ -637,7 +763,6 @@ dashboard:
   ## @param dashboard.lifecycleHooks for the Parse container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
-
   ## @param dashboard.parseServerUrlProtocol Protocol used by Parse Dashboard to form the URLs to Parse server
   ##
   parseServerUrlProtocol: "http"
@@ -681,7 +806,20 @@ dashboard:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
-    ## Kubernetes service for Parse Server Deployment
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param dashboard.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param dashboard.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param dashboard.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `dashboard.pdb.minAvailable` and `dashboard.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
+  ## @param dashboard.forceOverwriteConfFile Overwrite config.json configuration file on each run (set to false if mounting a custom configuration file)
+  ##
+  forceOverwriteConfFile: true
+  ## Kubernetes service for Parse Server Deployment
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services---service-types
   ##
   service:
@@ -735,7 +873,61 @@ dashboard:
     ##     timeoutSeconds: 300
     ##
     sessionAffinityConfig: {}
-
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param dashboard.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param dashboard.networkPolicy.allowExternal Don't require label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## dashboard label will have network access to the ports dashboard is listening
+    ## on. When true, dashboard will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param dashboard.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param dashboard.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param dashboard.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param dashboard.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param dashboard.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
 ## @section Traffic Exposure Parameters
 ##
 
@@ -775,7 +967,7 @@ ingress:
     ## @param ingress.dashboard.hostname Default host for the ingress resource
     ##
     hostname: parse-dashboard.local
-    ## @param ingress.dashboard.path The Path to WordPress. You may need to set this to '/*' in order to use this with ALB ingress controllers.
+    ## @param ingress.dashboard.path The Path to Parse. You may need to set this to '/*' in order to use this with ALB ingress controllers.
     ##
     path: /
     ## @param ingress.dashboard.pathType Ingress path type
@@ -784,7 +976,7 @@ ingress:
     ## @param ingress.dashboard.extraHosts The list of additional hostnames to be covered with this ingress record.
     ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
     ## extraHosts:
-    ## - name: wordpress.local
+    ## - name: parse.local
     ##   path: /
     ##
     extraHosts: []
@@ -810,7 +1002,7 @@ ingress:
     ## @param ingress.server.extraHosts The list of additional hostnames to be covered with this ingress record.
     ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
     ## extraHosts:
-    ## - name: wordpress.local
+    ## - name: parse.local
     ##   path: /
     ##
     extraHosts: []
@@ -827,8 +1019,8 @@ ingress:
   ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
   ## extraTls:
   ## - hosts:
-  ##     - wordpress.local
-  ##   secretName: wordpress.local-tls
+  ##     - parse.local
+  ##   secretName: parse.local-tls
   ##
   extraTls: []
   ## @param ingress.secrets If you're providing your own certificates, please use this to add the certificates as secrets
@@ -860,7 +1052,6 @@ ingress:
   ##             name: http
   ##
   extraRules: []
-
 ## @section Persistence Parameters
 ##
 
@@ -889,7 +1080,7 @@ persistence:
   ## @param persistence.existingClaim The name of an existing PVC to use for persistence
   ##
   existingClaim: ""
-  ## @param persistence.selector Selector to match an existing Persistent Volume for WordPress data PVC
+  ## @param persistence.selector Selector to match an existing Persistent Volume for Parse data PVC
   ## If set, the PVC can't have a PV dynamically provisioned for it
   ## E.g.
   ## selector:
@@ -903,7 +1094,6 @@ persistence:
   ## @param persistence.annotations Persistent Volume Claim annotations
   ##
   annotations: {}
-
 ## @section Volume Permissions parameters
 ##
 
@@ -924,7 +1114,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r92
+    tag: 12-debian-12-r33
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -935,10 +1125,21 @@ volumePermissions:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-  ## @param volumePermissions.resources The resources for the container
+  ## @param volumePermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "none"
+  ## @param volumePermissions.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
   ##
   resources: {}
-
 ## ServiceAccount configuration
 ##
 serviceAccount:
@@ -954,8 +1155,7 @@ serviceAccount:
   annotations: {}
   ## @param serviceAccount.automountServiceAccountToken Automount service account token for the server service account
   ##
-  automountServiceAccountToken: true
-
+  automountServiceAccountToken: false
 ## @section MongoDB&reg; Parameters
 ##
 
@@ -1010,3 +1210,24 @@ mongodb:
     ## @param mongodb.persistence.size PVC Storage Request for MongoDB&reg; volume
     ##
     size: 8Gi
+  ## MongoDB(&reg;) containers' resource requests and limits.
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## @param mongodb.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "small"
+  ## @param mongodb.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}

@@ -1,0 +1,101 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
+Did you know there are enterprise versions of the Bitnami catalog? For enhanced secure software supply chain features, unlimited pulls from Docker, LTS support, or application customization, see Bitnami Premium or Tanzu Application Catalog. See https://www.arrow.com/globalecs/na/vendors/bitnami for more information.
+
+** Please be patient while the chart is being deployed **
+
+{{- if empty (include "neo4j.host" .) }}
+###############################################################################
+### ERROR: You did not provide an external host in your 'helm install' call ###
+###############################################################################
+
+This deployment will be incomplete until you configure Neo4j with a resolvable
+host. To configure Neo4j with the URL of your service:
+
+1. Get the Neo4j URL by running:
+
+  {{- if eq .Values.service.type "NodePort" }}
+
+  export APP_PORT=$(kubectl get svc --namespace {{ include "common.names.namespace" . }} {{ include "common.names.fullname" . }} -o jsonpath="{.spec.ports[0].nodePort}")
+  export APP_HOST=$(kubectl get nodes --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.items[0].status.addresses[0].address}")
+
+  {{- else if eq .Values.service.type "LoadBalancer" }}
+
+  NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+        Watch the status with: 'kubectl get svc --namespace {{ include "common.names.namespace" . }} -w {{ include "common.names.fullname" . }}'
+
+  export APP_HOST=$(kubectl get svc --namespace {{ include "common.names.namespace" . }} {{ include "common.names.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
+
+  {{- end }}
+2. Complete your Neo4J deployment by running:
+
+  helm upgrade --namespace {{ include "common.names.namespace" . }} {{ .Release.Name }} oci://registry-1.docker.io/bitnamicharts/{{ .Chart.Name }} \
+    --set advertisedHost=$APP_HOST{{- if .Values.global }}{{- if .Values.global.imagePullSecrets }},global.imagePullSecrets={{ .Values.global.imagePullSecrets }}{{- end }}{{- end }}
+{{- else if .Values.diagnosticMode.enabled }}
+The chart has been deployed in diagnostic mode. All probes have been disabled and the command has been overwritten with:
+
+  command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 4 }}
+  args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 4 }}
+
+Get the list of pods by executing:
+
+  kubectl get pods --namespace {{ include "common.names.namespace" . | quote }} -l app.kubernetes.io/instance={{ .Release.Name }}
+
+Access the pod you want to debug by executing
+
+  kubectl exec --namespace {{ include "common.names.namespace" . | quote }} -ti <NAME OF THE POD> -- bash
+
+In order to replicate the container startup scripts execute this command:
+
+    /opt/bitnami/scripts/neo4j/entrypoint.sh /opt/bitnami/scripts/neo4j/run.sh
+
+{{- else }}
+
+Your Neo4j site can be accessed through the following DNS name from within your cluster:
+
+    {{ include "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} (port {{ .Values.service.ports.http }})
+
+To access your Neo4j site from outside the cluster follow the steps below:
+
+{{- if .Values.ingress.enabled }}
+
+1. Get the Neo4j URL and associate Neo4j hostname to your cluster external IP:
+
+   export CLUSTER_IP=$(minikube ip) # On Minikube. Use: `kubectl cluster-info` on others K8s clusters
+   echo "Neo4j URL: http{{ if .Values.ingress.tls }}s{{ end }}://{{ .Values.ingress.hostname }}/"
+   echo "$CLUSTER_IP  {{ .Values.ingress.hostname }}" | sudo tee -a /etc/hosts
+
+{{- else }}
+{{- $port := .Values.service.ports.http | toString }}
+
+1. Get the Neo4j URL by running these commands:
+
+{{- if contains "NodePort" .Values.service.type }}
+
+   export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "common.names.fullname" . }})
+   export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+   echo "Neo4j URL: http://$NODE_IP:$NODE_PORT/"
+
+{{- else if contains "LoadBalancer" .Values.service.type }}
+
+  NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ include "common.names.fullname" . }}'
+
+   export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
+   echo "Neo4j URL: http://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.service.ports.http }}{{ end }}/"
+
+{{- else if contains "ClusterIP"  .Values.service.type }}
+
+   kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "common.names.fullname" . }} {{ .Values.service.ports.http }}:{{ .Values.service.ports.http }} &
+   echo "Neo4j URL: http://127.0.0.1{{- if ne $port "80" }}:{{ .Values.service.ports.http }}{{ end }}//"
+
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- include "common.warnings.rollingTag" .Values.image }}
+{{- include "neo4j.validateValues" . }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.volumePermissions.image) "context" $) }}
+{{- include "common.errors.insecureImages" (dict "images" (list .Values.image .Values.volumePermissions.image) "context" $) }}

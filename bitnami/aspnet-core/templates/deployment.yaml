@@ -1,12 +1,12 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: {{ include "aspnet-core.fullname" . }}
+  name: {{ include "common.names.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
   {{- if .Values.commonAnnotations }}
@@ -28,7 +28,7 @@ spec:
       {{- end }}
     spec:
       {{- include "aspnet-core.imagePullSecrets" . | nindent 6 }}
-      automountServiceAccountToken: {{ .Values.serviceAccount.automountServiceAccountToken }}
+      automountServiceAccountToken: {{ .Values.automountServiceAccountToken }}
       {{- if .Values.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -57,12 +57,7 @@ spec:
       priorityClassName: {{ .Values.priorityClassName | quote }}
       {{- end }}
       {{- if .Values.podSecurityContext.enabled }}
-      securityContext:
-        fsGroup: {{ .Values.podSecurityContext.fsGroup }}
-        {{- if .Values.podSecurityContext.sysctls }}
-        sysctls:
-          {{- toYaml .Values.podSecurityContext.sysctls | nindent 10 }}
-        {{- end }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if or .Values.appFromExternalRepo.enabled .Values.initContainers }}
       initContainers:
@@ -75,10 +70,11 @@ spec:
             - -ec
             - |
               [[ -f "/opt/bitnami/scripts/git/entrypoint.sh" ]] && source "/opt/bitnami/scripts/git/entrypoint.sh"
-              git clone {{ .Values.appFromExternalRepo.clone.repository }} --branch {{ .Values.appFromExternalRepo.clone.revision }} /repo
+              git clone {{ .Values.appFromExternalRepo.clone.repository }} --branch {{ .Values.appFromExternalRepo.clone.revision }} {{- if .Values.appFromExternalRepo.clone.depth }} --depth {{ .Values.appFromExternalRepo.clone.depth }} {{- end }} /repo
           volumeMounts:
-            - name: repo
+            - name: empty-dir
               mountPath: /repo
+              subPath: app-repo-dir
           {{- if .Values.appFromExternalRepo.clone.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.appFromExternalRepo.clone.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -95,8 +91,9 @@ spec:
           volumeMounts:
             - name: app
               mountPath: /app
-            - name: repo
+            - name: empty-dir
               mountPath: /repo
+              subPath: app-repo-dir
         {{- end }}
         {{- if .Values.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
@@ -107,9 +104,7 @@ spec:
           image: {{ include "aspnet-core.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.containerSecurityContext.enabled }}
-          securityContext:
-            runAsUser: {{ .Values.containerSecurityContext.runAsUser }}
-            runAsNonRoot: {{ .Values.containerSecurityContext.runAsNonRoot }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.lifecycleHooks "context" $) | nindent 12 }}
@@ -150,12 +145,17 @@ spec:
           ports:
             - name: http
               containerPort: {{ .Values.containerPorts.http }}
+            {{- if .Values.extraContainerPorts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraContainerPorts "context" $) | nindent 12 }}
+            {{- end }}
           {{- if .Values.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.livenessProbe.enabled }}
           livenessProbe:
-            tcpSocket:
-              port: http
+            exec:
+              command:
+                - pgrep
+                - dotnet
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
@@ -188,6 +188,8 @@ spec:
           {{- end }}
           {{- if .Values.resources }}
           resources: {{- toYaml .Values.resources | nindent 12 }}
+          {{- else if ne .Values.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if or .Values.appFromExternalRepo.enabled .Values.appFromExistingPVC.enabled .Values.extraVolumeMounts }}
           volumeMounts:
@@ -195,6 +197,9 @@ spec:
             - name: app
               mountPath: /app
             {{- end }}
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             {{- if .Values.extraVolumeMounts }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
@@ -204,6 +209,8 @@ spec:
         {{- end }}
       {{- if or .Values.appFromExternalRepo.enabled .Values.appFromExistingPVC.enabled .Values.extraVolumes }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         {{- if .Values.extraVolumes }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
@@ -213,8 +220,6 @@ spec:
           persistentVolumeClaim:
             claimName: {{ printf "%s" (tpl (default "" .Values.appFromExistingPVC.existingClaim) .) }}
         {{- else }}
-          emptyDir: {}
-        - name: repo
           emptyDir: {}
         {{- end }}
         {{- end }}

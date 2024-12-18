@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -37,6 +37,7 @@ spec:
     spec:
       serviceAccountName: {{ template "grafana-tempo.serviceAccountName" . }}
       {{- include "grafana-tempo.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.vulture.automountServiceAccountToken }}
       {{- if .Values.vulture.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.vulture.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -64,8 +65,9 @@ spec:
       schedulerName: {{ .Values.vulture.schedulerName }}
       {{- end }}
       {{- if .Values.vulture.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.vulture.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.vulture.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
+      enableServiceLinks: {{ .Values.vulture.enableServiceLinks }}
       initContainers:
         {{- if .Values.vulture.initContainers }}
           {{- include "common.tplvalues.render" (dict "value" .Values.vulture.initContainers "context" $) | nindent 8 }}
@@ -75,7 +77,7 @@ spec:
           image: {{ template "grafana-tempo.vultureImage" . }}
           imagePullPolicy: {{ .Values.vulture.image.pullPolicy }}
           {{- if .Values.vulture.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.vulture.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.vulture.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -108,15 +110,16 @@ spec:
             - containerPort: {{ .Values.vulture.containerPorts.http }}
               name: http
           {{- if .Values.vulture.resources }}
-          resources: {{- toYaml .Values.vulture.resources | nindent 12 }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.vulture.resources "context" $) | nindent 12 }}
+          {{- else if ne .Values.vulture.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.vulture.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.vulture.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.vulture.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.vulture.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.vulture.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /metrics
+            tcpSocket:
               port: {{ .Values.vulture.containerPorts.http }}
           {{- end }}
           {{- if .Values.vulture.customReadinessProbe }}
@@ -139,6 +142,9 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.vulture.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: tempo-config
               mountPath: /bitnami/grafana-tempo/conf
           {{- if .Values.vulture.extraVolumeMounts }}
@@ -148,6 +154,8 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.vulture.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: tempo-config
           configMap:
             name: {{ template "grafana-tempo.tempoConfigmapName" . }}

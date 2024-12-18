@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -34,6 +34,7 @@ spec:
       {{- if .Values.defaultBackend.priorityClassName }}
       priorityClassName: {{ .Values.defaultBackend.priorityClassName | quote }}
       {{- end }}
+      automountServiceAccountToken: {{ .Values.defaultBackend.automountServiceAccountToken }}
       {{- if .Values.defaultBackend.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -58,7 +59,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.defaultBackend.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.defaultBackend.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.defaultBackend.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ template "nginx-ingress-controller.serviceAccountName" . }}
       {{- if .Values.defaultBackend.terminationGracePeriodSeconds }}
@@ -72,7 +73,7 @@ spec:
           image: {{ template "nginx-ingress-controller.defaultBackend.image" . }}
           imagePullPolicy: {{ .Values.defaultBackend.image.pullPolicy | quote }}
           {{- if .Values.defaultBackend.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.defaultBackend.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.defaultBackend.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.defaultBackend.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.command "context" $) | nindent 12 }}
@@ -109,10 +110,8 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.defaultBackend.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.defaultBackend.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /healthz
+            tcpSocket:
               port: http
-              scheme: HTTP
           {{- end }}
           {{- if .Values.defaultBackend.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.customReadinessProbe "context" $) | nindent 12 }}
@@ -136,8 +135,16 @@ spec:
               protocol: TCP
           {{- if .Values.defaultBackend.resources }}
           resources: {{- toYaml .Values.defaultBackend.resources | nindent 12 }}
+          {{- else if ne .Values.defaultBackend.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.defaultBackend.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/nginx/tmp
+              subPath: app-tmp-dir
             {{- if .Values.defaultBackend.serverBlockConfig }}
             - name: nginx-config-volume
               mountPath: /opt/bitnami/nginx/conf/bitnami/defaultBackend.conf
@@ -151,6 +158,8 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.defaultBackend.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         {{- if .Values.defaultBackend.serverBlockConfig }}
         - name: nginx-config-volume
           configMap:

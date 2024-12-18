@@ -1,4 +1,4 @@
-// Copyright VMware, Inc.
+// Copyright Broadcom, Inc. All Rights Reserved.
 // SPDX-License-Identifier: APACHE-2.0
 
 package integration
@@ -48,6 +48,17 @@ func clusterConfigOrDie() *rest.Config {
 }
 
 func createPodOrDie(ctx context.Context, c cv1.PodsGetter, name string, image string) *v1.Pod {
+	securityContext := &v1.SecurityContext{
+		Privileged:               &[]bool{false}[0],
+		AllowPrivilegeEscalation: &[]bool{false}[0],
+		RunAsNonRoot:             &[]bool{true}[0],
+		Capabilities: &v1.Capabilities{
+			Drop: []v1.Capability{"ALL"},
+		},
+		SeccompProfile: &v1.SeccompProfile{
+			Type: "RuntimeDefault",
+		},
+	}
 	podData := &v1.Pod{
 		ObjectMeta: metav1.ObjectMeta{
 			Namespace: *namespace,
@@ -58,6 +69,7 @@ func createPodOrDie(ctx context.Context, c cv1.PodsGetter, name string, image st
 				{
 					Name:  name,
 					Image: image,
+					SecurityContext: securityContext,
 				},
 			},
 		},
