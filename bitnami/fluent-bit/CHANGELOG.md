@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.4.1 (2024-12-18)
+
+* [bitnami/fluent-bit] Fix typo daemonset.enable ([#31088](https://github.com/bitnami/charts/pull/31088))
+
 ## 2.4.0 (2024-12-10)
 
 * [bitnami/fluent-bit] Detect non-standard images ([#30891](https://github.com/bitnami/charts/pull/30891))
