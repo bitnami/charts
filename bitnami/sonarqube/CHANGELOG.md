@@ -1,8 +1,13 @@
 # Changelog
 
+## 7.0.0 (2024-12-19)
+
+* [bitnami/sonarqube] Release 7.0.0 ([#31117](https://github.com/bitnami/charts/pull/31117))
+
 ## 6.2.0 (2024-12-19)
 
-* [bitnami/sonarqube] chore(jmx-exporter): Upgrade image and change args ([#31105](https://github.com/bitnami/charts/pull/31105))
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/sonarqube] chore(jmx-exporter): Upgrade image and change args (#31105) ([79c29e5](https://github.com/bitnami/charts/commit/79c29e5bbf9292969d4ff10021be21de166e2fa6)), closes [#31105](https://github.com/bitnami/charts/issues/31105)
 
 ## 6.1.0 (2024-12-10)
 
