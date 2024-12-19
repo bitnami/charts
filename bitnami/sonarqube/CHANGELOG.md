@@ -1,8 +1,16 @@
 # Changelog
 
+## 6.2.0 (2024-12-19)
+
+* [bitnami/sonarqube] chore(jmx-exporter): Upgrade image and change args ([#31105](https://github.com/bitnami/charts/pull/31105))
+
 ## 6.1.0 (2024-12-10)
 
-* [bitnami/sonarqube] Detect non-standard images ([#30946](https://github.com/bitnami/charts/pull/30946))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 6) (#30675) ([7b9cd04](https://github.com/bitnami/charts/commit/7b9cd04c2ffc730a0d62da787f2d4967c0ede47c)), closes [#30675](https://github.com/bitnami/charts/issues/30675)
+* [bitnami/*] docs: :memo: Unify "Securing Traffic using TLS" section (#30707) ([b572333](https://github.com/bitnami/charts/commit/b57233336e4fe9af928ecb4f2a5f334011efb1bc)), closes [#30707](https://github.com/bitnami/charts/issues/30707)
+* [bitnami/sonarqube] Detect non-standard images (#30946) ([09ff258](https://github.com/bitnami/charts/commit/09ff258f457254a4cdd96063f10ce0f0c4595905)), closes [#30946](https://github.com/bitnami/charts/issues/30946)
 
 ## <small>6.0.2 (2024-11-09)</small>
 
