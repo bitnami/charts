@@ -1,8 +1,12 @@
 # Changelog
 
+## 1.2.1 (2024-12-19)
+
+* [bitnami/janusgraph] Release 1.2.1 ([#31098](https://github.com/bitnami/charts/pull/31098))
+
 ## 1.2.0 (2024-12-18)
 
-* [birtnami/janusgraph] chore(jmx-exporter): Upgrade image and change args ([#31090](https://github.com/bitnami/charts/pull/31090))
+* [birtnami/janusgraph] chore(jmx-exporter): Upgrade image and change args (#31090) ([1c6465d](https://github.com/bitnami/charts/commit/1c6465d5502b8298898896c38302e4500bcae4a4)), closes [#31090](https://github.com/bitnami/charts/issues/31090)
 
 ## 1.1.0 (2024-12-10)
 
