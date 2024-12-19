@@ -3,27 +3,27 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if eq .Values.tempo.deploymentMode "microservices" }}
-{{- if and .Values.compactor.enabled .Values.compactor.networkPolicy.enabled }}
+{{- if eq .Values.tempo.deploymentMode "scalingMonolithic" }}
+{{- if .Values.scalingMonolithic.networkPolicy.enabled }}
 kind: NetworkPolicy
 apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
 metadata:
-  name: {{ template "grafana-tempo.compactor.fullname" . }}
+  name: {{ template "grafana-tempo.scaling-monolithic.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
-    app.kubernetes.io/component: compactor
+    app.kubernetes.io/component: scaling-monolithic
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.compactor.podLabels .Values.commonLabels ) "context" . ) }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.scalingMonolithic.podLabels .Values.commonLabels ) "context" . ) }}
   podSelector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
-      app.kubernetes.io/component: compactor
+      app.kubernetes.io/component: scaling-monolithic
   policyTypes:
     - Ingress
     - Egress
-  {{- if .Values.compactor.networkPolicy.allowExternalEgress }}
+  {{- if .Values.scalingMonolithic.networkPolicy.allowExternalEgress }}
   egress:
     - {}
   {{- else }}
@@ -86,12 +86,12 @@ spec:
         - podSelector:
             matchLabels:
               app.kubernetes.io/name: memcached
-              app.kubernetes.io/instance: {{ .Release.Name }}              
+              app.kubernetes.io/instance: {{ .Release.Name }}
       {{- else }}
         - port: {{ .Values.externalMemcached.port }}
       {{- end }}
-    {{- if .Values.compactor.networkPolicy.extraEgress }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.compactor.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
+    {{- if .Values.scalingMonolithic.networkPolicy.extraEgress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.scalingMonolithic.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
     {{- end }}
   {{- end }}
   ingress:
@@ -99,28 +99,28 @@ spec:
         - port: {{ .Values.tempo.containerPorts.web }}
         - port: {{ .Values.tempo.containerPorts.gossipRing }}
         - port: {{ .Values.tempo.containerPorts.grpc }}
-      {{- if not .Values.compactor.networkPolicy.allowExternal }}
+      {{- if not .Values.scalingMonolithic.networkPolicy.allowExternal }}
       from:
-        {{- if .Values.compactor.networkPolicy.addExternalClientAccess }}
+        {{- if .Values.scalingMonolithic.networkPolicy.addExternalClientAccess }}
         - podSelector:
             matchLabels:
-              {{ template "grafana-tempo.compactor.fullname" . }}-compactor: "true"
+              {{ template "grafana-tempo.scaling-monolithic.fullname" . }}-scalingMonolithic: "true"
         {{- end }}
-        {{- if .Values.compactor.networkPolicy.ingressPodMatchLabels }}
+        {{- if .Values.scalingMonolithic.networkPolicy.ingressPodMatchLabels }}
         - podSelector:
-            matchLabels: {{- include "common.tplvalues.render" (dict "value" .Values.compactor.networkPolicy.ingressPodMatchLabels "context" $ ) | nindent 14 }}
+            matchLabels: {{- include "common.tplvalues.render" (dict "value" .Values.scalingMonolithic.networkPolicy.ingressPodMatchLabels "context" $ ) | nindent 14 }}
         {{- end }}
-        {{- if .Values.compactor.networkPolicy.ingressNSMatchLabels }}
+        {{- if .Values.scalingMonolithic.networkPolicy.ingressNSMatchLabels }}
         - namespaceSelector:
-            matchLabels: {{- include "common.tplvalues.render" (dict "value" .Values.compactor.networkPolicy.ingressNSMatchLabels "context" $ ) | nindent 14 }}
-          {{- if .Values.compactor.networkPolicy.ingressNSPodMatchLabels }}
+            matchLabels: {{- include "common.tplvalues.render" (dict "value" .Values.scalingMonolithic.networkPolicy.ingressNSMatchLabels "context" $ ) | nindent 14 }}
+          {{- if .Values.scalingMonolithic.networkPolicy.ingressNSPodMatchLabels }}
           podSelector:
-            matchLabels: {{- include "common.tplvalues.render" (dict "value" .Values.compactor.networkPolicy.ingressNSPodMatchLabels "context" $ ) | nindent 14 }}
+            matchLabels: {{- include "common.tplvalues.render" (dict "value" .Values.scalingMonolithic.networkPolicy.ingressNSPodMatchLabels "context" $ ) | nindent 14 }}
           {{- end }}
         {{- end }}
       {{- end }}
-    {{- if .Values.compactor.networkPolicy.extraIngress }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.compactor.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
+    {{- if .Values.scalingMonolithic.networkPolicy.extraIngress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.scalingMonolithic.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
     {{- end }}
 {{- end }}
 {{- end }}
