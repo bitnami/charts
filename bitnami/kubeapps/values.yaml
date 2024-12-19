@@ -1117,7 +1117,8 @@ apprepository:
   ##
   initialRepos:
     - name: bitnami
-      url: https://charts.bitnami.com/bitnami
+      #url: https://charts.bitnami.com/bitnami
+      url: https://raw.githubusercontent.com/bitnami/charts/refs/heads/deprecated-index/bitnami
   ## @param apprepository.customAnnotations Custom annotations be added to each AppRepository-generated CronJob, Job and Pod
   ##
   customAnnotations: {}

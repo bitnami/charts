@@ -23,7 +23,8 @@ dashboard:
 apprepository:
   initialRepos:
     - name: bitnami
-      url: https://charts.bitnami.com/bitnami
+      #url: https://charts.bitnami.com/bitnami
+      url: https://raw.githubusercontent.com/bitnami/charts/refs/heads/deprecated-index/bitnami
       filterRule:
         jq: .name == "nginx"
   watchAllNamespaces: false
