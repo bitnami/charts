@@ -1,8 +1,17 @@
 # Changelog
 
+## 31.2.0 (2024-12-19)
+
+* [bitnami/kafka] chore(jmx-exporter): Upgrade image and change args ([#31108](https://github.com/bitnami/charts/pull/31108))
+
 ## 31.1.0 (2024-12-10)
 
-* [bitnami/kafka] Detect non-standard images ([#30903](https://github.com/bitnami/charts/pull/30903))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 3) (#30666) ([82fc7e2](https://github.com/bitnami/charts/commit/82fc7e2fc12e2648ed22069942203c02bf5d4cc6)), closes [#30666](https://github.com/bitnami/charts/issues/30666)
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 2) (#30687) ([c457848](https://github.com/bitnami/charts/commit/c457848b2a111aad59830b98f85ffa1e29918e10)), closes [#30687](https://github.com/bitnami/charts/issues/30687)
+* [bitnami/kafka] Add upgrade notes for version 31.0.0 (#30427) ([fe6422c](https://github.com/bitnami/charts/commit/fe6422cb722627ccd5db8138ad27cd7993947146)), closes [#30427](https://github.com/bitnami/charts/issues/30427)
+* [bitnami/kafka] Detect non-standard images (#30903) ([885bbcd](https://github.com/bitnami/charts/commit/885bbcd5b7b0b0fe7d12e5126659ee1d9dd0efee)), closes [#30903](https://github.com/bitnami/charts/issues/30903)
 
 ## 31.0.0 (2024-11-12)
 
