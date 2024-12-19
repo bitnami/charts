@@ -197,7 +197,7 @@ spec:
           {{- else if .Values.kubeappsapis.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.kubeappsapis.readinessProbe "enabled") "context" $) | nindent 12 }}
             exec:
-              command: ["grpc_health_probe", "-addr=:{{ .Values.kubeappsapis.containerPorts.http }}"]
+              command: ["grpc-health-probe", "-addr=:{{ .Values.kubeappsapis.containerPorts.http }}"]
           {{- end }}
           {{- if .Values.kubeappsapis.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.kubeappsapis.customStartupProbe "context" $) | nindent 12 }}
@@ -249,7 +249,7 @@ spec:
           command: {{- include "common.tplvalues.render" (dict "value" .Values.ociCatalog.command "context" $) | nindent 12 }}
           {{- else }}
           command:
-            - /oci-catalog
+            - oci-catalog
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
@@ -297,7 +297,7 @@ spec:
           {{- else if .Values.ociCatalog.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.ociCatalog.readinessProbe "enabled") "context" $) | nindent 12 }}
             exec:
-              command: ["grpc_health_probe", "-addr=:{{ .Values.ociCatalog.containerPorts.grpc }}"]
+              command: ["grpc-health-probe", "-addr=:{{ .Values.ociCatalog.containerPorts.grpc }}"]
           {{- end }}
           {{- if .Values.ociCatalog.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ociCatalog.customStartupProbe "context" $) | nindent 12 }}

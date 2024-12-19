@@ -2258,7 +2258,7 @@ kubeappsapis:
 ociCatalog:
   ## @param ociCatalog.enabled Enable the OCI catalog gRPC service for cataloging
   ## OCI repositories
-  enabled: false
+  enabled: true
   ## Bitnami Kubeapps OCI Catalog image
   ## ref: https://hub.docker.com/r/bitnami/kubeapps-ocicatalog/
   ## @param ociCatalog.image.registry [default: REGISTRY_NAME] OCI Catalog image registry
