@@ -102,6 +102,9 @@ tempo:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
+  ## @param tempo.deploymentMode decides components run in a process. (allowed values: microservices, scalingMonolithic)
+  ##
+  deploymentMode: "microservices"
   ## @param tempo.memBallastSizeMbs Tempo components memory ballast size in MB
   ##
   memBallastSizeMbs: 1024
@@ -204,7 +207,11 @@ tempo:
         {{- end }}
     querier:
       frontend_worker:
+        {{- if eq .Values.tempo.deploymentMode "microservices" }}
         frontend_address: {{ include "grafana-tempo.query-frontend.fullname" . }}-headless:{{ .Values.queryFrontend.service.ports.grpc }}
+        {{- else if eq .Values.tempo.deploymentMode "scalingMonolithic" }}
+        frontend_address: {{ include "grafana-tempo.scaling-monolithic.fullname" . }}-headless:{{ .Values.scalingMonolithic.service.ports.grpc }}
+        {{- end }}
     ingester:
       lifecycler:
         ring:
@@ -2724,6 +2731,598 @@ queryFrontend:
     ingressPodMatchLabels: {}
     ## @param queryFrontend.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces. Ignored if `queryFrontend.networkPolicy.allowExternal` is true.
     ## @param queryFrontend.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces. Ignored if `queryFrontend.networkPolicy.allowExternal` is true.
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
+
+## @section Scalable Single Binary Deployment Parameters
+##
+scalingMonolithic:
+  ## @param scalingMonolithic.extraEnvVars Array with extra environment variables to add to scalingMonolithic nodes
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param scalingMonolithic.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for scalingMonolithic nodes
+  ##
+  extraEnvVarsCM: ""
+  ## @param scalingMonolithic.extraEnvVarsSecret Name of existing Secret containing extra env vars for scalingMonolithic nodes
+  ##
+  extraEnvVarsSecret: ""
+  ## @param scalingMonolithic.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param scalingMonolithic.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param scalingMonolithic.replicaCount Number of scalingMonolithic replicas to deploy
+  ##
+  replicaCount: 1
+  ## Configure extra options for scalingMonolithic containers' liveness, readiness and startup probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
+  ## @param scalingMonolithic.livenessProbe.enabled Enable livenessProbe on scalingMonolithic nodes
+  ## @param scalingMonolithic.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param scalingMonolithic.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param scalingMonolithic.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param scalingMonolithic.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param scalingMonolithic.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    failureThreshold: 3
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+  ## @param scalingMonolithic.readinessProbe.enabled Enable readinessProbe on scalingMonolithic nodes
+  ## @param scalingMonolithic.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param scalingMonolithic.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param scalingMonolithic.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param scalingMonolithic.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param scalingMonolithic.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    failureThreshold: 3
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+  ## @param scalingMonolithic.startupProbe.enabled Enable startupProbe on scalingMonolithic containers
+  ## @param scalingMonolithic.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param scalingMonolithic.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param scalingMonolithic.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param scalingMonolithic.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param scalingMonolithic.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 15
+    successThreshold: 1
+  ## @param scalingMonolithic.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param scalingMonolithic.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param scalingMonolithic.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## @param scalingMonolithic.lifecycleHooks for the scalingMonolithic container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## scalingMonolithic resource requests and limits
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param scalingMonolithic.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if scalingMonolithic.resources is set (scalingMonolithic.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "nano"
+  ## @param scalingMonolithic.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param scalingMonolithic.podSecurityContext.enabled Enabled scalingMonolithic pods' Security Context
+  ## @param scalingMonolithic.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param scalingMonolithic.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param scalingMonolithic.podSecurityContext.supplementalGroups Set filesystem extra groups
+  ## @param scalingMonolithic.podSecurityContext.fsGroup Set scalingMonolithic pod's Security Context fsGroup
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
+    fsGroup: 1001
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param scalingMonolithic.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param scalingMonolithic.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param scalingMonolithic.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param scalingMonolithic.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+  ## @param scalingMonolithic.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param scalingMonolithic.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param scalingMonolithic.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param scalingMonolithic.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param scalingMonolithic.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param scalingMonolithic.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
+  ##
+  containerSecurityContext:
+    enabled: true
+    seLinuxOptions: {}
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
+  ## @param scalingMonolithic.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
+  ## @param scalingMonolithic.hostAliases scalingMonolithic pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param scalingMonolithic.podLabels Extra labels for scalingMonolithic pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param scalingMonolithic.podAnnotations Annotations for scalingMonolithic pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param scalingMonolithic.podAffinityPreset Pod affinity preset. Ignored if `scalingMonolithic.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param scalingMonolithic.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `scalingMonolithic.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## Node scalingMonolithic.affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param scalingMonolithic.nodeAffinityPreset.type Node affinity preset type. Ignored if `scalingMonolithic.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param scalingMonolithic.nodeAffinityPreset.key Node label key to match. Ignored if `scalingMonolithic.affinity` is set
+    ##
+    key: ""
+    ## @param scalingMonolithic.nodeAffinityPreset.values Node label values to match. Ignored if `scalingMonolithic.affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param scalingMonolithic.affinity Affinity for scalingMonolithic pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `scalingMonolithic.podAffinityPreset`, `scalingMonolithic.podAntiAffinityPreset`, and `scalingMonolithic.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param scalingMonolithic.nodeSelector Node labels for scalingMonolithic pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
+  ##
+  nodeSelector: {}
+  ## @param scalingMonolithic.tolerations Tolerations for scalingMonolithic pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param scalingMonolithic.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
+  ## @param scalingMonolithic.priorityClassName scalingMonolithic pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param scalingMonolithic.schedulerName Kubernetes pod scheduler registry
+  ## https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param scalingMonolithic.updateStrategy.type scalingMonolithic statefulset strategy type
+  ## @param scalingMonolithic.updateStrategy.rollingUpdate scalingMonolithic statefulset rolling update configuration parameters
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate: {}
+  ## @param scalingMonolithic.extraVolumes Optionally specify extra list of additional volumes for the scalingMonolithic pod(s)
+  ##
+  extraVolumes: []
+  ## @param scalingMonolithic.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the scalingMonolithic container(s)
+  ##
+  extraVolumeMounts: []
+  ## @param scalingMonolithic.sidecars Add additional sidecar containers to the scalingMonolithic pod(s)
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param scalingMonolithic.initContainers Add additional init containers to the scalingMonolithic pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param scalingMonolithic.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param scalingMonolithic.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param scalingMonolithic.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `scalingMonolithic.pdb.minAvailable` and `scalingMonolithic.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
+  ## @param scalingMonolithic.enableServiceLinks Whether information about services should be injected into pod's environment variable
+  ## The environment variables injected by service links are not used, but can lead to slow boot times or slow running of the scripts when there are many services in the current namespace.
+  ## If you experience slow pod startups or slow running of the scripts you probably want to set this to `false`.
+  ##
+  enableServiceLinks: true
+  ## @section scalingMonolithic Persistence Parameters
+
+  ## Enable persistence using Persistent Volume Claims
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
+  ##
+  persistence:
+    ## @param scalingMonolithic.persistence.enabled Enable persistence in scalingMonolithic instances
+    ##
+    enabled: true
+    ## @param scalingMonolithic.persistence.existingClaim Name of an existing PVC to use
+    ##
+    existingClaim: ""
+    ## @param scalingMonolithic.persistence.storageClass PVC Storage Class for Memcached data volume
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
+    storageClass: ""
+    ## @param scalingMonolithic.persistence.subPath The subdirectory of the volume to mount to
+    ##
+    subPath: ""
+    ## @param scalingMonolithic.persistence.accessModes PVC Access modes
+    ##
+    accessModes:
+      - ReadWriteOnce
+    ## @param scalingMonolithic.persistence.size PVC Storage Request for Memcached data volume
+    ##
+    size: 8Gi
+    ## @param scalingMonolithic.persistence.annotations Additional PVC annotations
+    ##
+    annotations: {}
+    ## @param scalingMonolithic.persistence.selector Selector to match an existing Persistent Volume for scalingMonolithic's data PVC
+    ## If set, the PVC can't have a PV dynamically provisioned for it
+    ## E.g.
+    ## selector:
+    ##   matchLabels:
+    ##     app: my-app
+    ##
+    selector: {}
+  ## @section scalingMonolithic Traffic Exposure Parameters
+  ##
+
+  query:
+    ## @param scalingMonolithic.query.enabled Whether to enable the query container for legacy Grafana compatibility with jaeger-ui.  Only required for grafana version <7.5
+    enabled: false
+    ## Bitnami Grafana Tempo Query image
+    ## ref: https://hub.docker.com/r/bitnami/grafana-tempo-query/tags/
+    ## @param scalingMonolithic.query.image.registry [default: REGISTRY_NAME] Grafana Tempo Query image registry
+    ## @param scalingMonolithic.query.image.repository [default: REPOSITORY_NAME/grafana-tempo-query] Grafana Tempo Query image repository
+    ## @skip scalingMonolithic.query.image.tag Grafana Tempo Query image tag (immutable tags are recommended)
+    ## @param scalingMonolithic.query.image.digest Grafana Tempo Query image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+    ## @param scalingMonolithic.query.image.pullPolicy Grafana Tempo Query image pull policy
+    ## @param scalingMonolithic.query.image.pullSecrets Grafana Tempo Query image pull secrets
+    ##
+    image:
+      registry: docker.io
+      repository: bitnami/grafana-tempo-query
+      tag: 2.6.1-debian-12-r4
+      digest: ""
+      ## Specify a imagePullPolicy
+      ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
+      ##
+      pullPolicy: IfNotPresent
+      ## Optionally specify an array of imagePullSecrets.
+      ## Secrets must be manually created in the namespace.
+      ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+      ## e.g:
+      ## pullSecrets:
+      ##   - myRegistryKeySecretName
+      ##
+      pullSecrets: []
+    ## @param scalingMonolithic.query.configuration [string] Query sidecar configuration
+    ##
+    configuration: |
+      backend: 127.0.0.1:{{ .Values.tempo.containerPorts.web }}
+    ## @param scalingMonolithic.query.containerPorts.jaegerMetrics scalingMonolithic query sidecar Jaeger metrics container port
+    ## @param scalingMonolithic.query.containerPorts.jaegerUI scalingMonolithic query sidecar Jaeger UI container port
+    ## @param scalingMonolithic.query.containerPorts.jaegerGRPC scalingMonolithic query sidecar Jaeger UI container port
+    ##
+    containerPorts:
+      jaegerMetrics: 16687
+      jaegerUI: 16686
+      jaegerGRPC: 16685
+    ## @param scalingMonolithic.query.existingConfigmap Name of a configmap with the query configuration
+    ##
+    existingConfigmap: ""
+    ## @param scalingMonolithic.query.extraEnvVars Array with extra environment variables to add to scalingMonolithic nodes
+    ## e.g:
+    ## extraEnvVars:
+    ##   - name: FOO
+    ##     value: "bar"
+    ##
+    extraEnvVars: []
+    ## @param scalingMonolithic.query.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for scalingMonolithic nodes
+    ##
+    extraEnvVarsCM: ""
+    ## @param scalingMonolithic.query.extraEnvVarsSecret Name of existing Secret containing extra env vars for scalingMonolithic nodes
+    ##
+    extraEnvVarsSecret: ""
+    ## @param scalingMonolithic.query.command Override default container command (useful when using custom images)
+    ##
+    command: []
+    ## @param scalingMonolithic.query.args Override default container args (useful when using custom images)
+    ##
+    args: []
+    ## Configure extra options for Query sidecar containers' liveness, readiness and startup probes
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
+    ## @param scalingMonolithic.query.livenessProbe.enabled Enable livenessProbe on Query sidecar nodes
+    ## @param scalingMonolithic.query.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+    ## @param scalingMonolithic.query.livenessProbe.periodSeconds Period seconds for livenessProbe
+    ## @param scalingMonolithic.query.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+    ## @param scalingMonolithic.query.livenessProbe.failureThreshold Failure threshold for livenessProbe
+    ## @param scalingMonolithic.query.livenessProbe.successThreshold Success threshold for livenessProbe
+    ##
+    livenessProbe:
+      enabled: true
+      failureThreshold: 3
+      initialDelaySeconds: 10
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 1
+    ## @param scalingMonolithic.query.readinessProbe.enabled Enable readinessProbe on Query sidecar nodes
+    ## @param scalingMonolithic.query.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+    ## @param scalingMonolithic.query.readinessProbe.periodSeconds Period seconds for readinessProbe
+    ## @param scalingMonolithic.query.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+    ## @param scalingMonolithic.query.readinessProbe.failureThreshold Failure threshold for readinessProbe
+    ## @param scalingMonolithic.query.readinessProbe.successThreshold Success threshold for readinessProbe
+    ##
+    readinessProbe:
+      enabled: true
+      failureThreshold: 3
+      initialDelaySeconds: 10
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 1
+    ## @param scalingMonolithic.query.startupProbe.enabled Enable startupProbe on Query sidecar containers
+    ## @param scalingMonolithic.query.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+    ## @param scalingMonolithic.query.startupProbe.periodSeconds Period seconds for startupProbe
+    ## @param scalingMonolithic.query.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+    ## @param scalingMonolithic.query.startupProbe.failureThreshold Failure threshold for startupProbe
+    ## @param scalingMonolithic.query.startupProbe.successThreshold Success threshold for startupProbe
+    ##
+    startupProbe:
+      enabled: false
+      initialDelaySeconds: 30
+      periodSeconds: 10
+      timeoutSeconds: 1
+      failureThreshold: 15
+      successThreshold: 1
+    ## @param scalingMonolithic.query.customLivenessProbe Custom livenessProbe that overrides the default one
+    ##
+    customLivenessProbe: {}
+    ## @param scalingMonolithic.query.customReadinessProbe Custom readinessProbe that overrides the default one
+    ##
+    customReadinessProbe: {}
+    ## @param scalingMonolithic.query.customStartupProbe Custom startupProbe that overrides the default one
+    ##
+    customStartupProbe: {}
+    ## @param scalingMonolithic.query.lifecycleHooks for the query sidecar container(s) to automate configuration before or after startup
+    ##
+    lifecycleHooks: {}
+    ## Configure Container Security Context
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+    ## @param scalingMonolithic.query.containerSecurityContext.enabled Enabled containers' Security Context
+    ## @param scalingMonolithic.query.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+    ## @param scalingMonolithic.query.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+
+    ## @param scalingMonolithic.query.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+    ## @param scalingMonolithic.query.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+    ## @param scalingMonolithic.query.containerSecurityContext.privileged Set container's Security Context privileged
+    ## @param scalingMonolithic.query.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+    ## @param scalingMonolithic.query.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+    ## @param scalingMonolithic.query.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+    ## @param scalingMonolithic.query.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
+    ##
+    containerSecurityContext:
+      enabled: true
+      seLinuxOptions: {}
+      runAsUser: 1001
+      runAsGroup: 1001
+      runAsNonRoot: true
+      privileged: false
+      readOnlyRootFilesystem: true
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop: ["ALL"]
+      seccompProfile:
+        type: "RuntimeDefault"
+    ## Query sidecar resource requests and limits
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+    ## @param scalingMonolithic.query.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if scalingMonolithic.query.resources is set (scalingMonolithic.query.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+    ##
+    resourcesPreset: "nano"
+    ## @param scalingMonolithic.query.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## Example:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    resources: {}
+    ## @param scalingMonolithic.query.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the scalingMonolithic container(s)
+    ##
+    extraVolumeMounts: []
+  ## @section Scaling Monolithic Traffic Exposure Parameters
+  ##
+
+  ## scalingMonolithic service parameters
+  ##
+  service:
+    ## @param scalingMonolithic.service.type scalingMonolithic service type
+    ##
+    type: ClusterIP
+    ## @param scalingMonolithic.service.ports.http scalingMonolithic HTTP service port
+    ## @param scalingMonolithic.service.ports.grpc scalingMonolithic GRPC service port
+    ##
+    ports:
+      http: 3200
+      grpc: 9095
+    ## Node ports to expose
+    ## NOTE: choose port between <30000-32767>
+    ## @param scalingMonolithic.service.nodePorts.http Node port for HTTP
+    ## @param scalingMonolithic.service.nodePorts.grpc Node port for GRPC
+    ##
+    nodePorts:
+      http: ""
+      grpc: ""
+    ## @param scalingMonolithic.service.sessionAffinity Control where client requests go, to the same pod or round-robin
+    ## Values: ClientIP or None
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
+    ##
+    sessionAffinity: None
+    ## @param scalingMonolithic.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
+    ## @param scalingMonolithic.service.clusterIP scalingMonolithic service Cluster IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param scalingMonolithic.service.loadBalancerIP scalingMonolithic service Load Balancer IP
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerIP: ""
+    ## @param scalingMonolithic.service.loadBalancerSourceRanges scalingMonolithic service Load Balancer sources
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param scalingMonolithic.service.externalTrafficPolicy scalingMonolithic service external traffic policy
+    ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param scalingMonolithic.service.annotations Additional custom annotations for scalingMonolithic service
+    ##
+    annotations: {}
+    ## @param scalingMonolithic.service.extraPorts Extra ports to expose in the scalingMonolithic service
+    ##
+    extraPorts: []
+    ## Headless service properties
+    ##
+    headless:
+      ## @param scalingMonolithic.service.headless.annotations Annotations for the headless service.
+      ##
+      annotations: {}
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param scalingMonolithic.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param scalingMonolithic.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param scalingMonolithic.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param scalingMonolithic.networkPolicy.addExternalClientAccess Allow access from pods with client label set to "true". Ignored if `scalingMonolithic.networkPolicy.allowExternal` is true.
+    ##
+    addExternalClientAccess: true
+    ## @param scalingMonolithic.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param scalingMonolithic.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param scalingMonolithic.networkPolicy.ingressPodMatchLabels [object] Labels to match to allow traffic from other pods. Ignored if `scalingMonolithic.networkPolicy.allowExternal` is true.
+    ## e.g:
+    ## ingressPodMatchLabels:
+    ##   my-client: "true"
+    #
+    ingressPodMatchLabels: {}
+    ## @param scalingMonolithic.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces. Ignored if `scalingMonolithic.networkPolicy.allowExternal` is true.
+    ## @param scalingMonolithic.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces. Ignored if `scalingMonolithic.networkPolicy.allowExternal` is true.
     ##
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
