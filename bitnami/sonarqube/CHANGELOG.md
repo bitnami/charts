@@ -1,6 +1,6 @@
 # Changelog
 
-## 7.0.0 (2024-12-19)
+## 7.0.0 (2024-12-20)
 
 * [bitnami/sonarqube] Release 7.0.0 ([#31117](https://github.com/bitnami/charts/pull/31117))
 
