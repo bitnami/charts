@@ -1,8 +1,13 @@
 # Changelog
 
-## 5.1.2 (2024-12-18)
+## 5.1.3 (2024-12-20)
 
-* [bitnami/appsmith] Release 5.1.2 ([#31092](https://github.com/bitnami/charts/pull/31092))
+* [bitnami/appsmith] Release 5.1.3 ([#31129](https://github.com/bitnami/charts/pull/31129))
+
+## <small>5.1.2 (2024-12-18)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/appsmith] Release 5.1.2 (#31092) ([5aa88f7](https://github.com/bitnami/charts/commit/5aa88f7099c975df1bc52ca83b9993e7328af989)), closes [#31092](https://github.com/bitnami/charts/issues/31092)
 
 ## <small>5.1.1 (2024-12-11)</small>
 
