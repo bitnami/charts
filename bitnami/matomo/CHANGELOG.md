@@ -1,8 +1,13 @@
 # Changelog
 
+## 9.2.1 (2024-12-20)
+
+* [bitnami/matomo] Release 9.2.1 ([#31134](https://github.com/bitnami/charts/pull/31134))
+
 ## 9.2.0 (2024-12-17)
 
-* [bitnami/matomo] add initContainers parameter to CronJob pods ([#31065](https://github.com/bitnami/charts/pull/31065))
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/matomo] add initContainers parameter to CronJob pods (#31065) ([27feba9](https://github.com/bitnami/charts/commit/27feba938379638644aae8e61f8f90c30d331b79)), closes [#31065](https://github.com/bitnami/charts/issues/31065)
 
 ## <small>9.1.1 (2024-12-12)</small>
 
