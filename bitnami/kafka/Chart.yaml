@@ -6,7 +6,7 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: jmx-exporter
-      image: docker.io/bitnami/jmx-exporter:1.0.1-debian-12-r9
+      image: docker.io/bitnami/jmx-exporter:1.1.0-debian-12-r1
     - name: kafka
       image: docker.io/bitnami/kafka:3.9.0-debian-12-r1
     - name: kubectl
@@ -40,4 +40,4 @@ maintainers:
 name: kafka
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/kafka
-version: 31.1.0
+version: 31.2.0
