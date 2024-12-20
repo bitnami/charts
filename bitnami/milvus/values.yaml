@@ -92,7 +92,7 @@ milvus:
   image:
     registry: docker.io
     repository: bitnami/milvus
-    tag: 2.4.17-debian-12-r1
+    tag: 2.4.18-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -5162,7 +5162,7 @@ waitContainer:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r33
+    tag: 12-debian-12-r34
     digest: ""
     ## @param waitContainer.image.pullPolicy Init container wait-container image pull policy
     ##
