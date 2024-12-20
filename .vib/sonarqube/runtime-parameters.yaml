@@ -28,3 +28,6 @@ postgresql:
     database: test_db_database
 sysctl:
   enabled: true
+metrics:
+  jmx:
+    enabled: true

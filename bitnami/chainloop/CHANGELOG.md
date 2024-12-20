@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.1.8 (2024-12-18)
+## 2.1.9 (2024-12-19)
 
-* [bitnami/chainloop] Release 2.1.8 ([#31082](https://github.com/bitnami/charts/pull/31082))
+* [bitnami/chainloop] Release 2.1.9 ([#31114](https://github.com/bitnami/charts/pull/31114))
+
+## <small>2.1.8 (2024-12-18)</small>
+
+* [bitnami/chainloop] Release 2.1.8 (#31082) ([43f2e94](https://github.com/bitnami/charts/commit/43f2e9458228d888b0f1f56d84e6cf50e01bdc59)), closes [#31082](https://github.com/bitnami/charts/issues/31082)
 
 ## <small>2.1.7 (2024-12-17)</small>
 

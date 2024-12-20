@@ -1,8 +1,12 @@
 # Changelog
 
-## 5.1.1 (2024-12-11)
+## 5.1.2 (2024-12-18)
 
-* [bitnami/appsmith] Release 5.1.1 ([#30984](https://github.com/bitnami/charts/pull/30984))
+* [bitnami/appsmith] Release 5.1.2 ([#31092](https://github.com/bitnami/charts/pull/31092))
+
+## <small>5.1.1 (2024-12-11)</small>
+
+* [bitnami/appsmith] Release 5.1.1 (#30984) ([0e4fe7e](https://github.com/bitnami/charts/commit/0e4fe7ea2ada0592f7d69b03452ea6f522945f51)), closes [#30984](https://github.com/bitnami/charts/issues/30984)
 
 ## 5.1.0 (2024-12-10)
 

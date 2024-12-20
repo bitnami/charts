@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.4.1 (2024-12-19)
+## 2.4.2 (2024-12-19)
 
 * [bitnami/fluent-bit] Fix typo daemonset.enable ([#31088](https://github.com/bitnami/charts/pull/31088))
+
+## 2.4.1 (2024-12-19)
+
+* [bitnami/fluent-bit] Release 2.4.1 ([#31123](https://github.com/bitnami/charts/pull/31123))
 
 ## 2.4.0 (2024-12-10)
 
