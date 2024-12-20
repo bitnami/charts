@@ -1,12 +1,12 @@
 # Changelog
 
-## 24.3.2 (2024-11-30)
+## 24.3.2 (2024-12-20)
 
 * [bitnami/keycloak] Update KEYCLOAK_ADMIN env variables deprecation ([#30636](https://github.com/bitnami/charts/pull/30636))
 
-## 24.3.1 (2024-12-12)
+## <small>24.3.1 (2024-12-16)</small>
 
-* [bitnami/keycloak] KEYCLOAK_HOSTNAME present even if KEYCLOAK_PROXY_HEADERS is set ([#30368](https://github.com/bitnami/charts/pull/30368))
+* [bitnami/keycloak] KEYCLOAK_HOSTNAME present even if KEYCLOAK_PROXY_HEADERS is set (#30368) ([80b1bc3](https://github.com/bitnami/charts/commit/80b1bc3db52748c242a43a37ac9573eed311e6df)), closes [#30368](https://github.com/bitnami/charts/issues/30368)
 
 ## 24.3.0 (2024-12-10)
 
