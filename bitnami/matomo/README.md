@@ -51,7 +51,7 @@ The command deploys Matomo on the Kubernetes cluster in the default configuratio
 
 Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
 
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcesPreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
 ### Update credentials
 
@@ -443,6 +443,7 @@ helm install my-release --set persistence.existingClaim=PVC_NAME oci://REGISTRY_
 | `cronjobs.taskScheduler.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                       | `[]`             |
 | `cronjobs.taskScheduler.podSecurityContext.fsGroup`                        | Task scheduler cronjob pods' group ID                                                                             | `1001`           |
 | `cronjobs.taskScheduler.extraEnvVars`                                      | Extra environment variables for the taskScheduler CronJob                                                         | `[]`             |
+| `cronjobs.taskScheduler.initContainers`                                    | Additional init containers for the taskScheduler CronJob                                                          | `[]`             |
 | `cronjobs.archive.enabled`                                                 | Whether to enable scheduled mail-to-task CronJob                                                                  | `true`           |
 | `cronjobs.archive.schedule`                                                | Kubernetes CronJob schedule                                                                                       | `*/5 * * * *`    |
 | `cronjobs.archive.serviceAccountName`                                      | Attach serviceAccountName to the pod of the CronJob                                                               | `""`             |
@@ -474,6 +475,7 @@ helm install my-release --set persistence.existingClaim=PVC_NAME oci://REGISTRY_
 | `cronjobs.archive.podSecurityContext.supplementalGroups`                   | Set filesystem extra groups                                                                                       | `[]`             |
 | `cronjobs.archive.podSecurityContext.fsGroup`                              | Archive cronjob pods' group ID                                                                                    | `1001`           |
 | `cronjobs.archive.extraEnvVars`                                            | Extra environment variables for the archive CronJob                                                               | `[]`             |
+| `cronjobs.archive.initContainers`                                          | Additional init containers for the archive CronJob                                                                | `[]`             |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

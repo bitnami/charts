@@ -1,8 +1,13 @@
 # Changelog
 
+## 11.5.0 (2024-12-19)
+
+* [birtnami/tomcat] chore(jmx-exporter): Upgrade image and change args ([#31104](https://github.com/bitnami/charts/pull/31104))
+
 ## 11.4.0 (2024-12-10)
 
-* [bitnami/tomcat] Detect non-standard images ([#30949](https://github.com/bitnami/charts/pull/30949))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/tomcat] Detect non-standard images (#30949) ([936a5de](https://github.com/bitnami/charts/commit/936a5dee502a7761e05d5e2254bb0ddba15a4a0b)), closes [#30949](https://github.com/bitnami/charts/issues/30949)
 
 ## <small>11.3.3 (2024-12-10)</small>
 

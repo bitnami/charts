@@ -33,7 +33,7 @@ There are two different ways to deploy a PostgreSQL cluster, using the PostgreSQ
 
 - Both the PostgreSQL HA and the PostgreSQL chart configures a cluster with a primary/replica topology. The primary node has writing permissions while replication is on the replica nodes which have read-only permissions.
 - The PostgreSQL HA Helm chart deploys a cluster with three nodes by default, one for pgpool, one primary, and one replica for PostgreSQL. The PostgreSQL chart configures a cluster with two nodes by default (one primary and one replica).
-- The PostgreSQL HA Helm chart uses pgpool to handle the connection to the nodes. pgpool is resposible to spread the queries among nodes.
+- The PostgreSQL HA Helm chart uses pgpool to handle the connection to the nodes. pgpool is responsible to spread the queries among nodes.
 - The PostgreSQL HA Helm chart includes a repmgr module that ensures high-availability thanks to automatic membership control. If the primary is down, any of the replica nodes will be promoted as primary to avoid data loss.
 
 The following diagram shows you the options you have for using Bitnami's PostgreSQL solutions in your deployments:
@@ -61,7 +61,7 @@ helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/postgresql-ha
 
 Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
 
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcesPreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
 ### Prometheus metrics
 

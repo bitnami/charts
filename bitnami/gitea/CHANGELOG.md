@@ -1,8 +1,12 @@
 # Changelog
 
-## 3.1.1 (2024-12-11)
+## 3.1.2 (2024-12-13)
 
-* [bitnami/gitea] Release 3.1.1 ([#31000](https://github.com/bitnami/charts/pull/31000))
+* [bitnami/gitea] Release 3.1.2 ([#31031](https://github.com/bitnami/charts/pull/31031))
+
+## <small>3.1.1 (2024-12-11)</small>
+
+* [bitnami/gitea] Release 3.1.1 (#31000) ([893a7e0](https://github.com/bitnami/charts/commit/893a7e0b2ea7cddd98553f14d290849c0e5d0d07)), closes [#31000](https://github.com/bitnami/charts/issues/31000)
 
 ## 3.1.0 (2024-12-10)
 

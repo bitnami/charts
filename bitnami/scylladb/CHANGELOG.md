@@ -1,8 +1,12 @@
 # Changelog
 
-## 3.1.4 (2024-12-12)
+## 3.1.5 (2024-12-15)
 
-* [bitnami/scylladb] Fix existingConfiguration parameter for scylladb ([#31014](https://github.com/bitnami/charts/pull/31014))
+* [bitnami/scylladb] Release 3.1.5 ([#31047](https://github.com/bitnami/charts/pull/31047))
+
+## <small>3.1.4 (2024-12-12)</small>
+
+* [bitnami/scylladb] Fix existingConfiguration parameter for scylladb (#31014) ([ac1944e](https://github.com/bitnami/charts/commit/ac1944e1390e4d6cbdb289f82786c1fe8451d05b)), closes [#31014](https://github.com/bitnami/charts/issues/31014)
 
 ## <small>3.1.3 (2024-12-12)</small>
 
