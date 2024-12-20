@@ -1,8 +1,35 @@
 # Changelog
 
-## 16.2.2 (2024-11-21)
+## 16.3.2 (2024-12-16)
 
-* [bitnami/postgresql] Release 16.2.2 ([#30570](https://github.com/bitnami/charts/pull/30570))
+* [bitnami/postgresql] Release 16.3.2 ([#31060](https://github.com/bitnami/charts/pull/31060))
+
+## <small>16.3.1 (2024-12-13)</small>
+
+* [bitnami/postgresql] Add Storage Class Configuration to Templates (#30858) ([b0d2c2e](https://github.com/bitnami/charts/commit/b0d2c2e53c9033d3827597c561931fbb331eb99b)), closes [#30858](https://github.com/bitnami/charts/issues/30858)
+
+## 16.3.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/postgresql] Detect non-standard images (#30936) ([ac96151](https://github.com/bitnami/charts/commit/ac96151bdbe5e99b00dcde62a4d72f1827fa46b2)), closes [#30936](https://github.com/bitnami/charts/issues/30936)
+
+## <small>16.2.5 (2024-12-03)</small>
+
+* [bitnami/postgresql] Release 16.2.5 (#30733) ([34606c1](https://github.com/bitnami/charts/commit/34606c10dedd06431182d0563fb61703e691ddf1)), closes [#30733](https://github.com/bitnami/charts/issues/30733)
+
+## <small>16.2.4 (2024-12-03)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 5) (#30674) ([ed2a546](https://github.com/bitnami/charts/commit/ed2a54617faf763169e6b01a89100b9db32e1000)), closes [#30674](https://github.com/bitnami/charts/issues/30674)
+* [bitnami/postgresql] use adminPassword for metrics user when custom user is not set (#30720) ([8f4bc7b](https://github.com/bitnami/charts/commit/8f4bc7b46b0ce02286cc9973ff8f054a1f9c3fde)), closes [#30720](https://github.com/bitnami/charts/issues/30720)
+
+## <small>16.2.3 (2024-11-28)</small>
+
+* [bitnami/postgresql] Release 16.2.3 (#30645) ([22a4c51](https://github.com/bitnami/charts/commit/22a4c51dc3b85e73b017cb6f6c73e15e6e4b811c)), closes [#30645](https://github.com/bitnami/charts/issues/30645)
+
+## <small>16.2.2 (2024-11-21)</small>
+
+* [bitnami/postgresql] Release 16.2.2 (#30570) ([7b3a6d5](https://github.com/bitnami/charts/commit/7b3a6d5808e79d68a7c9edb6bca54aff262a6264)), closes [#30570](https://github.com/bitnami/charts/issues/30570)
 
 ## <small>16.2.1 (2024-11-14)</small>
 

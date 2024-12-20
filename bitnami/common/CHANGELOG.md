@@ -1,8 +1,17 @@
 # Changelog
 
-## 2.27.1 (2024-11-26)
+## 2.28.0 (2024-12-10)
 
-* [bitnami/common] Fix VPA apiVersion ([#30625](https://github.com/bitnami/charts/pull/30625))
+* [bitnami/common] New helper to detect non-standard images ([#30851](https://github.com/bitnami/charts/pull/30851))
+
+## <small>2.27.2 (2024-11-27)</small>
+
+* [bitnami/common] Fix appVersion (#30628) ([b87d39e](https://github.com/bitnami/charts/commit/b87d39e27a0889c74b20c3d2fe5ae0c4a2417bfd)), closes [#30628](https://github.com/bitnami/charts/issues/30628)
+* [bitnami/common]: bump patch version (#30639) ([623e584](https://github.com/bitnami/charts/commit/623e5846ff827b7ecbcffa2dc51e2e94b14ef8fd)), closes [#30639](https://github.com/bitnami/charts/issues/30639)
+
+## <small>2.27.1 (2024-11-26)</small>
+
+* [bitnami/common] Fix VPA apiVersion (#30625) ([8c24438](https://github.com/bitnami/charts/commit/8c24438a2f6e8ec646cad9901ed82d71d4196e3e)), closes [#30625](https://github.com/bitnami/charts/issues/30625)
 
 ## 2.27.0 (2024-11-07)
 

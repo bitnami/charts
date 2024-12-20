@@ -1,8 +1,18 @@
 # Changelog
 
-## 9.4.7 (2024-10-28)
+## 9.5.0 (2024-12-10)
 
-* [bitnami/solr] chore: Increase ginkgo test timeout ([#30109](https://github.com/bitnami/charts/pull/30109))
+* [bitnami/solr] Detect non-standard images ([#30945](https://github.com/bitnami/charts/pull/30945))
+
+## <small>9.4.8 (2024-11-29)</small>
+
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 6) (#30675) ([7b9cd04](https://github.com/bitnami/charts/commit/7b9cd04c2ffc730a0d62da787f2d4967c0ede47c)), closes [#30675](https://github.com/bitnami/charts/issues/30675)
+* [bitnami/solr] Release 9.4.8 (#30678) ([5a19c1c](https://github.com/bitnami/charts/commit/5a19c1c49effb32921cf08141efdf0bb0abbeb68)), closes [#30678](https://github.com/bitnami/charts/issues/30678)
+
+## <small>9.4.7 (2024-10-29)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/solr] chore: Increase ginkgo test timeout (#30109) ([387437d](https://github.com/bitnami/charts/commit/387437dff423c5a29e2a7314c838ccb2ac62ee46)), closes [#30109](https://github.com/bitnami/charts/issues/30109)
 
 ## <small>9.4.6 (2024-10-20)</small>
 

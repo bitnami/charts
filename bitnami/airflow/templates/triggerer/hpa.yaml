@@ -17,7 +17,7 @@ metadata:
 spec:
   scaleTargetRef:
     apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
-    kind: Statefulset
+    kind: StatefulSet
     name: {{ template "airflow.triggerer.fullname" . }}
   minReplicas: {{ .Values.triggerer.autoscaling.hpa.minReplicas }}
   maxReplicas: {{ .Values.triggerer.autoscaling.hpa.maxReplicas }}

@@ -1,8 +1,24 @@
 # Changelog
 
-## 6.0.6 (2024-11-07)
+## 6.2.0 (2024-12-10)
 
-* [bitnami/oauth2-proxy] Release 6.0.6 ([#30288](https://github.com/bitnami/charts/pull/30288))
+* [bitnami/oauth2-proxy] Detect non-standard images ([#30933](https://github.com/bitnami/charts/pull/30933))
+
+## <small>6.1.1 (2024-12-04)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Unify "Securing Traffic using TLS" section (#30707) ([b572333](https://github.com/bitnami/charts/commit/b57233336e4fe9af928ecb4f2a5f334011efb1bc)), closes [#30707](https://github.com/bitnami/charts/issues/30707)
+* [bitnami/oauth2-proxy] Release 6.1.1 (#30770) ([8805060](https://github.com/bitnami/charts/commit/8805060f570e254bb8b66121537e5a3f7d54bce9)), closes [#30770](https://github.com/bitnami/charts/issues/30770)
+
+## 6.1.0 (2024-11-28)
+
+* [bitnami/oauth2-proxy] add useApplicationDefaultCredentials google (#30309) ([5ee114c](https://github.com/bitnami/charts/commit/5ee114cbf81aa174da2fd4e62cd3f1af10c96417)), closes [#30309](https://github.com/bitnami/charts/issues/30309)
+
+## <small>6.0.6 (2024-11-07)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/oauth2-proxy] Release 6.0.6 (#30288) ([763b6aa](https://github.com/bitnami/charts/commit/763b6aad5acfa854f0e62dfdb026ef78e2803f57)), closes [#30288](https://github.com/bitnami/charts/issues/30288)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
 
 ## <small>6.0.5 (2024-10-08)</small>
 

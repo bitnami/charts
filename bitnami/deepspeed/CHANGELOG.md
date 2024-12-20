@@ -1,8 +1,22 @@
 # Changelog
 
-## 2.2.27 (2024-11-26)
+## 2.3.1 (2024-12-19)
 
-* [bitnami/deepspeed] Release 2.2.27 ([#30623](https://github.com/bitnami/charts/pull/30623))
+* [bitnami/deepspeed] Release 2.3.1 ([#31101](https://github.com/bitnami/charts/pull/31101))
+
+## 2.3.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/deepspeed] Detect non-standard images (#30875) ([8351a22](https://github.com/bitnami/charts/commit/8351a22821c7cbd601eaf4f578dfb7a07df985fa)), closes [#30875](https://github.com/bitnami/charts/issues/30875)
+
+## <small>2.2.28 (2024-12-06)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/deepspeed] Release 2.2.28 (#30813) ([c1702df](https://github.com/bitnami/charts/commit/c1702df266af754d4334c49caaac69100516a526)), closes [#30813](https://github.com/bitnami/charts/issues/30813)
+
+## <small>2.2.27 (2024-11-26)</small>
+
+* [bitnami/deepspeed] Release 2.2.27 (#30623) ([12adcdd](https://github.com/bitnami/charts/commit/12adcdd608b9c2e4f0eef9a33bdd2957f3139b21)), closes [#30623](https://github.com/bitnami/charts/issues/30623)
 
 ## <small>2.2.26 (2024-11-15)</small>
 

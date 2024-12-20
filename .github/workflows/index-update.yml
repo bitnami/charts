@@ -46,11 +46,11 @@ jobs:
               echo "No new releases detected"
           fi
           echo "new-releases=$new_releases" >> $GITHUB_OUTPUT
-  update-index-and-promotions:
+  update-index:
     runs-on: ubuntu-latest
     needs:
       - find-new-releases
-    name: Update index and push promotions
+    name: Update index
     if: ${{ needs.find-new-releases.outputs.new-releases != '' }}
     steps:
       - name: Install helm
@@ -65,33 +65,11 @@ jobs:
           path: index
           # The token is persisted in the local git config and enables scripts to run authenticated git commands.
           token: ${{ secrets.BITNAMI_BOT_TOKEN }}
-      - id: update-index-and-promotions
+      - id: update-index
         name: Pull charts and update index
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_PROMOTION_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_PROMOTION_SECRET_ACCESS_KEY }}
-          AWS_PROMOTION_BUCKET: ${{ secrets.AWS_PROMOTION_BUCKET }}
-          AWS_MAX_ATTEMPTS: 3
-          AWS_DEFAULT_REGION: us-east-1
           NEW_RELEASES: ${{ needs.find-new-releases.outputs.new-releases }}
         run: |
-          # Promotions template
-          promotion_json_template=$(cat << "EOF"
-          {
-            "platform_id": $platform_id,
-            "application": $chart_name,
-            "external_id": "\($chart_name):\($chart_version)",
-            "version": $app_version,
-            "bundled_os_version": $bundled_os_version,
-            "properties": {
-                "chart_url": "oci://registry-1.docker.io/bitnamicharts/\($chart_name):\($chart_version)",
-                "containers": $image_list,
-                "github_repository": "bitnami/charts/tree/main/bitnami/\($chart_name)",
-            }
-          }
-          EOF
-          )
-
           cd index
           # Configure git
           git config user.name "Bitnami Containers"
@@ -126,36 +104,6 @@ jobs:
               helm repo remove cache
             fi
             cp ../download/index.yaml bitnami/index.yaml
-
-            ## Build and push promotions
-            tar -xzf ../download/${chart_name}-${chart_version}.tgz -C ../download
-            image_list="[]"
-            # Get image list (removing the registry)
-            for chart_yaml in $(find "../download/${chart_name}" -name "Chart.yaml"); do
-              image_list_aux="$(yq '.annotations.images' "${chart_yaml}" | yq '[ .[] | .image | sub("^[^/]+/", "") ] | tojson')"
-              image_list="$(jq -c --null-input --argjson arr1 "$image_list" --argjson arr2 "$image_list_aux" '$arr1 + $arr2 | unique')"
-            done
-            app_version=$(yq '.appVersion' "../download/${chart_name}/Chart.yaml")
-            release_date="$(date -u +"%Y/%m/%d")"
-            file_prefix="$(date -u +"%s%3N-${chart_name}-${app_version}")"
-            # Build JSON files
-            jq --null-input \
-              --arg platform_id "bitnami-chart-debian-x64" \
-              --arg chart_name "${chart_name}" \
-              --arg app_version "${app_version}" \
-              --arg chart_version "${chart_version}" \
-              --arg bundled_os_version "12" \
-              --argjson image_list "${image_list}" "${promotion_json_template}" > "${file_prefix}-bitnami-chart-debian-x64.json"
-            jq --null-input \
-              --arg platform_id "vmware-chart-debian-x64" \
-              --arg chart_name "${chart_name}" \
-              --arg app_version "${app_version}" \
-              --arg chart_version "${chart_version}" \
-              --arg bundled_os_version "12" \
-              --argjson image_list "${image_list}" "${promotion_json_template}" | jq '.properties += {"alias_platform_from": "bitnami-chart-debian-x64"}' > "${file_prefix}-vmware-chart-debian-x64.json"
-            # Upload files to the release bucket
-            aws s3 cp "${file_prefix}-bitnami-chart-debian-x64.json" "s3://${AWS_PROMOTION_BUCKET}/releases/${release_date}/${file_prefix}-bitnami-chart-debian-x64.json"
-            aws s3 cp "${file_prefix}-vmware-chart-debian-x64.json" "s3://${AWS_PROMOTION_BUCKET}/releases/${release_date}/${file_prefix}-vmware-chart-debian-x64.json"
 
             # Remove chart files
             rm -rf ../download

@@ -22,6 +22,11 @@ global:
   imagePullSecrets: []
   defaultStorageClass: ""
   storageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
   redis:
     password: ""
   ## Compatibility adaptations for Kubernetes platforms
@@ -635,6 +640,9 @@ master:
   ## @param master.extraPodSpec Optionally specify extra PodSpec for the Redis&reg; master pod(s)
   ##
   extraPodSpec: {}
+  ## @param master.annotations Additional custom annotations for Redis&reg; Master resource
+  ##
+  annotations: {}
 ## @section Redis&reg; replicas configuration parameters
 ##
 replica:
@@ -1123,6 +1131,9 @@ replica:
   ## @param replica.extraPodSpec Optionally specify extra PodSpec for the Redis&reg; replicas pod(s)
   ##
   extraPodSpec: {}
+  ## @param replica.annotations Additional custom annotations for Redis&reg; replicas resource
+  ##
+  annotations: {}
 ## @section Redis&reg; Sentinel configuration parameters
 ##
 
@@ -1459,7 +1470,15 @@ sentinel:
       ## @param sentinel.service.headless.annotations Annotations for the headless service.
       ##
       annotations: {}
-
+      ## @param sentinel.service.headless.extraPorts Optionally specify extra ports to expose for the headless service.
+      ## Example:
+      ## extraPorts:
+      ##   - name: my-custom-port
+      ##     port: 12345
+      ##     protocol: TCP
+      ##     targetPort: 12345
+      ##
+      extraPorts: []
   ## Redis&reg; master service parameters
   ##
   masterService:

@@ -1,8 +1,18 @@
 # Changelog
 
-## 12.0.4 (2024-10-22)
+## 12.1.0 (2024-12-10)
 
-* [bitnami/cassandra] Release 12.0.4 ([#29999](https://github.com/bitnami/charts/pull/29999))
+* [bitnami/cassandra] Detect non-standard images ([#30866](https://github.com/bitnami/charts/pull/30866))
+
+## <small>12.0.5 (2024-11-28)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/cassandra] Release 12.0.5 (#30670) ([bebba67](https://github.com/bitnami/charts/commit/bebba67d707601a50aada0ea1e8ebe3b5b1716cd)), closes [#30670](https://github.com/bitnami/charts/issues/30670)
+
+## <small>12.0.4 (2024-10-22)</small>
+
+* [bitnami/cassandra] Release 12.0.4 (#29999) ([fa84d22](https://github.com/bitnami/charts/commit/fa84d227e19679fb83303771eaaeaf6bdbb41927)), closes [#29999](https://github.com/bitnami/charts/issues/29999)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
 
 ## <small>12.0.3 (2024-09-30)</small>
 

@@ -1,8 +1,23 @@
 # Changelog
 
-## 2.3.24 (2024-11-17)
+## 2.4.1 (2024-12-19)
 
-* [bitnami/fluent-bit] Release 2.3.24 ([#30487](https://github.com/bitnami/charts/pull/30487))
+* [bitnami/fluent-bit] Release 2.4.1 ([#31123](https://github.com/bitnami/charts/pull/31123))
+
+## 2.4.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 2) (#30662) ([50e0570](https://github.com/bitnami/charts/commit/50e0570f98ab15308af7910b405baa4480e5fe3f)), closes [#30662](https://github.com/bitnami/charts/issues/30662)
+* [bitnami/fluent-bit] Detect non-standard images (#30891) ([f27be3c](https://github.com/bitnami/charts/commit/f27be3c8f1943001278a5769876ca0699be5e342)), closes [#30891](https://github.com/bitnami/charts/issues/30891)
+
+## <small>2.3.25 (2024-11-28)</small>
+
+* [bitnami/fluent-bit] Release 2.3.25 (#30667) ([4ae0f96](https://github.com/bitnami/charts/commit/4ae0f9678d68f7cf1215ef7700b54eabbd8cf188)), closes [#30667](https://github.com/bitnami/charts/issues/30667)
+
+## <small>2.3.24 (2024-11-17)</small>
+
+* [bitnami/fluent-bit] Release 2.3.24 (#30487) ([e9951e3](https://github.com/bitnami/charts/commit/e9951e3c9022560eaea85da02882441811e9017f)), closes [#30487](https://github.com/bitnami/charts/issues/30487)
 
 ## <small>2.3.23 (2024-11-15)</small>
 

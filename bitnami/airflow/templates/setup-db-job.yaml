@@ -122,6 +122,9 @@ spec:
             {{- if .Values.setupDBJob.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.setupDBJob.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
+            {{- if .Values.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
       volumes:
         - name: empty-dir
           emptyDir: {}
@@ -131,5 +134,8 @@ spec:
             optional: true
         {{- if .Values.setupDBJob.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.setupDBJob.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
 {{- end }}

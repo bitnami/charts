@@ -6,11 +6,11 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: metallb-controller
-      image: docker.io/bitnami/metallb-controller:0.14.8-debian-12-r9
+      image: docker.io/bitnami/metallb-controller:0.14.9-debian-12-r0
     - name: metallb-speaker
-      image: docker.io/bitnami/metallb-speaker:0.14.8-debian-12-r11
+      image: docker.io/bitnami/metallb-speaker:0.14.9-debian-12-r0
 apiVersion: v2
-appVersion: 0.14.8
+appVersion: 0.14.9
 dependencies:
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
@@ -35,4 +35,4 @@ maintainers:
 name: metallb
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/metallb
-version: 6.3.15
+version: 6.4.2

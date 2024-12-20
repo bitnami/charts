@@ -1,8 +1,35 @@
 # Changelog
 
-## 1.0.4 (2024-11-21)
+## 1.1.2 (2024-12-18)
 
-* [bitnami/nessie] Release 1.0.4 ([#30555](https://github.com/bitnami/charts/pull/30555))
+* [bitnami/nessie] Release 1.1.2 ([#31096](https://github.com/bitnami/charts/pull/31096))
+
+## <small>1.1.1 (2024-12-12)</small>
+
+* [bitnami/nessie] Release 1.1.1 (#31003) ([5be4662](https://github.com/bitnami/charts/commit/5be46622e257e418ec703a5a002e0a379cabac99)), closes [#31003](https://github.com/bitnami/charts/issues/31003)
+
+## 1.1.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/nessie] Detect non-standard images (#30931) ([021372b](https://github.com/bitnami/charts/commit/021372bbc3ef6e718f7b581f335014369f4eb7df)), closes [#30931](https://github.com/bitnami/charts/issues/30931)
+
+## <small>1.0.7 (2024-12-09)</small>
+
+* [bitnami/nessie] Release 1.0.7 (#30845) ([7df0c76](https://github.com/bitnami/charts/commit/7df0c769083e44d8847a9be82ad9731922fafbd4)), closes [#30845](https://github.com/bitnami/charts/issues/30845)
+
+## <small>1.0.6 (2024-12-06)</small>
+
+* [bitnami/nessie] Release 1.0.6 (#30814) ([fec53c6](https://github.com/bitnami/charts/commit/fec53c6b7be4ff4acb3daf670cc27e712bb5cc6a)), closes [#30814](https://github.com/bitnami/charts/issues/30814)
+
+## <small>1.0.5 (2024-12-02)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 5) (#30674) ([ed2a546](https://github.com/bitnami/charts/commit/ed2a54617faf763169e6b01a89100b9db32e1000)), closes [#30674](https://github.com/bitnami/charts/issues/30674)
+* [bitnami/nessie] Release 1.0.5 (#30712) ([79b92ab](https://github.com/bitnami/charts/commit/79b92ab8ac3181fbea44acbf26064e87df7ec5f3)), closes [#30712](https://github.com/bitnami/charts/issues/30712)
+
+## <small>1.0.4 (2024-11-21)</small>
+
+* [bitnami/nessie] Release 1.0.4 (#30555) ([180c7ee](https://github.com/bitnami/charts/commit/180c7ee1ca182f89df0ef185f5504428ab956e3d)), closes [#30555](https://github.com/bitnami/charts/issues/30555)
 
 ## <small>1.0.3 (2024-11-12)</small>
 
