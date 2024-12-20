@@ -1,8 +1,12 @@
 # Changelog
 
-## 7.1.2 (2024-12-19)
+## 7.1.3 (2024-12-20)
 
-* [bitnami/clickhouse] Release 7.1.2 ([#31115](https://github.com/bitnami/charts/pull/31115))
+* [bitnami/clickhouse] Release 7.1.3 ([#31124](https://github.com/bitnami/charts/pull/31124))
+
+## <small>7.1.2 (2024-12-19)</small>
+
+* [bitnami/clickhouse] Release 7.1.2 (#31115) ([7f3ca3e](https://github.com/bitnami/charts/commit/7f3ca3e219cf71beb83c2f0bd8885a193d306804)), closes [#31115](https://github.com/bitnami/charts/issues/31115)
 
 ## <small>7.1.1 (2024-12-19)</small>
 
