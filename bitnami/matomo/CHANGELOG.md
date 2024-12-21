@@ -1,6 +1,6 @@
 # Changelog
 
-## 9.2.1 (2024-12-20)
+## 9.2.1 (2024-12-21)
 
 * [bitnami/matomo] Release 9.2.1 ([#31134](https://github.com/bitnami/charts/pull/31134))
 
