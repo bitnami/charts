@@ -1,6 +1,6 @@
 # Changelog
 
-## 15.1.3 (2024-12-20)
+## 15.1.3 (2024-12-21)
 
 * [bitnami/postgresql-ha] Release 15.1.3 ([#31135](https://github.com/bitnami/charts/pull/31135))
 
