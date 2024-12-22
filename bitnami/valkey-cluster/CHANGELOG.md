@@ -1,8 +1,13 @@
 # Changelog
 
-## 2.0.2 (2024-12-01)
+## 2.1.0 (2024-12-10)
 
-* [bitnami/valkey-cluster] Release 2.0.2 ([#30702](https://github.com/bitnami/charts/pull/30702))
+* [bitnami/valkey-cluster] Detect non-standard images ([#30951](https://github.com/bitnami/charts/pull/30951))
+
+## <small>2.0.2 (2024-12-01)</small>
+
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 6) (#30675) ([7b9cd04](https://github.com/bitnami/charts/commit/7b9cd04c2ffc730a0d62da787f2d4967c0ede47c)), closes [#30675](https://github.com/bitnami/charts/issues/30675)
+* [bitnami/valkey-cluster] Release 2.0.2 (#30702) ([7b5eadf](https://github.com/bitnami/charts/commit/7b5eadf41da24bf85355b688876b7c022f35ae3e)), closes [#30702](https://github.com/bitnami/charts/issues/30702)
 
 ## <small>2.0.1 (2024-11-08)</small>
 

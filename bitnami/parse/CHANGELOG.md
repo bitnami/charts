@@ -1,8 +1,13 @@
 # Changelog
 
-## 24.0.2 (2024-12-01)
+## 24.1.0 (2024-12-10)
 
-* [bitnami/parse] Release 24.0.2 ([#30701](https://github.com/bitnami/charts/pull/30701))
+* [bitnami/parse] Detect non-standard images ([#30962](https://github.com/bitnami/charts/pull/30962))
+
+## <small>24.0.2 (2024-12-01)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/parse] Release 24.0.2 (#30701) ([b8c4d9f](https://github.com/bitnami/charts/commit/b8c4d9ff01fe35a6a8e373d53c47889e93a63f94)), closes [#30701](https://github.com/bitnami/charts/issues/30701)
 
 ## <small>24.0.1 (2024-10-22)</small>
 

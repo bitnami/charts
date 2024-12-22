@@ -1,8 +1,33 @@
 # Changelog
 
-## 5.0.11 (2024-12-04)
+## 5.1.3 (2024-12-20)
 
-* [bitnami/appsmith] Release 5.0.11 ([#30784](https://github.com/bitnami/charts/pull/30784))
+* [bitnami/appsmith] Release 5.1.3 ([#31129](https://github.com/bitnami/charts/pull/31129))
+
+## <small>5.1.2 (2024-12-18)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/appsmith] Release 5.1.2 (#31092) ([5aa88f7](https://github.com/bitnami/charts/commit/5aa88f7099c975df1bc52ca83b9993e7328af989)), closes [#31092](https://github.com/bitnami/charts/issues/31092)
+
+## <small>5.1.1 (2024-12-11)</small>
+
+* [bitnami/appsmith] Release 5.1.1 (#30984) ([0e4fe7e](https://github.com/bitnami/charts/commit/0e4fe7ea2ada0592f7d69b03452ea6f522945f51)), closes [#30984](https://github.com/bitnami/charts/issues/30984)
+
+## 5.1.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/appsmith] Detect non-standard images (#30863) ([3f553da](https://github.com/bitnami/charts/commit/3f553da2a6361243e3c33142ce285e80aa50d1bc)), closes [#30863](https://github.com/bitnami/charts/issues/30863)
+
+## <small>5.0.12 (2024-12-06)</small>
+
+* [bitnami/appsmith] Release 5.0.12 (#30816) ([e2cd722](https://github.com/bitnami/charts/commit/e2cd7226a84b5cb63b17d590e1000e36f2f893d4)), closes [#30816](https://github.com/bitnami/charts/issues/30816)
+
+## <small>5.0.11 (2024-12-04)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 1) (#30685) ([be6aa1d](https://github.com/bitnami/charts/commit/be6aa1df0bd4479173a78400fef7295de15b408d)), closes [#30685](https://github.com/bitnami/charts/issues/30685)
+* [bitnami/*] docs: :memo: Unify "Securing Traffic using TLS" section (#30707) ([b572333](https://github.com/bitnami/charts/commit/b57233336e4fe9af928ecb4f2a5f334011efb1bc)), closes [#30707](https://github.com/bitnami/charts/issues/30707)
+* [bitnami/appsmith] Release 5.0.11 (#30784) ([58b2505](https://github.com/bitnami/charts/commit/58b2505ed93b4ced387141213dacd4f8590a739e)), closes [#30784](https://github.com/bitnami/charts/issues/30784)
 
 ## <small>5.0.10 (2024-11-28)</small>
 

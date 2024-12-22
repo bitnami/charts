@@ -1,8 +1,18 @@
 # Changelog
 
-## 6.3.9 (2024-11-22)
+## 6.4.1 (2024-12-12)
 
-* [bitnami/logstash] Release 6.3.9 ([#30591](https://github.com/bitnami/charts/pull/30591))
+* [bitnami/logstash] Release 6.4.1 ([#31022](https://github.com/bitnami/charts/pull/31022))
+
+## 6.4.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/logstash] Detect non-standard images (#30919) ([e64e0d5](https://github.com/bitnami/charts/commit/e64e0d53149404ab60997cd038db3f517b47bc0c)), closes [#30919](https://github.com/bitnami/charts/issues/30919)
+
+## <small>6.3.9 (2024-11-22)</small>
+
+* [bitnami/logstash] Release 6.3.9 (#30591) ([266c704](https://github.com/bitnami/charts/commit/266c704facb55306a01fef15d69c7f3e722b2d06)), closes [#30591](https://github.com/bitnami/charts/issues/30591)
 
 ## <small>6.3.8 (2024-11-12)</small>
 

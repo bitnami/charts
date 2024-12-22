@@ -1,8 +1,17 @@
 # Changelog
 
-## 1.2.10 (2024-12-04)
+## 1.3.1 (2024-12-17)
 
-* [bitnami/cilium] Release 1.2.10 ([#30742](https://github.com/bitnami/charts/pull/30742))
+* [bitnami/cilium] Release 1.3.1 ([#31075](https://github.com/bitnami/charts/pull/31075))
+
+## 1.3.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/cilium] Detect non-standard images (#30870) ([de048d3](https://github.com/bitnami/charts/commit/de048d3082a8318b8d7bb6cb6c31688fd5341097)), closes [#30870](https://github.com/bitnami/charts/issues/30870)
+
+## <small>1.2.10 (2024-12-04)</small>
+
+* [bitnami/cilium] Release 1.2.10 (#30742) ([3dacf26](https://github.com/bitnami/charts/commit/3dacf2691af9ec913298ab440f5ab4d67620346f)), closes [#30742](https://github.com/bitnami/charts/issues/30742)
 
 ## <small>1.2.9 (2024-12-02)</small>
 

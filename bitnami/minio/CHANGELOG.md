@@ -1,8 +1,35 @@
 # Changelog
 
-## 14.8.6 (2024-12-04)
+## 14.10.3 (2024-12-20)
 
-* [bitnami/minio] Release 14.8.6 ([#30766](https://github.com/bitnami/charts/pull/30766))
+* [bitnami/minio] Fix rendering of CIDR block list for loadBalancerSourceRanges ([#31032](https://github.com/bitnami/charts/pull/31032))
+
+## <small>14.10.2 (2024-12-19)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/minio] Release 14.10.2 (#31099) ([c2900ec](https://github.com/bitnami/charts/commit/c2900ec91df4a918b05f82ea5f4f97c43fce191b)), closes [#31099](https://github.com/bitnami/charts/issues/31099)
+
+## <small>14.10.1 (2024-12-16)</small>
+
+* [bitnami/minio] Release 14.10.1 (#31050) ([91b6f97](https://github.com/bitnami/charts/commit/91b6f97217eed1670f665232cd841e3e73d8032e)), closes [#31050](https://github.com/bitnami/charts/issues/31050)
+
+## 14.10.0 (2024-12-13)
+
+* [bitnami/minio]: Templating sleep sleep time so that it can be passed using values.yaml (#30718) ([ea21cb8](https://github.com/bitnami/charts/commit/ea21cb82ebb71e0d159846aaeb39786e1d577913)), closes [#30718](https://github.com/bitnami/charts/issues/30718)
+
+## 14.9.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/minio] Detect non-standard images (#30924) ([a5d33d4](https://github.com/bitnami/charts/commit/a5d33d4add1c48085781da15b5d349c79b007595)), closes [#30924](https://github.com/bitnami/charts/issues/30924)
+
+## <small>14.8.6 (2024-12-04)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 4) (#30669) ([a4ec006](https://github.com/bitnami/charts/commit/a4ec00624589023a70a7094fcfb9f12e382bc280)), closes [#30669](https://github.com/bitnami/charts/issues/30669)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 6) (#30675) ([7b9cd04](https://github.com/bitnami/charts/commit/7b9cd04c2ffc730a0d62da787f2d4967c0ede47c)), closes [#30675](https://github.com/bitnami/charts/issues/30675)
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 2) (#30687) ([c457848](https://github.com/bitnami/charts/commit/c457848b2a111aad59830b98f85ffa1e29918e10)), closes [#30687](https://github.com/bitnami/charts/issues/30687)
+* [bitnami/*] docs: :memo: Unify "Securing Traffic using TLS" section (#30707) ([b572333](https://github.com/bitnami/charts/commit/b57233336e4fe9af928ecb4f2a5f334011efb1bc)), closes [#30707](https://github.com/bitnami/charts/issues/30707)
+* [bitnami/minio] Release 14.8.6 (#30766) ([fd14ff8](https://github.com/bitnami/charts/commit/fd14ff8a9f4621f35ca43b68e97dc5d856133ac8)), closes [#30766](https://github.com/bitnami/charts/issues/30766)
 
 ## <small>14.8.5 (2024-11-08)</small>
 

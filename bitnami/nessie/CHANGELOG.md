@@ -1,8 +1,25 @@
 # Changelog
 
-## 1.0.6 (2024-12-06)
+## 1.1.2 (2024-12-18)
 
-* [bitnami/nessie] Release 1.0.6 ([#30814](https://github.com/bitnami/charts/pull/30814))
+* [bitnami/nessie] Release 1.1.2 ([#31096](https://github.com/bitnami/charts/pull/31096))
+
+## <small>1.1.1 (2024-12-12)</small>
+
+* [bitnami/nessie] Release 1.1.1 (#31003) ([5be4662](https://github.com/bitnami/charts/commit/5be46622e257e418ec703a5a002e0a379cabac99)), closes [#31003](https://github.com/bitnami/charts/issues/31003)
+
+## 1.1.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/nessie] Detect non-standard images (#30931) ([021372b](https://github.com/bitnami/charts/commit/021372bbc3ef6e718f7b581f335014369f4eb7df)), closes [#30931](https://github.com/bitnami/charts/issues/30931)
+
+## <small>1.0.7 (2024-12-09)</small>
+
+* [bitnami/nessie] Release 1.0.7 (#30845) ([7df0c76](https://github.com/bitnami/charts/commit/7df0c769083e44d8847a9be82ad9731922fafbd4)), closes [#30845](https://github.com/bitnami/charts/issues/30845)
+
+## <small>1.0.6 (2024-12-06)</small>
+
+* [bitnami/nessie] Release 1.0.6 (#30814) ([fec53c6](https://github.com/bitnami/charts/commit/fec53c6b7be4ff4acb3daf670cc27e712bb5cc6a)), closes [#30814](https://github.com/bitnami/charts/issues/30814)
 
 ## <small>1.0.5 (2024-12-02)</small>
 

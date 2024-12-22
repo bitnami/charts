@@ -1,8 +1,19 @@
 # Changelog
 
-## 8.6.1 (2024-12-03)
+## 8.7.1 (2024-12-19)
 
-* [bitnami/external-dns] Release 8.6.1 ([#30747](https://github.com/bitnami/charts/pull/30747))
+* [bitnami/external-dns] Release 8.7.1 ([#31120](https://github.com/bitnami/charts/pull/31120))
+
+## 8.7.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/external-dns] Detect non-standard images (#30894) ([e963f07](https://github.com/bitnami/charts/commit/e963f07135a2c6875c96c66080476004275dc9ae)), closes [#30894](https://github.com/bitnami/charts/issues/30894)
+
+## <small>8.6.1 (2024-12-03)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 2) (#30662) ([50e0570](https://github.com/bitnami/charts/commit/50e0570f98ab15308af7910b405baa4480e5fe3f)), closes [#30662](https://github.com/bitnami/charts/issues/30662)
+* [bitnami/external-dns] Release 8.6.1 (#30747) ([a0583f2](https://github.com/bitnami/charts/commit/a0583f223636dcaa284afd5b5068dffec7231f06)), closes [#30747](https://github.com/bitnami/charts/issues/30747)
 
 ## 8.6.0 (2024-11-19)
 
