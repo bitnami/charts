@@ -1,6 +1,6 @@
 # Changelog
 
-## 24.1.1 (2024-12-19)
+## 24.1.1 (2024-12-23)
 
 * [bitnami/harbor] Only set metric environment variables for exporter when enabled, set environment variables for jobservice when metrics are enabled to fix metric name ([#31122](https://github.com/bitnami/charts/pull/31122))
 
