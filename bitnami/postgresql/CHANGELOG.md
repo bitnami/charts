@@ -1,8 +1,12 @@
 # Changelog
 
-## 16.3.3 (2024-12-20)
+## 16.3.4 (2024-12-23)
 
-* [bitnami/postgresql] Release 16.3.3 ([#31133](https://github.com/bitnami/charts/pull/31133))
+* [bitnami/postgresql] Release 16.3.4 ([#31143](https://github.com/bitnami/charts/pull/31143))
+
+## <small>16.3.3 (2024-12-20)</small>
+
+* [bitnami/postgresql] Release 16.3.3 (#31133) ([41671f2](https://github.com/bitnami/charts/commit/41671f2e787863686079e1358054142d61d15982)), closes [#31133](https://github.com/bitnami/charts/issues/31133)
 
 ## <small>16.3.2 (2024-12-16)</small>
 
