@@ -1,6 +1,6 @@
 # Changelog
 
-## 21.4.2 (2024-12-13)
+## 21.4.2 (2024-12-23)
 
 * bitnami/elasticsearch: mount cerst to master node instead empty-dir ([#30989](https://github.com/bitnami/charts/pull/30989))
 
