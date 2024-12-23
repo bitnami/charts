@@ -15,7 +15,13 @@ metadata:
   {{- end }}
 spec:
   accessModes:
-    - {{ .Values.persistence.accessMode | quote }}
+  {{- if not (empty .Values.persistence.accessModes) }}
+  {{- range .Values.persistence.accessModes }}
+    - {{ . | quote }}
+  {{- end }}
+  {{- else }}
+    - {{ .Values.persistence.accessModes | quote }}
+  {{- end }}
   capacity:
     storage: {{ .Values.persistence.size | quote }}
   hostPath:
