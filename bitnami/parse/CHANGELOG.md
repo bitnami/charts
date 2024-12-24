@@ -1,8 +1,13 @@
 # Changelog
 
-## 24.1.1 (2024-12-24)
+## 24.1.2 (2024-12-24)
 
-* [bitnami/parse] Release 24.1.1 ([#31157](https://github.com/bitnami/charts/pull/31157))
+* [bitnami/parse] Release 24.1.2 ([#31158](https://github.com/bitnami/charts/pull/31158))
+
+## <small>24.1.1 (2024-12-24)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/parse] Release 24.1.1 (#31157) ([96d743d](https://github.com/bitnami/charts/commit/96d743d10370263773b03be1e24edf29b5ba9d88)), closes [#31157](https://github.com/bitnami/charts/issues/31157)
 
 ## 24.1.0 (2024-12-10)
 
