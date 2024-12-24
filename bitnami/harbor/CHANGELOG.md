@@ -1,8 +1,13 @@
 # Changelog
 
-## 24.1.1 (2024-12-23)
+## 24.1.2 (2024-12-24)
 
-* [bitnami/harbor] Only set metric environment variables for exporter when enabled, set environment variables for jobservice when metrics are enabled to fix metric name ([#31122](https://github.com/bitnami/charts/pull/31122))
+* [bitnami/harbor] Release 24.1.2 ([#31156](https://github.com/bitnami/charts/pull/31156))
+
+## <small>24.1.1 (2024-12-23)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/harbor] Only set metric environment variables for exporter when enabled, set environment va ([7a204c4](https://github.com/bitnami/charts/commit/7a204c472c24a6b38344010f4907c0e189188b26)), closes [#31122](https://github.com/bitnami/charts/issues/31122)
 
 ## 24.1.0 (2024-12-10)
 
