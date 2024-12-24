@@ -4,6 +4,10 @@
 
 * [bitnami/kafka] chore(jmx-exporter): Upgrade image and change args ([#31108](https://github.com/bitnami/charts/pull/31108))
 
+## 31.1.1 (2024-12-22)
+
+* [bitnami/kafka] Release 31.1.1 ([#31139](https://github.com/bitnami/charts/pull/31139))
+
 ## 31.1.0 (2024-12-10)
 
 * [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
