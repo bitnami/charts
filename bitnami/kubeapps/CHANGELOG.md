@@ -1,12 +1,13 @@
 # Changelog
 
-## 17.2.0 (2024-12-18)
+## 17.2.0 (2024-12-24)
 
 * [bitnami/kubeapps] Set ociCatalog.enabled=true by default ([#31093](https://github.com/bitnami/charts/pull/31093))
 
-## 17.1.1 (2024-12-24)
+## <small>17.1.1 (2024-12-24)</small>
 
-* [bitnami/kubeapps] Release 17.1.1 ([#31153](https://github.com/bitnami/charts/pull/31153))
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/kubeapps] Release 17.1.1 (#31153) ([1229341](https://github.com/bitnami/charts/commit/12293419b20d4194dc3095d7ef2ec6974eb41bf9)), closes [#31153](https://github.com/bitnami/charts/issues/31153)
 
 ## 17.1.0 (2024-12-10)
 
