@@ -14,7 +14,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 data:
-  KEYCLOAK_ADMIN: {{ .Values.auth.adminUser | quote }}
+  KC_BOOTSTRAP_ADMIN_USERNAME: {{ .Values.auth.adminUser | quote }}
   KEYCLOAK_HTTP_PORT: {{ .Values.containerPorts.http | quote }}
   {{- if and .Values.proxy (empty .Values.proxyHeaders) }}
   KEYCLOAK_PROXY_HEADERS: {{ ternary "" "xforwarded" (eq .Values.proxy "passthrough") }}
