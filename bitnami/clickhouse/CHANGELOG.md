@@ -1,8 +1,17 @@
 # Changelog
 
-## 7.1.1 (2024-12-19)
+## 7.1.3 (2024-12-20)
 
-* [bitnami/clickhouse] Release 7.1.1 ([#31113](https://github.com/bitnami/charts/pull/31113))
+* [bitnami/clickhouse] Release 7.1.3 ([#31124](https://github.com/bitnami/charts/pull/31124))
+
+## <small>7.1.2 (2024-12-19)</small>
+
+* [bitnami/clickhouse] Release 7.1.2 (#31115) ([7f3ca3e](https://github.com/bitnami/charts/commit/7f3ca3e219cf71beb83c2f0bd8885a193d306804)), closes [#31115](https://github.com/bitnami/charts/issues/31115)
+
+## <small>7.1.1 (2024-12-19)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/clickhouse] Release 7.1.1 (#31113) ([a135583](https://github.com/bitnami/charts/commit/a13558312d3adf7be549e8160e7cec614d143f44)), closes [#31113](https://github.com/bitnami/charts/issues/31113)
 
 ## 7.1.0 (2024-12-10)
 

@@ -4,6 +4,10 @@
 
 * [bitnami/kubeapps] Temporarily use deprecated-index ([#31116](https://github.com/bitnami/charts/pull/31116))
 
+## 17.1.1 (2024-12-24)
+
+* [bitnami/kubeapps] Release 17.1.1 ([#31153](https://github.com/bitnami/charts/pull/31153))
+
 ## 17.1.0 (2024-12-10)
 
 * [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)

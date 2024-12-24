@@ -1,8 +1,13 @@
 # Changelog
 
+## 4.4.1 (2024-12-20)
+
+* [bitnami/rabbitmq-cluster-operator] Release 4.4.1 ([#31126](https://github.com/bitnami/charts/pull/31126))
+
 ## 4.4.0 (2024-12-10)
 
-* [bitnami/rabbitmq-cluster-operator] Detect non-standard images ([#30941](https://github.com/bitnami/charts/pull/30941))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/rabbitmq-cluster-operator] Detect non-standard images (#30941) ([b95e85b](https://github.com/bitnami/charts/commit/b95e85b077668be0add122fad290e7eecdcdf16c)), closes [#30941](https://github.com/bitnami/charts/issues/30941)
 
 ## <small>4.3.29 (2024-12-04)</small>
 

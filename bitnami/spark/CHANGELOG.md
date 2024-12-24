@@ -1,8 +1,12 @@
 # Changelog
 
-## 9.3.1 (2024-12-14)
+## 9.3.2 (2024-12-21)
 
-* [bitnami/spark] Release 9.3.1 ([#31041](https://github.com/bitnami/charts/pull/31041))
+* [bitnami/spark] Release 9.3.2 ([#31136](https://github.com/bitnami/charts/pull/31136))
+
+## <small>9.3.1 (2024-12-14)</small>
+
+* [bitnami/spark] Release 9.3.1 (#31041) ([092c28c](https://github.com/bitnami/charts/commit/092c28c197402c2d06ec821a86d6656df696f568)), closes [#31041](https://github.com/bitnami/charts/issues/31041)
 
 ## 9.3.0 (2024-12-10)
 
