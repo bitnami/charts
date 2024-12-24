@@ -1,8 +1,12 @@
 # Changelog
 
-## 15.9.2 (2024-12-12)
+## 15.9.3 (2024-12-24)
 
-* [bitnami/thanos] Add concurrency value to compactor ([#30722](https://github.com/bitnami/charts/pull/30722))
+* [bitnami/thanos] Add SHARD to Environment Variables  ([#31150](https://github.com/bitnami/charts/pull/31150))
+
+## <small>15.9.2 (2024-12-12)</small>
+
+* [bitnami/thanos] Add concurrency value to compactor (#30722) ([12b9c84](https://github.com/bitnami/charts/commit/12b9c8457916ffa9cce85d7914ca5c46f3b7b085)), closes [#30722](https://github.com/bitnami/charts/issues/30722)
 
 ## <small>15.9.1 (2024-12-11)</small>
 
