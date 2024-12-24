@@ -1,12 +1,13 @@
 # Changelog
 
-## 31.2.0 (2024-12-19)
+## 31.2.0 (2024-12-24)
 
 * [bitnami/kafka] chore(jmx-exporter): Upgrade image and change args ([#31108](https://github.com/bitnami/charts/pull/31108))
 
-## 31.1.1 (2024-12-22)
+## <small>31.1.1 (2024-12-22)</small>
 
-* [bitnami/kafka] Release 31.1.1 ([#31139](https://github.com/bitnami/charts/pull/31139))
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/kafka] Release 31.1.1 (#31139) ([61131de](https://github.com/bitnami/charts/commit/61131de7b63913f4ef1cb9e7b5b2e8c593178b42)), closes [#31139](https://github.com/bitnami/charts/issues/31139)
 
 ## 31.1.0 (2024-12-10)
 
