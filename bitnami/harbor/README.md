@@ -1252,13 +1252,21 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 25.0.0
+
+This major updates the used PostgreSQL version to 17.2. This version is not compatible with previous versions of the database. To upgrade, follow the instructions in the [official documentation](https://www.postgresql.org/docs/17/upgrading.html).
+
 ### To 24.1.0
 
 This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
 
+### To 24.0.1
+
+This version updates the PostgreSQL version to 14.x. Follow the [official instructions](https://www.postgresql.org/docs/14/upgrading.html) to upgrade to 14.x.
+
 ### To 24.0.0
 
-This major updates the PostgreSQL subchart to its newest major, 16.0.0, which uses PostgreSQL 17.x. Follow the [official instructions](https://www.postgresql.org/docs/17/upgrading.html) to upgrade to 17.x.
+This major updates the PostgreSQL subchart to its newest major, 16.0.0, but does not update the used PostgreSQL version.
 
 ### To 23.0.0
 
