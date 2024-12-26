@@ -1,8 +1,15 @@
 # Changelog
 
+## 16.1.1 (2024-12-26)
+
+* [bitnami/ejbca] Release 16.1.1 ([#31166](https://github.com/bitnami/charts/pull/31166))
+
 ## 16.1.0 (2024-12-10)
 
-* [bitnami/ejbca] Detect non-standard images ([#30879](https://github.com/bitnami/charts/pull/30879))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 1) (#30685) ([be6aa1d](https://github.com/bitnami/charts/commit/be6aa1df0bd4479173a78400fef7295de15b408d)), closes [#30685](https://github.com/bitnami/charts/issues/30685)
+* [bitnami/ejbca] Detect non-standard images (#30879) ([fad04d3](https://github.com/bitnami/charts/commit/fad04d3543a597a4b9b595f97f108560a327f170)), closes [#30879](https://github.com/bitnami/charts/issues/30879)
 
 ## <small>16.0.1 (2024-11-16)</small>
 
