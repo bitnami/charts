@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.29.0 (2024-12-26)
+## 2.29.0 (2024-12-27)
 
 * [bitnami/common] Add "common.capabilities.job.apiVersion" template ([#31164](https://github.com/bitnami/charts/pull/31164))
 
