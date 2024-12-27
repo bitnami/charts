@@ -1,8 +1,12 @@
 # Changelog
 
+## 17.0.1 (2024-12-27)
+
+* [bitnami/ejbca] Release 17.0.1 ([#31178](https://github.com/bitnami/charts/pull/31178))
+
 ## 17.0.0 (2024-12-27)
 
-* [bitnami/ejbca] Release 17.0.0 ([#31177](https://github.com/bitnami/charts/pull/31177))
+* [bitnami/ejbca] Release 17.0.0 (#31177) ([e8b6077](https://github.com/bitnami/charts/commit/e8b60778ed8c75de8246e09ea1728d4dd904170c)), closes [#31177](https://github.com/bitnami/charts/issues/31177)
 
 ## <small>16.1.1 (2024-12-26)</small>
 
