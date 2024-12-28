@@ -204,13 +204,11 @@ spec:
             - name: GHOST_SMTP_USER
               value: {{ .Values.smtpUser | quote }}
             {{- end }}
-            {{- if .Values.smtpPassword }}
             - name: GHOST_SMTP_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "common.secrets.name" (dict "existingSecret" .Values.existingSecret "context" $) }}
-                  key: {{ include "common.secrets.key" (dict "existingSecret" .Values.existingSecret "key" "smtp-password") }}
-            {{- end }}
+                  name: {{ include "ghost.smtpSecretName" . }}
+                  key: smtp-password
             {{- if .Values.smtpService }}
             - name: GHOST_SMTP_SERVICE
               value: {{ .Values.smtpService | quote }}

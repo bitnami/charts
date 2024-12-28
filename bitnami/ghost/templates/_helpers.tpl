@@ -137,6 +137,17 @@ Return the MySQL Secret Name
 {{- end -}}
 
 {{/*
+Return the SMTP Secret Name
+*/}}
+{{- define "ghost.smtpSecretName" -}}
+{{- if .Values.smtpExistingSecret }}
+    {{- printf "%s" .Values.smtpExistingSecret -}}
+{{- else -}}
+    {{- printf "%s-smtp" (include "common.names.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Compile all warnings into a single message.
 */}}
 {{- define "ghost.validateValues" -}}
