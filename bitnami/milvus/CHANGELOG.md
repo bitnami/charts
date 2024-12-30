@@ -1,6 +1,6 @@
 # Changelog
 
-## 10.1.2 (2024-12-26)
+## 10.1.2 (2024-12-30)
 
 * [bitnami/milvus] Release 10.1.2 ([#31169](https://github.com/bitnami/charts/pull/31169))
 
