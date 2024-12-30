@@ -37,6 +37,18 @@ Return the appropriate apiVersion for networkpolicy.
 {{- end -}}
 
 {{/*
+Return the appropriate apiVersion for job.
+*/}}
+{{- define "common.capabilities.job.apiVersion" -}}
+{{- $kubeVersion := include "common.capabilities.kubeVersion" . -}}
+{{- if and (not (empty $kubeVersion)) (semverCompare "<1.21-0" $kubeVersion) -}}
+{{- print "batch/v1beta1" -}}
+{{- else -}}
+{{- print "batch/v1" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the appropriate apiVersion for cronjob.
 */}}
 {{- define "common.capabilities.cronjob.apiVersion" -}}
@@ -81,18 +93,6 @@ Return the appropriate apiVersion for statefulset.
 {{- print "apps/v1beta1" -}}
 {{- else -}}
 {{- print "apps/v1" -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Return the appropriate apiVersion for job.
-*/}}
-{{- define "common.capabilities.job.apiVersion" -}}
-{{- $kubeVersion := include "common.capabilities.kubeVersion" . -}}
-{{- if and (not (empty $kubeVersion)) (semverCompare "<1.21-0" $kubeVersion) -}}
-{{- print "batch/v1beta1" -}}
-{{- else -}}
-{{- print "batch/v1" -}}
 {{- end -}}
 {{- end -}}
 
