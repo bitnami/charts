@@ -2,7 +2,7 @@
 
 ## 11.4.2 (2025-01-01)
 
-* [bitnami/kibana] Fix publicBaseUrl value when implied from ingress configuration ([#31193](https://github.com/bitnami/charts/pull/31193))
+* [bitnami/kibana] Fix publicBaseUrl value when inferred from ingress configuration ([#31193](https://github.com/bitnami/charts/pull/31193))
 
 ## <small>11.4.1 (2024-12-13)</small>
 
