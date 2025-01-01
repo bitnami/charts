@@ -1,8 +1,13 @@
 # Changelog
 
+## 4.2.1 (2025-01-01)
+
+* [bitnami/seaweedfs] Fix OpenShift compatibility issues for S3 + Filer init containers ([#31192](https://github.com/bitnami/charts/pull/31192))
+
 ## 4.2.0 (2024-12-10)
 
-* [bitnami/seaweedfs] Detect non-standard images ([#30967](https://github.com/bitnami/charts/pull/30967))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/seaweedfs] Detect non-standard images (#30967) ([a4d9265](https://github.com/bitnami/charts/commit/a4d9265e61197d5ed5e6c4a0f85ce7460abd4a66)), closes [#30967](https://github.com/bitnami/charts/issues/30967)
 
 ## <small>4.1.2 (2024-12-04)</small>
 
