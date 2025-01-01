@@ -403,6 +403,11 @@ Returns an init-container that waits for the database to be ready
       value: {{ include "seaweedfs.database.user" . | quote }}
     - name: DATABASE_PASSWORD_FILE
       value: "/secrets/password"
+  {{- if .Values.filer.resources }}
+  resources: {{- toYaml .Values.filer.resources | nindent 12 }}
+  {{- else if ne .Values.filer.resourcesPreset "none" }}
+  resources: {{- include "common.resources.preset" (dict "type" .Values.filer.resourcesPreset) | nindent 12 }}
+  {{- end }}
   volumeMounts:
     - name: empty-dir
       mountPath: /tmp
@@ -483,6 +488,11 @@ Returns an init-container that generates auth configuration for the Amazon S3 AP
         secretKeyRef:
           name: {{ printf "%s-auth" (include "seaweedfs.s3.fullname" .) }}
           key: read_secret_access_key
+  {{- if .Values.s3.resources }}
+  resources: {{- toYaml .Values.s3.resources | nindent 12 }}
+  {{- else if ne .Values.s3.resourcesPreset "none" }}
+  resources: {{- include "common.resources.preset" (dict "type" .Values.s3.resourcesPreset) | nindent 12 }}
+  {{- end }}
   volumeMounts:
     - name: empty-dir
       mountPath: /auth
