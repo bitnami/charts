@@ -1,8 +1,17 @@
 # Changelog
 
+## 1.5.1 (2024-12-16)
+
+* [bitnami/opensearch] Release 1.5.1 ([#31048](https://github.com/bitnami/charts/pull/31048))
+
 ## 1.5.0 (2024-12-10)
 
-* [bitnami/opensearch] Detect non-standard images ([#30934](https://github.com/bitnami/charts/pull/30934))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 5) (#30674) ([ed2a546](https://github.com/bitnami/charts/commit/ed2a54617faf763169e6b01a89100b9db32e1000)), closes [#30674](https://github.com/bitnami/charts/issues/30674)
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 3) (#30688) ([10a49f9](https://github.com/bitnami/charts/commit/10a49f9ff2db1d9d11a6edd1c40a9f61803241bc)), closes [#30688](https://github.com/bitnami/charts/issues/30688)
+* [bitnami/*] docs: :memo: Unify "Securing Traffic using TLS" section (#30707) ([b572333](https://github.com/bitnami/charts/commit/b57233336e4fe9af928ecb4f2a5f334011efb1bc)), closes [#30707](https://github.com/bitnami/charts/issues/30707)
+* [bitnami/opensearch] Detect non-standard images (#30934) ([e31f704](https://github.com/bitnami/charts/commit/e31f70462cccd22d5f2508c480101dbeed1a0605)), closes [#30934](https://github.com/bitnami/charts/issues/30934)
 
 ## 1.4.0 (2024-11-18)
 

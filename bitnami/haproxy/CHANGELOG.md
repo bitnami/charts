@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.2.1 (2024-12-11)
+## 2.2.2 (2024-12-19)
 
-* [bitnami/haproxy] Release 2.2.1 ([#30995](https://github.com/bitnami/charts/pull/30995))
+* [bitnami/haproxy] Release 2.2.2 ([#31118](https://github.com/bitnami/charts/pull/31118))
+
+## <small>2.2.1 (2024-12-11)</small>
+
+* [bitnami/haproxy] Release 2.2.1 (#30995) ([c41ce56](https://github.com/bitnami/charts/commit/c41ce563c288524f1aa26671f8553641d6dc1b31)), closes [#30995](https://github.com/bitnami/charts/issues/30995)
 
 ## 2.2.0 (2024-12-10)
 

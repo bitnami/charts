@@ -1,12 +1,12 @@
 # Source: https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v{version}/example/prometheus-operator-crd/monitoring.coreos.com_alertmanagerconfigs.yaml
-# Version: 0.78.2
+# Version: 0.79.2
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.16.4
-    operator.prometheus.io/version: 0.78.2
+    controller-gen.kubebuilder.io/version: v0.16.5
+    operator.prometheus.io/version: 0.79.2
   name: alertmanagerconfigs.monitoring.coreos.com
 spec:
   group: monitoring.coreos.com
@@ -6898,6 +6898,12 @@ spec:
                           message:
                             description: Message template
                             type: string
+                          messageThreadID:
+                            description: |-
+                              The Telegram Group Topic ID.
+                              It requires Alertmanager >= 0.26.0.
+                            format: int64
+                            type: integer
                           parseMode:
                             description: Parse mode for telegram message
                             enum:

@@ -48,7 +48,7 @@ These commands deploy one node with ScyllaDB on the Kubernetes cluster in the de
 
 Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
 
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcesPreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
 ### Update credentials
 
@@ -175,37 +175,37 @@ As the image run as non-root by default, it is necessary to adjust the ownership
 
 ### Scylladb parameters
 
-| Name                     | Description                                                                                                          | Value                      |
-| ------------------------ | -------------------------------------------------------------------------------------------------------------------- | -------------------------- |
-| `image.registry`         | Scylladb image registry                                                                                              | `REGISTRY_NAME`            |
-| `image.repository`       | Scylladb image repository                                                                                            | `REPOSITORY_NAME/scylladb` |
-| `image.digest`           | Scylladb image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag             | `""`                       |
-| `image.pullPolicy`       | image pull policy                                                                                                    | `IfNotPresent`             |
-| `image.pullSecrets`      | Scylladb image pull secrets                                                                                          | `[]`                       |
-| `image.debug`            | Enable image debug mode                                                                                              | `false`                    |
-| `dbUser.user`            | Scylladb admin user                                                                                                  | `cassandra`                |
-| `dbUser.forcePassword`   | Force the user to provide a non                                                                                      | `false`                    |
-| `dbUser.password`        | Password for `dbUser.user`. Randomly generated if empty                                                              | `""`                       |
-| `dbUser.existingSecret`  | Use an existing secret object for `dbUser.user` password (will ignore `dbUser.password`)                             | `""`                       |
-| `initDBConfigMap`        | ConfigMap with cql scripts. Useful for creating a keyspace and pre-populating data                                   | `""`                       |
-| `initDBSecret`           | Secret with cql script (with sensitive data). Useful for creating a keyspace and pre-populating data                 | `""`                       |
-| `existingConfiguration`  | ConfigMap with custom scylladb configuration files. This overrides any other Scylladb configuration set in the chart | `""`                       |
-| `cluster.name`           | Scylladb cluster name                                                                                                | `scylladb`                 |
-| `cluster.seedCount`      | Number of seed nodes                                                                                                 | `1`                        |
-| `cluster.numTokens`      | Number of tokens for each node                                                                                       | `256`                      |
-| `cluster.datacenter`     | Datacenter name                                                                                                      | `dc1`                      |
-| `cluster.rack`           | Rack name                                                                                                            | `rack1`                    |
-| `cluster.endpointSnitch` | Endpoint Snitch                                                                                                      | `SimpleSnitch`             |
-| `cluster.extraSeeds`     | For an external/second scylladb ring.                                                                                | `[]`                       |
-| `cluster.enableUDF`      | Enable User defined functions                                                                                        | `false`                    |
-| `jvm.extraOpts`          | Set the value for Java Virtual Machine extra options                                                                 | `""`                       |
-| `jvm.maxHeapSize`        | Set Java Virtual Machine maximum heap size (MAX_HEAP_SIZE). Calculated automatically if `nil`                        | `""`                       |
-| `jvm.newHeapSize`        | Set Java Virtual Machine new heap size (HEAP_NEWSIZE). Calculated automatically if `nil`                             | `""`                       |
-| `command`                | Command for running the container (set to default if not set). Use array form                                        | `[]`                       |
-| `args`                   | Args for running the container (set to default if not set). Use array form                                           | `[]`                       |
-| `extraEnvVars`           | Extra environment variables to be set on scylladb container                                                          | `[]`                       |
-| `extraEnvVarsCM`         | Name of existing ConfigMap containing extra env vars                                                                 | `""`                       |
-| `extraEnvVarsSecret`     | Name of existing Secret containing extra env vars                                                                    | `""`                       |
+| Name                     | Description                                                                                                            | Value                      |
+| ------------------------ | ---------------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| `image.registry`         | Scylladb image registry                                                                                                | `REGISTRY_NAME`            |
+| `image.repository`       | Scylladb image repository                                                                                              | `REPOSITORY_NAME/scylladb` |
+| `image.digest`           | Scylladb image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag               | `""`                       |
+| `image.pullPolicy`       | image pull policy                                                                                                      | `IfNotPresent`             |
+| `image.pullSecrets`      | Scylladb image pull secrets                                                                                            | `[]`                       |
+| `image.debug`            | Enable image debug mode                                                                                                | `false`                    |
+| `dbUser.user`            | Scylladb admin user                                                                                                    | `cassandra`                |
+| `dbUser.forcePassword`   | Force the user to provide a non                                                                                        | `false`                    |
+| `dbUser.password`        | Password for `dbUser.user`. Randomly generated if empty                                                                | `""`                       |
+| `dbUser.existingSecret`  | Use an existing secret object for `dbUser.user` password (will ignore `dbUser.password`)                               | `""`                       |
+| `initDBConfigMap`        | ConfigMap with cql scripts. Useful for creating a keyspace and pre-populating data                                     | `""`                       |
+| `initDBSecret`           | Secret with cql script (with sensitive data). Useful for creating a keyspace and pre-populating data                   | `""`                       |
+| `existingConfiguration`  | ConfigMap with custom scylla.yaml configuration file. This overrides any other Scylladb configuration set in the chart | `""`                       |
+| `cluster.name`           | Scylladb cluster name                                                                                                  | `scylladb`                 |
+| `cluster.seedCount`      | Number of seed nodes                                                                                                   | `1`                        |
+| `cluster.numTokens`      | Number of tokens for each node                                                                                         | `256`                      |
+| `cluster.datacenter`     | Datacenter name                                                                                                        | `dc1`                      |
+| `cluster.rack`           | Rack name                                                                                                              | `rack1`                    |
+| `cluster.endpointSnitch` | Endpoint Snitch                                                                                                        | `SimpleSnitch`             |
+| `cluster.extraSeeds`     | For an external/second scylladb ring.                                                                                  | `[]`                       |
+| `cluster.enableUDF`      | Enable User defined functions                                                                                          | `false`                    |
+| `jvm.extraOpts`          | Set the value for Java Virtual Machine extra options                                                                   | `""`                       |
+| `jvm.maxHeapSize`        | Set Java Virtual Machine maximum heap size (MAX_HEAP_SIZE). Calculated automatically if `nil`                          | `""`                       |
+| `jvm.newHeapSize`        | Set Java Virtual Machine new heap size (HEAP_NEWSIZE). Calculated automatically if `nil`                               | `""`                       |
+| `command`                | Command for running the container (set to default if not set). Use array form                                          | `[]`                       |
+| `args`                   | Args for running the container (set to default if not set). Use array form                                             | `[]`                       |
+| `extraEnvVars`           | Extra environment variables to be set on scylladb container                                                            | `[]`                       |
+| `extraEnvVarsCM`         | Name of existing ConfigMap containing extra env vars                                                                   | `""`                       |
+| `extraEnvVarsSecret`     | Name of existing Secret containing extra env vars                                                                      | `""`                       |
 
 ### Statefulset parameters
 

@@ -1,8 +1,18 @@
 # Changelog
 
+## 10.1.2 (2024-12-30)
+
+* [bitnami/milvus] Release 10.1.2 ([#31169](https://github.com/bitnami/charts/pull/31169))
+
+## <small>10.1.1 (2024-12-23)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/milvus] Release 10.1.1 (#31147) ([f8b9a38](https://github.com/bitnami/charts/commit/f8b9a385b826dea3d54afacd90501ff3a8f3d34d)), closes [#31147](https://github.com/bitnami/charts/issues/31147)
+
 ## 10.1.0 (2024-12-10)
 
-* [bitnami/milvus] Detect non-standard images ([#30959](https://github.com/bitnami/charts/pull/30959))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/milvus] Detect non-standard images (#30959) ([e40b32f](https://github.com/bitnami/charts/commit/e40b32f1e3ddb6589ff57381d30009ba3179d9cc)), closes [#30959](https://github.com/bitnami/charts/issues/30959)
 
 ## <small>10.0.4 (2024-12-04)</small>
 

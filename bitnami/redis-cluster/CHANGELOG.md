@@ -1,8 +1,14 @@
 # Changelog
 
+## 11.2.1 (2024-12-21)
+
+* [bitnami/redis-cluster] Release 11.2.1 ([#31137](https://github.com/bitnami/charts/pull/31137))
+
 ## 11.2.0 (2024-12-10)
 
-* [bitnami/redis-cluster] Detect non-standard images ([#30943](https://github.com/bitnami/charts/pull/30943))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 5) (#30674) ([ed2a546](https://github.com/bitnami/charts/commit/ed2a54617faf763169e6b01a89100b9db32e1000)), closes [#30674](https://github.com/bitnami/charts/issues/30674)
+* [bitnami/redis-cluster] Detect non-standard images (#30943) ([941937f](https://github.com/bitnami/charts/commit/941937f791d75eb04f1f29733fa73b37d3ecf15f)), closes [#30943](https://github.com/bitnami/charts/issues/30943)
 
 ## 11.1.0 (2024-11-26)
 

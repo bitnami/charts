@@ -1,12 +1,16 @@
 # Changelog
 
-## 24.1.1 (2025-01-02)
+## 24.1.5 (2025-01-02)
 
 * [bitnami/harbor] Fix REGISTRY_HTTP_SECRET creation when not using an existing secret ([#31013](https://github.com/bitnami/charts/pull/31013))
 
 ## <small>24.1.4 (2024-12-31)</small>
 
 * [bitnami/harbor] Release 24.1.4 (#31190) ([8dc6466](https://github.com/bitnami/charts/commit/8dc6466ae516b27785c0a42b8a56614e89824ac5)), closes [#31190](https://github.com/bitnami/charts/issues/31190)
+
+## 24.1.4 (2024-12-31)
+
+* [bitnami/harbor] Release 24.1.4 ([#31190](https://github.com/bitnami/charts/pull/31190))
 
 ## <small>24.1.3 (2024-12-31)</small>
 

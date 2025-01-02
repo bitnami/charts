@@ -1,8 +1,16 @@
 # Changelog
 
-## 1.1.1 (2024-12-12)
+## 1.1.3 (2024-12-26)
 
-* [bitnami/nessie] Release 1.1.1 ([#31003](https://github.com/bitnami/charts/pull/31003))
+* [bitnami/nessie]fix(runtime-parameters.yaml): Set long postgresql password ([#31165](https://github.com/bitnami/charts/pull/31165))
+
+## <small>1.1.2 (2024-12-18)</small>
+
+* [bitnami/nessie] Release 1.1.2 (#31096) ([31f73fe](https://github.com/bitnami/charts/commit/31f73fe9c561b996028a11550eeaf9292969d4ff)), closes [#31096](https://github.com/bitnami/charts/issues/31096)
+
+## <small>1.1.1 (2024-12-12)</small>
+
+* [bitnami/nessie] Release 1.1.1 (#31003) ([5be4662](https://github.com/bitnami/charts/commit/5be46622e257e418ec703a5a002e0a379cabac99)), closes [#31003](https://github.com/bitnami/charts/issues/31003)
 
 ## 1.1.0 (2024-12-10)
 

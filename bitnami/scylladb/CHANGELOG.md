@@ -1,8 +1,24 @@
 # Changelog
 
-## 3.1.1 (2024-12-11)
+## 3.1.5 (2024-12-15)
 
-* [bitnami/scylladb] Release 3.1.1 ([#30992](https://github.com/bitnami/charts/pull/30992))
+* [bitnami/scylladb] Release 3.1.5 ([#31047](https://github.com/bitnami/charts/pull/31047))
+
+## <small>3.1.4 (2024-12-12)</small>
+
+* [bitnami/scylladb] Fix existingConfiguration parameter for scylladb (#31014) ([ac1944e](https://github.com/bitnami/charts/commit/ac1944e1390e4d6cbdb289f82786c1fe8451d05b)), closes [#31014](https://github.com/bitnami/charts/issues/31014)
+
+## <small>3.1.3 (2024-12-12)</small>
+
+* [bitnami/scylladb] Release 3.1.3 (#31012) ([b6067b1](https://github.com/bitnami/charts/commit/b6067b1641d738898e0fd033ce38bec9ded58175)), closes [#31012](https://github.com/bitnami/charts/issues/31012)
+
+## <small>3.1.2 (2024-12-12)</small>
+
+* [bitnami/scylladb] Release 3.1.2 (#31011) ([e875c12](https://github.com/bitnami/charts/commit/e875c1268312b61204b6599a517c546130b41ea5)), closes [#31011](https://github.com/bitnami/charts/issues/31011)
+
+## <small>3.1.1 (2024-12-11)</small>
+
+* [bitnami/scylladb] Release 3.1.1 (#30992) ([26d19a0](https://github.com/bitnami/charts/commit/26d19a06d79c1e40d9c376eac26bc9b4a01d7e66)), closes [#30992](https://github.com/bitnami/charts/issues/30992)
 
 ## 3.1.0 (2024-12-10)
 
