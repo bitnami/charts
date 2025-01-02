@@ -7,9 +7,7 @@ annotations:
 apiVersion: v2
 # Please make sure that version and appVersion are always the same.
 appVersion: 2.29.0
-description:
-  A Library Helm Chart for grouping common logic between bitnami charts. This
-  chart is not deployable by itself.
+description: A Library Helm Chart for grouping common logic between bitnami charts. This chart is not deployable by itself.
 home: https://bitnami.com
 icon: https://bitnami.com/downloads/logos/bitnami-mark.png
 keywords:
