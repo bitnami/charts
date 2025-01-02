@@ -4,6 +4,14 @@
 
 * [bitnami/harbor] Upgrade postgres to version 17.2.0 ([#31159](https://github.com/bitnami/charts/pull/31159))
 
+## 24.1.4 (2024-12-31)
+
+* [bitnami/harbor] Release 24.1.4 ([#31190](https://github.com/bitnami/charts/pull/31190))
+
+## <small>24.1.3 (2024-12-31)</small>
+
+* [bitnami/harbor] Release 24.1.3 (#31187) ([520af96](https://github.com/bitnami/charts/commit/520af96aab6a5f0edcc92dbe33b6d1f27616248f)), closes [#31187](https://github.com/bitnami/charts/issues/31187)
+
 ## <small>24.1.2 (2024-12-24)</small>
 
 * [bitnami/harbor] Release 24.1.2 (#31156) ([7b7e8e0](https://github.com/bitnami/charts/commit/7b7e8e0453d3c47b0b65051ecb0e4b4648a1aef0)), closes [#31156](https://github.com/bitnami/charts/issues/31156)
