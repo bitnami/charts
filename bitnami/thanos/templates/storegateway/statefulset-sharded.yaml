@@ -195,9 +195,12 @@ spec:
             {{- $.Values.storegateway.extraFlags | toYaml | nindent 12 }}
             {{- end }}
             {{- end }}
-          {{- if $.Values.storegateway.extraEnvVars }}
-          env: {{- include "common.tplvalues.render" (dict "value" $.Values.storegateway.extraEnvVars "context" $) | nindent 12 }}
-          {{- end }}
+          env:
+            - name: SHARD
+              value: {{ $index | quote }}
+            {{- if $.Values.storegateway.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" $.Values.storegateway.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
           {{- if or $.Values.storegateway.extraEnvVarsCM $.Values.storegateway.extraEnvVarsSecret }}
           envFrom:
             {{- if $.Values.storegateway.extraEnvVarsCM }}
