@@ -1,8 +1,12 @@
 # Changelog
 
-## 24.1.4 (2024-12-31)
+## 24.1.5 (2025-01-02)
 
-* [bitnami/harbor] Release 24.1.4 ([#31190](https://github.com/bitnami/charts/pull/31190))
+* [bitnami/harbor] Release 24.1.5 ([#31196](https://github.com/bitnami/charts/pull/31196))
+
+## <small>24.1.4 (2024-12-31)</small>
+
+* [bitnami/harbor] Release 24.1.4 (#31190) ([8dc6466](https://github.com/bitnami/charts/commit/8dc6466ae516b27785c0a42b8a56614e89824ac5)), closes [#31190](https://github.com/bitnami/charts/issues/31190)
 
 ## <small>24.1.3 (2024-12-31)</small>
 
