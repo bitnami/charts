@@ -19,8 +19,7 @@
 
 ## 16.3.0 (2024-12-10)
 
-* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
-* [bitnami/postgresql] Detect non-standard images (#30936) ([ac96151](https://github.com/bitnami/charts/commit/ac96151bdbe5e99b00dcde62a4d72f1827fa46b2)), closes [#30936](https://github.com/bitnami/charts/issues/30936)
+* [bitnami/postgresql] Detect non-standard images ([#30936](https://github.com/bitnami/charts/pull/30936))
 
 ## <small>16.2.5 (2024-12-03)</small>
 
