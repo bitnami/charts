@@ -87,7 +87,7 @@ image:
 ## @param replicaCount Number of Moodle replicas (requires ReadWriteMany PVC support)
 ## Setting this will fix the number replica count needed for Moodle&trade;
 ## This can be overridden by setting autoscaling.enabled to true
-## For upgrades set the autoscaling.enabled to false and replicaCount to the desired number of replicas 
+## For upgrades set the autoscaling.enabled to false and replicaCount to the desired number of replicas
 ##
 replicaCount: 1
 ## When enabled, the number of Moodle&trade; replicas will be automatically adjusted based on targets on given metrics.
@@ -927,7 +927,6 @@ certificates:
   ## @skip certificates.image.tag Container sidecar image tag (immutable tags are recommended)
   ## @param certificates.image.digest Container sidecar image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param certificates.image.pullPolicy Container sidecar image pull policy
-  ## @param certificates.image.pullSecrets Container sidecar image pull secrets
   ##
   image:
     registry: docker.io
@@ -938,14 +937,6 @@ certificates:
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
-    ## Optionally specify an array of imagePullSecrets.
-    ## Secrets must be manually created in the namespace.
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-    ## e.g:
-    ## pullSecrets:
-    ##   - myRegistryKeySecretName
-    ##
-    pullSecrets: []
 ## @section NetworkPolicy parameters
 
 ## Network Policy configuration

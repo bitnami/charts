@@ -398,7 +398,6 @@ You may want to review the [PV reclaim policy](https://kubernetes.io/docs/tasks/
 | `certificates.image.repository`                      | Container sidecar image repository                                                                                | `REPOSITORY_NAME/os-shell`               |
 | `certificates.image.digest`                          | Container sidecar image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                     |
 | `certificates.image.pullPolicy`                      | Container sidecar image pull policy                                                                               | `IfNotPresent`                           |
-| `certificates.image.pullSecrets`                     | Container sidecar image pull secrets                                                                              | `[]`                                     |
 
 ### NetworkPolicy parameters
 
