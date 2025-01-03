@@ -97,10 +97,6 @@ spec:
         - name: certificates
           image: {{ template "certificates.image" . }}
           imagePullPolicy: {{ default .Values.image.pullPolicy .Values.certificates.image.pullPolicy }}
-          imagePullSecrets:
-          {{- range (default .Values.image.pullSecrets .Values.certificates.image.pullSecrets) }}
-            - name: {{ . }}
-          {{- end }}
           command:
           {{- if .Values.certificates.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.certificates.command "context" $) | nindent 12 }}
