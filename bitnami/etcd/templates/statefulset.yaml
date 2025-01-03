@@ -206,8 +206,6 @@ spec:
             {{- if gt $replicaCount 1 }}
             - name: ETCD_INITIAL_CLUSTER_TOKEN
               value: {{ .Values.initialClusterToken | quote }}
-            - name: ETCD_INITIAL_CLUSTER_STATE
-              value: {{ default (ternary "new" "existing" .Release.IsInstall) .Values.initialClusterState | quote }}
             {{- $initialCluster := list }}
             {{- range $e, $i := until $replicaCount }}
             {{- $initialCluster = append $initialCluster (printf "%s-%d=%s://%s-%d.%s.%s.svc.%s:%d" $etcdFullname $i $etcdPeerProtocol $etcdFullname $i $etcdHeadlessServiceName $releaseNamespace $clusterDomain $peerPort) }}
@@ -326,12 +324,6 @@ spec:
           {{- end }}
           {{- if .Values.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.lifecycleHooks "context" $) | nindent 12 }}
-          {{- else if and (gt $replicaCount 1) .Values.removeMemberOnContainerTermination }}
-          lifecycle:
-            preStop:
-              exec:
-                command:
-                  - /opt/bitnami/scripts/etcd/prestop.sh
           {{- end }}
           {{- end }}
           {{- if .Values.resources }}

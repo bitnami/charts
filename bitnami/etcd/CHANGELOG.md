@@ -1,8 +1,12 @@
 # Changelog
 
-## 10.7.1 (2024-12-11)
+## 11.0.0 (2024-12-27)
 
-* [bitnami/etcd] keep snapshot-pvc ([#30815](https://github.com/bitnami/charts/pull/30815))
+* [bitnami/etcd] Add pre-upgrade hook ([#31161](https://github.com/bitnami/charts/pull/31161))
+
+## <small>10.7.1 (2024-12-11)</small>
+
+* [bitnami/etcd] keep snapshot-pvc (#30815) ([2a63958](https://github.com/bitnami/charts/commit/2a639583f613184bb1e05346ba25169d872db3cf)), closes [#30815](https://github.com/bitnami/charts/issues/30815)
 
 ## 10.7.0 (2024-12-10)
 

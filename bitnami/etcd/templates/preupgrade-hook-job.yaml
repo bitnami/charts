@@ -1,0 +1,255 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+apiVersion: {{ include "common.capabilities.job.apiVersion" . }}
+kind: Job
+metadata:
+  name: {{ include "common.names.fullname" . }}-pre-upgrade
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: etcd-pre-upgrade-job
+  annotations: {{- include "common.tplvalues.render" (dict
+    "value" (merge 
+      .Values.commonAnnotations
+      (dict
+        "helm.sh/hook" "pre-upgrade"
+        "helm.sh/hook-delete-policy" "before-hook-creation")
+    )
+    "context" $) | nindent 4 }}
+spec:
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
+  template:
+    metadata:
+      name: {{ include "common.names.fullname" . }}-pre-upgrade
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/component: etcd-pre-upgrade-job
+      annotations:
+        {{- if .Values.podAnnotations }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if (include "etcd.createConfigmap" .) }}
+        checksum/configuration: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        {{- end }}
+        {{- if (include "etcd.token.createSecret" .) }}
+        checksum/token-secret: {{ include (print $.Template.BasePath "/token-secrets.yaml") . | sha256sum }}
+        {{- end }}
+    spec:
+      {{- include "etcd.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.automountServiceAccountToken }}
+      {{- if .Values.affinity }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAffinityPreset "component" "etcd-pre-upgrade-job" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "component" "etcd-pre-upgrade-job" "customLabels" $podLabels "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
+      {{- end }}
+      {{- if .Values.schedulerName }}
+      schedulerName: {{ .Values.schedulerName }}
+      {{- end }}
+      {{- if .Values.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      restartPolicy: Never
+      containers:
+        {{- $replicaCount := int .Values.replicaCount }}
+        {{- $peerPort := int .Values.containerPorts.peer }}
+        {{- $etcdFullname := include "common.names.fullname" . }}
+        {{- $releaseNamespace := .Release.Namespace }}
+        {{- $etcdHeadlessServiceName := (printf "%s-%s" $etcdFullname "headless" | trunc 63 | trimSuffix "-") }}
+        {{- $clusterDomain := .Values.clusterDomain }}
+        {{- $etcdPeerProtocol := include "etcd.peerProtocol" . }}
+        {{- $etcdClientProtocol := include "etcd.clientProtocol" . }}
+        - name: pre-upgrade-job
+          image: {{ include "etcd.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          command: [ "/opt/bitnami/scripts/etcd/entrypoint.sh" ]
+          args: [ "/opt/bitnami/scripts/etcd/preupgrade.sh" ]
+          env:
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
+            - name: MY_POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: MY_JOB_NAME
+              value: {{ printf "%s-pre-upgrade" (include "common.names.fullname" .) | quote }}
+            - name: MY_STS_NAME
+              value: {{ include "common.names.fullname" . | quote }}
+            - name: ETCDCTL_API
+              value: "3"
+            - name: ETCD_ON_K8S
+              value: "yes"
+            - name: ETCD_NAME
+              value: "$(MY_POD_NAME)"
+            - name: ETCD_DATA_DIR
+              value: "/bitnami/etcd/data"
+            - name: ETCD_LOG_LEVEL
+              value: {{ ternary "debug" .Values.logLevel .Values.image.debug | quote }}
+            - name: ETCD_ADVERTISE_CLIENT_URLS
+              value: "{{ $etcdClientProtocol }}://$(MY_POD_NAME).{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.svc.{{ $clusterDomain }}:{{ .Values.containerPorts.client }}{{- if .Values.service.enabled }},{{ $etcdClientProtocol }}://{{ $etcdFullname }}.{{ .Release.Namespace }}.svc.{{ $clusterDomain }}:{{ coalesce .Values.service.ports.client .Values.service.port }}{{- end }}"
+            - name: ALLOW_NONE_AUTHENTICATION
+              value: {{ ternary "yes" "no" (and (not (or .Values.auth.rbac.create .Values.auth.rbac.enabled)) .Values.auth.rbac.allowNoneAuthentication) | quote }}
+            {{- if or .Values.auth.rbac.create .Values.auth.rbac.enabled }}
+            - name: ETCD_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "etcd.secretName" . }}
+                  key: {{ include "etcd.secretPasswordKey" . }}
+            {{- end }}
+            {{- if .Values.auth.token.enabled }}
+            - name: ETCD_AUTH_TOKEN
+              {{- if eq .Values.auth.token.type "jwt" }}
+              value: {{ printf "jwt,priv-key=/opt/bitnami/etcd/certs/token/%s,sign-method=%s,ttl=%s" .Values.auth.token.privateKey.filename .Values.auth.token.signMethod .Values.auth.token.ttl | quote }}
+              {{- else if eq .Values.auth.token.type "simple" }}
+              value: "simple"
+              {{- end }}
+            {{- end }}
+            {{- if .Values.metrics.useSeparateEndpoint }}
+            - name: ETCD_LISTEN_METRICS_URLS
+              value: "http://0.0.0.0:{{ .Values.containerPorts.metrics }}"
+            {{- end }}
+            {{- if .Values.autoCompactionMode }}
+            - name: ETCD_AUTO_COMPACTION_MODE
+              value: {{ .Values.autoCompactionMode | quote }}
+            {{- end }}
+            {{- if .Values.autoCompactionRetention }}
+            - name: ETCD_AUTO_COMPACTION_RETENTION
+              value: {{ .Values.autoCompactionRetention | quote }}
+            {{- end }}
+            {{- if .Values.maxProcs }}
+            - name: GOMAXPROCS
+              value: {{ .Values.maxProcs }}
+            {{- end }}
+            {{- if gt $replicaCount 1 }}
+            - name: ETCD_INITIAL_CLUSTER_TOKEN
+              value: {{ .Values.initialClusterToken | quote }}
+            {{- $initialCluster := list }}
+            {{- range $e, $i := until $replicaCount }}
+            {{- $initialCluster = append $initialCluster (printf "%s-%d=%s://%s-%d.%s.%s.svc.%s:%d" $etcdFullname $i $etcdPeerProtocol $etcdFullname $i $etcdHeadlessServiceName $releaseNamespace $clusterDomain $peerPort) }}
+            {{- end }}
+            - name: ETCD_INITIAL_CLUSTER
+              value: {{ join "," $initialCluster | quote }}
+            {{- end }}
+            - name: ETCD_CLUSTER_DOMAIN
+              value: {{ printf "%s.%s.svc.%s" $etcdHeadlessServiceName $releaseNamespace $clusterDomain | quote }}
+            {{- if and .Values.auth.client.secureTransport .Values.auth.client.useAutoTLS }}
+            - name: ETCD_AUTO_TLS
+              value: "true"
+            {{- else if .Values.auth.client.secureTransport }}
+            - name: ETCD_CERT_FILE
+              value: "/opt/bitnami/etcd/certs/client/{{ .Values.auth.client.certFilename }}"
+            - name: ETCD_KEY_FILE
+              value: "/opt/bitnami/etcd/certs/client/{{ .Values.auth.client.certKeyFilename }}"
+            {{- if .Values.auth.client.enableAuthentication }}
+            - name: ETCD_CLIENT_CERT_AUTH
+              value: "true"
+            - name: ETCD_TRUSTED_CA_FILE
+              value: "/opt/bitnami/etcd/certs/client/{{ .Values.auth.client.caFilename | default "ca.crt" }}"
+            {{- else if .Values.auth.client.caFilename }}
+            - name: ETCD_TRUSTED_CA_FILE
+              value: "/opt/bitnami/etcd/certs/client/{{ .Values.auth.client.caFilename | default "ca.crt" }}"
+            {{- end }}
+            {{- end }}
+            {{- if and .Values.auth.peer.secureTransport .Values.auth.peer.useAutoTLS }}
+            - name: ETCD_PEER_AUTO_TLS
+              value: "true"
+            {{- else if .Values.auth.peer.secureTransport }}
+            - name: ETCD_PEER_CERT_FILE
+              value: "/opt/bitnami/etcd/certs/peer/{{ .Values.auth.peer.certFilename }}"
+            - name: ETCD_PEER_KEY_FILE
+              value: "/opt/bitnami/etcd/certs/peer/{{ .Values.auth.peer.certKeyFilename }}"
+            {{- if .Values.auth.peer.enableAuthentication }}
+            - name: ETCD_PEER_CLIENT_CERT_AUTH
+              value: "true"
+            - name: ETCD_PEER_TRUSTED_CA_FILE
+              value: "/opt/bitnami/etcd/certs/peer/{{ .Values.auth.peer.caFilename | default "ca.crt" }}"
+            {{- else if .Values.auth.peer.caFilename }}
+            - name: ETCD_PEER_TRUSTED_CA_FILE
+              value: "/opt/bitnami/etcd/certs/peer/{{ .Values.auth.peer.caFilename | default "ca.crt" }}"
+            {{- end }}
+            {{- end }}
+            {{- if .Values.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- if .Values.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          volumeMounts:
+            {{- if or .Values.configuration .Values.existingConfigmap }}
+            - name: configuration
+              mountPath: /opt/bitnami/etcd/conf/
+            {{- else }}
+            - name: empty-dir
+              mountPath: /opt/bitnami/etcd/conf/
+              subPath: app-conf-dir
+            {{- end }}
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            {{- if and (eq .Values.auth.token.enabled true) (eq .Values.auth.token.type "jwt") }}
+            - name: etcd-jwt-token
+              mountPath: /opt/bitnami/etcd/certs/token/
+              readOnly: true
+            {{- end }}
+            {{- if or .Values.auth.client.enableAuthentication (and .Values.auth.client.secureTransport (not .Values.auth.client.useAutoTLS )) }}
+            - name: etcd-client-certs
+              mountPath: /opt/bitnami/etcd/certs/client/
+              readOnly: true
+            {{- end }}
+            {{- if or .Values.auth.peer.enableAuthentication (and .Values.auth.peer.secureTransport (not .Values.auth.peer.useAutoTLS )) }}
+            - name: etcd-peer-certs
+              mountPath: /opt/bitnami/etcd/certs/peer/
+              readOnly: true
+            {{- end }}
+            {{- if .Values.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
+      volumes:
+        - name: empty-dir
+          emptyDir: {}
+        {{- if or .Values.configuration .Values.existingConfigmap }}
+        - name: configuration
+          configMap:
+            name: {{ include "etcd.configmapName" . }}
+        {{- end }}
+        {{- if and (eq .Values.auth.token.enabled true) (eq .Values.auth.token.type "jwt") }}
+        - name: etcd-jwt-token
+          secret:
+            secretName: {{ include "etcd.token.secretName" . }}
+            defaultMode: 256
+        {{- end }}
+        {{- if or .Values.auth.client.enableAuthentication (and .Values.auth.client.secureTransport (not .Values.auth.client.useAutoTLS )) }}
+        - name: etcd-client-certs
+          secret:
+            secretName: {{ required "A secret containing the client certificates is required" (tpl .Values.auth.client.existingSecret .) }}
+            defaultMode: 256
+        {{- end }}
+        {{- if or .Values.auth.peer.enableAuthentication (and .Values.auth.peer.secureTransport (not .Values.auth.peer.useAutoTLS )) }}
+        - name: etcd-peer-certs
+          secret:
+            secretName: {{ required "A secret containing the peer certificates is required" (tpl .Values.auth.peer.existingSecret .) }}
+            defaultMode: 256
+        {{- end }}
+        {{- if .Values.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
