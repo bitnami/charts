@@ -1,8 +1,13 @@
 # Changelog
 
+## 1.3.1 (2025-01-03)
+
+* [bitnami/grafana-mimir] Release 1.3.1 ([#31205](https://github.com/bitnami/charts/pull/31205))
+
 ## 1.3.0 (2024-12-10)
 
-* [bitnami/grafana-mimir] Detect non-standard images ([#30887](https://github.com/bitnami/charts/pull/30887))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/grafana-mimir] Detect non-standard images (#30887) ([b56f760](https://github.com/bitnami/charts/commit/b56f7600bebb18d442055540590355888463d60f)), closes [#30887](https://github.com/bitnami/charts/issues/30887)
 
 ## <small>1.2.23 (2024-12-03)</small>
 
