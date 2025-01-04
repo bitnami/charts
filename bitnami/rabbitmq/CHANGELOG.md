@@ -1,8 +1,12 @@
 # Changelog
 
-## 15.2.1 (2024-12-16)
+## 16.0.0 (2025-01-03)
 
-* [bitnami/rabbitmq] Release 15.2.1 ([#31049](https://github.com/bitnami/charts/pull/31049))
+* [bitnami/rabbitmq] remove undefined rts key from network policy template ([#31210](https://github.com/bitnami/charts/pull/31210))
+
+## <small>15.2.1 (2024-12-16)</small>
+
+* [bitnami/rabbitmq] Release 15.2.1 (#31049) ([973da81](https://github.com/bitnami/charts/commit/973da81d773b2b834c83e8b7b90553d915899bc5)), closes [#31049](https://github.com/bitnami/charts/issues/31049)
 
 ## 15.2.0 (2024-12-10)
 
