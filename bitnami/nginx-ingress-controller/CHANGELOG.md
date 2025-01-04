@@ -1,8 +1,13 @@
 # Changelog
 
+## 11.6.1 (2024-12-31)
+
+* [bitnami/nginx-ingress-controller] Release 11.6.1 ([#31188](https://github.com/bitnami/charts/pull/31188))
+
 ## 11.6.0 (2024-12-10)
 
-* [bitnami/nginx-ingress-controller] Detect non-standard images ([#30961](https://github.com/bitnami/charts/pull/30961))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/nginx-ingress-controller] Detect non-standard images (#30961) ([705a15e](https://github.com/bitnami/charts/commit/705a15efcb568567837cb5e53df6b1f5391231c8)), closes [#30961](https://github.com/bitnami/charts/issues/30961)
 
 ## <small>11.5.5 (2024-12-04)</small>
 
