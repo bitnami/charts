@@ -703,9 +703,9 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ### To 11.0.0
 
-This version introduce the following breaking changes:
+This version introduces the following breaking changes:
 
-- Remove `initialClusterState` which was unreliable at detecting cluster state. From now on, each node contact other members to determine cluster state. If no member are available and the data dir is empty then it bootstraps a new cluster.
+- Remove `initialClusterState` which was unreliable at detecting cluster state. From now on, each node will contact other members to determine cluster state. If no members are available and the data dir is empty, then it bootstraps a new cluster.
 - Remove `removeMemberOnContainerTermination` which was unreliable at removing stale members during replica count updates. Instead, a pre-upgrade hook is added to check and remove stale members.
 
 ### To 10.7.0
