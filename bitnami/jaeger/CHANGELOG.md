@@ -3,6 +3,9 @@
 ## 5.1.3 (2025-01-08)
 
 * [bitnami/jaeger] Release 5.1.3 ([#31251](https://github.com/bitnami/charts/pull/31251))
+## 5.1.3 (2025-01-04)
+
+* [bitnami/jaeger]  (fix) migration job not using namespaceOverwrite  ([#31216](https://github.com/bitnami/charts/pull/31216))
 
 ## <small>5.1.2 (2024-12-12)</small>
 
