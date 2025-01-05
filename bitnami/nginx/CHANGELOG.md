@@ -1,8 +1,12 @@
 # Changelog
 
-## 18.3.1 (2024-12-13)
+## 18.3.2 (2025-01-01)
 
-* [bitnami/nginx] fix nginx init containers with writable file system ([#30810](https://github.com/bitnami/charts/pull/30810))
+* [bitnami/nginx] Release 18.3.2 ([#31191](https://github.com/bitnami/charts/pull/31191))
+
+## <small>18.3.1 (2024-12-13)</small>
+
+* [bitnami/nginx] fix nginx init containers with writable file system (#30810) ([4688b13](https://github.com/bitnami/charts/commit/4688b13bf34325945954f62dc73cf925272e8248)), closes [#30810](https://github.com/bitnami/charts/issues/30810)
 
 ## 18.3.0 (2024-12-10)
 

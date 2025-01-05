@@ -1,8 +1,13 @@
 # Changelog
 
+## 7.6.1 (2024-12-23)
+
+* [bitnami/memcached] Release 7.6.1 ([#31142](https://github.com/bitnami/charts/pull/31142))
+
 ## 7.6.0 (2024-12-10)
 
-* [bitnami/memcached] Detect non-standard images ([#30922](https://github.com/bitnami/charts/pull/30922))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/memcached] Detect non-standard images (#30922) ([954239f](https://github.com/bitnami/charts/commit/954239fbde6ee74fb40dc8341b4cfb4ea243ced7)), closes [#30922](https://github.com/bitnami/charts/issues/30922)
 
 ## <small>7.5.4 (2024-12-05)</small>
 

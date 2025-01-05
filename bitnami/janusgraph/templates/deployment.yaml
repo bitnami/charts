@@ -227,7 +227,7 @@ spec:
             - -XX:MaxRAMPercentage=100
             - -XshowSettings:vm
             - -jar
-            - jmx_prometheus_httpserver.jar
+            - jmx_prometheus_standalone.jar
             - {{ .Values.metrics.containerPorts.metrics | quote }}
             - /etc/jmx-janusgraph/jmx-prometheus.yml
           {{- end }}
