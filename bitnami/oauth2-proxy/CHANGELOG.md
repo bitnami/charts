@@ -1,8 +1,14 @@
 # Changelog
 
-## 6.1.1 (2024-12-04)
+## 6.2.0 (2024-12-10)
 
-* [bitnami/oauth2-proxy] Release 6.1.1 ([#30770](https://github.com/bitnami/charts/pull/30770))
+* [bitnami/oauth2-proxy] Detect non-standard images ([#30933](https://github.com/bitnami/charts/pull/30933))
+
+## <small>6.1.1 (2024-12-04)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Unify "Securing Traffic using TLS" section (#30707) ([b572333](https://github.com/bitnami/charts/commit/b57233336e4fe9af928ecb4f2a5f334011efb1bc)), closes [#30707](https://github.com/bitnami/charts/issues/30707)
+* [bitnami/oauth2-proxy] Release 6.1.1 (#30770) ([8805060](https://github.com/bitnami/charts/commit/8805060f570e254bb8b66121537e5a3f7d54bce9)), closes [#30770](https://github.com/bitnami/charts/issues/30770)
 
 ## 6.1.0 (2024-11-28)
 

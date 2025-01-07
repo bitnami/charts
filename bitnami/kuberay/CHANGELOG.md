@@ -1,8 +1,14 @@
 # Changelog
 
-## 1.2.20 (2024-12-04)
+## 1.3.0 (2024-12-10)
 
-* [bitnami/kuberay] Release 1.2.20 ([#30760](https://github.com/bitnami/charts/pull/30760))
+* [bitnami/kuberay] Detect non-standard images ([#30918](https://github.com/bitnami/charts/pull/30918))
+
+## <small>1.2.20 (2024-12-04)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 3) (#30666) ([82fc7e2](https://github.com/bitnami/charts/commit/82fc7e2fc12e2648ed22069942203c02bf5d4cc6)), closes [#30666](https://github.com/bitnami/charts/issues/30666)
+* [bitnami/kuberay] Release 1.2.20 (#30760) ([957d8a1](https://github.com/bitnami/charts/commit/957d8a193b23382675b451452ce0197ff03f081c)), closes [#30760](https://github.com/bitnami/charts/issues/30760)
 
 ## <small>1.2.19 (2024-11-07)</small>
 

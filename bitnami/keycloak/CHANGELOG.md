@@ -1,8 +1,25 @@
 # Changelog
 
-## 24.2.3 (2024-12-03)
+## 24.3.2 (2024-12-20)
 
-* [bitnami/keycloak] Release 24.2.3 ([#30726](https://github.com/bitnami/charts/pull/30726))
+* [bitnami/keycloak] Update KEYCLOAK_ADMIN env variables deprecation ([#30636](https://github.com/bitnami/charts/pull/30636))
+
+## <small>24.3.1 (2024-12-16)</small>
+
+* [bitnami/keycloak] KEYCLOAK_HOSTNAME present even if KEYCLOAK_PROXY_HEADERS is set (#30368) ([80b1bc3](https://github.com/bitnami/charts/commit/80b1bc3db52748c242a43a37ac9573eed311e6df)), closes [#30368](https://github.com/bitnami/charts/issues/30368)
+
+## 24.3.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/keycloak] Detect non-standard images (#30902) ([6ee9c49](https://github.com/bitnami/charts/commit/6ee9c49966c3ff9d1f1d0fa05278d36a2e45af8e)), closes [#30902](https://github.com/bitnami/charts/issues/30902)
+
+## <small>24.2.3 (2024-12-03)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 3) (#30666) ([82fc7e2](https://github.com/bitnami/charts/commit/82fc7e2fc12e2648ed22069942203c02bf5d4cc6)), closes [#30666](https://github.com/bitnami/charts/issues/30666)
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 2) (#30687) ([c457848](https://github.com/bitnami/charts/commit/c457848b2a111aad59830b98f85ffa1e29918e10)), closes [#30687](https://github.com/bitnami/charts/issues/30687)
+* [bitnami/*] docs: :memo: Unify "Securing Traffic using TLS" section (#30707) ([b572333](https://github.com/bitnami/charts/commit/b57233336e4fe9af928ecb4f2a5f334011efb1bc)), closes [#30707](https://github.com/bitnami/charts/issues/30707)
+* [bitnami/keycloak] Release 24.2.3 (#30726) ([c163f68](https://github.com/bitnami/charts/commit/c163f689ad6c765c5b8d138ca597d85ab8402d14)), closes [#30726](https://github.com/bitnami/charts/issues/30726)
 
 ## <small>24.2.2 (2024-11-22)</small>
 

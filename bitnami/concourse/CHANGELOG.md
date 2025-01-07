@@ -1,8 +1,26 @@
 # Changelog
 
-## 5.0.15 (2024-12-05)
+## 5.1.3 (2025-01-04)
 
-* [bitnami/concourse] Release 5.0.15 ([#30792](https://github.com/bitnami/charts/pull/30792))
+* [bitnami/concourse] Release 5.1.3 ([#31214](https://github.com/bitnami/charts/pull/31214))
+
+## <small>5.1.2 (2024-12-20)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/concourse] Release 5.1.2 (#31130) ([a16f095](https://github.com/bitnami/charts/commit/a16f0953ab89087823fed9afab3fecf1430d9638)), closes [#31130](https://github.com/bitnami/charts/issues/31130)
+
+## <small>5.1.1 (2024-12-11)</small>
+
+* [bitnami/concourse] Release 5.1.1 (#30977) ([9e2c209](https://github.com/bitnami/charts/commit/9e2c20934cb7848b042aed0c8f87a2d4ed627006)), closes [#30977](https://github.com/bitnami/charts/issues/30977)
+
+## 5.1.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/concourse] Detect non-standard images (#30872) ([62a2bd4](https://github.com/bitnami/charts/commit/62a2bd4c512a859b75d765c846d5cb2a9fe694b2)), closes [#30872](https://github.com/bitnami/charts/issues/30872)
+
+## <small>5.0.15 (2024-12-05)</small>
+
+* [bitnami/concourse] Release 5.0.15 (#30792) ([51f0d05](https://github.com/bitnami/charts/commit/51f0d051baad14130026737253d1184cbddf43c7)), closes [#30792](https://github.com/bitnami/charts/issues/30792)
 
 ## <small>5.0.14 (2024-12-03)</small>
 

@@ -1,8 +1,17 @@
 # Changelog
 
-## 2.1.2 (2024-12-02)
+## 2.2.1 (2024-12-17)
 
-* [bitnami/valkey] Fix broken failover in sentinel setups ([#30689](https://github.com/bitnami/charts/pull/30689))
+* [bitnami/valkey] fix: sentinel pdb ([#31020](https://github.com/bitnami/charts/pull/31020))
+
+## 2.2.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/valkey] Detect non-standard images (#30950) ([3145dda](https://github.com/bitnami/charts/commit/3145ddaddcf99d4e23609a67e9740acfb589bc97)), closes [#30950](https://github.com/bitnami/charts/issues/30950)
+
+## <small>2.1.2 (2024-12-05)</small>
+
+* [bitnami/valkey] Fix broken failover in sentinel setups (#30689) ([1d3ed00](https://github.com/bitnami/charts/commit/1d3ed00f2868fbc37aee3b6adbbe29d8ef0aaa4f)), closes [#30689](https://github.com/bitnami/charts/issues/30689) [#30024](https://github.com/bitnami/charts/issues/30024)
 
 ## <small>2.1.1 (2024-12-01)</small>
 

@@ -1,8 +1,31 @@
 # Changelog
 
-## 15.0.4 (2024-12-03)
+## 15.1.4 (2024-12-23)
 
-* [bitnami/postgresql-ha] Release 15.0.4 ([#30732](https://github.com/bitnami/charts/pull/30732))
+* [bitnami/postgresql-ha] Release 15.1.4 ([#31144](https://github.com/bitnami/charts/pull/31144))
+
+## <small>15.1.3 (2024-12-23)</small>
+
+* [bitnami/postgresql-ha] Release 15.1.3 (#31135) ([b1fde05](https://github.com/bitnami/charts/commit/b1fde05a5dcb73ca619da5300686562f70d8fb1c)), closes [#31135](https://github.com/bitnami/charts/issues/31135)
+
+## <small>15.1.2 (2024-12-20)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/postgresql-ha] Fix typo in documentation (#31069) ([b3b4ac7](https://github.com/bitnami/charts/commit/b3b4ac71e48c593a1e4da42b00445fb0ec47b1c1)), closes [#31069](https://github.com/bitnami/charts/issues/31069)
+* [bitnami/postgresql-ha] Release 15.1.2 (#31132) ([a352680](https://github.com/bitnami/charts/commit/a352680c0b1a3c92b24b2888ed5fb8d532f9ba6d)), closes [#31132](https://github.com/bitnami/charts/issues/31132)
+
+## <small>15.1.1 (2024-12-13)</small>
+
+* [bitnami/postgresql-ha]Add Storage Class Configuration to Templates (#30993) ([485796b](https://github.com/bitnami/charts/commit/485796bfe633a508a8d679548d0fdb024a8ad92e)), closes [#30993](https://github.com/bitnami/charts/issues/30993)
+
+## 15.1.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/postgresql-ha] Detect non-standard images (#30937) ([5149845](https://github.com/bitnami/charts/commit/51498454247984c12b9b60ba51bad0b7e72ac36c)), closes [#30937](https://github.com/bitnami/charts/issues/30937)
+
+## <small>15.0.4 (2024-12-03)</small>
+
+* [bitnami/postgresql-ha] Release 15.0.4 (#30732) ([dd65642](https://github.com/bitnami/charts/commit/dd6564295a9a3bf1e56ba16663ee6b6e92ff4721)), closes [#30732](https://github.com/bitnami/charts/issues/30732)
 
 ## <small>15.0.3 (2024-12-03)</small>
 

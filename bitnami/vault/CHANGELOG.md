@@ -1,8 +1,24 @@
 # Changelog
 
-## 1.4.31 (2024-12-04)
+## 1.6.1 (2024-12-19)
 
-* [bitnami/vault] Release 1.4.31 ([#30780](https://github.com/bitnami/charts/pull/30780))
+* [bitnami/vault] Release 1.6.1 ([#31110](https://github.com/bitnami/charts/pull/31110))
+
+## 1.6.0 (2024-12-12)
+
+* [bitnami/vault] Parametize caBundle in mutatingwebhook (#30709) ([bbac787](https://github.com/bitnami/charts/commit/bbac7879e5179dce88e00195e480169f7fa4032d)), closes [#30709](https://github.com/bitnami/charts/issues/30709)
+
+## 1.5.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/vault] Detect non-standard images (#30952) ([b7d4d9c](https://github.com/bitnami/charts/commit/b7d4d9c133d90526e52d0cf39ea7096902af2979)), closes [#30952](https://github.com/bitnami/charts/issues/30952)
+
+## <small>1.4.31 (2024-12-04)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 6) (#30675) ([7b9cd04](https://github.com/bitnami/charts/commit/7b9cd04c2ffc730a0d62da787f2d4967c0ede47c)), closes [#30675](https://github.com/bitnami/charts/issues/30675)
+* [bitnami/*] docs: :memo: Unify "Securing Traffic using TLS" section (#30707) ([b572333](https://github.com/bitnami/charts/commit/b57233336e4fe9af928ecb4f2a5f334011efb1bc)), closes [#30707](https://github.com/bitnami/charts/issues/30707)
+* [bitnami/vault] Release 1.4.31 (#30780) ([46280fd](https://github.com/bitnami/charts/commit/46280fd8776323c22b2d0140da7e252b7cf6b31a)), closes [#30780](https://github.com/bitnami/charts/issues/30780)
 
 ## <small>1.4.30 (2024-11-22)</small>
 

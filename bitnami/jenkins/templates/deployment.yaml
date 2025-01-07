@@ -547,6 +547,7 @@ spec:
         {{- if or .Values.initHookScripts .Values.initHookScriptsCM .Values.initHookScriptsSecret }}
         - name: jenkins-init-hook-scripts
           projected:
+            defaultMode: 0755
             sources:
               {{- if or .Values.initHookScripts .Values.initHookScriptsCM }}
               - configMap:
@@ -554,8 +555,7 @@ spec:
               {{- end }}
               {{- if .Values.initHookScriptsSecret }}
               - secret:
-                  secretName: {{ print (tpl .Values.initHookScriptsSecret .) }}
-                  defaultMode: 0755
+                  name: {{ print (tpl .Values.initHookScriptsSecret .) }}
               {{- end }}
         {{- end }}
         {{- if .Values.extraVolumes }}

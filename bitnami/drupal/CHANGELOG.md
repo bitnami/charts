@@ -1,8 +1,25 @@
 # Changelog
 
-## 21.0.4 (2024-11-24)
+## 21.1.2 (2025-01-07)
 
-* [bitnami/drupal] Release 21.0.4 ([#30610](https://github.com/bitnami/charts/pull/30610))
+* [bitnami/drupal] Release 21.1.2 ([#31232](https://github.com/bitnami/charts/pull/31232))
+
+## <small>21.1.1 (2024-12-16)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/drupal] Release 21.1.1 (#31062) ([6919f51](https://github.com/bitnami/charts/commit/6919f51e5021b569e33e25a96eaa86ac19e094cd)), closes [#31062](https://github.com/bitnami/charts/issues/31062)
+
+## 21.1.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 1) (#30660) ([7409ca4](https://github.com/bitnami/charts/commit/7409ca4c21869fabe1532dd4f3ff24895df71c6d)), closes [#30660](https://github.com/bitnami/charts/issues/30660)
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 1) (#30685) ([be6aa1d](https://github.com/bitnami/charts/commit/be6aa1df0bd4479173a78400fef7295de15b408d)), closes [#30685](https://github.com/bitnami/charts/issues/30685)
+* [bitnami/drupal] Detect non-standard images (#30878) ([e9c279f](https://github.com/bitnami/charts/commit/e9c279f0b3a79fe9dec4f8f32ae04290f2f0afed)), closes [#30878](https://github.com/bitnami/charts/issues/30878)
+
+## <small>21.0.4 (2024-11-24)</small>
+
+* [bitnami/drupal] Release 21.0.4 (#30610) ([dec99e6](https://github.com/bitnami/charts/commit/dec99e61d7a64043582daf4ff3507cf55d3e93ed)), closes [#30610](https://github.com/bitnami/charts/issues/30610)
 
 ## <small>21.0.3 (2024-11-22)</small>
 
