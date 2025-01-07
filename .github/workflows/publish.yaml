@@ -6,18 +6,18 @@ on:
       - main
 
 jobs:
-  list_folders:
+  get_folders:
     runs-on: ubuntu-latest
     outputs:
-      folders: ${{ steps.list.outputs.folders }}
+      folders: ${{ steps.get.outputs.folders }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: List folders
-        id: list
+      - name: get folders
+        id: get
         run: |
-          echo "::set-output name=folders::$(ls -d bitnami/* | xargs -n 1 basename | jq -R -s -c 'split("\n")[:-1]')"
+          echo "folders=$(ls -d bitnami/* | xargs -n 1 basename | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
 
   package-and-publish:
     permissions:
@@ -26,7 +26,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        folder: ${{ fromJson(needs.list_folders.outputs.folders) }}
+        folder: ${{ fromJson(needs.get_folders.outputs.folders) }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
