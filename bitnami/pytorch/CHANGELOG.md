@@ -1,8 +1,12 @@
 # Changelog
 
+## 4.3.1 (2025-01-07)
+
+* [bitnami/pytorch] Release 4.3.1 ([#31236](https://github.com/bitnami/charts/pull/31236))
+
 ## 4.3.0 (2024-12-10)
 
-* [bitnami/pytorch] Detect non-standard images ([#30939](https://github.com/bitnami/charts/pull/30939))
+* [bitnami/pytorch] Detect non-standard images (#30939) ([e492f64](https://github.com/bitnami/charts/commit/e492f6436f48e2e93b0eb69456339dc0aa7ec073)), closes [#30939](https://github.com/bitnami/charts/issues/30939)
 
 ## <small>4.2.23 (2024-12-10)</small>
 

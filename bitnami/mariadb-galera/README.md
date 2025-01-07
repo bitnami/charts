@@ -228,13 +228,13 @@ extraInitContainers:
     - install_packages curl && curl http://api-service.local/db/starting;
 ```
 
-### Extra Containers
+### Sidecar Containers
 
-The feature allows for specifying additional containers in the pod. Usecases include situations when you need to run some sidecar containers. For example, you can observe if mysql in pod is running and report to some service discovery software like eureka. Example:
+The feature allows for specifying additional containers in the pod. Use cases include situations when you need to run some sidecar containers. For example, you can observe if mysql in pod is running and report to some service discovery software like eureka. Example:
 `values.yaml`
 
 ```yaml
-extraContainers:
+sidecars:
 - name: '{{ .Chart.Name }}-eureka-sidecar'
   image: 'image:tag'
   env:
