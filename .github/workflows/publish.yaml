@@ -24,6 +24,7 @@ jobs:
       contents: read
       packages: write
     runs-on: ubuntu-latest
+    needs: get_folders
     strategy:
       matrix:
         folder: ${{ fromJson(needs.get_folders.outputs.folders) }}
