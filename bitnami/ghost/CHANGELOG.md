@@ -1,6 +1,6 @@
 # Changelog
 
-## 22.1.3 (2024-12-29)
+## 22.1.3 (2025-01-07)
 
 * [bitnami/Ghost] Correctly handle smtpExistingSecret value ([#31179](https://github.com/bitnami/charts/pull/31179))
 
