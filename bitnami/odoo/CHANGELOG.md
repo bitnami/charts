@@ -1,8 +1,13 @@
 # Changelog
 
+## 28.1.1 (2025-01-07)
+
+* [bitnami/odoo] Release 28.1.1 ([#31241](https://github.com/bitnami/charts/pull/31241))
+
 ## 28.1.0 (2024-12-10)
 
-* [bitnami/odoo] Detect non-standard images ([#30910](https://github.com/bitnami/charts/pull/30910))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/odoo] Detect non-standard images (#30910) ([56d9ae2](https://github.com/bitnami/charts/commit/56d9ae2dc9de4a558e8d308b0842af3d1dc6bc8a)), closes [#30910](https://github.com/bitnami/charts/issues/30910)
 
 ## <small>28.0.3 (2024-12-06)</small>
 
