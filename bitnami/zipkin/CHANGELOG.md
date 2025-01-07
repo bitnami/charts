@@ -1,8 +1,13 @@
 # Changelog
 
+## 1.1.1 (2025-01-07)
+
+* [bitnami/zipkin] Release 1.1.1 ([#31228](https://github.com/bitnami/charts/pull/31228))
+
 ## 1.1.0 (2024-12-10)
 
-* [bitnami/zipkin] Detect non-standard images ([#30971](https://github.com/bitnami/charts/pull/30971))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/zipkin] Detect non-standard images (#30971) ([de87aad](https://github.com/bitnami/charts/commit/de87aad513e618342b252aed48805d4b2c9d3322)), closes [#30971](https://github.com/bitnami/charts/issues/30971)
 
 ## <small>1.0.5 (2024-12-05)</small>
 
