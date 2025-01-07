@@ -1,6 +1,6 @@
 # Changelog
 
-## 15.1.1 (2024-12-26)
+## 15.1.1 (2025-01-07)
 
 * [bitnami/kong] Release 15.1.1 ([#31173](https://github.com/bitnami/charts/pull/31173))
 
