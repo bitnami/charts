@@ -18,10 +18,10 @@ appVersion: 2.13.2
 dependencies:
 - condition: redis.enabled
   name: redis
-  repository: oci://registry-1.docker.io/bitnamicharts
+  repository: oci://ghcr.io/defenseunicorns/bitferno
   version: 20.x.x
 - name: common
-  repository: oci://registry-1.docker.io/bitnamicharts
+  repository: oci://ghcr.io/defenseunicorns/bitferno
   tags:
   - bitnami-common
   version: 2.x.x

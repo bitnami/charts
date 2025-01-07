@@ -18,30 +18,30 @@ appVersion: 2.14.2
 dependencies:
 - condition: minio.enabled
   name: minio
-  repository: oci://registry-1.docker.io/bitnamicharts
+  repository: oci://ghcr.io/defenseunicorns/bitferno
   version: 14.x.x
 - alias: memcachedmetadata
   condition: memcachedmetadata.enabled
   name: memcached
-  repository: oci://registry-1.docker.io/bitnamicharts
+  repository: oci://ghcr.io/defenseunicorns/bitferno
   version: 7.x.x
 - alias: memcachedindex
   condition: memcachedindex.enabled
   name: memcached
-  repository: oci://registry-1.docker.io/bitnamicharts
+  repository: oci://ghcr.io/defenseunicorns/bitferno
   version: 7.x.x
 - alias: memcachedfrontend
   condition: memcachedfrontend.enabled
   name: memcached
-  repository: oci://registry-1.docker.io/bitnamicharts
+  repository: oci://ghcr.io/defenseunicorns/bitferno
   version: 7.x.x
 - alias: memcachedchunks
   condition: memcachedchunks.enabled
   name: memcached
-  repository: oci://registry-1.docker.io/bitnamicharts
+  repository: oci://ghcr.io/defenseunicorns/bitferno
   version: 7.x.x
 - name: common
-  repository: oci://registry-1.docker.io/bitnamicharts
+  repository: oci://ghcr.io/defenseunicorns/bitferno
   tags:
   - bitnami-common
   version: 2.x.x

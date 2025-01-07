@@ -17,19 +17,19 @@ apiVersion: v2
 appVersion: 2.5.0
 dependencies:
 - name: etcd
-  repository: oci://registry-1.docker.io/bitnamicharts
+  repository: oci://ghcr.io/defenseunicorns/bitferno
   condition: etcd.enabled
   version: 10.x.x
 - condition: kafka.enabled
   name: kafka
-  repository: oci://registry-1.docker.io/bitnamicharts
+  repository: oci://ghcr.io/defenseunicorns/bitferno
   version: 31.x.x
 - condition: minio.enabled
   name: minio
-  repository: oci://registry-1.docker.io/bitnamicharts
+  repository: oci://ghcr.io/defenseunicorns/bitferno
   version: 14.x.x
 - name: common
-  repository: oci://registry-1.docker.io/bitnamicharts
+  repository: oci://ghcr.io/defenseunicorns/bitferno
   tags:
   - bitnami-common
   version: 2.x.x

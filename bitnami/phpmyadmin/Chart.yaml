@@ -14,12 +14,12 @@ appVersion: 5.2.1
 dependencies:
 - condition: db.bundleTestDB
   name: mariadb
-  repository: oci://registry-1.docker.io/bitnamicharts
+  repository: oci://ghcr.io/defenseunicorns/bitferno
   tags:
   - phpmyadmin-database
   version: 20.x.x
 - name: common
-  repository: oci://registry-1.docker.io/bitnamicharts
+  repository: oci://ghcr.io/defenseunicorns/bitferno
   tags:
   - bitnami-common
   version: 2.x.x

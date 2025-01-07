@@ -17,11 +17,11 @@ apiVersion: v2
 appVersion: 3.11.0
 dependencies:
 - name: etcd
-  repository: oci://registry-1.docker.io/bitnamicharts
+  repository: oci://ghcr.io/defenseunicorns/bitferno
   condition: etcd.enabled
   version: 10.x.x
 - name: common
-  repository: oci://registry-1.docker.io/bitnamicharts
+  repository: oci://ghcr.io/defenseunicorns/bitferno
   tags:
   - bitnami-common
   version: 2.x.x

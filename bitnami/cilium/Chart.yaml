@@ -22,12 +22,12 @@ appVersion: 1.16.5
 dependencies:
 - condition: etcd.enabled
   name: etcd
-  repository: oci://registry-1.docker.io/bitnamicharts
+  repository: oci://ghcr.io/defenseunicorns/bitferno
   tags:
   - cilium-database
   version: 10.x.x
 - name: common
-  repository: oci://registry-1.docker.io/bitnamicharts
+  repository: oci://ghcr.io/defenseunicorns/bitferno
   tags:
   - bitnami-common
   version: 2.x.x

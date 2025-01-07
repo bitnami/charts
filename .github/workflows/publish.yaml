@@ -1,0 +1,47 @@
+name: Publish
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  list_folders:
+    runs-on: ubuntu-latest
+    outputs:
+      folders: ${{ steps.list.outputs.folders }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: List folders
+        id: list
+        run: |
+          echo "::set-output name=folders::$(ls -d bitnami/* | xargs -n 1 basename | jq -R -s -c 'split("\n")[:-1]')"
+
+  package-and-publish:
+    permissions:
+      contents: read
+      packages: write
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        folder: ${{ fromJson(needs.list_folders.outputs.folders) }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Helm
+        uses: azure/setup-helm@v4
+
+      - name: Login to GHCR with helm
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | helm registry login -u ${{ github.actor }} --password-stdin ghcr.io
+
+      - name: Package chart
+        run: |
+          for i in {1..20}; do
+            helm package bitnami/${{ matrix.folder }} -u -d charts && break || sleep 10
+          done
+
+      - name: Publish chart
+        run: helm push charts/${{ matrix.folder }}-*.tgz oci://ghcr.io/defenseunicorns/bitferno

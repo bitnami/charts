@@ -20,14 +20,14 @@ appVersion: 0.79.2
 dependencies:
 - condition: exporters.enabled,exporters.node-exporter.enabled
   name: node-exporter
-  repository: oci://registry-1.docker.io/bitnamicharts
+  repository: oci://ghcr.io/defenseunicorns/bitferno
   version: 4.x.x
 - condition: exporters.enabled,exporters.kube-state-metrics.enabled
   name: kube-state-metrics
-  repository: oci://registry-1.docker.io/bitnamicharts
+  repository: oci://ghcr.io/defenseunicorns/bitferno
   version: 4.x.x
 - name: common
-  repository: oci://registry-1.docker.io/bitnamicharts
+  repository: oci://ghcr.io/defenseunicorns/bitferno
   tags:
   - bitnami-common
   version: 2.x.x
