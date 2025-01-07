@@ -1,8 +1,28 @@
 # Changelog
 
-## 8.4.9 (2024-11-11)
+## 8.5.2 (2024-12-17)
 
-* [bitnami/nats] Expose `publishNotReadyAddresses` on headless service ([#30393](https://github.com/bitnami/charts/pull/30393))
+* [bitnami/nats] Release 8.5.2 ([#31078](https://github.com/bitnami/charts/pull/31078))
+
+## <small>8.5.1 (2024-12-10)</small>
+
+* [bitnami/nats] Release 8.5.1 (#30974) ([3123a38](https://github.com/bitnami/charts/commit/3123a38c930d955f06a5563b18cf0b05d2b057ee)), closes [#30974](https://github.com/bitnami/charts/issues/30974)
+
+## 8.5.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/nats] Detect non-standard images (#30916) ([8dc032e](https://github.com/bitnami/charts/commit/8dc032e182d5e6c31d9973b88c583b6888fcaaad)), closes [#30916](https://github.com/bitnami/charts/issues/30916)
+
+## <small>8.4.10 (2024-12-04)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 5) (#30674) ([ed2a546](https://github.com/bitnami/charts/commit/ed2a54617faf763169e6b01a89100b9db32e1000)), closes [#30674](https://github.com/bitnami/charts/issues/30674)
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 3) (#30688) ([10a49f9](https://github.com/bitnami/charts/commit/10a49f9ff2db1d9d11a6edd1c40a9f61803241bc)), closes [#30688](https://github.com/bitnami/charts/issues/30688)
+* [bitnami/nats] Release 8.4.10 (#30771) ([2c67e6b](https://github.com/bitnami/charts/commit/2c67e6ba0bcd0b5a2603163a8ee932cf5efdd121)), closes [#30771](https://github.com/bitnami/charts/issues/30771)
+
+## <small>8.4.9 (2024-11-12)</small>
+
+* [bitnami/nats] Expose `publishNotReadyAddresses` on headless service (#30393) ([1b34ff8](https://github.com/bitnami/charts/commit/1b34ff8d81fb1441ce91a92855b3834613ecefb8)), closes [#30393](https://github.com/bitnami/charts/issues/30393)
 
 ## <small>8.4.8 (2024-11-08)</small>
 

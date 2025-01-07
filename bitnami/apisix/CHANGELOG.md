@@ -1,8 +1,18 @@
 # Changelog
 
+## 3.7.0 (2024-12-10)
+
+* [bitnami/apisix] Detect non-standard images ([#30861](https://github.com/bitnami/charts/pull/30861))
+
+## <small>3.6.1 (2024-11-30)</small>
+
+* [bitnami/apisix] Release 3.6.1 (#30695) ([292979c](https://github.com/bitnami/charts/commit/292979cddcab9e5228ff2e52f06f7559530ea7cd)), closes [#30695](https://github.com/bitnami/charts/issues/30695)
+
 ## 3.6.0 (2024-11-29)
 
-* [bitnami/apisix] feat: :sparkles: :memo: Allow password update via values.yaml ([#30682](https://github.com/bitnami/charts/pull/30682))
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 1) (#30660) ([7409ca4](https://github.com/bitnami/charts/commit/7409ca4c21869fabe1532dd4f3ff24895df71c6d)), closes [#30660](https://github.com/bitnami/charts/issues/30660)
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/apisix] feat: :sparkles: :memo: Allow password update via values.yaml (#30682) ([e41a46c](https://github.com/bitnami/charts/commit/e41a46c06a70ddfe543c9afa1fd81cd8fd2d97cd)), closes [#30682](https://github.com/bitnami/charts/issues/30682)
 
 ## <small>3.5.2 (2024-10-21)</small>
 

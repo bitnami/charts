@@ -1,8 +1,22 @@
 # Changelog
 
-## 4.2.16 (2024-11-08)
+## 4.3.1 (2024-12-10)
 
-* [bitnami/kube-state-metrics] Release 4.2.16 ([#30365](https://github.com/bitnami/charts/pull/30365))
+* [bitnami/kube-state-metrics] Fix typo in NOTES.txt ([#30930](https://github.com/bitnami/charts/pull/30930))
+
+## 4.3.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/kube-state-metrics] Detect non-standard images (#30913) ([ad6e78f](https://github.com/bitnami/charts/commit/ad6e78f46b05f345be2b8b03f288ba3cc64ead3a)), closes [#30913](https://github.com/bitnami/charts/issues/30913)
+
+## <small>4.2.17 (2024-12-04)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/kube-state-metrics] Release 4.2.17 (#30759) ([7ac7caa](https://github.com/bitnami/charts/commit/7ac7caa6377a085be8d07a5cfc18be367ad266fd)), closes [#30759](https://github.com/bitnami/charts/issues/30759)
+
+## <small>4.2.16 (2024-11-08)</small>
+
+* [bitnami/kube-state-metrics] Release 4.2.16 (#30365) ([decfaea](https://github.com/bitnami/charts/commit/decfaea1cd0a5e2d6c8caa33301946b03e2fbbd4)), closes [#30365](https://github.com/bitnami/charts/issues/30365)
 
 ## <small>4.2.15 (2024-11-07)</small>
 

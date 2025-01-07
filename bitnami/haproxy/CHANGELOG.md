@@ -1,8 +1,26 @@
 # Changelog
 
-## 2.1.11 (2024-11-26)
+## 2.2.2 (2024-12-19)
 
-* [bitnami/haproxy] Release 2.1.11 ([#30630](https://github.com/bitnami/charts/pull/30630))
+* [bitnami/haproxy] Release 2.2.2 ([#31118](https://github.com/bitnami/charts/pull/31118))
+
+## <small>2.2.1 (2024-12-11)</small>
+
+* [bitnami/haproxy] Release 2.2.1 (#30995) ([c41ce56](https://github.com/bitnami/charts/commit/c41ce563c288524f1aa26671f8553641d6dc1b31)), closes [#30995](https://github.com/bitnami/charts/issues/30995)
+
+## 2.2.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/haproxy] Detect non-standard images (#30884) ([253b77d](https://github.com/bitnami/charts/commit/253b77de688baec7c5c6db00a8999129ad67cdc6)), closes [#30884](https://github.com/bitnami/charts/issues/30884)
+
+## <small>2.1.12 (2024-12-03)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/haproxy] Release 2.1.12 (#30756) ([fca70ce](https://github.com/bitnami/charts/commit/fca70ce28a049725afdf7c09312fc7bed14847db)), closes [#30756](https://github.com/bitnami/charts/issues/30756)
+
+## <small>2.1.11 (2024-11-26)</small>
+
+* [bitnami/haproxy] Release 2.1.11 (#30630) ([51ca44b](https://github.com/bitnami/charts/commit/51ca44bc1fa53fa85937ed6c76ca44ac5d0180f0)), closes [#30630](https://github.com/bitnami/charts/issues/30630)
 
 ## <small>2.1.10 (2024-11-07)</small>
 

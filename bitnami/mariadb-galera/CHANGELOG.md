@@ -1,8 +1,24 @@
 # Changelog
 
-## 14.0.12 (2024-11-04)
+## 14.1.0 (2024-12-10)
 
-* [bitnami/mariadb-galera] Release 14.0.12 ([#30200](https://github.com/bitnami/charts/pull/30200))
+* [bitnami/mariadb-galera] Detect non-standard images ([#30920](https://github.com/bitnami/charts/pull/30920))
+
+## <small>14.0.14 (2024-12-03)</small>
+
+* [bitnami/mariadb-galera] Release 14.0.14 (#30736) ([a5cdf9b](https://github.com/bitnami/charts/commit/a5cdf9be50a545f51549780d3beaafe56b39d25a)), closes [#30736](https://github.com/bitnami/charts/issues/30736)
+
+## <small>14.0.13 (2024-12-03)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 4) (#30669) ([a4ec006](https://github.com/bitnami/charts/commit/a4ec00624589023a70a7094fcfb9f12e382bc280)), closes [#30669](https://github.com/bitnami/charts/issues/30669)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 6) (#30675) ([7b9cd04](https://github.com/bitnami/charts/commit/7b9cd04c2ffc730a0d62da787f2d4967c0ede47c)), closes [#30675](https://github.com/bitnami/charts/issues/30675)
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 2) (#30687) ([c457848](https://github.com/bitnami/charts/commit/c457848b2a111aad59830b98f85ffa1e29918e10)), closes [#30687](https://github.com/bitnami/charts/issues/30687)
+* [bitnami/mariadb-galera] Release 14.0.13 (#30735) ([2344562](https://github.com/bitnami/charts/commit/2344562e63dd67e0c401b7dcd1955f5123c6f845)), closes [#30735](https://github.com/bitnami/charts/issues/30735)
+
+## <small>14.0.12 (2024-11-04)</small>
+
+* [bitnami/mariadb-galera] Release 14.0.12 (#30200) ([fde08ae](https://github.com/bitnami/charts/commit/fde08ae54de37cef63e0015b906dd65c54c451f8)), closes [#30200](https://github.com/bitnami/charts/issues/30200)
 
 ## <small>14.0.11 (2024-11-02)</small>
 

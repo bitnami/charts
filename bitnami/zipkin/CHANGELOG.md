@@ -1,8 +1,19 @@
 # Changelog
 
-## 1.0.4 (2024-11-17)
+## 1.1.0 (2024-12-10)
 
-* [bitnami/zipkin] Release 1.0.4 ([#30490](https://github.com/bitnami/charts/pull/30490))
+* [bitnami/zipkin] Detect non-standard images ([#30971](https://github.com/bitnami/charts/pull/30971))
+
+## <small>1.0.5 (2024-12-05)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 6) (#30675) ([7b9cd04](https://github.com/bitnami/charts/commit/7b9cd04c2ffc730a0d62da787f2d4967c0ede47c)), closes [#30675](https://github.com/bitnami/charts/issues/30675)
+* [bitnami/*] docs: :memo: Unify "Securing Traffic using TLS" section (#30707) ([b572333](https://github.com/bitnami/charts/commit/b57233336e4fe9af928ecb4f2a5f334011efb1bc)), closes [#30707](https://github.com/bitnami/charts/issues/30707)
+* [bitnami/zipkin] Release 1.0.5 (#30796) ([a2e18c9](https://github.com/bitnami/charts/commit/a2e18c9b6faa831c6df79dd9f0c69e69c0f6ae47)), closes [#30796](https://github.com/bitnami/charts/issues/30796)
+
+## <small>1.0.4 (2024-11-17)</small>
+
+* [bitnami/zipkin] Release 1.0.4 (#30490) ([ec1cc79](https://github.com/bitnami/charts/commit/ec1cc794c1bda7408ba342029cea43194dc0ce2e)), closes [#30490](https://github.com/bitnami/charts/issues/30490)
 
 ## <small>1.0.3 (2024-11-08)</small>
 

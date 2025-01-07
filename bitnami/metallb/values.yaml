@@ -16,6 +16,11 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
   ## Compatibility adaptations for Kubernetes platforms
   ##
   compatibility:
@@ -155,7 +160,7 @@ controller:
   image:
     registry: docker.io
     repository: bitnami/metallb-controller
-    tag: 0.14.8-debian-12-r9
+    tag: 0.14.9-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -563,7 +568,7 @@ speaker:
   image:
     registry: docker.io
     repository: bitnami/metallb-speaker
-    tag: 0.14.8-debian-12-r11
+    tag: 0.14.9-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -939,7 +944,7 @@ speaker:
       ##
       registry: docker.io
       repository: bitnami/metallb-speaker
-      tag: 0.14.8-debian-12-r11
+      tag: 0.14.9-debian-12-r0
       digest: ""
       pullPolicy: IfNotPresent
       pullSecrets: []
