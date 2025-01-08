@@ -1371,11 +1371,13 @@ externalDatabase:
 ## NOTE: Set to false to use 'local' cache (only supported when replicaCount=1).
 ## @param cache.stackName Set infinispan cache stack to use
 ## @param cache.stackFile Set infinispan cache stack filename to use
+## @param cache.useHeadlessServiceWithAppVersion Set to true to create the headless service used for ispn containing the app version
 ##
 cache:
   enabled: true
   stackName: kubernetes
   stackFile: ""
+  useHeadlessServiceWithAppVersion: false
 ## @section Keycloak Logging parameters
 
 ## Keycloak logging configuration

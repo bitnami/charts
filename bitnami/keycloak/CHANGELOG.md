@@ -1,5 +1,9 @@
 # Changelog
 
+## 24.4.0 (2025-01-XX)
+
+* [bitnami/keycloak] Add support to bind the headless-service to the app version to allow for rolling upgrades, even with breaking changes in the infinispan cache (closes [#31072](https://github.com/bitnami/charts/issues/31072)).
+
 ## 24.3.2 (2024-12-20)
 
 * [bitnami/keycloak] Update KEYCLOAK_ADMIN env variables deprecation ([#30636](https://github.com/bitnami/charts/pull/30636))
