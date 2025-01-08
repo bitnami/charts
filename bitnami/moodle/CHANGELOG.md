@@ -1,6 +1,6 @@
 # Changelog
 
-## 25.1.1 (2025-01-03)
+## 25.1.1 (2025-01-08)
 
 * [bitnami/moodle] #31199 Fix invalid imagePullSecrets on container level ([#31208](https://github.com/bitnami/charts/pull/31208))
 
