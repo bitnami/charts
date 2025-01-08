@@ -8,7 +8,7 @@ annotations:
     - name: git
       image: docker.io/bitnami/git:2.47.1-debian-12-r1
     - name: nginx
-      image: docker.io/bitnami/nginx:1.27.3-debian-12-r3
+      image: docker.io/bitnami/nginx:1.27.3-debian-12-r4
     - name: nginx-exporter
       image: docker.io/bitnami/nginx-exporter:1.4.0-debian-12-r1
 apiVersion: v2
@@ -34,4 +34,4 @@ maintainers:
 name: nginx
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/nginx
-version: 18.3.3
+version: 18.3.4
