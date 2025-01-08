@@ -42,6 +42,3 @@ controller:
   automountServiceAccountToken: true
 serviceAccount:
   create: true
-metrics:
-  jmx:
-    enabled: true
