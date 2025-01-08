@@ -1,8 +1,13 @@
 # Changelog
 
+## 11.4.1 (2025-01-08)
+
+* [bitnami/consul] Release 11.4.1 ([#31252](https://github.com/bitnami/charts/pull/31252))
+
 ## 11.4.0 (2024-12-10)
 
-* [bitnami/consul] Detect non-standard images ([#30873](https://github.com/bitnami/charts/pull/30873))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/consul] Detect non-standard images (#30873) ([4b16ccc](https://github.com/bitnami/charts/commit/4b16ccce5d4ad4c82d0a8199ef5954910afcfec2)), closes [#30873](https://github.com/bitnami/charts/issues/30873)
 
 ## <small>11.3.22 (2024-12-03)</small>
 
