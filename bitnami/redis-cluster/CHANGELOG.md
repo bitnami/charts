@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.2.2 (2025-01-07)
+## 11.2.3 (2025-01-07)
 
-* [bitnami/redis-cluster] Release 11.2.2 ([#31239](https://github.com/bitnami/charts/pull/31239))
+* [bitnami/redis-cluster] Release 11.2.3 ([#31239](https://github.com/bitnami/charts/pull/31239))
+
+## <small>11.2.2 (2025-01-07)</small>
+
+* [bitnami/redis-cluster] Add support for namespaceOverride ([#31243](https://github.com/bitnami/charts/pull/31243))
 
 ## <small>11.2.1 (2024-12-21)</small>
 
