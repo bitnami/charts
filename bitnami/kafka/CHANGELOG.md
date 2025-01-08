@@ -1,6 +1,6 @@
 # Changelog
 
-## 31.2.0 (2025-01-07)
+## 31.2.0 (2025-01-08)
 
 * [bitnami/kafka] chore(jmx-exporter): Upgrade image and change args ([#31108](https://github.com/bitnami/charts/pull/31108))
 
