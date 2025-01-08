@@ -927,6 +927,7 @@ certificates:
   ## @skip certificates.image.tag Container sidecar image tag (immutable tags are recommended)
   ## @param certificates.image.digest Container sidecar image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param certificates.image.pullPolicy Container sidecar image pull policy
+  ## @param certificates.image.pullSecrets Container sidecar image pull secrets
   ##
   image:
     registry: docker.io
@@ -937,6 +938,14 @@ certificates:
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
 ## @section NetworkPolicy parameters
 
 ## Network Policy configuration
