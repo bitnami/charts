@@ -1,8 +1,12 @@
 # Changelog
 
-## 22.4.4 (2025-01-07)
+## 22.4.5 (2025-01-09)
 
-* [bitnami/airflow] Release 22.4.4 ([#31234](https://github.com/bitnami/charts/pull/31234))
+* [bitnami/airflow] Release 22.4.5 ([#31235](https://github.com/bitnami/charts/pull/31235))
+
+## <small>22.4.4 (2025-01-07)</small>
+
+* [bitnami/airflow] Release 22.4.4 (#31234) ([6c9b8fd](https://github.com/bitnami/charts/commit/6c9b8fd63436cc27859223a40d4d2ececd0711b1)), closes [#31234](https://github.com/bitnami/charts/issues/31234)
 
 ## <small>22.4.3 (2024-12-16)</small>
 
