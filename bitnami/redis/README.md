@@ -635,6 +635,7 @@ helm install my-release --set master.persistence.existingClaim=PVC_NAME oci://RE
 | `master.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                  | `{}`                     |
 | `master.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `master.pdb.minAvailable` and `master.pdb.maxUnavailable` are empty.                                                                    | `{}`                     |
 | `master.extraPodSpec`                                      | Optionally specify extra PodSpec for the Redis&reg; master pod(s)                                                                                                                                                               | `{}`                     |
+| `master.annotations`                                       | Additional custom annotations for Redis&reg; Master resource                                                                                                                                                                    | `{}`                     |
 
 ### Redis&reg; replicas configuration parameters
 
@@ -764,6 +765,7 @@ helm install my-release --set master.persistence.existingClaim=PVC_NAME oci://RE
 | `replica.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                    | `{}`                     |
 | `replica.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `replica.pdb.minAvailable` and `replica.pdb.maxUnavailable` are empty.                                                                    | `{}`                     |
 | `replica.extraPodSpec`                                      | Optionally specify extra PodSpec for the Redis&reg; replicas pod(s)                                                                                                                                                               | `{}`                     |
+| `replica.annotations`                                       | Additional custom annotations for Redis&reg; replicas resource                                                                                                                                                                    | `{}`                     |
 
 ### Redis&reg; Sentinel configuration parameters
 

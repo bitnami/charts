@@ -1,8 +1,12 @@
 # Changelog
 
+## 1.6.1 (2024-12-19)
+
+* [bitnami/vault] Release 1.6.1 ([#31110](https://github.com/bitnami/charts/pull/31110))
+
 ## 1.6.0 (2024-12-12)
 
-* [bitnami/vault] Parametize caBundle in mutatingwebhook ([#30709](https://github.com/bitnami/charts/pull/30709))
+* [bitnami/vault] Parametize caBundle in mutatingwebhook (#30709) ([bbac787](https://github.com/bitnami/charts/commit/bbac7879e5179dce88e00195e480169f7fa4032d)), closes [#30709](https://github.com/bitnami/charts/issues/30709)
 
 ## 1.5.0 (2024-12-10)
 

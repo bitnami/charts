@@ -1,8 +1,12 @@
 # Changelog
 
-## 24.3.2 (2024-12-16)
+## 24.3.3 (2024-12-16)
 
 * [bitnami/keycloak] improve keycloak value file comments on extraEnvVars property ([#31054](https://github.com/bitnami/charts/pull/31054))
+
+## <small>24.3.2 (2024-12-20)</small>
+
+* [bitnami/keycloak] Update KEYCLOAK_ADMIN env variables deprecation ([#30636](https://github.com/bitnami/charts/pull/30636))
 
 ## <small>24.3.1 (2024-12-16)</small>
 

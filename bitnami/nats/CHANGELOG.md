@@ -1,8 +1,12 @@
 # Changelog
 
-## 8.5.1 (2024-12-10)
+## 8.5.2 (2024-12-17)
 
-* [bitnami/nats] Release 8.5.1 ([#30974](https://github.com/bitnami/charts/pull/30974))
+* [bitnami/nats] Release 8.5.2 ([#31078](https://github.com/bitnami/charts/pull/31078))
+
+## <small>8.5.1 (2024-12-10)</small>
+
+* [bitnami/nats] Release 8.5.1 (#30974) ([3123a38](https://github.com/bitnami/charts/commit/3123a38c930d955f06a5563b18cf0b05d2b057ee)), closes [#30974](https://github.com/bitnami/charts/issues/30974)
 
 ## 8.5.0 (2024-12-10)
 

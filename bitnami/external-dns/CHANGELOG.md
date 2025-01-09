@@ -1,8 +1,13 @@
 # Changelog
 
+## 8.7.1 (2024-12-19)
+
+* [bitnami/external-dns] Release 8.7.1 ([#31120](https://github.com/bitnami/charts/pull/31120))
+
 ## 8.7.0 (2024-12-10)
 
-* [bitnami/external-dns] Detect non-standard images ([#30894](https://github.com/bitnami/charts/pull/30894))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/external-dns] Detect non-standard images (#30894) ([e963f07](https://github.com/bitnami/charts/commit/e963f07135a2c6875c96c66080476004275dc9ae)), closes [#30894](https://github.com/bitnami/charts/issues/30894)
 
 ## <small>8.6.1 (2024-12-03)</small>
 

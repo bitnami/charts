@@ -1,8 +1,13 @@
 # Changelog
 
+## 2.3.1 (2024-12-19)
+
+* [bitnami/deepspeed] Release 2.3.1 ([#31101](https://github.com/bitnami/charts/pull/31101))
+
 ## 2.3.0 (2024-12-10)
 
-* [bitnami/deepspeed] Detect non-standard images ([#30875](https://github.com/bitnami/charts/pull/30875))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/deepspeed] Detect non-standard images (#30875) ([8351a22](https://github.com/bitnami/charts/commit/8351a22821c7cbd601eaf4f578dfb7a07df985fa)), closes [#30875](https://github.com/bitnami/charts/issues/30875)
 
 ## <small>2.2.28 (2024-12-06)</small>
 

@@ -1858,3 +1858,5 @@ rbac:
 ## @param tlsExistingSecret Name of the existingSecret to be use in both contour and envoy. If it is not nil `contour.certgen` will be disabled.
 ##
 tlsExistingSecret: ""
+## @param useCertManager Use Cert-manager instead of Contour certgen to issue certificates for TLS connection between Contour and Envoy.
+useCertManager: false

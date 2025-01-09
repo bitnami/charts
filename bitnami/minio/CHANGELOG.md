@@ -1,8 +1,17 @@
 # Changelog
 
-## 14.10.1 (2024-12-16)
+## 14.10.3 (2024-12-20)
 
-* [bitnami/minio] Release 14.10.1 ([#31050](https://github.com/bitnami/charts/pull/31050))
+* [bitnami/minio] Fix rendering of CIDR block list for loadBalancerSourceRanges ([#31032](https://github.com/bitnami/charts/pull/31032))
+
+## <small>14.10.2 (2024-12-19)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/minio] Release 14.10.2 (#31099) ([c2900ec](https://github.com/bitnami/charts/commit/c2900ec91df4a918b05f82ea5f4f97c43fce191b)), closes [#31099](https://github.com/bitnami/charts/issues/31099)
+
+## <small>14.10.1 (2024-12-16)</small>
+
+* [bitnami/minio] Release 14.10.1 (#31050) ([91b6f97](https://github.com/bitnami/charts/commit/91b6f97217eed1670f665232cd841e3e73d8032e)), closes [#31050](https://github.com/bitnami/charts/issues/31050)
 
 ## 14.10.0 (2024-12-13)
 

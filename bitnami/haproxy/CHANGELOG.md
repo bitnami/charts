@@ -1,8 +1,17 @@
 # Changelog
 
-## 2.2.1 (2024-12-11)
+## 2.2.3 (2025-01-08)
 
-* [bitnami/haproxy] Release 2.2.1 ([#30995](https://github.com/bitnami/charts/pull/30995))
+* [bitnami/haproxy] Release 2.2.3 ([#31269](https://github.com/bitnami/charts/pull/31269))
+
+## <small>2.2.2 (2024-12-19)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/haproxy] Release 2.2.2 (#31118) ([149f128](https://github.com/bitnami/charts/commit/149f1281818dacd80a3fc13a69cce731b6324639)), closes [#31118](https://github.com/bitnami/charts/issues/31118)
+
+## <small>2.2.1 (2024-12-11)</small>
+
+* [bitnami/haproxy] Release 2.2.1 (#30995) ([c41ce56](https://github.com/bitnami/charts/commit/c41ce563c288524f1aa26671f8553641d6dc1b31)), closes [#30995](https://github.com/bitnami/charts/issues/30995)
 
 ## 2.2.0 (2024-12-10)
 
