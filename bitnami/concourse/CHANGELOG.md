@@ -1,8 +1,17 @@
 # Changelog
 
-## 5.1.2 (2024-12-20)
+## 5.1.4 (2025-01-07)
 
-* [bitnami/concourse] Release 5.1.2 ([#31130](https://github.com/bitnami/charts/pull/31130))
+* [bitnami/concourse] Release 5.1.4 ([#31245](https://github.com/bitnami/charts/pull/31245))
+
+## <small>5.1.3 (2025-01-04)</small>
+
+* [bitnami/concourse] Release 5.1.3 (#31214) ([3c19446](https://github.com/bitnami/charts/commit/3c19446fba280bab739179dd962fcbd8688336cc)), closes [#31214](https://github.com/bitnami/charts/issues/31214)
+
+## <small>5.1.2 (2024-12-20)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/concourse] Release 5.1.2 (#31130) ([a16f095](https://github.com/bitnami/charts/commit/a16f0953ab89087823fed9afab3fecf1430d9638)), closes [#31130](https://github.com/bitnami/charts/issues/31130)
 
 ## <small>5.1.1 (2024-12-11)</small>
 

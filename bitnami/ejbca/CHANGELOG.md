@@ -1,8 +1,17 @@
 # Changelog
 
-## 16.1.1 (2024-12-26)
+## 17.0.1 (2024-12-27)
 
-* [bitnami/ejbca] Release 16.1.1 ([#31166](https://github.com/bitnami/charts/pull/31166))
+* [bitnami/ejbca] Release 17.0.1 ([#31178](https://github.com/bitnami/charts/pull/31178))
+
+## 17.0.0 (2024-12-27)
+
+* [bitnami/ejbca] Release 17.0.0 (#31177) ([e8b6077](https://github.com/bitnami/charts/commit/e8b60778ed8c75de8246e09ea1728d4dd904170c)), closes [#31177](https://github.com/bitnami/charts/issues/31177)
+
+## <small>16.1.1 (2024-12-26)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/ejbca] Release 16.1.1 (#31166) ([847cc5e](https://github.com/bitnami/charts/commit/847cc5e0c84831ff8a803a41a50be56977e9893a)), closes [#31166](https://github.com/bitnami/charts/issues/31166)
 
 ## 16.1.0 (2024-12-10)
 
