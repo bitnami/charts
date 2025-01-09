@@ -1,8 +1,12 @@
 # Changelog
 
-## 10.7.1 (2024-12-11)
+## 10.7.2 (2025-01-09)
 
-* [bitnami/etcd] keep snapshot-pvc ([#30815](https://github.com/bitnami/charts/pull/30815))
+* [bitnami/etcd] fixed tls enable handling and v3 environment variable support for defrag cronjob ([#31270](https://github.com/bitnami/charts/pull/31270))
+
+## <small>10.7.1 (2024-12-11)</small>
+
+* [bitnami/etcd] keep snapshot-pvc (#30815) ([2a63958](https://github.com/bitnami/charts/commit/2a639583f613184bb1e05346ba25169d872db3cf)), closes [#30815](https://github.com/bitnami/charts/issues/30815)
 
 ## 10.7.0 (2024-12-10)
 
