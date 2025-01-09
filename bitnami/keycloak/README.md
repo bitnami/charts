@@ -685,12 +685,12 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 
 ### Keycloak Cache parameters
 
-| Name                                     | Description                                                                          | Value        |
-| ---------------------------------------- | ------------------------------------------------------------------------------------ | ------------ |
-| `cache.enabled`                          | Switch to enable or disable the keycloak distributed cache for kubernetes.           | `true`       |
-| `cache.stackName`                        | Set infinispan cache stack to use                                                    | `kubernetes` |
-| `cache.stackFile`                        | Set infinispan cache stack filename to use                                           | `""`         |
-| `cache.useHeadlessServiceWithAppVersion` | Set to true to use dedicated version bound headless service for jgroups discovery    | `false`      |
+| Name                                     | Description                                                                         | Value        |
+| ---------------------------------------- | ----------------------------------------------------------------------------------- | ------------ |
+| `cache.enabled`                          | Switch to enable or disable the keycloak distributed cache for kubernetes.          | `true`       |
+| `cache.stackName`                        | Set infinispan cache stack to use                                                   | `kubernetes` |
+| `cache.stackFile`                        | Set infinispan cache stack filename to use                                          | `""`         |
+| `cache.useHeadlessServiceWithAppVersion` | Set to true to create the headless service used for ispn containing the app version | `false`      |
 
 ### Keycloak Logging parameters
 
