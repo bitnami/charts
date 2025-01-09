@@ -78,6 +78,19 @@ Return the proper init external database job image name
 {{- end -}}
 
 {{/*
+Returns whether wait for external database is enabled
+*/}}
+{{- define "seaweedfs.waitForDatabase.enabled" -}}
+{{- if or (and .Values.mariadb.enabled (not .Values.externalDatabase.enabled) ) (and .Values.externalDatabase.enabled (eq .Values.externalDatabase.store "mariadb") (eq .Values.externalDatabase.waitForDatabaseEnabled true) ) }}
+    {{- print "true" -}}
+  {{- else if or (and .Values.postgresql.enabled (not .Values.externalDatabase.enabled) ) (and .Values.externalDatabase.enabled (eq .Values.externalDatabase.store "postgresql") (eq .Values.externalDatabase.waitForDatabaseEnabled true) ) }}
+    {{- print "true" -}}
+  {{- else }}
+    {{- print "false" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "seaweedfs.imagePullSecrets" -}}
@@ -339,6 +352,7 @@ Return the database secret key name
 Returns an init-container that waits for the database to be ready
 */}}
 {{- define "seaweedfs.filer.waitForDBInitContainer" -}}
+{{ if eq "true" ( include "seaweedfs.waitForDatabase.enabled" . ) }}
 - name: wait-for-db
   image: {{ include "seaweedfs.initDatabaseJob.image" . }}
   {{- if or .Values.mariadb.enabled (and .Values.externalDatabase.enabled (eq .Values.externalDatabase.store "mariadb") ) }}
@@ -409,6 +423,7 @@ Returns an init-container that waits for the database to be ready
       subPath: tmp-dir
     - name: db-credentials
       mountPath: /secrets
+{{- end -}}
 {{- end -}}
 
 {{/*
