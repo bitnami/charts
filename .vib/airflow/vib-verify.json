@@ -2,6 +2,10 @@
   "phases": {
     "package": {
       "context": {
+        "credentials": {
+          "username": "{DOCKER_USERNAME}",
+          "password": "{DOCKER_TOKEN}"
+        },
         "resources": {
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/airflow"
