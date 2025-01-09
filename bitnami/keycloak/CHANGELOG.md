@@ -1,12 +1,13 @@
 # Changelog
 
-## 24.4.0 (2025-01-XX)
+## 24.4.0 (2025-01-09)
 
-* [bitnami/keycloak] Add support to bind the headless-service to the app version to allow for rolling upgrades, even with breaking changes in the infinispan cache (closes [#31072](https://github.com/bitnami/charts/issues/31072)).
+* [bitnami/keycloak] add option to use dedicated version bound headless service for jgroups discovery ([#31271](https://github.com/bitnami/charts/pull/31271))
 
-## 24.3.2 (2024-12-20)
+## <small>24.3.2 (2024-12-30)</small>
 
-* [bitnami/keycloak] Update KEYCLOAK_ADMIN env variables deprecation ([#30636](https://github.com/bitnami/charts/pull/30636))
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/keycloak] Update KEYCLOAK_ADMIN env variables deprecation (#30636) ([668bd27](https://github.com/bitnami/charts/commit/668bd2772c5ea45af7b1b57141c1776ccf4169f4)), closes [#30636](https://github.com/bitnami/charts/issues/30636)
 
 ## <small>24.3.1 (2024-12-16)</small>
 
