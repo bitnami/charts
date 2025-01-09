@@ -1,8 +1,12 @@
 # Changelog
 
-## 16.3.5 (2024-12-23)
+## 16.3.6 (2024-12-23)
 
 * Dynamic assignment of custom schema name if defined in update-password job ([#31146](https://github.com/bitnami/charts/pull/31146))
+
+## 16.3.5 (2025-01-03)
+
+* Revert "[bitnami/postgresql] Add Storage Class Configuration to Templates (#30858)" ([#31204](https://github.com/bitnami/charts/pull/31204))
 
 ## <small>16.3.4 (2024-12-23)</small>
 

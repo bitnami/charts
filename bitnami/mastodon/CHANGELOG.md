@@ -1,8 +1,13 @@
 # Changelog
 
+## 9.1.1 (2024-12-30)
+
+* [bitnami/mastodon] Avoid mkdir issue when restarting ([#31183](https://github.com/bitnami/charts/pull/31183))
+
 ## 9.1.0 (2024-12-10)
 
-* [bitnami/mastodon] Detect non-standard images ([#30921](https://github.com/bitnami/charts/pull/30921))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/mastodon] Detect non-standard images (#30921) ([eea0814](https://github.com/bitnami/charts/commit/eea08143bfe95dfbd356d5f5fa8eb663b9bf130e)), closes [#30921](https://github.com/bitnami/charts/issues/30921)
 
 ## <small>9.0.5 (2024-12-03)</small>
 

@@ -1,8 +1,15 @@
 # Changelog
 
+## 3.7.1 (2025-01-09)
+
+* [bitnami/apisix] Release 3.7.1 ([#31272](https://github.com/bitnami/charts/pull/31272))
+
 ## 3.7.0 (2024-12-10)
 
-* [bitnami/apisix] Detect non-standard images ([#30861](https://github.com/bitnami/charts/pull/30861))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Unify "Securing Traffic using TLS" section (#30707) ([b572333](https://github.com/bitnami/charts/commit/b57233336e4fe9af928ecb4f2a5f334011efb1bc)), closes [#30707](https://github.com/bitnami/charts/issues/30707)
+* [bitnami/apisix] Detect non-standard images (#30861) ([0c989ce](https://github.com/bitnami/charts/commit/0c989ce546a26e91a94df349630d1ee3e9fa2a2a)), closes [#30861](https://github.com/bitnami/charts/issues/30861)
 
 ## <small>3.6.1 (2024-11-30)</small>
 

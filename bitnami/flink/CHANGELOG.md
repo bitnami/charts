@@ -1,8 +1,14 @@
 # Changelog
 
+## 1.4.1 (2024-12-26)
+
+* [bitnami/flink] Release 1.4.1 ([#31170](https://github.com/bitnami/charts/pull/31170))
+
 ## 1.4.0 (2024-12-10)
 
-* [bitnami/flink] Detect non-standard images ([#30893](https://github.com/bitnami/charts/pull/30893))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/flink] Detect non-standard images (#30893) ([9bbfbf7](https://github.com/bitnami/charts/commit/9bbfbf7e1b99916edcb4a4fbe2feae45c46742d1)), closes [#30893](https://github.com/bitnami/charts/issues/30893)
 
 ## <small>1.3.16 (2024-11-16)</small>
 

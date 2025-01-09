@@ -1,8 +1,21 @@
 # Changelog
 
-## 18.3.1 (2024-12-13)
+## 18.3.4 (2025-01-08)
 
-* [bitnami/nginx] fix nginx init containers with writable file system ([#30810](https://github.com/bitnami/charts/pull/30810))
+* [bitnami/nginx] Release 18.3.4 ([#31265](https://github.com/bitnami/charts/pull/31265))
+
+## <small>18.3.3 (2025-01-08)</small>
+
+* [bitnami/nginx] Release 18.3.3 (#31248) ([f4f89f6](https://github.com/bitnami/charts/commit/f4f89f6ee2a15e6a277959f58e96f78b36571c7e)), closes [#31248](https://github.com/bitnami/charts/issues/31248)
+
+## <small>18.3.2 (2025-01-01)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/nginx] Release 18.3.2 (#31191) ([a921fd9](https://github.com/bitnami/charts/commit/a921fd9f388032c02e6a625595f394d7680b0c41)), closes [#31191](https://github.com/bitnami/charts/issues/31191)
+
+## <small>18.3.1 (2024-12-13)</small>
+
+* [bitnami/nginx] fix nginx init containers with writable file system (#30810) ([4688b13](https://github.com/bitnami/charts/commit/4688b13bf34325945954f62dc73cf925272e8248)), closes [#30810](https://github.com/bitnami/charts/issues/30810)
 
 ## 18.3.0 (2024-12-10)
 
