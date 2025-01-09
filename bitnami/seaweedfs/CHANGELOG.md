@@ -1,8 +1,13 @@
 # Changelog
 
-## 4.2.1 (2025-01-07)
+## 4.2.2 (2025-01-09)
 
-* [bitnami/seaweedfs] Release 4.2.1 ([#31244](https://github.com/bitnami/charts/pull/31244))
+* [bitnami/seaweedfs] Make database check on start optional ([#31277](https://github.com/bitnami/charts/pull/31277))
+
+## <small>4.2.1 (2025-01-07)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/seaweedfs] Release 4.2.1 (#31244) ([75fba5d](https://github.com/bitnami/charts/commit/75fba5d61dbf307dabd130d1ff3f621bb85320cc)), closes [#31244](https://github.com/bitnami/charts/issues/31244)
 
 ## 4.2.0 (2024-12-10)
 
