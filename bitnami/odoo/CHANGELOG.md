@@ -1,6 +1,6 @@
 # Changelog
 
-## 28.1.1 (2025-01-07)
+## 28.1.1 (2025-01-09)
 
 * [bitnami/odoo] Release 28.1.1 ([#31241](https://github.com/bitnami/charts/pull/31241))
 
