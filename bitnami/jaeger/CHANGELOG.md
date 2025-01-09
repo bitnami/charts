@@ -1,8 +1,12 @@
 # Changelog
 
-## 5.1.2 (2024-12-12)
+## 5.1.3 (2025-01-08)
 
-* [bitnami/jaeger] Release 5.1.2 ([#31021](https://github.com/bitnami/charts/pull/31021))
+* [bitnami/jaeger] Release 5.1.3 ([#31251](https://github.com/bitnami/charts/pull/31251))
+
+## <small>5.1.2 (2024-12-12)</small>
+
+* [bitnami/jaeger] Release 5.1.2 (#31021) ([ee3a9bd](https://github.com/bitnami/charts/commit/ee3a9bdcc8437615b82b8033c33be35a397e2689)), closes [#31021](https://github.com/bitnami/charts/issues/31021)
 
 ## <small>5.1.1 (2024-12-10)</small>
 
