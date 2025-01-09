@@ -17,6 +17,11 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
   ## Compatibility adaptations for Kubernetes platforms
   ##
   compatibility:

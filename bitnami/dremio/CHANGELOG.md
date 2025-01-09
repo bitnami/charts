@@ -1,8 +1,25 @@
 # Changelog
 
-## 0.1.14 (2024-11-29)
+## 0.3.0 (2024-12-19)
 
-* [bitnami/dremio] chore: :bulb: :memo: :rotating_light: Rename prometheus "@section" to avoid linter problems ([#30683](https://github.com/bitnami/charts/pull/30683))
+* [birtnami/dremio] chore(jmx-exporter): Upgrade image and change args ([#31102](https://github.com/bitnami/charts/pull/31102))
+
+## 0.2.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/dremio] Detect non-standard images (#30897) ([0d3f735](https://github.com/bitnami/charts/commit/0d3f73580fa63eeddee5b7f29cc937588c612003)), closes [#30897](https://github.com/bitnami/charts/issues/30897)
+
+## <small>0.1.15 (2024-12-07)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Unify "Securing Traffic using TLS" section (#30707) ([b572333](https://github.com/bitnami/charts/commit/b57233336e4fe9af928ecb4f2a5f334011efb1bc)), closes [#30707](https://github.com/bitnami/charts/issues/30707)
+* [bitnami/dremio] Release 0.1.15 (#30824) ([62722f1](https://github.com/bitnami/charts/commit/62722f170126f40264c8df03723543b8dda7f8a5)), closes [#30824](https://github.com/bitnami/charts/issues/30824)
+
+## <small>0.1.14 (2024-11-29)</small>
+
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 1) (#30660) ([7409ca4](https://github.com/bitnami/charts/commit/7409ca4c21869fabe1532dd4f3ff24895df71c6d)), closes [#30660](https://github.com/bitnami/charts/issues/30660)
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/dremio] chore: :bulb: :memo: :rotating_light: Rename prometheus "@section" to avoid linter  ([2d4e2c3](https://github.com/bitnami/charts/commit/2d4e2c3f807ce5b892eed8a62643d76aef472abe)), closes [#30683](https://github.com/bitnami/charts/issues/30683)
 
 ## <small>0.1.13 (2024-10-28)</small>
 

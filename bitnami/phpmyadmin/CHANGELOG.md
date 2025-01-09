@@ -1,8 +1,19 @@
 # Changelog
 
-## 18.0.0 (2024-11-08)
+## 18.1.0 (2024-12-10)
 
-* [bitnami/phpmyadmin] chore!: :arrow_up: :boom: Bump MariaDB subchart to 20 ([#30356](https://github.com/bitnami/charts/pull/30356))
+* [bitnami/phpmyadmin] Detect non-standard images ([#30963](https://github.com/bitnami/charts/pull/30963))
+
+## <small>18.0.1 (2024-12-08)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 5) (#30674) ([ed2a546](https://github.com/bitnami/charts/commit/ed2a54617faf763169e6b01a89100b9db32e1000)), closes [#30674](https://github.com/bitnami/charts/issues/30674)
+* [bitnami/*] docs: :memo: Unify "Securing Traffic using TLS" section (#30707) ([b572333](https://github.com/bitnami/charts/commit/b57233336e4fe9af928ecb4f2a5f334011efb1bc)), closes [#30707](https://github.com/bitnami/charts/issues/30707)
+* [bitnami/phpmyadmin] Release 18.0.1 (#30828) ([d071989](https://github.com/bitnami/charts/commit/d071989c5ddebffdc20c17f58a45c29a8f1649c2)), closes [#30828](https://github.com/bitnami/charts/issues/30828)
+
+## 18.0.0 (2024-11-12)
+
+* [bitnami/phpmyadmin] chore!: :arrow_up: :boom: Bump MariaDB subchart to 20 (#30356) ([51d5755](https://github.com/bitnami/charts/commit/51d5755e62be68f8937c8b03c1efcee03272e785)), closes [#30356](https://github.com/bitnami/charts/issues/30356)
 
 ## <small>17.0.9 (2024-11-08)</small>
 

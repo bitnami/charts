@@ -1,8 +1,15 @@
 # Changelog
 
+## 23.1.0 (2024-12-10)
+
+* [bitnami/schema-registry] Detect non-standard images ([#30965](https://github.com/bitnami/charts/pull/30965))
+
 ## 23.0.0 (2024-12-04)
 
-* [bitnami/schema-registry] Release 23.0.0 ([#30775](https://github.com/bitnami/charts/pull/30775))
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Unify "Securing Traffic using TLS" section (#30707) ([b572333](https://github.com/bitnami/charts/commit/b57233336e4fe9af928ecb4f2a5f334011efb1bc)), closes [#30707](https://github.com/bitnami/charts/issues/30707)
+* [bitnami/*] docs: fix copy-paste typos with wrong references to Airflow (#30541) ([0a225d4](https://github.com/bitnami/charts/commit/0a225d44c1969429573b4e2630068eff129b6a96)), closes [#30541](https://github.com/bitnami/charts/issues/30541)
+* [bitnami/schema-registry] Release 23.0.0 (#30775) ([c0c64eb](https://github.com/bitnami/charts/commit/c0c64ebd9eef815a8a8ce4345fc03e4c689026bf)), closes [#30775](https://github.com/bitnami/charts/issues/30775)
 
 ## 22.0.0 (2024-11-12)
 

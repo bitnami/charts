@@ -49,6 +49,9 @@ spec:
           tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.cronjobs.archive.tolerations "context" $) | nindent 12 }}
           {{- end }}
           initContainers:
+            {{- if .Values.cronjobs.archive.initContainers }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.cronjobs.archive.initContainers "context" $) | nindent 12 }}
+            {{- end }}
             {{- include "matomo.initContainers" . | nindent 12 }}
           {{- if .Values.cronjobs.archive.podSecurityContext.enabled }}
           securityContext: {{- omit .Values.cronjobs.archive.podSecurityContext "enabled" | toYaml | nindent 16 }}
@@ -225,6 +228,9 @@ spec:
           {{- end }}
           restartPolicy: OnFailure
           initContainers:
+            {{- if .Values.cronjobs.taskScheduler.initContainers }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.cronjobs.taskScheduler.initContainers "context" $) | nindent 12 }}
+            {{- end }}
             {{- include "matomo.initContainers" . | nindent 12 }}
           {{- if .Values.cronjobs.taskScheduler.podSecurityContext.enabled }}
           securityContext: {{- omit .Values.cronjobs.taskScheduler.podSecurityContext "enabled" | toYaml | nindent 16 }}

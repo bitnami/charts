@@ -1,8 +1,17 @@
 # Changelog
 
-## 10.6.1 (2024-12-04)
+## 10.7.1 (2024-12-11)
 
-* [bitnami/etcd] Release 10.6.1 ([#30746](https://github.com/bitnami/charts/pull/30746))
+* [bitnami/etcd] keep snapshot-pvc ([#30815](https://github.com/bitnami/charts/pull/30815))
+
+## 10.7.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/etcd] Detect non-standard images (#30895) ([3e2009f](https://github.com/bitnami/charts/commit/3e2009f4310e4c3402df62e5dcc73d911fa4d0b7)), closes [#30895](https://github.com/bitnami/charts/issues/30895)
+
+## <small>10.6.1 (2024-12-04)</small>
+
+* [bitnami/etcd] Release 10.6.1 (#30746) ([9d81d81](https://github.com/bitnami/charts/commit/9d81d81ddbf73b9453468972a8c1501879888d32)), closes [#30746](https://github.com/bitnami/charts/issues/30746)
 
 ## 10.6.0 (2024-12-02)
 

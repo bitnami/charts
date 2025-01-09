@@ -1,8 +1,25 @@
 # Changelog
 
-## 2.2.1 (2024-11-18)
+## 2.3.1 (2024-12-11)
 
-* [bitnami/mlflow] Release 2.2.1 ([#30503](https://github.com/bitnami/charts/pull/30503))
+* [bitnami/mlflow] Release 2.3.1 ([#30994](https://github.com/bitnami/charts/pull/30994))
+
+## 2.3.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/mlflow] Detect non-standard images (#30925) ([3beb92f](https://github.com/bitnami/charts/commit/3beb92fb9c3ee77b47b0bbb1e15b6298f5d4f87b)), closes [#30925](https://github.com/bitnami/charts/issues/30925)
+
+## <small>2.2.2 (2024-12-10)</small>
+
+* fix: azure secrets (#30802) ([ffb38dd](https://github.com/bitnami/charts/commit/ffb38ddc22304901b3136edfded956eb666172bb)), closes [#30802](https://github.com/bitnami/charts/issues/30802)
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 4) (#30669) ([a4ec006](https://github.com/bitnami/charts/commit/a4ec00624589023a70a7094fcfb9f12e382bc280)), closes [#30669](https://github.com/bitnami/charts/issues/30669)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 6) (#30675) ([7b9cd04](https://github.com/bitnami/charts/commit/7b9cd04c2ffc730a0d62da787f2d4967c0ede47c)), closes [#30675](https://github.com/bitnami/charts/issues/30675)
+* [bitnami/*] docs: :memo: Unify "Securing Traffic using TLS" section (#30707) ([b572333](https://github.com/bitnami/charts/commit/b57233336e4fe9af928ecb4f2a5f334011efb1bc)), closes [#30707](https://github.com/bitnami/charts/issues/30707)
+
+## <small>2.2.1 (2024-11-18)</small>
+
+* [bitnami/mlflow] Release 2.2.1 (#30503) ([2028aad](https://github.com/bitnami/charts/commit/2028aad4277a9a6c6e57219f67f457659c13da0a)), closes [#30503](https://github.com/bitnami/charts/issues/30503)
 
 ## 2.2.0 (2024-11-15)
 

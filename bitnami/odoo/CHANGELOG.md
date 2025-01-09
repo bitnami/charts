@@ -1,8 +1,18 @@
 # Changelog
 
-## 28.0.2 (2024-12-04)
+## 28.1.0 (2024-12-10)
 
-* [bitnami/odoo] Release 28.0.2 ([#30790](https://github.com/bitnami/charts/pull/30790))
+* [bitnami/odoo] Detect non-standard images ([#30910](https://github.com/bitnami/charts/pull/30910))
+
+## <small>28.0.3 (2024-12-06)</small>
+
+* [bitnami/odoo] Release 28.0.3 (#30806) ([82182ac](https://github.com/bitnami/charts/commit/82182ac46fe08461ee98a7415ef12419363afbc4)), closes [#30806](https://github.com/bitnami/charts/issues/30806)
+
+## <small>28.0.2 (2024-12-04)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 3) (#30688) ([10a49f9](https://github.com/bitnami/charts/commit/10a49f9ff2db1d9d11a6edd1c40a9f61803241bc)), closes [#30688](https://github.com/bitnami/charts/issues/30688)
+* [bitnami/odoo] Release 28.0.2 (#30790) ([17816f2](https://github.com/bitnami/charts/commit/17816f2926c63da1fd6bbf33f75ad3ac51f6a6ba)), closes [#30790](https://github.com/bitnami/charts/issues/30790)
 
 ## <small>28.0.1 (2024-11-05)</small>
 

@@ -1,8 +1,20 @@
 # Changelog
 
-## 11.2.22 (2024-10-29)
+## 11.3.0 (2024-12-10)
 
-* [bitnami/apache] Release 11.2.22 ([#30118](https://github.com/bitnami/charts/pull/30118))
+* [bitnami/apache] Detect non-standard images ([#30857](https://github.com/bitnami/charts/pull/30857))
+
+## <small>11.2.23 (2024-12-08)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 1) (#30660) ([7409ca4](https://github.com/bitnami/charts/commit/7409ca4c21869fabe1532dd4f3ff24895df71c6d)), closes [#30660](https://github.com/bitnami/charts/issues/30660)
+* [bitnami/apache] Release 11.2.23 (#30827) ([f504f07](https://github.com/bitnami/charts/commit/f504f07780487955d3391075cc82721df6601bd8)), closes [#30827](https://github.com/bitnami/charts/issues/30827)
+
+## <small>11.2.22 (2024-10-29)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/apache] Release 11.2.22 (#30118) ([4d149a0](https://github.com/bitnami/charts/commit/4d149a0c7bb99f680887ae1184bf058b6a6a7fe5)), closes [#30118](https://github.com/bitnami/charts/issues/30118)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
 
 ## <small>11.2.21 (2024-10-16)</small>
 

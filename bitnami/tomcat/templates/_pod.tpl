@@ -183,7 +183,7 @@ containers:
       - -XX:MaxRAMPercentage=100
       - -XshowSettings:vm
       - -jar
-      - jmx_prometheus_httpserver.jar
+      - jmx_prometheus_standalone.jar
       - {{ .Values.metrics.jmx.ports.metrics | quote }}
       - /etc/jmx-tomcat/jmx-tomcat-prometheus.yml
     ports:

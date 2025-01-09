@@ -39,4 +39,4 @@ maintainers:
 name: grafana-tempo
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/grafana-tempo
-version: 3.7.14
+version: 3.8.0

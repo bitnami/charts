@@ -114,6 +114,7 @@ spec:
         - --retention.resolution-5m={{ .Values.compactor.retentionResolution5m }}
         - --retention.resolution-1h={{ .Values.compactor.retentionResolution1h }}
         - --consistency-delay={{ .Values.compactor.consistencyDelay }}
+        - --compact.concurrency={{ .Values.compactor.concurrency }}
         - --objstore.config-file=/conf/objstore.yml
         {{- if (include "thanos.httpConfigEnabled" .) }}
         - --http.config=/conf/http/http-config.yml

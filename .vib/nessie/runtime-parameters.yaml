@@ -1,3 +1,6 @@
+postgresql:
+  auth:
+    password: ComplicatedPassword123!4
 podSecurityContext:
   fsGroup: 1002
 containerSecurityContext:

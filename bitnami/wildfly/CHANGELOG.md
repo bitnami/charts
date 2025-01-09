@@ -1,8 +1,19 @@
 # Changelog
 
-## 22.0.5 (2024-12-04)
+## 22.1.1 (2024-12-12)
 
-* [bitnami/wildfly] Release 22.0.5 ([#30789](https://github.com/bitnami/charts/pull/30789))
+* [bitnami/wildfly] Bump patch version to apply .vib tests changes ([#31006](https://github.com/bitnami/charts/pull/31006))
+
+## 22.1.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/wildfly] Detect non-standard images (#30954) ([2f0f26d](https://github.com/bitnami/charts/commit/2f0f26da7b7386e7ed4398bd52379703e4c6972d)), closes [#30954](https://github.com/bitnami/charts/issues/30954)
+
+## <small>22.0.5 (2024-12-04)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 3) (#30688) ([10a49f9](https://github.com/bitnami/charts/commit/10a49f9ff2db1d9d11a6edd1c40a9f61803241bc)), closes [#30688](https://github.com/bitnami/charts/issues/30688)
+* [bitnami/wildfly] Release 22.0.5 (#30789) ([a2d65ff](https://github.com/bitnami/charts/commit/a2d65ffe8ea57e8793937e83b9fcf06ccf9090a1)), closes [#30789](https://github.com/bitnami/charts/issues/30789)
 
 ## <small>22.0.4 (2024-11-22)</small>
 

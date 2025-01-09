@@ -444,7 +444,7 @@ spec:
             {{- end }}
             {{ if .Values.existingConfiguration }}
             - name: configurations
-              mountPath: {{ printf "%s/etc" .Values.persistence.mountPath }}
+              mountPath: {{ printf "%s/etc/scylla" .Values.persistence.mountPath }}
             {{- end }}
             - name: empty-dir
               mountPath: /tmp

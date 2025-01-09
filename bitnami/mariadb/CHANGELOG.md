@@ -1,8 +1,22 @@
 # Changelog
 
-## 20.1.1 (2024-11-27)
+## 20.2.1 (2024-12-14)
 
-* [bitnami/mariadb] fix: :bug: Set correct TLS mountPath ([#30641](https://github.com/bitnami/charts/pull/30641))
+* [bitnami/mariadb] Release 20.2.1 ([#31043](https://github.com/bitnami/charts/pull/31043))
+
+## 20.2.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 4) (#30669) ([a4ec006](https://github.com/bitnami/charts/commit/a4ec00624589023a70a7094fcfb9f12e382bc280)), closes [#30669](https://github.com/bitnami/charts/issues/30669)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 6) (#30675) ([7b9cd04](https://github.com/bitnami/charts/commit/7b9cd04c2ffc730a0d62da787f2d4967c0ede47c)), closes [#30675](https://github.com/bitnami/charts/issues/30675)
+* [bitnami/*] docs: :memo: Unify "Securing Traffic using TLS" section (#30707) ([b572333](https://github.com/bitnami/charts/commit/b57233336e4fe9af928ecb4f2a5f334011efb1bc)), closes [#30707](https://github.com/bitnami/charts/issues/30707)
+* [bitnami/mariadb] Detect non-standard images (#30956) ([bb3402c](https://github.com/bitnami/charts/commit/bb3402c7a75a6a54976cd7c30a2116485deb7203)), closes [#30956](https://github.com/bitnami/charts/issues/30956)
+* [bitnami/mariadb] Fix typo in README (#30800) ([2b8b5f5](https://github.com/bitnami/charts/commit/2b8b5f5bed0ccb9840b35aca9e0415d88755b83c)), closes [#30800](https://github.com/bitnami/charts/issues/30800)
+
+## <small>20.1.1 (2024-11-27)</small>
+
+* [bitnami/mariadb] fix: :bug: Set correct TLS mountPath (#30641) ([fc2dcd7](https://github.com/bitnami/charts/commit/fc2dcd711548553180d6fc1d5debc51f40aa4d22)), closes [#30641](https://github.com/bitnami/charts/issues/30641)
 
 ## 20.1.0 (2024-11-27)
 

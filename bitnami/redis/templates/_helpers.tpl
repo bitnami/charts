@@ -125,8 +125,8 @@ Return the path to the CA cert file.
 {{- define "redis.tlsCACert" -}}
 {{- if (include "redis.createTlsSecret" . ) -}}
     {{- printf "/opt/bitnami/redis/certs/%s" "ca.crt" -}}
-{{- else -}}
-    {{- required "Certificate CA filename is required when TLS in enabled" .Values.tls.certCAFilename | printf "/opt/bitnami/redis/certs/%s" -}}
+{{- else }}
+    {{- ternary "" (printf "/opt/bitnami/redis/certs/%s" .Values.tls.certCAFilename) (empty .Values.tls.certCAFilename) }}
 {{- end -}}
 {{- end -}}
 

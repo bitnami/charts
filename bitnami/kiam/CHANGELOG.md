@@ -1,8 +1,14 @@
 # Changelog
 
-## 2.2.18 (2024-12-04)
+## 2.3.0 (2024-12-10)
 
-* [bitnami/kiam] Release 2.2.18 ([#30762](https://github.com/bitnami/charts/pull/30762))
+* [bitnami/kiam] Detect non-standard images ([#30900](https://github.com/bitnami/charts/pull/30900))
+
+## <small>2.2.18 (2024-12-04)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 3) (#30666) ([82fc7e2](https://github.com/bitnami/charts/commit/82fc7e2fc12e2648ed22069942203c02bf5d4cc6)), closes [#30666](https://github.com/bitnami/charts/issues/30666)
+* [bitnami/kiam] Release 2.2.18 (#30762) ([654bb09](https://github.com/bitnami/charts/commit/654bb09d1137cb21c52f275da787fecb9a5e818f)), closes [#30762](https://github.com/bitnami/charts/issues/30762)
 
 ## <small>2.2.17 (2024-11-07)</small>
 

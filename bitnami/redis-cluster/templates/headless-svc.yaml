@@ -7,7 +7,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ template "common.names.fullname" . }}-headless
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
   {{- if or .Values.service.headless.annotations .Values.commonAnnotations }}
   {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.service.headless.annotations .Values.commonAnnotations ) "context" . ) }}

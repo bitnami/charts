@@ -1,8 +1,19 @@
 # Changelog
 
-## 2.0.2 (2024-12-01)
+## 2.1.1 (2025-01-08)
 
-* [bitnami/valkey-cluster] Release 2.0.2 ([#30702](https://github.com/bitnami/charts/pull/30702))
+* [bitnami/valkey-cluster] Release 2.1.1 ([#31247](https://github.com/bitnami/charts/pull/31247))
+
+## 2.1.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 3) (#30688) ([10a49f9](https://github.com/bitnami/charts/commit/10a49f9ff2db1d9d11a6edd1c40a9f61803241bc)), closes [#30688](https://github.com/bitnami/charts/issues/30688)
+* [bitnami/valkey-cluster] Detect non-standard images (#30951) ([82e7a6a](https://github.com/bitnami/charts/commit/82e7a6aedc9a3534b7fa4f46f968a74623858bae)), closes [#30951](https://github.com/bitnami/charts/issues/30951)
+
+## <small>2.0.2 (2024-12-01)</small>
+
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 6) (#30675) ([7b9cd04](https://github.com/bitnami/charts/commit/7b9cd04c2ffc730a0d62da787f2d4967c0ede47c)), closes [#30675](https://github.com/bitnami/charts/issues/30675)
+* [bitnami/valkey-cluster] Release 2.0.2 (#30702) ([7b5eadf](https://github.com/bitnami/charts/commit/7b5eadf41da24bf85355b688876b7c022f35ae3e)), closes [#30702](https://github.com/bitnami/charts/issues/30702)
 
 ## <small>2.0.1 (2024-11-08)</small>
 

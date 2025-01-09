@@ -42,7 +42,7 @@ Create the name of the contour-certgen service account to use
 Whether to enabled contour-certgen or not
 */}}
 {{- define "contour.contour-certgen.enabled" -}}
-{{- if and (not .Values.tlsExistingSecret) (or (not .Values.contour.tlsExistingSecret) (not .Values.envoy.tlsExistingSecret))  -}}
+{{- if and (not .Values.tlsExistingSecret) (or (not .Values.contour.tlsExistingSecret) (not .Values.envoy.tlsExistingSecret)) (not .Values.useCertManager) -}}
     true
 {{- else -}}{{- end -}}
 {{- end -}}
@@ -51,8 +51,13 @@ Whether to enabled contour-certgen or not
 Contour certs secret name
 */}}
 {{- define "contour.contour.certs-secret.name" -}}
-{{- $existingSecret := default .Values.tlsExistingSecret .Values.contour.tlsExistingSecret -}}
-{{- $name := default "contourcert" $existingSecret -}}
+{{- $name := "" -}}
+{{- if .Values.useCertManager -}}
+    {{- $name = printf "%s-contour-crt" (include "common.names.fullname" .) -}}
+{{- else -}}
+    {{- $existingSecret := default .Values.tlsExistingSecret .Values.contour.tlsExistingSecret -}}
+    {{- $name = default "contourcert" $existingSecret -}}
+{{- end -}}
 {{- printf "%s" $name -}}
 {{- end -}}
 
@@ -60,8 +65,13 @@ Contour certs secret name
 Envoy certs secret name
 */}}
 {{- define "contour.envoy.certs-secret.name" -}}
-{{- $existingSecret := default .Values.tlsExistingSecret .Values.envoy.tlsExistingSecret -}}
-{{- $name := default "envoycert" $existingSecret -}}
+{{- $name := "" -}}
+{{- if .Values.useCertManager -}}
+    {{- $name = printf "%s-envoy-crt" (include "common.names.fullname" .) -}}
+{{- else -}}
+    {{- $existingSecret := default .Values.tlsExistingSecret .Values.envoy.tlsExistingSecret -}}
+    {{- $name = default "envoycert" $existingSecret -}}
+{{- end -}}
 {{- printf "%s" $name -}}
 {{- end -}}
 

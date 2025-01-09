@@ -1,8 +1,18 @@
 # Changelog
 
-## 6.2.21 (2024-11-18)
+## 6.3.1 (2024-12-28)
 
-* [bitnami/aspnet-core] Release 6.2.21 ([#30502](https://github.com/bitnami/charts/pull/30502))
+* [bitnami/aspnet-core] Release 6.3.1 ([#31180](https://github.com/bitnami/charts/pull/31180))
+
+## 6.3.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/aspnet-core] Detect non-standard images (#30865) ([1329644](https://github.com/bitnami/charts/commit/13296445b45cfa3c696d0bfbe289f61fafc1467e)), closes [#30865](https://github.com/bitnami/charts/issues/30865)
+
+## <small>6.2.21 (2024-11-18)</small>
+
+* [bitnami/aspnet-core] Release 6.2.21 (#30502) ([29c2afd](https://github.com/bitnami/charts/commit/29c2afd7d4b4f664dc2e6e215ee3d784cb49eae7)), closes [#30502](https://github.com/bitnami/charts/issues/30502)
 
 ## <small>6.2.20 (2024-11-18)</small>
 

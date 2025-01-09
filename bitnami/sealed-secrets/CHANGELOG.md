@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.4.14 (2024-12-05)
+## 2.5.0 (2024-12-10)
 
-* [bitnami/sealed-secrets] Release 2.4.14 ([#30805](https://github.com/bitnami/charts/pull/30805))
+* [bitnami/sealed-secrets] Detect non-standard images ([#30966](https://github.com/bitnami/charts/pull/30966))
+
+## <small>2.4.14 (2024-12-05)</small>
+
+* [bitnami/sealed-secrets] Release 2.4.14 (#30805) ([1bc7b3f](https://github.com/bitnami/charts/commit/1bc7b3fa73b91b48644cd1f9046087b6ea5d5c05)), closes [#30805](https://github.com/bitnami/charts/issues/30805)
 
 ## <small>2.4.13 (2024-12-04)</small>
 

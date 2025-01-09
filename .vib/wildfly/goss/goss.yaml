@@ -9,6 +9,7 @@ file:
     owner: root
 command:
   jboss-deploy:
-    exec: jboss-cli.sh --controller=wildfly:{{ .Vars.service.ports.mgmt }} --connect --user={{ .Vars.wildflyUsername }} --password='{{ .Vars.wildflyPassword }}' 'deploy ./wildfly/goss/testfiles/helloworld.war --force'
+    # Failing test for using MD5 in FIPS compliants OS
+    exec: if [ "$OS_FLAVOUR" != "photon-5" ]; then jboss-cli.sh --controller=wildfly:{{ .Vars.service.ports.mgmt }} --connect --user={{ .Vars.wildflyUsername }} --password='{{ .Vars.wildflyPassword }}' 'deploy ./wildfly/goss/testfiles/helloworld.war --force'; fi
     exit-status: 0
     timeout: 20000

@@ -1,8 +1,18 @@
 # Changelog
 
-## 7.5.4 (2024-12-05)
+## 7.6.1 (2024-12-23)
 
-* [bitnami/memcached] Release 7.5.4 ([#30797](https://github.com/bitnami/charts/pull/30797))
+* [bitnami/memcached] Release 7.6.1 ([#31142](https://github.com/bitnami/charts/pull/31142))
+
+## 7.6.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/memcached] Detect non-standard images (#30922) ([954239f](https://github.com/bitnami/charts/commit/954239fbde6ee74fb40dc8341b4cfb4ea243ced7)), closes [#30922](https://github.com/bitnami/charts/issues/30922)
+
+## <small>7.5.4 (2024-12-05)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/memcached] Release 7.5.4 (#30797) ([567544f](https://github.com/bitnami/charts/commit/567544f75d5058b7c4ea239146942c0bd56e1848)), closes [#30797](https://github.com/bitnami/charts/issues/30797)
 
 ## <small>7.5.3 (2024-11-30)</small>
 

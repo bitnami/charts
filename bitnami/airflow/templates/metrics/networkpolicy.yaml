@@ -40,6 +40,7 @@ spec:
   ingress:
     - ports:
         - port: {{ .Values.metrics.containerPorts.ingest }}
+          protocol: UDP
         - port: {{ .Values.metrics.containerPorts.metrics }}
       {{- if not .Values.metrics.networkPolicy.allowExternal }}
       from:

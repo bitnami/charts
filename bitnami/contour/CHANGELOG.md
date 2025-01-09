@@ -1,8 +1,19 @@
 # Changelog
 
-## 19.3.2 (2024-12-03)
+## 19.5.0 (2025-01-07)
 
-* [bitnami/contour] Release 19.3.2 ([#30745](https://github.com/bitnami/charts/pull/30745))
+* [bitnami/contour] Allow replacing certgen with cert-manager ([#29416](https://github.com/bitnami/charts/pull/29416))
+
+## 19.4.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/contour] Detect non-standard images (#30874) ([e47bbb4](https://github.com/bitnami/charts/commit/e47bbb4f1f57e1eea55f96f3c5641ce8564930af)), closes [#30874](https://github.com/bitnami/charts/issues/30874)
+
+## <small>19.3.2 (2024-12-03)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 1) (#30660) ([7409ca4](https://github.com/bitnami/charts/commit/7409ca4c21869fabe1532dd4f3ff24895df71c6d)), closes [#30660](https://github.com/bitnami/charts/issues/30660)
+* [bitnami/contour] Release 19.3.2 (#30745) ([10a3f22](https://github.com/bitnami/charts/commit/10a3f22fc74836fcf48e9d4d1bb4b025164d1afe)), closes [#30745](https://github.com/bitnami/charts/issues/30745)
 
 ## <small>19.3.1 (2024-11-07)</small>
 

@@ -5,3 +5,8 @@ service:
 preAllocSize: 65536
 containerPorts:
   client: 2181
+resources:
+  requests:
+    memory: 512Mi
+  limits:
+    memory: 1024Mi

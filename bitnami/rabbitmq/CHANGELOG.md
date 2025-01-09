@@ -1,8 +1,24 @@
 # Changelog
 
+## 15.2.2 (2025-01-07)
+
+* [bitnami/rabbitmq] remove undefined rts key from network policy template ([#31210](https://github.com/bitnami/charts/pull/31210))
+
+## <small>15.2.1 (2024-12-16)</small>
+
+* [bitnami/rabbitmq] Release 15.2.1 (#31049) ([973da81](https://github.com/bitnami/charts/commit/973da81d773b2b834c83e8b7b90553d915899bc5)), closes [#31049](https://github.com/bitnami/charts/issues/31049)
+
+## 15.2.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 5) (#30674) ([ed2a546](https://github.com/bitnami/charts/commit/ed2a54617faf763169e6b01a89100b9db32e1000)), closes [#30674](https://github.com/bitnami/charts/issues/30674)
+* [bitnami/*] docs: :memo: Unify "Securing Traffic using TLS" section (#30707) ([b572333](https://github.com/bitnami/charts/commit/b57233336e4fe9af928ecb4f2a5f334011efb1bc)), closes [#30707](https://github.com/bitnami/charts/issues/30707)
+* [bitnami/rabbitmq] Detect non-standard images (#30940) ([4dade21](https://github.com/bitnami/charts/commit/4dade214ff39b6741a9f1c1239c51a4ab13c1a4d)), closes [#30940](https://github.com/bitnami/charts/issues/30940)
+
 ## 15.1.0 (2024-11-25)
 
-* [bitnami/rabbitmq] feat: :sparkles: Allow password updates ([#30615](https://github.com/bitnami/charts/pull/30615))
+* [bitnami/rabbitmq] feat: :sparkles: Allow password updates (#30615) ([d98aecc](https://github.com/bitnami/charts/commit/d98aecce08aebd795cdace9bc1f814296a9aa873)), closes [#30615](https://github.com/bitnami/charts/issues/30615)
 
 ## <small>15.0.7 (2024-11-22)</small>
 

@@ -1,8 +1,13 @@
 # Changelog
 
-## 7.2.17 (2024-12-04)
+## 7.3.0 (2024-12-10)
 
-* [bitnami/metrics-server] Release 7.2.17 ([#30764](https://github.com/bitnami/charts/pull/30764))
+* [bitnami/metrics-server] Detect non-standard images ([#30958](https://github.com/bitnami/charts/pull/30958))
+
+## <small>7.2.17 (2024-12-04)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/metrics-server] Release 7.2.17 (#30764) ([d516181](https://github.com/bitnami/charts/commit/d516181b9aa4c3e7d2cd9126f28cab97e4f3ec89)), closes [#30764](https://github.com/bitnami/charts/issues/30764)
 
 ## <small>7.2.16 (2024-11-07)</small>
 

@@ -1,8 +1,30 @@
 # Changelog
 
-## 22.0.8 (2024-12-03)
+## 22.1.2 (2024-12-13)
 
-* [bitnami/ghost] Release 22.0.8 ([#30737](https://github.com/bitnami/charts/pull/30737))
+* [bitnami/ghost] Release 22.1.2 ([#31038](https://github.com/bitnami/charts/pull/31038))
+
+## <small>22.1.1 (2024-12-11)</small>
+
+* [bitnami/ghost] Release 22.1.1 (#30997) ([072977a](https://github.com/bitnami/charts/commit/072977a1debd650fa7abeb28931aa61f7df23a8c)), closes [#30997](https://github.com/bitnami/charts/issues/30997)
+
+## 22.1.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/ghost] Detect non-standard images (#30890) ([156d8c6](https://github.com/bitnami/charts/commit/156d8c6d221dd477db64253f55666d1d29e7f95e)), closes [#30890](https://github.com/bitnami/charts/issues/30890)
+
+## <small>22.0.10 (2024-12-09)</small>
+
+* [bitnami/ghost] Release 22.0.10 (#30831) ([4e2d5d2](https://github.com/bitnami/charts/commit/4e2d5d2aaceeffbf2c255938e74810c1baf75c91)), closes [#30831](https://github.com/bitnami/charts/issues/30831)
+
+## <small>22.0.9 (2024-12-06)</small>
+
+* [bitnami/ghost] Release 22.0.9 (#30820) ([90a3c1f](https://github.com/bitnami/charts/commit/90a3c1f68f0c01c63fbcba8b79295388a0e0f544)), closes [#30820](https://github.com/bitnami/charts/issues/30820)
+
+## <small>22.0.8 (2024-12-03)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/ghost] Release 22.0.8 (#30737) ([faf5cc9](https://github.com/bitnami/charts/commit/faf5cc9f40ad3a259812752d36790cf5a33d658d)), closes [#30737](https://github.com/bitnami/charts/issues/30737)
 
 ## <small>22.0.7 (2024-11-29)</small>
 

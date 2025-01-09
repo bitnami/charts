@@ -1,8 +1,14 @@
 # Changelog
 
-## 4.8.1 (2024-12-03)
+## 4.9.0 (2024-12-10)
 
-* [bitnami/grafana-operator] Release 4.8.1 ([#30754](https://github.com/bitnami/charts/pull/30754))
+* [bitnami/grafana-operator] Detect non-standard images ([#30886](https://github.com/bitnami/charts/pull/30886))
+
+## <small>4.8.1 (2024-12-03)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 2) (#30662) ([50e0570](https://github.com/bitnami/charts/commit/50e0570f98ab15308af7910b405baa4480e5fe3f)), closes [#30662](https://github.com/bitnami/charts/issues/30662)
+* [bitnami/grafana-operator] Release 4.8.1 (#30754) ([4a20938](https://github.com/bitnami/charts/commit/4a2093886e09a898d06a657b5cb52a6c1c772aa8)), closes [#30754](https://github.com/bitnami/charts/issues/30754)
 
 ## 4.8.0 (2024-11-07)
 
