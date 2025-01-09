@@ -1,12 +1,13 @@
 # Changelog
 
-## 24.3.3 (2024-12-16)
+## 24.3.3 (2025-01-09)
 
-* [bitnami/keycloak] improve keycloak value file comments on extraEnvVars property ([#31054](https://github.com/bitnami/charts/pull/31054))
+* [bitnami/keycloak] Improve keycloak value file comments on extraEnvVars property ([#31054](https://github.com/bitnami/charts/pull/31054))
 
-## <small>24.3.2 (2024-12-20)</small>
+## <small>24.3.2 (2024-12-30)</small>
 
-* [bitnami/keycloak] Update KEYCLOAK_ADMIN env variables deprecation ([#30636](https://github.com/bitnami/charts/pull/30636))
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/keycloak] Update KEYCLOAK_ADMIN env variables deprecation (#30636) ([668bd27](https://github.com/bitnami/charts/commit/668bd2772c5ea45af7b1b57141c1776ccf4169f4)), closes [#30636](https://github.com/bitnami/charts/issues/30636)
 
 ## <small>24.3.1 (2024-12-16)</small>
 
