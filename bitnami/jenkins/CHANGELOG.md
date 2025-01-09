@@ -1,8 +1,12 @@
 # Changelog
 
-## 13.5.2 (2025-01-07)
+## 13.5.3 (2025-01-08)
 
-* [bitnami/jenkins] Release 13.5.2 ([#31225](https://github.com/bitnami/charts/pull/31225))
+* [bitnami/jenkins] Release 13.5.3 ([#31259](https://github.com/bitnami/charts/pull/31259))
+
+## <small>13.5.2 (2025-01-07)</small>
+
+* [bitnami/jenkins] Release 13.5.2 (#31225) ([5fd0be7](https://github.com/bitnami/charts/commit/5fd0be75c1a4714f324acd55a0a304ab20a46647)), closes [#31225](https://github.com/bitnami/charts/issues/31225)
 
 ## <small>13.5.1 (2024-12-27)</small>
 
