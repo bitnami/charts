@@ -1,8 +1,12 @@
 # Changelog
 
-## 18.3.4 (2025-01-08)
+## 18.3.5 (2025-01-10)
 
-* [bitnami/nginx] Release 18.3.4 ([#31265](https://github.com/bitnami/charts/pull/31265))
+* [bitnami/nginx] Release 18.3.5 ([#31299](https://github.com/bitnami/charts/pull/31299))
+
+## <small>18.3.4 (2025-01-08)</small>
+
+* [bitnami/nginx] Release 18.3.4 (#31265) ([4a91230](https://github.com/bitnami/charts/commit/4a912308f58b5b36993828007e3dfb98a277f095)), closes [#31265](https://github.com/bitnami/charts/issues/31265)
 
 ## <small>18.3.3 (2025-01-08)</small>
 
