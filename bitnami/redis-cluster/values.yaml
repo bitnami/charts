@@ -1128,6 +1128,7 @@ metrics:
     ##
     clusterIP: ""
     loadBalancerIP: ""
+    loadBalancerClass: ""
     annotations: {}
     labels: {}
 ## @section Sysctl Image parameters
