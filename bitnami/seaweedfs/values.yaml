@@ -3538,6 +3538,10 @@ externalDatabase:
   ## NOTE: When it's set, the `externalDatabase.password` parameter is ignored
   ##
   existingSecret: ""
+  ## @param externalDatabase.waitForDatabaseEnabled Whether to check for external database before starting seaweedfs containers
+  ##
+  waitForDatabaseEnabled: true
+  ##
   ## Init external database job
   ##
   initDatabaseJob:
