@@ -1,8 +1,13 @@
 # Changelog
 
-## 3.1.3 (2025-01-09)
+## 3.1.4 (2025-01-10)
 
-* [bitnami/gitea] Release 3.1.3 ([#31276](https://github.com/bitnami/charts/pull/31276))
+* [bitnami/gitea] Release 3.1.4 ([#31285](https://github.com/bitnami/charts/pull/31285))
+
+## <small>3.1.3 (2025-01-09)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/gitea] Release 3.1.3 (#31276) ([50dc1bd](https://github.com/bitnami/charts/commit/50dc1bd4f77cc356862d39c919d31cba2d671b58)), closes [#31276](https://github.com/bitnami/charts/issues/31276)
 
 ## <small>3.1.2 (2024-12-13)</small>
 
