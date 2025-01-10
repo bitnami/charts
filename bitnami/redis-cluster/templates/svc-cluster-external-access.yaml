@@ -46,6 +46,9 @@ spec:
     (not $root.Values.cluster.externalAccess.service.disableLoadBalancerIP) }}
   loadBalancerIP: {{ index $root.Values.cluster.externalAccess.service.loadBalancerIP $i }}
   {{- end }}
+  {{- if and (eq $root.Values.cluster.externalAccess.service.type "LoadBalancer") $root.Values.cluster.externalAccess.service.loadBalancerClass }}
+  loadBalancerClass: {{ $root.Values.cluster.externalAccess.service.loadBalancerClass }}
+  {{- end }}
   {{- if and (eq $root.Values.cluster.externalAccess.service.type "LoadBalancer") $root.Values.cluster.externalAccess.service.loadBalancerSourceRanges }}
   loadBalancerSourceRanges: {{- toYaml $root.Values.cluster.externalAccess.service.loadBalancerSourceRanges | nindent 4 }}
   {{- end }}
