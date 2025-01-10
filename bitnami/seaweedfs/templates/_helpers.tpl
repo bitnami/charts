@@ -81,9 +81,7 @@ Return the proper init external database job image name
 Returns whether wait for external database is enabled
 */}}
 {{- define "seaweedfs.waitForDatabase.enabled" -}}
-{{- if or (and .Values.mariadb.enabled (not .Values.externalDatabase.enabled) ) (and .Values.externalDatabase.enabled (eq .Values.externalDatabase.store "mariadb") (eq .Values.externalDatabase.waitForDatabaseEnabled true) ) }}
-    {{- print "true" -}}
-  {{- else if or (and .Values.postgresql.enabled (not .Values.externalDatabase.enabled) ) (and .Values.externalDatabase.enabled (eq .Values.externalDatabase.store "postgresql") (eq .Values.externalDatabase.waitForDatabaseEnabled true) ) }}
+{{- if or .Values.mariadb.enabled .Values.postgresql.enabled (and .Values.externalDatabase.enabled (eq .Values.externalDatabase.waitForDatabaseEnabled true) ) }}
     {{- print "true" -}}
   {{- else }}
     {{- print "false" -}}
