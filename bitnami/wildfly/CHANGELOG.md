@@ -1,8 +1,12 @@
 # Changelog
 
-## 22.1.1 (2024-12-12)
+## 23.0.0 (2025-01-10)
 
-* [bitnami/wildfly] Bump patch version to apply .vib tests changes ([#31006](https://github.com/bitnami/charts/pull/31006))
+* [bitnami/wildfly] Release 23.0.0 ([#31290](https://github.com/bitnami/charts/pull/31290))
+
+## <small>22.1.1 (2024-12-12)</small>
+
+* [bitnami/wildfly] Bump patch version to apply .vib tests changes (#31006) ([054482e](https://github.com/bitnami/charts/commit/054482e1a22033fae1827dc7181d960f2bba1ad0)), closes [#31006](https://github.com/bitnami/charts/issues/31006)
 
 ## 22.1.0 (2024-12-10)
 
