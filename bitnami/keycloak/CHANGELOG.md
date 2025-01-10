@@ -1,6 +1,6 @@
 # Changelog
 
-## 24.3.3 (2025-01-07)
+## 24.3.3 (2025-01-10)
 
 * [bitnami/keycloak] reverts(#30368) ([#31227](https://github.com/bitnami/charts/pull/31227))
 
