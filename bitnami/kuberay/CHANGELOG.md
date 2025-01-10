@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.3.1 (2025-01-07)
+## 1.3.1 (2025-01-10)
 
 * [bitnami/kuberay] Adding the list and watch for endpoints resource to the cluster role to solve #30648 ([#31226](https://github.com/bitnami/charts/pull/31226))
 
