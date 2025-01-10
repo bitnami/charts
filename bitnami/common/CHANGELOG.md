@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.29.1 (2025-01-09)
+## 2.29.1 (2025-01-10)
 
 * [bitnami/common] Removing seLinuxOptions from omission ([#31279](https://github.com/bitnami/charts/pull/31279))
 
