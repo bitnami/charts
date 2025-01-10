@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.2.3 (2025-01-08)
+## 11.3.0 (2025-01-10)
 
-* [bitnami/redis-cluster] Release 11.2.3 ([#31239](https://github.com/bitnami/charts/pull/31239))
+* [bitnami/redis-cluster] feat: add support for customizing loadBalancerClass on services ([#31288](https://github.com/bitnami/charts/pull/31288))
+
+## <small>11.2.3 (2025-01-08)</small>
+
+* [bitnami/redis-cluster] Release 11.2.3 (#31239) ([f14298a](https://github.com/bitnami/charts/commit/f14298a112c8d6a7eb51ab3f1fd8b114bd27b050)), closes [#31239](https://github.com/bitnami/charts/issues/31239)
 
 ## <small>11.2.2 (2025-01-08)</small>
 
