@@ -1,8 +1,13 @@
 # Changelog
 
+## 0.2.1 (2025-01-10)
+
+* [bitnami/neo4j] Release 0.2.1 ([#31291](https://github.com/bitnami/charts/pull/31291))
+
 ## 0.2.0 (2024-12-10)
 
-* [bitnami/neo4j] Detect non-standard images ([#30917](https://github.com/bitnami/charts/pull/30917))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/neo4j] Detect non-standard images (#30917) ([317b01b](https://github.com/bitnami/charts/commit/317b01bed1fcd1c13f77a38295ea19d40cfbd34d)), closes [#30917](https://github.com/bitnami/charts/issues/30917)
 
 ## <small>0.1.17 (2024-12-09)</small>
 
