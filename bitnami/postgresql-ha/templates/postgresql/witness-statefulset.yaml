@@ -75,9 +75,7 @@ spec:
       {{- if .Values.witness.podSecurityContext.enabled }}
       securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.witness.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
-      {{- if .Values.serviceAccount.create }}
       serviceAccountName: {{ include "postgresql-ha.serviceAccountName" . }}
-      {{- end }}
       hostNetwork: {{ .Values.witness.hostNetwork }}
       hostIPC: {{ .Values.witness.hostIPC }}
       initContainers:
