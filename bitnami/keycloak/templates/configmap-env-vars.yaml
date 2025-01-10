@@ -93,7 +93,11 @@ data:
   {{- if .Values.cache.stackFile }}
   KEYCLOAK_CACHE_CONFIG_FILE: {{ .Values.cache.stackFile | quote }}
   {{- end }}
+  {{- if .Values.cache.useHeadlessServiceWithAppVersion }}
+  JAVA_OPTS_APPEND: {{ printf "-Djgroups.dns.query=%s-headless-ispn-%s.%s.svc.%s" (include "common.names.fullname" .) (replace "." "-" .Chart.AppVersion) (include "common.names.namespace" .) .Values.clusterDomain | quote }}
+  {{- else }}
   JAVA_OPTS_APPEND: {{ printf "-Djgroups.dns.query=%s-headless.%s.svc.%s" (include "common.names.fullname" .) (include "common.names.namespace" .) .Values.clusterDomain | quote }}
+  {{- end }}
   {{- else }}
   KEYCLOAK_CACHE_TYPE: "local"
   {{- end }}

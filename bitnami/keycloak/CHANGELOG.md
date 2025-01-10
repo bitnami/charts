@@ -1,8 +1,12 @@
 # Changelog
 
-## 24.3.3 (2025-01-10)
+## 24.4.1 (2025-01-10)
 
 * [bitnami/keycloak] reverts(#30368) ([#31227](https://github.com/bitnami/charts/pull/31227))
+
+## 24.4.0 (2025-01-09)
+
+* [bitnami/keycloak] add option to use dedicated version bound headless service for jgroups discovery ([#31271](https://github.com/bitnami/charts/pull/31271))
 
 ## <small>24.3.2 (2024-12-30)</small>
 
