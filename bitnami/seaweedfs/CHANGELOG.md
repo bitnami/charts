@@ -1,6 +1,6 @@
 # Changelog
 
-## 4.2.2 (2025-01-09)
+## 4.2.2 (2025-01-10)
 
 * [bitnami/seaweedfs] Make database check on start optional ([#31277](https://github.com/bitnami/charts/pull/31277))
 
