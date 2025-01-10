@@ -1235,12 +1235,6 @@ keycloakConfigCli:
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
-  ## @param keycloakConfigCli.extraEnvVars Additional environment variables to set
-  ## Example:
-  ## extraEnvVars:
-  ##   - name: FOO
-  ##     value: "bar"
-  ##
   ## @param keycloakConfigCli.nodeSelector Node labels for pod assignment
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
@@ -1250,6 +1244,12 @@ keycloakConfigCli:
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   podTolerations: []
+  ## @param keycloakConfigCli.extraEnvVars Additional environment variables to set
+  ## Example:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
   extraEnvVars: []
   ## @param keycloakConfigCli.extraEnvVarsCM ConfigMap with extra environment variables
   ##
