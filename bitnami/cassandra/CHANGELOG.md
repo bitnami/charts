@@ -1,8 +1,15 @@
 # Changelog
 
+## 12.1.1 (2025-01-07)
+
+* [bitnami/cassandra] Release 12.1.1 ([#31233](https://github.com/bitnami/charts/pull/31233))
+
 ## 12.1.0 (2024-12-10)
 
-* [bitnami/cassandra] Detect non-standard images ([#30866](https://github.com/bitnami/charts/pull/30866))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 1) (#30660) ([7409ca4](https://github.com/bitnami/charts/commit/7409ca4c21869fabe1532dd4f3ff24895df71c6d)), closes [#30660](https://github.com/bitnami/charts/issues/30660)
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 1) (#30685) ([be6aa1d](https://github.com/bitnami/charts/commit/be6aa1df0bd4479173a78400fef7295de15b408d)), closes [#30685](https://github.com/bitnami/charts/issues/30685)
+* [bitnami/cassandra] Detect non-standard images (#30866) ([30196ed](https://github.com/bitnami/charts/commit/30196ed6054c6c611ceb03bc71fedeccb36aeb1a)), closes [#30866](https://github.com/bitnami/charts/issues/30866)
 
 ## <small>12.0.5 (2024-11-28)</small>
 

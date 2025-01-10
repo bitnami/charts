@@ -1,8 +1,17 @@
 # Changelog
 
+## 4.3.2 (2025-01-07)
+
+* [bitnami/pytorch] Release 4.3.2 ([#31240](https://github.com/bitnami/charts/pull/31240))
+
+## <small>4.3.1 (2025-01-07)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/pytorch] Release 4.3.1 (#31236) ([bf8598c](https://github.com/bitnami/charts/commit/bf8598c47ffa6e86e7031e9a00a1e961528dca8d)), closes [#31236](https://github.com/bitnami/charts/issues/31236)
+
 ## 4.3.0 (2024-12-10)
 
-* [bitnami/pytorch] Detect non-standard images ([#30939](https://github.com/bitnami/charts/pull/30939))
+* [bitnami/pytorch] Detect non-standard images (#30939) ([e492f64](https://github.com/bitnami/charts/commit/e492f6436f48e2e93b0eb69456339dc0aa7ec073)), closes [#30939](https://github.com/bitnami/charts/issues/30939)
 
 ## <small>4.2.23 (2024-12-10)</small>
 

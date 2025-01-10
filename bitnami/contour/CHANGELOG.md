@@ -1,8 +1,13 @@
 # Changelog
 
+## 19.5.0 (2025-01-07)
+
+* [bitnami/contour] Allow replacing certgen with cert-manager ([#29416](https://github.com/bitnami/charts/pull/29416))
+
 ## 19.4.0 (2024-12-10)
 
-* [bitnami/contour] Detect non-standard images ([#30874](https://github.com/bitnami/charts/pull/30874))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/contour] Detect non-standard images (#30874) ([e47bbb4](https://github.com/bitnami/charts/commit/e47bbb4f1f57e1eea55f96f3c5641ce8564930af)), closes [#30874](https://github.com/bitnami/charts/issues/30874)
 
 ## <small>19.3.2 (2024-12-03)</small>
 
