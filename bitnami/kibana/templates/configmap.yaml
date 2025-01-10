@@ -22,8 +22,8 @@ data:
     {{- if .Values.configuration.server.basePath }}
     server.basePath: {{ .Values.configuration.server.basePath | quote }}
     {{- end }}
-    {{- if or .Values.configuration.server.publicBaseUrl .Values.ingress.enabled }}
-    server.publicBaseUrl: {{ default .Values.ingress.hostname .Values.configuration.server.publicBaseUrl }}
+    {{- if or .Values.configuration.server.publicBaseUrl ( get .Values.configuration "server.publicBaseUrl" ) .Values.ingress.enabled }}
+    server.publicBaseUrl: {{ include "common.tplvalues.render" ( dict "value" ( or .Values.configuration.server.publicBaseUrl ( get .Values.configuration "server.publicBaseUrl" ) .Values.ingress.hostname ) "context" $ ) }}
     {{- end }}
     server.rewriteBasePath: {{ .Values.configuration.server.rewriteBasePath }}
     {{- if .Values.extraConfiguration }}
