@@ -1,8 +1,13 @@
 # Changelog
 
+## 11.1.1 (2025-01-12)
+
+* [bitnami/argo-workflows] Release 11.1.1 ([#31309](https://github.com/bitnami/charts/pull/31309))
+
 ## 11.1.0 (2024-12-10)
 
-* [bitnami/argo-workflows] Detect non-standard images ([#30864](https://github.com/bitnami/charts/pull/30864))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/argo-workflows] Detect non-standard images (#30864) ([f47e86a](https://github.com/bitnami/charts/commit/f47e86a9b51dee8812bf752f2946fc6e5c24e3e0)), closes [#30864](https://github.com/bitnami/charts/issues/30864)
 
 ## <small>11.0.3 (2024-12-03)</small>
 
