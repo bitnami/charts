@@ -1,8 +1,18 @@
 # Changelog
 
+## 4.3.0 (2025-01-10)
+
+* [bitnami/seaweedfs] Make database check on start optional ([#31277](https://github.com/bitnami/charts/pull/31277))
+
+## <small>4.2.1 (2025-01-07)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/seaweedfs] Release 4.2.1 (#31244) ([75fba5d](https://github.com/bitnami/charts/commit/75fba5d61dbf307dabd130d1ff3f621bb85320cc)), closes [#31244](https://github.com/bitnami/charts/issues/31244)
+
 ## 4.2.0 (2024-12-10)
 
-* [bitnami/seaweedfs] Detect non-standard images ([#30967](https://github.com/bitnami/charts/pull/30967))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/seaweedfs] Detect non-standard images (#30967) ([a4d9265](https://github.com/bitnami/charts/commit/a4d9265e61197d5ed5e6c4a0f85ce7460abd4a66)), closes [#30967](https://github.com/bitnami/charts/issues/30967)
 
 ## <small>4.1.2 (2024-12-04)</small>
 

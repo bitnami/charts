@@ -85,7 +85,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/seaweedfs
-  tag: 3.80.0-debian-12-r1
+  tag: 3.81.0-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -3245,7 +3245,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r33
+    tag: 12-debian-12-r34
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -3329,7 +3329,7 @@ mariadb:
   image:
     registry: docker.io
     repository: bitnami/mariadb
-    tag: 11.4.4-debian-12-r1
+    tag: 11.4.4-debian-12-r2
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -3430,7 +3430,7 @@ postgresql:
   image:
     registry: docker.io
     repository: bitnami/postgresql
-    tag: 17.2.0-debian-12-r2
+    tag: 17.2.0-debian-12-r5
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -3538,6 +3538,10 @@ externalDatabase:
   ## NOTE: When it's set, the `externalDatabase.password` parameter is ignored
   ##
   existingSecret: ""
+  ## @param externalDatabase.waitForDatabaseEnabled Whether to check for external database before starting seaweedfs containers
+  ##
+  waitForDatabaseEnabled: true
+  ##
   ## Init external database job
   ##
   initDatabaseJob:

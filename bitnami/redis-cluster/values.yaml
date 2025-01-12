@@ -47,6 +47,9 @@ nameOverride: ""
 ## @param fullnameOverride String to fully override common.names.fullname template
 ##
 fullnameOverride: ""
+## @param namespaceOverride String to fully override common.names.namespace template
+##
+namespaceOverride: ""
 ## @param clusterDomain Kubernetes Cluster Domain
 ##
 clusterDomain: cluster.local
@@ -86,7 +89,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/redis-cluster
-  tag: 7.4.1-debian-12-r3
+  tag: 7.4.2-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -337,6 +340,10 @@ service:
   ## If service.type is LoadBalancer, request a specific static IP address if supported by the cloud provider, otherwise leave blank
   ##
   loadBalancerIP: ""
+  ## @param service.loadBalancerClass Load Balancer class if service type is `LoadBalancer` (optional, cloud specific)
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+  ##
+  loadBalancerClass: ""
   ## @param service.loadBalancerSourceRanges Service Load Balancer sources
   ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
   ## e.g:
@@ -886,6 +893,10 @@ cluster:
       ## @param cluster.externalAccess.service.loadBalancerIP Array of load balancer IPs for each Redis&reg; node. Length must be the same as cluster.nodes
       ##
       loadBalancerIP: []
+      ## @param cluster.externalAccess.service.loadBalancerClass Load Balancer class if service type is `LoadBalancer` (optional, cloud specific)
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+      ##
+      loadBalancerClass: ""
       ## @param cluster.externalAccess.service.loadBalancerSourceRanges Service Load Balancer sources
       ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
       ## e.g:
@@ -1098,6 +1109,7 @@ metrics:
   priorityClassName: ""
   ## @param metrics.service.type Kubernetes Service type (redis metrics)
   ## @param metrics.service.loadBalancerIP Use serviceLoadBalancerIP to request a specific static IP, otherwise leave blank
+  ## @param metrics.service.loadBalancerClass Load Balancer class if service type is `LoadBalancer` (optional, cloud specific)
   ## @param metrics.service.annotations Annotations for the services to monitor.
   ## @param metrics.service.labels Additional labels for the metrics service
   ##
@@ -1116,6 +1128,7 @@ metrics:
     ##
     clusterIP: ""
     loadBalancerIP: ""
+    loadBalancerClass: ""
     annotations: {}
     labels: {}
 ## @section Sysctl Image parameters

@@ -1,8 +1,12 @@
 # Changelog
 
-## 20.6.1 (2024-12-21)
+## 20.6.2 (2025-01-07)
 
-* [bitnami/redis] Release 20.6.1 ([#31138](https://github.com/bitnami/charts/pull/31138))
+* [bitnami/redis] Release 20.6.2 ([#31238](https://github.com/bitnami/charts/pull/31238))
+
+## <small>20.6.1 (2024-12-21)</small>
+
+* [bitnami/redis] Release 20.6.1 (#31138) ([2da450b](https://github.com/bitnami/charts/commit/2da450bd72c598237763760d9128e11a7599ec32)), closes [#31138](https://github.com/bitnami/charts/issues/31138)
 
 ## 20.6.0 (2024-12-16)
 

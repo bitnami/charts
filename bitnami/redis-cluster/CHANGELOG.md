@@ -1,8 +1,21 @@
 # Changelog
 
-## 11.2.1 (2024-12-21)
+## 11.3.0 (2025-01-10)
 
-* [bitnami/redis-cluster] Release 11.2.1 ([#31137](https://github.com/bitnami/charts/pull/31137))
+* [bitnami/redis-cluster] feat: add support for customizing loadBalancerClass on services ([#31288](https://github.com/bitnami/charts/pull/31288))
+
+## <small>11.2.3 (2025-01-08)</small>
+
+* [bitnami/redis-cluster] Release 11.2.3 (#31239) ([f14298a](https://github.com/bitnami/charts/commit/f14298a112c8d6a7eb51ab3f1fd8b114bd27b050)), closes [#31239](https://github.com/bitnami/charts/issues/31239)
+
+## <small>11.2.2 (2025-01-08)</small>
+
+* [bitnami/redis-cluster] Add support for namespaceOverride (#31243) ([d0dbf85](https://github.com/bitnami/charts/commit/d0dbf85e15c388ad23c6a3c58c3553c267a19356)), closes [#31243](https://github.com/bitnami/charts/issues/31243)
+
+## <small>11.2.1 (2024-12-21)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/redis-cluster] Release 11.2.1 (#31137) ([b648635](https://github.com/bitnami/charts/commit/b64863575083fb3358c8bc144a0807102b623290)), closes [#31137](https://github.com/bitnami/charts/issues/31137)
 
 ## 11.2.0 (2024-12-10)
 
