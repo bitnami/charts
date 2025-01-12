@@ -1,13 +1,12 @@
 # Changelog
 
-
-## 25.0.0 (2025-01-02)
+## 25.0.0 (2025-01-12)
 
 * [bitnami/harbor] Upgrade postgres to version 17.2.0 ([#31159](https://github.com/bitnami/charts/pull/31159))
 
-## 24.1.6 (2025-01-07)
+## <small>24.1.6 (2025-01-07)</small>
 
-* [bitnami/harbor] Fix REGISTRY_HTTP_SECRET creation when not using an existing secret ([#31013](https://github.com/bitnami/charts/pull/31013))
+* [bitnami/harbor] Fix REGISTRY_HTTP_SECRET creation when not using an existing secret (#31013) ([a58ae98](https://github.com/bitnami/charts/commit/a58ae9883672f4f8b55733b143a17279fd3c9e81)), closes [#31013](https://github.com/bitnami/charts/issues/31013)
 
 ## <small>24.1.5 (2025-01-02)</small>
 
