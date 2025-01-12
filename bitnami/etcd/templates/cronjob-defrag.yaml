@@ -74,11 +74,11 @@ spec:
                   value: "root:$(ETCD_ROOT_PASSWORD)"
                 {{- end }}
                 {{- if or .Values.auth.client.enableAuthentication (and .Values.auth.client.secureTransport (not .Values.auth.client.useAutoTLS )) }}
-                - name: ETCDCTL_CA_FILE
+                - name: ETCDCTL_CACERT
                   value: "/opt/bitnami/etcd/certs/client/{{ .Values.auth.client.caFilename | default "ca.crt" }}"
-                - name: ETCDCTL_KEY_FILE
+                - name: ETCDCTL_KEY
                   value: "/opt/bitnami/etcd/certs/client/{{ .Values.auth.client.certKeyFilename }}"
-                - name: ETCDCTL_CERT_FILE
+                - name: ETCDCTL_CERT
                   value: "/opt/bitnami/etcd/certs/client/{{ .Values.auth.client.certFilename }}"
                 {{- end }}
               {{- if .Values.defrag.cronjob.command }}
@@ -101,8 +101,13 @@ spec:
                 {{- $replicaCount := (int .Values.replicaCount) }}
                 {{- $releaseNamespace := .Release.Namespace }}
                 {{- range $iEndpoint, $e := until $replicaCount }}
+                {{- if or $.Values.auth.client.enableAuthentication (and $.Values.auth.client.secureTransport (not $.Values.auth.client.useAutoTLS )) }}
+                {{- $endpoint := printf "https://%s-%d.%s.%s.svc.%s:%d" $etcdFullname $iEndpoint $etcdHeadlessServiceName $namespace $clusterDomain $port }}
+                {{- $endpointStr = printf "%s%s" $endpointStr $endpoint }}
+                {{- else }}
                 {{- $endpoint := printf "http://%s-%d.%s.%s.svc.%s:%d" $etcdFullname $iEndpoint $etcdHeadlessServiceName $namespace $clusterDomain $port }}
                 {{- $endpointStr = printf "%s%s" $endpointStr $endpoint }}
+                {{- end }}
                 {{- if ne $iEndpoint (sub $replicaCount 1) }}
                 {{- $endpointStr = printf "%s," $endpointStr }}
                 {{- end }}
