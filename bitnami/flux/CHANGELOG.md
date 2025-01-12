@@ -1,8 +1,13 @@
 # Changelog
 
+## 2.4.1 (2025-01-12)
+
+* [bitnami/flux] Release 2.4.1 ([#31313](https://github.com/bitnami/charts/pull/31313))
+
 ## 2.4.0 (2024-12-10)
 
-* [bitnami/flux] Detect non-standard images ([#30892](https://github.com/bitnami/charts/pull/30892))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/flux] Detect non-standard images (#30892) ([a4f4a9c](https://github.com/bitnami/charts/commit/a4f4a9c2bdc0bd2f5b91a307ddded6c22f9b4f03)), closes [#30892](https://github.com/bitnami/charts/issues/30892)
 
 ## <small>2.3.22 (2024-12-03)</small>
 
