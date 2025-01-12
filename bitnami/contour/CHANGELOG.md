@@ -1,8 +1,13 @@
 # Changelog
 
+## 19.5.1 (2025-01-12)
+
+* [bitnami/contour] Release 19.5.1 ([#31311](https://github.com/bitnami/charts/pull/31311))
+
 ## 19.5.0 (2025-01-07)
 
-* [bitnami/contour] Allow replacing certgen with cert-manager ([#29416](https://github.com/bitnami/charts/pull/29416))
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/contour] Allow replacing certgen with cert-manager (#29416) ([63e4a63](https://github.com/bitnami/charts/commit/63e4a6324eff9a9b92322b3df97f97c5009ac410)), closes [#29416](https://github.com/bitnami/charts/issues/29416)
 
 ## 19.4.0 (2024-12-10)
 
