@@ -1,8 +1,13 @@
 # Changelog
 
+## 3.8.1 (2025-01-12)
+
+* [bitnami/grafana-tempo] Release 3.8.1 ([#31315](https://github.com/bitnami/charts/pull/31315))
+
 ## 3.8.0 (2024-12-10)
 
-* [bitnami/grafana-tempo] Detect non-standard images ([#30885](https://github.com/bitnami/charts/pull/30885))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/grafana-tempo] Detect non-standard images (#30885) ([212c966](https://github.com/bitnami/charts/commit/212c9666abe26c0897ee42e2e3ed376f8e0d2769)), closes [#30885](https://github.com/bitnami/charts/issues/30885)
 
 ## <small>3.7.14 (2024-12-03)</small>
 
