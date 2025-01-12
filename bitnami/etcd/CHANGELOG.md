@@ -1,8 +1,12 @@
 # Changelog
 
-## 10.7.1 (2024-12-11)
+## 10.7.2 (2025-01-12)
 
-* [bitnami/etcd] keep snapshot-pvc ([#30815](https://github.com/bitnami/charts/pull/30815))
+* [bitnami/etcd] Release 10.7.2 ([#31312](https://github.com/bitnami/charts/pull/31312))
+
+## <small>10.7.1 (2024-12-11)</small>
+
+* [bitnami/etcd] keep snapshot-pvc (#30815) ([2a63958](https://github.com/bitnami/charts/commit/2a639583f613184bb1e05346ba25169d872db3cf)), closes [#30815](https://github.com/bitnami/charts/issues/30815)
 
 ## 10.7.0 (2024-12-10)
 
