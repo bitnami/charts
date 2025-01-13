@@ -1,8 +1,12 @@
 # Changelog
 
+## 11.4.0 (2025-01-13)
+
+* [bitnami/redis-cluster] feat: add support for svc bindings ([#31330](https://github.com/bitnami/charts/pull/31330))
+
 ## 11.3.0 (2025-01-10)
 
-* [bitnami/redis-cluster] feat: add support for customizing loadBalancerClass on services ([#31288](https://github.com/bitnami/charts/pull/31288))
+* [bitnami/redis-cluster] feat: add support for customizing loadBalancerClass on services (#31288) ([ca6048a](https://github.com/bitnami/charts/commit/ca6048a15b45d61c0f590f6b98041ac92bac61c0)), closes [#31288](https://github.com/bitnami/charts/issues/31288)
 
 ## <small>11.2.3 (2025-01-08)</small>
 
