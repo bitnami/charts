@@ -1,8 +1,13 @@
 # Changelog
 
+## 7.3.1 (2025-01-13)
+
+* [bitnami/metrics-server] Release 7.3.1 ([#31321](https://github.com/bitnami/charts/pull/31321))
+
 ## 7.3.0 (2024-12-10)
 
-* [bitnami/metrics-server] Detect non-standard images ([#30958](https://github.com/bitnami/charts/pull/30958))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/metrics-server] Detect non-standard images (#30958) ([fcea029](https://github.com/bitnami/charts/commit/fcea0290ba2cae36820967e5123ccd7e267e6fb8)), closes [#30958](https://github.com/bitnami/charts/issues/30958)
 
 ## <small>7.2.17 (2024-12-04)</small>
 
