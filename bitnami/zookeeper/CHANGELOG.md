@@ -1,8 +1,12 @@
 # Changelog
 
-## 13.7.1 (2024-12-13)
+## 13.7.2 (2025-01-13)
 
-* [bitnami/zookeeper] Increase resources to avoid OOMKilled reason executing tests ([#31035](https://github.com/bitnami/charts/pull/31035))
+* [bitnami/zookeeper] Release 13.7.2 ([#31338](https://github.com/bitnami/charts/pull/31338))
+
+## <small>13.7.1 (2024-12-16)</small>
+
+* [bitnami/zookeeper] Increase resources to avoid OOMKilled reason executing tests (#31035) ([a03edc0](https://github.com/bitnami/charts/commit/a03edc0cc5dbae9c9bc5e16be45933373ccdfe44)), closes [#31035](https://github.com/bitnami/charts/issues/31035)
 
 ## 13.7.0 (2024-12-10)
 
