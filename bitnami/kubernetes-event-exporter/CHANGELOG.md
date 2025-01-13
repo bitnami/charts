@@ -1,8 +1,13 @@
 # Changelog
 
+## 3.3.1 (2025-01-13)
+
+* [bitnami/kubernetes-event-exporter] Release 3.3.1 ([#31318](https://github.com/bitnami/charts/pull/31318))
+
 ## 3.3.0 (2024-12-10)
 
-* [bitnami/kubernetes-event-exporter] Detect non-standard images ([#30955](https://github.com/bitnami/charts/pull/30955))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/kubernetes-event-exporter] Detect non-standard images (#30955) ([b33a1a0](https://github.com/bitnami/charts/commit/b33a1a00073522abb8b6d49f5a66526c9a28dfa7)), closes [#30955](https://github.com/bitnami/charts/issues/30955)
 
 ## <small>3.2.16 (2024-12-04)</small>
 
