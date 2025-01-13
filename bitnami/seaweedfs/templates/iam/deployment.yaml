@@ -16,9 +16,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  {{- if not .Values.iam.autoscaling.enabled }}
   replicas: {{ .Values.iam.replicaCount }}
-  {{- end }}
   {{- $podLabels := include "common.tplvalues.merge" (dict "values" (list .Values.iam.podLabels .Values.commonLabels) "context" .) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
