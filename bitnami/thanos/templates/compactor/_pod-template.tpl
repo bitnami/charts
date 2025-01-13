@@ -109,11 +109,12 @@ spec:
         - --log.level={{ .Values.compactor.logLevel }}
         - --log.format={{ .Values.compactor.logFormat }}
         - --http-address=0.0.0.0:{{ .Values.compactor.containerPorts.http }}
-        - --data-dir=/data
+        - --data-dir={{ .Values.compactor.dataDir }}
         - --retention.resolution-raw={{ .Values.compactor.retentionResolutionRaw }}
         - --retention.resolution-5m={{ .Values.compactor.retentionResolution5m }}
         - --retention.resolution-1h={{ .Values.compactor.retentionResolution1h }}
         - --consistency-delay={{ .Values.compactor.consistencyDelay }}
+        - --compact.concurrency={{ .Values.compactor.concurrency }}
         - --objstore.config-file=/conf/objstore.yml
         {{- if (include "thanos.httpConfigEnabled" .) }}
         - --http.config=/conf/http/http-config.yml

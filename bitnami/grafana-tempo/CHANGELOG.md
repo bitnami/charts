@@ -1,8 +1,118 @@
 # Changelog
 
-## 3.5.0 (2024-05-28)
+## 3.8.1 (2025-01-12)
 
-* [bitnami/grafana-tempo] Enable PodDisruptionBudgets ([#26484](https://github.com/bitnami/charts/pull/26484))
+* [bitnami/grafana-tempo] Release 3.8.1 ([#31315](https://github.com/bitnami/charts/pull/31315))
+
+## 3.8.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/grafana-tempo] Detect non-standard images (#30885) ([212c966](https://github.com/bitnami/charts/commit/212c9666abe26c0897ee42e2e3ed376f8e0d2769)), closes [#30885](https://github.com/bitnami/charts/issues/30885)
+
+## <small>3.7.14 (2024-12-03)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 2) (#30662) ([50e0570](https://github.com/bitnami/charts/commit/50e0570f98ab15308af7910b405baa4480e5fe3f)), closes [#30662](https://github.com/bitnami/charts/issues/30662)
+* [bitnami/grafana-tempo] Release 3.7.14 (#30755) ([e824b8d](https://github.com/bitnami/charts/commit/e824b8dc038b776f5bc78dacbe4e74116bdb4447)), closes [#30755](https://github.com/bitnami/charts/issues/30755)
+
+## <small>3.7.13 (2024-11-07)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/grafana-tempo] Release 3.7.13 (#30269) ([7a5479f](https://github.com/bitnami/charts/commit/7a5479f60aa186487878ef21269be6e898ccb45c)), closes [#30269](https://github.com/bitnami/charts/issues/30269)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>3.7.12 (2024-10-16)</small>
+
+* [bitnami/grafana-tempo] Release 3.7.12 (#29920) ([950333d](https://github.com/bitnami/charts/commit/950333dd301796e3361e87a5f644a8e215e17101)), closes [#29920](https://github.com/bitnami/charts/issues/29920)
+
+## <small>3.7.11 (2024-10-02)</small>
+
+* [bitnami/grafana-tempo] Release 3.7.11 (#29696) ([2005158](https://github.com/bitnami/charts/commit/20051588319b3f1ea172bb6792500886924a11cf)), closes [#29696](https://github.com/bitnami/charts/issues/29696)
+
+## <small>3.7.10 (2024-09-11)</small>
+
+* [bitnami/grafana-tempo] Allow rendering resources values (#29344) ([3df45d5](https://github.com/bitnami/charts/commit/3df45d51e716c35042594e76b8f00efc1b0f05f2)), closes [#29344](https://github.com/bitnami/charts/issues/29344)
+
+## <small>3.7.9 (2024-09-06)</small>
+
+* [bitnami/grafana-tempo] Release 3.7.9 (#29238) ([4685bca](https://github.com/bitnami/charts/commit/4685bca5832244969c233e10ea9a350fa7ededb3)), closes [#29238](https://github.com/bitnami/charts/issues/29238)
+
+## <small>3.7.8 (2024-09-04)</small>
+
+* [bitnami/grafana-tempo] Release 3.7.8 (#29185) ([a1b5261](https://github.com/bitnami/charts/commit/a1b526101929e25575e8a59ab47afd39300d5f0f)), closes [#29185](https://github.com/bitnami/charts/issues/29185)
+
+## <small>3.7.7 (2024-08-27)</small>
+
+* [bitnami/grafana-tempo] Release 3.7.7 (#29051) ([de8ab9e](https://github.com/bitnami/charts/commit/de8ab9e8254c63daa97c1ab6695e04facb39585b)), closes [#29051](https://github.com/bitnami/charts/issues/29051)
+
+## <small>3.7.6 (2024-08-23)</small>
+
+* [bitnami/grafana-tempo] Release 3.7.6 (#28997) ([ba1c140](https://github.com/bitnami/charts/commit/ba1c140a25e23c416f4bbbcba6ecaa8ad6ad623e)), closes [#28997](https://github.com/bitnami/charts/issues/28997)
+
+## <small>3.7.5 (2024-08-07)</small>
+
+* [bitnami/grafana-tempo] Release 3.7.5 (#28717) ([4330da1](https://github.com/bitnami/charts/commit/4330da1a87f211fff8b87af418a1b615221fe139)), closes [#28717](https://github.com/bitnami/charts/issues/28717)
+
+## <small>3.7.4 (2024-07-25)</small>
+
+* [bitnami/grafana-tempo] Release 3.7.4 (#28417) ([3ee0253](https://github.com/bitnami/charts/commit/3ee02539fa2d609f7b18237d83d493d67cd7df69)), closes [#28417](https://github.com/bitnami/charts/issues/28417)
+
+## <small>3.7.3 (2024-07-24)</small>
+
+* [bitnami/grafana-tempo] Release 3.7.3 (#28287) ([c1cf555](https://github.com/bitnami/charts/commit/c1cf555eedd69f1841ad2c84ff4bc89e59490e5b)), closes [#28287](https://github.com/bitnami/charts/issues/28287)
+
+## <small>3.7.2 (2024-07-24)</small>
+
+* [bitnami/grafana-tempo] Release 3.7.2 (#28248) ([0d0d073](https://github.com/bitnami/charts/commit/0d0d073eba178e9c1edd61eea87fca84d3deae11)), closes [#28248](https://github.com/bitnami/charts/issues/28248)
+
+## <small>3.7.1 (2024-07-19)</small>
+
+* [bitnami/grafana-tempo] Global StorageClass as default value (#28028) ([bcfcaef](https://github.com/bitnami/charts/commit/bcfcaef6e471b113e491631a5d78d19a8943e4a1)), closes [#28028](https://github.com/bitnami/charts/issues/28028)
+
+## 3.7.0 (2024-07-17)
+
+* [bitnami/grafana-tempo] Change OTLP HTTP port 55681 to 4318 (#27830) ([c14c3f9](https://github.com/bitnami/charts/commit/c14c3f9b47ad12a2ee5491ab66b3de26b27a40c1)), closes [#27830](https://github.com/bitnami/charts/issues/27830)
+
+## <small>3.6.3 (2024-07-08)</small>
+
+* [bitnami/grafana-tempo] Fix: bind correctly containerPorts (grpc and gossip-ring ports) (#27829) ([8eb5299](https://github.com/bitnami/charts/commit/8eb529978d6b43100dd43a7dc2d4a2bfaf0f4ed7)), closes [#27829](https://github.com/bitnami/charts/issues/27829)
+
+## <small>3.6.2 (2024-07-04)</small>
+
+* [bitnami/grafana-tempo] Release 3.6.2 (#27764) ([1194e92](https://github.com/bitnami/charts/commit/1194e9225dc4a85b74eb4cd60d9f32712501fbfe)), closes [#27764](https://github.com/bitnami/charts/issues/27764)
+
+## <small>3.6.1 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/grafana-tempo] Release 3.6.1 (#27657) ([544e8dd](https://github.com/bitnami/charts/commit/544e8ddfa5cd9379ed7177b511bdee0a653b3fea)), closes [#27657](https://github.com/bitnami/charts/issues/27657)
+
+## 3.6.0 (2024-06-24)
+
+* [bitnami/grafana-tempo] Add option to disable tempo-query sidecar (#27447) ([b251a0b](https://github.com/bitnami/charts/commit/b251a0beca7e98f2be4de453dad590fe8dfbac0d)), closes [#27447](https://github.com/bitnami/charts/issues/27447)
+
+## <small>3.5.5 (2024-06-18)</small>
+
+* [bitnami/grafana-tempo] Release 3.5.5 (#27352) ([bda5da9](https://github.com/bitnami/charts/commit/bda5da981a74094a9802d419ec77e87995177250)), closes [#27352](https://github.com/bitnami/charts/issues/27352)
+
+## <small>3.5.4 (2024-06-17)</small>
+
+* [bitnami/grafana-tempo] Release 3.5.4 (#27227) ([2846858](https://github.com/bitnami/charts/commit/28468587f7c7760cf24be63e6b47c1c45b613ed1)), closes [#27227](https://github.com/bitnami/charts/issues/27227)
+
+## <small>3.5.3 (2024-06-14)</small>
+
+* [bitnami/grafana-tempo] Release 3.5.3 (#26958) ([793e0ac](https://github.com/bitnami/charts/commit/793e0acb0bd52f2d19449c7bbc8f9649f7b84ccb)), closes [#26958](https://github.com/bitnami/charts/issues/26958)
+
+## <small>3.5.2 (2024-06-05)</small>
+
+* [bitnami/grafana-tempo] Bump chart version (#26833) ([37e9569](https://github.com/bitnami/charts/commit/37e956938ddd3a8eb999a519146e7ac6220125ee)), closes [#26833](https://github.com/bitnami/charts/issues/26833)
+
+## <small>3.5.1 (2024-06-05)</small>
+
+* [bitnami/grafana-tempo] Bump chart version (#26775) ([39ce37d](https://github.com/bitnami/charts/commit/39ce37d01180666c368ebb05c5c90b7327376af8)), closes [#26775](https://github.com/bitnami/charts/issues/26775)
+
+## 3.5.0 (2024-05-29)
+
+* [bitnami/grafana-tempo] Enable PodDisruptionBudgets (#26484) ([d637d7c](https://github.com/bitnami/charts/commit/d637d7c723a58b7426721a549b8a81625e7b110a)), closes [#26484](https://github.com/bitnami/charts/issues/26484)
 
 ## <small>3.4.1 (2024-05-23)</small>
 

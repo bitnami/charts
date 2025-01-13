@@ -72,6 +72,7 @@ spec:
       {{- if .Values.querier.podSecurityContext.enabled }}
       securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.querier.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
+      enableServiceLinks: {{ .Values.querier.enableServiceLinks }}
       initContainers:
         {{- if .Values.querier.initContainers }}
           {{- include "common.tplvalues.render" (dict "value" .Values.querier.initContainers "context" $) | nindent 8 }}
@@ -95,7 +96,7 @@ spec:
           securityContext: {{- .Values.volumePermissions.containerSecurityContext | toYaml | nindent 12 }}
           {{- end }}
           {{- if .Values.volumePermissions.resources }}
-          resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.volumePermissions.resources "context" $) | nindent 12 }}
           {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
           resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
@@ -153,7 +154,7 @@ spec:
             - containerPort: {{ .Values.loki.containerPorts.grpc }}
               name: grpc
           {{- if .Values.querier.resources }}
-          resources: {{- toYaml .Values.querier.resources | nindent 12 }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.querier.resources "context" $) | nindent 12 }}
           {{- else if ne .Values.querier.resourcesPreset "none" }}
           resources: {{- include "common.resources.preset" (dict "type" .Values.querier.resourcesPreset) | nindent 12 }}
           {{- end }}

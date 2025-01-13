@@ -27,7 +27,7 @@ it('allows submitting a workflow using a template created from a file', () => {
     cy.contains(workflowName);
   });
 
-  cy.visit('/workflows');
+  cy.visit('/workflows/default');
 
   cy.contains('Submit New').click({ force: true });
 

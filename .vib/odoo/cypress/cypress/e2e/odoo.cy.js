@@ -14,6 +14,8 @@ it('allows installing/uninstalling an application and inviting new users', () =>
     cy.get('button[name="button_immediate_install"]').click();
   });
 
+  // Wait some time so the plugin gets fully installed
+  cy.wait(180000);
   cy.reload({timeout: 300000});
 
   // Perform the second login only if the #login selector is visible
@@ -23,8 +25,8 @@ it('allows installing/uninstalling an application and inviting new users', () =>
       }
   })
 
-  cy.get('[title="Home Menu"]').click();
-  cy.contains('Settings').click();
+  cy.get('[title="Home Menu"]').click({ force: true });
+  cy.visit('odoo/settings');
   cy.fixture('users').then((user) => {
     cy.get('.o_user_emails').type(`${random}.${user.newUser.email}`);
     cy.contains('button', 'Invite').click();
@@ -37,12 +39,12 @@ it('allows installing/uninstalling an application and inviting new users', () =>
   cy.contains('a', 'Apps').click();
   cy.get('[role="searchbox"]').type('Invoicing {enter}');
   cy.contains('1-1');
-  cy.contains('[role="article"]', 'Invoicing').within(() => {
+  cy.contains('article', 'Invoicing').within(() => {
     cy.get('button[class*="dropdown-toggle"]').click({ force: true });
   });
   cy.contains('Uninstall').click({ force: true });
   cy.get('[name*="uninstall"]').click();
   cy.reload({timeout: 300000});
-  cy.get('[title="Home Menu"]').click();
+  cy.get('[title="Home Menu"]').click({ force: true });
   cy.contains('a', 'Invoicing').should('not.exist');
 });

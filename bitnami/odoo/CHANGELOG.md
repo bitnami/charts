@@ -1,8 +1,118 @@
 # Changelog
 
-## 26.2.0 (2024-05-23)
+## 28.1.1 (2025-01-13)
 
-* [bitnami/odoo] Enable PodDisruptionBudgets ([#26177](https://github.com/bitnami/charts/pull/26177))
+* [bitnami/odoo] Release 28.1.1 ([#31241](https://github.com/bitnami/charts/pull/31241))
+
+## 28.1.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/odoo] Detect non-standard images (#30910) ([56d9ae2](https://github.com/bitnami/charts/commit/56d9ae2dc9de4a558e8d308b0842af3d1dc6bc8a)), closes [#30910](https://github.com/bitnami/charts/issues/30910)
+
+## <small>28.0.3 (2024-12-06)</small>
+
+* [bitnami/odoo] Release 28.0.3 (#30806) ([82182ac](https://github.com/bitnami/charts/commit/82182ac46fe08461ee98a7415ef12419363afbc4)), closes [#30806](https://github.com/bitnami/charts/issues/30806)
+
+## <small>28.0.2 (2024-12-04)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 3) (#30688) ([10a49f9](https://github.com/bitnami/charts/commit/10a49f9ff2db1d9d11a6edd1c40a9f61803241bc)), closes [#30688](https://github.com/bitnami/charts/issues/30688)
+* [bitnami/odoo] Release 28.0.2 (#30790) ([17816f2](https://github.com/bitnami/charts/commit/17816f2926c63da1fd6bbf33f75ad3ac51f6a6ba)), closes [#30790](https://github.com/bitnami/charts/issues/30790)
+
+## <small>28.0.1 (2024-11-05)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/odoo] Release 28.0.1 (#30221) ([cf059d0](https://github.com/bitnami/charts/commit/cf059d077104d47020af6aa9c1ffd4c25d731001)), closes [#30221](https://github.com/bitnami/charts/issues/30221)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## 28.0.0 (2024-10-08)
+
+* [bitnami/odoo] Release 28.0.0 (#29820) ([7bb7b03](https://github.com/bitnami/charts/commit/7bb7b035d34260cbd4e20778391f6f8751d6a2fa)), closes [#29820](https://github.com/bitnami/charts/issues/29820)
+
+## <small>27.0.1 (2024-10-05)</small>
+
+* [bitnami/odoo] Release 27.0.1 (#29781) ([5983725](https://github.com/bitnami/charts/commit/59837258ad474817d39f0dd747bac57556fce055)), closes [#29781](https://github.com/bitnami/charts/issues/29781)
+
+## 27.0.0 (2024-10-03)
+
+* [bitnami/odoo] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x (#29742) ([a33fef2](https://github.com/bitnami/charts/commit/a33fef227991a5e93259a4ec024b2b020084c718)), closes [#29742](https://github.com/bitnami/charts/issues/29742)
+
+## <small>26.2.18 (2024-09-19)</small>
+
+* [bitnami/odoo] Release 26.2.18 (#29528) ([90521a3](https://github.com/bitnami/charts/commit/90521a3000c988d5e6baa470d4b6bb7819cdf878)), closes [#29528](https://github.com/bitnami/charts/issues/29528)
+
+## <small>26.2.17 (2024-09-05)</small>
+
+* [bitnami/odoo] Release 26.2.17 (#29208) ([3971e30](https://github.com/bitnami/charts/commit/3971e306284daef1eb302b1ef42e82ed6a5d05fe)), closes [#29208](https://github.com/bitnami/charts/issues/29208)
+
+## <small>26.2.16 (2024-08-26)</small>
+
+* [bitnami/odoo] Release 26.2.16 (#29004) ([9811aeb](https://github.com/bitnami/charts/commit/9811aebf921b9c73704d3715f6e96daf72b970c9)), closes [#29004](https://github.com/bitnami/charts/issues/29004)
+
+## <small>26.2.15 (2024-08-05)</small>
+
+* [bitnami/odoo] Release 26.2.15 (#28653) ([40d3045](https://github.com/bitnami/charts/commit/40d30457f714873969ac744c5e87be42402ca7b5)), closes [#28653](https://github.com/bitnami/charts/issues/28653)
+
+## <small>26.2.14 (2024-07-30)</small>
+
+* [bitnami/odoo] Release 26.2.14 (#28582) ([b19bef0](https://github.com/bitnami/charts/commit/b19bef00c45b2549f951edb9c0fb34fdc0fb635a)), closes [#28582](https://github.com/bitnami/charts/issues/28582)
+
+## <small>26.2.13 (2024-07-25)</small>
+
+* [bitnami/odoo] Release 26.2.13 (#28464) ([c7ddcbd](https://github.com/bitnami/charts/commit/c7ddcbd968233c8d812b09cea0ddf876a9816f4f)), closes [#28464](https://github.com/bitnami/charts/issues/28464)
+
+## <small>26.2.12 (2024-07-24)</small>
+
+* [bitnami/odoo] Release 26.2.12 (#28351) ([3f7dc35](https://github.com/bitnami/charts/commit/3f7dc35cb6d60e2a9e45e576c520d7f27e07fb5e)), closes [#28351](https://github.com/bitnami/charts/issues/28351)
+
+## <small>26.2.11 (2024-07-18)</small>
+
+* [bitnami/odoo] Global StorageClass as default value (#28074) ([4e782d5](https://github.com/bitnami/charts/commit/4e782d5a4cdedb9984a10175ff8144711d09c452)), closes [#28074](https://github.com/bitnami/charts/issues/28074)
+
+## <small>26.2.10 (2024-07-05)</small>
+
+* [bitnami/odoo] Release 26.2.10 (#27808) ([af8d109](https://github.com/bitnami/charts/commit/af8d10963794ed10c9237f678f5bd915b0eaaa8d)), closes [#27808](https://github.com/bitnami/charts/issues/27808)
+
+## <small>26.2.9 (2024-07-02)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/odoo] Release 26.2.9 (#27631) ([ac3351a](https://github.com/bitnami/charts/commit/ac3351a082d328c2ea62db64e242840adfa8c61a)), closes [#27631](https://github.com/bitnami/charts/issues/27631)
+
+## <small>26.2.8 (2024-06-18)</small>
+
+* [bitnami/odoo] Release 26.2.8 (#27393) ([c674b17](https://github.com/bitnami/charts/commit/c674b17119a3474feff01f740d42fab9e8aa9566)), closes [#27393](https://github.com/bitnami/charts/issues/27393)
+
+## <small>26.2.7 (2024-06-17)</small>
+
+* [bitnami/odoo] Release 26.2.7 (#27257) ([066357d](https://github.com/bitnami/charts/commit/066357dfb61595d90fcba9b202375d15fa37d35b)), closes [#27257](https://github.com/bitnami/charts/issues/27257)
+
+## <small>26.2.6 (2024-06-14)</small>
+
+* [bitnami/odoo] Release 26.2.6 (#27180) ([066b94d](https://github.com/bitnami/charts/commit/066b94dbf8f3b03a6fe6173c905fdc7fb30e8a53)), closes [#27180](https://github.com/bitnami/charts/issues/27180)
+
+## <small>26.2.5 (2024-06-14)</small>
+
+* [bitnami/odoo] Release 26.2.5 (#27166) ([5cdeae1](https://github.com/bitnami/charts/commit/5cdeae10981e39e5318749dfe4cd5de405b0a632)), closes [#27166](https://github.com/bitnami/charts/issues/27166)
+
+## <small>26.2.4 (2024-06-06)</small>
+
+* [bitnami/odoo] Release 26.2.4 (#27000) ([c4edaee](https://github.com/bitnami/charts/commit/c4edaee4c2f47ebd24b6cea00a955818ad20de3f)), closes [#27000](https://github.com/bitnami/charts/issues/27000)
+
+## <small>26.2.3 (2024-06-05)</small>
+
+* [bitnami/odoo] Bump chart version (#26851) ([e92d9d2](https://github.com/bitnami/charts/commit/e92d9d271efda7175001253aa208830e13d57548)), closes [#26851](https://github.com/bitnami/charts/issues/26851)
+
+## <small>26.2.2 (2024-06-05)</small>
+
+* [bitnami/odoo] Release 26.2.2 (#26816) ([f234976](https://github.com/bitnami/charts/commit/f234976acec4e6a8d3d8d9998984c0cfb71bf420)), closes [#26816](https://github.com/bitnami/charts/issues/26816)
+
+## <small>26.2.1 (2024-06-05)</small>
+
+* [bitnami/odoo] Bump chart version (#26793) ([fe7a0ea](https://github.com/bitnami/charts/commit/fe7a0ea6e62403f1ad9893158ad74b71e59f3c1f)), closes [#26793](https://github.com/bitnami/charts/issues/26793)
+
+## 26.2.0 (2024-05-24)
+
+* [bitnami/odoo] Enable PodDisruptionBudgets (#26177) ([56c8c6a](https://github.com/bitnami/charts/commit/56c8c6a2c992b3cefe1d7630237dd49e295df801)), closes [#26177](https://github.com/bitnami/charts/issues/26177)
 
 ## 26.1.0 (2024-05-21)
 

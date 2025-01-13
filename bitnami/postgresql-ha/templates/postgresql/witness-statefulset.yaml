@@ -75,9 +75,7 @@ spec:
       {{- if .Values.witness.podSecurityContext.enabled }}
       securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.witness.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
-      {{- if .Values.serviceAccount.create }}
       serviceAccountName: {{ include "postgresql-ha.serviceAccountName" . }}
-      {{- end }}
       hostNetwork: {{ .Values.witness.hostNetwork }}
       hostIPC: {{ .Values.witness.hostIPC }}
       initContainers:
@@ -97,9 +95,9 @@ spec:
               {{- end }}
               chmod 600 {{ template "postgresql-ha.postgresql.tlsCertKey" . }}
           {{- if eq ( toString ( .Values.volumePermissions.podSecurityContext.runAsUser )) "auto" }}
-          securityContext: {{- omit .Values.volumePermissions.podSecurityContext "runAsUser" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" (omit .Values.volumePermissions.podSecurityContext "runAsUser") "context" $) | nindent 12 }}
           {{- else }}
-          securityContext: {{- .Values.volumePermissions.podSecurityContext | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.volumePermissions.podSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: raw-certificates
@@ -181,7 +179,7 @@ spec:
               value: {{ .Values.persistence.mountPath | quote }}
             - name: PGDATA
               value: {{ printf "%s/%s" .Values.persistence.mountPath "data" | quote }}
-            {{- if and (or (not (include "postgresql-ha.postgresqlCreateSecret" .)) (include "postgresql-ha.postgresqlPasswordProvided" .)) (not (eq (include "postgresql-ha.postgresqlUsername" .) "postgres")) }}
+            {{- if and (not (eq (include "postgresql-ha.postgresqlUsername" .) "postgres")) (or (not (include "postgresql-ha.postgresqlCreateSecret" .)) (include "postgresql-ha.postgresqlPasswordProvided" .)) }}
             {{- if .Values.witness.usePasswordFile }}
             - name: POSTGRES_POSTGRES_PASSWORD_FILE
               value: "/opt/bitnami/postgresql/secrets/postgres-password"
@@ -617,6 +615,9 @@ spec:
         accessModes:
         {{- range .Values.persistence.accessModes }}
           - {{ . | quote }}
+        {{- end }}
+        {{- if .Values.persistence.storageClass }}
+        storageClassName: {{ .Values.persistence.storageClass }}
         {{- end }}
         resources:
           requests:

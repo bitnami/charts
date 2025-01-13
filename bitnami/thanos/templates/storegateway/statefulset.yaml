@@ -293,7 +293,9 @@ spec:
   {{- end }}
   {{- end }}
   volumeClaimTemplates:
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         name: data
         {{- if .Values.storegateway.persistence.labels }}
         labels: {{- include "common.tplvalues.render" ( dict "value" .Values.storegateway.persistence.labels "context" $) | nindent 10 }}

@@ -1,8 +1,81 @@
 # Changelog
 
-## 1.3.1 (2024-06-04)
+## 1.4.1 (2024-12-26)
 
-* [bitnami/flink] Bump chart version ([#26630](https://github.com/bitnami/charts/pull/26630))
+* [bitnami/flink] Release 1.4.1 ([#31170](https://github.com/bitnami/charts/pull/31170))
+
+## 1.4.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/flink] Detect non-standard images (#30893) ([9bbfbf7](https://github.com/bitnami/charts/commit/9bbfbf7e1b99916edcb4a4fbe2feae45c46742d1)), closes [#30893](https://github.com/bitnami/charts/issues/30893)
+
+## <small>1.3.16 (2024-11-16)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/flink] Release 1.3.16 (#30486) ([1794591](https://github.com/bitnami/charts/commit/1794591109bfa996ede6717411d1737b277b63dc)), closes [#30486](https://github.com/bitnami/charts/issues/30486)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>1.3.15 (2024-10-07)</small>
+
+* [bitnami/flink] Release 1.3.15 (#29803) ([6926d7e](https://github.com/bitnami/charts/commit/6926d7e3cb8376a8c0a71643cb9b249922ef0901)), closes [#29803](https://github.com/bitnami/charts/issues/29803)
+
+## <small>1.3.14 (2024-09-02)</small>
+
+* [bitnami/flink] Release 1.3.14 (#29155) ([33446f2](https://github.com/bitnami/charts/commit/33446f233c518c6df94cdf1ed63164c1a3dba2ff)), closes [#29155](https://github.com/bitnami/charts/issues/29155)
+
+## <small>1.3.13 (2024-09-02)</small>
+
+* [bitnami/flink] Release 1.3.13 (#29152) ([2424812](https://github.com/bitnami/charts/commit/242481260cb5f7467a46ee2f4ed44b65446ed76b)), closes [#29152](https://github.com/bitnami/charts/issues/29152)
+
+## <small>1.3.12 (2024-08-01)</small>
+
+* [bitnami/flink] Release 1.3.12 (#28625) ([18810c2](https://github.com/bitnami/charts/commit/18810c2e600761d58950c97e509191b7630a19bc)), closes [#28625](https://github.com/bitnami/charts/issues/28625)
+
+## <small>1.3.11 (2024-07-25)</small>
+
+* [bitnami/flink] Release 1.3.11 (#28435) ([77ddf10](https://github.com/bitnami/charts/commit/77ddf10ac9a4c6b5ba9c20284158d257858557f6)), closes [#28435](https://github.com/bitnami/charts/issues/28435)
+
+## <small>1.3.10 (2024-07-24)</small>
+
+* [bitnami/flink] Release 1.3.10 (#28302) ([725a84c](https://github.com/bitnami/charts/commit/725a84c9e47c4531f337b41289aaba75f076794a)), closes [#28302](https://github.com/bitnami/charts/issues/28302)
+
+## <small>1.3.9 (2024-07-23)</small>
+
+* [bitnami/flink] Release 1.3.9 (#28242) ([49846ce](https://github.com/bitnami/charts/commit/49846ce3fb792db7a24ac5126481f67ec5d795ad)), closes [#28242](https://github.com/bitnami/charts/issues/28242)
+
+## <small>1.3.8 (2024-07-16)</small>
+
+* [bitnami/flink] Global StorageClass as default value (#28018) ([39fa01e](https://github.com/bitnami/charts/commit/39fa01e344c574edcea71c3f0d9f38f571fc7fdb)), closes [#28018](https://github.com/bitnami/charts/issues/28018)
+
+## <small>1.3.7 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/flink] Release 1.3.7 (#27683) ([48d2c43](https://github.com/bitnami/charts/commit/48d2c436a7367ac68abac6fd09114b49541371b3)), closes [#27683](https://github.com/bitnami/charts/issues/27683)
+
+## <small>1.3.6 (2024-06-18)</small>
+
+* [bitnami/flink] Release 1.3.6 (#27343) ([b6743d3](https://github.com/bitnami/charts/commit/b6743d3b1e17cdeb12e3a4f6ee25ef8c564318fa)), closes [#27343](https://github.com/bitnami/charts/issues/27343)
+
+## <small>1.3.5 (2024-06-17)</small>
+
+* [bitnami/flink] Release 1.3.5 (#27217) ([72a8672](https://github.com/bitnami/charts/commit/72a867263269a9cec5d61411b1c294d3a75a1c10)), closes [#27217](https://github.com/bitnami/charts/issues/27217)
+
+## <small>1.3.4 (2024-06-14)</small>
+
+* [bitnami/flink] Release 1.3.4 (#27182) ([19a8dae](https://github.com/bitnami/charts/commit/19a8daeacb51e6d60051d55e81ab20afc19b11e3)), closes [#27182](https://github.com/bitnami/charts/issues/27182)
+
+## <small>1.3.3 (2024-06-06)</small>
+
+* [bitnami/flink] Release 1.3.3 (#26950) ([af5fc61](https://github.com/bitnami/charts/commit/af5fc61847eac8aef7c9a59ea99de77614daf3b9)), closes [#26950](https://github.com/bitnami/charts/issues/26950)
+
+## <small>1.3.2 (2024-06-06)</small>
+
+* [bitnami/flink] Release 1.3.2 (#26898) ([63273f2](https://github.com/bitnami/charts/commit/63273f25a3329be9f570ba31327dc7d6f3bc29b6)), closes [#26898](https://github.com/bitnami/charts/issues/26898)
+
+## <small>1.3.1 (2024-06-04)</small>
+
+* [bitnami/flink] Bump chart version (#26630) ([ae25bb7](https://github.com/bitnami/charts/commit/ae25bb7fad5896ff76afbf00f94c89a1fdcbefed)), closes [#26630](https://github.com/bitnami/charts/issues/26630)
 
 ## 1.3.0 (2024-06-03)
 

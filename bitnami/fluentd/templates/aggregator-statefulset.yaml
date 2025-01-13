@@ -74,13 +74,14 @@ spec:
       initContainers:
         {{- if .Values.aggregator.extraGems }}
         - name: install-extra-gems
-          image: {{ include "fluentd.aggregator.image" . }}
+          image: {{ include "fluentd.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           command:
             - sh
             - -c
           args:
             - |-
+              set -e
               cd /tmp
 
               # install extra gems
@@ -120,7 +121,7 @@ spec:
         {{- end }}
         # Source: https://github.com/fluent/fluentd-kubernetes-daemonset/issues/1393
         - name: tmp-dir-permissions
-          image: {{ include "fluentd.aggregator.image" . }}
+          image: {{ include "fluentd.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           command:
             - sh
@@ -147,7 +148,7 @@ spec:
       terminationGracePeriodSeconds: {{ .Values.aggregator.terminationGracePeriodSeconds }}
       containers:
         - name: fluentd
-          image: {{ include "fluentd.aggregator.image" . }}
+          image: {{ include "fluentd.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.aggregator.containerSecurityContext.enabled }}
           securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.aggregator.containerSecurityContext "context" $) | nindent 12 }}

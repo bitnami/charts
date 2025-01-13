@@ -8,14 +8,14 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: {{ include "common.names.fullname" $ }}-cluster-{{ .name }}
-  namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  namespace: {{ include "common.names.namespace" $ | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $.Values.commonLabels "context" $ ) | nindent 4 }}
     # Mandatory label
     # Ref: https://argoproj.github.io/argo-cd/operator-manual/declarative-setup/#atomic-configuration
     app.kubernetes.io/part-of: argocd
     argocd.argoproj.io/secret-type: cluster
-  {{- if .Values.commonAnnotations }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- if $.Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $.Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 type: Opaque
 stringData:

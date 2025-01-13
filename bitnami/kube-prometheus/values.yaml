@@ -9,7 +9,7 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
 ##
 global:
   imageRegistry: ""
@@ -18,7 +18,12 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass: ""
+  defaultStorageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
   ## Compatibility adaptations for Kubernetes platforms
   ##
   compatibility:
@@ -73,10 +78,9 @@ operator:
   image:
     registry: docker.io
     repository: bitnami/prometheus-operator
-    tag: 0.74.0-debian-12-r0
+    tag: 0.79.2-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -609,8 +613,8 @@ operator:
   ## @param operator.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
 
 ## @section Prometheus Parameters
@@ -634,7 +638,7 @@ prometheus:
   image:
     registry: docker.io
     repository: bitnami/prometheus
-    tag: 2.52.0-debian-12-r2
+    tag: 2.55.1-debian-12-r4
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -711,8 +715,8 @@ prometheus:
   ## @param prometheus.pdb.maxUnavailable Maximum number / percentage of pods that may be made unavailable
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
   ## Network Policies
   ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
@@ -1038,6 +1042,10 @@ prometheus:
   ## @param prometheus.enforcedSampleLimit Override sampleLimits set by ServiceMonitor, PodMonitor or Probe objects
   ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#monitoring.coreos.com/v1.PrometheusSpec
   enforcedSampleLimit: ""
+  ## @param prometheus.keepDroppedTargets Limit per scrape config on the number of targets dropped by relabeling that will be kept in memory. 0 means no limit.
+  ## Requires Prometheus v2.47.0 and newer
+  ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config
+  keepDroppedTargets: ""
   ## @param prometheus.listenLocal ListenLocal makes the Prometheus server listen on loopback
   ##
   listenLocal: false
@@ -1176,6 +1184,10 @@ prometheus:
   ## See https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#namespaceselector for usage
   ##
   scrapeConfigNamespaceSelector: {}
+  ## @param prometheus.scrapeClasses List of scrape classes to expose to scraping objects
+  ## See https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#scrapeclass for usage
+  ##
+  scrapeClasses: []
   ## @param prometheus.retention Metrics retention days
   ##
   retention: 10d
@@ -1347,14 +1359,6 @@ prometheus:
       key: ""
     internal:
       jobList: []
-  ## @param prometheus.additionalScrapeConfigsExternal.enabled Deprecated: Enable additional scrape configs that are managed externally to this chart
-  ## @param prometheus.additionalScrapeConfigsExternal.name Deprecated: Name of the secret that Prometheus should use for the additional scrape configuration
-  ## @param prometheus.additionalScrapeConfigsExternal.key Deprecated: Name of the key inside the secret to be used for the additional scrape configuration
-  ##
-  additionalScrapeConfigsExternal:
-    enabled: false
-    name: ""
-    key: ""
   ## Enable additional Prometheus alert relabel configs that are managed externally to this chart
   ## Note that the prometheus will fail to provision if the correct secret does not exist.
   ## @param prometheus.additionalAlertRelabelConfigsExternal.enabled Enable additional Prometheus alert relabel configs that are managed externally to this chart
@@ -1393,9 +1397,8 @@ prometheus:
     image:
       registry: docker.io
       repository: bitnami/thanos
-      tag: 0.35.0-debian-12-r4
+      tag: 0.37.2-debian-12-r0
       digest: ""
-      ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
       ##
       pullPolicy: IfNotPresent
@@ -1458,6 +1461,22 @@ prometheus:
     objectStorageConfig:
       secretName: ""
       secretKey: thanos.yaml
+    ## @param prometheus.thanos.extraEnvVars Array with extra environment variables to add to the thanos sidecar container
+    ## For example:
+    ## extraEnvVars:
+    ##  - name: REQUEST_LOGGING_CONFIG
+    ##    valueFrom:
+    ##      secretKeyRef:
+    ##        name: thanos-request-logging-config
+    ##        key: request-logging-config.yml
+    ##
+    extraEnvVars: []
+    ## @param prometheus.thanos.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for the thanos sidecar container
+    ##
+    extraEnvVarsCM: ""
+    ## @param prometheus.thanos.extraEnvVarsSecret Name of existing Secret containing extra env vars for the thanos sidecar container
+    ##
+    extraEnvVarsSecret: ""
     ## ref: https://github.com/thanos-io/thanos/blob/main/docs/components/sidecar.md
     ## @param prometheus.thanos.extraVolumeMounts Additional volumeMounts from `prometheus.volumes` for thanos sidecar container
     ## extraVolumeMounts:
@@ -1807,7 +1826,7 @@ alertmanager:
   image:
     registry: docker.io
     repository: bitnami/alertmanager
-    tag: 0.27.0-debian-12-r10
+    tag: 0.27.0-debian-12-r28
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1882,8 +1901,8 @@ alertmanager:
   ## @param alertmanager.pdb.maxUnavailable Maximum number / percentage of pods that may be made unavailable
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
   ## Alertmanager Service
   ##
@@ -2496,7 +2515,7 @@ blackboxExporter:
   image:
     registry: docker.io
     repository: bitnami/blackbox-exporter
-    tag: 0.25.0-debian-12-r5
+    tag: 0.25.0-debian-12-r21
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -2928,8 +2947,8 @@ blackboxExporter:
   ## @param blackboxExporter.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
 ## Component scraping the kube-apiserver
 ##

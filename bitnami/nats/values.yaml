@@ -8,6 +8,7 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
 ##
 global:
   imageRegistry: ""
@@ -16,6 +17,12 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  defaultStorageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
   ## Compatibility adaptations for Kubernetes platforms
   ##
   compatibility:
@@ -74,10 +81,9 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/nats
-  tag: 2.10.16-debian-12-r0
+  tag: 2.10.24-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -233,6 +239,7 @@ configuration: |-
   write_deadline: {{ .Values.writeDeadline | quote }}
   {{- end }}
 
+  {{- if gt (int .Values.replicaCount) 1 }}
   # Clustering definition
   cluster {
     name: {{ .Values.cluster.name | quote }}
@@ -260,6 +267,7 @@ configuration: |-
     connect_retries: {{ .Values.cluster.connectRetries }}
     {{- end }}
   }
+  {{- end }}
 
   {{- if .Values.jetstream.enabled }}
   # JetStream configuration
@@ -318,6 +326,9 @@ updateStrategy:
   ## @param updateStrategy.type StrategyType. Can be set to RollingUpdate or OnDelete
   ##
   type: RollingUpdate
+## @param podManagementPolicy StatefulSet pod management policy
+##
+podManagementPolicy: OrderedReady
 ## @param containerPorts.client NATS client container port
 ## @param containerPorts.cluster NATS cluster container port
 ## @param containerPorts.monitoring NATS monitoring container port
@@ -355,7 +366,7 @@ podSecurityContext:
 ##
 containerSecurityContext:
   enabled: true
-  seLinuxOptions: null
+  seLinuxOptions: {}
   runAsUser: 1001
   runAsGroup: 1001
   runAsNonRoot: true
@@ -615,6 +626,9 @@ service:
     ## @param service.headless.annotations Annotations for the headless service.
     ##
     annotations: {}
+    ## @param service.headless.publishNotReadyAddresses Publishes the addresses of not ready Pods
+    ##
+    publishNotReadyAddresses: false
 ## NATS ingress parameters
 ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
 ##
@@ -775,6 +789,32 @@ metrics:
   ## @param metrics.enabled Enable Prometheus metrics via exporter side-car
   ##
   enabled: false
+  ## metrics exporter containers' liveness probe.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param metrics.livenessProbe.enabled Enable livenessProbe
+  ## @param metrics.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param metrics.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 15
+    timeoutSeconds: 5
+  ## metrics exporter containers' readiness probe
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param metrics.readinessProbe.enabled Enable readinessProbe
+  ## @param metrics.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param metrics.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    timeoutSeconds: 1
+  ## @param metrics.customLivenessProbe Override default liveness probe
+  ##
+  customLivenessProbe: { }
+  ## @param metrics.customReadinessProbe Override default readiness probe
+  ##
+  customReadinessProbe: { }
   ## @param metrics.image.registry [default: REGISTRY_NAME] Prometheus metrics exporter image registry
   ## @param metrics.image.repository [default: REPOSITORY_NAME/nats-exporter] Prometheus metrics exporter image repository
   ## @skip metrics.image.tag Prometheus metrics exporter image tag (immutable tags are recommended)
@@ -785,7 +825,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/nats-exporter
-    tag: 0.15.0-debian-12-r4
+    tag: 0.16.0-debian-12-r0
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -912,6 +952,19 @@ persistence:
   ##     app: my-app
   ##
   selector: {}
+## Persistent Volume Claim Retention Policy
+## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#persistentvolumeclaim-retention
+##
+persistentVolumeClaimRetentionPolicy:
+  ## @param persistentVolumeClaimRetentionPolicy.enabled Enable Persistent volume retention policy for NATS statefulset
+  ##
+  enabled: false
+  ## @param persistentVolumeClaimRetentionPolicy.whenScaled Volume retention behavior when the replica count of the StatefulSet is reduced
+  ##
+  whenScaled: Retain
+  ## @param persistentVolumeClaimRetentionPolicy.whenDeleted Volume retention behavior that applies when the StatefulSet is deleted
+  ##
+  whenDeleted: Retain
 ## @section Other parameters
 
 ## NATS Pod Disruption Budget configuration
@@ -923,7 +976,7 @@ pdb:
   create: true
   ## @param pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
   ##
-  minAvailable: 1
+  minAvailable: ""
   ## @param pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
   ##
   maxUnavailable: ""

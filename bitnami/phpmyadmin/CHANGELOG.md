@@ -1,8 +1,93 @@
 # Changelog
 
-## 16.2.1 (2024-06-04)
+## 18.1.0 (2024-12-10)
 
-* [bitnami/phpmyadmin] Fix typo in deployment.yaml template ([#26616](https://github.com/bitnami/charts/pull/26616))
+* [bitnami/phpmyadmin] Detect non-standard images ([#30963](https://github.com/bitnami/charts/pull/30963))
+
+## <small>18.0.1 (2024-12-08)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 5) (#30674) ([ed2a546](https://github.com/bitnami/charts/commit/ed2a54617faf763169e6b01a89100b9db32e1000)), closes [#30674](https://github.com/bitnami/charts/issues/30674)
+* [bitnami/*] docs: :memo: Unify "Securing Traffic using TLS" section (#30707) ([b572333](https://github.com/bitnami/charts/commit/b57233336e4fe9af928ecb4f2a5f334011efb1bc)), closes [#30707](https://github.com/bitnami/charts/issues/30707)
+* [bitnami/phpmyadmin] Release 18.0.1 (#30828) ([d071989](https://github.com/bitnami/charts/commit/d071989c5ddebffdc20c17f58a45c29a8f1649c2)), closes [#30828](https://github.com/bitnami/charts/issues/30828)
+
+## 18.0.0 (2024-11-12)
+
+* [bitnami/phpmyadmin] chore!: :arrow_up: :boom: Bump MariaDB subchart to 20 (#30356) ([51d5755](https://github.com/bitnami/charts/commit/51d5755e62be68f8937c8b03c1efcee03272e785)), closes [#30356](https://github.com/bitnami/charts/issues/30356)
+
+## <small>17.0.9 (2024-11-08)</small>
+
+* [bitnami/phpmyadmin] Unify seLinuxOptions default value (#30333) ([55cdce0](https://github.com/bitnami/charts/commit/55cdce05b2217870b5db25ff18dc755dad1a0f95)), closes [#30333](https://github.com/bitnami/charts/issues/30333)
+
+## <small>17.0.8 (2024-10-29)</small>
+
+* [bitnami/phpmyadmin] Release 17.0.8 (#30121) ([b558073](https://github.com/bitnami/charts/commit/b558073849edc86755907155ab62765eb7102923)), closes [#30121](https://github.com/bitnami/charts/issues/30121)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>17.0.7 (2024-09-19)</small>
+
+* [bitnami/phpmyadmin] Release 17.0.7 (#29523) ([d25c970](https://github.com/bitnami/charts/commit/d25c97028c3adab3380ad512b0cb51ac392133d2)), closes [#29523](https://github.com/bitnami/charts/issues/29523)
+
+## <small>17.0.6 (2024-08-25)</small>
+
+* [bitnami/phpmyadmin] Release 17.0.6 (#29017) ([3cf1fc6](https://github.com/bitnami/charts/commit/3cf1fc67b905a3ffd7466e84895d06c8138da6da)), closes [#29017](https://github.com/bitnami/charts/issues/29017)
+
+## <small>17.0.5 (2024-08-09)</small>
+
+* [bitnami/phpmyadmin] Release 17.0.5 (#28803) ([903ad90](https://github.com/bitnami/charts/commit/903ad90e09a4efeea4ffe954a57c6ef71b2ca16a)), closes [#28803](https://github.com/bitnami/charts/issues/28803)
+
+## <small>17.0.4 (2024-08-01)</small>
+
+* [bitnami/phpmyadmin] Release 17.0.4 (#28631) ([129edbe](https://github.com/bitnami/charts/commit/129edbed24efdf6af9a779c348aeb3285fa14e26)), closes [#28631](https://github.com/bitnami/charts/issues/28631)
+
+## <small>17.0.3 (2024-07-25)</small>
+
+* [bitnami/phpmyadmin] Release 17.0.3 (#28460) ([5ce1599](https://github.com/bitnami/charts/commit/5ce1599aef1e96116dac08cec7940765226a279c)), closes [#28460](https://github.com/bitnami/charts/issues/28460)
+
+## <small>17.0.2 (2024-07-24)</small>
+
+* [bitnami/phpmyadmin] Release 17.0.2 (#28381) ([ca46583](https://github.com/bitnami/charts/commit/ca4658383585ecf886dc451ea630df4552e41d9f)), closes [#28381](https://github.com/bitnami/charts/issues/28381)
+
+## <small>17.0.1 (2024-07-16)</small>
+
+* [bitnami/phpmyadmin] Global StorageClass as default value (#28080) ([a050713](https://github.com/bitnami/charts/commit/a0507136851f7881ee451f999a9687c398d0c1ba)), closes [#28080](https://github.com/bitnami/charts/issues/28080)
+
+## 17.0.0 (2024-07-12)
+
+* [bitnami/phpmyadmin] chore!: :arrow_up: :boom: Update mariadb to 11.4 (#27934) ([09715e6](https://github.com/bitnami/charts/commit/09715e61c495b3b2cb07f33aa2940b2c1ce17284)), closes [#27934](https://github.com/bitnami/charts/issues/27934)
+
+## <small>16.2.8 (2024-07-08)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/phpmyadmin] Release 16.2.8 (#27730) ([680549f](https://github.com/bitnami/charts/commit/680549f455dc5b6e55bd5202603b1a79d96f73d6)), closes [#27730](https://github.com/bitnami/charts/issues/27730)
+
+## <small>16.2.7 (2024-06-18)</small>
+
+* [bitnami/phpmyadmin] Release 16.2.7 (#27398) ([264eb0b](https://github.com/bitnami/charts/commit/264eb0b227c1463e7cc6582a3cbe3e2f24e658d4)), closes [#27398](https://github.com/bitnami/charts/issues/27398)
+
+## <small>16.2.6 (2024-06-17)</small>
+
+* [bitnami/phpmyadmin] Release 16.2.6 (#27262) ([f0067a0](https://github.com/bitnami/charts/commit/f0067a0867f5268d7aeea13e99bcbcc550919590)), closes [#27262](https://github.com/bitnami/charts/issues/27262)
+
+## <small>16.2.5 (2024-06-06)</small>
+
+* [bitnami/phpmyadmin] Release 16.2.5 (#27002) ([8a94db2](https://github.com/bitnami/charts/commit/8a94db2af8b13c55f9d0218f6802655d9b2ee339)), closes [#27002](https://github.com/bitnami/charts/issues/27002)
+
+## <small>16.2.4 (2024-06-06)</small>
+
+* [bitnami/phpmyadmin] Release 16.2.4 (#26912) ([a5e837f](https://github.com/bitnami/charts/commit/a5e837f1c2e0ac67bb6ed951f8f27854bf4a1d09)), closes [#26912](https://github.com/bitnami/charts/issues/26912)
+
+## <small>16.2.3 (2024-06-05)</small>
+
+* [bitnami/phpmyadmin] Bump chart version (#26855) ([5d3305a](https://github.com/bitnami/charts/commit/5d3305aed3fa78c01e333ab66b8bca31dd82345d)), closes [#26855](https://github.com/bitnami/charts/issues/26855)
+
+## <small>16.2.2 (2024-06-05)</small>
+
+* [bitnami/phpmyadmin] Bump chart version (#26797) ([85bb88c](https://github.com/bitnami/charts/commit/85bb88c4ee8e7a9ba25328c82d932e90417be39e)), closes [#26797](https://github.com/bitnami/charts/issues/26797)
+
+## <small>16.2.1 (2024-06-04)</small>
+
+* [bitnami/phpmyadmin] Fix typo in deployment.yaml template (#26616) ([9fc8caa](https://github.com/bitnami/charts/commit/9fc8caad32e839bf42dd3a63b943b1d8ed5f3ff0)), closes [#26616](https://github.com/bitnami/charts/issues/26616)
 
 ## 16.2.0 (2024-05-29)
 

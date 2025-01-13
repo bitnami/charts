@@ -1,0 +1,106 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
+Did you know there are enterprise versions of the Bitnami catalog? For enhanced secure software supply chain features, unlimited pulls from Docker, LTS support, or application customization, see Bitnami Premium or Tanzu Application Catalog. See https://www.arrow.com/globalecs/na/vendors/bitnami for more information.
+
+** Please be patient while the chart is being deployed **
+
+{{- if .Values.diagnosticMode.enabled }}
+The chart has been deployed in diagnostic mode. All probes have been disabled and the command has been overwritten with:
+
+  command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 4 }}
+  args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 4 }}
+
+Get the list of pods by executing:
+
+  kubectl get pods --namespace {{ include "common.names.namespace" . | quote }} -l app.kubernetes.io/instance={{ .Release.Name }}
+
+Access the pod you want to debug by executing
+
+  kubectl exec --namespace {{ include "common.names.namespace" . | quote }} -ti <NAME OF THE POD> -- bash
+
+In order to replicate the container startup scripts execute this command:
+
+  cilium-agent --config-dir=/opt/bitnami/cilium/conf
+
+{{- else }}
+
+IMPORTANT: Cilium can only take ownership of CNI on a node after starting. Therefore, pods starting before Cilium runs on a given node may get IPs from the pre-configured CNI.
+It is recommended to rollout restart pre-existing pods in your cluster. Read more about this topic in the upstream docs below:
+
+  https://docs.cilium.io/en/latest/installation/taints
+
+Watch the Cilium Agent daemonset status using the command:
+
+    kubectl get daemonset -w --namespace {{ include "common.names.namespace" . }} -l app.kubernetes.io/name={{ include "common.names.name" . }},app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=agent
+
+{{- if .Values.agent.cniPlugin.install }}
+IMPORTANT: Please ensure that {{ include "cilium.agent.hostCNIBinDir" . }} and {{ include "cilium.agent.hostCNINetDir" . }} are where the CNI binary and configuration files are located in the Kubernetes nodes, otherwise the deployment will fail.
+{{- end }}
+
+{{- if .Values.hubble.relay.enabled }}
+
+Hubble Relay can be accessed through the following URL from within the cluster:
+
+  {{ include "cilium.hubble.relay.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}:{{ .Values.hubble.relay.service.ports.grpc }} (gRPC)
+
+{{- if .Values.hubble.ui.enabled }}
+
+Hubble UI can be accessed through the following URL from within the cluster:
+
+  {{ include "cilium.hubble.ui.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}:{{ .Values.hubble.ui.service.ports.http }} (HTTP)
+
+To access the Hubble UI from outside the cluster follow the steps below:
+
+{{- if .Values.hubble.ui.ingress.enabled }}
+
+1. Get the Hubble UI URL and associate the hostname to your cluster external IP:
+
+   export CLUSTER_IP=$(minikube ip) # On Minikube. Use: `kubectl cluster-info` on others K8s clusters
+   echo "Hubble UI URL: http{{ if .Values.hubble.ui.ingress.tls }}s{{ end }}://{{ .Values.hubble.ui.ingress.hostname }}{{ .Values.hubble.ui.ingress.path }}"
+   echo "$CLUSTER_IP  {{ .Values.hubble.ui.ingress.hostname }}" | sudo tee -a /etc/hosts
+
+{{- else }}
+{{- $port := .Values.hubble.ui.service.ports.http | toString }}
+
+1. Get the Hubble UI URL by running these commands:
+
+{{- if contains "NodePort" .Values.hubble.ui.service.type }}
+
+   export NODE_PORT=$(kubectl get --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "cilium.hubble.ui.fullname" . }})
+   export NODE_IP=$(kubectl get nodes --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.items[0].status.addresses[0].address}")
+   echo "Hubble UI URL: http://$NODE_IP:$NODE_PORT/"
+
+{{- else if contains "LoadBalancer" .Values.hubble.ui.service.type }}
+
+  NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+        Watch the status with: 'kubectl get svc --namespace {{ include "common.names.namespace" . }} -w {{ include "cilium.hubble.ui.fullname" . }}'
+
+   export SERVICE_IP=$(kubectl get svc --namespace {{ include "common.names.namespace" . }} {{ include "cilium.hubble.ui.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
+   echo "Hubble UI URL: http://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.hubble.ui.service.ports.http }}{{ end }}/"
+
+{{- else if contains "ClusterIP"  .Values.hubble.ui.service.type }}
+
+   kubectl port-forward --namespace {{ include "common.names.namespace" . }} svc/{{ include "cilium.hubble.ui.fullname" . }} {{ .Values.hubble.ui.service.ports.http }}:{{ .Values.hubble.ui.service.ports.http }} &
+   echo "Hubble UI URL: http://127.0.0.1{{- if ne $port "80" }}:{{ .Values.hubble.ui.service.ports.http }}{{ end }}/"
+
+{{- end }}
+{{- end }}
+
+2. Open a browser and access Hubble UI using the obtained URL.
+
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- include "common.warnings.rollingTag" .Values.agent.image }}
+{{- include "common.warnings.rollingTag" .Values.operator.image }}
+{{- include "common.warnings.rollingTag" .Values.envoy.image }}
+{{- include "common.warnings.rollingTag" .Values.hubble.relay.image }}
+{{- include "common.warnings.rollingTag" .Values.hubble.ui.frontend.image }}
+{{- include "common.warnings.rollingTag" .Values.hubble.ui.backend.image }}
+{{- include "common.warnings.resources" (dict "sections" (list "agent" "agent.defaultInitContainers.buildConfig" "agent.defaultInitContainers.installCniPlugin" "agent.defaultInitContainers.mountBpf" "agent.defaultInitContainers.mountCgroup2" "agent.defaultInitContainers.cleanState" "agent.defaultInitContainers.waitForKubeProxy" "operator" "envoy" "hubble.relay" "hubble.ui.frontend" "hubble.ui.backend") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.agent.image .Values.operator.image .Values.envoy.image .Values.hubble.relay.image .Values.hubble.ui.frontend.image .Values.hubble.ui.backend.image) "context" $) }}
+{{- include "cilium.validateValues" . }}
+{{- include "common.errors.insecureImages" (dict "images" (list .Values.agent.image .Values.operator.image .Values.envoy.image .Values.hubble.relay.image .Values.hubble.ui.frontend.image .Values.hubble.ui.backend.image) "context" $) }}

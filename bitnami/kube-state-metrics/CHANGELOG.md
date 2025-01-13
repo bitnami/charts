@@ -1,8 +1,89 @@
 # Changelog
 
-## 4.2.1 (2024-06-04)
+## 4.3.2 (2025-01-13)
 
-* [bitnami/kube-state-metrics] Bump chart version ([#26640](https://github.com/bitnami/charts/pull/26640))
+* [bitnami/kube-state-metrics] Release 4.3.2 ([#31317](https://github.com/bitnami/charts/pull/31317))
+
+## <small>4.3.1 (2024-12-10)</small>
+
+* [bitnami/kube-state-metrics] Fix typo in NOTES.txt (#30930) ([c2474c7](https://github.com/bitnami/charts/commit/c2474c7583d5d0dcc953bbc38a3a300e4f84ddaf)), closes [#30930](https://github.com/bitnami/charts/issues/30930)
+
+## 4.3.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/kube-state-metrics] Detect non-standard images (#30913) ([ad6e78f](https://github.com/bitnami/charts/commit/ad6e78f46b05f345be2b8b03f288ba3cc64ead3a)), closes [#30913](https://github.com/bitnami/charts/issues/30913)
+
+## <small>4.2.17 (2024-12-04)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/kube-state-metrics] Release 4.2.17 (#30759) ([7ac7caa](https://github.com/bitnami/charts/commit/7ac7caa6377a085be8d07a5cfc18be367ad266fd)), closes [#30759](https://github.com/bitnami/charts/issues/30759)
+
+## <small>4.2.16 (2024-11-08)</small>
+
+* [bitnami/kube-state-metrics] Release 4.2.16 (#30365) ([decfaea](https://github.com/bitnami/charts/commit/decfaea1cd0a5e2d6c8caa33301946b03e2fbbd4)), closes [#30365](https://github.com/bitnami/charts/issues/30365)
+
+## <small>4.2.15 (2024-11-07)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/kube-state-metrics] Release 4.2.15 (#30277) ([068ec88](https://github.com/bitnami/charts/commit/068ec88147390ea823af22ead339ab4e0e5b42d8)), closes [#30277](https://github.com/bitnami/charts/issues/30277)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>4.2.14 (2024-10-02)</small>
+
+* [bitnami/kube-state-metrics] Release 4.2.14 (#29702) ([ae112cf](https://github.com/bitnami/charts/commit/ae112cfdf05f6648bdbc0725e7d75ec26a1abd55)), closes [#29702](https://github.com/bitnami/charts/issues/29702)
+
+## <small>4.2.13 (2024-09-06)</small>
+
+* [bitnami/kube-state-metrics] Release 4.2.13 (#29242) ([f7b9ec5](https://github.com/bitnami/charts/commit/f7b9ec5f70e160a861a8d8cae03a47aeeb403e80)), closes [#29242](https://github.com/bitnami/charts/issues/29242)
+
+## <small>4.2.12 (2024-08-07)</small>
+
+* [bitnami/kube-state-metrics] Release 4.2.12 (#28725) ([544c85d](https://github.com/bitnami/charts/commit/544c85d2396aac0091327cf2f42f28007622e5ce)), closes [#28725](https://github.com/bitnami/charts/issues/28725)
+
+## <small>4.2.11 (2024-07-25)</small>
+
+* [bitnami/kube-state-metrics] Release 4.2.11 (#28427) ([c59ea22](https://github.com/bitnami/charts/commit/c59ea22f8bdfe4014bba24cf7f1418fd075ca2d9)), closes [#28427](https://github.com/bitnami/charts/issues/28427)
+
+## <small>4.2.10 (2024-07-24)</small>
+
+* [bitnami/kube-state-metrics] Release 4.2.10 (#28294) ([2c42d07](https://github.com/bitnami/charts/commit/2c42d07e8dff4ca3f97d46d23402255a0f5030df)), closes [#28294](https://github.com/bitnami/charts/issues/28294)
+
+## <small>4.2.9 (2024-07-19)</small>
+
+* [bitnami/kube-state-metrics] Release 4.2.9 (#28180) ([97befff](https://github.com/bitnami/charts/commit/97befffecc115b9f269f89256eb3a033e215fbda)), closes [#28180](https://github.com/bitnami/charts/issues/28180)
+
+## <small>4.2.8 (2024-07-18)</small>
+
+* [bitnami/kube-state-metrics] Remove global.storageClass (#28044) ([0814a4a](https://github.com/bitnami/charts/commit/0814a4a6390761fb68dfc9265c57e047794a5618)), closes [#28044](https://github.com/bitnami/charts/issues/28044)
+
+## <small>4.2.7 (2024-07-04)</small>
+
+* [bitnami/kube-state-metrics] Release 4.2.7 (#27786) ([096c1cd](https://github.com/bitnami/charts/commit/096c1cd92bdbf4d5870f5dc9852fd4686f3d062d)), closes [#27786](https://github.com/bitnami/charts/issues/27786)
+
+## <small>4.2.6 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/kube-state-metrics] Release 4.2.6 (#27658) ([e347f7b](https://github.com/bitnami/charts/commit/e347f7b5bb286d2ace5412af9430754396d22e06)), closes [#27658](https://github.com/bitnami/charts/issues/27658)
+
+## <small>4.2.5 (2024-06-18)</small>
+
+* [bitnami/kube-state-metrics] Release 4.2.5 (#27367) ([25c4280](https://github.com/bitnami/charts/commit/25c428035346747c59874d57de01ee45bc5a9742)), closes [#27367](https://github.com/bitnami/charts/issues/27367)
+
+## <small>4.2.4 (2024-06-17)</small>
+
+* [bitnami/kube-state-metrics] Release 4.2.4 (#27269) ([8daa6ab](https://github.com/bitnami/charts/commit/8daa6ab4340de07c244b53672b8b5485cc90b409)), closes [#27269](https://github.com/bitnami/charts/issues/27269)
+
+## <small>4.2.3 (2024-06-06)</small>
+
+* [bitnami/kube-state-metrics] Release 4.2.3 (#26968) ([538c7d2](https://github.com/bitnami/charts/commit/538c7d2dc927bc5c115e76f73f78b9c268626f5c)), closes [#26968](https://github.com/bitnami/charts/issues/26968)
+
+## <small>4.2.2 (2024-06-05)</small>
+
+* [bitnami/kube-state-metrics] Release 4.2.2 (#26736) ([a807b01](https://github.com/bitnami/charts/commit/a807b0160cbc52ed57bf7ea0286371aa35d89334)), closes [#26736](https://github.com/bitnami/charts/issues/26736)
+
+## <small>4.2.1 (2024-06-04)</small>
+
+* [bitnami/kube-state-metrics] Bump chart version (#26640) ([3dd2c7c](https://github.com/bitnami/charts/commit/3dd2c7cf1f35ca87640c337a8f5fda4edc60cb3d)), closes [#26640](https://github.com/bitnami/charts/issues/26640)
 
 ## 4.2.0 (2024-05-29)
 

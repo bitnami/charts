@@ -1,8 +1,145 @@
 # Changelog
 
-## 14.3.3 (2024-06-04)
+## 15.2.2 (2025-01-07)
 
-* [bitnami/rabbitmq] Bump chart version ([#26664](https://github.com/bitnami/charts/pull/26664))
+* [bitnami/rabbitmq] remove undefined rts key from network policy template ([#31210](https://github.com/bitnami/charts/pull/31210))
+
+## <small>15.2.1 (2024-12-16)</small>
+
+* [bitnami/rabbitmq] Release 15.2.1 (#31049) ([973da81](https://github.com/bitnami/charts/commit/973da81d773b2b834c83e8b7b90553d915899bc5)), closes [#31049](https://github.com/bitnami/charts/issues/31049)
+
+## 15.2.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 5) (#30674) ([ed2a546](https://github.com/bitnami/charts/commit/ed2a54617faf763169e6b01a89100b9db32e1000)), closes [#30674](https://github.com/bitnami/charts/issues/30674)
+* [bitnami/*] docs: :memo: Unify "Securing Traffic using TLS" section (#30707) ([b572333](https://github.com/bitnami/charts/commit/b57233336e4fe9af928ecb4f2a5f334011efb1bc)), closes [#30707](https://github.com/bitnami/charts/issues/30707)
+* [bitnami/rabbitmq] Detect non-standard images (#30940) ([4dade21](https://github.com/bitnami/charts/commit/4dade214ff39b6741a9f1c1239c51a4ab13c1a4d)), closes [#30940](https://github.com/bitnami/charts/issues/30940)
+
+## 15.1.0 (2024-11-25)
+
+* [bitnami/rabbitmq] feat: :sparkles: Allow password updates (#30615) ([d98aecc](https://github.com/bitnami/charts/commit/d98aecce08aebd795cdace9bc1f814296a9aa873)), closes [#30615](https://github.com/bitnami/charts/issues/30615)
+
+## <small>15.0.7 (2024-11-22)</small>
+
+* [bitnami/rabbitmq] Release 15.0.7 (#30572) ([212993b](https://github.com/bitnami/charts/commit/212993b0c06a0f0a3ccafdc8c253fe260b525b73)), closes [#30572](https://github.com/bitnami/charts/issues/30572)
+
+## <small>15.0.6 (2024-11-08)</small>
+
+* [bitnami/rabbitmq] Unify seLinuxOptions default value (#30327) ([9537964](https://github.com/bitnami/charts/commit/95379640c83645c2b37e8cebc18823cf5984308b)), closes [#30327](https://github.com/bitnami/charts/issues/30327)
+
+## <small>15.0.5 (2024-10-31)</small>
+
+* [bitnami/rabbitmq] Release 15.0.5 (#30152) ([2dba9cb](https://github.com/bitnami/charts/commit/2dba9cb5e390c6bef2a0d5ee9b4a401cffea0070)), closes [#30152](https://github.com/bitnami/charts/issues/30152)
+
+## <small>15.0.4 (2024-10-29)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/rabbitmq] Allow missing memory limit when memoryHighWatermark is absolute (#30079) ([b92af12](https://github.com/bitnami/charts/commit/b92af12ad55e92c8b1377987b222090787d23b02)), closes [#30079](https://github.com/bitnami/charts/issues/30079)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>15.0.3 (2024-10-14)</small>
+
+* [bitnami/rabbitmq] Use common password/secrets manager to handle credentials (#29879) ([456bfb2](https://github.com/bitnami/charts/commit/456bfb2a2762fb78e96ae09d55d82cfaacc74d45)), closes [#29879](https://github.com/bitnami/charts/issues/29879)
+
+## <small>15.0.2 (2024-10-07)</small>
+
+* [Bitnami/rabbitmq] - Fix duplicate key issue with Helm/FluxCD integration (#29780) ([cea9e6c](https://github.com/bitnami/charts/commit/cea9e6c9ea4b97b5ec48c5156d8d6c9fcd1ded13)), closes [#29780](https://github.com/bitnami/charts/issues/29780)
+
+## <small>15.0.1 (2024-09-25)</small>
+
+* [bitnami/rabbitmq] docs: :memo: Add upgrade notes for version 15.x.x ([012685d](https://github.com/bitnami/charts/commit/012685db9831eefe1a77be9122fbcdf5933198a1))
+* [bitnami/rabbitmq] Release 15.0.1 (#29600) ([f0bcc5c](https://github.com/bitnami/charts/commit/f0bcc5cb258b5329bcb6cacd998d4f4170d3b06a)), closes [#29600](https://github.com/bitnami/charts/issues/29600)
+
+## 15.0.0 (2024-09-20)
+
+* [bitnami/rabbitmq] Release 15.0.0 (#29555) ([595df29](https://github.com/bitnami/charts/commit/595df29e55c616de44a5f0794738bf7520e6eb58)), closes [#29555](https://github.com/bitnami/charts/issues/29555)
+
+## 14.7.0 (2024-09-12)
+
+* [bitnami/rabbitmq] Breaking out RabbitMQ metrics endpoints to configure separately (#28891) ([3b9cfe9](https://github.com/bitnami/charts/commit/3b9cfe99e23c485ea95bbeb128dc44961374d434)), closes [#28891](https://github.com/bitnami/charts/issues/28891)
+
+## <small>14.6.10 (2024-09-11)</small>
+
+* [bitnami/rabbitmq] Allow rendering resources values (#29347) ([7479317](https://github.com/bitnami/charts/commit/747931744d2242abe11ff29ea8f499ed292e731a)), closes [#29347](https://github.com/bitnami/charts/issues/29347)
+
+## <small>14.6.9 (2024-08-28)</small>
+
+* [bitnami/rabbitmq] Release 14.6.9 (#29092) ([711e2f7](https://github.com/bitnami/charts/commit/711e2f720d92e936b9a67bbdc269d57c33a9dca6)), closes [#29092](https://github.com/bitnami/charts/issues/29092)
+
+## <small>14.6.8 (2024-08-28)</small>
+
+* [bitnami/rabbitmq] Improve Ginkgo test (#29082) ([778a269](https://github.com/bitnami/charts/commit/778a269c23fd9e6534c3c15e85f016c38f498e81)), closes [#29082](https://github.com/bitnami/charts/issues/29082)
+
+## <small>14.6.7 (2024-08-26)</small>
+
+* [bitnami/rabbitmq] Release 14.6.7 (#29018) ([8eb9085](https://github.com/bitnami/charts/commit/8eb9085b47699e839bae9f0238a775c1d0b0dfa5)), closes [#29018](https://github.com/bitnami/charts/issues/29018)
+
+## <small>14.6.6 (2024-08-08)</small>
+
+* [bitnami/rabbitmq] Fix rabbitmq pods not being restarted after changing init scripts (#27900) ([95148a9](https://github.com/bitnami/charts/commit/95148a9ae1363f9da6415b64085aadfd8add1413)), closes [#27900](https://github.com/bitnami/charts/issues/27900)
+
+## <small>14.6.5 (2024-07-25)</small>
+
+* [bitnami/rabbitmq] Release 14.6.5 (#28473) ([40abb28](https://github.com/bitnami/charts/commit/40abb284adcd42c0c27190899e9e3a115dbf46e8)), closes [#28473](https://github.com/bitnami/charts/issues/28473)
+
+## <small>14.6.4 (2024-07-24)</small>
+
+* [bitnami/rabbitmq] Release 14.6.4 (#28361) ([ab8d156](https://github.com/bitnami/charts/commit/ab8d1562d3da46daeca8f0a70119b57aa5f402c5)), closes [#28361](https://github.com/bitnami/charts/issues/28361)
+
+## <small>14.6.3 (2024-07-23)</small>
+
+* [bitnami/rabbitmq] Release 14.6.3 (#28204) ([5a213c4](https://github.com/bitnami/charts/commit/5a213c4352403949d91fb28f30361bb676121dc3)), closes [#28204](https://github.com/bitnami/charts/issues/28204)
+
+## <small>14.6.2 (2024-07-22)</small>
+
+* [bitnami/rabbitmq] Release 14.6.2 (#28192) ([69ced0b](https://github.com/bitnami/charts/commit/69ced0b8f41f3a3ebeeb595df864880a79cbdff2)), closes [#28192](https://github.com/bitnami/charts/issues/28192)
+
+## <small>14.6.1 (2024-07-18)</small>
+
+* [bitnami/rabbitmq] Global StorageClass as default value (#28087) ([a4143c5](https://github.com/bitnami/charts/commit/a4143c5e397df6a5124381f7531d2d508f526221)), closes [#28087](https://github.com/bitnami/charts/issues/28087)
+
+## 14.6.0 (2024-07-17)
+
+* [bitnami/rabbitmq] make queue_master_locator configurable (#27990) ([7266748](https://github.com/bitnami/charts/commit/726674875655c7f90ccd17370950c858f951a96a)), closes [#27990](https://github.com/bitnami/charts/issues/27990)
+
+## 14.5.0 (2024-07-09)
+
+* [bitnami/rabbitmq] Replace extraPorts with extraPortsHeadless in headless service (#27853) ([b205f7a](https://github.com/bitnami/charts/commit/b205f7a39c528e0fe365568f955c25c460649c4f)), closes [#27853](https://github.com/bitnami/charts/issues/27853)
+
+## <small>14.4.6 (2024-07-03)</small>
+
+* [bitnami/rabbitmq] Release 14.4.6 (#27739) ([891935d](https://github.com/bitnami/charts/commit/891935dae482369fc75a9be9cdf13e9a148fdb3f)), closes [#27739](https://github.com/bitnami/charts/issues/27739)
+
+## <small>14.4.5 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/rabbitmq] Release 14.4.5 (#27713) ([c54e941](https://github.com/bitnami/charts/commit/c54e941e790295203771c7574c907c72a00aef80)), closes [#27713](https://github.com/bitnami/charts/issues/27713)
+
+## <small>14.4.4 (2024-06-18)</small>
+
+* [bitnami/rabbitmq] Release 14.4.4 (#27409) ([e809d66](https://github.com/bitnami/charts/commit/e809d66db6e5bbd2d90fdb7fce9b67d2fb9cf64d)), closes [#27409](https://github.com/bitnami/charts/issues/27409)
+
+## <small>14.4.3 (2024-06-17)</small>
+
+* [bitnami/rabbitmq] Release 14.4.3 (#27276) ([7fc3346](https://github.com/bitnami/charts/commit/7fc3346f8835f684a1e87c763e9f37c69834eba2)), closes [#27276](https://github.com/bitnami/charts/issues/27276)
+
+## <small>14.4.2 (2024-06-13)</small>
+
+* [bitnami/rabbitmq] Align ulimitNofiles default value on containerd runc runtime default ulimit -n va ([34a4923](https://github.com/bitnami/charts/commit/34a4923799d19456818466a6ca3f42b207071868)), closes [#27052](https://github.com/bitnami/charts/issues/27052)
+* RabbitMQ: explain how to safely avoid a deployment deadlock (#25931) ([3117b57](https://github.com/bitnami/charts/commit/3117b573147401387321a2a0e1f587978cef0ed2)), closes [#25931](https://github.com/bitnami/charts/issues/25931)
+
+## <small>14.4.1 (2024-06-06)</small>
+
+* [bitnami/rabbitmq] Release 14.4.1 (#27010) ([1769eb5](https://github.com/bitnami/charts/commit/1769eb5722a47299d4e5b1051e5ad3826861d9ff)), closes [#27010](https://github.com/bitnami/charts/issues/27010)
+
+## 14.4.0 (2024-06-06)
+
+* [bitnami/rabbitmq] Enable PodDisruptionBudgets (#26222) ([afa165f](https://github.com/bitnami/charts/commit/afa165feb72347547666eabe57c81d21c2d092f9)), closes [#26222](https://github.com/bitnami/charts/issues/26222)
+
+## <small>14.3.3 (2024-06-04)</small>
+
+* [bitnami/rabbitmq] Bump chart version (#26664) ([95ffecb](https://github.com/bitnami/charts/commit/95ffecbeb93eae95ead8a2c67a77776ba8c9c87d)), closes [#26664](https://github.com/bitnami/charts/issues/26664)
 
 ## <small>14.3.2 (2024-06-01)</small>
 

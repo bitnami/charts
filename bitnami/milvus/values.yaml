@@ -9,7 +9,7 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
 ##
 global:
   imageRegistry: ""
@@ -18,7 +18,12 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass: ""
+  defaultStorageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
   ## Compatibility adaptations for Kubernetes platforms
   ##
   compatibility:
@@ -87,10 +92,9 @@ milvus:
   image:
     registry: docker.io
     repository: bitnami/milvus
-    tag: 2.4.2-debian-12-r1
+    tag: 2.5.3-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -268,10 +272,9 @@ initJob:
   image:
     registry: docker.io
     repository: bitnami/pymilvus
-    tag: 2.4.3-debian-12-r0
+    tag: 2.5.3-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -4601,10 +4604,9 @@ attu:
   image:
     registry: docker.io
     repository: bitnami/attu
-    tag: 2.3.10-debian-12-r3
+    tag: 2.5.0-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -5160,7 +5162,7 @@ waitContainer:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r21
+    tag: 12-debian-12-r35
     digest: ""
     ## @param waitContainer.image.pullPolicy Init container wait-container image pull policy
     ##
@@ -5262,7 +5264,7 @@ externalEtcd:
     ##
     keyPassword: ""
 ## @section External S3 parameters
-## All of these values are only used when redis.enabled is set to false
+## All of these values are only used when minio.enabled is set to false
 ## @param externalS3.host External S3 host
 ## @param externalS3.port External S3 port number
 ## @param externalS3.accessKeyID External S3 access key ID
@@ -5270,7 +5272,6 @@ externalEtcd:
 ## @param externalS3.existingSecret Name of an existing secret resource containing the S3 credentials
 ## @param externalS3.existingSecretAccessKeyIDKey Name of an existing secret key containing the S3 access key ID
 ## @param externalS3.existingSecretKeySecretKey Name of an existing secret key containing the S3 access key secret
-## @param externalS3.protocol External S3 protocol
 ## @param externalS3.bucket External S3 bucket
 ## @param externalS3.rootPath External S3 root path
 ## @param externalS3.iamEndpoint External S3 IAM endpoint
@@ -5284,7 +5285,18 @@ externalS3:
   existingSecret: ""
   existingSecretAccessKeyIDKey: "root-user"
   existingSecretKeySecretKey: "root-password"
-  protocol: "https"
+  ## External S3 TLS connection configuration
+  ##
+  tls:
+    ## @param externalS3.tls.enabled Enable TLS for externalS3 client connections.
+    ##
+    enabled: false
+    ## @param externalS3.tls.existingSecret Name of the existing secret containing the TLS certificates for externalS3 client communications.
+    ##
+    existingSecret: ""
+    ## @param externalS3.tls.caCert The secret key from the existingSecret if 'caCert' key different from the default (ca.crt)
+    ##
+    caCert: ca.crt
   bucket: "milvus"
   rootPath: "file"
   iamEndpoint: ""
@@ -5318,6 +5330,29 @@ externalKafka:
     existingSecret: ""
     existingSecretPasswordKey: "kafka-root-password"
     enabledMechanisms: "PLAIN"
+  ## External kafka TLS connection configuration
+  ##
+  tls:
+    ## @param externalKafka.tls.enabled Enable TLS for kafka client connections.
+    ##
+    enabled: false
+    ## @param externalKafka.tls.existingSecret Name of the existing secret containing the TLS certificates for external kafka client communications.
+    ##
+    existingSecret: ""
+    ## @param externalKafka.tls.cert The secret key from the existingSecret if 'cert' key different from the default (tls.crt)
+    ##
+    cert: tls.crt
+    ## @param externalKafka.tls.key The secret key from the existingSecret if 'key' key different from the default (tls.key)
+    ##
+    key: tls.key
+    ## @param externalKafka.tls.caCert The secret key from the existingSecret if 'caCert' key different from the default (ca.crt)
+    ##
+    caCert: ca.crt
+    ## @param externalKafka.tls.keyPassword Password to access the password-protected PEM key if necessary.
+    ##
+    keyPassword: ""
+
+
 ## @section etcd sub-chart parameters
 ##
 etcd:

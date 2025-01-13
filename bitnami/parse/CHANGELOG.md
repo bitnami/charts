@@ -1,8 +1,99 @@
 # Changelog
 
-## 23.2.0 (2024-05-28)
+## 24.1.2 (2024-12-24)
 
-* [bitnami/parse] Enable PodDisruptionBudgets ([#26516](https://github.com/bitnami/charts/pull/26516))
+* [bitnami/parse] Release 24.1.2 ([#31158](https://github.com/bitnami/charts/pull/31158))
+
+## <small>24.1.1 (2024-12-24)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/parse] Release 24.1.1 (#31157) ([96d743d](https://github.com/bitnami/charts/commit/96d743d10370263773b03be1e24edf29b5ba9d88)), closes [#31157](https://github.com/bitnami/charts/issues/31157)
+
+## 24.1.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 3) (#30688) ([10a49f9](https://github.com/bitnami/charts/commit/10a49f9ff2db1d9d11a6edd1c40a9f61803241bc)), closes [#30688](https://github.com/bitnami/charts/issues/30688)
+* [bitnami/parse] Detect non-standard images (#30962) ([cd40d8b](https://github.com/bitnami/charts/commit/cd40d8b162e95ca5b9a834b55fd62a0f63732b7f)), closes [#30962](https://github.com/bitnami/charts/issues/30962)
+
+## <small>24.0.2 (2024-12-01)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/parse] Release 24.0.2 (#30701) ([b8c4d9f](https://github.com/bitnami/charts/commit/b8c4d9ff01fe35a6a8e373d53c47889e93a63f94)), closes [#30701](https://github.com/bitnami/charts/issues/30701)
+
+## <small>24.0.1 (2024-10-22)</small>
+
+* [bitnami/parse] Release 24.0.1 (#30039) ([eea1a8e](https://github.com/bitnami/charts/commit/eea1a8e5e6b2595d78d3885792a8827c43dac9a6)), closes [#30039](https://github.com/bitnami/charts/issues/30039)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## 24.0.0 (2024-10-08)
+
+* [bitnami/parse] Update MongoDB chart to 16.0.0 (#29808) ([477a654](https://github.com/bitnami/charts/commit/477a654e1c0f3f6c91d7336306e2df1a4c35cc02)), closes [#29808](https://github.com/bitnami/charts/issues/29808)
+
+## <small>23.2.15 (2024-10-04)</small>
+
+* [bitnami/parse] Release 23.2.15 (#29771) ([35af86b](https://github.com/bitnami/charts/commit/35af86b8a8e0be491f80bce2c95c778e67f2b58f)), closes [#29771](https://github.com/bitnami/charts/issues/29771)
+
+## <small>23.2.14 (2024-09-26)</small>
+
+* [bitnami/parse] Release 23.2.14 (#29611) ([97d18a5](https://github.com/bitnami/charts/commit/97d18a5f9cc7f163e0f8e981588878baaf8bcbda)), closes [#29611](https://github.com/bitnami/charts/issues/29611)
+
+## <small>23.2.13 (2024-08-23)</small>
+
+* [bitnami/parse] Release 23.2.13 (#29006) ([3dbbf9f](https://github.com/bitnami/charts/commit/3dbbf9f4d3a0786256cb98371e27f11a6ce9e853)), closes [#29006](https://github.com/bitnami/charts/issues/29006)
+
+## <small>23.2.12 (2024-07-25)</small>
+
+* [bitnami/parse] Release 23.2.12 (#28458) ([c192fe5](https://github.com/bitnami/charts/commit/c192fe5e491de1eb158e64decc5d41f39eeb5759)), closes [#28458](https://github.com/bitnami/charts/issues/28458)
+
+## <small>23.2.11 (2024-07-24)</small>
+
+* [bitnami/parse] Release 23.2.11 (#28346) ([53113b9](https://github.com/bitnami/charts/commit/53113b90dfd6ed4f4d9b3702ee4e3254b39e2b9e)), closes [#28346](https://github.com/bitnami/charts/issues/28346)
+
+## <small>23.2.10 (2024-07-18)</small>
+
+* [bitnami/parse] Global StorageClass as default value (#28078) ([4ae4f9b](https://github.com/bitnami/charts/commit/4ae4f9bf3c738bf40d1d57e1ff334cb66b263f77)), closes [#28078](https://github.com/bitnami/charts/issues/28078)
+
+## <small>23.2.9 (2024-07-10)</small>
+
+* [bitnami/parse] Release 23.2.9 (#27874) ([f0018fa](https://github.com/bitnami/charts/commit/f0018fa9ae6d9ab6584c617de432ff0e77e78d18)), closes [#27874](https://github.com/bitnami/charts/issues/27874)
+
+## <small>23.2.8 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/parse] Release 23.2.8 (#27725) ([cc1d031](https://github.com/bitnami/charts/commit/cc1d03180b458ff3290192c1ee83cf54f0fccbd9)), closes [#27725](https://github.com/bitnami/charts/issues/27725)
+
+## <small>23.2.7 (2024-06-18)</small>
+
+* [bitnami/parse] Release 23.2.7 (#27396) ([4cfbbfa](https://github.com/bitnami/charts/commit/4cfbbfa46ec8f572cb84382fe96ae5d0f558887e)), closes [#27396](https://github.com/bitnami/charts/issues/27396)
+
+## <small>23.2.6 (2024-06-17)</small>
+
+* [bitnami/parse] Release 23.2.6 (#27260) ([6d5d22e](https://github.com/bitnami/charts/commit/6d5d22e2a907828be451774f64e50be4af87b368)), closes [#27260](https://github.com/bitnami/charts/issues/27260)
+
+## <small>23.2.5 (2024-06-06)</small>
+
+* [bitnami/parse] Release 23.2.5 (#27001) ([e212a25](https://github.com/bitnami/charts/commit/e212a25c2b552f9cbfd47e9b5b44c467dfdbfff6)), closes [#27001](https://github.com/bitnami/charts/issues/27001)
+
+## <small>23.2.4 (2024-06-06)</small>
+
+* [bitnami/parse] Release 23.2.4 (#26911) ([a10d27e](https://github.com/bitnami/charts/commit/a10d27e2e448c308d7ff96bf4548fa811537f407)), closes [#26911](https://github.com/bitnami/charts/issues/26911)
+
+## <small>23.2.3 (2024-06-06)</small>
+
+* [bitnami/parse] Release 23.2.3 (#26893) ([f575d40](https://github.com/bitnami/charts/commit/f575d40a4c50fa621b9ea511e9d4892394b28ea8)), closes [#26893](https://github.com/bitnami/charts/issues/26893)
+
+## <small>23.2.2 (2024-06-05)</small>
+
+* [bitnami/parse] Bump chart version (#26853) ([9e7dafb](https://github.com/bitnami/charts/commit/9e7dafb5f95a0dc6778e21aa7664ad04b62f4e3e)), closes [#26853](https://github.com/bitnami/charts/issues/26853)
+
+## <small>23.2.1 (2024-06-05)</small>
+
+* [bitnami/parse] Bump chart version (#26795) ([cbf752a](https://github.com/bitnami/charts/commit/cbf752a9b656224e972c54b4e7897607642a5903)), closes [#26795](https://github.com/bitnami/charts/issues/26795)
+
+## 23.2.0 (2024-05-30)
+
+* [bitnami/parse] Enable PodDisruptionBudgets (#26516) ([627d79e](https://github.com/bitnami/charts/commit/627d79e306798efa3e48d814d64fa3aa3d3e5987)), closes [#26516](https://github.com/bitnami/charts/issues/26516)
 
 ## 23.1.0 (2024-05-21)
 

@@ -3,7 +3,7 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if .Values.rbac.create -}}
+{{- if and .Values.rbac.create .Values.server.clusterAdminAccess -}}
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
 metadata:
@@ -13,6 +13,9 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 rules:
+  {{- if .Values.server.clusterRoleRules }}
+  {{- include "common.tplvalues.render" ( dict "value" .Values.server.clusterRoleRules "context" $ ) | nindent 2 }}
+  {{ else }}
   - apiGroups:
       - '*'
     resources:
@@ -27,6 +30,8 @@ rules:
       - events
     verbs:
       - list
+      # Needed for multi-tenancy namespace
+      - create
   - apiGroups:
       - ""
     resources:
@@ -43,4 +48,9 @@ rules:
       - list
       - update
       - watch
+      # Needed for multi-tenancy namespace
+      - create
+      - delete
+      - patch
+  {{- end }}
 {{- end }}

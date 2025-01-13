@@ -8,7 +8,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ template "common.names.fullname" . }}-metrics
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.metrics.service.labels .Values.commonLabels ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: "metrics"
@@ -24,9 +24,15 @@ spec:
   {{- if and (eq .Values.metrics.service.type "LoadBalancer") .Values.metrics.service.loadBalancerIP }}
   loadBalancerIP: {{ .Values.metrics.service.loadBalancerIP }}
   {{- end }}
+  {{- if and (eq .Values.metrics.service.type "LoadBalancer")  .Values.metrics.service.loadBalancerClass }}
+  loadBalancerClass: {{ .Values.metrics.service.loadBalancerClass }}
+  {{- end }}
   ports:
     - name: metrics
       port: {{ .Values.metrics.service.ports.http }}
+      {{- if .Values.metrics.service.ports.appProtocol }}
+      appProtocol: {{ .Values.metrics.service.ports.appProtocol }}
+      {{- end }}
       targetPort: http-metrics
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.redis.podLabels .Values.commonLabels ) "context" . ) }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}

@@ -37,10 +37,13 @@ spec:
   externalTrafficPolicy: {{ .Values.controlPlane.service.externalTrafficPolicy | quote }}
   {{- end }}
   {{- if and (eq .Values.controlPlane.service.type "LoadBalancer") (not (empty .Values.controlPlane.service.loadBalancerSourceRanges)) }}
-  loadBalancerSourceRanges: {{ .Values.controlPlane.service.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges: {{ toYaml .Values.controlPlane.service.loadBalancerSourceRanges | nindent 4 }}
   {{- end }}
   {{- if and (eq .Values.controlPlane.service.type "LoadBalancer") (not (empty .Values.controlPlane.service.loadBalancerIP)) }}
   loadBalancerIP: {{ .Values.controlPlane.service.loadBalancerIP }}
+  {{- end }}
+  {{- if .Values.controlPlane.service.externalIPs }}
+  externalIPs: {{- include "common.tplvalues.render" (dict "value" .Values.controlPlane.service.externalIPs "context" $) | nindent 4 }}
   {{- end }}
   ports:
     - name: {{ ternary "https" "http" .Values.controlPlane.tls.enabled }}-admin-api

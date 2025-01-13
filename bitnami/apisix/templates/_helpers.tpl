@@ -353,6 +353,7 @@ Init container definition for waiting for the database to be ready
   env:
     - name: BITNAMI_DEBUG
       value: {{ ternary "true" "false" (or .context.Values.image.debug .context.Values.diagnosticMode.enabled) | quote }}
+    {{- if .context.Values.controlPlane.enabled }}
     - name: APISIX_ADMIN_API_TOKEN
       valueFrom:
         secretKeyRef:
@@ -363,6 +364,7 @@ Init container definition for waiting for the database to be ready
         secretKeyRef:
           name: {{ include "apisix.control-plane.secretName" .context }}
           key: {{ include "apisix.control-plane.viewerTokenKey" .context }}
+    {{- end }}
     {{- if (include "apisix.etcd.authEnabled" .context) }}
     - name: APISIX_ETCD_USER
       value: {{ include "apisix.etcd.user" .context }}
@@ -443,8 +445,13 @@ Init container definition for waiting for the database to be ready
       )
 
       check_etcd() {
+          local curl_options=()
+          {{- if and .Values.etcd.auth.client.secureTransport .Values.etcd.auth.client.useAutoTLS }}
+          curl_options=("--insecure" ${curl_options[*]})
+          {{- end }}
+
           local -r etcd_host="${1:-?missing etcd}"
-          if curl --max-time 5 "${etcd_host}/version" | grep etcdcluster; then
+          if curl "${curl_options[@]}" --max-time 5 "${etcd_host}/version" | grep etcdcluster; then
              return 0
           else
              return 1
@@ -560,6 +567,7 @@ Render configuration for the dashboard and ingress-controller components
   env:
     - name: BITNAMI_DEBUG
       value: {{ ternary "true" "false" (or .context.Values.image.debug .context.Values.diagnosticMode.enabled) | quote }}
+    {{- if .context.Values.controlPlane.enabled }}
     - name: APISIX_ADMIN_API_TOKEN
       valueFrom:
         secretKeyRef:
@@ -570,6 +578,7 @@ Render configuration for the dashboard and ingress-controller components
         secretKeyRef:
           name: {{ include "apisix.control-plane.secretName" .context }}
           key: {{ include "apisix.control-plane.viewerTokenKey" .context }}
+    {{- end }}
     {{- if (include "apisix.etcd.authEnabled" .context) }}
     - name: APISIX_ETCD_USER
       value: {{ include "apisix.etcd.user" .context }}

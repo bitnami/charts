@@ -140,8 +140,19 @@ spec:
             - secretRef:
                 name: {{ .Values.extraEnvVarsSecret }}
             {{- end }}
-          {{- if .Values.containerPorts }}
-          ports: {{ toYaml .Values.containerPorts | nindent 12 }}
+          {{- if or .Values.containerPorts .Values.extraContainerPorts .Values.enableMonitoringAPI }}
+          ports:
+            {{- if .Values.containerPorts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.containerPorts "context" $) | nindent 12 }}
+            {{- end }}
+            {{- if .Values.extraContainerPorts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraContainerPorts "context" $) | nindent 12 }}
+            {{- end }}
+            {{- if .Values.enableMonitoringAPI }}
+            - name: monitoring
+              containerPort: {{ .Values.monitoringAPIPort }}
+              protocol: TCP
+            {{- end }}
           {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.customLivenessProbe }}

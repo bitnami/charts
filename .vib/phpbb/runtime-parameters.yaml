@@ -1,6 +1,0 @@
-phpbbUsername: user
-phpbbPassword: ComplicatedPassword123!4
-service:
-  type: LoadBalancer
-  ports:
-    http: 80

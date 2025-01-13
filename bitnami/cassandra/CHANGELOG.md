@@ -1,8 +1,119 @@
 # Changelog
 
-## 11.2.1 (2024-06-04)
+## 12.1.1 (2025-01-07)
 
-* [bitnami/cassandra] Bump chart version ([#26622](https://github.com/bitnami/charts/pull/26622))
+* [bitnami/cassandra] Release 12.1.1 ([#31233](https://github.com/bitnami/charts/pull/31233))
+
+## 12.1.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 1) (#30660) ([7409ca4](https://github.com/bitnami/charts/commit/7409ca4c21869fabe1532dd4f3ff24895df71c6d)), closes [#30660](https://github.com/bitnami/charts/issues/30660)
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 1) (#30685) ([be6aa1d](https://github.com/bitnami/charts/commit/be6aa1df0bd4479173a78400fef7295de15b408d)), closes [#30685](https://github.com/bitnami/charts/issues/30685)
+* [bitnami/cassandra] Detect non-standard images (#30866) ([30196ed](https://github.com/bitnami/charts/commit/30196ed6054c6c611ceb03bc71fedeccb36aeb1a)), closes [#30866](https://github.com/bitnami/charts/issues/30866)
+
+## <small>12.0.5 (2024-11-28)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/cassandra] Release 12.0.5 (#30670) ([bebba67](https://github.com/bitnami/charts/commit/bebba67d707601a50aada0ea1e8ebe3b5b1716cd)), closes [#30670](https://github.com/bitnami/charts/issues/30670)
+
+## <small>12.0.4 (2024-10-22)</small>
+
+* [bitnami/cassandra] Release 12.0.4 (#29999) ([fa84d22](https://github.com/bitnami/charts/commit/fa84d227e19679fb83303771eaaeaf6bdbb41927)), closes [#29999](https://github.com/bitnami/charts/issues/29999)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>12.0.3 (2024-09-30)</small>
+
+* [bitnami/cassandra] Release 12.0.3 (#29666) ([acf52f1](https://github.com/bitnami/charts/commit/acf52f17121eced58c2b8241b419e11997215b25)), closes [#29666](https://github.com/bitnami/charts/issues/29666)
+
+## <small>12.0.2 (2024-09-26)</small>
+
+* [bitnami/cassandra] Use common password manager to handle passwords (#29560) ([2f3e793](https://github.com/bitnami/charts/commit/2f3e793a6ba8d63859f57561efaf6c6e5e2119a2)), closes [#29560](https://github.com/bitnami/charts/issues/29560)
+
+## <small>12.0.1 (2024-09-10)</small>
+
+* [bitnami/cassandra] Release 12.0.1 (#29339) ([0349ba2](https://github.com/bitnami/charts/commit/0349ba298f17cef36647d887f74cc9600be00be5)), closes [#29339](https://github.com/bitnami/charts/issues/29339)
+
+## 12.0.0 (2024-09-10)
+
+* [bitnami/cassandra] Release 12.0.0 (#29305) ([a1acd8f](https://github.com/bitnami/charts/commit/a1acd8f74562ec3d85d0ee11e6d22c9d426699df)), closes [#29305](https://github.com/bitnami/charts/issues/29305)
+
+## <small>11.4.2 (2024-09-04)</small>
+
+* [bitnami/cassandra] test: :white_check_mark: Increase ginkgo test timeout ([a6ee96a](https://github.com/bitnami/charts/commit/a6ee96a47c38957ce7150282aa3b02f0fbc7b0d6))
+
+## <small>11.4.1 (2024-09-03)</small>
+
+* [bitnami/cassandra] test: :white_check_mark: Improve ginkgo testing reliability (#29177) ([28cf5f7](https://github.com/bitnami/charts/commit/28cf5f7b8e48370b31d79ed596fd26697ac4a0dc)), closes [#29177](https://github.com/bitnami/charts/issues/29177)
+
+## 11.4.0 (2024-09-03)
+
+* [bitnami/cassandra] feat: :sparkles: Allow setting initdb scripts in values (#29172) ([0aaac20](https://github.com/bitnami/charts/commit/0aaac209548b8c38af586322dbda2e86e8830600)), closes [#29172](https://github.com/bitnami/charts/issues/29172)
+* Update README.md (#29126) ([0d5e4f8](https://github.com/bitnami/charts/commit/0d5e4f85cd10e48fcf53dc6a9d69b2f4a4c8ae34)), closes [#29126](https://github.com/bitnami/charts/issues/29126)
+
+## <small>11.3.14 (2024-08-28)</small>
+
+* [bitnami/cassandra] Release 11.3.14 (#29077) ([70e610c](https://github.com/bitnami/charts/commit/70e610c83801ad78a7d6370ee830df0ff97c129e)), closes [#29077](https://github.com/bitnami/charts/issues/29077)
+
+## <small>11.3.13 (2024-08-21)</small>
+
+* [bitnami/cassandra] Release 11.3.13 (#28958) ([9ff4ab2](https://github.com/bitnami/charts/commit/9ff4ab23d8a1b5d70279cb991d8028a99a1d7a4b)), closes [#28958](https://github.com/bitnami/charts/issues/28958)
+
+## <small>11.3.12 (2024-07-31)</small>
+
+* [bitnami/cassandra] Improve Ginkgo test (#28603) ([bcf704a](https://github.com/bitnami/charts/commit/bcf704adf1f2140df4ca8e6c2f60cbeabeca1711)), closes [#28603](https://github.com/bitnami/charts/issues/28603)
+
+## <small>11.3.11 (2024-07-25)</small>
+
+* [bitnami/cassandra] Release 11.3.11 (#28408) ([8a65384](https://github.com/bitnami/charts/commit/8a6538440b1ca408369ec814831f6239fe47fa3b)), closes [#28408](https://github.com/bitnami/charts/issues/28408)
+
+## <small>11.3.10 (2024-07-24)</small>
+
+* [bitnami/cassandra] Release 11.3.10 (#28273) ([b022c3b](https://github.com/bitnami/charts/commit/b022c3b7535e7d063ee7302357c20257c4022c57)), closes [#28273](https://github.com/bitnami/charts/issues/28273)
+
+## <small>11.3.9 (2024-07-23)</small>
+
+* [bitnami/cassandra] Release 11.3.9 (#28236) ([4c14b4d](https://github.com/bitnami/charts/commit/4c14b4d164e705409e1a6b1126ff7da2400895fb)), closes [#28236](https://github.com/bitnami/charts/issues/28236)
+
+## <small>11.3.8 (2024-07-23)</small>
+
+* [bitnami/cassandra] Release 11.3.8 (#28209) ([97f5aaa](https://github.com/bitnami/charts/commit/97f5aaaa2a19c9ed3a8581db26e7c74de423c456)), closes [#28209](https://github.com/bitnami/charts/issues/28209)
+
+## <small>11.3.7 (2024-07-17)</small>
+
+* [bitnami/cassandra] Fix for cassandra.commitstorage.class helper (#28119) ([18acada](https://github.com/bitnami/charts/commit/18acada4400bdf5bde6d8c5b36d93ee57bb54b22)), closes [#28119](https://github.com/bitnami/charts/issues/28119)
+
+## <small>11.3.6 (2024-07-16)</small>
+
+* [bitnami/cassandra] Global StorageClass as default value (#28002) ([691d719](https://github.com/bitnami/charts/commit/691d71984aa90d993cc8d869950bb2ef8ea46374)), closes [#28002](https://github.com/bitnami/charts/issues/28002)
+
+## <small>11.3.5 (2024-07-12)</small>
+
+* [bitnami/cassandra] Release 11.3.5 (#27932) ([c70f93d](https://github.com/bitnami/charts/commit/c70f93dfc0bbfa494c94b248ea9219c2c1a3918b)), closes [#27932](https://github.com/bitnami/charts/issues/27932)
+
+## <small>11.3.4 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/cassandra] Release 11.3.4 (#27687) ([7d04f02](https://github.com/bitnami/charts/commit/7d04f020dd9e7c697dcc3433234ebf98be704377)), closes [#27687](https://github.com/bitnami/charts/issues/27687)
+
+## <small>11.3.3 (2024-06-18)</small>
+
+* [bitnami/cassandra] Release 11.3.3 (#27327) ([0500e6c](https://github.com/bitnami/charts/commit/0500e6ce6acbefcb6093f7cf04de1821a3b42971)), closes [#27327](https://github.com/bitnami/charts/issues/27327)
+
+## <small>11.3.2 (2024-06-17)</small>
+
+* [bitnami/cassandra] Release 11.3.2 (#27205) ([9ff5a5c](https://github.com/bitnami/charts/commit/9ff5a5c88575dae15cb405b981986c05066a8b34)), closes [#27205](https://github.com/bitnami/charts/issues/27205)
+
+## <small>11.3.1 (2024-06-06)</small>
+
+* [bitnami/cassandra] Release 11.3.1 (#26940) ([a8bd95b](https://github.com/bitnami/charts/commit/a8bd95b0223ba9ec7688788027e423eb5a80d990)), closes [#26940](https://github.com/bitnami/charts/issues/26940)
+
+## 11.3.0 (2024-06-05)
+
+* [bitnami/cassandra] Enable PodDisruptionBudgets (#26687) ([70cc69f](https://github.com/bitnami/charts/commit/70cc69f7216348eb03e34b47d096dc60e82770b3)), closes [#26687](https://github.com/bitnami/charts/issues/26687)
+
+## <small>11.2.1 (2024-06-04)</small>
+
+* [bitnami/cassandra] Bump chart version (#26622) ([c46fcac](https://github.com/bitnami/charts/commit/c46fcacea5c0f1e3688fe4c35c3bd79ea68de122)), closes [#26622](https://github.com/bitnami/charts/issues/26622)
 
 ## 11.2.0 (2024-05-21)
 

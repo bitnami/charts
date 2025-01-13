@@ -3,7 +3,7 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{ if and (or .Values.input .Values.filter .Values.output .Values.extraConfigurationFiles) (not .Values.existingConfiguration) }}
+{{ if and (or .Values.input .Values.extraInput .Values.filter .Values.output .Values.extraConfigurationFiles) (not .Values.existingConfiguration) }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -16,9 +16,10 @@ metadata:
 data:
 {{- if (or .Values.input .Values.filter .Values.output) }}
   logstash.conf: |-
-{{- if .Values.input }}
+{{- if or .Values.input .Values.extraInput }}
     input {
     {{- include "common.tplvalues.render" (dict "value" .Values.input "context" $) | nindent 6 }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.extraInput "context" $) | nindent 6 }}
     }
 {{- end }}
 {{- if .Values.filter }}

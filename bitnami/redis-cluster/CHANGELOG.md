@@ -1,8 +1,110 @@
 # Changelog
 
-## 10.2.2 (2024-06-04)
+## 11.4.0 (2025-01-13)
 
-* [bitnami/redis-cluster] Bump chart version ([#26667](https://github.com/bitnami/charts/pull/26667))
+* [bitnami/redis-cluster] feat: add support for svc bindings ([#31330](https://github.com/bitnami/charts/pull/31330))
+
+## 11.3.0 (2025-01-10)
+
+* [bitnami/redis-cluster] feat: add support for customizing loadBalancerClass on services (#31288) ([ca6048a](https://github.com/bitnami/charts/commit/ca6048a15b45d61c0f590f6b98041ac92bac61c0)), closes [#31288](https://github.com/bitnami/charts/issues/31288)
+
+## <small>11.2.3 (2025-01-08)</small>
+
+* [bitnami/redis-cluster] Release 11.2.3 (#31239) ([f14298a](https://github.com/bitnami/charts/commit/f14298a112c8d6a7eb51ab3f1fd8b114bd27b050)), closes [#31239](https://github.com/bitnami/charts/issues/31239)
+
+## <small>11.2.2 (2025-01-08)</small>
+
+* [bitnami/redis-cluster] Add support for namespaceOverride (#31243) ([d0dbf85](https://github.com/bitnami/charts/commit/d0dbf85e15c388ad23c6a3c58c3553c267a19356)), closes [#31243](https://github.com/bitnami/charts/issues/31243)
+
+## <small>11.2.1 (2024-12-21)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/redis-cluster] Release 11.2.1 (#31137) ([b648635](https://github.com/bitnami/charts/commit/b64863575083fb3358c8bc144a0807102b623290)), closes [#31137](https://github.com/bitnami/charts/issues/31137)
+
+## 11.2.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 5) (#30674) ([ed2a546](https://github.com/bitnami/charts/commit/ed2a54617faf763169e6b01a89100b9db32e1000)), closes [#30674](https://github.com/bitnami/charts/issues/30674)
+* [bitnami/redis-cluster] Detect non-standard images (#30943) ([941937f](https://github.com/bitnami/charts/commit/941937f791d75eb04f1f29733fa73b37d3ecf15f)), closes [#30943](https://github.com/bitnami/charts/issues/30943)
+
+## 11.1.0 (2024-11-26)
+
+* [bitnami/redis-cluster] feat: Set custom terminationGracePeriodSeconds for redis (#30470) ([1cacaa5](https://github.com/bitnami/charts/commit/1cacaa54741ef79e47c8ca402ad97c9dbaa5103d)), closes [#30470](https://github.com/bitnami/charts/issues/30470)
+
+## <small>11.0.8 (2024-11-11)</small>
+
+* [bitnami/redis-cluster] Release 11.0.8 (#30406) ([03bdf29](https://github.com/bitnami/charts/commit/03bdf29b58fb4f1d4d9561d7654d39fc5e8e7ffd)), closes [#30406](https://github.com/bitnami/charts/issues/30406)
+
+## <small>11.0.7 (2024-11-08)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/redis-cluster] Unify seLinuxOptions default value (#30328) ([0743b55](https://github.com/bitnami/charts/commit/0743b55625dd5ccc2dc78de04c6536254ac40239)), closes [#30328](https://github.com/bitnami/charts/issues/30328)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>11.0.6 (2024-10-02)</small>
+
+* [bitnami/redis-cluster] Release 11.0.6 (#29755) ([c99aea9](https://github.com/bitnami/charts/commit/c99aea94ae614acd9e15b3333496da5d7e29de01)), closes [#29755](https://github.com/bitnami/charts/issues/29755)
+
+## <small>11.0.5 (2024-09-30)</small>
+
+* [bitnami/redis-cluster] Release 11.0.5 (#29657) ([d8e686d](https://github.com/bitnami/charts/commit/d8e686d691541b3f570ae8a01d0f5128ea99a50a)), closes [#29657](https://github.com/bitnami/charts/issues/29657)
+
+## <small>11.0.4 (2024-09-12)</small>
+
+* [bitnami/redis-cluster] fix: add apiVersion and kind to volumeClaimTemplates (#29358) ([c96e854](https://github.com/bitnami/charts/commit/c96e854ff082fff8007306511664a3fc21745225)), closes [#29358](https://github.com/bitnami/charts/issues/29358)
+
+## <small>11.0.3 (2024-08-21)</small>
+
+* [bitnami/redis-cluster] Release 11.0.3 (#28946) ([c55e12a](https://github.com/bitnami/charts/commit/c55e12acccfdc87bc6998c568e3c499c009538c5)), closes [#28946](https://github.com/bitnami/charts/issues/28946)
+
+## <small>11.0.2 (2024-08-09)</small>
+
+* Remove template variables from values file (#28782) ([6e6fad6](https://github.com/bitnami/charts/commit/6e6fad6c5debb1a894d9d85e4fa8d56abd4e1ba0)), closes [#28782](https://github.com/bitnami/charts/issues/28782)
+
+## <small>11.0.1 (2024-08-09)</small>
+
+* [bitnami/redis-cluster] fix: Use rollout restart in ginkgo tests (#28814) ([8eea194](https://github.com/bitnami/charts/commit/8eea19412153441d7d40c4cc45a5c3454f7a12f5)), closes [#28814](https://github.com/bitnami/charts/issues/28814)
+
+## 11.0.0 (2024-08-09)
+
+* [bitnami/redis-cluster] Release 11.0.0 (#28806) ([6dcde75](https://github.com/bitnami/charts/commit/6dcde759edb811d3b59211b7d18fe1cd8010bb6f)), closes [#28806](https://github.com/bitnami/charts/issues/28806)
+
+## 10.3.0 (2024-08-01)
+
+* [bitnami/redis-cluster] Add configurable appProtocol for metrics service port (#28380) ([879530f](https://github.com/bitnami/charts/commit/879530fe23bd410471024c57f15dae27266913fb)), closes [#28380](https://github.com/bitnami/charts/issues/28380)
+
+## <small>10.2.9 (2024-07-25)</small>
+
+* [bitnami/redis-cluster] Release 10.2.9 (#28475) ([465b7b2](https://github.com/bitnami/charts/commit/465b7b290d014884801e307dc6281a8af83513b1)), closes [#28475](https://github.com/bitnami/charts/issues/28475)
+
+## <small>10.2.8 (2024-07-24)</small>
+
+* [bitnami/redis-cluster] Release 10.2.8 (#28367) ([125073f](https://github.com/bitnami/charts/commit/125073f413c2e041ad1bcca1f2877d700a1f3b58)), closes [#28367](https://github.com/bitnami/charts/issues/28367)
+
+## <small>10.2.7 (2024-07-16)</small>
+
+* [bitnami/redis-cluster] Global StorageClass as default value (#28090) ([d80ea5c](https://github.com/bitnami/charts/commit/d80ea5c578a13a27eafd5733aabab31bccc86fe8)), closes [#28090](https://github.com/bitnami/charts/issues/28090)
+
+## <small>10.2.6 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/redis-cluster] Release 10.2.6 (#27711) ([4070805](https://github.com/bitnami/charts/commit/4070805cbedcbaa8a04282e5ab6a9dadc79f4e23)), closes [#27711](https://github.com/bitnami/charts/issues/27711)
+
+## <small>10.2.5 (2024-06-18)</small>
+
+* [bitnami/redis-cluster] Release 10.2.5 (#27410) ([1fe6395](https://github.com/bitnami/charts/commit/1fe6395d057044dbe1869af7c747fb9ebce48149)), closes [#27410](https://github.com/bitnami/charts/issues/27410)
+
+## <small>10.2.4 (2024-06-17)</small>
+
+* [bitnami/redis-cluster] Release 10.2.4 (#27275) ([101db3a](https://github.com/bitnami/charts/commit/101db3ad32781a4bbdd169dc52aa1691cebd5d1f)), closes [#27275](https://github.com/bitnami/charts/issues/27275)
+
+## <small>10.2.3 (2024-06-06)</small>
+
+* [bitnami/redis-cluster] Release 10.2.3 (#27014) ([7959ccc](https://github.com/bitnami/charts/commit/7959ccc29102a561711d44c92bfb1869d75fc04e)), closes [#27014](https://github.com/bitnami/charts/issues/27014)
+
+## <small>10.2.2 (2024-06-04)</small>
+
+* [bitnami/redis-cluster] Bump chart version (#26667) ([aa5e27b](https://github.com/bitnami/charts/commit/aa5e27b02e0051213112e31ccc6e4d5ea4f1e466)), closes [#26667](https://github.com/bitnami/charts/issues/26667)
 
 ## <small>10.2.1 (2024-06-03)</small>
 

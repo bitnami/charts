@@ -1,8 +1,211 @@
 # Changelog
 
+## 2.3.1 (2024-12-11)
+
+* [bitnami/mlflow] Release 2.3.1 ([#30994](https://github.com/bitnami/charts/pull/30994))
+
+## 2.3.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/mlflow] Detect non-standard images (#30925) ([3beb92f](https://github.com/bitnami/charts/commit/3beb92fb9c3ee77b47b0bbb1e15b6298f5d4f87b)), closes [#30925](https://github.com/bitnami/charts/issues/30925)
+
+## <small>2.2.2 (2024-12-10)</small>
+
+* fix: azure secrets (#30802) ([ffb38dd](https://github.com/bitnami/charts/commit/ffb38ddc22304901b3136edfded956eb666172bb)), closes [#30802](https://github.com/bitnami/charts/issues/30802)
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 4) (#30669) ([a4ec006](https://github.com/bitnami/charts/commit/a4ec00624589023a70a7094fcfb9f12e382bc280)), closes [#30669](https://github.com/bitnami/charts/issues/30669)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 6) (#30675) ([7b9cd04](https://github.com/bitnami/charts/commit/7b9cd04c2ffc730a0d62da787f2d4967c0ede47c)), closes [#30675](https://github.com/bitnami/charts/issues/30675)
+* [bitnami/*] docs: :memo: Unify "Securing Traffic using TLS" section (#30707) ([b572333](https://github.com/bitnami/charts/commit/b57233336e4fe9af928ecb4f2a5f334011efb1bc)), closes [#30707](https://github.com/bitnami/charts/issues/30707)
+
+## <small>2.2.1 (2024-11-18)</small>
+
+* [bitnami/mlflow] Release 2.2.1 (#30503) ([2028aad](https://github.com/bitnami/charts/commit/2028aad4277a9a6c6e57219f67f457659c13da0a)), closes [#30503](https://github.com/bitnami/charts/issues/30503)
+
+## 2.2.0 (2024-11-15)
+
+* [bitnami/mlflow] Adding missing Azure Storage configuration in the Helm Chart (#29626) ([6aa1ccb](https://github.com/bitnami/charts/commit/6aa1ccbdccc5f566f92e310b69133c2e697037a1)), closes [#29626](https://github.com/bitnami/charts/issues/29626) [#1](https://github.com/bitnami/charts/issues/1)
+
+## 2.1.0 (2024-11-04)
+
+* [bitnami/mlflow] Make mlflow host part of values (#29862) ([148ff74](https://github.com/bitnami/charts/commit/148ff74ddb1e0aa6c268f37a4a8f98d08fe821fb)), closes [#29862](https://github.com/bitnami/charts/issues/29862)
+
+## <small>2.0.5 (2024-10-31)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/mlflow] Release 2.0.5 (#30157) ([6610a2d](https://github.com/bitnami/charts/commit/6610a2d1f4cf26b83ae86ce5b7171360c2f80007)), closes [#30157](https://github.com/bitnami/charts/issues/30157)
+
+## <small>2.0.4 (2024-10-26)</small>
+
+* [bitnami/mlflow] Release 2.0.4 (#30089) ([6156103](https://github.com/bitnami/charts/commit/615610351c0de5778f95da7169c3bb66adba2f5b)), closes [#30089](https://github.com/bitnami/charts/issues/30089)
+
+## <small>2.0.3 (2024-10-24)</small>
+
+* fixed doc string for mlflow container security context; fixes #30059 (#30060) ([c7811fe](https://github.com/bitnami/charts/commit/c7811fe1c1902bf29c35af70216cc7db2037586b)), closes [#30059](https://github.com/bitnami/charts/issues/30059) [#30060](https://github.com/bitnami/charts/issues/30060)
+
+## <small>2.0.2 (2024-10-16)</small>
+
+* [bitnami/mlflow] Release 2.0.2 (#29945) ([709da84](https://github.com/bitnami/charts/commit/709da84701cec3a9e448bd35ae4f6c288894eaf0)), closes [#29945](https://github.com/bitnami/charts/issues/29945)
+
+## <small>2.0.1 (2024-10-16)</small>
+
+* [bitnami/mlflow] Release 2.0.1 (#29927) ([d0b88fc](https://github.com/bitnami/charts/commit/d0b88fc101c00906458403db9246731258f6cbe3)), closes [#29927](https://github.com/bitnami/charts/issues/29927)
+
+## 2.0.0 (2024-10-03)
+
+* [bitnami/mlflow] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x (#29740) ([366ae2b](https://github.com/bitnami/charts/commit/366ae2be83024c1fdbf09db44c6e99057e67c150)), closes [#29740](https://github.com/bitnami/charts/issues/29740)
+
+## <small>1.5.7 (2024-09-19)</small>
+
+* [bitnami/mlflow] Release 1.5.7 (#29534) ([706e4b6](https://github.com/bitnami/charts/commit/706e4b6cb60bdd595e209507f798868de6fd8777)), closes [#29534](https://github.com/bitnami/charts/issues/29534)
+
+## <small>1.5.6 (2024-09-19)</small>
+
+* [bitnami/mlflow] Release 1.5.6 (#29517) ([b5a4bf8](https://github.com/bitnami/charts/commit/b5a4bf89bdf7df7cd357830dcf31e9b0af495f16)), closes [#29517](https://github.com/bitnami/charts/issues/29517)
+
+## <small>1.5.5 (2024-09-17)</small>
+
+* [bitnami/mlflow] Release 1.5.5 (#29477) ([6182dc5](https://github.com/bitnami/charts/commit/6182dc59c2e0e0cc94e6cbca035161fc20bc12d2)), closes [#29477](https://github.com/bitnami/charts/issues/29477)
+
+## <small>1.5.4 (2024-09-17)</small>
+
+* [bitnami/mlflow] Release 1.5.4 (#29461) ([429ff90](https://github.com/bitnami/charts/commit/429ff903d4d62bd7382e8f6a3d0544a7177c80b8)), closes [#29461](https://github.com/bitnami/charts/issues/29461)
+
+## <small>1.5.3 (2024-09-16)</small>
+
+* [bitnami/mlflow] Release 1.5.3 (#29454) ([1a0c35a](https://github.com/bitnami/charts/commit/1a0c35a253d05c85ce49a6cbd991b701b732800d)), closes [#29454](https://github.com/bitnami/charts/issues/29454)
+
+## <small>1.5.2 (2024-09-16)</small>
+
+* [bitnami/mlflow] Release 1.5.2 (#29435) ([b9f4a56](https://github.com/bitnami/charts/commit/b9f4a563c176f1482d230efaef67f2930e6f0c68)), closes [#29435](https://github.com/bitnami/charts/issues/29435)
+
+## <small>1.5.1 (2024-09-15)</small>
+
+* [bitnami/mlflow] Release 1.5.1 (#29419) ([c4a8f6c](https://github.com/bitnami/charts/commit/c4a8f6cd95e3c12629e1d5e7571f58b20b5015cd)), closes [#29419](https://github.com/bitnami/charts/issues/29419)
+
+## 1.5.0 (2024-09-06)
+
+* [bitnami/mlflow] Add support for Google Cloud Storage as artifact store (#28938) ([2c6d076](https://github.com/bitnami/charts/commit/2c6d076252331b0ab641750cb0f742a5b3bb41d6)), closes [#28938](https://github.com/bitnami/charts/issues/28938)
+
+## <small>1.4.25 (2024-08-31)</small>
+
+* [bitnami/mlflow] Release 1.4.25 (#29139) ([07365a4](https://github.com/bitnami/charts/commit/07365a40a3e0246fdc926b421893782b9f17ccd7)), closes [#29139](https://github.com/bitnami/charts/issues/29139)
+
+## <small>1.4.24 (2024-08-26)</small>
+
+* [bitnami/mlflow] Release 1.4.24 (#29010) ([b750bad](https://github.com/bitnami/charts/commit/b750badc6a2332a658cec43f04a055ab40aaded4)), closes [#29010](https://github.com/bitnami/charts/issues/29010)
+
+## <small>1.4.23 (2024-08-22)</small>
+
+* [bitnami/mlflow] Update externalS3.host example (#28955) ([ce491c1](https://github.com/bitnami/charts/commit/ce491c1c1c5ded613a8f5fd087351ac769db5c1b)), closes [#28955](https://github.com/bitnami/charts/issues/28955)
+
+## <small>1.4.22 (2024-08-06)</small>
+
+* [bitnami/mlflow] Release 1.4.22 (#28698) ([b135917](https://github.com/bitnami/charts/commit/b135917f329846d61cb2510b87a717c99aa4cda3)), closes [#28698](https://github.com/bitnami/charts/issues/28698)
+
+## <small>1.4.21 (2024-07-29)</small>
+
+* [bitnami/mlflow] Release 1.4.21 (#28568) ([f122907](https://github.com/bitnami/charts/commit/f1229071d5e472881fe01e8bdaa4a90a2abe1c34)), closes [#28568](https://github.com/bitnami/charts/issues/28568)
+
+## <small>1.4.20 (2024-07-25)</small>
+
+* [bitnami/mlflow] Release 1.4.20 (#28516) ([ffd6c43](https://github.com/bitnami/charts/commit/ffd6c43f18a473a19d1c7ab420f80ec2ac03f8b5)), closes [#28516](https://github.com/bitnami/charts/issues/28516)
+
+## <small>1.4.19 (2024-07-24)</small>
+
+* [bitnami/mlflow] Release 1.4.19 (#28322) ([709e1d4](https://github.com/bitnami/charts/commit/709e1d407c0ea0a3a5e6529cab764468feab85d4)), closes [#28322](https://github.com/bitnami/charts/issues/28322)
+
+## <small>1.4.18 (2024-07-24)</small>
+
+* [bitnami/mlflow] feat: Fixup to allow database dialects to be configured (#25965) (#28316) ([5b69392](https://github.com/bitnami/charts/commit/5b693921f0ef549e63bd2496b7f636110a5ed5f2)), closes [#25965](https://github.com/bitnami/charts/issues/25965) [#28316](https://github.com/bitnami/charts/issues/28316)
+
+## <small>1.4.17 (2024-07-19)</small>
+
+* [bitnami/mlflow] Global StorageClass as default value (#28060) ([ad82fbf](https://github.com/bitnami/charts/commit/ad82fbf05614fe2bbd5155164cee374aceb00bf5)), closes [#28060](https://github.com/bitnami/charts/issues/28060)
+
+## <small>1.4.16 (2024-07-17)</small>
+
+* [bitnami/mlflow] fix issue 26397 - allow MLFLOW_S3_ENDPOINT without minio (#26462) ([bfef7cf](https://github.com/bitnami/charts/commit/bfef7cf6e49f2f941d0ceea68e369d2c39a1f4ac)), closes [#26462](https://github.com/bitnami/charts/issues/26462)
+
+## <small>1.4.15 (2024-07-17)</small>
+
+* [bitnami/mlflow] Update deps (#28131) ([35854a2](https://github.com/bitnami/charts/commit/35854a2de3b24a3d307c8a6d2210ce849a13c81c)), closes [#28131](https://github.com/bitnami/charts/issues/28131)
+
+## <small>1.4.14 (2024-07-13)</small>
+
+* [bitnami/mlflow] Release 1.4.14 (#27949) ([88f5ff0](https://github.com/bitnami/charts/commit/88f5ff0e1ca35361e0cc4f2cf0c6d8b84c8ad2f7)), closes [#27949](https://github.com/bitnami/charts/issues/27949)
+
+## <small>1.4.13 (2024-07-08)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/mlflow] Release 1.4.13 (#27841) ([8384d96](https://github.com/bitnami/charts/commit/8384d96ba8b92128a2d262499f8b54f4541db2a4)), closes [#27841](https://github.com/bitnami/charts/issues/27841)
+
+## <small>1.4.12 (2024-06-20)</small>
+
+* [bitnami/mlflow] Release 1.4.12 (#27468) ([00fe505](https://github.com/bitnami/charts/commit/00fe505345fccf57ff1353749841ae3ec5b9d2a5)), closes [#27468](https://github.com/bitnami/charts/issues/27468)
+
+## <small>1.4.11 (2024-06-18)</small>
+
+* [bitnami/mlflow] Release 1.4.11 (#27381) ([b836b94](https://github.com/bitnami/charts/commit/b836b94e531bf9a141eb2ccff8eb44c1babec746)), closes [#27381](https://github.com/bitnami/charts/issues/27381)
+
+## <small>1.4.10 (2024-06-17)</small>
+
+* [bitnami/mlflow] Release 1.4.10 (#27311) ([889aeb0](https://github.com/bitnami/charts/commit/889aeb05dbc702c615faa94052e67d8aae737f2e)), closes [#27311](https://github.com/bitnami/charts/issues/27311)
+
+## <small>1.4.9 (2024-06-17)</small>
+
+* [bitnami/mlflow] Release 1.4.9 (#27251) ([2e581c1](https://github.com/bitnami/charts/commit/2e581c17d559f6b295d9ccd5b87785220b1a0e4b)), closes [#27251](https://github.com/bitnami/charts/issues/27251)
+
+## <small>1.4.8 (2024-06-17)</small>
+
+* [bitnami/mlflow] Increase tracking memory (#27194) ([79745a3](https://github.com/bitnami/charts/commit/79745a3cb79a2c249d4653cb9aa666dc692aa84b)), closes [#27194](https://github.com/bitnami/charts/issues/27194)
+
+## <small>1.4.7 (2024-06-14)</small>
+
+* [bitnami/mlflow] Add wait before starting the tests (#27178) ([10d0f98](https://github.com/bitnami/charts/commit/10d0f984612a0b5fe9b411bc6fec36879823a188)), closes [#27178](https://github.com/bitnami/charts/issues/27178)
+
+## <small>1.4.6 (2024-06-14)</small>
+
+* [bitnami/mlflow] Release 1.4.6 (#27176) ([7a481b5](https://github.com/bitnami/charts/commit/7a481b5a18c4f62a2fae53d67921a5d28e03dbc4)), closes [#27176](https://github.com/bitnami/charts/issues/27176)
+
+## <small>1.4.5 (2024-06-12)</small>
+
+* [bitnami/mlflow] Render imagePullSecrets (#27126) ([3c75b41](https://github.com/bitnami/charts/commit/3c75b4159defefb892eed325a3383ca2c9c76aea)), closes [#27126](https://github.com/bitnami/charts/issues/27126)
+
+## <small>1.4.4 (2024-06-06)</small>
+
+* [bitnami/mlflow] Release 1.4.4 (#27035) ([017a475](https://github.com/bitnami/charts/commit/017a4756394b9c887853f961d7c5e9437282dee0)), closes [#27035](https://github.com/bitnami/charts/issues/27035)
+
+## <small>1.4.3 (2024-06-06)</small>
+
+* [bitnami/mlflow] Release 1.4.3 (#26987) ([2f07b57](https://github.com/bitnami/charts/commit/2f07b57791e3651cd60d9e98a0d4bef31f633ad6)), closes [#26987](https://github.com/bitnami/charts/issues/26987)
+
+## <small>1.4.2 (2024-06-06)</small>
+
+* [bitnami/mlflow] Fix tests definition and remove legacy code from PDBs (#26895) ([00bd196](https://github.com/bitnami/charts/commit/00bd196165d80375faff351e6920cac6736ebcd2)), closes [#26895](https://github.com/bitnami/charts/issues/26895)
+
+## <small>1.4.1 (2024-06-05)</small>
+
+* [bitnami/mlflow] Bump chart version (#26848) ([c01d8ed](https://github.com/bitnami/charts/commit/c01d8edce57340a0f0b2a386ad2480162f7249f4)), closes [#26848](https://github.com/bitnami/charts/issues/26848)
+
+## 1.4.0 (2024-06-05)
+
+* [bitnami/mlflow] Align PodDisruptionBudgets with templates (#26706) ([bef7a6a](https://github.com/bitnami/charts/commit/bef7a6a2ba60ebcc400fe447965e73272b9dcc21)), closes [#26706](https://github.com/bitnami/charts/issues/26706)
+
+## <small>1.3.3 (2024-06-05)</small>
+
+* [bitnami/mlflow] Bump chart version (#26790) ([c8e65b0](https://github.com/bitnami/charts/commit/c8e65b02bb411a40468790386cf6c6eebba8ecf8)), closes [#26790](https://github.com/bitnami/charts/issues/26790)
+
+## <small>1.3.2 (2024-06-04)</small>
+
+* [bitnami/mlflow] Release 1.3.2 (#26571) ([cd67157](https://github.com/bitnami/charts/commit/cd67157cf8ce156e779046b1eb9404ce903deda7)), closes [#26571](https://github.com/bitnami/charts/issues/26571)
+
+## <small>1.3.1 (2024-06-04)</small>
+
+* [bitnami/mlflow] Fix missing '-' option in the liveness execution command (#26526) ([e0d5dd1](https://github.com/bitnami/charts/commit/e0d5dd144e9ac10903e72f51f3adbbeabd976126)), closes [#26526](https://github.com/bitnami/charts/issues/26526)
+
 ## 1.3.0 (2024-06-04)
 
-* [bitnami/mlflow] feat: Allow database dialects of external database to be configured ([#25965](https://github.com/bitnami/charts/pull/25965))
+* [bitnami/mlflow] feat: Allow database dialects of external database to be configured (#25965) ([6e2e370](https://github.com/bitnami/charts/commit/6e2e37046ed6d20c3142a202db43a0ee459b177e)), closes [#25965](https://github.com/bitnami/charts/issues/25965) [#25964](https://github.com/bitnami/charts/issues/25964)
 
 ## <small>1.2.3 (2024-06-04)</small>
 

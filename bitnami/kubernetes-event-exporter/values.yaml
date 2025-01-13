@@ -16,6 +16,11 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
   ## Compatibility adaptations for Kubernetes platforms
   ##
   compatibility:
@@ -85,10 +90,9 @@ image:
   ##
   registry: docker.io
   repository: bitnami/kubernetes-event-exporter
-  tag: 1.7.0-debian-12-r4
+  tag: 1.7.0-debian-12-r20
   digest: ""
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent

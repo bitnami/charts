@@ -3,7 +3,7 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if and .Values.rbac.create .Values.applicationSet.enabled }}
+{{- if and .Values.applicationSet.enabled .Values.rbac.create }}
 kind: Role
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 metadata:
@@ -43,6 +43,8 @@ rules:
     - appprojects
     verbs:
     - get
+    - list
+    - watch
   - apiGroups:
     - ""
     resources:

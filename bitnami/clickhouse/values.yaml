@@ -9,7 +9,8 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
+## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ##
 global:
   imageRegistry: ""
@@ -18,7 +19,13 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  defaultStorageClass: ""
   storageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
   ## Compatibility adaptations for Kubernetes platforms
   ##
   compatibility:
@@ -85,10 +92,9 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/clickhouse
-  tag: 24.5.1-debian-12-r0
+  tag: 24.12.2-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -103,6 +109,9 @@ image:
   ## Enable debug mode
   ##
   debug: false
+## @param clusterName ClickHouse cluster name
+##
+clusterName: default
 ## @param shards Number of ClickHouse shards to deploy
 ##
 shards: 2
@@ -284,7 +293,7 @@ defaultConfigurationOverrides: |
     {{- if or (ne (int .Values.shards) 1) (ne (int .Values.replicaCount) 1)}}
     <!-- Cluster configuration - Any update of the shards and replicas requires helm upgrade -->
     <remote_servers>
-      <default>
+      <{{ .Values.clusterName }}>
         {{- $shards := $.Values.shards | int }}
         {{- range $shard, $e := until $shards }}
         <shard>
@@ -299,7 +308,7 @@ defaultConfigurationOverrides: |
             {{- end }}
         </shard>
         {{- end }}
-      </default>
+      </{{ .Values.clusterName }}>
     </remote_servers>
     {{- end }}
     {{- if .Values.keeper.enabled }}
@@ -988,7 +997,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r22
+    tag: 12-debian-12-r34
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1138,17 +1147,6 @@ externalZookeeper:
 ##
 zookeeper:
   enabled: true
-  ## Override zookeeper default image as 3.9 is not supported https://github.com/ClickHouse/ClickHouse/issues/53749
-  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/zookeeper
-  ## @param zookeeper.image.registry [default: REGISTRY_NAME] Zookeeper image registry
-  ## @param zookeeper.image.repository [default: REPOSITORY_NAME/zookeeper] Zookeeper image repository
-  ## @skip zookeeper.image.tag Zookeeper image tag (immutable tags are recommended)
-  ## @param zookeeper.image.pullPolicy Zookeeper image pull policy
-  image:
-    registry: docker.io
-    repository: bitnami/zookeeper
-    tag: 3.8.4-debian-12-r6
-    pullPolicy: IfNotPresent
   replicaCount: 3
   service:
     ports:

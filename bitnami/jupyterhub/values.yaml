@@ -8,7 +8,8 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
+## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ##
 global:
   imageRegistry: ""
@@ -17,7 +18,13 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  defaultStorageClass: ""
   storageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
   ## Compatibility adaptations for Kubernetes platforms
   ##
   compatibility:
@@ -77,10 +84,9 @@ hub:
   image:
     registry: docker.io
     repository: bitnami/jupyterhub
-    tag: 4.1.5-debian-12-r6
+    tag: 4.1.6-debian-12-r9
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -196,17 +202,19 @@ hub:
       {{- if .Values.singleuser.sidecars }}
       extraContainers: {{- include "common.tplvalues.render" ( dict "value" .Values.singleuser.sidecars "context" $ ) | nindent 4 }}
       {{- end }}
+      {{- if not (or (eq .Values.global.compatibility.openshift.adaptSecurityContext "force") (and (eq .Values.global.compatibility.openshift.adaptSecurityContext "auto") (include "common.compatibility.isOpenshift" .))) }}
       {{- if .Values.singleuser.containerSecurityContext.enabled }}
       uid: {{ .Values.singleuser.containerSecurityContext.runAsUser }}
       {{- end }}
       {{- if .Values.singleuser.podSecurityContext.enabled }}
       fsGid: {{ .Values.singleuser.podSecurityContext.fsGroup }}
       {{- end }}
+      {{- end }}
       {{- if .Values.singleuser.containerSecurityContext.enabled }}
-      containerSecurityContext: {{- omit .Values.singleuser.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+      containerSecurityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.singleuser.containerSecurityContext "context" $) | nindent 4 }}
       {{- end }}
       {{- if .Values.singleuser.podSecurityContext.enabled }}
-      podSecurityContext: {{- omit .Values.singleuser.podSecurityContext "enabled" | toYaml | nindent 4 }}
+      podSecurityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.singleuser.podSecurityContext "context" $) | nindent 4 }}
       {{- end }}
       serviceAccountName: {{ template "jupyterhub.singleuserServiceAccountName" . }}
       automountServiceAccountToken: {{ .Values.singleuser.automountServiceAccountToken }}
@@ -223,14 +231,14 @@ hub:
           - name: empty-dir
             emptyDir: {}
           {{- if .Values.singleuser.extraVolumes }}
-          {{- include "common.tplvalues.render" ( dict "value" .Values.singleuser.extraVolumes "context" $ ) | nindent 4 }}
+          {{- include "common.tplvalues.render" ( dict "value" .Values.singleuser.extraVolumes "context" $ ) | nindent 6 }}
           {{- end }}
         extraVolumeMounts:
           - name: empty-dir
             mountPath: /tmp
             subPath: tmp-dir
           {{- if .Values.singleuser.extraVolumeMounts }}
-          {{- include "common.tplvalues.render" ( dict "value" .Values.singleuser.extraVolumeMounts "context" $ ) | nindent 4 }}
+          {{- include "common.tplvalues.render" ( dict "value" .Values.singleuser.extraVolumeMounts "context" $ ) | nindent 6 }}
           {{- end }}
         capacity: {{ .Values.singleuser.persistence.size }}
         homeMountPath: {{ .Values.singleuser.notebookDir }}
@@ -520,7 +528,7 @@ hub:
   ## @param hub.pdb.maxUnavailable Set maximum available hub instances
   ##
   pdb:
-    create: false
+    create: true
     minAvailable: ""
     maxUnavailable: ""
   ## @section Hub RBAC parameters
@@ -701,10 +709,9 @@ proxy:
   image:
     registry: docker.io
     repository: bitnami/configurable-http-proxy
-    tag: 4.6.1-debian-12-r25
+    tag: 4.6.2-debian-12-r12
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -976,7 +983,7 @@ proxy:
   pdb:
     ## @param proxy.pdb.create Deploy Proxy PodDisruptionBudget
     ##
-    create: false
+    create: true
     ## @param proxy.pdb.minAvailable Set minimum available proxy instances
     ##
     minAvailable: ""
@@ -1579,10 +1586,9 @@ singleuser:
   image:
     registry: docker.io
     repository: bitnami/jupyter-base-notebook
-    tag: 5.0.0-debian-12-r0
+    tag: 4.1.6-debian-12-r19
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     ##
@@ -1819,7 +1825,7 @@ singleuser:
 auxiliaryImage:
   registry: docker.io
   repository: bitnami/os-shell
-  tag: 12-debian-12-r22
+  tag: 12-debian-12-r34
   digest: ""
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.

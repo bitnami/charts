@@ -18,6 +18,7 @@ metadata:
 subjects:
   - kind: ServiceAccount
     name: {{ include "argocd.dex.serviceAccountName" . }}
+    namespace: {{ include "common.names.namespace" . | quote }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role

@@ -4,12 +4,12 @@
 ## @section Global parameters
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
-## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+## Current available global Docker image parameters: imageRegistry, imagePullSecrets, defaultStorageClass and compatibility
 ##
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
 ##
 global:
   imageRegistry: ""
@@ -18,7 +18,13 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass: ""
+  defaultStorageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    ##
+    allowInsecureImages: false
   ## Compatibility adaptations for Kubernetes platforms
   ##
   compatibility:
@@ -82,10 +88,9 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/kong
-  tag: 3.7.0-debian-12-r1
+  tag: 3.9.0-debian-12-r6
   digest: ""
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -283,7 +288,7 @@ autoscaling:
 ## @param pdb.maxUnavailable Maximum unavailable Kong replicas (expressed in percentage)
 ##
 pdb:
-  create: false
+  create: true
   minAvailable: ""
   maxUnavailable: "50%"
 ## @section Kong Container Parameters
@@ -663,10 +668,9 @@ ingressController:
   image:
     registry: docker.io
     repository: bitnami/kong-ingress-controller
-    tag: 3.1.5-debian-12-r0
+    tag: 3.4.0-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -895,18 +899,6 @@ migration:
 ##
 postgresql:
   enabled: true
-  ## Override PostgreSQL default image as 14.x is not supported
-  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/postgresql
-  ## @param postgresql.image.registry [default: REGISTRY_NAME] PostgreSQL image registry
-  ## @param postgresql.image.repository [default: REPOSITORY_NAME/postgresql] PostgreSQL image repository
-  ## @skip postgresql.image.tag PostgreSQL image tag (immutable tags are recommended)
-  ## @param postgresql.image.digest PostgreSQL image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
-  ##
-  image:
-    registry: docker.io
-    repository: bitnami/postgresql
-    tag: 14.12.0-debian-12-r8
-    digest: ""
   auth:
     username: kong
     password: ""

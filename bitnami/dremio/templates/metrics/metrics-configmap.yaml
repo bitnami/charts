@@ -1,0 +1,51 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{/* Adding the helper in here for better readability */}}
+{{- define "dremio.metrics.jmxConfiguration.default" }}
+jmxUrl: service:jmx:rmi:///jndi/rmi://127.0.0.1:{{ .Values.dremio.containerPorts.jmx }}/jmxrmi
+lowercaseOutputName: true
+lowercaseOutputLabelNames: true
+ssl: false
+rules:
+  - pattern: ".*"
+{{- end }}
+
+{{- define "dremio.metrics.telemetryConfiguration.default" }}
+{{- /* Taken from https://docs.dremio.com/current/sonar/monitoring/dremio-nodes/#enabling-node-metrics */}}
+auto-reload:
+ enabled: True
+ period: 90
+ unit: SECONDS
+
+metrics:
+ - name: jmx_reporter
+   comment: "Publish metrics on jmx"
+   reporter:
+     type: jmx
+     rate: SECONDS
+     duration: MILLISECONDS
+{{- end }}
+
+{{- if and .Values.metrics.enabled (not .Values.metrics.existingConfigmap) }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ printf "%s-metrics-configuration" (include "common.names.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: dremio
+    app.kubernetes.io/component: metrics
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+data:
+  {{- $jmxConfiguration := mustMergeOverwrite (include "dremio.metrics.jmxConfiguration.default" . | fromYaml) (include "common.tplvalues.render" (dict "value" .Values.metrics.jmxConfigOverrides "context" $) | fromYaml) }}
+  jmx-prometheus.yml: |
+    {{- toYaml $jmxConfiguration | nindent 4 }}
+  {{- $telemetryConfiguration := mustMergeOverwrite (include "dremio.metrics.telemetryConfiguration.default" . | fromYaml) (include "common.tplvalues.render" (dict "value" .Values.metrics.telemetryConfigOverrides "context" $) | fromYaml) }}
+  dremio-telemetry.yaml: |
+    {{- toYaml $telemetryConfiguration | nindent 4 }}
+{{- end -}}

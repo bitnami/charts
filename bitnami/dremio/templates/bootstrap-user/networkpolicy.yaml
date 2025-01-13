@@ -1,0 +1,59 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.bootstrapUserJob.networkPolicy.enabled }}
+kind: NetworkPolicy
+apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
+metadata:
+  name: {{ printf "%s-bootstrap-user" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: dremio
+    app.kubernetes.io/component: master-coordinator
+    {{- /* We need an extra label that applies to both master and non-master coordinators. Taken from upstream dremio chart */}}
+    app: dremio-coordinator
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.bootstrapUserJob.podLabels .Values.commonLabels ) "context" . ) }}
+  podSelector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/part-of: dremio
+      app.kubernetes.io/component: bootstrap-user
+  policyTypes:
+    - Ingress
+    - Egress
+  {{- if .Values.bootstrapUserJob.networkPolicy.allowExternalEgress }}
+  egress:
+    - {}
+  {{- else }}
+  egress:
+    # Allow dns resolution
+    - ports:
+        - port: 53
+          protocol: UDP
+        - port: 53
+          protocol: TCP
+    # Allow outbound connections to other cluster pods
+    - ports:
+        - port: {{ .Values.dremio.containerPorts.web }}
+        - port: {{ .Values.dremio.containerPorts.client }}
+        - port: {{ .Values.dremio.containerPorts.flight }}
+        - port: {{ .Values.dremio.containerPorts.fabric }}
+        - port: {{ .Values.dremio.containerPorts.conduit }}
+      to:
+        - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
+              part-of: dremio
+    {{- if .Values.bootstrapUserJob.networkPolicy.extraEgress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.bootstrapUserJob.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+  ingress:
+    {{- if .Values.bootstrapUserJob.networkPolicy.extraIngress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.bootstrapUserJob.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
+    {{- end }}
+{{- end }}

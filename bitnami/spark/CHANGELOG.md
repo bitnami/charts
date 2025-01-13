@@ -1,8 +1,86 @@
 # Changelog
 
-## 9.1.1 (2024-06-04)
+## 9.3.2 (2024-12-21)
 
-* [bitnami/spark] Bump chart version ([#26669](https://github.com/bitnami/charts/pull/26669))
+* [bitnami/spark] Release 9.3.2 ([#31136](https://github.com/bitnami/charts/pull/31136))
+
+## <small>9.3.1 (2024-12-14)</small>
+
+* [bitnami/spark] Release 9.3.1 (#31041) ([092c28c](https://github.com/bitnami/charts/commit/092c28c197402c2d06ec821a86d6656df696f568)), closes [#31041](https://github.com/bitnami/charts/issues/31041)
+
+## 9.3.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 6) (#30675) ([7b9cd04](https://github.com/bitnami/charts/commit/7b9cd04c2ffc730a0d62da787f2d4967c0ede47c)), closes [#30675](https://github.com/bitnami/charts/issues/30675)
+* [bitnami/spark] Detect non-standard images (#30947) ([85f0c77](https://github.com/bitnami/charts/commit/85f0c770ad8792b2371207403eabedfb701730c1)), closes [#30947](https://github.com/bitnami/charts/issues/30947)
+
+## <small>9.2.14 (2024-11-08)</small>
+
+* [bitnami/spark] Unify seLinuxOptions default value (#30326) ([f47256e](https://github.com/bitnami/charts/commit/f47256e1c1d90eecb1850ca453568e9c8990ea5c)), closes [#30326](https://github.com/bitnami/charts/issues/30326)
+
+## <small>9.2.13 (2024-11-04)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/spark] Release 9.2.13 (#30189) ([68f8f1f](https://github.com/bitnami/charts/commit/68f8f1f9932a70137ce4b26fe2a5025e956b31fe)), closes [#30189](https://github.com/bitnami/charts/issues/30189)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>9.2.12 (2024-10-01)</small>
+
+* [bitnami/spark] Fix extraEgress being applied from master instead of worker (#29591) ([65b08b5](https://github.com/bitnami/charts/commit/65b08b500c0324ba079d1a8c18306330d4812026)), closes [#29591](https://github.com/bitnami/charts/issues/29591)
+
+## <small>9.2.11 (2024-09-25)</small>
+
+* [bitnami/spark] Release 9.2.11 (#29593) ([733c5e8](https://github.com/bitnami/charts/commit/733c5e8a5516fa46c6f86c5d503edc388fae2d7e)), closes [#29593](https://github.com/bitnami/charts/issues/29593)
+
+## <small>9.2.10 (2024-08-24)</small>
+
+* [bitnami/spark] Release 9.2.10 (#29011) ([2c919dc](https://github.com/bitnami/charts/commit/2c919dc748aba27b595f4aaf0a4c7f4270ff0ba7)), closes [#29011](https://github.com/bitnami/charts/issues/29011)
+
+## <small>9.2.9 (2024-08-12)</small>
+
+* [bitnami/spark] Release 9.2.9 (#28833) ([b449fa9](https://github.com/bitnami/charts/commit/b449fa96b8c4898ba6fbd40e0a3c1039be16282a)), closes [#28833](https://github.com/bitnami/charts/issues/28833)
+
+## <small>9.2.8 (2024-07-25)</small>
+
+* [bitnami/spark] Release 9.2.8 (#28498) ([947dec0](https://github.com/bitnami/charts/commit/947dec017ad4a59e817791c363b7367c1dd96d49)), closes [#28498](https://github.com/bitnami/charts/issues/28498)
+
+## <small>9.2.7 (2024-07-24)</small>
+
+* [bitnami/spark] Release 9.2.7 (#28393) ([c72861c](https://github.com/bitnami/charts/commit/c72861cb4fcebdca4cbe6368967dc3d73eebe9fe)), closes [#28393](https://github.com/bitnami/charts/issues/28393)
+
+## <small>9.2.6 (2024-07-18)</small>
+
+* [bitnami/spark] Global StorageClass as default value (#28098) ([a71c989](https://github.com/bitnami/charts/commit/a71c989e8810622b5c0eeddef8fae16d17831f64)), closes [#28098](https://github.com/bitnami/charts/issues/28098)
+
+## <small>9.2.5 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/spark] Release 9.2.5 (#27719) ([5dfefe1](https://github.com/bitnami/charts/commit/5dfefe1a0d1f2da7655fb26b3a36d1a7aba337b4)), closes [#27719](https://github.com/bitnami/charts/issues/27719)
+
+## <small>9.2.4 (2024-06-18)</small>
+
+* [bitnami/spark] Release 9.2.4 (#27419) ([8d0a80f](https://github.com/bitnami/charts/commit/8d0a80fc4933932005d946b82c8fa4750d91ddcf)), closes [#27419](https://github.com/bitnami/charts/issues/27419)
+
+## <small>9.2.3 (2024-06-17)</small>
+
+* [bitnami/spark] Release 9.2.3 (#27304) ([1b43ea1](https://github.com/bitnami/charts/commit/1b43ea1a272812f29abefc0374544ca1f4d3e519)), closes [#27304](https://github.com/bitnami/charts/issues/27304)
+
+## <small>9.2.2 (2024-06-06)</small>
+
+* [bitnami/spark] Release 9.2.2 (#27021) ([ff645d7](https://github.com/bitnami/charts/commit/ff645d76d78913c2afbce282f89a40cb795d8ffe)), closes [#27021](https://github.com/bitnami/charts/issues/27021)
+
+## <small>9.2.1 (2024-06-06)</small>
+
+* [bitnami/spark] Release 9.2.1 (#26921) ([0183af4](https://github.com/bitnami/charts/commit/0183af4fbccb89cebcfb1f6a476a9c32ef13a7e3)), closes [#26921](https://github.com/bitnami/charts/issues/26921)
+
+## 9.2.0 (2024-06-05)
+
+* [bitnami/spark] Enable PodDisruptionBudgets (#26536) ([8b090f2](https://github.com/bitnami/charts/commit/8b090f2591afe979c746d463c14cd2355e3f3d7f)), closes [#26536](https://github.com/bitnami/charts/issues/26536)
+
+## <small>9.1.1 (2024-06-04)</small>
+
+* [bitnami/spark] Bump chart version (#26669) ([484cd76](https://github.com/bitnami/charts/commit/484cd761e8b4d7cf597c74af4f065d40b6cce7c9)), closes [#26669](https://github.com/bitnami/charts/issues/26669)
 
 ## 9.1.0 (2024-05-21)
 

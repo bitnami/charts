@@ -1,8 +1,146 @@
 # Changelog
 
-## 4.5.1 (2024-06-03)
+## 4.7.1 (2024-12-18)
 
-* [bitnami/grafana-loki] Release 4.5.1 ([#26614](https://github.com/bitnami/charts/pull/26614))
+* [bitnami/grafana-loki] Release 4.7.1 ([#31097](https://github.com/bitnami/charts/pull/31097))
+
+## 4.7.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/grafana-loki] Detect non-standard images (#30876) ([cb2d1b1](https://github.com/bitnami/charts/commit/cb2d1b14eda9779e2da95aa80108590f968ddcb0)), closes [#30876](https://github.com/bitnami/charts/issues/30876)
+
+## <small>4.6.25 (2024-12-05)</small>
+
+* [bitnami/grafana-loki] Release 4.6.25 (#30793) ([6be9a41](https://github.com/bitnami/charts/commit/6be9a41c3c51a3fb33956354c6e07164d8dd05e5)), closes [#30793](https://github.com/bitnami/charts/issues/30793)
+
+## <small>4.6.24 (2024-12-03)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 2) (#30662) ([50e0570](https://github.com/bitnami/charts/commit/50e0570f98ab15308af7910b405baa4480e5fe3f)), closes [#30662](https://github.com/bitnami/charts/issues/30662)
+* [bitnami/grafana-loki] Release 4.6.24 (#30751) ([300ba4b](https://github.com/bitnami/charts/commit/300ba4b3c61532fe725a5eeee419b6f75e63214c)), closes [#30751](https://github.com/bitnami/charts/issues/30751)
+
+## <small>4.6.23 (2024-11-20)</small>
+
+* [bitnami/grafana-loki] Release 4.6.23 (#30543) ([53f1731](https://github.com/bitnami/charts/commit/53f17313951afb5989f8c255add605cfc1c40138)), closes [#30543](https://github.com/bitnami/charts/issues/30543)
+
+## <small>4.6.22 (2024-11-07)</small>
+
+* [bitnami/grafana-loki] Release 4.6.22 (#30267) ([1445d2d](https://github.com/bitnami/charts/commit/1445d2dfb356b74ff8344e33f4c1525db9dcb0bb)), closes [#30267](https://github.com/bitnami/charts/issues/30267)
+
+## <small>4.6.21 (2024-10-29)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/grafana-loki] Fix conditional on ruler PDB creation (#30112) ([c10c73b](https://github.com/bitnami/charts/commit/c10c73b3185e95507c2ef41fa4d45fcdd899b91c)), closes [#30112](https://github.com/bitnami/charts/issues/30112)
+
+## <small>4.6.20 (2024-10-17)</small>
+
+* [bitnami/grafana-loki] Release 4.6.20 (#29978) ([b823cbd](https://github.com/bitnami/charts/commit/b823cbd9fa85f1ef1353b022b17a63b1fca86182)), closes [#29978](https://github.com/bitnami/charts/issues/29978)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>4.6.19 (2024-10-15)</small>
+
+* [grafana-loki] Fix loki config results_cache type embedded-cache (#29878) ([00cecc4](https://github.com/bitnami/charts/commit/00cecc46568fc4d65a0e88d4e8a0033107f2573e)), closes [#29878](https://github.com/bitnami/charts/issues/29878)
+
+## <small>4.6.18 (2024-10-02)</small>
+
+* [bitnami/grafana-loki] Release 4.6.18 (#29695) ([cbbfbba](https://github.com/bitnami/charts/commit/cbbfbba37e3dd37337bfbcc0bfd8c45ad31f6d57)), closes [#29695](https://github.com/bitnami/charts/issues/29695)
+
+## <small>4.6.17 (2024-09-24)</small>
+
+* [bitnami/grafana-loki] Release 4.6.17 (#29541) ([d92e7e9](https://github.com/bitnami/charts/commit/d92e7e98c17ae02afba6e98b8559880b40bc53eb)), closes [#29541](https://github.com/bitnami/charts/issues/29541)
+
+## <small>4.6.16 (2024-09-16)</small>
+
+* [bitnami/grafana-loki] bugfix: loki component not include `.Values.metrics.serviceMonitor.labels` (# ([9dc17d8](https://github.com/bitnami/charts/commit/9dc17d8ec99ea4451bbe01256496029e346e17c3)), closes [#29434](https://github.com/bitnami/charts/issues/29434)
+
+## <small>4.6.15 (2024-09-13)</small>
+
+* [bitnami/grafana-loki] Allow rendering resources values (#29343) ([b1a390b](https://github.com/bitnami/charts/commit/b1a390ba566cc74fa8b8a35138c79cc7c181a540)), closes [#29343](https://github.com/bitnami/charts/issues/29343)
+
+## <small>4.6.14 (2024-09-09)</small>
+
+* [bitnami/grafana-loki] Release 4.6.14 (#29235) ([2cc3811](https://github.com/bitnami/charts/commit/2cc3811f15b304febf7fd98eeebfd0a6573157fb)), closes [#29235](https://github.com/bitnami/charts/issues/29235)
+
+## <small>4.6.13 (2024-08-27)</small>
+
+* [bitnami/grafana-loki] Release 4.6.13 (#29049) ([86d763f](https://github.com/bitnami/charts/commit/86d763f751e71238fdd6c46e705396cdc6f9369f)), closes [#29049](https://github.com/bitnami/charts/issues/29049)
+
+## <small>4.6.12 (2024-08-23)</small>
+
+* [bitnami/grafana-loki] Release 4.6.12 (#28999) ([e65fcad](https://github.com/bitnami/charts/commit/e65fcadcf3f6aa0d8b2063c822a80c2038e943d5)), closes [#28999](https://github.com/bitnami/charts/issues/28999)
+
+## <small>4.6.11 (2024-08-08)</small>
+
+* [bitnami/grafana-loki] Release 4.6.11 (#28791) ([46649a9](https://github.com/bitnami/charts/commit/46649a9b7004762d30cf592a78c156356ce11118)), closes [#28791](https://github.com/bitnami/charts/issues/28791)
+
+## <small>4.6.10 (2024-08-07)</small>
+
+* [bitnami/grafana-loki] Release 4.6.10 (#28714) ([4e33de7](https://github.com/bitnami/charts/commit/4e33de79a8dabad3f851936aefb2c41b98aa9c36)), closes [#28714](https://github.com/bitnami/charts/issues/28714)
+
+## <small>4.6.9 (2024-07-25)</small>
+
+* [bitnami/grafana-loki] Release 4.6.9 (#28410) ([afc54e4](https://github.com/bitnami/charts/commit/afc54e444b7184c66ef781343cd2b0ecf1052ae4)), closes [#28410](https://github.com/bitnami/charts/issues/28410)
+
+## <small>4.6.8 (2024-07-24)</small>
+
+* [bitnami/grafana-loki] Release 4.6.8 (#28281) ([d1775b8](https://github.com/bitnami/charts/commit/d1775b8bf72d0a4a12d5dd5a5d9b1182d15361e7)), closes [#28281](https://github.com/bitnami/charts/issues/28281)
+
+## <small>4.6.7 (2024-07-24)</small>
+
+* [bitnami/grafana-loki] Release 4.6.7 (#28251) ([9e1b52b](https://github.com/bitnami/charts/commit/9e1b52b4d128a94179435664617b7cbe581937dc)), closes [#28251](https://github.com/bitnami/charts/issues/28251)
+
+## <small>4.6.6 (2024-07-18)</small>
+
+* [bitnami/grafana-loki] Global StorageClass as default value (#28025) ([c2143a4](https://github.com/bitnami/charts/commit/c2143a49ff62dbe2c69411128f5391856894f803)), closes [#28025](https://github.com/bitnami/charts/issues/28025)
+
+## <small>4.6.5 (2024-07-04)</small>
+
+* [bitnami/grafana-loki] Release 4.6.5 (#27762) ([9feb5b9](https://github.com/bitnami/charts/commit/9feb5b9f173cb473571c2257a7841d10da201406)), closes [#27762](https://github.com/bitnami/charts/issues/27762)
+
+## <small>4.6.4 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/grafana-loki] Release 4.6.4 (#27650) ([f8225e4](https://github.com/bitnami/charts/commit/f8225e4587c108c607ed19202a7e5fb7a843ba7b)), closes [#27650](https://github.com/bitnami/charts/issues/27650)
+
+## <small>4.6.3 (2024-06-24)</small>
+
+* [bitnami/grafana-loki] Disable Promtail secret creation if existing secret is provided (#27465) ([ca03a4e](https://github.com/bitnami/charts/commit/ca03a4e4616c48c5d7d7161ab703bc4f30400566)), closes [#27465](https://github.com/bitnami/charts/issues/27465)
+
+## <small>4.6.2 (2024-06-18)</small>
+
+* [bitnami/grafana-loki] Release 4.6.2 (#27349) ([c4e8932](https://github.com/bitnami/charts/commit/c4e89322d597eedccff4abb793489a30897385c8)), closes [#27349](https://github.com/bitnami/charts/issues/27349)
+
+## <small>4.6.1 (2024-06-17)</small>
+
+* [bitnami/grafana-loki] Release 4.6.1 (#27222) ([7118ee1](https://github.com/bitnami/charts/commit/7118ee1b62b2d1d0ceebfabd6523a89b8c1cd2eb)), closes [#27222](https://github.com/bitnami/charts/issues/27222)
+
+## 4.6.0 (2024-06-10)
+
+* [bitnami/grafana-loki] Allow disabling enableServiceLinks (#25858) ([edcbba3](https://github.com/bitnami/charts/commit/edcbba396fa1d90b80f8ad2a185669747454379f)), closes [#25858](https://github.com/bitnami/charts/issues/25858)
+
+## <small>4.5.6 (2024-06-06)</small>
+
+* [bitnami/grafana-loki] Release 4.5.6 (#26955) ([b7a386f](https://github.com/bitnami/charts/commit/b7a386fcca74bce289524843f0e6bc019d01bcae)), closes [#26955](https://github.com/bitnami/charts/issues/26955)
+
+## <small>4.5.5 (2024-06-06)</small>
+
+* [bitnami/grafana-loki] Release 4.5.5 (#26901) ([9c7dce4](https://github.com/bitnami/charts/commit/9c7dce4fea0bf4270852698c896ecc0ceb438e35)), closes [#26901](https://github.com/bitnami/charts/issues/26901)
+
+## <small>4.5.4 (2024-06-05)</small>
+
+* [bitnami/grafana-loki] Bump chart version (#26831) ([5ecf902](https://github.com/bitnami/charts/commit/5ecf902a335d328cfeba4f614dd52bfd5d9e897b)), closes [#26831](https://github.com/bitnami/charts/issues/26831)
+
+## <small>4.5.3 (2024-06-05)</small>
+
+* [bitnami/grafana-loki] Bump chart version (#26773) ([ba92179](https://github.com/bitnami/charts/commit/ba92179375b1b68a9751c463e3ba58dceb485aee)), closes [#26773](https://github.com/bitnami/charts/issues/26773)
+
+## <small>4.5.2 (2024-06-05)</small>
+
+* [bitnami/grafana-loki] Release 4.5.2 (#26732) ([b7caa72](https://github.com/bitnami/charts/commit/b7caa72f037078e277c3a7970301852f057f85c7)), closes [#26732](https://github.com/bitnami/charts/issues/26732)
+
+## <small>4.5.1 (2024-06-03)</small>
+
+* [bitnami/grafana-loki] Release 4.5.1 (#26614) ([e0a510e](https://github.com/bitnami/charts/commit/e0a510ebf68a8e3d0b296e771f2637212d09ad23)), closes [#26614](https://github.com/bitnami/charts/issues/26614)
 
 ## 4.5.0 (2024-06-03)
 

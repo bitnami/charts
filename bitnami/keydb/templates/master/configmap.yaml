@@ -1,0 +1,54 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if not .Values.master.existingConfigmap }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "keydb.master.configmapName" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: keydb
+    app.kubernetes.io/component: master
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+data:
+  keydb.conf: |-
+  {{- if .Values.commonConfiguration }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.commonConfiguration "context" .) | nindent 4 }}
+  {{- else }}
+    # Enable AOF
+    # ref: https://docs.keydb.dev/docs/persistence/#append-only-file
+    appendonly yes
+    # Disable RDB persistence, AOF persistence already enabled
+    # ref: https://docs.keydb.dev/docs/persistence/#rdb-disadvantages
+    save ""
+    loglevel notice
+  {{- end }}
+  {{- if .Values.master.configuration }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.master.configuration "context" $ ) | nindent 4 }}
+  {{- else }}
+    bind 0.0.0.0 ::
+    dir {{ .Values.master.persistence.mountPath }}
+  {{- if not .Values.auth.enabled }}
+    protected-mode no
+  {{- end }}
+  {{- if .Values.tls.enabled }}
+    port 0
+    tls-port {{ .Values.master.containerPorts.keydb }}
+    tls-cert-file /opt/bitnami/keydb/certs/tls.crt
+    tls-key-file /opt/bitnami/keydb/certs/tls.key
+    tls-ca-cert-file /opt/bitnami/keydb/certs/ca.crt
+    tls-auth-clients optional
+  {{- else }}
+    port {{ .Values.master.containerPorts.keydb }}
+  {{- end }}
+  {{- range .Values.master.disableCommands }}
+    rename-command {{ . }} ""
+  {{- end }}
+  {{- end }}
+
+{{- end }}

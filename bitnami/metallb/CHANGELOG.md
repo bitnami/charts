@@ -1,8 +1,86 @@
 # Changelog
 
-## 6.3.1 (2024-06-04)
+## 6.4.2 (2024-12-17)
 
-* [bitnami/metallb] Bump chart version ([#26647](https://github.com/bitnami/charts/pull/26647))
+* [bitnami/metallb] Release 6.4.2 ([#31074](https://github.com/bitnami/charts/pull/31074))
+
+## <small>6.4.1 (2024-12-10)</small>
+
+* [bitnami/metallb] Fix lack of global.security.allowInsecureImages option (#30973) ([8e0efd9](https://github.com/bitnami/charts/commit/8e0efd97e4510d6b533242b0f4bd91adb915fe04)), closes [#30973](https://github.com/bitnami/charts/issues/30973)
+
+## 6.4.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/metallb] Detect non-standard images (#30923) ([048c203](https://github.com/bitnami/charts/commit/048c2036e2c1c7d93ef2d51f5bb3c487e34a7224)), closes [#30923](https://github.com/bitnami/charts/issues/30923)
+
+## <small>6.3.16 (2024-12-04)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 4) (#30669) ([a4ec006](https://github.com/bitnami/charts/commit/a4ec00624589023a70a7094fcfb9f12e382bc280)), closes [#30669](https://github.com/bitnami/charts/issues/30669)
+* [bitnami/metallb] Release 6.3.16 (#30763) ([2b81e7f](https://github.com/bitnami/charts/commit/2b81e7f231fd340f909f3bc5c0fbb96ecfa0bb3a)), closes [#30763](https://github.com/bitnami/charts/issues/30763)
+
+## <small>6.3.15 (2024-11-08)</small>
+
+* [bitnami/metallb] Unify seLinuxOptions default value (#30339) ([f1cc8ce](https://github.com/bitnami/charts/commit/f1cc8ce1d4d3c8e0da0c4aa799bcaab62177f9d1)), closes [#30339](https://github.com/bitnami/charts/issues/30339)
+
+## <small>6.3.14 (2024-11-07)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/metallb] Release 6.3.14 (#30280) ([7c02be0](https://github.com/bitnami/charts/commit/7c02be08858db99911a0a4a30edbec071d1def1a)), closes [#30280](https://github.com/bitnami/charts/issues/30280)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>6.3.13 (2024-10-02)</small>
+
+* [bitnami/metallb] Release 6.3.13 (#29706) ([86c6c62](https://github.com/bitnami/charts/commit/86c6c62fd91c52da161e7d3392187a9f8a880bf9)), closes [#29706](https://github.com/bitnami/charts/issues/29706)
+
+## <small>6.3.12 (2024-09-19)</small>
+
+* [bitnami/metallb] Release 6.3.12 (#29514) ([549fe79](https://github.com/bitnami/charts/commit/549fe79bc491fe4de9d7392e3ca07b74d7fcaba5)), closes [#29514](https://github.com/bitnami/charts/issues/29514)
+
+## <small>6.3.11 (2024-09-06)</small>
+
+* [bitnami/metallb] Release 6.3.11 (#29251) ([6836c94](https://github.com/bitnami/charts/commit/6836c9487f831eea731e33cabda76db8092b31da)), closes [#29251](https://github.com/bitnami/charts/issues/29251)
+
+## <small>6.3.10 (2024-08-08)</small>
+
+* [bitnami/metallb] Release 6.3.10 (#28760) ([9ca98f2](https://github.com/bitnami/charts/commit/9ca98f2617777533328f679c8252ceeaf5ece509)), closes [#28760](https://github.com/bitnami/charts/issues/28760)
+
+## <small>6.3.9 (2024-07-24)</small>
+
+* [bitnami/metallb] Remove duplicate keys (#28203) ([1552ffc](https://github.com/bitnami/charts/commit/1552ffc0cba7b4173c1d3647e34236ebbfb4fef2)), closes [#28203](https://github.com/bitnami/charts/issues/28203)
+
+## <small>6.3.8 (2024-07-16)</small>
+
+* [bitnami/metallb] Global StorageClass as default value (#28056) ([d0ab955](https://github.com/bitnami/charts/commit/d0ab95565e69472a14c13408893b8207fe5ec578)), closes [#28056](https://github.com/bitnami/charts/issues/28056)
+
+## <small>6.3.7 (2024-07-04)</small>
+
+* [bitnami/metallb] Release 6.3.7 (#27796) ([bfd90e5](https://github.com/bitnami/charts/commit/bfd90e589210411ecf58128c2c92dc178ff3299b)), closes [#27796](https://github.com/bitnami/charts/issues/27796)
+
+## <small>6.3.6 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/metallb] Release 6.3.6 (#27664) ([fe3e1bd](https://github.com/bitnami/charts/commit/fe3e1bda08186e65efe914093b4bbe2080df065a)), closes [#27664](https://github.com/bitnami/charts/issues/27664)
+
+## <small>6.3.5 (2024-06-18)</small>
+
+* [bitnami/metallb] Release 6.3.5 (#27377) ([05ad8f5](https://github.com/bitnami/charts/commit/05ad8f5856607e0079c0e4212dc5c164a4b5634a)), closes [#27377](https://github.com/bitnami/charts/issues/27377)
+
+## <small>6.3.4 (2024-06-17)</small>
+
+* [bitnami/metallb] Release 6.3.4 (#27247) ([2638922](https://github.com/bitnami/charts/commit/2638922ed758bc4f30795d11f7bb555715f3fbdc)), closes [#27247](https://github.com/bitnami/charts/issues/27247)
+
+## <small>6.3.3 (2024-06-06)</small>
+
+* [bitnami/metallb] Release 6.3.3 (#26982) ([748cb12](https://github.com/bitnami/charts/commit/748cb12f5a3a77dfdea161df28e1e48312ef197d)), closes [#26982](https://github.com/bitnami/charts/issues/26982)
+
+## <small>6.3.2 (2024-06-05)</small>
+
+* [bitnami/metallb] Release 6.3.2 (#26739) ([82091c9](https://github.com/bitnami/charts/commit/82091c95212fcdc8515174c401a2d08268bb280c)), closes [#26739](https://github.com/bitnami/charts/issues/26739)
+
+## <small>6.3.1 (2024-06-04)</small>
+
+* [bitnami/metallb] Bump chart version (#26647) ([21fe6dc](https://github.com/bitnami/charts/commit/21fe6dc1b5b4129e998d715250ce8275093668aa)), closes [#26647](https://github.com/bitnami/charts/issues/26647)
 
 ## 6.3.0 (2024-05-30)
 

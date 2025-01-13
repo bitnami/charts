@@ -1,8 +1,110 @@
 # Changelog
 
-## 1.1.2 (2024-06-04)
+## 1.3.1 (2025-01-13)
 
-* [bitnami/kuberay] Bump chart version ([#26641](https://github.com/bitnami/charts/pull/26641))
+* [bitnami/kuberay] Release 1.3.1 ([#31319](https://github.com/bitnami/charts/pull/31319))
+
+## 1.3.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/kuberay] Detect non-standard images (#30918) ([a9558bc](https://github.com/bitnami/charts/commit/a9558bc475d78cbb012de01d09b04df980a7aec9)), closes [#30918](https://github.com/bitnami/charts/issues/30918)
+
+## <small>1.2.20 (2024-12-04)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 3) (#30666) ([82fc7e2](https://github.com/bitnami/charts/commit/82fc7e2fc12e2648ed22069942203c02bf5d4cc6)), closes [#30666](https://github.com/bitnami/charts/issues/30666)
+* [bitnami/kuberay] Release 1.2.20 (#30760) ([957d8a1](https://github.com/bitnami/charts/commit/957d8a193b23382675b451452ce0197ff03f081c)), closes [#30760](https://github.com/bitnami/charts/issues/30760)
+
+## <small>1.2.19 (2024-11-07)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/kuberay] Release 1.2.19 (#30278) ([f923bc9](https://github.com/bitnami/charts/commit/f923bc9d4a3120b8787da2e1d1db712e132897bc)), closes [#30278](https://github.com/bitnami/charts/issues/30278)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>1.2.18 (2024-10-02)</small>
+
+* [bitnami/kuberay] Release 1.2.18 (#29703) ([b971616](https://github.com/bitnami/charts/commit/b971616dbd1cb98e5319f2370c4d16cb18a7aeb2)), closes [#29703](https://github.com/bitnami/charts/issues/29703)
+
+## <small>1.2.17 (2024-09-29)</small>
+
+* [bitnami/kuberay] Release 1.2.17 (#29651) ([6635179](https://github.com/bitnami/charts/commit/6635179dc8b474d583c22337d3f076b9a5b7631d)), closes [#29651](https://github.com/bitnami/charts/issues/29651)
+
+## <small>1.2.16 (2024-09-06)</small>
+
+* [bitnami/kuberay] Release 1.2.16 (#29245) ([a7faa67](https://github.com/bitnami/charts/commit/a7faa6703781d406d18cd92b81dad24f12cfc260)), closes [#29245](https://github.com/bitnami/charts/issues/29245)
+
+## <small>1.2.15 (2024-09-05)</small>
+
+* [bitnami/kuberay] Release 1.2.15 (#29220) ([5f595ef](https://github.com/bitnami/charts/commit/5f595ef89c1cb323f252d81e6b56e57ffc31b199)), closes [#29220](https://github.com/bitnami/charts/issues/29220)
+
+## <small>1.2.14 (2024-09-05)</small>
+
+* [bitnami/kuberay] Release 1.2.14 (#29143) ([df1a61b](https://github.com/bitnami/charts/commit/df1a61ba9ed6c7e7ceacb67c24ce8ee456668861)), closes [#29143](https://github.com/bitnami/charts/issues/29143)
+
+## <small>1.2.13 (2024-08-27)</small>
+
+* [bitnami/kuberay] Release 1.2.13 (#29066) ([8206354](https://github.com/bitnami/charts/commit/82063541e28ad12c93228eaf911efd9a0562da01)), closes [#29066](https://github.com/bitnami/charts/issues/29066)
+
+## <small>1.2.12 (2024-08-23)</small>
+
+* [bitnami/kuberay] Release 1.2.12 (#29000) ([3f938b9](https://github.com/bitnami/charts/commit/3f938b946e4598c4059650ba97fb66525ad5f47f)), closes [#29000](https://github.com/bitnami/charts/issues/29000)
+
+## <small>1.2.11 (2024-08-07)</small>
+
+* [bitnami/kuberay] Release 1.2.11 (#28726) ([3b8ba77](https://github.com/bitnami/charts/commit/3b8ba775cab9bbd9f7a90402baea49e457c77039)), closes [#28726](https://github.com/bitnami/charts/issues/28726)
+
+## <small>1.2.10 (2024-07-25)</small>
+
+* [bitnami/kuberay] Release 1.2.10 (#28430) ([c01eb4b](https://github.com/bitnami/charts/commit/c01eb4bb469fabab28418e1f6e9583f19f557c40)), closes [#28430](https://github.com/bitnami/charts/issues/28430)
+
+## <small>1.2.9 (2024-07-24)</small>
+
+* [bitnami/kuberay] Release 1.2.9 (#28306) ([2d2531f](https://github.com/bitnami/charts/commit/2d2531fd491cb6701d78d548a17c1c80c257fcfd)), closes [#28306](https://github.com/bitnami/charts/issues/28306)
+
+## <small>1.2.8 (2024-07-16)</small>
+
+* [bitnami/kuberay] Global StorageClass as default value (#28046) ([ce63e89](https://github.com/bitnami/charts/commit/ce63e897be221fde5f370807188e894f2ad5f616)), closes [#28046](https://github.com/bitnami/charts/issues/28046)
+
+## <small>1.2.7 (2024-07-04)</small>
+
+* [bitnami/kuberay] Release 1.2.7 (#27798) ([5619a25](https://github.com/bitnami/charts/commit/5619a25ba4aa1ee7d62cbcc66044be7fb95db6e3)), closes [#27798](https://github.com/bitnami/charts/issues/27798)
+
+## <small>1.2.6 (2024-07-03)</small>
+
+* [bitnami/kuberay] Release 1.2.6 (#27673) ([d2be9ce](https://github.com/bitnami/charts/commit/d2be9ce1553907c01198a3ee94167044c7a54b2d)), closes [#27673](https://github.com/bitnami/charts/issues/27673)
+
+## <small>1.2.5 (2024-06-28)</small>
+
+* [bitnami/kuberay] Release 1.2.5 (#27574) ([f76470a](https://github.com/bitnami/charts/commit/f76470ab1411a5de878d4eab292af56f507e059f)), closes [#27574](https://github.com/bitnami/charts/issues/27574)
+
+## <small>1.2.4 (2024-06-27)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/kuberay] Release 1.2.4 (#27559) ([284f9aa](https://github.com/bitnami/charts/commit/284f9aa9ce8bf55d7872d77b20e1ebc70a7a2715)), closes [#27559](https://github.com/bitnami/charts/issues/27559)
+
+## <small>1.2.3 (2024-06-18)</small>
+
+* [bitnami/kuberay] Release 1.2.3 (#27368) ([40f17d6](https://github.com/bitnami/charts/commit/40f17d61d826ef9250289db5098262eb282ebf6e)), closes [#27368](https://github.com/bitnami/charts/issues/27368)
+
+## <small>1.2.2 (2024-06-17)</small>
+
+* [bitnami/kuberay] Release 1.2.2 (#27271) ([10e6c3d](https://github.com/bitnami/charts/commit/10e6c3dea944b779e7ad8048f895fbd937a09c1f)), closes [#27271](https://github.com/bitnami/charts/issues/27271)
+
+## <small>1.2.1 (2024-06-06)</small>
+
+* [bitnami/kuberay] Release 1.2.1 (#26972) ([d75ae0a](https://github.com/bitnami/charts/commit/d75ae0a678ead0d9b894a64db3ce5861cc1f6685)), closes [#26972](https://github.com/bitnami/charts/issues/26972)
+
+## 1.2.0 (2024-06-06)
+
+* [bitnami/kuberay] Enable PodDisruptionBudgets (#26702) ([e7d7dec](https://github.com/bitnami/charts/commit/e7d7dec7af82e9d5e82ae33ed0aac569ace03e7b)), closes [#26702](https://github.com/bitnami/charts/issues/26702)
+
+## <small>1.1.3 (2024-06-05)</small>
+
+* [bitnami/kuberay] Release 1.1.3 (#26737) ([e53a993](https://github.com/bitnami/charts/commit/e53a993a5de7f9f4c9bd16cf69ee1fe75db5d0a5)), closes [#26737](https://github.com/bitnami/charts/issues/26737)
+
+## <small>1.1.2 (2024-06-04)</small>
+
+* [bitnami/kuberay] Bump chart version (#26641) ([2f9071b](https://github.com/bitnami/charts/commit/2f9071b8fd86a5e6abcf6a91c2701abcc5edaabb)), closes [#26641](https://github.com/bitnami/charts/issues/26641)
 
 ## <small>1.1.1 (2024-05-22)</small>
 

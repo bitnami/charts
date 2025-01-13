@@ -1,8 +1,105 @@
 # Changelog
 
-## 2.3.1 (2024-06-04)
+## 2.4.1 (2025-01-13)
 
-* [bitnami/flux] Bump chart version ([#26632](https://github.com/bitnami/charts/pull/26632))
+* [bitnami/flux] Release 2.4.1 ([#31313](https://github.com/bitnami/charts/pull/31313))
+
+## 2.4.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/flux] Detect non-standard images (#30892) ([a4f4a9c](https://github.com/bitnami/charts/commit/a4f4a9c2bdc0bd2f5b91a307ddded6c22f9b4f03)), closes [#30892](https://github.com/bitnami/charts/issues/30892)
+
+## <small>2.3.22 (2024-12-03)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 2) (#30662) ([50e0570](https://github.com/bitnami/charts/commit/50e0570f98ab15308af7910b405baa4480e5fe3f)), closes [#30662](https://github.com/bitnami/charts/issues/30662)
+* [bitnami/flux] Release 2.3.22 (#30749) ([1ecb342](https://github.com/bitnami/charts/commit/1ecb342be439ce78a2bddb4cf433a9384505c09b)), closes [#30749](https://github.com/bitnami/charts/issues/30749)
+
+## <small>2.3.21 (2024-11-07)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/flux] Release 2.3.21 (#30263) ([0a49b81](https://github.com/bitnami/charts/commit/0a49b81709b631dcd2e3f4c71d2c33deb52fdd91)), closes [#30263](https://github.com/bitnami/charts/issues/30263)
+
+## <small>2.3.20 (2024-10-02)</small>
+
+* [bitnami/flux] Release 2.3.20 (#29691) ([ab05b82](https://github.com/bitnami/charts/commit/ab05b82e2d7f572995086c0935b6fbfaad70d184)), closes [#29691](https://github.com/bitnami/charts/issues/29691)
+
+## <small>2.3.19 (2024-09-26)</small>
+
+* [bitnami/flux] Release 2.3.19 (#29638) ([6b93649](https://github.com/bitnami/charts/commit/6b93649fd91b138cc40a73a928242627f019386d)), closes [#29638](https://github.com/bitnami/charts/issues/29638)
+
+## <small>2.3.18 (2024-09-25)</small>
+
+* [bitnami/flux] Release 2.3.18 (#29606) ([b02b54f](https://github.com/bitnami/charts/commit/b02b54f7f0a04992f3d0034f4ebe8b4e4a4e2b8a)), closes [#29606](https://github.com/bitnami/charts/issues/29606)
+
+## <small>2.3.17 (2024-09-19)</small>
+
+* [bitnami/flux] Release 2.3.17 (#29513) ([81ff21a](https://github.com/bitnami/charts/commit/81ff21aca7ab4d05009f871ef15a90cae8c3843b)), closes [#29513](https://github.com/bitnami/charts/issues/29513)
+
+## <small>2.3.16 (2024-09-16)</small>
+
+* [bitnami/flux] Release 2.3.16 (#29447) ([9acdd0f](https://github.com/bitnami/charts/commit/9acdd0fa523280c667733d7d5ec3fcec6aad12ad)), closes [#29447](https://github.com/bitnami/charts/issues/29447)
+
+## <small>2.3.15 (2024-09-05)</small>
+
+* [bitnami/flux] Release 2.3.15 (#29230) ([2b0fab8](https://github.com/bitnami/charts/commit/2b0fab8b91de19475f8626acb5b770a080246a64)), closes [#29230](https://github.com/bitnami/charts/issues/29230)
+
+## <small>2.3.14 (2024-08-07)</small>
+
+* [bitnami/flux] Release 2.3.14 (#28710) ([7f19247](https://github.com/bitnami/charts/commit/7f19247a14d737594ddbd21f7af603cbf7f6f71a)), closes [#28710](https://github.com/bitnami/charts/issues/28710)
+
+## <small>2.3.13 (2024-08-06)</small>
+
+* [bitnami/flux] Use nginx instead of dokuwiki for testing (#28671) ([fd31545](https://github.com/bitnami/charts/commit/fd31545aa00292995aeceb7e8d1338852e8a4514)), closes [#28671](https://github.com/bitnami/charts/issues/28671)
+
+## <small>2.3.12 (2024-07-25)</small>
+
+* [bitnami/flux] Release 2.3.12 (#28429) ([d37fda0](https://github.com/bitnami/charts/commit/d37fda0b2b83f0f961b3cbb2d8dc985cf5ce3de2)), closes [#28429](https://github.com/bitnami/charts/issues/28429)
+
+## <small>2.3.11 (2024-07-24)</small>
+
+* [bitnami/flux] Release 2.3.11 (#28275) ([b23d1cd](https://github.com/bitnami/charts/commit/b23d1cdc6a01cf2f9374174f022ec98a1da79f28)), closes [#28275](https://github.com/bitnami/charts/issues/28275)
+
+## <small>2.3.10 (2024-07-24)</small>
+
+* [bitnami/flux] Release 2.3.10 (#28266) ([dced3e4](https://github.com/bitnami/charts/commit/dced3e4856e1bcd7cc710c49443e17748638249c)), closes [#28266](https://github.com/bitnami/charts/issues/28266)
+
+## <small>2.3.9 (2024-07-18)</small>
+
+* [bitnami/flux] Global StorageClass as default value (#28021) ([d16095e](https://github.com/bitnami/charts/commit/d16095eb4fba118281fe9248d4cc22db31985043)), closes [#28021](https://github.com/bitnami/charts/issues/28021)
+
+## <small>2.3.8 (2024-07-04)</small>
+
+* [bitnami/flux] Release 2.3.8 (#27782) ([de06d71](https://github.com/bitnami/charts/commit/de06d71002305f8ec3f52a245ec4e25aeed084d1)), closes [#27782](https://github.com/bitnami/charts/issues/27782)
+
+## <small>2.3.7 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/flux] Release 2.3.7 (#27648) ([488d70c](https://github.com/bitnami/charts/commit/488d70c8412155c2a3288a30bf0ea3eb5aa368cb)), closes [#27648](https://github.com/bitnami/charts/issues/27648)
+
+## <small>2.3.6 (2024-06-18)</small>
+
+* [bitnami/flux] Release 2.3.6 (#27347) ([93f9bd3](https://github.com/bitnami/charts/commit/93f9bd311895f086dca1ad03b6edf3cfc9684873)), closes [#27347](https://github.com/bitnami/charts/issues/27347)
+
+## <small>2.3.5 (2024-06-17)</small>
+
+* [bitnami/flux] Release 2.3.5 (#27220) ([d6a55e1](https://github.com/bitnami/charts/commit/d6a55e1f60c24b69ba980c0e4b1fbe98ddd1ddb6)), closes [#27220](https://github.com/bitnami/charts/issues/27220)
+
+## <small>2.3.4 (2024-06-06)</small>
+
+* [bitnami/flux] Release 2.3.4 (#26956) ([4e1e169](https://github.com/bitnami/charts/commit/4e1e1691fffeb8dde61ed07978876af2b8e187f6)), closes [#26956](https://github.com/bitnami/charts/issues/26956)
+
+## <small>2.3.3 (2024-06-05)</small>
+
+* [bitnami/flux] Align PodDisruptionBudgets with templates (#26694) ([328d102](https://github.com/bitnami/charts/commit/328d102cf4a18663989cf3b56c90c85319b30844)), closes [#26694](https://github.com/bitnami/charts/issues/26694)
+
+## <small>2.3.2 (2024-06-05)</small>
+
+* [bitnami/flux] Release 2.3.2 (#26725) ([53a66af](https://github.com/bitnami/charts/commit/53a66af5a59dbbd365c4d458f1ad5a95a62e5266)), closes [#26725](https://github.com/bitnami/charts/issues/26725)
+
+## <small>2.3.1 (2024-06-04)</small>
+
+* [bitnami/flux] Bump chart version (#26632) ([1b8fd97](https://github.com/bitnami/charts/commit/1b8fd97a13c1017a896191b930041ce8d0659b9d)), closes [#26632](https://github.com/bitnami/charts/issues/26632)
 
 ## 2.3.0 (2024-05-21)
 

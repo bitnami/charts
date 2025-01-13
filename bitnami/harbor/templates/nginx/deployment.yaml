@@ -70,9 +70,7 @@ spec:
       {{- if .Values.nginx.schedulerName }}
       schedulerName: {{ .Values.nginx.schedulerName }}
       {{- end }}
-      {{- if .Values.nginx.serviceAccountName }}
-      serviceAccountName: {{ .Values.nginx.serviceAccountName }}
-      {{- end }}
+      serviceAccountName: {{ include "harbor.nginx.serviceAccountName" . }}
       {{- if .Values.nginx.podSecurityContext.enabled }}
       securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.nginx.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}

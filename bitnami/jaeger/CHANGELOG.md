@@ -1,8 +1,165 @@
 # Changelog
 
-## 2.3.0 (2024-05-28)
+## 5.1.3 (2025-01-08)
 
-* [bitnami/jaeger] Enable PodDisruptionBudgets ([#26494](https://github.com/bitnami/charts/pull/26494))
+* [bitnami/jaeger] Release 5.1.3 ([#31251](https://github.com/bitnami/charts/pull/31251))
+
+## <small>5.1.2 (2024-12-12)</small>
+
+* [bitnami/jaeger] Release 5.1.2 (#31021) ([ee3a9bd](https://github.com/bitnami/charts/commit/ee3a9bdcc8437615b82b8033c33be35a397e2689)), closes [#31021](https://github.com/bitnami/charts/issues/31021)
+
+## <small>5.1.1 (2024-12-10)</small>
+
+* [bitnami/jaeger] Fix typo in NOTES.txt (#30909) ([b7f1b92](https://github.com/bitnami/charts/commit/b7f1b926ecabfec95ef6c081d8b12f40d950d30e)), closes [#30909](https://github.com/bitnami/charts/issues/30909)
+
+## 5.1.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/jaeger] Detect non-standard images (#30881) ([4773008](https://github.com/bitnami/charts/commit/47730085e639cddd081ec93d62339322a36b0fc5)), closes [#30881](https://github.com/bitnami/charts/issues/30881)
+
+## <small>5.0.1 (2024-12-04)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/jaeger] Release 5.0.1 (#30758) ([1672922](https://github.com/bitnami/charts/commit/16729228545387e22171fe81cb0982202363a1db)), closes [#30758](https://github.com/bitnami/charts/issues/30758)
+
+## 5.0.0 (2024-11-20)
+
+* [bitnami/jaeger] Release 5.0.0 (#30529) ([8e7120e](https://github.com/bitnami/charts/commit/8e7120edd246ee4e5bb6467ffef905446a8b27c3)), closes [#30529](https://github.com/bitnami/charts/issues/30529)
+
+## 4.0.0 (2024-11-13)
+
+* [bitnami/jaeger] chore!: :arrow_up: :fire: :boom: Update Jaeger to 1.63.0 and deprecate jaeger-agent ([ab89e33](https://github.com/bitnami/charts/commit/ab89e33385cf98a4de67c6795d4ab970d16a1f33)), closes [#30439](https://github.com/bitnami/charts/issues/30439)
+
+## <small>3.0.6 (2024-11-08)</small>
+
+* [bitnami/jaeger] Unify seLinuxOptions default value (#30347) ([31165b2](https://github.com/bitnami/charts/commit/31165b20a0d9d22744787b4379ae4f4eb5ec8860)), closes [#30347](https://github.com/bitnami/charts/issues/30347)
+
+## <small>3.0.5 (2024-11-07)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/jaeger] Release 3.0.5 (#30273) ([235579d](https://github.com/bitnami/charts/commit/235579d5e1bcef5c2e192d9e734b29b724b6d8dc)), closes [#30273](https://github.com/bitnami/charts/issues/30273)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>3.0.4 (2024-10-10)</small>
+
+* [bitnami/jaeger] Release 3.0.4 (#29860) ([aabab2a](https://github.com/bitnami/charts/commit/aabab2ab6a76bfd988b03ea54b679cac92143ce8)), closes [#29860](https://github.com/bitnami/charts/issues/29860)
+
+## <small>3.0.3 (2024-10-07)</small>
+
+* [bitnami/jaeger] Release 3.0.3 (#29800) ([f31a3fa](https://github.com/bitnami/charts/commit/f31a3faa2b2849cdc4a68228ce6f4409dad307fc)), closes [#29800](https://github.com/bitnami/charts/issues/29800)
+
+## <small>3.0.2 (2024-10-02)</small>
+
+* [bitnami/jaeger] Release 3.0.2 (#29700) ([4cef175](https://github.com/bitnami/charts/commit/4cef1759fc061799009c72d43a7ddf475cf32071)), closes [#29700](https://github.com/bitnami/charts/issues/29700)
+
+## <small>3.0.1 (2024-09-19)</small>
+
+* [bitnami/jaeger] Release 3.0.1 (#29535) ([4163372](https://github.com/bitnami/charts/commit/4163372fd1cb5cd3dc86353dacea5d0ab705171a)), closes [#29535](https://github.com/bitnami/charts/issues/29535)
+
+## 3.0.0 (2024-09-10)
+
+* [bitnami/jaeger] Upgrade Cassandra to 12.x.x (appVersion 5.0.0) (#29324) ([40b54b0](https://github.com/bitnami/charts/commit/40b54b00a232074ba2b497823ce417c69ed78473)), closes [#29324](https://github.com/bitnami/charts/issues/29324)
+
+## <small>2.5.12 (2024-09-06)</small>
+
+* [bitnami/jaeger] Release 2.5.12 (#29243) ([4251f05](https://github.com/bitnami/charts/commit/4251f057d49681e6d9acc7f7b8fa6a0b07fa0277)), closes [#29243](https://github.com/bitnami/charts/issues/29243)
+
+## <small>2.5.11 (2024-08-27)</small>
+
+* [bitnami/jaeger] Release 2.5.11 (#29053) ([bd6238e](https://github.com/bitnami/charts/commit/bd6238edc4bcf484c54d75d8ac293ac920bc4248)), closes [#29053](https://github.com/bitnami/charts/issues/29053)
+
+## <small>2.5.10 (2024-08-07)</small>
+
+* [bitnami/jaeger] Release 2.5.10 (#28724) ([af0ed90](https://github.com/bitnami/charts/commit/af0ed90ed8da2fc475ef96dfc75082200743ca92)), closes [#28724](https://github.com/bitnami/charts/issues/28724)
+
+## <small>2.5.9 (2024-08-06)</small>
+
+* [bitnami/jaeger] Release 2.5.9 (#28703) ([d7487c1](https://github.com/bitnami/charts/commit/d7487c1a3c7cb06d07a9106e983986b2c175c45e)), closes [#28703](https://github.com/bitnami/charts/issues/28703)
+
+## <small>2.5.8 (2024-07-25)</small>
+
+* [bitnami/jaeger] Release 2.5.8 (#28419) ([edc1cd4](https://github.com/bitnami/charts/commit/edc1cd498f3cc860779116b1100f416642ff9742)), closes [#28419](https://github.com/bitnami/charts/issues/28419)
+
+## <small>2.5.7 (2024-07-24)</small>
+
+* [bitnami/jaeger] Release 2.5.7 (#28290) ([e99f82e](https://github.com/bitnami/charts/commit/e99f82ef8c2889987ca27fcb6022fdb049b5285d)), closes [#28290](https://github.com/bitnami/charts/issues/28290)
+
+## <small>2.5.6 (2024-07-24)</small>
+
+* [bitnami/jaeger] Release 2.5.6 (#28253) ([b955a63](https://github.com/bitnami/charts/commit/b955a63b31a4548d3466451ed79aae61ff761d93)), closes [#28253](https://github.com/bitnami/charts/issues/28253)
+
+## <small>2.5.5 (2024-07-18)</small>
+
+* [bitnami/jaeger] Global StorageClass as default value (#28032) ([13e60dc](https://github.com/bitnami/charts/commit/13e60dc00af1dde0172f3518919c88b46eacb035)), closes [#28032](https://github.com/bitnami/charts/issues/28032)
+
+## <small>2.5.4 (2024-07-15)</small>
+
+* [bitnami/jaeger] Release 2.5.4 (#27973) ([2c4f9ae](https://github.com/bitnami/charts/commit/2c4f9ae71a62018b6d691ab0014318cc4bf85d2b)), closes [#27973](https://github.com/bitnami/charts/issues/27973)
+
+## <small>2.5.3 (2024-07-15)</small>
+
+* [bitnami/jaeger] Release 2.5.3 (#27887) ([e01a53a](https://github.com/bitnami/charts/commit/e01a53ac8b79f09a562a1d3c598d28d2139f55fb)), closes [#27887](https://github.com/bitnami/charts/issues/27887)
+
+## <small>2.5.2 (2024-07-04)</small>
+
+* [bitnami/jaeger] Release 2.5.2 (#27791) ([3edc25b](https://github.com/bitnami/charts/commit/3edc25bff13fe127431031109120adf4dc3d83b1)), closes [#27791](https://github.com/bitnami/charts/issues/27791)
+
+## <small>2.5.1 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/jaeger] Release 2.5.1 (#27654) ([b66430f](https://github.com/bitnami/charts/commit/b66430fa4ecbfc084700db342034a88151ab1279)), closes [#27654](https://github.com/bitnami/charts/issues/27654)
+
+## 2.5.0 (2024-06-25)
+
+* [bitnami/jaeger] Add init containers resources to Jaeger chart (#27462) ([58cb9da](https://github.com/bitnami/charts/commit/58cb9daf49adfee0794376d3616f290c8d56218b)), closes [#27462](https://github.com/bitnami/charts/issues/27462)
+
+## <small>2.4.1 (2024-06-22)</small>
+
+* [bitnami/jaeger] Release 2.4.1 (#27500) ([7dc1439](https://github.com/bitnami/charts/commit/7dc14399f43185a57254bfe91552eb28c3556527)), closes [#27500](https://github.com/bitnami/charts/issues/27500)
+
+## 2.4.0 (2024-06-21)
+
+* [bitnami/jaeger] Add support for cassandra existingSecret (#26563) ([175b933](https://github.com/bitnami/charts/commit/175b933346aaf2cdef7842394806cba75fa8f078)), closes [#26563](https://github.com/bitnami/charts/issues/26563)
+
+## <small>2.3.9 (2024-06-18)</small>
+
+* [bitnami/jaeger] Release 2.3.9 (#27357) ([a11df55](https://github.com/bitnami/charts/commit/a11df5597f3a252e7405f2f2beae81347c0d7d89)), closes [#27357](https://github.com/bitnami/charts/issues/27357)
+
+## <small>2.3.8 (2024-06-17)</small>
+
+* [bitnami/jaeger] Release 2.3.8 (#27231) ([b2b3f5d](https://github.com/bitnami/charts/commit/b2b3f5d8750a9219037a5a4a7abbf0e2d00e2078)), closes [#27231](https://github.com/bitnami/charts/issues/27231)
+
+## <small>2.3.7 (2024-06-17)</small>
+
+* [bitnami/jaeger] Release 2.3.7 (#27192) ([d3f69e6](https://github.com/bitnami/charts/commit/d3f69e6c610f0b560bcfdaf165e43ccb45ae7be6)), closes [#27192](https://github.com/bitnami/charts/issues/27192)
+
+## <small>2.3.6 (2024-06-14)</small>
+
+* [bitnami/jaeger] Update query for check_cassandra_keyspace_schema (#27160) ([ad20b5b](https://github.com/bitnami/charts/commit/ad20b5befc669a241afee5795c2928e37af16f7d)), closes [#27160](https://github.com/bitnami/charts/issues/27160)
+
+## <small>2.3.5 (2024-06-12)</small>
+
+* [bitnami/jaeger] Release 2.3.5 (#27118) ([a6ec3ea](https://github.com/bitnami/charts/commit/a6ec3eaf341ed6bd42874bd896d072ec92d7faf6)), closes [#27118](https://github.com/bitnami/charts/issues/27118)
+
+## <small>2.3.4 (2024-06-06)</small>
+
+* [bitnami/jaeger] Release 2.3.4 (#26959) ([d8e4eb8](https://github.com/bitnami/charts/commit/d8e4eb885d9f68dd0b731d33c0d90ee382f29698)), closes [#26959](https://github.com/bitnami/charts/issues/26959)
+
+## <small>2.3.3 (2024-06-05)</small>
+
+* [bitnami/jaeger] Bump chart version (#26835) ([2d0c1d7](https://github.com/bitnami/charts/commit/2d0c1d7b1599e89a141300f39e29658700958562)), closes [#26835](https://github.com/bitnami/charts/issues/26835)
+
+## <small>2.3.2 (2024-06-05)</small>
+
+* [bitnami/jaeger] Bump chart version (#26777) ([dd25238](https://github.com/bitnami/charts/commit/dd252384d4ffa24ffc9429f557f70e99ab26bed3)), closes [#26777](https://github.com/bitnami/charts/issues/26777)
+
+## <small>2.3.1 (2024-06-05)</small>
+
+* [bitnami/jaeger] Release 2.3.1 (#26735) ([d0f5e2e](https://github.com/bitnami/charts/commit/d0f5e2e0f99d2508cae0cf7dee09c165295650b9)), closes [#26735](https://github.com/bitnami/charts/issues/26735)
+
+## 2.3.0 (2024-06-03)
+
+* [bitnami/jaeger] Enable PodDisruptionBudgets (#26494) ([c8a1142](https://github.com/bitnami/charts/commit/c8a11426b11314f84b5f44154ab696292b2052e4)), closes [#26494](https://github.com/bitnami/charts/issues/26494)
 
 ## <small>2.2.1 (2024-05-22)</small>
 

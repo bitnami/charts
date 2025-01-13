@@ -7,7 +7,6 @@ cluster:
 containerPorts:
   intra: 7001
   tls: 7002
-  jmx: 7198
   cql: 9043
   cqlShard: 9099
   api: 12394
@@ -26,3 +25,5 @@ podSecurityContext:
 containerSecurityContext:
   enabled: true
   runAsUser: 1002
+sysctl:
+  enabled: true

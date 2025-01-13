@@ -1,8 +1,104 @@
 # Changelog
 
-## 9.2.2 (2024-05-30)
+## 9.5.1 (2025-01-08)
 
-* [bitnami/solr] Release 9.2.2 ([#26558](https://github.com/bitnami/charts/pull/26558))
+* [bitnami/solr] Release 9.5.1 ([#31249](https://github.com/bitnami/charts/pull/31249))
+
+## 9.5.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 3) (#30688) ([10a49f9](https://github.com/bitnami/charts/commit/10a49f9ff2db1d9d11a6edd1c40a9f61803241bc)), closes [#30688](https://github.com/bitnami/charts/issues/30688)
+* [bitnami/*] docs: :memo: Unify "Securing Traffic using TLS" section (#30707) ([b572333](https://github.com/bitnami/charts/commit/b57233336e4fe9af928ecb4f2a5f334011efb1bc)), closes [#30707](https://github.com/bitnami/charts/issues/30707)
+* [bitnami/solr] Detect non-standard images (#30945) ([be6bbcf](https://github.com/bitnami/charts/commit/be6bbcf46fc8869982035d19e19e4f1616f3cdf9)), closes [#30945](https://github.com/bitnami/charts/issues/30945)
+
+## <small>9.4.8 (2024-11-29)</small>
+
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 6) (#30675) ([7b9cd04](https://github.com/bitnami/charts/commit/7b9cd04c2ffc730a0d62da787f2d4967c0ede47c)), closes [#30675](https://github.com/bitnami/charts/issues/30675)
+* [bitnami/solr] Release 9.4.8 (#30678) ([5a19c1c](https://github.com/bitnami/charts/commit/5a19c1c49effb32921cf08141efdf0bb0abbeb68)), closes [#30678](https://github.com/bitnami/charts/issues/30678)
+
+## <small>9.4.7 (2024-10-29)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/solr] chore: Increase ginkgo test timeout (#30109) ([387437d](https://github.com/bitnami/charts/commit/387437dff423c5a29e2a7314c838ccb2ac62ee46)), closes [#30109](https://github.com/bitnami/charts/issues/30109)
+
+## <small>9.4.6 (2024-10-20)</small>
+
+* [bitnami/solr] Release 9.4.6 (#30001) ([5e45cf2](https://github.com/bitnami/charts/commit/5e45cf25de1677d32d4b22ed09cbc8fc52e66611)), closes [#30001](https://github.com/bitnami/charts/issues/30001)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>9.4.5 (2024-09-17)</small>
+
+* [bitnami/solr] test: :white_check_mark: Improve reliability of ginkgo tests (#29463) ([1e01d4e](https://github.com/bitnami/charts/commit/1e01d4e63c18c978e9db4bbafa44dbbf5a89695b)), closes [#29463](https://github.com/bitnami/charts/issues/29463)
+
+## <small>9.4.4 (2024-09-16)</small>
+
+* [bitnami/solr] Use common password manager to handle password (#29430) ([3ecd8bd](https://github.com/bitnami/charts/commit/3ecd8bd03ceb15b03d06744989dc6aafab51c34d)), closes [#29430](https://github.com/bitnami/charts/issues/29430)
+
+## <small>9.4.3 (2024-09-11)</small>
+
+* [bitnami/solr] fix: add apiVersion and kind to volumeClaimTemplates (#29356) ([1e10d96](https://github.com/bitnami/charts/commit/1e10d964f28584ac5f9d4de6dc9118ca504e49ba)), closes [#29356](https://github.com/bitnami/charts/issues/29356)
+
+## <small>9.4.2 (2024-09-10)</small>
+
+* [bitnami/solr] Release 9.4.2 (#29317) ([18066e1](https://github.com/bitnami/charts/commit/18066e1687f1dafd53b1fce35ae0a9351a006f13)), closes [#29317](https://github.com/bitnami/charts/issues/29317)
+
+## <small>9.4.1 (2024-09-03)</small>
+
+* [bitnami/solr] Release 9.4.1 (#29171) ([e16f252](https://github.com/bitnami/charts/commit/e16f2527ebe36c8773f9c9a87c37a3e2a9d517cf)), closes [#29171](https://github.com/bitnami/charts/issues/29171)
+
+## 9.4.0 (2024-08-08)
+
+* [bitnami/solr] Add revisionHistoryLimit variable for metrics-deployment (#28137) ([e0efe5b](https://github.com/bitnami/charts/commit/e0efe5b38e0fd8e7a2636ef50fed474b886cc84a)), closes [#28137](https://github.com/bitnami/charts/issues/28137)
+
+## <small>9.3.10 (2024-07-25)</small>
+
+* [bitnami/solr] Release 9.3.10 (#28511) ([1bd973f](https://github.com/bitnami/charts/commit/1bd973fafea0e2e802bd48cbdf353b0da0f6a06b)), closes [#28511](https://github.com/bitnami/charts/issues/28511)
+
+## <small>9.3.9 (2024-07-24)</small>
+
+* [bitnami/solr] Release 9.3.9 (#28374) ([1a45149](https://github.com/bitnami/charts/commit/1a45149d8dfe4f0a4ad0a62f87d202fdebe33079)), closes [#28374](https://github.com/bitnami/charts/issues/28374)
+
+## <small>9.3.8 (2024-07-23)</small>
+
+* [bitnami/solr] Change permissions of the Solr data directory (#28189) ([1590355](https://github.com/bitnami/charts/commit/159035583e70a5ded7d1b7aea22978e022c79660)), closes [#28189](https://github.com/bitnami/charts/issues/28189)
+
+## <small>9.3.7 (2024-07-18)</small>
+
+* [bitnami/solr] Global StorageClass as default value (#28096) ([6897cfa](https://github.com/bitnami/charts/commit/6897cfa75b4e26fc94e211c4984f6d9e713212ec)), closes [#28096](https://github.com/bitnami/charts/issues/28096)
+
+## <small>9.3.6 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/solr] Release 9.3.6 (#27720) ([9624189](https://github.com/bitnami/charts/commit/9624189a95b49082ca553c021c1d7ca749c776a1)), closes [#27720](https://github.com/bitnami/charts/issues/27720)
+
+## <small>9.3.5 (2024-06-18)</small>
+
+* [bitnami/solr] Release 9.3.5 (#27417) ([5ea1326](https://github.com/bitnami/charts/commit/5ea13267930734b27e99bf62bc38c175b4daaa94)), closes [#27417](https://github.com/bitnami/charts/issues/27417)
+
+## <small>9.3.4 (2024-06-17)</small>
+
+* [bitnami/solr] Release 9.3.4 (#27289) ([876f64b](https://github.com/bitnami/charts/commit/876f64b612160ea67d6d2dbfdb32399379cffc0b)), closes [#27289](https://github.com/bitnami/charts/issues/27289)
+
+## <small>9.3.3 (2024-06-06)</small>
+
+* [bitnami/solr] Release 9.3.3 (#27018) ([c09a0bb](https://github.com/bitnami/charts/commit/c09a0bb43ab9526405787a2522c672bd795e8c3e)), closes [#27018](https://github.com/bitnami/charts/issues/27018)
+
+## <small>9.3.2 (2024-06-05)</small>
+
+* [bitnami/solr] Bump chart version (#26862) ([50bae78](https://github.com/bitnami/charts/commit/50bae78f14b3bf971007ffb2bc1dacd97e8bd48f)), closes [#26862](https://github.com/bitnami/charts/issues/26862)
+
+## <small>9.3.1 (2024-06-05)</small>
+
+* [bitnami/solr] Bump chart version (#26804) ([f647d19](https://github.com/bitnami/charts/commit/f647d196e2c9a980324b3cd28d4ac69ae8086092)), closes [#26804](https://github.com/bitnami/charts/issues/26804)
+
+## 9.3.0 (2024-06-05)
+
+* [bitnami/solr] Enable PodDisruptionBudgets (#26708) ([e5877b7](https://github.com/bitnami/charts/commit/e5877b74133f0770e3352efe4309cc4779fbb037)), closes [#26708](https://github.com/bitnami/charts/issues/26708)
+
+## <small>9.2.2 (2024-05-30)</small>
+
+* [bitnami/solr] Release 9.2.2 (#26558) ([be4358b](https://github.com/bitnami/charts/commit/be4358b13e35b10026d6ee31efdda58ea864633c)), closes [#26558](https://github.com/bitnami/charts/issues/26558)
 
 ## <small>9.2.1 (2024-05-22)</small>
 

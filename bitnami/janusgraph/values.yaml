@@ -9,7 +9,8 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
+## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ##
 global:
   imageRegistry: ""
@@ -18,7 +19,13 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  defaultStorageClass: ""
   storageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
   ## Compatibility adaptations for Kubernetes platforms
   ##
   compatibility:
@@ -177,10 +184,9 @@ javaOptions: ""
 image:
   registry: docker.io
   repository: bitnami/janusgraph
-  tag: 1.0.0-debian-12-r4
+  tag: 1.1.0-debian-12-r3
   digest: ""
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -308,7 +314,7 @@ podSecurityContext:
 ##
 containerSecurityContext:
   enabled: true
-  seLinuxOptions: null
+  seLinuxOptions: {}
   runAsUser: 1001
   runAsGroup: 1001
   runAsNonRoot: true
@@ -358,7 +364,7 @@ podAntiAffinityPreset: soft
 ##
 pdb:
   create: true
-  minAvailable: 1
+  minAvailable: ""
   maxUnavailable: ""
 ## Node affinity preset
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
@@ -617,7 +623,7 @@ persistence:
   ##
   resourcePolicy: ""
 
-## @section Prometheus metrics
+## @section Prometheus metrics parameters
 ##
 metrics:
   ## @param metrics.enabled Enable the export of Prometheus metrics
@@ -635,10 +641,9 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/jmx-exporter
-    tag: 0.20.0-debian-12-r17
+    tag: 1.1.0-debian-12-r1
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -838,7 +843,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r21
+    tag: 12-debian-12-r34
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -939,7 +944,7 @@ networkPolicy:
   ingressNSPodMatchLabels: {}
 
 ## @section Cassandra storage sub-chart
-## Controlled by value storage.cassandra.enabled
+## Controlled by value storageBackend.cassandra.enabled
 ##
 cassandra:
   ## @param cassandra.keyspace Name for cassandra's janusgraph keyspace

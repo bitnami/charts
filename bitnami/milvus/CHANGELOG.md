@@ -1,8 +1,185 @@
 # Changelog
 
-## 8.1.0 (2024-05-29)
+## 10.1.4 (2025-01-13)
 
-* [bitnami/milvus] PDB review ([#25983](https://github.com/bitnami/charts/pull/25983))
+* [bitnami/milvus] Release 10.1.4 ([#31333](https://github.com/bitnami/charts/pull/31333))
+
+## <small>10.1.3 (2025-01-02)</small>
+
+* [bitnami/milvus] Release 10.1.3 (#31197) ([1fe7c59](https://github.com/bitnami/charts/commit/1fe7c59f415c46e5b1e002229d5d2027f167a320)), closes [#31197](https://github.com/bitnami/charts/issues/31197)
+
+## <small>10.1.2 (2024-12-30)</small>
+
+* [bitnami/milvus] Release 10.1.2 (#31169) ([bd64596](https://github.com/bitnami/charts/commit/bd64596d62ee84df6d3515e0f6b83472bfcf7eda)), closes [#31169](https://github.com/bitnami/charts/issues/31169)
+
+## <small>10.1.1 (2024-12-23)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/milvus] Release 10.1.1 (#31147) ([f8b9a38](https://github.com/bitnami/charts/commit/f8b9a385b826dea3d54afacd90501ff3a8f3d34d)), closes [#31147](https://github.com/bitnami/charts/issues/31147)
+
+## 10.1.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/milvus] Detect non-standard images (#30959) ([e40b32f](https://github.com/bitnami/charts/commit/e40b32f1e3ddb6589ff57381d30009ba3179d9cc)), closes [#30959](https://github.com/bitnami/charts/issues/30959)
+
+## <small>10.0.4 (2024-12-04)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 4) (#30669) ([a4ec006](https://github.com/bitnami/charts/commit/a4ec00624589023a70a7094fcfb9f12e382bc280)), closes [#30669](https://github.com/bitnami/charts/issues/30669)
+* [bitnami/*] docs: :memo: Unify "Securing Traffic using TLS" section (#30707) ([b572333](https://github.com/bitnami/charts/commit/b57233336e4fe9af928ecb4f2a5f334011efb1bc)), closes [#30707](https://github.com/bitnami/charts/issues/30707)
+* [bitnami/milvus] Release 10.0.4 (#30765) ([5ce39e2](https://github.com/bitnami/charts/commit/5ce39e2c5bafaa70d6dbddc22d1bd7b6730e7abf)), closes [#30765](https://github.com/bitnami/charts/issues/30765)
+
+## <small>10.0.3 (2024-11-28)</small>
+
+* [bitnami/milvus] feat: update chart deps (#30651) ([8f80dc6](https://github.com/bitnami/charts/commit/8f80dc6f00e679c7c182055ae6ed24b780410a95)), closes [#30651](https://github.com/bitnami/charts/issues/30651)
+
+## <small>10.0.2 (2024-11-22)</small>
+
+* [bitnami/milvus] Release 10.0.2 (#30580) ([c3d8e1f](https://github.com/bitnami/charts/commit/c3d8e1f5f50f49e33f1f051baeb7c1b3d2e461b1)), closes [#30580](https://github.com/bitnami/charts/issues/30580)
+
+## <small>10.0.1 (2024-11-19)</small>
+
+* [bitnami/milvus] Release 10.0.1 (#30533) ([80a27f1](https://github.com/bitnami/charts/commit/80a27f1b29ae77195e29d29ce1a0207dfbdd4c89)), closes [#30533](https://github.com/bitnami/charts/issues/30533)
+
+## 10.0.0 (2024-11-12)
+
+* [bitnami/milvus] docs: :memo: Add "Update credentials" section (#30241) ([5e0114a](https://github.com/bitnami/charts/commit/5e0114a6b39fa7bedcefba38e5e17c54e35361e9)), closes [#30241](https://github.com/bitnami/charts/issues/30241)
+* [bitnami/milvus] Update kafka subchart to 31.0.0 (#30428) ([81e0133](https://github.com/bitnami/charts/commit/81e013315ea356fe6dc8c4252854a77af48a649d)), closes [#30428](https://github.com/bitnami/charts/issues/30428)
+
+## <small>9.0.12 (2024-11-07)</small>
+
+* [bitnami/milvus] Release 9.0.12 (#30282) ([f175ffc](https://github.com/bitnami/charts/commit/f175ffc8b28e02cc24dc6b60d447facd550a2cea)), closes [#30282](https://github.com/bitnami/charts/issues/30282)
+
+## <small>9.0.11 (2024-11-06)</small>
+
+* [bitnami/milvus] Release 9.0.10 (#30214) ([27f46e0](https://github.com/bitnami/charts/commit/27f46e0491ef08712909c825585a57fe5e39967c)), closes [#30214](https://github.com/bitnami/charts/issues/30214)
+
+## <small>9.0.10 (2024-11-05)</small>
+
+* [bitnami/milvus] Release 9.0.9 (#30148) ([c11e8b3](https://github.com/bitnami/charts/commit/c11e8b31bb20b343e6c4441969277d099d543db1)), closes [#30148](https://github.com/bitnami/charts/issues/30148)
+
+## <small>9.0.9 (2024-11-04)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/milvus] Fixed bug/typo in datanode networkpolicy.yaml to allow all egress raffic (#29956) ([9a2eba2](https://github.com/bitnami/charts/commit/9a2eba284f5c803bc0b7180b9cda8aadf57d34e8)), closes [#29956](https://github.com/bitnami/charts/issues/29956)
+
+## <small>9.0.8 (2024-10-16)</small>
+
+* [bitnami/milvus] Release 9.0.8 (#29954) ([252247d](https://github.com/bitnami/charts/commit/252247d14cd7b6cbfff98200d5301ee61e24d623)), closes [#29954](https://github.com/bitnami/charts/issues/29954)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>9.0.7 (2024-10-02)</small>
+
+* [bitnami/milvus] Release 9.0.7 (#29707) ([e5c2381](https://github.com/bitnami/charts/commit/e5c2381b7e2801392777f2abb1eb8fda3c4afe49)), closes [#29707](https://github.com/bitnami/charts/issues/29707)
+
+## <small>9.0.6 (2024-09-25)</small>
+
+* [bitnami/milvus] Release 9.0.6 (#29604) ([a196b31](https://github.com/bitnami/charts/commit/a196b314201a26506ce6448238d00857160cf43c)), closes [#29604](https://github.com/bitnami/charts/issues/29604)
+
+## <small>9.0.5 (2024-09-10)</small>
+
+* [bitnami/milvus] Release 9.0.5 (#29294) ([b467df8](https://github.com/bitnami/charts/commit/b467df892da24bb52f29256a0090488c40d452f7)), closes [#29294](https://github.com/bitnami/charts/issues/29294)
+
+## <small>9.0.4 (2024-09-02)</small>
+
+* [bitnami/milvus] Release 9.0.4 (#29113) ([4ec696e](https://github.com/bitnami/charts/commit/4ec696e3455eebf116b2e97b3a18f5d5f6f2cc60)), closes [#29113](https://github.com/bitnami/charts/issues/29113)
+
+## <small>9.0.3 (2024-08-16)</small>
+
+* [bitnami/milvus] Release 9.0.3 (#28903) ([b556a6e](https://github.com/bitnami/charts/commit/b556a6e3e2a0eabf61baa240c142cef635bff4c5)), closes [#28903](https://github.com/bitnami/charts/issues/28903)
+
+## <small>9.0.2 (2024-08-13)</small>
+
+* [bitnami/milvus] Release 9.0.2 (#28858) ([6263394](https://github.com/bitnami/charts/commit/62633945f53d2d0b76e19bf8558acf2c864a8977)), closes [#28858](https://github.com/bitnami/charts/issues/28858)
+
+## <small>9.0.1 (2024-08-07)</small>
+
+* [bitnami/milvus] Release 9.0.1 (#28729) ([acd9fce](https://github.com/bitnami/charts/commit/acd9fce938b8b11f8855b6eb5e72ed1703f52c2f)), closes [#28729](https://github.com/bitnami/charts/issues/28729)
+
+## 9.0.0 (2024-08-05)
+
+* [bitnami/milvus] Update chart dependency (kafka) (#28674) ([97bfd61](https://github.com/bitnami/charts/commit/97bfd615761d546da012fc0aaf093f2ee0fdcbc0)), closes [#28674](https://github.com/bitnami/charts/issues/28674)
+
+## <small>8.3.8 (2024-08-02)</small>
+
+* [bitnami/milvus] Release 8.3.8 (#28642) ([c0e7077](https://github.com/bitnami/charts/commit/c0e7077b6d65a0442334ae1da0eacdaf3505e5f4)), closes [#28642](https://github.com/bitnami/charts/issues/28642)
+
+## <small>8.3.7 (2024-07-25)</small>
+
+* [bitnami/milvus] fix: :bug: Set cache directory fully writable in attu (#28521) ([901c5f3](https://github.com/bitnami/charts/commit/901c5f3577a895211a53205c47e3093169d00d81)), closes [#28521](https://github.com/bitnami/charts/issues/28521)
+
+## <small>8.3.6 (2024-07-25)</small>
+
+* [bitnami/milvus] Release 8.3.6 (#28439) ([33e113a](https://github.com/bitnami/charts/commit/33e113a21a95f4c6c6075a1bb83b485d885f0e52)), closes [#28439](https://github.com/bitnami/charts/issues/28439)
+
+## <small>8.3.5 (2024-07-24)</small>
+
+* [bitnami/milvus] Release 8.3.5 (#28339) ([b06e2d7](https://github.com/bitnami/charts/commit/b06e2d76f39e5994cb026e9833e47c51ecba964f)), closes [#28339](https://github.com/bitnami/charts/issues/28339)
+
+## <small>8.3.4 (2024-07-22)</small>
+
+* [bitnami/milvus] Global StorageClass as default value (#28058) ([f706402](https://github.com/bitnami/charts/commit/f70640229e5e26e1e1357e404955dfa877c035f6)), closes [#28058](https://github.com/bitnami/charts/issues/28058)
+
+## <small>8.3.3 (2024-07-08)</small>
+
+* [bitnami/milvus] Release 8.3.3 (#27807) ([9cfaffe](https://github.com/bitnami/charts/commit/9cfaffeeb9f4145f26bb2f03a868d4fe2bd295a2)), closes [#27807](https://github.com/bitnami/charts/issues/27807)
+
+## <small>8.3.2 (2024-06-28)</small>
+
+* [bitnami/milvus] Release 8.3.2 (#27573) ([05453cb](https://github.com/bitnami/charts/commit/05453cbeae31cd9cffcd9fcf98cffc16233e5a47)), closes [#27573](https://github.com/bitnami/charts/issues/27573)
+
+## <small>8.3.1 (2024-06-27)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/milvus] Release 8.3.1 (#27558) ([45be6d3](https://github.com/bitnami/charts/commit/45be6d3c5169f035356910e2a75d211922b9249a)), closes [#27558](https://github.com/bitnami/charts/issues/27558)
+
+## 8.3.0 (2024-06-19)
+
+* [bitnami/milvus] feat: config external S3 tls client certs settings (… (#27068) ([f8249bf](https://github.com/bitnami/charts/commit/f8249bf1cca9198fd42c23d02409b774b18d3e60)), closes [#27068](https://github.com/bitnami/charts/issues/27068) [bitnami#26111](https://github.com/bitnami/issues/26111)
+
+## <small>8.2.7 (2024-06-18)</small>
+
+* [bitnami/milvus] Release 8.2.7 (#27403) ([72a2ad7](https://github.com/bitnami/charts/commit/72a2ad7c8a3f2eac2cfeede24bbf96d28c13fa18)), closes [#27403](https://github.com/bitnami/charts/issues/27403)
+
+## <small>8.2.6 (2024-06-17)</small>
+
+* [bitnami/milvus] Release 8.2.6 (#27249) ([2a2f211](https://github.com/bitnami/charts/commit/2a2f211c1bf9d862d42ffbbb4c1d3e574b8e617a)), closes [#27249](https://github.com/bitnami/charts/issues/27249)
+
+## <small>8.2.5 (2024-06-17)</small>
+
+* [bitnami/milvus] Do not expose externalKafka.tls.keyPassword (#27145) ([c16f98a](https://github.com/bitnami/charts/commit/c16f98a612a9ab4173894bb8c68b069ea74ec1cf)), closes [#27145](https://github.com/bitnami/charts/issues/27145)
+
+## <small>8.2.4 (2024-06-14)</small>
+
+* [bitnami/milvus] Release 8.2.4 (#27171) ([5e6ddd4](https://github.com/bitnami/charts/commit/5e6ddd4911796bdc5e6456e8019c1600fe254deb)), closes [#27171](https://github.com/bitnami/charts/issues/27171)
+
+## <small>8.2.3 (2024-06-14)</small>
+
+* [bitnami/milvus] Fix milvus externalS3 config, address minor typos (#27140) ([e6c70d5](https://github.com/bitnami/charts/commit/e6c70d517ebb0c9e53957abd27b839d909b62d6f)), closes [#27140](https://github.com/bitnami/charts/issues/27140)
+
+## <small>8.2.2 (2024-06-12)</small>
+
+* [bitnami/milvus] Release 8.2.2 (#27115) ([6e4fd91](https://github.com/bitnami/charts/commit/6e4fd9138237cb84c50b77427aa37c7a69ca4975)), closes [#27115](https://github.com/bitnami/charts/issues/27115)
+
+## <small>8.2.1 (2024-06-12)</small>
+
+* [bitnami/milvus] Release 8.2.1 (#26984) ([2619076](https://github.com/bitnami/charts/commit/26190763c1f425a920268fc19d1a026083cf083d)), closes [#26984](https://github.com/bitnami/charts/issues/26984)
+
+## 8.2.0 (2024-06-06)
+
+* [bitnami/milvus] feat: config external kafka tls client certs setting… (#26118) ([43e8796](https://github.com/bitnami/charts/commit/43e87967c4dd409632e37e9eacc1825397de4192)), closes [#26118](https://github.com/bitnami/charts/issues/26118) [bitnami#26110](https://github.com/bitnami/issues/26110)
+
+## <small>8.1.2 (2024-06-05)</small>
+
+* [bitnami/milvus] Bump chart version (#26847) ([8f68730](https://github.com/bitnami/charts/commit/8f687301d02eaa93e9420f7bbcf5b47e25b6bf97)), closes [#26847](https://github.com/bitnami/charts/issues/26847)
+
+## <small>8.1.1 (2024-06-05)</small>
+
+* [bitnami/milvus] Bump chart version (#26789) ([c846ba9](https://github.com/bitnami/charts/commit/c846ba9c85b488e2b952613e4ead90dd7d6ae131)), closes [#26789](https://github.com/bitnami/charts/issues/26789)
+
+## 8.1.0 (2024-05-30)
+
+* [bitnami/milvus] PDB review (#25983) ([4e80463](https://github.com/bitnami/charts/commit/4e804630c3af64934e79fcacc5e1962750a0355f)), closes [#25983](https://github.com/bitnami/charts/issues/25983)
 
 ## 8.0.0 (2024-05-27)
 

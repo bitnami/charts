@@ -17,6 +17,11 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
   ## Compatibility adaptations for Kubernetes platforms
   ##
   compatibility:
@@ -168,10 +173,9 @@ operator:
   image:
     registry: docker.io
     repository: bitnami/grafana-operator
-    tag: 5.9.1-debian-12-r0
+    tag: 5.15.1-debian-12-r4
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## Ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -518,10 +522,9 @@ grafana:
   image:
     registry: docker.io
     repository: bitnami/grafana
-    tag: 11.0.0-debian-12-r0
+    tag: 11.4.0-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## Ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -545,6 +548,10 @@ grafana:
   ## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
   podLabels: {}
+  ## @param grafana.podAnnotations Additional pod annotations to pods in the grafana deployment
+  ## Ref https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
   ## Pod securityContext
   ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param grafana.podSecurityContext.enabled Enable pods security context
@@ -656,14 +663,31 @@ grafana:
   ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
+  ## Pod Disruption Budget configuration for the grafana instance
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param grafana.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param grafana.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param grafana.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `grafana.pdb.minAvailable` and `grafana.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: false
+    minAvailable: ""
+    maxUnavailable: ""
+  ## @param grafana.extraEnvVars Array containing extra env vars to configure Grafana
+  ## For example:
+  ## extraEnvVars:
+  ##  - name: MY_ENV
+  ##    value: my-env-value
+  ##
+  extraEnvVars: []
   ## @param grafana.envFrom Extra environment variable to pass to the running container
   ## Ref: https://github.com/integr8ly/grafana-operator/blob/master/documentation/deploy_grafana.md#configuring-the-deployment
   ## e.g:
   ## envFrom:
   ## - configMapRef:
-  ##   name: grafana-configmap
+  ##     name: grafana-configmap
   ## - secretRef:
-  ##   name: grafana-secrets
+  ##     name: grafana-secrets
   ##
   envFrom: []
   ## The grafana-operator client-configuration for this grafana instance

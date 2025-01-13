@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/scylladb
 ```
 
-Looking to use ScyllaDB in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use ScyllaDB in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -48,15 +48,44 @@ These commands deploy one node with ScyllaDB on the Kubernetes cluster in the de
 
 Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
 
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcesPreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling vs Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
+### Update credentials
+
+Bitnami charts configure credentials at first boot. Any further change in the secrets or credentials require manual intervention. Follow these instructions:
+
+- Update the user password following [the upstream documentation](https://docs.scylladb.com)
+- Update the password secret with the new values (replace the SECRET_NAME and PASSWORD placeholders)
+
+```shell
+kubectl create secret generic SECRET_NAME --from-literal=scylladb-password=PASSWORD --dry-run -o yaml | kubectl apply -f -
+```
+
+### Prometheus metrics
+
+This chart can be integrated with Prometheus by setting `metrics.enabled` to `true`. This will expose ScyllaDB native Prometheus in all pods and via the ScyllaDB service. This service will have the necessary annotations to be automatically scraped by Prometheus.
+
+#### Prometheus requirements
+
+It is necessary to have a working installation of Prometheus or Prometheus Operator for the integration to work. Install the [Bitnami Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/prometheus) or the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) to easily have a working Prometheus in your cluster.
+
+#### Integration with Prometheus Operator
+
+The chart can deploy `ServiceMonitor` objects for integration with Prometheus Operator installations. To do so, set the value `metrics.serviceMonitor.enabled=true`. Ensure that the Prometheus Operator `CustomResourceDefinitions` are installed in the cluster or it will fail with the following error:
+
+```text
+no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"
+```
+
+Install the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) for having the necessary CRDs and the Prometheus Operator.
+
+### [Rolling vs Immutable tags](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
-### Enable TLS
+### Securing Traffic using TLS
 
 This chart supports TLS between client and server and between nodes, as explained below:
 
@@ -90,15 +119,15 @@ existingConfiguration=scylladb-configuration
 
 > NOTE: This ConfigMap will override other ScyllaDB configuration variables set in the chart.
 
-### Backup and restore
-
-Refer to our detailed tutorial on [backing up and restoring Bitnami ScyllaDB deployments on Kubernetes](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-backup-restore-data-scylladb-kubernetes-index.html).
-
 ### Set pod affinity
 
 This chart allows you to set custom pod affinity using the `XXX.affinity` parameter(s). Find more information about pod affinity in the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
 As an alternative, you can use the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
+
+### Backup and restore
+
+To back up and restore Helm chart deployments on Kubernetes, you need to back up the persistent volumes from the source deployment and attach them to a new deployment using [Velero](https://velero.io/), a Kubernetes backup/restore tool. Find the instructions for using Velero in [this guide](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-backup-restore-deployments-velero-index.html).
 
 ## Persistence
 
@@ -120,12 +149,14 @@ As the image run as non-root by default, it is necessary to adjust the ownership
 
 ### Global parameters
 
-| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value  |
-| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
-| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
-| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`   |
-| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value   |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`    |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`    |
+| `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`    |
+| `global.storageClass`                                 | DEPRECATED: use global.defaultStorageClass instead                                                                                                                                                                                                                                                                                                                  | `""`    |
+| `global.security.allowInsecureImages`                 | Allows skipping image verification                                                                                                                                                                                                                                                                                                                                  | `false` |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto`  |
 
 ### Common parameters
 
@@ -144,37 +175,37 @@ As the image run as non-root by default, it is necessary to adjust the ownership
 
 ### Scylladb parameters
 
-| Name                     | Description                                                                                                          | Value                      |
-| ------------------------ | -------------------------------------------------------------------------------------------------------------------- | -------------------------- |
-| `image.registry`         | Scylladb image registry                                                                                              | `REGISTRY_NAME`            |
-| `image.repository`       | Scylladb image repository                                                                                            | `REPOSITORY_NAME/scylladb` |
-| `image.digest`           | Scylladb image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag             | `""`                       |
-| `image.pullPolicy`       | image pull policy                                                                                                    | `IfNotPresent`             |
-| `image.pullSecrets`      | Scylladb image pull secrets                                                                                          | `[]`                       |
-| `image.debug`            | Enable image debug mode                                                                                              | `false`                    |
-| `dbUser.user`            | Scylladb admin user                                                                                                  | `cassandra`                |
-| `dbUser.forcePassword`   | Force the user to provide a non                                                                                      | `false`                    |
-| `dbUser.password`        | Password for `dbUser.user`. Randomly generated if empty                                                              | `""`                       |
-| `dbUser.existingSecret`  | Use an existing secret object for `dbUser.user` password (will ignore `dbUser.password`)                             | `""`                       |
-| `initDBConfigMap`        | ConfigMap with cql scripts. Useful for creating a keyspace and pre-populating data                                   | `""`                       |
-| `initDBSecret`           | Secret with cql script (with sensitive data). Useful for creating a keyspace and pre-populating data                 | `""`                       |
-| `existingConfiguration`  | ConfigMap with custom scylladb configuration files. This overrides any other Scylladb configuration set in the chart | `""`                       |
-| `cluster.name`           | Scylladb cluster name                                                                                                | `scylladb`                 |
-| `cluster.seedCount`      | Number of seed nodes                                                                                                 | `1`                        |
-| `cluster.numTokens`      | Number of tokens for each node                                                                                       | `256`                      |
-| `cluster.datacenter`     | Datacenter name                                                                                                      | `dc1`                      |
-| `cluster.rack`           | Rack name                                                                                                            | `rack1`                    |
-| `cluster.endpointSnitch` | Endpoint Snitch                                                                                                      | `SimpleSnitch`             |
-| `cluster.extraSeeds`     | For an external/second scylladb ring.                                                                                | `[]`                       |
-| `cluster.enableUDF`      | Enable User defined functions                                                                                        | `false`                    |
-| `jvm.extraOpts`          | Set the value for Java Virtual Machine extra options                                                                 | `""`                       |
-| `jvm.maxHeapSize`        | Set Java Virtual Machine maximum heap size (MAX_HEAP_SIZE). Calculated automatically if `nil`                        | `""`                       |
-| `jvm.newHeapSize`        | Set Java Virtual Machine new heap size (HEAP_NEWSIZE). Calculated automatically if `nil`                             | `""`                       |
-| `command`                | Command for running the container (set to default if not set). Use array form                                        | `[]`                       |
-| `args`                   | Args for running the container (set to default if not set). Use array form                                           | `[]`                       |
-| `extraEnvVars`           | Extra environment variables to be set on scylladb container                                                          | `[]`                       |
-| `extraEnvVarsCM`         | Name of existing ConfigMap containing extra env vars                                                                 | `""`                       |
-| `extraEnvVarsSecret`     | Name of existing Secret containing extra env vars                                                                    | `""`                       |
+| Name                     | Description                                                                                                            | Value                      |
+| ------------------------ | ---------------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| `image.registry`         | Scylladb image registry                                                                                                | `REGISTRY_NAME`            |
+| `image.repository`       | Scylladb image repository                                                                                              | `REPOSITORY_NAME/scylladb` |
+| `image.digest`           | Scylladb image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag               | `""`                       |
+| `image.pullPolicy`       | image pull policy                                                                                                      | `IfNotPresent`             |
+| `image.pullSecrets`      | Scylladb image pull secrets                                                                                            | `[]`                       |
+| `image.debug`            | Enable image debug mode                                                                                                | `false`                    |
+| `dbUser.user`            | Scylladb admin user                                                                                                    | `cassandra`                |
+| `dbUser.forcePassword`   | Force the user to provide a non                                                                                        | `false`                    |
+| `dbUser.password`        | Password for `dbUser.user`. Randomly generated if empty                                                                | `""`                       |
+| `dbUser.existingSecret`  | Use an existing secret object for `dbUser.user` password (will ignore `dbUser.password`)                               | `""`                       |
+| `initDBConfigMap`        | ConfigMap with cql scripts. Useful for creating a keyspace and pre-populating data                                     | `""`                       |
+| `initDBSecret`           | Secret with cql script (with sensitive data). Useful for creating a keyspace and pre-populating data                   | `""`                       |
+| `existingConfiguration`  | ConfigMap with custom scylla.yaml configuration file. This overrides any other Scylladb configuration set in the chart | `""`                       |
+| `cluster.name`           | Scylladb cluster name                                                                                                  | `scylladb`                 |
+| `cluster.seedCount`      | Number of seed nodes                                                                                                   | `1`                        |
+| `cluster.numTokens`      | Number of tokens for each node                                                                                         | `256`                      |
+| `cluster.datacenter`     | Datacenter name                                                                                                        | `dc1`                      |
+| `cluster.rack`           | Rack name                                                                                                              | `rack1`                    |
+| `cluster.endpointSnitch` | Endpoint Snitch                                                                                                        | `SimpleSnitch`             |
+| `cluster.extraSeeds`     | For an external/second scylladb ring.                                                                                  | `[]`                       |
+| `cluster.enableUDF`      | Enable User defined functions                                                                                          | `false`                    |
+| `jvm.extraOpts`          | Set the value for Java Virtual Machine extra options                                                                   | `""`                       |
+| `jvm.maxHeapSize`        | Set Java Virtual Machine maximum heap size (MAX_HEAP_SIZE). Calculated automatically if `nil`                          | `""`                       |
+| `jvm.newHeapSize`        | Set Java Virtual Machine new heap size (HEAP_NEWSIZE). Calculated automatically if `nil`                               | `""`                       |
+| `command`                | Command for running the container (set to default if not set). Use array form                                          | `[]`                       |
+| `args`                   | Args for running the container (set to default if not set). Use array form                                             | `[]`                       |
+| `extraEnvVars`           | Extra environment variables to be set on scylladb container                                                            | `[]`                       |
+| `extraEnvVarsCM`         | Name of existing ConfigMap containing extra env vars                                                                   | `""`                       |
+| `extraEnvVarsSecret`     | Name of existing Secret containing extra env vars                                                                      | `""`                       |
 
 ### Statefulset parameters
 
@@ -270,7 +301,7 @@ As the image run as non-root by default, it is necessary to adjust the ownership
 
 | Name                                                         | Description                                                                                                                                                                                                                         | Value            |
 | ------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
-| `jmxProxy.enabled`                                           | Enable JMX Proxy sidecar                                                                                                                                                                                                            | `true`           |
+| `jmxProxy.enabled`                                           | Enable JMX Proxy sidecar                                                                                                                                                                                                            | `false`          |
 | `jmxProxy.extraEnvVars`                                      | Array with extra environment variables to add to JMX Proxy sidecar                                                                                                                                                                  | `[]`             |
 | `jmxProxy.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars for JMX Proxy sidecar                                                                                                                                                          | `""`             |
 | `jmxProxy.extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars for JMX Proxy sidecar                                                                                                                                                             | `""`             |
@@ -484,6 +515,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 3.1.0
+
+This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
+
 It's necessary to set the `dbUser.password` parameter when upgrading for readiness/liveness probes to work properly. When you install this chart for the first time, some notes will be displayed providing the credentials you must use. Please note down the password and run the command below to upgrade your chart:
 
 ```console
@@ -493,6 +528,10 @@ helm upgrade my-release oci://REGISTRY_NAME/REPOSITORY_NAME/scylladb --set dbUse
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 | Note: you need to substitute the placeholder *[PASSWORD]* with the value obtained in the installation notes.
+
+### To 3.0.0
+
+This major version updates ScyllaDB to version 6.2. From now on, scylla-jmx becomes an optional package and is not installed by default. `jmxProxy.enabled`  has been set to `false`, and the whole JMX logic is deprecated and plan to be removed in a future release.
 
 ## License
 

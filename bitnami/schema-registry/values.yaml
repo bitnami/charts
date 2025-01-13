@@ -8,6 +8,7 @@
 ## Current available global Docker image parameters: imageRegistry and imagePullSecrets
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
 ##
 global:
   imageRegistry: ""
@@ -16,6 +17,12 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  defaultStorageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
   ## Compatibility adaptations for Kubernetes platforms
   ##
   compatibility:
@@ -29,10 +36,10 @@ global:
 ##
 kubeVersion: ""
 ## @section Common parameters
-## @param nameOverride String to partially override airflow.fullname template with a string (will prepend the release name)
+## @param nameOverride String to partially override common.names.fullname template with a string (will prepend the release name)
 ##
 nameOverride: ""
-## @param fullnameOverride String to fully override airflow.fullname template with a string
+## @param fullnameOverride String to fully override common.names.fullname template with a string
 ##
 fullnameOverride: ""
 ## @param namespaceOverride String to fully override common.names.namespace
@@ -78,9 +85,8 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/schema-registry
-  tag: 7.6.1-debian-12-r4
+  tag: 7.8.0-debian-12-r1
   digest: ""
-  ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -517,6 +523,9 @@ service:
   ## @param service.annotations Annotations for Schema Registry service
   ##
   annotations: {}
+  ## @param service.labels Labels for Schema Registry service
+  ##
+  labels: {}
   ## @param service.extraPorts Extra ports to expose in Schema Registry service (normally used with the `sidecars` value)
   ##
   extraPorts: []
@@ -674,7 +683,7 @@ ingress:
   ## Please see README.md for more information
   ## e.g:
   ## secrets:
-  ##   - name: odoo.local-tls
+  ##   - name: schema-registry.local-tls
   ##     key: |-
   ##       -----BEGIN RSA PRIVATE KEY-----
   ##       ...
@@ -689,12 +698,12 @@ ingress:
   ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
   ## e.g:
   ## extraRules:
-  ## - host: airflow.local
+  ## - host: schema-registry.local
   ##     http:
   ##       path: /
   ##       backend:
   ##         service:
-  ##           name: airflow-svc
+  ##           name: schema-registry
   ##           port:
   ##             name: http
   ##

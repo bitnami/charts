@@ -7,7 +7,8 @@
 ## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
+## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ##
 global:
   imageRegistry: ""
@@ -16,7 +17,13 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  defaultStorageClass: ""
   storageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
   ## Compatibility adaptations for Kubernetes platforms
   ##
   compatibility:
@@ -77,10 +84,9 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/concourse
-  tag: 7.11.2-debian-12-r12
+  tag: 7.12.0-debian-12-r18
   digest: ""
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -544,7 +550,7 @@ web:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsGroup: 1001
     runAsNonRoot: true
@@ -668,7 +674,7 @@ web:
     ## @param web.pdb.minAvailable Minimum number / percentage of Concourse worker pods that should remain scheduled
     ## @param web.pdb.maxUnavailable Maximum number/percentage of Concourse worker pods that may be made unavailable
     ##
-    minAvailable: 1
+    minAvailable: ""
     maxUnavailable: ""
   ## @param web.psp.create Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later
   ##
@@ -933,7 +939,7 @@ worker:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 0
     runAsGroup: 0
     runAsNonRoot: false
@@ -1407,7 +1413,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r21
+    tag: 12-debian-12-r35
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1443,7 +1449,7 @@ volumePermissions:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 0
     seccompProfile:
       type: "RuntimeDefault"

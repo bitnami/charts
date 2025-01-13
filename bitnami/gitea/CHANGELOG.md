@@ -1,8 +1,147 @@
 # Changelog
 
-## 2.3.0 (2024-05-28)
+## 3.1.4 (2025-01-10)
 
-* [bitnami/gitea] Enable PodDisruptionBudgets ([#26433](https://github.com/bitnami/charts/pull/26433))
+* [bitnami/gitea] Release 3.1.4 ([#31285](https://github.com/bitnami/charts/pull/31285))
+
+## <small>3.1.3 (2025-01-09)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/gitea] Release 3.1.3 (#31276) ([50dc1bd](https://github.com/bitnami/charts/commit/50dc1bd4f77cc356862d39c919d31cba2d671b58)), closes [#31276](https://github.com/bitnami/charts/issues/31276)
+
+## <small>3.1.2 (2024-12-13)</small>
+
+* [bitnami/gitea] Release 3.1.2 (#31031) ([f137d21](https://github.com/bitnami/charts/commit/f137d2178d93c2c257339ca6fd8688cbb5a74034)), closes [#31031](https://github.com/bitnami/charts/issues/31031)
+
+## <small>3.1.1 (2024-12-11)</small>
+
+* [bitnami/gitea] Release 3.1.1 (#31000) ([893a7e0](https://github.com/bitnami/charts/commit/893a7e0b2ea7cddd98553f14d290849c0e5d0d07)), closes [#31000](https://github.com/bitnami/charts/issues/31000)
+
+## 3.1.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/gitea] Detect non-standard images (#30889) ([00a7a4e](https://github.com/bitnami/charts/commit/00a7a4e5ed1d81a90cf5f5c9f1b816eb1b0becac)), closes [#30889](https://github.com/bitnami/charts/issues/30889)
+
+## <small>3.0.4 (2024-12-03)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 2) (#30687) ([c457848](https://github.com/bitnami/charts/commit/c457848b2a111aad59830b98f85ffa1e29918e10)), closes [#30687](https://github.com/bitnami/charts/issues/30687)
+* [bitnami/gitea] Release 3.0.4 (#30750) ([61e17d8](https://github.com/bitnami/charts/commit/61e17d8e5b627d9bd2174a28708edfb2b611ca53)), closes [#30750](https://github.com/bitnami/charts/issues/30750)
+
+## <small>3.0.3 (2024-11-27)</small>
+
+* [bitnami/gitea] Release 3.0.3 (#30642) ([6278bcc](https://github.com/bitnami/charts/commit/6278bcc27deabce0d3bf6c9f475974c78d4441a1)), closes [#30642](https://github.com/bitnami/charts/issues/30642)
+
+## <small>3.0.2 (2024-11-07)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/gitea] Release 3.0.2 (#30265) ([a65be9e](https://github.com/bitnami/charts/commit/a65be9e30f7a4906a97afbf56c8df31ab46c0eb1)), closes [#30265](https://github.com/bitnami/charts/issues/30265)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>3.0.1 (2024-10-09)</small>
+
+* [bitnami/gitea] Release 3.0.1 (#29853) ([06bc529](https://github.com/bitnami/charts/commit/06bc529e30553869e3414c900eee6c8cf9dbd300)), closes [#29853](https://github.com/bitnami/charts/issues/29853)
+
+## 3.0.0 (2024-10-03)
+
+* [bitnami/gitea] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x (#29732) ([d7f95fe](https://github.com/bitnami/charts/commit/d7f95fe48347c4cdb0a63f19752db52b5d7f9612)), closes [#29732](https://github.com/bitnami/charts/issues/29732)
+
+## <small>2.3.23 (2024-10-02)</small>
+
+* [bitnami/gitea] Release 2.3.23 (#29692) ([b9087cc](https://github.com/bitnami/charts/commit/b9087cc758df039fd5a47f74271d608f577e8697)), closes [#29692](https://github.com/bitnami/charts/issues/29692)
+
+## <small>2.3.22 (2024-09-19)</small>
+
+* [bitnami/gitea] Release 2.3.22 (#29512) ([5b8e97d](https://github.com/bitnami/charts/commit/5b8e97dae372b47f3ff2df5f9826373f3cc778e0)), closes [#29512](https://github.com/bitnami/charts/issues/29512)
+
+## <small>2.3.21 (2024-09-15)</small>
+
+* [bitnami/gitea] Release 2.3.21 (#29427) ([fc69df6](https://github.com/bitnami/charts/commit/fc69df6f756458aa4f2b769460fd43f2249654d8)), closes [#29427](https://github.com/bitnami/charts/issues/29427)
+
+## <small>2.3.20 (2024-09-11)</small>
+
+* [bitnami/gitea] Update externaldb-secret logic (#27596) ([c247305](https://github.com/bitnami/charts/commit/c2473057525a51f5177c3da0fc9ae03c0e4577dc)), closes [#27596](https://github.com/bitnami/charts/issues/27596)
+
+## <small>2.3.19 (2024-09-06)</small>
+
+* [bitnami/gitea] Release 2.3.19 (#29244) ([c08607d](https://github.com/bitnami/charts/commit/c08607d3a426e0a41881160baa650147b3b36451)), closes [#29244](https://github.com/bitnami/charts/issues/29244)
+
+## <small>2.3.18 (2024-08-07)</small>
+
+* [bitnami/gitea] Release 2.3.18 (#28713) ([1c3acc8](https://github.com/bitnami/charts/commit/1c3acc86db823eccafcd80454dfd0596128ed655)), closes [#28713](https://github.com/bitnami/charts/issues/28713)
+
+## <small>2.3.17 (2024-07-25)</small>
+
+* [bitnami/gitea] Release 2.3.17 (#28406) ([7e7d160](https://github.com/bitnami/charts/commit/7e7d16055a07b89fc6270a63eabf7f5629a33edf)), closes [#28406](https://github.com/bitnami/charts/issues/28406)
+
+## <small>2.3.16 (2024-07-24)</small>
+
+* [bitnami/gitea] Release 2.3.16 (#28278) ([ec73679](https://github.com/bitnami/charts/commit/ec7367976ea372796d7825cd7854e2ef125501ae)), closes [#28278](https://github.com/bitnami/charts/issues/28278)
+
+## <small>2.3.15 (2024-07-24)</small>
+
+* [bitnami/gitea] Release 2.3.15 (#28250) ([b3b4a50](https://github.com/bitnami/charts/commit/b3b4a5093a599091e18955b29bdff33fdcf88298)), closes [#28250](https://github.com/bitnami/charts/issues/28250)
+
+## <small>2.3.14 (2024-07-18)</small>
+
+* [bitnami/gitea] Global StorageClass as default value (#28023) ([36100a3](https://github.com/bitnami/charts/commit/36100a3f4471aabfeb2d4179fea56d153157e525)), closes [#28023](https://github.com/bitnami/charts/issues/28023)
+
+## <small>2.3.13 (2024-07-15)</small>
+
+* [bitnami/gitea] Include goss-wait test to improve test results (#27980) ([c690b0d](https://github.com/bitnami/charts/commit/c690b0d818d06feb79ad473ae1447d5b3b345518)), closes [#27980](https://github.com/bitnami/charts/issues/27980)
+
+## <small>2.3.12 (2024-07-15)</small>
+
+* [bitnami/gitea] Release 2.3.12 (#27964) ([48112ab](https://github.com/bitnami/charts/commit/48112ab4823167fd68daa82cda933f4f896acf7e)), closes [#27964](https://github.com/bitnami/charts/issues/27964)
+
+## <small>2.3.11 (2024-07-05)</small>
+
+* [bitnami/gitea] Release 2.3.11 (#27810) ([f792844](https://github.com/bitnami/charts/commit/f7928444d215f77f582b06dd8b0cce317d538992)), closes [#27810](https://github.com/bitnami/charts/issues/27810)
+
+## <small>2.3.10 (2024-07-04)</small>
+
+* [bitnami/gitea] Release 2.3.10 (#27803) ([0dd2cf0](https://github.com/bitnami/charts/commit/0dd2cf0499d348260f7b967a9d739a8e57d451c4)), closes [#27803](https://github.com/bitnami/charts/issues/27803)
+
+## <small>2.3.9 (2024-07-04)</small>
+
+* [bitnami/gitea] Release 2.3.9 (#27752) ([b37b9ef](https://github.com/bitnami/charts/commit/b37b9ef02ef34e15e576544ff94ce3c98c1ac159)), closes [#27752](https://github.com/bitnami/charts/issues/27752)
+
+## <small>2.3.8 (2024-07-03)</small>
+
+* [bitnami/gitea] Release 2.3.8 (#27647) ([53e54e7](https://github.com/bitnami/charts/commit/53e54e79995cd75fb1356302f22b8f16160928e8)), closes [#27647](https://github.com/bitnami/charts/issues/27647)
+
+## <small>2.3.7 (2024-07-02)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/gitea] Release 2.3.7 (#27630) ([e0208e5](https://github.com/bitnami/charts/commit/e0208e5b734d3c5c3e9475894222ce4b5bb653da)), closes [#27630](https://github.com/bitnami/charts/issues/27630)
+
+## <small>2.3.6 (2024-06-18)</small>
+
+* [bitnami/gitea] Release 2.3.6 (#27348) ([b74347f](https://github.com/bitnami/charts/commit/b74347fad60d2643e60d6a6a572ec7d436b0d447)), closes [#27348](https://github.com/bitnami/charts/issues/27348)
+
+## <small>2.3.5 (2024-06-17)</small>
+
+* [bitnami/gitea] Release 2.3.5 (#27223) ([8933668](https://github.com/bitnami/charts/commit/893366838219b710030bd39c047cf64bdd7cdf6b)), closes [#27223](https://github.com/bitnami/charts/issues/27223)
+
+## <small>2.3.4 (2024-06-06)</small>
+
+* [bitnami/gitea] Release 2.3.4 (#26952) ([02b29d7](https://github.com/bitnami/charts/commit/02b29d737ef4e5aca0386b21f0084f13ce7bfd7b)), closes [#26952](https://github.com/bitnami/charts/issues/26952)
+
+## <small>2.3.3 (2024-06-05)</small>
+
+* [bitnami/gitea] Bump chart version (#26830) ([8412b82](https://github.com/bitnami/charts/commit/8412b824b39039281dfd0680cc81e87568fb5411)), closes [#26830](https://github.com/bitnami/charts/issues/26830)
+
+## <small>2.3.2 (2024-06-05)</small>
+
+* [bitnami/gitea] Bump chart version (#26772) ([9cf1e1c](https://github.com/bitnami/charts/commit/9cf1e1cebc78b6a7ed5e304ca0bacb5c01f0a40c)), closes [#26772](https://github.com/bitnami/charts/issues/26772)
+
+## <small>2.3.1 (2024-06-05)</small>
+
+* [bitnami/gitea] Release 2.3.1 (#26727) ([05a43bd](https://github.com/bitnami/charts/commit/05a43bd2116fefd64e7796ea9036bfb99ba0983c)), closes [#26727](https://github.com/bitnami/charts/issues/26727)
+
+## 2.3.0 (2024-06-03)
+
+* [bitnami/gitea] Enable PodDisruptionBudgets (#26433) ([4b3877b](https://github.com/bitnami/charts/commit/4b3877b03c181c7b77386f4f327568fc93093a55)), closes [#26433](https://github.com/bitnami/charts/issues/26433)
 
 ## <small>2.2.1 (2024-05-27)</small>
 

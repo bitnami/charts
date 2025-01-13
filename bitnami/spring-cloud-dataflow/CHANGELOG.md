@@ -1,8 +1,109 @@
 # Changelog
 
-## 29.0.2 (2024-05-28)
+## 34.1.0 (2024-12-10)
 
-* [bitnami/spring-cloud-dataflow] Support taskServiceAccountName ([#26450](https://github.com/bitnami/charts/pull/26450))
+* [bitnami/spring-cloud-dataflow] Detect non-standard images ([#30968](https://github.com/bitnami/charts/pull/30968))
+
+## <small>34.0.1 (2024-12-08)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 6) (#30675) ([7b9cd04](https://github.com/bitnami/charts/commit/7b9cd04c2ffc730a0d62da787f2d4967c0ede47c)), closes [#30675](https://github.com/bitnami/charts/issues/30675)
+* [bitnami/spring-cloud-dataflow] Release 34.0.1 (#30829) ([99bdcc4](https://github.com/bitnami/charts/commit/99bdcc485b97dd97b1e74836d6b32805aab7323f)), closes [#30829](https://github.com/bitnami/charts/issues/30829)
+
+## 34.0.0 (2024-11-12)
+
+* [bitnami/spring-cloud-dataflow] Update kafka subchart to 31.0.0 (#30426) ([01bfb98](https://github.com/bitnami/charts/commit/01bfb98c9b21baf9c18d15ef67e8a116979994e9)), closes [#30426](https://github.com/bitnami/charts/issues/30426)
+
+## 33.0.0 (2024-11-12)
+
+* [bitnami/spring-cloud-dataflow] chore!: :arrow_up: :boom: Bump MariaDB subchart to 20 (#30359) ([1369cbf](https://github.com/bitnami/charts/commit/1369cbfd07e26350d2b4fa91eeeb7c908fd49cca)), closes [#30359](https://github.com/bitnami/charts/issues/30359)
+
+## <small>32.0.2 (2024-10-29)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/spring-cloud-dataflow] Release 32.0.2 (#30122) ([6349db0](https://github.com/bitnami/charts/commit/6349db02cff375314e0278cc3618b33ffb4eafd1)), closes [#30122](https://github.com/bitnami/charts/issues/30122)
+
+## <small>32.0.1 (2024-10-22)</small>
+
+* [bitnami/spring-cloud-dataflow] fix: :bug: Add missing /.m2 emptyDir (#30034) ([483b762](https://github.com/bitnami/charts/commit/483b762831fff2de246581452b91501e6309f052)), closes [#30034](https://github.com/bitnami/charts/issues/30034)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## 32.0.0 (2024-09-23)
+
+* [bitnami/spring-cloud-dataflow] feat!: :arrow_up: :boom: Bump RabbitMQ to 4.x.x (#29572) ([7adaf80](https://github.com/bitnami/charts/commit/7adaf809d4275fa8c1dfedc2c8a23f7fab33c242)), closes [#29572](https://github.com/bitnami/charts/issues/29572)
+
+## <small>31.0.4 (2024-09-19)</small>
+
+* [bitnami/spring-cloud-dataflow] Release 31.0.4 (#29525) ([75c3ba7](https://github.com/bitnami/charts/commit/75c3ba741ecaa5baf0bd3535af0001e0a2fc8309)), closes [#29525](https://github.com/bitnami/charts/issues/29525)
+
+## <small>31.0.3 (2024-09-16)</small>
+
+* [bitnami/spring-cloud-dataflow] Release 31.0.3 (#29457) ([aa038e9](https://github.com/bitnami/charts/commit/aa038e9953df2ba74d481cb7ba1cccb3dc32c5fc)), closes [#29457](https://github.com/bitnami/charts/issues/29457)
+
+## <small>31.0.2 (2024-09-14)</small>
+
+* [bitnami/spring-cloud-dataflow] Release 31.0.2 (#29412) ([814380b](https://github.com/bitnami/charts/commit/814380bb5a90622b16afa10722bdb63d2e50e448)), closes [#29412](https://github.com/bitnami/charts/issues/29412)
+
+## <small>31.0.1 (2024-08-14)</small>
+
+* [bitnami/spring-cloud-dataflow] Release 31.0.1 (#28880) ([cedc020](https://github.com/bitnami/charts/commit/cedc020972e0a15abc8b198580cc47cacf1159b3)), closes [#28880](https://github.com/bitnami/charts/issues/28880)
+
+## 31.0.0 (2024-08-05)
+
+* [bitnami/spring-cloud-dataflow] Update chart dependency (kafka) (#28675) ([0468258](https://github.com/bitnami/charts/commit/04682586de34b78a0e85daf68ce91aea6f4e1e8f)), closes [#28675](https://github.com/bitnami/charts/issues/28675)
+
+## <small>30.0.4 (2024-07-25)</small>
+
+* [bitnami/spring-cloud-dataflow] Release 30.0.4 (#28490) ([fef224c](https://github.com/bitnami/charts/commit/fef224c6d2c336831ef6bf70ce56e9cbbdf0b05c)), closes [#28490](https://github.com/bitnami/charts/issues/28490)
+
+## <small>30.0.3 (2024-07-24)</small>
+
+* [bitnami/spring-cloud-dataflow] Release 30.0.3 (#28378) ([91ec994](https://github.com/bitnami/charts/commit/91ec994833dd0be99c363e4ff7c817b99dd8bacf)), closes [#28378](https://github.com/bitnami/charts/issues/28378)
+
+## <small>30.0.2 (2024-07-19)</small>
+
+* [bitnami/spring-cloud-dataflow] Global StorageClass as default value (#28099) ([8adda63](https://github.com/bitnami/charts/commit/8adda63eaf319c373fb0e822aa3bf7da263dafea)), closes [#28099](https://github.com/bitnami/charts/issues/28099)
+
+## <small>30.0.1 (2024-07-19)</small>
+
+* [bitnami/spring-cloud-dataflow] Release 30.0.1 (#28170) ([5acbf5d](https://github.com/bitnami/charts/commit/5acbf5d9c113a265e65d4b5f91e1676d37a578fe)), closes [#28170](https://github.com/bitnami/charts/issues/28170)
+
+## 30.0.0 (2024-07-16)
+
+* [bitnami/spring-cloud-dataflow] chore!: :arrow_up: :boom: Update mariadb to 11.4 (#27931) ([e319e16](https://github.com/bitnami/charts/commit/e319e16c3ca9b4390de72f20550a09e037cc023f)), closes [#27931](https://github.com/bitnami/charts/issues/27931)
+
+## <small>29.0.9 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/spring-cloud-dataflow] Release 29.0.9 (#27721) ([118d637](https://github.com/bitnami/charts/commit/118d63706b4d9709d1f806dc9ade176de7028124)), closes [#27721](https://github.com/bitnami/charts/issues/27721)
+
+## <small>29.0.8 (2024-06-18)</small>
+
+* [bitnami/spring-cloud-dataflow] Release 29.0.8 (#27420) ([113e822](https://github.com/bitnami/charts/commit/113e8220987b0eb36bf4866def844994f864e405)), closes [#27420](https://github.com/bitnami/charts/issues/27420)
+
+## <small>29.0.7 (2024-06-17)</small>
+
+* [bitnami/spring-cloud-dataflow] Release 29.0.7 (#27290) ([0863e11](https://github.com/bitnami/charts/commit/0863e113a246c93e3143a9ec6838f43f8adf6df3)), closes [#27290](https://github.com/bitnami/charts/issues/27290)
+
+## <small>29.0.6 (2024-06-14)</small>
+
+* [bitnami/spring-cloud-dataflow] Release 29.0.6 (#27173) ([0edfa5b](https://github.com/bitnami/charts/commit/0edfa5b2ce7bfbbc637fde3c628b121db8539047)), closes [#27173](https://github.com/bitnami/charts/issues/27173)
+
+## <small>29.0.5 (2024-06-06)</small>
+
+* [bitnami/spring-cloud-dataflow] Release 29.0.5 (#27022) ([be5548e](https://github.com/bitnami/charts/commit/be5548ef803e05f2d436c17d6323a196cb80b0ff)), closes [#27022](https://github.com/bitnami/charts/issues/27022)
+
+## <small>29.0.4 (2024-06-05)</small>
+
+* [bitnami/spring-cloud-dataflow] Bump chart version (#26864) ([467c823](https://github.com/bitnami/charts/commit/467c8235570a499f9699df63b311e6cf7a548f7a)), closes [#26864](https://github.com/bitnami/charts/issues/26864)
+
+## <small>29.0.3 (2024-06-05)</small>
+
+* [bitnami/spring-cloud-dataflow] Bump chart version (#26806) ([3067abd](https://github.com/bitnami/charts/commit/3067abd374e6ac22275b1d5472a117b0e147c466)), closes [#26806](https://github.com/bitnami/charts/issues/26806)
+
+## <small>29.0.2 (2024-06-03)</small>
+
+* [bitnami/spring-cloud-dataflow] Support taskServiceAccountName (#26450) ([a09c51b](https://github.com/bitnami/charts/commit/a09c51b4c47259e29ebed72202c37111f5032764)), closes [#26450](https://github.com/bitnami/charts/issues/26450)
 
 ## <small>29.0.1 (2024-05-27)</small>
 

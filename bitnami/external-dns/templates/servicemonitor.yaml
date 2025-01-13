@@ -7,41 +7,45 @@ SPDX-License-Identifier: APACHE-2.0
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: {{ template "external-dns.fullname" . }}
-  namespace: {{ default .Release.Namespace .Values.metrics.serviceMonitor.namespace | quote }}
+  name: {{ template "common.names.fullname" . }}
+  namespace: {{ default (include "common.names.namespace" .) .Values.metrics.serviceMonitor.namespace | quote }}
   {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.metrics.serviceMonitor.labels .Values.commonLabels ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
-    {{- if .Values.metrics.serviceMonitor.additionalLabels }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.metrics.serviceMonitor.additionalLabels "context" $) | nindent 4 }}
-    {{- end }}
-  {{- if .Values.commonAnnotations }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- if or .Values.metrics.serviceMonitor.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.metrics.serviceMonitor.annotations .Values.commonAnnotations) "context" .) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
   endpoints:
     - port: http
       path: /metrics
-      {{- with .Values.metrics.serviceMonitor.interval }}
-      interval: {{ . }}
+      {{- if .Values.metrics.serviceMonitor.interval }}
+      interval: {{ .Values.metrics.serviceMonitor.interval }}
       {{- end }}
-      {{- with .Values.metrics.serviceMonitor.scrapeTimeout }}
-      scrapeTimeout: {{ . }}
+      {{- if .Values.metrics.serviceMonitor.scrapeTimeout }}
+      scrapeTimeout: {{ .Values.metrics.serviceMonitor.scrapeTimeout }}
       {{- end }}
       {{- if .Values.metrics.serviceMonitor.honorLabels }}
       honorLabels: {{ .Values.metrics.serviceMonitor.honorLabels }}
       {{- end }}
       {{- if .Values.metrics.serviceMonitor.metricRelabelings }}
-      metricRelabelings: {{- toYaml .Values.metrics.serviceMonitor.metricRelabelings | nindent 6 }}
+      metricRelabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.serviceMonitor.metricRelabelings "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.metrics.serviceMonitor.relabelings }}
-      relabelings: {{ toYaml .Values.metrics.serviceMonitor.relabelings | nindent 6 }}
+      relabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.serviceMonitor.relabelings "context" $) | nindent 8 }}
       {{- end }}
   {{- if .Values.metrics.serviceMonitor.jobLabel }}
   jobLabel: {{ .Values.metrics.serviceMonitor.jobLabel }}
   {{- end }}
+  {{- if .Values.metrics.serviceMonitor.podTargetLabels }}
+  podTargetLabels: {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.serviceMonitor.podTargetLabels "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.metrics.serviceMonitor.targetLabels }}
+  targetLabels: {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.serviceMonitor.targetLabels "context" $) | nindent 4 }}
+  {{- end }}
   namespaceSelector:
     matchNames:
-      - {{ .Release.Namespace }}
+      - {{ include "common.names.namespace" . | quote }}
   selector:
     {{- $svcLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.metrics.serviceMonitor.selector .Values.commonLabels ) "context" . ) }}
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $svcLabels "context" $ ) | nindent 6 }}

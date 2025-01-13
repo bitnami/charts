@@ -110,7 +110,7 @@ spec:
             - containerPort: {{ .Values.vulture.containerPorts.http }}
               name: http
           {{- if .Values.vulture.resources }}
-          resources: {{- toYaml .Values.vulture.resources | nindent 12 }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.vulture.resources "context" $) | nindent 12 }}
           {{- else if ne .Values.vulture.resourcesPreset "none" }}
           resources: {{- include "common.resources.preset" (dict "type" .Values.vulture.resourcesPreset) | nindent 12 }}
           {{- end }}

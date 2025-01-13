@@ -1,6 +1,9 @@
+{{- $releaseNamespace := include "common.names.namespace" . }}
 CHART NAME: {{ .Chart.Name }}
 CHART VERSION: {{ .Chart.Version }}
 APP VERSION: {{ .Chart.AppVersion }}
+
+Did you know there are enterprise versions of the Bitnami catalog? For enhanced secure software supply chain features, unlimited pulls from Docker, LTS support, or application customization, see Bitnami Premium or Tanzu Application Catalog. See https://www.arrow.com/globalecs/na/vendors/bitnami for more information.
 
 ** Please be patient while the chart is being deployed **
 
@@ -12,11 +15,11 @@ The chart has been deployed in diagnostic mode. All probes have been disabled an
 
 Get the list of pods by executing:
 
-  kubectl get pods --namespace {{ .Release.Namespace }} -l app.kubernetes.io/instance={{ .Release.Name }}
+  kubectl get pods --namespace {{ $releaseNamespace }} -l app.kubernetes.io/instance={{ .Release.Name }}
 
 Access the pod you want to debug by executing
 
-  kubectl exec --namespace {{ .Release.Namespace }} -ti <NAME OF THE POD> -- /opt/bitnami/scripts/postgresql/entrypoint.sh /bin/bash
+  kubectl exec --namespace {{ $releaseNamespace }} -ti <NAME OF THE POD> -- /opt/bitnami/scripts/postgresql/entrypoint.sh /bin/bash
 
 In order to replicate the container startup scripts execute this command:
 
@@ -34,11 +37,11 @@ WARNING: PostgreSQL has been configured without authentication, this is not reco
 
 PostgreSQL can be accessed via port {{ include "postgresql.v1.service.port" . }} on the following DNS names from within your cluster:
 
-    {{ include "postgresql.v1.primary.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local - Read/Write connection
+    {{ include "postgresql.v1.primary.fullname" . }}.{{ $releaseNamespace }}.svc.cluster.local - Read/Write connection
 
 {{- if eq .Values.architecture "replication" }}
 
-    {{ include "postgresql.v1.readReplica.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local - Read only connection
+    {{ include "postgresql.v1.readReplica.fullname" . }}.{{ $releaseNamespace }}.svc.cluster.local - Read only connection
 
 {{- end }}
 
@@ -47,29 +50,29 @@ PostgreSQL can be accessed via port {{ include "postgresql.v1.service.port" . }}
 
 To get the password for "postgres" run:
 
-    export POSTGRES_ADMIN_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "postgresql.v1.secretName" . }} -o jsonpath="{.data.{{include "postgresql.v1.adminPasswordKey" .}}}" | base64 -d)
+    export POSTGRES_ADMIN_PASSWORD=$(kubectl get secret --namespace {{ $releaseNamespace }} {{ include "postgresql.v1.secretName" . }} -o jsonpath="{.data.{{include "postgresql.v1.adminPasswordKey" .}}}" | base64 -d)
 {{- end }}
 
 To get the password for "{{ $customUser }}" run:
 
-    export POSTGRES_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "postgresql.v1.secretName" . }} -o jsonpath="{.data.{{include "postgresql.v1.userPasswordKey" .}}}" | base64 -d)
+    export POSTGRES_PASSWORD=$(kubectl get secret --namespace {{ $releaseNamespace }} {{ include "postgresql.v1.secretName" . }} -o jsonpath="{.data.{{include "postgresql.v1.userPasswordKey" .}}}" | base64 -d)
 {{- else }}
 {{- if .Values.auth.enablePostgresUser }}
 
 To get the password for "{{ default "postgres" $customUser }}" run:
 
-    export POSTGRES_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "postgresql.v1.secretName" . }} -o jsonpath="{.data.{{ ternary "password" (include "postgresql.v1.adminPasswordKey" .)  (and (not (empty $customUser)) (ne $customUser "postgres")) }}}" | base64 -d)
+    export POSTGRES_PASSWORD=$(kubectl get secret --namespace {{ $releaseNamespace }} {{ include "postgresql.v1.secretName" . }} -o jsonpath="{.data.{{ ternary "password" (include "postgresql.v1.adminPasswordKey" .)  (and (not (empty $customUser)) (ne $customUser "postgres")) }}}" | base64 -d)
 {{- end }}
 {{- end }}
 
 To connect to your database run the following command:
     {{- if $authEnabled }}
 
-    kubectl run {{ include "common.names.fullname" . }}-client --rm --tty -i --restart='Never' --namespace {{ .Release.Namespace }} --image {{ include "postgresql.v1.image" . }} --env="PGPASSWORD=$POSTGRES_PASSWORD" \
+    kubectl run {{ include "common.names.fullname" . }}-client --rm --tty -i --restart='Never' --namespace {{ $releaseNamespace }} --image {{ include "postgresql.v1.image" . }} --env="PGPASSWORD=$POSTGRES_PASSWORD" \
       --command -- psql --host {{ include "postgresql.v1.primary.fullname" . }} -U {{ default "postgres" $customUser }} -d {{- if include "postgresql.v1.database" . }} {{ include "postgresql.v1.database" . }}{{- else }} postgres{{- end }} -p {{ include "postgresql.v1.service.port" . }}
     {{- else }}
 
-    kubectl run {{ include "common.names.fullname" . }}-client --rm --tty -i --restart='Never' --namespace {{ .Release.Namespace }} --image {{ include "postgresql.v1.image" . }} \
+    kubectl run {{ include "common.names.fullname" . }}-client --rm --tty -i --restart='Never' --namespace {{ $releaseNamespace }} --image {{ include "postgresql.v1.image" . }} \
       --command -- psql --host {{ include "postgresql.v1.primary.fullname" . }} -d {{- if include "postgresql.v1.database" . }} {{ include "postgresql.v1.database" . }}{{- else }} postgres{{- end }} -p {{ include "postgresql.v1.service.port" . }}
     {{- end }}
 
@@ -79,8 +82,8 @@ To connect to your database from outside the cluster execute the following comma
 
 {{- if contains "NodePort" .Values.primary.service.type }}
 
-    export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
-    export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "postgresql.v1.primary.fullname" . }})
+    export NODE_IP=$(kubectl get nodes --namespace {{ $releaseNamespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+    export NODE_PORT=$(kubectl get --namespace {{ $releaseNamespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "postgresql.v1.primary.fullname" . }})
     {{- if $authEnabled }}
     PGPASSWORD="$POSTGRES_PASSWORD" psql --host $NODE_IP --port $NODE_PORT -U {{ default "postgres" $customUser }} -d {{- if include "postgresql.v1.database" . }} {{ include "postgresql.v1.database" . }}{{- else }} postgres{{- end }}
     {{- else }}
@@ -89,9 +92,9 @@ To connect to your database from outside the cluster execute the following comma
 {{- else if contains "LoadBalancer" .Values.primary.service.type }}
 
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ include "postgresql.v1.primary.fullname" . }}'
+        Watch the status with: 'kubectl get svc --namespace {{ $releaseNamespace }} -w {{ include "postgresql.v1.primary.fullname" . }}'
 
-    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "postgresql.v1.primary.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
+    export SERVICE_IP=$(kubectl get svc --namespace {{ $releaseNamespace }} {{ include "postgresql.v1.primary.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
     {{- if $authEnabled }}
     PGPASSWORD="$POSTGRES_PASSWORD" psql --host $SERVICE_IP --port {{ include "postgresql.v1.service.port" . }} -U {{ default "postgres" $customUser }} -d {{- if include "postgresql.v1.database" . }} {{ include "postgresql.v1.database" . }}{{- else }} postgres{{- end }}
     {{- else }}
@@ -99,7 +102,7 @@ To connect to your database from outside the cluster execute the following comma
     {{- end }}
 {{- else if contains "ClusterIP" .Values.primary.service.type }}
 
-    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "postgresql.v1.primary.fullname" . }} {{ include "postgresql.v1.service.port" . }}:{{ include "postgresql.v1.service.port" . }} &
+    kubectl port-forward --namespace {{ $releaseNamespace }} svc/{{ include "postgresql.v1.primary.fullname" . }} {{ include "postgresql.v1.service.port" . }}:{{ include "postgresql.v1.service.port" . }} &
     {{- if $authEnabled }}
     PGPASSWORD="$POSTGRES_PASSWORD" psql --host 127.0.0.1 -U {{ default "postgres" $customUser }} -d {{- if include "postgresql.v1.database" . }} {{ include "postgresql.v1.database" . }}{{- else }} postgres{{- end }} -p {{ include "postgresql.v1.service.port" . }}
     {{- else }}
@@ -115,3 +118,4 @@ WARNING: The configured password will be ignored on new installation in case whe
 {{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
 {{- include "common.warnings.resources" (dict "sections" (list "metrics" "primary" "readReplicas" "volumePermissions") "context" $) }}
 {{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.volumePermissions.image .Values.metrics.image) "context" $) }}
+{{- include "common.errors.insecureImages" (dict "images" (list .Values.image .Values.volumePermissions.image .Values.metrics.image) "context" $) }}

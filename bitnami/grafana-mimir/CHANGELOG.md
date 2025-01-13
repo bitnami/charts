@@ -1,8 +1,134 @@
 # Changelog
 
-## 1.1.1 (2024-05-22)
+## 1.3.1 (2025-01-03)
 
-* [bitnami/grafana-mimir] Use different liveness/readiness probes ([#26350](https://github.com/bitnami/charts/pull/26350))
+* [bitnami/grafana-mimir] Release 1.3.1 ([#31205](https://github.com/bitnami/charts/pull/31205))
+
+## 1.3.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/grafana-mimir] Detect non-standard images (#30887) ([b56f760](https://github.com/bitnami/charts/commit/b56f7600bebb18d442055540590355888463d60f)), closes [#30887](https://github.com/bitnami/charts/issues/30887)
+
+## <small>1.2.23 (2024-12-03)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 2) (#30662) ([50e0570](https://github.com/bitnami/charts/commit/50e0570f98ab15308af7910b405baa4480e5fe3f)), closes [#30662](https://github.com/bitnami/charts/issues/30662)
+* [bitnami/grafana-mimir] Release 1.2.23 (#30753) ([e68da81](https://github.com/bitnami/charts/commit/e68da81a7fd7ae43414ca2e4ed9f7d8e169acd6e)), closes [#30753](https://github.com/bitnami/charts/issues/30753)
+
+## <small>1.2.22 (2024-11-14)</small>
+
+* [bitnami/grafana-mimir] Release 1.2.22 (#30450) ([d9d2d92](https://github.com/bitnami/charts/commit/d9d2d921e046f4ad56e35f7739856e4c3f9819c5)), closes [#30450](https://github.com/bitnami/charts/issues/30450)
+
+## <small>1.2.21 (2024-11-07)</small>
+
+* [bitnami/grafana-mimir] Release 1.2.21 (#30266) ([10d9b5f](https://github.com/bitnami/charts/commit/10d9b5f579258a6cf54f8660b3f6adbb26430ed6)), closes [#30266](https://github.com/bitnami/charts/issues/30266)
+
+## <small>1.2.20 (2024-11-01)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/grafana-mimir] Release 1.2.20 (#30174) ([393e256](https://github.com/bitnami/charts/commit/393e256348e094d46c2efd1e3bbe85feb98dfc1d)), closes [#30174](https://github.com/bitnami/charts/issues/30174)
+
+## <small>1.2.19 (2024-10-21)</small>
+
+* [bitnami/grafana-mimir] Release 1.2.19 (#30018) ([79e1e9b](https://github.com/bitnami/charts/commit/79e1e9bb690850d0a40e151a89e74b564969fd50)), closes [#30018](https://github.com/bitnami/charts/issues/30018)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>1.2.18 (2024-10-02)</small>
+
+* [bitnami/grafana-mimir] Release 1.2.18 (#29693) ([08f450e](https://github.com/bitnami/charts/commit/08f450e911970099b7b64bc3d0525cab3733c0ab)), closes [#29693](https://github.com/bitnami/charts/issues/29693)
+
+## <small>1.2.17 (2024-09-17)</small>
+
+* [bitnami/grafana-mimir] Release 1.2.17 (#29483) ([d6bfc60](https://github.com/bitnami/charts/commit/d6bfc608021629d77051ca62af0cd7180277dd09)), closes [#29483](https://github.com/bitnami/charts/issues/29483)
+
+## <small>1.2.16 (2024-09-16)</small>
+
+* [bitnami/grafana-mimir] chore: :construction_worker: :wrench: Use serial verification ([089d15f](https://github.com/bitnami/charts/commit/089d15f59f6345ab24ee2f17cf6f740a5c8ca808))
+
+## <small>1.2.15 (2024-09-09)</small>
+
+*  [bitnami/grafana-mimir] removing quotes from gw secrets #29214 (#29267) ([3fe94e9](https://github.com/bitnami/charts/commit/3fe94e977c51d8d3ed08a9e9eb7f80092a66a3ed)), closes [#29214](https://github.com/bitnami/charts/issues/29214) [#29267](https://github.com/bitnami/charts/issues/29267)
+
+## <small>1.2.14 (2024-09-05)</small>
+
+* [bitnami/grafana-mimir] Release 1.2.14 (#29236) ([bb0dc36](https://github.com/bitnami/charts/commit/bb0dc36af90dde2443429e8eecf09419b1006e2d)), closes [#29236](https://github.com/bitnami/charts/issues/29236)
+
+## <small>1.2.13 (2024-08-27)</small>
+
+* [bitnami/grafana-mimir] Release 1.2.13 (#29050) ([d14c588](https://github.com/bitnami/charts/commit/d14c5885d15c70cc86b150af3c475c482777fb71)), closes [#29050](https://github.com/bitnami/charts/issues/29050)
+
+## <small>1.2.12 (2024-08-23)</small>
+
+* [bitnami/grafana-mimir] Release 1.2.12 (#29001) ([149903d](https://github.com/bitnami/charts/commit/149903d981e84bced8de667e8440daa2a3e9473f)), closes [#29001](https://github.com/bitnami/charts/issues/29001)
+
+## <small>1.2.11 (2024-08-07)</small>
+
+* [bitnami/grafana-mimir] Release 1.2.11 (#28715) ([c027550](https://github.com/bitnami/charts/commit/c0275505296803d800b8c66003b0c4d673ee7fbb)), closes [#28715](https://github.com/bitnami/charts/issues/28715)
+
+## <small>1.2.10 (2024-07-25)</small>
+
+* [bitnami/grafana-mimir] Release 1.2.10 (#28415) ([ab58d00](https://github.com/bitnami/charts/commit/ab58d00e2c0cc6489184b6de2ac8687311160293)), closes [#28415](https://github.com/bitnami/charts/issues/28415)
+
+## <small>1.2.9 (2024-07-24)</small>
+
+* [bitnami/grafana-mimir] Release 1.2.9 (#28312) ([7b1b3bc](https://github.com/bitnami/charts/commit/7b1b3bc73e04c57a69400851ff47ef110fbf24a9)), closes [#28312](https://github.com/bitnami/charts/issues/28312)
+
+## <small>1.2.8 (2024-07-24)</small>
+
+* [bitnami/grafana-mimir] Release 1.2.8 (#28247) ([923cd57](https://github.com/bitnami/charts/commit/923cd57a07cae06635b7bbc82816f1d802e58532)), closes [#28247](https://github.com/bitnami/charts/issues/28247)
+
+## <small>1.2.7 (2024-07-22)</small>
+
+* [bitnami/grafana-mimir] Global StorageClass as default value (#28026) ([ca1fab7](https://github.com/bitnami/charts/commit/ca1fab7ceca035dc4f1a34bf14afc758cbf0cee8)), closes [#28026](https://github.com/bitnami/charts/issues/28026)
+
+## <small>1.2.6 (2024-07-05)</small>
+
+* [bitnami/grafana-mimir] Release 1.2.6 (#27826) ([f905b88](https://github.com/bitnami/charts/commit/f905b887f60db45761cb1b7034f7451297062a97)), closes [#27826](https://github.com/bitnami/charts/issues/27826)
+
+## <small>1.2.5 (2024-07-04)</small>
+
+* [bitnami/grafana-mimir] Release 1.2.5 (#27767) ([4ecd808](https://github.com/bitnami/charts/commit/4ecd808615065f34f6ea97fcd68a393761d42dad)), closes [#27767](https://github.com/bitnami/charts/issues/27767)
+
+## <small>1.2.4 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/grafana-mimir] Release 1.2.4 (#27651) ([c3ca8c3](https://github.com/bitnami/charts/commit/c3ca8c35942f39a665475451f7063995c354f89c)), closes [#27651](https://github.com/bitnami/charts/issues/27651)
+
+## <small>1.2.3 (2024-06-18)</small>
+
+* [bitnami/grafana-mimir] Release 1.2.3 (#27351) ([bea97ef](https://github.com/bitnami/charts/commit/bea97ef105d07a94cd50fd9eb894195cbd21f1d9)), closes [#27351](https://github.com/bitnami/charts/issues/27351)
+
+## <small>1.2.2 (2024-06-17)</small>
+
+* [bitnami/grafana-mimir] Release 1.2.2 (#27224) ([8657fec](https://github.com/bitnami/charts/commit/8657fecf03fc5d7f96671399038ec17bc7d7aad3)), closes [#27224](https://github.com/bitnami/charts/issues/27224)
+
+## <small>1.2.1 (2024-06-06)</small>
+
+* [bitnami/grafana-mimir] Release 1.2.1 (#26954) ([06d3971](https://github.com/bitnami/charts/commit/06d3971e5f34d6ab755080fde8a10fffd6766e75)), closes [#26954](https://github.com/bitnami/charts/issues/26954)
+
+## 1.2.0 (2024-06-06)
+
+* [bitnami/grafana-mimir] Enable PodDisruptionBudgets (#26695) ([bae36af](https://github.com/bitnami/charts/commit/bae36afa871eb80138dcbcc12ebbc663038108b3)), closes [#26695](https://github.com/bitnami/charts/issues/26695)
+
+## <small>1.1.5 (2024-06-06)</small>
+
+* [bitnami/grafana-mimir] Release 1.1.5 (#26903) ([f95bb0a](https://github.com/bitnami/charts/commit/f95bb0a5db396db1e896923a9a20a409504ef167)), closes [#26903](https://github.com/bitnami/charts/issues/26903)
+
+## <small>1.1.4 (2024-06-05)</small>
+
+* [bitnami/grafana-mimir] Bump chart version (#26832) ([61841c6](https://github.com/bitnami/charts/commit/61841c6a1d2e94214c4ccca1303b6009ef3bbe66)), closes [#26832](https://github.com/bitnami/charts/issues/26832)
+
+## <small>1.1.3 (2024-06-05)</small>
+
+* [bitnami/grafana-mimir] Bump chart version (#26774) ([ec0b18c](https://github.com/bitnami/charts/commit/ec0b18c968060db292a7c3abe4b658005e16e002)), closes [#26774](https://github.com/bitnami/charts/issues/26774)
+
+## <small>1.1.2 (2024-06-05)</small>
+
+* [bitnami/grafana-mimir] Release 1.1.2 (#26731) ([db18447](https://github.com/bitnami/charts/commit/db18447898bafcfaf031c4d04940b9cdca29c4f6)), closes [#26731](https://github.com/bitnami/charts/issues/26731)
+
+## <small>1.1.1 (2024-05-23)</small>
+
+* [bitnami/grafana-mimir] Use different liveness/readiness probes (#26350) ([e4cc957](https://github.com/bitnami/charts/commit/e4cc9575527835733af5b4647a5f45a80efebe23)), closes [#26350](https://github.com/bitnami/charts/issues/26350)
 
 ## 1.1.0 (2024-05-21)
 

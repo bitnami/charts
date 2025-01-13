@@ -42,7 +42,7 @@ jobs:
           charts_dirs_changed="$(echo "$files_changed" | xargs dirname | grep -o "bitnami/[^/]*" | sort | uniq || true)"
           # Using grep -c as a better alternative to wc -l when dealing with empty strings."
           num_charts_changed="$(echo "$charts_dirs_changed" | grep -c "bitnami" || true)"
-          num_version_bumps="$(echo "$files_changed_data" | jq -r '[.[] | select(.filename|endswith("Chart.yaml")) | select(.patch|contains("+version")) ] | length' )"
+          num_version_bumps="$(echo "$files_changed_data" | jq -r '[.[] | select(.filename|match("bitnami/[^/]+/Chart.yaml")) | select(.patch|contains("+version")) ] | length' )"
           non_readme_files=$(echo "$files_changed" | grep -vc "\.md" || true)
 
           if [[ $(curl -Lks "${PULL_REQUEST_URL}" | jq '.state | index("closed")') != *null* ]]; then
@@ -89,6 +89,78 @@ jobs:
             } else {
               core.warning(message);
             }
+  chart-tests:
+    runs-on: ubuntu-latest
+    needs: [get-chart]
+    name: Look for hardcoded images
+    if: needs.get-chart.outputs.result == 'ok'
+    steps:
+      - name: Checkout bitnami/charts
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{github.event.pull_request.head.ref}}
+          repository: ${{github.event.pull_request.head.repo.full_name}}
+          path: charts
+      - id: check-hardcoded-images
+        name: Look for hardcoded images
+        env:
+          CHART: ${{ needs.get-chart.outputs.chart }}
+        run: |
+          hardcoded_images=()
+          while read -r image; do
+            if [[ -n "$image" && $image != {{*}} ]]; then
+              hardcoded_images+=("${image}")
+            fi
+          done <<< "$(grep -REoh "\s*image:\s+[\"']*.+[\"']*\s*$" "charts/bitnami/${CHART}/templates" | sed "s/image: [\"']*//" | sed "s/[\"']*$//")"
+
+          echo "${hardcoded_images[@]}"
+          if [[ ${#hardcoded_images[@]} -gt 0 ]] ; then
+            echo "error=Found hardcoded images in the chart templates: ${hardcoded_images[@]}"
+            exit 1
+          fi
+      - id: check-image-warning-list
+        name: Check image warning list
+        env:
+          CHART: ${{ needs.get-chart.outputs.chart }}
+        run: |
+          if [[ "$CHART" != "common" && "$CHART" != "fluentd" ]]; then
+            readarray -t tag_paths < <(yq e '.. | (path | join("."))' charts/bitnami/$CHART/values.yaml | grep -E '\.tag$' | sed 's/.tag$//g' | sort -u)
+            readarray -t registry_paths < <(yq e '.. | (path | join("."))' charts/bitnami/$CHART/values.yaml | grep '\.registry$' | sed 's/.registry$//g' | sort -u)
+
+            # We assume that image objects are those that contain both keys 'tag' and 'registry'
+            images_paths=()
+            for path in ${tag_paths[@]}; do
+              if echo "${registry_paths[@]}" | grep -w -q "$path"; then
+                if [[ -n "$path" ]]; then
+                  images_paths+=("$path")
+                fi
+              fi
+            done
+
+            # Get the images defined in the image warning helper
+            readarray -d ' ' -t images_list_tmp < <(grep -E 'common.warnings.modifiedImages' charts/bitnami/$CHART/templates/NOTES.txt | sed -E 's/.*\(list (.+)\) "context".*/\1/' | sed 's/.Values.//g')
+
+            # Remove any empty element from the array
+            images_list=()
+            for i in "${images_list_tmp[@]}"; do
+              if echo $i | grep -q -E "\S+"; then
+                images_list+=("$i")
+              fi
+            done
+
+            # Compare the image objects and the image warning list
+            if [[ ${#images_list[@]} -eq ${#images_paths[@]} ]]; then
+              for path in ${images_list[@]}; do
+                if ! echo ${images_paths[*]} | grep -w -q "$path"; then
+                  echo "Found inconsistencies in the images warning list: '${images_list[@]}' should be equal to '${images_paths[@]}'"
+                  exit 1
+                fi
+              done
+            else
+                echo "Found inconsistencies in the images warning list: '${images_list[@]}' should be equal to '${images_paths[@]}'"
+                exit 1
+            fi
+          fi
   update-pr:
     runs-on: ubuntu-latest
     needs: [get-chart]
@@ -100,14 +172,14 @@ jobs:
     if: needs.get-chart.outputs.result == 'ok'
     steps:
       - name: Checkout bitnami/charts
-        uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           ref: ${{github.event.pull_request.head.ref}}
           repository: ${{github.event.pull_request.head.repo.full_name}}
           token: ${{ secrets.BITNAMI_BOT_TOKEN }}
           path: charts
       - name: Clone upstream bitnami/charts repository
-        uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           path: upstream-charts
       - name: Setup git configuration
@@ -128,9 +200,14 @@ jobs:
       - id: generate-changelog
         name: Generate changelog
         env:
+          PULL_REQUEST_NUMBER: "${{ github.event.pull_request.number }}"
+          PULL_REQUEST_URL: "${{ github.server_url }}/${{ github.repository }}/pull/${{ github.event.number }}"
+          GITHUB_TOKEN: "${{ github.token }}"
           CHART: ${{ needs.get-chart.outputs.chart }}
         run: |
           cd $GITHUB_WORKSPACE/upstream-charts
+          # Get PR title using the API to avoid malicious string substitutions
+          pr_title="$(gh api /repos/${GITHUB_REPOSITORY}/pulls/${PULL_REQUEST_NUMBER} | jq -r '.title')"
           # The generator needs the file to exist
           chart_version="$(yq e '.version' $GITHUB_WORKSPACE/charts/bitnami/${CHART}/Chart.yaml)"
           changelog_file="$GITHUB_WORKSPACE/charts/bitnami/${CHART}/CHANGELOG.md"
@@ -152,7 +229,7 @@ jobs:
           # Include h1 heading and add entry for the current version. There is no tag for the current version (this will be created once merged), so we need to manually add it.
           # We know the final squashed commit title, which will be the PR title. We cannot add a link to the commit in the main branch because it has not been
           # merged yet (this will be corrected once a new version regenerates the changelog). Instead, we add the PR url which contains the exact same information.
-          echo -e -n "# Changelog\n\n## $chart_version ($(date +'%Y-%m-%d'))\n\n* ${{ github.event.pull_request.title }} ([#${{ github.event.number }}](${{ github.server_url }}/${{ github.repository }}/pull/${{ github.event.number }}))\n" > ${changelog_file}
+          echo -e -n "# Changelog\n\n## $chart_version ($(date +'%Y-%m-%d'))\n\n* ${pr_title} ([#${PULL_REQUEST_NUMBER}](${PULL_REQUEST_URL}))\n" > ${changelog_file}
           cat ${changelog_tmp} >> ${changelog_file}
           rm ${changelog_tmp}
           if git status -s | grep "bitnami/${CHART}/CHANGELOG.md"; then
@@ -208,9 +285,9 @@ jobs:
         env:
           CHART: ${{ needs.get-chart.outputs.chart }}
         run: |
-          # Updating CRDs stored at 'bitnami/$CHART/crds' and 'bitnami/$CHART/templates/crds'
+          # Updating CRDs stored at 'bitnami/$CHART/crds', 'bitnami/$CHART/templates/crds', and "bitnami/${CHART}/charts/${CHART}-crds/crds"
           cd $GITHUB_WORKSPACE/charts
-          mapfile -t crd_files < <(find "bitnami/${CHART}/crds" "bitnami/${CHART}/templates/crds" -name "*.yaml" -o -name "*.yml" 2>/dev/null || true)
+          mapfile -t crd_files < <(find "bitnami/${CHART}/crds" "bitnami/${CHART}/templates/crds" "bitnami/${CHART}/charts/${CHART}-crds/crds" -name "*.yaml" -o -name "*.yml" 2>/dev/null || true)
           for file in "${crd_files[@]}"; do
             # Automatically update CRDs that use the '# Source' header
             source_url_tpl="$(head -n 1 $file | grep -E "^# ?Source: ?" | sed -E 's|^# ?Source: ?||' || true)"
@@ -298,9 +375,77 @@ jobs:
           else
             echo "result=skip" >> $GITHUB_OUTPUT
           fi
+  chart-score:
+    runs-on: ubuntu-latest
+    needs: [get-chart]
+    name: Get chart latest Kubescape score
+    permissions:
+      contents: read
+    outputs:
+      threshold: ${{ steps.set-output.outputs.threshold }}
+    if: needs.get-chart.outputs.result == 'ok'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        name: Checkout 'main' branch
+        with:
+          path: charts-main
+          repository: bitnami/charts
+          fetch-depth: 1
+      - name: Install helm
+        run: |
+          HELM_TARBALL="helm-v3.8.1-linux-amd64.tar.gz"
+          curl -SsLfO "https://get.helm.sh/${HELM_TARBALL}" && sudo tar xf "$HELM_TARBALL" --strip-components 1 -C /usr/local/bin
+      - name: Run helm-dep-build
+        env:
+          CHART: ${{ needs.get-chart.outputs.chart }}
+        run: |
+          if [ -d "charts-main/bitnami/${CHART}" ]; then
+            helm dep build charts-main/bitnami/${CHART}
+            if [ -d "charts-main/bitnami/${CHART}/charts" ]; then
+              cd charts-main/bitnami/${CHART}/charts
+              for filename in *.tgz; do
+                tar -xf "$filename"
+                rm -f "$filename"
+              done
+            fi
+          fi
+      - id: get-chart-score
+        uses: addnab/docker-run-action@4f65fabd2431ebc8d299f8e5a018d79a769ae185
+        name: Get main branch kubescape score
+        # Skip step when user is bitnami-bot or 'skip-score' label is used
+        if: |
+          !(
+            github.event.pull_request.user.login == 'bitnami-bot' ||
+            contains(github.event.pull_request.labels.*.name, 'skip-score') ||
+            (github.event.action == 'labeled' && github.event.label.name == 'skip-score')
+          )
+        env:
+          CHART: ${{ needs.get-chart.outputs.chart }}
+        with:
+          image: bitnami/kubescape:3.0.3
+          options: -v  /home/runner/work/charts/charts/charts-main:/charts -v /tmp:/out -e CHART
+          run: |
+            if [ -d "/charts/bitnami/${CHART}" ]; then
+              kubescape scan framework MITRE,NSA,SOC2,cis-v1.23-t1.0.1 /charts/bitnami/${CHART} --format json -o /out/report.json
+              # Truncate score to 2 decimals
+              printf "%s.%.2s" $(echo "$(jq .summaryDetails.complianceScore /out/report.json)" | tr '.' ' ') | sed 's/\.$//' > /out/score
+            else
+              echo "Chart not found at /charts/bitnami/${CHART}. It will be assumed that the upstream chart does not exist."
+            fi
+      - id: set-output
+        name: Set threshold score
+        run: |
+          if [[ -f "/tmp/score" ]]; then
+            score="$(cat /tmp/score)"
+          else
+            echo "Skipping Kubescape score check."
+            score="0"
+          fi
+          echo "Using threshold score: ${score}"
+          echo "threshold=${score}" >> $GITHUB_OUTPUT
   vib-verify:
     runs-on: ubuntu-latest
-    needs: [get-chart, update-pr]
+    needs: [get-chart, update-pr, chart-score]
     permissions:
       contents: read
     # Given performance issues of the action feature on GH's side, we need to be very restrictive in the job's triggers:
@@ -316,7 +461,7 @@ jobs:
       )
     name: VIB Verify
     steps:
-      - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         name: Checkout Repository
         with:
           ref: ${{ github.event.pull_request.head.ref }}
@@ -355,13 +500,19 @@ jobs:
           verification-mode: ${{ steps.get-asset-vib-config.outputs.verification_mode }}
           runtime-parameters-file: ${{ steps.get-asset-vib-config.outputs.runtime_parameters_file }}
         env:
-          CSP_API_URL: https://console.cloud.vmware.com
+          CSP_API_URL: https://console.tanzu.broadcom.com
           CSP_API_TOKEN: ${{ secrets.CSP_API_TOKEN }}
           VIB_PUBLIC_URL: https://cp.bromelia.vmware.com
           # Target-Platform used by default
           VIB_ENV_TARGET_PLATFORM: ${{ secrets.VIB_ENV_TARGET_PLATFORM }}
           # Alternative Target-Platform to be used in case of incompatibilities
           VIB_ENV_ALTERNATIVE_TARGET_PLATFORM: ${{ secrets.VIB_ENV_ALTERNATIVE_TARGET_PLATFORM }}
+          # Set kubescape score threshold
+          VIB_ENV_KUBESCAPE_SCORE_THRESHOLD: ${{ needs.chart-score.outputs.threshold }}
+          # Set docker credentials
+          VIB_ENV_CHARTS_REGISTRY: oci://registry-1.docker.io/bitnamicharts
+          VIB_ENV_CHARTS_REGISTRY_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          VIB_ENV_CHARTS_REGISTRY_PASSWORD: ${{ secrets.DOCKERHUB_TOKEN }}
   auto-pr-review:
     runs-on: ubuntu-latest
     needs: vib-verify

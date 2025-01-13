@@ -161,12 +161,12 @@ spec:
           resources: {{- include "common.resources.preset" (dict "type" .Values.defaultBackend.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if .Values.defaultBackend.extraVolumeMounts }}
-          volumeMounts: {{- include "common.tplvalues.render" ( dict "value" .Values.contour.extraVolumeMounts "context" $ ) | nindent 12 }}
+          volumeMounts: {{- include "common.tplvalues.render" ( dict "value" .Values.defaultBackend.extraVolumeMounts "context" $ ) | nindent 12 }}
           {{- end }}
         {{- if .Values.defaultBackend.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.defaultBackend.sidecars "context" $) | nindent 8 }}
         {{- end }}
-        {{- if .Values.defaultBackend.extraVolumes }}
-        volumes: {{- include "common.tplvalues.render" ( dict "value" .Values.defaultBackend.extraVolumes "context" $ ) | nindent 8 }}
-        {{- end }}
+      {{- if .Values.defaultBackend.extraVolumes }}
+      volumes: {{- include "common.tplvalues.render" ( dict "value" .Values.defaultBackend.extraVolumes "context" $ ) | nindent 6 }}
+      {{- end }}
 {{- end }}

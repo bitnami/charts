@@ -428,7 +428,15 @@ spec:
         {{- if $.Values.shardsvr.dataNode.extraVolumes }}
           {{- include "common.tplvalues.render" ( dict "value" $.Values.shardsvr.dataNode.extraVolumes "context" $ ) | nindent 8 }}
         {{- end }}
-  {{- if and $.Values.shardsvr.persistence.enabled }}
+  {{- if not $.Values.shardsvr.persistence.enabled }}
+        - name: datadir
+          emptyDir: {}
+  {{- else }}
+  {{- if $.Values.shardsvr.persistentVolumeClaimRetentionPolicy.enabled }}
+  persistentVolumeClaimRetentionPolicy:
+    whenDeleted: {{ $.Values.shardsvr.persistentVolumeClaimRetentionPolicy.whenDeleted }}
+    whenScaled: {{ $.Values.shardsvr.persistentVolumeClaimRetentionPolicy.whenScaled }}
+  {{- end }}
   volumeClaimTemplates:
     - apiVersion: v1
       kind: PersistentVolumeClaim
@@ -443,9 +451,6 @@ spec:
           {{- if $.Values.shardsvr.persistence.annotations }}
           {{- include "common.tplvalues.render" ( dict "value" $.Values.shardsvr.persistence.annotations "context" $) | nindent 10 }}
           {{- end }}
-          {{- if $.Values.shardsvr.persistence.resourcePolicy }}
-            helm.sh/resource-policy: {{ $.Values.shardsvr.persistence.resourcePolicy | quote }}
-          {{- end }}
         {{- end }}
         {{- end }}
       spec:
@@ -457,9 +462,6 @@ spec:
           requests:
             storage: {{ $.Values.shardsvr.persistence.size | quote }}
         {{- include "common.storage.class" (dict "persistence" $.Values.shardsvr.persistence "global" $.Values.global) | nindent 8 }}
-  {{- else }}
-    - name: datadir
-      emptyDir: {}
   {{- end }}
 {{- if lt $i (sub $replicas 1) }}
 ---

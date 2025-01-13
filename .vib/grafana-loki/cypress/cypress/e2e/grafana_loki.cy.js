@@ -10,7 +10,8 @@ import { lastMinuteTimestamp } from '../support/utils';
 it('checks Loki range endpoint', () => {
   cy.request({
     method: 'GET',
-    url: 'loki/api/v1/query?query={job="varlogs"}',
+    url: 'loki/api/v1/query',
+    qs: { query: 'sum(rate({job="varlogs"}[10m])) by (level)' },
     form: true,
   }).then((response) => {
     expect(response.status).to.eq(200);

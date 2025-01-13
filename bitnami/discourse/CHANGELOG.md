@@ -1,8 +1,144 @@
 # Changelog
 
-## 13.2.0 (2024-05-24)
+## 15.1.1 (2024-12-19)
 
-* [bitnami/discourse] Enable PodDisruptionBudgets ([#26425](https://github.com/bitnami/charts/pull/26425))
+* [bitnami/discourse] Release 15.1.1 ([#31121](https://github.com/bitnami/charts/pull/31121))
+
+## 15.1.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 1) (#30685) ([be6aa1d](https://github.com/bitnami/charts/commit/be6aa1df0bd4479173a78400fef7295de15b408d)), closes [#30685](https://github.com/bitnami/charts/issues/30685)
+* [bitnami/*] docs: :memo: Unify "Securing Traffic using TLS" section (#30707) ([b572333](https://github.com/bitnami/charts/commit/b57233336e4fe9af928ecb4f2a5f334011efb1bc)), closes [#30707](https://github.com/bitnami/charts/issues/30707)
+* [bitnami/*] docs: fix copy-paste typos with wrong references to Airflow (#30541) ([0a225d4](https://github.com/bitnami/charts/commit/0a225d44c1969429573b4e2630068eff129b6a96)), closes [#30541](https://github.com/bitnami/charts/issues/30541)
+* [bitnami/discourse] Detect non-standard images (#30896) ([fd7e138](https://github.com/bitnami/charts/commit/fd7e1380bb9d29cf437adef3c86ef97025de6eab)), closes [#30896](https://github.com/bitnami/charts/issues/30896)
+
+## <small>15.0.5 (2024-11-14)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/discourse] Release 15.0.5 (#30451) ([a6a5283](https://github.com/bitnami/charts/commit/a6a5283e07b990b49497de6d6cd54f7ad16cf565)), closes [#30451](https://github.com/bitnami/charts/issues/30451)
+
+## <small>15.0.4 (2024-10-22)</small>
+
+* [bitnami/discourse] include discourse.extraEnvVars in the "install-plugins" init-container (#30026) ([3c92104](https://github.com/bitnami/charts/commit/3c9210499341e217733db49192a7927b9e048105)), closes [#30026](https://github.com/bitnami/charts/issues/30026)
+
+## <small>15.0.3 (2024-10-21)</small>
+
+* [bitnami/discourse] Avoid looping on subdirectories on plugins instalation (#30022) ([4bb0481](https://github.com/bitnami/charts/commit/4bb0481e66a9a52557d938d24561cc392ddc3482)), closes [#30022](https://github.com/bitnami/charts/issues/30022)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>15.0.2 (2024-10-14)</small>
+
+* [bitnami/discourse]: (bugfix) fix mount path on install-plugins init-container (#29874) ([8a8e47b](https://github.com/bitnami/charts/commit/8a8e47bf9be1dcaeb082a2afb06768488eaa4ecd)), closes [#29874](https://github.com/bitnami/charts/issues/29874)
+
+## <small>15.0.1 (2024-10-08)</small>
+
+* [bitnami/discourse] Release 15.0.1 (#29827) ([0fffd76](https://github.com/bitnami/charts/commit/0fffd7689f20e475cfc7e460a4ff6b3b8c451103)), closes [#29827](https://github.com/bitnami/charts/issues/29827)
+
+## 15.0.0 (2024-10-03)
+
+* [bitnami/discourse] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x (#29731) ([f9c4cd6](https://github.com/bitnami/charts/commit/f9c4cd65e4d5638b55da1c8a2c08d42c084032d2)), closes [#29731](https://github.com/bitnami/charts/issues/29731)
+
+## 14.2.0 (2024-09-26)
+
+* [bitnami/discourse] Move plugins installation to init-container (#29568) ([024b741](https://github.com/bitnami/charts/commit/024b741934c5d7df88e88b193b9a33dc8ac04237)), closes [#29568](https://github.com/bitnami/charts/issues/29568)
+
+## <small>14.1.6 (2024-09-19)</small>
+
+* [bitnami/discourse] Release 14.1.6 (#29502) ([69c82cf](https://github.com/bitnami/charts/commit/69c82cfc867a79a1120a57d114382680661e6360)), closes [#29502](https://github.com/bitnami/charts/issues/29502)
+
+## <small>14.1.5 (2024-09-15)</small>
+
+* [bitnami/discourse] Release 14.1.5 (#29424) ([c5e5c6a](https://github.com/bitnami/charts/commit/c5e5c6ae5d4d05263f46c5b4848c8384fe826861)), closes [#29424](https://github.com/bitnami/charts/issues/29424)
+
+## <small>14.1.4 (2024-09-10)</small>
+
+* [bitnami/discourse] Release 14.1.4 (#29338) ([3d8b5c9](https://github.com/bitnami/charts/commit/3d8b5c97a8562b27877833726b542c985ccb7359)), closes [#29338](https://github.com/bitnami/charts/issues/29338)
+
+## <small>14.1.3 (2024-08-27)</small>
+
+* [bitnami/discourse] Release 14.1.3 (#29064) ([aecbb98](https://github.com/bitnami/charts/commit/aecbb98766dbc46824a635c6a741aa05cb2c96e0)), closes [#29064](https://github.com/bitnami/charts/issues/29064)
+
+## <small>14.1.2 (2024-08-27)</small>
+
+* [bitnami/discourse] Release 14.1.2 (#29047) ([8dca3b5](https://github.com/bitnami/charts/commit/8dca3b533b4683bf854f391cc2fb2727327e6b26)), closes [#29047](https://github.com/bitnami/charts/issues/29047)
+
+## <small>14.1.1 (2024-08-22)</small>
+
+* [bitnami/discourse] Release 14.1.1 (#28966) ([f4e8e0b](https://github.com/bitnami/charts/commit/f4e8e0bb0af6097e0fbdca1aa41463b0a960b484)), closes [#28966](https://github.com/bitnami/charts/issues/28966)
+
+## 14.1.0 (2024-08-20)
+
+* [bitnami/discourse] Bump discourse to 3.3.0 (#28786) ([439b8c7](https://github.com/bitnami/charts/commit/439b8c7b48980952615ca0290defa6180a2164ed)), closes [#28786](https://github.com/bitnami/charts/issues/28786)
+
+## 14.0.0 (2024-08-13)
+
+* [bitnami/discourse] Update dependencies (#28852) ([279c2bd](https://github.com/bitnami/charts/commit/279c2bd4db105ad48a25419958e318f3e522338b)), closes [#28852](https://github.com/bitnami/charts/issues/28852)
+
+## <small>13.2.15 (2024-07-30)</small>
+
+* [bitnami/discourse] Release 13.2.15 (#28578) ([1e0e9c7](https://github.com/bitnami/charts/commit/1e0e9c79d42cbd3dbe4b3ad89201e229bb39215c)), closes [#28578](https://github.com/bitnami/charts/issues/28578)
+
+## <small>13.2.14 (2024-07-25)</small>
+
+* [bitnami/discourse] Release 13.2.14 (#28448) ([a1c04d9](https://github.com/bitnami/charts/commit/a1c04d937c775cbd265b5b7174217f013af208a5)), closes [#28448](https://github.com/bitnami/charts/issues/28448)
+
+## <small>13.2.13 (2024-07-24)</small>
+
+* [bitnami/discourse] Release 13.2.13 (#28291) ([b094b74](https://github.com/bitnami/charts/commit/b094b74156c4915dd01b6aee5c68e8bac39acd80)), closes [#28291](https://github.com/bitnami/charts/issues/28291)
+
+## <small>13.2.12 (2024-07-18)</small>
+
+* [bitnami/discourse] fix: :bug: Remove incorrect CHMOD capability (#27982) ([4decca8](https://github.com/bitnami/charts/commit/4decca8eb92c6f98dce549f9d01d8ef6a191c75d)), closes [#27982](https://github.com/bitnami/charts/issues/27982)
+
+## <small>13.2.11 (2024-07-16)</small>
+
+* [bitnami/discourse] Global StorageClass as default value (#28010) ([84bce06](https://github.com/bitnami/charts/commit/84bce06012772a0a5c93072e4dd5a64878e54eec)), closes [#28010](https://github.com/bitnami/charts/issues/28010)
+
+## <small>13.2.10 (2024-07-15)</small>
+
+* [bitnami/discourse] Release 13.2.10 (#27984) ([d5f6db6](https://github.com/bitnami/charts/commit/d5f6db6dd719f2e2333a26d7651a18bda6e412aa)), closes [#27984](https://github.com/bitnami/charts/issues/27984)
+
+## <small>13.2.9 (2024-07-08)</small>
+
+* [bitnami/discourse] Fix pgrep on livenessProbe typo (#27824) ([5c4b604](https://github.com/bitnami/charts/commit/5c4b6040abe28a689f210bcd18572ad0e4a690ba)), closes [#27824](https://github.com/bitnami/charts/issues/27824)
+
+## <small>13.2.8 (2024-07-03)</small>
+
+* [bitnami/discourse] Release 13.2.8 (#27749) ([bc83af9](https://github.com/bitnami/charts/commit/bc83af9654e2901e463ff39f7baff6e231cb6853)), closes [#27749](https://github.com/bitnami/charts/issues/27749)
+
+## <small>13.2.7 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/discourse] Release 13.2.7 (#27684) ([8dc1d42](https://github.com/bitnami/charts/commit/8dc1d42ccec3fb8528a731b99bbf32b2ef3dfa36)), closes [#27684](https://github.com/bitnami/charts/issues/27684)
+
+## <small>13.2.6 (2024-06-18)</small>
+
+* [bitnami/discourse] Release 13.2.6 (#27337) ([11c378d](https://github.com/bitnami/charts/commit/11c378d1340c94175443c7a57d4413aae3fed97b)), closes [#27337](https://github.com/bitnami/charts/issues/27337)
+
+## <small>13.2.5 (2024-06-17)</small>
+
+* [bitnami/discourse] Release 13.2.5 (#27209) ([3d6a8e6](https://github.com/bitnami/charts/commit/3d6a8e6083dfc386e4707ad1c9876395c4dafe54)), closes [#27209](https://github.com/bitnami/charts/issues/27209)
+
+## <small>13.2.4 (2024-06-06)</small>
+
+* [bitnami/discourse] Release 13.2.4 (#27038) ([cc079aa](https://github.com/bitnami/charts/commit/cc079aa7aa3b7e92a3f1a6d3b9cfbc2706c7e34c)), closes [#27038](https://github.com/bitnami/charts/issues/27038)
+
+## <small>13.2.3 (2024-06-06)</small>
+
+* [bitnami/discourse] Release 13.2.3 (#26923) ([ee49396](https://github.com/bitnami/charts/commit/ee49396b6a329b8fcca26bf2bf6ae22309b8ad24)), closes [#26923](https://github.com/bitnami/charts/issues/26923)
+
+## <small>13.2.2 (2024-06-05)</small>
+
+* [bitnami/discourse] Bump chart version (#26825) ([b6ab645](https://github.com/bitnami/charts/commit/b6ab645721eb7f3dea446f32dc6ebe23f03051cd)), closes [#26825](https://github.com/bitnami/charts/issues/26825)
+
+## <small>13.2.1 (2024-06-05)</small>
+
+* [bitnami/discourse] Bump chart version (#26767) ([e841b7c](https://github.com/bitnami/charts/commit/e841b7c9aafd711a3e6f425905e00a019949791b)), closes [#26767](https://github.com/bitnami/charts/issues/26767)
+
+## 13.2.0 (2024-05-30)
+
+* [bitnami/discourse] Enable PodDisruptionBudgets (#26425) ([b5de08f](https://github.com/bitnami/charts/commit/b5de08fa965b07a74fd2611cfc4e3a962463f6b5)), closes [#26425](https://github.com/bitnami/charts/issues/26425)
 
 ## 13.1.0 (2024-05-21)
 

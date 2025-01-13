@@ -1,8 +1,95 @@
 # Changelog
 
-## 13.4.1 (2024-06-04)
+## 13.7.1 (2024-12-13)
 
-* [bitnami/zookeeper] Bump chart version ([#26675](https://github.com/bitnami/charts/pull/26675))
+* [bitnami/zookeeper] Increase resources to avoid OOMKilled reason executing tests ([#31035](https://github.com/bitnami/charts/pull/31035))
+
+## 13.7.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/zookeeper] Detect non-standard images (#30915) ([8168ae4](https://github.com/bitnami/charts/commit/8168ae4c69fac2433cc3f4b2e464c819f76a2420)), closes [#30915](https://github.com/bitnami/charts/issues/30915)
+
+## <small>13.6.1 (2024-12-04)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 6) (#30675) ([7b9cd04](https://github.com/bitnami/charts/commit/7b9cd04c2ffc730a0d62da787f2d4967c0ede47c)), closes [#30675](https://github.com/bitnami/charts/issues/30675)
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 3) (#30688) ([10a49f9](https://github.com/bitnami/charts/commit/10a49f9ff2db1d9d11a6edd1c40a9f61803241bc)), closes [#30688](https://github.com/bitnami/charts/issues/30688)
+* [bitnami/zookeeper] Release 13.6.1 (#30786) ([684e90c](https://github.com/bitnami/charts/commit/684e90c974b21a319ffdbd4aefec4d0eb97d55b6)), closes [#30786](https://github.com/bitnami/charts/issues/30786)
+
+## 13.6.0 (2024-11-05)
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/zookeeper] Make the ZOO_SERVERS environment variable configurable (#29921) ([1cfa790](https://github.com/bitnami/charts/commit/1cfa790448007d7e2976ac73fad063b21c29736e)), closes [#29921](https://github.com/bitnami/charts/issues/29921)
+
+## <small>13.5.1 (2024-10-26)</small>
+
+* [bitnami/zookeeper] Release 13.5.1 (#30094) ([671cf5e](https://github.com/bitnami/charts/commit/671cf5e571a5e86d0943d002da4f8bef72a54fed)), closes [#30094](https://github.com/bitnami/charts/issues/30094)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## 13.5.0 (2024-10-10)
+
+* [bitnami/zookeeper] Rename metrics port and expose scheme, and tlsConfig for Istio compatibility (#2 ([0bcfc6d](https://github.com/bitnami/charts/commit/0bcfc6d635eb09f0cc2f7d8187254b5a4ffe95be)), closes [#29683](https://github.com/bitnami/charts/issues/29683)
+
+## <small>13.4.15 (2024-10-09)</small>
+
+* [bitnami/zookeeper] Release 13.4.15 (#29850) ([f3af6eb](https://github.com/bitnami/charts/commit/f3af6ebad051648b856f45e54e6c86858265b766)), closes [#29850](https://github.com/bitnami/charts/issues/29850)
+
+## <small>13.4.14 (2024-09-23)</small>
+
+* [bitnami/zookeeper] Drop unused `getValueFromSecret` local helper (#29440) ([630e4cb](https://github.com/bitnami/charts/commit/630e4cb5e4af4fda0bc633cd9ffe3930a93f13b3)), closes [#29440](https://github.com/bitnami/charts/issues/29440)
+
+## <small>13.4.13 (2024-09-17)</small>
+
+* [bitnami/zookeeper] test: :white_check_mark: Improve reliability of ginkgo tests (#29475) ([2c66097](https://github.com/bitnami/charts/commit/2c6609778ffdea57b4d0b4aaba193e451e2186bc)), closes [#29475](https://github.com/bitnami/charts/issues/29475)
+
+## <small>13.4.12 (2024-09-09)</small>
+
+* [bitnami/zookeeper] fix: add apiVersion and kind to volumeClaimTemplates (#29289) ([f393472](https://github.com/bitnami/charts/commit/f393472ab8514b93c8e0f0de9f6b022d43d16142)), closes [#29289](https://github.com/bitnami/charts/issues/29289)
+
+## <small>13.4.11 (2024-08-30)</small>
+
+* [bitnami/zookeeper] Release 13.4.11 (#29137) ([85b3d7a](https://github.com/bitnami/charts/commit/85b3d7af73a7c81cdbe12891ebec00cc4e2a5802)), closes [#29137](https://github.com/bitnami/charts/issues/29137)
+
+## <small>13.4.10 (2024-07-25)</small>
+
+* [bitnami/zookeeper] Release 13.4.10 (#28507) ([ed70bd7](https://github.com/bitnami/charts/commit/ed70bd7c9acfcfc96f7dc9fbedf9f5f9b4368cb4)), closes [#28507](https://github.com/bitnami/charts/issues/28507)
+
+## <small>13.4.9 (2024-07-24)</small>
+
+* [bitnami/zookeeper] Release 13.4.9 (#28387) ([b706c77](https://github.com/bitnami/charts/commit/b706c770002e437b33ef0ab6685ad7aee863a998)), closes [#28387](https://github.com/bitnami/charts/issues/28387)
+
+## <small>13.4.8 (2024-07-16)</small>
+
+* [bitnami/zookeeper] Global StorageClass as default value (#28111) ([101d9b9](https://github.com/bitnami/charts/commit/101d9b943793ddd2383149562cf8505ea684a238)), closes [#28111](https://github.com/bitnami/charts/issues/28111)
+
+## <small>13.4.7 (2024-07-11)</small>
+
+* [bitnami/zookeeper] Bump patch version (#27895) ([8cf2526](https://github.com/bitnami/charts/commit/8cf2526d81c0010e69e9c19b7739ec86531f8d2e)), closes [#27895](https://github.com/bitnami/charts/issues/27895)
+
+## <small>13.4.6 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/zookeeper] Release 13.4.6 (#27722) ([84b4b99](https://github.com/bitnami/charts/commit/84b4b99f4450009d8fcac4c43755cd8116db33ff)), closes [#27722](https://github.com/bitnami/charts/issues/27722)
+
+## <small>13.4.5 (2024-06-18)</small>
+
+* [bitnami/zookeeper] Release 13.4.5 (#27431) ([2168b4a](https://github.com/bitnami/charts/commit/2168b4af978a7657a8a1b0db8a0bd04e354cf0b9)), closes [#27431](https://github.com/bitnami/charts/issues/27431)
+
+## <small>13.4.4 (2024-06-17)</small>
+
+* [bitnami/zookeeper] Release 13.4.4 (#27309) ([eb6c0ff](https://github.com/bitnami/charts/commit/eb6c0ff2245c49d80712168f4a61b6928569fb06)), closes [#27309](https://github.com/bitnami/charts/issues/27309)
+
+## <small>13.4.3 (2024-06-06)</small>
+
+* [bitnami/zookeeper] Release 13.4.3 (#27029) ([a3977c8](https://github.com/bitnami/charts/commit/a3977c84f92e93ec4f9eea1710646afd987d3d08)), closes [#27029](https://github.com/bitnami/charts/issues/27029)
+
+## <small>13.4.2 (2024-06-05)</small>
+
+* [bitnami/zookeeper] Release 13.4.2 (#26874) ([25338c3](https://github.com/bitnami/charts/commit/25338c3a70634f51d331459793a1161244576f54)), closes [#26874](https://github.com/bitnami/charts/issues/26874)
+
+## <small>13.4.1 (2024-06-04)</small>
+
+* [bitnami/zookeeper] Bump chart version (#26675) ([a04a619](https://github.com/bitnami/charts/commit/a04a619420db3ac872e225b0709889b588ecf886)), closes [#26675](https://github.com/bitnami/charts/issues/26675)
 
 ## 13.4.0 (2024-05-24)
 

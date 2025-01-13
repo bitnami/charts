@@ -1,8 +1,99 @@
 # Changelog
 
-## 8.2.4 (2024-06-04)
+## 9.1.0 (2024-12-10)
 
-* [bitnami/mongodb-sharded] Bump chart version ([#26651](https://github.com/bitnami/charts/pull/26651))
+* [bitnami/mongodb-sharded] Detect non-standard images ([#30927](https://github.com/bitnami/charts/pull/30927))
+
+## <small>9.0.5 (2024-12-06)</small>
+
+* [bitnami/mongodb-sharded] Release 9.0.5 (#30821) ([c926860](https://github.com/bitnami/charts/commit/c926860fff55e3718ed34b0b99b9196fd4331917)), closes [#30821](https://github.com/bitnami/charts/issues/30821)
+
+## <small>9.0.4 (2024-12-04)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 4) (#30669) ([a4ec006](https://github.com/bitnami/charts/commit/a4ec00624589023a70a7094fcfb9f12e382bc280)), closes [#30669](https://github.com/bitnami/charts/issues/30669)
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 3) (#30688) ([10a49f9](https://github.com/bitnami/charts/commit/10a49f9ff2db1d9d11a6edd1c40a9f61803241bc)), closes [#30688](https://github.com/bitnami/charts/issues/30688)
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/mongodb-sharded] Release 9.0.4 (#30787) ([c3af04c](https://github.com/bitnami/charts/commit/c3af04cdff0ee39614f9da280ab4731aec555968)), closes [#30787](https://github.com/bitnami/charts/issues/30787)
+
+## <small>9.0.3 (2024-10-26)</small>
+
+* [bitnami/mongodb-sharded] Release 9.0.3 (#30088) ([a54742d](https://github.com/bitnami/charts/commit/a54742d636d66d841a3be0133f0ae2f368ae416b)), closes [#30088](https://github.com/bitnami/charts/issues/30088)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>9.0.2 (2024-10-09)</small>
+
+* [bitnami/mongodb-sharded] Release 9.0.2 (#29854) ([1eff071](https://github.com/bitnami/charts/commit/1eff071db3ea82d88961566d4120a9b51bb3887d)), closes [#29854](https://github.com/bitnami/charts/issues/29854)
+
+## <small>9.0.1 (2024-10-08)</small>
+
+* [bitnami/mongodb-sharded] Release 9.0.1 (#29829) ([98bbc94](https://github.com/bitnami/charts/commit/98bbc94cbf695b84dacd75bcf6110fefd00244a6)), closes [#29829](https://github.com/bitnami/charts/issues/29829)
+* [bitnami/mongodb] Update README (#29812) ([6f8a1bf](https://github.com/bitnami/charts/commit/6f8a1bf241a0032a3e44a2ea47f9574f6786d436)), closes [#29812](https://github.com/bitnami/charts/issues/29812)
+
+## 9.0.0 (2024-10-07)
+
+* [bitnami/mongodb-sharded] Release 9.0.0 (#29802) ([0f15049](https://github.com/bitnami/charts/commit/0f15049eae01dd4fb989546e1627a96dd0008359)), closes [#29802](https://github.com/bitnami/charts/issues/29802)
+
+## <small>8.3.9 (2024-10-05)</small>
+
+* [bitnami/mongodb-sharded] Release 8.3.9 (#29785) ([e23d06a](https://github.com/bitnami/charts/commit/e23d06a7a7e4b30f4eadcb8bc35ea47ae621342e)), closes [#29785](https://github.com/bitnami/charts/issues/29785)
+
+## <small>8.3.8 (2024-09-30)</small>
+
+* [bitnami/mongodb-sharded] Fix uncapacity to disable persistence (#29599) ([9666bc1](https://github.com/bitnami/charts/commit/9666bc1ffe5959f3ddee62d124f79ad1aee71769)), closes [#29599](https://github.com/bitnami/charts/issues/29599)
+
+## <small>8.3.7 (2024-09-11)</small>
+
+* [bitnami/mongodb-sharded] Changed to use namespaceOverride value when defining primaryhost in config ([2244aef](https://github.com/bitnami/charts/commit/2244aefaff5e48f8b708c2d0b9592e6802ceb6b1)), closes [#29145](https://github.com/bitnami/charts/issues/29145)
+
+## <small>8.3.6 (2024-08-26)</small>
+
+* [bitnami/mongodb-sharded] Release 8.3.6 (#29028) ([bc3ab9f](https://github.com/bitnami/charts/commit/bc3ab9fbfc042c1c4a17fe069b284bf0616c42dc)), closes [#29028](https://github.com/bitnami/charts/issues/29028)
+
+## <small>8.3.5 (2024-08-20)</small>
+
+* [bitnami/mongodb-sharded]Ginkgo tests: Use rollout instead of scale down (#28937) ([698baac](https://github.com/bitnami/charts/commit/698baac23bdd0f35da136ed7386b26ad7a6ea3bc)), closes [#28937](https://github.com/bitnami/charts/issues/28937)
+
+## <small>8.3.4 (2024-07-25)</small>
+
+* [bitnami/mongodb-sharded] Release 8.3.4 (#28476) ([a0f15d4](https://github.com/bitnami/charts/commit/a0f15d4092aab507d6a2e98f457bda516f5caf80)), closes [#28476](https://github.com/bitnami/charts/issues/28476)
+
+## <small>8.3.3 (2024-07-24)</small>
+
+* [bitnami/mongodb-sharded] Release 8.3.3 (#28324) ([cc102ed](https://github.com/bitnami/charts/commit/cc102ed5dc00e4e755c7c467214debb4a8c31dc6)), closes [#28324](https://github.com/bitnami/charts/issues/28324)
+
+## <small>8.3.2 (2024-07-16)</small>
+
+* [bitnami/mongodb-sharded] Global StorageClass as default value (#28062) ([d432ce0](https://github.com/bitnami/charts/commit/d432ce00fd96cc8b19f482467543dee2519e1b1d)), closes [#28062](https://github.com/bitnami/charts/issues/28062)
+
+## <small>8.3.1 (2024-06-29)</small>
+
+* [bitnami/mongodb-sharded] Release 8.3.1 (#27591) ([d572425](https://github.com/bitnami/charts/commit/d57242503ec47daca1a284e6cbdaa039383347db)), closes [#27591](https://github.com/bitnami/charts/issues/27591)
+
+## 8.3.0 (2024-06-28)
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/mongodb-sharded] Support for persistent volume retention policies (#27512) ([df93121](https://github.com/bitnami/charts/commit/df93121fb40abcdaf4b3b12cd213c27d9f1b4e3f)), closes [#27512](https://github.com/bitnami/charts/issues/27512)
+
+## <small>8.2.8 (2024-06-18)</small>
+
+* [bitnami/mongodb-sharded] Release 8.2.8 (#27383) ([99030f3](https://github.com/bitnami/charts/commit/99030f353001393d321297c9295105b7c5c56ffb)), closes [#27383](https://github.com/bitnami/charts/issues/27383)
+
+## <small>8.2.7 (2024-06-17)</small>
+
+* [bitnami/mongodb-sharded] Release 8.2.7 (#27316) ([89ef0cf](https://github.com/bitnami/charts/commit/89ef0cf930a22e4338ecf36fbb29221f00ca08cc)), closes [#27316](https://github.com/bitnami/charts/issues/27316)
+
+## <small>8.2.6 (2024-06-17)</small>
+
+* [bitnami/mongodb-sharded] Release 8.2.6 (#27252) ([cd07b41](https://github.com/bitnami/charts/commit/cd07b41777df273758467d3e3b8406d84650459e)), closes [#27252](https://github.com/bitnami/charts/issues/27252)
+
+## <small>8.2.5 (2024-06-06)</small>
+
+* [bitnami/mongodb-sharded] Release 8.2.5 (#26986) ([52cc943](https://github.com/bitnami/charts/commit/52cc943e0c09b75180611b2613a121ed724457dc)), closes [#26986](https://github.com/bitnami/charts/issues/26986)
+
+## <small>8.2.4 (2024-06-04)</small>
+
+* [bitnami/mongodb-sharded] Bump chart version (#26651) ([36e571f](https://github.com/bitnami/charts/commit/36e571fecd941a118f5605ba0ab9280cd4f67977)), closes [#26651](https://github.com/bitnami/charts/issues/26651)
 
 ## <small>8.2.3 (2024-05-31)</small>
 

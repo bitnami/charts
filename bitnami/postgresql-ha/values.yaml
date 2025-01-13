@@ -8,7 +8,8 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
+## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ## @param global.postgresql.username PostgreSQL username (overrides `postgresql.username`)
 ## @param global.postgresql.password PostgreSQL password (overrides `postgresql.password`)
 ## @param global.postgresql.database PostgreSQL database (overrides `postgresql.database`)
@@ -29,7 +30,13 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  defaultStorageClass: ""
   storageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
   postgresql:
     username: ""
     password: ""
@@ -111,9 +118,8 @@ postgresql:
   image:
     registry: docker.io
     repository: bitnami/postgresql-repmgr
-    tag: 16.3.0-debian-12-r9
+    tag: 17.2.0-debian-12-r6
     digest: ""
-    ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -263,7 +269,7 @@ postgresql:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsGroup: 1001
     runAsNonRoot: true
@@ -624,7 +630,7 @@ postgresql:
   ## NOTE: This will override postgresql.repmgrConfiguration, postgresql.configuration and postgresql.pgHbaConfiguration
   ##
   configurationCM: ""
-  ## @param postgresql.extendedConf Extended PostgreSQL configuration (appended to main or default configuration). Implies `volumePermissions.enabled`.
+  ## @param postgresql.extendedConf Extended PostgreSQL configuration (requires `volumePermissions.enabled` to be `true`)
   ## Similar to postgresql.configuration, but _appended_ to the main configuration
   ## ref: https://github.com/bitnami/containers/tree/main/bitnami/postgresql-repmgr#allow-settings-to-be-loaded-from-files-other-than-the-default-postgresqlconf
   ## Example:
@@ -634,8 +640,8 @@ postgresql:
   ##   ...
   ##
   extendedConf: ""
-  ## @param postgresql.extendedConfCM ConfigMap with PostgreSQL extended configuration
-  ## NOTE: This will override postgresql.extendedConf and implies `volumePermissions.enabled`
+  ## @param postgresql.extendedConfCM ConfigMap with PostgreSQL extended configuration (requires `volumePermissions.enabled` to be `true`)
+  ## NOTE: This will override postgresql.extendedConf
   ##
   extendedConfCM: ""
   ## @param postgresql.initdbScripts Dictionary of initdb scripts
@@ -829,7 +835,7 @@ witness:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsGroup: 1001
     runAsNonRoot: true
@@ -1077,7 +1083,7 @@ witness:
   ## NOTE: This will override witness.repmgrConfiguration, witness.configuration and witness.pgHbaConfiguration
   ##
   configurationCM: ""
-  ## @param witness.extendedConf Extended PostgreSQL configuration (appended to main or default configuration). Implies `volumePermissions.enabled`.
+  ## @param witness.extendedConf Extended PostgreSQL configuration (requires `volumePermissions.enabled` to be `true`)
   ## Similar to witness.configuration, but _appended_ to the main configuration
   ## ref: https://github.com/bitnami/containers/tree/main/bitnami/postgresql-repmgr#allow-settings-to-be-loaded-from-files-other-than-the-default-postgresqlconf
   ## Example:
@@ -1087,8 +1093,8 @@ witness:
   ##   ...
   ##
   extendedConf: ""
-  ## @param witness.extendedConfCM ConfigMap with PostgreSQL extended configuration
-  ## NOTE: This will override witness.extendedConf and implies `volumePermissions.enabled`
+  ## @param witness.extendedConfCM ConfigMap with PostgreSQL extended configuration (requires `volumePermissions.enabled` to be `true`)
+  ## NOTE: This will override witness.extendedConf
   ##
   extendedConfCM: ""
   ## @param witness.initdbScripts Dictionary of initdb scripts
@@ -1128,9 +1134,8 @@ pgpool:
   image:
     registry: docker.io
     repository: bitnami/pgpool
-    tag: 4.5.2-debian-12-r0
+    tag: 4.5.5-debian-12-r0
     digest: ""
-    ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -1324,7 +1329,7 @@ pgpool:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsGroup: 1001
     runAsNonRoot: true
@@ -1666,7 +1671,7 @@ rbac:
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
 ##
 serviceAccount:
-  ## @param serviceAccount.create Enable creation of ServiceAccount for Airflow pods
+  ## @param serviceAccount.create Specifies whether a ServiceAccount should be created
   ##
   create: true
   ## @param serviceAccount.name The name of the ServiceAccount to use.
@@ -1707,9 +1712,8 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/postgres-exporter
-    tag: 0.15.0-debian-12-r32
+    tag: 0.16.0-debian-12-r2
     digest: ""
-    ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -1735,7 +1739,7 @@ metrics:
   ##
   podSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsGroup: 1001
     runAsNonRoot: true
@@ -1958,9 +1962,8 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r22
+    tag: 12-debian-12-r34
     digest: ""
-    ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -1983,7 +1986,7 @@ volumePermissions:
   ##
   podSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 0
     runAsGroup: 0
     runAsNonRoot: false
@@ -2185,7 +2188,7 @@ backup:
     ## @param backup.cronjob.containerSecurityContext.capabilities.drop Set backup container's Security Context capabilities to drop
     containerSecurityContext:
       enabled: true
-      seLinuxOptions: null
+      seLinuxOptions: {}
       runAsUser: 1001
       runAsGroup: 1001
       runAsNonRoot: true
@@ -2213,6 +2216,24 @@ backup:
     ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
     ##
     tolerations: []
+    ## @param backup.cronjob.extraEnvVars Array containing extra environment variables
+    ## For example:
+    ##  - name: BEARER_AUTH
+    ##    value: true
+    ##
+    extraEnvVars: []
+    ## @param backup.cronjob.extraEnvVarsCM ConfigMap with extra environment variables
+    ##
+    extraEnvVarsCM: ""
+    ## @param backup.cronjob.extraEnvVarsSecret Secret with extra environment variables
+    ##
+    extraEnvVarsSecret: ""
+    ## @param backup.cronjob.extraVolumes Extra volumes to add to the backup container
+    ##
+    extraVolumes: []
+    ## @param backup.cronjob.extraVolumeMounts Extra volume mounts to add to the backup container. Normally used with `extraVolumes`
+    ##
+    extraVolumeMounts: []
     storage:
       ## @param backup.cronjob.storage.existingClaim Provide an existing `PersistentVolumeClaim` (only when `architecture=standalone`)
       ## If defined, PVC must be created manually before volume will be bound

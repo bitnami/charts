@@ -21,7 +21,7 @@ spec:
   ingressClassName: {{ .Values.controlPlane.ingress.ingressClassName | quote }}
   {{- end }}
   rules:
-    {{- $servicePort := (printf "%s-%s" (ternary "https" "http" .Values.controlPlane.tls.enabled) "admin") }}
+    {{- $servicePort := (printf "%s-%s" (ternary "https" "http" .Values.controlPlane.tls.enabled) "admin-api") }}
     {{- if .Values.controlPlane.ingress.hostname }}
     - host: {{ .Values.controlPlane.ingress.hostname }}
       http:

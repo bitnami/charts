@@ -1,0 +1,113 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if not .Values.metrics.existingConfigmap }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "airflow.metrics.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: metrics
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
+  {{- end }}
+data:
+  mappings.yml: |-
+  {{- if .Values.metrics.configuration }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.metrics.configuration "context" .) | indent 4 }}
+  {{- else }}
+    mappings:
+      - match: airflow.dagrun.dependency-check.*.*
+        name: "airflow_dagrun_dependency_check"
+        labels:
+          dag_id: "$1"
+
+      - match: airflow.operator_successes_(.*)
+        match_type: regex
+        name: "airflow_operator_successes"
+        labels:
+          operator: "$1"
+
+      - match: airflow.operator_failures_(.*)
+        match_type: regex
+        name: "airflow_operator_failures"
+        labels:
+          operator: "$1"
+
+      - match: airflow.scheduler_heartbeat
+        match_type: regex
+        name: "airflow_scheduler_heartbeat"
+        labels:
+          type: counter
+
+      - match: airflow.dag_processor_heartbeat
+        match_type: regex
+        name: "airflow_dag_processor_heartbeat"
+        labels:
+          type: counter
+
+      - match: airflow.dag.*.*.duration
+        name: "airflow_task_duration"
+        labels:
+          dag_id: "$1"
+          task_id: "$2"
+
+      - match: airflow.dagrun.duration.success.*
+        name: "airflow_dagrun_duration"
+        labels:
+          dag_id: "$1"
+
+      - match: airflow.dagrun.duration.failed.*
+        name: "airflow_dagrun_failed"
+        labels:
+          dag_id: "$1"
+
+      - match: airflow.dagrun.schedule_delay.*
+        name: "airflow_dagrun_schedule_delay"
+        labels:
+          dag_id: "$1"
+
+      - match: airflow.dag_processing.last_runtime.*
+        name: "airflow_dag_processing_last_runtime"
+        labels:
+          dag_file: "$1"
+
+      - match: airflow.dag_processing.last_run.seconds_ago.*
+        name: "airflow_dag_processing_last_run_seconds_ago"
+        labels:
+          dag_file: "$1"
+
+      - match: airflow.pool.open_slots.*
+        name: "airflow_pool_open_slots"
+        labels:
+          pool: "$1"
+
+      - match: airflow.pool.used_slots.*
+        name: "airflow_pool_used_slots"
+        labels:
+          pool: "$1"
+
+      - match: airflow.pool.starving_tasks.*
+        name: "airflow_pool_starving_tasks"
+        labels:
+          pool: "$1"
+
+      - match: airflow.executor.open_slots.*
+        name: "airflow_executor_open_slots"
+        labels:
+          executor: "$1"
+
+      - match: airflow.executor.queued_tasks.*
+        name: "airflow_executor_queued_tasks"
+        labels:
+          executor: "$1"
+
+      - match: airflow.executor.running_tasks.*
+        name: "airflow_executor_running_tasks"
+        labels:
+          executor: "$1"
+  {{- end }}
+{{- end }}

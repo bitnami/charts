@@ -1,8 +1,119 @@
 # Changelog
 
-## 11.2.1 (2024-06-04)
+## 11.4.1 (2025-01-08)
 
-* [bitnami/consul] Bump chart version ([#26624](https://github.com/bitnami/charts/pull/26624))
+* [bitnami/consul] Release 11.4.1 ([#31252](https://github.com/bitnami/charts/pull/31252))
+
+## 11.4.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/consul] Detect non-standard images (#30873) ([4b16ccc](https://github.com/bitnami/charts/commit/4b16ccce5d4ad4c82d0a8199ef5954910afcfec2)), closes [#30873](https://github.com/bitnami/charts/issues/30873)
+
+## <small>11.3.22 (2024-12-03)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 1) (#30660) ([7409ca4](https://github.com/bitnami/charts/commit/7409ca4c21869fabe1532dd4f3ff24895df71c6d)), closes [#30660](https://github.com/bitnami/charts/issues/30660)
+* [bitnami/*] docs: :memo: Unify "Securing Traffic using TLS" section (#30707) ([b572333](https://github.com/bitnami/charts/commit/b57233336e4fe9af928ecb4f2a5f334011efb1bc)), closes [#30707](https://github.com/bitnami/charts/issues/30707)
+* [bitnami/consul] Release 11.3.22 (#30744) ([ac8988c](https://github.com/bitnami/charts/commit/ac8988cc3a6f252bda827aa7ce11ed7ebc1ff75a)), closes [#30744](https://github.com/bitnami/charts/issues/30744)
+
+## <small>11.3.21 (2024-11-09)</small>
+
+* [bitnami/consul] Release 11.3.21 (#30374) ([0a42c1a](https://github.com/bitnami/charts/commit/0a42c1ad95be7b2466d4306d5a3abbbd989638c9)), closes [#30374](https://github.com/bitnami/charts/issues/30374)
+
+## <small>11.3.20 (2024-11-07)</small>
+
+* [bitnami/consul] Release 11.3.20 (#30259) ([6c44b4c](https://github.com/bitnami/charts/commit/6c44b4c00afd32f6178260d90e1f2096c854b22f)), closes [#30259](https://github.com/bitnami/charts/issues/30259)
+
+## <small>11.3.19 (2024-10-31)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/consul] Release 11.3.19 (#30141) ([f02726a](https://github.com/bitnami/charts/commit/f02726aadc0452fec60f9487f48f363f3e74af04)), closes [#30141](https://github.com/bitnami/charts/issues/30141)
+
+## <small>11.3.18 (2024-10-22)</small>
+
+* [bitnami/consul] Change Configmap Template (#30016) ([11f2a7d](https://github.com/bitnami/charts/commit/11f2a7d09ea9c38286c1c3fc3fa4ab70473a8678)), closes [#30016](https://github.com/bitnami/charts/issues/30016)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>11.3.17 (2024-10-16)</small>
+
+* [bitnami/consul] Release 11.3.17 (#29918) ([1478868](https://github.com/bitnami/charts/commit/1478868d7784fc7a82fefc0302aa2ebed2dfa624)), closes [#29918](https://github.com/bitnami/charts/issues/29918)
+
+## <small>11.3.16 (2024-10-02)</small>
+
+* [bitnami/consul] Release 11.3.16 (#29687) ([3c2a220](https://github.com/bitnami/charts/commit/3c2a2201f0605e46931f7d3799aa56d588dc8c41)), closes [#29687](https://github.com/bitnami/charts/issues/29687)
+
+## <small>11.3.15 (2024-09-17)</small>
+
+* [bitnami/consul] test: :white_check_mark: Improve reliability of ginkgo tests (#29464) ([d3966d8](https://github.com/bitnami/charts/commit/d3966d89e63670cb22307b6c27be89dea9f52b02)), closes [#29464](https://github.com/bitnami/charts/issues/29464)
+
+## <small>11.3.14 (2024-09-05)</small>
+
+* [bitnami/consul] Release 11.3.14 (#29228) ([ceb5750](https://github.com/bitnami/charts/commit/ceb5750e92b1324bd7f33f80d7013678ef8db5a3)), closes [#29228](https://github.com/bitnami/charts/issues/29228)
+
+## <small>11.3.13 (2024-08-27)</small>
+
+* [bitnami/consul] Release 11.3.13 (#29070) ([e3c4130](https://github.com/bitnami/charts/commit/e3c4130589625dcd7b9ad5ef2f0c0c4648acec97)), closes [#29070](https://github.com/bitnami/charts/issues/29070)
+
+## <small>11.3.12 (2024-08-07)</small>
+
+* [bitnami/consul] Release 11.3.12 (#28763) ([552e3c6](https://github.com/bitnami/charts/commit/552e3c6363b094c43ef7f4b78225c4ea4c1055b0)), closes [#28763](https://github.com/bitnami/charts/issues/28763)
+
+## <small>11.3.11 (2024-07-25)</small>
+
+* [bitnami/consul] Release 11.3.11 (#28401) ([e11bc04](https://github.com/bitnami/charts/commit/e11bc04f38795cf195d323496241169ff7efaa58)), closes [#28401](https://github.com/bitnami/charts/issues/28401)
+
+## <small>11.3.10 (2024-07-24)</small>
+
+* [bitnami/consul] Release 11.3.10 (#28272) ([1a21ef5](https://github.com/bitnami/charts/commit/1a21ef5fefedaa40c9397d279c91c1eaa5afe7e4)), closes [#28272](https://github.com/bitnami/charts/issues/28272)
+
+## <small>11.3.9 (2024-07-23)</small>
+
+* [bitnami/consul] Release 11.3.9 (#28231) ([ccc6335](https://github.com/bitnami/charts/commit/ccc633529597ce610d64728a6d410762aac4bb94)), closes [#28231](https://github.com/bitnami/charts/issues/28231)
+
+## <small>11.3.8 (2024-07-16)</small>
+
+* [bitnami/consul] Global StorageClass as default value (#28007) ([70f6b86](https://github.com/bitnami/charts/commit/70f6b861f201ce413929259e4a39225533a55d2c)), closes [#28007](https://github.com/bitnami/charts/issues/28007)
+
+## <small>11.3.7 (2024-07-13)</small>
+
+* [bitnami/consul] Release 11.3.7 (#27919) ([84b416f](https://github.com/bitnami/charts/commit/84b416fa1044c6cdee410d2e4db2fb379bd30fa0)), closes [#27919](https://github.com/bitnami/charts/issues/27919)
+
+## <small>11.3.6 (2024-07-04)</small>
+
+* [bitnami/consul] Release 11.3.6 (#27776) ([a490d98](https://github.com/bitnami/charts/commit/a490d980bcd640b15b5eb6819859a6259befda5d)), closes [#27776](https://github.com/bitnami/charts/issues/27776)
+
+## <small>11.3.5 (2024-07-02)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/consul] Release 11.3.5 (#27644) ([cd486ca](https://github.com/bitnami/charts/commit/cd486ca72b025e6afc74b384e2e1f3241e923146)), closes [#27644](https://github.com/bitnami/charts/issues/27644)
+
+## <small>11.3.4 (2024-06-18)</small>
+
+* [bitnami/consul] Release 11.3.4 (#27330) ([4086845](https://github.com/bitnami/charts/commit/4086845bf81f1d07020dfad875385f034290ce6d)), closes [#27330](https://github.com/bitnami/charts/issues/27330)
+
+## <small>11.3.3 (2024-06-17)</small>
+
+* [bitnami/consul] Release 11.3.3 (#27208) ([d82e61b](https://github.com/bitnami/charts/commit/d82e61b4f398e68e169aa8288633de06078264c2)), closes [#27208](https://github.com/bitnami/charts/issues/27208)
+
+## <small>11.3.2 (2024-06-14)</small>
+
+* [bitnami/consul] Release 11.3.2 (#27165) ([60c59bd](https://github.com/bitnami/charts/commit/60c59bd594c6980908caa1dbc17067f67ba5d195)), closes [#27165](https://github.com/bitnami/charts/issues/27165)
+
+## <small>11.3.1 (2024-06-06)</small>
+
+* [bitnami/consul] Release 11.3.1 (#26941) ([7cf8eff](https://github.com/bitnami/charts/commit/7cf8eff87df202faca3442e2eec13eaf0eae9cb2)), closes [#26941](https://github.com/bitnami/charts/issues/26941)
+
+## 11.3.0 (2024-06-06)
+
+* [bitnami/consul] Enable PodDisruptionBudgets (#26689) ([3f55468](https://github.com/bitnami/charts/commit/3f5546820886f3aa43203eb6cd88b59f0bb62f08)), closes [#26689](https://github.com/bitnami/charts/issues/26689)
+
+## <small>11.2.2 (2024-06-05)</small>
+
+* [bitnami/consul] Release 11.2.2 (#26722) ([cf24480](https://github.com/bitnami/charts/commit/cf24480e67cb9bb0c7fee0e1ff880b9f0e1e0ab0)), closes [#26722](https://github.com/bitnami/charts/issues/26722)
+
+## <small>11.2.1 (2024-06-04)</small>
+
+* [bitnami/consul] Bump chart version (#26624) ([4114a4b](https://github.com/bitnami/charts/commit/4114a4bde5d9c392d9ac46d9d20a91f705f9e344)), closes [#26624](https://github.com/bitnami/charts/issues/26624)
 
 ## 11.2.0 (2024-05-21)
 

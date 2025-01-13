@@ -8,7 +8,7 @@ file:
     exists: true
     contents:
       - "listeners = {{ .Vars.listeners }}"
-      - "avro.compatibility.level = {{ .Vars.avroCompatibilityLevel }}"
+      - "schema.compatibility.level = {{ .Vars.avroCompatibilityLevel }}"
 command:
   {{ if and .Vars.serviceAccount.create .Vars.automountServiceAccountToken }}
   check-sa:

@@ -1,0 +1,22 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.ingressController.enabled .Values.ingressController.ingressClass.create }}
+apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
+kind: IngressClass
+metadata:
+  name: {{ .Values.ingressController.ingressClass.name }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.ingressController.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: apisix
+    app.kubernetes.io/component: ingress-controller
+  {{- if or .Values.commonAnnotations .Values.ingressController.ingressClass.annotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.ingressController.ingressClass.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  controller: apisix.apache.org/apisix-ingress
+{{- end }}

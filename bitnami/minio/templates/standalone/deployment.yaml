@@ -231,7 +231,7 @@ spec:
             - name: empty-dir
               mountPath: /.mc
               subPath: app-mc-dir
-            {{- if .Values.auth.useCredentialsFiles }}
+            {{- if and .Values.auth.useSecret .Values.auth.useCredentialsFiles }}
             - name: minio-credentials
               mountPath: /opt/bitnami/minio/secrets/
             {{- end }}
@@ -250,7 +250,7 @@ spec:
       volumes:
         - name: empty-dir
           emptyDir: {}
-        {{- if .Values.auth.useCredentialsFiles }}
+        {{- if and .Values.auth.useSecret .Values.auth.useCredentialsFiles }}
         - name: minio-credentials
           secret:
             secretName: {{ include "minio.secretName" . }}

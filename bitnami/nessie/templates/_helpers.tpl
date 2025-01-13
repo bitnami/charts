@@ -253,8 +253,10 @@ Return the volume-permissions init container
       {{- if .Values.usePasswordFile }}
       export DATABASE_PASSWORD="$(< "/bitnami/nessie/secrets/database/QUARKUS_DATASOURCE_POSTGRESQL_PASSWORD")"
       {{- end }}
-      info "Waiting for host $DATABASE_HOST"
+      info "Waiting for host $DATABASE_HOST:$DATABASE_PORT_NUMBER"
       export PGCONNECT_TIMEOUT="5"
+      # Adaptation required by libpostgresql.sh
+      export POSTGRESQL_PORT_NUMBER="$DATABASE_PORT_NUMBER"
       psql_is_ready() {
           if ! echo "SELECT 1" | postgresql_execute "$DATABASE_NAME" "$DATABASE_USER" "$DATABASE_PASSWORD" "-h" "$DATABASE_HOST"; then
              return 1

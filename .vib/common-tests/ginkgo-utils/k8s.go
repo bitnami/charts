@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"strconv"
+	"time"
 
 	appsv1 "k8s.io/api/apps/v1"
 	batchv1 "k8s.io/api/batch/v1"
@@ -52,6 +53,64 @@ func StsScale(ctx context.Context, c kubernetes.Interface, ss *appsv1.StatefulSe
 			return ss, nil
 		}
 		*(ss.Spec.Replicas) = count
+		ss, err = c.AppsV1().StatefulSets(ns).Update(ctx, ss, metav1.UpdateOptions{})
+		if err == nil {
+			return ss, nil
+		}
+		if !apierrors.IsConflict(err) && !apierrors.IsServerTimeout(err) {
+			return nil, fmt.Errorf("failed to update statefulset %q: %v", name, err)
+		}
+	}
+
+	return nil, fmt.Errorf("too many retries draining statefulset %q", name)
+}
+
+// StsRolloutRestart performs a rollout restart in StatefulSet instances
+func StsRolloutRestart(ctx context.Context, c kubernetes.Interface, ss *appsv1.StatefulSet) (*appsv1.StatefulSet, error) {
+	name := ss.Name
+	ns := ss.Namespace
+	const maxRetries = 3
+
+	for i := 0; i < maxRetries; i++ {
+		ss, err := c.AppsV1().StatefulSets(ns).Get(ctx, name, metav1.GetOptions{})
+		if err != nil {
+			return nil, fmt.Errorf("failed to get statefulset %q: %v", name, err)
+		}
+		// Update the statefulset's annotation to trigger a restart
+		if ss.Spec.Template.Annotations == nil {
+			ss.Spec.Template.Annotations = make(map[string]string)
+		}
+		ss.Spec.Template.Annotations["kubectl.kubernetes.io/restartedAt"] = time.Now().Format(time.RFC3339)
+		ss, err = c.AppsV1().StatefulSets(ns).Update(ctx, ss, metav1.UpdateOptions{})
+		if err == nil {
+			return ss, nil
+		}
+		if !apierrors.IsConflict(err) && !apierrors.IsServerTimeout(err) {
+			return nil, fmt.Errorf("failed to update statefulset %q: %v", name, err)
+		}
+	}
+
+	return nil, fmt.Errorf("too many retries draining statefulset %q", name)
+}
+
+// StsAnnotateTemplate annotate pods. This also performs a rollout restart in StatefulSet instances
+func StsAnnotateTemplate(ctx context.Context, c kubernetes.Interface, ss *appsv1.StatefulSet, annotations map[string]string) (*appsv1.StatefulSet, error) {
+	name := ss.Name
+	ns := ss.Namespace
+	const maxRetries = 3
+
+	for i := 0; i < maxRetries; i++ {
+		ss, err := c.AppsV1().StatefulSets(ns).Get(ctx, name, metav1.GetOptions{})
+		if err != nil {
+			return nil, fmt.Errorf("failed to get statefulset %q: %v", name, err)
+		}
+		// Update the statefulset's annotation to trigger a restart
+		if ss.Spec.Template.Annotations == nil {
+			ss.Spec.Template.Annotations = make(map[string]string)
+		}
+		for k, v := range annotations {
+			ss.Spec.Template.Annotations[k] = v
+		}
 		ss, err = c.AppsV1().StatefulSets(ns).Update(ctx, ss, metav1.UpdateOptions{})
 		if err == nil {
 			return ss, nil

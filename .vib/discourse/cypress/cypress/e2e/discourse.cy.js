@@ -16,7 +16,7 @@ it('allows to sign up', () => {
     cy.get('#new-account-password').type(`${random}.${user.newUser.password}`);
   });
   cy.contains('Checking username').should('not.exist');
-  cy.contains('button', 'Create your account').click();
+  cy.get('.btn-large').contains('button', 'Sign Up').click();
   cy.contains('button', 'Resend Activation Email');
 });
 

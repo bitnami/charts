@@ -1,8 +1,104 @@
 # Changelog
 
-## 19.1.0 (2024-05-28)
+## 23.1.1 (2025-01-13)
 
-* [bitnami/schema-registry] Enable PodDisruptionBudgets ([#26377](https://github.com/bitnami/charts/pull/26377))
+* [bitnami/schema-registry] Release 23.1.1 ([#31325](https://github.com/bitnami/charts/pull/31325))
+
+## 23.1.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/schema-registry] Detect non-standard images (#30965) ([fbbcc3f](https://github.com/bitnami/charts/commit/fbbcc3f9f48f692cb9c316f4d317c3fa0795ea3b)), closes [#30965](https://github.com/bitnami/charts/issues/30965)
+
+## 23.0.0 (2024-12-04)
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Unify "Securing Traffic using TLS" section (#30707) ([b572333](https://github.com/bitnami/charts/commit/b57233336e4fe9af928ecb4f2a5f334011efb1bc)), closes [#30707](https://github.com/bitnami/charts/issues/30707)
+* [bitnami/*] docs: fix copy-paste typos with wrong references to Airflow (#30541) ([0a225d4](https://github.com/bitnami/charts/commit/0a225d44c1969429573b4e2630068eff129b6a96)), closes [#30541](https://github.com/bitnami/charts/issues/30541)
+* [bitnami/schema-registry] Release 23.0.0 (#30775) ([c0c64eb](https://github.com/bitnami/charts/commit/c0c64ebd9eef815a8a8ce4345fc03e4c689026bf)), closes [#30775](https://github.com/bitnami/charts/issues/30775)
+
+## 22.0.0 (2024-11-12)
+
+* [bitnami/schema-registry] Update kafka subchart to 31.0.0 (#30425) ([aeb7d43](https://github.com/bitnami/charts/commit/aeb7d430e5db1e05358978a7dffffca5b56298f1)), closes [#30425](https://github.com/bitnami/charts/issues/30425)
+
+## <small>21.0.3 (2024-11-04)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/schema-registry] Release 21.0.3 (#30190) ([e0c7e61](https://github.com/bitnami/charts/commit/e0c7e6100c124751454fb670e200220972c662e4)), closes [#30190](https://github.com/bitnami/charts/issues/30190)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>21.0.2 (2024-09-25)</small>
+
+* [bitnami/schema-registry] Release 21.0.2 (#29596) ([a63864e](https://github.com/bitnami/charts/commit/a63864e215d7a6a01af762d12d93b7753daa448e)), closes [#29596](https://github.com/bitnami/charts/issues/29596)
+
+## <small>21.0.1 (2024-09-12)</small>
+
+* [bitnami/schema-registry] Release 21.0.1 (#29370) ([6d9c981](https://github.com/bitnami/charts/commit/6d9c981f179c3c383d699b7291b616ee1fb0cb92)), closes [#29370](https://github.com/bitnami/charts/issues/29370)
+* [schema-registry] Fix typo in README: envVars -> extraEnvVars (#27564) ([46cae1c](https://github.com/bitnami/charts/commit/46cae1c851d1df12dcc98662c6304699663d2908)), closes [#27564](https://github.com/bitnami/charts/issues/27564)
+
+## 21.0.0 (2024-08-05)
+
+* [bitnami/schema-registry] Update chart dependency (kafka) (#28672) ([ff628f6](https://github.com/bitnami/charts/commit/ff628f683cd67d664d6bcea2d4c8c90daf353087)), closes [#28672](https://github.com/bitnami/charts/issues/28672)
+
+## 20.0.0 (2024-08-02)
+
+* [bitnami/schema-registry] Release 20.0.0 (#28641) ([b6f2246](https://github.com/bitnami/charts/commit/b6f22465529a3990027ff4de3f72e589c394ed20)), closes [#28641](https://github.com/bitnami/charts/issues/28641)
+
+## <small>19.2.5 (2024-07-25)</small>
+
+* [bitnami/schema-registry] Release 19.2.5 (#28488) ([faf51a1](https://github.com/bitnami/charts/commit/faf51a11ab03c961a30f0379ebd9551a047035aa)), closes [#28488](https://github.com/bitnami/charts/issues/28488)
+
+## <small>19.2.4 (2024-07-24)</small>
+
+* [bitnami/schema-registry] Release 19.2.4 (#28371) ([8586f2a](https://github.com/bitnami/charts/commit/8586f2ac394d32d147aa50a074296ddb3e5f5770)), closes [#28371](https://github.com/bitnami/charts/issues/28371)
+
+## <small>19.2.3 (2024-07-17)</small>
+
+* [bitnami/schema-registry] Release 19.2.3 (#28148) ([ef37a2d](https://github.com/bitnami/charts/commit/ef37a2d3e7bc6d5ed84d9d49a1ef231b728c6c13)), closes [#28148](https://github.com/bitnami/charts/issues/28148)
+
+## <small>19.2.2 (2024-07-16)</small>
+
+* [bitnami/schema-registry] Global StorageClass as default value (#28092) ([1b0c2c6](https://github.com/bitnami/charts/commit/1b0c2c6cbdbf602d74965110225359f5cf2eb446)), closes [#28092](https://github.com/bitnami/charts/issues/28092)
+
+## <small>19.2.1 (2024-07-03)</small>
+
+* [bitnami/schema-registry] Release 19.2.1 (#27716) ([793f73b](https://github.com/bitnami/charts/commit/793f73b2410013bacc67069306a5d792b6360b8c)), closes [#27716](https://github.com/bitnami/charts/issues/27716)
+
+## 19.2.0 (2024-06-28)
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/schema-registry] Add labels to service (#27528) ([638dc9e](https://github.com/bitnami/charts/commit/638dc9e45a55ada309f759368de3677b54da69ed)), closes [#27528](https://github.com/bitnami/charts/issues/27528)
+
+## <small>19.1.7 (2024-06-21)</small>
+
+* [bitnami/schema-registry] Release 19.1.7 (#27414) ([bbeca45](https://github.com/bitnami/charts/commit/bbeca45e5660f575ee0ca3c57992d11dde7beca0)), closes [#27414](https://github.com/bitnami/charts/issues/27414)
+
+## <small>19.1.6 (2024-06-17)</small>
+
+* [bitnami/schema-registry] Release 19.1.6 (#27302) ([d681090](https://github.com/bitnami/charts/commit/d681090fe4e5c8197ac700aa3847b74e18c94064)), closes [#27302](https://github.com/bitnami/charts/issues/27302)
+
+## <small>19.1.5 (2024-06-14)</small>
+
+* [bitnami/schema-registry] Release 19.1.5 (#27169) ([d1fc70f](https://github.com/bitnami/charts/commit/d1fc70f5a2b6b02de8e161e5642f63df5d525f24)), closes [#27169](https://github.com/bitnami/charts/issues/27169)
+
+## <small>19.1.4 (2024-06-13)</small>
+
+* [bitnami/schema-registry] Render imagePullSecrets (#27129) ([155d842](https://github.com/bitnami/charts/commit/155d842a9517619077f82e2589d0104027a4a004)), closes [#27129](https://github.com/bitnami/charts/issues/27129)
+
+## <small>19.1.3 (2024-06-06)</small>
+
+* [bitnami/schema-registry] Release 19.1.3 (#27015) ([9624f24](https://github.com/bitnami/charts/commit/9624f24d3cc8eaf0704ac828729ec486ab0779ac)), closes [#27015](https://github.com/bitnami/charts/issues/27015)
+
+## <small>19.1.2 (2024-06-05)</small>
+
+* [bitnami/schema-registry] Bump chart version (#26859) ([cc07701](https://github.com/bitnami/charts/commit/cc07701f428b486e8c4f35fae719e1a513ee56ef)), closes [#26859](https://github.com/bitnami/charts/issues/26859)
+
+## <small>19.1.1 (2024-06-05)</small>
+
+* [bitnami/schema-registry] Bump chart version (#26801) ([90a1ef0](https://github.com/bitnami/charts/commit/90a1ef0fbe9545af302d682ac2b51adc3e6a9be9)), closes [#26801](https://github.com/bitnami/charts/issues/26801)
+
+## 19.1.0 (2024-05-29)
+
+* [bitnami/schema-registry] Enable PodDisruptionBudgets (#26377) ([5337d8a](https://github.com/bitnami/charts/commit/5337d8ab354416b64a55994f5a2f838cea83f083)), closes [#26377](https://github.com/bitnami/charts/issues/26377)
 
 ## 19.0.0 (2024-05-27)
 

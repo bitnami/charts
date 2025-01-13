@@ -21,8 +21,8 @@ spec:
   {{- if .Values.notificationController.pdb.minAvailable }}
   minAvailable: {{ .Values.notificationController.pdb.minAvailable }}
   {{- end }}
-  {{- if .Values.notificationController.pdb.maxUnavailable }}
-  maxUnavailable: {{ .Values.notificationController.pdb.maxUnavailable }}
+  {{- if or .Values.notificationController.pdb.maxUnavailable ( not .Values.notificationController.pdb.minAvailable ) }}
+  maxUnavailable: {{ .Values.notificationController.pdb.maxUnavailable | default 1 }}
   {{- end }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.notificationController.podLabels .Values.commonLabels ) "context" . ) }}
   selector:

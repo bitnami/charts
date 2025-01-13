@@ -3,22 +3,20 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if .Values.web.pdb.enabled }}
+{{- if .Values.web.pdb.create }}
 kind: PodDisruptionBudget
 apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
 metadata:
-  name: {{ printf "%s-web" (include "common.names.fullname" .) }}
-  namespace: {{ .Release.Namespace | quote }}
-  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.web.image "chart" .Chart ) ) }}
-  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
-  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+  name: {{ template "airflow.web.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: web
 spec:
   {{- if .Values.web.pdb.minAvailable }}
   minAvailable: {{ .Values.web.pdb.minAvailable }}
   {{- end }}
-  {{- if .Values.web.pdb.maxUnavailable }}
-  maxUnavailable: {{ .Values.web.pdb.maxUnavailable }}
+  {{- if or .Values.web.pdb.maxUnavailable ( not .Values.web.pdb.minAvailable ) }}
+  maxUnavailable: {{ .Values.web.pdb.maxUnavailable | default 1 }}
   {{- end }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.web.podLabels .Values.commonLabels ) "context" . ) }}
   selector:

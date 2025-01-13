@@ -105,12 +105,7 @@ Return  the proper Commit Storage Class
 {{ include "cassandra.commitstorage.class" ( dict "persistence" .Values.path.to.the.persistence "global" $) }}
 */}}
 {{- define "cassandra.commitstorage.class" -}}
-{{- $storageClass := .persistence.commitStorageClass -}}
-{{- if .global -}}
-    {{- if .global.storageClass -}}
-        {{- $storageClass = .global.commitStorageClass -}}
-    {{- end -}}
-{{- end -}}
+{{- $storageClass := default .persistence.commitStorageClass | default (.global).defaultStorageClass | default "" -}}
 
 {{- if $storageClass -}}
   {{- if (eq "-" $storageClass) -}}
@@ -136,8 +131,6 @@ Return true if encryption via TLS for internode communication connections should
 {{- define "cassandra.internode.tlsEncryption" -}}
 {{- if (ne .Values.tls.internodeEncryption "none") -}}
     {{- printf "%s" .Values.tls.internodeEncryption -}}
-{{- else if (ne .Values.cluster.internodeEncryption "none") -}}
-    {{- printf "%s" .Values.cluster.internodeEncryption -}}
 {{- else -}}
     {{- printf "none" -}}
 {{- end -}}
@@ -257,42 +250,13 @@ Return true if a TLS credentials secret object should be created
 {{- end -}}
 
 {{/*
-Returns the available value for certain key in an existing secret (if it exists),
-otherwise it generates a random value.
+Get the password to use to access Cassandra
 */}}
-{{- define "getValueFromSecret" }}
-    {{- $len := (default 16 .Length) | int -}}
-    {{- $obj := (lookup "v1" "Secret" .Namespace .Name).data -}}
-    {{- if $obj }}
-        {{- index $obj .Key | b64dec -}}
-    {{- else -}}
-        {{- randAlphaNum $len -}}
-    {{- end -}}
-{{- end }}
-
 {{- define "cassandra.password" -}}
-    {{- if .Values.dbUser.password }}
-        {{- .Values.dbUser.password }}
-    {{- else if (not .Values.dbUser.forcePassword) }}
-        {{- include "getValueFromSecret" (dict "Namespace" (include "common.names.namespace" .) "Name" (include "common.names.fullname" .) "Length" 10 "Key" "cassandra-password")  -}}
-    {{- else }}
+    {{- if (and (empty .Values.dbUser.password) .Values.dbUser.forcePassword) }}
         {{ required "A Cassandra Password is required!" .Values.dbUser.password }}
-    {{- end }}
-{{- end -}}
-
-{{- define "cassandra.keystore.password" -}}
-    {{- if .Values.tls.keystorePassword }}
-        {{- .Values.tls.keystorePassword }}
     {{- else }}
-        {{- include "getValueFromSecret" (dict "Namespace" (include "common.names.namespace" .) "Name" (printf "%s-%s" (include "common.names.fullname" .) "tls-pass" | trunc 63 | trimSuffix "-") "Length" 10 "Key" "keystore-password")  -}}
-    {{- end }}
-{{- end -}}
-
-{{- define "cassandra.truststore.password" -}}
-    {{- if .Values.tls.truststorePassword }}
-        {{- .Values.tls.truststorePassword }}
-    {{- else }}
-        {{- include "getValueFromSecret" (dict "Namespace" (include "common.names.namespace" .) "Name" (printf "%s-%s" (include "common.names.fullname" .) "tls-pass" | trunc 63 | trimSuffix "-") "Length" 10 "Key" "truststore-password")  -}}
+        {{- include "common.secrets.passwords.manage" (dict "secret" (include "common.names.fullname" .) "key" "cassandra-password" "providedValues" (list "dbUser.password") "context" $) -}}
     {{- end }}
 {{- end -}}
 

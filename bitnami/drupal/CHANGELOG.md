@@ -1,8 +1,196 @@
 # Changelog
 
-## 18.21.0 (2024-05-24)
+## 21.1.2 (2025-01-07)
 
-* [bitnami/drupal] Enable PodDisruptionBudgets ([#26428](https://github.com/bitnami/charts/pull/26428))
+* [bitnami/drupal] Release 21.1.2 ([#31232](https://github.com/bitnami/charts/pull/31232))
+
+## <small>21.1.1 (2024-12-16)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/drupal] Release 21.1.1 (#31062) ([6919f51](https://github.com/bitnami/charts/commit/6919f51e5021b569e33e25a96eaa86ac19e094cd)), closes [#31062](https://github.com/bitnami/charts/issues/31062)
+
+## 21.1.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 1) (#30660) ([7409ca4](https://github.com/bitnami/charts/commit/7409ca4c21869fabe1532dd4f3ff24895df71c6d)), closes [#30660](https://github.com/bitnami/charts/issues/30660)
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 1) (#30685) ([be6aa1d](https://github.com/bitnami/charts/commit/be6aa1df0bd4479173a78400fef7295de15b408d)), closes [#30685](https://github.com/bitnami/charts/issues/30685)
+* [bitnami/drupal] Detect non-standard images (#30878) ([e9c279f](https://github.com/bitnami/charts/commit/e9c279f0b3a79fe9dec4f8f32ae04290f2f0afed)), closes [#30878](https://github.com/bitnami/charts/issues/30878)
+
+## <small>21.0.4 (2024-11-24)</small>
+
+* [bitnami/drupal] Release 21.0.4 (#30610) ([dec99e6](https://github.com/bitnami/charts/commit/dec99e61d7a64043582daf4ff3507cf55d3e93ed)), closes [#30610](https://github.com/bitnami/charts/issues/30610)
+
+## <small>21.0.3 (2024-11-22)</small>
+
+* [bitnami/drupal] Release 21.0.3 (#30596) ([e8fbaa1](https://github.com/bitnami/charts/commit/e8fbaa187334d9896e46f4766727be1da8bc8d02)), closes [#30596](https://github.com/bitnami/charts/issues/30596)
+
+## <small>21.0.2 (2024-11-20)</small>
+
+* [bitnami/drupal] Release 21.0.2 (#30553) ([d6dd241](https://github.com/bitnami/charts/commit/d6dd241721bf0d0d63622c254103fec53199bb79)), closes [#30553](https://github.com/bitnami/charts/issues/30553)
+
+## <small>21.0.1 (2024-11-12)</small>
+
+* [bitnami/drupal] Release 21.0.1 (#30418) ([52480cd](https://github.com/bitnami/charts/commit/52480cd42286e4c5f451413e6e2944587aab950b)), closes [#30418](https://github.com/bitnami/charts/issues/30418)
+
+## 21.0.0 (2024-11-12)
+
+* [bitnami/drupal] chore!: :arrow_up: :boom: Bump MariaDB subchart to 20 (#30352) ([3152c34](https://github.com/bitnami/charts/commit/3152c34edbe451b20ad0e75f45e394adee9e245e)), closes [#30352](https://github.com/bitnami/charts/issues/30352)
+
+## <small>20.0.13 (2024-10-31)</small>
+
+* [bitnami/drupal] Release 20.0.13 (#30165) ([356941d](https://github.com/bitnami/charts/commit/356941ddb5c6ebbd08867aae2b07dfa21ff0e394)), closes [#30165](https://github.com/bitnami/charts/issues/30165)
+
+## <small>20.0.12 (2024-10-31)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/drupal] Release 20.0.12 (#30145) ([7e6d111](https://github.com/bitnami/charts/commit/7e6d111ee64254fc33e8491a0ac7df1b7340c9d5)), closes [#30145](https://github.com/bitnami/charts/issues/30145)
+
+## <small>20.0.11 (2024-10-23)</small>
+
+* [bitnami/drupal] Release 20.0.11 (#30057) ([f14d986](https://github.com/bitnami/charts/commit/f14d986d3713716a9b263075ac784ef749438a04)), closes [#30057](https://github.com/bitnami/charts/issues/30057)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>20.0.10 (2024-10-09)</small>
+
+* [bitnami/drupal] Release 20.0.10 (#29842) ([a781e77](https://github.com/bitnami/charts/commit/a781e775554f74ae029d2e2bb3a3758a5871ad33)), closes [#29842](https://github.com/bitnami/charts/issues/29842)
+
+## <small>20.0.9 (2024-10-03)</small>
+
+* [bitnami/drupal] Release 20.0.9 (#29760) ([7811272](https://github.com/bitnami/charts/commit/7811272b7e19eb908077cfc533b3098ff7be3a98)), closes [#29760](https://github.com/bitnami/charts/issues/29760)
+
+## <small>20.0.8 (2024-10-01)</small>
+
+* [bitnami/drupal] templates/ingress.yaml: fix wrong www.www tls name (#29564) ([1eca3e6](https://github.com/bitnami/charts/commit/1eca3e6fd6543df2775265a19cccab9e549b202d)), closes [#29564](https://github.com/bitnami/charts/issues/29564)
+
+## <small>20.0.7 (2024-09-19)</small>
+
+* [bitnami/drupal] Release 20.0.7 (#29515) ([cfcfb7f](https://github.com/bitnami/charts/commit/cfcfb7fd7ae06eb0f766a71230bafb788893bc3c)), closes [#29515](https://github.com/bitnami/charts/issues/29515)
+
+## <small>20.0.6 (2024-09-17)</small>
+
+* [bitnami/drupal] Release 20.0.6 (#29486) ([20f086c](https://github.com/bitnami/charts/commit/20f086c05eb4887baaec9173be5ea0d89bfcb3e4)), closes [#29486](https://github.com/bitnami/charts/issues/29486)
+
+## <small>20.0.5 (2024-09-12)</small>
+
+* [bitnami/drupal] Release 20.0.5 (#29384) ([6621c14](https://github.com/bitnami/charts/commit/6621c14db7381b042a98fb024ec3fd9613431f92)), closes [#29384](https://github.com/bitnami/charts/issues/29384)
+
+## <small>20.0.4 (2024-09-06)</small>
+
+* [bitnami/drupal] Release 20.0.4 (#29286) ([cc775b8](https://github.com/bitnami/charts/commit/cc775b8b4889f3a393e7d39ed20feecc4221b9b2)), closes [#29286](https://github.com/bitnami/charts/issues/29286)
+
+## <small>20.0.3 (2024-09-06)</small>
+
+* [bitnami/drupal] Release 20.0.3 (#29283) ([bd9d1b2](https://github.com/bitnami/charts/commit/bd9d1b2d6f05498ae7e61e28e7cc1f45076a29e9)), closes [#29283](https://github.com/bitnami/charts/issues/29283)
+
+## <small>20.0.2 (2024-09-05)</small>
+
+* [bitnami/drupal] Release 20.0.2 (#29222) ([c9daacb](https://github.com/bitnami/charts/commit/c9daacbab47a8d7bf8185c8bc0cca237accd9d9a)), closes [#29222](https://github.com/bitnami/charts/issues/29222)
+
+## <small>20.0.1 (2024-08-22)</small>
+
+* [bitnami/drupal] Release 20.0.1 (#28965) ([0490b9c](https://github.com/bitnami/charts/commit/0490b9c70cfc28df4bc9993eaae36cd58ba11337)), closes [#28965](https://github.com/bitnami/charts/issues/28965)
+
+## 20.0.0 (2024-08-13)
+
+* [bitnami/drupal] Release 20.0.0 (#28846) ([4136b1d](https://github.com/bitnami/charts/commit/4136b1d1c8b8cbbe95c140f5fb89c334421baa59)), closes [#28846](https://github.com/bitnami/charts/issues/28846)
+
+## <small>19.0.9 (2024-08-08)</small>
+
+* [bitnami/drupal] Release 19.0.9 (#28783) ([5664e79](https://github.com/bitnami/charts/commit/5664e7995b849387dd4049a105ad83443808dce5)), closes [#28783](https://github.com/bitnami/charts/issues/28783)
+
+## <small>19.0.8 (2024-08-02)</small>
+
+* [bitnami/drupal] Release 19.0.8 (#28644) ([20e3a5c](https://github.com/bitnami/charts/commit/20e3a5cf50685e0d69144a0d287991592a15d21b)), closes [#28644](https://github.com/bitnami/charts/issues/28644)
+
+## <small>19.0.7 (2024-08-02)</small>
+
+* [bitnami/drupal] Release 19.0.7 (#28637) ([c6ad0ab](https://github.com/bitnami/charts/commit/c6ad0abd1e5c2eb64bbc3507c32108a7e6e2cc02)), closes [#28637](https://github.com/bitnami/charts/issues/28637)
+
+## <small>19.0.6 (2024-07-30)</small>
+
+* [bitnami/drupal] Release 19.0.6 (#28592) ([4296854](https://github.com/bitnami/charts/commit/4296854e4b338d83d607a322042dcc280cf36bfa)), closes [#28592](https://github.com/bitnami/charts/issues/28592)
+
+## <small>19.0.5 (2024-07-30)</small>
+
+* [bitnami/drupal] Release 19.0.5 (#28589) ([0447bf9](https://github.com/bitnami/charts/commit/0447bf9e56cae535e4d726d3e2705116808d2a4e)), closes [#28589](https://github.com/bitnami/charts/issues/28589)
+
+## <small>19.0.4 (2024-07-25)</small>
+
+* [bitnami/drupal] Release 19.0.4 (#28463) ([8f7e675](https://github.com/bitnami/charts/commit/8f7e675f2a12e23d641e00282bfb4cdd804dfc50)), closes [#28463](https://github.com/bitnami/charts/issues/28463)
+
+## <small>19.0.3 (2024-07-24)</small>
+
+* [bitnami/drupal] Release 19.0.3 (#28279) ([7ffd7e0](https://github.com/bitnami/charts/commit/7ffd7e0084cbc26dff684615750f1df4f27ad39c)), closes [#28279](https://github.com/bitnami/charts/issues/28279)
+
+## <small>19.0.2 (2024-07-24)</small>
+
+* [bitnami/drupal] Release 19.0.2 (#28244) ([909cdca](https://github.com/bitnami/charts/commit/909cdca1a6a39ebfd491a40037562411d67e883d)), closes [#28244](https://github.com/bitnami/charts/issues/28244)
+
+## <small>19.0.1 (2024-07-16)</small>
+
+* [bitnami/drupal] Global StorageClass as default value (#28013) ([2a9b593](https://github.com/bitnami/charts/commit/2a9b593ea30172512e51f2fe2969178a02e8382c)), closes [#28013](https://github.com/bitnami/charts/issues/28013)
+
+## 19.0.0 (2024-07-12)
+
+* [bitnami/drupal] chore!: :arrow_up: :boom: Update mariadb to 11.4 (#27927) ([b68f40d](https://github.com/bitnami/charts/commit/b68f40dad01802822b4973bc263e95926af941cc)), closes [#27927](https://github.com/bitnami/charts/issues/27927)
+
+## <small>18.21.13 (2024-07-04)</small>
+
+* [bitnami/drupal] Release 18.21.13 (#27771) ([9026350](https://github.com/bitnami/charts/commit/902635019f3f306d634ba7e90db39eff0bda28e2)), closes [#27771](https://github.com/bitnami/charts/issues/27771)
+
+## <small>18.21.12 (2024-06-26)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/drupal] Release 18.21.12 (#27541) ([2dd97dc](https://github.com/bitnami/charts/commit/2dd97dc37f63302aec5f0149aea839d250579bb3)), closes [#27541](https://github.com/bitnami/charts/issues/27541)
+
+## <small>18.21.11 (2024-06-21)</small>
+
+* [bitnami/drupal] Release 18.21.11 (#27472) ([efb420b](https://github.com/bitnami/charts/commit/efb420b65a7b953689629f318c492ba3eb48750b)), closes [#27472](https://github.com/bitnami/charts/issues/27472)
+
+## <small>18.21.10 (2024-06-18)</small>
+
+* [bitnami/drupal] Release 18.21.10 (#27336) ([442561b](https://github.com/bitnami/charts/commit/442561b508578c24a6c60f4891bc852ab2a95aad)), closes [#27336](https://github.com/bitnami/charts/issues/27336)
+
+## <small>18.21.9 (2024-06-17)</small>
+
+* [bitnami/drupal] Release 18.21.9 (#27212) ([52e56bf](https://github.com/bitnami/charts/commit/52e56bf1a405dc11af61ab6f0371839c2921f31f)), closes [#27212](https://github.com/bitnami/charts/issues/27212)
+
+## <small>18.21.8 (2024-06-13)</small>
+
+* [bitnami/drupal] Release 18.21.8 (#27157) ([c550d7d](https://github.com/bitnami/charts/commit/c550d7d40a10c1bdfc1f604725bdaa559d472322)), closes [#27157](https://github.com/bitnami/charts/issues/27157)
+
+## <small>18.21.7 (2024-06-13)</small>
+
+* [bitnami/drupal] Release 18.21.7 (#27148) ([202becc](https://github.com/bitnami/charts/commit/202becc0cc9cdbf32032c68b262443b34caa19cc)), closes [#27148](https://github.com/bitnami/charts/issues/27148)
+
+## <small>18.21.6 (2024-06-13)</small>
+
+* [bitnami/drupal] Release 18.21.6 (#27144) ([4ee8ce7](https://github.com/bitnami/charts/commit/4ee8ce7fe4a77814f8a9bdba5c7e5bdbf42fcd4a)), closes [#27144](https://github.com/bitnami/charts/issues/27144)
+
+## <small>18.21.5 (2024-06-06)</small>
+
+* [bitnami/drupal] Release 18.21.5 (#26945) ([6abbd26](https://github.com/bitnami/charts/commit/6abbd266239e2585b135218b675b6ffa91740869)), closes [#26945](https://github.com/bitnami/charts/issues/26945)
+
+## <small>18.21.4 (2024-06-06)</small>
+
+* [bitnami/drupal] Release 18.21.4 (#26884) ([ad57d57](https://github.com/bitnami/charts/commit/ad57d571a069edbc036d121a91dd340c6dfeca98)), closes [#26884](https://github.com/bitnami/charts/issues/26884)
+
+## <small>18.21.3 (2024-06-05)</small>
+
+* [bitnami/drupal] Bump chart version (#26826) ([d043062](https://github.com/bitnami/charts/commit/d04306223932c525c0df2b5b0f742366f5606e73)), closes [#26826](https://github.com/bitnami/charts/issues/26826)
+
+## <small>18.21.2 (2024-06-05)</small>
+
+* [bitnami/drupal] Bump chart version (#26768) ([01766d5](https://github.com/bitnami/charts/commit/01766d58adf0c0e3f6e0ac3cb1dd6e5c06639953)), closes [#26768](https://github.com/bitnami/charts/issues/26768)
+
+## <small>18.21.1 (2024-06-04)</small>
+
+* [bitnami/drupal] Fix typo in deployment.yaml template (#26679) ([5d83a69](https://github.com/bitnami/charts/commit/5d83a69dd3168a476a8edb9ea2d85c23b97cea13)), closes [#26679](https://github.com/bitnami/charts/issues/26679)
+
+## 18.21.0 (2024-06-03)
+
+* [bitnami/drupal] Enable PodDisruptionBudgets (#26428) ([1e4ac4c](https://github.com/bitnami/charts/commit/1e4ac4c1c282b929665b92709291af2ace17d5f0)), closes [#26428](https://github.com/bitnami/charts/issues/26428)
 
 ## 18.1.0 (2024-05-21)
 

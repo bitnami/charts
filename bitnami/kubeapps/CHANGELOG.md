@@ -1,8 +1,97 @@
 # Changelog
 
-## 15.2.0 (2024-06-03)
+## 17.1.1 (2024-12-24)
 
-* [bitnami/kubeapps] Enable PodDisruptionBudgets ([#26505](https://github.com/bitnami/charts/pull/26505))
+* [bitnami/kubeapps] Release 17.1.1 ([#31153](https://github.com/bitnami/charts/pull/31153))
+
+## 17.1.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/kubeapps] Detect non-standard images (#30914) ([2ff6384](https://github.com/bitnami/charts/commit/2ff6384c57f0d270bbe8651fc9908fca1978aa28)), closes [#30914](https://github.com/bitnami/charts/issues/30914)
+
+## <small>17.0.3 (2024-11-08)</small>
+
+* [bitnami/kubeapps] Unify seLinuxOptions default value (#30343) ([bdebc92](https://github.com/bitnami/charts/commit/bdebc9238ffec5d47e805966811a3be84e4f0d79)), closes [#30343](https://github.com/bitnami/charts/issues/30343)
+
+## <small>17.0.2 (2024-10-31)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/kubeapps] Release 17.0.2 (#30164) ([be30b31](https://github.com/bitnami/charts/commit/be30b315457e24fedb63ba336c73929fa8294c55)), closes [#30164](https://github.com/bitnami/charts/issues/30164)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>17.0.1 (2024-10-14)</small>
+
+* [bitnami/kubeapps] Release 17.0.1 (#29886) ([a1f4eb7](https://github.com/bitnami/charts/commit/a1f4eb71c2190feed6e047d7e28ba18e0e491e86)), closes [#29886](https://github.com/bitnami/charts/issues/29886)
+
+## 17.0.0 (2024-10-03)
+
+* [bitnami/kubeapps] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x (#29738) ([5982481](https://github.com/bitnami/charts/commit/59824815c7e4575f70cfea81ad61d158c2a85c0e)), closes [#29738](https://github.com/bitnami/charts/issues/29738)
+
+## <small>16.0.1 (2024-09-03)</small>
+
+* [bitnami/kubeapps] Release 16.0.1 (#29165) ([f2fdc57](https://github.com/bitnami/charts/commit/f2fdc5769e04a670d66bc1227bd030b360723264)), closes [#29165](https://github.com/bitnami/charts/issues/29165)
+
+## 16.0.0 (2024-08-13)
+
+* [bitnami/kubeapps] Update dependencies (#28854) ([27470e1](https://github.com/bitnami/charts/commit/27470e1f8ce75bb0848f09c41c8743afe9e69dfa)), closes [#28854](https://github.com/bitnami/charts/issues/28854)
+
+## <small>15.3.10 (2024-07-25)</small>
+
+* [bitnami/kubeapps] Release 15.3.10 (#28437) ([cd89d4f](https://github.com/bitnami/charts/commit/cd89d4fffc71c4bcb663127de19524340c9a177c)), closes [#28437](https://github.com/bitnami/charts/issues/28437)
+
+## <small>15.3.9 (2024-07-24)</small>
+
+* [bitnami/kubeapps] Release 15.3.9 (#28300) ([71e533d](https://github.com/bitnami/charts/commit/71e533daec43cc9010911439a1f3e0ad9f5ccf86)), closes [#28300](https://github.com/bitnami/charts/issues/28300)
+
+## <small>15.3.8 (2024-07-23)</small>
+
+* [bitnami/kubeapps] Release 15.3.8 (#28214) ([f44f329](https://github.com/bitnami/charts/commit/f44f329af1153385a569d735b0d5cd46391d0a67)), closes [#28214](https://github.com/bitnami/charts/issues/28214)
+
+## <small>15.3.7 (2024-07-18)</small>
+
+* [bitnami/kubeapps] Global StorageClass as default value (#28045) ([44a64a8](https://github.com/bitnami/charts/commit/44a64a8adb3b1e66aa43a41f85cb3d51f14b322a)), closes [#28045](https://github.com/bitnami/charts/issues/28045)
+
+## <small>15.3.6 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/kubeapps] Release 15.3.6 (#27706) ([ea5443f](https://github.com/bitnami/charts/commit/ea5443fd9bdb8a27e10bf03824d8d37f4189a834)), closes [#27706](https://github.com/bitnami/charts/issues/27706)
+
+## <small>15.3.5 (2024-06-19)</small>
+
+* [bitnami/kubeapps] Render imagePullSecrets (#27127) ([af2aef8](https://github.com/bitnami/charts/commit/af2aef81f2dc4d521935a931d8a133fecb25b536)), closes [#27127](https://github.com/bitnami/charts/issues/27127)
+
+## <small>15.3.4 (2024-06-18)</small>
+
+* [bitnami/kubeapps] Release 15.3.4 (#27370) ([21e02c5](https://github.com/bitnami/charts/commit/21e02c5eb7e009bea98eb8c61e619601f6c89722)), closes [#27370](https://github.com/bitnami/charts/issues/27370)
+
+## <small>15.3.3 (2024-06-17)</small>
+
+* [bitnami/kubeapps] Release 15.3.3 (#27270) ([3770923](https://github.com/bitnami/charts/commit/3770923925b87e06d7689be4d40457ce2b86e367)), closes [#27270](https://github.com/bitnami/charts/issues/27270)
+
+## <small>15.3.2 (2024-06-07)</small>
+
+* [bitnami/kubeapps] Release 15.3.2 (#26904) ([23bbc7b](https://github.com/bitnami/charts/commit/23bbc7b26b43cfe3d4be24cdfca84887d9a4e85a)), closes [#26904](https://github.com/bitnami/charts/issues/26904)
+
+## <small>15.3.1 (2024-06-06)</small>
+
+* [bitnami/kubeapps] Release 15.3.1 (#26974) ([042ec4d](https://github.com/bitnami/charts/commit/042ec4db43b95bfc57d366ae1300c03c6fd677ac)), closes [#26974](https://github.com/bitnami/charts/issues/26974)
+
+## 15.3.0 (2024-06-06)
+
+* [bitnami/kubeapps] Enable PodDisruptionBudgets (part 2) (#26701) ([f4e8688](https://github.com/bitnami/charts/commit/f4e868898b61b2de7c367d23135209c9e92dd021)), closes [#26701](https://github.com/bitnami/charts/issues/26701)
+
+## <small>15.2.2 (2024-06-05)</small>
+
+* [bitnami/kubeapps] Bump chart version (#26842) ([16d5b78](https://github.com/bitnami/charts/commit/16d5b784039a37ca643ac685c56d87373b1edaf7)), closes [#26842](https://github.com/bitnami/charts/issues/26842)
+
+## <small>15.2.1 (2024-06-05)</small>
+
+* [bitnami/kubeapps] Bump chart version (#26784) ([30ed241](https://github.com/bitnami/charts/commit/30ed241740bd6dab47af5ec3ebfbae0fc2aa4970)), closes [#26784](https://github.com/bitnami/charts/issues/26784)
+
+## 15.2.0 (2024-06-04)
+
+* [bitnami/kubeapps] Enable PodDisruptionBudgets (#26505) ([9e6a2b3](https://github.com/bitnami/charts/commit/9e6a2b3cd6aae4e47c292be7f78db1e8ed900cea)), closes [#26505](https://github.com/bitnami/charts/issues/26505)
 
 ## <small>15.1.2 (2024-06-03)</small>
 

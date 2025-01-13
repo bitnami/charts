@@ -72,9 +72,7 @@ spec:
       {{- if .Values.pgpool.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.pgpool.terminationGracePeriodSeconds }}
       {{- end }}
-      {{- if .Values.serviceAccount.create }}
       serviceAccountName: {{ include "postgresql-ha.serviceAccountName" . }}
-      {{- end }}
       {{- if or .Values.pgpool.tls.enabled .Values.pgpool.initContainers }}
       initContainers:
       {{- if .Values.pgpool.tls.enabled }}
@@ -93,9 +91,9 @@ spec:
               {{- end }}
               chmod 600 {{ template "postgresql-ha.pgpool.tlsCertKey" . }}
           {{- if eq ( toString ( .Values.volumePermissions.podSecurityContext.runAsUser )) "auto" }}
-          securityContext: {{- omit .Values.volumePermissions.podSecurityContext "runAsUser" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" (omit .Values.volumePermissions.podSecurityContext "runAsUser") "context" $) | nindent 12 }}
           {{- else }}
-          securityContext: {{- .Values.volumePermissions.podSecurityContext | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.volumePermissions.podSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
@@ -330,7 +328,7 @@ spec:
               command:
                 - bash
                 - -ec
-                - PGPASSWORD=${PGPOOL_POSTGRES_PASSWORD} psql -U {{ (include "postgresql-ha.postgresqlUsername" .) | quote }} {{- if not (empty (include "postgresql-ha.postgresqlDatabase" .)) }} -d {{ (include "postgresql-ha.postgresqlDatabase" .) | quote }}{{- end }} -h /opt/bitnami/pgpool/tmp -tA -c "SELECT 1" >/dev/null
+                - '{{ include "postgresql-ha.pgpoolPostgresPassword" . }} psql -U {{ (include "postgresql-ha.postgresqlUsername" .) | quote }} {{- if not (empty (include "postgresql-ha.postgresqlDatabase" .)) }} -d {{ (include "postgresql-ha.postgresqlDatabase" .) | quote }}{{- end }} -h /opt/bitnami/pgpool/tmp -tA -c "SELECT 1" >/dev/null'
           {{- end }}
           {{- if .Values.pgpool.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.pgpool.customStartupProbe "context" $) | nindent 12 }}

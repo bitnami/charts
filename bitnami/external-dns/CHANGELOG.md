@@ -1,8 +1,142 @@
 # Changelog
 
-## 7.5.3 (2024-06-04)
+## 8.7.1 (2024-12-19)
 
-* [bitnami/external-dns] Bump chart version ([#26629](https://github.com/bitnami/charts/pull/26629))
+* [bitnami/external-dns] Release 8.7.1 ([#31120](https://github.com/bitnami/charts/pull/31120))
+
+## 8.7.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/external-dns] Detect non-standard images (#30894) ([e963f07](https://github.com/bitnami/charts/commit/e963f07135a2c6875c96c66080476004275dc9ae)), closes [#30894](https://github.com/bitnami/charts/issues/30894)
+
+## <small>8.6.1 (2024-12-03)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 2) (#30662) ([50e0570](https://github.com/bitnami/charts/commit/50e0570f98ab15308af7910b405baa4480e5fe3f)), closes [#30662](https://github.com/bitnami/charts/issues/30662)
+* [bitnami/external-dns] Release 8.6.1 (#30747) ([a0583f2](https://github.com/bitnami/charts/commit/a0583f223636dcaa284afd5b5068dffec7231f06)), closes [#30747](https://github.com/bitnami/charts/issues/30747)
+
+## 8.6.0 (2024-11-19)
+
+* [bitnami/external-dns] feat: add support to namespaceOverride and simplify name helpers (#30515) ([09a4572](https://github.com/bitnami/charts/commit/09a457226009bd1962710456a9f919052337e8b4)), closes [#30515](https://github.com/bitnami/charts/issues/30515)
+
+## <small>8.5.1 (2024-11-07)</small>
+
+* [bitnami/external-dns] Release 8.5.1 (#30262) ([d21d425](https://github.com/bitnami/charts/commit/d21d425d121adeb175e925898bc9342f296dbd3f)), closes [#30262](https://github.com/bitnami/charts/issues/30262)
+
+## 8.5.0 (2024-11-05)
+
+* [bitnami/external-dns] Add targetLabels option to ServiceMonitor (#29828) ([bba5754](https://github.com/bitnami/charts/commit/bba5754878b88d7ec1ff4326e558cbb24e5c9331)), closes [#29828](https://github.com/bitnami/charts/issues/29828) [#29332](https://github.com/bitnami/charts/issues/29332)
+
+## 8.4.0 (2024-11-05)
+
+* [bitnami/external-dns] add support for multiple rfc2136 zones (#30011) ([174879d](https://github.com/bitnami/charts/commit/174879da11cc5678e38f5bcf8b1633e6a0f64376)), closes [#30011](https://github.com/bitnami/charts/issues/30011)
+
+## <small>8.3.12 (2024-10-29)</small>
+
+* [bitnami/external-dns] Allow rfc2136-zone to specify multiple zones (#28681) ([0868c63](https://github.com/bitnami/charts/commit/0868c633cc6b2f16efcbbd86e0dce126ac0fdcd1)), closes [#28681](https://github.com/bitnami/charts/issues/28681)
+
+## <small>8.3.11 (2024-10-29)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/external-dns] fix: secret not getting created when pihole password value is set (#30114) ([15c8fa0](https://github.com/bitnami/charts/commit/15c8fa0ff4bcb0b36d8504a6b0b0104634c6ba6c)), closes [#30114](https://github.com/bitnami/charts/issues/30114)
+
+## <small>8.3.10 (2024-10-28)</small>
+
+* [bitnami/external-dns] chore: :wrench: :construction_worker: Re-enable CRD automation (#29266) ([9e50d55](https://github.com/bitnami/charts/commit/9e50d55475410d956d5d048b2443759050b8183e)), closes [#29266](https://github.com/bitnami/charts/issues/29266)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>8.3.9 (2024-10-02)</small>
+
+* [bitnami/external-dns] Release 8.3.9 (#29690) ([c30d45e](https://github.com/bitnami/charts/commit/c30d45e45592f7d8647c19c484f455e85359ff7e)), closes [#29690](https://github.com/bitnami/charts/issues/29690)
+
+## <small>8.3.8 (2024-09-16)</small>
+
+* [bitnami/external-dns] Fixed oci workload identity secret creation (#29374) ([a248647](https://github.com/bitnami/charts/commit/a248647ee9b6ff0b90e25856ab292557287df10a)), closes [#29374](https://github.com/bitnami/charts/issues/29374)
+
+## <small>8.3.7 (2024-09-05)</small>
+
+* [bitnami/external-dns] Release 8.3.7 (#29231) ([e6c6578](https://github.com/bitnami/charts/commit/e6c65782c9e73b79537c59c33e945d72dcf29b26)), closes [#29231](https://github.com/bitnami/charts/issues/29231)
+
+## <small>8.3.6 (2024-09-05)</small>
+
+* [bitnami/external-dns] Release 8.3.6 (#29211) ([bcab075](https://github.com/bitnami/charts/commit/bcab0754df8f1941cf474c71a895a52ac36a6094)), closes [#29211](https://github.com/bitnami/charts/issues/29211)
+
+## <small>8.3.5 (2024-08-13)</small>
+
+* [bitnami/external-dns]  Fix crd.create=true (#27434) ([fc11b48](https://github.com/bitnami/charts/commit/fc11b486d642d36be11822e902912e29c95e71dc)), closes [#27434](https://github.com/bitnami/charts/issues/27434) [#25967](https://github.com/bitnami/charts/issues/25967)
+
+## <small>8.3.4 (2024-08-07)</small>
+
+* [bitnami/external-dns] Release 8.3.4 (#28711) ([773fcd7](https://github.com/bitnami/charts/commit/773fcd7b74b7231483b12f25c65a291a52cc2e9c)), closes [#28711](https://github.com/bitnami/charts/issues/28711)
+
+## <small>8.3.3 (2024-07-25)</small>
+
+* [bitnami/external-dns] Release 8.3.3 (#28422) ([2426090](https://github.com/bitnami/charts/commit/2426090e00e4dcec3435afeaf19d6156a00ab508)), closes [#28422](https://github.com/bitnami/charts/issues/28422)
+
+## <small>8.3.2 (2024-07-24)</small>
+
+* [bitnami/external-dns] Release 8.3.2 (#28315) ([25da286](https://github.com/bitnami/charts/commit/25da286e637c761bcdfbb7c6bbb66663eb3b96e5)), closes [#28315](https://github.com/bitnami/charts/issues/28315)
+
+## <small>8.3.1 (2024-07-24)</small>
+
+* [bitnami/external-dns] Release 8.3.1 (#28245) ([4ab8fdf](https://github.com/bitnami/charts/commit/4ab8fdfe3afda4afab13edeacfd7d0adb5a9dde2)), closes [#28245](https://github.com/bitnami/charts/issues/28245)
+
+## 8.3.0 (2024-07-23)
+
+* [bitnami/external-dns] feat: Add support for provider scaleway secretName (#24630) ([fdb8c86](https://github.com/bitnami/charts/commit/fdb8c86dfa81697619b5d5e798f41860c793ad3c)), closes [#24630](https://github.com/bitnami/charts/issues/24630)
+
+## <small>8.2.3 (2024-07-18)</small>
+
+* [bitnami/external-dns] Add value.yaml support for "--infoblox-create-ptr" argument flag (#27882) ([d50881f](https://github.com/bitnami/charts/commit/d50881f2b88c8c16711e98962121e75162c8e539)), closes [#27882](https://github.com/bitnami/charts/issues/27882)
+
+## <small>8.2.2 (2024-07-16)</small>
+
+* [bitnami/external-dns] add revisionHistoryLimit value (#27913) ([8cd1824](https://github.com/bitnami/charts/commit/8cd182450c2cc0e2f7136ee9a455a3aa3486d7dc)), closes [#27913](https://github.com/bitnami/charts/issues/27913)
+
+## <small>8.2.1 (2024-07-11)</small>
+
+* [bitnami/external-dns] docs: update registry doc url (#27505) ([cf18b0b](https://github.com/bitnami/charts/commit/cf18b0b65db5371bab05415066e31d5c80378922)), closes [#27505](https://github.com/bitnami/charts/issues/27505)
+
+## 8.2.0 (2024-07-10)
+
+* [bitnami/external-dns] Added extra arguments for Traefik new/legacy resource support (#27766) ([31ff6e7](https://github.com/bitnami/charts/commit/31ff6e73fb7d3e89c4c821c38a711afbf2eab830)), closes [#27766](https://github.com/bitnami/charts/issues/27766)
+
+## 8.1.0 (2024-07-08)
+
+* [bitnami/external-dns] add default pihole.password value (#27158) ([531123b](https://github.com/bitnami/charts/commit/531123ba7d24cf35a1769047165a9073322a31e3)), closes [#27158](https://github.com/bitnami/charts/issues/27158)
+
+## <small>8.0.2 (2024-07-04)</small>
+
+* [bitnami/external-dns] Release 8.0.2 (#27760) ([565db6a](https://github.com/bitnami/charts/commit/565db6a6cebfcc534e9fa0a88cd6a097bd461601)), closes [#27760](https://github.com/bitnami/charts/issues/27760)
+
+## <small>8.0.1 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/external-dns] Release 8.0.1 (#27645) ([ca9be4a](https://github.com/bitnami/charts/commit/ca9be4a6bd1a9327401a1ab0f6694e8eb5a50279)), closes [#27645](https://github.com/bitnami/charts/issues/27645)
+
+## 8.0.0 (2024-06-19)
+
+* [bitnami/external-dns] Major release: drop support for multiple replicas and DaemonSet (#26759) ([3186d84](https://github.com/bitnami/charts/commit/3186d8485b643a8a4141eafd67bcf259528aa548)), closes [#26759](https://github.com/bitnami/charts/issues/26759)
+
+## <small>7.5.7 (2024-06-18)</small>
+
+* [bitnami/external-dns] Release 7.5.7 (#27341) ([6668b3c](https://github.com/bitnami/charts/commit/6668b3c1ae632eb90b6e825fedddc39637aec137)), closes [#27341](https://github.com/bitnami/charts/issues/27341)
+
+## <small>7.5.6 (2024-06-17)</small>
+
+* [bitnami/external-dns] Release 7.5.6 (#27216) ([cfe95c9](https://github.com/bitnami/charts/commit/cfe95c9c1d2c0e6b8e3f1b574f992f47486bc91a)), closes [#27216](https://github.com/bitnami/charts/issues/27216)
+
+## <small>7.5.5 (2024-06-06)</small>
+
+* [bitnami/external-dns] Release 7.5.5 (#26948) ([d8def07](https://github.com/bitnami/charts/commit/d8def07c4bdaa2f6809d919bb9a4e5e6818317e3)), closes [#26948](https://github.com/bitnami/charts/issues/26948)
+
+## <small>7.5.4 (2024-06-05)</small>
+
+* [bitnami/external-dns] Release 7.5.4 (#26724) ([4b622b9](https://github.com/bitnami/charts/commit/4b622b935a9445598fd42adf885346549671032f)), closes [#26724](https://github.com/bitnami/charts/issues/26724)
+
+## <small>7.5.3 (2024-06-04)</small>
+
+* [bitnami/external-dns] Bump chart version (#26629) ([aba7563](https://github.com/bitnami/charts/commit/aba75631498b41c20034d7486431447527b75acd)), closes [#26629](https://github.com/bitnami/charts/issues/26629)
 
 ## <small>7.5.2 (2024-05-24)</small>
 

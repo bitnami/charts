@@ -1,8 +1,96 @@
 # Changelog
 
-## 2.1.1 (2024-06-04)
+## 2.2.0 (2024-12-10)
 
-* [bitnami/multus-cni] Bump chart version ([#26652](https://github.com/bitnami/charts/pull/26652))
+* [bitnami/multus-cni] Detect non-standard images ([#30928](https://github.com/bitnami/charts/pull/30928))
+
+## <small>2.1.21 (2024-12-06)</small>
+
+* [bitnami/multus-cni] Release 2.1.21 (#30823) ([68cc34d](https://github.com/bitnami/charts/commit/68cc34d392e8ca36648bd1b0ac991bad11b46c84)), closes [#30823](https://github.com/bitnami/charts/issues/30823)
+
+## <small>2.1.20 (2024-12-04)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/multus-cni] Release 2.1.20 (#30767) ([f33ba05](https://github.com/bitnami/charts/commit/f33ba05a18232d34af20ed64cb74f85de406e042)), closes [#30767](https://github.com/bitnami/charts/issues/30767)
+
+## <small>2.1.19 (2024-11-07)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/multus-cni] Release 2.1.19 (#30284) ([3d6966b](https://github.com/bitnami/charts/commit/3d6966bf4434f1bdba64b552fa41442c93b00785)), closes [#30284](https://github.com/bitnami/charts/issues/30284)
+
+## <small>2.1.18 (2024-10-16)</small>
+
+* [bitnami/multus-cni] Release 2.1.18 (#29953) ([858b84e](https://github.com/bitnami/charts/commit/858b84ec9bc20f2775e01dbfe05d2eb190579f21)), closes [#29953](https://github.com/bitnami/charts/issues/29953)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>2.1.17 (2024-10-08)</small>
+
+* [bitnami/multus-cni] Release 2.1.17 (#29810) ([bc840b6](https://github.com/bitnami/charts/commit/bc840b623c9317a0c2c95602f0755301a7b8849c)), closes [#29810](https://github.com/bitnami/charts/issues/29810)
+
+## <small>2.1.16 (2024-10-02)</small>
+
+* [bitnami/multus-cni] Release 2.1.16 (#29709) ([5aa9aa4](https://github.com/bitnami/charts/commit/5aa9aa4bc1cb7aebb8cf2ddfa72fc221da5ebf6f)), closes [#29709](https://github.com/bitnami/charts/issues/29709)
+
+## <small>2.1.15 (2024-09-16)</small>
+
+* [bitnami/multus-cni] Release 2.1.15 (#29452) ([6d377f7](https://github.com/bitnami/charts/commit/6d377f7d0d502b901dc6248f9fa9577f07ba2255)), closes [#29452](https://github.com/bitnami/charts/issues/29452)
+
+## <small>2.1.14 (2024-09-06)</small>
+
+* [bitnami/multus-cni] Release 2.1.14 (#29262) ([a2c18c7](https://github.com/bitnami/charts/commit/a2c18c736e7d22cfa47284179d314958d1689927)), closes [#29262](https://github.com/bitnami/charts/issues/29262)
+
+## <small>2.1.13 (2024-08-27)</small>
+
+* [bitnami/multus-cni] Release 2.1.13 (#29057) ([9f9e5dd](https://github.com/bitnami/charts/commit/9f9e5dd82c193d6eb4a4a50b6744b387951180b6)), closes [#29057](https://github.com/bitnami/charts/issues/29057)
+
+## <small>2.1.12 (2024-08-21)</small>
+
+* [bitnami/multus-cni] Release 2.1.12 (#28775) ([b6c366b](https://github.com/bitnami/charts/commit/b6c366b8980ddb0e5a28200db14b8ee15555e239)), closes [#28775](https://github.com/bitnami/charts/issues/28775)
+
+## <small>2.1.11 (2024-08-07)</small>
+
+* [bitnami/multus-cni] Release 2.1.11 (#28732) ([bc19c52](https://github.com/bitnami/charts/commit/bc19c528352f5abc4aba2b346c4eb6736538446a)), closes [#28732](https://github.com/bitnami/charts/issues/28732)
+
+## <small>2.1.10 (2024-07-25)</small>
+
+* [bitnami/multus-cni] Release 2.1.10 (#28469) ([f71edb3](https://github.com/bitnami/charts/commit/f71edb3ccee3121144999103ebc57534d661f6d5)), closes [#28469](https://github.com/bitnami/charts/issues/28469)
+
+## <small>2.1.9 (2024-07-24)</small>
+
+* [bitnami/multus-cni] Release 2.1.9 (#28335) ([002b224](https://github.com/bitnami/charts/commit/002b224e93d8e134e8c7f0c9ef05a799eb39929c)), closes [#28335](https://github.com/bitnami/charts/issues/28335)
+
+## <small>2.1.8 (2024-07-18)</small>
+
+* [bitnami/multus-cni] Global StorageClass as default value (#28064) ([fcfb5d0](https://github.com/bitnami/charts/commit/fcfb5d0a33eb0d56c3bb4841de1b12957fada4a1)), closes [#28064](https://github.com/bitnami/charts/issues/28064)
+
+## <small>2.1.7 (2024-07-04)</small>
+
+* [bitnami/multus-cni] Release 2.1.7 (#27770) ([0d4001e](https://github.com/bitnami/charts/commit/0d4001ef1bd840b0bc01e6dedf895ae18f17cc46)), closes [#27770](https://github.com/bitnami/charts/issues/27770)
+
+## <small>2.1.6 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/multus-cni] Release 2.1.6 (#27667) ([ff481b9](https://github.com/bitnami/charts/commit/ff481b98ef40e394a6bb695208e233733b7af6df)), closes [#27667](https://github.com/bitnami/charts/issues/27667)
+
+## <small>2.1.5 (2024-06-18)</small>
+
+* [bitnami/multus-cni] Release 2.1.5 (#27385) ([e3a6ba2](https://github.com/bitnami/charts/commit/e3a6ba2a593ca6b4d10195126723b30ab63dd8ea)), closes [#27385](https://github.com/bitnami/charts/issues/27385)
+
+## <small>2.1.4 (2024-06-17)</small>
+
+* [bitnami/multus-cni] Release 2.1.4 (#27283) ([386c85f](https://github.com/bitnami/charts/commit/386c85fe7a4a0325e645a1ea1dd102d343e87d64)), closes [#27283](https://github.com/bitnami/charts/issues/27283)
+
+## <small>2.1.3 (2024-06-06)</small>
+
+* [bitnami/multus-cni] Release 2.1.3 (#26989) ([b7dc128](https://github.com/bitnami/charts/commit/b7dc1288b1e2771af53e50ea96744ea26a913d51)), closes [#26989](https://github.com/bitnami/charts/issues/26989)
+
+## <small>2.1.2 (2024-06-05)</small>
+
+* [bitnami/multus-cni] Release 2.1.2 (#26744) ([e0e241d](https://github.com/bitnami/charts/commit/e0e241daeb6885b0ca707aed31a90dc4b69f3f96)), closes [#26744](https://github.com/bitnami/charts/issues/26744)
+
+## <small>2.1.1 (2024-06-04)</small>
+
+* [bitnami/multus-cni] Bump chart version (#26652) ([0cc9fc4](https://github.com/bitnami/charts/commit/0cc9fc4124ed0b05158149082689e5a394dc791d)), closes [#26652](https://github.com/bitnami/charts/issues/26652)
 
 ## 2.1.0 (2024-05-21)
 

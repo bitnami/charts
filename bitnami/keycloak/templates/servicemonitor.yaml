@@ -20,11 +20,15 @@ spec:
   jobLabel: {{ .Values.metrics.serviceMonitor.jobLabel }}
   {{- end }}
   endpoints:
-    {{- $defaultEndpoint := pick .Values.metrics.serviceMonitor "port" "interval" "scrapeTimeout" "relabelings" "metricRelabelings" "honorLabels" }}
+    {{- $defaultEndpoint := pick .Values.metrics.serviceMonitor "port" "scheme" "tlsConfig" "interval" "scrapeTimeout" "relabelings" "metricRelabelings" "honorLabels" }}
     {{- $endpoints := ternary (.Values.metrics.serviceMonitor.endpoints) (list (dict "path" .Values.metrics.serviceMonitor.path)) (empty .Values.metrics.serviceMonitor.path) }}
     {{- range $endpoints }}
     {{- $endpoint := merge . $defaultEndpoint }}
     - port: {{ $endpoint.port | quote }}
+      scheme: {{ $endpoint.scheme | quote }}
+      {{- if $endpoint.tlsConfig }}
+      tlsConfig: {{- include "common.tplvalues.render" ( dict "value" $endpoint.tlsConfig "context" $) | nindent 8 }}
+      {{- end }}
       path: {{ include "common.tplvalues.render" ( dict "value" $endpoint.path "context" $) }}
       {{- if $endpoint.interval }}
       interval: {{ $endpoint.interval }}

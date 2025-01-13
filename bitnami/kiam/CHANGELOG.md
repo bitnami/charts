@@ -1,8 +1,90 @@
 # Changelog
 
-## 2.2.1 (2024-06-04)
+## 2.3.1 (2025-01-13)
 
-* [bitnami/kiam] Bump chart version ([#26638](https://github.com/bitnami/charts/pull/26638))
+* [bitnami/kiam] Release 2.3.1 ([#31320](https://github.com/bitnami/charts/pull/31320))
+
+## 2.3.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/kiam] Detect non-standard images (#30900) ([802c8ce](https://github.com/bitnami/charts/commit/802c8ceb740cb29e63465e74929bed881cf68381)), closes [#30900](https://github.com/bitnami/charts/issues/30900)
+
+## <small>2.2.18 (2024-12-04)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 3) (#30666) ([82fc7e2](https://github.com/bitnami/charts/commit/82fc7e2fc12e2648ed22069942203c02bf5d4cc6)), closes [#30666](https://github.com/bitnami/charts/issues/30666)
+* [bitnami/kiam] Release 2.2.18 (#30762) ([654bb09](https://github.com/bitnami/charts/commit/654bb09d1137cb21c52f275da787fecb9a5e818f)), closes [#30762](https://github.com/bitnami/charts/issues/30762)
+
+## <small>2.2.17 (2024-11-07)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/kiam] Release 2.2.17 (#30275) ([d173b06](https://github.com/bitnami/charts/commit/d173b065454e4e92e7a37c2cce3e891f2cecfc9d)), closes [#30275](https://github.com/bitnami/charts/issues/30275)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>2.2.16 (2024-10-10)</small>
+
+* [bitnami/kiam] Release 2.2.16 (#29861) ([155fb66](https://github.com/bitnami/charts/commit/155fb66f79e7e24ad1f804c8ed6c57c2472c6172)), closes [#29861](https://github.com/bitnami/charts/issues/29861)
+
+## <small>2.2.15 (2024-10-02)</small>
+
+* [bitnami/kiam] Release 2.2.15 (#29701) ([99fefd2](https://github.com/bitnami/charts/commit/99fefd2e1a27fb5321ba372c5e826ce4e6baf203)), closes [#29701](https://github.com/bitnami/charts/issues/29701)
+
+## <small>2.2.14 (2024-09-06)</small>
+
+* [bitnami/kiam] Release 2.2.14 (#29246) ([48b7c0c](https://github.com/bitnami/charts/commit/48b7c0c546be24f2ff760d16de6543a8853f78eb)), closes [#29246](https://github.com/bitnami/charts/issues/29246)
+
+## <small>2.2.13 (2024-08-27)</small>
+
+* [bitnami/kiam] Release 2.2.13 (#29058) ([a9e80c7](https://github.com/bitnami/charts/commit/a9e80c7ec43679c878a14cd707337c4ed03c5716)), closes [#29058](https://github.com/bitnami/charts/issues/29058)
+
+## <small>2.2.12 (2024-08-07)</small>
+
+* [bitnami/kiam] Release 2.2.12 (#28723) ([6e7458d](https://github.com/bitnami/charts/commit/6e7458da5b765de34c09caae86d37289a9d49cfd)), closes [#28723](https://github.com/bitnami/charts/issues/28723)
+
+## <small>2.2.11 (2024-07-25)</small>
+
+* [bitnami/kiam] Release 2.2.11 (#28425) ([89048cb](https://github.com/bitnami/charts/commit/89048cb6b41ae3e06173e85a60ac0b99a8499a32)), closes [#28425](https://github.com/bitnami/charts/issues/28425)
+
+## <small>2.2.10 (2024-07-24)</small>
+
+* [bitnami/kiam] Release 2.2.10 (#28292) ([2e9e5dd](https://github.com/bitnami/charts/commit/2e9e5dd037e082defd7491fa49df76f51438c8d9)), closes [#28292](https://github.com/bitnami/charts/issues/28292)
+
+## <small>2.2.9 (2024-07-24)</small>
+
+* [bitnami/kiam] Release 2.2.9 (#28263) ([d77d200](https://github.com/bitnami/charts/commit/d77d200f3695d262c0073c3fea17568d52e9c772)), closes [#28263](https://github.com/bitnami/charts/issues/28263)
+
+## <small>2.2.8 (2024-07-19)</small>
+
+* [bitnami/kiam] Global StorageClass as default value (#28040) ([bcebfb0](https://github.com/bitnami/charts/commit/bcebfb0311c21bb5909f310ab1b7011a326b3cab)), closes [#28040](https://github.com/bitnami/charts/issues/28040)
+
+## <small>2.2.7 (2024-07-04)</small>
+
+* [bitnami/kiam] Release 2.2.7 (#27787) ([bb34d7f](https://github.com/bitnami/charts/commit/bb34d7f6281499e25b317cc998d459b45c81cbe5)), closes [#27787](https://github.com/bitnami/charts/issues/27787)
+
+## <small>2.2.6 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/kiam] Release 2.2.6 (#27655) ([bde09c5](https://github.com/bitnami/charts/commit/bde09c56a79f1a9e95aec9fa46e9b5f40f27f940)), closes [#27655](https://github.com/bitnami/charts/issues/27655)
+
+## <small>2.2.5 (2024-06-18)</small>
+
+* [bitnami/kiam] Release 2.2.5 (#27365) ([7b0acfb](https://github.com/bitnami/charts/commit/7b0acfb2c828631af7b7c34964dbb60bf70a8927)), closes [#27365](https://github.com/bitnami/charts/issues/27365)
+
+## <small>2.2.4 (2024-06-17)</small>
+
+* [bitnami/kiam] Release 2.2.4 (#27265) ([aae30c3](https://github.com/bitnami/charts/commit/aae30c35857f82f20d9edf45e20316991f687ddf)), closes [#27265](https://github.com/bitnami/charts/issues/27265)
+
+## <small>2.2.3 (2024-06-06)</small>
+
+* [bitnami/kiam] Release 2.2.3 (#26971) ([3c1fc88](https://github.com/bitnami/charts/commit/3c1fc88212d5817b751f144af1b51ad4a053f7da)), closes [#26971](https://github.com/bitnami/charts/issues/26971)
+
+## <small>2.2.2 (2024-06-05)</small>
+
+* [bitnami/kiam] Release 2.2.2 (#26734) ([16d7be0](https://github.com/bitnami/charts/commit/16d7be0d2c9eac7692e29360fade811bce8de1f0)), closes [#26734](https://github.com/bitnami/charts/issues/26734)
+
+## <small>2.2.1 (2024-06-04)</small>
+
+* [bitnami/kiam] Bump chart version (#26638) ([3c501b6](https://github.com/bitnami/charts/commit/3c501b6f194ea225c9c43fee7ccde4d0fb392bfb)), closes [#26638](https://github.com/bitnami/charts/issues/26638)
 
 ## 2.2.0 (2024-05-29)
 

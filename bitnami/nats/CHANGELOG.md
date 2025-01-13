@@ -1,8 +1,147 @@
 # Changelog
 
-## 8.2.3 (2024-06-04)
+## 8.5.2 (2024-12-17)
 
-* [bitnami/nats] Bump chart version ([#26654](https://github.com/bitnami/charts/pull/26654))
+* [bitnami/nats] Release 8.5.2 ([#31078](https://github.com/bitnami/charts/pull/31078))
+
+## <small>8.5.1 (2024-12-10)</small>
+
+* [bitnami/nats] Release 8.5.1 (#30974) ([3123a38](https://github.com/bitnami/charts/commit/3123a38c930d955f06a5563b18cf0b05d2b057ee)), closes [#30974](https://github.com/bitnami/charts/issues/30974)
+
+## 8.5.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/nats] Detect non-standard images (#30916) ([8dc032e](https://github.com/bitnami/charts/commit/8dc032e182d5e6c31d9973b88c583b6888fcaaad)), closes [#30916](https://github.com/bitnami/charts/issues/30916)
+
+## <small>8.4.10 (2024-12-04)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 5) (#30674) ([ed2a546](https://github.com/bitnami/charts/commit/ed2a54617faf763169e6b01a89100b9db32e1000)), closes [#30674](https://github.com/bitnami/charts/issues/30674)
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 3) (#30688) ([10a49f9](https://github.com/bitnami/charts/commit/10a49f9ff2db1d9d11a6edd1c40a9f61803241bc)), closes [#30688](https://github.com/bitnami/charts/issues/30688)
+* [bitnami/nats] Release 8.4.10 (#30771) ([2c67e6b](https://github.com/bitnami/charts/commit/2c67e6ba0bcd0b5a2603163a8ee932cf5efdd121)), closes [#30771](https://github.com/bitnami/charts/issues/30771)
+
+## <small>8.4.9 (2024-11-12)</small>
+
+* [bitnami/nats] Expose `publishNotReadyAddresses` on headless service (#30393) ([1b34ff8](https://github.com/bitnami/charts/commit/1b34ff8d81fb1441ce91a92855b3834613ecefb8)), closes [#30393](https://github.com/bitnami/charts/issues/30393)
+
+## <small>8.4.8 (2024-11-08)</small>
+
+* [bitnami/nats] Unify seLinuxOptions default value (#30340) ([697dc7b](https://github.com/bitnami/charts/commit/697dc7bf0d5d8f8059fb1c32207fb81e712ab6a9)), closes [#30340](https://github.com/bitnami/charts/issues/30340)
+
+## <small>8.4.7 (2024-11-07)</small>
+
+* [bitnami/nats] Release 8.4.7 (#30285) ([3fcd2f9](https://github.com/bitnami/charts/commit/3fcd2f99944900b3bfd06f759a406c3192d9778f)), closes [#30285](https://github.com/bitnami/charts/issues/30285)
+
+## <small>8.4.6 (2024-11-06)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/nats] Expose `podManagementPolicy` in Statefulset (#30218) ([829a6f7](https://github.com/bitnami/charts/commit/829a6f75a5f7cb3fcf972abba387296a8683e221)), closes [#30218](https://github.com/bitnami/charts/issues/30218)
+
+## <small>8.4.5 (2024-10-17)</small>
+
+* [bitnami/nats] Release 8.4.5 (#29975) ([e87d9ae](https://github.com/bitnami/charts/commit/e87d9ae42ca5df4c4429bbb8eb72e7e25fdcb97c)), closes [#29975](https://github.com/bitnami/charts/issues/29975)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>8.4.4 (2024-10-02)</small>
+
+* [bitnami/nats] Release 8.4.4 (#29710) ([ee3e136](https://github.com/bitnami/charts/commit/ee3e1367e57cdbb3157668dab2904997d39dea20)), closes [#29710](https://github.com/bitnami/charts/issues/29710)
+
+## <small>8.4.3 (2024-09-26)</small>
+
+* [bitnami/nats] Release 8.4.3 (#29629) ([9b3d1fa](https://github.com/bitnami/charts/commit/9b3d1fa0732f8be0689806ec21fbc3dd65125cc9)), closes [#29629](https://github.com/bitnami/charts/issues/29629)
+
+## <small>8.4.2 (2024-09-17)</small>
+
+* [bitnami/nats] Improve Ginkgo tests (#29462) ([3ec3cfb](https://github.com/bitnami/charts/commit/3ec3cfb0596ab1a5360ecc530842646bcd2a581a)), closes [#29462](https://github.com/bitnami/charts/issues/29462)
+
+## <small>8.4.1 (2024-09-16)</small>
+
+* [bitnami/nats] Fix single replica Jetstream (#29379) ([4959500](https://github.com/bitnami/charts/commit/4959500b4987deb760d38e06d181022bacc3308d)), closes [#29379](https://github.com/bitnami/charts/issues/29379)
+
+## 8.4.0 (2024-09-12)
+
+* [bitnami/nats] Add `PersistentVolumeRetentionPolicy` (#29371) ([15d5c40](https://github.com/bitnami/charts/commit/15d5c40828d572501ad98281c3afff73e36a2a71)), closes [#29371](https://github.com/bitnami/charts/issues/29371)
+
+## <small>8.3.5 (2024-09-06)</small>
+
+* [bitnami/nats] Release 8.3.5 (#29253) ([a1687c9](https://github.com/bitnami/charts/commit/a1687c981454b4ec06fbc05993a6c498e5b29bcd)), closes [#29253](https://github.com/bitnami/charts/issues/29253)
+
+## <small>8.3.4 (2024-08-30)</small>
+
+* [bitnami/nats] Release 8.3.4 (#29132) ([96e3084](https://github.com/bitnami/charts/commit/96e308493174de2b481ad857ac24b4fc1a37672a)), closes [#29132](https://github.com/bitnami/charts/issues/29132)
+
+## <small>8.3.3 (2024-08-29)</small>
+
+* [bitnami/nats] Release 8.3.3 (#29116) ([93f1632](https://github.com/bitnami/charts/commit/93f163201bea82c9321499bb4698fad46b4dc3e7)), closes [#29116](https://github.com/bitnami/charts/issues/29116)
+
+## <small>8.3.2 (2024-08-27)</small>
+
+* [bitnami/nats] Release 8.3.2 (#29073) ([ba84935](https://github.com/bitnami/charts/commit/ba849357e9811de3f34ba30a7f71857d521a46d9)), closes [#29073](https://github.com/bitnami/charts/issues/29073)
+
+## <small>8.3.1 (2024-08-27)</small>
+
+* [bitnami/nats] Release 8.3.1 (#29059) ([1537655](https://github.com/bitnami/charts/commit/1537655b0bb2e68d9a1977c21c0c4a7a65c8f63a)), closes [#29059](https://github.com/bitnami/charts/issues/29059)
+
+## 8.3.0 (2024-08-13)
+
+* [bitnami/nats] metrics exporter probe configuration (#28825) ([4c8a589](https://github.com/bitnami/charts/commit/4c8a58943b7d3fd3841d6acc883533c87ec67457)), closes [#28825](https://github.com/bitnami/charts/issues/28825)
+
+## <small>8.2.16 (2024-08-07)</small>
+
+* [bitnami/nats] Release 8.2.16 (#28730) ([86ae138](https://github.com/bitnami/charts/commit/86ae13804ecc635e0ef36df7f71283215cfbfe75)), closes [#28730](https://github.com/bitnami/charts/issues/28730)
+
+## <small>8.2.15 (2024-07-25)</small>
+
+* [bitnami/nats] Release 8.2.15 (#28462) ([7a00340](https://github.com/bitnami/charts/commit/7a0034030f93ff36c01c7ac144ade3db4e8441a6)), closes [#28462](https://github.com/bitnami/charts/issues/28462)
+
+## <small>8.2.14 (2024-07-24)</small>
+
+* [bitnami/nats] Release 8.2.14 (#28328) ([5eda2ca](https://github.com/bitnami/charts/commit/5eda2ca676cefb2226eafb615a5c359ae0d5f623)), closes [#28328](https://github.com/bitnami/charts/issues/28328)
+
+## <small>8.2.13 (2024-07-18)</small>
+
+* [bitnami/nats] Global StorageClass as default value (#28067) ([5656011](https://github.com/bitnami/charts/commit/56560114a9166e7912a8a25ab4c0db7805efd42a)), closes [#28067](https://github.com/bitnami/charts/issues/28067)
+
+## <small>8.2.12 (2024-07-17)</small>
+
+* [bitnami/nats] Release 8.2.12 (#28138) ([e4002d9](https://github.com/bitnami/charts/commit/e4002d94fbe0abe6014f9d7e8984c7f05b05801d)), closes [#28138](https://github.com/bitnami/charts/issues/28138)
+
+## <small>8.2.11 (2024-07-04)</small>
+
+* [bitnami/nats] Release 8.2.11 (#27788) ([aa648ed](https://github.com/bitnami/charts/commit/aa648ed3c9003d697dc74c9bd354101362e3c881)), closes [#27788](https://github.com/bitnami/charts/issues/27788)
+
+## <small>8.2.10 (2024-07-03)</small>
+
+* [bitnami/nats] Release 8.2.10 (#27670) ([06da1d1](https://github.com/bitnami/charts/commit/06da1d122aaf5236aab95a04db60045448e30f7d)), closes [#27670](https://github.com/bitnami/charts/issues/27670)
+
+## <small>8.2.9 (2024-06-28)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/nats] Release 8.2.9 (#27572) ([21d53ff](https://github.com/bitnami/charts/commit/21d53ffe4b446dbcc3e4b86b12f3fc14f0dfbba0)), closes [#27572](https://github.com/bitnami/charts/issues/27572)
+
+## <small>8.2.8 (2024-06-18)</small>
+
+* [bitnami/nats] Release 8.2.8 (#27386) ([e2627bb](https://github.com/bitnami/charts/commit/e2627bb64fda56838614ae653822536c506cf50a)), closes [#27386](https://github.com/bitnami/charts/issues/27386)
+
+## <small>8.2.7 (2024-06-17)</small>
+
+* [bitnami/nats] Release 8.2.7 (#27285) ([289e29b](https://github.com/bitnami/charts/commit/289e29b8b7af49addc31773516336b0dd5dcd37f)), closes [#27285](https://github.com/bitnami/charts/issues/27285)
+
+## <small>8.2.6 (2024-06-06)</small>
+
+* [bitnami/nats] Release 8.2.6 (#26990) ([ceb395f](https://github.com/bitnami/charts/commit/ceb395f4284e4425233a3f0916e1680cd48b3cc5)), closes [#26990](https://github.com/bitnami/charts/issues/26990)
+
+## <small>8.2.5 (2024-06-06)</small>
+
+* [bitnami/nats] Align PodDisruptionBudgets with templates (#26707) ([db78a05](https://github.com/bitnami/charts/commit/db78a056f96576ac2ec4b85ac78fbf85a40630d4)), closes [#26707](https://github.com/bitnami/charts/issues/26707)
+
+## <small>8.2.4 (2024-06-05)</small>
+
+* [bitnami/nats] Release 8.2.4 (#26745) ([bb70a5f](https://github.com/bitnami/charts/commit/bb70a5f5f49cccdc0ee7972dd3701f50343fc6bd)), closes [#26745](https://github.com/bitnami/charts/issues/26745)
+
+## <small>8.2.3 (2024-06-04)</small>
+
+* [bitnami/nats] Bump chart version (#26654) ([68a9a8d](https://github.com/bitnami/charts/commit/68a9a8d748c0235451b71b9f610440838bbf8de2)), closes [#26654](https://github.com/bitnami/charts/issues/26654)
 
 ## <small>8.2.2 (2024-05-23)</small>
 

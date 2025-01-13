@@ -2,6 +2,8 @@ CHART NAME: {{ .Chart.Name }}
 CHART VERSION: {{ .Chart.Version }}
 APP VERSION: {{ .Chart.AppVersion }}
 
+Did you know there are enterprise versions of the Bitnami catalog? For enhanced secure software supply chain features, unlimited pulls from Docker, LTS support, or application customization, see Bitnami Premium or Tanzu Application Catalog. See https://www.arrow.com/globalecs/na/vendors/bitnami for more information.
+
 ** Please be patient while the chart is being deployed **
 
 {{- if .Values.diagnosticMode.enabled }}
@@ -33,14 +35,14 @@ For Valkey Sentinel:
 {{- end }}
 {{- else }}
 
-{{- if contains .Values.master.service.type "LoadBalancer" }}
+{{- if contains .Values.primary.service.type "LoadBalancer" }}
 {{- if not .Values.auth.enabled }}
 {{ if and (not .Values.networkPolicy.enabled) (.Values.networkPolicy.allowExternal) }}
 
 -------------------------------------------------------------------------------
  WARNING
 
-    By specifying "master.service.type=LoadBalancer" and "auth.enabled=false" you have
+    By specifying "primary.service.type=LoadBalancer" and "auth.enabled=false" you have
     most likely exposed the Valkey service externally without any authentication
     mechanism.
 
@@ -53,7 +55,7 @@ For Valkey Sentinel:
 {{- end }}
 {{- end }}
 
-{{- if and .Values.auth.usePasswordFiles (not .Values.auth.usePasswordFileFromSecret) (or (empty .Values.master.initContainers) (empty .Values.replica.initContainers)) }}
+{{- if and .Values.auth.usePasswordFiles (not .Values.auth.usePasswordFileFromSecret) (or (empty .Values.primary.initContainers) (empty .Values.replica.initContainers)) }}
 
 -------------------------------------------------------------------------------
  WARNING
@@ -63,7 +65,7 @@ For Valkey Sentinel:
     (by default in /opt/bitnami/valkey/secrets/valkey-password)
 
     Ensure that you specify the respective initContainers in
-    both .Values.master.initContainers and .Values.replica.initContainers
+    both .Values.primary.initContainers and .Values.replica.initContainers
     in order to populate the contents of this file.
 
 -------------------------------------------------------------------------------
@@ -82,15 +84,15 @@ For read/write operations, first access the Valkey Sentinel cluster, which is av
 
 Valkey can be accessed on the following DNS names from within your cluster:
 
-    {{ printf "%s-master.%s.svc.%s" (include "common.names.fullname" .) (include "common.names.namespace" . ) .Values.clusterDomain }} for read/write operations (port {{ .Values.master.service.ports.valkey }})
+    {{ printf "%s-primary.%s.svc.%s" (include "common.names.fullname" .) (include "common.names.namespace" . ) .Values.clusterDomain }} for read/write operations (port {{ .Values.primary.service.ports.valkey }})
     {{ printf "%s-replicas.%s.svc.%s" (include "common.names.fullname" .) (include "common.names.namespace" . ) .Values.clusterDomain }} for read-only operations (port {{ .Values.replica.service.ports.valkey }})
 
 {{- end }}
 {{- else }}
 
-Valkey can be accessed via port {{ .Values.master.service.ports.valkey }} on the following DNS name from within your cluster:
+Valkey can be accessed via port {{ .Values.primary.service.ports.valkey }} on the following DNS name from within your cluster:
 
-    {{ template "common.names.fullname" . }}-master.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}
+    {{ template "common.names.fullname" . }}-primary.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}
 
 {{- end }}
 
@@ -98,7 +100,7 @@ Valkey can be accessed via port {{ .Values.master.service.ports.valkey }} on the
 
 To get your password run:
 
-    export VALKEY_PASSWORD=$(kubectl get secret --namespace {{ include "common.names.namespace" . }} {{ template "valkey.secretName" . }} -o jsonpath="{.data.valkey-password}" | base64 -d)
+    export VALKEY_PASSWORD=$(kubectl get secret --namespace {{ include "common.names.namespace" . }} {{ include "valkey.secretName" . }} -o jsonpath="{.data.{{ include "valkey.secretPasswordKey" . }}}" | base64 -d)
 
 {{- end }}
 
@@ -131,11 +133,11 @@ To connect to your Valkey server:
    {{ if .Values.auth.enabled }}REDISCLI_AUTH="$VALKEY_PASSWORD" {{ end }}valkey-cli -h {{ template "common.names.fullname" . }} -p {{ .Values.sentinel.service.ports.valkey }}{{ if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }} # Read only operations
    {{ if .Values.auth.enabled }}REDISCLI_AUTH="$VALKEY_PASSWORD" {{ end }}valkey-cli -h {{ template "common.names.fullname" . }} -p {{ .Values.sentinel.service.ports.sentinel }}{{ if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }} # Sentinel access
    {{- else }}
-   {{ if .Values.auth.enabled }}REDISCLI_AUTH="$VALKEY_PASSWORD" {{ end }}valkey-cli -h {{ printf "%s-master" (include "common.names.fullname" .) }}{{ if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
+   {{ if .Values.auth.enabled }}REDISCLI_AUTH="$VALKEY_PASSWORD" {{ end }}valkey-cli -h {{ printf "%s-primary" (include "common.names.fullname" .) }}{{ if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
    {{ if .Values.auth.enabled }}REDISCLI_AUTH="$VALKEY_PASSWORD" {{ end }}valkey-cli -h {{ printf "%s-replicas" (include "common.names.fullname" .) }}{{ if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
    {{- end }}
 {{- else }}
-   {{ if .Values.auth.enabled }}REDISCLI_AUTH="$VALKEY_PASSWORD" {{ end }}valkey-cli -h {{ template "common.names.fullname" . }}-master{{ if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
+   {{ if .Values.auth.enabled }}REDISCLI_AUTH="$VALKEY_PASSWORD" {{ end }}valkey-cli -h {{ template "common.names.fullname" . }}-primary{{ if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
 {{- end }}
 
 {{- if and (.Values.networkPolicy.enabled) (not .Values.networkPolicy.allowExternal) }}
@@ -168,24 +170,24 @@ To connect to your database from outside the cluster execute the following comma
 
 {{- end }}
 {{- else }}
-{{- if contains "NodePort" .Values.master.service.type }}
+{{- if contains "NodePort" .Values.primary.service.type }}
 
     export NODE_IP=$(kubectl get nodes --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.items[0].status.addresses[0].address}")
-    export NODE_PORT=$(kubectl get --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ printf "%s-master" (include "common.names.fullname" .) }})
+    export NODE_PORT=$(kubectl get --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ printf "%s-primary" (include "common.names.fullname" .) }})
     {{ if .Values.auth.enabled }}REDISCLI_AUTH="$VALKEY_PASSWORD" {{ end }}valkey-cli -h $NODE_IP -p $NODE_PORT {{- if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
 
-{{- else if contains "LoadBalancer" .Values.master.service.type }}
+{{- else if contains "LoadBalancer" .Values.primary.service.type }}
 
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
         Watch the status with: 'kubectl get svc --namespace {{ include "common.names.namespace" . }} -w {{ template "common.names.fullname" . }}'
 
-    export SERVICE_IP=$(kubectl get svc --namespace {{ include "common.names.namespace" . }} {{ printf "%s-master" (include "common.names.fullname" .) }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
-    {{ if .Values.auth.enabled }}REDISCLI_AUTH="$VALKEY_PASSWORD" {{ end }}valkey-cli -h $SERVICE_IP -p {{ .Values.master.service.ports.valkey }} {{- if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
+    export SERVICE_IP=$(kubectl get svc --namespace {{ include "common.names.namespace" . }} {{ printf "%s-primary" (include "common.names.fullname" .) }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
+    {{ if .Values.auth.enabled }}REDISCLI_AUTH="$VALKEY_PASSWORD" {{ end }}valkey-cli -h $SERVICE_IP -p {{ .Values.primary.service.ports.valkey }} {{- if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
 
-{{- else if contains "ClusterIP" .Values.master.service.type }}
+{{- else if contains "ClusterIP" .Values.primary.service.type }}
 
-    kubectl port-forward --namespace {{ include "common.names.namespace" . }} svc/{{ printf "%s-master" (include "common.names.fullname" .) }} {{ .Values.master.service.ports.valkey }}:{{ .Values.master.service.ports.valkey }} &
-    {{ if .Values.auth.enabled }}REDISCLI_AUTH="$VALKEY_PASSWORD" {{ end }}valkey-cli -h 127.0.0.1 -p {{ .Values.master.service.ports.valkey }} {{- if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
+    kubectl port-forward --namespace {{ include "common.names.namespace" . }} svc/{{ printf "%s-primary" (include "common.names.fullname" .) }} {{ .Values.primary.service.ports.valkey }}:{{ .Values.primary.service.ports.valkey }} &
+    {{ if .Values.auth.enabled }}REDISCLI_AUTH="$VALKEY_PASSWORD" {{ end }}valkey-cli -h 127.0.0.1 -p {{ .Values.primary.service.ports.valkey }} {{- if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
 
 {{- end }}
 {{- end }}
@@ -205,7 +207,8 @@ YOU NEED TO PERFORM AN UPGRADE FOR THE SERVICES AND WORKLOAD TO BE CREATED
 {{- end }}
 {{- $resourceSections := list "metrics" "replica" "sentinel" "volumePermissions" }}
 {{- if not (and (eq .Values.architecture "replication") .Values.sentinel.enabled) }}
-  {{- $resourceSections = append $resourceSections "master" -}}
+  {{- $resourceSections = append $resourceSections "primary" -}}
 {{- end }}
 {{- include "common.warnings.resources" (dict "sections" $resourceSections "context" $) }}
 {{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.sentinel.image .Values.metrics.image .Values.volumePermissions.image .Values.kubectl.image) "context" $) }}
+{{- include "common.errors.insecureImages" (dict "images" (list .Values.image .Values.sentinel.image .Values.metrics.image .Values.volumePermissions.image .Values.kubectl.image) "context" $) }}

@@ -9,7 +9,8 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
+## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ##
 global:
   imageRegistry: ""
@@ -18,7 +19,13 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  defaultStorageClass: ""
   storageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
   ## Compatibility adaptations for Kubernetes platforms
   ##
   compatibility:
@@ -85,10 +92,9 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/zookeeper
-  tag: 3.9.2-debian-12-r6
+  tag: 3.9.3-debian-12-r2
   digest: ""
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -186,6 +192,9 @@ minServerId: 1
 ## @param listenOnAllIPs Allow ZooKeeper to listen for connections from its peers on all available IP addresses
 ##
 listenOnAllIPs: false
+## @param zooServers ZooKeeper space separated servers list. Leave empty to use the default ZooKeeper server names.
+##
+zooServers: ""
 ## Ongoing data directory cleanup configuration
 ##
 autopurge:
@@ -767,7 +776,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r21
+    tag: 12-debian-12-r33
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -866,6 +875,18 @@ metrics:
     ## @param metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
     ##
     jobLabel: ""
+    ## @param metrics.serviceMonitor.scheme The explicit scheme for metrics scraping.
+    ##
+    scheme: ""
+    ## @param metrics.serviceMonitor.tlsConfig [object] TLS configuration used for scrape endpoints used by Prometheus
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#tlsconfig
+    ## e.g:
+    ## tlsConfig:
+    ##   ca:
+    ##     secret:
+    ##       name: existingSecretName
+    ##
+    tlsConfig: {}
   ## Prometheus Operator PrometheusRule configuration
   ##
   prometheusRule:

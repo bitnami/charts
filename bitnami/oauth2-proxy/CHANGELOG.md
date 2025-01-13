@@ -1,8 +1,106 @@
 # Changelog
 
+## 6.2.1 (2025-01-13)
+
+* [bitnami/oauth2-proxy] Release 6.2.1 ([#31323](https://github.com/bitnami/charts/pull/31323))
+
+## 6.2.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/oauth2-proxy] Detect non-standard images (#30933) ([81f3a51](https://github.com/bitnami/charts/commit/81f3a51a0ee4bdc1de6e479643e9f1a35d95e5a9)), closes [#30933](https://github.com/bitnami/charts/issues/30933)
+
+## <small>6.1.1 (2024-12-04)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Unify "Securing Traffic using TLS" section (#30707) ([b572333](https://github.com/bitnami/charts/commit/b57233336e4fe9af928ecb4f2a5f334011efb1bc)), closes [#30707](https://github.com/bitnami/charts/issues/30707)
+* [bitnami/oauth2-proxy] Release 6.1.1 (#30770) ([8805060](https://github.com/bitnami/charts/commit/8805060f570e254bb8b66121537e5a3f7d54bce9)), closes [#30770](https://github.com/bitnami/charts/issues/30770)
+
+## 6.1.0 (2024-11-28)
+
+* [bitnami/oauth2-proxy] add useApplicationDefaultCredentials google (#30309) ([5ee114c](https://github.com/bitnami/charts/commit/5ee114cbf81aa174da2fd4e62cd3f1af10c96417)), closes [#30309](https://github.com/bitnami/charts/issues/30309)
+
+## <small>6.0.6 (2024-11-07)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/oauth2-proxy] Release 6.0.6 (#30288) ([763b6aa](https://github.com/bitnami/charts/commit/763b6aad5acfa854f0e62dfdb026ef78e2803f57)), closes [#30288](https://github.com/bitnami/charts/issues/30288)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>6.0.5 (2024-10-08)</small>
+
+* [bitnami/oauth2-proxy] Release 6.0.5 (#29826) ([f2bfdd7](https://github.com/bitnami/charts/commit/f2bfdd7e093b51b8c1dacfa31aa8ae2b2ca3c06e)), closes [#29826](https://github.com/bitnami/charts/issues/29826)
+
+## <small>6.0.4 (2024-10-02)</small>
+
+* [bitnami/oauth2-proxy] Release 6.0.4 (#29737) ([cfc1c86](https://github.com/bitnami/charts/commit/cfc1c8696d90e6b7b4f43b2e5ca9e167ae16e913)), closes [#29737](https://github.com/bitnami/charts/issues/29737)
+
+## <small>6.0.3 (2024-10-02)</small>
+
+* [bitnami/oauth2-proxy] Release 6.0.3 (#29713) ([7378dcc](https://github.com/bitnami/charts/commit/7378dcc902c2e6223f60754cdca78b752ce15b73)), closes [#29713](https://github.com/bitnami/charts/issues/29713)
+
+## <small>6.0.2 (2024-09-06)</small>
+
+* [bitnami/oauth2-proxy] Release 6.0.2 (#29259) ([c0e0c19](https://github.com/bitnami/charts/commit/c0e0c194514327f2777d586a9affadb57c4dcd44)), closes [#29259](https://github.com/bitnami/charts/issues/29259)
+
+## <small>6.0.1 (2024-08-27)</small>
+
+* [bitnami/oauth2-proxy] Release 6.0.1 (#29065) ([63ac0ba](https://github.com/bitnami/charts/commit/63ac0bab25da3c6ab4cacadd543fa34501471acc)), closes [#29065](https://github.com/bitnami/charts/issues/29065)
+
+## 6.0.0 (2024-08-13)
+
+* [bitnami/oauth2-proxy] Update dependencies (#28856) ([a6cecdf](https://github.com/bitnami/charts/commit/a6cecdf534b24a0d8d5d196bdf7b6b6f67ecab70)), closes [#28856](https://github.com/bitnami/charts/issues/28856)
+
+## <small>5.3.12 (2024-08-07)</small>
+
+* [bitnami/oauth2-proxy] Release 5.3.12 (#28733) ([1f2bc8b](https://github.com/bitnami/charts/commit/1f2bc8b4bdbbb6bdcae14b6849c962b279824177)), closes [#28733](https://github.com/bitnami/charts/issues/28733)
+
+## <small>5.3.11 (2024-07-25)</small>
+
+* [bitnami/oauth2-proxy] Release 5.3.11 (#28451) ([2c92255](https://github.com/bitnami/charts/commit/2c922556df1f63c7f8396621c65e31d3d9d4bfe2)), closes [#28451](https://github.com/bitnami/charts/issues/28451)
+
+## <small>5.3.10 (2024-07-24)</small>
+
+* [bitnami/oauth2-proxy] Release 5.3.10 (#28345) ([f31c5ee](https://github.com/bitnami/charts/commit/f31c5ee9bae6e81179da963155262bdefdccc317)), closes [#28345](https://github.com/bitnami/charts/issues/28345)
+
+## <small>5.3.9 (2024-07-18)</small>
+
+* [bitnami/oauth2-proxy] Global StorageClass as default value (#28073) ([04ad6b8](https://github.com/bitnami/charts/commit/04ad6b89687a8fd1da21d1477a86f14f7c3b29af)), closes [#28073](https://github.com/bitnami/charts/issues/28073)
+
+## <small>5.3.8 (2024-07-04)</small>
+
+* [bitnami/oauth2-proxy] Release 5.3.8 (#27777) ([a10d8a5](https://github.com/bitnami/charts/commit/a10d8a558ba6ad53c1a3df426cd0a8d09989d23b)), closes [#27777](https://github.com/bitnami/charts/issues/27777)
+
+## <small>5.3.7 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/oauth2-proxy] Release 5.3.7 (#27671) ([e0dc793](https://github.com/bitnami/charts/commit/e0dc7936312a9c06b9a24eb71c93281611d34f54)), closes [#27671](https://github.com/bitnami/charts/issues/27671)
+
+## <small>5.3.6 (2024-06-18)</small>
+
+* [bitnami/oauth2-proxy] Release 5.3.6 (#27392) ([018294a](https://github.com/bitnami/charts/commit/018294a69e74f4f7b090a534b2b610e106b91836)), closes [#27392](https://github.com/bitnami/charts/issues/27392)
+
+## <small>5.3.5 (2024-06-17)</small>
+
+* [bitnami/oauth2-proxy] Release 5.3.5 (#27256) ([3c3e7cc](https://github.com/bitnami/charts/commit/3c3e7ccce936048bceda6556fe804760aa033cb9)), closes [#27256](https://github.com/bitnami/charts/issues/27256)
+
+## <small>5.3.4 (2024-06-06)</small>
+
+* [bitnami/oauth2-proxy] Release 5.3.4 (#26998) ([3e218c3](https://github.com/bitnami/charts/commit/3e218c3e9e7be00fade1bd7c74586bf8b64830f1)), closes [#26998](https://github.com/bitnami/charts/issues/26998)
+
+## <small>5.3.3 (2024-06-05)</small>
+
+* [bitnami/oauth2-proxy] Bump chart version (#26850) ([83ca47c](https://github.com/bitnami/charts/commit/83ca47c7c6a4b6e3aee8fc99a86d9e8392853dc7)), closes [#26850](https://github.com/bitnami/charts/issues/26850)
+
+## <small>5.3.2 (2024-06-05)</small>
+
+* [bitnami/oauth2-proxy] Bump chart version (#26792) ([3199b02](https://github.com/bitnami/charts/commit/3199b025f38b3b7e2e0e4c9995bbf6f114519ea5)), closes [#26792](https://github.com/bitnami/charts/issues/26792)
+
+## <small>5.3.1 (2024-06-05)</small>
+
+* [bitnami/oauth2-proxy] Release 5.3.1 (#26746) ([e5bea6c](https://github.com/bitnami/charts/commit/e5bea6c07275e46d4aa6ca2c191c0a352d94e929)), closes [#26746](https://github.com/bitnami/charts/issues/26746)
+
 ## 5.3.0 (2024-05-27)
 
-* [bitnami/oauth2-proxy] Add field externalRedis.databaseIndex ([#26439](https://github.com/bitnami/charts/pull/26439))
+* [bitnami/oauth2-proxy] Add field externalRedis.databaseIndex (#26439) ([43a38d4](https://github.com/bitnami/charts/commit/43a38d47397e7af81002f0adda65ea266c7369a9)), closes [#26439](https://github.com/bitnami/charts/issues/26439)
 
 ## 5.2.0 (2024-05-24)
 

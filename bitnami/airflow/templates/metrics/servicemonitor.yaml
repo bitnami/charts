@@ -7,8 +7,8 @@ SPDX-License-Identifier: APACHE-2.0
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: {{ printf "%s-exporter" (include "common.names.fullname" .) }}
-  namespace: {{ default .Release.Namespace .Values.metrics.serviceMonitor.namespace | quote }}
+  name: {{ template "airflow.metrics.fullname" . }}
+  namespace: {{ default (include "common.names.namespace" .) .Values.metrics.serviceMonitor.namespace | quote }}
   {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.metrics.image "chart" .Chart ) ) }}
   {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.metrics.serviceMonitor.labels .Values.commonLabels $versionLabel ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
@@ -46,5 +46,5 @@ spec:
       {{- end }}
   namespaceSelector:
     matchNames:
-      - {{ .Release.Namespace }}
+      - {{ include "common.names.namespace" . | quote }}
 {{- end }}

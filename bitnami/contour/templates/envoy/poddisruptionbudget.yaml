@@ -21,8 +21,8 @@ spec:
   {{- if .Values.envoy.pdb.minAvailable }}
   minAvailable: {{ .Values.envoy.pdb.minAvailable }}
   {{- end }}
-  {{- if .Values.envoy.pdb.maxUnavailable }}
-  maxUnavailable: {{ .Values.envoy.pdb.maxUnavailable }}
+  {{- if or .Values.envoy.pdb.maxUnavailable ( not .Values.envoy.pdb.minAvailable ) }}
+  maxUnavailable: {{ .Values.envoy.pdb.maxUnavailable | default 1 }}
   {{- end }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.envoy.podLabels .Values.commonLabels ) "context" . ) }}
   selector:

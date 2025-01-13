@@ -1,8 +1,109 @@
 # Changelog
 
-## 6.1.2 (2024-06-04)
+## 6.3.1 (2024-12-28)
 
-* [bitnami/aspnet-core] Bump chart version ([#26621](https://github.com/bitnami/charts/pull/26621))
+* [bitnami/aspnet-core] Release 6.3.1 ([#31180](https://github.com/bitnami/charts/pull/31180))
+
+## 6.3.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/aspnet-core] Detect non-standard images (#30865) ([1329644](https://github.com/bitnami/charts/commit/13296445b45cfa3c696d0bfbe289f61fafc1467e)), closes [#30865](https://github.com/bitnami/charts/issues/30865)
+
+## <small>6.2.21 (2024-11-18)</small>
+
+* [bitnami/aspnet-core] Release 6.2.21 (#30502) ([29c2afd](https://github.com/bitnami/charts/commit/29c2afd7d4b4f664dc2e6e215ee3d784cb49eae7)), closes [#30502](https://github.com/bitnami/charts/issues/30502)
+
+## <small>6.2.20 (2024-11-18)</small>
+
+* [bitnami/aspnet-core] Release 6.2.20 (#30501) ([e2685b6](https://github.com/bitnami/charts/commit/e2685b62db0efbae283988628a8f58e14f34cff9)), closes [#30501](https://github.com/bitnami/charts/issues/30501)
+
+## <small>6.2.19 (2024-11-09)</small>
+
+* [bitnami/aspnet-core] Release 6.2.19 (#30379) ([83fc324](https://github.com/bitnami/charts/commit/83fc32473b9e5ecbf873d00daa653b18805b0215)), closes [#30379](https://github.com/bitnami/charts/issues/30379)
+
+## <small>6.2.18 (2024-11-09)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/aspnet-core] Release 6.2.18 (#30378) ([e9f2836](https://github.com/bitnami/charts/commit/e9f28365f922b2cd01f7cc600cd559abc7358aca)), closes [#30378](https://github.com/bitnami/charts/issues/30378)
+
+## <small>6.2.17 (2024-10-18)</small>
+
+* [bitnami/aspnet-core] Remove wrong entries from image verification (#29912) ([a4750e4](https://github.com/bitnami/charts/commit/a4750e497887c5a1e52b0b7ccc933087d68492a1)), closes [#29912](https://github.com/bitnami/charts/issues/29912)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>6.2.16 (2024-10-08)</small>
+
+* [bitnami/aspnet-core] Release 6.2.16 (#29825) ([bf9676c](https://github.com/bitnami/charts/commit/bf9676c5a8a7b8db2da364ed1a01ee66cd38d7e3)), closes [#29825](https://github.com/bitnami/charts/issues/29825)
+
+## <small>6.2.15 (2024-09-19)</small>
+
+* [bitnami/aspnet-core] Release 6.2.15 (#29505) ([ee09a07](https://github.com/bitnami/charts/commit/ee09a0792e3840df8d2d9d371b32711297f00879)), closes [#29505](https://github.com/bitnami/charts/issues/29505)
+
+## <small>6.2.14 (2024-09-15)</small>
+
+* [bitnami/aspnet-core] Release 6.2.14 (#29421) ([4d81639](https://github.com/bitnami/charts/commit/4d81639d55d1015131f20c7a8f5b514543456de4)), closes [#29421](https://github.com/bitnami/charts/issues/29421)
+
+## <small>6.2.13 (2024-09-14)</small>
+
+* [bitnami/aspnet-core] Release 6.2.13 (#29415) ([4647a68](https://github.com/bitnami/charts/commit/4647a68eb4989a2de365965dcb0606f9fe838363)), closes [#29415](https://github.com/bitnami/charts/issues/29415)
+
+## <small>6.2.12 (2024-09-14)</small>
+
+* [bitnami/aspnet-core] Release 6.2.12 (#29407) ([0f0b73d](https://github.com/bitnami/charts/commit/0f0b73d6455d83615d9e2f0e3a8eb6824b177397)), closes [#29407](https://github.com/bitnami/charts/issues/29407)
+
+## <small>6.2.11 (2024-08-13)</small>
+
+* [bitnami/aspnet-core] Release 6.2.11 (#28867) ([9792545](https://github.com/bitnami/charts/commit/97925459f3b3e61114fec96bf3395b8a26af5f15)), closes [#28867](https://github.com/bitnami/charts/issues/28867)
+
+## <small>6.2.10 (2024-07-25)</small>
+
+* [bitnami/aspnet-core] Release 6.2.10 (#28403) ([b0ecc1f](https://github.com/bitnami/charts/commit/b0ecc1f8a544ed8b7dff4a20ae80d50db16d62c4)), closes [#28403](https://github.com/bitnami/charts/issues/28403)
+
+## <small>6.2.9 (2024-07-24)</small>
+
+* [bitnami/aspnet-core] Release 6.2.9 (#28270) ([92e5c19](https://github.com/bitnami/charts/commit/92e5c194a3cbc9ea9f4f3475e40ccc2d7f18404a)), closes [#28270](https://github.com/bitnami/charts/issues/28270)
+
+## <small>6.2.8 (2024-07-24)</small>
+
+* [bitnami/aspnet-core] Release 6.2.8 (#28257) ([6301e0b](https://github.com/bitnami/charts/commit/6301e0b2faeb04375730eeaebd3c2a9427ab5b34)), closes [#28257](https://github.com/bitnami/charts/issues/28257)
+
+## <small>6.2.7 (2024-07-18)</small>
+
+* [bitnami/aspnet-core] Global StorageClass as default value (#28001) ([47f17a5](https://github.com/bitnami/charts/commit/47f17a5e6da81dfc4694b544ab3ef3d030b6977e)), closes [#28001](https://github.com/bitnami/charts/issues/28001)
+
+## <small>6.2.6 (2024-07-09)</small>
+
+* [bitnami/aspnet-core] Release 6.2.6 (#27863) ([f9e93eb](https://github.com/bitnami/charts/commit/f9e93eb8d4c798567ceab1849f63279f634a6d09)), closes [#27863](https://github.com/bitnami/charts/issues/27863)
+
+## <small>6.2.5 (2024-07-03)</small>
+
+* [bitnami/aspnet-core] Release 6.2.5 (#27744) ([f846654](https://github.com/bitnami/charts/commit/f846654f84e02a2ede18d41ed2e9856b893dd546)), closes [#27744](https://github.com/bitnami/charts/issues/27744)
+
+## <small>6.2.4 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/aspnet-core] Release 6.2.4 (#27689) ([6b7a9d0](https://github.com/bitnami/charts/commit/6b7a9d04956cfff086cc62faafa195781a1779cf)), closes [#27689](https://github.com/bitnami/charts/issues/27689)
+
+## <small>6.2.3 (2024-06-18)</small>
+
+* [bitnami/aspnet-core] Release 6.2.3 (#27333) ([ae9dd67](https://github.com/bitnami/charts/commit/ae9dd675722da8a44669c44431bb75fce61ea0bf)), closes [#27333](https://github.com/bitnami/charts/issues/27333)
+
+## <small>6.2.2 (2024-06-17)</small>
+
+* [bitnami/aspnet-core] Release 6.2.2 (#27204) ([5b055f5](https://github.com/bitnami/charts/commit/5b055f58f0c0db5fe42232d73f4be2316fa9fc39)), closes [#27204](https://github.com/bitnami/charts/issues/27204)
+
+## <small>6.2.1 (2024-06-06)</small>
+
+* [bitnami/aspnet-core] Release 6.2.1 (#26942) ([768c05a](https://github.com/bitnami/charts/commit/768c05ae901c132114596827870fe31db77f7b55)), closes [#26942](https://github.com/bitnami/charts/issues/26942)
+
+## 6.2.0 (2024-06-05)
+
+* [bitnami/aspnet-core] Enable PodDisruptionBudgets (#26686) ([c6f0ebf](https://github.com/bitnami/charts/commit/c6f0ebfabdeebea404968766aefbfd9865096227)), closes [#26686](https://github.com/bitnami/charts/issues/26686)
+
+## <small>6.1.2 (2024-06-04)</small>
+
+* [bitnami/aspnet-core] Bump chart version (#26621) ([2f31401](https://github.com/bitnami/charts/commit/2f31401c926f6f39e7bb4333348cd23c281a6bd9)), closes [#26621](https://github.com/bitnami/charts/issues/26621)
 
 ## <small>6.1.1 (2024-05-29)</small>
 

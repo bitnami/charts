@@ -69,6 +69,7 @@ spec:
       {{- if .Values.tableManager.podSecurityContext.enabled }}
       securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.tableManager.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
+      enableServiceLinks: {{ .Values.tableManager.enableServiceLinks }}
       initContainers:
         {{- if .Values.tableManager.initContainers }}
           {{- include "common.tplvalues.render" (dict "value" .Values.tableManager.initContainers "context" $) | nindent 8 }}
@@ -115,7 +116,7 @@ spec:
             - containerPort: {{ .Values.loki.containerPorts.grpc }}
               name: grpc
           {{- if .Values.tableManager.resources }}
-          resources: {{- toYaml .Values.tableManager.resources | nindent 12 }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.tableManager.resources "context" $) | nindent 12 }}
           {{- else if ne .Values.tableManager.resourcesPreset "none" }}
           resources: {{- include "common.resources.preset" (dict "type" .Values.tableManager.resourcesPreset) | nindent 12 }}
           {{- end }}

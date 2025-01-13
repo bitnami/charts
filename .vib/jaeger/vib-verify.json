@@ -2,6 +2,15 @@
   "phases": {
     "package": {
       "context": {
+        "credentials": [
+          {
+            "url": "{VIB_ENV_CHARTS_REGISTRY}",
+            "authn": {
+              "username": "{VIB_ENV_CHARTS_REGISTRY_USERNAME}",
+              "password": "{VIB_ENV_CHARTS_REGISTRY_PASSWORD}"
+            }
+          }
+        ],
         "resources": {
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/jaeger"
@@ -41,7 +50,7 @@
             "vars_file": "jaeger/runtime-parameters.yaml",
             "remote": {
               "pod": {
-                "workload": "deploy-jaeger--agent"
+                "workload": "deploy-jaeger-collector"
               }
             }
           }
@@ -54,6 +63,12 @@
             },
             "endpoint": "lb-jaeger-query-api",
             "app_protocol": "HTTP"
+          }
+        },
+        {
+          "action_id": "kubescape",
+          "params": {
+            "threshold": {VIB_ENV_KUBESCAPE_SCORE_THRESHOLD}
           }
         }
       ]

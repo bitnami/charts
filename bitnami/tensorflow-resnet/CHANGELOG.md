@@ -1,8 +1,78 @@
 # Changelog
 
-## 4.2.1 (2024-06-04)
+## 4.3.1 (2024-12-11)
 
-* [bitnami/tensorflow-resnet] Bump chart version ([#26670](https://github.com/bitnami/charts/pull/26670))
+* [bitnami/tensorflow-resnet] Release 4.3.1 ([#30987](https://github.com/bitnami/charts/pull/30987))
+
+## 4.3.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 6) (#30675) ([7b9cd04](https://github.com/bitnami/charts/commit/7b9cd04c2ffc730a0d62da787f2d4967c0ede47c)), closes [#30675](https://github.com/bitnami/charts/issues/30675)
+* [bitnami/tensorflow-resnet] Detect non-standard images (#30969) ([65341d4](https://github.com/bitnami/charts/commit/65341d444cb3df3c1dda0b5a310e5a265fbaee2c)), closes [#30969](https://github.com/bitnami/charts/issues/30969)
+
+## <small>4.2.15 (2024-11-11)</small>
+
+* [bitnami/tensorflow-resnet] Unify seLinuxOptions default value (#30321) ([e7c7a90](https://github.com/bitnami/charts/commit/e7c7a90baca50093843b502c12f45837ef0a7b6d)), closes [#30321](https://github.com/bitnami/charts/issues/30321)
+
+## <small>4.2.14 (2024-11-01)</small>
+
+* [bitnami/tensorflow-resnet] Release 4.2.14 (#30170) ([778d287](https://github.com/bitnami/charts/commit/778d2876bed3ce6b9ced8ae4e6666df2f45efa5f)), closes [#30170](https://github.com/bitnami/charts/issues/30170)
+
+## <small>4.2.13 (2024-10-31)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/tensorflow-resnet] Release 4.2.13 (#30154) ([95f4ee6](https://github.com/bitnami/charts/commit/95f4ee6bceb2d25fabec31004493a4065a960347)), closes [#30154](https://github.com/bitnami/charts/issues/30154)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>4.2.12 (2024-10-05)</small>
+
+* [bitnami/tensorflow-resnet] Release 4.2.12 (#29786) ([3900b54](https://github.com/bitnami/charts/commit/3900b5400c9725095772d0d56fc55459bdc74ebc)), closes [#29786](https://github.com/bitnami/charts/issues/29786)
+
+## <small>4.2.11 (2024-08-26)</small>
+
+* [bitnami/tensorflow-resnet] Release 4.2.11 (#29029) ([a00c55f](https://github.com/bitnami/charts/commit/a00c55f50f074844398f71c696c21dcfee393c52)), closes [#29029](https://github.com/bitnami/charts/issues/29029)
+
+## <small>4.2.10 (2024-08-26)</small>
+
+* [bitnami/tensorflow-resnet] Release 4.2.10 (#29027) ([b93d655](https://github.com/bitnami/charts/commit/b93d6553acf1f4cecf1006a60c08306f67f9ca62)), closes [#29027](https://github.com/bitnami/charts/issues/29027)
+
+## <small>4.2.9 (2024-07-25)</small>
+
+* [bitnami/tensorflow-resnet] Release 4.2.9 (#28494) ([9b26834](https://github.com/bitnami/charts/commit/9b2683405a987a57462c6b1e9144e5167f6f374c)), closes [#28494](https://github.com/bitnami/charts/issues/28494)
+
+## <small>4.2.8 (2024-07-24)</small>
+
+* [bitnami/tensorflow-resnet] Release 4.2.8 (#28392) ([2d2b1ce](https://github.com/bitnami/charts/commit/2d2b1ce4543287c09d8cfb8414022c476e295711)), closes [#28392](https://github.com/bitnami/charts/issues/28392)
+
+## <small>4.2.7 (2024-07-23)</small>
+
+* [bitnami/tensorflow-resnet] Release 4.2.7 (#28216) ([0487c42](https://github.com/bitnami/charts/commit/0487c4284b82514ae80c0ad26e41c43fdf779ba7)), closes [#28216](https://github.com/bitnami/charts/issues/28216)
+
+## <small>4.2.6 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/tensorflow-resnet] Release 4.2.6 (#27714) ([1d97768](https://github.com/bitnami/charts/commit/1d97768803359a386f0d0e1f1a3edf6702ae1645)), closes [#27714](https://github.com/bitnami/charts/issues/27714)
+
+## <small>4.2.5 (2024-06-18)</small>
+
+* [bitnami/tensorflow-resnet] Release 4.2.5 (#27423) ([6449cd9](https://github.com/bitnami/charts/commit/6449cd9d3ea02274be58b1f197255b01b0f9e742)), closes [#27423](https://github.com/bitnami/charts/issues/27423)
+
+## <small>4.2.4 (2024-06-17)</small>
+
+* [bitnami/tensorflow-resnet] Release 4.2.4 (#27292) ([edfb505](https://github.com/bitnami/charts/commit/edfb505d5a3efb8df42700a30c8e093d43c79ac2)), closes [#27292](https://github.com/bitnami/charts/issues/27292)
+
+## <small>4.2.3 (2024-06-06)</small>
+
+* [bitnami/tensorflow-resnet] Release 4.2.3 (#27019) ([2941d26](https://github.com/bitnami/charts/commit/2941d2694cb3f26721e39bd7b72b8589510cd02c)), closes [#27019](https://github.com/bitnami/charts/issues/27019)
+
+## <small>4.2.2 (2024-06-06)</small>
+
+* [bitnami/tensorflow-resnet] Release 4.2.2 (#26919) ([8a2c71d](https://github.com/bitnami/charts/commit/8a2c71d21e6723b13df2e35f2eafe1403a63f96a)), closes [#26919](https://github.com/bitnami/charts/issues/26919)
+
+## <small>4.2.1 (2024-06-04)</small>
+
+* [bitnami/tensorflow-resnet] Bump chart version (#26670) ([56bfe6b](https://github.com/bitnami/charts/commit/56bfe6bb3100cceba0b219809c8c22577877e583)), closes [#26670](https://github.com/bitnami/charts/issues/26670)
 
 ## 4.2.0 (2024-05-29)
 

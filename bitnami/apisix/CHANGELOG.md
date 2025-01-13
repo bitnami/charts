@@ -1,8 +1,128 @@
 # Changelog
 
-## 3.1.1 (2024-05-22)
+## 3.7.1 (2025-01-09)
 
-* [bitnami/apisix] Use different liveness/readiness probes ([#26337](https://github.com/bitnami/charts/pull/26337))
+* [bitnami/apisix] Release 3.7.1 ([#31272](https://github.com/bitnami/charts/pull/31272))
+
+## 3.7.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Unify "Securing Traffic using TLS" section (#30707) ([b572333](https://github.com/bitnami/charts/commit/b57233336e4fe9af928ecb4f2a5f334011efb1bc)), closes [#30707](https://github.com/bitnami/charts/issues/30707)
+* [bitnami/apisix] Detect non-standard images (#30861) ([0c989ce](https://github.com/bitnami/charts/commit/0c989ce546a26e91a94df349630d1ee3e9fa2a2a)), closes [#30861](https://github.com/bitnami/charts/issues/30861)
+
+## <small>3.6.1 (2024-11-30)</small>
+
+* [bitnami/apisix] Release 3.6.1 (#30695) ([292979c](https://github.com/bitnami/charts/commit/292979cddcab9e5228ff2e52f06f7559530ea7cd)), closes [#30695](https://github.com/bitnami/charts/issues/30695)
+
+## 3.6.0 (2024-11-29)
+
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 1) (#30660) ([7409ca4](https://github.com/bitnami/charts/commit/7409ca4c21869fabe1532dd4f3ff24895df71c6d)), closes [#30660](https://github.com/bitnami/charts/issues/30660)
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/apisix] feat: :sparkles: :memo: Allow password update via values.yaml (#30682) ([e41a46c](https://github.com/bitnami/charts/commit/e41a46c06a70ddfe543c9afa1fd81cd8fd2d97cd)), closes [#30682](https://github.com/bitnami/charts/issues/30682)
+
+## <small>3.5.2 (2024-10-21)</small>
+
+* [bitnami/apisix] Release 3.5.2 (#30014) ([53d7503](https://github.com/bitnami/charts/commit/53d7503654c7179d92e4352fc85d50db202a15f8)), closes [#30014](https://github.com/bitnami/charts/issues/30014)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>3.5.1 (2024-09-29)</small>
+
+* [bitnami/apisix] Release 3.5.1 (#29652) ([d4851f4](https://github.com/bitnami/charts/commit/d4851f402eae31a590ec6275226b3cfb449a47c7)), closes [#29652](https://github.com/bitnami/charts/issues/29652)
+
+## 3.5.0 (2024-09-23)
+
+* [bitnami/apisix] Allow setting externalIPs for services (#29550) ([5b2d4c1](https://github.com/bitnami/charts/commit/5b2d4c132c34f01450069aec521b579a726708ec)), closes [#29550](https://github.com/bitnami/charts/issues/29550)
+
+## 3.4.0 (2024-09-13)
+
+* [bitnami/apisix] Allow IngressClass to be created conditionally (#29085) ([32f63b4](https://github.com/bitnami/charts/commit/32f63b4d1574d344e568db396accdeef0d795d6e)), closes [#29085](https://github.com/bitnami/charts/issues/29085)
+
+## <small>3.3.11 (2024-09-04)</small>
+
+* [bitnami/apisix] Added multi-auth plugin to the plugins list (#29170) ([69939ca](https://github.com/bitnami/charts/commit/69939ca7692fd60533132f03d039f5bd9db1f573)), closes [#29170](https://github.com/bitnami/charts/issues/29170)
+
+## <small>3.3.10 (2024-08-20)</small>
+
+* [bitnami/apisix] Release 3.3.10 (#28942) ([f7bd58e](https://github.com/bitnami/charts/commit/f7bd58e4b2842e0bf1bf2dcd0288beea98dd87a9)), closes [#28942](https://github.com/bitnami/charts/issues/28942)
+
+## <small>3.3.9 (2024-07-25)</small>
+
+* [bitnami/apisix] Release 3.3.9 (#28396) ([399e694](https://github.com/bitnami/charts/commit/399e69482bcb220bdd04fc18212de4ceafc83e46)), closes [#28396](https://github.com/bitnami/charts/issues/28396)
+
+## <small>3.3.8 (2024-07-24)</small>
+
+* [bitnami/apisix] Release 3.3.8 (#28267) ([1cfe3bc](https://github.com/bitnami/charts/commit/1cfe3bcd8be4dbff16ef68fd40037befe97bc656)), closes [#28267](https://github.com/bitnami/charts/issues/28267)
+
+## <small>3.3.7 (2024-07-23)</small>
+
+* [bitnami/apisix] Release 3.3.7 (#28227) ([fd667ad](https://github.com/bitnami/charts/commit/fd667ad8d2e343247b389e5f5f128a634c41d68e)), closes [#28227](https://github.com/bitnami/charts/issues/28227)
+
+## <small>3.3.6 (2024-07-16)</small>
+
+* [bitnami/apisix] Global StorageClass as default value (#27997) ([d280b1e](https://github.com/bitnami/charts/commit/d280b1e357dfb1db422ebd955260ada65071f3cb)), closes [#27997](https://github.com/bitnami/charts/issues/27997)
+
+## <small>3.3.5 (2024-07-16)</small>
+
+* [bitnami/apisix] Correct type at loadBalancerSourceRanges (#27985) ([fa74d4b](https://github.com/bitnami/charts/commit/fa74d4b7af146ec18c7f17776432016428422b68)), closes [#27985](https://github.com/bitnami/charts/issues/27985)
+
+## <small>3.3.4 (2024-07-16)</small>
+
+* [bitnami/apisix] wait container: support self-generated certificates at etcd (#27947) ([e816b4a](https://github.com/bitnami/charts/commit/e816b4a249e0212ea6378bd31657661c5ac234a3)), closes [#27947](https://github.com/bitnami/charts/issues/27947)
+
+## <small>3.3.3 (2024-07-10)</small>
+
+* [bitnami/apisix] Correct service port name in control plane ingress (#27839) ([769db5e](https://github.com/bitnami/charts/commit/769db5e671e228bf2c74cc7c1b7d7b9079ff1e2a)), closes [#27839](https://github.com/bitnami/charts/issues/27839)
+
+## <small>3.3.2 (2024-07-08)</small>
+
+* [bitnami/apisix] Updated jsonschema to allow string values for fields passed to tpl (#27441) ([d3967c3](https://github.com/bitnami/charts/commit/d3967c3c5308e70f54028e67328552523d2358b4)), closes [#27441](https://github.com/bitnami/charts/issues/27441)
+
+## <small>3.3.1 (2024-07-03)</small>
+
+* [bitnami/apisix] Release 3.3.1 (#27686) ([79fa0ac](https://github.com/bitnami/charts/commit/79fa0acb8beae9fa77fa0cb9081ea2e5fe0b0535)), closes [#27686](https://github.com/bitnami/charts/issues/27686)
+
+## 3.3.0 (2024-06-28)
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/apisix] Add IngressClass for Ingress Controller (#27568) ([40b3153](https://github.com/bitnami/charts/commit/40b3153cf66e9c2dd9454c92c6d8f43b12ed5d42)), closes [#27568](https://github.com/bitnami/charts/issues/27568)
+
+## <small>3.2.5 (2024-06-20)</small>
+
+* [bitnami/apisix] Fix typo Mastodon -> APISIX (#27433) ([a5d7c12](https://github.com/bitnami/charts/commit/a5d7c12f999559bd982cf0516f93241f6db253a1)), closes [#27433](https://github.com/bitnami/charts/issues/27433)
+* [bitnami/apisix] Fixes to support running Apisix in standalone mode (#27062) ([272a58e](https://github.com/bitnami/charts/commit/272a58e82291f619fed91936bd117151e3d68db4)), closes [#27062](https://github.com/bitnami/charts/issues/27062)
+
+## <small>3.2.4 (2024-06-18)</small>
+
+* [bitnami/apisix] Release 3.2.4 (#27329) ([991b820](https://github.com/bitnami/charts/commit/991b820e187ea80c4b16146128af9c4d06df03ee)), closes [#27329](https://github.com/bitnami/charts/issues/27329)
+
+## <small>3.2.3 (2024-06-17)</small>
+
+* [bitnami/apisix] Release 3.2.3 (#27199) ([1a6ef72](https://github.com/bitnami/charts/commit/1a6ef72e257eae3a9445085614ad7083d3f37930)), closes [#27199](https://github.com/bitnami/charts/issues/27199)
+
+## <small>3.2.2 (2024-06-06)</small>
+
+* [bitnami/apisix] Release 3.2.2 (#26936) ([b67410a](https://github.com/bitnami/charts/commit/b67410a9a295dd0ee8b81369acfe29dbfe3e5d50)), closes [#26936](https://github.com/bitnami/charts/issues/26936)
+
+## <small>3.2.1 (2024-06-06)</small>
+
+* [bitnami/apisix] Release 3.2.1 (#26891) ([50be215](https://github.com/bitnami/charts/commit/50be215d066511e6181ee874e51c5496a1b7a72c)), closes [#26891](https://github.com/bitnami/charts/issues/26891)
+
+## 3.2.0 (2024-06-06)
+
+* [bitnami/apisix] Enable PodDisruptionBudgets (#26711) ([72db65f](https://github.com/bitnami/charts/commit/72db65ff343d7522b8836bc2f112c43588c83912)), closes [#26711](https://github.com/bitnami/charts/issues/26711)
+
+## <small>3.1.3 (2024-06-05)</small>
+
+* [bitnami/apisix] Bump chart version (#26819) ([a68d34d](https://github.com/bitnami/charts/commit/a68d34d6314f9f2de578969146e62b33f42dc4a0)), closes [#26819](https://github.com/bitnami/charts/issues/26819)
+
+## <small>3.1.2 (2024-06-05)</small>
+
+* [bitnami/apisix] Bump chart version (#26761) ([85c6bf2](https://github.com/bitnami/charts/commit/85c6bf23151bdd8fc4a651152959fb05fed024ec)), closes [#26761](https://github.com/bitnami/charts/issues/26761)
+
+## <small>3.1.1 (2024-05-23)</small>
+
+* [bitnami/apisix] Use different liveness/readiness probes (#26337) ([b9e533c](https://github.com/bitnami/charts/commit/b9e533cb5bc8ee31882457136c00e4d253941797)), closes [#26337](https://github.com/bitnami/charts/issues/26337)
 
 ## 3.1.0 (2024-05-21)
 

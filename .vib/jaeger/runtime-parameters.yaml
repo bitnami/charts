@@ -1,7 +1,7 @@
 query:
   sidecars: |-
     - name: hotrod-example
-      image: jaegertracing/example-hotrod:{{ .Chart.AppVersion }}
+      image: jaegertracing/example-hotrod:latest
       args: ['all']
       env:
         - name: OTEL_EXPORTER_OTLP_ENDPOINT
@@ -46,13 +46,8 @@ collector:
   service:
     ports:
       admin: 14270
-agent:
-  service:
-    ports:
-      admin: 14272
   containerPorts:
-    config: 5779
-    admin: 14272
+    admin: 14771
   podSecurityContext:
     enabled: true
     fsGroup: 1002
@@ -69,7 +64,6 @@ agent:
     - name: empty-dir
       mountPath: /tmp
       subPath: tmp-dir
-
 cassandra:
   enabled: true
   keyspace: bitnami_test_jaeger

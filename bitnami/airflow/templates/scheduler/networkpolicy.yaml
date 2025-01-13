@@ -7,7 +7,7 @@ SPDX-License-Identifier: APACHE-2.0
 kind: NetworkPolicy
 apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
 metadata:
-  name: {{ printf "%s-scheduler" (include "common.names.fullname" .) }}
+  name: {{ template "airflow.scheduler.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: scheduler
@@ -37,6 +37,9 @@ spec:
     - ports:
         - port: {{ .Values.service.ports.http }}
         - port: {{ .Values.worker.containerPorts.http }}
+        {{- if .Values.metrics.enabled }}
+        - port: {{ .Values.metrics.service.ports.ingest }}
+        {{- end }}
       to:
         - podSelector:
             matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}

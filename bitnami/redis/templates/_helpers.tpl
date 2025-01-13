@@ -125,8 +125,8 @@ Return the path to the CA cert file.
 {{- define "redis.tlsCACert" -}}
 {{- if (include "redis.createTlsSecret" . ) -}}
     {{- printf "/opt/bitnami/redis/certs/%s" "ca.crt" -}}
-{{- else -}}
-    {{- required "Certificate CA filename is required when TLS in enabled" .Values.tls.certCAFilename | printf "/opt/bitnami/redis/certs/%s" -}}
+{{- else }}
+    {{- ternary "" (printf "/opt/bitnami/redis/certs/%s" .Values.tls.certCAFilename) (empty .Values.tls.certCAFilename) }}
 {{- end -}}
 {{- end -}}
 
@@ -222,34 +222,13 @@ Get the password key to be retrieved from Redis&reg; secret.
 {{- end -}}
 {{- end -}}
 
-
-{{/*
-Returns the available value for certain key in an existing secret (if it exists),
-otherwise it generates a random value.
-*/}}
-{{- define "getValueFromSecret" }}
-    {{- $len := (default 16 .Length) | int -}}
-    {{- $obj := (lookup "v1" "Secret" .Namespace .Name).data -}}
-    {{- if $obj }}
-        {{- index $obj .Key | b64dec -}}
-    {{- else -}}
-        {{- randAlphaNum $len -}}
-    {{- end -}}
-{{- end }}
-
 {{/*
 Return Redis&reg; password
 */}}
 {{- define "redis.password" -}}
-{{- if or .Values.auth.enabled .Values.global.redis.password }}
-    {{- if not (empty .Values.global.redis.password) }}
-        {{- .Values.global.redis.password -}}
-    {{- else if not (empty .Values.auth.password) -}}
-        {{- .Values.auth.password -}}
-    {{- else -}}
-        {{- include "getValueFromSecret" (dict "Namespace" (include "common.names.namespace" .) "Name" (include "redis.secretName" .) "Length" 10 "Key" (include "redis.secretPasswordKey" .))  -}}
-    {{- end -}}
-{{- end -}}
+{{- if or .Values.auth.enabled .Values.global.redis.password -}}
+    {{- include "common.secrets.passwords.manage" (dict "secret" (include "redis.secretName" .) "key" (include "redis.secretPasswordKey" .) "providedValues" (list "global.redis.password" "auth.password") "length" 10 "skipB64enc" true "skipQuote" true "honorProvidedValues" true "context" $) -}}
+{{- end }}
 {{- end }}
 
 {{/* Check if there are rolling tags in the images */}}

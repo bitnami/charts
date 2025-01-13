@@ -8,7 +8,8 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
+## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ##
 global:
   imageRegistry: ""
@@ -17,7 +18,13 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  defaultStorageClass: ""
   storageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
   ## Compatibility adaptations for Kubernetes platforms
   ##
   compatibility:
@@ -184,10 +191,9 @@ useIstioLabels: true
 image:
   registry: docker.io
   repository: bitnami/opensearch
-  tag: 2.14.0-debian-12-r1
+  tag: 2.18.0-debian-12-r2
   digest: ""
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -598,7 +604,7 @@ master:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsGroup: 1001
     runAsNonRoot: true
@@ -928,6 +934,107 @@ master:
       ## @param master.autoscaling.hpa.targetMemory Target Memory utilization percentage
       ##
       targetMemory: ""
+  ## Metrics configuration for master-eligible node
+  ##
+  metrics:
+    ## @param master.metrics.enabled Enable master-eligible node metrics
+    ##
+    enabled: false
+    service:
+      ## @param master.metrics.service.ports.metrics master-eligible node metrics service port
+      ##
+      ports:
+        metrics: 80
+      ## @param master.metrics.service.clusterIP master-eligible node metrics service Cluster IP
+      ## e.g.:
+      ## clusterIP: None
+      ##
+      clusterIP: ""
+    ## master-eligible node metrics service monitor configuration
+    ##
+    serviceMonitor:
+      ## @param master.metrics.serviceMonitor.enabled Create ServiceMonitor Resource for scraping metrics using PrometheusOperator
+      ##
+      enabled: false
+      ## @param master.metrics.serviceMonitor.namespace Namespace which Prometheus is running in
+      ## e.g:
+      ## namespace: monitoring
+      ##
+      namespace: ""
+      ## @param master.metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
+      ##
+      jobLabel: ""
+      ## @param master.metrics.serviceMonitor.interval Interval at which metrics should be scraped
+      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+      ##
+      interval: 30s
+      ## @param master.metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
+      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+      ##
+      scrapeTimeout: 10s
+      ## @param master.metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping
+      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
+      ##
+      relabelings: []
+      ## @param master.metrics.serviceMonitor.metricRelabelings MetricRelabelConfigs to apply to samples before ingestion
+      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
+      ##
+      metricRelabelings: []
+      ## @param master.metrics.serviceMonitor.selector ServiceMonitor selector labels
+      ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
+      ##
+      ## selector:
+      ##   prometheus: my-prometheus
+      ##
+      selector: {}
+      ## @param master.metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
+      ##
+      honorLabels: false
+    ## Rules for PrometheusRule object if enabled
+    ##
+    ## E.g.
+    ## @param master.metrics.rules.enabled Enable render extra rules for PrometheusRule object
+    ## @param master.metrics.rules.spec Rules to render into the PrometheusRule object
+    ## @param master.metrics.rules.selector Selector for the PrometheusRule object
+    ## @param master.metrics.rules.namespace Namespace where to create the PrometheusRule object
+    ## @param master.metrics.rules.additionalLabels Additional lables to add to the PrometheusRule object
+    ##
+    rules:
+      enabled: false
+      ## E.g
+      ## - alert: ArgoAppMissing
+      ##   expr: |
+      ##     absent(argocd_app_info)
+      ##   for: 15m
+      ##   labels:
+      ##     severity: critical
+      ##   annotations:
+      ##     summary: "[ArgoCD] No reported applications"
+      ##     description: >
+      ##       ArgoCD has not reported any applications data for the past 15 minutes which
+      ##       means that it must be down or not functioning properly.  This needs to be
+      ##       resolved for this cloud to continue to maintain state.
+      ## - alert: ArgoAppNotSynced
+      ##   expr: |
+      ##     argocd_app_info{sync_status!="Synced"} == 1
+      ##   for: 12h
+      ##   labels:
+      ##     severity: warning
+      ##   annotations:
+      ##     summary: "[{{`{{ $labels.name }}`}}] Application not synchronized"
+      ##     description: >
+      ##       The application [{{`{{ $labels.name }}`}} has not been synchronized for over
+      ##       12 hours which means that the state of this cloud has drifted away from the
+      ##       state inside Git.
+      ##
+      spec: []
+      ## E.g
+      ## selector:
+      ##   prometheus: kube-prometheus
+      ##
+      selector: {}
+      namespace: monitoring
+      additionalLabels: {}
 ## @section Data-only nodes parameters
 data:
   ## @param data.replicaCount Number of data-only replicas to deploy
@@ -1016,7 +1123,7 @@ data:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsGroup: 1001
     runAsNonRoot: true
@@ -1346,6 +1453,107 @@ data:
       ## @param data.autoscaling.hpa.targetMemory Target Memory utilization percentage
       ##
       targetMemory: ""
+  ## Metrics configuration for data node
+  ##
+  metrics:
+    ## @param data.metrics.enabled Enable data node metrics
+    ##
+    enabled: false
+    service:
+      ## @param data.metrics.service.ports.metrics data node metrics service port
+      ##
+      ports:
+        metrics: 80
+      ## @param data.metrics.service.clusterIP data node metrics service Cluster IP
+      ## e.g.:
+      ## clusterIP: None
+      ##
+      clusterIP: ""
+    ## data node metrics service monitor configuration
+    ##
+    serviceMonitor:
+      ## @param data.metrics.serviceMonitor.enabled Create ServiceMonitor Resource for scraping metrics using PrometheusOperator
+      ##
+      enabled: false
+      ## @param data.metrics.serviceMonitor.namespace Namespace which Prometheus is running in
+      ## e.g:
+      ## namespace: monitoring
+      ##
+      namespace: ""
+      ## @param data.metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
+      ##
+      jobLabel: ""
+      ## @param data.metrics.serviceMonitor.interval Interval at which metrics should be scraped
+      ## ref: https://github.com/coreos/prometheus-operator/blob/data/Documentation/api.md#endpoint
+      ##
+      interval: 30s
+      ## @param data.metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
+      ## ref: https://github.com/coreos/prometheus-operator/blob/data/Documentation/api.md#endpoint
+      ##
+      scrapeTimeout: 10s
+      ## @param data.metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping
+      ## ref: https://github.com/coreos/prometheus-operator/blob/data/Documentation/api.md#relabelconfig
+      ##
+      relabelings: []
+      ## @param data.metrics.serviceMonitor.metricRelabelings MetricRelabelConfigs to apply to samples before ingestion
+      ## ref: https://github.com/coreos/prometheus-operator/blob/data/Documentation/api.md#relabelconfig
+      ##
+      metricRelabelings: []
+      ## @param data.metrics.serviceMonitor.selector ServiceMonitor selector labels
+      ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
+      ##
+      ## selector:
+      ##   prometheus: my-prometheus
+      ##
+      selector: {}
+      ## @param data.metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
+      ##
+      honorLabels: false
+    ## Rules for PrometheusRule object if enabled
+    ##
+    ## E.g.
+    ## @param data.metrics.rules.enabled Enable render extra rules for PrometheusRule object
+    ## @param data.metrics.rules.spec Rules to render into the PrometheusRule object
+    ## @param data.metrics.rules.selector Selector for the PrometheusRule object
+    ## @param data.metrics.rules.namespace Namespace where to create the PrometheusRule object
+    ## @param data.metrics.rules.additionalLabels Additional lables to add to the PrometheusRule object
+    ##
+    rules:
+      enabled: false
+      ## E.g
+      ## - alert: ArgoAppMissing
+      ##   expr: |
+      ##     absent(argocd_app_info)
+      ##   for: 15m
+      ##   labels:
+      ##     severity: critical
+      ##   annotations:
+      ##     summary: "[ArgoCD] No reported applications"
+      ##     description: >
+      ##       ArgoCD has not reported any applications data for the past 15 minutes which
+      ##       means that it must be down or not functioning properly.  This needs to be
+      ##       resolved for this cloud to continue to maintain state.
+      ## - alert: ArgoAppNotSynced
+      ##   expr: |
+      ##     argocd_app_info{sync_status!="Synced"} == 1
+      ##   for: 12h
+      ##   labels:
+      ##     severity: warning
+      ##   annotations:
+      ##     summary: "[{{`{{ $labels.name }}`}}] Application not synchronized"
+      ##     description: >
+      ##       The application [{{`{{ $labels.name }}`}} has not been synchronized for over
+      ##       12 hours which means that the state of this cloud has drifted away from the
+      ##       state inside Git.
+      ##
+      spec: []
+      ## E.g
+      ## selector:
+      ##   prometheus: kube-prometheus
+      ##
+      selector: {}
+      namespace: monitoring
+      additionalLabels: {}
 ## @section Coordinating-only nodes parameters
 coordinating:
   ## @param coordinating.replicaCount Number of coordinating-only replicas to deploy
@@ -1435,7 +1643,7 @@ coordinating:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsGroup: 1001
     runAsNonRoot: true
@@ -1726,6 +1934,107 @@ coordinating:
       ## @param coordinating.autoscaling.hpa.targetMemory Target Memory utilization percentage
       ##
       targetMemory: ""
+  ## Metrics configuration for coordinating node
+  ##
+  metrics:
+    ## @param coordinating.metrics.enabled Enable coordinating node metrics
+    ##
+    enabled: false
+    service:
+      ## @param coordinating.metrics.service.ports.metrics coordinating node metrics service port
+      ##
+      ports:
+        metrics: 80
+      ## @param coordinating.metrics.service.clusterIP coordinating node metrics service Cluster IP
+      ## e.g.:
+      ## clusterIP: None
+      ##
+      clusterIP: ""
+    ## coordinating node metrics service monitor configuration
+    ##
+    serviceMonitor:
+      ## @param coordinating.metrics.serviceMonitor.enabled Create ServiceMonitor Resource for scraping metrics using PrometheusOperator
+      ##
+      enabled: false
+      ## @param coordinating.metrics.serviceMonitor.namespace Namespace which Prometheus is running in
+      ## e.g:
+      ## namespace: monitoring
+      ##
+      namespace: ""
+      ## @param coordinating.metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
+      ##
+      jobLabel: ""
+      ## @param coordinating.metrics.serviceMonitor.interval Interval at which metrics should be scraped
+      ## ref: https://github.com/coreos/prometheus-operator/blob/coordinating/Documentation/api.md#endpoint
+      ##
+      interval: 30s
+      ## @param coordinating.metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
+      ## ref: https://github.com/coreos/prometheus-operator/blob/coordinating/Documentation/api.md#endpoint
+      ##
+      scrapeTimeout: 10s
+      ## @param coordinating.metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping
+      ## ref: https://github.com/coreos/prometheus-operator/blob/coordinating/Documentation/api.md#relabelconfig
+      ##
+      relabelings: []
+      ## @param coordinating.metrics.serviceMonitor.metricRelabelings MetricRelabelConfigs to apply to samples before ingestion
+      ## ref: https://github.com/coreos/prometheus-operator/blob/coordinating/Documentation/api.md#relabelconfig
+      ##
+      metricRelabelings: []
+      ## @param coordinating.metrics.serviceMonitor.selector ServiceMonitor selector labels
+      ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
+      ##
+      ## selector:
+      ##   prometheus: my-prometheus
+      ##
+      selector: {}
+      ## @param coordinating.metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
+      ##
+      honorLabels: false
+    ## Rules for PrometheusRule object if enabled
+    ##
+    ## E.g.
+    ## @param coordinating.metrics.rules.enabled Enable render extra rules for PrometheusRule object
+    ## @param coordinating.metrics.rules.spec Rules to render into the PrometheusRule object
+    ## @param coordinating.metrics.rules.selector Selector for the PrometheusRule object
+    ## @param coordinating.metrics.rules.namespace Namespace where to create the PrometheusRule object
+    ## @param coordinating.metrics.rules.additionalLabels Additional lables to add to the PrometheusRule object
+    ##
+    rules:
+      enabled: false
+      ## E.g
+      ## - alert: ArgoAppMissing
+      ##   expr: |
+      ##     absent(argocd_app_info)
+      ##   for: 15m
+      ##   labels:
+      ##     severity: critical
+      ##   annotations:
+      ##     summary: "[ArgoCD] No reported applications"
+      ##     description: >
+      ##       ArgoCD has not reported any applications data for the past 15 minutes which
+      ##       means that it must be down or not functioning properly.  This needs to be
+      ##       resolved for this cloud to continue to maintain state.
+      ## - alert: ArgoAppNotSynced
+      ##   expr: |
+      ##     argocd_app_info{sync_status!="Synced"} == 1
+      ##   for: 12h
+      ##   labels:
+      ##     severity: warning
+      ##   annotations:
+      ##     summary: "[{{`{{ $labels.name }}`}}] Application not synchronized"
+      ##     description: >
+      ##       The application [{{`{{ $labels.name }}`}} has not been synchronized for over
+      ##       12 hours which means that the state of this cloud has drifted away from the
+      ##       state inside Git.
+      ##
+      spec: []
+      ## E.g
+      ## selector:
+      ##   prometheus: kube-prometheus
+      ##
+      selector: {}
+      namespace: monitoring
+      additionalLabels: {}
 ## @section Ingest-only nodes parameters
 ingest:
   ## @param ingest.enabled Enable ingest nodes
@@ -1817,7 +2126,7 @@ ingest:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsGroup: 1001
     runAsNonRoot: true
@@ -2274,6 +2583,107 @@ ingest:
     ##             name: http
     ##
     extraRules: []
+  ## Metrics configuration for ingest node
+  ##
+  metrics:
+    ## @param ingest.metrics.enabled Enable ingest node metrics
+    ##
+    enabled: false
+    service:
+      ## @param ingest.metrics.service.ports.metrics ingest node metrics service port
+      ##
+      ports:
+        metrics: 80
+      ## @param ingest.metrics.service.clusterIP ingest node metrics service Cluster IP
+      ## e.g.:
+      ## clusterIP: None
+      ##
+      clusterIP: ""
+    ## ingest node metrics service monitor configuration
+    ##
+    serviceMonitor:
+      ## @param ingest.metrics.serviceMonitor.enabled Create ServiceMonitor Resource for scraping metrics using PrometheusOperator
+      ##
+      enabled: false
+      ## @param ingest.metrics.serviceMonitor.namespace Namespace which Prometheus is running in
+      ## e.g:
+      ## namespace: monitoring
+      ##
+      namespace: ""
+      ## @param ingest.metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
+      ##
+      jobLabel: ""
+      ## @param ingest.metrics.serviceMonitor.interval Interval at which metrics should be scraped
+      ## ref: https://github.com/coreos/prometheus-operator/blob/ingest/Documentation/api.md#endpoint
+      ##
+      interval: 30s
+      ## @param ingest.metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
+      ## ref: https://github.com/coreos/prometheus-operator/blob/ingest/Documentation/api.md#endpoint
+      ##
+      scrapeTimeout: 10s
+      ## @param ingest.metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping
+      ## ref: https://github.com/coreos/prometheus-operator/blob/ingest/Documentation/api.md#relabelconfig
+      ##
+      relabelings: []
+      ## @param ingest.metrics.serviceMonitor.metricRelabelings MetricRelabelConfigs to apply to samples before ingestion
+      ## ref: https://github.com/coreos/prometheus-operator/blob/ingest/Documentation/api.md#relabelconfig
+      ##
+      metricRelabelings: []
+      ## @param ingest.metrics.serviceMonitor.selector ServiceMonitor selector labels
+      ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
+      ##
+      ## selector:
+      ##   prometheus: my-prometheus
+      ##
+      selector: {}
+      ## @param ingest.metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
+      ##
+      honorLabels: false
+    ## Rules for PrometheusRule object if enabled
+    ##
+    ## E.g.
+    ## @param ingest.metrics.rules.enabled Enable render extra rules for PrometheusRule object
+    ## @param ingest.metrics.rules.spec Rules to render into the PrometheusRule object
+    ## @param ingest.metrics.rules.selector Selector for the PrometheusRule object
+    ## @param ingest.metrics.rules.namespace Namespace where to create the PrometheusRule object
+    ## @param ingest.metrics.rules.additionalLabels Additional lables to add to the PrometheusRule object
+    ##
+    rules:
+      enabled: false
+      ## E.g
+      ## - alert: ArgoAppMissing
+      ##   expr: |
+      ##     absent(argocd_app_info)
+      ##   for: 15m
+      ##   labels:
+      ##     severity: critical
+      ##   annotations:
+      ##     summary: "[ArgoCD] No reported applications"
+      ##     description: >
+      ##       ArgoCD has not reported any applications data for the past 15 minutes which
+      ##       means that it must be down or not functioning properly.  This needs to be
+      ##       resolved for this cloud to continue to maintain state.
+      ## - alert: ArgoAppNotSynced
+      ##   expr: |
+      ##     argocd_app_info{sync_status!="Synced"} == 1
+      ##   for: 12h
+      ##   labels:
+      ##     severity: warning
+      ##   annotations:
+      ##     summary: "[{{`{{ $labels.name }}`}}] Application not synchronized"
+      ##     description: >
+      ##       The application [{{`{{ $labels.name }}`}} has not been synchronized for over
+      ##       12 hours which means that the state of this cloud has drifted away from the
+      ##       state inside Git.
+      ##
+      spec: []
+      ## E.g
+      ## selector:
+      ##   prometheus: kube-prometheus
+      ##
+      selector: {}
+      namespace: monitoring
+      additionalLabels: {}
 ## @section Init Container Parameters
 
 ## 'volumePermissions' init container parameters
@@ -2294,7 +2704,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r21
+    tag: 12-debian-12-r34
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -2341,10 +2751,9 @@ sysctlImage:
   ##
   registry: docker.io
   repository: bitnami/os-shell
-  tag: 12-debian-12-r21
+  tag: 12-debian-12-r34
   digest: ""
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -2394,10 +2803,9 @@ dashboards:
   image:
     registry: docker.io
     repository: bitnami/opensearch-dashboards
-    tag: 2.13.0-debian-12-r3
+    tag: 2.18.0-debian-12-r2
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -2656,7 +3064,7 @@ dashboards:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsGroup: 1001
     runAsNonRoot: true
@@ -3002,3 +3410,181 @@ dashboards:
     ## @param dashboards.persistence.dataSource Custom PVC data source
     ##
     dataSource: {}
+
+## @section OpenSearch Snapshots Parameters
+snapshots:
+  ## @param snapshots.enabled Enable automatic setup of repositories and snapshot policies
+  ##
+  enabled: false
+  ## @param snapshots.command Override default container command (useful when using custom images)
+  ##
+  command:
+    - /usr/bin/curl
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param snapshots.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param snapshots.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param snapshots.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param snapshots.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+  ## @param snapshots.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param snapshots.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param snapshots.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param snapshots.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param snapshots.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param snapshots.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
+  ##
+  containerSecurityContext:
+    enabled: true
+    seLinuxOptions: null
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
+  ## @param snapshots.fullnameOverride String to fully override opensearch.snapshots.fullname
+  ##
+  fullnameOverride: ""
+  ## Bitnami OpenSearch Snapshots image
+  ## @param snapshots.image.registry [default: REGISTRY_NAME] OpenSearch Snapshots image registry
+  ## @param snapshots.image.repository [default: REPOSITORY_NAME/os-shell] OpenSearch Snapshots image repository
+  ## @skip snapshots.image.tag OpenSearch Snapshots image tag (immutable tags are recommended)
+  ## @param snapshots.image.digest OpenSearch Snapshots image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param snapshots.image.pullPolicy OpenSearch Snapshots image pull policy
+  ## @param snapshots.image.pullSecrets OpenSearch Snapshots image pull secrets
+  ## @param snapshots.image.debug Enable OpenSearch Snapshots image debug mode
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/os-shell
+    tag: 12-debian-12-r34
+    digest: ""
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+    ## Enable debug mode
+    ##
+    debug: false
+  ## @param snapshots.nameOverride String to partially override common.names.fullname
+  ##
+  nameOverride: ""
+  ## Enable persistence using Persistent Volume Claims
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
+  ##
+  persistence:
+    ## @param snapshots.persistence.enabled Enable persistence using Persistent Volume Claims
+    ##
+    enabled: false
+    ## @param snapshots.persistence.accessModes Persistent Volume Access Modes
+    ##
+    accessModes:
+      - ReadWriteMany
+    ## @param snapshots.persistence.annotations Persistent Volume Claim annotations
+    ##
+    annotations: {}
+    ## @param snapshots.persistence.dataSource Custom PVC data source
+    ##
+    dataSource: {}
+    ## @param snapshots.persistence.existingClaim The name of an existing PVC to use for persistence
+    ##
+    existingClaim: ""
+    ## @param snapshots.persistence.labels Extra labels for the Persistent Volume Claim
+    ##
+    labels: {}
+    ## @param snapshots.persistence.selector Selector to match an existing Persistent Volume for OpenSearch data PVC
+    ## If set, the PVC can't have a PV dynamically provisioned for it
+    ## E.g.
+    ## selector:
+    ##   matchLabels:
+    ##     app: my-app
+    ##
+    selector: {}
+    ## @param snapshots.persistence.size Size of data volume
+    ##
+    size: 8Gi
+    ## @param snapshots.persistence.storageClass Storage class of backing PVC
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
+    storageClass: ""
+    ## @param snapshots.persistence.subPath The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services
+    ##
+    subPath: ""
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param snapshots.podSecurityContext.enabled Enabled data pods' Security Context
+  ## @param snapshots.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param snapshots.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param snapshots.podSecurityContext.supplementalGroups Set filesystem extra groups
+  ## @param snapshots.podSecurityContext.fsGroup Set snapshots pod's Security Context fsGroup
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
+    fsGroup: 1001
+  ## @param snapshots.policies [default: SNAPSHOT_POLICY_API_BODY] Each object represents a snapshot policy in YAML form, which will be converted to JSON and then passed as the HTTP body data to the OpenSearch REST API.
+  ## NOTE: The field `snapshot_config.repository` in each policy must match a repo name in `snapshots.repositories`.
+  ##
+  policies:
+    default:
+      creation:
+        schedule:
+          cron:
+            expression: "0 20 * * *"
+            timezone: UTC
+      deletion:
+        condition:
+          max_age: 7d
+          min_count: 1
+        schedule:
+          cron:
+            expression: 0 20 * * *
+            timezone: UTC
+      description: Default snapshot policy
+      enabled: true
+      snapshot_config:
+        repository: default
+  ## @param snapshots.repositories [default: SNAPSHOT_REPO_API_BODY] Each object represents a snapshot repository in YAML form, which will be converted to JSON and then passed as the HTTP body data to the OpenSearch REST API.
+  ## NOTE: The field `settings.location` in each repo must match the snapshot repo path configured in `snapshotRepoPath`, if its `type` is `fs`.
+  ##
+  repositories:
+    default:
+      settings:
+        location: /snapshots
+      type: fs
+  ## OpenSearch resource requests and limits
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param snapshots.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if snapshots.resources is set (snapshots.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "nano"
+  ## @param snapshots.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 100m
+  ##     memory: 10Mi
+  ##   limits:
+  ##     cpu: 200m
+  ##     memory: 20Mi
+  ##
+  resources: {}

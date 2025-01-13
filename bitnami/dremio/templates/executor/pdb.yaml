@@ -1,0 +1,45 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- /*
+  Dremio supports different executor groups called "engines".
+  These are defined in executor.engines and all the executor-specific k8s objects are created per engine.
+  Each engine contains an "overrides" section which allows replacing the common executor configuration
+  set in executor.common. This logic is inspired in upstream Dremio chart.
+
+  https://docs.dremio.com/cloud/sonar/workloads/engines/
+ */}}
+{{- range $engine := .Values.executor.engines }}
+{{- $executorValues := mustMergeOverwrite $.Values.executor.common $engine.overrides }}
+{{- if $executorValues.pdb.create }}
+---
+apiVersion: {{ include "common.capabilities.policy.apiVersion" $ }}
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "dremio.executor.fullname" (dict "context" $ "engine" $engine.name) }}
+  namespace: {{ include "common.names.namespace" $ | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $.Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: dremio
+    app.kubernetes.io/component: executor
+    {{- /* We need an extra label for the engine */}}
+    engine: {{ $engine.name }}
+  {{- if $.Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $.Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if $executorValues.pdb.minAvailable }}
+  minAvailable: {{ $executorValues.pdb.minAvailable }}
+  {{- end  }}
+  {{- if or $executorValues.pdb.maxUnavailable ( not $executorValues.pdb.minAvailable ) }}
+  maxUnavailable: {{ $executorValues.pdb.maxUnavailable | default 1 }}
+  {{- end  }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list $executorValues.podLabels $.Values.commonLabels ) "context" . ) }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/part-of: dremio
+      app.kubernetes.io/component: executor
+      engine: {{ $engine.name }}
+{{- end }}
+{{- end }}

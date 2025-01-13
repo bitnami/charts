@@ -3,7 +3,7 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if .Values.rbac.create -}}
+{{- if and .Values.rbac.create .Values.server.clusterAdminAccess -}}
 kind: ClusterRoleBinding
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 metadata:
@@ -20,5 +20,5 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: {{ include "argocd.server.serviceAccountName" . }}
-    namespace: {{ include "common.names.namespace" . }}
+    namespace: {{ include "common.names.namespace" . | quote }}
 {{- end }}

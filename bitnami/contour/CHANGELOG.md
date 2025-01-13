@@ -1,8 +1,131 @@
 # Changelog
 
-## 18.1.2 (2024-06-04)
+## 19.5.1 (2025-01-12)
 
-* [bitnami/contour] Bump chart version ([#26625](https://github.com/bitnami/charts/pull/26625))
+* [bitnami/contour] Release 19.5.1 ([#31311](https://github.com/bitnami/charts/pull/31311))
+
+## 19.5.0 (2025-01-07)
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/contour] Allow replacing certgen with cert-manager (#29416) ([63e4a63](https://github.com/bitnami/charts/commit/63e4a6324eff9a9b92322b3df97f97c5009ac410)), closes [#29416](https://github.com/bitnami/charts/issues/29416)
+
+## 19.4.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/contour] Detect non-standard images (#30874) ([e47bbb4](https://github.com/bitnami/charts/commit/e47bbb4f1f57e1eea55f96f3c5641ce8564930af)), closes [#30874](https://github.com/bitnami/charts/issues/30874)
+
+## <small>19.3.2 (2024-12-03)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 1) (#30660) ([7409ca4](https://github.com/bitnami/charts/commit/7409ca4c21869fabe1532dd4f3ff24895df71c6d)), closes [#30660](https://github.com/bitnami/charts/issues/30660)
+* [bitnami/contour] Release 19.3.2 (#30745) ([10a3f22](https://github.com/bitnami/charts/commit/10a3f22fc74836fcf48e9d4d1bb4b025164d1afe)), closes [#30745](https://github.com/bitnami/charts/issues/30745)
+
+## <small>19.3.1 (2024-11-07)</small>
+
+* [bitnami/contour] Release 19.3.1 (#30260) ([4910a21](https://github.com/bitnami/charts/commit/4910a21b12108eec0195cf6388334d09ad3c81c0)), closes [#30260](https://github.com/bitnami/charts/issues/30260)
+
+## 19.3.0 (2024-11-06)
+
+* [bitnami/contour] Add Gateway API CRDs (#30166) ([07b77f3](https://github.com/bitnami/charts/commit/07b77f3cd37719392b3f71489a6a9e2d235304bc)), closes [#30166](https://github.com/bitnami/charts/issues/30166)
+
+## <small>19.2.2 (2024-11-04)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/contour] Release 19.2.2 (#30198) ([f91ea1b](https://github.com/bitnami/charts/commit/f91ea1bfb5bfadb6616ff169b66fabfa525e5828)), closes [#30198](https://github.com/bitnami/charts/issues/30198)
+
+## <small>19.2.1 (2024-10-21)</small>
+
+* [bitnami/contour]: Fix invalid volume indentation (#29890) ([d135756](https://github.com/bitnami/charts/commit/d135756e51a90a958255a4551c5d79dfb468402d)), closes [#29890](https://github.com/bitnami/charts/issues/29890)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## 19.2.0 (2024-10-14)
+
+* fixed wrong envoy-service-name arg value in contour when envoy service name is changed (#29556) ([268d5b8](https://github.com/bitnami/charts/commit/268d5b84cba4ce10cc6132de86f6e209cd0068f6)), closes [#29556](https://github.com/bitnami/charts/issues/29556)
+
+## 19.1.0 (2024-10-10)
+
+* [bitnami/contour] Expose NodePort for the metrics port in the Envoy service (#29818) ([1b98ba2](https://github.com/bitnami/charts/commit/1b98ba2878d323a74e28a11540a4a483f6afe450)), closes [#29818](https://github.com/bitnami/charts/issues/29818)
+
+## <small>19.0.5 (2024-10-09)</small>
+
+* [bitnami/contour]: Fix invalid extraVolumeMounts (#29817) ([b445bd3](https://github.com/bitnami/charts/commit/b445bd37a6c255363ba790ea37cc380a55f6c49b)), closes [#29817](https://github.com/bitnami/charts/issues/29817)
+
+## <small>19.0.4 (2024-10-04)</small>
+
+* [bitnami/contour] Release 19.0.4 (#29688) ([ad308c2](https://github.com/bitnami/charts/commit/ad308c2fcc162182933038eeff9a8880c0923991)), closes [#29688](https://github.com/bitnami/charts/issues/29688)
+
+## <small>19.0.3 (2024-09-05)</small>
+
+* [bitnami/contour] Release 19.0.3 (#29234) ([dbf9bec](https://github.com/bitnami/charts/commit/dbf9bec468d2a7f356bbc1d762559f060f34790d)), closes [#29234](https://github.com/bitnami/charts/issues/29234)
+
+## <small>19.0.2 (2024-08-07)</small>
+
+* [bitnami/contour] Release 19.0.2 (#28709) ([6acac8c](https://github.com/bitnami/charts/commit/6acac8c6a8a7ddf79f529ee74b9bb735360bc1d6)), closes [#28709](https://github.com/bitnami/charts/issues/28709)
+
+## <small>19.0.1 (2024-08-06)</small>
+
+* [bitnami/contour] Release 19.0.1 (#28683) ([801c69a](https://github.com/bitnami/charts/commit/801c69a1b644ecf2ba19307977a9bfc8eccd21cb)), closes [#28683](https://github.com/bitnami/charts/issues/28683)
+
+## 19.0.0 (2024-08-05)
+
+* [bitnami/contour] Release 19.0.0 (#28636) ([694171f](https://github.com/bitnami/charts/commit/694171f0690fc656a36cf7f48cd9a98a1838f149)), closes [#28636](https://github.com/bitnami/charts/issues/28636)
+
+## <small>18.2.11 (2024-08-01)</small>
+
+* [bitnami/contour] Release 18.2.11 (#28614) ([59b5029](https://github.com/bitnami/charts/commit/59b5029f9600c6cdba796466c7f0eede2f79d876)), closes [#28614](https://github.com/bitnami/charts/issues/28614)
+
+## <small>18.2.10 (2024-07-22)</small>
+
+* [bitnami/contour] Global StorageClass as default value (#28008) ([6c4a9bb](https://github.com/bitnami/charts/commit/6c4a9bb690baa192c5ff853950a9bc47ec5dfe68)), closes [#28008](https://github.com/bitnami/charts/issues/28008)
+
+## <small>18.2.9 (2024-07-04)</small>
+
+* [bitnami/contour] Release 18.2.9 (#27759) ([3fc8c8d](https://github.com/bitnami/charts/commit/3fc8c8dd7a257e47498e531a734faad5ebb9c52d)), closes [#27759](https://github.com/bitnami/charts/issues/27759)
+
+## <small>18.2.8 (2024-07-03)</small>
+
+* [bitnami/contour] Release 18.2.8 (#27649) ([b0114cf](https://github.com/bitnami/charts/commit/b0114cf34cb4669cb33c98a5cd36757c6e20c0e1)), closes [#27649](https://github.com/bitnami/charts/issues/27649)
+
+## <small>18.2.7 (2024-07-02)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/contour] allow customizing lifecycle hooks for envoy containers (#27506) ([08e8c58](https://github.com/bitnami/charts/commit/08e8c5859d21cd76feeba0474a545c35680b163e)), closes [#27506](https://github.com/bitnami/charts/issues/27506)
+
+## <small>18.2.6 (2024-06-18)</small>
+
+* [bitnami/contour] Release 18.2.6 (#27335) ([c28d442](https://github.com/bitnami/charts/commit/c28d442b0762f714a6279ff1bf204eac218105fc)), closes [#27335](https://github.com/bitnami/charts/issues/27335)
+
+## <small>18.2.5 (2024-06-17)</small>
+
+* [bitnami/contour] Release 18.2.5 (#27210) ([21d95c8](https://github.com/bitnami/charts/commit/21d95c8b684a29e9be25154c706599643a4797d5)), closes [#27210](https://github.com/bitnami/charts/issues/27210)
+
+## <small>18.2.4 (2024-06-13)</small>
+
+* [bitnami/contour] Release 18.2.4 (#27152) ([874e69a](https://github.com/bitnami/charts/commit/874e69aba60cb47333de699741e0a61005ff1c6c)), closes [#27152](https://github.com/bitnami/charts/issues/27152)
+
+## <small>18.2.3 (2024-06-11)</small>
+
+* [bitnami/contour] Fix Envoy livenessProbe typo (#26525) ([e8c1156](https://github.com/bitnami/charts/commit/e8c1156ac6490f67db026c78290917b59a8e86a3)), closes [#26525](https://github.com/bitnami/charts/issues/26525)
+
+## <small>18.2.2 (2024-06-06)</small>
+
+* [bitnami/contour] Release 18.2.2 (#26943) ([df54b46](https://github.com/bitnami/charts/commit/df54b460deeb32892ef6762684db25f8f02900d1)), closes [#26943](https://github.com/bitnami/charts/issues/26943)
+
+## <small>18.2.1 (2024-06-06)</small>
+
+* [bitnami/contour] Release 18.2.1 (#26902) ([8b6fa17](https://github.com/bitnami/charts/commit/8b6fa174722bf6af2cd73f318038e35745eed913)), closes [#26902](https://github.com/bitnami/charts/issues/26902)
+
+## 18.2.0 (2024-06-05)
+
+* [bitnami/contour] Enable PodDisruptionBudgets (#26690) ([759085d](https://github.com/bitnami/charts/commit/759085d08c1a2d29f3baab5124b1387d94fdcea9)), closes [#26690](https://github.com/bitnami/charts/issues/26690)
+
+## <small>18.1.3 (2024-06-05)</small>
+
+* [bitnami/contour] Release 18.1.3 (#26726) ([9de7bb1](https://github.com/bitnami/charts/commit/9de7bb15e394bda4f2e4aa5ddaeaf464a2016d69)), closes [#26726](https://github.com/bitnami/charts/issues/26726)
+
+## <small>18.1.2 (2024-06-04)</small>
+
+* [bitnami/contour] Bump chart version (#26625) ([d25f2e3](https://github.com/bitnami/charts/commit/d25f2e3c56d17d3032ac828c2979f0f7dd9e78ed)), closes [#26625](https://github.com/bitnami/charts/issues/26625)
 
 ## <small>18.1.1 (2024-05-22)</small>
 

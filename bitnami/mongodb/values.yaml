@@ -9,7 +9,8 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
+## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ## @param global.namespaceOverride Override the namespace for resource deployed by the chart, but can itself be overridden by the local namespaceOverride
 ##
 global:
@@ -19,7 +20,13 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  defaultStorageClass: ""
   storageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
   namespaceOverride: ""
   ## Compatibility adaptations for Kubernetes platforms
   ##
@@ -129,7 +136,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mongodb
-  tag: 7.0.11-debian-12-r0
+  tag: 8.0.4-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -255,7 +262,7 @@ tls:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.26.0-debian-12-r2
+    tag: 1.27.3-debian-12-r0
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -296,7 +303,7 @@ tls:
   ##     memory: 1024Mi
   ##
   resources: {}
-  ## Init Container securityContext 
+  ## Init Container securityContext
   ## ref: https://kubernetes.io/docs/concepts/security/pod-security-policy/
   ## @param tls.securityContext Init container generate-tls-cert Security context
   ##
@@ -843,10 +850,9 @@ externalAccess:
     image:
       registry: docker.io
       repository: bitnami/kubectl
-      tag: 1.30.1-debian-12-r0
+      tag: 1.31.3-debian-12-r1
       digest: ""
       ## Specify a imagePullPolicy
-      ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
       ##
       pullPolicy: IfNotPresent
@@ -893,10 +899,9 @@ externalAccess:
     image:
       registry: docker.io
       repository: bitnami/os-shell
-      tag: 12-debian-12-r21
+      tag: 12-debian-12-r33
       digest: ""
       ## Specify a imagePullPolicy
-      ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
       ##
       pullPolicy: IfNotPresent
@@ -1091,6 +1096,137 @@ externalAccess:
       ##     timeoutSeconds: 300
       ##
       sessionAffinityConfig: {}
+## @section Password update job
+##
+passwordUpdateJob:
+  ## @param passwordUpdateJob.enabled Enable password update job
+  ##
+  enabled: false
+  ## @param passwordUpdateJob.backoffLimit set backoff limit of the job
+  ##
+  backoffLimit: 10
+  ## @param passwordUpdateJob.command Override default container command on mysql Primary container(s) (useful when using custom images)
+  ##
+  command: []
+  ## @param passwordUpdateJob.args Override default container args on mysql Primary container(s) (useful when using custom images)
+  ##
+  args: []
+  ## @param passwordUpdateJob.extraCommands Extra commands to pass to the generation job
+  ##
+  extraCommands: ""
+  ## @param passwordUpdateJob.previousPasswords.rootPassword Previous root password (set if the password secret was already changed)
+  ## @param passwordUpdateJob.previousPasswords.existingSecret Name of a secret containing the previous passwords (set if the password secret was already changed)
+  previousPasswords:
+    rootPassword: ""
+    existingSecret: ""
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param passwordUpdateJob.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param passwordUpdateJob.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param passwordUpdateJob.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param passwordUpdateJob.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+  ## @param passwordUpdateJob.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param passwordUpdateJob.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param passwordUpdateJob.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param passwordUpdateJob.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param passwordUpdateJob.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param passwordUpdateJob.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
+  ##
+  containerSecurityContext:
+    enabled: true
+    seLinuxOptions: {}
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param passwordUpdateJob.podSecurityContext.enabled Enabled credential init job pods' Security Context
+  ## @param passwordUpdateJob.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param passwordUpdateJob.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param passwordUpdateJob.podSecurityContext.supplementalGroups Set filesystem extra groups
+  ## @param passwordUpdateJob.podSecurityContext.fsGroup Set credential init job pod's Security Context fsGroup
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
+    fsGroup: 1001
+  ## @param passwordUpdateJob.extraEnvVars Array containing extra env vars to configure the credential init job
+  ## For example:
+  ## extraEnvVars:
+  ##  - name: GF_DEFAULT_INSTANCE_NAME
+  ##    value: my-instance
+  ##
+  extraEnvVars: []
+  ## @param passwordUpdateJob.extraEnvVarsCM ConfigMap containing extra env vars to configure the credential init job
+  ##
+  extraEnvVarsCM: ""
+  ## @param passwordUpdateJob.extraEnvVarsSecret Secret containing extra env vars to configure the credential init job (in case of sensitive data)
+  ##
+  extraEnvVarsSecret: ""
+  ## @param passwordUpdateJob.extraVolumes Optionally specify extra list of additional volumes for the credential init job
+  ##
+  extraVolumes: []
+  ## @param passwordUpdateJob.extraVolumeMounts Array of extra volume mounts to be added to the jwt Container (evaluated as template). Normally used with `extraVolumes`.
+  ##
+  extraVolumeMounts: []
+  ## @param passwordUpdateJob.initContainers Add additional init containers for the mysql Primary pod(s)
+  ##
+  initContainers: []
+  ## Container resource requests and limits
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param passwordUpdateJob.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if passwordUpdateJob.resources is set (passwordUpdateJob.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "micro"
+  ## @param passwordUpdateJob.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
+  ## @param passwordUpdateJob.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param passwordUpdateJob.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param passwordUpdateJob.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## @param passwordUpdateJob.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
+  ## @param passwordUpdateJob.hostAliases Add deployment host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param passwordUpdateJob.annotations [object] Add annotations to the job
+  ##
+  annotations: {}
+  ## @param passwordUpdateJob.podLabels Additional pod labels
+  ## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param passwordUpdateJob.podAnnotations Additional pod annotations
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+
+
 ## @section Network policy parameters
 ##
 
@@ -1251,6 +1387,9 @@ backup:
     ## @param backup.cronjob.schedule Set the cronjob parameter schedule
     ##
     schedule: "@daily"
+    ## @param backup.cronjob.timeZone Set the cronjob parameter timeZone
+    ##
+    timeZone: ""
     ## @param backup.cronjob.concurrencyPolicy Set the cronjob parameter concurrencyPolicy
     ##
     concurrencyPolicy: Allow
@@ -1297,6 +1436,27 @@ backup:
         drop: ["ALL"]
       seccompProfile:
         type: "RuntimeDefault"
+    ## backup container's resource requests and limits.
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+    ## We usually recommend not to specify default resources and to leave this as a conscious
+    ## choice for the user. This also increases chances charts run on environments with little
+    ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+    ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ## @param backup.cronjob.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+    ##
+    resourcesPreset: "none"
+    ## @param backup.cronjob.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## Example:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    resources: {}
     ## @param backup.cronjob.command Set backup container's command to run
     ##
     command: []
@@ -1333,7 +1493,7 @@ backup:
       ## @param backup.cronjob.storage.annotations PVC annotations
       ##
       annotations: {}
-      ## @param backup.cronjob.storage.mountPath Path to mount the volume at 
+      ## @param backup.cronjob.storage.mountPath Path to mount the volume at
       ##
       mountPath: /backup/mongodb
       ## @param backup.cronjob.storage.subPath Subdirectory of the volume to mount at
@@ -1465,10 +1625,9 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r21
+    tag: 12-debian-12-r33
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -2226,6 +2385,9 @@ hidden:
       ##
       dataSource: {}
   service:
+    ## @param hidden.service.nameOverride The hidden service name
+    ##
+    nameOverride: ""
     ## @param hidden.service.portName MongoDB(&reg;) service port name
     ##
     portName: "mongodb"
@@ -2263,7 +2425,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mongodb-exporter
-    tag: 0.40.0-debian-12-r29
+    tag: 0.43.0-debian-12-r0
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

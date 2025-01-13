@@ -1,8 +1,102 @@
 # Changelog
 
-## 18.2.1 (2024-06-04)
+## 20.2.1 (2024-12-14)
 
-* [bitnami/mariadb] Bump chart version ([#26644](https://github.com/bitnami/charts/pull/26644))
+* [bitnami/mariadb] Release 20.2.1 ([#31043](https://github.com/bitnami/charts/pull/31043))
+
+## 20.2.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 4) (#30669) ([a4ec006](https://github.com/bitnami/charts/commit/a4ec00624589023a70a7094fcfb9f12e382bc280)), closes [#30669](https://github.com/bitnami/charts/issues/30669)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 6) (#30675) ([7b9cd04](https://github.com/bitnami/charts/commit/7b9cd04c2ffc730a0d62da787f2d4967c0ede47c)), closes [#30675](https://github.com/bitnami/charts/issues/30675)
+* [bitnami/*] docs: :memo: Unify "Securing Traffic using TLS" section (#30707) ([b572333](https://github.com/bitnami/charts/commit/b57233336e4fe9af928ecb4f2a5f334011efb1bc)), closes [#30707](https://github.com/bitnami/charts/issues/30707)
+* [bitnami/mariadb] Detect non-standard images (#30956) ([bb3402c](https://github.com/bitnami/charts/commit/bb3402c7a75a6a54976cd7c30a2116485deb7203)), closes [#30956](https://github.com/bitnami/charts/issues/30956)
+* [bitnami/mariadb] Fix typo in README (#30800) ([2b8b5f5](https://github.com/bitnami/charts/commit/2b8b5f5bed0ccb9840b35aca9e0415d88755b83c)), closes [#30800](https://github.com/bitnami/charts/issues/30800)
+
+## <small>20.1.1 (2024-11-27)</small>
+
+* [bitnami/mariadb] fix: :bug: Set correct TLS mountPath (#30641) ([fc2dcd7](https://github.com/bitnami/charts/commit/fc2dcd711548553180d6fc1d5debc51f40aa4d22)), closes [#30641](https://github.com/bitnami/charts/issues/30641)
+
+## 20.1.0 (2024-11-27)
+
+* [bitnami/mariadb] feat: :sparkles: Add TLS support (#30629) ([13c518f](https://github.com/bitnami/charts/commit/13c518ffc9cfefc10110317d9aa13ddc84a2d6ec)), closes [#30629](https://github.com/bitnami/charts/issues/30629)
+
+## 20.0.0 (2024-11-08)
+
+* [bitnami/mariadb] fix!: :bug: :sparkles: :boom: Set correct serviceName and add Password Update Job  ([b90422b](https://github.com/bitnami/charts/commit/b90422bd86f34d4c94d8b9da41ebf89e03dbf384)), closes [#30300](https://github.com/bitnami/charts/issues/30300)
+
+## <small>19.1.2 (2024-11-04)</small>
+
+* [bitnami/mariadb] Release 19.1.2 (#30203) ([86984d1](https://github.com/bitnami/charts/commit/86984d109d4bb2be040824fe362649b8678f7ae6)), closes [#30203](https://github.com/bitnami/charts/issues/30203)
+
+## <small>19.1.1 (2024-11-02)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/mariadb] Release 19.1.1 (#30176) ([6e6c654](https://github.com/bitnami/charts/commit/6e6c654a7a0d175f9ae47aa6f70aef9bbe11fb65)), closes [#30176](https://github.com/bitnami/charts/issues/30176)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## 19.1.0 (2024-10-10)
+
+* [bitnami/mariadb] add default binlog expiry configuration of 30 days (#29841) ([bb0c258](https://github.com/bitnami/charts/commit/bb0c258b0ee0965ab2b97f2bc30e3d8e0710be07)), closes [#29841](https://github.com/bitnami/charts/issues/29841)
+
+## <small>19.0.7 (2024-09-23)</small>
+
+* [bitnami/mariadb] Release 19.0.7 (#29571) ([a64fadf](https://github.com/bitnami/charts/commit/a64fadf42cc82f7468245ff87c61aa50356fbb47)), closes [#29571](https://github.com/bitnami/charts/issues/29571)
+
+## <small>19.0.6 (2024-09-17)</small>
+
+* [bitnami/mariadb] test: :white_check_mark: Improve reliability of ginkgo tests (#29467) ([c6cae80](https://github.com/bitnami/charts/commit/c6cae80e8a0cf7f3b0faad5782d13e75765daaf2)), closes [#29467](https://github.com/bitnami/charts/issues/29467)
+* Update README.md (typo fix) (#29334) ([2b03ac4](https://github.com/bitnami/charts/commit/2b03ac4952c06ae7001e89dcacca0cfdf81bc684)), closes [#29334](https://github.com/bitnami/charts/issues/29334)
+
+## <small>19.0.5 (2024-08-27)</small>
+
+* [bitnami/mariadb] Fix deprecation warnings in checks (#29021) ([213786f](https://github.com/bitnami/charts/commit/213786f3f87836b41e2e70fcedd007f08a4a012f)), closes [#29021](https://github.com/bitnami/charts/issues/29021)
+
+## <small>19.0.4 (2024-08-14)</small>
+
+* [bitnami/mariadb] Release 19.0.4 (#28874) ([0f767f1](https://github.com/bitnami/charts/commit/0f767f1e215d103c10fa8e1661f023f807382036)), closes [#28874](https://github.com/bitnami/charts/issues/28874)
+
+## <small>19.0.3 (2024-07-25)</small>
+
+* [bitnami/mariadb] Release 19.0.3 (#28455) ([3c84a4f](https://github.com/bitnami/charts/commit/3c84a4fdf417cedde724beca82fa5123281769ed)), closes [#28455](https://github.com/bitnami/charts/issues/28455)
+
+## <small>19.0.2 (2024-07-24)</small>
+
+* [bitnami/mariadb] Release 19.0.2 (#28317) ([978ae2c](https://github.com/bitnami/charts/commit/978ae2c01d792aa43d216aaafb741ee29648d093)), closes [#28317](https://github.com/bitnami/charts/issues/28317)
+
+## <small>19.0.1 (2024-07-18)</small>
+
+* [bitnami/mariadb] Global StorageClass as default value (#28050) ([7319c20](https://github.com/bitnami/charts/commit/7319c20e742e282f4517823f6cca054fa7322f0e)), closes [#28050](https://github.com/bitnami/charts/issues/28050)
+
+## 19.0.0 (2024-07-11)
+
+* [bitnami/mariadb] Release 19.0.0 (#27901) ([48377c3](https://github.com/bitnami/charts/commit/48377c3de20aa481943ab187419dc3b18afac3d9)), closes [#27901](https://github.com/bitnami/charts/issues/27901)
+
+## <small>18.2.6 (2024-07-02)</small>
+
+* [bitnami/mariadb] Release 18.2.6 (#27638) ([9822f43](https://github.com/bitnami/charts/commit/9822f43757bbf85d48db29c9e0c39ae4825e436b)), closes [#27638](https://github.com/bitnami/charts/issues/27638)
+
+## <small>18.2.5 (2024-07-01)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/mariadb] Release 18.2.5 (#27619) ([41836cc](https://github.com/bitnami/charts/commit/41836ccc60bd99a45185b0e33e2ca5970867e886)), closes [#27619](https://github.com/bitnami/charts/issues/27619)
+
+## <small>18.2.4 (2024-06-18)</small>
+
+* [bitnami/mariadb] Release 18.2.4 (#27375) ([fcac2b3](https://github.com/bitnami/charts/commit/fcac2b33f4bb90c19932b4eec6636fc4b3c10cdc)), closes [#27375](https://github.com/bitnami/charts/issues/27375)
+
+## <small>18.2.3 (2024-06-17)</small>
+
+* [bitnami/mariadb] Release 18.2.3 (#27243) ([605363c](https://github.com/bitnami/charts/commit/605363caa20e787ea3782928ae95faea07b9b08a)), closes [#27243](https://github.com/bitnami/charts/issues/27243)
+
+## <small>18.2.2 (2024-06-06)</small>
+
+* [bitnami/mariadb] Release 18.2.2 (#26977) ([e79cf8c](https://github.com/bitnami/charts/commit/e79cf8c2aa2aba398f4464d119605afe11534b08)), closes [#26977](https://github.com/bitnami/charts/issues/26977)
+
+## <small>18.2.1 (2024-06-04)</small>
+
+* [bitnami/mariadb] Bump chart version (#26644) ([1cf51a6](https://github.com/bitnami/charts/commit/1cf51a65b4c7753ade78015e301b378cf490979e)), closes [#26644](https://github.com/bitnami/charts/issues/26644)
 
 ## 18.2.0 (2024-05-24)
 

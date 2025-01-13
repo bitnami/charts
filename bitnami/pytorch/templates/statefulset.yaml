@@ -246,7 +246,9 @@ spec:
           emptyDir: {}
   {{- else }}
   volumeClaimTemplates:
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         name: data
         {{- if or .Values.commonAnnotations .Values.persistence.annotations }}
         {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.persistence.annotations .Values.commonAnnotations ) "context" . ) }}

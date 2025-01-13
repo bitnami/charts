@@ -21,8 +21,8 @@ spec:
   {{- if .Values.kustomizeController.pdb.minAvailable }}
   minAvailable: {{ .Values.kustomizeController.pdb.minAvailable }}
   {{- end }}
-  {{- if .Values.kustomizeController.pdb.maxUnavailable }}
-  maxUnavailable: {{ .Values.kustomizeController.pdb.maxUnavailable }}
+  {{- if or .Values.kustomizeController.pdb.maxUnavailable ( not .Values.kustomizeController.pdb.minAvailable ) }}
+  maxUnavailable: {{ .Values.kustomizeController.pdb.maxUnavailable | default 1 }}
   {{- end }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.kustomizeController.podLabels .Values.commonLabels ) "context" . ) }}
   selector:

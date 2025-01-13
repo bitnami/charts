@@ -57,7 +57,7 @@ spec:
         - port: 9411
         {{- end }}
         {{- if .Values.tempo.traces.otlp.http }}
-        - port: 55681
+        - port: 4318
         {{- end }}
         {{- if .Values.tempo.traces.otlp.grpc }}
         - port: 4317
@@ -117,7 +117,7 @@ spec:
         - port: 9411
         {{- end }}
         {{- if .Values.tempo.traces.otlp.http }}
-        - port: 55681
+        - port: 4318
         {{- end }}
         {{- if .Values.tempo.traces.otlp.grpc }}
         - port: 4317

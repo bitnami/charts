@@ -113,7 +113,7 @@ spec:
             - containerPort: {{ .Values.tempo.containerPorts.gossipRing }}
               name: http-memberlist
           {{- if .Values.compactor.resources }}
-          resources: {{- toYaml .Values.compactor.resources | nindent 12 }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.compactor.resources "context" $) | nindent 12 }}
           {{- else if ne .Values.compactor.resourcesPreset "none" }}
           resources: {{- include "common.resources.preset" (dict "type" .Values.compactor.resourcesPreset) | nindent 12 }}
           {{- end }}

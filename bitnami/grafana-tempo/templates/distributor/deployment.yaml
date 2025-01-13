@@ -137,7 +137,7 @@ spec:
               protocol: TCP
             {{- end }}
             {{- if .Values.tempo.traces.otlp.http }}
-            - containerPort: 55681
+            - containerPort: 4318
               name: otlp-http
               protocol: TCP
             {{- end }}
@@ -152,7 +152,7 @@ spec:
               protocol: TCP
             {{- end }}
           {{- if .Values.distributor.resources }}
-          resources: {{- toYaml .Values.distributor.resources | nindent 12 }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.distributor.resources "context" $) | nindent 12 }}
           {{- else if ne .Values.distributor.resourcesPreset "none" }}
           resources: {{- include "common.resources.preset" (dict "type" .Values.distributor.resourcesPreset) | nindent 12 }}
           {{- end }}

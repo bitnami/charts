@@ -34,9 +34,7 @@ spec:
         {{- if and .Values.filer.config (empty .Values.filer.existingConfigmap) }}
         checksum/config: {{ include (print $.Template.BasePath "/filer/configmap.yaml") . | sha256sum }}
         {{- end }}
-        {{- if .Values.security.enabled }}
         checksum/security-config: {{ include (print $.Template.BasePath "/security-configmap.yaml") . | sha256sum }}
-        {{- end }}
         {{- if .Values.filer.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.filer.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
@@ -44,7 +42,7 @@ spec:
         app.kubernetes.io/component: filer
     spec:
       {{- include "seaweedfs.imagePullSecrets" . | nindent 6 }}
-      serviceAccountName: {{ template "seaweedfs.serviceAccountName" . }}    
+      serviceAccountName: {{ template "seaweedfs.serviceAccountName" . }}
       automountServiceAccountToken: {{ .Values.filer.automountServiceAccountToken }}
       {{- if .Values.filer.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.filer.hostAliases "context" $) | nindent 8 }}
@@ -109,9 +107,7 @@ spec:
           args:
             - -logtostderr=true
             - -v={{ .Values.filer.logLevel }}
-            {{- if or .Values.security.enabled .Values.filer.config .Values.filer.existingConfigmap }}
             - -config_dir=/etc/seaweedfs
-            {{- end }}
             - filer
             - -ip.bind={{ .Values.filer.bindAddress }}
             - -ip=$(POD_NAME).{{ printf "%s-headless" (include "seaweedfs.filer.fullname" .) }}.$(NAMESPACE).svc.{{ .Values.clusterDomain }}
@@ -135,6 +131,7 @@ spec:
                   fieldPath: metadata.namespace
             - name: WEED_CLUSTER_DEFAULT
               value: {{ .Values.clusterDefault | quote }}
+            {{- if or .Values.mariadb.enabled (and .Values.externalDatabase.enabled (eq .Values.externalDatabase.store "mariadb") ) }}
             - name: WEED_MYSQL_ENABLED
               value: "true"
             - name: WEED_MYSQL_HOSTNAME
@@ -149,15 +146,35 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ include "seaweedfs.database.secretName" . }}
-                  key: mariadb-password
+                  key: {{ include "seaweedfs.database.keyName" . }}
             - name: WEED_MYSQL_CONNECTION_MAX_IDLE
               value: "5"
             - name: WEED_MYSQL_CONNECTION_MAX_OPEN
-              value: "75" 
+              value: "75"
             - name: WEED_MYSQL_CONNECTION_MAX_LIFETIME_SECONDS
               value: "600"
             - name: WEED_MYSQL_INTERPOLATEPARAMS
               value: "true"
+            {{- end }}
+            {{- if or .Values.postgresql.enabled (and .Values.externalDatabase.enabled (eq .Values.externalDatabase.store "postgresql") ) }}
+            - name: WEED_POSTGRES_ENABLED
+              value: "true"
+            - name: WEED_POSTGRES_HOSTNAME
+              value: {{ include "seaweedfs.database.host" . | quote }}
+            - name: WEED_POSTGRES_PORT
+              value: {{ include "seaweedfs.database.port" . | quote }}
+            - name: WEED_POSTGRES_DATABASE
+              value: {{ include "seaweedfs.database.name" . | quote }}
+            - name: WEED_POSTGRES_USERNAME
+              value: {{ include "seaweedfs.database.user" . | quote }}
+            - name: WEED_POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "seaweedfs.database.secretName" . }}
+                  key: {{ include "seaweedfs.database.keyName" . }}
+            - name: WEED_POSTGRES_SSLMODE
+              value: "disable"
+            {{- end }}
             {{- if .Values.filer.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.filer.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
@@ -227,7 +244,6 @@ spec:
               subPath: filer.toml
               readOnly: true
             {{- end }}
-            {{- if .Values.security.enabled }}
             - name: security-config
               mountPath: /etc/seaweedfs/security.toml
               subPath: security.toml
@@ -249,7 +265,6 @@ spec:
               readOnly: true
               mountPath: /certs/client
             {{- end }}
-            {{- end }}
           {{- if .Values.filer.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.filer.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -259,12 +274,17 @@ spec:
       volumes:
         - name: empty-dir
           emptyDir: {}
+        - name: db-credentials
+          secret:
+            secretName: {{ include "seaweedfs.database.secretName" . }}
+            items:
+            - key: {{ include "seaweedfs.database.keyName" . }}
+              path: password
         {{- if or .Values.filer.config .Values.filer.existingConfigmap }}
         - name: config
           configMap:
             name: {{ template "seaweedfs.filer.configmapName" . }}
         {{- end }}
-        {{- if .Values.security.enabled }}
         - name: security-config
           configMap:
             name: {{ printf "%s-security" (include "common.names.fullname" .) }}
@@ -287,7 +307,6 @@ spec:
         - name: client-cert
           secret:
             secretName: {{ template "seaweedfs.security.mTLS.client.secretName" . }}
-        {{- end }}
         {{- end }}
         {{- if .Values.filer.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.filer.extraVolumes "context" $) | nindent 8 }}

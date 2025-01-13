@@ -2,6 +2,15 @@
   "phases": {
     "package": {
       "context": {
+        "credentials": [
+          {
+            "url": "{VIB_ENV_CHARTS_REGISTRY}",
+            "authn": {
+              "username": "{VIB_ENV_CHARTS_REGISTRY_USERNAME}",
+              "password": "{VIB_ENV_CHARTS_REGISTRY_PASSWORD}"
+            }
+          }
+        ],
         "resources": {
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/airflow"
@@ -25,7 +34,7 @@
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
-            "name": "M4"
+            "name": "L4"
           }
         }
       },
@@ -37,6 +46,7 @@
               "path": "/.vib"
             },
             "tests_file": "airflow/goss/goss.yaml",
+            "vars_file": "airflow/runtime-parameters.yaml",
             "remote": {
               "pod": {
                 "workload": "deploy-airflow-web"
@@ -56,6 +66,12 @@
               "username": "user",
               "password": "ComplicatedPassword123!4"
             }
+          }
+        },
+        {
+          "action_id": "kubescape",
+          "params": {
+            "threshold": {VIB_ENV_KUBESCAPE_SCORE_THRESHOLD}
           }
         }
       ]

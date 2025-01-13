@@ -459,6 +459,9 @@ Returns the Kafka listeners settings based on the listeners.* object
   {{- $listeners = append $listeners .context.Values.listeners.controller -}}
   {{- end -}}
   {{- end -}}
+  {{- range $i := .context.Values.listeners.extraListeners -}}
+  {{- $listeners = append $listeners $i -}}
+  {{- end -}}
   {{- $res := list -}}
   {{- range $listener := $listeners -}}
   {{- $res = append $res (printf "%s://:%d" (upper $listener.name) (int $listener.containerPort)) -}}

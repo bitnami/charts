@@ -12,13 +12,15 @@ metadata:
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: master
-  {{- if .Values.commonAnnotations }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- if or .Values.commonAnnotations .Values.master.annotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.master.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
   {{- if not (eq .Values.master.kind "DaemonSet") }}
   replicas: {{ .Values.master.count }}
   {{- end }}
+  revisionHistoryLimit: {{ .Values.master.revisionHistoryLimit }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.master.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
@@ -57,6 +59,9 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.podAnnotations "context" $ ) | nindent 8 }}
         {{- end }}
     spec:
+      {{- if .Values.master.extraPodSpec }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.master.extraPodSpec "context" $) | nindent 6 }}
+      {{- end }}
       {{- include "redis.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.master.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.master.hostAliases "context" $) | nindent 8 }}
@@ -157,8 +162,10 @@ spec:
               value: {{ template "redis.tlsCert" . }}
             - name:  REDIS_TLS_KEY_FILE
               value: {{ template "redis.tlsCertKey" . }}
-            - name:  REDIS_TLS_CA_FILE
+            {{- if not (empty (include "redis.tlsCACert" .)) }}
+            - name: REDIS_TLS_CA_FILE
               value: {{ template "redis.tlsCACert" . }}
+            {{- end }}
             {{- if .Values.tls.dhParamsFilename }}
             - name:  REDIS_TLS_DH_PARAMS_FILE
               value: {{ template "redis.tlsDHParams" . }}
@@ -304,14 +311,16 @@ spec:
             {{- if .Values.tls.enabled }}
             - name: REDIS_ADDR
               value: rediss://{{ .Values.metrics.redisTargetHost }}:{{ .Values.master.containerPorts.redis }}
-              {{- if .Values.tls.authClients }}
+            {{- if .Values.tls.authClients }}
             - name: REDIS_EXPORTER_TLS_CLIENT_KEY_FILE
               value: {{ template "redis.tlsCertKey" . }}
             - name: REDIS_EXPORTER_TLS_CLIENT_CERT_FILE
               value: {{ template "redis.tlsCert" . }}
-              {{- end }}
+            {{- end }}
+            {{- if not (empty (include "redis.tlsCACert" .)) }}
             - name: REDIS_EXPORTER_TLS_CA_CERT_FILE
               value: {{ template "redis.tlsCACert" . }}
+            {{- end }}
             {{- end }}
             {{- if .Values.metrics.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.metrics.extraEnvVars "context" $) | nindent 12 }}
@@ -391,6 +400,10 @@ spec:
           securityContext: {{- omit .Values.volumePermissions.containerSecurityContext "runAsUser" | toYaml | nindent 12 }}
           {{- else }}
           securityContext: {{- .Values.volumePermissions.containerSecurityContext | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.volumePermissions.extraEnvVars }}
+          env:
+          {{- include "common.tplvalues.render" (dict "value" .Values.volumePermissions.extraEnvVars "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}

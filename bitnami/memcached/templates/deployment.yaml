@@ -151,7 +151,7 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.resources }}
-          resources: {{- toYaml .Values.resources | nindent 12 }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.resources "context" $) | nindent 12 }}
           {{- else if ne .Values.resourcesPreset "none" }}
           resources: {{- include "common.resources.preset" (dict "type" .Values.resourcesPreset) | nindent 12 }}
           {{- end }}
@@ -199,7 +199,7 @@ spec:
           {{- end }}
           {{- end }}
           {{- if .Values.metrics.resources }}
-          resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.resources "context" $) | nindent 12 }}
           {{- else if ne .Values.metrics.resourcesPreset "none" }}
           resources: {{- include "common.resources.preset" (dict "type" .Values.metrics.resourcesPreset) | nindent 12 }}
           {{- end }}
@@ -216,7 +216,12 @@ spec:
         {{- end }}
       volumes:
         - name: empty-dir
+        {{- if eq .Values.emptyDir.medium "Memory" }}
+          emptyDir:
+            medium: "Memory"
+        {{- else }}
           emptyDir: {}
+        {{- end }}
         {{- if .Values.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
         {{- end }}

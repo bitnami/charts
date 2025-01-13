@@ -9,7 +9,8 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
+## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ##
 global:
   imageRegistry: ""
@@ -18,7 +19,13 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  defaultStorageClass: ""
   storageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
   ## Compatibility adaptations for Kubernetes platforms
   ##
   compatibility:
@@ -82,10 +89,9 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/scylladb
-  tag: 5.4.6-debian-12-r1
+  tag: 6.2.2-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -131,7 +137,7 @@ initDBConfigMap: ""
 ## @param initDBSecret Secret with cql script (with sensitive data). Useful for creating a keyspace and pre-populating data
 ##
 initDBSecret: ""
-## @param existingConfiguration ConfigMap with custom scylladb configuration files. This overrides any other Scylladb configuration set in the chart
+## @param existingConfiguration ConfigMap with custom scylla.yaml configuration file. This overrides any other Scylladb configuration set in the chart
 ##
 existingConfiguration: ""
 ## Cluster parameters
@@ -492,11 +498,11 @@ hostPorts:
   metrics: ""
 
 ## @section JMX Proxy Deployment Parameters
-##
+## DEPRECATED: scylla-jmx becomes optional package from ScyllaDB 6.2, not installed by default.
 jmxProxy:
   ## @param jmxProxy.enabled Enable JMX Proxy sidecar
   ##
-  enabled: true
+  enabled: false
   ## @param jmxProxy.extraEnvVars Array with extra environment variables to add to JMX Proxy sidecar
   ## e.g:
   ## extraEnvVars:
@@ -929,7 +935,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r21
+    tag: 12-debian-12-r34
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1094,7 +1100,7 @@ sysctl:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r21
+    tag: 12-debian-12-r34
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

@@ -20,8 +20,8 @@ spec:
   {{- if .Values.contour.pdb.minAvailable }}
   minAvailable: {{ .Values.contour.pdb.minAvailable }}
   {{- end }}
-  {{- if .Values.contour.pdb.maxUnavailable }}
-  maxUnavailable: {{ .Values.contour.pdb.maxUnavailable }}
+  {{- if or .Values.contour.pdb.maxUnavailable ( not .Values.contour.pdb.minAvailable ) }}
+  maxUnavailable: {{ .Values.contour.pdb.maxUnavailable | default 1 }}
   {{- end }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.contour.podLabels .Values.commonLabels ) "context" . ) }}
   selector:

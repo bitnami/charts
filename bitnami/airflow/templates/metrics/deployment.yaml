@@ -7,8 +7,8 @@ SPDX-License-Identifier: APACHE-2.0
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: {{ printf "%s-exporter" (include "common.names.fullname" .) }}
-  namespace: {{ .Release.Namespace | quote }}
+  name: {{ template "airflow.metrics.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.metrics.image "chart" .Chart ) ) }}
   {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
@@ -25,6 +25,7 @@ spec:
   template:
     metadata:
       annotations:
+        checksum/configmap: {{ include (print $.Template.BasePath "/metrics/configmap.yaml") . | sha256sum }}
         {{- if .Values.metrics.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.metrics.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
@@ -47,6 +48,9 @@ spec:
       {{- if .Values.metrics.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.metrics.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.metrics.terminationGracePeriodSeconds }}
+      {{- end }}
       {{- if .Values.metrics.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.tolerations "context" .) | nindent 8 }}
       {{- end }}
@@ -59,12 +63,14 @@ spec:
       {{- if .Values.metrics.schedulerName }}
       schedulerName: {{ .Values.metrics.schedulerName }}
       {{- end }}
+      serviceAccountName: {{ include "airflow.serviceAccountName" . }}
       {{- if .Values.metrics.podSecurityContext.enabled }}
       securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.metrics.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       containers:
-        - image: {{ include "airflow.metrics.image" . | quote }}
-          name: airflow-exporter
+        - name: statsd-exporter
+          image: {{ include "airflow.metrics.image" . | quote }}
+          imagePullPolicy: {{ .Values.metrics.image.pullPolicy }}
           {{- if .Values.metrics.containerSecurityContext.enabled }}
           securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.metrics.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
@@ -73,46 +79,43 @@ spec:
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else }}
+          args:
+            - "--statsd.mapping-config=/config/mappings.yml"
           {{- end }}
-          env:
-            - name: AIRFLOW_PROMETHEUS_DATABASE_BACKEND
-              value: "postgres"
-            - name: AIRFLOW_PROMETHEUS_DATABASE_HOST
-              value: {{ include "airflow.database.host" . }}
-            - name: AIRFLOW_PROMETHEUS_DATABASE_PORT
-              value: {{ include "airflow.database.port" . }}
-            - name: AIRFLOW_PROMETHEUS_DATABASE_USER
-              value: {{ include "airflow.database.user" . }}
-            {{- if or (not .Values.postgresql.enabled) .Values.postgresql.auth.enablePostgresUser }}
-            - name: AIRFLOW_PROMETHEUS_DATABASE_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "airflow.postgresql.secretName" . }}
-                  key: {{ include "airflow.database.existingsecret.key" . }}
-            {{- else }}
-            - name: ALLOW_EMPTY_PASSWORD
-              value: "true"
-            {{- end }}
-            - name: AIRFLOW_PROMETHEUS_DATABASE_NAME
-              value: {{ include "airflow.database.name" . }}
-            {{- if .Values.metrics.extraEnvVars }}
-            {{- include "common.tplvalues.render" (dict "value" .Values.metrics.extraEnvVars "context" $) | nindent 12 }}
-            {{- end }}
-          envFrom:
-            {{- if .Values.metrics.extraEnvVarsCM }}
-            - configMapRef:
-                name: {{ .Values.metrics.extraEnvVarsCM }}
-            {{- end }}
-            {{- if .Values.metrics.extraEnvVarsSecret }}
-            - secretRef:
-                name: {{ .Values.metrics.extraEnvVarsSecret }}
-            {{- end }}
           {{- if .Values.metrics.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.metrics.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customLivenessProbe "context" $) | trim | nindent 12 }}
+          {{- else if .Values.metrics.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metrics.livenessProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: metrics
+          {{- end }}
+          {{- if .Values.metrics.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.metrics.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metrics.readinessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /metrics
+              port: metrics
+          {{- end }}
+          {{- if .Values.metrics.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.metrics.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metrics.startupProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: metrics
+          {{- end }}
+          {{- end }}
           ports:
             - name: metrics
-              containerPort: {{ .Values.metrics.containerPorts.http }}
+              containerPort: {{ .Values.metrics.containerPorts.metrics }}
+            - name: ingest
+              containerPort: {{ .Values.metrics.containerPorts.ingest }}
+              protocol: UDP
           {{- if .Values.metrics.resources }}
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
           {{- else if ne .Values.metrics.resourcesPreset "none" }}
@@ -122,12 +125,18 @@ spec:
             - name: empty-dir
               mountPath: /tmp
               subPath: tmp-dir
+            - name: configuration
+              mountPath: /config/mappings.yml
+              subPath: mappings.yml
             {{- if .Values.metrics.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.metrics.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
       volumes:
         - name: empty-dir
           emptyDir: {}
+        - name: configuration
+          configMap:
+            name: {{ include "airflow.metrics.configMapName"  . }}
         {{- if .Values.metrics.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.metrics.extraVolumes "context" $) | nindent 8 }}
         {{- end }}

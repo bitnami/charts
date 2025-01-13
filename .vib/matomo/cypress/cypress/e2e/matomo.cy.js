@@ -5,7 +5,6 @@
 
 /// <reference types="cypress" />
 import { random } from '../support/utils';
-import { baseURL } from '../support/commands';
 
 it('allows to create a new website', () => {
   cy.login();
@@ -29,17 +28,27 @@ it('allows to create a new website', () => {
 // The Matomo API allows checking the site analytics and tracking metrics
 // Source: https://matomo.org/guide/apis/analytics-api/
 it('allows to use the API to retrieve analytics', () => {
-  // Record a new visit in order to generate analytics beforehand
-  cy.request(`${baseURL()}/matomo.php?idsite=1&rec=1`).then((response) => {
+  // Record a new visit in order to generate analytics
+  cy.request({
+    url: '/matomo.php',
+    method: 'GET',
+    headers: {
+      'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36',
+    },
+    qs: {
+      rec: 1,
+      idsite: 1,
+    },
+  }).then((response) => {
     expect(response.status).to.eq(200);
   });
 
   cy.login();
   // Navigate using the UI as Matomo will randomly fail with
   // "token mismatch" if accessed directly
-  cy.contains('Forms', {timeout: 60000});
   cy.get('#topmenu-coreadminhome').click();
-  cy.contains('System Summary', {timeout: 60000});
+  // Wait for page to load
+  cy.wait(10000);
   cy.contains('Personal').click();
   cy.contains('Security').click();
   cy.contains('Create new token', {timeout: 60000}).click();
@@ -53,7 +62,7 @@ it('allows to use the API to retrieve analytics', () => {
     .invoke('text')
     .then((apiToken) => {
       cy.request({
-        url: `${baseURL()}/index.php`,
+        url: '/index.php',
         method: 'GET',
         qs: {
           module: 'API',

@@ -27,7 +27,7 @@ it('allows creating a bucket, uploading and retrieving a file', () => {
   });
 
   cy.fixture(fileToUpload).then((uploadedFile) => {
-    cy.request(`/api/v1/buckets/${bucketName}/objects/download?prefix=${Buffer.from(fileToUpload).toString('base64')}`).then((response) => {
+    cy.request(`/api/v1/buckets/${bucketName}/objects/download?prefix=${fileToUpload}`).then((response) => {
       cy.writeFile(`cypress/downloads/${fileToUpload}`, response.body)
     })
     cy.readFile(`cypress/downloads/${fileToUpload}`).then((downloadedFile) => {

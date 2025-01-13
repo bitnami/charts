@@ -8,7 +8,7 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
 ##
 global:
   imageRegistry: ""
@@ -17,7 +17,12 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass: ""
+  defaultStorageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
   ## Compatibility adaptations for Kubernetes platforms
   ##
   compatibility:
@@ -62,10 +67,9 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/moodle
-  tag: 4.4.0-debian-12-r3
+  tag: 4.5.1-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -83,7 +87,7 @@ image:
 ## @param replicaCount Number of Moodle replicas (requires ReadWriteMany PVC support)
 ## Setting this will fix the number replica count needed for Moodle&trade;
 ## This can be overridden by setting autoscaling.enabled to true
-## For upgrades set the autoscaling.enabled to false and replicaCount to the desired number of replicas 
+## For upgrades set the autoscaling.enabled to false and replicaCount to the desired number of replicas
 ##
 replicaCount: 1
 ## When enabled, the number of Moodle&trade; replicas will be automatically adjusted based on targets on given metrics.
@@ -544,10 +548,6 @@ ingress:
   ## @param ingress.enabled Set to true to enable ingress record generation
   ##
   enabled: false
-  ## DEPRECATED: Use ingress.annotations instead of ingress.certManager
-  ## certManager: false
-  ##
-
   ## @param ingress.pathType Ingress Path type
   ##
   pathType: ImplementationSpecific
@@ -759,7 +759,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r21
+    tag: 12-debian-12-r33
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -804,7 +804,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 1.0.7-debian-12-r8
+    tag: 1.0.9-debian-12-r6
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -932,10 +932,9 @@ certificates:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r21
+    tag: 12-debian-12-r33
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent

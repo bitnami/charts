@@ -8,7 +8,8 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
+## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ##
 global:
   imageRegistry: ""
@@ -17,7 +18,13 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  defaultStorageClass: ""
   storageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
   ## Compatibility adaptations for Kubernetes platforms
   ##
   compatibility:
@@ -79,10 +86,9 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/memcached
-  tag: 1.6.28-debian-12-r0
+  tag: 1.6.34-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -345,6 +351,10 @@ terminationGracePeriodSeconds: ""
 updateStrategy:
   type: RollingUpdate
   rollingUpdate: {}
+## @param emptyDir.medium Override emptyDir Volume type, defaults to emptyDir: {}
+## Possible values: "Memory", ""
+emptyDir:
+  medium: ""
 ## @param extraVolumes Optionally specify extra list of additional volumes for the Memcached pod(s)
 ## Example Use Case: mount certificates to enable TLS
 ## e.g:
@@ -420,7 +430,7 @@ autoscaling:
 pdb:
   create: true
   minAvailable: ""
-  maxUnavailable: 1
+  maxUnavailable: ""
 ## @section Traffic Exposure parameters
 service:
   ## @param service.type Kubernetes Service type
@@ -614,7 +624,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r22
+    tag: 12-debian-12-r34
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -669,7 +679,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/memcached-exporter
-    tag: 0.14.3-debian-12-r7
+    tag: 0.15.0-debian-12-r3
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

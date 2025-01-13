@@ -143,10 +143,6 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 {{- end -}}
 
-{{- define "harbor.database.encryptedPassword" -}}
-  {{- include "harbor.database.rawPassword" . | b64enc | quote -}}
-{{- end -}}
-
 {{- define "harbor.database.coreDatabase" -}}
 {{- ternary "registry" .Values.externalDatabase.coreDatabase .Values.postgresql.enabled -}}
 {{- end -}}
@@ -467,4 +463,81 @@ TRACE_OTEL_COMPRESSION: {{ .Values.tracing.otel.compression | quote }}
 TRACE_OTEL_TIMEOUT: {{ .Values.tracing.otel.timeout | quote }}
 TRACE_OTEL_INSECURE: {{ .Values.tracing.otel.insecure | quote }}
 {{- end }}
+{{- end -}}
+
+{{/*
+Create the name of the service account to use for the Harbor Core
+*/}}
+{{- define "harbor.core.serviceAccountName" -}}
+{{- if .Values.core.serviceAccount.create -}}
+    {{ default (include "harbor.core" .) .Values.core.serviceAccount.name | trunc 63 | trimSuffix "-" }}
+{{- else -}}
+    {{ default "default" .Values.core.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the name of the service account to use for the Harbor Registry
+*/}}
+{{- define "harbor.registry.serviceAccountName" -}}
+{{- if .Values.registry.serviceAccount.create -}}
+    {{ default (include "harbor.registry" .) .Values.registry.serviceAccount.name | trunc 63 | trimSuffix "-" }}
+{{- else -}}
+    {{ default "default" .Values.registry.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the name of the service account to use for the Harbor Portal
+*/}}
+{{- define "harbor.portal.serviceAccountName" -}}
+{{- if .Values.portal.serviceAccount.create -}}
+    {{ default (include "harbor.portal" .) .Values.portal.serviceAccount.name | trunc 63 | trimSuffix "-" }}
+{{- else -}}
+    {{ default "default" .Values.portal.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the name of the service account to use for the Harbor Jobservice
+*/}}
+{{- define "harbor.jobservice.serviceAccountName" -}}
+{{- if .Values.jobservice.serviceAccount.create -}}
+    {{ default (include "harbor.jobservice" .) .Values.jobservice.serviceAccount.name | trunc 63 | trimSuffix "-" }}
+{{- else -}}
+    {{ default "default" .Values.jobservice.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the name of the service account to use for the Harbor Exporter
+*/}}
+{{- define "harbor.exporter.serviceAccountName" -}}
+{{- if .Values.exporter.serviceAccount.create -}}
+    {{ default (include "harbor.exporter" .) .Values.exporter.serviceAccount.name | trunc 63 | trimSuffix "-" }}
+{{- else -}}
+    {{ default "default" .Values.exporter.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the name of the service account to use for the Trivy
+*/}}
+{{- define "harbor.trivy.serviceAccountName" -}}
+{{- if .Values.trivy.serviceAccount.create -}}
+    {{ default (include "harbor.trivy" .) .Values.trivy.serviceAccount.name | trunc 63 | trimSuffix "-" }}
+{{- else -}}
+    {{ default "default" .Values.trivy.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the name of the service account to use for the Harbor Nginx
+*/}}
+{{- define "harbor.nginx.serviceAccountName" -}}
+{{- if .Values.nginx.serviceAccount.create -}}
+    {{ default (include "harbor.nginx" .) .Values.nginx.serviceAccount.name | trunc 63 | trimSuffix "-" }}
+{{- else -}}
+    {{ default "default" .Values.nginx.serviceAccount.name }}
+{{- end -}}
 {{- end -}}

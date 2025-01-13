@@ -1,8 +1,138 @@
 # Changelog
 
-## 12.1.3 (2024-05-31)
+## 15.1.1 (2025-01-07)
 
-* [bitnami/kong] Release 12.1.3 ([#26587](https://github.com/bitnami/charts/pull/26587))
+* [bitnami/kong] Release 15.1.1 ([#31173](https://github.com/bitnami/charts/pull/31173))
+
+## 15.1.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 3) (#30666) ([82fc7e2](https://github.com/bitnami/charts/commit/82fc7e2fc12e2648ed22069942203c02bf5d4cc6)), closes [#30666](https://github.com/bitnami/charts/issues/30666)
+* [bitnami/kong] Detect non-standard images (#30898) ([f51cea0](https://github.com/bitnami/charts/commit/f51cea0833ace64f69a2c73167f3d3d7fabfc312)), closes [#30898](https://github.com/bitnami/charts/issues/30898)
+
+## 15.0.0 (2024-11-22)
+
+* [bitnami/kong] Use postgresql 17 for Kong (#30584) ([66c3a1c](https://github.com/bitnami/charts/commit/66c3a1c7c70034befe21bf5f004ab040f264dca6)), closes [#30584](https://github.com/bitnami/charts/issues/30584)
+
+## <small>14.0.9 (2024-11-22)</small>
+
+* [bitnami/kong] Release 14.0.9 (#30574) ([1966baa](https://github.com/bitnami/charts/commit/1966baacadf3f66d9e52319e22d7269ba72b742a)), closes [#30574](https://github.com/bitnami/charts/issues/30574)
+
+## <small>14.0.8 (2024-11-21)</small>
+
+* [bitnami/kong] Release 14.0.8 (#30560) ([250a2ee](https://github.com/bitnami/charts/commit/250a2ee7562c5ecbbd1e1ff1562cb9728cf88aa3)), closes [#30560](https://github.com/bitnami/charts/issues/30560)
+
+## <small>14.0.7 (2024-11-21)</small>
+
+* [bitnami/kong] Release 14.0.7 (#30558) ([2f93e0e](https://github.com/bitnami/charts/commit/2f93e0e7a4cf274137bbe8fcb87716326b638dff)), closes [#30558](https://github.com/bitnami/charts/issues/30558)
+
+## <small>14.0.6 (2024-11-19)</small>
+
+* [bitnami/kong] Release 14.0.6 (#30511) ([2cbf54a](https://github.com/bitnami/charts/commit/2cbf54a295ebd343bb41b074641d7b640ff58807)), closes [#30511](https://github.com/bitnami/charts/issues/30511)
+
+## <small>14.0.5 (2024-11-09)</small>
+
+* [bitnami/kong] Release 14.0.5 (#30381) ([097a935](https://github.com/bitnami/charts/commit/097a9359c2b21f2de2e919d8ddd5b68733244af5)), closes [#30381](https://github.com/bitnami/charts/issues/30381)
+
+## <small>14.0.4 (2024-11-07)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/kong] Release 14.0.4 (#30276) ([5d37187](https://github.com/bitnami/charts/commit/5d37187597f35f33ea254f333e740d8a2963a440)), closes [#30276](https://github.com/bitnami/charts/issues/30276)
+
+## <small>14.0.3 (2024-10-28)</small>
+
+* [bitnami/kong] Release 14.0.3 (#30102) ([4f414b2](https://github.com/bitnami/charts/commit/4f414b270d913db9477efb273786d543b96fb408)), closes [#30102](https://github.com/bitnami/charts/issues/30102)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>14.0.2 (2024-10-16)</small>
+
+* [bitnami/kong] Release 14.0.2 (#29926) ([33bd511](https://github.com/bitnami/charts/commit/33bd5119767d11ee76a34dd137380558a7d4a584)), closes [#29926](https://github.com/bitnami/charts/issues/29926)
+
+## <small>14.0.1 (2024-10-16)</small>
+
+* [bitnami/kong] Release 14.0.1 (#29922) ([db33704](https://github.com/bitnami/charts/commit/db33704cd47f8afa9fc0c7822061212668674f42)), closes [#29922](https://github.com/bitnami/charts/issues/29922)
+
+## 14.0.0 (2024-10-03)
+
+* [bitnami/kong] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x (#29736) ([2f9809b](https://github.com/bitnami/charts/commit/2f9809b8abe8a576cdb4f14be16749a4d1a9792a)), closes [#29736](https://github.com/bitnami/charts/issues/29736)
+
+## <small>13.0.3 (2024-09-19)</small>
+
+* [bitnami/kong] Remove duplicated empty password check `common.validations.values.cassandra.passwords ([139f5a5](https://github.com/bitnami/charts/commit/139f5a54c71ba4da1a0401300b84f8b31d8ff2e9)), closes [#29441](https://github.com/bitnami/charts/issues/29441)
+
+## <small>13.0.2 (2024-09-19)</small>
+
+* [bitnami/kong] Release 13.0.2 (#29509) ([accb05e](https://github.com/bitnami/charts/commit/accb05efca0ba859d82ed0dd42e16be990f20eda)), closes [#29509](https://github.com/bitnami/charts/issues/29509)
+
+## <small>13.0.1 (2024-09-18)</small>
+
+* [bitnami/kong] Release 13.0.1 (#29492) ([b9009aa](https://github.com/bitnami/charts/commit/b9009aa6c246efe8a6ad2c36a0a1874d197db340)), closes [#29492](https://github.com/bitnami/charts/issues/29492)
+
+## 13.0.0 (2024-09-10)
+
+* [bitnami/kong] Upgrade Cassandra to 12.x.x (appVersion 5.0.0) (#29329) ([eb13e52](https://github.com/bitnami/charts/commit/eb13e5212410771560fd9e064f6ce0fb057e67c5)), closes [#29329](https://github.com/bitnami/charts/issues/29329)
+
+## <small>12.2.11 (2024-08-22)</small>
+
+* [bitnami/kong] Release 12.2.11 (#28964) ([e5c037e](https://github.com/bitnami/charts/commit/e5c037ef631f585d74a6eb99c13aacff10fe07b6)), closes [#28964](https://github.com/bitnami/charts/issues/28964)
+
+## <small>12.2.10 (2024-07-25)</small>
+
+* [bitnami/kong] Release 12.2.10 (#28509) ([1d7aa1c](https://github.com/bitnami/charts/commit/1d7aa1c3f7ef36a7a159b0a51c4aba1bde9b692e)), closes [#28509](https://github.com/bitnami/charts/issues/28509)
+
+## <small>12.2.9 (2024-07-24)</small>
+
+* [bitnami/kong] Release 12.2.9 (#28390) ([8e11928](https://github.com/bitnami/charts/commit/8e1192888a7930e11c8cd259456869348e742743)), closes [#28390](https://github.com/bitnami/charts/issues/28390)
+
+## <small>12.2.8 (2024-07-23)</small>
+
+* [bitnami/kong] Release 12.2.8 (#28212) ([7781ee0](https://github.com/bitnami/charts/commit/7781ee0271ccab2c8beb7d8c0190f6b83b4da611)), closes [#28212](https://github.com/bitnami/charts/issues/28212)
+
+## <small>12.2.7 (2024-07-18)</small>
+
+* [bitnami/kong] Global StorageClass as default value (#28042) ([0d5fd72](https://github.com/bitnami/charts/commit/0d5fd72f4d1307f8437b149589b4e9e8df0f7c34)), closes [#28042](https://github.com/bitnami/charts/issues/28042)
+
+## <small>12.2.6 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/kong] Release 12.2.6 (#27698) ([277f389](https://github.com/bitnami/charts/commit/277f389d58297bc7ac9dae529e2ee37a8d5c88ad)), closes [#27698](https://github.com/bitnami/charts/issues/27698)
+
+## <small>12.2.5 (2024-06-21)</small>
+
+* [bitnami/kong] Release 12.2.5 (#27481) ([0a244ff](https://github.com/bitnami/charts/commit/0a244ffab824b403db7d1bc265351e33ed6bf0de)), closes [#27481](https://github.com/bitnami/charts/issues/27481)
+
+## <small>12.2.4 (2024-06-19)</small>
+
+* [bitnami/kong] Release 12.2.4 (#27456) ([81b7b69](https://github.com/bitnami/charts/commit/81b7b6955bbae026c7bc8146188f0721cad048b1)), closes [#27456](https://github.com/bitnami/charts/issues/27456)
+
+## <small>12.2.3 (2024-06-18)</small>
+
+* [bitnami/kong] Release 12.2.3 (#27366) ([3c12d1d](https://github.com/bitnami/charts/commit/3c12d1d6d44f557149388980f2cc8b34c2e7251f)), closes [#27366](https://github.com/bitnami/charts/issues/27366)
+
+## <small>12.2.2 (2024-06-17)</small>
+
+* [bitnami/kong] Release 12.2.2 (#27261) ([77cbfcf](https://github.com/bitnami/charts/commit/77cbfcf0bfc71deaae131e03396fab5e7c6b571f)), closes [#27261](https://github.com/bitnami/charts/issues/27261)
+
+## <small>12.2.1 (2024-06-06)</small>
+
+* [bitnami/kong] Release 12.2.1 (#26970) ([ce6b8ee](https://github.com/bitnami/charts/commit/ce6b8ee3dec599e4e5f077fb77fd3647f8c224f6)), closes [#26970](https://github.com/bitnami/charts/issues/26970)
+
+## 12.2.0 (2024-06-06)
+
+* [bitnami/kong] Enable PodDisruptionBudgets (#26699) ([7361954](https://github.com/bitnami/charts/commit/7361954763b8602aedf7345f133874ab4eea6ac2)), closes [#26699](https://github.com/bitnami/charts/issues/26699)
+
+## <small>12.1.5 (2024-06-05)</small>
+
+* [bitnami/kong] Bump chart version (#26841) ([8d3928b](https://github.com/bitnami/charts/commit/8d3928b66f2579b2dc45d62653b6b303f9ad0098)), closes [#26841](https://github.com/bitnami/charts/issues/26841)
+
+## <small>12.1.4 (2024-06-05)</small>
+
+* [bitnami/kong] Bump chart version (#26783) ([a647110](https://github.com/bitnami/charts/commit/a647110f654f9f2e450388aa7d423b19a6352ff1)), closes [#26783](https://github.com/bitnami/charts/issues/26783)
+
+## <small>12.1.3 (2024-05-31)</small>
+
+* [bitnami/kong] Release 12.1.3 (#26587) ([1e4a6ee](https://github.com/bitnami/charts/commit/1e4a6eed352ba6c6bc3f5e3b718f5c747c53af4b)), closes [#26587](https://github.com/bitnami/charts/issues/26587)
 
 ## <small>12.1.2 (2024-05-28)</small>
 

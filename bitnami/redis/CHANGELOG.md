@@ -1,8 +1,148 @@
 # Changelog
 
-## 19.5.1 (2024-06-04)
+## 20.6.2 (2025-01-07)
 
-* [bitnami/redis] Bump chart version ([#26666](https://github.com/bitnami/charts/pull/26666))
+* [bitnami/redis] Release 20.6.2 ([#31238](https://github.com/bitnami/charts/pull/31238))
+
+## <small>20.6.1 (2024-12-21)</small>
+
+* [bitnami/redis] Release 20.6.1 (#31138) ([2da450b](https://github.com/bitnami/charts/commit/2da450bd72c598237763760d9128e11a7599ec32)), closes [#31138](https://github.com/bitnami/charts/issues/31138)
+
+## 20.6.0 (2024-12-16)
+
+* [bitname/redis] Add support for master and replicas resources to be annotated (#31034) ([5111fa5](https://github.com/bitnami/charts/commit/5111fa5201b1cec4bf3c9aab8806bee45d07e4c6)), closes [#31034](https://github.com/bitnami/charts/issues/31034)
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* Redis Readme: fix typo in value key name (#31007) ([4a8c60a](https://github.com/bitnami/charts/commit/4a8c60aa11316a73e846c3316b36132822e30956)), closes [#31007](https://github.com/bitnami/charts/issues/31007)
+
+## 20.5.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/redis] Detect non-standard images (#30942) ([f06f8db](https://github.com/bitnami/charts/commit/f06f8dbafe5eb3b22f689168d7ac9fb2fb0f707d)), closes [#30942](https://github.com/bitnami/charts/issues/30942)
+
+## <small>20.4.1 (2024-12-10)</small>
+
+* [bitnami/redis] CA shouldn't be mandatory when TLS is enabled (#30520) ([85219eb](https://github.com/bitnami/charts/commit/85219eb721efa640075325a1812d9ca8316a0a1a)), closes [#30520](https://github.com/bitnami/charts/issues/30520)
+
+## 20.4.0 (2024-12-02)
+
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 5) (#30674) ([ed2a546](https://github.com/bitnami/charts/commit/ed2a54617faf763169e6b01a89100b9db32e1000)), closes [#30674](https://github.com/bitnami/charts/issues/30674)
+* [bitnami/redis] add extraPortsEnabled (#30607) ([77a98fa](https://github.com/bitnami/charts/commit/77a98fa631f21a49b0c013d856cfb21ba090a0a6)), closes [#30607](https://github.com/bitnami/charts/issues/30607)
+
+## 20.3.0 (2024-11-14)
+
+* [bitnami/redis] feat: :sparkles: Allow updating credentials via values.yaml (#30452) ([d6a3118](https://github.com/bitnami/charts/commit/d6a3118e42a9a481d4429defbd628015a3b8f755)), closes [#30452](https://github.com/bitnami/charts/issues/30452)
+
+## <small>20.2.2 (2024-11-11)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/redis] Release 20.2.2 (#30407) ([ae54e98](https://github.com/bitnami/charts/commit/ae54e980494b5431d98d72a672532fc36b7a21c4)), closes [#30407](https://github.com/bitnami/charts/issues/30407)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>20.2.1 (2024-10-15)</small>
+
+* [bitnami/redis] Fix preExecCmds parameter (#29898) ([6db8a2e](https://github.com/bitnami/charts/commit/6db8a2e736e2a60be2d3848d85f49d236a43136c)), closes [#29898](https://github.com/bitnami/charts/issues/29898)
+
+## 20.2.0 (2024-10-09)
+
+* [bitnami/redis] add extraPodSpec (#29725) ([0d2b826](https://github.com/bitnami/charts/commit/0d2b8269e0e5c1a287fcd8e44c623afa6311e761)), closes [#29725](https://github.com/bitnami/charts/issues/29725)
+
+## <small>20.1.7 (2024-10-02)</small>
+
+* [bitnami/redis] Release 20.1.7 (#29756) ([bc01e03](https://github.com/bitnami/charts/commit/bc01e03cea20cd93fdd43a4fece348aabb3f1ea4)), closes [#29756](https://github.com/bitnami/charts/issues/29756)
+
+## <small>20.1.6 (2024-10-02)</small>
+
+* [bitnami/redis] adds kind & apiVersion for pvc template in statefulset (#29678) ([13212d2](https://github.com/bitnami/charts/commit/13212d218c0eea9d60a3b9d08f8d5ca1b5951d74)), closes [#29678](https://github.com/bitnami/charts/issues/29678)
+
+## <small>20.1.5 (2024-09-26)</small>
+
+* [bitnami/redis] - fix additionalEndpoints in servicemonitor (#29595) ([6e674ff](https://github.com/bitnami/charts/commit/6e674ff9f082dc60676e4451917400a48c05a6ad)), closes [#29595](https://github.com/bitnami/charts/issues/29595)
+
+## <small>20.1.4 (2024-09-19)</small>
+
+* [bitnami/redis] Release 20.1.4 (#29530) ([8053b1a](https://github.com/bitnami/charts/commit/8053b1a13272f5485ca5c6ec0ace6741cf202262)), closes [#29530](https://github.com/bitnami/charts/issues/29530)
+
+## <small>20.1.3 (2024-09-14)</small>
+
+* [bitnami/redis] Release 20.1.3 (#29411) ([b0b5c88](https://github.com/bitnami/charts/commit/b0b5c88f48cbb67d367121d92cf44afd5ddb424f)), closes [#29411](https://github.com/bitnami/charts/issues/29411)
+
+## <small>20.1.2 (2024-09-13)</small>
+
+* [bitnami/redis] Use common password manager to handle password (#29376) ([6ec3657](https://github.com/bitnami/charts/commit/6ec365736a61521aeb8f44d475420bf529f7f1fd)), closes [#29376](https://github.com/bitnami/charts/issues/29376)
+
+## <small>20.1.1 (2024-09-13)</small>
+
+* [bitnami/redis] fix: move variable from annotation to label (#29209) ([396fa01](https://github.com/bitnami/charts/commit/396fa01503a29a5c4695073ed9e6bde1923b187b)), closes [#29209](https://github.com/bitnami/charts/issues/29209)
+
+## 20.1.0 (2024-09-09)
+
+* [bitnami/redis] Support extraEnvVars on volume-permissions for dynamic subfolders (#29195) ([b33ff20](https://github.com/bitnami/charts/commit/b33ff200f4710173de48581071bc132d09618594)), closes [#29195](https://github.com/bitnami/charts/issues/29195)
+
+## <small>20.0.5 (2024-09-05)</small>
+
+* [bitnami/redis] label slave pod using sentinel masterService (#29121) ([6ae397f](https://github.com/bitnami/charts/commit/6ae397fb40ff4af6a578c54911f96383e30fed96)), closes [#29121](https://github.com/bitnami/charts/issues/29121)
+
+## <small>20.0.4 (2024-09-04)</small>
+
+* [bitnami/redis] update values.schema.json (#29106) ([8a2fea3](https://github.com/bitnami/charts/commit/8a2fea3d935989fc929092083e3af341d4eb545f)), closes [#29106](https://github.com/bitnami/charts/issues/29106)
+
+## <small>20.0.3 (2024-08-20)</small>
+
+* [bitnami/redis] Release 20.0.3 (#28941) ([d2a1abb](https://github.com/bitnami/charts/commit/d2a1abbba3a6125260c2df569ef060e165be88fa)), closes [#28941](https://github.com/bitnami/charts/issues/28941)
+
+## <small>20.0.2 (2024-08-14)</small>
+
+* [bitnami/redis] Release 20.0.2 (#28881) ([582b058](https://github.com/bitnami/charts/commit/582b058c032a83ad74eed87c9e9665ca4252f0ce)), closes [#28881](https://github.com/bitnami/charts/issues/28881)
+* [bitnami/redis] Update README after major update (#28848) ([a96205b](https://github.com/bitnami/charts/commit/a96205be4d1d1b4af34bf000cae49ae63b237a2a)), closes [#28848](https://github.com/bitnami/charts/issues/28848)
+
+## <small>20.0.1 (2024-08-09)</small>
+
+* [bitnami/redis] fix: Use rollout restart in ginkgo tests (#28813) ([1d8cb54](https://github.com/bitnami/charts/commit/1d8cb543a33d12b519a4b0e28fa99d3e20421a28)), closes [#28813](https://github.com/bitnami/charts/issues/28813)
+
+## 20.0.0 (2024-08-09)
+
+* [bitnami/redis] Release 20.0.0 (#28810) ([9e08d34](https://github.com/bitnami/charts/commit/9e08d34b938aebbe3ed955f4224b8e525313821d)), closes [#28810](https://github.com/bitnami/charts/issues/28810)
+
+## <small>19.6.4 (2024-07-25)</small>
+
+* [bitnami/redis] Release 19.6.4 (#28499) ([aaa7a7c](https://github.com/bitnami/charts/commit/aaa7a7cd11bfd8821d0464ef312ef0f66a3afce5)), closes [#28499](https://github.com/bitnami/charts/issues/28499)
+
+## <small>19.6.3 (2024-07-24)</small>
+
+* [bitnami/redis] Release 19.6.3 (#28365) ([e7ef119](https://github.com/bitnami/charts/commit/e7ef119715fad9e14d990a235a45f21a3158052d)), closes [#28365](https://github.com/bitnami/charts/issues/28365)
+
+## <small>19.6.2 (2024-07-16)</small>
+
+* [bitnami/redis] Global StorageClass as default value (#28089) ([5c8de02](https://github.com/bitnami/charts/commit/5c8de02f432e95ff59f033af241ccb7d566b9c6a)), closes [#28089](https://github.com/bitnami/charts/issues/28089)
+
+## <small>19.6.1 (2024-07-03)</small>
+
+* [bitnami/redis] Release 19.6.1 (#27712) ([a8f05c6](https://github.com/bitnami/charts/commit/a8f05c665a810762b420864a29460d8c84421f73)), closes [#27712](https://github.com/bitnami/charts/issues/27712)
+
+## 19.6.0 (2024-06-26)
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/redis] Allow setting revisionHistoryLimit (#27498) ([f8ea005](https://github.com/bitnami/charts/commit/f8ea005b071d8f2bbb6ccfe0a722ff8ca2882b3d)), closes [#27498](https://github.com/bitnami/charts/issues/27498)
+
+## <small>19.5.5 (2024-06-18)</small>
+
+* [bitnami/redis] Release 19.5.5 (#27411) ([ea96081](https://github.com/bitnami/charts/commit/ea96081967711fbb45815b51363a9c5818623a6f)), closes [#27411](https://github.com/bitnami/charts/issues/27411)
+
+## <small>19.5.4 (2024-06-17)</small>
+
+* [bitnami/redis] Release 19.5.4 (#27277) ([fe4c932](https://github.com/bitnami/charts/commit/fe4c932de4fec2aefd4d56dd9d0145c0bd76cc15)), closes [#27277](https://github.com/bitnami/charts/issues/27277)
+
+## <small>19.5.3 (2024-06-13)</small>
+
+* [bitnami/redis] Fix sentinel PDB condition (#27080) ([2d8e19f](https://github.com/bitnami/charts/commit/2d8e19f100c67838636a394c751f6f3994e62f73)), closes [#27080](https://github.com/bitnami/charts/issues/27080)
+
+## <small>19.5.2 (2024-06-06)</small>
+
+* [bitnami/redis] Release 19.5.2 (#27012) ([128a592](https://github.com/bitnami/charts/commit/128a59210d13d4619c9c80aa0631897f0d981917)), closes [#27012](https://github.com/bitnami/charts/issues/27012)
+
+## <small>19.5.1 (2024-06-04)</small>
+
+* [bitnami/redis] Bump chart version (#26666) ([01a2ef5](https://github.com/bitnami/charts/commit/01a2ef5c1354a3b93065bed9f5b4f41845114506)), closes [#26666](https://github.com/bitnami/charts/issues/26666)
 
 ## 19.5.0 (2024-05-23)
 

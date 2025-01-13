@@ -173,22 +173,28 @@ spec:
           args: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.flags "context" $) | nindent 12 }}
             - "http://localhost:{{ .Values.containerPorts.monitoring }}"
           {{- end }}
+          {{- if not .Values.diagnosticMode.enabled }}
           ports:
             - name: metrics
-              containerPort: {{ .Values.metrics.containerPort }}
-          {{- if not .Values.diagnosticMode.enabled }}
-          livenessProbe:
+              containerPort: {{ coalesce .Values.metrics.containerPorts.http .Values.metrics.containerPort }}
+
+          {{- if .Values.metrics.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.metrics.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metrics.livenessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /metrics
               port: metrics
-            initialDelaySeconds: 15
-            timeoutSeconds: 5
-          readinessProbe:
+          {{- end }}
+          {{- if .Values.metrics.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.metrics.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metrics.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /metrics
               port: metrics
-            initialDelaySeconds: 5
-            timeoutSeconds: 1
+          {{- end }}
+
           {{- end }}
           {{- if .Values.metrics.resources }}
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}

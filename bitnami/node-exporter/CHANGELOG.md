@@ -1,8 +1,89 @@
 # Changelog
 
-## 4.4.1 (2024-06-04)
+## 4.5.1 (2025-01-13)
 
-* [bitnami/node-exporter] Bump chart version ([#26657](https://github.com/bitnami/charts/pull/26657))
+* [bitnami/node-exporter] Release 4.5.1 ([#31322](https://github.com/bitnami/charts/pull/31322))
+
+## 4.5.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/node-exporter] Detect non-standard images (#30932) ([1550707](https://github.com/bitnami/charts/commit/1550707a5720a351ee35855e3ae7dfe8dfc439f2)), closes [#30932](https://github.com/bitnami/charts/issues/30932)
+
+## <small>4.4.18 (2024-12-04)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/node-exporter] Release 4.4.18 (#30769) ([4d95e2d](https://github.com/bitnami/charts/commit/4d95e2d019f0c4800e8bd291179da70b0ba431df)), closes [#30769](https://github.com/bitnami/charts/issues/30769)
+
+## <small>4.4.17 (2024-11-07)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/node-exporter] Release 4.4.17 (#30287) ([7b2f581](https://github.com/bitnami/charts/commit/7b2f581869ba457e0707cff46254630af2ecae16)), closes [#30287](https://github.com/bitnami/charts/issues/30287)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>4.4.16 (2024-10-02)</small>
+
+* [bitnami/node-exporter] Release 4.4.16 (#29712) ([0167536](https://github.com/bitnami/charts/commit/01675369336bd56efd76864c5aa69546805fa7af)), closes [#29712](https://github.com/bitnami/charts/issues/29712)
+
+## <small>4.4.15 (2024-09-06)</small>
+
+* [bitnami/node-exporter] Release 4.4.15 (#29255) ([6223523](https://github.com/bitnami/charts/commit/62235233ff4b93efa89a730fbe8f4653d0421ad3)), closes [#29255](https://github.com/bitnami/charts/issues/29255)
+
+## <small>4.4.14 (2024-08-28)</small>
+
+* [bitnami/node-exporter] Release 4.4.14 (#29075) ([3ecd8b2](https://github.com/bitnami/charts/commit/3ecd8b22af5ed0550e794fd4b0e557516f48a49d)), closes [#29075](https://github.com/bitnami/charts/issues/29075)
+
+## <small>4.4.13 (2024-08-23)</small>
+
+* [bitnami/node-exporter] Release 4.4.13 (#29003) ([93801d0](https://github.com/bitnami/charts/commit/93801d0d347db778d1f494520b7bb4058a0220c2)), closes [#29003](https://github.com/bitnami/charts/issues/29003)
+
+## <small>4.4.12 (2024-08-07)</small>
+
+* [bitnami/node-exporter] Release 4.4.12 (#28736) ([cac3342](https://github.com/bitnami/charts/commit/cac33425ef531bc78dd21cb13ccfbb1a315059f7)), closes [#28736](https://github.com/bitnami/charts/issues/28736)
+
+## <small>4.4.11 (2024-07-25)</small>
+
+* [bitnami/node-exporter] Release 4.4.11 (#28454) ([b2e316f](https://github.com/bitnami/charts/commit/b2e316f2b53897ecc0ed52ccf28b64a72e046260)), closes [#28454](https://github.com/bitnami/charts/issues/28454)
+
+## <small>4.4.10 (2024-07-24)</small>
+
+* [bitnami/node-exporter] Release 4.4.10 (#28331) ([1fd9642](https://github.com/bitnami/charts/commit/1fd96423650c9bfc1f5ee1501473f3aa344c2f37)), closes [#28331](https://github.com/bitnami/charts/issues/28331)
+
+## <small>4.4.9 (2024-07-16)</small>
+
+* [bitnami/node-exporter] Global StorageClass as default value (#28072) ([4977903](https://github.com/bitnami/charts/commit/49779038f6c5f8c0a6ba24c3cfeaf29285418455)), closes [#28072](https://github.com/bitnami/charts/issues/28072)
+
+## <small>4.4.8 (2024-07-14)</small>
+
+* [bitnami/node-exporter] Release 4.4.8 (#27959) ([f83c58e](https://github.com/bitnami/charts/commit/f83c58e64c7c33a4594d2cd7a7f7ea5e02aeb59e)), closes [#27959](https://github.com/bitnami/charts/issues/27959)
+
+## <small>4.4.7 (2024-07-04)</small>
+
+* [bitnami/node-exporter] Release 4.4.7 (#27772) ([1205c88](https://github.com/bitnami/charts/commit/1205c887c4f450c380857f2f4bcab0e4a80a8a7e)), closes [#27772](https://github.com/bitnami/charts/issues/27772)
+
+## <small>4.4.6 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/node-exporter] Release 4.4.6 (#27668) ([b8aa99f](https://github.com/bitnami/charts/commit/b8aa99f7c6b67a23c9a0814ec5c589070e2b8b48)), closes [#27668](https://github.com/bitnami/charts/issues/27668)
+
+## <small>4.4.5 (2024-06-18)</small>
+
+* [bitnami/node-exporter] Release 4.4.5 (#27391) ([5a9a37c](https://github.com/bitnami/charts/commit/5a9a37c37072cec5a556925e689c2ce5d5587f19)), closes [#27391](https://github.com/bitnami/charts/issues/27391)
+
+## <small>4.4.4 (2024-06-17)</small>
+
+* [bitnami/node-exporter] Release 4.4.4 (#27255) ([ef9d1bb](https://github.com/bitnami/charts/commit/ef9d1bbfe4959730013f5eddccd88f268defd6a5)), closes [#27255](https://github.com/bitnami/charts/issues/27255)
+
+## <small>4.4.3 (2024-06-06)</small>
+
+* [bitnami/node-exporter] Release 4.4.3 (#26993) ([9ffacbf](https://github.com/bitnami/charts/commit/9ffacbfc73233b8c8b5eda941b3a3c6d1cda3f34)), closes [#26993](https://github.com/bitnami/charts/issues/26993)
+
+## <small>4.4.2 (2024-06-05)</small>
+
+* [bitnami/node-exporter] Release 4.4.2 (#26747) ([4d4e371](https://github.com/bitnami/charts/commit/4d4e371c8cd4c49136f72b8b9948cc10eafe53e0)), closes [#26747](https://github.com/bitnami/charts/issues/26747)
+
+## <small>4.4.1 (2024-06-04)</small>
+
+* [bitnami/node-exporter] Bump chart version (#26657) ([8a50a40](https://github.com/bitnami/charts/commit/8a50a4084b2639ef1ca78266cb32cd371f7a518f)), closes [#26657](https://github.com/bitnami/charts/issues/26657)
 
 ## 4.4.0 (2024-06-03)
 
