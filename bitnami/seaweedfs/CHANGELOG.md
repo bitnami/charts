@@ -1,8 +1,12 @@
 # Changelog
 
+## 4.4.0 (2025-01-13)
+
+* [bitnami/seaweedfs]: add pod for `weed iam` ([#31334](https://github.com/bitnami/charts/pull/31334))
+
 ## 4.3.0 (2025-01-10)
 
-* [bitnami/seaweedfs] Make database check on start optional ([#31277](https://github.com/bitnami/charts/pull/31277))
+* [bitnami/seaweedfs] Make database check on start optional (#31277) ([ddb8a97](https://github.com/bitnami/charts/commit/ddb8a97d80c5bc87f2c33be751fbc35797f5f1be)), closes [#31277](https://github.com/bitnami/charts/issues/31277)
 
 ## <small>4.2.1 (2025-01-07)</small>
 
