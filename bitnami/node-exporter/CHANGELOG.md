@@ -1,8 +1,13 @@
 # Changelog
 
+## 4.5.1 (2025-01-13)
+
+* [bitnami/node-exporter] Release 4.5.1 ([#31322](https://github.com/bitnami/charts/pull/31322))
+
 ## 4.5.0 (2024-12-10)
 
-* [bitnami/node-exporter] Detect non-standard images ([#30932](https://github.com/bitnami/charts/pull/30932))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/node-exporter] Detect non-standard images (#30932) ([1550707](https://github.com/bitnami/charts/commit/1550707a5720a351ee35855e3ae7dfe8dfc439f2)), closes [#30932](https://github.com/bitnami/charts/issues/30932)
 
 ## <small>4.4.18 (2024-12-04)</small>
 
