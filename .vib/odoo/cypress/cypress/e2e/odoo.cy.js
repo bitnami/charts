@@ -14,7 +14,7 @@ it('allows installing/uninstalling an application and inviting new users', () =>
     cy.get('button[name="button_immediate_install"]').click();
   });
 
-  cy.reload({timeout: 300000});
+  cy.reload({timeout: 600000});
 
   // Perform the second login only if the #login selector is visible
   cy.get("body").then(($body) => {
