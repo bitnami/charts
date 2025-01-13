@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.4.1 (2024-12-10)
+## 2.4.2 (2025-01-13)
 
-* [bitnami/pinniped] Release 2.4.1 ([#30975](https://github.com/bitnami/charts/pull/30975))
+* [bitnami/pinniped] bugfix: remove deprecated vars to configure OpenLDAP on VIB ([#31337](https://github.com/bitnami/charts/pull/31337))
+
+## <small>2.4.1 (2024-12-10)</small>
+
+* [bitnami/pinniped] Release 2.4.1 (#30975) ([0505a7e](https://github.com/bitnami/charts/commit/0505a7eadfbcd76a857100c0676f36069b03bf79)), closes [#30975](https://github.com/bitnami/charts/issues/30975)
 
 ## 2.4.0 (2024-12-10)
 
