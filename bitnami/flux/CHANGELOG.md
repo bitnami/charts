@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.4.1 (2025-01-12)
+## 2.4.1 (2025-01-13)
 
 * [bitnami/flux] Release 2.4.1 ([#31313](https://github.com/bitnami/charts/pull/31313))
 
