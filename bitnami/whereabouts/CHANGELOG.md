@@ -1,8 +1,13 @@
 # Changelog
 
+## 1.2.1 (2025-01-13)
+
+* [bitnami/whereabouts] Release 1.2.1 ([#31326](https://github.com/bitnami/charts/pull/31326))
+
 ## 1.2.0 (2024-12-10)
 
-* [bitnami/whereabouts] Detect non-standard images ([#30953](https://github.com/bitnami/charts/pull/30953))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/whereabouts] Detect non-standard images (#30953) ([0da5ab8](https://github.com/bitnami/charts/commit/0da5ab850e004dd1afc1d7052247ea954b70d1d1)), closes [#30953](https://github.com/bitnami/charts/issues/30953)
 
 ## <small>1.1.17 (2024-12-04)</small>
 
