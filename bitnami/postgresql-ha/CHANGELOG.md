@@ -1,8 +1,12 @@
 # Changelog
 
-## 15.1.5 (2025-01-10)
+## 15.1.6 (2025-01-13)
 
-* [bitnami/postgresql-ha] setting ServiceAccount also when is not created by the bitnami chart ([#31293](https://github.com/bitnami/charts/pull/31293))
+* [bitnami/postgresql-ha] Release 15.1.6 ([#31341](https://github.com/bitnami/charts/pull/31341))
+
+## <small>15.1.5 (2025-01-13)</small>
+
+* [bitnami/postgresql-ha] setting ServiceAccount also when is not created by the bitnami chart (#31293 ([2316c35](https://github.com/bitnami/charts/commit/2316c354ab2b1cb54f57e0b5f0e108faec7d523b)), closes [#31293](https://github.com/bitnami/charts/issues/31293)
 
 ## <small>15.1.4 (2024-12-23)</small>
 
