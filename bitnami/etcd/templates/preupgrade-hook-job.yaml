@@ -81,26 +81,8 @@ spec:
           env:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
-            - name: MY_POD_NAME
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.name
-            - name: MY_JOB_NAME
-              value: {{ printf "%s-pre-upgrade" (include "common.names.fullname" .) | quote }}
-            - name: MY_STS_NAME
-              value: {{ include "common.names.fullname" . | quote }}
-            - name: ETCDCTL_API
-              value: "3"
             - name: ETCD_ON_K8S
               value: "yes"
-            - name: ETCD_NAME
-              value: "$(MY_POD_NAME)"
-            - name: ETCD_DATA_DIR
-              value: "/bitnami/etcd/data"
-            - name: ETCD_LOG_LEVEL
-              value: {{ ternary "debug" .Values.logLevel .Values.image.debug | quote }}
-            - name: ALLOW_NONE_AUTHENTICATION
-              value: {{ ternary "yes" "no" (and (not (or .Values.auth.rbac.create .Values.auth.rbac.enabled)) .Values.auth.rbac.allowNoneAuthentication) | quote }}
             {{- if or .Values.auth.rbac.create .Values.auth.rbac.enabled }}
             - name: ETCD_ROOT_PASSWORD
               valueFrom:
@@ -108,33 +90,7 @@ spec:
                   name: {{ include "etcd.secretName" . }}
                   key: {{ include "etcd.secretPasswordKey" . }}
             {{- end }}
-            {{- if .Values.auth.token.enabled }}
-            - name: ETCD_AUTH_TOKEN
-              {{- if eq .Values.auth.token.type "jwt" }}
-              value: {{ printf "jwt,priv-key=/opt/bitnami/etcd/certs/token/%s,sign-method=%s,ttl=%s" .Values.auth.token.privateKey.filename .Values.auth.token.signMethod .Values.auth.token.ttl | quote }}
-              {{- else if eq .Values.auth.token.type "simple" }}
-              value: "simple"
-              {{- end }}
-            {{- end }}
-            {{- if .Values.metrics.useSeparateEndpoint }}
-            - name: ETCD_LISTEN_METRICS_URLS
-              value: "http://0.0.0.0:{{ .Values.containerPorts.metrics }}"
-            {{- end }}
-            {{- if .Values.autoCompactionMode }}
-            - name: ETCD_AUTO_COMPACTION_MODE
-              value: {{ .Values.autoCompactionMode | quote }}
-            {{- end }}
-            {{- if .Values.autoCompactionRetention }}
-            - name: ETCD_AUTO_COMPACTION_RETENTION
-              value: {{ .Values.autoCompactionRetention | quote }}
-            {{- end }}
-            {{- if .Values.maxProcs }}
-            - name: GOMAXPROCS
-              value: {{ .Values.maxProcs }}
-            {{- end }}
             {{- if gt $replicaCount 1 }}
-            - name: ETCD_INITIAL_CLUSTER_TOKEN
-              value: {{ .Values.initialClusterToken | quote }}
             {{- $initialCluster := list }}
             {{- range $e, $i := until $replicaCount }}
             {{- $initialCluster = append $initialCluster (printf "%s-%d=%s://%s-%d.%s.%s.svc.%s:%d" $etcdFullname $i $etcdPeerProtocol $etcdFullname $i $etcdHeadlessServiceName $releaseNamespace $clusterDomain $peerPort) }}
@@ -142,44 +98,12 @@ spec:
             - name: ETCD_INITIAL_CLUSTER
               value: {{ join "," $initialCluster | quote }}
             {{- end }}
-            - name: ETCD_CLUSTER_DOMAIN
-              value: {{ printf "%s.%s.svc.%s" $etcdHeadlessServiceName $releaseNamespace $clusterDomain | quote }}
-            {{- if and .Values.auth.client.secureTransport .Values.auth.client.useAutoTLS }}
-            - name: ETCD_AUTO_TLS
-              value: "true"
-            {{- else if .Values.auth.client.secureTransport }}
             - name: ETCD_CERT_FILE
               value: "/opt/bitnami/etcd/certs/client/{{ .Values.auth.client.certFilename }}"
             - name: ETCD_KEY_FILE
               value: "/opt/bitnami/etcd/certs/client/{{ .Values.auth.client.certKeyFilename }}"
-            {{- if .Values.auth.client.enableAuthentication }}
-            - name: ETCD_CLIENT_CERT_AUTH
-              value: "true"
             - name: ETCD_TRUSTED_CA_FILE
               value: "/opt/bitnami/etcd/certs/client/{{ .Values.auth.client.caFilename | default "ca.crt" }}"
-            {{- else if .Values.auth.client.caFilename }}
-            - name: ETCD_TRUSTED_CA_FILE
-              value: "/opt/bitnami/etcd/certs/client/{{ .Values.auth.client.caFilename | default "ca.crt" }}"
-            {{- end }}
-            {{- end }}
-            {{- if and .Values.auth.peer.secureTransport .Values.auth.peer.useAutoTLS }}
-            - name: ETCD_PEER_AUTO_TLS
-              value: "true"
-            {{- else if .Values.auth.peer.secureTransport }}
-            - name: ETCD_PEER_CERT_FILE
-              value: "/opt/bitnami/etcd/certs/peer/{{ .Values.auth.peer.certFilename }}"
-            - name: ETCD_PEER_KEY_FILE
-              value: "/opt/bitnami/etcd/certs/peer/{{ .Values.auth.peer.certKeyFilename }}"
-            {{- if .Values.auth.peer.enableAuthentication }}
-            - name: ETCD_PEER_CLIENT_CERT_AUTH
-              value: "true"
-            - name: ETCD_PEER_TRUSTED_CA_FILE
-              value: "/opt/bitnami/etcd/certs/peer/{{ .Values.auth.peer.caFilename | default "ca.crt" }}"
-            {{- else if .Values.auth.peer.caFilename }}
-            - name: ETCD_PEER_TRUSTED_CA_FILE
-              value: "/opt/bitnami/etcd/certs/peer/{{ .Values.auth.peer.caFilename | default "ca.crt" }}"
-            {{- end }}
-            {{- end }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
