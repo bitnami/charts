@@ -29,7 +29,7 @@ Create the cassandra host
 */}}
 {{- define "zipkin.cassandra.host" -}}
     {{- if not .Values.cassandra.enabled -}}
-        {{- .Values.externalDatabase.host | quote -}}
+        {{- .Values.externalDatabase.host -}}
     {{- else -}}
         {{- include "common.names.dependency.fullname" (dict "chartName" "cassandra" "chartValues" .Values.cassandra "context" $) -}}
     {{- end }}
