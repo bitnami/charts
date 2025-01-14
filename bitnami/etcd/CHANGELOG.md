@@ -1,12 +1,13 @@
 # Changelog
 
-## 11.0.0 (2025-01-04)
+## 11.0.0 (2025-01-14)
 
 * [bitnami/etcd] Add pre-upgrade hook ([#31161](https://github.com/bitnami/charts/pull/31161))
 
-## 10.7.2 (2025-01-12)
+## <small>10.7.2 (2025-01-12)</small>
 
-* [bitnami/etcd] Release 10.7.2 ([#31312](https://github.com/bitnami/charts/pull/31312))
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/etcd] Release 10.7.2 (#31312) ([0e47c54](https://github.com/bitnami/charts/commit/0e47c5464e650b9149a87fbeac84f5a497012f36)), closes [#31312](https://github.com/bitnami/charts/issues/31312)
 
 ## <small>10.7.1 (2024-12-11)</small>
 
