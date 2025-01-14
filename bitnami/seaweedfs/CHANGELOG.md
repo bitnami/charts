@@ -1,11 +1,12 @@
 # Changelog
 
-## 4.4.0 (2025-01-13)
+## 4.4.0 (2025-01-14)
 
 * [bitnami/seaweedfs]: add pod for `weed iam` ([#31334](https://github.com/bitnami/charts/pull/31334))
-## 4.3.1 (2025-01-13)
 
-* [bitnami/seaweedfs]: correct typo in values.yaml regarding s3.auth.existingSecret ([#31339](https://github.com/bitnami/charts/pull/31339))
+## <small>4.3.1 (2025-01-13)</small>
+
+* [bitnami/seaweedfs]: correct typo in values.yaml regarding s3.auth.existingSecret (#31339) ([31d0532](https://github.com/bitnami/charts/commit/31d0532a517bd0669b445e6974c2c5aace41697d)), closes [#31339](https://github.com/bitnami/charts/issues/31339)
 
 ## 4.3.0 (2025-01-10)
 
