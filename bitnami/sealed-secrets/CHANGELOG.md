@@ -1,8 +1,13 @@
 # Changelog
 
+## 2.5.1 (2025-01-14)
+
+* [bitnami/sealed-secrets] Release 2.5.1 ([#31361](https://github.com/bitnami/charts/pull/31361))
+
 ## 2.5.0 (2024-12-10)
 
-* [bitnami/sealed-secrets] Detect non-standard images ([#30966](https://github.com/bitnami/charts/pull/30966))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/sealed-secrets] Detect non-standard images (#30966) ([7ee255a](https://github.com/bitnami/charts/commit/7ee255a1d61e589fc0c093bb9d3bcf8ac4d99f28)), closes [#30966](https://github.com/bitnami/charts/issues/30966)
 
 ## <small>2.4.14 (2024-12-05)</small>
 
