@@ -707,6 +707,7 @@ This version introduces the following breaking changes:
 
 - Remove `initialClusterState` which was unreliable at detecting cluster state. From now on, each node will contact other members to determine cluster state. If no members are available and the data dir is empty, then it bootstraps a new cluster.
 - Remove `removeMemberOnContainerTermination` which was unreliable at removing stale members during replica count updates. Instead, a pre-upgrade hook is added to check and remove stale members.
+- Remove support for manual scaling with `kubectl` or autoscaler. Upgrading of any kind including increasing replica count must be done with `helm upgrade` exclusively. CD automation tools that respect Helm hooks such as ArgoCD can also be used.
 
 ### To 10.7.0
 

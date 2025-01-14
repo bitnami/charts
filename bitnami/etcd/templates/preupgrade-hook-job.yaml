@@ -83,6 +83,8 @@ spec:
               value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
             - name: ETCD_ON_K8S
               value: "yes"
+            - name: ETCD_DATA_DIR
+              value: "/bitnami/etcd/data"
             {{- if or .Values.auth.rbac.create .Values.auth.rbac.enabled }}
             - name: ETCD_ROOT_PASSWORD
               valueFrom:
@@ -98,12 +100,24 @@ spec:
             - name: ETCD_INITIAL_CLUSTER
               value: {{ join "," $initialCluster | quote }}
             {{- end }}
+            {{- if and .Values.auth.client.secureTransport .Values.auth.client.useAutoTLS }}
+            - name: ETCD_AUTO_TLS
+              value: "true"
+            {{- else if .Values.auth.client.secureTransport }}
             - name: ETCD_CERT_FILE
               value: "/opt/bitnami/etcd/certs/client/{{ .Values.auth.client.certFilename }}"
             - name: ETCD_KEY_FILE
               value: "/opt/bitnami/etcd/certs/client/{{ .Values.auth.client.certKeyFilename }}"
+            {{- if .Values.auth.client.enableAuthentication }}
+            - name: ETCD_CLIENT_CERT_AUTH
+              value: "true"
             - name: ETCD_TRUSTED_CA_FILE
               value: "/opt/bitnami/etcd/certs/client/{{ .Values.auth.client.caFilename | default "ca.crt" }}"
+            {{- else if .Values.auth.client.caFilename }}
+            - name: ETCD_TRUSTED_CA_FILE
+              value: "/opt/bitnami/etcd/certs/client/{{ .Values.auth.client.caFilename | default "ca.crt" }}"
+            {{- end }}
+            {{- end }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
@@ -138,11 +152,6 @@ spec:
               mountPath: /opt/bitnami/etcd/certs/client/
               readOnly: true
             {{- end }}
-            {{- if or .Values.auth.peer.enableAuthentication (and .Values.auth.peer.secureTransport (not .Values.auth.peer.useAutoTLS )) }}
-            - name: etcd-peer-certs
-              mountPath: /opt/bitnami/etcd/certs/peer/
-              readOnly: true
-            {{- end }}
             {{- if .Values.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
@@ -164,12 +173,6 @@ spec:
         - name: etcd-client-certs
           secret:
             secretName: {{ required "A secret containing the client certificates is required" (tpl .Values.auth.client.existingSecret .) }}
-            defaultMode: 256
-        {{- end }}
-        {{- if or .Values.auth.peer.enableAuthentication (and .Values.auth.peer.secureTransport (not .Values.auth.peer.useAutoTLS )) }}
-        - name: etcd-peer-certs
-          secret:
-            secretName: {{ required "A secret containing the peer certificates is required" (tpl .Values.auth.peer.existingSecret .) }}
             defaultMode: 256
         {{- end }}
         {{- if .Values.extraVolumes }}
