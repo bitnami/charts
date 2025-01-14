@@ -1,8 +1,50 @@
 # Changelog
 
+## 10.1.4 (2025-01-13)
+
+* [bitnami/milvus] Release 10.1.4 ([#31333](https://github.com/bitnami/charts/pull/31333))
+
+## <small>10.1.3 (2025-01-02)</small>
+
+* [bitnami/milvus] Release 10.1.3 (#31197) ([1fe7c59](https://github.com/bitnami/charts/commit/1fe7c59f415c46e5b1e002229d5d2027f167a320)), closes [#31197](https://github.com/bitnami/charts/issues/31197)
+
+## <small>10.1.2 (2024-12-30)</small>
+
+* [bitnami/milvus] Release 10.1.2 (#31169) ([bd64596](https://github.com/bitnami/charts/commit/bd64596d62ee84df6d3515e0f6b83472bfcf7eda)), closes [#31169](https://github.com/bitnami/charts/issues/31169)
+
+## <small>10.1.1 (2024-12-23)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/milvus] Release 10.1.1 (#31147) ([f8b9a38](https://github.com/bitnami/charts/commit/f8b9a385b826dea3d54afacd90501ff3a8f3d34d)), closes [#31147](https://github.com/bitnami/charts/issues/31147)
+
+## 10.1.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/milvus] Detect non-standard images (#30959) ([e40b32f](https://github.com/bitnami/charts/commit/e40b32f1e3ddb6589ff57381d30009ba3179d9cc)), closes [#30959](https://github.com/bitnami/charts/issues/30959)
+
+## <small>10.0.4 (2024-12-04)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 4) (#30669) ([a4ec006](https://github.com/bitnami/charts/commit/a4ec00624589023a70a7094fcfb9f12e382bc280)), closes [#30669](https://github.com/bitnami/charts/issues/30669)
+* [bitnami/*] docs: :memo: Unify "Securing Traffic using TLS" section (#30707) ([b572333](https://github.com/bitnami/charts/commit/b57233336e4fe9af928ecb4f2a5f334011efb1bc)), closes [#30707](https://github.com/bitnami/charts/issues/30707)
+* [bitnami/milvus] Release 10.0.4 (#30765) ([5ce39e2](https://github.com/bitnami/charts/commit/5ce39e2c5bafaa70d6dbddc22d1bd7b6730e7abf)), closes [#30765](https://github.com/bitnami/charts/issues/30765)
+
+## <small>10.0.3 (2024-11-28)</small>
+
+* [bitnami/milvus] feat: update chart deps (#30651) ([8f80dc6](https://github.com/bitnami/charts/commit/8f80dc6f00e679c7c182055ae6ed24b780410a95)), closes [#30651](https://github.com/bitnami/charts/issues/30651)
+
+## <small>10.0.2 (2024-11-22)</small>
+
+* [bitnami/milvus] Release 10.0.2 (#30580) ([c3d8e1f](https://github.com/bitnami/charts/commit/c3d8e1f5f50f49e33f1f051baeb7c1b3d2e461b1)), closes [#30580](https://github.com/bitnami/charts/issues/30580)
+
+## <small>10.0.1 (2024-11-19)</small>
+
+* [bitnami/milvus] Release 10.0.1 (#30533) ([80a27f1](https://github.com/bitnami/charts/commit/80a27f1b29ae77195e29d29ce1a0207dfbdd4c89)), closes [#30533](https://github.com/bitnami/charts/issues/30533)
+
 ## 10.0.0 (2024-11-12)
 
-* [bitnami/milvus] Update kafka subchart to 31.0.0 ([#30428](https://github.com/bitnami/charts/pull/30428))
+* [bitnami/milvus] docs: :memo: Add "Update credentials" section (#30241) ([5e0114a](https://github.com/bitnami/charts/commit/5e0114a6b39fa7bedcefba38e5e17c54e35361e9)), closes [#30241](https://github.com/bitnami/charts/issues/30241)
+* [bitnami/milvus] Update kafka subchart to 31.0.0 (#30428) ([81e0133](https://github.com/bitnami/charts/commit/81e013315ea356fe6dc8c4252854a77af48a649d)), closes [#30428](https://github.com/bitnami/charts/issues/30428)
 
 ## <small>9.0.12 (2024-11-07)</small>
 

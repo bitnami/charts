@@ -19,6 +19,11 @@ global:
   ##
   imagePullSecrets: []
   defaultStorageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
   ## Compatibility adaptations for Kubernetes platforms
   ##
   compatibility:
@@ -80,7 +85,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/seaweedfs
-  tag: 3.80.0-debian-12-r0
+  tag: 3.81.0-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -2226,10 +2231,10 @@ s3:
   ## @param s3.auth.enabled Enable Amazon S3 API authentication
   ## @param s3.auth.existingSecret Existing secret with Amazon S3 API authentication configuration
   ## @param s3.auth.existingSecretConfigKey Key of the above existing secret with S3 API authentication configuration, defaults to `config.json`
-  ## @param s3.auth.adminAccessKeyId Amazon S3 API access key with admin privileges. Ignored if `security.mTLS.volume.existingSecret` is set
-  ## @param s3.auth.adminSecretAccessKey Amazon S3 API secret key with admin privileges. Ignored if `security.mTLS.volume.existingSecret` is set
-  ## @param s3.auth.readAccessKeyId Amazon S3 API read access key with read-only privileges. Ignored if `security.mTLS.volume.existingSecret` is set
-  ## @param s3.auth.readSecretAccessKey Amazon S3 API read secret key with read-only privileges. Ignored if `security.mTLS.volume.existingSecret` is set
+  ## @param s3.auth.adminAccessKeyId Amazon S3 API access key with admin privileges. Ignored if `s3.auth.existingSecret` is set
+  ## @param s3.auth.adminSecretAccessKey Amazon S3 API secret key with admin privileges. Ignored if `s3.auth.existingSecret` is set
+  ## @param s3.auth.readAccessKeyId Amazon S3 API read access key with read-only privileges. Ignored if `s3.auth.existingSecret` is set
+  ## @param s3.auth.readSecretAccessKey Amazon S3 API read secret key with read-only privileges. Ignored if `s3.auth.existingSecret` is set
   ##
   auth:
     enabled: false
@@ -3240,7 +3245,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r33
+    tag: 12-debian-12-r34
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -3324,7 +3329,7 @@ mariadb:
   image:
     registry: docker.io
     repository: bitnami/mariadb
-    tag: 11.4.4-debian-12-r1
+    tag: 11.4.4-debian-12-r2
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -3425,7 +3430,7 @@ postgresql:
   image:
     registry: docker.io
     repository: bitnami/postgresql
-    tag: 17.1.0-debian-12-r0
+    tag: 17.2.0-debian-12-r5
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -3533,6 +3538,10 @@ externalDatabase:
   ## NOTE: When it's set, the `externalDatabase.password` parameter is ignored
   ##
   existingSecret: ""
+  ## @param externalDatabase.waitForDatabaseEnabled Whether to check for external database before starting seaweedfs containers
+  ##
+  waitForDatabaseEnabled: true
+  ##
   ## Init external database job
   ##
   initDatabaseJob:

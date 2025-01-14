@@ -1,8 +1,34 @@
 # Changelog
 
+## 5.1.3 (2025-01-08)
+
+* [bitnami/jaeger] Release 5.1.3 ([#31251](https://github.com/bitnami/charts/pull/31251))
+
+## <small>5.1.2 (2024-12-12)</small>
+
+* [bitnami/jaeger] Release 5.1.2 (#31021) ([ee3a9bd](https://github.com/bitnami/charts/commit/ee3a9bdcc8437615b82b8033c33be35a397e2689)), closes [#31021](https://github.com/bitnami/charts/issues/31021)
+
+## <small>5.1.1 (2024-12-10)</small>
+
+* [bitnami/jaeger] Fix typo in NOTES.txt (#30909) ([b7f1b92](https://github.com/bitnami/charts/commit/b7f1b926ecabfec95ef6c081d8b12f40d950d30e)), closes [#30909](https://github.com/bitnami/charts/issues/30909)
+
+## 5.1.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/jaeger] Detect non-standard images (#30881) ([4773008](https://github.com/bitnami/charts/commit/47730085e639cddd081ec93d62339322a36b0fc5)), closes [#30881](https://github.com/bitnami/charts/issues/30881)
+
+## <small>5.0.1 (2024-12-04)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/jaeger] Release 5.0.1 (#30758) ([1672922](https://github.com/bitnami/charts/commit/16729228545387e22171fe81cb0982202363a1db)), closes [#30758](https://github.com/bitnami/charts/issues/30758)
+
+## 5.0.0 (2024-11-20)
+
+* [bitnami/jaeger] Release 5.0.0 (#30529) ([8e7120e](https://github.com/bitnami/charts/commit/8e7120edd246ee4e5bb6467ffef905446a8b27c3)), closes [#30529](https://github.com/bitnami/charts/issues/30529)
+
 ## 4.0.0 (2024-11-13)
 
-* [bitnami/jaeger] chore!: :arrow_up: :fire: :boom: Update Jaeger to 1.63.0 and deprecate jaeger-agent ([#30439](https://github.com/bitnami/charts/pull/30439))
+* [bitnami/jaeger] chore!: :arrow_up: :fire: :boom: Update Jaeger to 1.63.0 and deprecate jaeger-agent ([ab89e33](https://github.com/bitnami/charts/commit/ab89e33385cf98a4de67c6795d4ab970d16a1f33)), closes [#30439](https://github.com/bitnami/charts/issues/30439)
 
 ## <small>3.0.6 (2024-11-08)</small>
 

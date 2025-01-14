@@ -1,8 +1,30 @@
 # Changelog
 
-## 3.5.2 (2024-10-21)
+## 3.7.1 (2025-01-09)
 
-* [bitnami/apisix] Release 3.5.2 ([#30014](https://github.com/bitnami/charts/pull/30014))
+* [bitnami/apisix] Release 3.7.1 ([#31272](https://github.com/bitnami/charts/pull/31272))
+
+## 3.7.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Unify "Securing Traffic using TLS" section (#30707) ([b572333](https://github.com/bitnami/charts/commit/b57233336e4fe9af928ecb4f2a5f334011efb1bc)), closes [#30707](https://github.com/bitnami/charts/issues/30707)
+* [bitnami/apisix] Detect non-standard images (#30861) ([0c989ce](https://github.com/bitnami/charts/commit/0c989ce546a26e91a94df349630d1ee3e9fa2a2a)), closes [#30861](https://github.com/bitnami/charts/issues/30861)
+
+## <small>3.6.1 (2024-11-30)</small>
+
+* [bitnami/apisix] Release 3.6.1 (#30695) ([292979c](https://github.com/bitnami/charts/commit/292979cddcab9e5228ff2e52f06f7559530ea7cd)), closes [#30695](https://github.com/bitnami/charts/issues/30695)
+
+## 3.6.0 (2024-11-29)
+
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 1) (#30660) ([7409ca4](https://github.com/bitnami/charts/commit/7409ca4c21869fabe1532dd4f3ff24895df71c6d)), closes [#30660](https://github.com/bitnami/charts/issues/30660)
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/apisix] feat: :sparkles: :memo: Allow password update via values.yaml (#30682) ([e41a46c](https://github.com/bitnami/charts/commit/e41a46c06a70ddfe543c9afa1fd81cd8fd2d97cd)), closes [#30682](https://github.com/bitnami/charts/issues/30682)
+
+## <small>3.5.2 (2024-10-21)</small>
+
+* [bitnami/apisix] Release 3.5.2 (#30014) ([53d7503](https://github.com/bitnami/charts/commit/53d7503654c7179d92e4352fc85d50db202a15f8)), closes [#30014](https://github.com/bitnami/charts/issues/30014)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
 
 ## <small>3.5.1 (2024-09-29)</small>
 

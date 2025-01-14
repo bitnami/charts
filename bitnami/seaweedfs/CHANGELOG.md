@@ -1,8 +1,33 @@
 # Changelog
 
-## 4.1.1 (2024-11-18)
+## 4.3.1 (2025-01-13)
 
-* [bitnami/seaweedfs] Release 4.1.1 ([#30510](https://github.com/bitnami/charts/pull/30510))
+* [bitnami/seaweedfs]: correct typo in values.yaml regarding s3.auth.existingSecret ([#31339](https://github.com/bitnami/charts/pull/31339))
+
+## 4.3.0 (2025-01-10)
+
+* [bitnami/seaweedfs] Make database check on start optional (#31277) ([ddb8a97](https://github.com/bitnami/charts/commit/ddb8a97d80c5bc87f2c33be751fbc35797f5f1be)), closes [#31277](https://github.com/bitnami/charts/issues/31277)
+
+## <small>4.2.1 (2025-01-07)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/seaweedfs] Release 4.2.1 (#31244) ([75fba5d](https://github.com/bitnami/charts/commit/75fba5d61dbf307dabd130d1ff3f621bb85320cc)), closes [#31244](https://github.com/bitnami/charts/issues/31244)
+
+## 4.2.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/seaweedfs] Detect non-standard images (#30967) ([a4d9265](https://github.com/bitnami/charts/commit/a4d9265e61197d5ed5e6c4a0f85ce7460abd4a66)), closes [#30967](https://github.com/bitnami/charts/issues/30967)
+
+## <small>4.1.2 (2024-12-04)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 6) (#30675) ([7b9cd04](https://github.com/bitnami/charts/commit/7b9cd04c2ffc730a0d62da787f2d4967c0ede47c)), closes [#30675](https://github.com/bitnami/charts/issues/30675)
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 3) (#30688) ([10a49f9](https://github.com/bitnami/charts/commit/10a49f9ff2db1d9d11a6edd1c40a9f61803241bc)), closes [#30688](https://github.com/bitnami/charts/issues/30688)
+* [bitnami/seaweedfs] Release 4.1.2 (#30778) ([7342074](https://github.com/bitnami/charts/commit/7342074fd2562d7a024407a0275c62affee0181a)), closes [#30778](https://github.com/bitnami/charts/issues/30778)
+
+## <small>4.1.1 (2024-11-18)</small>
+
+* [bitnami/seaweedfs] Release 4.1.1 (#30510) ([990d46e](https://github.com/bitnami/charts/commit/990d46e857dbca7ff3181675cebb1f7509f7e698)), closes [#30510](https://github.com/bitnami/charts/issues/30510)
 
 ## 4.1.0 (2024-11-18)
 

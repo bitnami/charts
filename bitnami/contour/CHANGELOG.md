@@ -1,8 +1,32 @@
 # Changelog
 
-## 19.3.1 (2024-11-07)
+## 19.5.2 (2025-01-13)
 
-* [bitnami/contour] Release 19.3.1 ([#30260](https://github.com/bitnami/charts/pull/30260))
+* [bitnami/contour] Release 19.5.2 ([#31343](https://github.com/bitnami/charts/pull/31343))
+
+## <small>19.5.1 (2025-01-12)</small>
+
+* [bitnami/contour] Release 19.5.1 (#31311) ([6078445](https://github.com/bitnami/charts/commit/6078445d8d73a914d715194ccbe7b2a4fd1aa84b)), closes [#31311](https://github.com/bitnami/charts/issues/31311)
+
+## 19.5.0 (2025-01-07)
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/contour] Allow replacing certgen with cert-manager (#29416) ([63e4a63](https://github.com/bitnami/charts/commit/63e4a6324eff9a9b92322b3df97f97c5009ac410)), closes [#29416](https://github.com/bitnami/charts/issues/29416)
+
+## 19.4.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/contour] Detect non-standard images (#30874) ([e47bbb4](https://github.com/bitnami/charts/commit/e47bbb4f1f57e1eea55f96f3c5641ce8564930af)), closes [#30874](https://github.com/bitnami/charts/issues/30874)
+
+## <small>19.3.2 (2024-12-03)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 1) (#30660) ([7409ca4](https://github.com/bitnami/charts/commit/7409ca4c21869fabe1532dd4f3ff24895df71c6d)), closes [#30660](https://github.com/bitnami/charts/issues/30660)
+* [bitnami/contour] Release 19.3.2 (#30745) ([10a3f22](https://github.com/bitnami/charts/commit/10a3f22fc74836fcf48e9d4d1bb4b025164d1afe)), closes [#30745](https://github.com/bitnami/charts/issues/30745)
+
+## <small>19.3.1 (2024-11-07)</small>
+
+* [bitnami/contour] Release 19.3.1 (#30260) ([4910a21](https://github.com/bitnami/charts/commit/4910a21b12108eec0195cf6388334d09ad3c81c0)), closes [#30260](https://github.com/bitnami/charts/issues/30260)
 
 ## 19.3.0 (2024-11-06)
 

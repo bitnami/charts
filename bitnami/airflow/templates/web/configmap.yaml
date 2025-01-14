@@ -30,10 +30,10 @@ data:
 
     AUTH_TYPE = AUTH_LDAP
     AUTH_LDAP_SERVER = {{ .Values.ldap.uri | squote }}
-    AUTH_LDAP_SEARCH = {{ .Values.ldap.basedn }}
+    AUTH_LDAP_SEARCH = {{ .Values.ldap.basedn | squote }}
     AUTH_LDAP_UID_FIELD = {{ .Values.ldap.searchAttribute | squote }}
     AUTH_LDAP_BIND_USER = {{ .Values.ldap.binddn | squote }}
-    AUTH_USER_REGISTRATION = {{ .Values.ldap.userRegistration }}
+    AUTH_USER_REGISTRATION = {{ .Values.ldap.userRegistration | squote }}
     AUTH_USER_REGISTRATION_ROLE = {{ .Values.ldap.userRegistrationRole | squote }}
     AUTH_ROLES_MAPPING = {{ .Values.ldap.rolesMapping }}
     AUTH_ROLES_SYNC_AT_LOGIN = {{ .Values.ldap.rolesSyncAtLogin }}

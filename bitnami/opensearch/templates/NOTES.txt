@@ -2,6 +2,8 @@ CHART NAME: {{ .Chart.Name }}
 CHART VERSION: {{ .Chart.Version }}
 APP VERSION: {{ .Chart.AppVersion }}
 
+Did you know there are enterprise versions of the Bitnami catalog? For enhanced secure software supply chain features, unlimited pulls from Docker, LTS support, or application customization, see Bitnami Premium or Tanzu Application Catalog. See https://www.arrow.com/globalecs/na/vendors/bitnami for more information.
+
 {{- if contains .Values.service.type "LoadBalancer" }}
 
 -------------------------------------------------------------------------------
@@ -121,3 +123,4 @@ In order to replicate the container startup scripts execute this command:
 {{ include "opensearch.validateValues" . }}
 {{- include "common.warnings.resources" (dict "sections" (list "coordinating" "dashboards" "data" "ingest" "master" "sysctlImage" "volumePermissions") "context" $) }}
 {{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.volumePermissions.image .Values.sysctlImage .Values.dashboards.image .Values.snapshots.image) "context" $) }}
+{{- include "common.errors.insecureImages" (dict "images" (list .Values.image .Values.volumePermissions.image .Values.sysctlImage .Values.dashboards.image .Values.snapshots.image) "context" $) }}

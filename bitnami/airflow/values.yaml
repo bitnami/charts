@@ -18,6 +18,11 @@ global:
   ##
   imagePullSecrets: []
   defaultStorageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
   ## Compatibility adaptations for Kubernetes platforms
   ##
   compatibility:
@@ -83,7 +88,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/airflow
-  tag: 2.10.3-debian-12-r5
+  tag: 2.10.4-debian-12-r2
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -134,14 +139,20 @@ executor: CeleryExecutor
 ## @param loadExamples Switch to load some Airflow examples
 ##
 loadExamples: false
-## @param configuration Specify content for Airflow config file (auto-generated based on other env. vars otherwise)
-## e.g:
-## configuration: |-
-##   [core]
-##   dags_folder=/opt/bitnami/airflow/dags
-##   ...
+## @param configuration Specify content for Airflow config file (auto-generated based on other parameters otherwise)
+## ref: https://airflow.apache.org/docs/apache-airflow/stable/configurations-ref.html
+## Use YAML format, then it's transformed to .cfg format by the chart. e.g:
+##    configuration:
+##      core:
+##        dags_folder: "/opt/bitnami/airflow/dags"
+## ... will be transformed to:
+##    [core]
+##    dags_folder = "/opt/bitnami/airflow/dags"
 ##
-configuration: ""
+configuration: {}
+## @param overrideConfiguration Airflow common configuration override. Values defined here takes precedence over the ones defined at `configuration`
+##
+overrideConfiguration: {}
 ## @param localSettings Specify content for Airflow local settings (airflow_local_settings.py)
 ## ref: https://airflow.apache.org/docs/apache-airflow/stable/howto/set-config.html#configuring-local-settings
 ## e.g:
@@ -2452,6 +2463,23 @@ setupDBJob:
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
+  ## @param setupDBJob.extraVolumes Optionally specify extra list of additional volumes for Airflow "setup-db" job's pods
+  ##
+  extraVolumes: []
+  ## @param setupDBJob.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Airflow "setup-db" job's containers
+  ##
+  extraVolumeMounts: []
+  ## @param setupDBJob.initContainers Add additional init containers to the Airflow "setup-db" job's pods
+  ## Example:
+  ## initContainers:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  initContainers: []
 
 ## @section Airflow ldap parameters
 
@@ -2710,7 +2738,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/statsd-exporter
-    tag: 0.28.0-debian-12-r0
+    tag: 0.28.0-debian-12-r2
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

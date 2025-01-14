@@ -1,8 +1,24 @@
 # Changelog
 
+## 23.1.1 (2025-01-13)
+
+* [bitnami/schema-registry] Release 23.1.1 ([#31325](https://github.com/bitnami/charts/pull/31325))
+
+## 23.1.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/schema-registry] Detect non-standard images (#30965) ([fbbcc3f](https://github.com/bitnami/charts/commit/fbbcc3f9f48f692cb9c316f4d317c3fa0795ea3b)), closes [#30965](https://github.com/bitnami/charts/issues/30965)
+
+## 23.0.0 (2024-12-04)
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Unify "Securing Traffic using TLS" section (#30707) ([b572333](https://github.com/bitnami/charts/commit/b57233336e4fe9af928ecb4f2a5f334011efb1bc)), closes [#30707](https://github.com/bitnami/charts/issues/30707)
+* [bitnami/*] docs: fix copy-paste typos with wrong references to Airflow (#30541) ([0a225d4](https://github.com/bitnami/charts/commit/0a225d44c1969429573b4e2630068eff129b6a96)), closes [#30541](https://github.com/bitnami/charts/issues/30541)
+* [bitnami/schema-registry] Release 23.0.0 (#30775) ([c0c64eb](https://github.com/bitnami/charts/commit/c0c64ebd9eef815a8a8ce4345fc03e4c689026bf)), closes [#30775](https://github.com/bitnami/charts/issues/30775)
+
 ## 22.0.0 (2024-11-12)
 
-* [bitnami/schema-registry] Update kafka subchart to 31.0.0 ([#30425](https://github.com/bitnami/charts/pull/30425))
+* [bitnami/schema-registry] Update kafka subchart to 31.0.0 (#30425) ([aeb7d43](https://github.com/bitnami/charts/commit/aeb7d430e5db1e05358978a7dffffca5b56298f1)), closes [#30425](https://github.com/bitnami/charts/issues/30425)
 
 ## <small>21.0.3 (2024-11-04)</small>
 

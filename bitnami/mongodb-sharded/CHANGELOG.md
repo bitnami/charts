@@ -1,8 +1,25 @@
 # Changelog
 
-## 9.0.3 (2024-10-26)
+## 9.1.0 (2024-12-10)
 
-* [bitnami/mongodb-sharded] Release 9.0.3 ([#30088](https://github.com/bitnami/charts/pull/30088))
+* [bitnami/mongodb-sharded] Detect non-standard images ([#30927](https://github.com/bitnami/charts/pull/30927))
+
+## <small>9.0.5 (2024-12-06)</small>
+
+* [bitnami/mongodb-sharded] Release 9.0.5 (#30821) ([c926860](https://github.com/bitnami/charts/commit/c926860fff55e3718ed34b0b99b9196fd4331917)), closes [#30821](https://github.com/bitnami/charts/issues/30821)
+
+## <small>9.0.4 (2024-12-04)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 4) (#30669) ([a4ec006](https://github.com/bitnami/charts/commit/a4ec00624589023a70a7094fcfb9f12e382bc280)), closes [#30669](https://github.com/bitnami/charts/issues/30669)
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 3) (#30688) ([10a49f9](https://github.com/bitnami/charts/commit/10a49f9ff2db1d9d11a6edd1c40a9f61803241bc)), closes [#30688](https://github.com/bitnami/charts/issues/30688)
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/mongodb-sharded] Release 9.0.4 (#30787) ([c3af04c](https://github.com/bitnami/charts/commit/c3af04cdff0ee39614f9da280ab4731aec555968)), closes [#30787](https://github.com/bitnami/charts/issues/30787)
+
+## <small>9.0.3 (2024-10-26)</small>
+
+* [bitnami/mongodb-sharded] Release 9.0.3 (#30088) ([a54742d](https://github.com/bitnami/charts/commit/a54742d636d66d841a3be0133f0ae2f368ae416b)), closes [#30088](https://github.com/bitnami/charts/issues/30088)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
 
 ## <small>9.0.2 (2024-10-09)</small>
 

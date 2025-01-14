@@ -1,8 +1,25 @@
 # Changelog
 
-## 1.2.19 (2024-11-07)
+## 1.3.1 (2025-01-13)
 
-* [bitnami/kuberay] Release 1.2.19 ([#30278](https://github.com/bitnami/charts/pull/30278))
+* [bitnami/kuberay] Release 1.3.1 ([#31319](https://github.com/bitnami/charts/pull/31319))
+
+## 1.3.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/kuberay] Detect non-standard images (#30918) ([a9558bc](https://github.com/bitnami/charts/commit/a9558bc475d78cbb012de01d09b04df980a7aec9)), closes [#30918](https://github.com/bitnami/charts/issues/30918)
+
+## <small>1.2.20 (2024-12-04)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 3) (#30666) ([82fc7e2](https://github.com/bitnami/charts/commit/82fc7e2fc12e2648ed22069942203c02bf5d4cc6)), closes [#30666](https://github.com/bitnami/charts/issues/30666)
+* [bitnami/kuberay] Release 1.2.20 (#30760) ([957d8a1](https://github.com/bitnami/charts/commit/957d8a193b23382675b451452ce0197ff03f081c)), closes [#30760](https://github.com/bitnami/charts/issues/30760)
+
+## <small>1.2.19 (2024-11-07)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/kuberay] Release 1.2.19 (#30278) ([f923bc9](https://github.com/bitnami/charts/commit/f923bc9d4a3120b8787da2e1d1db712e132897bc)), closes [#30278](https://github.com/bitnami/charts/issues/30278)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
 
 ## <small>1.2.18 (2024-10-02)</small>
 

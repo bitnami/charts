@@ -20,6 +20,11 @@ global:
   imagePullSecrets: []
   defaultStorageClass: ""
   storageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
   ## Compatibility adaptations for Kubernetes platforms
   ##
   compatibility:
@@ -81,7 +86,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/influxdb
-  tag: 2.7.10-debian-12-r7
+  tag: 2.7.11-debian-12-r2
   digest: ""
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
@@ -896,7 +901,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r32
+    tag: 12-debian-12-r35
     digest: ""
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
@@ -979,6 +984,24 @@ backup:
     ## @param backup.cronjob.historyLimit Number of successful finished jobs to retain
     ##
     historyLimit: 1
+    ##
+    ## Option to include ca-bundle
+    ##
+    caBundle:
+      ## @param backup.cronjob.caBundle.enabled Boolean flag to enable/disable the inclusion of a CA bundle for backup CronJob.
+      ## If enabled a configmap should be created with key as ca-bundle.crt and value to be the actual CA Bundle
+      ##
+      enabled: false
+      ## @param backup.cronjob.caBundle.existingConfigMap Name of the existing ConfigMap that contains the CA bundle for SSL Communication.
+      ##
+      existingConfigMap: ""
+      ## @param backup.cronjob.caBundle.mountPath The path inside the CronJob container where the CA bundle will be mounted.
+      ##
+      mountPath: "/opt/ca-certificates/ca-bundle.crt"
+      ## @param backup.cronjob.caBundle.subPath The filename within the mountPath directory where the CA bundle will be available.
+      ##
+      subPath: "ca-bundle.crt"
+    ##
     ## @param backup.cronjob.podAnnotations Pod annotations
     ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
     ##
@@ -1104,7 +1127,7 @@ backup:
       image:
         registry: docker.io
         repository: bitnami/google-cloud-sdk
-        tag: 0.500.0-debian-12-r0
+        tag: 0.505.0-debian-12-r0
         digest: ""
         ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
         ##
@@ -1157,7 +1180,7 @@ backup:
       image:
         registry: docker.io
         repository: bitnami/azure-cli
-        tag: 2.65.0-debian-12-r1
+        tag: 2.67.0-debian-12-r1
         digest: ""
         ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
         ##
@@ -1212,7 +1235,7 @@ backup:
       image:
         registry: docker.io
         repository: bitnami/aws-cli
-        tag: 2.19.0-debian-12-r0
+        tag: 2.22.30-debian-12-r0
         digest: ""
         ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
         ##

@@ -1,8 +1,22 @@
 # Changelog
 
-## 1.3.28 (2024-11-19)
+## 1.4.1 (2025-01-13)
 
-* [bitnami/prometheus] Release 1.3.28 ([#30518](https://github.com/bitnami/charts/pull/30518))
+* [bitnami/prometheus] Release 1.4.1 ([#31324](https://github.com/bitnami/charts/pull/31324))
+
+## 1.4.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/prometheus] Detect non-standard images (#30938) ([492b79e](https://github.com/bitnami/charts/commit/492b79e3b1e75d12d57d7d4881faf01c682a4ec8)), closes [#30938](https://github.com/bitnami/charts/issues/30938)
+
+## <small>1.3.29 (2024-12-04)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/prometheus] Release 1.3.29 (#30774) ([f1b557c](https://github.com/bitnami/charts/commit/f1b557c5e48a6a6195353d2827922638f91cd250)), closes [#30774](https://github.com/bitnami/charts/issues/30774)
+
+## <small>1.3.28 (2024-11-19)</small>
+
+* [bitnami/prometheus] Release 1.3.28 (#30518) ([8a90ea8](https://github.com/bitnami/charts/commit/8a90ea87706d89c78bcaa0bb08ca6a0d96512b5c)), closes [#30518](https://github.com/bitnami/charts/issues/30518)
 
 ## <small>1.3.27 (2024-11-08)</small>
 

@@ -1,8 +1,33 @@
 # Changelog
 
-## 13.4.27 (2024-11-04)
+## 13.5.3 (2025-01-08)
 
-* [bitnami/jenkins] Release 13.4.27 ([#30143](https://github.com/bitnami/charts/pull/30143))
+* [bitnami/jenkins] Release 13.5.3 ([#31259](https://github.com/bitnami/charts/pull/31259))
+
+## <small>13.5.2 (2025-01-07)</small>
+
+* [bitnami/jenkins] Release 13.5.2 (#31225) ([5fd0be7](https://github.com/bitnami/charts/commit/5fd0be75c1a4714f324acd55a0a304ab20a46647)), closes [#31225](https://github.com/bitnami/charts/issues/31225)
+
+## <small>13.5.1 (2024-12-27)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/jenkins] Fix initHookScriptsSecret (#31175) ([77ca822](https://github.com/bitnami/charts/commit/77ca8222f5e564e76de8e997c67ee36b909f337a)), closes [#31175](https://github.com/bitnami/charts/issues/31175)
+
+## 13.5.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 2) (#30687) ([c457848](https://github.com/bitnami/charts/commit/c457848b2a111aad59830b98f85ffa1e29918e10)), closes [#30687](https://github.com/bitnami/charts/issues/30687)
+* [bitnami/jenkins] Detect non-standard images (#30905) ([59a3b68](https://github.com/bitnami/charts/commit/59a3b68c1b43deabc3a6eb08002baab4e2943bcf)), closes [#30905](https://github.com/bitnami/charts/issues/30905)
+
+## <small>13.4.28 (2024-11-28)</small>
+
+* [bitnami/jenkins] Release 13.4.28 (#30664) ([4b3a80d](https://github.com/bitnami/charts/commit/4b3a80d615308fddf33150c42e35da20dfad6ebb)), closes [#30664](https://github.com/bitnami/charts/issues/30664)
+
+## <small>13.4.27 (2024-11-04)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/jenkins] Release 13.4.27 (#30143) ([d461ca0](https://github.com/bitnami/charts/commit/d461ca069a425d5bf77ac9e0ddce9054ce287aa9)), closes [#30143](https://github.com/bitnami/charts/issues/30143)
 
 ## <small>13.4.26 (2024-10-17)</small>
 

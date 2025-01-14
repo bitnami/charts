@@ -1,5 +1,8 @@
 auth:
   password: ComplicatedPassword123!4
+overrideConfiguration:
+  logging:
+    colored_console_log: 'True'
 loadExamples: true
 web:
   containerPorts:
@@ -27,4 +30,5 @@ metrics:
   enabled: true
   service:
     ports:
+      ingest: 9125
       metrics: 9102

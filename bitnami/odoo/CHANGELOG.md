@@ -1,8 +1,29 @@
 # Changelog
 
-## 28.0.1 (2024-11-05)
+## 28.1.1 (2025-01-13)
 
-* [bitnami/odoo] Release 28.0.1 ([#30221](https://github.com/bitnami/charts/pull/30221))
+* [bitnami/odoo] Release 28.1.1 ([#31241](https://github.com/bitnami/charts/pull/31241))
+
+## 28.1.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/odoo] Detect non-standard images (#30910) ([56d9ae2](https://github.com/bitnami/charts/commit/56d9ae2dc9de4a558e8d308b0842af3d1dc6bc8a)), closes [#30910](https://github.com/bitnami/charts/issues/30910)
+
+## <small>28.0.3 (2024-12-06)</small>
+
+* [bitnami/odoo] Release 28.0.3 (#30806) ([82182ac](https://github.com/bitnami/charts/commit/82182ac46fe08461ee98a7415ef12419363afbc4)), closes [#30806](https://github.com/bitnami/charts/issues/30806)
+
+## <small>28.0.2 (2024-12-04)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 3) (#30688) ([10a49f9](https://github.com/bitnami/charts/commit/10a49f9ff2db1d9d11a6edd1c40a9f61803241bc)), closes [#30688](https://github.com/bitnami/charts/issues/30688)
+* [bitnami/odoo] Release 28.0.2 (#30790) ([17816f2](https://github.com/bitnami/charts/commit/17816f2926c63da1fd6bbf33f75ad3ac51f6a6ba)), closes [#30790](https://github.com/bitnami/charts/issues/30790)
+
+## <small>28.0.1 (2024-11-05)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/odoo] Release 28.0.1 (#30221) ([cf059d0](https://github.com/bitnami/charts/commit/cf059d077104d47020af6aa9c1ffd4c25d731001)), closes [#30221](https://github.com/bitnami/charts/issues/30221)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
 
 ## 28.0.0 (2024-10-08)
 

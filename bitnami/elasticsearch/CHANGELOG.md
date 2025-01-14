@@ -1,8 +1,28 @@
 # Changelog
 
-## 21.3.25 (2024-11-15)
+## 21.4.2 (2024-12-23)
 
-* [bitnami/elasticsearch] Release 21.3.25 ([#30476](https://github.com/bitnami/charts/pull/30476))
+* bitnami/elasticsearch: mount cerst to master node instead empty-dir ([#30989](https://github.com/bitnami/charts/pull/30989))
+
+## <small>21.4.1 (2024-12-12)</small>
+
+* [bitnami/elasticsearch] Release 21.4.1 (#31023) ([53a4725](https://github.com/bitnami/charts/commit/53a4725c3a3eea865a91fc352308f1f8c0a09fea)), closes [#31023](https://github.com/bitnami/charts/issues/31023)
+
+## 21.4.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 2) (#30662) ([50e0570](https://github.com/bitnami/charts/commit/50e0570f98ab15308af7910b405baa4480e5fe3f)), closes [#30662](https://github.com/bitnami/charts/issues/30662)
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 1) (#30685) ([be6aa1d](https://github.com/bitnami/charts/commit/be6aa1df0bd4479173a78400fef7295de15b408d)), closes [#30685](https://github.com/bitnami/charts/issues/30685)
+* [bitnami/elasticsearch] Detect non-standard images (#30880) ([c74993f](https://github.com/bitnami/charts/commit/c74993fc926949dcc570189ce5bbdef4ec76334c)), closes [#30880](https://github.com/bitnami/charts/issues/30880)
+
+## <small>21.3.26 (2024-11-22)</small>
+
+* [bitnami/elasticsearch] Release 21.3.26 (#30594) ([5aad9d6](https://github.com/bitnami/charts/commit/5aad9d642bb534555244da524ef133f2d8a8d7a0)), closes [#30594](https://github.com/bitnami/charts/issues/30594)
+
+## <small>21.3.25 (2024-11-15)</small>
+
+* [bitnami/elasticsearch] Release 21.3.25 (#30476) ([d5f2f92](https://github.com/bitnami/charts/commit/d5f2f9289c10138367cac2f17383fb3ed63d8f37)), closes [#30476](https://github.com/bitnami/charts/issues/30476)
 
 ## <small>21.3.24 (2024-11-12)</small>
 

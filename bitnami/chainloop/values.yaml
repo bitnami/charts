@@ -18,6 +18,11 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
 
   ## Compatibility adaptations for Kubernetes platforms
   ##
@@ -164,7 +169,7 @@ controlplane:
   image:
     registry: docker.io
     repository: bitnami/chainloop-control-plane
-    tag: 0.110.0-debian-12-r0
+    tag: 0.151.0-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -241,7 +246,7 @@ controlplane:
     image:
       registry: docker.io
       repository: bitnami/chainloop-control-plane-migrations
-      tag: 0.110.0-debian-12-r0
+      tag: 0.151.0-debian-12-r0
       digest: ""
       ## Specify a imagePullPolicy
       ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -988,7 +993,7 @@ cas:
   image:
     registry: docker.io
     repository: bitnami/chainloop-artifact-cas
-    tag: 0.110.0-debian-12-r0
+    tag: 0.151.0-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1741,7 +1746,7 @@ dex:
   image:
     registry: docker.io
     repository: bitnami/dex
-    tag: 2.41.1-debian-12-r8
+    tag: 2.41.1-debian-12-r10
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##

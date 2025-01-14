@@ -432,7 +432,7 @@ spec:
             - -XX:MaxRAMPercentage=100
             - -XshowSettings:vm
             - -jar
-            - jmx_prometheus_httpserver.jar
+            - jmx_prometheus_standalone.jar
             - {{ .Values.metrics.jmx.containerPorts.metrics | quote }}
             - /etc/jmx/sonarqube-prometheus.yml
           {{- end }}
@@ -443,6 +443,17 @@ spec:
           resources: {{- toYaml .Values.metrics.jmx.resources | nindent 12 }}
           {{- else if ne .Values.metrics.jmx.resourcesPreset "none" }}
           resources: {{- include "common.resources.preset" (dict "type" .Values.metrics.jmx.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.metrics.jmx.livenessProbe.enabled }}
+          livenessProbe: {{- omit .Values.metrics.jmx.livenessProbe "enabled" | toYaml | nindent 12 }}
+            tcpSocket:
+              port: metrics
+          {{- end }}
+          {{- if .Values.metrics.jmx.readinessProbe.enabled }}
+          readinessProbe: {{- omit .Values.metrics.jmx.readinessProbe "enabled" | toYaml | nindent 12 }}
+            httpGet:
+              path: /
+              port: metrics
           {{- end }}
           volumeMounts:
             - name: empty-dir
