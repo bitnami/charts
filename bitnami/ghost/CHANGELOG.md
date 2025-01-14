@@ -1,8 +1,12 @@
 # Changelog
 
-## 22.1.2 (2024-12-13)
+## 22.1.3 (2025-01-13)
 
-* [bitnami/ghost] Release 22.1.2 ([#31038](https://github.com/bitnami/charts/pull/31038))
+* [bitnami/ghost] Release 22.1.3 ([#31332](https://github.com/bitnami/charts/pull/31332))
+
+## <small>22.1.2 (2024-12-13)</small>
+
+* [bitnami/ghost] Release 22.1.2 (#31038) ([b5d4c51](https://github.com/bitnami/charts/commit/b5d4c5136f4da9c15b23fa036fc2f826f3852adf)), closes [#31038](https://github.com/bitnami/charts/issues/31038)
 
 ## <small>22.1.1 (2024-12-11)</small>
 

@@ -2231,10 +2231,10 @@ s3:
   ## @param s3.auth.enabled Enable Amazon S3 API authentication
   ## @param s3.auth.existingSecret Existing secret with Amazon S3 API authentication configuration
   ## @param s3.auth.existingSecretConfigKey Key of the above existing secret with S3 API authentication configuration, defaults to `config.json`
-  ## @param s3.auth.adminAccessKeyId Amazon S3 API access key with admin privileges. Ignored if `security.mTLS.volume.existingSecret` is set
-  ## @param s3.auth.adminSecretAccessKey Amazon S3 API secret key with admin privileges. Ignored if `security.mTLS.volume.existingSecret` is set
-  ## @param s3.auth.readAccessKeyId Amazon S3 API read access key with read-only privileges. Ignored if `security.mTLS.volume.existingSecret` is set
-  ## @param s3.auth.readSecretAccessKey Amazon S3 API read secret key with read-only privileges. Ignored if `security.mTLS.volume.existingSecret` is set
+  ## @param s3.auth.adminAccessKeyId Amazon S3 API access key with admin privileges. Ignored if `s3.auth.existingSecret` is set
+  ## @param s3.auth.adminSecretAccessKey Amazon S3 API secret key with admin privileges. Ignored if `s3.auth.existingSecret` is set
+  ## @param s3.auth.readAccessKeyId Amazon S3 API read access key with read-only privileges. Ignored if `s3.auth.existingSecret` is set
+  ## @param s3.auth.readSecretAccessKey Amazon S3 API read secret key with read-only privileges. Ignored if `s3.auth.existingSecret` is set
   ##
   auth:
     enabled: false
