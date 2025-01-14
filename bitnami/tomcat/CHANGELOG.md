@@ -1,8 +1,13 @@
 # Changelog
 
+## 11.5.1 (2025-01-14)
+
+* [bitnami/tomcat] Release 11.5.1 ([#31370](https://github.com/bitnami/charts/pull/31370))
+
 ## 11.5.0 (2024-12-19)
 
-* [birtnami/tomcat] chore(jmx-exporter): Upgrade image and change args ([#31104](https://github.com/bitnami/charts/pull/31104))
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/tomcat] chore(jmx-exporter): Upgrade image and change args (#31104) ([95b6681](https://github.com/bitnami/charts/commit/95b66814b50b2ac7b23d9f1987d207700f222d24)), closes [#31104](https://github.com/bitnami/charts/issues/31104)
 
 ## 11.4.0 (2024-12-10)
 
