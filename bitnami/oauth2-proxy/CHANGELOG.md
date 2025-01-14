@@ -1,8 +1,13 @@
 # Changelog
 
+## 6.2.1 (2025-01-13)
+
+* [bitnami/oauth2-proxy] Release 6.2.1 ([#31323](https://github.com/bitnami/charts/pull/31323))
+
 ## 6.2.0 (2024-12-10)
 
-* [bitnami/oauth2-proxy] Detect non-standard images ([#30933](https://github.com/bitnami/charts/pull/30933))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/oauth2-proxy] Detect non-standard images (#30933) ([81f3a51](https://github.com/bitnami/charts/commit/81f3a51a0ee4bdc1de6e479643e9f1a35d95e5a9)), closes [#30933](https://github.com/bitnami/charts/issues/30933)
 
 ## <small>6.1.1 (2024-12-04)</small>
 

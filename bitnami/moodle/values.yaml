@@ -87,7 +87,7 @@ image:
 ## @param replicaCount Number of Moodle replicas (requires ReadWriteMany PVC support)
 ## Setting this will fix the number replica count needed for Moodle&trade;
 ## This can be overridden by setting autoscaling.enabled to true
-## For upgrades set the autoscaling.enabled to false and replicaCount to the desired number of replicas 
+## For upgrades set the autoscaling.enabled to false and replicaCount to the desired number of replicas
 ##
 replicaCount: 1
 ## When enabled, the number of Moodle&trade; replicas will be automatically adjusted based on targets on given metrics.

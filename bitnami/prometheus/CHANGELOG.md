@@ -1,8 +1,13 @@
 # Changelog
 
+## 1.4.1 (2025-01-13)
+
+* [bitnami/prometheus] Release 1.4.1 ([#31324](https://github.com/bitnami/charts/pull/31324))
+
 ## 1.4.0 (2024-12-10)
 
-* [bitnami/prometheus] Detect non-standard images ([#30938](https://github.com/bitnami/charts/pull/30938))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/prometheus] Detect non-standard images (#30938) ([492b79e](https://github.com/bitnami/charts/commit/492b79e3b1e75d12d57d7d4881faf01c682a4ec8)), closes [#30938](https://github.com/bitnami/charts/issues/30938)
 
 ## <small>1.3.29 (2024-12-04)</small>
 

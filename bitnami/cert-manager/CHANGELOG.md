@@ -1,8 +1,13 @@
 # Changelog
 
+## 1.4.1 (2025-01-12)
+
+* [bitnami/cert-manager] Release 1.4.1 ([#31310](https://github.com/bitnami/charts/pull/31310))
+
 ## 1.4.0 (2024-12-10)
 
-* [bitnami/cert-manager] Detect non-standard images ([#30867](https://github.com/bitnami/charts/pull/30867))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/cert-manager] Detect non-standard images (#30867) ([bfe39d0](https://github.com/bitnami/charts/commit/bfe39d0581ce5337ec54e0da192055a1a19e5e59)), closes [#30867](https://github.com/bitnami/charts/issues/30867)
 
 ## <small>1.3.24 (2024-12-03)</small>
 

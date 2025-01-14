@@ -1,8 +1,13 @@
 # Changelog
 
+## 4.9.1 (2025-01-12)
+
+* [bitnami/grafana-operator] Release 4.9.1 ([#31314](https://github.com/bitnami/charts/pull/31314))
+
 ## 4.9.0 (2024-12-10)
 
-* [bitnami/grafana-operator] Detect non-standard images ([#30886](https://github.com/bitnami/charts/pull/30886))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/grafana-operator] Detect non-standard images (#30886) ([0fd9040](https://github.com/bitnami/charts/commit/0fd904034666713debda0e1e937e0f547c34dfb2)), closes [#30886](https://github.com/bitnami/charts/issues/30886)
 
 ## <small>4.8.1 (2024-12-03)</small>
 
