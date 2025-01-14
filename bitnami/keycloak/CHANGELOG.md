@@ -1,8 +1,12 @@
 # Changelog
 
-## 24.4.2 (2025-01-13)
+## 24.4.3 (2025-01-14)
 
-* [bitnami/keycloak] Release 24.4.2 ([#31340](https://github.com/bitnami/charts/pull/31340))
+* [bitnami/keycloak] Release 24.4.3 ([#31369](https://github.com/bitnami/charts/pull/31369))
+
+## <small>24.4.2 (2025-01-13)</small>
+
+* [bitnami/keycloak] Release 24.4.2 (#31340) ([e81606c](https://github.com/bitnami/charts/commit/e81606cb05043717405bc44e97e41b12dfe9992a)), closes [#31340](https://github.com/bitnami/charts/issues/31340)
 
 ## <small>24.4.1 (2025-01-12)</small>
 
