@@ -1,6 +1,6 @@
 # Changelog
 
-## 15.2.3 (2025-01-13)
+## 15.2.3 (2025-01-15)
 
 * [bitnami/rabbitmq] Fix incorrect configuration of TCP listen options by memoryHighWatermark settings ([#31336](https://github.com/bitnami/charts/pull/31336))
 
