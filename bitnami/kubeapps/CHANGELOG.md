@@ -1,6 +1,6 @@
 # Changelog
 
-## 17.2.0 (2024-12-24)
+## 17.2.0 (2025-01-15)
 
 * [bitnami/kubeapps] Set ociCatalog.enabled=true by default ([#31093](https://github.com/bitnami/charts/pull/31093))
 
