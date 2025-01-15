@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.1.2 (2025-01-15)
+## 1.1.3 (2025-01-15)
 
 * bitnami/zipkin Remove quote for the host ([#31371](https://github.com/bitnami/charts/pull/31371))
 
