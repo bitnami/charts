@@ -1,8 +1,13 @@
 # Changelog
 
-## 15.1.1 (2024-12-19)
+## 15.1.2 (2025-01-15)
 
-* [bitnami/discourse] Release 15.1.1 ([#31121](https://github.com/bitnami/charts/pull/31121))
+* [bitnami/discourse] Release 15.1.2 ([#31384](https://github.com/bitnami/charts/pull/31384))
+
+## <small>15.1.1 (2024-12-19)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/discourse] Release 15.1.1 (#31121) ([8caa1dd](https://github.com/bitnami/charts/commit/8caa1ddfb20a6201d7847c4029c2cfa9996e94fb)), closes [#31121](https://github.com/bitnami/charts/issues/31121)
 
 ## 15.1.0 (2024-12-10)
 
