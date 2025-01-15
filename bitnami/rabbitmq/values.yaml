@@ -515,9 +515,9 @@ configuration: |-
   vm_memory_high_watermark.{{ .Values.memoryHighWatermark.type }} = {{ .Values.memoryHighWatermark.value }}
   {{- end }}
   {{- end }}
+  {{- if .Values.tcpListenOptions.enabled }}
   ## TCP Listen Options
   ##
-  {{- if .Values.tcpListenOptions.enabled }}
   tcp_listen_options.backlog = {{ .Values.tcpListenOptions.backlog }}
   tcp_listen_options.nodelay = {{ .Values.tcpListenOptions.nodelay }}
   tcp_listen_options.linger.on      = {{ .Values.tcpListenOptions.linger.lingerOn }}
