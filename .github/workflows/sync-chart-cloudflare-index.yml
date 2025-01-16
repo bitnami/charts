@@ -4,6 +4,14 @@ on:
   push:
     branches:
     - index
+  workflow_call:
+    secrets:
+      CLOUDFLARE_CLIENT_ID:
+        required: true
+      CLOUDFLARE_CLIENT_SECRET:
+        required: true
+      CLOUDFLARE_USER_AUTH:
+        required: true
 
 # Remove all permissions by default
 permissions: {}
