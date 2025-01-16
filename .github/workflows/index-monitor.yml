@@ -38,6 +38,9 @@ jobs:
             else
               attempts=$((attempts+1))
               echo "Integrity check failed. Remote checksum '${REMOTE_MD5[0]}' does not match expected '${REPOSITORY_MD5[0]}'";
+              # Refresh the 'index' branch in case it was updated
+              git fetch origin index
+              git reset --hard origin/index
               # Wait 30 seconds
               sleep 30
             fi
