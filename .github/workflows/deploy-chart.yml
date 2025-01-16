@@ -7,10 +7,12 @@ on:
         description: 3rd chart name (in ECR)
         type: string
         required: true
+        default: neo4j-chart
       chart-version:
         description: 3rd chart version (in ECR)
         type: string
         required: true
+        default: 0.2.0
       cluster-name:
         description: k8s cluster name
         type: string
@@ -20,6 +22,7 @@ on:
         description: k8s namespace name
         type: string
         required: true
+        default: neo4j
       values-file:
         description: Chart values file
         type: string
@@ -51,14 +54,15 @@ jobs:
         aws-region: eu-west-1
     - name: Authenticate to EKS
       run: |
-        aws eks update-kubeconfig --name ${{ inputs.chart-name }}
+        aws eks update-kubeconfig --name ${{ inputs.cluster-name }}
         echo "Successfully configured kubectl. Context is:"
         kubectl config current-context
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v2
     - name: Deploy to EKS
-      working-directory: bitnami/${{ inputs.chart-name }}
       run: |
-        kubectl config current-context
-        helm pull oci://oci://702886132326.dkr.ecr.eu-west-1.amazonaws.com/bitnami/${{ inputs.chart-name}} --version ${{ inputs.chart-version }}
+        helm pull oci://702886132326.dkr.ecr.eu-west-1.amazonaws.com/bitnami/${{ inputs.chart-name}} --version ${{ inputs.chart-version }}
         tar -xzf ${{ inputs.chart-name}}-${{ inputs.chart-version }}.tgz --wildcards --no-anchored 'values.*' --transform='s|.*/||'  
         helm upgrade -i ${{ inputs.chart-name }} oci://702886132326.dkr.ecr.eu-west-1.amazonaws.com/bitnami/${{ inputs.chart-name}} --version ${{ inputs.chart-version }} \
-           --create-namespace -n $${{ inputs.namespace }} --atomic --timeout 15m -f ${{ inputs.values-file }}
+           --create-namespace -n ${{ inputs.namespace }} --atomic --timeout 15m -f ${{ inputs.values-file }}

@@ -7,11 +7,6 @@ on:
         description: 3rd chart name (under "bitnami" folder)
         type: string
         required: true
-      cluster-name:
-        description: k8s cluster name
-        type: string
-        default: dell-eks-dev
-        required: true
       
 permissions:
     id-token: write

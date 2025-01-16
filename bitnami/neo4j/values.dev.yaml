@@ -236,7 +236,7 @@ containerSecurityContext:
 ## @param auth.existingSecret Name of a secret containing the neo4j password. Password must be stored under the 'password' key.
 ##
 auth:
-  password: ""
+  password: "testpassword"
   existingSecret: ""
 
 tls:
@@ -459,7 +459,7 @@ autoscaling:
 service:
   ## @param service.type neo4j service type
   ##
-  type: clusterIP
+  type: ClusterIP
   ## @param service.ports.bolt neo4j service bolt port
   ## @param service.ports.http neo4j service HTTP port
   ## @param service.ports.https neo4j service HTTPS port
@@ -588,7 +588,7 @@ ingress:
   enabled: true
   ## @param ingress.pathType Ingress path type
   ##
-  pathType: ImplementationSpecific
+  pathType: Prefix
   ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
   ##
   apiVersion: ""
@@ -599,7 +599,7 @@ ingress:
   ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
   ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
   ##
-  ingressClassName: ""
+  ingressClassName: "alb"
   ## @param ingress.path Default path for the ingress record
   ## NOTE: You may need to set this to '/*' in order to use this with ALB ingress controllers
   ##
@@ -613,17 +613,18 @@ ingress:
   ##   cert-manager.io/cluster-issuer: cluster-issuer-name
   ##
   annotations: 
-    external-dns.alpha.kubernetes.io/hostname: neo4j-dev.dev.sp.dell.com
+    external-dns.alpha.kubernetes.io/hostname: neo4j.dev.sp.dell.com
     alb.ingress.kubernetes.io/scheme: internal
     alb.ingress.kubernetes.io/group.name: "saas-dsp-portal-dev"
     alb.ingress.kubernetes.io/certificate-arn: "arn:aws:acm:eu-west-1:702886132326:certificate/aa01e3eb-053d-40c7-8f00-5f70741a3b3d"
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80},{"HTTPS": 443}]'
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/load-balancer-attributes: idle_timeout.timeout_seconds=4000
-    alb.ingress.kubernetes.io/healthcheck-port: {{ .Values.service.http.port | quote }}
-    alb.ingress.kubernetes.io/healthcheck-protocol: 7474
-    alb.ingress.kubernetes.io/success-codes: '200'
-    alb.ingress.kubernetes.io/healthcheck-path: {{ .Values.livenessProbe.httpGet.path | default "/" | quote }}
+    alb.ingress.kubernetes.io/healthcheck-port: "7474"
+    alb.ingress.kubernetes.io/healthcheck-protocol: HTTP
+    alb.ingress.kubernetes.io/success-codes: "200"
+    alb.ingress.kubernetes.io/healthcheck-path: "/"
+
   ## @param ingress.tls Enable TLS configuration for the host defined at `ingress.hostname` parameter
   ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.ingress.hostname }}`
   ## You can:
