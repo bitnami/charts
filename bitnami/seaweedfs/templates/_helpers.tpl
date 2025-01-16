@@ -25,6 +25,13 @@ Return the proper SeaweedFS Filer Server fullname
 {{- end -}}
 
 {{/*
+Return the proper SeaweedFS IAM Server fullname
+*/}}
+{{- define "seaweedfs.iam.fullname" -}}
+{{- printf "%s-iam" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
 Return the proper SeaweedFS Amazon S3 API fullname
 */}}
 {{- define "seaweedfs.s3.fullname" -}}
