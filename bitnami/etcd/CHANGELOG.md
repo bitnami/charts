@@ -1,6 +1,6 @@
 # Changelog
 
-## 11.0.0 (2025-01-14)
+## 11.0.0 (2025-01-16)
 
 * [bitnami/etcd] Add pre-upgrade hook ([#31161](https://github.com/bitnami/charts/pull/31161))
 
