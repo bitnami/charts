@@ -1,8 +1,12 @@
 # Changelog
 
-## 15.9.2 (2024-12-12)
+## 15.10.0 (2025-01-15)
 
-* [bitnami/thanos] Add concurrency value to compactor ([#30722](https://github.com/bitnami/charts/pull/30722))
+* [bitnami/thanos] feature: allow configuring the Thanos ruler rule-file via ruler.ruleFile parameter ([#31377](https://github.com/bitnami/charts/pull/31377))
+
+## <small>15.9.2 (2024-12-12)</small>
+
+* [bitnami/thanos] Add concurrency value to compactor (#30722) ([12b9c84](https://github.com/bitnami/charts/commit/12b9c8457916ffa9cce85d7914ca5c46f3b7b085)), closes [#30722](https://github.com/bitnami/charts/issues/30722)
 
 ## <small>15.9.1 (2024-12-11)</small>
 
