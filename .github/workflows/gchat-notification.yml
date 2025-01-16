@@ -39,4 +39,4 @@ jobs:
           # Use curl to send the JSON to Google.
           escapedText=$(sed -e 's/\n/\\n/g' -e 's/"/\\"/g' -e "s/'/\\'/g" "${tmp_file}")
           json="{\"text\": \"$escapedText\"}"
-          curl -X POST -H 'Content-Type: application/json' -d "$json" "${GCHAT_WEBHOOK_URL}"
+          curl -o /tmp/out -s --fail -X POST -H 'Content-Type: application/json' -d "$json" "${GCHAT_WEBHOOK_URL}"
