@@ -1,8 +1,8 @@
 # Changelog
 
-## 5.1.4 (2025-01-14)
+## 5.1.4 (2025-01-16)
 
-* [bitnami/jaeger]  migration job not using namespaceOverwrite  ([#31216](https://github.com/bitnami/charts/pull/31216))
+*  [bitnami/jaeger] Migration job not using namespace overwrite 31207 ([#31405](https://github.com/bitnami/charts/pull/31405))
 
 ## <small>5.1.3 (2025-01-08)</small>
 
