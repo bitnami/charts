@@ -9,19 +9,13 @@ metadata:
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: etcd-pre-upgrade-job
-  annotations: {{- include "common.tplvalues.render" (dict
-    "value" (merge 
-      .Values.commonAnnotations
-      (dict
-        "helm.sh/hook" "pre-upgrade"
-        "helm.sh/hook-delete-policy" "before-hook-creation")
-    )
-    "context" $) | nindent 4 }}
+  {{- $defaultAnnotations := dict "helm.sh/hook" "pre-upgrade" "helm.sh/hook-delete-policy" "before-hook-creation" }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonAnnotations $defaultAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
 spec:
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
   template:
     metadata:
-      name: {{ include "common.names.fullname" . }}-pre-upgrade
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: etcd-pre-upgrade-job
       annotations:
@@ -69,7 +63,6 @@ spec:
         {{- $etcdHeadlessServiceName := (printf "%s-%s" $etcdFullname "headless" | trunc 63 | trimSuffix "-") }}
         {{- $clusterDomain := .Values.clusterDomain }}
         {{- $etcdPeerProtocol := include "etcd.peerProtocol" . }}
-        {{- $etcdClientProtocol := include "etcd.clientProtocol" . }}
         - name: pre-upgrade-job
           image: {{ include "etcd.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
