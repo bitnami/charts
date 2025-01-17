@@ -1,8 +1,13 @@
 # Changelog
 
-## 6.4.2 (2024-12-17)
+## 6.4.3 (2025-01-17)
 
-* [bitnami/metallb] Release 6.4.2 ([#31074](https://github.com/bitnami/charts/pull/31074))
+* [bitnami/metallb] Release 6.4.3 ([#31431](https://github.com/bitnami/charts/pull/31431))
+
+## <small>6.4.2 (2024-12-17)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/metallb] Release 6.4.2 (#31074) ([d59f600](https://github.com/bitnami/charts/commit/d59f6000e96e7f9322309da24e061b65e6002e3e)), closes [#31074](https://github.com/bitnami/charts/issues/31074)
 
 ## <small>6.4.1 (2024-12-10)</small>
 
