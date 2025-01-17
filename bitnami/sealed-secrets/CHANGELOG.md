@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.5.2 (2025-01-16)
+## 2.5.3 (2025-01-17)
 
-* [bitnami/sealed-secrets] Release 2.5.2 ([#31399](https://github.com/bitnami/charts/pull/31399))
+* [bitnami/sealed-secrets] Release 2.5.3 ([#31442](https://github.com/bitnami/charts/pull/31442))
+
+## <small>2.5.2 (2025-01-16)</small>
+
+* [bitnami/sealed-secrets] Release 2.5.2 (#31399) ([de224a6](https://github.com/bitnami/charts/commit/de224a6bfe3372ec8ad75884d9dd2f7d3f42b126)), closes [#31399](https://github.com/bitnami/charts/issues/31399)
 
 ## <small>2.5.1 (2025-01-14)</small>
 

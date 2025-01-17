@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.4.3 (2025-01-15)
+## 2.4.4 (2025-01-17)
 
-* [bitnami/pinniped] Release 2.4.3 ([#31388](https://github.com/bitnami/charts/pull/31388))
+* [bitnami/pinniped] Release 2.4.4 ([#31440](https://github.com/bitnami/charts/pull/31440))
+
+## <small>2.4.3 (2025-01-15)</small>
+
+* [bitnami/pinniped] Release 2.4.3 (#31388) ([5431593](https://github.com/bitnami/charts/commit/5431593572ef413843aed94fb50978fce9a77c6a)), closes [#31388](https://github.com/bitnami/charts/issues/31388)
 
 ## <small>2.4.2 (2025-01-13)</small>
 
