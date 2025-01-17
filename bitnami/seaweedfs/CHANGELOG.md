@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.3.1 (2025-01-13)
+## 4.3.2 (2025-01-17)
 
-* [bitnami/seaweedfs]: correct typo in values.yaml regarding s3.auth.existingSecret ([#31339](https://github.com/bitnami/charts/pull/31339))
+* [bitnami/seaweedfs] Release 4.3.2 ([#31443](https://github.com/bitnami/charts/pull/31443))
+
+## <small>4.3.1 (2025-01-13)</small>
+
+* [bitnami/seaweedfs]: correct typo in values.yaml regarding s3.auth.existingSecret (#31339) ([31d0532](https://github.com/bitnami/charts/commit/31d0532a517bd0669b445e6974c2c5aace41697d)), closes [#31339](https://github.com/bitnami/charts/issues/31339)
 
 ## 4.3.0 (2025-01-10)
 
