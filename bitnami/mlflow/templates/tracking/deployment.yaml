@@ -92,8 +92,10 @@ spec:
         {{- if .Values.tracking.auth.enabled }}
         # Render basic auth configuration
         {{- include "mlflow.v0.tracking.renderAuthConfInitContainer" . | nindent 8 }}
+        {{- if .Values.tracking.auth.upgradeEnabled }}
         # Perform upgrade of the Auth Database
         {{- include "mlflow.v0.tracking.upgradeDBAuthInitContainer" . | nindent 8 }}
+        {{- end }}
         {{- end }}
         {{- if (include "mlflow.v0.s3.enabled" .) }}
         # Wait for S3 backend to be ready
