@@ -19,6 +19,18 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  ## E.g.
+  ## ipFamily:
+  ##   - IPv4
+  ## Possible values: [IPv4, IPv6] or both in case of DualStack policy
+  ##
+  ipFamily:
+  - IPv4
+  ## E.g.
+  ## ipFamilyPolicy: SingleStack
+  ## Possible values: [SingleStack, PreferDualStack, RequireDualStack]
+  ##
+  ipFamilyPolicy: SingleStack
   defaultStorageClass: ""
   storageClass: ""
   ## Security parameters
