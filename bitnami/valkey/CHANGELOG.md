@@ -1,8 +1,17 @@
 # Changelog
 
-## 2.2.1 (2024-12-17)
+## 2.2.3 (2025-01-10)
 
-* [bitnami/valkey] fix: sentinel pdb ([#31020](https://github.com/bitnami/charts/pull/31020))
+* [bitnami/valkey] bugfix: instructions to obtain password on installation notes ([#31287](https://github.com/bitnami/charts/pull/31287))
+
+## <small>2.2.2 (2025-01-08)</small>
+
+* [bitnami/valkey] Release 2.2.2 (#31246) ([8b7bfe3](https://github.com/bitnami/charts/commit/8b7bfe3148a3a068b39c0afdf30ced26829f088b)), closes [#31246](https://github.com/bitnami/charts/issues/31246)
+
+## <small>2.2.1 (2024-12-17)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/valkey] fix: sentinel pdb (#31020) ([711d831](https://github.com/bitnami/charts/commit/711d8319865931adc84705188b23ab575597b12f)), closes [#31020](https://github.com/bitnami/charts/issues/31020)
 
 ## 2.2.0 (2024-12-10)
 

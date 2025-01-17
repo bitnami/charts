@@ -1,8 +1,20 @@
 # Changelog
 
-## 10.1.3 (2025-01-02)
+## 10.1.6 (2025-01-17)
 
-* [bitnami/milvus] Release 10.1.3 ([#31197](https://github.com/bitnami/charts/pull/31197))
+* [bitnami/milvus] Release 10.1.6 ([#31432](https://github.com/bitnami/charts/pull/31432))
+
+## <small>10.1.5 (2025-01-14)</small>
+
+* [bitnami/milvus] Release 10.1.5 (#31360) ([5bffc89](https://github.com/bitnami/charts/commit/5bffc8907118be3811586323ba2f1450f3f43baf)), closes [#31360](https://github.com/bitnami/charts/issues/31360)
+
+## <small>10.1.4 (2025-01-13)</small>
+
+* [bitnami/milvus] Release 10.1.4 (#31333) ([7f1d18d](https://github.com/bitnami/charts/commit/7f1d18de409c40ad74ab0bd6f065d85759a5e5c7)), closes [#31333](https://github.com/bitnami/charts/issues/31333)
+
+## <small>10.1.3 (2025-01-02)</small>
+
+* [bitnami/milvus] Release 10.1.3 (#31197) ([1fe7c59](https://github.com/bitnami/charts/commit/1fe7c59f415c46e5b1e002229d5d2027f167a320)), closes [#31197](https://github.com/bitnami/charts/issues/31197)
 
 ## <small>10.1.2 (2024-12-30)</small>
 

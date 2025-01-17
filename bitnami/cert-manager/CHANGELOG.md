@@ -1,8 +1,22 @@
 # Changelog
 
+## 1.4.3 (2025-01-16)
+
+* [bitnami/cert-manager] Release 1.4.3 ([#31409](https://github.com/bitnami/charts/pull/31409))
+
+## <small>1.4.2 (2025-01-16)</small>
+
+* [bitnami/cert-manager] Release 1.4.2 (#31401) ([3620b04](https://github.com/bitnami/charts/commit/3620b04c31341d1dcf6197ff5a3f9e8a3c2c52d4)), closes [#31401](https://github.com/bitnami/charts/issues/31401)
+
+## <small>1.4.1 (2025-01-12)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/cert-manager] Release 1.4.1 (#31310) ([40d5294](https://github.com/bitnami/charts/commit/40d52944a726858c011d6dfa77a41a223a75a332)), closes [#31310](https://github.com/bitnami/charts/issues/31310)
+
 ## 1.4.0 (2024-12-10)
 
-* [bitnami/cert-manager] Detect non-standard images ([#30867](https://github.com/bitnami/charts/pull/30867))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/cert-manager] Detect non-standard images (#30867) ([bfe39d0](https://github.com/bitnami/charts/commit/bfe39d0581ce5337ec54e0da192055a1a19e5e59)), closes [#30867](https://github.com/bitnami/charts/issues/30867)
 
 ## <small>1.3.24 (2024-12-03)</small>
 
