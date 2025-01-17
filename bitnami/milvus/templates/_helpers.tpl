@@ -980,10 +980,33 @@ Init container definition for waiting for the database to be ready
 Init container definition for waiting for the database to be ready
 */}}
 {{- define "milvus.prepareMilvusInitContainer" -}}
+- name: copy-default-configuration
+  image: {{ template "milvus.image" .context }}
+  imagePullPolicy: {{ .context.Values.milvus.image.pullPolicy }}
+  {{- $block := index .context.Values .component }}
+  {{- if $block.containerSecurityContext.enabled }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" $block.containerSecurityContext "context" .context) | nindent 4 }}
+  {{- end }}
+  {{- if $block.resources }}
+  resources: {{- toYaml $block.resources | nindent 4 }}
+  {{- else if ne $block.resourcesPreset "none" }}
+  resources: {{- include "common.resources.preset" (dict "type" $block.resourcesPreset) | nindent 4 }}
+  {{- end }}
+  command:
+    - bash
+    - -ec
+    - |
+      #!/bin/bash
+      echo "Copying milvus default configuration"
+      cp -r /opt/bitnami/milvus/configs/. /bitnami/milvus/input-conf
+  volumeMounts:
+    - name: empty-dir
+      mountPath: /bitnami/milvus/input-conf
+      subPath: app-input-conf-dir
 # This init container renders and merges the Milvus configuration files.
 # We need to use a volume because we're working with ReadOnlyRootFilesystem
 - name: prepare-milvus
-  image: {{ template "milvus.image" .context }}
+  image: {{ template "milvus.wait-container.image" .context }}
   imagePullPolicy: {{ .context.Values.milvus.image.pullPolicy }}
   {{- $block := index .context.Values .component }}
   {{- if $block.containerSecurityContext.enabled }}
@@ -1001,7 +1024,7 @@ Init container definition for waiting for the database to be ready
       #!/bin/bash
       # Remove previously existing files and copy the default configuration files to ensure they are present in mounted configs directory
       rm -rf /bitnami/milvus/rendered-conf/*
-      cp -r /opt/bitnami/milvus/configs/. /bitnami/milvus/rendered-conf
+      cp -r /bitnami/milvus/input-conf/. /bitnami/milvus/rendered-conf
       # Build final milvus.yaml with the sections of the different files
       find /bitnami/milvus/conf -type f -name *.yaml -print0 | sort -z | xargs -0 yq eval-all '. as $item ireduce ({}; . * $item )' /bitnami/milvus/rendered-conf/milvus.yaml > /bitnami/milvus/rendered-conf/pre-render-config_00.yaml
 
@@ -1114,6 +1137,9 @@ Init container definition for waiting for the database to be ready
     - name: empty-dir
       mountPath: /bitnami/milvus/rendered-conf/
       subPath: app-rendered-conf-dir
+    - name: empty-dir
+      mountPath: /bitnami/milvus/input-conf
+      subPath: app-input-conf-dir
 {{- end -}}
 
 {{/*
