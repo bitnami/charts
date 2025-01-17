@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.3.2 (2025-01-07)
+## 1.3.3 (2025-01-17)
 
-* [bitnami/cilium] Release 1.3.2 ([#31242](https://github.com/bitnami/charts/pull/31242))
+* [bitnami/cilium] Release 1.3.3 ([#31412](https://github.com/bitnami/charts/pull/31412))
+
+## <small>1.3.2 (2025-01-07)</small>
+
+* [bitnami/cilium] Release 1.3.2 (#31242) ([4c807e0](https://github.com/bitnami/charts/commit/4c807e01d3b96dd1b93ff82c17603d67979b56b1)), closes [#31242](https://github.com/bitnami/charts/issues/31242)
 
 ## <small>1.3.1 (2024-12-17)</small>
 

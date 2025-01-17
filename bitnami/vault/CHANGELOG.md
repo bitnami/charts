@@ -1,8 +1,13 @@
 # Changelog
 
-## 1.6.1 (2024-12-19)
+## 1.6.2 (2025-01-17)
 
-* [bitnami/vault] Release 1.6.1 ([#31110](https://github.com/bitnami/charts/pull/31110))
+* [bitnami/vault] Release 1.6.2 ([#31445](https://github.com/bitnami/charts/pull/31445))
+
+## <small>1.6.1 (2024-12-19)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/vault] Release 1.6.1 (#31110) ([99abcba](https://github.com/bitnami/charts/commit/99abcba5ae865a78096c8b26632a299d08480635)), closes [#31110](https://github.com/bitnami/charts/issues/31110)
 
 ## 1.6.0 (2024-12-12)
 

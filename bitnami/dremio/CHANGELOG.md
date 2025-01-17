@@ -1,8 +1,12 @@
 # Changelog
 
+## 0.3.1 (2025-01-16)
+
+* [bitnami/dremio] Release 0.3.1 ([#31398](https://github.com/bitnami/charts/pull/31398))
+
 ## 0.3.0 (2024-12-19)
 
-* [birtnami/dremio] chore(jmx-exporter): Upgrade image and change args ([#31102](https://github.com/bitnami/charts/pull/31102))
+* [birtnami/dremio] chore(jmx-exporter): Upgrade image and change args (#31102) ([dbed966](https://github.com/bitnami/charts/commit/dbed9663f4a4499917346933a176cb37aa1e5377)), closes [#31102](https://github.com/bitnami/charts/issues/31102)
 
 ## 0.2.0 (2024-12-10)
 
