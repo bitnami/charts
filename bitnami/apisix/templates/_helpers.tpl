@@ -315,7 +315,7 @@ Init container definition for waiting for the database to be ready
 # This init container renders and merges the APISIX configuration files, as well
 # as preparing the Nginx server. We need to use a volume because we're working with
 # ReadOnlyRootFilesystem
-- name: prepare-apisix
+- name: prepare-apisix-dirs
   image: {{ template "apisix.image" .context }}
   imagePullPolicy: {{ .context.Values.image.pullPolicy }}
   {{- $block := "" }}
@@ -337,9 +337,7 @@ Init container definition for waiting for the database to be ready
       ln -sf /opt/bitnami/apisix/openresty/luajit/share/lua/*/apisix /usr/local/apisix
       mkdir -p /usr/local/apisix/logs
       # Build final config.yaml with the sections of the different files
-      find /bitnami/apisix/conf -type f -name *.yaml -print0 | sort -z | xargs -0 yq eval-all '. as $item ireduce ({}; . * $item )' > /usr/local/apisix/conf/pre-render-config.yaml
-      render-template /usr/local/apisix/conf/pre-render-config.yaml > /usr/local/apisix/conf/config.yaml
-      rm /usr/local/apisix/conf/pre-render-config.yaml
+      cp /bitnami/apisix/rendered-conf/config.yaml /usr/local/apisix/conf/
       chmod 644 /usr/local/apisix/conf/config.yaml
       apisix init
       {{- if eq .component "control-plane" }}
@@ -390,15 +388,12 @@ Init container definition for waiting for the database to be ready
     - name: empty-dir
       mountPath: /usr/local/apisix
       subPath: app-tmp-dir
-    - name: config
-      mountPath: /bitnami/apisix/conf/00_default
+    - name: empty-dir
+      mountPath: /bitnami/apisix/rendered-conf
+      subPath: app-conf-dir
     - name: empty-dir
       mountPath: /tmp
       subPath: tmp-dir
-    {{- if or $block.extraConfig $block.extraConfigExistingConfigMap }}
-    - name: extra-config
-      mountPath: /bitnami/apisix/conf/01_extra
-    {{- end }}
     {{- if $block.tls.enabled }}
     - name: certs
       mountPath: /bitnami/certs
@@ -543,11 +538,15 @@ Render configuration for the dashboard and ingress-controller components
 # as preparing the Nginx server. We need to use a volume because we're working with
 # ReadOnlyRootFilesystem
 - name: render-conf
-  image: {{ template "apisix.image" .context }}
+  image: {{ template "apisix.wait-container.image" .context }}
   imagePullPolicy: {{ .context.Values.image.pullPolicy }}
   {{- $block := "" }}
   {{- if eq .component "ingress-controller" }}
   {{- $block = index .context.Values "ingressController" }}
+  {{- else if eq .component "control-plane" }}
+  {{- $block = index .context.Values "controlPlane" }}
+  {{- else if eq .component "data-plane" }}
+  {{- $block = index .context.Values "dataPlane" }}
   {{- else }}
   {{- $block = index .context.Values "dashboard" }}
   {{- end }}

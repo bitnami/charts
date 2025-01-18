@@ -1,8 +1,18 @@
 # Changelog
 
+## 2.3.2 (2025-01-17)
+
+* [bitnami/kiam] Release 2.3.2 ([#31427](https://github.com/bitnami/charts/pull/31427))
+
+## <small>2.3.1 (2025-01-13)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/kiam] Release 2.3.1 (#31320) ([394a0bc](https://github.com/bitnami/charts/commit/394a0bcac867e518e407d13e6119d57480bf577b)), closes [#31320](https://github.com/bitnami/charts/issues/31320)
+
 ## 2.3.0 (2024-12-10)
 
-* [bitnami/kiam] Detect non-standard images ([#30900](https://github.com/bitnami/charts/pull/30900))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/kiam] Detect non-standard images (#30900) ([802c8ce](https://github.com/bitnami/charts/commit/802c8ceb740cb29e63465e74929bed881cf68381)), closes [#30900](https://github.com/bitnami/charts/issues/30900)
 
 ## <small>2.2.18 (2024-12-04)</small>
 

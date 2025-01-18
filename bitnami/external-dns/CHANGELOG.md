@@ -1,8 +1,13 @@
 # Changelog
 
-## 8.7.1 (2024-12-19)
+## 8.7.2 (2025-01-17)
 
-* [bitnami/external-dns] Release 8.7.1 ([#31120](https://github.com/bitnami/charts/pull/31120))
+* [bitnami/external-dns] Release 8.7.2 ([#31420](https://github.com/bitnami/charts/pull/31420))
+
+## <small>8.7.1 (2024-12-19)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/external-dns] Release 8.7.1 (#31120) ([d463e38](https://github.com/bitnami/charts/commit/d463e389493f7f518df70b239336d8d13f02cb2d)), closes [#31120](https://github.com/bitnami/charts/issues/31120)
 
 ## 8.7.0 (2024-12-10)
 

@@ -1,8 +1,17 @@
 # Changelog
 
-## 10.7.1 (2024-12-11)
+## 10.7.3 (2025-01-17)
 
-* [bitnami/etcd] keep snapshot-pvc ([#30815](https://github.com/bitnami/charts/pull/30815))
+* [bitnami/etcd] Release 10.7.3 ([#31419](https://github.com/bitnami/charts/pull/31419))
+
+## <small>10.7.2 (2025-01-12)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/etcd] Release 10.7.2 (#31312) ([0e47c54](https://github.com/bitnami/charts/commit/0e47c5464e650b9149a87fbeac84f5a497012f36)), closes [#31312](https://github.com/bitnami/charts/issues/31312)
+
+## <small>10.7.1 (2024-12-11)</small>
+
+* [bitnami/etcd] keep snapshot-pvc (#30815) ([2a63958](https://github.com/bitnami/charts/commit/2a639583f613184bb1e05346ba25169d872db3cf)), closes [#30815](https://github.com/bitnami/charts/issues/30815)
 
 ## 10.7.0 (2024-12-10)
 

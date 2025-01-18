@@ -1,8 +1,13 @@
 # Changelog
 
+## 34.1.1 (2025-01-17)
+
+* [bitnami/spring-cloud-dataflow] Release 34.1.1 ([#31451](https://github.com/bitnami/charts/pull/31451))
+
 ## 34.1.0 (2024-12-10)
 
-* [bitnami/spring-cloud-dataflow] Detect non-standard images ([#30968](https://github.com/bitnami/charts/pull/30968))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/spring-cloud-dataflow] Detect non-standard images (#30968) ([f1ceafb](https://github.com/bitnami/charts/commit/f1ceafba996e8b44a30abdff8594376a7e3b0399)), closes [#30968](https://github.com/bitnami/charts/issues/30968)
 
 ## <small>34.0.1 (2024-12-08)</small>
 
