@@ -22,8 +22,14 @@ data:
     {{- if .Values.configuration.server.basePath }}
     server.basePath: {{ .Values.configuration.server.basePath | quote }}
     {{- end }}
-    {{- if or .Values.configuration.server.publicBaseUrl .Values.ingress.enabled }}
-    server.publicBaseUrl: {{ default .Values.ingress.hostname .Values.configuration.server.publicBaseUrl }}
+    {{- if .Values.configuration.server.publicBaseUrl }}
+    server.publicBaseUrl: {{ .Values.configuration.server.publicBaseUrl }}
+    {{- else }}
+    {{- if .Values.ingress.enabled }}
+    {{- $protocol := ternary "https" "http" (or .Values.ingress.tls .Values.ingress.extraTls) -}}
+    {{- $hostname := required "Ingress hostname must be specified" .Values.ingress.hostname -}}
+    server.publicBaseUrl: {{ printf "%s://%s" $protocol $hostname }}
+    {{- end }}
     {{- end }}
     server.rewriteBasePath: {{ .Values.configuration.server.rewriteBasePath }}
     {{- if .Values.extraConfiguration }}
