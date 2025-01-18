@@ -38,6 +38,17 @@ rules:
     verbs:
       - "create"
       - "get"
+  - apiGroups:
+      - "batch"
+    resources:
+      - "jobs"
+    verbs:
+      - "create"
+      - "list"
+      - "get"
+      - "watch"
+      - "delete"
+      - "patch"
   {{- if .Values.rbac.rules }}
   {{- include "common.tplvalues.render" ( dict "value" .Values.rbac.rules "context" $ ) | nindent 2 }}
   {{- end }}
