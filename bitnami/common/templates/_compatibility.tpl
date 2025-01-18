@@ -40,7 +40,7 @@ Usage:
 {{- end -}}
 {{/* Remove fields that are disregarded when running the container in privileged mode */}}
 {{- if $adaptedContext.privileged -}}
-  {{- $adaptedContext = omit $adaptedContext "capabilities" "seLinuxOptions" -}}
+  {{- $adaptedContext = omit $adaptedContext "capabilities" -}}
 {{- end -}}
 {{- omit $adaptedContext "enabled" | toYaml -}}
 {{- end -}}
