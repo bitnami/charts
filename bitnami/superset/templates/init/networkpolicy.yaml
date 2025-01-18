@@ -1,0 +1,67 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.init.networkPolicy.enabled .Values.init.enabled }}
+kind: NetworkPolicy
+apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
+metadata:
+  name:  {{ include "common.names.fullname" . }}-init
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: superset
+    app.kubernetes.io/component: init
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.init.podLabels .Values.commonLabels ) "context" . ) }}
+  podSelector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/part-of: superset
+      app.kubernetes.io/component: init
+  policyTypes:
+    - Ingress
+    - Egress
+  {{- if .Values.init.networkPolicy.allowExternalEgress }}
+  egress:
+    - {}
+  {{- else }}
+  egress:
+    # Allow dns resolution
+    - ports:
+        - port: 53
+          protocol: UDP
+        - port: 53
+          protocol: TCP
+    # Allow outbound connections to Redis and Posgresql
+    - ports:
+        - port: {{ include "superset.redis.port" . }}
+          {{- if .Values.redis.enabled }}
+          to:
+            - podSelector:
+                matchLabels:
+                  app.kubernetes.io/name: redis
+                  app.kubernetes.io/instance: {{ .Release.Name }}
+          {{- end }}
+    - ports:
+        - port: {{ include "superset.postgresql.port" . }}
+          {{- if .Values.postgresql.enabled }}
+          to:
+            - podSelector:
+                matchLabels:
+                  app.kubernetes.io/name: postgresql
+                  app.kubernetes.io/instance: {{ .Release.Name }}
+          {{- end }}
+    {{- if .Values.init.networkPolicy.extraEgress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.init.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+  ingress:
+    {{- if .Values.init.networkPolicy.extraIngress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.init.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
+    {{- end }}
+{{- end }}
