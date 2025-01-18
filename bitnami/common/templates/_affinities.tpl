@@ -71,10 +71,7 @@ Return a soft podAffinity/podAntiAffinity definition
 preferredDuringSchedulingIgnoredDuringExecution:
   - podAffinityTerm:
       labelSelector:
-        matchLabels: {{- (include "common.labels.matchLabels" ( dict "customLabels" $customLabels "context" .context )) | nindent 10 }}
-          {{- if not (empty $component) }}
-          {{ printf "app.kubernetes.io/component: %s" $component }}
-          {{- end }}
+        matchLabels: {{- (include "common.labels.matchLabels" (dict "customLabels" $customLabels "context" .context "component" $component)) | nindent 10 }}
           {{- range $key, $value := $extraMatchLabels }}
           {{ $key }}: {{ $value | quote }}
           {{- end }}
@@ -82,7 +79,7 @@ preferredDuringSchedulingIgnoredDuringExecution:
       namespaces:
         - {{ .context.Release.Namespace }}
         {{- with $extraNamespaces }}
-        {{ include "common.tplvalues.render" (dict "value" . "context" $) | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" . "context" $) | nindent 8 }}
         {{- end }}
       {{- end }}
       topologyKey: {{ include "common.affinities.topologyKey" (dict "topologyKey" .topologyKey) }}
@@ -90,10 +87,7 @@ preferredDuringSchedulingIgnoredDuringExecution:
   {{- range $extraPodAffinityTerms }}
   - podAffinityTerm:
       labelSelector:
-        matchLabels: {{- (include "common.labels.matchLabels" ( dict "customLabels" $customLabels "context" $.context )) | nindent 10 }}
-          {{- if not (empty $component) }}
-          {{ printf "app.kubernetes.io/component: %s" $component }}
-          {{- end }}
+        matchLabels: {{- (include "common.labels.matchLabels" (dict "customLabels" $customLabels "context" $.context "component" $component)) | nindent 10 }}
           {{- range $key, $value := .extraMatchLabels }}
           {{ $key }}: {{ $value | quote }}
           {{- end }}
@@ -114,10 +108,7 @@ Return a hard podAffinity/podAntiAffinity definition
 {{- $extraNamespaces := default (list) .extraNamespaces -}}
 requiredDuringSchedulingIgnoredDuringExecution:
   - labelSelector:
-      matchLabels: {{- (include "common.labels.matchLabels" ( dict "customLabels" $customLabels "context" .context )) | nindent 8 }}
-        {{- if not (empty $component) }}
-        {{ printf "app.kubernetes.io/component: %s" $component }}
-        {{- end }}
+      matchLabels: {{- (include "common.labels.matchLabels" (dict "customLabels" $customLabels "context" .context "component" $component)) | nindent 8 }}
         {{- range $key, $value := $extraMatchLabels }}
         {{ $key }}: {{ $value | quote }}
         {{- end }}
@@ -125,16 +116,13 @@ requiredDuringSchedulingIgnoredDuringExecution:
       namespaces:
         - {{ .context.Release.Namespace }}
         {{- with $extraNamespaces }}
-        {{ include "common.tplvalues.render" (dict "value" . "context" $) | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" . "context" $) | nindent 8 }}
         {{- end }}
       {{- end }}
     topologyKey: {{ include "common.affinities.topologyKey" (dict "topologyKey" .topologyKey) }}
   {{- range $extraPodAffinityTerms }}
   - labelSelector:
-      matchLabels: {{- (include "common.labels.matchLabels" ( dict "customLabels" $customLabels "context" $.context )) | nindent 8 }}
-        {{- if not (empty $component) }}
-        {{ printf "app.kubernetes.io/component: %s" $component }}
-        {{- end }}
+      matchLabels: {{- (include "common.labels.matchLabels" (dict "customLabels" $customLabels "context" $.context "component" $component)) | nindent 8 }}
         {{- range $key, $value := .extraMatchLabels }}
         {{ $key }}: {{ $value | quote }}
         {{- end }}
