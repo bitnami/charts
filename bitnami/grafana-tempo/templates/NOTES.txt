@@ -14,11 +14,11 @@ The chart has been deployed in diagnostic mode. All probes have been disabled an
 
 Get the list of pods by executing:
 
-  kubectl get pods --namespace {{ .Release.Namespace }} -l app.kubernetes.io/instance={{ .Release.Name }}
+  kubectl get pods --namespace {{ include "common.names.namespace" . }} -l app.kubernetes.io/instance={{ .Release.Name }}
 
 Access the pod you want to debug by executing
 
-  kubectl exec --namespace {{ .Release.Namespace }} -ti <NAME OF THE POD> -- bash
+  kubectl exec --namespace {{ include "common.names.namespace" . }} -ti <NAME OF THE POD> -- bash
 
 In order to replicate the container startup execute this command:
 
@@ -45,13 +45,13 @@ Installed components:
 
 {{- if eq .Values.tempo.deploymentMode "microservices" }}
 {{- if contains "NodePort" .Values.queryFrontend.service.type }}
-    export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "grafana-tempo.query-frontend.fullname" . }})
-    export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+    export NODE_PORT=$(kubectl get --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "grafana-tempo.query-frontend.fullname" . }})
+    export NODE_IP=$(kubectl get nodes --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.items[0].status.addresses[0].address}")
     echo http://$NODE_IP:$NODE_PORT
 {{- else if contains "LoadBalancer" .Values.queryFrontend.service.type }}
      NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-           You can watch the status of by running 'kubectl get --namespace {{ .Release.Namespace }} svc -w {{ template "common.names.fullname" . }}
-    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+           You can watch the status of by running 'kubectl get --namespace {{ include "common.names.namespace" . }} svc -w {{ template "common.names.fullname" . }}
+    export SERVICE_IP=$(kubectl get svc --namespace {{ include "common.names.namespace" . }} {{ template "common.names.fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
     echo http://$SERVICE_IP:{{ .Values.queryFrontend.service.ports.http }}
 {{- else if contains "ClusterIP" .Values.queryFrontend.service.type }}
     echo "The Query Frontend is available at http://127.0.0.1:{{ .Values.queryFrontend.service.ports.http }}"
@@ -59,13 +59,13 @@ Installed components:
 {{- end }}
 {{- else if eq .Values.tempo.deploymentMode "scalingMonolithic" }}
 {{- if contains "NodePort" .Values.scalingMonolithic.service.type }}
-    export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "grafana-tempo.scaling-monolithic.fullname" . }})
-    export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+    export NODE_PORT=$(kubectl get --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "grafana-tempo.scaling-monolithic.fullname" . }})
+    export NODE_IP=$(kubectl get nodes --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.items[0].status.addresses[0].address}")
     echo http://$NODE_IP:$NODE_PORT
 {{- else if contains "LoadBalancer" .Values.scalingMonolithic.service.type }}
      NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-           You can watch the status of by running 'kubectl get --namespace {{ .Release.Namespace }} svc -w {{ template "common.names.fullname" . }}
-    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+           You can watch the status of by running 'kubectl get --namespace {{ include "common.names.namespace" . }} svc -w {{ template "common.names.fullname" . }}
+    export SERVICE_IP=$(kubectl get svc --namespace {{ include "common.names.namespace" . }} {{ template "common.names.fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
     echo http://$SERVICE_IP:{{ .Values.scalingMonolithic.service.ports.http }}
 {{- else if contains "ClusterIP" .Values.scalingMonolithic.service.type }}
     echo "The Query Frontend is available at http://127.0.0.1:{{ .Values.scalingMonolithic.service.ports.http }}"

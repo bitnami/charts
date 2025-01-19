@@ -8,7 +8,7 @@ apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
   name: {{ template "grafana-tempo.scaling-monolithic.fullname" . }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: scaling-monolithic
   {{- if .Values.commonAnnotations }}
