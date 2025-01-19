@@ -1078,7 +1078,8 @@ The [Bitnami grafana-tempo](https://github.com/bitnami/containers/tree/main/bitn
 | `scalingMonolithic.service.externalTrafficPolicy`         | scalingMonolithic service external traffic policy                                                                               | `Cluster`   |
 | `scalingMonolithic.service.annotations`                   | Additional custom annotations for scalingMonolithic service                                                                     | `{}`        |
 | `scalingMonolithic.service.extraPorts`                    | Extra ports to expose in the scalingMonolithic service                                                                          | `[]`        |
-| `scalingMonolithic.service.headless.annotations`          | Annotations for the headless service.                                                                                           | `{}`        |
+| `scalingMonolithic.service.headless.annotations`          | Annotations for the scalingMonolithic headless service.                                                                         | `{}`        |
+| `scalingMonolithic.service.headless.extraPorts`           | Extra ports to expose in the scalingMonolithic headless service                                                                 | `[]`        |
 | `scalingMonolithic.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                                                             | `true`      |
 | `scalingMonolithic.networkPolicy.allowExternal`           | Don't require server label for connections                                                                                      | `true`      |
 | `scalingMonolithic.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                                                 | `true`      |
