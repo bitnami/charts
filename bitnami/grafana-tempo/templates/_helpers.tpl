@@ -190,6 +190,7 @@ Compile all warnings into a single message.
 */}}
 {{- define "grafana-tempo.validateValues" -}}
 {{- $messages := list -}}
+{{- $messages := append $messages (include "grafana-tempo.validateValues.deploymentMode" .) -}}
 {{- $messages := append $messages (include "grafana-tempo.validateValues.vulture" .) -}}
 {{- $messages := append $messages (include "grafana-tempo.validateValues.memcached" .) -}}
 {{- $messages := without $messages "" -}}
@@ -198,6 +199,14 @@ Compile all warnings into a single message.
 {{- if $message -}}
 {{-   printf "\nVALUES VALIDATION:\n%s" $message -}}
 {{- end -}}
+{{- end -}}
+
+{{/* Validate values of Grafana Tempo - DeploymentMode */}}
+{{- define "grafana-tempo.validateValues.deploymentMode" -}}
+{{- if and (ne .Values.tempo.deploymentMode "microservices") (ne .Values.tempo.deploymentMode "scalingMonolithic") }}
+grafana-tempo: DeploymentMode
+    Allowed deploymentMode values are 'microservices' and 'scalingMonolithic'. Found: {{ .Values.tempo.deploymentMode }}
+{{- end }}
 {{- end -}}
 
 {{/* Validate values of Grafana Tempo - Memcached */}}
