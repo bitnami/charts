@@ -3,8 +3,7 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if eq .Values.tempo.deploymentMode "microservices" }}
-{{- if and .Values.metrics.enabled .Values.metrics.serviceMonitor.enabled }}
+{{- if and (eq .Values.tempo.deploymentMode "microservices") .Values.metrics.enabled .Values.metrics.serviceMonitor.enabled }}
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
@@ -47,5 +46,4 @@ spec:
   namespaceSelector:
     matchNames:
       - {{ .Release.Namespace }}
-{{- end }}
 {{- end }}

@@ -3,8 +3,7 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if eq .Values.tempo.deploymentMode "microservices" }}
-{{- if .Values.compactor.enabled }}
+{{- if and (eq .Values.tempo.deploymentMode "microservices") .Values.compactor.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -61,5 +60,4 @@ spec:
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.compactor.podLabels .Values.commonLabels ) "context" . ) }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: compactor
-{{- end }}
 {{- end }}

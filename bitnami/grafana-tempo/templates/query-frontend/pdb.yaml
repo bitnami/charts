@@ -3,8 +3,7 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if eq .Values.tempo.deploymentMode "microservices" }}
-{{- if .Values.queryFrontend.pdb.create }}
+{{- if and (eq .Values.tempo.deploymentMode "microservices") .Values.queryFrontend.pdb.create }}
 apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
 kind: PodDisruptionBudget
 metadata:
@@ -28,5 +27,4 @@ spec:
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: query-frontend
-{{- end }}
 {{- end }}

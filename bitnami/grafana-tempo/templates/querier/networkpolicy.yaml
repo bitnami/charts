@@ -3,8 +3,7 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if eq .Values.tempo.deploymentMode "microservices" }}
-{{- if .Values.querier.networkPolicy.enabled }}
+{{- if and (eq .Values.tempo.deploymentMode "microservices") .Values.querier.networkPolicy.enabled }}
 kind: NetworkPolicy
 apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
 metadata:
@@ -122,5 +121,4 @@ spec:
     {{- if .Values.querier.networkPolicy.extraIngress }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.querier.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
     {{- end }}
-{{- end }}
 {{- end }}
