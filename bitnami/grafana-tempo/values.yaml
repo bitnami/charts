@@ -3259,9 +3259,12 @@ scalingMonolithic:
     ## Headless service properties
     ##
     headless:
-      ## @param scalingMonolithic.service.headless.annotations Annotations for the headless service.
+      ## @param scalingMonolithic.service.headless.annotations Annotations for the scalingMonolithic headless service.
       ##
       annotations: {}
+      ## @param scalingMonolithic.service.headless.extraPorts Extra ports to expose in the scalingMonolithic headless service
+      ##
+      extraPorts: []
   ## Network Policies
   ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
   ##
