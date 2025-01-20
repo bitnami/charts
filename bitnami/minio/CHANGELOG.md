@@ -1,8 +1,12 @@
 # Changelog
 
-## 14.10.4 (2025-01-17)
+## 14.10.5 (2025-01-20)
 
-* [bitnami/minio] Release 14.10.4 ([#31433](https://github.com/bitnami/charts/pull/31433))
+* [bitnami/minio] chore: :recycle: Do not use wait-for-port in minio image ([#31475](https://github.com/bitnami/charts/pull/31475))
+
+## <small>14.10.4 (2025-01-17)</small>
+
+* [bitnami/minio] Release 14.10.4 (#31433) ([163a43f](https://github.com/bitnami/charts/commit/163a43f4443e89720a5eb931309c1f41d26f8fcf)), closes [#31433](https://github.com/bitnami/charts/issues/31433)
 
 ## <small>14.10.3 (2024-12-20)</small>
 
