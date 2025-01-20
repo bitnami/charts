@@ -1,8 +1,12 @@
 # Changelog
 
-## 24.4.4 (2025-01-15)
+## 24.4.5 (2025-01-17)
 
-* [bitnami/keycloak] Release 24.4.4 ([#31380](https://github.com/bitnami/charts/pull/31380))
+* [bitnami/keycloak] Fix quotes for handling KC_PROXY_HEADER when options is set to passthrough ([#31459](https://github.com/bitnami/charts/pull/31459))
+
+## <small>24.4.4 (2025-01-15)</small>
+
+* [bitnami/keycloak] Release 24.4.4 (#31380) ([820f59b](https://github.com/bitnami/charts/commit/820f59b6f9be409f7c9f0a3881975f451fe49174)), closes [#31380](https://github.com/bitnami/charts/issues/31380)
 
 ## <small>24.4.3 (2025-01-14)</small>
 
