@@ -716,7 +716,6 @@ Init container definition for waiting for the database to be ready
     - bash
     - -ec
     - |
-      #!/bin/bash
       retry_while() {
         local -r cmd="${1:?cmd is missing}"
         local -r retries="${2:-12}"
@@ -797,7 +796,6 @@ Init container definition for waiting for the database to be ready
     - bash
     - -ec
     - |
-      #!/bin/bash
       retry_while() {
         local -r cmd="${1:?cmd is missing}"
         local -r retries="${2:-12}"
@@ -870,7 +868,6 @@ Init container definition for waiting for the database to be ready
     - bash
     - -ec
     - |
-      #!/bin/bash
       retry_while() {
         local -r cmd="${1:?cmd is missing}"
         local -r retries="${2:-12}"
@@ -937,7 +934,6 @@ Init container definition for waiting for the database to be ready
     - bash
     - -ec
     - |
-      #!/bin/bash
       retry_while() {
         local -r cmd="${1:?cmd is missing}"
         local -r retries="${2:-12}"
@@ -1001,7 +997,7 @@ Init container definition for waiting for the database to be ready
   volumeMounts:
     - name: empty-dir
       mountPath: /bitnami/milvus/rendered-conf
-      subPath: app-input-conf-dir
+      subPath: app-rendered-conf-dir
 # This init container renders and merges the Milvus configuration files.
 # We need to use a volume because we're working with ReadOnlyRootFilesystem
 - name: prepare-milvus
