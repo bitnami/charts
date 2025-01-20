@@ -1,8 +1,12 @@
 # Changelog
 
-## 3.1.4 (2025-01-10)
+## 3.1.5 (2025-01-17)
 
-* [bitnami/gitea] Release 3.1.4 ([#31285](https://github.com/bitnami/charts/pull/31285))
+* [bitnami/gitea] Release 3.1.5 ([#31417](https://github.com/bitnami/charts/pull/31417))
+
+## <small>3.1.4 (2025-01-10)</small>
+
+* [bitnami/gitea] Release 3.1.4 (#31285) ([6afa662](https://github.com/bitnami/charts/commit/6afa662c1cb7c25a9e165b607ffa404364ebf8d4)), closes [#31285](https://github.com/bitnami/charts/issues/31285)
 
 ## <small>3.1.3 (2025-01-09)</small>
 

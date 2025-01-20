@@ -1,8 +1,17 @@
 # Changelog
 
-## 2.4.2 (2025-01-13)
+## 2.4.4 (2025-01-17)
 
-* [bitnami/pinniped] bugfix: remove deprecated vars to configure OpenLDAP on VIB ([#31337](https://github.com/bitnami/charts/pull/31337))
+* [bitnami/pinniped] Release 2.4.4 ([#31440](https://github.com/bitnami/charts/pull/31440))
+
+## <small>2.4.3 (2025-01-15)</small>
+
+* [bitnami/pinniped] Release 2.4.3 (#31388) ([5431593](https://github.com/bitnami/charts/commit/5431593572ef413843aed94fb50978fce9a77c6a)), closes [#31388](https://github.com/bitnami/charts/issues/31388)
+
+## <small>2.4.2 (2025-01-13)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/pinniped] bugfix: remove deprecated vars to configure OpenLDAP on VIB (#31337) ([e24fab4](https://github.com/bitnami/charts/commit/e24fab4b2cb9d6e5e0c3b4e3b93fd87bca011c2b)), closes [#31337](https://github.com/bitnami/charts/issues/31337)
 
 ## <small>2.4.1 (2024-12-10)</small>
 
