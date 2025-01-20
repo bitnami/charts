@@ -1,8 +1,12 @@
 # Changelog
 
-## 16.4.3 (2025-01-14)
+## 16.4.4 (2025-01-20)
 
-* bitnami/postgresql Fix missing dot in include statement for passwordUpdate job template ([#31364](https://github.com/bitnami/charts/pull/31364))
+* [bitnami/postgresql] Release 16.4.4 ([#31482](https://github.com/bitnami/charts/pull/31482))
+
+## <small>16.4.3 (2025-01-14)</small>
+
+* bitnami/postgresql Fix missing dot in include statement for passwordUpdate job template (#31364) ([901b26c](https://github.com/bitnami/charts/commit/901b26c4b7be8935d9764d51df4b76d8dede0117)), closes [#31364](https://github.com/bitnami/charts/issues/31364)
 
 ## <small>16.4.2 (2025-01-13)</small>
 
