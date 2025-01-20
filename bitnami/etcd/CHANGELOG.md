@@ -6,7 +6,7 @@
 
 ## 11.0.0 (2025-01-20)
 
-* [bitnami/etcd] Add pre-upgrade hook ([#31161](https://github.com/bitnami/charts/pull/31161))
+* [bitnami/etcd] Add pre-upgrade hook (#31161) ([38be6c5](https://github.com/bitnami/charts/commit/38be6c5dcd4ed7bff0c830d8eefe98962310c54d)), closes [#31161](https://github.com/bitnami/charts/issues/31161)
 
 ## <small>10.7.3 (2025-01-17)</small>
 
