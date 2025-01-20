@@ -44,6 +44,7 @@ spec:
         {{- end }}
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: keycloak
+        app.kubernetes.io/app-version: {{ .Chart.AppVersion }}
     spec:
       serviceAccountName: {{ template "keycloak.serviceAccountName" . }}
       {{- include "keycloak.imagePullSecrets" . | nindent 6 }}

@@ -83,6 +83,7 @@ spec:
       {{- end }}
       initContainers:
         {{- include "apisix.waitForETCDInitContainer" . | nindent 8 }}
+        {{- include "apisix.renderConfInitContainer" (dict "component" "control-plane" "context" $) | nindent 8 }}
         {{- include "apisix.prepareApisixInitContainer" (dict "component" "control-plane" "context" $) | nindent 8 }}
         {{- if .Values.controlPlane.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.controlPlane.initContainers "context" $) | nindent 8 }}

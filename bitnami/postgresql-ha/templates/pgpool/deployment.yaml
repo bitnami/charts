@@ -72,9 +72,7 @@ spec:
       {{- if .Values.pgpool.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.pgpool.terminationGracePeriodSeconds }}
       {{- end }}
-      {{- if .Values.serviceAccount.create }}
       serviceAccountName: {{ include "postgresql-ha.serviceAccountName" . }}
-      {{- end }}
       {{- if or .Values.pgpool.tls.enabled .Values.pgpool.initContainers }}
       initContainers:
       {{- if .Values.pgpool.tls.enabled }}
