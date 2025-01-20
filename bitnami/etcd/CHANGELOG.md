@@ -1,8 +1,12 @@
 # Changelog
 
-## 10.7.3 (2025-01-17)
+## 11.0.0 (2025-01-20)
 
-* [bitnami/etcd] Release 10.7.3 ([#31419](https://github.com/bitnami/charts/pull/31419))
+* [bitnami/etcd] Add pre-upgrade hook ([#31161](https://github.com/bitnami/charts/pull/31161))
+
+## <small>10.7.3 (2025-01-17)</small>
+
+* [bitnami/etcd] Release 10.7.3 (#31419) ([7ef8d56](https://github.com/bitnami/charts/commit/7ef8d562ec9953460d675b02cfbce336ab66bceb)), closes [#31419](https://github.com/bitnami/charts/issues/31419)
 
 ## <small>10.7.2 (2025-01-12)</small>
 
