@@ -1,8 +1,12 @@
 # Changelog
 
-## 16.4.4 (2025-01-20)
+## 16.4.5 (2025-01-20)
 
-* [bitnami/postgresql] Release 16.4.4 ([#31482](https://github.com/bitnami/charts/pull/31482))
+* [bitnami/postgresql] Release 16.4.5 ([#31484](https://github.com/bitnami/charts/pull/31484))
+
+## <small>16.4.4 (2025-01-20)</small>
+
+* [bitnami/postgresql] Release 16.4.4 (#31482) ([e784f18](https://github.com/bitnami/charts/commit/e784f187c01d6a2d7a1237ae5015bd5cb6e4e4b8)), closes [#31482](https://github.com/bitnami/charts/issues/31482)
 
 ## <small>16.4.3 (2025-01-14)</small>
 
