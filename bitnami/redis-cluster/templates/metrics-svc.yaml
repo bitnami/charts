@@ -24,6 +24,9 @@ spec:
   {{- if and (eq .Values.metrics.service.type "LoadBalancer") .Values.metrics.service.loadBalancerIP }}
   loadBalancerIP: {{ .Values.metrics.service.loadBalancerIP }}
   {{- end }}
+  {{- if and (eq .Values.metrics.service.type "LoadBalancer")  .Values.metrics.service.loadBalancerClass }}
+  loadBalancerClass: {{ .Values.metrics.service.loadBalancerClass }}
+  {{- end }}
   ports:
     - name: metrics
       port: {{ .Values.metrics.service.ports.http }}

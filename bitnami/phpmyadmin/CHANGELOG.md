@@ -1,8 +1,13 @@
 # Changelog
 
+## 18.1.1 (2025-01-17)
+
+* [bitnami/phpmyadmin] Release 18.1.1 ([#31452](https://github.com/bitnami/charts/pull/31452))
+
 ## 18.1.0 (2024-12-10)
 
-* [bitnami/phpmyadmin] Detect non-standard images ([#30963](https://github.com/bitnami/charts/pull/30963))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/phpmyadmin] Detect non-standard images (#30963) ([fa05829](https://github.com/bitnami/charts/commit/fa058290a52c6f0c59f3ee3c02ea89afadff8b57)), closes [#30963](https://github.com/bitnami/charts/issues/30963)
 
 ## <small>18.0.1 (2024-12-08)</small>
 
