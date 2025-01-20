@@ -1,8 +1,12 @@
 # Changelog
 
-## 10.1.6 (2025-01-17)
+## 10.1.7 (2025-01-20)
 
-* [bitnami/milvus] Release 10.1.6 ([#31432](https://github.com/bitnami/charts/pull/31432))
+* [bitnami/milvus] feat: :recycle: Use os-shell for config generation ([#31460](https://github.com/bitnami/charts/pull/31460))
+
+## <small>10.1.6 (2025-01-17)</small>
+
+* [bitnami/milvus] Release 10.1.6 (#31432) ([e006414](https://github.com/bitnami/charts/commit/e0064149e9a00d882be4c891bef34dbd055734c5)), closes [#31432](https://github.com/bitnami/charts/issues/31432)
 
 ## <small>10.1.5 (2025-01-14)</small>
 
