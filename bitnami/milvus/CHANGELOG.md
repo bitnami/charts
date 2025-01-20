@@ -1,6 +1,6 @@
 # Changelog
 
-## 10.1.7 (2025-01-17)
+## 10.1.7 (2025-01-20)
 
 * [bitnami/milvus] feat: :recycle: Use os-shell for config generation ([#31460](https://github.com/bitnami/charts/pull/31460))
 
