@@ -57,7 +57,7 @@ spec:
           args:
             - |
               {{- $customUser := include "postgresql.v1.username" . }}
-              {{- $customDatabase := include "postgresql.v1.database" | default "postgres" }}
+              {{- $customDatabase := include "postgresql.v1.database" . | default "postgres" }}
               {{- if .Values.usePasswordFiles }}
               # We need to load all the secret env vars to the system
               for file in $(find /bitnami/postgresql/secrets -type f); do
