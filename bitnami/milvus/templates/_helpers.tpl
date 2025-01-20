@@ -996,7 +996,6 @@ Init container definition for waiting for the database to be ready
     - bash
     - -ec
     - |
-      #!/bin/bash
       echo "Copying milvus default configuration"
       cp -r /opt/bitnami/milvus/configs/. /bitnami/milvus/rendered-conf
   volumeMounts:
