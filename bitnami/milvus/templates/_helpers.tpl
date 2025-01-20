@@ -998,10 +998,10 @@ Init container definition for waiting for the database to be ready
     - |
       #!/bin/bash
       echo "Copying milvus default configuration"
-      cp -r /opt/bitnami/milvus/configs/. /bitnami/milvus/input-conf
+      cp -r /opt/bitnami/milvus/configs/. /bitnami/milvus/rendered-conf
   volumeMounts:
     - name: empty-dir
-      mountPath: /bitnami/milvus/input-conf
+      mountPath: /bitnami/milvus/rendered-conf
       subPath: app-input-conf-dir
 # This init container renders and merges the Milvus configuration files.
 # We need to use a volume because we're working with ReadOnlyRootFilesystem
@@ -1022,9 +1022,6 @@ Init container definition for waiting for the database to be ready
     - -ec
     - |
       #!/bin/bash
-      # Remove previously existing files and copy the default configuration files to ensure they are present in mounted configs directory
-      rm -rf /bitnami/milvus/rendered-conf/*
-      cp -r /bitnami/milvus/input-conf/. /bitnami/milvus/rendered-conf
       # Build final milvus.yaml with the sections of the different files
       find /bitnami/milvus/conf -type f -name *.yaml -print0 | sort -z | xargs -0 yq eval-all '. as $item ireduce ({}; . * $item )' /bitnami/milvus/rendered-conf/milvus.yaml > /bitnami/milvus/rendered-conf/pre-render-config_00.yaml
 
@@ -1137,9 +1134,6 @@ Init container definition for waiting for the database to be ready
     - name: empty-dir
       mountPath: /bitnami/milvus/rendered-conf/
       subPath: app-rendered-conf-dir
-    - name: empty-dir
-      mountPath: /bitnami/milvus/input-conf
-      subPath: app-input-conf-dir
 {{- end -}}
 
 {{/*
