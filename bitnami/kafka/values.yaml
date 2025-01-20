@@ -11,6 +11,8 @@
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
 ## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
 ## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
+## @param global.ipFamily Global IpFamilies
+## @param global.ipFamilyPolicy Global IpFamilyPolicy Services
 ##
 global:
   imageRegistry: ""
