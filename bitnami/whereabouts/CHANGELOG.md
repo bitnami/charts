@@ -1,8 +1,13 @@
 # Changelog
 
-## 1.2.1 (2025-01-13)
+## 1.2.2 (2025-01-17)
 
-* [bitnami/whereabouts] Release 1.2.1 ([#31326](https://github.com/bitnami/charts/pull/31326))
+* [bitnami/whereabouts] Release 1.2.2 ([#31447](https://github.com/bitnami/charts/pull/31447))
+
+## <small>1.2.1 (2025-01-13)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/whereabouts] Release 1.2.1 (#31326) ([03d96f7](https://github.com/bitnami/charts/commit/03d96f76490d77c02fa4cdd40ee3bbac5f5d06c1)), closes [#31326](https://github.com/bitnami/charts/issues/31326)
 
 ## 1.2.0 (2024-12-10)
 

@@ -1,8 +1,13 @@
 # Changelog
 
+## 9.1.1 (2025-01-15)
+
+* [bitnami/mongodb-sharded] Release 9.1.1 ([#31389](https://github.com/bitnami/charts/pull/31389))
+
 ## 9.1.0 (2024-12-10)
 
-* [bitnami/mongodb-sharded] Detect non-standard images ([#30927](https://github.com/bitnami/charts/pull/30927))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/mongodb-sharded] Detect non-standard images (#30927) ([3c8ef42](https://github.com/bitnami/charts/commit/3c8ef421a131f3c69c1bf6b95bbae8d1c7ef6b31)), closes [#30927](https://github.com/bitnami/charts/issues/30927)
 
 ## <small>9.0.5 (2024-12-06)</small>
 

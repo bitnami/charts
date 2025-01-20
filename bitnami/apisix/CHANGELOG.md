@@ -1,8 +1,13 @@
 # Changelog
 
-## 3.7.1 (2025-01-09)
+## 3.7.2 (2025-01-17)
 
-* [bitnami/apisix] Release 3.7.1 ([#31272](https://github.com/bitnami/charts/pull/31272))
+* [bitnami/apisix] feat: :recycle: Use os-shell for config generation ([#31455](https://github.com/bitnami/charts/pull/31455))
+
+## <small>3.7.1 (2025-01-09)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/apisix] Release 3.7.1 (#31272) ([199b715](https://github.com/bitnami/charts/commit/199b7151ef54c3cc81ca09813e28e2b2ade50f2d)), closes [#31272](https://github.com/bitnami/charts/issues/31272)
 
 ## 3.7.0 (2024-12-10)
 

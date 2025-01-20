@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.5.0 (2025-01-14)
+
+* [bitnami/seaweedfs]: add pod for `weed iam` ([#31334](https://github.com/bitnami/charts/pull/31334))
+
 ## 4.4.0 (2025-01-14)
 
 * [bitnami/seaweedfs]: add pod for `weed iam` ([#31334](https://github.com/bitnami/charts/pull/31334))
