@@ -126,6 +126,9 @@ spec:
           ports:
             - name: http
               containerPort: {{ .Values.web.containerPorts.http }}
+            {{- if .Values.flower.extraContainerPorts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.flower.extraContainerPorts "context" $) | nindent 12 }}
+            {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.web.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.web.customLivenessProbe "context" $) | nindent 12 }}

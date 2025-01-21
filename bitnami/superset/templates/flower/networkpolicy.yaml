@@ -60,6 +60,9 @@ spec:
   ingress:
     - ports:
         - port: {{ .Values.flower.containerPorts.flower }}
+        {{- range .Values.web.extraContainerPorts }}
+        - port: {{ .containerPort }}
+        {{- end }}
       {{- if not .Values.flower.networkPolicy.allowExternal }}
       from:
         - podSelector:

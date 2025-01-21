@@ -127,6 +127,9 @@ spec:
           ports:
             - name: flower
               containerPort: {{ .Values.flower.containerPorts.flower }}
+            {{- if .Values.flower.extraContainerPorts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.flower.extraContainerPorts "context" $) | nindent 12 }}
+            {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.flower.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.flower.customLivenessProbe "context" $) | nindent 12 }}

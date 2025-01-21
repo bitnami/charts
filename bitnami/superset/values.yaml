@@ -167,6 +167,13 @@ web:
   ##
   containerPorts:
     http: 80
+  ## @param web.extraContainerPorts Optionally specify extra list of additional ports for WordPress container(s)
+  ## e.g:
+  ## extraContainerPorts:
+  ##   - name: myservice
+  ##     containerPort: 9090
+  ##
+  extraContainerPorts: []
   ## Configure extra options for Superset webserver containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param web.livenessProbe.enabled Enable livenessProbe on Superset webserver containers
@@ -1418,6 +1425,13 @@ flower:
   ##
   containerPorts:
     flower: 5555
+  ## @param flower.extraContainerPorts Optionally specify extra list of additional ports for WordPress container(s)
+  ## e.g:
+  ## extraContainerPorts:
+  ##   - name: myservice
+  ##     containerPort: 9090
+  ##
+  extraContainerPorts: []
   ## Configure extra options for Superset celery flower containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param flower.livenessProbe.enabled Enable livenessProbe on Superset celery flower containers
