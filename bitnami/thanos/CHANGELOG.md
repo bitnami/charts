@@ -1,6 +1,6 @@
 # Changelog
 
-## 15.10.2 (2025-01-20)
+## 15.10.2 (2025-01-21)
 
 * [bitnami/thanos] Fix Helm Template Error For Storegateway and HPA ([#31486](https://github.com/bitnami/charts/pull/31486))
 
