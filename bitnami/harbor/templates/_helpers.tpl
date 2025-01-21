@@ -426,10 +426,10 @@ harbor: PostgreSQL password
     Please set a password (--set postgresql.auth.postgresPassword="xxxx")
   {{- end -}}
 {{- else -}}
-  {{- if not .Values.externalDatabase.password -}}
+    {{- if and (not .Values.externalDatabase.password) (not .Values.externalDatabase.existingSecret) -}}
 harbor: External PostgreSQL password
     An external database password is required!.
-    Please set a password (--set externalDatabase.password="xxxx")
+    Please set a password (--set externalDatabase.password="xxxx") or using an existing secret
   {{- end -}}
 {{- end -}}
 {{- end -}}
