@@ -320,10 +320,44 @@ Compile all warnings into a single message.
 */}}
 {{- define "superset.validateValues" -}}
 {{- $messages := list -}}
+{{- $messages := append $messages (include "superset.validateValues.database" .) -}}
+{{- $messages := append $messages (include "superset.validateValues.redis" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
 {{- if $message -}}
 {{-   printf "\nVALUES VALIDATION:\n%s" $message -}}
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of Appsmith - Postgresql */}}
+{{- define "superset.validateValues.database" -}}
+{{- if and .Values.postgresql.enabled .Values.externalDatabase.hosts -}}
+superset: Database
+    You can only use one database.
+    Please choose installing a Postgresql chart (--set postgresql.enabled=true) or
+    using an external database (--set externalDatabase.hosts)
+{{- end -}}
+{{- if and (not .Values.postgresql.enabled) (not .Values.externalDatabase.hosts) -}}
+superset: NoDatabase
+    You did not set any database.
+    Please choose installing a Postgresql chart (--set postgresql.enabled=true) or
+    using an external instance (--set externalDatabase.hosts)
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of Appsmith - Redis */}}
+{{- define "superset.validateValues.redis" -}}
+{{- if and .Values.redis.enabled .Values.externalDatabase.hosts -}}
+superset: Redis
+    You can only use one Redis.
+    Please choose installing a Redis chart (--set redis.enabled=true) or
+    using an external Redis (--set externalRedis.host)
+{{- end -}}
+{{- if and (not .Values.redis.enabled) (not .Values.externalRedis.host) -}}
+superset: NoRedis
+    You did not set any Redis.
+    Please choose installing a Redis chart (--set redis.enabled=true) or
+    using an external instance (--set externalRedis.host)
 {{- end -}}
 {{- end -}}
