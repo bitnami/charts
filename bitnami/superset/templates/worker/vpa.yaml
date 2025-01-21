@@ -7,7 +7,7 @@ SPDX-License-Identifier: APACHE-2.0
 apiVersion: autoscaling.k8s.io/v1
 kind: VerticalPodAutoscaler
 metadata:
-  name: {{ include "common.names.fullname" . }}
+  name: {{ include "common.names.fullname" . | trunc 63 | trimSuffix "-" }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: celery-worker
@@ -35,7 +35,7 @@ spec:
   targetRef:
     apiVersion: apps/v1
     kind: "Deployment"
-    name: {{ printf "%s-worker" (include "common.names.fullname" .) }}
+    name: {{ printf "%s-worker" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   {{- if .Values.worker.autoscaling.vpa.updatePolicy }}
   updatePolicy:
     {{- with .Values.worker.autoscaling.vpa.updatePolicy.updateMode }}

@@ -7,7 +7,7 @@ SPDX-License-Identifier: APACHE-2.0
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: {{ printf "%s-beat" (include "common.names.fullname" .) }}
+  name: {{ printf "%s-beat" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: celery-beat
@@ -17,7 +17,6 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  replicas: 1
   {{- if .Values.beat.updateStrategy }}
   strategy: {{- toYaml .Values.beat.updateStrategy | nindent 4 }}
   {{- end }}
@@ -162,6 +161,10 @@ spec:
             - name: empty-dir
               mountPath: /opt/bitnami/superset/tmp
               subPath: app-tmp-dir
+            {{- if or .Values.existingConfigmap .Values.config }}
+            - name: superset-config
+              mountPath: /bitnami/superset/conf
+            {{- end }}
           {{- if .Values.beat.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.beat.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -171,6 +174,11 @@ spec:
       volumes:
         - name: empty-dir
           emptyDir: {}
+        {{- if or .Values.existingConfigmap .Values.config }}
+        - name: superset-config
+          configMap:
+            name: {{ include "superset.configMapName" . }}
+        {{- end }}
         {{- if .Values.beat.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.beat.extraVolumes "context" $) | nindent 8 }}
         {{- end }}

@@ -6,7 +6,16 @@ web:
     ports:
       http: 80
     type: LoadBalancer
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1002
 beat:
   enabled: true
 flower:
   enabled: true
+  service:
+    ports:
+      flower: 5556
+serviceAccount:
+  create: true
+  automountServiceAccountToken: true

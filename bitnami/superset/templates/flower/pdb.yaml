@@ -7,7 +7,7 @@ SPDX-License-Identifier: APACHE-2.0
 apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
 kind: PodDisruptionBudget
 metadata:
-  name: {{ printf "%s-flower" (include "common.names.fullname" .) }}
+  name: {{ printf "%s-flower" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: celery-flower
@@ -19,7 +19,7 @@ spec:
   {{- if .Values.flower.pdb.minAvailable }}
   minAvailable: {{ .Values.flower.pdb.minAvailable }}
   {{- end  }}
-  {{- if .Values.flower.pdb.maxUnavailable }}
+  {{- if or .Values.flower.pdb.maxUnavailable ( not .Values.flower.pdb.minAvailable ) }}
   maxUnavailable: {{ .Values.flower.pdb.maxUnavailable }}
   {{- end  }}
   {{- $podLabels := include "common.tplvalues.merge" (dict "values" (list .Values.flower.podLabels .Values.commonLabels) "context" .) }}

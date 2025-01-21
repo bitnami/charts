@@ -7,11 +7,9 @@ SPDX-License-Identifier: APACHE-2.0
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ printf "%s-init" (include "common.names.fullname" .) }}
+  name: {{ printf "%s-init" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.image "chart" .Chart ) ) }}
-  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
-  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: superset
     app.kubernetes.io/component: init
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.init.jobAnnotations "context" $ ) | nindent 4 }}
@@ -22,7 +20,7 @@ spec:
   backoffLimit: {{ .Values.init.backoffLimit }}
   template:
     metadata:
-      {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.init.podLabels .Values.commonLabels $versionLabel ) "context" . ) }}
+      {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.init.podLabels .Values.commonLabels) "context" . ) }}
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/part-of: superset
         app.kubernetes.io/component: init
@@ -107,6 +105,10 @@ spec:
             - name: empty-dir
               mountPath: /opt/bitnami/superset/superset_home
               subPath: superset-home
+            {{- if or .Values.existingConfigmap .Values.config }}
+            - name: superset-config
+              mountPath: /bitnami/superset/conf
+            {{- end }}
           {{- if .Values.init.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.init.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -116,6 +118,11 @@ spec:
       volumes:
         - name: empty-dir
           emptyDir: {}
+        {{- if or .Values.existingConfigmap .Values.config }}
+        - name: superset-config
+          configMap:
+            name: {{ include "superset.configMapName" . }}
+        {{- end }}
       {{- if .Values.init.extraVolumes }}
       {{- include "common.tplvalues.render" (dict "value" .Values.init.extraVolumes "context" $) | nindent 8 }}
       {{- end }}

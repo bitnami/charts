@@ -7,7 +7,7 @@ SPDX-License-Identifier: APACHE-2.0
 apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
 kind: PodDisruptionBudget
 metadata:
-  name: {{ printf "%s-web" (include "common.names.fullname" .) }}
+  name: {{ printf "%s-web" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: superset-web
@@ -19,7 +19,7 @@ spec:
   {{- if .Values.web.pdb.minAvailable }}
   minAvailable: {{ .Values.web.pdb.minAvailable }}
   {{- end  }}
-  {{- if .Values.web.pdb.maxUnavailable }}
+  {{- if or .Values.web.pdb.maxUnavailable ( not .Values.web.pdb.minAvailable ) }}
   maxUnavailable: {{ .Values.web.pdb.maxUnavailable }}
   {{- end  }}
   {{- $podLabels := include "common.tplvalues.merge" (dict "values" (list .Values.web.podLabels .Values.commonLabels) "context" .) }}

@@ -7,7 +7,7 @@ SPDX-License-Identifier: APACHE-2.0
 apiVersion: autoscaling.k8s.io/v1
 kind: VerticalPodAutoscaler
 metadata:
-  name: {{ printf "%s-web" (include "common.names.fullname" .) }}
+  name: {{ printf "%s-web" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: superset-web
@@ -35,7 +35,7 @@ spec:
   targetRef:
     apiVersion: apps/v1
     kind: "Deployment"
-    name: {{ printf "%s-web" (include "common.names.fullname" .) }}
+    name: {{ printf "%s-web" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   {{- if .Values.web.autoscaling.vpa.updatePolicy }}
   updatePolicy:
     {{- with .Values.web.autoscaling.vpa.updatePolicy.updateMode }}

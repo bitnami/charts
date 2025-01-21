@@ -31,6 +31,7 @@ maintainers:
     url: https://github.com/bitnami/charts
 name: superset
 sources:
+  - https://github.com/bitnami/charts/tree/main/bitnami/superset
   - https://github.com/bitnami/containers/tree/main/bitnami/superset
   - https://github.com/apache/superset
 version: 0.1.0

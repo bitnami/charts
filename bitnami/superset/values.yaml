@@ -99,7 +99,6 @@ image:
   ##
   pullSecrets: []
   debug: false
-##
 
 ## @param config The name of an existing ConfigMap with your custom configuration for Superset
 ##
@@ -107,6 +106,31 @@ config: ""
 ## @param existingConfigmap The name of an existing ConfigMap with your custom configuration for Superset
 ##
 existingConfigmap: ""
+## @param loadExamples If set to true, the Superset examples database will be loaded at startup
+##
+loadExamples: false
+
+## @param sidecars Add additional sidecar containers to the all the Superset pods
+## e.g:
+## sidecars:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
+##
+sidecars: []
+## @param initContainers Add additional init containers to the all the Superset pods
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+## e.g:
+## initContainers:
+##  - name: your-image-name
+##    image: your-image
+##    imagePullPolicy: Always
+##    command: ['sh', '-c', 'echo "hello world"']
+##
+initContainers: []
 
 ## Authentication parameters
 ## ref: https://github.com/bitnami/containers/tree/main/bitnami/superset#environment-variables
@@ -201,7 +225,7 @@ web:
   ## @param web.resourcesPreset Set Superset webserver container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if web.resources is set (web.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param web.resources Set Superset webserver container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -608,7 +632,7 @@ worker:
   ## @param worker.resourcesPreset Set Superset Celery worker container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if worker.resources is set (worker.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "large"
   ## @param worker.resources Set Superset Celery worker container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -951,7 +975,7 @@ init:
   ## @param init.resourcesPreset Set Superset init-job container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if init.resources is set (init.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "medium"
   ## @param init.resources Set Superset init-job container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -1138,7 +1162,7 @@ beat:
   ## @param beat.resourcesPreset Set Superset celery beat container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if beat.resources is set (beat.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "large"
   ## @param beat.resources Set Superset celery beat container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -1452,7 +1476,7 @@ flower:
   ## @param flower.resourcesPreset Set Superset celery flower container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if flower.resources is set (flower.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param flower.resources Set Superset celery flower container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -1693,8 +1717,7 @@ flower:
     ## @param flower.service.type Superset celery flower service type
     ##
     type: LoadBalancer
-    ## @param flower.service.ports.http Superset celery flower service HTTP port
-    ## @param flower.service.ports.https Superset celery flower service HTTPS port
+    ## @param flower.service.ports.flower Superset celery flower service port
     ##
     ports:
       flower: 5555
@@ -1917,7 +1940,7 @@ waitForDB:
   ## @param waitForDB.resourcesPreset Set init container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if waitForDB.resources is set (waitForDB.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param waitForDB.resources Set init container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -1966,7 +1989,7 @@ waitForRedis:
   ## @param waitForRedis.resourcesPreset Set init container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if waitForRedis.resources is set (waitForRedis.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param waitForRedis.resources Set init container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -2051,7 +2074,7 @@ postgresql:
     ## @param postgresql.primary.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if primary.resources is set (primary.resources is recommended for production).
     ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
     ##
-    resourcesPreset: "none"
+    resourcesPreset: "nano"
     ## @param postgresql.primary.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
     ## Example:
     ## resources:
@@ -2104,7 +2127,7 @@ redis:
     ## @param redis.master.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if master.resources is set (master.resources is recommended for production).
     ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
     ##
-    resourcesPreset: "none"
+    resourcesPreset: "nano"
     ## @param redis.master.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
     ## Example:
     ## resources:

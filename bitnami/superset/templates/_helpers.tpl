@@ -72,9 +72,9 @@ Get the secret name
 */}}
 {{- define "superset.secretName" -}}
 {{- if .Values.existingSecret -}}
-  {{- print .Values.existingSecret -}}
+    {{- print .Values.existingSecret -}}
 {{- else -}}
-  {{- print (include "common.names.fullname" .) -}}
+    {{- print (include "common.names.fullname" .) -}}
 {{- end -}}
 {{- end -}}
 
@@ -83,19 +83,9 @@ Get the configmap name
 */}}
 {{- define "superset.configMapName" -}}
 {{- if .Values.existingConfigmap -}}
-  {{- print (tpl .Values.existingConfigmap $) -}}
+    {{- print (tpl .Values.existingConfigmap $) -}}
 {{- else -}}
-  {{- printf "%s-configuration" (include "common.names.fullname" .) -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Return true if cert-manager required annotations for TLS signed certificates are set in the Ingress annotations
-Ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
-*/}}
-{{- define "superset.ingress.certManagerRequest" -}}
-{{ if or (hasKey . "cert-manager.io/cluster-issuer") (hasKey . "cert-manager.io/issuer") }}
-    {{- true -}}
+    {{- printf "%s-configuration" (include "common.names.fullname" .) -}}
 {{- end -}}
 {{- end -}}
 
@@ -225,6 +215,10 @@ Add environment variables to configure superset common values
     secretKeyRef:
       name: {{ include "superset.secretName" . }}
       key: superset-secret-key
+{{- if or .Values.existingConfigmap .Values.config }}
+- name: SUPERSET_CONF_FILE
+  value: "/bitnami/superset/conf/superset_config.py"
+{{- end }}
 - name: BITNAMI_DEBUG
   value: {{ ternary "true" "false" .Values.image.debug | quote }}
 {{- end -}}
@@ -251,8 +245,6 @@ Init container definition to wait for PostgreSQL
   args:
     - -ec
     - |
-        #!/bin/bash
-
         set -o errexit
         set -o nounset
         set -o pipefail
@@ -268,7 +260,7 @@ Init container definition to wait for PostgreSQL
         info "Connecting to the PostgreSQL instance $SUPERSET_DATABASE_HOST:$SUPERSET_DATABASE_PORT_NUMBER"
         if ! retry_while "check_postgresql_connection"; then
             error "Could not connect to the database server"
-            return 1
+            exit 1
         else
             info "Connected to the PostgreSQL instance"
         fi
@@ -298,8 +290,6 @@ Init container definition to wait for Redis
   args:
     - -ec
     - |
-        #!/bin/bash
-
         set -o errexit
         set -o nounset
         set -o pipefail
@@ -317,7 +307,7 @@ Init container definition to wait for Redis
         info "Checking redis connection..."
         if ! retry_while "check_redis_connection"; then
             error "Could not connect to the Redis server"
-            return 1
+            exit 1
         else
             info "Connected to the Redis instance"
         fi

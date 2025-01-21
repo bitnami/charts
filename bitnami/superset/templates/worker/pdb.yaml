@@ -7,7 +7,7 @@ SPDX-License-Identifier: APACHE-2.0
 apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
 kind: PodDisruptionBudget
 metadata:
-  name: {{ printf "%s-worker" (include "common.names.fullname" .) }}
+  name: {{ printf "%s-worker" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: celery-worker
@@ -19,7 +19,7 @@ spec:
   {{- if .Values.worker.pdb.minAvailable }}
   minAvailable: {{ .Values.worker.pdb.minAvailable }}
   {{- end  }}
-  {{- if .Values.worker.pdb.maxUnavailable }}
+  {{- if or .Values.worker.pdb.maxUnavailable ( not .Values.worker.pdb.minAvailable ) }}
   maxUnavailable: {{ .Values.worker.pdb.maxUnavailable }}
   {{- end  }}
   {{- $podLabels := include "common.tplvalues.merge" (dict "values" (list .Values.worker.podLabels .Values.commonLabels) "context" .) }}

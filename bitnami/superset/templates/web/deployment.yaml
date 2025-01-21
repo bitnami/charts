@@ -6,7 +6,7 @@ SPDX-License-Identifier: APACHE-2.0
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: {{ printf "%s-web" (include "common.names.fullname" .) }}
+  name: {{ printf "%s-web" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: superset-web
@@ -161,6 +161,10 @@ spec:
             - name: empty-dir
               mountPath: /opt/bitnami/superset/superset_home
               subPath: superset-home
+            {{- if or .Values.existingConfigmap .Values.config }}
+            - name: superset-config
+              mountPath: /bitnami/superset/conf
+            {{- end }}
           {{- if .Values.web.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.web.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -170,6 +174,11 @@ spec:
       volumes:
         - name: empty-dir
           emptyDir: {}
+        {{- if or .Values.existingConfigmap .Values.config }}
+        - name: superset-config
+          configMap:
+            name: {{ include "superset.configMapName" . }}
+        {{- end }}
         {{- if .Values.web.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.web.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
