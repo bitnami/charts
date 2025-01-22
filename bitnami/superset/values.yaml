@@ -165,7 +165,7 @@ web:
   ## @param web.containerPorts.http Superset webserver HTTP container port
   ##
   containerPorts:
-    http: 80
+    http: 8080
   ## @param web.extraContainerPorts Optionally specify extra list of additional ports for WordPress container(s)
   ## e.g:
   ## extraContainerPorts:
