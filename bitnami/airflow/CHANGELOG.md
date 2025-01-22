@@ -1,6 +1,6 @@
 # Changelog
 
-## 22.4.6 (2025-01-21)
+## 22.4.6 (2025-01-22)
 
 * [bitnami/airflow] Fix missing directory in Airflow configmap-based dag ([#31499](https://github.com/bitnami/charts/pull/31499))
 
