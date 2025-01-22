@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.2 (2025-01-22)
+
+* [bitnami/keydb] Release 0.3.2 ([#31518](https://github.com/bitnami/charts/pull/31518))
+
 ## 0.3.1 (2024-12-27)
 
 * [bitnami/keydb] Release 0.3.1 ([#31176](https://github.com/bitnami/charts/pull/31176))
