@@ -1865,6 +1865,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 11.0.0
+
+This major updates the `etcd` subchart to it newest major,11.0.0. For more information on this subchart's major, please refer to [etcd upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/etcd#to-1100).
+
 ### To 10.1.0
 
 This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
