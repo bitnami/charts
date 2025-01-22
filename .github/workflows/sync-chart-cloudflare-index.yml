@@ -26,6 +26,8 @@ jobs:
       result: ${{ steps.upload.outputs.result }}
     steps:
     - uses: actions/checkout@master
+      with:
+        ref: 'index'
     - name: Upload to Cloudflare using a BCOM upload proxy
       id: upload
       env:
