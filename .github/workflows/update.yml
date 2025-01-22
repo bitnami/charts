@@ -43,7 +43,16 @@ jobs:
       - name: Test All Charts
         run: |
           for dir in bitnami/*/; do
-            helm template "$dir" --set global.imageRegistry=ghcr.io --dependency-update
+            if [ "$dir" == "bitnami/common/" ]; then
+              echo "Skipping common chart"
+              continue
+            fi
+            if helm template "$dir" --set global.imageRegistry=ghcr.io --dependency-update > /dev/null 2>&1; then
+              echo "$dir Passed"
+            else
+              echo "$dir Failed"
+              exit 1
+            fi
           done
 
       - name: Push Changes
