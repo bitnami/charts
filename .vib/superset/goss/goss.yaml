@@ -2,13 +2,15 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 http:
-  http://superset-web:{{ .Vars.web.service.ports.http }}/health:
+  http://superset-web:80/health:
     status: 200
+    body:
+      - /OK/
   http://superset-flower:{{ .Vars.flower.service.ports.flower }}:
     status: 200
 file:
   /opt/bitnami/superset/superset_config.py:
-    mode: "0644"
+    mode: "0664"
     filetype: file
     exists: true
   /opt/bitnami/superset/superset_home:
