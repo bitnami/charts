@@ -442,7 +442,7 @@ web:
       ## cpu: 200m
       ## memory: 100Mi
       minAllowed: {}
-      ## @section VPA update policy
+      ## VPA update policy
       ##
       updatePolicy:
         ## @param web.autoscaling.vpa.updatePolicy.updateMode Autoscaling update policy Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod
@@ -851,7 +851,7 @@ worker:
       ## cpu: 200m
       ## memory: 100Mi
       minAllowed: {}
-      ## @section VPA update policy
+      ## VPA update policy
       ##
       updatePolicy:
         ## @param worker.autoscaling.vpa.updatePolicy.updateMode Autoscaling update policy Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod
@@ -1705,7 +1705,7 @@ flower:
       ## cpu: 200m
       ## memory: 100Mi
       minAllowed: {}
-      ## @section VPA update policy
+      ## VPA update policy
       ##
       updatePolicy:
         ## @param flower.autoscaling.vpa.updatePolicy.updateMode Autoscaling update policy Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod
