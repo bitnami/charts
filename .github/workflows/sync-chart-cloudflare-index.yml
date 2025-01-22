@@ -1,0 +1,93 @@
+name: '[Index] Sync bitnami/charts index.yaml to Cloudflare'
+
+on:
+  push:
+    branches:
+    - index
+  workflow_call:
+    secrets:
+      CLOUDFLARE_CLIENT_ID:
+        required: true
+      CLOUDFLARE_CLIENT_SECRET:
+        required: true
+      CLOUDFLARE_USER_AUTH:
+        required: true
+
+# Remove all permissions by default
+permissions: {}
+
+jobs:
+  deploy:
+    name: Sync bitnami/charts index.yaml to Cloudflare
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      result: ${{ steps.upload.outputs.result }}
+    steps:
+    - uses: actions/checkout@master
+      with:
+        ref: 'index'
+    - name: Upload to Cloudflare using a BCOM upload proxy
+      id: upload
+      env:
+        CLOUDFLARE_CLIENT_ID: ${{ secrets.CLOUDFLARE_CLIENT_ID }}
+        CLOUDFLARE_CLIENT_SECRET: ${{ secrets.CLOUDFLARE_CLIENT_SECRET }}
+        CLOUDFLARE_USER_AUTH: ${{ secrets.CLOUDFLARE_USER_AUTH }}
+      run: |
+        status="fail"
+        retries=0
+        while [[ "${status}" != "ok" && "$retries" -lt 3 ]]; do
+          export TOKEN=$(curl -s --location 'https://api-esp.broadcom.com/auth/oauth/v2/token' \
+          --data-urlencode "client_id=${CLOUDFLARE_CLIENT_ID}" \
+          --data-urlencode "client_secret=${CLOUDFLARE_CLIENT_SECRET}" \
+          --data-urlencode 'grant_type=client_credentials' | jq .access_token -r )
+
+          curl_args=(
+            "--location" "--request" "PUT"
+            "--fail" "--max-time" "10"
+            "--header" "userAuth: Basic ${CLOUDFLARE_USER_AUTH}"
+            "--header" "filePath: /index.yaml"
+            "--header" "Content-Type: text/yaml"
+            "--header" "Authorization: Bearer $TOKEN"
+            "--upload-file" "bitnami/index.yaml"
+          )
+          echo "Uploading index.yaml to Cloudflare"
+          # To avoid the action from failing, we run the request inside a conditional so we can retry
+          if curl "${curl_args[@]}" 'https://api-esp.broadcom.com/crushftp/fileUpload'; then
+            echo "Index upload request succeeded, waiting 20 seconds before integrity check..."
+            # Wait for 20 seconds to ensure the new index.yaml is available
+            sleep 20
+            # Compare the index.yaml checksums remote and locally
+            REMOTE_MD5=($(curl -Ls https://charts.bitnami.com/bitnami/index.yaml | md5sum))
+            REPOSITORY_MD5=($(md5sum bitnami/index.yaml))
+            if [[ "${REPOSITORY_MD5[0]}" == "${REMOTE_MD5[0]}" ]]; then
+              status='ok'
+            else
+              echo "Integrity check failed. Uploading index.yaml again.";
+            fi
+          else
+            echo "Index upload request failed or timed out. Retrying again in 20 seconds...";
+            sleep 20
+          fi
+          retries=$((retries+1))
+        done
+        echo "result=${status}" >> $GITHUB_OUTPUT
+    - name: Show messages
+      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
+      with:
+        script: |
+          if ("${{ steps.upload.outputs.result }}" != "ok" ) {
+            core.setFailed("Index upload failed");
+          } else {
+            core.info("Index upload succeeded")
+          }
+  notify:
+    name: Send notification
+    needs: [deploy]
+    if: ${{ always() && needs.deploy.outputs.result != 'ok' }}
+    uses: bitnami/charts/.github/workflows/gchat-notification.yml@main
+    with:
+      workflow: ${{ github.workflow }}
+      job-url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+    secrets: inherit
