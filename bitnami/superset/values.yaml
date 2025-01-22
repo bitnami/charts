@@ -1446,7 +1446,7 @@ flower:
   ##
   livenessProbe:
     enabled: true
-    initialDelaySeconds: 15
+    initialDelaySeconds: 30
     periodSeconds: 15
     timeoutSeconds: 1
     failureThreshold: 3
@@ -1493,7 +1493,7 @@ flower:
   ## @param flower.resourcesPreset Set Superset celery flower container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if flower.resources is set (flower.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "nano"
+  resourcesPreset: "small"
   ## @param flower.resources Set Superset celery flower container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
