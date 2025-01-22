@@ -41,7 +41,9 @@ jobs:
         run: |
           ./de-cringe.sh
           git add .
-          git commit -m "chore: apply automated modifications"
+            if [ -n "$(git status --porcelain)" ]; then
+            git commit -m "chore: apply automated modifications"
+            fi
 
       - name: Test All Charts
         run: |
