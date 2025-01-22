@@ -163,7 +163,6 @@ web:
   ##
   replicaCount: 1
   ## @param web.containerPorts.http Superset webserver HTTP container port
-  ## @param web.containerPorts.https Superset webserver HTTPS container port
   ##
   containerPorts:
     http: 80
@@ -263,6 +262,7 @@ web:
   ## @param web.containerSecurityContext.enabled Enabled Superset webserver container' Security Context
   ## @param web.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in Superset webserver container
   ## @param web.containerSecurityContext.runAsUser Set runAsUser in Superset webserver container' Security Context
+  ## @param web.containerSecurityContext.runAsGroup Set runAsGroup in Superset webserver container' Security Context
   ## @param web.containerSecurityContext.runAsNonRoot Set runAsNonRoot in Superset webserver container' Security Context
   ## @param web.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in Superset webserver container' Security Context
   ## @param web.containerSecurityContext.privileged Set privileged in Superset webserver container' Security Context
@@ -593,7 +593,7 @@ worker:
   livenessProbe:
     enabled: true
     initialDelaySeconds: 15
-    periodSeconds: 15
+    periodSeconds: 60
     timeoutSeconds: 30
     failureThreshold: 3
     successThreshold: 1
@@ -607,7 +607,7 @@ worker:
   readinessProbe:
     enabled: true
     initialDelaySeconds: 15
-    periodSeconds: 15
+    periodSeconds: 60
     timeoutSeconds: 30
     failureThreshold: 3
     successThreshold: 1
@@ -621,7 +621,7 @@ worker:
   startupProbe:
     enabled: false
     initialDelaySeconds: 15
-    periodSeconds: 5
+    periodSeconds: 15
     timeoutSeconds: 30
     failureThreshold: 60
     successThreshold: 1
@@ -670,6 +670,7 @@ worker:
   ## @param worker.containerSecurityContext.enabled Enabled Superset Celery worker container' Security Context
   ## @param worker.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in Superset Celery worker container
   ## @param worker.containerSecurityContext.runAsUser Set runAsUser in Superset Celery worker container' Security Context
+  ## @param worker.containerSecurityContext.runAsGroup Set runAsGroup in Superset Celery worker container' Security Context
   ## @param worker.containerSecurityContext.runAsNonRoot Set runAsNonRoot in Superset Celery worker container' Security Context
   ## @param worker.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in Superset Celery worker container' Security Context
   ## @param worker.containerSecurityContext.privileged Set privileged in Superset Celery worker container' Security Context
@@ -928,7 +929,7 @@ worker:
 ## Superset Init Job
 ##
 init:
-  ## @param beat.enabled Enables the Superset init job, which is in charge of initialising the database, admin user credentials, DB upgrade, etc.
+  ## @param init.enabled Enables the Superset init job, which is in charge of initialising the database, admin user credentials, DB upgrade, etc.
   ##
   enabled: true
   ## @param init.extraEnvVars Array with extra environment variables to add to Superset init-job containers
@@ -1013,6 +1014,7 @@ init:
   ## @param init.containerSecurityContext.enabled Enabled Superset init-job container' Security Context
   ## @param init.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in Superset init-job container
   ## @param init.containerSecurityContext.runAsUser Set runAsUser in Superset init-job container' Security Context
+  ## @param init.containerSecurityContext.runAsGroup Set runAsGroup in Superset init-job container' Security Context
   ## @param init.containerSecurityContext.runAsNonRoot Set runAsNonRoot in Superset init-job container' Security Context
   ## @param init.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in Superset init-job container' Security Context
   ## @param init.containerSecurityContext.privileged Set privileged in Superset init-job container' Security Context
@@ -1200,6 +1202,7 @@ beat:
   ## @param beat.containerSecurityContext.enabled Enabled Superset celery beat container' Security Context
   ## @param beat.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in Superset celery beat container
   ## @param beat.containerSecurityContext.runAsUser Set runAsUser in Superset celery beat container' Security Context
+  ## @param beat.containerSecurityContext.runAsGroup Set runAsGroup in Superset celery beat container' Security Context
   ## @param beat.containerSecurityContext.runAsNonRoot Set runAsNonRoot in Superset celery beat container' Security Context
   ## @param beat.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in Superset celery beat container' Security Context
   ## @param beat.containerSecurityContext.privileged Set privileged in Superset celery beat container' Security Context
@@ -1521,6 +1524,7 @@ flower:
   ## @param flower.containerSecurityContext.enabled Enabled Superset celery flower container' Security Context
   ## @param flower.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in Superset celery flower container
   ## @param flower.containerSecurityContext.runAsUser Set runAsUser in Superset celery flower container' Security Context
+  ## @param flower.containerSecurityContext.runAsGroup Set runAsGroup in Superset celery flower container' Security Context
   ## @param flower.containerSecurityContext.runAsNonRoot Set runAsNonRoot in Superset celery flower container' Security Context
   ## @param flower.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in Superset celery flower container' Security Context
   ## @param flower.containerSecurityContext.privileged Set privileged in Superset celery flower container' Security Context
@@ -1736,8 +1740,7 @@ flower:
     ports:
       flower: 5555
     ## Node ports to expose
-    ## @param flower.service.nodePorts.http Node port for HTTP
-    ## @param flower.service.nodePorts.https Node port for HTTPS
+    ## @param flower.service.nodePorts.flower Node port for flower
     ## NOTE: choose port between <30000-32767>
     ##
     nodePorts:
@@ -1971,6 +1974,7 @@ waitForDB:
   ## @param waitForDB.containerSecurityContext.enabled Enabled wait-for-db initcontainer's Security Context
   ## @param waitForDB.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in wait-for-db initcontainer
   ## @param waitForDB.containerSecurityContext.runAsUser Set runAsUser in wait-for-db initcontainer's Security Context
+  ## @param waitForDB.containerSecurityContext.runAsGroup Set runAsGroup in wait-for-db initcontainer's Security Context
   ## @param waitForDB.containerSecurityContext.runAsNonRoot Set runAsNonRoot in wait-for-db initcontainer's Security Context
   ## @param waitForDB.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in wait-for-db initcontainer's Security Context
   ## @param waitForDB.containerSecurityContext.privileged Set privileged in wait-for-db initcontainer's Security Context
@@ -2020,6 +2024,7 @@ waitForRedis:
   ## @param waitForRedis.containerSecurityContext.enabled Enabled wait-for-redis initcontainer's Security Context
   ## @param waitForRedis.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in wait-for-redis initcontainer
   ## @param waitForRedis.containerSecurityContext.runAsUser Set runAsUser in wait-for-redis initcontainer's Security Context
+  ## @param waitForRedis.containerSecurityContext.runAsGroup Set runAsGroup in wait-for-redis initcontainer's Security Context
   ## @param waitForRedis.containerSecurityContext.runAsNonRoot Set runAsNonRoot in wait-for-redis initcontainer's Security Context
   ## @param waitForRedis.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in wait-for-redis initcontainer's Security Context
   ## @param waitForRedis.containerSecurityContext.privileged Set privileged in wait-for-redis initcontainer's Security Context
