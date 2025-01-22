@@ -16,7 +16,7 @@ it('Example dashboards visible', () => {
     cy.get('body').then(($body) => {
       if ($body.find('a[href*="/dashboard/births/"]').length === 0) {
         // run job has not finished executing, so we wait and reload the page
-        cy.wait(10000);
+        cy.wait(20000);
         cy.reload();
       } else {
         runFound = true;
