@@ -1,0 +1,50 @@
+name: Update Fork
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # Runs daily at midnight
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-fork:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Fork
+        uses: actions/checkout@v3
+        with:
+          ref: main
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Add Upstream Remote
+        run: git remote add upstream https://github.com/bitnami/charts.git
+
+      - name: Fetch Upstream
+        run: git fetch upstream
+
+      - name: Merge Upstream Changes
+        run: |
+          git checkout main
+          git merge -X ours upstream/main
+
+      - name: Run Modification Script
+        run: ./de-cringe.sh
+
+      - name: Test All Charts
+        run: |
+          for dir in bitnami/*/; do
+            helm template "$dir" --set global.imageRegistry=ghcr.io --dependency-update
+          done
+          git add bitnami/*
+          git commit -m "chore: update chart dependencies"
+
+      - name: Push Changes
+        run: git push origin main
