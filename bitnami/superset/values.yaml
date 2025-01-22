@@ -231,7 +231,7 @@ web:
   ## @param web.resourcesPreset Set Superset webserver container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if web.resources is set (web.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "nano"
+  resourcesPreset: "small"
   ## @param web.resources Set Superset webserver container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:

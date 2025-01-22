@@ -10,16 +10,16 @@ it('Example dashboards visible', () => {
   cy.login();
   cy.visit(`dashboard/list`);
   // Retries required to ensure examples finished loading
-  const max_attempts = 4;
+  const max_attempts = 10;
   let runFound = false;
   for (let i = 0; i < max_attempts && !runFound; i += 1) {
     cy.get('body').then(($body) => {
       if ($body.find('a[href*="/dashboard/births/"]').length === 0) {
         // run job has not finished executing, so we wait and reload the page
-        runFound = true;
-      } else {
-        cy.wait(5000);
+        cy.wait(10000);
         cy.reload();
+      } else {
+        runFound = true;
       }
     });
   }
