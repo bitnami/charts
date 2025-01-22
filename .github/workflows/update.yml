@@ -14,9 +14,11 @@ jobs:
 
     steps:
       - name: Checkout Fork
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: main
+          fetch-depth: 0
+          fetch-tags: false
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Configure Git
@@ -28,7 +30,7 @@ jobs:
         run: git remote add upstream https://github.com/bitnami/charts.git
 
       - name: Fetch Upstream
-        run: git fetch upstream
+        run: git fetch upstream --no-tags
 
       - name: Merge Upstream Changes
         run: |
