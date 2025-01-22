@@ -52,7 +52,7 @@ jobs:
               echo "Skipping common chart"
               continue
             fi
-            if helm template "$dir" --set global.imageRegistry=ghcr.io --dependency-update; then
+            if helm template "$dir" --set global.imageRegistry=ghcr.io --dependency-update > /dev/null 2>&1; then
               echo "$dir Passed"
             else
               echo "$dir Failed"
