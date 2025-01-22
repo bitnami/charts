@@ -1867,7 +1867,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ### To 11.0.0
 
-This major updates the `etcd` subchart to it newest major,11.0.0. For more information on this subchart's major, please refer to [etcd upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/etcd#to-1100).
+This major updates the `etcd` subchart to it newest major, 11.0.0. For more information on this subchart's major, please refer to [etcd upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/etcd#to-1100).
 
 ### To 10.1.0
 
