@@ -43,8 +43,6 @@ jobs:
           for dir in bitnami/*/; do
             helm template "$dir" --set global.imageRegistry=ghcr.io --dependency-update
           done
-          git add bitnami/*
-          git commit -m "chore: update chart dependencies"
 
       - name: Push Changes
         run: git push origin main
