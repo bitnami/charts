@@ -38,7 +38,10 @@ jobs:
           git merge -X ours upstream/main
 
       - name: Run Modification Script
-        run: ./de-cringe.sh
+        run: |
+          ./de-cringe.sh
+          git add .
+          git commit -m "chore: apply automated modifications"
 
       - name: Test All Charts
         run: |
@@ -47,7 +50,7 @@ jobs:
               echo "Skipping common chart"
               continue
             fi
-            if helm template "$dir" --set global.imageRegistry=ghcr.io --dependency-update > /dev/null 2>&1; then
+            if helm template "$dir" --set global.imageRegistry=ghcr.io --dependency-update; then
               echo "$dir Passed"
             else
               echo "$dir Failed"
