@@ -1,8 +1,13 @@
 # Changelog
 
-## 16.4.1 (2025-01-15)
+## 16.4.2 (2025-01-20)
 
-* [bitnami/mongodb] Release 16.4.1 ([#31390](https://github.com/bitnami/charts/pull/31390))
+* [bitnami/mongodb] remove undefined rts key from network policy template ([#31356](https://github.com/bitnami/charts/pull/31356))
+
+## <small>16.4.1 (2025-01-15)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/mongodb] Release 16.4.1 (#31390) ([639b28e](https://github.com/bitnami/charts/commit/639b28e5326003ba369f423c9718f1a6a4b4985c)), closes [#31390](https://github.com/bitnami/charts/issues/31390)
 
 ## 16.4.0 (2024-12-10)
 

@@ -1,8 +1,12 @@
 # Changelog
 
-## 22.4.6 (2025-01-20)
+## 22.4.7 (2025-01-20)
 
-* [bitnami/airflow] Release 22.4.6 ([#31476](https://github.com/bitnami/charts/pull/31476))
+* [bitnami/airflow] Release 22.4.7 ([#31476](https://github.com/bitnami/charts/pull/31476))
+
+## <small>22.4.6 (2025-01-22)</small>
+
+* [bitnami/airflow] Fix missing directory in Airflow configmap-based dag ([#31499](https://github.com/bitnami/charts/pull/31499))
 
 ## <small>22.4.5 (2025-01-09)</small>
 
