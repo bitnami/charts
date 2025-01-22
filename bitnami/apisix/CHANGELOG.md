@@ -1,8 +1,24 @@
 # Changelog
 
+## 4.0.0 (2025-01-22)
+
+* [bitnami/apisix] Update ETCD to major 11 ([#31508](https://github.com/bitnami/charts/pull/31508))
+
+## <small>3.7.2 (2025-01-17)</small>
+
+* [bitnami/apisix] feat: :recycle: Use os-shell for config generation (#31455) ([e808ba0](https://github.com/bitnami/charts/commit/e808ba010c008023c7dfc1c1ee5bafb2f9acf38c)), closes [#31455](https://github.com/bitnami/charts/issues/31455)
+
+## <small>3.7.1 (2025-01-09)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/apisix] Release 3.7.1 (#31272) ([199b715](https://github.com/bitnami/charts/commit/199b7151ef54c3cc81ca09813e28e2b2ade50f2d)), closes [#31272](https://github.com/bitnami/charts/issues/31272)
+
 ## 3.7.0 (2024-12-10)
 
-* [bitnami/apisix] Detect non-standard images ([#30861](https://github.com/bitnami/charts/pull/30861))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Unify "Securing Traffic using TLS" section (#30707) ([b572333](https://github.com/bitnami/charts/commit/b57233336e4fe9af928ecb4f2a5f334011efb1bc)), closes [#30707](https://github.com/bitnami/charts/issues/30707)
+* [bitnami/apisix] Detect non-standard images (#30861) ([0c989ce](https://github.com/bitnami/charts/commit/0c989ce546a26e91a94df349630d1ee3e9fa2a2a)), closes [#30861](https://github.com/bitnami/charts/issues/30861)
 
 ## <small>3.6.1 (2024-11-30)</small>
 
