@@ -1,8 +1,16 @@
 # Changelog
 
-## 24.4.5 (2025-01-17)
+## 24.4.7 (2025-01-17)
 
 * [bitnami/keycloak] reverts(#30368) ([#31227](https://github.com/bitnami/charts/pull/31227))
+
+## <small>24.4.6 (2025-01-20)</small>
+
+* [bitnami/keycloak] Improve keycloak value file comments on extraEnvVars property ([#31054](https://github.com/bitnami/charts/pull/31054))
+
+## <small>24.4.5 (2025-01-20)</small>
+
+* [bitnami/keycloak] Fix quotes for handling KC_PROXY_HEADER when options is set to passthrough (#3145 ([cd8d753](https://github.com/bitnami/charts/commit/cd8d753aa9af28a55c935c85cae5f967096eba5b)), closes [#31459](https://github.com/bitnami/charts/issues/31459)
 
 ## <small>24.4.4 (2025-01-15)</small>
 
