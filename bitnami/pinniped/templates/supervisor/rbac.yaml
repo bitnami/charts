@@ -3,7 +3,6 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-// and
 {{- if and .Values.supervisor.enabled .Values.supervisor.rbac.create }}
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
