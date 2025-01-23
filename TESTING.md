@@ -108,7 +108,7 @@ This guide will focus in the `verify` phase section, in which there are some thi
 
 * The installation of the chart can be customized via runtime parameters, which are provided using the `runtimes-parameters.yaml` file. See the [Runtime parameters](#runtime-parameters) section for further information.
 
-* The runtime parameters are shared accross all `actions`, which guarantees that each release of the chart is based on the exact same configuration.
+* The runtime parameters are shared across all `actions`, which guarantees that each release of the chart is based on the exact same configuration.
 
 ### vib-verify.json vs vib-publish.json
 
