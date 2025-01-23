@@ -229,13 +229,10 @@ configuration: ""
 existingSecret: ""
 ## @param command Override default container command (useful when using custom images)
 ##
-command:
-- /nats-server
+command: []
 ## @param args Override default container args (useful when using custom images)
 ##
-args:
-- "-c"
-- "/etc/{{ .Values.natsFilename }}.conf"
+args: []
 ## @param extraEnvVars Extra environment variables to be set on NATS container
 ## Example:
 ## extraEnvVars:

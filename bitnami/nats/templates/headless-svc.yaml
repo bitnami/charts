@@ -19,13 +19,13 @@ spec:
   clusterIP: None
   ports:
     - name: tcp-client
-      port: {{ .Values.service.ports.client }}
+      port: {{ .Values.containerPorts.client }}
       targetPort: client
     - name: tcp-cluster
-      port: {{ .Values.service.ports.cluster }}
+      port: {{ .Values.containerPorts.cluster }}
       targetPort: cluster
     - name: tcp-monitoring
-      port: {{ .Values.service.ports.monitoring }}
+      port: {{ .Values.containerPorts.monitoring }}
       targetPort: monitoring
   publishNotReadyAddresses: {{ .Values.service.headless.publishNotReadyAddresses }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}

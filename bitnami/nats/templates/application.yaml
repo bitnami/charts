@@ -3,8 +3,9 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-apiVersion: {{ ternary (include "common.capabilities.deployment.apiVersion" .) (include "common.capabilities.statefulset.apiVersion" .) (eq (lower .Values.resourceType) "deployment") }}
-kind: {{ ternary "Deployment" "StatefulSet" (eq (lower .Values.resourceType) "deployment") }}
+{{- $resourceType := lower .Values.resourceType }}
+apiVersion: {{ ternary (include "common.capabilities.deployment.apiVersion" .) (include "common.capabilities.statefulset.apiVersion" .) (eq $resourceType "deployment") }}
+kind: {{ ternary "Deployment" "StatefulSet" (eq $resourceType "deployment") }}
 metadata:
   name: {{ template "common.names.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
@@ -17,12 +18,12 @@ spec:
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
-  {{- if eq (lower .Values.resourceType) "statefulset" }}
+  {{- if eq $resourceType "statefulset" }}
   podManagementPolicy: {{ .Values.podManagementPolicy }}
   serviceName: {{ printf "%s-headless" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   {{- end }}
   {{- if .Values.updateStrategy }}
-  {{ ternary "strategy" "updateStrategy" (eq (lower .Values.resourceType) "deployment") }}: {{- include "common.tplvalues.render" (dict "value" .Values.updateStrategy "context" $ ) | nindent 4 }}
+  {{ ternary "strategy" "updateStrategy" (eq $resourceType "deployment") }}: {{- include "common.tplvalues.render" (dict "value" .Values.updateStrategy "context" $ ) | nindent 4 }}
   {{- end }}
   template:
     metadata:
@@ -77,18 +78,25 @@ spec:
           {{- if .Values.containerSecurityContext.enabled }}
           securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
+          command:
           {{- if .Values.diagnosticMode.enabled }}
-          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
           {{- else if .Values.command }}
-          command: {{- include "common.tplvalues.render" (dict "value" .Values.command "context" $) | nindent 12 }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.command "context" $) | nindent 12 }}
+          {{- else }}
+            - /nats-server
           {{- end }}
+          args:
           {{- if .Values.diagnosticMode.enabled }}
-          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
           {{- else if .Values.args }}
-          args: {{- include "common.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
+          {{- else }}
+            - -c
+            - /etc/{{ .Values.natsFilename }}.conf
           {{- end }}
           env:
-            {{- if eq (lower .Values.resourceType) "statefulset" }}
+            {{- if eq $resourceType "statefulset" }}
             - name: NATS_SERVER_NAME
               valueFrom:
                 fieldRef:
@@ -163,7 +171,7 @@ spec:
               mountPath: /etc/certs/server
               readOnly: true
             {{- end }}
-            {{- if and .Values.persistence.enabled (eq (lower .Values.resourceType) "statefulset") }}
+            {{- if and .Values.persistence.enabled (eq $resourceType "statefulset") }}
             - name: data
               mountPath: /data
             {{- end }}
@@ -233,7 +241,7 @@ spec:
         {{- if .Values.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
-  {{- if and .Values.persistence.enabled (eq (lower .Values.resourceType) "statefulset") }}
+  {{- if and .Values.persistence.enabled (eq $resourceType "statefulset") }}
   {{- if .Values.persistentVolumeClaimRetentionPolicy.enabled }}
   persistentVolumeClaimRetentionPolicy:
     whenDeleted: {{ .Values.persistentVolumeClaimRetentionPolicy.whenDeleted }}
