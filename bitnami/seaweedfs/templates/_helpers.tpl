@@ -25,6 +25,13 @@ Return the proper SeaweedFS Filer Server fullname
 {{- end -}}
 
 {{/*
+Return the proper SeaweedFS IAM Server fullname
+*/}}
+{{- define "seaweedfs.iam.fullname" -}}
+{{- printf "%s-iam" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
 Return the proper SeaweedFS Amazon S3 API fullname
 */}}
 {{- define "seaweedfs.s3.fullname" -}}
@@ -74,6 +81,17 @@ Return the proper init external database job image name
     {{- include "common.images.image" (dict "imageRoot" .Values.mariadb.image "global" .Values.global) -}}
   {{- else if or .Values.postgresql.enabled (and .Values.externalDatabase.enabled (eq .Values.externalDatabase.store "postgresql") ) }}
     {{- include "common.images.image" (dict "imageRoot" .Values.postgresql.image "global" .Values.global) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Returns whether wait for external database is enabled
+*/}}
+{{- define "seaweedfs.waitForDatabase.enabled" -}}
+{{- if or .Values.mariadb.enabled .Values.postgresql.enabled (and .Values.externalDatabase.enabled (eq .Values.externalDatabase.waitForDatabaseEnabled true) ) }}
+    {{- print "true" -}}
+  {{- else }}
+    {{- print "false" -}}
 {{- end -}}
 {{- end -}}
 
@@ -339,6 +357,7 @@ Return the database secret key name
 Returns an init-container that waits for the database to be ready
 */}}
 {{- define "seaweedfs.filer.waitForDBInitContainer" -}}
+{{ if eq "true" ( include "seaweedfs.waitForDatabase.enabled" . ) }}
 - name: wait-for-db
   image: {{ include "seaweedfs.initDatabaseJob.image" . }}
   {{- if or .Values.mariadb.enabled (and .Values.externalDatabase.enabled (eq .Values.externalDatabase.store "mariadb") ) }}
@@ -409,6 +428,7 @@ Returns an init-container that waits for the database to be ready
       subPath: tmp-dir
     - name: db-credentials
       mountPath: /secrets
+{{- end -}}
 {{- end -}}
 
 {{/*

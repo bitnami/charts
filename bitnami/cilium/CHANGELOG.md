@@ -1,8 +1,24 @@
 # Changelog
 
-## 1.3.1 (2024-12-17)
+## 2.0.0 (2025-01-22)
 
-* [bitnami/cilium] Release 1.3.1 ([#31075](https://github.com/bitnami/charts/pull/31075))
+* [bitnami/cilium] Update ETCD to major 11 ([#31510](https://github.com/bitnami/charts/pull/31510))
+
+## <small>1.3.4 (2025-01-21)</small>
+
+* [bitnami/cilium] Release 1.3.4 (#31502) ([c00512c](https://github.com/bitnami/charts/commit/c00512cf690cf67604d1c654231bb398d65f97bd)), closes [#31502](https://github.com/bitnami/charts/issues/31502)
+
+## <small>1.3.3 (2025-01-17)</small>
+
+* [bitnami/cilium] Release 1.3.3 (#31412) ([c729dc6](https://github.com/bitnami/charts/commit/c729dc67e7ee778242f0e515c41a401c96e0fc7e)), closes [#31412](https://github.com/bitnami/charts/issues/31412)
+
+## <small>1.3.2 (2025-01-07)</small>
+
+* [bitnami/cilium] Release 1.3.2 (#31242) ([4c807e0](https://github.com/bitnami/charts/commit/4c807e01d3b96dd1b93ff82c17603d67979b56b1)), closes [#31242](https://github.com/bitnami/charts/issues/31242)
+
+## <small>1.3.1 (2024-12-17)</small>
+
+* [bitnami/cilium] Release 1.3.1 (#31075) ([694ac57](https://github.com/bitnami/charts/commit/694ac57526b172451ea5b147d9252f6f217fb13e)), closes [#31075](https://github.com/bitnami/charts/issues/31075)
 
 ## 1.3.0 (2024-12-10)
 

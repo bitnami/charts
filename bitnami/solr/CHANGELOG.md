@@ -1,8 +1,16 @@
 # Changelog
 
+## 9.5.1 (2025-01-08)
+
+* [bitnami/solr] Release 9.5.1 ([#31249](https://github.com/bitnami/charts/pull/31249))
+
 ## 9.5.0 (2024-12-10)
 
-* [bitnami/solr] Detect non-standard images ([#30945](https://github.com/bitnami/charts/pull/30945))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 3) (#30688) ([10a49f9](https://github.com/bitnami/charts/commit/10a49f9ff2db1d9d11a6edd1c40a9f61803241bc)), closes [#30688](https://github.com/bitnami/charts/issues/30688)
+* [bitnami/*] docs: :memo: Unify "Securing Traffic using TLS" section (#30707) ([b572333](https://github.com/bitnami/charts/commit/b57233336e4fe9af928ecb4f2a5f334011efb1bc)), closes [#30707](https://github.com/bitnami/charts/issues/30707)
+* [bitnami/solr] Detect non-standard images (#30945) ([be6bbcf](https://github.com/bitnami/charts/commit/be6bbcf46fc8869982035d19e19e4f1616f3cdf9)), closes [#30945](https://github.com/bitnami/charts/issues/30945)
 
 ## <small>9.4.8 (2024-11-29)</small>
 

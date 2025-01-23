@@ -1,8 +1,30 @@
 # Changelog
 
+## 11.6.5 (2025-01-17)
+
+* [bitnami/nginx-ingress-controller] Release 11.6.5 ([#31437](https://github.com/bitnami/charts/pull/31437))
+
+## <small>11.6.4 (2025-01-10)</small>
+
+* [bitnami/nginx-ingress-controller] Release 11.6.4 (#31300) ([dafa15f](https://github.com/bitnami/charts/commit/dafa15f8e54bd49618a0c8e64ca630307c6aab32)), closes [#31300](https://github.com/bitnami/charts/issues/31300)
+
+## <small>11.6.3 (2025-01-08)</small>
+
+* [bitnami/nginx-ingress-controller] Release 11.6.3 (#31266) ([99d2e46](https://github.com/bitnami/charts/commit/99d2e4646714a801a0576d0bbc3307793aed780a)), closes [#31266](https://github.com/bitnami/charts/issues/31266)
+
+## <small>11.6.2 (2025-01-08)</small>
+
+* [bitnami/nginx-ingress-controller] Release 11.6.2 (#31250) ([04b60b7](https://github.com/bitnami/charts/commit/04b60b7c47f7df12d5712c698d659b925041df5e)), closes [#31250](https://github.com/bitnami/charts/issues/31250)
+
+## <small>11.6.1 (2024-12-31)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/nginx-ingress-controller] Release 11.6.1 (#31188) ([cf402b9](https://github.com/bitnami/charts/commit/cf402b9b53fe6aa48a1d10e1cbd57a5145ef4479)), closes [#31188](https://github.com/bitnami/charts/issues/31188)
+
 ## 11.6.0 (2024-12-10)
 
-* [bitnami/nginx-ingress-controller] Detect non-standard images ([#30961](https://github.com/bitnami/charts/pull/30961))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/nginx-ingress-controller] Detect non-standard images (#30961) ([705a15e](https://github.com/bitnami/charts/commit/705a15efcb568567837cb5e53df6b1f5391231c8)), closes [#30961](https://github.com/bitnami/charts/issues/30961)
 
 ## <small>11.5.5 (2024-12-04)</small>
 
