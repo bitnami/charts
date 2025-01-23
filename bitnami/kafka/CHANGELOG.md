@@ -1,8 +1,12 @@
 # Changelog
 
+## 31.3.0 (2025-01-21)
+
+* [binami/kafka] Setting broker.rack for azure based on brokerRackAssignment parameter ([#31496](https://github.com/bitnami/charts/pull/31496))
+
 ## 31.2.0 (2025-01-08)
 
-* [bitnami/kafka] chore(jmx-exporter): Upgrade image and change args ([#31108](https://github.com/bitnami/charts/pull/31108))
+* [bitnami/kafka] chore(jmx-exporter): Upgrade image and change args (#31108) ([70d7aac](https://github.com/bitnami/charts/commit/70d7aac72b9adf6496589418054d5b4f66c16b18)), closes [#31108](https://github.com/bitnami/charts/issues/31108)
 
 ## <small>31.1.1 (2024-12-22)</small>
 
