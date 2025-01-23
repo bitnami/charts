@@ -71,14 +71,14 @@ Get the Postgresql credentials secret.
 Get the secret name
 */}}
 {{- define "superset.secretName" -}}
-{{ default (include "common.names.fullname" .) (tpl .Values.existingSecret .) -}}
+{{- default (include "common.names.fullname" .) (tpl .Values.existingSecret .) -}}
 {{- end -}}
 
 {{/*
 Get the configmap name
 */}}
 {{- define "superset.configMapName" -}}
-{{ default (printf "%s-configuration" (include "common.names.fullname" .)) (tpl .Values.existingConfigmap .) -}}
+{{- default (printf "%s-configuration" (include "common.names.fullname" .)) (tpl .Values.existingConfigmap .) -}}
 {{- end -}}
 
 {{/*
@@ -366,23 +366,23 @@ Compile all warnings into a single message.
 
 {{/* Validate values of Appsmith - Postgresql */}}
 {{- define "superset.validateValues.database" -}}
-{{- if and .Values.postgresql.enabled .Values.externalDatabase.hosts -}}
+{{- if and .Values.postgresql.enabled .Values.externalDatabase.host -}}
 superset: Database
     You can only use one database.
     Please choose installing a Postgresql chart (--set postgresql.enabled=true) or
-    using an external database (--set externalDatabase.hosts)
+    using an external database (--set externalDatabase.host)
 {{- end -}}
-{{- if and (not .Values.postgresql.enabled) (not .Values.externalDatabase.hosts) -}}
+{{- if and (not .Values.postgresql.enabled) (not .Values.externalDatabase.host) -}}
 superset: NoDatabase
     You did not set any database.
     Please choose installing a Postgresql chart (--set postgresql.enabled=true) or
-    using an external instance (--set externalDatabase.hosts)
+    using an external instance (--set externalDatabase.host)
 {{- end -}}
 {{- end -}}
 
 {{/* Validate values of Appsmith - Redis */}}
 {{- define "superset.validateValues.redis" -}}
-{{- if and .Values.redis.enabled .Values.externalDatabase.hosts -}}
+{{- if and .Values.redis.enabled .Values.externalRedis.host -}}
 superset: Redis
     You can only use one Redis.
     Please choose installing a Redis chart (--set redis.enabled=true) or
