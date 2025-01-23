@@ -1,8 +1,29 @@
 # Changelog
 
-## 22.4.2 (2024-12-11)
+## 22.4.7 (2025-01-22)
 
-* [bitnami/airflow] Fix wrong protocol for metrics network policy ([#30990](https://github.com/bitnami/charts/pull/30990))
+* [bitnami/airflow] Release 22.4.7 ([#31476](https://github.com/bitnami/charts/pull/31476))
+
+## <small>22.4.6 (2025-01-22)</small>
+
+* [bitnami/airflow] Fix missing directory in Airflow configmap-based dag (#31499) ([8a46f54](https://github.com/bitnami/charts/commit/8a46f543ce8bd091cf75e3a4507429a15898bfbb)), closes [#31499](https://github.com/bitnami/charts/issues/31499)
+
+## <small>22.4.5 (2025-01-09)</small>
+
+* [bitnami/airflow] Release 22.4.5 (#31235) ([c3f19be](https://github.com/bitnami/charts/commit/c3f19beaaf393f1b7167e5c6af89a7b0fe01690b)), closes [#31235](https://github.com/bitnami/charts/issues/31235)
+
+## <small>22.4.4 (2025-01-07)</small>
+
+* [bitnami/airflow] Release 22.4.4 (#31234) ([6c9b8fd](https://github.com/bitnami/charts/commit/6c9b8fd63436cc27859223a40d4d2ececd0711b1)), closes [#31234](https://github.com/bitnami/charts/issues/31234)
+
+## <small>22.4.3 (2024-12-16)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/airflow] Release 22.4.3 (#31058) ([54f5d27](https://github.com/bitnami/charts/commit/54f5d27f24c8322973da46a83957383018d1726a)), closes [#31058](https://github.com/bitnami/charts/issues/31058)
+
+## <small>22.4.2 (2024-12-13)</small>
+
+* [bitnami/airflow] Fix wrong protocol for metrics network policy (#30990) ([fc9dadc](https://github.com/bitnami/charts/commit/fc9dadcf74fda22f9be8152abe01e480c0212cc0)), closes [#30990](https://github.com/bitnami/charts/issues/30990)
 
 ## <small>22.4.1 (2024-12-11)</small>
 

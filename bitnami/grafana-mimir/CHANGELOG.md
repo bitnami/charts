@@ -1,8 +1,18 @@
 # Changelog
 
+## 1.3.2 (2025-01-17)
+
+* [bitnami/grafana-mimir] Release 1.3.2 ([#31421](https://github.com/bitnami/charts/pull/31421))
+
+## <small>1.3.1 (2025-01-03)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/grafana-mimir] Release 1.3.1 (#31205) ([9e53dc4](https://github.com/bitnami/charts/commit/9e53dc4f22e3d226d08ec3dec07cbfcbe04029ef)), closes [#31205](https://github.com/bitnami/charts/issues/31205)
+
 ## 1.3.0 (2024-12-10)
 
-* [bitnami/grafana-mimir] Detect non-standard images ([#30887](https://github.com/bitnami/charts/pull/30887))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/grafana-mimir] Detect non-standard images (#30887) ([b56f760](https://github.com/bitnami/charts/commit/b56f7600bebb18d442055540590355888463d60f)), closes [#30887](https://github.com/bitnami/charts/issues/30887)
 
 ## <small>1.2.23 (2024-12-03)</small>
 

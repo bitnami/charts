@@ -1,8 +1,45 @@
 # Changelog
 
-## 16.3.1 (2024-12-12)
+## 16.4.5 (2025-01-20)
 
-* [bitnami/postgresql] Add Storage Class Configuration to Templates ([#30858](https://github.com/bitnami/charts/pull/30858))
+* [bitnami/postgresql] Release 16.4.5 ([#31484](https://github.com/bitnami/charts/pull/31484))
+
+## <small>16.4.4 (2025-01-20)</small>
+
+* [bitnami/postgresql] Release 16.4.4 (#31482) ([e784f18](https://github.com/bitnami/charts/commit/e784f187c01d6a2d7a1237ae5015bd5cb6e4e4b8)), closes [#31482](https://github.com/bitnami/charts/issues/31482)
+
+## <small>16.4.3 (2025-01-14)</small>
+
+* bitnami/postgresql Fix missing dot in include statement for passwordUpdate job template (#31364) ([901b26c](https://github.com/bitnami/charts/commit/901b26c4b7be8935d9764d51df4b76d8dede0117)), closes [#31364](https://github.com/bitnami/charts/issues/31364)
+
+## <small>16.4.2 (2025-01-13)</small>
+
+* [bitnami/postgresql] Release 16.4.2 (#31342) ([946b638](https://github.com/bitnami/charts/commit/946b638fd63e2d7e74865d591ef403b4dce229b3)), closes [#31342](https://github.com/bitnami/charts/issues/31342)
+
+## <small>16.4.1 (2025-01-13)</small>
+
+* Dynamic assignment of custom schema name if defined in update-password job (#31146) ([364ac45](https://github.com/bitnami/charts/commit/364ac45ea6a20b693662b14a17122885f4e43364)), closes [#31146](https://github.com/bitnami/charts/issues/31146)
+
+## <small>16.3.5 (2025-01-03)</small>
+
+* Revert "[bitnami/postgresql] Add Storage Class Configuration to Templates (#30858)" (#31204) ([c03fe0c](https://github.com/bitnami/charts/commit/c03fe0c3e359db15c2c096d52e6e28e480dfdbd6)), closes [#30858](https://github.com/bitnami/charts/issues/30858) [#31204](https://github.com/bitnami/charts/issues/31204)
+
+## <small>16.3.4 (2024-12-23)</small>
+
+* [bitnami/postgresql] Release 16.3.4 (#31143) ([05a9583](https://github.com/bitnami/charts/commit/05a9583f949b49fab2673774a4f56ff686d959f4)), closes [#31143](https://github.com/bitnami/charts/issues/31143)
+
+## <small>16.3.3 (2024-12-20)</small>
+
+* [bitnami/postgresql] Release 16.3.3 (#31133) ([41671f2](https://github.com/bitnami/charts/commit/41671f2e787863686079e1358054142d61d15982)), closes [#31133](https://github.com/bitnami/charts/issues/31133)
+
+## <small>16.3.2 (2024-12-16)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/postgresql] Release 16.3.2 (#31060) ([1406ab1](https://github.com/bitnami/charts/commit/1406ab116e0fcfbb8fe2eaec1adc5fe494c0f329)), closes [#31060](https://github.com/bitnami/charts/issues/31060)
+
+## <small>16.3.1 (2024-12-13)</small>
+
+* [bitnami/postgresql] Add Storage Class Configuration to Templates (#30858) ([b0d2c2e](https://github.com/bitnami/charts/commit/b0d2c2e53c9033d3827597c561931fbb331eb99b)), closes [#30858](https://github.com/bitnami/charts/issues/30858)
 
 ## 16.3.0 (2024-12-10)
 

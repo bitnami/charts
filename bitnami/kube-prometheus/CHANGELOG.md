@@ -1,8 +1,26 @@
 # Changelog
 
+## 10.2.4 (2025-01-21)
+
+* [bitnami/kube-prometheus] Release 10.2.4 ([#31441](https://github.com/bitnami/charts/pull/31441))
+
+## <small>10.2.3 (2024-12-19)</small>
+
+* [bitnami/kube-prometheus] Release 10.2.3 (#31095) ([f201909](https://github.com/bitnami/charts/commit/f20190907226d69578d47c4563fdd556b8b42555)), closes [#31095](https://github.com/bitnami/charts/issues/31095)
+
+## <small>10.2.2 (2024-12-18)</small>
+
+* [bitnami/kube-prometheus] Release 10.2.2 (#31071) ([e8c59dc](https://github.com/bitnami/charts/commit/e8c59dca5577355f81d3f60a1e89cb1df4f94e4f)), closes [#31071](https://github.com/bitnami/charts/issues/31071)
+
+## <small>10.2.1 (2024-12-17)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/kube-prometheus] Release 10.2.1 (#31040) ([5cf957c](https://github.com/bitnami/charts/commit/5cf957c39ae9798fefa0a4cbcc19bd1e92c23219)), closes [#31040](https://github.com/bitnami/charts/issues/31040)
+
 ## 10.2.0 (2024-12-10)
 
-* [bitnami/kube-prometheus] Detect non-standard images ([#30912](https://github.com/bitnami/charts/pull/30912))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/kube-prometheus] Detect non-standard images (#30912) ([b7e3175](https://github.com/bitnami/charts/commit/b7e317558b8d20e16700c96808411fe0d2c30171)), closes [#30912](https://github.com/bitnami/charts/issues/30912)
 
 ## <small>10.1.1 (2024-12-04)</small>
 

@@ -1,8 +1,18 @@
 # Changelog
 
+## 4.4.2 (2025-01-17)
+
+* [bitnami/rabbitmq-cluster-operator] Release 4.4.2 ([#31448](https://github.com/bitnami/charts/pull/31448))
+
+## <small>4.4.1 (2024-12-20)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/rabbitmq-cluster-operator] Release 4.4.1 (#31126) ([22f7911](https://github.com/bitnami/charts/commit/22f79115cfdde74662fc06f76ac372fffd557023)), closes [#31126](https://github.com/bitnami/charts/issues/31126)
+
 ## 4.4.0 (2024-12-10)
 
-* [bitnami/rabbitmq-cluster-operator] Detect non-standard images ([#30941](https://github.com/bitnami/charts/pull/30941))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/rabbitmq-cluster-operator] Detect non-standard images (#30941) ([b95e85b](https://github.com/bitnami/charts/commit/b95e85b077668be0add122fad290e7eecdcdf16c)), closes [#30941](https://github.com/bitnami/charts/issues/30941)
 
 ## <small>4.3.29 (2024-12-04)</small>
 

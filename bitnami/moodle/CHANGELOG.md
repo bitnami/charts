@@ -1,8 +1,18 @@
 # Changelog
 
+## 25.1.2 (2025-01-18)
+
+* [bitnami/moodle] Release 25.1.2 ([#31464](https://github.com/bitnami/charts/pull/31464))
+
+## <small>25.1.1 (2025-01-08)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/moodle] #31199 Fix invalid imagePullSecrets on container level (#31208) ([f137992](https://github.com/bitnami/charts/commit/f13799285711dba7a9c81ef4578d55a602e0d4a8)), closes [#31208](https://github.com/bitnami/charts/issues/31208)
+
 ## 25.1.0 (2024-12-10)
 
-* [bitnami/moodle] Detect non-standard images ([#30960](https://github.com/bitnami/charts/pull/30960))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/moodle] Detect non-standard images (#30960) ([3438d77](https://github.com/bitnami/charts/commit/3438d776d1fe43b64779e83fbccd69d7c67accdd)), closes [#30960](https://github.com/bitnami/charts/issues/30960)
 
 ## <small>25.0.2 (2024-12-09)</small>
 

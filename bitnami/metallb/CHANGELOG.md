@@ -1,8 +1,17 @@
 # Changelog
 
-## 6.4.1 (2024-12-10)
+## 6.4.3 (2025-01-17)
 
-* [bitnami/metallb] Fix lack of global.security.allowInsecureImages option ([#30973](https://github.com/bitnami/charts/pull/30973))
+* [bitnami/metallb] Release 6.4.3 ([#31431](https://github.com/bitnami/charts/pull/31431))
+
+## <small>6.4.2 (2024-12-17)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/metallb] Release 6.4.2 (#31074) ([d59f600](https://github.com/bitnami/charts/commit/d59f6000e96e7f9322309da24e061b65e6002e3e)), closes [#31074](https://github.com/bitnami/charts/issues/31074)
+
+## <small>6.4.1 (2024-12-10)</small>
+
+* [bitnami/metallb] Fix lack of global.security.allowInsecureImages option (#30973) ([8e0efd9](https://github.com/bitnami/charts/commit/8e0efd97e4510d6b533242b0f4bd91adb915fe04)), closes [#30973](https://github.com/bitnami/charts/issues/30973)
 
 ## 6.4.0 (2024-12-10)
 

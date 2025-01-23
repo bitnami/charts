@@ -1,8 +1,27 @@
 # Changelog
 
+## 20.6.3 (2025-01-14)
+
+* [bitnami/redis] fix: update JSON schema to allow string values for values passed to tpl ([#30526](https://github.com/bitnami/charts/pull/30526))
+
+## <small>20.6.2 (2025-01-07)</small>
+
+* [bitnami/redis] Release 20.6.2 (#31238) ([f24c74c](https://github.com/bitnami/charts/commit/f24c74cf287e64a25688ae0aab0362c3119f9f20)), closes [#31238](https://github.com/bitnami/charts/issues/31238)
+
+## <small>20.6.1 (2024-12-21)</small>
+
+* [bitnami/redis] Release 20.6.1 (#31138) ([2da450b](https://github.com/bitnami/charts/commit/2da450bd72c598237763760d9128e11a7599ec32)), closes [#31138](https://github.com/bitnami/charts/issues/31138)
+
+## 20.6.0 (2024-12-16)
+
+* [bitname/redis] Add support for master and replicas resources to be annotated (#31034) ([5111fa5](https://github.com/bitnami/charts/commit/5111fa5201b1cec4bf3c9aab8806bee45d07e4c6)), closes [#31034](https://github.com/bitnami/charts/issues/31034)
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* Redis Readme: fix typo in value key name (#31007) ([4a8c60a](https://github.com/bitnami/charts/commit/4a8c60aa11316a73e846c3316b36132822e30956)), closes [#31007](https://github.com/bitnami/charts/issues/31007)
+
 ## 20.5.0 (2024-12-10)
 
-* [bitnami/redis] Detect non-standard images ([#30942](https://github.com/bitnami/charts/pull/30942))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/redis] Detect non-standard images (#30942) ([f06f8db](https://github.com/bitnami/charts/commit/f06f8dbafe5eb3b22f689168d7ac9fb2fb0f707d)), closes [#30942](https://github.com/bitnami/charts/issues/30942)
 
 ## <small>20.4.1 (2024-12-10)</small>
 

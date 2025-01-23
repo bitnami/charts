@@ -1,8 +1,29 @@
 # Changelog
 
-## 14.10.0 (2024-12-12)
+## 14.10.5 (2025-01-20)
 
-* [bitnami/minio]: Templating sleep sleep time so that it can be passed using values.yaml ([#30718](https://github.com/bitnami/charts/pull/30718))
+* [bitnami/minio] chore: :recycle: Do not use wait-for-port in minio image ([#31475](https://github.com/bitnami/charts/pull/31475))
+
+## <small>14.10.4 (2025-01-17)</small>
+
+* [bitnami/minio] Release 14.10.4 (#31433) ([163a43f](https://github.com/bitnami/charts/commit/163a43f4443e89720a5eb931309c1f41d26f8fcf)), closes [#31433](https://github.com/bitnami/charts/issues/31433)
+
+## <small>14.10.3 (2024-12-20)</small>
+
+* [bitnami/minio] Fix rendering of CIDR block list for loadBalancerSourceRanges (#31032) ([a84ea6d](https://github.com/bitnami/charts/commit/a84ea6da98c0489efd1cca4e28fa398a02e5885b)), closes [#31032](https://github.com/bitnami/charts/issues/31032)
+
+## <small>14.10.2 (2024-12-19)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/minio] Release 14.10.2 (#31099) ([c2900ec](https://github.com/bitnami/charts/commit/c2900ec91df4a918b05f82ea5f4f97c43fce191b)), closes [#31099](https://github.com/bitnami/charts/issues/31099)
+
+## <small>14.10.1 (2024-12-16)</small>
+
+* [bitnami/minio] Release 14.10.1 (#31050) ([91b6f97](https://github.com/bitnami/charts/commit/91b6f97217eed1670f665232cd841e3e73d8032e)), closes [#31050](https://github.com/bitnami/charts/issues/31050)
+
+## 14.10.0 (2024-12-13)
+
+* [bitnami/minio]: Templating sleep sleep time so that it can be passed using values.yaml (#30718) ([ea21cb8](https://github.com/bitnami/charts/commit/ea21cb82ebb71e0d159846aaeb39786e1d577913)), closes [#30718](https://github.com/bitnami/charts/issues/30718)
 
 ## 14.9.0 (2024-12-10)
 

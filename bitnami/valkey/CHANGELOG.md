@@ -1,8 +1,22 @@
 # Changelog
 
+## 2.2.3 (2025-01-10)
+
+* [bitnami/valkey] bugfix: instructions to obtain password on installation notes ([#31287](https://github.com/bitnami/charts/pull/31287))
+
+## <small>2.2.2 (2025-01-08)</small>
+
+* [bitnami/valkey] Release 2.2.2 (#31246) ([8b7bfe3](https://github.com/bitnami/charts/commit/8b7bfe3148a3a068b39c0afdf30ced26829f088b)), closes [#31246](https://github.com/bitnami/charts/issues/31246)
+
+## <small>2.2.1 (2024-12-17)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/valkey] fix: sentinel pdb (#31020) ([711d831](https://github.com/bitnami/charts/commit/711d8319865931adc84705188b23ab575597b12f)), closes [#31020](https://github.com/bitnami/charts/issues/31020)
+
 ## 2.2.0 (2024-12-10)
 
-* [bitnami/valkey] Detect non-standard images ([#30950](https://github.com/bitnami/charts/pull/30950))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/valkey] Detect non-standard images (#30950) ([3145dda](https://github.com/bitnami/charts/commit/3145ddaddcf99d4e23609a67e9740acfb589bc97)), closes [#30950](https://github.com/bitnami/charts/issues/30950)
 
 ## <small>2.1.2 (2024-12-05)</small>
 

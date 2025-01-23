@@ -1,8 +1,17 @@
 # Changelog
 
-## 8.5.1 (2024-12-10)
+## 8.5.3 (2025-01-17)
 
-* [bitnami/nats] Release 8.5.1 ([#30974](https://github.com/bitnami/charts/pull/30974))
+* [bitnami/nats] Release 8.5.3 ([#31435](https://github.com/bitnami/charts/pull/31435))
+
+## <small>8.5.2 (2024-12-17)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/nats] Release 8.5.2 (#31078) ([45544bd](https://github.com/bitnami/charts/commit/45544bd633ab9a4fcd5e884366955c1d27e1848b)), closes [#31078](https://github.com/bitnami/charts/issues/31078)
+
+## <small>8.5.1 (2024-12-10)</small>
+
+* [bitnami/nats] Release 8.5.1 (#30974) ([3123a38](https://github.com/bitnami/charts/commit/3123a38c930d955f06a5563b18cf0b05d2b057ee)), closes [#30974](https://github.com/bitnami/charts/issues/30974)
 
 ## 8.5.0 (2024-12-10)
 

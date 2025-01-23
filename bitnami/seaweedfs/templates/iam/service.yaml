@@ -1,0 +1,54 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.filer.enabled .Values.iam.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "seaweedfs.iam.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: iam
+  {{- if or .Values.iam.service.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.iam.service.annotations .Values.commonAnnotations) "context" .) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.iam.service.type }}
+  {{- if and .Values.iam.service.clusterIP (eq .Values.iam.service.type "ClusterIP") }}
+  clusterIP: {{ .Values.iam.service.clusterIP }}
+  {{- end }}
+  {{- if .Values.iam.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.iam.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.iam.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.iam.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if or (eq .Values.iam.service.type "LoadBalancer") (eq .Values.iam.service.type "NodePort") }}
+  externalTrafficPolicy: {{ .Values.iam.service.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{- if and (eq .Values.iam.service.type "LoadBalancer") (not (empty .Values.iam.service.loadBalancerSourceRanges)) }}
+  loadBalancerSourceRanges: {{ .Values.iam.service.loadBalancerSourceRanges }}
+  {{- end }}
+  {{- if and (eq .Values.iam.service.type "LoadBalancer") (not (empty .Values.iam.service.loadBalancerIP)) }}
+  loadBalancerIP: {{ .Values.iam.service.loadBalancerIP }}
+  {{- end }}
+  ports:
+    - name: "http"
+      port: {{ .Values.iam.service.ports.http }}
+      targetPort: "http"
+      protocol: TCP
+      {{- if and (or (eq .Values.iam.service.type "NodePort") (eq .Values.iam.service.type "LoadBalancer")) (not (empty .Values.iam.service.nodePorts.http)) }}
+      nodePort: {{ .Values.iam.service.nodePorts.http }}
+      {{- else if eq .Values.iam.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    {{- if .Values.iam.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.iam.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" (dict "values" (list .Values.iam.podLabels .Values.commonLabels) "context" .) | fromYaml }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: iam
+{{- end }}

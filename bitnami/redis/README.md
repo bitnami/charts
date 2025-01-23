@@ -63,7 +63,7 @@ The command deploys Redis&reg; on the Kubernetes cluster in the default configur
 
 Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
 
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcesPreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
 ### Prometheus metrics
 
@@ -635,6 +635,7 @@ helm install my-release --set master.persistence.existingClaim=PVC_NAME oci://RE
 | `master.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                  | `{}`                     |
 | `master.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `master.pdb.minAvailable` and `master.pdb.maxUnavailable` are empty.                                                                    | `{}`                     |
 | `master.extraPodSpec`                                      | Optionally specify extra PodSpec for the Redis&reg; master pod(s)                                                                                                                                                               | `{}`                     |
+| `master.annotations`                                       | Additional custom annotations for Redis&reg; Master resource                                                                                                                                                                    | `{}`                     |
 
 ### Redis&reg; replicas configuration parameters
 
@@ -764,6 +765,7 @@ helm install my-release --set master.persistence.existingClaim=PVC_NAME oci://RE
 | `replica.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                    | `{}`                     |
 | `replica.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `replica.pdb.minAvailable` and `replica.pdb.maxUnavailable` are empty.                                                                    | `{}`                     |
 | `replica.extraPodSpec`                                      | Optionally specify extra PodSpec for the Redis&reg; replicas pod(s)                                                                                                                                                               | `{}`                     |
+| `replica.annotations`                                       | Additional custom annotations for Redis&reg; replicas resource                                                                                                                                                                    | `{}`                     |
 
 ### Redis&reg; Sentinel configuration parameters
 

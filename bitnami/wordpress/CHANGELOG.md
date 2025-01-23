@@ -1,8 +1,21 @@
 # Changelog
 
-## 24.1.4 (2024-12-13)
+## 24.1.7 (2025-01-20)
 
-* [bitnami/wordpress] Release 24.1.4 ([#31037](https://github.com/bitnami/charts/pull/31037))
+* [bitnami/wordpress] Release 24.1.7 ([#31481](https://github.com/bitnami/charts/pull/31481))
+
+## <small>24.1.6 (2025-01-13)</small>
+
+* [bitnami/wordpress] Release 24.1.6 (#31344) ([936309d](https://github.com/bitnami/charts/commit/936309de796b64a5d613605047bd4b4e7b42c968)), closes [#31344](https://github.com/bitnami/charts/issues/31344)
+
+## <small>24.1.5 (2024-12-17)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/wordpress] Release 24.1.5 (#31076) ([32ceeab](https://github.com/bitnami/charts/commit/32ceeab08da1b5072e6619f5e8b6717fdd897e99)), closes [#31076](https://github.com/bitnami/charts/issues/31076)
+
+## <small>24.1.4 (2024-12-13)</small>
+
+* [bitnami/wordpress] Release 24.1.4 (#31037) ([2407487](https://github.com/bitnami/charts/commit/24074879b1d65dbeff3092709cb8bb63254888e2)), closes [#31037](https://github.com/bitnami/charts/issues/31037)
 
 ## <small>24.1.3 (2024-12-12)</small>
 

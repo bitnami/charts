@@ -17,7 +17,7 @@ file:
     filetype: file
     exists: true
     contents:
-    - "{{ toJson .Vars.extraConfiguration }}"
+      - /csp.strict.*{{ index .Vars.extraConfiguration "csp.strict" }}/
 command:
   {{- $uid := .Vars.containerSecurityContext.runAsUser }}
   {{- $gid := .Vars.podSecurityContext.fsGroup }}

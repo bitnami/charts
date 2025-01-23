@@ -1,8 +1,17 @@
 # Changelog
 
+## 1.6.2 (2025-01-17)
+
+* [bitnami/vault] Release 1.6.2 ([#31445](https://github.com/bitnami/charts/pull/31445))
+
+## <small>1.6.1 (2024-12-19)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/vault] Release 1.6.1 (#31110) ([99abcba](https://github.com/bitnami/charts/commit/99abcba5ae865a78096c8b26632a299d08480635)), closes [#31110](https://github.com/bitnami/charts/issues/31110)
+
 ## 1.6.0 (2024-12-12)
 
-* [bitnami/vault] Parametize caBundle in mutatingwebhook ([#30709](https://github.com/bitnami/charts/pull/30709))
+* [bitnami/vault] Parametize caBundle in mutatingwebhook (#30709) ([bbac787](https://github.com/bitnami/charts/commit/bbac7879e5179dce88e00195e480169f7fa4032d)), closes [#30709](https://github.com/bitnami/charts/issues/30709)
 
 ## 1.5.0 (2024-12-10)
 

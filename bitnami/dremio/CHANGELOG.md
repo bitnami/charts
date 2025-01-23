@@ -1,8 +1,17 @@
 # Changelog
 
+## 0.3.1 (2025-01-16)
+
+* [bitnami/dremio] Release 0.3.1 ([#31398](https://github.com/bitnami/charts/pull/31398))
+
+## 0.3.0 (2024-12-19)
+
+* [birtnami/dremio] chore(jmx-exporter): Upgrade image and change args (#31102) ([dbed966](https://github.com/bitnami/charts/commit/dbed9663f4a4499917346933a176cb37aa1e5377)), closes [#31102](https://github.com/bitnami/charts/issues/31102)
+
 ## 0.2.0 (2024-12-10)
 
-* [bitnami/dremio] Detect non-standard images ([#30897](https://github.com/bitnami/charts/pull/30897))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/dremio] Detect non-standard images (#30897) ([0d3f735](https://github.com/bitnami/charts/commit/0d3f73580fa63eeddee5b7f29cc937588c612003)), closes [#30897](https://github.com/bitnami/charts/issues/30897)
 
 ## <small>0.1.15 (2024-12-07)</small>
 

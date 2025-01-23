@@ -1,8 +1,17 @@
 # Changelog
 
+## 13.7.2 (2025-01-13)
+
+* [bitnami/zookeeper] Release 13.7.2 ([#31338](https://github.com/bitnami/charts/pull/31338))
+
+## <small>13.7.1 (2024-12-16)</small>
+
+* [bitnami/zookeeper] Increase resources to avoid OOMKilled reason executing tests (#31035) ([a03edc0](https://github.com/bitnami/charts/commit/a03edc0cc5dbae9c9bc5e16be45933373ccdfe44)), closes [#31035](https://github.com/bitnami/charts/issues/31035)
+
 ## 13.7.0 (2024-12-10)
 
-* [bitnami/zookeeper] Detect non-standard images ([#30915](https://github.com/bitnami/charts/pull/30915))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/zookeeper] Detect non-standard images (#30915) ([8168ae4](https://github.com/bitnami/charts/commit/8168ae4c69fac2433cc3f4b2e464c819f76a2420)), closes [#30915](https://github.com/bitnami/charts/issues/30915)
 
 ## <small>13.6.1 (2024-12-04)</small>
 

@@ -50,7 +50,7 @@ These commands deploy contour on the Kubernetes cluster in the default configura
 
 Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
 
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcesPreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
 ### Prometheus metrics
 
@@ -681,11 +681,12 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 
 ### Other parameters
 
-| Name                | Description                                                                                                          | Value  |
-| ------------------- | -------------------------------------------------------------------------------------------------------------------- | ------ |
-| `rbac.create`       | Create the RBAC roles for API accessibility                                                                          | `true` |
-| `rbac.rules`        | Custom RBAC rules to set                                                                                             | `[]`   |
-| `tlsExistingSecret` | Name of the existingSecret to be use in both contour and envoy. If it is not nil `contour.certgen` will be disabled. | `""`   |
+| Name                | Description                                                                                                          | Value   |
+| ------------------- | -------------------------------------------------------------------------------------------------------------------- | ------- |
+| `rbac.create`       | Create the RBAC roles for API accessibility                                                                          | `true`  |
+| `rbac.rules`        | Custom RBAC rules to set                                                                                             | `[]`    |
+| `tlsExistingSecret` | Name of the existingSecret to be use in both contour and envoy. If it is not nil `contour.certgen` will be disabled. | `""`    |
+| `useCertManager`    | Use Cert-manager instead of Contour certgen to issue certificates for TLS connection between Contour and Envoy.      | `false` |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

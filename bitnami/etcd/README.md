@@ -48,7 +48,7 @@ These commands deploy etcd on the Kubernetes cluster in the default configuratio
 
 Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
 
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcesPreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
 ### [Rolling VS Immutable tags](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html)
 
@@ -109,7 +109,6 @@ Here is an example of the environment configuration bootstrapping an etcd cluste
 | 2       | ETCD_NAME                        | etcd-2                                                                                                                                                                                                |
 | 2       | ETCD_INITIAL_ADVERTISE_PEER_URLS | <http://etcd-2.etcd-headless.default.svc.cluster.local:2380>                                                                                                                                            |
 |---------|----------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| *       | ETCD_INITIAL_CLUSTER_STATE       | new                                                                                                                                                                                                   |
 | *       | ETCD_INITIAL_CLUSTER_TOKEN       | etcd-cluster-k8s                                                                                                                                                                                      |
 | *       | ETCD_INITIAL_CLUSTER             | etcd-0=<http://etcd-0.etcd-headless.default.svc.cluster.local:2380>,etcd-1=<http://etcd-1.etcd-headless.default.svc.cluster.local:2380>,etcd-2=<http://etcd-2.etcd-headless.default.svc.cluster.local:2380> |
 
@@ -405,11 +404,9 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 | `auth.peer.caFilename`                 | Name of the file containing the peer CA certificate                                                                  | `""`                   |
 | `autoCompactionMode`                   | Auto compaction mode, by default periodic. Valid values: "periodic", "revision".                                     | `""`                   |
 | `autoCompactionRetention`              | Auto compaction retention for mvcc key value store in hour, by default 0, means disabled                             | `""`                   |
-| `initialClusterState`                  | Initial cluster state. Allowed values: 'new' or 'existing'                                                           | `""`                   |
 | `initialClusterToken`                  | Initial cluster token. Can be used to protect etcd from cross-cluster-interaction, which might corrupt the clusters. | `etcd-cluster-k8s`     |
 | `logLevel`                             | Sets the log level for the etcd process. Allowed values: 'debug', 'info', 'warn', 'error', 'panic', 'fatal'          | `info`                 |
 | `maxProcs`                             | Limits the number of operating system threads that can execute user-level                                            | `""`                   |
-| `removeMemberOnContainerTermination`   | Use a PreStop hook to remove the etcd members from the etcd cluster on container termination                         | `true`                 |
 | `configuration`                        | etcd configuration. Specify content for etcd.conf.yml                                                                | `""`                   |
 | `existingConfigmap`                    | Existing ConfigMap with etcd configuration                                                                           | `""`                   |
 | `extraEnvVars`                         | Extra environment variables to be set on etcd container                                                              | `[]`                   |
@@ -703,6 +700,14 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/etcd
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 11.0.0
+
+This version introduces the following breaking changes:
+
+- Remove `initialClusterState` which was unreliable at detecting cluster state. From now on, each node will contact other members to determine cluster state. If no members are available and the data dir is empty, then it bootstraps a new cluster.
+- Remove `removeMemberOnContainerTermination` which was unreliable at removing stale members during replica count updates. Instead, a pre-upgrade hook is added to check and remove stale members.
+- Remove support for manual scaling with `kubectl` or autoscaler. Upgrading of any kind including increasing replica count must be done with `helm upgrade` exclusively. CD automation tools that respect Helm hooks such as ArgoCD can also be used.
 
 ### To 10.7.0
 
