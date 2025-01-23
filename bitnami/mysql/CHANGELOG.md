@@ -1,8 +1,13 @@
 # Changelog
 
-## 12.2.1 (2025-01-04)
+## 12.2.2 (2025-01-22)
 
-* [bitnami/mysql] Release 12.2.1 ([#31215](https://github.com/bitnami/charts/pull/31215))
+* [bitnami/mysql] Release 12.2.2 ([#31512](https://github.com/bitnami/charts/pull/31512))
+
+## <small>12.2.1 (2025-01-04)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/mysql] Release 12.2.1 (#31215) ([65fb2fa](https://github.com/bitnami/charts/commit/65fb2fa98b20f187dfecca09042fd8fbf70f6b95)), closes [#31215](https://github.com/bitnami/charts/issues/31215)
 
 ## 12.2.0 (2024-12-10)
 

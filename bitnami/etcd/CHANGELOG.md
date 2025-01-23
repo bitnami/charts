@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.0.1 (2025-01-20)
+## 11.0.2 (2025-01-23)
 
-* [bitnami/etcd] fixed tls enable handling and v3 environment variable support for defrag cronjob ([#31270](https://github.com/bitnami/charts/pull/31270))
+* [bitnami/etcd] fix for PreUpgrade Job Issue ([#31524](https://github.com/bitnami/charts/pull/31524))
+
+## <small>11.0.1 (2025-01-20)</small>
+
+* [bitnami/etcd] fixed tls enable handling and v3 environment variable support for defrag cronjob (#31 ([c3c3e43](https://github.com/bitnami/charts/commit/c3c3e4327129db9fa1a88ee7a79227647404d63f)), closes [#31270](https://github.com/bitnami/charts/issues/31270)
 
 ## 11.0.0 (2025-01-20)
 
