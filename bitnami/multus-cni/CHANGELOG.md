@@ -2,7 +2,7 @@
 
 ## 2.2.3 (2025-01-23)
 
-* fixes #30606 by adding path to kubeconfig as args ([#31045](https://github.com/bitnami/charts/pull/31045))
+* [multus-cni] Add --multus-kubeconfig-file-host arg ([#31045](https://github.com/bitnami/charts/pull/31045))
 
 ## <small>2.2.2 (2025-01-17)</small>
 
