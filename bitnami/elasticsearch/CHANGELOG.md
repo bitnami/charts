@@ -1,8 +1,13 @@
 # Changelog
 
-## 21.4.2 (2024-12-23)
+## 21.4.3 (2025-01-21)
 
-* bitnami/elasticsearch: mount cerst to master node instead empty-dir ([#30989](https://github.com/bitnami/charts/pull/30989))
+* [bitnami/elasticsearch] Release 21.4.3 ([#31498](https://github.com/bitnami/charts/pull/31498))
+
+## <small>21.4.2 (2025-01-08)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* bitnami/elasticsearch: mount cerst to master node instead empty-dir (#30989) ([bb91a17](https://github.com/bitnami/charts/commit/bb91a17b630dc07a7ff0bb1f9d198f0916177fff)), closes [#30989](https://github.com/bitnami/charts/issues/30989)
 
 ## <small>21.4.1 (2024-12-12)</small>
 

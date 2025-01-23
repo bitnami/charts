@@ -1,8 +1,12 @@
 # Changelog
 
-## 5.1.7 (2025-01-17)
+## 5.1.8 (2025-01-22)
 
-* [bitnami/concourse] Release 5.1.7 ([#31462](https://github.com/bitnami/charts/pull/31462))
+* [bitnami/concourse] Release 5.1.8 ([#31519](https://github.com/bitnami/charts/pull/31519))
+
+## <small>5.1.7 (2025-01-17)</small>
+
+* [bitnami/concourse] Release 5.1.7 (#31462) ([590f617](https://github.com/bitnami/charts/commit/590f617f65a5ba1ad4600e492e849233437e30fd)), closes [#31462](https://github.com/bitnami/charts/issues/31462)
 
 ## <small>5.1.6 (2025-01-17)</small>
 

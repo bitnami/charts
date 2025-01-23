@@ -1,8 +1,16 @@
 # Changelog
 
-## 10.7.3 (2025-01-17)
+## 11.0.1 (2025-01-20)
 
-* [bitnami/etcd] Release 10.7.3 ([#31419](https://github.com/bitnami/charts/pull/31419))
+* [bitnami/etcd] fixed tls enable handling and v3 environment variable support for defrag cronjob ([#31270](https://github.com/bitnami/charts/pull/31270))
+
+## 11.0.0 (2025-01-20)
+
+* [bitnami/etcd] Add pre-upgrade hook (#31161) ([38be6c5](https://github.com/bitnami/charts/commit/38be6c5dcd4ed7bff0c830d8eefe98962310c54d)), closes [#31161](https://github.com/bitnami/charts/issues/31161)
+
+## <small>10.7.3 (2025-01-17)</small>
+
+* [bitnami/etcd] Release 10.7.3 (#31419) ([7ef8d56](https://github.com/bitnami/charts/commit/7ef8d562ec9953460d675b02cfbce336ab66bceb)), closes [#31419](https://github.com/bitnami/charts/issues/31419)
 
 ## <small>10.7.2 (2025-01-12)</small>
 
