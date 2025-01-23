@@ -1,6 +1,6 @@
 # Changelog
 
-## 9.0.0 (2025-01-22)
+## 9.0.0 (2025-01-23)
 
 * [bitnami/nats] NATS chart based on scratch image ([#31516](https://github.com/bitnami/charts/pull/31516))
 
