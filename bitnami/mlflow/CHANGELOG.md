@@ -1,12 +1,13 @@
 # Changelog
 
-## 2.3.3 (2025-01-13)
+## 2.3.3 (2025-01-23)
 
 * [bitnami/mlflow] Fix parsing of mlflow tracking service loadBalancerSourceRanges ([#31327](https://github.com/bitnami/charts/pull/31327))
 
 ## <small>2.3.2 (2025-01-20)</small>
 
-* [bitnami/mlflow] Release 2.3.2 ([#31485](https://github.com/bitnami/charts/pull/31485))
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/mlflow] Release 2.3.2 (#31485) ([78bbe94](https://github.com/bitnami/charts/commit/78bbe94ec731a0cb046e0387b5d610de41f97472)), closes [#31485](https://github.com/bitnami/charts/issues/31485)
 
 ## <small>2.3.1 (2024-12-11)</small>
 
