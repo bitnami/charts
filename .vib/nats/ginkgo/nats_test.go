@@ -39,16 +39,16 @@ var _ = Describe("NATS", Ordered, func() {
 			getOpts := metav1.GetOptions{}
 
 			By("checking all the replicas are available")
-			ss, err := c.AppsV1().StatefulSets(namespace).Get(ctx, stsName, getOpts)
+			ss, err := c.AppsV1().StatefulSets(namespace).Get(ctx, releaseName, getOpts)
 			Expect(err).NotTo(HaveOccurred())
 			Expect(ss.Status.Replicas).NotTo(BeZero())
 			origReplicas := *ss.Spec.Replicas
 
 			Eventually(func() (*appsv1.StatefulSet, error) {
-				return c.AppsV1().StatefulSets(namespace).Get(ctx, stsName, getOpts)
+				return c.AppsV1().StatefulSets(namespace).Get(ctx, releaseName, getOpts)
 			}, timeout, PollingInterval).Should(WithTransform(getAvailableReplicas, Equal(origReplicas)))
 
-			svc, err := c.CoreV1().Services(namespace).Get(ctx, stsName, getOpts)
+			svc, err := c.CoreV1().Services(namespace).Get(ctx, releaseName, getOpts)
 			Expect(err).NotTo(HaveOccurred())
 
 			port, err := utils.SvcGetPortByName(svc, "tcp-client")
@@ -59,7 +59,7 @@ var _ = Describe("NATS", Ordered, func() {
 
 			By("creating a job to create a new KV Store Bucket")
 			addKVBucketJobName := fmt.Sprintf("%s-add-kv-bucket-%s",
-				stsName, jobSuffix)
+				releaseName, jobSuffix)
 			storeBucketName := fmt.Sprintf("test%s", jobSuffix)
 
 			err = createJob(ctx, c, addKVBucketJobName, port, "add", storeBucketName)
@@ -75,7 +75,7 @@ var _ = Describe("NATS", Ordered, func() {
 
 			By("creating a job to put some key-value pair")
 			putKVJobName := fmt.Sprintf("%s-put-kv-%s",
-				stsName, jobSuffix)
+				releaseName, jobSuffix)
 			err = createJob(ctx, c, putKVJobName, port, "put", storeBucketName, "testKey", "testValue")
 			Expect(err).NotTo(HaveOccurred())
 
@@ -96,17 +96,17 @@ var _ = Describe("NATS", Ordered, func() {
 
 			for i := int(origReplicas) - 1; i >= 0; i-- {
 				Eventually(func() (*v1.Pod, error) {
-					return c.CoreV1().Pods(namespace).Get(ctx, fmt.Sprintf("%s-%d", stsName, i), getOpts)
+					return c.CoreV1().Pods(namespace).Get(ctx, fmt.Sprintf("%s-%d", releaseName, i), getOpts)
 				}, timeout, PollingInterval).Should(WithTransform(getRestartedAtAnnotation, Not(BeEmpty())))
 			}
 
 			Eventually(func() (*appsv1.StatefulSet, error) {
-				return c.AppsV1().StatefulSets(namespace).Get(ctx, stsName, getOpts)
+				return c.AppsV1().StatefulSets(namespace).Get(ctx, releaseName, getOpts)
 			}, timeout, PollingInterval).Should(WithTransform(getAvailableReplicas, Equal(origReplicas)))
 
 			By("creating a job to get a value for a key")
 			getKVJobName := fmt.Sprintf("%s-get-key-%s",
-				stsName, jobSuffix)
+				releaseName, jobSuffix)
 			err = createJob(ctx, c, getKVJobName, port, "get", storeBucketName, "testKey")
 			Expect(err).NotTo(HaveOccurred())
 
@@ -120,7 +120,7 @@ var _ = Describe("NATS", Ordered, func() {
 
 			By("creating a job to get the delete the KV Store Bucket")
 			deleteKVBucketJobName := fmt.Sprintf("%s-del-kv-bucket-%s",
-				stsName, jobSuffix)
+				releaseName, jobSuffix)
 			err = createJob(ctx, c, deleteKVBucketJobName, port, "del", storeBucketName, "-f")
 			Expect(err).NotTo(HaveOccurred())
 

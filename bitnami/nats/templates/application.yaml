@@ -156,8 +156,11 @@ spec:
               mountPath: /etc/{{ .Values.natsFilename }}.conf
               subPath: {{ .Values.natsFilename }}.conf
             {{- if .Values.tls.enabled }}
-            - name: tls-certificates
-              mountPath: /etc/certs
+            - name: ca-cert
+              mountPath: /etc/certs/ca
+              readOnly: true
+            - name: server-cert
+              mountPath: /etc/certs/server
               readOnly: true
             {{- end }}
             {{- if and .Values.persistence.enabled (eq (lower .Values.resourceType) "statefulset") }}
@@ -218,9 +221,13 @@ spec:
           secret:
             secretName: {{ include "nats.secretName" . }}
         {{- if .Values.tls.enabled }}
-        - name: tls-certificates
+        - name: ca-cert
           secret:
-            secretName: {{ template "nats.tls.secretName" . }}
+            secretName: {{ template "nats.tls.ca.secretName" . }}
+            defaultMode: 256
+        - name: server-cert
+          secret:
+            secretName: {{ template "nats.tls.server.secretName" . }}
             defaultMode: 256
         {{- end }}
         {{- if .Values.extraVolumes }}
