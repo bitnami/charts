@@ -1,8 +1,13 @@
 # Changelog
 
-## 25.1.1 (2025-01-08)
+## 25.1.2 (2025-01-18)
 
-* [bitnami/moodle] #31199 Fix invalid imagePullSecrets on container level ([#31208](https://github.com/bitnami/charts/pull/31208))
+* [bitnami/moodle] Release 25.1.2 ([#31464](https://github.com/bitnami/charts/pull/31464))
+
+## <small>25.1.1 (2025-01-08)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/moodle] #31199 Fix invalid imagePullSecrets on container level (#31208) ([f137992](https://github.com/bitnami/charts/commit/f13799285711dba7a9c81ef4578d55a602e0d4a8)), closes [#31208](https://github.com/bitnami/charts/issues/31208)
 
 ## 25.1.0 (2024-12-10)
 

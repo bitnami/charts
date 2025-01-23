@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.4.1 (2024-12-12)
+## 11.4.2 (2025-01-21)
 
-* [bitnami/kibana] Release 11.4.1 ([#31024](https://github.com/bitnami/charts/pull/31024))
+* [bitnami/kibana] Release 11.4.2 ([#31500](https://github.com/bitnami/charts/pull/31500))
+
+## <small>11.4.1 (2024-12-13)</small>
+
+* [bitnami/kibana] Release 11.4.1 (#31024) ([e6d89b9](https://github.com/bitnami/charts/commit/e6d89b9f651965a7bd5d6e9a25b8ed07cc56873f)), closes [#31024](https://github.com/bitnami/charts/issues/31024)
 
 ## 11.4.0 (2024-12-10)
 

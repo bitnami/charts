@@ -1,8 +1,17 @@
 # Changelog
 
-## 1.4.1 (2025-01-13)
+## 1.4.3 (2025-01-22)
 
-* [bitnami/prometheus] Release 1.4.1 ([#31324](https://github.com/bitnami/charts/pull/31324))
+* [bitnami/prometheus] Remove GOSS duplicated command ([#31513](https://github.com/bitnami/charts/pull/31513))
+
+## <small>1.4.2 (2025-01-17)</small>
+
+* [bitnami/prometheus] Release 1.4.2 (#31446) ([8d5a3a8](https://github.com/bitnami/charts/commit/8d5a3a81abd654712bdddeec3f7263890dabe9b8)), closes [#31446](https://github.com/bitnami/charts/issues/31446)
+
+## <small>1.4.1 (2025-01-13)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/prometheus] Release 1.4.1 (#31324) ([074a131](https://github.com/bitnami/charts/commit/074a1318cbcb9063e83927d585e12475431cc93c)), closes [#31324](https://github.com/bitnami/charts/issues/31324)
 
 ## 1.4.0 (2024-12-10)
 

@@ -1,8 +1,12 @@
 # Changelog
 
-## 20.6.2 (2025-01-07)
+## 20.6.3 (2025-01-14)
 
-* [bitnami/redis] Release 20.6.2 ([#31238](https://github.com/bitnami/charts/pull/31238))
+* [bitnami/redis] fix: update JSON schema to allow string values for values passed to tpl ([#30526](https://github.com/bitnami/charts/pull/30526))
+
+## <small>20.6.2 (2025-01-07)</small>
+
+* [bitnami/redis] Release 20.6.2 (#31238) ([f24c74c](https://github.com/bitnami/charts/commit/f24c74cf287e64a25688ae0aab0362c3119f9f20)), closes [#31238](https://github.com/bitnami/charts/issues/31238)
 
 ## <small>20.6.1 (2024-12-21)</small>
 
