@@ -20,7 +20,7 @@ spec:
   minAvailable: {{ .Values.beat.pdb.minAvailable }}
   {{- end  }}
   {{- if or .Values.beat.pdb.maxUnavailable ( not .Values.beat.pdb.minAvailable ) }}
-  maxUnavailable: {{ .Values.beat.pdb.maxUnavailable }}
+  maxUnavailable: {{ .Values.beat.pdb.maxUnavailable | default 1 }}
   {{- end  }}
   {{- $podLabels := include "common.tplvalues.merge" (dict "values" (list .Values.beat.podLabels .Values.commonLabels) "context" .) }}
   selector:

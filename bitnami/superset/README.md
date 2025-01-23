@@ -29,7 +29,6 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 - Kubernetes 1.23+
 - Helm 3.8.0+
 - PV provisioner support in the underlying infrastructure
-- ReadWriteMany volumes for deployment scaling
 
 ## Installing the Chart
 
@@ -700,7 +699,6 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `externalRedis.existingSecret`               | Name of an existing secret resource containing the Redis&trade credentials                                                                                                                                                 | `""`               |
 | `externalRedis.existingSecretPasswordKey`    | Name of an existing secret key containing the Redis&trade credentials                                                                                                                                                      | `redis-password`   |
 
-See <https://github.com/bitnami/readme-generator-for-helm> to create the table
 
 The above parameters map to the env variables defined in [bitnami/superset](https://github.com/bitnami/containers/tree/main/bitnami/superset). For more information please refer to the [bitnami/superset](https://github.com/bitnami/containers/tree/main/bitnami/superset) image documentation.
 
@@ -716,7 +714,7 @@ helm install my-release \
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
-The above command sets the Superset administrator account username and password to `admin` and `password` respectively. Additionally, it sets the MariaDB `root` user password to `secretpassword`.
+The above command sets the Superset administrator account username and password to `admin` and `password` respectively. Additionally, it sets the PostgreSQL user password to `secretpassword`.
 
 > NOTE: Once this chart is deployed, it is not possible to change the application's access credentials, such as usernames or passwords, using Helm. To change these application credentials after deployment, delete any persistent volumes (PVs) used by the chart and re-deploy it, or use the application's built-in administrative tools if available.
 
