@@ -856,7 +856,7 @@
 
 ## 4.0.0 (2021-08-02)
 
-* [bitnami/several] Upadte READMEs ([eb3c291](https://github.com/bitnami/charts/commit/eb3c2916be233280f2226d9cdceb57b08ab4a23b))
+* [bitnami/several] Update READMEs ([eb3c291](https://github.com/bitnami/charts/commit/eb3c2916be233280f2226d9cdceb57b08ab4a23b))
 * [bitnami/several] Use the latest major version in subcharts (#7117) ([3c1c105](https://github.com/bitnami/charts/commit/3c1c105ce61d24a81e34bf7be5250bfe07068efb)), closes [#7117](https://github.com/bitnami/charts/issues/7117)
 
 ## <small>3.0.3 (2021-07-26)</small>
