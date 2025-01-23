@@ -1,8 +1,13 @@
 # Changelog
 
-## 0.3.1 (2024-12-27)
+## 0.3.2 (2025-01-23)
 
-* [bitnami/keydb] Release 0.3.1 ([#31176](https://github.com/bitnami/charts/pull/31176))
+* [bitnami/keydb] fix: Update "volume-permissions" initContainers command ([#31518](https://github.com/bitnami/charts/pull/31518))
+
+## <small>0.3.1 (2024-12-27)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/keydb] Release 0.3.1 (#31176) ([28ede84](https://github.com/bitnami/charts/commit/28ede84eddc77f9a87e4197bd0067e8e42178649)), closes [#31176](https://github.com/bitnami/charts/issues/31176)
 
 ## 0.3.0 (2024-12-10)
 
