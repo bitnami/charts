@@ -1,8 +1,13 @@
 # Changelog
 
-## 8.1.1 (2024-12-19)
+## 8.1.2 (2025-01-07)
 
-* [bitnami/jupyterhub] Release 8.1.1 ([#31107](https://github.com/bitnami/charts/pull/31107))
+* [bitnami/jupyterhub] Release 8.1.2 ([#31229](https://github.com/bitnami/charts/pull/31229))
+
+## <small>8.1.1 (2024-12-19)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/jupyterhub] Release 8.1.1 (#31107) ([9d2c8b2](https://github.com/bitnami/charts/commit/9d2c8b20accdffd94ca714987cc36b932f4835e7)), closes [#31107](https://github.com/bitnami/charts/issues/31107)
 
 ## 8.1.0 (2024-12-10)
 

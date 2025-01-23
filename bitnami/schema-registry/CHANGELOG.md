@@ -1,8 +1,13 @@
 # Changelog
 
+## 23.1.1 (2025-01-13)
+
+* [bitnami/schema-registry] Release 23.1.1 ([#31325](https://github.com/bitnami/charts/pull/31325))
+
 ## 23.1.0 (2024-12-10)
 
-* [bitnami/schema-registry] Detect non-standard images ([#30965](https://github.com/bitnami/charts/pull/30965))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/schema-registry] Detect non-standard images (#30965) ([fbbcc3f](https://github.com/bitnami/charts/commit/fbbcc3f9f48f692cb9c316f4d317c3fa0795ea3b)), closes [#30965](https://github.com/bitnami/charts/issues/30965)
 
 ## 23.0.0 (2024-12-04)
 

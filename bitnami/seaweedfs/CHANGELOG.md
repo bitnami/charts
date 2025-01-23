@@ -1,8 +1,34 @@
 # Changelog
 
+## 4.5.1 (2025-01-21)
+
+* [bitnami/seaweedfs] Release 4.5.1 ([#31490](https://github.com/bitnami/charts/pull/31490))
+
+## 4.5.0 (2025-01-20)
+
+* [bitnami/seaweedfs]: add pod for `weed iam` (#31334) ([5f5a702](https://github.com/bitnami/charts/commit/5f5a70213129a814f4a0d4be92409b9fec9686a5)), closes [#31334](https://github.com/bitnami/charts/issues/31334)
+
+## <small>4.3.2 (2025-01-17)</small>
+
+* [bitnami/seaweedfs] Release 4.3.2 (#31443) ([942718e](https://github.com/bitnami/charts/commit/942718e8ec1eef14fcd63ebc11e2f2ce7a180c17)), closes [#31443](https://github.com/bitnami/charts/issues/31443)
+
+## <small>4.3.1 (2025-01-13)</small>
+
+* [bitnami/seaweedfs]: correct typo in values.yaml regarding s3.auth.existingSecret (#31339) ([31d0532](https://github.com/bitnami/charts/commit/31d0532a517bd0669b445e6974c2c5aace41697d)), closes [#31339](https://github.com/bitnami/charts/issues/31339)
+
+## 4.3.0 (2025-01-10)
+
+* [bitnami/seaweedfs] Make database check on start optional (#31277) ([ddb8a97](https://github.com/bitnami/charts/commit/ddb8a97d80c5bc87f2c33be751fbc35797f5f1be)), closes [#31277](https://github.com/bitnami/charts/issues/31277)
+
+## <small>4.2.1 (2025-01-07)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/seaweedfs] Release 4.2.1 (#31244) ([75fba5d](https://github.com/bitnami/charts/commit/75fba5d61dbf307dabd130d1ff3f621bb85320cc)), closes [#31244](https://github.com/bitnami/charts/issues/31244)
+
 ## 4.2.0 (2024-12-10)
 
-* [bitnami/seaweedfs] Detect non-standard images ([#30967](https://github.com/bitnami/charts/pull/30967))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/seaweedfs] Detect non-standard images (#30967) ([a4d9265](https://github.com/bitnami/charts/commit/a4d9265e61197d5ed5e6c4a0f85ce7460abd4a66)), closes [#30967](https://github.com/bitnami/charts/issues/30967)
 
 ## <small>4.1.2 (2024-12-04)</small>
 

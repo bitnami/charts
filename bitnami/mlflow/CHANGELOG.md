@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.3.1 (2024-12-11)
+## 2.3.2 (2025-01-20)
 
-* [bitnami/mlflow] Release 2.3.1 ([#30994](https://github.com/bitnami/charts/pull/30994))
+* [bitnami/mlflow] Release 2.3.2 ([#31485](https://github.com/bitnami/charts/pull/31485))
+
+## <small>2.3.1 (2024-12-11)</small>
+
+* [bitnami/mlflow] Release 2.3.1 (#30994) ([d5a8c38](https://github.com/bitnami/charts/commit/d5a8c380742726bd6268ccaa96a63bb57d1d64db)), closes [#30994](https://github.com/bitnami/charts/issues/30994)
 
 ## 2.3.0 (2024-12-10)
 
