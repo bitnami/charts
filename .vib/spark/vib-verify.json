@@ -13,7 +13,7 @@
         ],
         "resources": {
           "url": "{SHA_ARCHIVE}",
-          "path": "/bitnami/airflow"
+          "path": "/bitnami/spark"
         }
       },
       "actions": [
@@ -29,12 +29,12 @@
       "context": {
         "resources": {
           "url": "{SHA_ARCHIVE}",
-          "path": "/bitnami/airflow"
+          "path": "/bitnami/spark"
         },
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
-            "name": "L4"
+            "name": "S4"
           }
         }
       },
@@ -45,11 +45,11 @@
             "resources": {
               "path": "/.vib"
             },
-            "tests_file": "airflow/goss/goss.yaml",
-            "vars_file": "airflow/runtime-parameters.yaml",
+            "tests_file": "spark/goss/goss.yaml",
+            "vars_file": "spark/runtime-parameters.yaml",
             "remote": {
               "pod": {
-                "workload": "deploy-airflow-web"
+                "workload": "sts-spark-worker"
               }
             }
           }
@@ -58,13 +58,12 @@
           "action_id": "cypress",
           "params": {
             "resources": {
-              "path": "/.vib/superset/cypress"
+              "path": "/.vib/spark/cypress"
             },
-            "endpoint": "lb-superset-web-http",
+            "endpoint": "lb-spark-master-svc-http",
             "app_protocol": "HTTP",
             "env": {
-              "username": "user",
-              "password": "ComplicatedPassword123!4"
+              "expectedWorkers": "2"
             }
           }
         },
