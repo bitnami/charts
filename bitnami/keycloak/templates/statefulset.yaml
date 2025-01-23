@@ -330,8 +330,8 @@ spec:
             - name: custom-init-scripts
               mountPath: /docker-entrypoint-initdb.d
             {{- end }}
-            {{- if .Values.extraVolumeMounts }}
-            {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- if .Values.keycloakConfigCli.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.keycloakConfigCli.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
         {{- if .Values.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.sidecars "context" $) | nindent 8 }}
@@ -367,6 +367,6 @@ spec:
           configMap:
             name: {{ include "keycloak.initdbScriptsCM" . }}
         {{- end }}
-        {{- if .Values.extraVolumes }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
+        {{- if .Values.keycloakConfigCli.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.keycloakConfigCli.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
