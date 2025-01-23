@@ -73,10 +73,13 @@ spec:
       {{- end }}
       initContainers:
         {{- if .Values.waitForDB.enabled }}
-        {{- include "superset.initContainers.waitForDB" . | nindent 8}}
+        {{- include "superset.initContainers.waitForDB" . | nindent 8 }}
         {{- end }}
         {{- if .Values.waitForRedis.enabled }}
-        {{- include "superset.initContainers.waitForRedis" . | nindent 8}}
+        {{- include "superset.initContainers.waitForRedis" . | nindent 8 }}
+        {{- end }}
+        {{- if and .Values.web.waitForExamples.enabled .Values.loadExamples }}
+        {{- include "superset.initContainers.waitForExamples" . | nindent 8 }}
         {{- end }}
         {{- if .Values.web.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.web.initContainers "context" $) | nindent 8 }}
@@ -84,7 +87,7 @@ spec:
       containers:
         - name: superset-web
           image: {{ template "superset.image" . }}
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.web.containerSecurityContext.enabled }}
           securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.web.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}

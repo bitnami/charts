@@ -74,10 +74,10 @@ spec:
       {{- end }}
       initContainers:
         {{- if .Values.waitForDB.enabled }}
-        {{- include "superset.initContainers.waitForDB" . | nindent 8}}
+        {{- include "superset.initContainers.waitForDB" . | nindent 8 }}
         {{- end }}
         {{- if .Values.waitForRedis.enabled }}
-        {{- include "superset.initContainers.waitForRedis" . | nindent 8}}
+        {{- include "superset.initContainers.waitForRedis" . | nindent 8 }}
         {{- end }}
         {{- if .Values.flower.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.flower.initContainers "context" $) | nindent 8 }}
@@ -85,7 +85,7 @@ spec:
       containers:
         - name: celery-flower
           image: {{ template "superset.image" . }}
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.flower.containerSecurityContext.enabled }}
           securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.flower.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}

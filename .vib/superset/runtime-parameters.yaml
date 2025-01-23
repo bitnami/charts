@@ -2,6 +2,8 @@ auth:
   password: ComplicatedPassword123!4
 loadExamples: true
 web:
+  waitForExamples:
+    enabled: true
   service:
     ports:
       http: 80

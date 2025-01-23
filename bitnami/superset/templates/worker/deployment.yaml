@@ -73,10 +73,10 @@ spec:
       {{- end }}
       initContainers:
         {{- if .Values.waitForDB.enabled }}
-        {{- include "superset.initContainers.waitForDB" . | nindent 8}}
+        {{- include "superset.initContainers.waitForDB" . | nindent 8 }}
         {{- end }}
         {{- if .Values.waitForRedis.enabled }}
-        {{- include "superset.initContainers.waitForRedis" . | nindent 8}}
+        {{- include "superset.initContainers.waitForRedis" . | nindent 8 }}
         {{- end }}
         {{- if .Values.worker.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.worker.initContainers "context" $) | nindent 8 }}
@@ -84,7 +84,7 @@ spec:
       containers:
         - name: celery-worker
           image: {{ template "superset.image" . }}
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.worker.containerSecurityContext.enabled }}
           securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.worker.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}

@@ -575,6 +575,56 @@ web:
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
 
+  ## 'wait-for-examples' init container parameters
+  ##
+  waitForExamples:
+    ## @param web.waitForExamples.enabled Enable init container that waits for the load_examples command to finish before starting the webserver
+    ##
+    enabled: false
+    ## Init container's resource requests and limits
+    ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+    ## @param web.waitForExamples.resourcesPreset Set init container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if waitForExamples.resources is set (waitForExamples.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+    ##
+    resourcesPreset: "nano"
+    ## @param web.waitForExamples.resources Set init container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## Example:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    resources: {}
+    ## InitContainer Security Context
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+    ## @param web.waitForExamples.containerSecurityContext.enabled Enabled wait-for-redis initcontainer's Security Context
+    ## @param web.waitForExamples.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in wait-for-redis initcontainer
+    ## @param web.waitForExamples.containerSecurityContext.runAsUser Set runAsUser in wait-for-redis initcontainer's Security Context
+    ## @param web.waitForExamples.containerSecurityContext.runAsGroup Set runAsGroup in wait-for-redis initcontainer's Security Context
+    ## @param web.waitForExamples.containerSecurityContext.runAsNonRoot Set runAsNonRoot in wait-for-redis initcontainer's Security Context
+    ## @param web.waitForExamples.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in wait-for-redis initcontainer's Security Context
+    ## @param web.waitForExamples.containerSecurityContext.privileged Set privileged in wait-for-redis initcontainer's Security Context
+    ## @param web.waitForExamples.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in wait-for-redis initcontainer's Security Context
+    ## @param web.waitForExamples.containerSecurityContext.capabilities.drop List of capabilities to be dropped in wait-for-redis initcontainer
+    ## @param web.waitForExamples.containerSecurityContext.seccompProfile.type Set seccomp profile in wait-for-redis initcontainer
+    ##
+    containerSecurityContext:
+      enabled: true
+      seLinuxOptions: {}
+      runAsUser: 1001
+      runAsGroup: 1001
+      runAsNonRoot: true
+      readOnlyRootFilesystem: false
+      privileged: false
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop: ["ALL"]
+      seccompProfile:
+        type: "RuntimeDefault"
+
 ## Superset Celery worker
 ##
 worker:
@@ -1171,7 +1221,7 @@ beat:
   ## @param beat.resourcesPreset Set Superset celery beat container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if beat.resources is set (beat.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "large"
+  resourcesPreset: "small"
   ## @param beat.resources Set Superset celery beat container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -1949,7 +1999,7 @@ ingress:
 ## 'wait-for-db' init container parameters
 ##
 waitForDB:
-  ## @param waitForDB.enabled Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`
+  ## @param waitForDB.enabled Enable init container that waits for the Database to be available
   ##
   enabled: true
   ## Init container's resource requests and limits
@@ -1999,7 +2049,7 @@ waitForDB:
 ## 'wait-for-redis' init container parameters
 ##
 waitForRedis:
-  ## @param waitForRedis.enabled Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`
+  ## @param waitForRedis.enabled Enable init container that waits for Redis to be available
   ##
   enabled: true
   ## Init container's resource requests and limits

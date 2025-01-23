@@ -315,6 +315,48 @@ Init container definition to wait for Redis
     {{- include "superset.configure.redis" . | nindent 4 }}
 {{- end }}
 
+{{- define "superset.initContainers.waitForExamples" -}}
+# NOTE: The value redis.image is not available unless redis.enabled is not set. We could change this to use os-shell if
+# it had the binary wait-for-port.
+- name: wait-for-examples
+  image: {{ include "common.images.image" (dict "imageRoot" .Values.postgresql.image "global" .Values.global) }}
+  imagePullPolicy: {{ .Values.postgresql.image.pullPolicy  }}
+  {{- if .Values.web.waitForExamples.resources }}
+  resources: {{ toYaml .Values.web.waitForExamples.resources | nindent 4 }}
+  {{- else if ne .Values.web.waitForExamples.resourcesPreset "none" }}
+  resources: {{- include "common.resources.preset" (dict "type" .Values.web.waitForExamples.resourcesPreset) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.web.waitForExamples.containerSecurityContext.enabled }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.web.waitForExamples.containerSecurityContext "context" $) | nindent 4 }}
+  {{- end }}
+  command:
+    - /bin/bash
+  args:
+    - -ec
+    - |
+        set -o errexit
+        set -o nounset
+        set -o pipefail
+
+        . /opt/bitnami/scripts/libos.sh
+        . /opt/bitnami/scripts/liblog.sh
+        . /opt/bitnami/scripts/libpostgresql.sh
+
+        check_examples_database() {
+            echo "SELECT dashboard_title FROM dashboards" | postgresql_remote_execute_print_output "$SUPERSET_DATABASE_HOST" "$SUPERSET_DATABASE_PORT_NUMBER" "$SUPERSET_DATABASE_NAME" "$SUPERSET_DATABASE_USER" "$SUPERSET_DATABASE_PASSWORD" | grep "Dashboard"
+        }
+
+        info "Checking if the 'examples' database exists at $SUPERSET_DATABASE_HOST:$SUPERSET_DATABASE_PORT_NUMBER"
+        if ! retry_while "check_examples_database"; then
+            error "Examples database not ready yet"
+            exit 1
+        else
+            info "Connected to the PostgreSQL instance"
+        fi
+  env:
+    {{- include "superset.configure.database" . | nindent 4 }}
+{{- end }}
+
 {{/*
 Compile all warnings into a single message.
 */}}
