@@ -1,8 +1,17 @@
 # Changelog
 
-## 4.3.1 (2024-12-10)
+## 4.3.3 (2025-01-17)
 
-* [bitnami/kube-state-metrics] Fix typo in NOTES.txt ([#30930](https://github.com/bitnami/charts/pull/30930))
+* [bitnami/kube-state-metrics] Release 4.3.3 ([#31428](https://github.com/bitnami/charts/pull/31428))
+
+## <small>4.3.2 (2025-01-13)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/kube-state-metrics] Release 4.3.2 (#31317) ([a0c2fe7](https://github.com/bitnami/charts/commit/a0c2fe7e76e93b29f8b944b9c7fcb13001da8a5a)), closes [#31317](https://github.com/bitnami/charts/issues/31317)
+
+## <small>4.3.1 (2024-12-10)</small>
+
+* [bitnami/kube-state-metrics] Fix typo in NOTES.txt (#30930) ([c2474c7](https://github.com/bitnami/charts/commit/c2474c7583d5d0dcc953bbc38a3a300e4f84ddaf)), closes [#30930](https://github.com/bitnami/charts/issues/30930)
 
 ## 4.3.0 (2024-12-10)
 

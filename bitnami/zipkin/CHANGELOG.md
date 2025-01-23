@@ -1,8 +1,17 @@
 # Changelog
 
+## 1.1.2 (2025-01-21)
+
+* bitnami/zipkin Remove quote for the host ([#31374](https://github.com/bitnami/charts/pull/31374))
+
+## <small>1.1.1 (2025-01-07)</small>
+
+* [bitnami/zipkin] Release 1.1.1 (#31228) ([a71714c](https://github.com/bitnami/charts/commit/a71714cd224837c124b989f7ffd5b795ca0fb699)), closes [#31228](https://github.com/bitnami/charts/issues/31228)
+
 ## 1.1.0 (2024-12-10)
 
-* [bitnami/zipkin] Detect non-standard images ([#30971](https://github.com/bitnami/charts/pull/30971))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/zipkin] Detect non-standard images (#30971) ([de87aad](https://github.com/bitnami/charts/commit/de87aad513e618342b252aed48805d4b2c9d3322)), closes [#30971](https://github.com/bitnami/charts/issues/30971)
 
 ## <small>1.0.5 (2024-12-05)</small>
 

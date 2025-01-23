@@ -1,8 +1,37 @@
 # Changelog
 
-## 24.3.2 (2024-12-20)
+## 24.4.6 (2025-01-20)
 
-* [bitnami/keycloak] Update KEYCLOAK_ADMIN env variables deprecation ([#30636](https://github.com/bitnami/charts/pull/30636))
+* [bitnami/keycloak] Improve keycloak value file comments on extraEnvVars property ([#31054](https://github.com/bitnami/charts/pull/31054))
+
+## <small>24.4.5 (2025-01-20)</small>
+
+* [bitnami/keycloak] Fix quotes for handling KC_PROXY_HEADER when options is set to passthrough (#3145 ([cd8d753](https://github.com/bitnami/charts/commit/cd8d753aa9af28a55c935c85cae5f967096eba5b)), closes [#31459](https://github.com/bitnami/charts/issues/31459)
+
+## <small>24.4.4 (2025-01-15)</small>
+
+* [bitnami/keycloak] Release 24.4.4 (#31380) ([820f59b](https://github.com/bitnami/charts/commit/820f59b6f9be409f7c9f0a3881975f451fe49174)), closes [#31380](https://github.com/bitnami/charts/issues/31380)
+
+## <small>24.4.3 (2025-01-14)</small>
+
+* [bitnami/keycloak] Release 24.4.3 (#31369) ([2276613](https://github.com/bitnami/charts/commit/2276613499faf4a44286e8bdc519f69ed9d7fa77)), closes [#31369](https://github.com/bitnami/charts/issues/31369)
+
+## <small>24.4.2 (2025-01-13)</small>
+
+* [bitnami/keycloak] Release 24.4.2 (#31340) ([e81606c](https://github.com/bitnami/charts/commit/e81606cb05043717405bc44e97e41b12dfe9992a)), closes [#31340](https://github.com/bitnami/charts/issues/31340)
+
+## <small>24.4.1 (2025-01-12)</small>
+
+* [bitnami/keycloak] Release 24.4.1 (#31305) ([24fc9ab](https://github.com/bitnami/charts/commit/24fc9abfdbb376fe367345c367fdd433d0ec1bde)), closes [#31305](https://github.com/bitnami/charts/issues/31305)
+
+## 24.4.0 (2025-01-10)
+
+* [bitnami/keycloak] add option to use dedicated version bound headless service for jgroups discovery  ([d1a8d92](https://github.com/bitnami/charts/commit/d1a8d923c78fb5d170267ef8554ae47c29864f59)), closes [#31271](https://github.com/bitnami/charts/issues/31271) [#31072](https://github.com/bitnami/charts/issues/31072)
+
+## <small>24.3.2 (2024-12-30)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/keycloak] Update KEYCLOAK_ADMIN env variables deprecation (#30636) ([668bd27](https://github.com/bitnami/charts/commit/668bd2772c5ea45af7b1b57141c1776ccf4169f4)), closes [#30636](https://github.com/bitnami/charts/issues/30636)
 
 ## <small>24.3.1 (2024-12-16)</small>
 

@@ -1,8 +1,23 @@
 # Changelog
 
+## 3.8.3 (2025-01-17)
+
+* [bitnami/grafana-tempo] Release 3.8.3 ([#31423](https://github.com/bitnami/charts/pull/31423))
+
+## <small>3.8.2 (2025-01-14)</small>
+
+* [bitnami/grafana-tempo] Release 3.8.2 (#31353) ([34e557d](https://github.com/bitnami/charts/commit/34e557d61a81aab6a20a39494e9cc9df5d62841b)), closes [#31353](https://github.com/bitnami/charts/issues/31353)
+
+## <small>3.8.1 (2025-01-12)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/grafana-tempo] Release 3.8.1 (#31315) ([03166d0](https://github.com/bitnami/charts/commit/03166d03a6c5de421ee01c691eeec322658d4b8e)), closes [#31315](https://github.com/bitnami/charts/issues/31315)
+* Update README.md (#31141) ([0ca0ca4](https://github.com/bitnami/charts/commit/0ca0ca4014dda6d04f62849e8ee78516d692a639)), closes [#31141](https://github.com/bitnami/charts/issues/31141)
+
 ## 3.8.0 (2024-12-10)
 
-* [bitnami/grafana-tempo] Detect non-standard images ([#30885](https://github.com/bitnami/charts/pull/30885))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/grafana-tempo] Detect non-standard images (#30885) ([212c966](https://github.com/bitnami/charts/commit/212c9666abe26c0897ee42e2e3ed376f8e0d2769)), closes [#30885](https://github.com/bitnami/charts/issues/30885)
 
 ## <small>3.7.14 (2024-12-03)</small>
 

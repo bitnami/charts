@@ -681,11 +681,12 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 
 ### Other parameters
 
-| Name                | Description                                                                                                          | Value  |
-| ------------------- | -------------------------------------------------------------------------------------------------------------------- | ------ |
-| `rbac.create`       | Create the RBAC roles for API accessibility                                                                          | `true` |
-| `rbac.rules`        | Custom RBAC rules to set                                                                                             | `[]`   |
-| `tlsExistingSecret` | Name of the existingSecret to be use in both contour and envoy. If it is not nil `contour.certgen` will be disabled. | `""`   |
+| Name                | Description                                                                                                          | Value   |
+| ------------------- | -------------------------------------------------------------------------------------------------------------------- | ------- |
+| `rbac.create`       | Create the RBAC roles for API accessibility                                                                          | `true`  |
+| `rbac.rules`        | Custom RBAC rules to set                                                                                             | `[]`    |
+| `tlsExistingSecret` | Name of the existingSecret to be use in both contour and envoy. If it is not nil `contour.certgen` will be disabled. | `""`    |
+| `useCertManager`    | Use Cert-manager instead of Contour certgen to issue certificates for TLS connection between Contour and Envoy.      | `false` |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

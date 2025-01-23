@@ -1,8 +1,18 @@
 # Changelog
 
+## 16.4.2 (2025-01-20)
+
+* [bitnami/mongodb] remove undefined rts key from network policy template ([#31356](https://github.com/bitnami/charts/pull/31356))
+
+## <small>16.4.1 (2025-01-15)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/mongodb] Release 16.4.1 (#31390) ([639b28e](https://github.com/bitnami/charts/commit/639b28e5326003ba369f423c9718f1a6a4b4985c)), closes [#31390](https://github.com/bitnami/charts/issues/31390)
+
 ## 16.4.0 (2024-12-10)
 
-* [bitnami/mongodb] Detect non-standard images ([#30926](https://github.com/bitnami/charts/pull/30926))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/mongodb] Detect non-standard images (#30926) ([9b7cdc2](https://github.com/bitnami/charts/commit/9b7cdc25e189dcb8256a4a11aa35bf46fa01b6c7)), closes [#30926](https://github.com/bitnami/charts/issues/30926)
 
 ## <small>16.3.3 (2024-12-06)</small>
 

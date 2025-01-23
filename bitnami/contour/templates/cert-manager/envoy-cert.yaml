@@ -1,0 +1,18 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.useCertManager }}
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ printf "%s-envoy" (include "common.names.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+spec:
+  secretName: {{ printf "%s-envoy-crt" (include "common.names.fullname" .) }}
+  commonName: "envoy"
+  issuerRef:
+    name: {{ include "common.names.fullname" . | quote }}
+    kind: Issuer
+{{- end }}
