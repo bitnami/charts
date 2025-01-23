@@ -94,7 +94,6 @@ spec:
             {{- end }}
             - name: ETCD_INITIAL_CLUSTER
               value: {{ join "," $initialCluster | quote }}
-            {{- end }}
             {{- if and .Values.auth.client.secureTransport .Values.auth.client.useAutoTLS }}
             - name: ETCD_AUTO_TLS
               value: "true"
