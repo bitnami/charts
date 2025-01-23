@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.3.2 (2025-01-22)
+## 2.3.2 (2025-01-23)
 
 * [bitnami/deepspeed] Release 2.3.2 ([#31505](https://github.com/bitnami/charts/pull/31505))
 
