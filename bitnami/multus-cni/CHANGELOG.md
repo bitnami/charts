@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.2.2 (2025-01-17)
+## 2.2.3 (2025-01-23)
 
-* [bitnami/multus-cni] Release 2.2.2 ([#31434](https://github.com/bitnami/charts/pull/31434))
+* [multus-cni] Add --multus-kubeconfig-file-host arg ([#31045](https://github.com/bitnami/charts/pull/31045))
+
+## <small>2.2.2 (2025-01-17)</small>
+
+* [bitnami/multus-cni] Release 2.2.2 (#31434) ([fc5669d](https://github.com/bitnami/charts/commit/fc5669d0eeffd90df6f1d0c408a3b29b005d912b)), closes [#31434](https://github.com/bitnami/charts/issues/31434)
 
 ## <small>2.2.1 (2025-01-15)</small>
 
