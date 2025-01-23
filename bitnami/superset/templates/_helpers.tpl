@@ -71,7 +71,7 @@ Get the Postgresql credentials secret.
 Get the secret name
 */}}
 {{- define "superset.secretName" -}}
-{{- default (include "common.names.fullname" .) (tpl .Values.existingSecret .) -}}
+{{- default (include "common.names.fullname" .) (tpl .Values.auth.existingSecret .) -}}
 {{- end -}}
 
 {{/*

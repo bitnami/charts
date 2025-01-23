@@ -106,9 +106,6 @@ config: ""
 ## @param existingConfigmap The name of an existing ConfigMap with your custom configuration for Superset
 ##
 existingConfigmap: ""
-## @param existingSecret The name of an existing secret containing the Superset Secret key and user password, under the keys 'superset-secret-key' and 'superset-password', respectively
-##
-existingSecret: ""
 ## @param loadExamples If set to true, the Superset examples database will be loaded at startup
 ##
 loadExamples: false
