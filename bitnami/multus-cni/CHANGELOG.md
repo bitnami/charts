@@ -8,10 +8,6 @@
 
 * [bitnami/multus-cni] Release 2.2.2 (#31434) ([fc5669d](https://github.com/bitnami/charts/commit/fc5669d0eeffd90df6f1d0c408a3b29b005d912b)), closes [#31434](https://github.com/bitnami/charts/issues/31434)
 
-## <small>2.2.2 (2025-01-17)</small>
-
-* [bitnami/multus-cni] Release 2.2.2 ([#31434](https://github.com/bitnami/charts/pull/31434))
-
 ## <small>2.2.1 (2025-01-15)</small>
 
 * [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
