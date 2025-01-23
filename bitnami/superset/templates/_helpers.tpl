@@ -71,22 +71,14 @@ Get the Postgresql credentials secret.
 Get the secret name
 */}}
 {{- define "superset.secretName" -}}
-{{- if .Values.existingSecret -}}
-    {{- print .Values.existingSecret -}}
-{{- else -}}
-    {{- print (include "common.names.fullname" .) -}}
-{{- end -}}
+{{ default (include "common.names.fullname" .) (tpl .Values.existingSecret .) -}}
 {{- end -}}
 
 {{/*
 Get the configmap name
 */}}
 {{- define "superset.configMapName" -}}
-{{- if .Values.existingConfigmap -}}
-    {{- print (tpl .Values.existingConfigmap $) -}}
-{{- else -}}
-    {{- printf "%s-configuration" (include "common.names.fullname" .) -}}
-{{- end -}}
+{{ default (printf "%s-configuration" (include "common.names.fullname" .)) (tpl .Values.existingConfigmap .) -}}
 {{- end -}}
 
 {{/*
