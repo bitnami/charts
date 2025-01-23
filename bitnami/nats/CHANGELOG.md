@@ -1,8 +1,12 @@
 # Changelog
 
-## 8.5.4 (2025-01-23)
+## 9.0.0 (2025-01-23)
 
-* [bitnami/nats] Improve NATS routes configuration ([#31523](https://github.com/bitnami/charts/pull/31523))
+* [bitnami/nats] NATS chart based on scratch image ([#31516](https://github.com/bitnami/charts/pull/31516))
+
+## <small>8.5.4 (2025-01-23)</small>
+
+* [bitnami/nats] Improve NATS routes configuration (#31523) ([293d9e2](https://github.com/bitnami/charts/commit/293d9e20aa93cf76f020561a38f5380f55e5567b)), closes [#31523](https://github.com/bitnami/charts/issues/31523) [#30124](https://github.com/bitnami/charts/issues/30124)
 
 ## <small>8.5.3 (2025-01-17)</small>
 
