@@ -6,7 +6,7 @@
 
 ## <small>2.4.6 (2025-01-24)</small>
 
-* [bitnami/pinniped] Release 2.4.6 ([#31578](https://github.com/bitnami/charts/pull/31578))
+* [bitnami/pinniped] Release 2.4.6 (#31578) ([bdb886b](https://github.com/bitnami/charts/commit/bdb886b13ad7b43e211f601eccbccb4460c3de00)), closes [#31578](https://github.com/bitnami/charts/issues/31578)
 
 ## <small>2.4.5 (2025-01-23)</small>
 
