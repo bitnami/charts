@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.1.16 (2025-01-16)
+## 2.1.17 (2025-01-24)
 
-* [bitnami/chainloop] Release 2.1.16 ([#31410](https://github.com/bitnami/charts/pull/31410))
+* [bitnami/chainloop] Release 2.1.17 ([#31544](https://github.com/bitnami/charts/pull/31544))
+
+## <small>2.1.16 (2025-01-16)</small>
+
+* [bitnami/chainloop] Release 2.1.16 (#31410) ([71c2a13](https://github.com/bitnami/charts/commit/71c2a13bcbe100cc0fa1897068f70183138fd060)), closes [#31410](https://github.com/bitnami/charts/issues/31410)
 
 ## <small>2.1.15 (2025-01-15)</small>
 
