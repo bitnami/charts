@@ -1,8 +1,12 @@
 # Changelog
 
+## 11.0.1 (2025-01-24)
+
+* [bitnami/milvus] Release 11.0.1 ([#31570](https://github.com/bitnami/charts/pull/31570))
+
 ## 11.0.0 (2025-01-22)
 
-* [bitnami/milvus] Update ETCD to major 11 ([#31509](https://github.com/bitnami/charts/pull/31509))
+* [bitnami/milvus] Update ETCD to major 11 (#31509) ([3def614](https://github.com/bitnami/charts/commit/3def6145de0f57541026afb80f41f57c94f4a37f)), closes [#31509](https://github.com/bitnami/charts/issues/31509)
 
 ## <small>10.1.7 (2025-01-20)</small>
 
