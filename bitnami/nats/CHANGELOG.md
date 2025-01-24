@@ -1,8 +1,12 @@
 # Changelog
 
+## 9.0.1 (2025-01-24)
+
+* [bitnami/nats] Release 9.0.1 ([#31572](https://github.com/bitnami/charts/pull/31572))
+
 ## 9.0.0 (2025-01-23)
 
-* [bitnami/nats] NATS chart based on scratch image ([#31516](https://github.com/bitnami/charts/pull/31516))
+* [bitnami/nats] NATS chart based on scratch image (#31516) ([37c61ed](https://github.com/bitnami/charts/commit/37c61ed57feb0c18938fc18ce7099e51662d924a)), closes [#31516](https://github.com/bitnami/charts/issues/31516)
 
 ## <small>8.5.4 (2025-01-23)</small>
 

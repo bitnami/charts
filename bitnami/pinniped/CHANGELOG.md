@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.4.6 (2025-01-24)
+## 2.4.7 (2025-01-24)
 
 * [bitnami/pinniped] Ensure rbac and networkpolicy is not created for Concierge when disabled ([#31564](https://github.com/bitnami/charts/pull/31564))
+
+## <small>2.4.6 (2025-01-24)</small>
+
+* [bitnami/pinniped] Release 2.4.6 ([#31578](https://github.com/bitnami/charts/pull/31578))
 
 ## <small>2.4.5 (2025-01-23)</small>
 
