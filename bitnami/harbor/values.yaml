@@ -1475,7 +1475,7 @@ core:
   ## The secret must contain the keys:
   ## `CSRF_KEY` (optional - alternatively auto-generated),
   ## `HARBOR_ADMIN_PASSWORD` (optional - alternatively auto-generated),
-  ## `POSTGRESQL_PASSWORD` (optional - alternatively uses weak upstream default. Read below if you set it),
+  ## `POSTGRESQL_PASSWORD` (optional - alternatively uses weak upstream default. Read below if you set it. You must also set postgresql.auth.existingSecret to the same value as core.existingEnvVarsSecret for this to work!),
   ## `postgres-password` (required if POSTGRESQL_PASSWORD is set & must be the same as POSTGRESQL_PASSWORD.)
   ## `HARBOR_DATABASE_PASSWORD` (required if POSTGRESQL_PASSWORD is set & must be the same as POSTGRESQL_PASSWORD.)
   ## `REGISTRY_CREDENTIAL_USERNAME` (optional - alternatively weak defaults),

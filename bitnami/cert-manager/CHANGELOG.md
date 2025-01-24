@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.4.3 (2025-01-16)
+## 1.4.4 (2025-01-24)
 
-* [bitnami/cert-manager] Release 1.4.3 ([#31409](https://github.com/bitnami/charts/pull/31409))
+* [bitnami/cert-manager] Release 1.4.4 ([#31543](https://github.com/bitnami/charts/pull/31543))
+
+## <small>1.4.3 (2025-01-16)</small>
+
+* [bitnami/cert-manager] Release 1.4.3 (#31409) ([a8585ac](https://github.com/bitnami/charts/commit/a8585ac5863f67e360d4899903bf8f84ca94c266)), closes [#31409](https://github.com/bitnami/charts/issues/31409)
 
 ## <small>1.4.2 (2025-01-16)</small>
 

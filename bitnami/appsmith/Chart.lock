@@ -4,9 +4,9 @@ dependencies:
   version: 20.6.3
 - name: mongodb
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 16.4.1
+  version: 16.4.2
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
   version: 2.29.0
-digest: sha256:0e41cf21e32d92cbdbd158c031ced7816bb1f5423f001266f82306a817c5f530
-generated: "2025-01-16T18:07:34.391716228Z"
+digest: sha256:8ff5b17bab2fd7a69fe3c1d43cb016641d7842bb719d7e87288db951d140d19c
+generated: "2025-01-23T15:21:11.528049285Z"

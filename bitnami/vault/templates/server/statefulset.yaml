@@ -246,6 +246,11 @@ spec:
             name: {{ include "vault.server.configmapName" . }}
         - name: home
           emptyDir: {}
+        {{- if and .Values.server.persistence.enabled .Values.server.persistence.existingClaim }}
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ .Values.server.persistence.existingClaim }}
+        {{- end }}
         {{- if .Values.server.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.server.extraVolumes "context" $) | nindent 8 }}
         {{- end }}

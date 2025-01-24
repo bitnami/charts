@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.4.4 (2025-01-17)
+## 2.4.5 (2025-01-22)
 
-* [bitnami/pinniped] Release 2.4.4 ([#31440](https://github.com/bitnami/charts/pull/31440))
+* [bitnami/pinniped] Ensure rbac and networkpolicy is not created for s… ([#31515](https://github.com/bitnami/charts/pull/31515))
+
+## <small>2.4.4 (2025-01-17)</small>
+
+* [bitnami/pinniped] Release 2.4.4 (#31440) ([c198f0f](https://github.com/bitnami/charts/commit/c198f0f46df6ceec39eda8f66177fc586a791082)), closes [#31440](https://github.com/bitnami/charts/issues/31440)
 
 ## <small>2.4.3 (2025-01-15)</small>
 
