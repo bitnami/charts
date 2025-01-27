@@ -13,6 +13,7 @@ jobs:
     steps:
       - uses: tgymnich/fork-sync@v1.8
         with:
-          owner: llvm
-          base: master
-          head: master   
+          token: ${{ secrets.AUTH_TOKEN_GITHUB_COM }}
+          owner: koren
+          base: main
+          head: main   
