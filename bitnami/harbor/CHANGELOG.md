@@ -1,6 +1,6 @@
 # Changelog
 
-## 24.1.9 (2025-01-26)
+## 24.2.0 (2025-01-27)
 
 * [bitnami/harbor] allow custom trivy db repository ([#31594](https://github.com/bitnami/charts/pull/31594))
 
