@@ -6,14 +6,30 @@ on:
   workflow_dispatch:
    
 jobs:
-  sync:
-
+  sync_with_upstream:
     runs-on: arc-runner-eks-small
+    name: Sync main with upstream latest
 
     steps:
-      - uses: tgymnich/fork-sync@v1.8
-        with:
-          token: ${{ secrets.AUTH_TOKEN_GITHUB_COM }}
-          owner: korenlev
-          base: main
-          head: main   
+    - name: Checkout main
+      uses: actions/checkout@v2
+      with:
+        ref: main
+
+    - name: Pull (Fast-Forward) upstream changes
+      id: sync
+      uses: aormsby/Fork-Sync-With-Upstream-action@v3.4.1
+      with:
+        target_sync_branch: main
+        upstream_sync_repo: bitnami/charts
+        upstream_sync_branch: main
+        target_repo_token: ${{ secrets.AUTH_TOKEN_GITHUB_COM }}
+
+    - name: Check for new commits
+      if: steps.sync.outputs.has_new_commits
+      run: echo "There were new commits."
+
+    - name: Timestamp
+      run: date
+
+   
