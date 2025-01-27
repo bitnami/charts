@@ -2925,9 +2925,9 @@ trivy:
   ##
   skipJavaDbUpdate: false
   ## @param trivy.dbRepository OCI repositor(ies) to retrieve the trivy vulnerability database from
-  dbRepository: "mirror.gcr.io/aquasec/trivy-db,ghcr.io/aquasecurity/trivy-db"
+  dbRepository: ""
   ## @param trivy.javaDbRepository OCI repositor(ies) to retrieve the Java trivy vulnerability database from
-  javaDbRepository: "ghcr.io/aquasecurity/trivy-java-db"
+  javaDbRepository: ""
   ## @param trivy.cacheDir Directory to store the cache
   ##
   cacheDir: "/bitnami/harbor-adapter-trivy/.cache"
