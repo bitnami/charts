@@ -32,7 +32,7 @@ keywords:
 maintainers:
 - name: Broadcom, Inc. All Rights Reserved.
   url: https://github.com/bitnami/charts
-name: postgresql
+name: postgresql-chart
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/postgresql
 version: 16.3.2
