@@ -129,19 +129,19 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 
 {{- define "harbor.database.rawPassword" -}}
 {{- if .Values.postgresql.enabled }}
-    {{- if .Values.global.postgresql }}
-        {{- if .Values.global.postgresql.auth }}
-            {{- coalesce .Values.global.postgresql.auth.postgresPassword .Values.postgresql.auth.postgresPassword -}}
-        {{- else -}}
-            {{- .Values.postgresql.auth.postgresPassword -}}
-        {{- end -}}
+  {{- if .Values.global.postgresql }}
+    {{- if .Values.global.postgresql.auth }}
+      {{- coalesce .Values.global.postgresql.auth.postgresPassword .Values.postgresql.auth.postgresPassword -}}
     {{- else -}}
-        {{- .Values.postgresql.auth.postgresPassword -}}
+      {{- .Values.postgresql.auth.postgresPassword -}}
     {{- end -}}
+  {{- else -}}
+    {{- .Values.postgresql.auth.postgresPassword -}}
+  {{- end -}}
 {{- else -}}
-    {{- if not .Values.externalDatabase.existingSecret -}}
-        {{- .Values.externalDatabase.password -}}
-    {{- end -}}
+  {{- if not .Values.externalDatabase.existingSecret -}}
+    {{- .Values.externalDatabase.password -}}
+  {{- end -}}
 {{- end -}}
 {{- end -}}
 
