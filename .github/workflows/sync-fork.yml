@@ -14,6 +14,6 @@ jobs:
       - uses: tgymnich/fork-sync@v1.8
         with:
           token: ${{ secrets.AUTH_TOKEN_GITHUB_COM }}
-          owner: koren
+          owner: korenlev
           base: main
           head: main   
