@@ -139,7 +139,9 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
         {{- .Values.postgresql.auth.postgresPassword -}}
     {{- end -}}
 {{- else -}}
-    {{- .Values.externalDatabase.password -}}
+    {{- if not .Values.externalDatabase.existingSecret -}}
+        {{- .Values.externalDatabase.password -}}
+    {{- end -}}
 {{- end -}}
 {{- end -}}
 
