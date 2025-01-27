@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.6.6 (2025-01-24)
+## 11.6.7 (2025-01-27)
 
-* [bitnami/nginx-ingress-controller] Release 11.6.6 ([#31576](https://github.com/bitnami/charts/pull/31576))
+* [bitnami/nginx-ingress-controller] Add --enable-metrics command line argument ([#31605](https://github.com/bitnami/charts/pull/31605))
+
+## <small>11.6.6 (2025-01-24)</small>
+
+* [bitnami/nginx-ingress-controller] Release 11.6.6 (#31576) ([e107d55](https://github.com/bitnami/charts/commit/e107d55a9114bc30359e4c2805cd17b4eb6b78c2)), closes [#31576](https://github.com/bitnami/charts/issues/31576)
 
 ## <small>11.6.5 (2025-01-17)</small>
 
