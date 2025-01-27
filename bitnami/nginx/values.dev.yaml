@@ -1,0 +1,26 @@
+ingress:
+  ## @param ingress.enabled Set to true to enable ingress record generation
+  ##
+  enabled: true
+  hostname: dsp-portal.dev.sp.dell.com
+  path: /
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: dsp-portal.dev.sp.dell.com
+    alb.ingress.kubernetes.io/scheme: internal
+    alb.ingress.kubernetes.io/group.name: saas-dsp-portal-dev
+    alb.ingress.kubernetes.io/certificate-arn: 'arn:aws:acm:eu-west-1:702886132326:certificate/aa01e3eb-053d-40c7-8f00-5f70741a3b3d'
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80},{"HTTPS": 443}]'
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/load-balancer-attributes: idle_timeout.timeout_seconds=4000
+    alb.ingress.kubernetes.io/healthcheck-port: '80'
+    alb.ingress.kubernetes.io/healthcheck-protocol: 'HTTP'
+    alb.ingress.kubernetes.io/success-codes: '200'
+    alb.ingress.kubernetes.io/healthcheck-path: '/health'
+
+  ingressClassName: "alb"
+  extraHosts: []
+  extraPaths:
+    - path: /service-a/*
+      backend:
+        serviceName: dsp-portal-service-a
+        servicePort: 5000
