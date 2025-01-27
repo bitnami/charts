@@ -1,8 +1,12 @@
 # Changelog
 
-## 32.1.1 (2024-12-12)
+## 32.1.2 (2025-01-21)
 
-* [bitnami/redmine] Release 32.1.1 ([#31001](https://github.com/bitnami/charts/pull/31001))
+* [bitnami/redmine] Release 32.1.2 ([#31487](https://github.com/bitnami/charts/pull/31487))
+
+## <small>32.1.1 (2024-12-12)</small>
+
+* [bitnami/redmine] Release 32.1.1 (#31001) ([211442a](https://github.com/bitnami/charts/commit/211442ab315fad505118ae4389ebc0056d3893d0)), closes [#31001](https://github.com/bitnami/charts/issues/31001)
 
 ## 32.1.0 (2024-12-10)
 

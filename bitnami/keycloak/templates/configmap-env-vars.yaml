@@ -17,7 +17,7 @@ data:
   KC_BOOTSTRAP_ADMIN_USERNAME: {{ .Values.auth.adminUser | quote }}
   KEYCLOAK_HTTP_PORT: {{ .Values.containerPorts.http | quote }}
   {{- if and .Values.proxy (empty .Values.proxyHeaders) }}
-  KEYCLOAK_PROXY_HEADERS: {{ ternary "" "xforwarded" (eq .Values.proxy "passthrough") }}
+  KEYCLOAK_PROXY_HEADERS: {{ ternary "" "xforwarded" (eq .Values.proxy "passthrough") | quote }}
   {{- else }}
   KEYCLOAK_PROXY_HEADERS: {{ .Values.proxyHeaders | quote }}
   {{- end }}

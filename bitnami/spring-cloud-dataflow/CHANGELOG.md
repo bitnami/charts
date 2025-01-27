@@ -1,8 +1,13 @@
 # Changelog
 
+## 34.1.1 (2025-01-17)
+
+* [bitnami/spring-cloud-dataflow] Release 34.1.1 ([#31451](https://github.com/bitnami/charts/pull/31451))
+
 ## 34.1.0 (2024-12-10)
 
-* [bitnami/spring-cloud-dataflow] Detect non-standard images ([#30968](https://github.com/bitnami/charts/pull/30968))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/spring-cloud-dataflow] Detect non-standard images (#30968) ([f1ceafb](https://github.com/bitnami/charts/commit/f1ceafba996e8b44a30abdff8594376a7e3b0399)), closes [#30968](https://github.com/bitnami/charts/issues/30968)
 
 ## <small>34.0.1 (2024-12-08)</small>
 
@@ -851,7 +856,7 @@
 
 ## 4.0.0 (2021-08-02)
 
-* [bitnami/several] Upadte READMEs ([eb3c291](https://github.com/bitnami/charts/commit/eb3c2916be233280f2226d9cdceb57b08ab4a23b))
+* [bitnami/several] Update READMEs ([eb3c291](https://github.com/bitnami/charts/commit/eb3c2916be233280f2226d9cdceb57b08ab4a23b))
 * [bitnami/several] Use the latest major version in subcharts (#7117) ([3c1c105](https://github.com/bitnami/charts/commit/3c1c105ce61d24a81e34bf7be5250bfe07068efb)), closes [#7117](https://github.com/bitnami/charts/issues/7117)
 
 ## <small>3.0.3 (2021-07-26)</small>

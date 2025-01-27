@@ -1,8 +1,16 @@
 # Changelog
 
-## 7.1.3 (2025-01-14)
+## 7.1.5 (2025-01-24)
 
-* [bitnami/argo-cd] Release 7.1.3 ([#31363](https://github.com/bitnami/charts/pull/31363))
+* [bitnami/argo-cd] Release 7.1.5 ([#31541](https://github.com/bitnami/charts/pull/31541))
+
+## <small>7.1.4 (2025-01-16)</small>
+
+* [bitnami/argo-cd] Release 7.1.4 (#31407) ([aef6466](https://github.com/bitnami/charts/commit/aef6466f8b9ee9d19b37dccd89d612673b487723)), closes [#31407](https://github.com/bitnami/charts/issues/31407)
+
+## <small>7.1.3 (2025-01-14)</small>
+
+* [bitnami/argo-cd] Release 7.1.3 (#31363) ([a6f0eb1](https://github.com/bitnami/charts/commit/a6f0eb19404e6760719e2f41c1f84c42adf49005)), closes [#31363](https://github.com/bitnami/charts/issues/31363)
 
 ## <small>7.1.2 (2025-01-03)</small>
 

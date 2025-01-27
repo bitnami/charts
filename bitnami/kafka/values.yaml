@@ -167,10 +167,12 @@ existingLog4jConfigMap: ""
 ## @param heapOpts Kafka Java Heap configuration
 ##
 heapOpts: -XX:InitialRAMPercentage=75 -XX:MaxRAMPercentage=75
-## @param brokerRackAssignment Set Broker Assignment for multi tenant environment Allowed values: `aws-az`
+## @param brokerRackAssignment Set Broker Assignment for multi tenant environment Allowed values: `aws-az`, `azure`
 ## ref: https://cwiki.apache.org/confluence/display/KAFKA/KIP-392%3A+Allow+consumers+to+fetch+from+closest+replica
 ##
 brokerRackAssignment: ""
+## @param brokerRackAssignmentApiVersion Set Broker Assignment API version when brokerRackAssignment set to : `azure`
+brokerRackAssignmentApiVersion: "2023-11-15"
 ## @param interBrokerProtocolVersion Override the setting 'inter.broker.protocol.version' during the ZK migration.
 ## Ref. https://docs.confluent.io/platform/current/installation/migrate-zk-kraft.html
 ##

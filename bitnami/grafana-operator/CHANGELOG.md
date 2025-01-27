@@ -1,8 +1,20 @@
 # Changelog
 
-## 4.9.2 (2025-01-16)
+## 4.9.5 (2025-01-24)
 
-* [bitnami/grafana-operator] Release 4.9.2 ([#31393](https://github.com/bitnami/charts/pull/31393))
+* [bitnami/grafana-operator] Release 4.9.5 ([#31556](https://github.com/bitnami/charts/pull/31556))
+
+## <small>4.9.4 (2025-01-21)</small>
+
+* [bitnami/grafana-operator] Add another missing CRD (#31406) ([09c1d15](https://github.com/bitnami/charts/commit/09c1d1585739f1c4e640dee8ef98a4b675d72482)), closes [#31406](https://github.com/bitnami/charts/issues/31406)
+
+## <small>4.9.3 (2025-01-17)</small>
+
+* [bitnami/grafana-operator] Release 4.9.3 (#31422) ([cd7288a](https://github.com/bitnami/charts/commit/cd7288a5a6afefe811fdcda6023863ad3dfc1ed3)), closes [#31422](https://github.com/bitnami/charts/issues/31422)
+
+## <small>4.9.2 (2025-01-16)</small>
+
+* [bitnami/grafana-operator] Release 4.9.2 (#31393) ([f4b98a6](https://github.com/bitnami/charts/commit/f4b98a615b5a98828edd0de67d40f7f7ce1358f4)), closes [#31393](https://github.com/bitnami/charts/issues/31393)
 
 ## <small>4.9.1 (2025-01-12)</small>
 

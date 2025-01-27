@@ -1,8 +1,20 @@
 # Changelog
 
-## 10.1.5 (2025-01-14)
+## 11.0.0 (2025-01-22)
 
-* [bitnami/milvus] Release 10.1.5 ([#31360](https://github.com/bitnami/charts/pull/31360))
+* [bitnami/milvus] Update ETCD to major 11 ([#31509](https://github.com/bitnami/charts/pull/31509))
+
+## <small>10.1.7 (2025-01-20)</small>
+
+* [bitnami/milvus] feat: :recycle: Use os-shell for config generation (#31460) ([fcf8bff](https://github.com/bitnami/charts/commit/fcf8bff7bea31b9fa7254e46804e26aa9bb1d914)), closes [#31460](https://github.com/bitnami/charts/issues/31460)
+
+## <small>10.1.6 (2025-01-17)</small>
+
+* [bitnami/milvus] Release 10.1.6 (#31432) ([e006414](https://github.com/bitnami/charts/commit/e0064149e9a00d882be4c891bef34dbd055734c5)), closes [#31432](https://github.com/bitnami/charts/issues/31432)
+
+## <small>10.1.5 (2025-01-14)</small>
+
+* [bitnami/milvus] Release 10.1.5 (#31360) ([5bffc89](https://github.com/bitnami/charts/commit/5bffc8907118be3811586323ba2f1450f3f43baf)), closes [#31360](https://github.com/bitnami/charts/issues/31360)
 
 ## <small>10.1.4 (2025-01-13)</small>
 

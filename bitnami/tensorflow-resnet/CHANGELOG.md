@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.3.1 (2024-12-11)
+## 4.3.2 (2025-01-20)
 
-* [bitnami/tensorflow-resnet] Release 4.3.1 ([#30987](https://github.com/bitnami/charts/pull/30987))
+* [bitnami/tensorflow-resnet] Release 4.3.2 ([#31479](https://github.com/bitnami/charts/pull/31479))
+
+## <small>4.3.1 (2024-12-11)</small>
+
+* [bitnami/tensorflow-resnet] Release 4.3.1 (#30987) ([495fc98](https://github.com/bitnami/charts/commit/495fc988405ce4917e5cfef01cd4cc1f2ff76eda)), closes [#30987](https://github.com/bitnami/charts/issues/30987)
 
 ## 4.3.0 (2024-12-10)
 

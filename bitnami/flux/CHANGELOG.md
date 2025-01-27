@@ -1,8 +1,17 @@
 # Changelog
 
-## 2.4.1 (2025-01-13)
+## 2.4.3 (2025-01-24)
 
-* [bitnami/flux] Release 2.4.1 ([#31313](https://github.com/bitnami/charts/pull/31313))
+* [bitnami/flux] Release 2.4.3 ([#31552](https://github.com/bitnami/charts/pull/31552))
+
+## <small>2.4.2 (2025-01-17)</small>
+
+* [bitnami/flux] Release 2.4.2 (#31416) ([640bfd8](https://github.com/bitnami/charts/commit/640bfd8b53078ebca0b9a87aa576931253c84196)), closes [#31416](https://github.com/bitnami/charts/issues/31416)
+
+## <small>2.4.1 (2025-01-13)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/flux] Release 2.4.1 (#31313) ([0ed2580](https://github.com/bitnami/charts/commit/0ed2580d9f39676cb6b12ab5c9f5df680fca7efc)), closes [#31313](https://github.com/bitnami/charts/issues/31313)
 
 ## 2.4.0 (2024-12-10)
 

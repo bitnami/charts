@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.5.1 (2024-12-16)
+## 1.5.2 (2025-01-25)
 
-* [bitnami/opensearch] Release 1.5.1 ([#31048](https://github.com/bitnami/charts/pull/31048))
+* [bitnami/opensearch] Release 1.5.2 ([#31592](https://github.com/bitnami/charts/pull/31592))
+
+## <small>1.5.1 (2024-12-16)</small>
+
+* [bitnami/opensearch] Release 1.5.1 (#31048) ([4f14ffa](https://github.com/bitnami/charts/commit/4f14ffa0492d1cf05f794be16a77b9fa02a1633c)), closes [#31048](https://github.com/bitnami/charts/issues/31048)
 
 ## 1.5.0 (2024-12-10)
 

@@ -1,8 +1,17 @@
 # Changelog
 
-## 11.4.1 (2025-01-08)
+## 11.4.3 (2025-01-24)
 
-* [bitnami/consul] Release 11.4.1 ([#31252](https://github.com/bitnami/charts/pull/31252))
+* [bitnami/consul] Release 11.4.3 ([#31547](https://github.com/bitnami/charts/pull/31547))
+
+## <small>11.4.2 (2025-01-17)</small>
+
+* [bitnami/consul] Release 11.4.2 (#31413) ([c8f4fa3](https://github.com/bitnami/charts/commit/c8f4fa37eca6aa96aaaa363b1de0738bf4eb5586)), closes [#31413](https://github.com/bitnami/charts/issues/31413)
+
+## <small>11.4.1 (2025-01-08)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/consul] Release 11.4.1 (#31252) ([4964e2d](https://github.com/bitnami/charts/commit/4964e2d57ab000c41f13cab5b92afbcb32d5b3b4)), closes [#31252](https://github.com/bitnami/charts/issues/31252)
 
 ## 11.4.0 (2024-12-10)
 

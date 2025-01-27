@@ -1,8 +1,16 @@
 # Changelog
 
-## 24.1.6 (2025-01-07)
+## 24.1.8 (2025-01-23)
 
-* [bitnami/harbor] Fix REGISTRY_HTTP_SECRET creation when not using an existing secret ([#31013](https://github.com/bitnami/charts/pull/31013))
+* [bitnami/harbor] Clarify usage of custom POSTGRESQL_PASSWORD ([#31507](https://github.com/bitnami/charts/pull/31507))
+
+## <small>24.1.7 (2025-01-17)</small>
+
+* [bitnami/harbor] Release 24.1.7 (#31457) ([a607b9f](https://github.com/bitnami/charts/commit/a607b9faa767ef8ed65f535c0a4563ebfb39429e)), closes [#31457](https://github.com/bitnami/charts/issues/31457)
+
+## <small>24.1.6 (2025-01-07)</small>
+
+* [bitnami/harbor] Fix REGISTRY_HTTP_SECRET creation when not using an existing secret (#31013) ([a58ae98](https://github.com/bitnami/charts/commit/a58ae9883672f4f8b55733b143a17279fd3c9e81)), closes [#31013](https://github.com/bitnami/charts/issues/31013)
 
 ## <small>24.1.5 (2025-01-02)</small>
 
