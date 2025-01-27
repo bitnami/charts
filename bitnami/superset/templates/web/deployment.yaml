@@ -6,7 +6,7 @@ SPDX-License-Identifier: APACHE-2.0
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: {{ printf "%s-web" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  name: {{ template "superset.web.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: superset-web
@@ -72,10 +72,10 @@ spec:
       terminationGracePeriodSeconds: {{ .Values.web.terminationGracePeriodSeconds }}
       {{- end }}
       initContainers:
-        {{- if .Values.waitForDB.enabled }}
+        {{- if .Values.defaultInitContainers.waitForDB.enabled }}
         {{- include "superset.initContainers.waitForDB" . | nindent 8 }}
         {{- end }}
-        {{- if .Values.waitForRedis.enabled }}
+        {{- if .Values.defaultInitContainers.waitForRedis.enabled }}
         {{- include "superset.initContainers.waitForRedis" . | nindent 8 }}
         {{- end }}
         {{- if and .Values.web.waitForExamples.enabled .Values.loadExamples }}

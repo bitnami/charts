@@ -33,9 +33,9 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
   targetRef:
-    apiVersion: apps/v1
+    apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
     kind: "Deployment"
-    name: {{ printf "%s-flower" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+    name: {{ template "superset.flower.fullname" . }}
   {{- if .Values.flower.autoscaling.vpa.updatePolicy }}
   updatePolicy:
     {{- with .Values.flower.autoscaling.vpa.updatePolicy.updateMode }}

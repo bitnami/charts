@@ -18,6 +18,38 @@ Return the proper Docker Image Registry Secret Names
 {{- end -}}
 
 {{/*
+Create a default fully qualified name for Superset web component.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+*/}}
+{{- define "superset.web.fullname" -}}
+{{- printf "%s-web" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
+Create a default fully qualified name for Superset Celery flower component.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+*/}}
+{{- define "superset.flower.fullname" -}}
+{{- printf "%s-flower" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
+Create a default fully qualified name for Superset Celery worker component.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+*/}}
+{{- define "superset.worker.fullname" -}}
+{{- printf "%s-worker" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
+Create a default fully qualified name for Superset Celery beat component.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+*/}}
+{{- define "superset.beat.fullname" -}}
+{{- printf "%s-beat" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
 Create a default fully qualified postgresql name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
@@ -114,11 +146,7 @@ Add environment variables to configure database values
 Add environment variables to configure database values
 */}}
 {{- define "superset.database.secretKey" -}}
-{{- if .Values.postgresql.enabled -}}
-    {{- print "password" -}}
-{{- else -}}
-    {{- print .Values.externalDatabase.existingSecretPasswordKey -}}
-{{- end -}}
+{{- ternary "password" (tpl .Values.externalDatabase.existingSecretPasswordKey .) .Values.postgresql.enabled -}}
 {{- end -}}
 
 {{/*
@@ -150,11 +178,7 @@ Add environment variables to configure redis values
 Add environment variables to configure redis values
 */}}
 {{- define "superset.redis.secretKey" -}}
-{{- if .Values.redis.enabled -}}
-    {{- print "redis-password" -}}
-{{- else -}}
-    {{- print .Values.externalRedis.existingSecretPasswordKey -}}
-{{- end -}}
+{{- ternary "redis-password" (tpl .Values.externalRedis.existingSecretPasswordKey .) .Values.redis.enabled -}}
 {{- end -}}
 
 {{/*
@@ -224,13 +248,13 @@ Init container definition to wait for PostgreSQL
 - name: wait-for-db
   image: {{ include "common.images.image" (dict "imageRoot" .Values.postgresql.image "global" .Values.global) }}
   imagePullPolicy: {{ .Values.postgresql.image.pullPolicy  }}
-  {{- if .Values.waitForDB.resources }}
-  resources: {{ toYaml .Values.waitForDB.resources | nindent 4 }}
-  {{- else if ne .Values.waitForDB.resourcesPreset "none" }}
-  resources: {{- include "common.resources.preset" (dict "type" .Values.waitForDB.resourcesPreset) | nindent 4 }}
+  {{- if .Values.defaultInitContainers.waitForDB.resources }}
+  resources: {{ toYaml .Values.defaultInitContainers.waitForDB.resources | nindent 4 }}
+  {{- else if ne .Values.defaultInitContainers.waitForDB.resourcesPreset "none" }}
+  resources: {{- include "common.resources.preset" (dict "type" .Values.defaultInitContainers.waitForDB.resourcesPreset) | nindent 4 }}
   {{- end }}
-  {{- if .Values.waitForDB.containerSecurityContext.enabled }}
-  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.waitForDB.containerSecurityContext "context" $) | nindent 4 }}
+  {{- if .Values.defaultInitContainers.waitForDB.containerSecurityContext.enabled }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.defaultInitContainers.waitForDB.containerSecurityContext "context" $) | nindent 4 }}
   {{- end }}
   command:
     - /bin/bash
@@ -269,13 +293,13 @@ Init container definition to wait for Redis
 - name: wait-for-redis
   image: {{ include "common.images.image" (dict "imageRoot" .Values.redis.image "global" .Values.global) }}
   imagePullPolicy: {{ .Values.redis.image.pullPolicy | quote }}
-  {{- if .Values.waitForRedis.resources }}
-  resources: {{ toYaml .Values.waitForRedis.resources | nindent 4 }}
-  {{- else if ne .Values.waitForRedis.resourcesPreset "none" }}
-  resources: {{- include "common.resources.preset" (dict "type" .Values.waitForRedis.resourcesPreset) | nindent 4 }}
+  {{- if .Values.defaultInitContainers.waitForRedis.resources }}
+  resources: {{ toYaml .Values.defaultInitContainers.waitForRedis.resources | nindent 4 }}
+  {{- else if ne .Values.defaultInitContainers.waitForRedis.resourcesPreset "none" }}
+  resources: {{- include "common.resources.preset" (dict "type" .Values.defaultInitContainers.waitForRedis.resourcesPreset) | nindent 4 }}
   {{- end }}
-  {{- if .Values.waitForRedis.containerSecurityContext.enabled }}
-  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.waitForRedis.containerSecurityContext "context" $) | nindent 4 }}
+  {{- if .Values.defaultInitContainers.waitForRedis.containerSecurityContext.enabled }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.defaultInitContainers.waitForRedis.containerSecurityContext "context" $) | nindent 4 }}
   {{- end }}
   command:
     - /bin/bash
@@ -308,8 +332,8 @@ Init container definition to wait for Redis
 {{- end }}
 
 {{- define "superset.initContainers.waitForExamples" -}}
-# NOTE: The value redis.image is not available unless redis.enabled is not set. We could change this to use os-shell if
-# it had the binary wait-for-port.
+# NOTE: The value postgresql.image is not available unless postgresql.enabled is not set.
+# We could change this to use superset image postgresql client.
 - name: wait-for-examples
   image: {{ include "common.images.image" (dict "imageRoot" .Values.postgresql.image "global" .Values.global) }}
   imagePullPolicy: {{ .Values.postgresql.image.pullPolicy  }}
@@ -364,7 +388,7 @@ Compile all warnings into a single message.
 {{- end -}}
 {{- end -}}
 
-{{/* Validate values of Appsmith - Postgresql */}}
+{{/* Validate values of Superset - Postgresql */}}
 {{- define "superset.validateValues.database" -}}
 {{- if and .Values.postgresql.enabled .Values.externalDatabase.host -}}
 superset: Database
@@ -380,7 +404,7 @@ superset: NoDatabase
 {{- end -}}
 {{- end -}}
 
-{{/* Validate values of Appsmith - Redis */}}
+{{/* Validate values of Superset - Redis */}}
 {{- define "superset.validateValues.redis" -}}
 {{- if and .Values.redis.enabled .Values.externalRedis.host -}}
 superset: Redis

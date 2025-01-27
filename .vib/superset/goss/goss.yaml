@@ -2,7 +2,11 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 http:
-  http://superset-web:80/health:
+  http://superset-web:{{ .Vars.web.service.ports.http }}/health:
+    status: 200
+    body:
+      - /OK/
+  http://127.0.0.1:{{ .Vars.web.containerPorts.http }}/health:
     status: 200
     body:
       - /OK/

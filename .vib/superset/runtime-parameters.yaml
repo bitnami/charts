@@ -4,6 +4,8 @@ loadExamples: true
 web:
   waitForExamples:
     enabled: true
+  containerPorts:
+    http: 8081
   service:
     ports:
       http: 80

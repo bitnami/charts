@@ -1989,108 +1989,108 @@ ingress:
   ##
   extraRules: []
 
-## @section Init Container Parameters
+## @section Default Init Container Parameters
 ##
-
-## 'wait-for-db' init container parameters
-##
-waitForDB:
-  ## @param waitForDB.enabled Enable init container that waits for the Database to be available
+defaultInitContainers:
+  ## 'wait-for-db' init container parameters
   ##
-  enabled: true
-  ## Init container's resource requests and limits
-  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param waitForDB.resourcesPreset Set init container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if waitForDB.resources is set (waitForDB.resources is recommended for production).
-  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
-  ##
-  resourcesPreset: "nano"
-  ## @param waitForDB.resources Set init container requests and limits for different resources like CPU or memory (essential for production workloads)
-  ## Example:
-  ## resources:
-  ##   requests:
-  ##     cpu: 2
-  ##     memory: 512Mi
-  ##   limits:
-  ##     cpu: 3
-  ##     memory: 1024Mi
-  ##
-  resources: {}
-  ## InitContainer Security Context
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param waitForDB.containerSecurityContext.enabled Enabled wait-for-db initcontainer's Security Context
-  ## @param waitForDB.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in wait-for-db initcontainer
-  ## @param waitForDB.containerSecurityContext.runAsUser Set runAsUser in wait-for-db initcontainer's Security Context
-  ## @param waitForDB.containerSecurityContext.runAsGroup Set runAsGroup in wait-for-db initcontainer's Security Context
-  ## @param waitForDB.containerSecurityContext.runAsNonRoot Set runAsNonRoot in wait-for-db initcontainer's Security Context
-  ## @param waitForDB.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in wait-for-db initcontainer's Security Context
-  ## @param waitForDB.containerSecurityContext.privileged Set privileged in wait-for-db initcontainer's Security Context
-  ## @param waitForDB.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in wait-for-db initcontainer's Security Context
-  ## @param waitForDB.containerSecurityContext.capabilities.drop List of capabilities to be dropped in wait-for-db initcontainer
-  ## @param waitForDB.containerSecurityContext.seccompProfile.type Set seccomp profile in wait-for-db initcontainer
-  ##
-  containerSecurityContext:
+  waitForDB:
+    ## @param defaultInitContainers.waitForDB.enabled Enable init container that waits for the Database to be available
+    ##
     enabled: true
-    seLinuxOptions: {}
-    runAsUser: 1001
-    runAsGroup: 1001
-    runAsNonRoot: true
-    readOnlyRootFilesystem: false
-    privileged: false
-    allowPrivilegeEscalation: false
-    capabilities:
-      drop: ["ALL"]
-    seccompProfile:
-      type: "RuntimeDefault"
+    ## Init container's resource requests and limits
+    ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+    ## @param defaultInitContainers.waitForDB.resourcesPreset Set init container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if waitForDB.resources is set (waitForDB.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+    ##
+    resourcesPreset: "nano"
+    ## @param defaultInitContainers.waitForDB.resources Set init container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## Example:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    resources: {}
+    ## InitContainer Security Context
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+    ## @param defaultInitContainers.waitForDB.containerSecurityContext.enabled Enabled wait-for-db initcontainer's Security Context
+    ## @param defaultInitContainers.waitForDB.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in wait-for-db initcontainer
+    ## @param defaultInitContainers.waitForDB.containerSecurityContext.runAsUser Set runAsUser in wait-for-db initcontainer's Security Context
+    ## @param defaultInitContainers.waitForDB.containerSecurityContext.runAsGroup Set runAsGroup in wait-for-db initcontainer's Security Context
+    ## @param defaultInitContainers.waitForDB.containerSecurityContext.runAsNonRoot Set runAsNonRoot in wait-for-db initcontainer's Security Context
+    ## @param defaultInitContainers.waitForDB.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in wait-for-db initcontainer's Security Context
+    ## @param defaultInitContainers.waitForDB.containerSecurityContext.privileged Set privileged in wait-for-db initcontainer's Security Context
+    ## @param defaultInitContainers.waitForDB.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in wait-for-db initcontainer's Security Context
+    ## @param defaultInitContainers.waitForDB.containerSecurityContext.capabilities.drop List of capabilities to be dropped in wait-for-db initcontainer
+    ## @param defaultInitContainers.waitForDB.containerSecurityContext.seccompProfile.type Set seccomp profile in wait-for-db initcontainer
+    ##
+    containerSecurityContext:
+      enabled: true
+      seLinuxOptions: {}
+      runAsUser: 1001
+      runAsGroup: 1001
+      runAsNonRoot: true
+      readOnlyRootFilesystem: false
+      privileged: false
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop: ["ALL"]
+      seccompProfile:
+        type: "RuntimeDefault"
 
-## 'wait-for-redis' init container parameters
-##
-waitForRedis:
-  ## @param waitForRedis.enabled Enable init container that waits for Redis to be available
+  ## 'wait-for-redis' init container parameters
   ##
-  enabled: true
-  ## Init container's resource requests and limits
-  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param waitForRedis.resourcesPreset Set init container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if waitForRedis.resources is set (waitForRedis.resources is recommended for production).
-  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
-  ##
-  resourcesPreset: "nano"
-  ## @param waitForRedis.resources Set init container requests and limits for different resources like CPU or memory (essential for production workloads)
-  ## Example:
-  ## resources:
-  ##   requests:
-  ##     cpu: 2
-  ##     memory: 512Mi
-  ##   limits:
-  ##     cpu: 3
-  ##     memory: 1024Mi
-  ##
-  resources: {}
-  ## InitContainer Security Context
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param waitForRedis.containerSecurityContext.enabled Enabled wait-for-redis initcontainer's Security Context
-  ## @param waitForRedis.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in wait-for-redis initcontainer
-  ## @param waitForRedis.containerSecurityContext.runAsUser Set runAsUser in wait-for-redis initcontainer's Security Context
-  ## @param waitForRedis.containerSecurityContext.runAsGroup Set runAsGroup in wait-for-redis initcontainer's Security Context
-  ## @param waitForRedis.containerSecurityContext.runAsNonRoot Set runAsNonRoot in wait-for-redis initcontainer's Security Context
-  ## @param waitForRedis.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in wait-for-redis initcontainer's Security Context
-  ## @param waitForRedis.containerSecurityContext.privileged Set privileged in wait-for-redis initcontainer's Security Context
-  ## @param waitForRedis.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in wait-for-redis initcontainer's Security Context
-  ## @param waitForRedis.containerSecurityContext.capabilities.drop List of capabilities to be dropped in wait-for-redis initcontainer
-  ## @param waitForRedis.containerSecurityContext.seccompProfile.type Set seccomp profile in wait-for-redis initcontainer
-  ##
-  containerSecurityContext:
+  waitForRedis:
+    ## @param waitForRedis.enabled Enable init container that waits for Redis to be available
+    ##
     enabled: true
-    seLinuxOptions: {}
-    runAsUser: 1001
-    runAsGroup: 1001
-    runAsNonRoot: true
-    readOnlyRootFilesystem: false
-    privileged: false
-    allowPrivilegeEscalation: false
-    capabilities:
-      drop: ["ALL"]
-    seccompProfile:
-      type: "RuntimeDefault"
+    ## Init container's resource requests and limits
+    ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+    ## @param waitForRedis.resourcesPreset Set init container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if waitForRedis.resources is set (waitForRedis.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+    ##
+    resourcesPreset: "nano"
+    ## @param waitForRedis.resources Set init container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## Example:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    resources: {}
+    ## InitContainer Security Context
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+    ## @param waitForRedis.containerSecurityContext.enabled Enabled wait-for-redis initcontainer's Security Context
+    ## @param waitForRedis.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in wait-for-redis initcontainer
+    ## @param waitForRedis.containerSecurityContext.runAsUser Set runAsUser in wait-for-redis initcontainer's Security Context
+    ## @param waitForRedis.containerSecurityContext.runAsGroup Set runAsGroup in wait-for-redis initcontainer's Security Context
+    ## @param waitForRedis.containerSecurityContext.runAsNonRoot Set runAsNonRoot in wait-for-redis initcontainer's Security Context
+    ## @param waitForRedis.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in wait-for-redis initcontainer's Security Context
+    ## @param waitForRedis.containerSecurityContext.privileged Set privileged in wait-for-redis initcontainer's Security Context
+    ## @param waitForRedis.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in wait-for-redis initcontainer's Security Context
+    ## @param waitForRedis.containerSecurityContext.capabilities.drop List of capabilities to be dropped in wait-for-redis initcontainer
+    ## @param waitForRedis.containerSecurityContext.seccompProfile.type Set seccomp profile in wait-for-redis initcontainer
+    ##
+    containerSecurityContext:
+      enabled: true
+      seLinuxOptions: {}
+      runAsUser: 1001
+      runAsGroup: 1001
+      runAsNonRoot: true
+      readOnlyRootFilesystem: false
+      privileged: false
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop: ["ALL"]
+      seccompProfile:
+        type: "RuntimeDefault"
 
 ## @section Other Parameters
 ##
@@ -2117,6 +2117,7 @@ serviceAccount:
 ## PostgreSQL chart configuration
 ## ref: https://github.com/bitnami/charts/blob/main/bitnami/postgresql/values.yaml
 ## @param postgresql.enabled Switch to enable or disable the PostgreSQL helm chart
+## @param postgresql.primary.service.ports.postgresql PostgreSQL service port
 ## @param postgresql.auth.enablePostgresUser Assign a password to the "postgres" admin user. Otherwise, remote access will be blocked for this user
 ## @param postgresql.auth.username Name for a custom user to create
 ## @param postgresql.auth.password Password for the custom user to create
@@ -2126,6 +2127,9 @@ serviceAccount:
 ##
 postgresql:
   enabled: true
+  service:
+    ports:
+      postgresql: 5432
   auth:
     enablePostgresUser: true
     username: bn_superset
@@ -2187,6 +2191,11 @@ redis:
     existingSecret: ""
   architecture: standalone
   master:
+    ## @param redis.master.service.ports.redis Redis&reg; port
+    ##
+    service:
+      ports:
+        redis: 6379
     ## Redis&reg; master resource requests and limits
     ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
     ## @param redis.master.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if master.resources is set (master.resources is recommended for production).

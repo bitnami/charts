@@ -7,7 +7,7 @@ SPDX-License-Identifier: APACHE-2.0
 apiVersion: {{ include "common.capabilities.hpa.apiVersion" . }}
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ printf "%s-web" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  name: {{ template "superset.web.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: superset-web
@@ -19,7 +19,7 @@ spec:
   scaleTargetRef:
     apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
     kind: Deployment
-    name: {{ printf "%s-web" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+    name: {{ template "superset.web.fullname" . }}
   minReplicas: {{ .Values.web.autoscaling.hpa.minReplicas }}
   maxReplicas: {{ .Values.web.autoscaling.hpa.maxReplicas }}
   metrics:

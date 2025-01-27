@@ -33,9 +33,9 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
   targetRef:
-    apiVersion: apps/v1
+    apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
     kind: "Deployment"
-    name: {{ printf "%s-worker" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+    name: {{ template "superset.worker.fullname" . }}
   {{- if .Values.worker.autoscaling.vpa.updatePolicy }}
   updatePolicy:
     {{- with .Values.worker.autoscaling.vpa.updatePolicy.updateMode }}

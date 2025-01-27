@@ -38,10 +38,10 @@ spec:
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.init.hostAliases "context" $) | nindent 8 }}
       {{- end }}
       initContainers:
-        {{- if .Values.waitForDB.enabled }}
+        {{- if .Values.defaultInitContainers.waitForDB.enabled }}
         {{- include "superset.initContainers.waitForDB" . | nindent 8 }}
         {{- end }}
-        {{- if .Values.waitForRedis.enabled }}
+        {{- if .Values.defaultInitContainers.waitForRedis.enabled }}
         {{- include "superset.initContainers.waitForRedis" . | nindent 8 }}
         {{- end }}
         {{- if .Values.init.initContainers }}
