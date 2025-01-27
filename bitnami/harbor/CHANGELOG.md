@@ -1,8 +1,12 @@
 # Changelog
 
-## 24.1.8 (2025-01-23)
+## 24.2.0 (2025-01-27)
 
-* [bitnami/harbor] Clarify usage of custom POSTGRESQL_PASSWORD ([#31507](https://github.com/bitnami/charts/pull/31507))
+* [bitnami/harbor] allow custom trivy db repository ([#31594](https://github.com/bitnami/charts/pull/31594))
+
+## <small>24.1.8 (2025-01-23)</small>
+
+* [bitnami/harbor] Clarify usage of custom POSTGRESQL_PASSWORD (#31507) ([b871457](https://github.com/bitnami/charts/commit/b8714574f24519dcec83895fb19cb7819c6e016e)), closes [#31507](https://github.com/bitnami/charts/issues/31507)
 
 ## <small>24.1.7 (2025-01-17)</small>
 
