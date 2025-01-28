@@ -15,9 +15,17 @@ permissions:
     contents: read
 
 jobs:
+  block:
+    runs-on: arc-runner-eks-small
+    if: github.ref != 'refs/heads/stable'
+    steps:
+    - name: Check branch
+      run: |
+        echo "Workflows allowed only from stable"
   publish:
     name: Publish chart to ECR
     runs-on: arc-runner-eks-small
+    if: github.ref == 'refs/heads/stable'
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
