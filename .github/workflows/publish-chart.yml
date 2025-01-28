@@ -67,7 +67,7 @@ jobs:
 
           # Check if the image already exists in ECR
           if aws ecr describe-images --repository-name "$REPOSITORY" --image-ids imageTag="$TAG" > /dev/null 2>&1; then
-            echo "Image already exists in ECR: $TARGET_IMAGE"
+            echo "Image already exists in ECR: $TARGET_IMAGE" | tee -a "$GITHUB_STEP_SUMMARY"
             continue
           fi
 
