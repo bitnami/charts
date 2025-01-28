@@ -1,6 +1,6 @@
 # Changelog
 
-## 11.6.7 (2025-01-27)
+## 11.6.7 (2025-01-28)
 
 * [bitnami/nginx-ingress-controller] Add --enable-metrics command line argument ([#31605](https://github.com/bitnami/charts/pull/31605))
 
