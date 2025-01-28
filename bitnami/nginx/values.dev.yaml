@@ -21,6 +21,7 @@ ingress:
   extraHosts: []
   extraPaths:
     - path: /service-a/*
+      pathType: ImplementationSpecific
       backend:
         serviceName: dsp-portal-service-a
         servicePort: 5000
