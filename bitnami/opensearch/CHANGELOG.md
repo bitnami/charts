@@ -1,8 +1,13 @@
 # Changelog
 
-## 1.5.2 (2025-01-25)
+## 1.5.3 (2025-01-28)
 
-* [bitnami/opensearch] Release 1.5.2 ([#31592](https://github.com/bitnami/charts/pull/31592))
+* [bitnami/opensearch] Release 1.5.3 ([#31638](https://github.com/bitnami/charts/pull/31638))
+
+## <small>1.5.2 (2025-01-25)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/opensearch] Release 1.5.2 (#31592) ([c3e0d1b](https://github.com/bitnami/charts/commit/c3e0d1b5e5bd1cd0bd116f58d47b2541d2dd4211)), closes [#31592](https://github.com/bitnami/charts/issues/31592)
 
 ## <small>1.5.1 (2024-12-16)</small>
 
