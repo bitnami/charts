@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.3.1 (2025-01-16)
+## 0.3.2 (2025-01-28)
 
-* [bitnami/dremio] Release 0.3.1 ([#31398](https://github.com/bitnami/charts/pull/31398))
+* [bitnami/dremio] Release 0.3.2 ([#31622](https://github.com/bitnami/charts/pull/31622))
+
+## <small>0.3.1 (2025-01-16)</small>
+
+* [bitnami/dremio] Release 0.3.1 (#31398) ([cba6c79](https://github.com/bitnami/charts/commit/cba6c79ff2ff9a5d62519899d10f16516ba40cbf)), closes [#31398](https://github.com/bitnami/charts/issues/31398)
 
 ## 0.3.0 (2024-12-19)
 
