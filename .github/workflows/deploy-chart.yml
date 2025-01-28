@@ -7,12 +7,12 @@ on:
         description: 3rd party chart name (in ECR)
         type: string
         required: true
-        default: neo4j-chart
+        default: nginx-chart
       chart-version:
         description: 3rd party chart version (in ECR)
         type: string
         required: true
-        default: 0.2.0
+        default: 18.3.1
       cluster-name:
         description: k8s cluster name
         type: string
@@ -22,7 +22,7 @@ on:
         description: k8s namespace name
         type: string
         required: true
-        default: neo4j
+        default: dsp-portal
       values-file:
         description: Chart values file
         type: string
