@@ -1,8 +1,26 @@
 # Changelog
 
+## 1.3.4 (2025-01-24)
+
+* [bitnami/kuberay] Release 1.3.4 ([#31566](https://github.com/bitnami/charts/pull/31566))
+
+## <small>1.3.3 (2025-01-20)</small>
+
+* [bitnami/kuberay] Adding the list and watch for endpoints resource to the cluster role to solve #306 ([173f920](https://github.com/bitnami/charts/commit/173f9209b057ea150870a867258e8cbc345a3c3e)), closes [#30648](https://github.com/bitnami/charts/issues/30648) [#31226](https://github.com/bitnami/charts/issues/31226) [#30648](https://github.com/bitnami/charts/issues/30648)
+
+## <small>1.3.2 (2025-01-17)</small>
+
+* [bitnami/kuberay] Release 1.3.2 (#31429) ([e444d5f](https://github.com/bitnami/charts/commit/e444d5fd384a6f6191f6dd2234752f4fd4b40230)), closes [#31429](https://github.com/bitnami/charts/issues/31429)
+
+## <small>1.3.1 (2025-01-13)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/kuberay] Release 1.3.1 (#31319) ([83e9735](https://github.com/bitnami/charts/commit/83e9735310a4599d4da2f070e4fbd8934a4a04da)), closes [#31319](https://github.com/bitnami/charts/issues/31319)
+
 ## 1.3.0 (2024-12-10)
 
-* [bitnami/kuberay] Detect non-standard images ([#30918](https://github.com/bitnami/charts/pull/30918))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/kuberay] Detect non-standard images (#30918) ([a9558bc](https://github.com/bitnami/charts/commit/a9558bc475d78cbb012de01d09b04df980a7aec9)), closes [#30918](https://github.com/bitnami/charts/issues/30918)
 
 ## <small>1.2.20 (2024-12-04)</small>
 

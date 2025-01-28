@@ -1,8 +1,18 @@
 # Changelog
 
+## 11.3.2 (2025-01-24)
+
+* [bitnami/apache] Release 11.3.2 ([#31540](https://github.com/bitnami/charts/pull/31540))
+
+## <small>11.3.1 (2025-01-17)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/apache] Release 11.3.1 (#31449) ([9a77ff2](https://github.com/bitnami/charts/commit/9a77ff22affb31fae8ad04bb098d97112695e0cb)), closes [#31449](https://github.com/bitnami/charts/issues/31449)
+
 ## 11.3.0 (2024-12-10)
 
-* [bitnami/apache] Detect non-standard images ([#30857](https://github.com/bitnami/charts/pull/30857))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/apache] Detect non-standard images (#30857) ([5666175](https://github.com/bitnami/charts/commit/5666175ae207b9527bb15070daf92f616aaa6c6a)), closes [#30857](https://github.com/bitnami/charts/issues/30857)
 
 ## <small>11.2.23 (2024-12-08)</small>
 

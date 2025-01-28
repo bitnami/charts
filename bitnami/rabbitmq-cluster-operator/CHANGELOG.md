@@ -1,8 +1,17 @@
 # Changelog
 
-## 4.4.1 (2024-12-20)
+## 4.4.3 (2025-01-24)
 
-* [bitnami/rabbitmq-cluster-operator] Release 4.4.1 ([#31126](https://github.com/bitnami/charts/pull/31126))
+* [bitnami/rabbitmq-cluster-operator] Release 4.4.3 ([#31581](https://github.com/bitnami/charts/pull/31581))
+
+## <small>4.4.2 (2025-01-17)</small>
+
+* [bitnami/rabbitmq-cluster-operator] Release 4.4.2 (#31448) ([0656c74](https://github.com/bitnami/charts/commit/0656c7413772219335816bfab8d3d4affaec3153)), closes [#31448](https://github.com/bitnami/charts/issues/31448)
+
+## <small>4.4.1 (2024-12-20)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/rabbitmq-cluster-operator] Release 4.4.1 (#31126) ([22f7911](https://github.com/bitnami/charts/commit/22f79115cfdde74662fc06f76ac372fffd557023)), closes [#31126](https://github.com/bitnami/charts/issues/31126)
 
 ## 4.4.0 (2024-12-10)
 

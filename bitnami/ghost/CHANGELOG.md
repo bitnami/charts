@@ -1,8 +1,29 @@
 # Changelog
 
-## 22.1.2 (2024-12-13)
+## 22.1.7 (2025-01-26)
 
-* [bitnami/ghost] Release 22.1.2 ([#31038](https://github.com/bitnami/charts/pull/31038))
+* [bitnami/ghost] Release 22.1.7 ([#31595](https://github.com/bitnami/charts/pull/31595))
+
+## <small>22.1.6 (2025-01-21)</small>
+
+* [bitnami/ghost] Release 22.1.6 (#31488) ([13001bc](https://github.com/bitnami/charts/commit/13001bc7caca05ac7fd91b4b2ad9d66c48feeba7)), closes [#31488](https://github.com/bitnami/charts/issues/31488)
+
+## <small>22.1.5 (2025-01-20)</small>
+
+* [bitnami/ghost] Release 22.1.5 (#31483) ([1271104](https://github.com/bitnami/charts/commit/127110406e07e18cc73bee1ac9a65e63e1c983e3)), closes [#31483](https://github.com/bitnami/charts/issues/31483)
+
+## <small>22.1.4 (2025-01-17)</small>
+
+* [bitnami/ghost] Release 22.1.4 (#31461) ([56e1ac2](https://github.com/bitnami/charts/commit/56e1ac2221c4426002b8bcf57dca07cdc73d7651)), closes [#31461](https://github.com/bitnami/charts/issues/31461)
+
+## <small>22.1.3 (2025-01-13)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/ghost] Release 22.1.3 (#31332) ([979b822](https://github.com/bitnami/charts/commit/979b8225405c9f1d8d623fb69fd33632dc77f2f6)), closes [#31332](https://github.com/bitnami/charts/issues/31332)
+
+## <small>22.1.2 (2024-12-13)</small>
+
+* [bitnami/ghost] Release 22.1.2 (#31038) ([b5d4c51](https://github.com/bitnami/charts/commit/b5d4c5136f4da9c15b23fa036fc2f826f3852adf)), closes [#31038](https://github.com/bitnami/charts/issues/31038)
 
 ## <small>22.1.1 (2024-12-11)</small>
 

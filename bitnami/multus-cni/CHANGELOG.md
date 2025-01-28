@@ -1,8 +1,26 @@
 # Changelog
 
+## 2.2.4 (2025-01-24)
+
+* [bitnami/multus-cni] Release 2.2.4 ([#31571](https://github.com/bitnami/charts/pull/31571))
+
+## <small>2.2.3 (2025-01-23)</small>
+
+* [multus-cni] Add --multus-kubeconfig-file-host arg (#31045) ([ca6f16d](https://github.com/bitnami/charts/commit/ca6f16d2084c7d695bf99d9ebe6c4ff693fb38d7)), closes [#31045](https://github.com/bitnami/charts/issues/31045) [#30606](https://github.com/bitnami/charts/issues/30606)
+
+## <small>2.2.2 (2025-01-17)</small>
+
+* [bitnami/multus-cni] Release 2.2.2 (#31434) ([fc5669d](https://github.com/bitnami/charts/commit/fc5669d0eeffd90df6f1d0c408a3b29b005d912b)), closes [#31434](https://github.com/bitnami/charts/issues/31434)
+
+## <small>2.2.1 (2025-01-15)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/multus-cni] Release 2.2.1 (#31391) ([299cd4b](https://github.com/bitnami/charts/commit/299cd4b4fa199ae8ed9bd4c747fc638a1ed4accb)), closes [#31391](https://github.com/bitnami/charts/issues/31391)
+
 ## 2.2.0 (2024-12-10)
 
-* [bitnami/multus-cni] Detect non-standard images ([#30928](https://github.com/bitnami/charts/pull/30928))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/multus-cni] Detect non-standard images (#30928) ([4834eb7](https://github.com/bitnami/charts/commit/4834eb7ef5796a72bbcd6d6043c295892dbd4b09)), closes [#30928](https://github.com/bitnami/charts/issues/30928)
 
 ## <small>2.1.21 (2024-12-06)</small>
 

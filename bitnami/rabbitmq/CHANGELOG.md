@@ -1,8 +1,17 @@
 # Changelog
 
-## 15.2.2 (2025-01-07)
+## 15.2.4 (2025-01-25)
 
-* [bitnami/rabbitmq] remove undefined rts key from network policy template ([#31210](https://github.com/bitnami/charts/pull/31210))
+* [bitnami/rabbitmq] Release 15.2.4 ([#31593](https://github.com/bitnami/charts/pull/31593))
+
+## <small>15.2.3 (2025-01-15)</small>
+
+* [bitnami/rabbitmq] Fix incorrect configuration of TCP listen options by memoryHighWatermark settings ([7432a31](https://github.com/bitnami/charts/commit/7432a317f4126ac2ca2b3a56e731d483a92b752a)), closes [#31336](https://github.com/bitnami/charts/issues/31336)
+
+## <small>15.2.2 (2025-01-07)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/rabbitmq] remove undefined rts key from network policy template (#31210) ([1e98bac](https://github.com/bitnami/charts/commit/1e98bacbb4153a6a57690d1cc96b7f76e66c6abe)), closes [#31210](https://github.com/bitnami/charts/issues/31210)
 
 ## <small>15.2.1 (2024-12-16)</small>
 

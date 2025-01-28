@@ -1,8 +1,12 @@
 # Changelog
 
-## 9.1.2 (2025-01-12)
+## 9.1.3 (2025-01-16)
 
-* [bitnami/mastodon] Release 9.1.2 ([#31308](https://github.com/bitnami/charts/pull/31308))
+* [bitnami/mastodon] Release 9.1.3 ([#31400](https://github.com/bitnami/charts/pull/31400))
+
+## <small>9.1.2 (2025-01-12)</small>
+
+* [bitnami/mastodon] Release 9.1.2 (#31308) ([712bf25](https://github.com/bitnami/charts/commit/712bf2565a95cc41b01448f2551d19f40ea12898)), closes [#31308](https://github.com/bitnami/charts/issues/31308)
 
 ## <small>9.1.1 (2024-12-30)</small>
 

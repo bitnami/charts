@@ -1,8 +1,22 @@
 # Changelog
 
+## 7.3.3 (2025-01-24)
+
+* [bitnami/metrics-server] Release 7.3.3 ([#31569](https://github.com/bitnami/charts/pull/31569))
+
+## <small>7.3.2 (2025-01-17)</small>
+
+* [bitnami/metrics-server] Release 7.3.2 (#31436) ([1d5b8eb](https://github.com/bitnami/charts/commit/1d5b8eb46dc1021d067f0ee3e423ba9282ffe8a5)), closes [#31436](https://github.com/bitnami/charts/issues/31436)
+
+## <small>7.3.1 (2025-01-13)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/metrics-server] Release 7.3.1 (#31321) ([cec8fd1](https://github.com/bitnami/charts/commit/cec8fd1493fc794eabf71d84ab09b867e7456176)), closes [#31321](https://github.com/bitnami/charts/issues/31321)
+
 ## 7.3.0 (2024-12-10)
 
-* [bitnami/metrics-server] Detect non-standard images ([#30958](https://github.com/bitnami/charts/pull/30958))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/metrics-server] Detect non-standard images (#30958) ([fcea029](https://github.com/bitnami/charts/commit/fcea0290ba2cae36820967e5123ccd7e267e6fb8)), closes [#30958](https://github.com/bitnami/charts/issues/30958)
 
 ## <small>7.2.17 (2024-12-04)</small>
 

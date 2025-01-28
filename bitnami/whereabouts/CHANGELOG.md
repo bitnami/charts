@@ -1,8 +1,22 @@
 # Changelog
 
+## 1.2.3 (2025-01-24)
+
+* [bitnami/whereabouts] Release 1.2.3 ([#31587](https://github.com/bitnami/charts/pull/31587))
+
+## <small>1.2.2 (2025-01-17)</small>
+
+* [bitnami/whereabouts] Release 1.2.2 (#31447) ([892157d](https://github.com/bitnami/charts/commit/892157ddd2086064088a1b439cafea02228eb3b8)), closes [#31447](https://github.com/bitnami/charts/issues/31447)
+
+## <small>1.2.1 (2025-01-13)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/whereabouts] Release 1.2.1 (#31326) ([03d96f7](https://github.com/bitnami/charts/commit/03d96f76490d77c02fa4cdd40ee3bbac5f5d06c1)), closes [#31326](https://github.com/bitnami/charts/issues/31326)
+
 ## 1.2.0 (2024-12-10)
 
-* [bitnami/whereabouts] Detect non-standard images ([#30953](https://github.com/bitnami/charts/pull/30953))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/whereabouts] Detect non-standard images (#30953) ([0da5ab8](https://github.com/bitnami/charts/commit/0da5ab850e004dd1afc1d7052247ea954b70d1d1)), closes [#30953](https://github.com/bitnami/charts/issues/30953)
 
 ## <small>1.1.17 (2024-12-04)</small>
 

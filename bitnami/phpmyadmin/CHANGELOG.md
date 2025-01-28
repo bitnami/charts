@@ -1,8 +1,18 @@
 # Changelog
 
+## 18.1.2 (2025-01-21)
+
+* [bitnami/phpmyadmin] Release 18.1.2 ([#31501](https://github.com/bitnami/charts/pull/31501))
+
+## <small>18.1.1 (2025-01-17)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/phpmyadmin] Release 18.1.1 (#31452) ([6665848](https://github.com/bitnami/charts/commit/66658481c760abea6015c05d2368e2dc88566fc5)), closes [#31452](https://github.com/bitnami/charts/issues/31452)
+
 ## 18.1.0 (2024-12-10)
 
-* [bitnami/phpmyadmin] Detect non-standard images ([#30963](https://github.com/bitnami/charts/pull/30963))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/phpmyadmin] Detect non-standard images (#30963) ([fa05829](https://github.com/bitnami/charts/commit/fa058290a52c6f0c59f3ee3c02ea89afadff8b57)), closes [#30963](https://github.com/bitnami/charts/issues/30963)
 
 ## <small>18.0.1 (2024-12-08)</small>
 
