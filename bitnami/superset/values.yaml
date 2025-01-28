@@ -2045,16 +2045,16 @@ defaultInitContainers:
   ## 'wait-for-redis' init container parameters
   ##
   waitForRedis:
-    ## @param waitForRedis.enabled Enable init container that waits for Redis to be available
+    ## @param defaultInitContainers.waitForRedis.enabled Enable init container that waits for Redis to be available
     ##
     enabled: true
     ## Init container's resource requests and limits
     ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-    ## @param waitForRedis.resourcesPreset Set init container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if waitForRedis.resources is set (waitForRedis.resources is recommended for production).
+    ## @param defaultInitContainers.waitForRedis.resourcesPreset Set init container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if waitForRedis.resources is set (waitForRedis.resources is recommended for production).
     ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
     ##
     resourcesPreset: "nano"
-    ## @param waitForRedis.resources Set init container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## @param defaultInitContainers.waitForRedis.resources Set init container requests and limits for different resources like CPU or memory (essential for production workloads)
     ## Example:
     ## resources:
     ##   requests:
@@ -2067,16 +2067,16 @@ defaultInitContainers:
     resources: {}
     ## InitContainer Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-    ## @param waitForRedis.containerSecurityContext.enabled Enabled wait-for-redis initcontainer's Security Context
-    ## @param waitForRedis.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in wait-for-redis initcontainer
-    ## @param waitForRedis.containerSecurityContext.runAsUser Set runAsUser in wait-for-redis initcontainer's Security Context
-    ## @param waitForRedis.containerSecurityContext.runAsGroup Set runAsGroup in wait-for-redis initcontainer's Security Context
-    ## @param waitForRedis.containerSecurityContext.runAsNonRoot Set runAsNonRoot in wait-for-redis initcontainer's Security Context
-    ## @param waitForRedis.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in wait-for-redis initcontainer's Security Context
-    ## @param waitForRedis.containerSecurityContext.privileged Set privileged in wait-for-redis initcontainer's Security Context
-    ## @param waitForRedis.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in wait-for-redis initcontainer's Security Context
-    ## @param waitForRedis.containerSecurityContext.capabilities.drop List of capabilities to be dropped in wait-for-redis initcontainer
-    ## @param waitForRedis.containerSecurityContext.seccompProfile.type Set seccomp profile in wait-for-redis initcontainer
+    ## @param defaultInitContainers.waitForRedis.containerSecurityContext.enabled Enabled wait-for-redis initcontainer's Security Context
+    ## @param defaultInitContainers.waitForRedis.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in wait-for-redis initcontainer
+    ## @param defaultInitContainers.waitForRedis.containerSecurityContext.runAsUser Set runAsUser in wait-for-redis initcontainer's Security Context
+    ## @param defaultInitContainers.waitForRedis.containerSecurityContext.runAsGroup Set runAsGroup in wait-for-redis initcontainer's Security Context
+    ## @param defaultInitContainers.waitForRedis.containerSecurityContext.runAsNonRoot Set runAsNonRoot in wait-for-redis initcontainer's Security Context
+    ## @param defaultInitContainers.waitForRedis.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in wait-for-redis initcontainer's Security Context
+    ## @param defaultInitContainers.waitForRedis.containerSecurityContext.privileged Set privileged in wait-for-redis initcontainer's Security Context
+    ## @param defaultInitContainers.waitForRedis.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in wait-for-redis initcontainer's Security Context
+    ## @param defaultInitContainers.waitForRedis.containerSecurityContext.capabilities.drop List of capabilities to be dropped in wait-for-redis initcontainer
+    ## @param defaultInitContainers.waitForRedis.containerSecurityContext.seccompProfile.type Set seccomp profile in wait-for-redis initcontainer
     ##
     containerSecurityContext:
       enabled: true
@@ -2117,7 +2117,6 @@ serviceAccount:
 ## PostgreSQL chart configuration
 ## ref: https://github.com/bitnami/charts/blob/main/bitnami/postgresql/values.yaml
 ## @param postgresql.enabled Switch to enable or disable the PostgreSQL helm chart
-## @param postgresql.primary.service.ports.postgresql PostgreSQL service port
 ## @param postgresql.auth.enablePostgresUser Assign a password to the "postgres" admin user. Otherwise, remote access will be blocked for this user
 ## @param postgresql.auth.username Name for a custom user to create
 ## @param postgresql.auth.password Password for the custom user to create
@@ -2127,9 +2126,6 @@ serviceAccount:
 ##
 postgresql:
   enabled: true
-  service:
-    ports:
-      postgresql: 5432
   auth:
     enablePostgresUser: true
     username: bn_superset
@@ -2138,6 +2134,11 @@ postgresql:
     existingSecret: ""
   architecture: standalone
   primary:
+    ## @param postgresql.primary.service.ports.postgresql PostgreSQL service port
+    ##
+    service:
+      ports:
+        postgresql: 5432
     ## PostgreSQL Primary resource requests and limits
     ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
     ## @param postgresql.primary.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if primary.resources is set (primary.resources is recommended for production).
