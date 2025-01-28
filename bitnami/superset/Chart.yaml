@@ -4,6 +4,9 @@
 annotations:
   category: Analytics
   licenses: Apache-2.0
+  images: |
+    - name: superset
+      image: docker.io/bitnami/superset:4.1.1-debian-12-r1
 apiVersion: v2
 appVersion: 4.0.0
 dependencies:
