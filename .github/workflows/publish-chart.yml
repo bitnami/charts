@@ -1,11 +1,11 @@
-name: Package & Publish 3rd Chart
+name: Package & Publish Chart
 run-name: "Package & Publish ${{ inputs.chart-name }} chart"
 on:
   workflow_dispatch:
     inputs:
       chart-name:
         description: >
-            3rd chart name (under "bitnami" folder)
+            3rd party chart name (under "bitnami" folder)
             Need to add "-chart" in the name in Chart.yaml
         type: string
         required: true
