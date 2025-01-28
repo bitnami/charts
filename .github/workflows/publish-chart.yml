@@ -78,7 +78,7 @@ jobs:
           docker tag "$IMAGE" "$TARGET_IMAGE"
           docker push "$TARGET_IMAGE"
                 
-          echo "Successfully processed and pushed: $IMAGE to $TARGET_IMAGE"
+          echo "Successfully processed and pushed: $IMAGE to $TARGET_IMAGE" | tee -a "$GITHUB_STEP_SUMMARY"
         done
         yq eval ".global.image.registry = \"702886132326.dkr.ecr.eu-west-1.amazonaws.com\"" -i values.yaml
     
@@ -88,3 +88,5 @@ jobs:
         CHART_VERSION=$(grep '^version:' Chart.yaml | awk '{print $2}')
         helm package -u --version $CHART_VERSION --dependency-update .
         helm push ${{ inputs.chart-name }}-chart-$CHART_VERSION.tgz oci://702886132326.dkr.ecr.eu-west-1.amazonaws.com/bitnami
+        echo "Chart Version Published: $CHART_VERSION" >> "$GITHUB_STEP_SUMMARY"
+        
