@@ -105,8 +105,18 @@ spec:
             {{- include "superset.configure.redis" . | nindent 12 }}
             - name: SUPERSET_ROLE
               value: "celery-flower"
-            - name: FLOWER_UNAUTHENTICATED_API
-              value: "true"
+            {{- if .Values.flower.auth.enabled }}
+            {{- if .Values.auth.usePasswordFiles }}
+            - name: FLOWER_BASIC_AUTH_FILE
+              value: "/opt/bitnami/superset/secrets/flower-basic-auth"
+            {{- else }}
+            - name: FLOWER_BASIC_AUTH
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "superset.flower.secretName" . }}
+                  key: flower-basic-auth
+            {{- end }}
+            {{- end }}
             {{- if .Values.flower.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.flower.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
@@ -143,7 +153,7 @@ spec:
           {{- else if .Values.flower.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.flower.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
-              path: /api/workers
+              path: /healthcheck
               port: flower
           {{- end }}
           {{- if .Values.flower.customStartupProbe }}
@@ -151,7 +161,7 @@ spec:
           {{- else if .Values.flower.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.flower.startupProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
-              path: /api/workers
+              path: /healthcheck
               port: flower
           {{- end }}
           {{- end }}
@@ -165,6 +175,11 @@ spec:
             - name: empty-dir
               mountPath: /opt/bitnami/superset/superset_home
               subPath: superset-home
+            {{- if and .Values.flower.auth.enabled .Values.flower.auth.usePasswordFiles }}
+            - name: flower-basic-auth
+              mountPath: /opt/bitnami/superset/secrets
+              readOnly: true
+            {{- end }}
             {{- if or .Values.existingConfigmap .Values.config }}
             - name: superset-config
               mountPath: /bitnami/superset/conf
@@ -178,6 +193,14 @@ spec:
       volumes:
         - name: empty-dir
           emptyDir: {}
+        {{- if and .Values.flower.auth.enabled .Values.flower.auth.usePasswordFiles }}
+        - name: flower-basic-auth
+          secret:
+            secretName: {{ template "superset.flower.secretName" . }}
+            items:
+              - key: flower-basic-auth
+                path: flower-basic-auth
+        {{- end }}
         {{- if or .Values.existingConfigmap .Values.config }}
         - name: superset-config
           configMap:

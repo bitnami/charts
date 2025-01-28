@@ -75,6 +75,12 @@ To connect to Superset from outside the cluster, perform the following steps:
     echo User:     {{ default "user" .Values.auth.username }}
     echo Password: $SUPERSET_PASSWORD
 
+{{- if and .Values.flower.enabled .Values.flower.auth.enabled }}
+
+4. Celery flower has been enabled. You can get your Superset Celery flower login credentials by running:
+    {{ include "common.utils.secret.getvalue" (dict "secret" (include "superset.flower.secretName" .) "field" "flower-basic-auth" "context" $) }}
+    echo Flower credentials: $FLOWER_BASIC_AUTH
+{{- end }}
 {{- end }}
 
 {{- include "common.warnings.rollingTag" .Values.image }}

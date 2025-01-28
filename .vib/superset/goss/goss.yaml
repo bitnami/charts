@@ -10,7 +10,7 @@ http:
     status: 200
     body:
       - /OK/
-  http://superset-flower:{{ .Vars.flower.service.ports.flower }}:
+  http://{{ .Vars.flower.auth.username }}:{{ .Vars.flower.auth.password }}@superset-flower:{{ .Vars.flower.service.ports.flower }}:
     status: 200
 file:
   /opt/bitnami/superset/superset_config.py:

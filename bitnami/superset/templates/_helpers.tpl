@@ -100,6 +100,13 @@ Get the Postgresql credentials secret.
 {{- end -}}
 
 {{/*
+Get the Superset Celery flower secret name
+*/}}
+{{- define "superset.flower.secretName" -}}
+{{- default (include "superset.flower.fullname" .) (tpl .Values.flower.auth.existingSecret .) -}}
+{{- end -}}
+
+{{/*
 Get the secret name
 */}}
 {{- define "superset.secretName" -}}
