@@ -1,0 +1,46 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+file:
+  /etc/{{ .Vars.natsFilename }}.conf:
+    mode: "0644"
+    filetype: file
+    exists: true
+    contents:
+      - /server_name:\s\$NATS_SERVER_NAME/
+      - /listen:\s0.0.0.0:{{ .Vars.containerPorts.client }}/
+      - /http:\s0.0.0.0:{{ .Vars.containerPorts.monitoring }}/
+      - /listen:\s0.0.0.0:{{ .Vars.containerPorts.cluster }}/
+      - /debug:\s{{ .Vars.debug.enabled }}/
+      - /jetstream:\s{{ .Vars.jetstream.enabled }}/
+  {{ if .Vars.tls.enabled }}
+  /etc/certs/ca/tls.crt:
+    mode: "0644"
+    filetype: file
+    exists: true
+  /etc/certs/server/tls.crt:
+    mode: "0644"
+    filetype: file
+    exists: true
+  /etc/certs/server/tls.key:
+    mode: "0644"
+    filetype: file
+    exists: true
+  {{ end }}
+port:
+  tcp:{{ .Vars.containerPorts.client }}:
+    listening: true
+  tcp:{{ .Vars.containerPorts.cluster }}:
+    listening: true
+  tcp:{{ .Vars.containerPorts.monitoring }}:
+    listening: true
+addr:
+  tcp://nats:{{ .Vars.service.ports.client }}:
+    reachable: true
+    timeout: 500
+  tcp://nats:{{ .Vars.service.ports.cluster }}:
+    reachable: true
+    timeout: 500
+  tcp://nats:{{ .Vars.service.ports.monitoring }}:
+    reachable: true
+    timeout: 500
