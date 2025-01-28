@@ -1,9 +1,29 @@
+replicaCount: 2
+#autoscaling:
+#  enabled: false
+#  minReplicas: "2"
+#  maxReplicas: "4"
+
+resources:
+  requests:
+    cpu: 200m
+    memory: 256Mi
+  limits:
+    cpu: 2
+    memory: 1024Mi
+
+service:
+  type: ClusterIP
+  ports:
+    http: 8080
+    https: 8443
+  
 ingress:
   ## @param ingress.enabled Set to true to enable ingress record generation
   ##
   enabled: true
   hostname: dsp-portal.dev.sp.dell.com
-  path: /
+  path: /*
   annotations:
     external-dns.alpha.kubernetes.io/hostname: dsp-portal.dev.sp.dell.com
     alb.ingress.kubernetes.io/scheme: internal
@@ -15,13 +35,34 @@ ingress:
     alb.ingress.kubernetes.io/healthcheck-port: '80'
     alb.ingress.kubernetes.io/healthcheck-protocol: 'HTTP'
     alb.ingress.kubernetes.io/success-codes: '200'
-    alb.ingress.kubernetes.io/healthcheck-path: '/health'
+    alb.ingress.kubernetes.io/healthcheck-path: /
 
   ingressClassName: "alb"
-  extraHosts: []
-  extraPaths:
-    - path: /service-a/*
-      pathType: ImplementationSpecific
-      backend:
-        serviceName: dsp-portal-service-a
-        servicePort: 5000
+
+containerSecurityContext:
+  runAsNonRoot: false
+
+containerPorts:
+  http: 8080
+  https: 8443
+  
+serverBlock: |-
+  server {
+    listen 0.0.0.0:8080;
+    location /service-a {
+      proxy_set_header Host $host;
+      proxy_set_header X-Real-IP $remote_addr;
+      proxy_pass http://dsp-portal-service-a:5000/health;
+    }
+    location /gui {
+      proxy_set_header Host $host;
+      proxy_set_header X-Real-IP $remote_addr;
+      proxy_pass http://dsp-portal-gui:3000/health;
+    }
+    location /service-b {
+      proxy_set_header Host $host;
+      proxy_set_header X-Real-IP $remote_addr;
+      proxy_pass http://dsp-portal-service-b:5000/health;
+    }
+  }
+  
