@@ -22,13 +22,12 @@ ingress:
   ## @param ingress.enabled Set to true to enable ingress record generation
   ##
   enabled: true
-  hostname: dsp-portal.sp.dell.com
+  hostname: dsp-portal.staging.sp.dell.com
   path: /*
   annotations:
-    external-dns.alpha.kubernetes.io/hostname: dsp-portal.sp.dell.com
     alb.ingress.kubernetes.io/scheme: internal
-    alb.ingress.kubernetes.io/group.name: saas-dsp-portal-production
-    alb.ingress.kubernetes.io/certificate-arn: 'arn:aws:acm:us-east-1:008791006138:certificate/495acca7-2891-4528-89cb-8091437ab1f4'
+    alb.ingress.kubernetes.io/group.name: saas-dsp-portal-staging
+    alb.ingress.kubernetes.io/certificate-arn: 'arn:aws:acm:eu-west-1:816069151864:certificate/b11d162c-f8b2-4b7d-a722-524da4b7f639'
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80},{"HTTPS": 443}]'
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/load-balancer-attributes: idle_timeout.timeout_seconds=4000
