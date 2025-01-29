@@ -1,4 +1,4 @@
-<!--- app-name: superset -->
+<!--- app-name: Apache Superset -->
 
 # Bitnami package for Apache Superset
 
