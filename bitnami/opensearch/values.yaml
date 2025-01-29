@@ -191,7 +191,7 @@ useIstioLabels: true
 image:
   registry: docker.io
   repository: bitnami/opensearch
-  tag: 2.18.0-debian-12-r3
+  tag: 2.18.0-debian-12-r4
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -2803,7 +2803,7 @@ dashboards:
   image:
     registry: docker.io
     repository: bitnami/opensearch-dashboards
-    tag: 2.18.0-debian-12-r3
+    tag: 2.18.0-debian-12-r4
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images

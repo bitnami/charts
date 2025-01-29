@@ -1,8 +1,8 @@
-<!--- app-name: superset -->
+<!--- app-name: Apache Superset -->
 
 # Bitnami package for Apache Superset
 
-Superset is an open source Data Visualization and Data Exploration Platform.
+Superset is a modern data exploration and data visualization platform.
 
 [Overview of Apache Superset](https://superset.apache.org/)
 
