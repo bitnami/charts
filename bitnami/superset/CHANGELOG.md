@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.1.1 (2025-01-29)
+## 0.2.0 (2025-01-29)
 
 * [bitnami/superset] Fix README.md app-name typo ([#31650](https://github.com/bitnami/charts/pull/31650))
 
