@@ -17,7 +17,7 @@ dependencies:
 - condition: minio.enabled
   name: minio
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 14.x.x
+  version: 15.x.x
 - condition: zookeeper.enabled
   name: zookeeper
   repository: oci://registry-1.docker.io/bitnamicharts
@@ -41,4 +41,4 @@ sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/dremio
 - https://github.com/bitnami/containers/tree/main/bitnami/dremio
 - https://github.com/dremio/dremio-oss
-version: 0.3.2
+version: 0.4.0
