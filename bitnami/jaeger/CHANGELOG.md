@@ -1,8 +1,12 @@
 # Changelog
 
-## 5.1.5 (2025-01-24)
+## 5.2.0 (2025-01-29)
 
-* [bitnami/jaeger] Release 5.1.5 ([#31560](https://github.com/bitnami/charts/pull/31560))
+* [bitnami/jaeger] Add option to skip Cassandra readiness check ([#31654](https://github.com/bitnami/charts/pull/31654))
+
+## <small>5.1.5 (2025-01-24)</small>
+
+* [bitnami/jaeger] Release 5.1.5 (#31560) ([dc8441b](https://github.com/bitnami/charts/commit/dc8441b4737ad2d8769689690e78739e34985a82)), closes [#31560](https://github.com/bitnami/charts/issues/31560)
 
 ## <small>5.1.4 (2025-01-21)</small>
 
