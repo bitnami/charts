@@ -71,9 +71,9 @@ diagnosticMode:
 ## @section Superset Parameters
 
 ## Bitnami Superset image
-## ref: https://hub.docker.com/r/bitnami/superset/tags/
+## ref: https://hub.docker.com/r/bitnami/Apache Superset/tags/
 ## @param image.registry [default: REGISTRY_NAME] Superset image registry
-## @param image.repository [default: REPOSITORY_NAME/superset] Superset image repository
+## @param image.repository [default: REPOSITORY_NAME/Apache Superset] Superset image repository
 ## @skip image.tag Superset image tag (immutable tags are recommended)
 ## @param image.digest Superset image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
 ## @param image.pullPolicy Superset image pull policy
@@ -82,8 +82,8 @@ diagnosticMode:
 ##
 image:
   registry: docker.io
-  repository: bitnami/superset
-  tag: 4.1.1-debian-12-r1
+  repository: bitnami/Apache Superset
+  tag: 4.1.1-debian-12-r2
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -111,7 +111,7 @@ existingConfigmap: ""
 loadExamples: false
 
 ## Authentication parameters
-## ref: https://github.com/bitnami/containers/tree/main/bitnami/superset#environment-variables
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/Apache Superset#environment-variables
 ##
 auth:
   ## @param auth.username Username to access web UI
@@ -124,12 +124,12 @@ auth:
   ##
   password: ""
   ## @param auth.secretKey Secret key to run your flask app
-  ## ref: https://superset.apache.org/docs/configuration/configuring-superset/#specifying-a-secret_key
+  ## ref: https://Apache Superset.apache.org/docs/configuration/configuring-Apache Superset/#specifying-a-secret_key
   ##
   secretKey: ""
   ## @param auth.existingSecret Name of an existing secret to use for Superset credentials
   ## `auth.password` and `auth.secretKey` will be ignored and picked up from this secret
-  ## The secret must contain the keys `superset-password` and `superset-secret-key'
+  ## The secret must contain the keys `Apache Superset-password` and `Apache Superset-secret-key'
   ## The value is evaluated as a template
   ##
   existingSecret: ""
@@ -1919,7 +1919,7 @@ ingress:
   apiVersion: ""
   ## @param ingress.hostname Default host for the ingress record
   ##
-  hostname: superset.local
+  hostname: Apache Superset.local
   ## @param ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
   ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
   ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
@@ -1952,7 +1952,7 @@ ingress:
   ## @param ingress.extraHosts An array with additional hostname(s) to be covered with the ingress record
   ## e.g:
   ## extraHosts:
-  ##   - name: superset.local
+  ##   - name: Apache Superset.local
   ##     path: /
   ##
   extraHosts: []
@@ -1970,8 +1970,8 @@ ingress:
   ## e.g:
   ## extraTls:
   ## - hosts:
-  ##     - superset.local
-  ##   secretName: superset.local-tls
+  ##     - Apache Superset.local
+  ##   secretName: Apache Superset.local-tls
   ##
   extraTls: []
   ## @param ingress.secrets Custom TLS certificates as secrets
@@ -1983,7 +1983,7 @@ ingress:
   ## Please see README.md for more information
   ## e.g:
   ## secrets:
-  ##   - name: superset.local-tls
+  ##   - name: Apache Superset.local-tls
   ##     key: |-
   ##       -----BEGIN RSA PRIVATE KEY-----
   ##       ...
@@ -2148,9 +2148,9 @@ postgresql:
   enabled: true
   auth:
     enablePostgresUser: true
-    username: bn_superset
+    username: bn_Apache Superset
     password: ""
-    database: bitnami_superset
+    database: bitnami_Apache Superset
     existingSecret: ""
   architecture: standalone
   primary:
@@ -2189,8 +2189,8 @@ postgresql:
 externalDatabase:
   host: ""
   port: 5432
-  user: bn_superset
-  database: bitnami_superset
+  user: bn_Apache Superset
+  database: bitnami_Apache Superset
   password: ""
   existingSecret: ""
   existingSecretPasswordKey: "db-password"

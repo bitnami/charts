@@ -1,17 +1,17 @@
-<!--- app-name: superset -->
+<!--- app-name: Apache Superset -->
 
 # Bitnami package for Apache Superset
 
-Superset is an open source Data Visualization and Data Exploration Platform.
+Superset is a modern data exploration and data visualization platform. 
 
-[Overview of Apache Superset](https://superset.apache.org/)
+[Overview of Apache Superset](https://Apache Superset.apache.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
 ## TL;DR
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/superset
+helm install my-release oci://registry-1.docker.io/bitnamicharts/Apache Superset
 ```
 
 Looking to use Superset in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
@@ -20,7 +20,7 @@ Looking to use Superset in production? Try [VMware Tanzu Application Catalog](ht
 
 Bitnami charts for Helm are carefully engineered, actively maintained and are the quickest and easiest way to deploy containers on a Kubernetes cluster that are ready to handle production workloads.
 
-This chart bootstraps a [Superset](https://superset.apache.org/) Deployment in a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Superset](https://Apache Superset.apache.org/) Deployment in a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
@@ -35,7 +35,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/superset
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/Apache Superset
 ```
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
@@ -180,7 +180,7 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | Name                                                                    | Description                                                                                                                                                                                                                                     | Value                      |
 | ----------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
 | `image.registry`                                                        | Superset image registry                                                                                                                                                                                                                         | `REGISTRY_NAME`            |
-| `image.repository`                                                      | Superset image repository                                                                                                                                                                                                                       | `REPOSITORY_NAME/superset` |
+| `image.repository`                                                      | Superset image repository                                                                                                                                                                                                                       | `REPOSITORY_NAME/Apache Superset` |
 | `image.digest`                                                          | Superset image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)                                                                                             | `""`                       |
 | `image.pullPolicy`                                                      | Superset image pull policy                                                                                                                                                                                                                      | `IfNotPresent`             |
 | `image.pullSecrets`                                                     | Superset image pull secrets                                                                                                                                                                                                                     | `[]`                       |
@@ -620,7 +620,7 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `ingress.enabled`                                                       | Enable ingress record generation for Superset                                                                                                                                                                                                   | `false`                    |
 | `ingress.pathType`                                                      | Ingress path type                                                                                                                                                                                                                               | `ImplementationSpecific`   |
 | `ingress.apiVersion`                                                    | Force Ingress API version (automatically detected if not set)                                                                                                                                                                                   | `""`                       |
-| `ingress.hostname`                                                      | Default host for the ingress record                                                                                                                                                                                                             | `superset.local`           |
+| `ingress.hostname`                                                      | Default host for the ingress record                                                                                                                                                                                                             | `Apache Superset.local`           |
 | `ingress.ingressClassName`                                              | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                                                                                                                                   | `""`                       |
 | `ingress.path`                                                          | Default path for the ingress record                                                                                                                                                                                                             | `/`                        |
 | `ingress.annotations`                                                   | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.                                                                                                                | `{}`                       |
@@ -678,9 +678,9 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | --------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ |
 | `postgresql.enabled`                          | Switch to enable or disable the PostgreSQL helm chart                                                                                                                                                                      | `true`             |
 | `postgresql.auth.enablePostgresUser`          | Assign a password to the "postgres" admin user. Otherwise, remote access will be blocked for this user                                                                                                                     | `true`             |
-| `postgresql.auth.username`                    | Name for a custom user to create                                                                                                                                                                                           | `bn_superset`      |
+| `postgresql.auth.username`                    | Name for a custom user to create                                                                                                                                                                                           | `bn_Apache Superset`      |
 | `postgresql.auth.password`                    | Password for the custom user to create                                                                                                                                                                                     | `""`               |
-| `postgresql.auth.database`                    | Name for a custom database to create                                                                                                                                                                                       | `bitnami_superset` |
+| `postgresql.auth.database`                    | Name for a custom database to create                                                                                                                                                                                       | `bitnami_Apache Superset` |
 | `postgresql.auth.existingSecret`              | Name of existing secret to use for PostgreSQL credentials                                                                                                                                                                  | `""`               |
 | `postgresql.architecture`                     | PostgreSQL architecture (`standalone` or `replication`)                                                                                                                                                                    | `standalone`       |
 | `postgresql.primary.service.ports.postgresql` | PostgreSQL service port                                                                                                                                                                                                    | `5432`             |
@@ -688,9 +688,9 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `postgresql.primary.resources`                | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                          | `{}`               |
 | `externalDatabase.host`                       | Database host                                                                                                                                                                                                              | `""`               |
 | `externalDatabase.port`                       | Database port number                                                                                                                                                                                                       | `5432`             |
-| `externalDatabase.user`                       | Non-root username for Superset                                                                                                                                                                                             | `bn_superset`      |
+| `externalDatabase.user`                       | Non-root username for Superset                                                                                                                                                                                             | `bn_Apache Superset`      |
 | `externalDatabase.password`                   | Password for the non-root username for Superset                                                                                                                                                                            | `""`               |
-| `externalDatabase.database`                   | Superset database name                                                                                                                                                                                                     | `bitnami_superset` |
+| `externalDatabase.database`                   | Superset database name                                                                                                                                                                                                     | `bitnami_Apache Superset` |
 | `externalDatabase.existingSecret`             | Name of an existing secret resource containing the database credentials                                                                                                                                                    | `""`               |
 | `externalDatabase.existingSecretPasswordKey`  | Name of an existing secret key containing the database credentials                                                                                                                                                         | `db-password`      |
 | `redis.enabled`                               | Switch to enable or disable the Redis&reg; helm                                                                                                                                                                            | `true`             |
@@ -708,7 +708,7 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `externalRedis.existingSecret`                | Name of an existing secret resource containing the Redis&trade credentials                                                                                                                                                 | `""`               |
 | `externalRedis.existingSecretPasswordKey`     | Name of an existing secret key containing the Redis&trade credentials                                                                                                                                                      | `redis-password`   |
 
-The above parameters map to the env variables defined in [bitnami/superset](https://github.com/bitnami/containers/tree/main/bitnami/superset). For more information please refer to the [bitnami/superset](https://github.com/bitnami/containers/tree/main/bitnami/superset) image documentation.
+The above parameters map to the env variables defined in [bitnami/Apache Superset](https://github.com/bitnami/containers/tree/main/bitnami/Apache Superset). For more information please refer to the [bitnami/Apache Superset](https://github.com/bitnami/containers/tree/main/bitnami/Apache Superset) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -717,7 +717,7 @@ helm install my-release \
   --set auth.username=admin \
   --set auth.password=password \
   --set postgresql.auth.password=secretpassword \
-    oci://REGISTRY_NAME/REPOSITORY_NAME/superset
+    oci://REGISTRY_NAME/REPOSITORY_NAME/Apache Superset
 ```
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
@@ -729,11 +729,11 @@ The above command sets the Superset administrator account username and password 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/superset
+helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/Apache Superset
 ```
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-> **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/blob/main/template/superset/values.yaml)
+> **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/blob/main/template/Apache Superset/values.yaml)
 
 ## Troubleshooting
 
