@@ -1,8 +1,12 @@
 # Changelog
 
-## 24.4.6 (2025-01-20)
+## 24.4.7 (2025-01-28)
 
-* [bitnami/keycloak] Improve keycloak value file comments on extraEnvVars property ([#31054](https://github.com/bitnami/charts/pull/31054))
+* [bitnami/keycloak] Release 24.4.7 ([#31625](https://github.com/bitnami/charts/pull/31625))
+
+## <small>24.4.6 (2025-01-21)</small>
+
+* [bitnami/keycloak] Improve keycloak value file comments on extraEnvVars property (#31054) ([fb276fe](https://github.com/bitnami/charts/commit/fb276feeb53dace5c792d8cbf8a6a77162425ae1)), closes [#31054](https://github.com/bitnami/charts/issues/31054)
 
 ## <small>24.4.5 (2025-01-20)</small>
 
