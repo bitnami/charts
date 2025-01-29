@@ -48,6 +48,7 @@ Create a container for checking cassandra availability
 {{- define "jaeger.waitForDBInitContainer" -}}
 {{- $context := .context }}
 {{- $block := index .context.Values .component }}
+{{- if not $block.skipCassandraCheck }}
 - name: jaeger-cassandra-ready-check
   image: {{ include "jaeger.cqlshImage" .context }}
   imagePullPolicy: {{ .context.Values.image.pullPolicy | quote }}
@@ -99,6 +100,7 @@ Create a container for checking cassandra availability
   {{- else if ne .context.Values.cqlshImage.resourcesPreset "none" }}
   resources: {{- include "common.resources.preset" (dict "type" .context.Values.cqlshImage.resourcesPreset) | nindent 4 }}
   {{- end }}
+{{- end }}
 {{- end -}}
 
 {{/*

@@ -110,6 +110,10 @@ query:
   ## @param query.automountServiceAccountToken Mount Service Account token in pod
   ##
   automountServiceAccountToken: false
+  ## @param query.skipCassandraCheck Enable/disable the Cassandra readiness check init container
+  ## When set to true, the init container that checks Cassandra availability will be skipped
+  ##
+  skipCassandraCheck: false
   ## @param query.hostAliases Set pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -501,6 +505,10 @@ collector:
   ## @param collector.automountServiceAccountToken Mount Service Account token in pod
   ##
   automountServiceAccountToken: false
+  ## @param collector.skipCassandraCheck Enable/disable the Cassandra readiness check init container
+  ## When set to true, the init container that checks Cassandra availability will be skipped
+  ##
+  skipCassandraCheck: false
   ## @param collector.hostAliases Set pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
