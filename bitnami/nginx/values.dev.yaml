@@ -48,15 +48,20 @@ containerPorts:
 serverBlock: |-
   server {
     listen 0.0.0.0:8080;
+    location / {
+      proxy_set_header Host $host;
+      proxy_set_header X-Real-IP $remote_addr;
+      proxy_pass http://dsp-portal-gui:3000/;
+    }
+    location /agreement-svc {
+      proxy_set_header Host $host;
+      proxy_set_header X-Real-IP $remote_addr;
+      proxy_pass http://dsp-agreement-svc:5000/;
+    }
     location /service-a {
       proxy_set_header Host $host;
       proxy_set_header X-Real-IP $remote_addr;
       proxy_pass http://dsp-portal-service-a:5000/health;
-    }
-    location /gui {
-      proxy_set_header Host $host;
-      proxy_set_header X-Real-IP $remote_addr;
-      proxy_pass http://dsp-portal-gui:3000/health;
     }
     location /service-b {
       proxy_set_header Host $host;
