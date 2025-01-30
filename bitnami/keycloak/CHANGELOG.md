@@ -1,8 +1,8 @@
 # Changelog
 
-## 24.4.7 (2025-01-22)
+## 24.4.7 (2025-01-28)
 
-* [bitnami/keycloak] reverts(#30368) ([#31227](https://github.com/bitnami/charts/pull/31227))
+* [bitnami/keycloak] Release 24.4.7 ([#31625](https://github.com/bitnami/charts/pull/31625))
 
 ## <small>24.4.6 (2025-01-21)</small>
 

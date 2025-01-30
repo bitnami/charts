@@ -1,8 +1,12 @@
 # Changelog
 
-## 10.2.4 (2025-01-21)
+## 10.2.5 (2025-01-27)
 
-* [bitnami/kube-prometheus] Release 10.2.4 ([#31441](https://github.com/bitnami/charts/pull/31441))
+* [bitnami/kube-prometheus] Release 10.2.5 ([#31579](https://github.com/bitnami/charts/pull/31579))
+
+## <small>10.2.4 (2025-01-21)</small>
+
+* [bitnami/kube-prometheus] Release 10.2.4 (#31441) ([1d408bd](https://github.com/bitnami/charts/commit/1d408bded4e34460eee6e9b2050a796d0f772b21)), closes [#31441](https://github.com/bitnami/charts/issues/31441)
 
 ## <small>10.2.3 (2024-12-19)</small>
 

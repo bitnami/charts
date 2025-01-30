@@ -97,7 +97,7 @@ spec:
             - /bin/bash
             - -ec
             - |
-              find {{ .Values.replica.persistence.path }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs chown -R {{ printf "%d:%d" (int .Values.replica.containerSecurityContext.runAsUser) (int .Values.replica.podSecurityContext.fsGroup) }}
+              find {{ .Values.replica.persistence.mountPath }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs -r chown -R {{ printf "%d:%d" (int .Values.replica.containerSecurityContext.runAsUser) (int .Values.replica.podSecurityContext.fsGroup) }}
           {{- if .Values.volumePermissions.containerSecurityContext.enabled }}
           securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.volumePermissions.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}

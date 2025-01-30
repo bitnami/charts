@@ -3,31 +3,33 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if or (eq .Values.resourceType "statefulset") (not (contains .Values.resourceType "deployment")) }}
-apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
-kind: StatefulSet
+{{- $resourceType := lower .Values.resourceType }}
+apiVersion: {{ ternary (include "common.capabilities.deployment.apiVersion" .) (include "common.capabilities.statefulset.apiVersion" .) (eq $resourceType "deployment") }}
+kind: {{ ternary "Deployment" "StatefulSet" (eq $resourceType "deployment") }}
 metadata:
   name: {{ template "common.names.fullname" . }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  podManagementPolicy: {{ .Values.podManagementPolicy }}
   replicas: {{ .Values.replicaCount }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+  {{- if eq $resourceType "statefulset" }}
+  podManagementPolicy: {{ .Values.podManagementPolicy }}
   serviceName: {{ printf "%s-headless" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  {{- end }}
   {{- if .Values.updateStrategy }}
-  updateStrategy: {{- include "common.tplvalues.render" (dict "value" .Values.updateStrategy "context" $ ) | nindent 4 }}
+  {{ ternary "strategy" "updateStrategy" (eq $resourceType "deployment") }}: {{- include "common.tplvalues.render" (dict "value" .Values.updateStrategy "context" $ ) | nindent 4 }}
   {{- end }}
   template:
     metadata:
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
       annotations:
-        {{- if (include "nats.createSecret" .) }}
+        {{- if not .Values.existingSecret }}
         checksum/secret: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }}
         {{- end }}
         {{- if .Values.podAnnotations }}
@@ -76,25 +78,30 @@ spec:
           {{- if .Values.containerSecurityContext.enabled }}
           securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
+          command:
           {{- if .Values.diagnosticMode.enabled }}
-          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
           {{- else if .Values.command }}
-          command: {{- include "common.tplvalues.render" (dict "value" .Values.command "context" $) | nindent 12 }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.command "context" $) | nindent 12 }}
+          {{- else }}
+            - /nats-server
           {{- end }}
+          args:
           {{- if .Values.diagnosticMode.enabled }}
-          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
           {{- else if .Values.args }}
-          args: {{- include "common.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
+          {{- else }}
+            - -c
+            - /etc/{{ .Values.natsFilename }}.conf
           {{- end }}
           env:
-            - name: BITNAMI_DEBUG
-              value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
-            - name: NATS_FILENAME
-              value: {{ .Values.natsFilename | quote }}
+            {{- if eq $resourceType "statefulset" }}
             - name: NATS_SERVER_NAME
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
+            {{- end }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
@@ -153,19 +160,18 @@ spec:
             - name: empty-dir
               mountPath: /tmp
               subPath: tmp-dir
-            - name: empty-dir
-              mountPath: /opt/bitnami/nats/conf
-              subPath: app-conf-dir
-            - name: empty-dir
-              mountPath: /opt/bitnami/nats/tmp
-              subPath: app-tmp-dir
-            - name: empty-dir
-              mountPath: /opt/bitnami/nats/logs
-              subPath: app-logs-dir
             - name: config
-              mountPath: /bitnami/nats/conf/{{ .Values.natsFilename }}.conf
+              mountPath: /etc/{{ .Values.natsFilename }}.conf
               subPath: {{ .Values.natsFilename }}.conf
-            {{- if .Values.persistence.enabled }}
+            {{- if .Values.tls.enabled }}
+            - name: ca-cert
+              mountPath: /etc/certs/ca
+              readOnly: true
+            - name: server-cert
+              mountPath: /etc/certs/server
+              readOnly: true
+            {{- end }}
+            {{- if and .Values.persistence.enabled (eq $resourceType "statefulset") }}
             - name: data
               mountPath: /data
             {{- end }}
@@ -176,6 +182,9 @@ spec:
         - name: metrics
           image: {{ template "nats.metrics.image" . }}
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
+          {{- if .Values.metrics.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.metrics.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
@@ -183,11 +192,10 @@ spec:
           args: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.flags "context" $) | nindent 12 }}
             - "http://localhost:{{ .Values.containerPorts.monitoring }}"
           {{- end }}
-          {{- if not .Values.diagnosticMode.enabled }}
           ports:
             - name: metrics
-              containerPort: {{ coalesce .Values.metrics.containerPorts.http .Values.metrics.containerPort }}
-
+              containerPort: {{ .Values.metrics.containerPorts.http }}
+          {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.metrics.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.metrics.livenessProbe.enabled }}
@@ -204,7 +212,6 @@ spec:
               path: /metrics
               port: metrics
           {{- end }}
-
           {{- end }}
           {{- if .Values.metrics.resources }}
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
@@ -221,10 +228,20 @@ spec:
         - name: config
           secret:
             secretName: {{ include "nats.secretName" . }}
+        {{- if .Values.tls.enabled }}
+        - name: ca-cert
+          secret:
+            secretName: {{ template "nats.tls.ca.secretName" . }}
+            defaultMode: 256
+        - name: server-cert
+          secret:
+            secretName: {{ template "nats.tls.server.secretName" . }}
+            defaultMode: 256
+        {{- end }}
         {{- if .Values.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
-  {{- if .Values.persistence.enabled }}
+  {{- if and .Values.persistence.enabled (eq $resourceType "statefulset") }}
   {{- if .Values.persistentVolumeClaimRetentionPolicy.enabled }}
   persistentVolumeClaimRetentionPolicy:
     whenDeleted: {{ .Values.persistentVolumeClaimRetentionPolicy.whenDeleted }}
@@ -253,4 +270,3 @@ spec:
         {{- end }}
         {{- include "common.storage.class" (dict "persistence" .Values.persistence "global" .Values.global) | nindent 8 }}
   {{- end }}
-{{- end }}

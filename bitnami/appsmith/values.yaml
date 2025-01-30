@@ -87,7 +87,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/appsmith
-  tag: 1.57.0-debian-12-r0
+  tag: 1.58.0-debian-12-r1
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -864,7 +864,7 @@ backend:
     image:
       registry: docker.io
       repository: bitnami/haproxy
-      tag: 3.1.2-debian-12-r0
+      tag: 3.1.2-debian-12-r2
       digest: ""
       ## Specify a imagePullPolicy
       ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
