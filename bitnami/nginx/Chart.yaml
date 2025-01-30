@@ -34,4 +34,4 @@ maintainers:
 name: nginx-chart
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/nginx
-version: 18.3.2
+version: 18.3.1
