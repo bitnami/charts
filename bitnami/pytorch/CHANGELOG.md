@@ -1,6 +1,6 @@
 # Changelog
 
-## 4.3.3 (2025-01-29)
+## 4.3.3 (2025-01-30)
 
 * [bitnami/pytorch] Release 4.3.3 ([#31670](https://github.com/bitnami/charts/pull/31670))
 
