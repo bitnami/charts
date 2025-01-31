@@ -6,7 +6,7 @@
 
 ## <small>11.0.4 (2025-01-24)</small>
 
-* [bitnami/etcd] Release 11.0.4 ([#31591](https://github.com/bitnami/charts/pull/31591))
+* [bitnami/etcd] Release 11.0.4 (#31591) ([b342ec8](https://github.com/bitnami/charts/commit/b342ec844c9106fb724ec952fa4abbe7f26844d1)), closes [#31591](https://github.com/bitnami/charts/issues/31591)
 
 ## <small>11.0.3 (2025-01-24)</small>
 
