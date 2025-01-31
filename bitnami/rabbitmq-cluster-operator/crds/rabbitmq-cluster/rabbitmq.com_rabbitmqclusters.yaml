@@ -1,5 +1,5 @@
 # Source: https://raw.githubusercontent.com/rabbitmq/cluster-operator/v{version}/config/crd/bases/rabbitmq.com_rabbitmqclusters.yaml
-# Version: 2.12.0
+# Version: 2.12.1
 # RabbitMQ Cluster Operator
 #
 # Copyright 2020 VMware, Inc. All Rights Reserved.
@@ -12,7 +12,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.16.3
+    controller-gen.kubebuilder.io/version: v0.17.0
   name: rabbitmqclusters.rabbitmq.com
 spec:
   group: rabbitmq.com
@@ -3785,6 +3785,39 @@ spec:
                                       x-kubernetes-list-map-keys:
                                         - name
                                       x-kubernetes-list-type: map
+                                    resources:
+                                      properties:
+                                        claims:
+                                          items:
+                                            properties:
+                                              name:
+                                                type: string
+                                              request:
+                                                type: string
+                                            required:
+                                              - name
+                                            type: object
+                                          type: array
+                                          x-kubernetes-list-map-keys:
+                                            - name
+                                          x-kubernetes-list-type: map
+                                        limits:
+                                          additionalProperties:
+                                            anyOf:
+                                              - type: integer
+                                              - type: string
+                                            pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                                            x-kubernetes-int-or-string: true
+                                          type: object
+                                        requests:
+                                          additionalProperties:
+                                            anyOf:
+                                              - type: integer
+                                              - type: string
+                                            pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                                            x-kubernetes-int-or-string: true
+                                          type: object
+                                      type: object
                                     restartPolicy:
                                       type: string
                                     runtimeClassName:
@@ -3827,6 +3860,8 @@ spec:
                                         runAsUser:
                                           format: int64
                                           type: integer
+                                        seLinuxChangePolicy:
+                                          type: string
                                         seLinuxOptions:
                                           properties:
                                             level:
@@ -5156,7 +5191,7 @@ spec:
                       description: |-
                         Name of a Secret in the same Namespace as the RabbitmqCluster, containing the Certificate Authority's public certificate for TLS.
                         The Secret must store this as ca.crt.
-                        This Secret can be created by running `kubectl create secret generic ca-secret --from-file=ca.crt=path/to/ca.cert`
+                        This Secret can be created by running `kubectl create secret generic ca-secret --from-file=ca.crt=path/to/ca.crt`
                         Used for mTLS, and TLS for rabbitmq_web_stomp and rabbitmq_web_mqtt.
                       type: string
                     disableNonTLSListeners:
@@ -5168,7 +5203,7 @@ spec:
                       description: |-
                         Name of a Secret in the same Namespace as the RabbitmqCluster, containing the server's private key & public certificate for TLS.
                         The Secret must store these as tls.key and tls.crt, respectively.
-                        This Secret can be created by running `kubectl create secret tls tls-secret --cert=path/to/tls.cert --key=path/to/tls.key`
+                        This Secret can be created by running `kubectl create secret tls tls-secret --cert=path/to/tls.crt --key=path/to/tls.key`
                       type: string
                   type: object
                 tolerations:

@@ -1,8 +1,12 @@
 # Changelog
 
-## 3.8.3 (2025-01-17)
+## 3.8.4 (2025-01-24)
 
-* [bitnami/grafana-tempo] Release 3.8.3 ([#31423](https://github.com/bitnami/charts/pull/31423))
+* [bitnami/grafana-tempo] Release 3.8.4 ([#31557](https://github.com/bitnami/charts/pull/31557))
+
+## <small>3.8.3 (2025-01-17)</small>
+
+* [bitnami/grafana-tempo] Release 3.8.3 (#31423) ([e30df1e](https://github.com/bitnami/charts/commit/e30df1e7e90673f0e80a30dafff3e98271434401)), closes [#31423](https://github.com/bitnami/charts/issues/31423)
 
 ## <small>3.8.2 (2025-01-14)</small>
 

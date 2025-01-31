@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.0.4 (2025-01-24)
+## 11.0.5 (2025-01-31)
 
 * [bitnami/etcd] Fix: issue with preupgrade job during scale down ([#31539](https://github.com/bitnami/charts/pull/31539))
+
+## <small>11.0.4 (2025-01-24)</small>
+
+* [bitnami/etcd] Release 11.0.4 ([#31591](https://github.com/bitnami/charts/pull/31591))
 
 ## <small>11.0.3 (2025-01-24)</small>
 
