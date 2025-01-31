@@ -1,12 +1,12 @@
 # Changelog
 
-## 3.9.0 (2025-01-21)
+## 3.9.0 (2025-01-31)
 
 * [bitnami/grafana-tempo] Add persistence options for Grafana Tempo metrics generator ([#31495](https://github.com/bitnami/charts/pull/31495))
 
 ## <small>3.8.4 (2025-01-24)</small>
 
-* [bitnami/grafana-tempo] Release 3.8.4 ([#31557](https://github.com/bitnami/charts/pull/31557))
+* [bitnami/grafana-tempo] Release 3.8.4 (#31557) ([b291adb](https://github.com/bitnami/charts/commit/b291adb57d77f42c00903a6bdf0f6e3fd82842c6)), closes [#31557](https://github.com/bitnami/charts/issues/31557)
 
 ## <small>3.8.3 (2025-01-17)</small>
 
