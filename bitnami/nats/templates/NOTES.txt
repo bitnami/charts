@@ -7,6 +7,7 @@ Did you know there are enterprise versions of the Bitnami catalog? For enhanced 
 ** Please be patient while the chart is being deployed **
 
 {{- if .Values.diagnosticMode.enabled }}
+
 The chart has been deployed in diagnostic mode. All probes have been disabled and the command has been overwritten with:
 
   command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 4 }}
@@ -15,14 +16,6 @@ The chart has been deployed in diagnostic mode. All probes have been disabled an
 Get the list of pods by executing:
 
   kubectl get pods --namespace {{ .Release.Namespace }} -l app.kubernetes.io/instance={{ .Release.Name }}
-
-Access the pod you want to debug by executing
-
-  kubectl exec --namespace {{ .Release.Namespace }} -ti <NAME OF THE POD> -- bash
-
-In order to replicate the container startup scripts execute this command:
-
-    /opt/bitnami/scripts/nats/entrypoint.sh
 
 {{- else }}
 
@@ -54,9 +47,13 @@ NATS can be accessed via port {{ .Values.service.ports.client }} on the followin
 
 To get the authentication credentials, run:
 
-    export NATS_USER=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} -o jsonpath='{.data.*}' | base64 -d | grep -m 1 user | awk '{print $2}' | tr -d '"')
-    export NATS_PASS=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} -o jsonpath='{.data.*}' | base64 -d | grep -m 1 password | awk '{print $2}' | tr -d '"')
+    {{- if .Values.auth.token }}
+    export NATS_TOKEN=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} -o jsonpath='{.data.*}' | base64 -d | sed -n 's/.*token: "\([^"]*\)".*/\1/p' | head -n 1)
+    {{- else }}
+    export NATS_USER=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} -o jsonpath='{.data.*}' | base64 -d | sed -n 's/.*user: "\([^"]*\)".*/\1/p' | head -n 1)
+    export NATS_PASS=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} -o jsonpath='{.data.*}' | base64 -d | sed -n 's/.*password: "\([^"]*\)".*/\1/p' | head -n 1)
     echo -e "Client credentials:\n\tUser: $NATS_USER\n\tPassword: $NATS_PASS"
+    {{- end }}
 
 {{- end }}
 
@@ -64,20 +61,62 @@ NATS monitoring service can be accessed via port {{ .Values.service.ports.monito
 
     {{ include "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
 
-You can create a Golang pod to be used as a NATS client:
+You can create a pod to be used as a NATS client:
 
-      kubectl run {{ include "common.names.fullname" . }}-client --restart='Never' --env="NATS_USER=$NATS_USER" --env="NATS_PASS=$NATS_PASS" --image docker.io/bitnami/golang --namespace {{ .Release.Namespace }} --command -- sleep infinity
-      kubectl exec --tty -i {{ include "common.names.fullname" . }}-client --namespace {{ .Release.Namespace }} -- bash
-      GO111MODULE=off go get github.com/nats-io/nats.go
-      cd $GOPATH/src/github.com/nats-io/nats.go/examples/nats-pub && go install && cd
-      cd $GOPATH/src/github.com/nats-io/nats.go/examples/nats-echo && go install && cd
-      {{- if .Values.auth.enabled }}
-      nats-echo -s nats://$NATS_USER:$NATS_PASS@{{ include "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.service.ports.client }} SomeSubject
-      nats-pub -s nats://$NATS_USER:$NATS_PASS@{{ include "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.service.ports.client }} -reply Hi SomeSubject "Hi everyone"
-      {{- else }}
-      nats-echo -s nats://{{ include "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.service.ports.client }} SomeSubject
-      nats-pub -s nats://{{ include "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.service.ports.client }} -reply Hi SomeSubject "Hi everyone"
-      {{- end }}
+    cat <<EOF | kubectl apply -f -
+apiVersion: v1
+kind: Pod
+metadata:
+  name: {{ include "common.names.fullname" . }}-client
+  namespace: {{ .Release.Namespace }}
+spec:
+  containers:
+  - name: cli
+    image: docker.io/bitnami/natscli
+    command: ["sleep", "infinity"]
+    env:
+    {{- if .Values.auth.token }}
+    - name: NATS_TOKEN
+      value: "$NATS_TOKEN"
+    {{- else }}
+    - name: NATS_USER
+      value: "$NATS_USER"
+    - name: NATS_PASS
+      value: "$NATS_PASS"
+    {{- end }}
+  {{- if .Values.tls.enabled }}
+    volumeMounts:
+    - mountPath: /etc/certs/ca
+      name: ca-cert
+      readOnly: true
+    - mountPath: /etc/certs/client
+      name: client-cert
+      readOnly: true
+  volumes:
+  - name: ca-cert
+    secret:
+      secretName: {{ template "nats.tls.ca.secretName" . }}
+  - name: client-cert
+    secret:
+      secretName: {{ template "nats.tls.client.secretName" . }}
+  {{- end }}
+EOF
+
+Then, access the pod and connect to NATS:
+
+    kubectl exec --tty -i {{ include "common.names.fullname" . }}-client --namespace {{ .Release.Namespace }} -- bash
+    {{- if .Values.auth.enabled }}
+    {{- if .Values.auth.token }}
+    nats -s nats://$NATS_TOKEN@{{ include "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.service.ports.client }} {{ if .Values.tls.enabled }}--tlscert /etc/certs/client/tls.crt --tlskey /etc/certs/client/tls.key --tlsca /etc/certs/ca/tls.crt{{ end }} subscribe SomeSubject &
+    nats -s nats://$NATS_TOKEN@{{ include "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.service.ports.client }} {{ if .Values.tls.enabled }}--tlscert /etc/certs/client/tls.crt --tlskey /etc/certs/client/tls.key --tlsca /etc/certs/ca/tls.crt{{ end }} publish SomeSubject "Some message"
+    {{- else }}
+    nats -s nats://$NATS_USER:$NATS_PASS@{{ include "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.service.ports.client }} {{ if .Values.tls.enabled }}--tlscert /etc/certs/client/tls.crt --tlskey /etc/certs/client/tls.key --tlsca /etc/certs/ca/tls.crt{{ end }} subscribe SomeSubject
+    nats -s nats://$NATS_USER:$NATS_PASS@{{ include "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.service.ports.client }} {{ if .Values.tls.enabled }}--tlscert /etc/certs/client/tls.crt --tlskey /etc/certs/client/tls.key --tlsca /etc/certs/ca/tls.crt{{ end }} publish SomeSubject "Some message"
+    {{- end }}
+    {{- else }}
+    nats -s nats://{{ include "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.service.ports.client }} {{ if .Values.tls.enabled }}--tlscert /etc/certs/client/tls.crt --tlskey /etc/certs/client/tls.key --tlsca /etc/certs/ca/tls.crt{{ end }} subscribe SomeSubject
+    nats -s nats://{{ include "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.service.ports.client }} {{ if .Values.tls.enabled }}--tlscert /etc/certs/client/tls.crt --tlskey /etc/certs/client/tls.key --tlsca /etc/certs/ca/tls.crt{{ end }} publish SomeSubject "Some message"
+    {{- end }}
 
 To access the Monitoring svc from outside the cluster, follow the steps below:
 
@@ -129,7 +168,7 @@ To access the Monitoring svc from outside the cluster, follow the steps below:
 
 {{- include "common.warnings.rollingTag" .Values.image }}
 {{- include "common.warnings.rollingTag" .Values.metrics.image }}
-{{- include "nats.validateValues" . -}}
 {{- include "common.warnings.resources" (dict "sections" (list "metrics" "") "context" $) }}
 {{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.metrics.image) "context" $) }}
 {{- include "common.errors.insecureImages" (dict "images" (list .Values.image .Values.metrics.image) "context" $) }}
+{{- include "nats.validateValues" . }}

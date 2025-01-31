@@ -1,8 +1,29 @@
 # Changelog
 
-## 2.3.1 (2024-12-11)
+## 2.4.1 (2025-01-30)
 
-* [bitnami/mlflow] Release 2.3.1 ([#30994](https://github.com/bitnami/charts/pull/30994))
+* [bitnami/mlflow] Release 2.4.1 ([#31679](https://github.com/bitnami/charts/pull/31679))
+
+## 2.4.0 (2025-01-29)
+
+* [bitnami/mlflow] feature(minio): Bump MinIO subchart (#31662) ([d3d32f1](https://github.com/bitnami/charts/commit/d3d32f17477c4cd8fc12b0e0be584b7e64e408a9)), closes [#31662](https://github.com/bitnami/charts/issues/31662)
+
+## <small>2.3.4 (2025-01-24)</small>
+
+* [bitnami/mlflow] Release 2.3.4 (#31573) ([e353b25](https://github.com/bitnami/charts/commit/e353b25dd3301299be4fcf16d53669226bff805d)), closes [#31573](https://github.com/bitnami/charts/issues/31573)
+
+## <small>2.3.3 (2025-01-23)</small>
+
+* [bitnami/mlflow] Fix parsing of mlflow tracking service loadBalancerSourceRanges (#31327) ([a0cf872](https://github.com/bitnami/charts/commit/a0cf87299703c97217c7585b2d81a8d6bb8281c8)), closes [#31327](https://github.com/bitnami/charts/issues/31327)
+
+## <small>2.3.2 (2025-01-20)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/mlflow] Release 2.3.2 (#31485) ([78bbe94](https://github.com/bitnami/charts/commit/78bbe94ec731a0cb046e0387b5d610de41f97472)), closes [#31485](https://github.com/bitnami/charts/issues/31485)
+
+## <small>2.3.1 (2024-12-11)</small>
+
+* [bitnami/mlflow] Release 2.3.1 (#30994) ([d5a8c38](https://github.com/bitnami/charts/commit/d5a8c380742726bd6268ccaa96a63bb57d1d64db)), closes [#30994](https://github.com/bitnami/charts/issues/30994)
 
 ## 2.3.0 (2024-12-10)
 

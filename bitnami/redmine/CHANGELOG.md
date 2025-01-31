@@ -1,8 +1,21 @@
 # Changelog
 
-## 32.1.1 (2024-12-12)
+## 32.1.4 (2025-01-29)
 
-* [bitnami/redmine] Release 32.1.1 ([#31001](https://github.com/bitnami/charts/pull/31001))
+* [bitnami/redmine] Release 32.1.4 ([#31657](https://github.com/bitnami/charts/pull/31657))
+
+## <small>32.1.3 (2025-01-29)</small>
+
+* [bitnami/redmine] Release 32.1.3 (#31652) ([b2e3e29](https://github.com/bitnami/charts/commit/b2e3e29653d0f9cc5530476b6325a308eecef954)), closes [#31652](https://github.com/bitnami/charts/issues/31652)
+
+## <small>32.1.2 (2025-01-21)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/redmine] Release 32.1.2 (#31487) ([28f93ad](https://github.com/bitnami/charts/commit/28f93ad2df0cb9b7f7879eb9eda2b7c20ef93247)), closes [#31487](https://github.com/bitnami/charts/issues/31487)
+
+## <small>32.1.1 (2024-12-12)</small>
+
+* [bitnami/redmine] Release 32.1.1 (#31001) ([211442a](https://github.com/bitnami/charts/commit/211442ab315fad505118ae4389ebc0056d3893d0)), closes [#31001](https://github.com/bitnami/charts/issues/31001)
 
 ## 32.1.0 (2024-12-10)
 

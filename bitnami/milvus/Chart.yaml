@@ -19,7 +19,7 @@ dependencies:
 - name: etcd
   repository: oci://registry-1.docker.io/bitnamicharts
   condition: etcd.enabled
-  version: 10.x.x
+  version: 11.x.x
 - condition: kafka.enabled
   name: kafka
   repository: oci://registry-1.docker.io/bitnamicharts
@@ -27,7 +27,7 @@ dependencies:
 - condition: minio.enabled
   name: minio
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 14.x.x
+  version: 15.x.x
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
   tags:
@@ -48,4 +48,4 @@ maintainers:
 name: milvus
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/milvus
-version: 10.1.6
+version: 11.1.0

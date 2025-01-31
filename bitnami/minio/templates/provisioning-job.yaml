@@ -44,7 +44,7 @@ spec:
       serviceAccountName: {{ template "minio.serviceAccountName" . }}
       initContainers:
         - name: wait-for-available-minio
-          image: {{ include "minio.image" . }}
+          image: {{ include "minio.volumePermissions.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.provisioning.containerSecurityContext.enabled }}
           securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.provisioning.containerSecurityContext "context" $) | nindent 12 }}
@@ -82,6 +82,20 @@ spec:
             - |-
               set -e;
               echo "Start Minio provisioning";
+
+              retry_while() {
+                local -r cmd="${1:?cmd is missing}"
+                local -r retries="${2:-12}"
+                local -r sleep_time="${3:-5}"
+                local return_value=1
+
+                read -r -a command <<< "$cmd"
+                for ((i = 1 ; i <= retries ; i+=1 )); do
+                    "${command[@]}" && return_value=0 && break
+                    sleep "$sleep_time"
+                done
+                return $return_value
+              }
 
               function attachPolicy() {
                 local tmp=$(mc admin $1 info {{ $minioAlias }} $2 | sed -n -e 's/^Policy.*: \(.*\)$/\1/p');
@@ -148,11 +162,10 @@ spec:
               # "mc admin service restart --wait" command is not working as expected
               sleep {{ .Values.provisioning.sleepTime | default 5 }};
               echo "Waiting for Minio to be available after restart";
-              wait-for-port \
-                --host={{ include "common.names.fullname" . }} \
-                --state=inuse \
-                --timeout=120 \
-                {{ .Values.service.ports.api | int64 }};
+              if ! retry_while "mc admin info {{ $minioAlias }}"; then
+                  echo "Error connecting to Minio"
+                  exit 1
+              fi
               echo "Minio is available. Executing provisioning commands";
 
               {{- range $policy := .Values.provisioning.policies }}

@@ -14,7 +14,7 @@ SPDX-License-Identifier: APACHE-2.0
 {{- if not (empty .Values.storegateway.sharded.timePartitioning) }}
   {{- $timeShards = len .Values.storegateway.sharded.timePartitioning }}
 {{- end }}
-{{- $shards = mul $hashShards $timeShards }}
+{{- $shards = mul $hashShards $timeShards | int }}
 
 {{- range $index, $_ := until $shards }}
 apiVersion: {{ include "common.capabilities.hpa.apiVersion" ( dict "context" $ ) }}

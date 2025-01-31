@@ -386,6 +386,13 @@ data:
     export BROKER_RACK=$(curl -H "X-aws-ec2-metadata-token: $EC2_METADATA_TOKEN" "http://169.254.169.254/latest/meta-data/placement/availability-zone-id")
     kafka_conf_set "$KAFKA_CONFIG_FILE" "broker.rack" "$BROKER_RACK"
     {{- end }}
+    {{- if eq .Values.brokerRackAssignment "azure" }}
+    # Broker rack awareness IGT Implemented
+    echo "Obtaining broker.rack for Azure rack assignment"
+    export LOCATION=$(curl -s -H Metadata:true --noproxy "*" "http://169.254.169.254/metadata/instance/compute/location?api-version={{ .Values.brokerRackAssignmentApiVersion }}&format=text")
+    export ZONE=$(curl -s -H Metadata:true --noproxy "*" "http://169.254.169.254/metadata/instance/compute/zone?api-version={{ .Values.brokerRackAssignmentApiVersion }}&format=text")
+    kafka_conf_set "$KAFKA_CONFIG_FILE" "broker.rack" "${LOCATION}-${ZONE}"
+    {{- end }}
     if [ -f /secret-config/server-secret.properties ]; then
       append_file_to_kafka_conf /secret-config/server-secret.properties $KAFKA_CONFIG_FILE
     fi

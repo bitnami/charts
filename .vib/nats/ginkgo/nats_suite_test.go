@@ -17,7 +17,7 @@ import (
 
 var (
 	kubeconfig     string
-	stsName        string
+	releaseName    string
 	namespace      string
 	username       string
 	password       string
@@ -27,10 +27,10 @@ var (
 
 func init() {
 	flag.StringVar(&kubeconfig, "kubeconfig", "", "absolute path to the kubeconfig file")
-	flag.StringVar(&stsName, "name", "", "name of the primary statefulset")
+	flag.StringVar(&releaseName, "name", "", "name of the chart release")
 	flag.StringVar(&namespace, "namespace", "", "namespace where the application is running")
-	flag.StringVar(&username, "username", "", "database user")
-	flag.StringVar(&password, "password", "", "database password for username")
+	flag.StringVar(&username, "username", "", "nats user")
+	flag.StringVar(&password, "password", "", "password for nats user")
 	flag.IntVar(&timeoutSeconds, "timeout", 300, "timeout in seconds")
 	timeout = time.Duration(timeoutSeconds) * time.Second
 }
@@ -74,7 +74,7 @@ func createJob(ctx context.Context, c kubernetes.Interface, name string, port st
 							Env: []v1.EnvVar{
 								{
 									Name:  "NATS_URL",
-									Value: fmt.Sprintf("nats://%s:%s", stsName, port),
+									Value: fmt.Sprintf("nats://%s:%s", releaseName, port),
 								},
 								{
 									Name:  "NATS_USER",
@@ -84,8 +84,48 @@ func createJob(ctx context.Context, c kubernetes.Interface, name string, port st
 									Name:  "NATS_PASSWORD",
 									Value: password,
 								},
+								{
+									Name:  "NATS_CERT",
+									Value: "/certs/client/tls.crt",
+								},
+								{
+									Name:  "NATS_KEY",
+									Value: "/certs/client/tls.key",
+								},
+								{
+									Name:  "NATS_CA",
+									Value: "/certs/ca/tls.crt",
+								},
 							},
 							SecurityContext: securityContext,
+							VolumeMounts: []v1.VolumeMount{
+								{
+									Name:      "ca-cert",
+									MountPath: "/certs/ca",
+								},
+								{
+									Name:      "client-cert",
+									MountPath: "/certs/client",
+								},
+							},
+						},
+					},
+					Volumes: []v1.Volume{
+						{
+							Name: "ca-cert",
+							VolumeSource: v1.VolumeSource{
+								Secret: &v1.SecretVolumeSource{
+									SecretName: fmt.Sprintf("%s-ca-crt", releaseName),
+								},
+							},
+						},
+						{
+							Name: "client-cert",
+							VolumeSource: v1.VolumeSource{
+								Secret: &v1.SecretVolumeSource{
+									SecretName: fmt.Sprintf("%s-client-crt", releaseName),
+								},
+							},
 						},
 					},
 				},

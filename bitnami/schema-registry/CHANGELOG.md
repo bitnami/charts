@@ -1,8 +1,13 @@
 # Changelog
 
-## 23.1.1 (2025-01-13)
+## 23.1.2 (2025-01-28)
 
-* [bitnami/schema-registry] Release 23.1.1 ([#31325](https://github.com/bitnami/charts/pull/31325))
+* [bitnami/schema-registry] Release 23.1.2 ([#31640](https://github.com/bitnami/charts/pull/31640))
+
+## <small>23.1.1 (2025-01-13)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/schema-registry] Release 23.1.1 (#31325) ([8d00a21](https://github.com/bitnami/charts/commit/8d00a21f9a7b4c1c9dad0981ff73a4c23a1419d2)), closes [#31325](https://github.com/bitnami/charts/issues/31325)
 
 ## 23.1.0 (2024-12-10)
 
