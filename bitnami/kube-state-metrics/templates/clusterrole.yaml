@@ -169,12 +169,6 @@ rules:
       - storageclasses
     verbs: ["list", "watch"]
   {{- end }}
-  {{- if .Values.kubeResources.verticalpodautoscalers }}
-  - apiGroups: ["autoscaling.k8s.io"]
-    resources:
-      - verticalpodautoscalers
-    verbs: ["list", "watch"]
-  {{- end }}
   {{- if .Values.kubeResources.validatingwebhookconfigurations }}
   - apiGroups: ["admissionregistration.k8s.io"]
     resources:
