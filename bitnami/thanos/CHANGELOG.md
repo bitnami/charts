@@ -1,8 +1,8 @@
 # Changelog
 
-## 15.10.4 (2025-01-29)
+## 15.11.0 (2025-01-29)
 
-* [bitnami/thanos] Remove quotes from --rule-file arg ([#31649](https://github.com/bitnami/charts/pull/31649))
+* [bitnami/thanos] feature(minio): Bump MinIO subchart ([#31663](https://github.com/bitnami/charts/pull/31663))
 
 ## <small>15.10.3 (2025-01-24)</small>
 
