@@ -3679,6 +3679,8 @@ postgresql:
 ## @param externalDatabase.password Password for the non-root username for Harbor
 ## @param externalDatabase.sslmode External database ssl mode
 ## @param externalDatabase.coreDatabase External database name for core
+## @param externalDatabase.existingSecret The name of an existing secret with database credentials
+## @param externalDatabase.existingSecretPasswordKey Password key on the existing secret
 ##
 externalDatabase:
   host: localhost
@@ -3687,6 +3689,9 @@ externalDatabase:
   password: ""
   sslmode: disable
   coreDatabase: ""
+  existingSecret: ""
+  existingSecretPasswordKey: "db-password"
+
 ## @section Redis&reg; parameters
 ##
 

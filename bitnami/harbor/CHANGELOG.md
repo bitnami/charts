@@ -1,8 +1,12 @@
 # Changelog
 
+## 24.3.0 (2025-01-27)
+
+* [bitnami/harbor] Added existingSecret parameter for external database ([#31492](https://github.com/bitnami/charts/pull/31492))
+
 ## 24.2.0 (2025-01-27)
 
-* [bitnami/harbor] allow custom trivy db repository ([#31594](https://github.com/bitnami/charts/pull/31594))
+* [bitnami/harbor] allow custom trivy db repository (#31594) ([1041261](https://github.com/bitnami/charts/commit/1041261ac0c42618da3e0357e18ac200052ff31f)), closes [#31594](https://github.com/bitnami/charts/issues/31594)
 
 ## <small>24.1.8 (2025-01-23)</small>
 

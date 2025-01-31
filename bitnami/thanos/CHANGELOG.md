@@ -1,8 +1,12 @@
 # Changelog
 
-## 15.10.3 (2025-01-24)
+## 15.11.0 (2025-01-29)
 
-* [bitnami/thanos] Release 15.10.3 ([#31584](https://github.com/bitnami/charts/pull/31584))
+* [bitnami/thanos] feature(minio): Bump MinIO subchart ([#31663](https://github.com/bitnami/charts/pull/31663))
+
+## <small>15.10.3 (2025-01-24)</small>
+
+* [bitnami/thanos] Release 15.10.3 (#31584) ([67e1d09](https://github.com/bitnami/charts/commit/67e1d092248249b1f2171d452ec54a27e0ca79de)), closes [#31584](https://github.com/bitnami/charts/issues/31584)
 
 ## <small>15.10.2 (2025-01-21)</small>
 
