@@ -1,8 +1,13 @@
 # Changelog
 
-## 13.7.2 (2025-01-13)
+## 13.7.3 (2025-01-28)
 
-* [bitnami/zookeeper] Release 13.7.2 ([#31338](https://github.com/bitnami/charts/pull/31338))
+* [bitnami/zookeeper] Release 13.7.3 ([#31631](https://github.com/bitnami/charts/pull/31631))
+
+## <small>13.7.2 (2025-01-13)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/zookeeper] Release 13.7.2 (#31338) ([01777dd](https://github.com/bitnami/charts/commit/01777dd78c61164343f699f4a9e28f1c5f94e0fb)), closes [#31338](https://github.com/bitnami/charts/issues/31338)
 
 ## <small>13.7.1 (2024-12-16)</small>
 

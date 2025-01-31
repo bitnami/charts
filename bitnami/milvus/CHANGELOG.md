@@ -1,8 +1,16 @@
 # Changelog
 
-## 10.1.7 (2025-01-20)
+## 11.1.0 (2025-01-29)
 
-* [bitnami/milvus] feat: :recycle: Use os-shell for config generation ([#31460](https://github.com/bitnami/charts/pull/31460))
+* [bitnami/milvus] feature(minio): Bump MinIO subchart ([#31661](https://github.com/bitnami/charts/pull/31661))
+
+## 11.0.0 (2025-01-22)
+
+* [bitnami/milvus] Update ETCD to major 11 (#31509) ([3def614](https://github.com/bitnami/charts/commit/3def6145de0f57541026afb80f41f57c94f4a37f)), closes [#31509](https://github.com/bitnami/charts/issues/31509)
+
+## <small>10.1.7 (2025-01-20)</small>
+
+* [bitnami/milvus] feat: :recycle: Use os-shell for config generation (#31460) ([fcf8bff](https://github.com/bitnami/charts/commit/fcf8bff7bea31b9fa7254e46804e26aa9bb1d914)), closes [#31460](https://github.com/bitnami/charts/issues/31460)
 
 ## <small>10.1.6 (2025-01-17)</small>
 

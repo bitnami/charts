@@ -1,8 +1,12 @@
 # Changelog
 
-## 20.2.1 (2024-12-14)
+## 20.2.2 (2025-01-23)
 
-* [bitnami/mariadb] Release 20.2.1 ([#31043](https://github.com/bitnami/charts/pull/31043))
+* [bitnami/mariadb] Release 20.2.2 ([#31535](https://github.com/bitnami/charts/pull/31535))
+
+## <small>20.2.1 (2024-12-14)</small>
+
+* [bitnami/mariadb] Release 20.2.1 (#31043) ([afe2d8d](https://github.com/bitnami/charts/commit/afe2d8d5b540a8b3ced4a46d04b4c5313c7354e1)), closes [#31043](https://github.com/bitnami/charts/issues/31043)
 
 ## 20.2.0 (2024-12-10)
 

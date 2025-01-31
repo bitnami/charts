@@ -1,8 +1,12 @@
 # Changelog
 
+## 11.4.1 (2025-01-21)
+
+* [bitnami/redis-cluster] Address chart not working with external access enabled ([#31494](https://github.com/bitnami/charts/pull/31494))
+
 ## 11.4.0 (2025-01-13)
 
-* [bitnami/redis-cluster] feat: add support for svc bindings ([#31330](https://github.com/bitnami/charts/pull/31330))
+* [bitnami/redis-cluster] feat: add support for svc bindings (#31330) ([c409f1f](https://github.com/bitnami/charts/commit/c409f1fc5d34e37299878f19718410493350344e)), closes [#31330](https://github.com/bitnami/charts/issues/31330)
 
 ## 11.3.0 (2025-01-10)
 

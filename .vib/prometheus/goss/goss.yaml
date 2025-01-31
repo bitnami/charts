@@ -27,6 +27,17 @@ command:
     stdout:
     - /serviceaccount.*name.*{{.Env.BITNAMI_APP_NAME }}/
   {{ end }}
+  check-config-files:
+    exec: promtool check config /opt/bitnami/prometheus/conf/{{ .Vars.server.existingConfigmapKey }}
+    exit-status: 0
+    stdout:
+    - "SUCCESS"
+  check-metrics:
+    exec: promtool query instant http://localhost:{{ .Vars.server.containerPorts.http }} prometheus_http_requests_total
+    exit-status: 0
+    stdout:
+    - "/-/healthy"
+    - "/-/ready"
 file:
   /opt/bitnami/prometheus/conf/{{ .Vars.server.existingConfigmapKey }}:
     exists: true
@@ -65,15 +76,3 @@ http:
     body:
     - "{{ (first (first .Vars.server.alertingRules.groups).rules).annotations.summary }}"
   {{- end }}
-command:
-  check-config-files:
-    exec: promtool check config /opt/bitnami/prometheus/conf/{{ .Vars.server.existingConfigmapKey }}
-    exit-status: 0
-    stdout:
-    - "SUCCESS"
-  check-metrics:
-    exec: promtool query instant http://localhost:{{ .Vars.server.containerPorts.http }} prometheus_http_requests_total
-    exit-status: 0
-    stdout:
-    - "/-/healthy"
-    - "/-/ready"

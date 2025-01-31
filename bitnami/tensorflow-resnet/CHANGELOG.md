@@ -1,8 +1,13 @@
 # Changelog
 
-## 4.3.2 (2025-01-20)
+## 4.3.3 (2025-01-28)
 
-* [bitnami/tensorflow-resnet] Release 4.3.2 ([#31479](https://github.com/bitnami/charts/pull/31479))
+* [bitnami/tensorflow-resnet] Release 4.3.3 ([#31634](https://github.com/bitnami/charts/pull/31634))
+
+## <small>4.3.2 (2025-01-20)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/tensorflow-resnet] Release 4.3.2 (#31479) ([8a2a477](https://github.com/bitnami/charts/commit/8a2a477bc67c7badb2fb32a1949d19b8801f7699)), closes [#31479](https://github.com/bitnami/charts/issues/31479)
 
 ## <small>4.3.1 (2024-12-11)</small>
 

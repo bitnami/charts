@@ -1,8 +1,16 @@
 # Changelog
 
-## 11.4.3 (2025-01-17)
+## 11.4.5 (2025-01-29)
 
-* [bitnami/grafana] Release 11.4.3 ([#31424](https://github.com/bitnami/charts/pull/31424))
+* [bitnami/grafana] Release 11.4.5 ([#31668](https://github.com/bitnami/charts/pull/31668))
+
+## <small>11.4.4 (2025-01-24)</small>
+
+* [bitnami/grafana] Release 11.4.4 (#31588) ([5cd8160](https://github.com/bitnami/charts/commit/5cd8160d55d70bdc12c7dfd7e2367ff565be4ed7)), closes [#31588](https://github.com/bitnami/charts/issues/31588)
+
+## <small>11.4.3 (2025-01-17)</small>
+
+* [bitnami/grafana] Release 11.4.3 (#31424) ([b514de2](https://github.com/bitnami/charts/commit/b514de25da7da4ea5a76f27176edf271667012fc)), closes [#31424](https://github.com/bitnami/charts/issues/31424)
 
 ## <small>11.4.2 (2024-12-18)</small>
 
