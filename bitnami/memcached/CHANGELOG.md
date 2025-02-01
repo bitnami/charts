@@ -1,8 +1,13 @@
 # Changelog
 
-## 7.6.1 (2024-12-23)
+## 7.6.2 (2025-02-01)
 
-* [bitnami/memcached] Release 7.6.1 ([#31142](https://github.com/bitnami/charts/pull/31142))
+* [bitnami/memcached] Release 7.6.2 ([#31696](https://github.com/bitnami/charts/pull/31696))
+
+## <small>7.6.1 (2024-12-23)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/memcached] Release 7.6.1 (#31142) ([a0056eb](https://github.com/bitnami/charts/commit/a0056ebac6b52ff17a6e57244c79acacc58d134e)), closes [#31142](https://github.com/bitnami/charts/issues/31142)
 
 ## 7.6.0 (2024-12-10)
 
