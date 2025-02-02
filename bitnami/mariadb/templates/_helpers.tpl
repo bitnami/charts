@@ -219,3 +219,10 @@ Get existing password to access MariaDB
     {{- true -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Generate TDE secretProviderClass custom resource name
+*/}}
+{{- define "mariadb.tde.secretProviderClassName" -}}
+{{- printf "%s-spc-tde" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
+{{- end -}}

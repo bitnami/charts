@@ -1,176 +1,2289 @@
 {
-  "$schema": "http://json-schema.org/schema#",
-  "type": "object",
-  "properties": {
-    "architecture": {
-      "type": "string",
-      "title": "MariaDB architecture",
-      "form": true,
-      "description": "Allowed values: `standalone` or `replication`"
-    },
-    "auth": {
-      "type": "object",
-      "title": "Authentication configuration",
-      "form": true,
-      "properties": {
-        "rootPassword": {
-          "type": "string",
-          "title": "MariaDB root password",
-          "form": true,
-          "description": "Defaults to a random 10-character alphanumeric string if not set"
-        },
-        "database": {
-          "type": "string",
-          "title": "MariaDB custom database",
-          "description": "Name of the custom database to be created during the 1st initialization of MariaDB",
-          "form": true
-        },
-        "username": {
-          "type": "string",
-          "title": "MariaDB custom user",
-          "description": "Name of the custom user to be created during the 1st initialization of MariaDB. This user only has permissions on the MariaDB custom database",
-          "form": true
-        },
-        "password": {
-          "type": "string",
-          "title": "Password for MariaDB custom user",
-          "description": "Defaults to a random 10-character alphanumeric string if not set",
-          "form": true,
-          "hidden": {
-            "value": false,
-            "path": "usePassword"
-          }
-        },
-        "replicationUser": {
-          "type": "string",
-          "title": "MariaDB replication user",
-          "description": "Name of user used to manage replication.",
-          "form": true,
-          "hidden": {
-            "value": "standalone",
-            "path": "architecture"
-          }
-        },
-        "replicationPassword": {
-          "type": "string",
-          "title": "Password for MariaDB replication user",
-          "description": "Defaults to a random 10-character alphanumeric string if not set",
-          "form": true,
-          "hidden": {
-            "value": "standalone",
-            "path": "architecture"
-          }
-        }
-      }
-    },
-    "primary": {
-      "type": "object",
-      "title": "Primary replicas settings",
-      "form": true,
-      "properties": {
-        "persistence": {
-          "type": "object",
-          "title": "Persistence for primary replicas",
-          "form": true,
-          "properties": {
-            "enabled": {
-              "type": "boolean",
-              "form": true,
-              "title": "Enable persistence",
-              "description": "Enable persistence using Persistent Volume Claims"
-            },
-            "size": {
-              "type": "string",
-              "title": "Persistent Volume Size",
-              "form": true,
-              "render": "slider",
-              "sliderMin": 1,
-              "sliderMax": 100,
-              "sliderUnit": "Gi",
-              "hidden": {
-                "value": false,
-                "path": "persistence/enabled"
-              }
+    "title": "Chart Values",
+    "type": "object",
+    "properties": {
+        "global": {
+            "type": "object",
+            "properties": {
+                "imageRegistry": {
+                    "type": "string",
+                    "description": "Global Docker Image registry",
+                    "default": ""
+                },
+                "imagePullSecrets": {
+                    "type": "array",
+                    "description": "Global Docker registry secret names as an array",
+                    "default": [],
+                    "items": {}
+                },
+                "defaultStorageClass": {
+                    "type": "string",
+                    "description": "Global default StorageClass for Persistent Volume(s)",
+                    "default": ""
+                },
+                "security": {
+                    "type": "object",
+                    "properties": {
+                        "allowInsecureImages": {
+                            "type": "boolean",
+                            "description": "Allows skipping image verification",
+                            "default": false
+                        }
+                    }
+                },
+                "compatibility": {
+                    "type": "object",
+                    "properties": {
+                        "openshift": {
+                            "type": "object",
+                            "properties": {
+                                "adaptSecurityContext": {
+                                    "type": "string",
+                                    "description": "Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)",
+                                    "default": "auto"
+                                }
+                            }
+                        }
+                    }
+                }
             }
-          }
-        }
-      }
-    },
-    "secondary": {
-      "type": "object",
-      "title": "Secondary replicas settings",
-      "form": true,
-      "hidden": {
-        "value": false,
-        "path": "replication/enabled"
-      },
-      "properties": {
-        "persistence": {
-          "type": "object",
-          "title": "Persistence for secondary replicas",
-          "form": true,
-          "properties": {
-            "enabled": {
-              "type": "boolean",
-              "form": true,
-              "title": "Enable persistence",
-              "description": "Enable persistence using Persistent Volume Claims"
-            },
-            "size": {
-              "type": "string",
-              "title": "Persistent Volume Size",
-              "form": true,
-              "render": "slider",
-              "sliderMin": 1,
-              "sliderMax": 100,
-              "sliderUnit": "Gi",
-              "hidden": {
-                "value": false,
-                "path": "persistence/enabled"
-              }
-            }
-          }
-        }
-      }
-    },
-    "volumePermissions": {
-      "type": "object",
-      "properties": {
-        "enabled": {
-          "type": "boolean",
-          "form": true,
-          "title": "Enable Init Containers",
-          "description": "Use an init container to set required folder permissions on the data volume before mounting it in the final destination"
-        }
-      }
-    },
-    "metrics": {
-      "type": "object",
-      "form": true,
-      "title": "Prometheus metrics details",
-      "properties": {
-        "enabled": {
-          "type": "boolean",
-          "title": "Create Prometheus metrics exporter",
-          "description": "Create a side-car container to expose Prometheus metrics",
-          "form": true
         },
-        "serviceMonitor": {
-          "type": "object",
-          "properties": {
-            "enabled": {
-              "type": "boolean",
-              "title": "Create Prometheus Operator ServiceMonitor",
-              "description": "Create a ServiceMonitor to track metrics using Prometheus Operator",
-              "form": true,
-              "hidden": {
-                "value": false,
-                "path": "metrics/enabled"
-              }
+        "kubeVersion": {
+            "type": "string",
+            "description": "Force target Kubernetes version (using Helm capabilities if not set)",
+            "default": ""
+        },
+        "nameOverride": {
+            "type": "string",
+            "description": "String to partially override mariadb.fullname",
+            "default": ""
+        },
+        "fullnameOverride": {
+            "type": "string",
+            "description": "String to fully override mariadb.fullname",
+            "default": ""
+        },
+        "clusterDomain": {
+            "type": "string",
+            "description": "Default Kubernetes cluster domain",
+            "default": "cluster.local"
+        },
+        "commonAnnotations": {
+            "type": "object",
+            "description": "Common annotations to add to all MariaDB resources (sub-charts are not considered)",
+            "default": {}
+        },
+        "commonLabels": {
+            "type": "object",
+            "description": "Common labels to add to all MariaDB resources (sub-charts are not considered)",
+            "default": {}
+        },
+        "schedulerName": {
+            "type": "string",
+            "description": "Name of the scheduler (other than default) to dispatch pods",
+            "default": ""
+        },
+        "runtimeClassName": {
+            "type": "string",
+            "description": "Name of the Runtime Class for all MariaDB pods",
+            "default": ""
+        },
+        "extraDeploy": {
+            "type": "array",
+            "description": "Array of extra objects to deploy with the release (evaluated as a template)",
+            "default": [],
+            "items": {}
+        },
+        "diagnosticMode": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Enable diagnostic mode (all probes will be disabled and the command will be overridden)",
+                    "default": false
+                },
+                "command": {
+                    "type": "array",
+                    "description": "Command to override all containers in the deployment",
+                    "default": [
+                        "sleep"
+                    ],
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "args": {
+                    "type": "array",
+                    "description": "Args to override all containers in the deployment",
+                    "default": [
+                        "infinity"
+                    ],
+                    "items": {
+                        "type": "string"
+                    }
+                }
             }
-          }
+        },
+        "serviceBindings": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Create secret for service binding (Experimental)",
+                    "default": false
+                }
+            }
+        },
+        "image": {
+            "type": "object",
+            "properties": {
+                "registry": {
+                    "type": "string",
+                    "description": "MariaDB image registry",
+                    "default": "REGISTRY_NAME"
+                },
+                "repository": {
+                    "type": "string",
+                    "description": "MariaDB image repository",
+                    "default": "REPOSITORY_NAME/mariadb"
+                },
+                "digest": {
+                    "type": "string",
+                    "description": "MariaDB image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag",
+                    "default": ""
+                },
+                "pullPolicy": {
+                    "type": "string",
+                    "description": "MariaDB image pull policy",
+                    "default": "IfNotPresent"
+                },
+                "pullSecrets": {
+                    "type": "array",
+                    "description": "Specify docker-registry secret names as an array",
+                    "default": [],
+                    "items": {}
+                },
+                "debug": {
+                    "type": "boolean",
+                    "description": "Specify if debug logs should be enabled",
+                    "default": false
+                }
+            }
+        },
+        "architecture": {
+            "type": "string",
+            "description": "MariaDB architecture (`standalone` or `replication`)",
+            "default": "standalone"
+        },
+        "auth": {
+            "type": "object",
+            "properties": {
+                "rootPassword": {
+                    "type": "string",
+                    "description": "Password for the `root` user. Ignored if existing secret is provided.",
+                    "default": ""
+                },
+                "database": {
+                    "type": "string",
+                    "description": "Name for a custom database to create",
+                    "default": "my_database"
+                },
+                "username": {
+                    "type": "string",
+                    "description": "Name for a custom user to create",
+                    "default": ""
+                },
+                "password": {
+                    "type": "string",
+                    "description": "Password for the new user. Ignored if existing secret is provided",
+                    "default": ""
+                },
+                "replicationUser": {
+                    "type": "string",
+                    "description": "MariaDB replication user",
+                    "default": "replicator"
+                },
+                "replicationPassword": {
+                    "type": "string",
+                    "description": "MariaDB replication user password. Ignored if existing secret is provided",
+                    "default": ""
+                },
+                "existingSecret": {
+                    "type": "string",
+                    "description": "Use existing secret for password details (`auth.rootPassword`, `auth.password`, `auth.replicationPassword` will be ignored and picked up from this secret). The secret has to contain the keys `mariadb-root-password`, `mariadb-replication-password` and `mariadb-password`",
+                    "default": ""
+                },
+                "forcePassword": {
+                    "type": "boolean",
+                    "description": "Force users to specify required passwords",
+                    "default": false
+                },
+                "usePasswordFiles": {
+                    "type": "boolean",
+                    "description": "Mount credentials as files instead of using environment variables",
+                    "default": false
+                },
+                "customPasswordFiles": {
+                    "type": "object",
+                    "description": "Use custom password files when `auth.usePasswordFiles` is set to `true`. Define path for keys `root` and `user`, also define `replicator` if `architecture` is set to `replication`",
+                    "default": {}
+                }
+            }
+        },
+        "initdbScripts": {
+            "type": "object",
+            "description": "Dictionary of initdb scripts",
+            "default": {}
+        },
+        "initdbScriptsConfigMap": {
+            "type": "string",
+            "description": "ConfigMap with the initdb scripts (Note: Overrides `initdbScripts`)",
+            "default": ""
+        },
+        "tls": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Enable TLS in MariaDB",
+                    "default": false
+                },
+                "existingSecret": {
+                    "type": "string",
+                    "description": "Existing secret that contains TLS certificates",
+                    "default": ""
+                },
+                "certFilename": {
+                    "type": "string",
+                    "description": "The secret key from the existingSecret if 'cert' key different from the default (tls.crt)",
+                    "default": "tls.crt"
+                },
+                "certKeyFilename": {
+                    "type": "string",
+                    "description": "The secret key from the existingSecret if 'key' key different from the default (tls.key)",
+                    "default": "tls.key"
+                },
+                "certCAFilename": {
+                    "type": "string",
+                    "description": "The secret key from the existingSecret if 'ca' key different from the default (tls.crt)",
+                    "default": ""
+                },
+                "ca": {
+                    "type": "string",
+                    "description": "CA certificate for TLS. Ignored if `tls.existingSecret` is set",
+                    "default": ""
+                },
+                "cert": {
+                    "type": "string",
+                    "description": "TLS certificate. Ignored if `tls.master.existingSecret` is set",
+                    "default": ""
+                },
+                "key": {
+                    "type": "string",
+                    "description": "TLS key. Ignored if `tls.master.existingSecret` is set",
+                    "default": ""
+                },
+                "autoGenerated": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable automatic generation of certificates for TLS",
+                            "default": true
+                        },
+                        "engine": {
+                            "type": "string",
+                            "description": "Mechanism to generate the certificates (allowed values: helm, cert-manager)",
+                            "default": "helm"
+                        },
+                        "certManager": {
+                            "type": "object",
+                            "properties": {
+                                "existingIssuer": {
+                                    "type": "string",
+                                    "description": "The name of an existing Issuer to use for generating the certificates (only for `cert-manager` engine)",
+                                    "default": ""
+                                },
+                                "existingIssuerKind": {
+                                    "type": "string",
+                                    "description": "Existing Issuer kind, defaults to Issuer (only for `cert-manager` engine)",
+                                    "default": ""
+                                },
+                                "keyAlgorithm": {
+                                    "type": "string",
+                                    "description": "Key algorithm for the certificates (only for `cert-manager` engine)",
+                                    "default": "RSA"
+                                },
+                                "keySize": {
+                                    "type": "number",
+                                    "description": "Key size for the certificates (only for `cert-manager` engine)",
+                                    "default": 2048
+                                },
+                                "duration": {
+                                    "type": "string",
+                                    "description": "Duration for the certificates (only for `cert-manager` engine)",
+                                    "default": "2160h"
+                                },
+                                "renewBefore": {
+                                    "type": "string",
+                                    "description": "Renewal period for the certificates (only for `cert-manager` engine)",
+                                    "default": "360h"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "tde": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Enable Transparent Data Encryption using the File Key Management Encryption Plugin for MariaDB",
+                    "default": false
+                },
+                "existingSecret": {
+                    "type": "string",
+                    "description": "Existing secret that contains Transparent Data Encryption key files used when secretsStoreProvider is not enabled",
+                    "default": ""
+                },
+                "randomKeyFilename": {
+                    "type": "string",
+                    "description": "File name of the 'random keyfile' when it is different from the default (keyfile.key), is also used for key name in the existingSecret",
+                    "default": "keyfile.key"
+                },
+                "encryptedKeyFilename": {
+                    "type": "string",
+                    "description": "File name of the 'encrypted keyfile' when it is different from the default (keyfile.enc), is also used for key name in the existingSecret",
+                    "default": "keyfile.enc"
+                },
+                "fileKeyManagementEncryptionAlgorithm": {
+                    "type": "string",
+                    "description": "Encryption algorithm used for encrypting data (allowed values: AES_CTR, AES_CBC | default: AES_CTR)",
+                    "default": "AES_CTR"
+                },
+                "innodbEncryptTables": {
+                    "type": "string",
+                    "description": "Enables automatic encryption of all InnoDB tablespaces (allowed values: FORCE, ON, OFF | default: FORCE)",
+                    "default": "FORCE"
+                },
+                "innodbEncryptLog": {
+                    "type": "string",
+                    "description": "Enables encryption of the InnoDB redo log (allowed values: ON, OFF | default: ON)",
+                    "default": "ON"
+                },
+                "innodbEncryptTemporaryTables": {
+                    "type": "string",
+                    "description": "Enables automatic encryption of the InnoDB temporary tablespace (allowed values: ON, OFF | default: ON)",
+                    "default": "ON"
+                },
+                "innodbEncryptionThreads": {
+                    "type": "number",
+                    "description": "Number of threads to use for encryption (default: 4)",
+                    "default": 4
+                },
+                "encryptTmpDiskTables": {
+                    "type": "string",
+                    "description": "Enables automatic encryption of all internal on-disk temporary tables that are created during query execution (allowed values: ON, OFF | default: ON)",
+                    "default": "ON"
+                },
+                "encryptTmpTiles": {
+                    "type": "string",
+                    "description": "Enables automatic encryption of temporary files, such as those created for filesort operations, binary log file caches, etc. (allowed values: ON, OFF | default: ON)",
+                    "default": "ON"
+                },
+                "encryptBINLOG": {
+                    "type": "string",
+                    "description": "Enables encrypting binary logs including relay logs (allowed values: ON, OFF | default: ON)",
+                    "default": "ON"
+                },
+                "ariaEncryptTables": {
+                    "type": "string",
+                    "description": "Enables automatic encryption of all Aria tablespaces (allowed values: ON, OFF | default: ON)",
+                    "default": "ON"
+                },
+                "secretsStoreProvider": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable use of secrets store provider for Transparent Data Encryption key files",
+                            "default": false
+                        },
+                        "provider": {
+                            "type": "string",
+                            "description": "Type of provider used in secrets store provider class (allowed values: vault)",
+                            "default": "vault"
+                        },
+                        "vault": {
+                            "type": "object",
+                            "properties": {
+                                "roleName": {
+                                    "type": "string",
+                                    "description": "The name of the HashiCorp Vault role used for accessing the key files (only for `vault` provider)",
+                                    "default": ""
+                                },
+                                "address": {
+                                    "type": "string",
+                                    "description": "The URL of the HashiCorp Vault server (only for `vault` provider)",
+                                    "default": ""
+                                },
+                                "authMountPath": {
+                                    "type": "string",
+                                    "description": "The HashiCorp Vault auth mount path (only for `vault` provider)",
+                                    "default": ""
+                                },
+                                "randomKeySecretPath": {
+                                    "type": "string",
+                                    "description": "The HashiCorp Vault secret path for the 'random keyfile' (only for `vault` provider)",
+                                    "default": ""
+                                },
+                                "randomKeySecretKey": {
+                                    "type": "string",
+                                    "description": "The HashiCorp Vault secret key for the 'random keyfile' (only for `vault` provider)",
+                                    "default": ""
+                                },
+                                "encryptedKeySecretPath": {
+                                    "type": "string",
+                                    "description": "The HashiCorp Vault secret path for the 'encrypted keyfile' (only for `vault` provider)",
+                                    "default": ""
+                                },
+                                "encryptedKeySecretKey": {
+                                    "type": "string",
+                                    "description": "The HashiCorp Vault secret key for the 'encrypted keyfile' (only for `vault` provider)",
+                                    "default": ""
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "primary": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "Name of the primary database (eg primary, master, leader, ...)",
+                    "default": "primary"
+                },
+                "command": {
+                    "type": "array",
+                    "description": "Override default container command on MariaDB Primary container(s) (useful when using custom images)",
+                    "default": [],
+                    "items": {}
+                },
+                "args": {
+                    "type": "array",
+                    "description": "Override default container args on MariaDB Primary container(s) (useful when using custom images)",
+                    "default": [],
+                    "items": {}
+                },
+                "lifecycleHooks": {
+                    "type": "object",
+                    "description": "for the MariaDB Primary container(s) to automate configuration before or after startup",
+                    "default": {}
+                },
+                "automountServiceAccountToken": {
+                    "type": "boolean",
+                    "description": "Mount Service Account token in pod",
+                    "default": false
+                },
+                "hostAliases": {
+                    "type": "array",
+                    "description": "Add deployment host aliases",
+                    "default": [],
+                    "items": {}
+                },
+                "containerPorts": {
+                    "type": "object",
+                    "properties": {
+                        "mysql": {
+                            "type": "number",
+                            "description": "Container port for mysql",
+                            "default": 3306
+                        }
+                    }
+                },
+                "configuration": {
+                    "type": "string",
+                    "description": "MariaDB Primary configuration to be injected as ConfigMap",
+                    "default": "\"\""
+                },
+                "existingConfigmap": {
+                    "type": "string",
+                    "description": "Name of existing ConfigMap with MariaDB Primary configuration.",
+                    "default": ""
+                },
+                "updateStrategy": {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "description": "MariaDB primary statefulset strategy type",
+                            "default": "RollingUpdate"
+                        }
+                    }
+                },
+                "rollingUpdatePartition": {
+                    "type": "string",
+                    "description": "Partition update strategy for Mariadb Primary statefulset",
+                    "default": ""
+                },
+                "podAnnotations": {
+                    "type": "object",
+                    "description": "Additional pod annotations for MariaDB primary pods",
+                    "default": {}
+                },
+                "podLabels": {
+                    "type": "object",
+                    "description": "Extra labels for MariaDB primary pods",
+                    "default": {}
+                },
+                "podAffinityPreset": {
+                    "type": "string",
+                    "description": "MariaDB primary pod affinity preset. Ignored if `primary.affinity` is set. Allowed values: `soft` or `hard`",
+                    "default": ""
+                },
+                "podAntiAffinityPreset": {
+                    "type": "string",
+                    "description": "MariaDB primary pod anti-affinity preset. Ignored if `primary.affinity` is set. Allowed values: `soft` or `hard`",
+                    "default": "soft"
+                },
+                "nodeAffinityPreset": {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "description": "MariaDB primary node affinity preset type. Ignored if `primary.affinity` is set. Allowed values: `soft` or `hard`",
+                            "default": ""
+                        },
+                        "key": {
+                            "type": "string",
+                            "description": "MariaDB primary node label key to match Ignored if `primary.affinity` is set.",
+                            "default": ""
+                        },
+                        "values": {
+                            "type": "array",
+                            "description": "MariaDB primary node label values to match. Ignored if `primary.affinity` is set.",
+                            "default": [],
+                            "items": {}
+                        }
+                    }
+                },
+                "affinity": {
+                    "type": "object",
+                    "description": "Affinity for MariaDB primary pods assignment",
+                    "default": {}
+                },
+                "nodeSelector": {
+                    "type": "object",
+                    "description": "Node labels for MariaDB primary pods assignment",
+                    "default": {}
+                },
+                "tolerations": {
+                    "type": "array",
+                    "description": "Tolerations for MariaDB primary pods assignment",
+                    "default": [],
+                    "items": {}
+                },
+                "schedulerName": {
+                    "type": "string",
+                    "description": "Name of the k8s scheduler (other than default)",
+                    "default": ""
+                },
+                "podManagementPolicy": {
+                    "type": "string",
+                    "description": "podManagementPolicy to manage scaling operation of MariaDB primary pods",
+                    "default": ""
+                },
+                "topologySpreadConstraints": {
+                    "type": "array",
+                    "description": "Topology Spread Constraints for MariaDB primary pods assignment",
+                    "default": [],
+                    "items": {}
+                },
+                "priorityClassName": {
+                    "type": "string",
+                    "description": "Priority class for MariaDB primary pods assignment",
+                    "default": ""
+                },
+                "runtimeClassName": {
+                    "type": "string",
+                    "description": "Runtime Class for MariaDB primary pods",
+                    "default": ""
+                },
+                "podSecurityContext": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable security context for MariaDB primary pods",
+                            "default": true
+                        },
+                        "fsGroupChangePolicy": {
+                            "type": "string",
+                            "description": "Set filesystem group change policy",
+                            "default": "Always"
+                        },
+                        "sysctls": {
+                            "type": "array",
+                            "description": "Set kernel settings using the sysctl interface",
+                            "default": [],
+                            "items": {}
+                        },
+                        "supplementalGroups": {
+                            "type": "array",
+                            "description": "Set filesystem extra groups",
+                            "default": [],
+                            "items": {}
+                        },
+                        "fsGroup": {
+                            "type": "number",
+                            "description": "Group ID for the mounted volumes' filesystem",
+                            "default": 1001
+                        }
+                    }
+                },
+                "containerSecurityContext": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "MariaDB primary container securityContext",
+                            "default": true
+                        },
+                        "runAsUser": {
+                            "type": "number",
+                            "description": "User ID for the MariaDB primary container",
+                            "default": 1001
+                        },
+                        "runAsGroup": {
+                            "type": "number",
+                            "description": "Group ID for the MariaDB primary container",
+                            "default": 1001
+                        },
+                        "runAsNonRoot": {
+                            "type": "boolean",
+                            "description": "Set primary container's Security Context runAsNonRoot",
+                            "default": true
+                        },
+                        "privileged": {
+                            "type": "boolean",
+                            "description": "Set primary container's Security Context privileged",
+                            "default": false
+                        },
+                        "allowPrivilegeEscalation": {
+                            "type": "boolean",
+                            "description": "Set primary container's Security Context allowPrivilegeEscalation",
+                            "default": false
+                        },
+                        "readOnlyRootFilesystem": {
+                            "type": "boolean",
+                            "description": "Set container's Security Context readOnlyRootFilesystem",
+                            "default": true
+                        },
+                        "capabilities": {
+                            "type": "object",
+                            "properties": {
+                                "drop": {
+                                    "type": "array",
+                                    "description": "List of capabilities to be dropped",
+                                    "default": [
+                                        "ALL"
+                                    ],
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        },
+                        "seccompProfile": {
+                            "type": "object",
+                            "properties": {
+                                "type": {
+                                    "type": "string",
+                                    "description": "Set container's Security Context seccomp profile",
+                                    "default": "RuntimeDefault"
+                                }
+                            }
+                        }
+                    }
+                },
+                "resourcesPreset": {
+                    "type": "string",
+                    "description": "Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if primary.resources is set (primary.resources is recommended for production).",
+                    "default": "micro"
+                },
+                "resources": {
+                    "type": "object",
+                    "description": "Set container requests and limits for different resources like CPU or memory (essential for production workloads)",
+                    "default": {}
+                },
+                "startupProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable startupProbe",
+                            "default": false
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for startupProbe",
+                            "default": 120
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for startupProbe",
+                            "default": 15
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for startupProbe",
+                            "default": 5
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for startupProbe",
+                            "default": 10
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for startupProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "livenessProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable livenessProbe",
+                            "default": true
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for livenessProbe",
+                            "default": 120
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for livenessProbe",
+                            "default": 10
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for livenessProbe",
+                            "default": 1
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for livenessProbe",
+                            "default": 3
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for livenessProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "readinessProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable readinessProbe",
+                            "default": true
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for readinessProbe",
+                            "default": 30
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for readinessProbe",
+                            "default": 10
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for readinessProbe",
+                            "default": 1
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for readinessProbe",
+                            "default": 3
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for readinessProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "customStartupProbe": {
+                    "type": "object",
+                    "description": "Override default startup probe for MariaDB primary containers",
+                    "default": {}
+                },
+                "customLivenessProbe": {
+                    "type": "object",
+                    "description": "Override default liveness probe for MariaDB primary containers",
+                    "default": {}
+                },
+                "customReadinessProbe": {
+                    "type": "object",
+                    "description": "Override default readiness probe for MariaDB primary containers",
+                    "default": {}
+                },
+                "startupWaitOptions": {
+                    "type": "object",
+                    "description": "Override default builtin startup wait check options for MariaDB primary containers",
+                    "default": {}
+                },
+                "extraFlags": {
+                    "type": "string",
+                    "description": "MariaDB primary additional command line flags",
+                    "default": ""
+                },
+                "extraEnvVars": {
+                    "type": "array",
+                    "description": "Extra environment variables to be set on MariaDB primary containers",
+                    "default": [],
+                    "items": {}
+                },
+                "extraEnvVarsCM": {
+                    "type": "string",
+                    "description": "Name of existing ConfigMap containing extra env vars for MariaDB primary containers",
+                    "default": ""
+                },
+                "extraEnvVarsSecret": {
+                    "type": "string",
+                    "description": "Name of existing Secret containing extra env vars for MariaDB primary containers",
+                    "default": ""
+                },
+                "persistence": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable persistence on MariaDB primary replicas using a `PersistentVolumeClaim`. If false, use emptyDir",
+                            "default": true
+                        },
+                        "existingClaim": {
+                            "type": "string",
+                            "description": "Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas",
+                            "default": ""
+                        },
+                        "subPath": {
+                            "type": "string",
+                            "description": "Subdirectory of the volume to mount at",
+                            "default": ""
+                        },
+                        "storageClass": {
+                            "type": "string",
+                            "description": "MariaDB primary persistent volume storage Class",
+                            "default": ""
+                        },
+                        "labels": {
+                            "type": "object",
+                            "description": "Labels for the PVC",
+                            "default": {}
+                        },
+                        "annotations": {
+                            "type": "object",
+                            "description": "MariaDB primary persistent volume claim annotations",
+                            "default": {}
+                        },
+                        "accessModes": {
+                            "type": "array",
+                            "description": "MariaDB primary persistent volume access Modes",
+                            "default": [
+                                "ReadWriteOnce"
+                            ],
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "size": {
+                            "type": "string",
+                            "description": "MariaDB primary persistent volume size",
+                            "default": "8Gi"
+                        },
+                        "selector": {
+                            "type": "object",
+                            "description": "Selector to match an existing Persistent Volume",
+                            "default": {}
+                        }
+                    }
+                },
+                "extraVolumes": {
+                    "type": "array",
+                    "description": "Optionally specify extra list of additional volumes to the MariaDB Primary pod(s)",
+                    "default": [],
+                    "items": {}
+                },
+                "extraVolumeMounts": {
+                    "type": "array",
+                    "description": "Optionally specify extra list of additional volumeMounts for the MariaDB Primary container(s)",
+                    "default": [],
+                    "items": {}
+                },
+                "initContainers": {
+                    "type": "array",
+                    "description": "Add additional init containers for the MariaDB Primary pod(s)",
+                    "default": [],
+                    "items": {}
+                },
+                "sidecars": {
+                    "type": "array",
+                    "description": "Add additional sidecar containers for the MariaDB Primary pod(s)",
+                    "default": [],
+                    "items": {}
+                },
+                "service": {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "description": "MariaDB Primary Kubernetes service type",
+                            "default": "ClusterIP"
+                        },
+                        "ports": {
+                            "type": "object",
+                            "properties": {
+                                "mysql": {
+                                    "type": "number",
+                                    "description": "MariaDB Primary Kubernetes service port for MariaDB",
+                                    "default": 3306
+                                },
+                                "metrics": {
+                                    "type": "number",
+                                    "description": "MariaDB Primary Kubernetes service port for metrics",
+                                    "default": 9104
+                                }
+                            }
+                        },
+                        "nodePorts": {
+                            "type": "object",
+                            "properties": {
+                                "mysql": {
+                                    "type": "string",
+                                    "description": "MariaDB Primary Kubernetes service node port",
+                                    "default": ""
+                                }
+                            }
+                        },
+                        "clusterIP": {
+                            "type": "string",
+                            "description": "MariaDB Primary Kubernetes service clusterIP IP",
+                            "default": ""
+                        },
+                        "loadBalancerIP": {
+                            "type": "string",
+                            "description": "MariaDB Primary loadBalancerIP if service type is `LoadBalancer`",
+                            "default": ""
+                        },
+                        "externalTrafficPolicy": {
+                            "type": "string",
+                            "description": "Enable client source IP preservation",
+                            "default": "Cluster"
+                        },
+                        "loadBalancerSourceRanges": {
+                            "type": "array",
+                            "description": "Address that are allowed when MariaDB Primary service is LoadBalancer",
+                            "default": [],
+                            "items": {}
+                        },
+                        "extraPorts": {
+                            "type": "array",
+                            "description": "Extra ports to expose (normally used with the `sidecar` value)",
+                            "default": [],
+                            "items": {}
+                        },
+                        "annotations": {
+                            "type": "object",
+                            "description": "Provide any additional annotations which may be required",
+                            "default": {}
+                        },
+                        "sessionAffinity": {
+                            "type": "string",
+                            "description": "Session Affinity for Kubernetes service, can be \"None\" or \"ClientIP\"",
+                            "default": "None"
+                        },
+                        "sessionAffinityConfig": {
+                            "type": "object",
+                            "description": "Additional settings for the sessionAffinity",
+                            "default": {}
+                        },
+                        "headless": {
+                            "type": "object",
+                            "properties": {
+                                "annotations": {
+                                    "type": "object",
+                                    "description": "Annotations of the headless service",
+                                    "default": {}
+                                }
+                            }
+                        }
+                    }
+                },
+                "pdb": {
+                    "type": "object",
+                    "properties": {
+                        "create": {
+                            "type": "boolean",
+                            "description": "Enable/disable a Pod Disruption Budget creation for MariaDB primary pods",
+                            "default": true
+                        },
+                        "minAvailable": {
+                            "type": "string",
+                            "description": "Minimum number/percentage of MariaDB primary pods that must still be available after the eviction",
+                            "default": ""
+                        },
+                        "maxUnavailable": {
+                            "type": "string",
+                            "description": "Maximum number/percentage of MariaDB primary pods that can be unavailable after the eviction. Defaults to `1` if both `primary.pdb.minAvailable` and `primary.pdb.maxUnavailable` are empty.",
+                            "default": ""
+                        }
+                    }
+                },
+                "revisionHistoryLimit": {
+                    "type": "number",
+                    "description": "Maximum number of revisions that will be maintained in the StatefulSet",
+                    "default": 10
+                }
+            }
+        },
+        "secondary": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "Name of the secondary database (eg secondary, slave, ...)",
+                    "default": "secondary"
+                },
+                "replicaCount": {
+                    "type": "number",
+                    "description": "Number of MariaDB secondary replicas",
+                    "default": 1
+                },
+                "command": {
+                    "type": "array",
+                    "description": "Override default container command on MariaDB Secondary container(s) (useful when using custom images)",
+                    "default": [],
+                    "items": {}
+                },
+                "args": {
+                    "type": "array",
+                    "description": "Override default container args on MariaDB Secondary container(s) (useful when using custom images)",
+                    "default": [],
+                    "items": {}
+                },
+                "lifecycleHooks": {
+                    "type": "object",
+                    "description": "for the MariaDB Secondary container(s) to automate configuration before or after startup",
+                    "default": {}
+                },
+                "automountServiceAccountToken": {
+                    "type": "boolean",
+                    "description": "Mount Service Account token in pod",
+                    "default": false
+                },
+                "hostAliases": {
+                    "type": "array",
+                    "description": "Add deployment host aliases",
+                    "default": [],
+                    "items": {}
+                },
+                "containerPorts": {
+                    "type": "object",
+                    "properties": {
+                        "mysql": {
+                            "type": "number",
+                            "description": "Container port for mysql",
+                            "default": 3306
+                        }
+                    }
+                },
+                "configuration": {
+                    "type": "string",
+                    "description": "MariaDB Secondary configuration to be injected as ConfigMap",
+                    "default": "\"\""
+                },
+                "existingConfigmap": {
+                    "type": "string",
+                    "description": "Name of existing ConfigMap with MariaDB Secondary configuration.",
+                    "default": ""
+                },
+                "updateStrategy": {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "description": "MariaDB secondary statefulset strategy type",
+                            "default": "RollingUpdate"
+                        }
+                    }
+                },
+                "rollingUpdatePartition": {
+                    "type": "string",
+                    "description": "Partition update strategy for Mariadb Secondary statefulset",
+                    "default": ""
+                },
+                "podAnnotations": {
+                    "type": "object",
+                    "description": "Additional pod annotations for MariaDB secondary pods",
+                    "default": {}
+                },
+                "podLabels": {
+                    "type": "object",
+                    "description": "Extra labels for MariaDB secondary pods",
+                    "default": {}
+                },
+                "podAffinityPreset": {
+                    "type": "string",
+                    "description": "MariaDB secondary pod affinity preset. Ignored if `secondary.affinity` is set. Allowed values: `soft` or `hard`",
+                    "default": ""
+                },
+                "podAntiAffinityPreset": {
+                    "type": "string",
+                    "description": "MariaDB secondary pod anti-affinity preset. Ignored if `secondary.affinity` is set. Allowed values: `soft` or `hard`",
+                    "default": "soft"
+                },
+                "nodeAffinityPreset": {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "description": "MariaDB secondary node affinity preset type. Ignored if `secondary.affinity` is set. Allowed values: `soft` or `hard`",
+                            "default": ""
+                        },
+                        "key": {
+                            "type": "string",
+                            "description": "MariaDB secondary node label key to match Ignored if `secondary.affinity` is set.",
+                            "default": ""
+                        },
+                        "values": {
+                            "type": "array",
+                            "description": "MariaDB secondary node label values to match. Ignored if `secondary.affinity` is set.",
+                            "default": [],
+                            "items": {}
+                        }
+                    }
+                },
+                "affinity": {
+                    "type": "object",
+                    "description": "Affinity for MariaDB secondary pods assignment",
+                    "default": {}
+                },
+                "nodeSelector": {
+                    "type": "object",
+                    "description": "Node labels for MariaDB secondary pods assignment",
+                    "default": {}
+                },
+                "tolerations": {
+                    "type": "array",
+                    "description": "Tolerations for MariaDB secondary pods assignment",
+                    "default": [],
+                    "items": {}
+                },
+                "topologySpreadConstraints": {
+                    "type": "array",
+                    "description": "Topology Spread Constraints for MariaDB secondary pods assignment",
+                    "default": [],
+                    "items": {}
+                },
+                "priorityClassName": {
+                    "type": "string",
+                    "description": "Priority class for MariaDB secondary pods assignment",
+                    "default": ""
+                },
+                "runtimeClassName": {
+                    "type": "string",
+                    "description": "Runtime Class for MariaDB secondary pods",
+                    "default": ""
+                },
+                "schedulerName": {
+                    "type": "string",
+                    "description": "Name of the k8s scheduler (other than default)",
+                    "default": ""
+                },
+                "podManagementPolicy": {
+                    "type": "string",
+                    "description": "podManagementPolicy to manage scaling operation of MariaDB secondary pods",
+                    "default": ""
+                },
+                "podSecurityContext": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable security context for MariaDB secondary pods",
+                            "default": true
+                        },
+                        "fsGroupChangePolicy": {
+                            "type": "string",
+                            "description": "Set filesystem group change policy",
+                            "default": "Always"
+                        },
+                        "sysctls": {
+                            "type": "array",
+                            "description": "Set kernel settings using the sysctl interface",
+                            "default": [],
+                            "items": {}
+                        },
+                        "supplementalGroups": {
+                            "type": "array",
+                            "description": "Set filesystem extra groups",
+                            "default": [],
+                            "items": {}
+                        },
+                        "fsGroup": {
+                            "type": "number",
+                            "description": "Group ID for the mounted volumes' filesystem",
+                            "default": 1001
+                        }
+                    }
+                },
+                "containerSecurityContext": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "MariaDB secondary container securityContext",
+                            "default": true
+                        },
+                        "runAsUser": {
+                            "type": "number",
+                            "description": "User ID for the MariaDB secondary container",
+                            "default": 1001
+                        },
+                        "runAsGroup": {
+                            "type": "number",
+                            "description": "Group ID for the MariaDB secondary container",
+                            "default": 1001
+                        },
+                        "runAsNonRoot": {
+                            "type": "boolean",
+                            "description": "Set secondary container's Security Context runAsNonRoot",
+                            "default": true
+                        },
+                        "privileged": {
+                            "type": "boolean",
+                            "description": "Set secondary container's Security Context privileged",
+                            "default": false
+                        },
+                        "allowPrivilegeEscalation": {
+                            "type": "boolean",
+                            "description": "Set secondary container's Security Context allowPrivilegeEscalation",
+                            "default": false
+                        },
+                        "readOnlyRootFilesystem": {
+                            "type": "boolean",
+                            "description": "Set container's Security Context readOnlyRootFilesystem",
+                            "default": true
+                        },
+                        "capabilities": {
+                            "type": "object",
+                            "properties": {
+                                "drop": {
+                                    "type": "array",
+                                    "description": "List of capabilities to be dropped",
+                                    "default": [
+                                        "ALL"
+                                    ],
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        },
+                        "seccompProfile": {
+                            "type": "object",
+                            "properties": {
+                                "type": {
+                                    "type": "string",
+                                    "description": "Set container's Security Context seccomp profile",
+                                    "default": "RuntimeDefault"
+                                }
+                            }
+                        }
+                    }
+                },
+                "resourcesPreset": {
+                    "type": "string",
+                    "description": "Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if secondary.resources is set (secondary.resources is recommended for production).",
+                    "default": "micro"
+                },
+                "resources": {
+                    "type": "object",
+                    "description": "Set container requests and limits for different resources like CPU or memory (essential for production workloads)",
+                    "default": {}
+                },
+                "startupProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable startupProbe",
+                            "default": false
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for startupProbe",
+                            "default": 120
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for startupProbe",
+                            "default": 15
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for startupProbe",
+                            "default": 5
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for startupProbe",
+                            "default": 10
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for startupProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "livenessProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable livenessProbe",
+                            "default": true
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for livenessProbe",
+                            "default": 120
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for livenessProbe",
+                            "default": 10
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for livenessProbe",
+                            "default": 1
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for livenessProbe",
+                            "default": 3
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for livenessProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "readinessProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable readinessProbe",
+                            "default": true
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for readinessProbe",
+                            "default": 30
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for readinessProbe",
+                            "default": 10
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for readinessProbe",
+                            "default": 1
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for readinessProbe",
+                            "default": 3
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for readinessProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "customStartupProbe": {
+                    "type": "object",
+                    "description": "Override default startup probe for MariaDB secondary containers",
+                    "default": {}
+                },
+                "customLivenessProbe": {
+                    "type": "object",
+                    "description": "Override default liveness probe for MariaDB secondary containers",
+                    "default": {}
+                },
+                "customReadinessProbe": {
+                    "type": "object",
+                    "description": "Override default readiness probe for MariaDB secondary containers",
+                    "default": {}
+                },
+                "startupWaitOptions": {
+                    "type": "object",
+                    "description": "Override default builtin startup wait check options for MariaDB secondary containers",
+                    "default": {}
+                },
+                "extraFlags": {
+                    "type": "string",
+                    "description": "MariaDB secondary additional command line flags",
+                    "default": ""
+                },
+                "extraEnvVars": {
+                    "type": "array",
+                    "description": "Extra environment variables to be set on MariaDB secondary containers",
+                    "default": [],
+                    "items": {}
+                },
+                "extraEnvVarsCM": {
+                    "type": "string",
+                    "description": "Name of existing ConfigMap containing extra env vars for MariaDB secondary containers",
+                    "default": ""
+                },
+                "extraEnvVarsSecret": {
+                    "type": "string",
+                    "description": "Name of existing Secret containing extra env vars for MariaDB secondary containers",
+                    "default": ""
+                },
+                "persistence": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable persistence on MariaDB secondary replicas using a `PersistentVolumeClaim`",
+                            "default": true
+                        },
+                        "subPath": {
+                            "type": "string",
+                            "description": "Subdirectory of the volume to mount at",
+                            "default": ""
+                        },
+                        "storageClass": {
+                            "type": "string",
+                            "description": "MariaDB secondary persistent volume storage Class",
+                            "default": ""
+                        },
+                        "labels": {
+                            "type": "object",
+                            "description": "Labels for the PVC",
+                            "default": {}
+                        },
+                        "annotations": {
+                            "type": "object",
+                            "description": "MariaDB secondary persistent volume claim annotations",
+                            "default": {}
+                        },
+                        "accessModes": {
+                            "type": "array",
+                            "description": "MariaDB secondary persistent volume access Modes",
+                            "default": [
+                                "ReadWriteOnce"
+                            ],
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "size": {
+                            "type": "string",
+                            "description": "MariaDB secondary persistent volume size",
+                            "default": "8Gi"
+                        },
+                        "selector": {
+                            "type": "object",
+                            "description": "Selector to match an existing Persistent Volume",
+                            "default": {}
+                        }
+                    }
+                },
+                "extraVolumes": {
+                    "type": "array",
+                    "description": "Optionally specify extra list of additional volumes to the MariaDB secondary pod(s)",
+                    "default": [],
+                    "items": {}
+                },
+                "extraVolumeMounts": {
+                    "type": "array",
+                    "description": "Optionally specify extra list of additional volumeMounts for the MariaDB secondary container(s)",
+                    "default": [],
+                    "items": {}
+                },
+                "initContainers": {
+                    "type": "array",
+                    "description": "Add additional init containers for the MariaDB secondary pod(s)",
+                    "default": [],
+                    "items": {}
+                },
+                "sidecars": {
+                    "type": "array",
+                    "description": "Add additional sidecar containers for the MariaDB secondary pod(s)",
+                    "default": [],
+                    "items": {}
+                },
+                "service": {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "description": "MariaDB secondary Kubernetes service type",
+                            "default": "ClusterIP"
+                        },
+                        "ports": {
+                            "type": "object",
+                            "properties": {
+                                "mysql": {
+                                    "type": "number",
+                                    "description": "MariaDB secondary Kubernetes service port for MariaDB",
+                                    "default": 3306
+                                },
+                                "metrics": {
+                                    "type": "number",
+                                    "description": "MariaDB secondary Kubernetes service port for metrics",
+                                    "default": 9104
+                                }
+                            }
+                        },
+                        "nodePorts": {
+                            "type": "object",
+                            "properties": {
+                                "mysql": {
+                                    "type": "string",
+                                    "description": "MariaDB secondary Kubernetes service node port",
+                                    "default": ""
+                                }
+                            }
+                        },
+                        "clusterIP": {
+                            "type": "string",
+                            "description": "MariaDB secondary Kubernetes service clusterIP IP",
+                            "default": ""
+                        },
+                        "loadBalancerIP": {
+                            "type": "string",
+                            "description": "MariaDB secondary loadBalancerIP if service type is `LoadBalancer`",
+                            "default": ""
+                        },
+                        "externalTrafficPolicy": {
+                            "type": "string",
+                            "description": "Enable client source IP preservation",
+                            "default": "Cluster"
+                        },
+                        "loadBalancerSourceRanges": {
+                            "type": "array",
+                            "description": "Address that are allowed when MariaDB secondary service is LoadBalancer",
+                            "default": [],
+                            "items": {}
+                        },
+                        "extraPorts": {
+                            "type": "array",
+                            "description": "Extra ports to expose (normally used with the `sidecar` value)",
+                            "default": [],
+                            "items": {}
+                        },
+                        "annotations": {
+                            "type": "object",
+                            "description": "Provide any additional annotations which may be required",
+                            "default": {}
+                        },
+                        "sessionAffinity": {
+                            "type": "string",
+                            "description": "Session Affinity for Kubernetes service, can be \"None\" or \"ClientIP\"",
+                            "default": "None"
+                        },
+                        "sessionAffinityConfig": {
+                            "type": "object",
+                            "description": "Additional settings for the sessionAffinity",
+                            "default": {}
+                        }
+                    }
+                },
+                "pdb": {
+                    "type": "object",
+                    "properties": {
+                        "create": {
+                            "type": "boolean",
+                            "description": "Enable/disable a Pod Disruption Budget creation for MariaDB secondary pods",
+                            "default": true
+                        },
+                        "minAvailable": {
+                            "type": "string",
+                            "description": "Minimum number/percentage of MariaDB secondary pods that should remain scheduled",
+                            "default": ""
+                        },
+                        "maxUnavailable": {
+                            "type": "string",
+                            "description": "Maximum number/percentage of MariaDB secondary pods that may be made unavailable. Defaults to `1` if both `secondary.pdb.minAvailable` and `secondary.pdb.maxUnavailable` are empty.",
+                            "default": ""
+                        }
+                    }
+                },
+                "revisionHistoryLimit": {
+                    "type": "number",
+                    "description": "Maximum number of revisions that will be maintained in the StatefulSet",
+                    "default": 10
+                }
+            }
+        },
+        "serviceAccount": {
+            "type": "object",
+            "properties": {
+                "create": {
+                    "type": "boolean",
+                    "description": "Enable the creation of a ServiceAccount for MariaDB pods",
+                    "default": true
+                },
+                "name": {
+                    "type": "string",
+                    "description": "Name of the created ServiceAccount",
+                    "default": ""
+                },
+                "annotations": {
+                    "type": "object",
+                    "description": "Annotations for MariaDB Service Account",
+                    "default": {}
+                },
+                "automountServiceAccountToken": {
+                    "type": "boolean",
+                    "description": "Automount service account token for the server service account",
+                    "default": false
+                }
+            }
+        },
+        "rbac": {
+            "type": "object",
+            "properties": {
+                "create": {
+                    "type": "boolean",
+                    "description": "Whether to create and use RBAC resources or not",
+                    "default": false
+                }
+            }
+        },
+        "passwordUpdateJob": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Enable password update job",
+                    "default": false
+                },
+                "backoffLimit": {
+                    "type": "number",
+                    "description": "set backoff limit of the job",
+                    "default": 10
+                },
+                "command": {
+                    "type": "array",
+                    "description": "Override default container command on MariaDB Primary container(s) (useful when using custom images)",
+                    "default": [],
+                    "items": {}
+                },
+                "args": {
+                    "type": "array",
+                    "description": "Override default container args on MariaDB Primary container(s) (useful when using custom images)",
+                    "default": [],
+                    "items": {}
+                },
+                "extraCommands": {
+                    "type": "string",
+                    "description": "Extra commands to pass to the generation job",
+                    "default": ""
+                },
+                "previousPasswords": {
+                    "type": "object",
+                    "properties": {
+                        "rootPassword": {
+                            "type": "string",
+                            "description": "Previous root password (set if the password secret was already changed)",
+                            "default": ""
+                        },
+                        "password": {
+                            "type": "string",
+                            "description": "Previous password (set if the password secret was already changed)",
+                            "default": ""
+                        },
+                        "replicationPassword": {
+                            "type": "string",
+                            "description": "Previous replication password (set if the password secret was already changed)",
+                            "default": ""
+                        },
+                        "existingSecret": {
+                            "type": "string",
+                            "description": "Name of a secret containing the previous passwords (set if the password secret was already changed)",
+                            "default": ""
+                        }
+                    }
+                },
+                "containerSecurityContext": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enabled containers' Security Context",
+                            "default": true
+                        },
+                        "runAsUser": {
+                            "type": "number",
+                            "description": "Set containers' Security Context runAsUser",
+                            "default": 1001
+                        },
+                        "runAsGroup": {
+                            "type": "number",
+                            "description": "Set containers' Security Context runAsGroup",
+                            "default": 1001
+                        },
+                        "runAsNonRoot": {
+                            "type": "boolean",
+                            "description": "Set container's Security Context runAsNonRoot",
+                            "default": true
+                        },
+                        "privileged": {
+                            "type": "boolean",
+                            "description": "Set container's Security Context privileged",
+                            "default": false
+                        },
+                        "readOnlyRootFilesystem": {
+                            "type": "boolean",
+                            "description": "Set container's Security Context readOnlyRootFilesystem",
+                            "default": true
+                        },
+                        "allowPrivilegeEscalation": {
+                            "type": "boolean",
+                            "description": "Set container's Security Context allowPrivilegeEscalation",
+                            "default": false
+                        },
+                        "capabilities": {
+                            "type": "object",
+                            "properties": {
+                                "drop": {
+                                    "type": "array",
+                                    "description": "List of capabilities to be dropped",
+                                    "default": [
+                                        "ALL"
+                                    ],
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        },
+                        "seccompProfile": {
+                            "type": "object",
+                            "properties": {
+                                "type": {
+                                    "type": "string",
+                                    "description": "Set container's Security Context seccomp profile",
+                                    "default": "RuntimeDefault"
+                                }
+                            }
+                        }
+                    }
+                },
+                "podSecurityContext": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enabled credential init job pods' Security Context",
+                            "default": true
+                        },
+                        "fsGroupChangePolicy": {
+                            "type": "string",
+                            "description": "Set filesystem group change policy",
+                            "default": "Always"
+                        },
+                        "sysctls": {
+                            "type": "array",
+                            "description": "Set kernel settings using the sysctl interface",
+                            "default": [],
+                            "items": {}
+                        },
+                        "supplementalGroups": {
+                            "type": "array",
+                            "description": "Set filesystem extra groups",
+                            "default": [],
+                            "items": {}
+                        },
+                        "fsGroup": {
+                            "type": "number",
+                            "description": "Set credential init job pod's Security Context fsGroup",
+                            "default": 1001
+                        }
+                    }
+                },
+                "extraEnvVars": {
+                    "type": "array",
+                    "description": "Array containing extra env vars to configure the credential init job",
+                    "default": [],
+                    "items": {}
+                },
+                "extraEnvVarsCM": {
+                    "type": "string",
+                    "description": "ConfigMap containing extra env vars to configure the credential init job",
+                    "default": ""
+                },
+                "extraEnvVarsSecret": {
+                    "type": "string",
+                    "description": "Secret containing extra env vars to configure the credential init job (in case of sensitive data)",
+                    "default": ""
+                },
+                "extraVolumes": {
+                    "type": "array",
+                    "description": "Optionally specify extra list of additional volumes for the credential init job",
+                    "default": [],
+                    "items": {}
+                },
+                "extraVolumeMounts": {
+                    "type": "array",
+                    "description": "Array of extra volume mounts to be added to the jwt Container (evaluated as template). Normally used with `extraVolumes`.",
+                    "default": [],
+                    "items": {}
+                },
+                "initContainers": {
+                    "type": "array",
+                    "description": "Add additional init containers for the MariaDB Primary pod(s)",
+                    "default": [],
+                    "items": {}
+                },
+                "resourcesPreset": {
+                    "type": "string",
+                    "description": "Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if passwordUpdateJob.resources is set (passwordUpdateJob.resources is recommended for production).",
+                    "default": "micro"
+                },
+                "resources": {
+                    "type": "object",
+                    "description": "Set container requests and limits for different resources like CPU or memory (essential for production workloads)",
+                    "default": {}
+                },
+                "customLivenessProbe": {
+                    "type": "object",
+                    "description": "Custom livenessProbe that overrides the default one",
+                    "default": {}
+                },
+                "customReadinessProbe": {
+                    "type": "object",
+                    "description": "Custom readinessProbe that overrides the default one",
+                    "default": {}
+                },
+                "customStartupProbe": {
+                    "type": "object",
+                    "description": "Custom startupProbe that overrides the default one",
+                    "default": {}
+                },
+                "automountServiceAccountToken": {
+                    "type": "boolean",
+                    "description": "Mount Service Account token in pod",
+                    "default": false
+                },
+                "hostAliases": {
+                    "type": "array",
+                    "description": "Add deployment host aliases",
+                    "default": [],
+                    "items": {}
+                },
+                "podLabels": {
+                    "type": "object",
+                    "description": "Additional pod labels",
+                    "default": {}
+                },
+                "podAnnotations": {
+                    "type": "object",
+                    "description": "Additional pod annotations",
+                    "default": {}
+                }
+            }
+        },
+        "volumePermissions": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup`",
+                    "default": false
+                },
+                "image": {
+                    "type": "object",
+                    "properties": {
+                        "registry": {
+                            "type": "string",
+                            "description": "Init container volume-permissions image registry",
+                            "default": "REGISTRY_NAME"
+                        },
+                        "repository": {
+                            "type": "string",
+                            "description": "Init container volume-permissions image repository",
+                            "default": "REPOSITORY_NAME/os-shell"
+                        },
+                        "digest": {
+                            "type": "string",
+                            "description": "Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag",
+                            "default": ""
+                        },
+                        "pullPolicy": {
+                            "type": "string",
+                            "description": "Init container volume-permissions image pull policy",
+                            "default": "IfNotPresent"
+                        },
+                        "pullSecrets": {
+                            "type": "array",
+                            "description": "Specify docker-registry secret names as an array",
+                            "default": [],
+                            "items": {}
+                        }
+                    }
+                },
+                "resourcesPreset": {
+                    "type": "string",
+                    "description": "Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).",
+                    "default": "nano"
+                },
+                "resources": {
+                    "type": "object",
+                    "description": "Set container requests and limits for different resources like CPU or memory (essential for production workloads)",
+                    "default": {}
+                }
+            }
+        },
+        "metrics": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Start a side-car prometheus exporter",
+                    "default": false
+                },
+                "image": {
+                    "type": "object",
+                    "properties": {
+                        "registry": {
+                            "type": "string",
+                            "description": "Exporter image registry",
+                            "default": "REGISTRY_NAME"
+                        },
+                        "repository": {
+                            "type": "string",
+                            "description": "Exporter image repository",
+                            "default": "REPOSITORY_NAME/mysqld-exporter"
+                        },
+                        "digest": {
+                            "type": "string",
+                            "description": "Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag",
+                            "default": ""
+                        },
+                        "pullPolicy": {
+                            "type": "string",
+                            "description": "Exporter image pull policy",
+                            "default": "IfNotPresent"
+                        },
+                        "pullSecrets": {
+                            "type": "array",
+                            "description": "Specify docker-registry secret names as an array",
+                            "default": [],
+                            "items": {}
+                        }
+                    }
+                },
+                "containerPorts": {
+                    "type": "object",
+                    "properties": {
+                        "http": {
+                            "type": "number",
+                            "description": "Container port for http",
+                            "default": 9104
+                        }
+                    }
+                },
+                "containerSecurityContext": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable security context for MariaDB metrics container",
+                            "default": false
+                        },
+                        "runAsUser": {
+                            "type": "number",
+                            "description": "User ID for the MariaDB metrics container",
+                            "default": 1001
+                        },
+                        "runAsGroup": {
+                            "type": "number",
+                            "description": "Group ID for the MariaDB metrics container",
+                            "default": 1001
+                        },
+                        "runAsNonRoot": {
+                            "type": "boolean",
+                            "description": "Set metrics container's Security Context runAsNonRoot",
+                            "default": true
+                        },
+                        "privileged": {
+                            "type": "boolean",
+                            "description": "Set metrics container's Security Context privileged",
+                            "default": false
+                        },
+                        "allowPrivilegeEscalation": {
+                            "type": "boolean",
+                            "description": "Set metrics container's Security Context allowPrivilegeEscalation",
+                            "default": false
+                        },
+                        "readOnlyRootFilesystem": {
+                            "type": "boolean",
+                            "description": "Set container's Security Context readOnlyRootFilesystem",
+                            "default": true
+                        },
+                        "capabilities": {
+                            "type": "object",
+                            "properties": {
+                                "drop": {
+                                    "type": "array",
+                                    "description": "List of capabilities to be dropped",
+                                    "default": [
+                                        "ALL"
+                                    ],
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        },
+                        "seccompProfile": {
+                            "type": "object",
+                            "properties": {
+                                "type": {
+                                    "type": "string",
+                                    "description": "Set container's Security Context seccomp profile",
+                                    "default": "RuntimeDefault"
+                                }
+                            }
+                        }
+                    }
+                },
+                "resourcesPreset": {
+                    "type": "string",
+                    "description": "Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if metrics.resources is set (metrics.resources is recommended for production).",
+                    "default": "nano"
+                },
+                "resources": {
+                    "type": "object",
+                    "description": "Set container requests and limits for different resources like CPU or memory (essential for production workloads)",
+                    "default": {}
+                },
+                "livenessProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable livenessProbe",
+                            "default": true
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for livenessProbe",
+                            "default": 120
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for livenessProbe",
+                            "default": 10
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for livenessProbe",
+                            "default": 1
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for livenessProbe",
+                            "default": 3
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for livenessProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "readinessProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable readinessProbe",
+                            "default": true
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for readinessProbe",
+                            "default": 30
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for readinessProbe",
+                            "default": 10
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for readinessProbe",
+                            "default": 1
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for readinessProbe",
+                            "default": 3
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for readinessProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "serviceMonitor": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Create ServiceMonitor Resource for scraping metrics using PrometheusOperator",
+                            "default": false
+                        },
+                        "namespace": {
+                            "type": "string",
+                            "description": "Namespace which Prometheus is running in",
+                            "default": ""
+                        },
+                        "jobLabel": {
+                            "type": "string",
+                            "description": "The name of the label on the target service to use as the job name in prometheus.",
+                            "default": ""
+                        },
+                        "interval": {
+                            "type": "string",
+                            "description": "Interval at which metrics should be scraped",
+                            "default": "30s"
+                        },
+                        "scrapeTimeout": {
+                            "type": "string",
+                            "description": "Specify the timeout after which the scrape is ended",
+                            "default": ""
+                        },
+                        "relabelings": {
+                            "type": "array",
+                            "description": "RelabelConfigs to apply to samples before scraping",
+                            "default": [],
+                            "items": {}
+                        },
+                        "metricRelabelings": {
+                            "type": "array",
+                            "description": "MetricRelabelConfigs to apply to samples before ingestion",
+                            "default": [],
+                            "items": {}
+                        },
+                        "honorLabels": {
+                            "type": "boolean",
+                            "description": "honorLabels chooses the metric's labels on collisions with target labels",
+                            "default": false
+                        },
+                        "selector": {
+                            "type": "object",
+                            "description": "ServiceMonitor selector labels",
+                            "default": {}
+                        },
+                        "labels": {
+                            "type": "object",
+                            "description": "Extra labels for the ServiceMonitor",
+                            "default": {}
+                        }
+                    }
+                },
+                "prometheusRule": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "if `true`, creates a Prometheus Operator PrometheusRule (also requires `metrics.enabled` to be `true` and `metrics.prometheusRule.rules`)",
+                            "default": false
+                        },
+                        "namespace": {
+                            "type": "string",
+                            "description": "Namespace for the PrometheusRule Resource (defaults to the Release Namespace)",
+                            "default": ""
+                        },
+                        "additionalLabels": {
+                            "type": "object",
+                            "description": "Additional labels that can be used so PrometheusRule will be discovered by Prometheus",
+                            "default": {}
+                        },
+                        "rules": {
+                            "type": "array",
+                            "description": "Prometheus Rule definitions",
+                            "default": [],
+                            "items": {}
+                        }
+                    }
+                }
+            }
+        },
+        "networkPolicy": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Enable creation of NetworkPolicy resources",
+                    "default": true
+                },
+                "allowExternal": {
+                    "type": "boolean",
+                    "description": "The Policy model to apply",
+                    "default": true
+                },
+                "allowExternalEgress": {
+                    "type": "boolean",
+                    "description": "Allow the pod to access any range of port and all destinations.",
+                    "default": true
+                },
+                "extraIngress": {
+                    "type": "array",
+                    "description": "Add extra ingress rules to the NetworkPolicy",
+                    "default": "[]",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "extraEgress": {
+                    "type": "array",
+                    "description": "Add extra ingress rules to the NetworkPolicy",
+                    "default": "[]",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
         }
-      }
     }
-  }
 }
