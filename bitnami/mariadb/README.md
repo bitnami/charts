@@ -175,7 +175,7 @@ The chart supports two different ways to enable TDE:
 - Using Kubernetes secret to store the encryption keys. Enable this feature by setting `tde.enabled` to `true` and `tde.existingSecret` to the name of the secret containing the random key and the encrypted TDE key.
 - Using the Secrets Store CSI Driver to store the encryption keys. Enable this feature by setting `tde.enabled` to `true` and `tde.secretsStoreProvider.enabled` to `true`. Currently only the `vault` provider is supported and requires further parameters to be set for secret keys and paths to the encryption keys.
 
-To simplify the configuration the chart defaults most configuration values for TDE and [file key management encryption plugin](https://mariadb.com/kb/en/file-key-management-encryption-plugin/). For more information, on creating the required keys to enable TDE please refer to the mariaDB blog post [here](https://mariadb.com/resources/blog/mariadb-encryption-tde-using-mariadbs-file-key-management-encryption-plugin/). 
+To simplify the configuration the chart defaults most configuration values for TDE and [file key management encryption plugin](https://mariadb.com/kb/en/file-key-management-encryption-plugin/). For more information, on creating the required keys to enable TDE please refer to the mariaDB blog post [here](https://mariadb.com/resources/blog/mariadb-encryption-tde-using-mariadbs-file-key-management-encryption-plugin/).  
 
 > NOTE: The `tde.enabled` parameter impacts recoverability of the MariaDB data. If you enable TDE, the MariaDB data cannot be recovered if your encryption keys are lost. Always backup your encryption keys and store in a secure location outside of the cluster.
 
@@ -202,7 +202,7 @@ vault kv put secrets-kv/keyfile key="$KEYFILE_KEY" enc="$KEYFILE_ENC"
 
 The `SecretProviderClass` for `vault` at minimum requires the `tde.secretsStoreProvider.vault.roleName`, `tde.secretsStoreProvider.vault.*KeySecretPath` and `tde.secretsStoreProvider.vault.*SecretKey` parameters to be set for the secret values to properly be mounted.
 
->NOTE: This guide does not include configuration for the Secrets Store CSI Driver or Hashicorp Vault provider which are prerequisites for enabling TDE with the Secrets Store CSI Driver. 
+>NOTE: This guide does not include configuration for the Secrets Store CSI Driver or Hashicorp Vault provider which are prerequisites for enabling TDE with the Secrets Store CSI Driver.  
 
 ### Sidecars and Init Containers
 
