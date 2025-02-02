@@ -1,6 +1,6 @@
 # Changelog
 
-## 16.4.3 (2025-02-01)
+## 16.4.3 (2025-02-02)
 
 * [bitnami/mongodb] Release 16.4.3 ([#31699](https://github.com/bitnami/charts/pull/31699))
 
