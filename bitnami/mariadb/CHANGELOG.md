@@ -1,6 +1,6 @@
 # Changelog
 
-## 20.3.0 (2025-02-02)
+## 20.3.0 (2025-02-03)
 
 * [bitnami/mariadb] feat: Add Transparent Data Encryption support ([#31706](https://github.com/bitnami/charts/pull/31706))
 
