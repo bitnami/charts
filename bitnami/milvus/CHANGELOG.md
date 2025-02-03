@@ -1,12 +1,12 @@
 # Changelog
 
-## 11.1.1 (2025-01-24)
+## 11.1.1 (2025-02-03)
 
-* [bitnami/milvus] Release 11.1.1 ([#31570](https://github.com/bitnami/charts/pull/31570))
+* [bitnami/milvus] Release 11.0.1 ([#31570](https://github.com/bitnami/charts/pull/31570))
 
 ## 11.1.0 (2025-01-29)
 
-* [bitnami/milvus] feature(minio): Bump MinIO subchart ([#31661](https://github.com/bitnami/charts/pull/31661))
+* [bitnami/milvus] feature(minio): Bump MinIO subchart (#31661) ([4186dbc](https://github.com/bitnami/charts/commit/4186dbc2950181d8dbd9c4898b5242466637a6cf)), closes [#31661](https://github.com/bitnami/charts/issues/31661)
 
 ## 11.0.0 (2025-01-22)
 
