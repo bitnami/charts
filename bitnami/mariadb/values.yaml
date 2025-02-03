@@ -239,12 +239,12 @@ tde:
   encryptedKeyFilename: keyfile.enc
   fileKeyManagementEncryptionAlgorithm: AES_CTR
   innodbEncryptTables: FORCE
-  innodbEncryptLog: ON
-  innodbEncryptTemporaryTables: ON
-  encryptTmpDiskTables: ON
-  encryptTmpTiles: ON
-  encryptBINLOG: ON
-  ariaEncryptTables: ON
+  innodbEncryptLog: "ON"
+  innodbEncryptTemporaryTables: "ON"
+  encryptTmpDiskTables: "ON"
+  encryptTmpTiles: "ON"
+  encryptBINLOG: "ON"
+  ariaEncryptTables: "ON"
   innodbEncryptionThreads: 4
   ## @param tde.secretsStoreProvider.enabled Enable use of secrets store provider for Transparent Data Encryption key files
   ## @param tde.secretsStoreProvider.provider Type of provider used in secrets store provider class (allowed values: vault)
