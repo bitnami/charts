@@ -1,6 +1,6 @@
 # Changelog
 
-## 5.0.0 (2025-01-31)
+## 5.0.0 (2025-02-03)
 
 * [bitnami/kube-state-metrics] Remove resource VPA no longer available since v2.9.0 ([#31689](https://github.com/bitnami/charts/pull/31689))
 
