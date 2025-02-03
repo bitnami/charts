@@ -1,8 +1,13 @@
 # Changelog
 
-## 22.1.9 (2025-01-31)
+## 22.1.10 (2025-02-03)
 
-* [bitnami/ghost] Release 22.1.9 ([#31694](https://github.com/bitnami/charts/pull/31694))
+* [bitnami/ghost] Release 22.1.10 ([#31717](https://github.com/bitnami/charts/pull/31717))
+
+## <small>22.1.9 (2025-02-03)</small>
+
+* [bitnami/ghost] Release 22.1.9 (#31694) ([181a004](https://github.com/bitnami/charts/commit/181a004c1d004c535ffa9034818791a7abf676a9)), closes [#31694](https://github.com/bitnami/charts/issues/31694)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
 
 ## <small>22.1.8 (2025-01-30)</small>
 
