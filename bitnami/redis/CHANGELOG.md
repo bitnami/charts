@@ -1,6 +1,6 @@
 # Changelog
 
-## 20.7.0 (2025-02-02)
+## 20.7.0 (2025-02-03)
 
 * [bitnami/redis] Redis ACL support to the Bitnami Redis Helm Chart ([#31707](https://github.com/bitnami/charts/pull/31707))
 
