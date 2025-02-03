@@ -1,6 +1,6 @@
 # Changelog
 
-## 9.1.2 (2025-02-02)
+## 9.1.2 (2025-02-03)
 
 * [bitnami/mongodb-sharded] Release 9.1.2 ([#31698](https://github.com/bitnami/charts/pull/31698))
 
