@@ -1,6 +1,6 @@
 # Changelog
 
-## 21.4.5 (2025-01-31)
+## 21.4.5 (2025-02-03)
 
 * [bitnami/elasticsearch] fix: 🐛 Mount emptyDir in /bitnami/elasticsear… ([#31607](https://github.com/bitnami/charts/pull/31607))
 
