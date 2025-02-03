@@ -582,7 +582,7 @@ Usage:
 {{ include "thanos.receive.podFqdn" (dict "root" . "extra" $suffix ) }}
 */}}
 {{- define "thanos.receive.podFqdn" -}}
-{{- printf "\"%s-receive-%d.%s-receive-headless.%s.svc.%s:10901\"" (include "common.names.fullname" .root ) .extra (include "common.names.fullname" .root ) .root.Release.Namespace .root.Values.clusterDomain -}}
+{{- printf "%s-receive-%d.%s-receive-headless.%s.svc.%s" (include "common.names.fullname" .root ) .extra (include "common.names.fullname" .root ) .root.Release.Namespace .root.Values.clusterDomain -}}
 {{- end -}}
 
 {{/* Returns a proper configuration when no config is specified
@@ -592,30 +592,23 @@ Usage:
 {{- define "thanos.receive.config" -}}
 {{- if not .Values.receive.existingConfigmap }}
 {{- if not .Values.receive.config -}}
+{{- $endpoints_list := list -}}
+{{- $grpc_port := int .Values.receive.containerPorts.grpc -}}
+{{- $capnproto_port := int .Values.receive.containerPorts.capnproto -}}
 {{- if .Values.receive.service.additionalHeadless -}}
 {{- $count := int .Values.receive.replicaCount -}}
-{{- $endpoints_dict := dict "endpoints" (list)  -}}
 {{- $root := . -}}
 {{- range $i := until $count -}}
-{{- $data := dict "root" $root "extra" $i -}}
-{{- $noop := (include "thanos.receive.podFqdn" $data) | append $endpoints_dict.endpoints | set $endpoints_dict "endpoints" -}}
+  {{- $podFqdn := (include "thanos.receive.podFqdn" (dict "root" $root "extra" $i)) -}}
+  {{- $endpoint := dict "address" (printf "%s:%d" $podFqdn $grpc_port) "capnproto_address" (printf "%s:%d" $podFqdn $capnproto_port) -}}
+  {{- $endpoints_list = append $endpoints_list $endpoint -}}
 {{- end -}}
-[
-  {
-    "endpoints": [
-{{ join ",\n" $endpoints_dict.endpoints | indent 6 }}
-    ]
-  }
-]
 {{- else -}}
-[
-  {
-    "endpoints": [
-        "127.0.0.1:10901"
-    ]
-  }
-]
+{{- $endpoint := dict "address" (printf "127.0.0.1:%d" $grpc_port) "capnproto_address" (printf "127.0.0.1:%d" $capnproto_port) -}}
+{{- $endpoints_list = append $endpoints_list $endpoint -}}
 {{- end -}}
+{{- $config := list (dict "endpoints" $endpoints_list) -}}
+{{- $config | toPrettyJson -}}
 {{- else -}}
 {{- if (typeIs "string" .Values.receive.config) }}
 {{- .Values.receive.config -}}

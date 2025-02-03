@@ -153,7 +153,7 @@ spec:
             {{- if not .Values.receive.service.additionalHeadless }}
             - --receive.local-endpoint=127.0.0.1:{{ .Values.receive.containerPorts.grpc }}
             {{- else }}
-            - --receive.local-endpoint=$(NAME).{{ include "thanos.receive.fullname" . }}-headless.$(NAMESPACE).svc.{{ .Values.clusterDomain }}:10901
+            - --receive.local-endpoint=$(NAME).{{ include "thanos.receive.fullname" . }}-headless.$(NAMESPACE).svc.{{ .Values.clusterDomain }}:{{ .Values.receive.containerPorts.grpc }}
             {{- end }}
             {{- if eq .Values.receive.mode "standalone" }}
             - --receive.hashrings-file=/var/lib/thanos-receive/hashrings.json
