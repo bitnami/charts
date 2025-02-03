@@ -162,9 +162,6 @@ spec:
             {{- if .Values.kubeResources.storageclasses }}
             - --resources=storageclasses
             {{- end }}
-            {{- if .Values.kubeResources.verticalpodautoscalers }}
-            - --resources=verticalpodautoscalers
-            {{- end }}
             {{- if .Values.kubeResources.validatingwebhookconfigurations }}
             - --resources=validatingwebhookconfigurations
             {{- end }}

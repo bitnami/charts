@@ -234,7 +234,6 @@ namespaces: ""
 ## @param kubeResources.services Enable the `services` resource
 ## @param kubeResources.statefulsets Enable the `statefulsets` resource
 ## @param kubeResources.storageclasses Enable the `storageclasses` resource
-## @param kubeResources.verticalpodautoscalers Enable the `verticalpodautoscalers` resource
 ## @param kubeResources.validatingwebhookconfigurations Enable the `validatingwebhookconfigurations` resource
 ## @param kubeResources.volumeattachments Enable the `volumeattachments` resource
 ##
@@ -265,7 +264,6 @@ kubeResources:
   services: true
   statefulsets: true
   storageclasses: true
-  verticalpodautoscalers: false
   validatingwebhookconfigurations: false
   volumeattachments: true
 ## Configure custom resource state metrics

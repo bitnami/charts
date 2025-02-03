@@ -188,7 +188,6 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `kubeResources.services`                            | Enable the `services` resource                                                                                                                                                                                    | `true`                               |
 | `kubeResources.statefulsets`                        | Enable the `statefulsets` resource                                                                                                                                                                                | `true`                               |
 | `kubeResources.storageclasses`                      | Enable the `storageclasses` resource                                                                                                                                                                              | `true`                               |
-| `kubeResources.verticalpodautoscalers`              | Enable the `verticalpodautoscalers` resource                                                                                                                                                                      | `false`                              |
 | `kubeResources.validatingwebhookconfigurations`     | Enable the `validatingwebhookconfigurations` resource                                                                                                                                                             | `false`                              |
 | `kubeResources.volumeattachments`                   | Enable the `volumeattachments` resource                                                                                                                                                                           | `true`                               |
 | `customResourceState.enabled`                       | Enabled custom resource state metrics                                                                                                                                                                             | `false`                              |
@@ -308,6 +307,21 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/kube-
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 5.0.0
+
+Removal of `kubeResources.verticalpodautoscalers` which no longer work since version `2.9.0` of kube-state-metrics. If you are using an older version and want to keep this metric, use the following configuration:
+
+```yaml
+rbac:
+  rules:
+    - apiGroups: ["autoscaling.k8s.io"]
+      resources:
+        - verticalpodautoscalers
+      verbs: ["list", "watch"]
+extraArgs:
+  resources: verticalpodautoscalers
+```
 
 ### To 4.3.0
 
