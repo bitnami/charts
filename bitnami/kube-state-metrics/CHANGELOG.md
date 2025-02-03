@@ -1,8 +1,12 @@
 # Changelog
 
+## 5.0.1 (2025-02-03)
+
+* [bitnami/kube-state-metrics] Release 5.0.1 ([#31712](https://github.com/bitnami/charts/pull/31712))
+
 ## 5.0.0 (2025-02-03)
 
-* [bitnami/kube-state-metrics] Remove resource VPA no longer available since v2.9.0 ([#31689](https://github.com/bitnami/charts/pull/31689))
+* [bitnami/kube-state-metrics] Remove resource VPA no longer available since v2.9.0 (#31689) ([bbf5101](https://github.com/bitnami/charts/commit/bbf510172dc4a2835fb3620a17309be8a8b6ffaf)), closes [#31689](https://github.com/bitnami/charts/issues/31689)
 
 ## 4.4.0 (2025-02-03)
 
