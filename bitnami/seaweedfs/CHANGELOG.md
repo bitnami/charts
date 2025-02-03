@@ -1,8 +1,13 @@
 # Changelog
 
-## 4.5.3 (2025-02-02)
+## 4.5.4 (2025-02-03)
 
-* [bitnami/seaweedfs] Release 4.5.3 ([#31700](https://github.com/bitnami/charts/pull/31700))
+* [bitnami/seaweedfs] Release 4.5.4 ([#31718](https://github.com/bitnami/charts/pull/31718))
+
+## <small>4.5.3 (2025-02-03)</small>
+
+* [bitnami/seaweedfs] Release 4.5.3 (#31700) ([6752afa](https://github.com/bitnami/charts/commit/6752afab2f7805c38dfca3ab7e75afffcb0db3e7)), closes [#31700](https://github.com/bitnami/charts/issues/31700)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
 
 ## <small>4.5.2 (2025-01-24)</small>
 
