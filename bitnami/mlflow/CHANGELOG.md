@@ -1,8 +1,12 @@
 # Changelog
 
+## 2.4.1 (2025-01-30)
+
+* [bitnami/mlflow] Release 2.4.1 ([#31679](https://github.com/bitnami/charts/pull/31679))
+
 ## 2.4.0 (2025-01-29)
 
-* [bitnami/mlflow] feature(minio): Bump MinIO subchart ([#31662](https://github.com/bitnami/charts/pull/31662))
+* [bitnami/mlflow] feature(minio): Bump MinIO subchart (#31662) ([d3d32f1](https://github.com/bitnami/charts/commit/d3d32f17477c4cd8fc12b0e0be584b7e64e408a9)), closes [#31662](https://github.com/bitnami/charts/issues/31662)
 
 ## <small>2.3.4 (2025-01-24)</small>
 

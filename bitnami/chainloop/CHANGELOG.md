@@ -1,8 +1,20 @@
 # Changelog
 
-## 2.1.19 (2025-01-28)
+## 2.1.22 (2025-02-03)
 
-* [bitnami/chainloop] Release 2.1.19 ([#31633](https://github.com/bitnami/charts/pull/31633))
+* [bitnami/chainloop] Release 2.1.22 ([#31719](https://github.com/bitnami/charts/pull/31719))
+
+## <small>2.1.21 (2025-02-03)</small>
+
+* [bitnami/chainloop] Release 2.1.21 (#31708) ([cbb23f2](https://github.com/bitnami/charts/commit/cbb23f2eb4a61ec9e9bc0ea3ef3668626a5c2747)), closes [#31708](https://github.com/bitnami/charts/issues/31708)
+
+## <small>2.1.20 (2025-01-30)</small>
+
+* [bitnami/chainloop] Release 2.1.20 (#31677) ([e62715c](https://github.com/bitnami/charts/commit/e62715ca2dca84b4bc803c0d2a3eed189e8442e8)), closes [#31677](https://github.com/bitnami/charts/issues/31677)
+
+## <small>2.1.19 (2025-01-28)</small>
+
+* [bitnami/chainloop] Release 2.1.19 (#31633) ([980906c](https://github.com/bitnami/charts/commit/980906c314d3e3fa5566309dc9ff92d09f9c357e)), closes [#31633](https://github.com/bitnami/charts/issues/31633)
 
 ## <small>2.1.18 (2025-01-24)</small>
 
