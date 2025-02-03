@@ -187,4 +187,13 @@ rules:
       - volumeattachments
     verbs: ["list", "watch"]
   {{- end }}
+  {{- if .Values.customResourceState.enabled }}
+  - apiGroups: ["apiextensions.k8s.io"]
+    resources:
+      - customresourcedefinitions
+    verbs: ["list", "watch"]
+  {{- end }}
+  {{- if .Values.rbac.rules }}
+  {{- include "common.tplvalues.render" ( dict "value" .Values.rbac.rules "context" $ ) | nindent 2 }}
+  {{- end }}
 {{- end }}
