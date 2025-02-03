@@ -246,6 +246,9 @@ spec:
             {{- if .Values.web.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.web.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
+        {{- if and .Values.dags.enabled (not .Values.dagProcessor.enabled) }}
+        {{- include "airflow.defaultSidecars.syncDAGs" . | nindent 8 }}
+        {{- end }}
         {{- if .Values.plugins.enabled }}
         {{- include "airflow.defaultSidecars.syncPlugins" . | nindent 8 }}
         {{- end }}
