@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.2.1 (2025-01-29)
+## 1.0.0 (2025-01-31)
 
-* [bitnami/superset] Release 0.2.1 ([#31653](https://github.com/bitnami/charts/pull/31653))
+* [bitnami/superset] Update subcharts ([#31691](https://github.com/bitnami/charts/pull/31691))
+
+## <small>0.2.1 (2025-01-29)</small>
+
+* [bitnami/superset] Release 0.2.1 (#31653) ([d93687e](https://github.com/bitnami/charts/commit/d93687eb78fd5ba828b3e918f31749ab8211feda)), closes [#31653](https://github.com/bitnami/charts/issues/31653)
 
 ## 0.2.0 (2025-01-29)
 

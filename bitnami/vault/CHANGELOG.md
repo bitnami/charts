@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.6.4 (2025-01-24)
+## 1.6.5 (2025-01-31)
 
-* [bitnami/vault] Release 1.6.4 ([#31586](https://github.com/bitnami/charts/pull/31586))
+* [bitnami/vault] Release 1.6.5 ([#31681](https://github.com/bitnami/charts/pull/31681))
+
+## <small>1.6.4 (2025-01-24)</small>
+
+* [bitnami/vault] Release 1.6.4 (#31586) ([1151ff3](https://github.com/bitnami/charts/commit/1151ff31c6004424c9983246b2735673f0149cc6)), closes [#31586](https://github.com/bitnami/charts/issues/31586)
 
 ## <small>1.6.3 (2025-01-23)</small>
 
