@@ -152,6 +152,9 @@ spec:
           {{- if .Values.watchIngressWithoutClass }}
             - --watch-ingress-without-class=true
           {{- end }}
+          {{- if .Values.metrics.enabled }}
+            - --enable-metrics
+          {{- end }}
           {{- range $key, $value := .Values.extraArgs }}
             {{- if $value }}
             - --{{ $key }}={{ $value }}

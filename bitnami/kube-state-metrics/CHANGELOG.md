@@ -1,8 +1,16 @@
 # Changelog
 
-## 4.3.3 (2025-01-17)
+## 4.4.0 (2025-02-03)
 
-* [bitnami/kube-state-metrics] Release 4.3.3 ([#31428](https://github.com/bitnami/charts/pull/31428))
+* [bitnami/kube-state-metrics] allow creation of custom resource state ([#31687](https://github.com/bitnami/charts/pull/31687))
+
+## <small>4.3.4 (2025-01-24)</small>
+
+* [bitnami/kube-state-metrics] Release 4.3.4 (#31562) ([62970ac](https://github.com/bitnami/charts/commit/62970acb89b03bd6169fc418e5562c5e186bbc07)), closes [#31562](https://github.com/bitnami/charts/issues/31562)
+
+## <small>4.3.3 (2025-01-17)</small>
+
+* [bitnami/kube-state-metrics] Release 4.3.3 (#31428) ([c9f8c99](https://github.com/bitnami/charts/commit/c9f8c996cc05e44bc6db425dcfaefdf24d0237cf)), closes [#31428](https://github.com/bitnami/charts/issues/31428)
 
 ## <small>4.3.2 (2025-01-13)</small>
 

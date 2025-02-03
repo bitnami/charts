@@ -129,17 +129,19 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 
 {{- define "harbor.database.rawPassword" -}}
 {{- if .Values.postgresql.enabled }}
-    {{- if .Values.global.postgresql }}
-        {{- if .Values.global.postgresql.auth }}
-            {{- coalesce .Values.global.postgresql.auth.postgresPassword .Values.postgresql.auth.postgresPassword -}}
-        {{- else -}}
-            {{- .Values.postgresql.auth.postgresPassword -}}
-        {{- end -}}
+  {{- if .Values.global.postgresql }}
+    {{- if .Values.global.postgresql.auth }}
+      {{- coalesce .Values.global.postgresql.auth.postgresPassword .Values.postgresql.auth.postgresPassword -}}
     {{- else -}}
-        {{- .Values.postgresql.auth.postgresPassword -}}
+      {{- .Values.postgresql.auth.postgresPassword -}}
     {{- end -}}
+  {{- else -}}
+    {{- .Values.postgresql.auth.postgresPassword -}}
+  {{- end -}}
 {{- else -}}
+  {{- if not .Values.externalDatabase.existingSecret -}}
     {{- .Values.externalDatabase.password -}}
+  {{- end -}}
 {{- end -}}
 {{- end -}}
 
@@ -426,10 +428,10 @@ harbor: PostgreSQL password
     Please set a password (--set postgresql.auth.postgresPassword="xxxx")
   {{- end -}}
 {{- else -}}
-  {{- if not .Values.externalDatabase.password -}}
+    {{- if and (not .Values.externalDatabase.password) (not .Values.externalDatabase.existingSecret) -}}
 harbor: External PostgreSQL password
     An external database password is required!.
-    Please set a password (--set externalDatabase.password="xxxx")
+    Please set a password (--set externalDatabase.password="xxxx") or using an existing secret
   {{- end -}}
 {{- end -}}
 {{- end -}}
