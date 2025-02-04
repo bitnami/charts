@@ -1,8 +1,12 @@
 # Changelog
 
-## 7.2.0 (2025-01-17)
+## 7.2.1 (2025-02-04)
 
-*  [bitnami/clickhouse] Fix: bind ipv6 and ipv4 by default  ([#31200](https://github.com/bitnami/charts/pull/31200))
+* [bitnami/clickhouse] Release 7.2.1 ([#31741](https://github.com/bitnami/charts/pull/31741))
+
+## 7.2.0 (2025-01-20)
+
+*  [bitnami/clickhouse] Fix: bind ipv6 and ipv4 by default  (#31200) ([422b3a7](https://github.com/bitnami/charts/commit/422b3a72023f2c47fded9e3d696c855540d1b158)), closes [#31200](https://github.com/bitnami/charts/issues/31200)
 
 ## <small>7.1.6 (2025-01-17)</small>
 
