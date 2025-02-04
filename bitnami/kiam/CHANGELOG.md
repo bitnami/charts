@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.3.3 (2025-01-24)
+## 2.3.4 (2025-02-04)
 
-* [bitnami/kiam] Release 2.3.3 ([#31561](https://github.com/bitnami/charts/pull/31561))
+* [bitnami/kiam] Release 2.3.4 ([#31762](https://github.com/bitnami/charts/pull/31762))
+
+## <small>2.3.3 (2025-01-24)</small>
+
+* [bitnami/kiam] Release 2.3.3 (#31561) ([497c4de](https://github.com/bitnami/charts/commit/497c4de2b3461b0e0c13b17b9703c42b7de07443)), closes [#31561](https://github.com/bitnami/charts/issues/31561)
 
 ## <small>2.3.2 (2025-01-17)</small>
 
