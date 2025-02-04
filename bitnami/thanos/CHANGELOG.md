@@ -1,8 +1,12 @@
 # Changelog
 
-## 15.11.0 (2025-01-29)
+## 15.12.0 (2025-02-03)
 
-* [bitnami/thanos] feature(minio): Bump MinIO subchart ([#31663](https://github.com/bitnami/charts/pull/31663))
+* [bitnami/thanos] Enable Can'N'Proto replication protocol for Receiver ([#31715](https://github.com/bitnami/charts/pull/31715))
+
+## 15.11.0 (2025-01-30)
+
+* [bitnami/thanos] feature(minio): Bump MinIO subchart (#31663) ([32912fd](https://github.com/bitnami/charts/commit/32912fd449cdadc7f30a1400a084bb8977101571)), closes [#31663](https://github.com/bitnami/charts/issues/31663)
 
 ## <small>15.10.3 (2025-01-24)</small>
 

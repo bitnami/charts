@@ -1,8 +1,13 @@
 # Changelog
 
-## 15.1.1 (2025-01-07)
+## 15.1.2 (2025-02-04)
 
-* [bitnami/kong] Release 15.1.1 ([#31173](https://github.com/bitnami/charts/pull/31173))
+* [bitnami/kong] Release 15.1.2 ([#31736](https://github.com/bitnami/charts/pull/31736))
+
+## <small>15.1.1 (2025-01-07)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/kong] Release 15.1.1 (#31173) ([b265fbe](https://github.com/bitnami/charts/commit/b265fbed4047e4ffeb82b8307b05bf5630af058a)), closes [#31173](https://github.com/bitnami/charts/issues/31173)
 
 ## 15.1.0 (2024-12-10)
 

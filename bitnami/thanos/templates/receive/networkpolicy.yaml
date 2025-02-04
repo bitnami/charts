@@ -38,11 +38,14 @@ spec:
         - port: {{ .Values.receive.service.ports.http }}
         - port: {{ .Values.receive.containerPorts.grpc }}
         - port: {{ .Values.receive.service.ports.grpc }}
+        - port: {{ .Values.receive.containerPorts.capnproto }}
+        - port: {{ .Values.receive.service.ports.capnproto }}
     # Communicate with other receive instances via headless service
     - ports:
         - port: {{ .Values.receive.containerPorts.http }}
         - port: {{ .Values.receive.containerPorts.grpc }}
         - port: {{ .Values.receive.containerPorts.remote }}
+        - port: {{ .Values.receive.containerPorts.capnproto }}
       to:
         - podSelector:
             matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 14 }}
@@ -60,7 +63,7 @@ spec:
         - podSelector:
             matchLabels:
               app.kubernetes.io/name: minio
-              app.kubernetes.io/instance: {{ .Release.Name }}            
+              app.kubernetes.io/instance: {{ .Release.Name }}
     {{- end }}
     {{- if .Values.queryFrontend.enabled }}
     # Communicate with query-frontend
@@ -98,6 +101,8 @@ spec:
         - port: {{ .Values.receive.service.ports.grpc }}
         - port: {{ .Values.receive.containerPorts.remote }}
         - port: {{ .Values.receive.service.ports.remote }}
+        - port: {{ .Values.receive.containerPorts.capnproto }}
+        - port: {{ .Values.receive.service.ports.capnproto }}
       {{- if not  .Values.receive.networkPolicy.allowExternal }}
       from:
         - podSelector:

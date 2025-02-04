@@ -25,7 +25,7 @@ dependencies:
 - condition: exporters.enabled,exporters.kube-state-metrics.enabled
   name: kube-state-metrics
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 4.x.x
+  version: 5.x.x
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
   tags:
@@ -49,4 +49,4 @@ maintainers:
 name: kube-prometheus
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus
-version: 10.2.5
+version: 11.0.0
