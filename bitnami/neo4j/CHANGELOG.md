@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.2.2 (2025-01-10)
+## 0.2.3 (2025-02-04)
 
-* [bitnami/neo4j] Release 0.2.2 ([#31295](https://github.com/bitnami/charts/pull/31295))
+* [bitnami/neo4j] Release 0.2.3 ([#31737](https://github.com/bitnami/charts/pull/31737))
+
+## <small>0.2.2 (2025-01-10)</small>
+
+* [bitnami/neo4j] Release 0.2.2 (#31295) ([41652fd](https://github.com/bitnami/charts/commit/41652fdf0e09f2f5ddcc22fd9ddaf61dcc5c2648)), closes [#31295](https://github.com/bitnami/charts/issues/31295)
 
 ## <small>0.2.1 (2025-01-10)</small>
 
