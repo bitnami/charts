@@ -1,6 +1,6 @@
 # Changelog
 
-## 11.1.1 (2025-02-03)
+## 11.1.1 (2025-02-04)
 
 * [bitnami/milvus] Release 11.0.1 ([#31570](https://github.com/bitnami/charts/pull/31570))
 
