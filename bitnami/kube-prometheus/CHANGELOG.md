@@ -1,6 +1,6 @@
 # Changelog
 
-## 11.0.1 (2025-02-04)
+## 11.0.1 (2025-02-05)
 
 * [bitnami/kube-prometheus] Release 11.0.1 ([#31734](https://github.com/bitnami/charts/pull/31734))
 
