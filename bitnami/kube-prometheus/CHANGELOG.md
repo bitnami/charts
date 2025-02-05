@@ -1,8 +1,13 @@
 # Changelog
 
+## 11.0.1 (2025-02-05)
+
+* [bitnami/kube-prometheus] Release 11.0.1 ([#31734](https://github.com/bitnami/charts/pull/31734))
+
 ## 11.0.0 (2025-02-04)
 
-* [kube-prometheus] Update kube-state-metric subchart to 5.0.0 ([#31731](https://github.com/bitnami/charts/pull/31731))
+* [kube-prometheus] Update kube-state-metric subchart to 5.0.0 (#31731) ([bd0f609](https://github.com/bitnami/charts/commit/bd0f609d17126f312f354ba5597ef70d75828cd0)), closes [#31731](https://github.com/bitnami/charts/issues/31731)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
 
 ## <small>10.2.5 (2025-01-29)</small>
 
