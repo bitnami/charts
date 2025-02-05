@@ -1,8 +1,16 @@
 # Changelog
 
-## 1.1.7 (2025-01-28)
+## 1.1.9 (2025-02-01)
 
-* [bitnami/nessie] Release 1.1.7 ([#31632](https://github.com/bitnami/charts/pull/31632))
+* [bitnami/nessie] Release 1.1.9 ([#31695](https://github.com/bitnami/charts/pull/31695))
+
+## <small>1.1.8 (2025-01-30)</small>
+
+* [bitnami/nessie] Release 1.1.8 (#31676) ([f2d4caa](https://github.com/bitnami/charts/commit/f2d4caa470a6729efecd7c8e8479f75f173b7c53)), closes [#31676](https://github.com/bitnami/charts/issues/31676)
+
+## <small>1.1.7 (2025-01-28)</small>
+
+* [bitnami/nessie] Release 1.1.7 (#31632) ([cbb2262](https://github.com/bitnami/charts/commit/cbb2262339ae8e62e075d2913dcc8151aa29716d)), closes [#31632](https://github.com/bitnami/charts/issues/31632)
 
 ## <small>1.1.6 (2025-01-24)</small>
 

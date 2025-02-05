@@ -1,4 +1,4 @@
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 SPDX-License-Identifier: APACHE-2.0
 
 This product includes third-party open source software. Additional copyright and licensing information can be found inside the Bitnami packages themselves and/or at https://bitnami.com/open-source

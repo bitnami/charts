@@ -511,6 +511,8 @@ helm install my-release --set master.persistence.existingClaim=PVC_NAME oci://RE
 | `auth.existingSecretPasswordKey` | Password key to be retrieved from existing secret                                     | `""`          |
 | `auth.usePasswordFiles`          | Mount credentials as files instead of using an environment variable                   | `false`       |
 | `auth.usePasswordFileFromSecret` | Mount password file from secret                                                       | `true`        |
+| `auth.acl.enabled`               | Enables the support of the Redis ACL system                                           | `false`       |
+| `auth.acl.users`                 | A list of the configured users in the Redis ACL system                                | `[]`          |
 | `commonConfiguration`            | Common configuration to be added into the ConfigMap                                   | `""`          |
 | `existingConfigmap`              | The name of an existing ConfigMap with your custom configuration for Redis&reg; nodes | `""`          |
 
@@ -1306,7 +1308,7 @@ kubectl patch deployments my-release-redis-metrics --type=json -p='[{"op": "remo
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
