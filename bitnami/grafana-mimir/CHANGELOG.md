@@ -1,8 +1,12 @@
 # Changelog
 
+## 1.4.1 (2025-02-04)
+
+* [bitnami/grafana-mimir] Release 1.4.1 ([#31754](https://github.com/bitnami/charts/pull/31754))
+
 ## 1.4.0 (2025-01-29)
 
-* [bitnami/grafana-mimir] feature(minio): Bump MinIO subchart ([#31659](https://github.com/bitnami/charts/pull/31659))
+* [bitnami/grafana-mimir] feature(minio): Bump MinIO subchart (#31659) ([423f680](https://github.com/bitnami/charts/commit/423f68052a6aeb6a2f389b560515f74570143b3c)), closes [#31659](https://github.com/bitnami/charts/issues/31659)
 
 ## <small>1.3.3 (2025-01-24)</small>
 

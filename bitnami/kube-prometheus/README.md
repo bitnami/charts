@@ -935,6 +935,10 @@ While upgrading a chart, please note that there are certain limitations to upgra
 
 ## Upgrading
 
+### To 11.0.0
+
+This major updates the kube-state-metrics subchart to its newest major, 5.0.0. For more information, please refer to [kube-state-metrics upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/kube-state-metrics#to-500).
+
 ### To 10.2.0
 
 This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).

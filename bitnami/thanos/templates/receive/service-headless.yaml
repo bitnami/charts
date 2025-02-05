@@ -30,6 +30,10 @@ spec:
       targetPort: grpc
       protocol: TCP
       name: grpc
+    - port: {{ .Values.receive.service.ports.capnproto }}
+      targetPort: capnproto
+      protocol: TCP
+      name: capnproto
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.receive.podLabels .Values.commonLabels ) "context" . ) }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: receive

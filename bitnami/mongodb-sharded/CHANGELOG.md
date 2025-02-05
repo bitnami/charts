@@ -1,8 +1,13 @@
 # Changelog
 
-## 9.1.1 (2025-01-15)
+## 9.1.2 (2025-02-03)
 
-* [bitnami/mongodb-sharded] Release 9.1.1 ([#31389](https://github.com/bitnami/charts/pull/31389))
+* [bitnami/mongodb-sharded] Release 9.1.2 ([#31698](https://github.com/bitnami/charts/pull/31698))
+
+## <small>9.1.1 (2025-01-15)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/mongodb-sharded] Release 9.1.1 (#31389) ([3792427](https://github.com/bitnami/charts/commit/379242754da4f52c1d5cecfa6746124c75341fe5)), closes [#31389](https://github.com/bitnami/charts/issues/31389)
 
 ## 9.1.0 (2024-12-10)
 
