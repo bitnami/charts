@@ -1,8 +1,14 @@
 # Changelog
 
-## 7.2.1 (2025-02-04)
+## 8.0.0 (2025-02-05)
 
-* [bitnami/clickhouse] Release 7.2.1 ([#31741](https://github.com/bitnami/charts/pull/31741))
+* [bitnami/clickhouse] Release 8.0.0 ([#31786](https://github.com/bitnami/charts/pull/31786))
+
+## <small>7.2.1 (2025-02-04)</small>
+
+* [bitnami/clickhouse] Release 7.2.1 (#31741) ([12dee00](https://github.com/bitnami/charts/commit/12dee0066050b030aad778322aac04070649b352)), closes [#31741](https://github.com/bitnami/charts/issues/31741)
+* [bitnami/clickhouse][bitnami/moodle] Remove references to deprecated kube-lego (#31726) ([4e44ec5](https://github.com/bitnami/charts/commit/4e44ec50d9144f8c3c017afa4e518c43d8f3847b)), closes [#31726](https://github.com/bitnami/charts/issues/31726)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
 
 ## 7.2.0 (2025-01-20)
 
