@@ -1,8 +1,12 @@
 # Changelog
 
-## 31.3.1 (2025-01-28)
+## 31.3.2 (2025-02-05)
 
 * [bitnami/kafka] IpFamilies and IpFamilyPolicy configurables ([#31456](https://github.com/bitnami/charts/pull/31456))
+
+## <small>31.3.1 (2025-01-28)</small>
+
+* [bitnami/kafka] Release 31.3.1 (#31624) ([21e8180](https://github.com/bitnami/charts/commit/21e8180f88d4f0f85e31086fa609220ae1b853e0)), closes [#31624](https://github.com/bitnami/charts/issues/31624)
 
 ## 31.3.0 (2025-01-23)
 
