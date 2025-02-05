@@ -1,8 +1,12 @@
 # Changelog
 
-## 6.4.4 (2025-01-24)
+## 6.4.5 (2025-02-05)
 
-* [bitnami/metallb] Release 6.4.4 ([#31568](https://github.com/bitnami/charts/pull/31568))
+* [bitnami/metallb] Release 6.4.5 ([#31769](https://github.com/bitnami/charts/pull/31769))
+
+## <small>6.4.4 (2025-01-24)</small>
+
+* [bitnami/metallb] Release 6.4.4 (#31568) ([f0041c8](https://github.com/bitnami/charts/commit/f0041c8ee02b15fea17e54b29d8bfdd600139488)), closes [#31568](https://github.com/bitnami/charts/issues/31568)
 
 ## <small>6.4.3 (2025-01-17)</small>
 
