@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.5.5 (2025-02-05)
+## 4.6.0 (2025-02-05)
 
-* [bitnami/seaweedfs] Release 4.5.5 ([#31779](https://github.com/bitnami/charts/pull/31779))
+* [bitnami/seaweedfs] Add support for log persistence ([#31793](https://github.com/bitnami/charts/pull/31793))
+
+## <small>4.5.5 (2025-02-05)</small>
+
+* [bitnami/seaweedfs] Release 4.5.5 (#31779) ([db2813f](https://github.com/bitnami/charts/commit/db2813f08e07f03142c8acd5b587c47bf66a0057)), closes [#31779](https://github.com/bitnami/charts/issues/31779)
 
 ## <small>4.5.4 (2025-02-03)</small>
 
