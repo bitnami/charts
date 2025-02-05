@@ -1,8 +1,13 @@
 # Changelog
 
-## 15.12.0 (2025-02-03)
+## 15.12.1 (2025-02-05)
 
-* [bitnami/thanos] Enable Can'N'Proto replication protocol for Receiver ([#31715](https://github.com/bitnami/charts/pull/31715))
+* [bitnami/thanos] Release 15.12.1 ([#31780](https://github.com/bitnami/charts/pull/31780))
+
+## 15.12.0 (2025-02-04)
+
+* [bitnami/thanos] Enable Can'N'Proto replication protocol for Receiver (#31715) ([58ff639](https://github.com/bitnami/charts/commit/58ff63927a319abbdf8b3efe0c26eee68a48a7aa)), closes [#31715](https://github.com/bitnami/charts/issues/31715)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
 
 ## 15.11.0 (2025-01-30)
 
