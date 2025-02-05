@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.5.3 (2025-01-24)
+## 4.5.4 (2025-02-05)
 
-* [bitnami/node-exporter] Release 4.5.3 ([#31574](https://github.com/bitnami/charts/pull/31574))
+* [bitnami/node-exporter] Release 4.5.4 ([#31772](https://github.com/bitnami/charts/pull/31772))
+
+## <small>4.5.3 (2025-01-24)</small>
+
+* [bitnami/node-exporter] Release 4.5.3 (#31574) ([6c16122](https://github.com/bitnami/charts/commit/6c1612203c16b46cbd65f9ff0013a33c0f4c45ca)), closes [#31574](https://github.com/bitnami/charts/issues/31574)
 
 ## <small>4.5.2 (2025-01-17)</small>
 
