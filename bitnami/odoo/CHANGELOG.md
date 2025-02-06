@@ -1,8 +1,13 @@
 # Changelog
 
-## 28.1.1 (2025-01-13)
+## 28.1.2 (2025-02-05)
 
-* [bitnami/odoo] Release 28.1.1 ([#31241](https://github.com/bitnami/charts/pull/31241))
+* [bitnami/odoo] Release 28.1.2 ([#31784](https://github.com/bitnami/charts/pull/31784))
+
+## <small>28.1.1 (2025-01-13)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/odoo] Release 28.1.1 (#31241) ([6b38b5b](https://github.com/bitnami/charts/commit/6b38b5b2873e98c98548d1a3991e64bebb3c4c49)), closes [#31241](https://github.com/bitnami/charts/issues/31241)
 
 ## 28.1.0 (2024-12-10)
 
