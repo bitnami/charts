@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.3.2 (2025-01-24)
+## 11.3.3 (2025-02-06)
 
-* [bitnami/apache] Release 11.3.2 ([#31540](https://github.com/bitnami/charts/pull/31540))
+* [bitnami/chart] Apache/metrics bug ([#31817](https://github.com/bitnami/charts/pull/31817))
+
+## <small>11.3.2 (2025-01-24)</small>
+
+* [bitnami/apache] Release 11.3.2 (#31540) ([8771ff7](https://github.com/bitnami/charts/commit/8771ff797f7c9ef19c66f2a3d597535c280a295f)), closes [#31540](https://github.com/bitnami/charts/issues/31540)
 
 ## <small>11.3.1 (2025-01-17)</small>
 
