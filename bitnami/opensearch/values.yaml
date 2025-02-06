@@ -34,6 +34,7 @@ global:
       ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
       ##
       adaptSecurityContext: auto
+
 ## @section Common parameters
 
 ## @param kubeVersion Override Kubernetes version
@@ -74,6 +75,7 @@ diagnosticMode:
   ##
   args:
     - infinity
+
 ## @section OpenSearch cluster Parameters
 
 ## @param clusterName OpenSearch cluster name
@@ -345,8 +347,8 @@ security:
     ## @param security.tls.adminDN A comma separated list of DN for admins
     ##
     adminDN: ""
+
 ## @section Traffic Exposure Parameters
-##
 
 ## OpenSearch service parameters
 ##
@@ -509,7 +511,9 @@ ingress:
   ##             name: http
   ##
   extraRules: []
+
 ## @section Master-eligible nodes parameters
+
 master:
   ## @param master.masterOnly Deploy the OpenSearch master-eligible nodes as master-only nodes. Recommended for high-demand deployments.
   ## If you are
@@ -1035,7 +1039,9 @@ master:
       selector: {}
       namespace: monitoring
       additionalLabels: {}
+
 ## @section Data-only nodes parameters
+
 data:
   ## @param data.replicaCount Number of data-only replicas to deploy
   ##
@@ -1554,7 +1560,9 @@ data:
       selector: {}
       namespace: monitoring
       additionalLabels: {}
+
 ## @section Coordinating-only nodes parameters
+
 coordinating:
   ## @param coordinating.replicaCount Number of coordinating-only replicas to deploy
   ##
@@ -2035,7 +2043,9 @@ coordinating:
       selector: {}
       namespace: monitoring
       additionalLabels: {}
+
 ## @section Ingest-only nodes parameters
+
 ingest:
   ## @param ingest.enabled Enable ingest nodes
   ##
@@ -2684,6 +2694,7 @@ ingest:
       selector: {}
       namespace: monitoring
       additionalLabels: {}
+
 ## @section Init Container Parameters
 
 ## 'volumePermissions' init container parameters
@@ -2786,7 +2797,9 @@ sysctlImage:
   ##     memory: 1024Mi
   ##
   resources: {}
+
 ## @section OpenSearch Dashboards Parameters
+
 dashboards:
   ## @param dashboards.enabled Enables OpenSearch Dashboards deployment
   ##
@@ -3412,14 +3425,14 @@ dashboards:
     dataSource: {}
 
 ## @section OpenSearch Snapshots Parameters
+
 snapshots:
   ## @param snapshots.enabled Enable automatic setup of repositories and snapshot policies
   ##
   enabled: false
   ## @param snapshots.command Override default container command (useful when using custom images)
   ##
-  command:
-    - /usr/bin/curl
+  command: []
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param snapshots.containerSecurityContext.enabled Enabled containers' Security Context
