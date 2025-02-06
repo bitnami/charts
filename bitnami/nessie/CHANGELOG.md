@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.1.10 (2025-02-05)
+## 1.1.10 (2025-02-06)
 
 * [bitnami/nessie] Release 1.1.10 ([#31800](https://github.com/bitnami/charts/pull/31800))
 
