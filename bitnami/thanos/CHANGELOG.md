@@ -1,8 +1,12 @@
 # Changelog
 
-## 15.12.1 (2025-02-05)
+## 15.12.2 (2025-02-07)
 
-* [bitnami/thanos] Release 15.12.1 ([#31780](https://github.com/bitnami/charts/pull/31780))
+* [bitnami/thanos] Release 15.12.2 ([#31831](https://github.com/bitnami/charts/pull/31831))
+
+## <small>15.12.1 (2025-02-05)</small>
+
+* [bitnami/thanos] Release 15.12.1 (#31780) ([c49cedb](https://github.com/bitnami/charts/commit/c49cedba45928f20ceba5e6f723e725e09219c30)), closes [#31780](https://github.com/bitnami/charts/issues/31780)
 
 ## 15.12.0 (2025-02-04)
 
