@@ -169,3 +169,15 @@ jobs:
             echo "Could not update the index after $max_attempts attempts"
             exit 1
           fi
+  notify:
+    name: Send notification
+    needs:
+      - vib-publish
+      - update-deprecated-index
+    if: ${{ always() && (needs.vib-publish.result == 'failure' || needs.update-deprecated-index.result == 'failure') }}
+    uses: bitnami/support/.github/workflows/gchat-notification.yml@main
+    with:
+      workflow: ${{ github.workflow }}
+      job-url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+    secrets:
+      webhook-url: ${{ secrets.GCHAT_CONTENT_ALERTS_WEBHOOK_URL }}
