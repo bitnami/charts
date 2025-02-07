@@ -1,8 +1,17 @@
 # Changelog
 
-## 2.3.1 (2024-12-19)
+## 2.3.3 (2025-02-04)
 
-* [bitnami/deepspeed] Release 2.3.1 ([#31101](https://github.com/bitnami/charts/pull/31101))
+* [bitnami/deepspeed] Release 2.3.3 ([#31740](https://github.com/bitnami/charts/pull/31740))
+
+## <small>2.3.2 (2025-01-23)</small>
+
+* [bitnami/deepspeed] Release 2.3.2 (#31532) ([f87c9af](https://github.com/bitnami/charts/commit/f87c9aff56eccd740252c01cf53124716deeaeb0)), closes [#31532](https://github.com/bitnami/charts/issues/31532)
+
+## <small>2.3.1 (2024-12-19)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/deepspeed] Release 2.3.1 (#31101) ([65c6de3](https://github.com/bitnami/charts/commit/65c6de3cb3602526a79e90b86f25cad32e71a3b9)), closes [#31101](https://github.com/bitnami/charts/issues/31101)
 
 ## 2.3.0 (2024-12-10)
 

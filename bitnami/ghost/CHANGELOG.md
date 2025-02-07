@@ -1,8 +1,37 @@
 # Changelog
 
-## 22.1.4 (2025-01-17)
+## 22.1.11 (2025-02-04)
 
-* [bitnami/ghost] Release 22.1.4 ([#31461](https://github.com/bitnami/charts/pull/31461))
+* [bitnami/ghost] Release 22.1.11 ([#31738](https://github.com/bitnami/charts/pull/31738))
+
+## <small>22.1.10 (2025-02-03)</small>
+
+* [bitnami/ghost] Release 22.1.10 (#31717) ([0a6ed76](https://github.com/bitnami/charts/commit/0a6ed76c67e6fdaac47a59390bc72be431006a6f)), closes [#31717](https://github.com/bitnami/charts/issues/31717)
+
+## <small>22.1.9 (2025-02-03)</small>
+
+* [bitnami/ghost] Release 22.1.9 (#31694) ([181a004](https://github.com/bitnami/charts/commit/181a004c1d004c535ffa9034818791a7abf676a9)), closes [#31694](https://github.com/bitnami/charts/issues/31694)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>22.1.8 (2025-01-30)</small>
+
+* [bitnami/ghost] Release 22.1.8 (#31678) ([0298c73](https://github.com/bitnami/charts/commit/0298c73534991028e68cd4362f28aa99128fd9d6)), closes [#31678](https://github.com/bitnami/charts/issues/31678)
+
+## <small>22.1.7 (2025-01-26)</small>
+
+* [bitnami/ghost] Release 22.1.7 (#31595) ([29d9167](https://github.com/bitnami/charts/commit/29d916774ecd61dcd089023c62016251a11bfe3d)), closes [#31595](https://github.com/bitnami/charts/issues/31595)
+
+## <small>22.1.6 (2025-01-21)</small>
+
+* [bitnami/ghost] Release 22.1.6 (#31488) ([13001bc](https://github.com/bitnami/charts/commit/13001bc7caca05ac7fd91b4b2ad9d66c48feeba7)), closes [#31488](https://github.com/bitnami/charts/issues/31488)
+
+## <small>22.1.5 (2025-01-20)</small>
+
+* [bitnami/ghost] Release 22.1.5 (#31483) ([1271104](https://github.com/bitnami/charts/commit/127110406e07e18cc73bee1ac9a65e63e1c983e3)), closes [#31483](https://github.com/bitnami/charts/issues/31483)
+
+## <small>22.1.4 (2025-01-17)</small>
+
+* [bitnami/ghost] Release 22.1.4 (#31461) ([56e1ac2](https://github.com/bitnami/charts/commit/56e1ac2221c4426002b8bcf57dca07cdc73d7651)), closes [#31461](https://github.com/bitnami/charts/issues/31461)
 
 ## <small>22.1.3 (2025-01-13)</small>
 

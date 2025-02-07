@@ -19,7 +19,7 @@ dependencies:
 - name: etcd
   repository: oci://registry-1.docker.io/bitnamicharts
   condition: etcd.enabled
-  version: 10.x.x
+  version: 11.x.x
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
   tags:
@@ -45,4 +45,4 @@ sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/apisix
 - https://github.com/bitnami/charts/tree/main/bitnami/apisix-dashboard
 - https://github.com/bitnami/charts/tree/main/bitnami/apisix-ingress-controller
-version: 3.7.2
+version: 4.0.0

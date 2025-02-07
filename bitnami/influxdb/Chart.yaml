@@ -6,15 +6,15 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: aws-cli
-      image: docker.io/bitnami/aws-cli:2.23.0-debian-12-r0
+      image: docker.io/bitnami/aws-cli:2.23.10-debian-12-r0
     - name: azure-cli
       image: docker.io/bitnami/azure-cli:2.68.0-debian-12-r0
     - name: google-cloud-sdk
-      image: docker.io/bitnami/google-cloud-sdk:0.506.0-debian-12-r0
+      image: docker.io/bitnami/google-cloud-sdk:0.508.0-debian-12-r0
     - name: influxdb
-      image: docker.io/bitnami/influxdb:2.7.11-debian-12-r3
+      image: docker.io/bitnami/influxdb:2.7.11-debian-12-r5
     - name: os-shell
-      image: docker.io/bitnami/os-shell:12-debian-12-r35
+      image: docker.io/bitnami/os-shell:12-debian-12-r36
 apiVersion: v2
 appVersion: 2.7.11
 dependencies:
@@ -37,4 +37,4 @@ maintainers:
 name: influxdb
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/influxdb
-version: 6.5.2
+version: 6.5.4

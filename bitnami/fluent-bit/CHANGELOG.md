@@ -1,8 +1,16 @@
 # Changelog
 
-## 2.4.3 (2024-12-30)
+## 2.4.5 (2025-02-07)
 
-* [bitnami/fluent-bit] Release 2.4.3 ([#31186](https://github.com/bitnami/charts/pull/31186))
+* [bitnami/fluent-bit] Release 2.4.5 ([#31835](https://github.com/bitnami/charts/pull/31835))
+
+## <small>2.4.4 (2025-01-24)</small>
+
+* [bitnami/fluent-bit] Release 2.4.4 (#31551) ([67f7f3b](https://github.com/bitnami/charts/commit/67f7f3b8fe90c9edf097e323e9b530fe55887155)), closes [#31551](https://github.com/bitnami/charts/issues/31551)
+
+## <small>2.4.3 (2024-12-30)</small>
+
+* [bitnami/fluent-bit] Release 2.4.3 (#31186) ([343ce6d](https://github.com/bitnami/charts/commit/343ce6df75c858132b0a42cb7691441da56768df)), closes [#31186](https://github.com/bitnami/charts/issues/31186)
 
 ## <small>2.4.2 (2024-12-20)</small>
 

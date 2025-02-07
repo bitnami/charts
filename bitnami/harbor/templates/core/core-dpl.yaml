@@ -139,6 +139,13 @@ spec:
                   name: {{ include "harbor.jobservice" . }}
                   key: secret
                 {{- end }}
+            {{- if and (not .Values.postgresql.enabled) .Values.externalDatabase.existingSecret }}
+            - name: POSTGRESQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.externalDatabase.existingSecret }}
+                  key: {{ .Values.externalDatabase.existingSecretPasswordKey }}
+            {{- end }}
             {{- if or .Values.core.configOverwriteJson .Values.core.configOverwriteJsonSecret }}
             - name: CONFIG_OVERWRITE_JSON
               valueFrom:

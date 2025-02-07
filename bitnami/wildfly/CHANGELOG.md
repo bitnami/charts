@@ -1,8 +1,16 @@
 # Changelog
 
-## 23.0.1 (2025-01-14)
+## 23.0.3 (2025-02-06)
 
-* [bitnami/wildfly] Release 23.0.1 ([#31372](https://github.com/bitnami/charts/pull/31372))
+* [bitnami/wildfly] Release 23.0.3 ([#31819](https://github.com/bitnami/charts/pull/31819))
+
+## <small>23.0.2 (2025-01-28)</small>
+
+* [bitnami/wildfly] Release 23.0.2 (#31635) ([903f5b0](https://github.com/bitnami/charts/commit/903f5b085872373a70ec71192dee4139bca809f6)), closes [#31635](https://github.com/bitnami/charts/issues/31635)
+
+## <small>23.0.1 (2025-01-14)</small>
+
+* [bitnami/wildfly] Release 23.0.1 (#31372) ([7ba2259](https://github.com/bitnami/charts/commit/7ba2259f3e0c4227df2b0019cf63cbb9d322da35)), closes [#31372](https://github.com/bitnami/charts/issues/31372)
 
 ## 23.0.0 (2025-01-10)
 

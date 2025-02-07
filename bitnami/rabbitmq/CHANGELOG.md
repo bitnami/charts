@@ -1,8 +1,16 @@
 # Changelog
 
-## 15.2.3 (2025-01-15)
+## 15.2.5 (2025-01-31)
 
-* [bitnami/rabbitmq] Fix incorrect configuration of TCP listen options by memoryHighWatermark settings ([#31336](https://github.com/bitnami/charts/pull/31336))
+* [bitnami/rabbitmq] Release 15.2.5 ([#31684](https://github.com/bitnami/charts/pull/31684))
+
+## <small>15.2.4 (2025-01-25)</small>
+
+* [bitnami/rabbitmq] Release 15.2.4 (#31593) ([30b43f3](https://github.com/bitnami/charts/commit/30b43f32ddb93639ae7a714c7a9cbd686280d302)), closes [#31593](https://github.com/bitnami/charts/issues/31593)
+
+## <small>15.2.3 (2025-01-15)</small>
+
+* [bitnami/rabbitmq] Fix incorrect configuration of TCP listen options by memoryHighWatermark settings ([7432a31](https://github.com/bitnami/charts/commit/7432a317f4126ac2ca2b3a56e731d483a92b752a)), closes [#31336](https://github.com/bitnami/charts/issues/31336)
 
 ## <small>15.2.2 (2025-01-07)</small>
 

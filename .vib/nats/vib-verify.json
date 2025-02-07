@@ -40,21 +40,6 @@
       },
       "actions": [
         {
-          "action_id": "goss",
-          "params": {
-            "resources": {
-              "path": "/.vib"
-            },
-            "tests_file": "nats/goss/goss.yaml",
-            "vars_file": "nats/runtime-parameters.yaml",
-            "remote": {
-              "pod": {
-                "workload": "sts-nats"
-              }
-            }
-          }
-        },
-        {
           "action_id": "cypress",
           "params": {
             "resources": {

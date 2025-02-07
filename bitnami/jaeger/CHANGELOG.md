@@ -1,8 +1,26 @@
 # Changelog
 
-## 5.1.3 (2025-01-08)
+## 5.1.7 (2025-02-07)
 
-* [bitnami/jaeger] Release 5.1.3 ([#31251](https://github.com/bitnami/charts/pull/31251))
+* [bitnami/jaeger] Release 5.1.7 ([#31834](https://github.com/bitnami/charts/pull/31834))
+
+## <small>5.1.6 (2025-02-04)</small>
+
+* [bitnami/jaeger] Release 5.1.6 (#31760) ([230c8b5](https://github.com/bitnami/charts/commit/230c8b5c991115ea771f786ac795d5ef04a34bcf)), closes [#31760](https://github.com/bitnami/charts/issues/31760)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>5.1.5 (2025-01-24)</small>
+
+* [bitnami/jaeger] Release 5.1.5 (#31560) ([dc8441b](https://github.com/bitnami/charts/commit/dc8441b4737ad2d8769689690e78739e34985a82)), closes [#31560](https://github.com/bitnami/charts/issues/31560)
+
+## <small>5.1.4 (2025-01-21)</small>
+
+*  [bitnami/jaeger] Migration job not using namespace overwrite 31207 (#31405) ([2e7a486](https://github.com/bitnami/charts/commit/2e7a486cda512311b84ad6a5d80d2a6fa90f25ff)), closes [#31405](https://github.com/bitnami/charts/issues/31405)
+
+## <small>5.1.3 (2025-01-08)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/jaeger] Release 5.1.3 (#31251) ([accc2a4](https://github.com/bitnami/charts/commit/accc2a409a6e4c3f52ccc0dd574680c8d645dd4e)), closes [#31251](https://github.com/bitnami/charts/issues/31251)
 
 ## <small>5.1.2 (2024-12-12)</small>
 

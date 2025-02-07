@@ -574,7 +574,7 @@ The chart mounts a [Persistent Volume](https://kubernetes.io/docs/concepts/stora
 | `sidecars`                                                  | Add additional sidecar containers (this value is evaluated as a template)                                                                                                                                                         | `[]`                              |
 | `extraVolumes`                                              | Extra volumes                                                                                                                                                                                                                     | `[]`                              |
 | `extraVolumeMounts`                                         | Mount extra volume(s)                                                                                                                                                                                                             | `[]`                              |
-| `resourcesPreset`                                           | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).                 | `micro`                           |
+| `resourcesPreset`                                           | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).                 | `small`                           |
 | `resources`                                                 | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                 | `{}`                              |
 | `livenessProbe.enabled`                                     | Turn on and off liveness probe                                                                                                                                                                                                    | `true`                            |
 | `livenessProbe.initialDelaySeconds`                         | Delay before liveness probe is initiated                                                                                                                                                                                          | `120`                             |
@@ -811,7 +811,7 @@ Bitnami Kubernetes documentation is available at [https://docs.bitnami.com/](htt
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

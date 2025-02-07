@@ -1,8 +1,13 @@
 # Changelog
 
-## 11.3.1 (2025-01-17)
+## 11.3.2 (2025-01-24)
 
-* [bitnami/apache] Release 11.3.1 ([#31449](https://github.com/bitnami/charts/pull/31449))
+* [bitnami/apache] Release 11.3.2 ([#31540](https://github.com/bitnami/charts/pull/31540))
+
+## <small>11.3.1 (2025-01-17)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/apache] Release 11.3.1 (#31449) ([9a77ff2](https://github.com/bitnami/charts/commit/9a77ff22affb31fae8ad04bb098d97112695e0cb)), closes [#31449](https://github.com/bitnami/charts/issues/31449)
 
 ## 11.3.0 (2024-12-10)
 

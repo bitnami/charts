@@ -484,7 +484,8 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 | `log4j`                               | An optional log4j.properties file to overwrite the default of the Kafka brokers                                                                                                                            | `""`                                                  |
 | `existingLog4jConfigMap`              | The name of an existing ConfigMap containing a log4j.properties file                                                                                                                                       | `""`                                                  |
 | `heapOpts`                            | Kafka Java Heap configuration                                                                                                                                                                              | `-XX:InitialRAMPercentage=75 -XX:MaxRAMPercentage=75` |
-| `brokerRackAssignment`                | Set Broker Assignment for multi tenant environment Allowed values: `aws-az`                                                                                                                                | `""`                                                  |
+| `brokerRackAssignment`                | Set Broker Assignment for multi tenant environment Allowed values: `aws-az`, `azure`                                                                                                                       | `""`                                                  |
+| `brokerRackAssignmentApiVersion`      | Set Broker Assignment API version when brokerRackAssignment set to : `azure`                                                                                                                               | `2023-11-15`                                          |
 | `interBrokerProtocolVersion`          | Override the setting 'inter.broker.protocol.version' during the ZK migration.                                                                                                                              | `""`                                                  |
 | `listeners.client.name`               | Name for the Kafka client listener                                                                                                                                                                         | `CLIENT`                                              |
 | `listeners.client.containerPort`      | Port for the Kafka client listener                                                                                                                                                                         | `9092`                                                |
@@ -1546,7 +1547,7 @@ kubectl delete statefulset kafka-zookeeper --cascade=false
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

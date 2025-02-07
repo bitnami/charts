@@ -1,8 +1,17 @@
 # Changelog
 
-## 12.1.1 (2025-01-07)
+## 12.1.3 (2025-02-03)
 
-* [bitnami/cassandra] Release 12.1.1 ([#31233](https://github.com/bitnami/charts/pull/31233))
+* [bitnami/cassandra] Release 12.1.3 ([#31721](https://github.com/bitnami/charts/pull/31721))
+
+## <small>12.1.2 (2025-01-28)</small>
+
+* [bitnami/cassandra] Release 12.1.2 (#31642) ([f17fef7](https://github.com/bitnami/charts/commit/f17fef71fe687224f58eb4334b522fab535d4e5b)), closes [#31642](https://github.com/bitnami/charts/issues/31642)
+
+## <small>12.1.1 (2025-01-07)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/cassandra] Release 12.1.1 (#31233) ([bdd9622](https://github.com/bitnami/charts/commit/bdd9622b7bf579ae71d61a2e014d0dfaaf29497d)), closes [#31233](https://github.com/bitnami/charts/issues/31233)
 
 ## 12.1.0 (2024-12-10)
 

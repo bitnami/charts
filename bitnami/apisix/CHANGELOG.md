@@ -1,8 +1,12 @@
 # Changelog
 
-## 3.7.2 (2025-01-17)
+## 4.0.0 (2025-01-22)
 
-* [bitnami/apisix] feat: :recycle: Use os-shell for config generation ([#31455](https://github.com/bitnami/charts/pull/31455))
+* [bitnami/apisix] Update ETCD to major 11 ([#31508](https://github.com/bitnami/charts/pull/31508))
+
+## <small>3.7.2 (2025-01-17)</small>
+
+* [bitnami/apisix] feat: :recycle: Use os-shell for config generation (#31455) ([e808ba0](https://github.com/bitnami/charts/commit/e808ba010c008023c7dfc1c1ee5bafb2f9acf38c)), closes [#31455](https://github.com/bitnami/charts/issues/31455)
 
 ## <small>3.7.1 (2025-01-09)</small>
 

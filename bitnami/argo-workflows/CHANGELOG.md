@@ -1,8 +1,21 @@
 # Changelog
 
-## 11.1.2 (2025-01-16)
+## 11.1.5 (2025-02-07)
 
-* [bitnami/argo-workflows] Release 11.1.2 ([#31408](https://github.com/bitnami/charts/pull/31408))
+* [bitnami/argo-workflows] Release 11.1.5 ([#31824](https://github.com/bitnami/charts/pull/31824))
+
+## <small>11.1.4 (2025-02-04)</small>
+
+* [bitnami/argo-workflows] Release 11.1.4 (#31743) ([03714fc](https://github.com/bitnami/charts/commit/03714fc841dcf5199a8c841d9b3b5876fa80c821)), closes [#31743](https://github.com/bitnami/charts/issues/31743)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>11.1.3 (2025-01-24)</small>
+
+* [bitnami/argo-workflows] Release 11.1.3 (#31542) ([08db052](https://github.com/bitnami/charts/commit/08db052141e48c2f28d920d2ec923da8c7953f7e)), closes [#31542](https://github.com/bitnami/charts/issues/31542)
+
+## <small>11.1.2 (2025-01-16)</small>
+
+* [bitnami/argo-workflows] Release 11.1.2 (#31408) ([fc7398e](https://github.com/bitnami/charts/commit/fc7398e8b2d6b1e29fe2e2730b2af217dc307af3)), closes [#31408](https://github.com/bitnami/charts/issues/31408)
 
 ## <small>11.1.1 (2025-01-12)</small>
 

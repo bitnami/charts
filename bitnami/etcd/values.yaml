@@ -86,7 +86,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/etcd
-  tag: 3.5.17-debian-12-r3
+  tag: 3.5.18-debian-12-r1
   digest: ""
   ## @param image.pullPolicy etcd image pull policy
   ## Specify a imagePullPolicy
@@ -215,12 +215,6 @@ autoCompactionMode: ""
 ## @param autoCompactionRetention Auto compaction retention for mvcc key value store in hour, by default 0, means disabled
 ##
 autoCompactionRetention: ""
-## @param initialClusterState Initial cluster state. Allowed values: 'new' or 'existing'
-## If this values is not set, the default values below are set:
-## - 'new': when installing the chart ('helm install ...')
-## - 'existing': when upgrading the chart ('helm upgrade ...')
-##
-initialClusterState: ""
 ## @param initialClusterToken Initial cluster token. Can be used to protect etcd from cross-cluster-interaction, which might corrupt the clusters.
 ## If spinning up multiple clusters (or creating and destroying a single cluster)
 ## with same configuration for testing purpose, it is highly recommended that each cluster is given a unique initial-cluster-token.
@@ -235,11 +229,6 @@ logLevel: "info"
 ## ref: https://golang.org/pkg/runtime
 ##
 maxProcs: ""
-## @param removeMemberOnContainerTermination Use a PreStop hook to remove the etcd members from the etcd cluster on container termination
-## they the containers are terminated. Set to 'false' if appears an error-related member ID wasn't properly stored.
-## NOTE: Ignored if lifecycleHooks is set or replicaCount=1
-##
-removeMemberOnContainerTermination: true
 ## @param configuration etcd configuration. Specify content for etcd.conf.yml
 ## e.g:
 ## configuration: |-
@@ -681,7 +670,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r35
+    tag: 12-debian-12-r36
     digest: ""
     ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
     ##
