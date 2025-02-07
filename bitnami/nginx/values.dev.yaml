@@ -53,7 +53,7 @@ serverBlock: |-
       proxy_set_header X-Real-IP $remote_addr;
       proxy_pass http://dsp-portal-gui:3000/;
     }
-    location /agreement-svc {
+    location /agreement-svc/ {
       proxy_set_header Host $host;
       proxy_set_header X-Real-IP $remote_addr;
       proxy_pass http://dsp-agreement-svc:5000/;
