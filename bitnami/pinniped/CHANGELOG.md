@@ -1,8 +1,13 @@
 # Changelog
 
-## 2.4.8 (2025-02-05)
+## 2.4.9 (2025-02-07)
 
-* [bitnami/pinniped] Release 2.4.8 ([#31774](https://github.com/bitnami/charts/pull/31774))
+* [bitnami/pinniped] Release 2.4.9 ([#31826](https://github.com/bitnami/charts/pull/31826))
+
+## <small>2.4.8 (2025-02-05)</small>
+
+* [bitnami/pinniped] Release 2.4.8 (#31774) ([d35eec7](https://github.com/bitnami/charts/commit/d35eec7815622f4f0c7ee710ca4fc19a3f4d9c1c)), closes [#31774](https://github.com/bitnami/charts/issues/31774)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
 
 ## <small>2.4.7 (2025-01-27)</small>
 
