@@ -68,12 +68,12 @@ serverBlock: |-
       proxy_set_header X-Real-IP $remote_addr;
       proxy_pass http://dsp-portal-service-b:5000/health;
     }
-    location ~ ^/catalog-gui/.* {
+    location /catalog-gui/ {
       proxy_set_header Host $host;
       proxy_set_header X-Real-IP $remote_addr;
       proxy_pass http://dsp-catalog-gui:3000/;
     }
-    location  ~ ^/services-gui/.* {
+    location  /services-gui/ {
       proxy_set_header Host $host;
       proxy_set_header X-Real-IP $remote_addr;
       proxy_pass http://dsp-services-gui:3000/;
