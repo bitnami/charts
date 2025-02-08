@@ -1,8 +1,12 @@
 # Changelog
 
-## 15.0.2 (2025-02-05)
+## 15.0.3 (2025-02-08)
 
-* [bitnami/minio] Release 15.0.2 ([#31768](https://github.com/bitnami/charts/pull/31768))
+* [bitnami/minio] Release 15.0.3 ([#31841](https://github.com/bitnami/charts/pull/31841))
+
+## <small>15.0.2 (2025-02-05)</small>
+
+* [bitnami/minio] Release 15.0.2 (#31768) ([1da85ac](https://github.com/bitnami/charts/commit/1da85ac792b1c42d7a83e654fe1725aa43d1550e)), closes [#31768](https://github.com/bitnami/charts/issues/31768)
 
 ## <small>15.0.1 (2025-02-04)</small>
 
