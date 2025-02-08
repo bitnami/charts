@@ -2,7 +2,7 @@
 
 ## 16.4.7 (2025-02-08)
 
-* fix(bitnami/postgresql): use adminPassword for metrics user when custom user is not set on primary ([#31840](https://github.com/bitnami/charts/pull/31840))
+* [bitnami/postgresql] use adminPassword for metrics user when custom user is not set on primary ([#31840](https://github.com/bitnami/charts/pull/31840))
 
 ## <small>16.4.6 (2025-02-03)</small>
 
