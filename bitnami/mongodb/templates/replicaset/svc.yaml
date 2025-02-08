@@ -25,7 +25,7 @@ metadata:
   {{- end }}
 spec:
   type: ClusterIP
-  publishNotReadyAddresses: true
+  publishNotReadyAddresses: {{ $root.Values.service.publishNotReadyAddresses }}
   ports:
     - name: {{ $root.Values.service.portName | quote }}
       port: {{ $root.Values.service.ports.mongodb }}

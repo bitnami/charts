@@ -824,6 +824,10 @@ service:
     ## @param service.headless.annotations Annotations for the headless service.
     ##
     annotations: {}
+  ## @param service.publishNotReadyAddresses Indicates that any agent which deals with endpoints for this Service should disregard any indications of ready/not-ready
+  ## ref: https://kubernetes.io/docs/reference/kubernetes-api/service-resources/service-v1/
+  ##
+  publishNotReadyAddresses: false
 ## External Access to MongoDB(&reg;) nodes configuration
 ##
 externalAccess:
