@@ -1,8 +1,13 @@
 # Changelog
 
-## 28.1.2 (2025-02-05)
+## 28.1.3 (2025-02-10)
 
-* [bitnami/odoo] Release 28.1.2 ([#31784](https://github.com/bitnami/charts/pull/31784))
+* [bitnami/odoo] fix issue #31612 - Incompatibility with OCI FSS persistent volumes (.snapshot read-only file system) ([#31860](https://github.com/bitnami/charts/pull/31860))
+
+## <small>28.1.2 (2025-02-06)</small>
+
+* [bitnami/odoo] Release 28.1.2 (#31784) ([c31c809](https://github.com/bitnami/charts/commit/c31c809602d61ad62baa5fcf73b3ffec6626de7c)), closes [#31784](https://github.com/bitnami/charts/issues/31784)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
 
 ## <small>28.1.1 (2025-01-13)</small>
 
