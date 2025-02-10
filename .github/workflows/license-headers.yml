@@ -74,5 +74,5 @@ jobs:
             echo "result=skip" >> $GITHUB_OUTPUT
           fi
       - name: Check license Headers
-        uses: apache/skywalking-eyes/header@cd7b195c51fd3d6ad52afceb760719ddc6b3ee91
+        uses: apache/skywalking-eyes/header@5c5b974209f0de5d905f37deb69369068ebfc15c
         if: ${{ steps.get-modified-files.outputs.result == 'success' }}
