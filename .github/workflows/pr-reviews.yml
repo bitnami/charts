@@ -1,6 +1,7 @@
 # Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
+# NOTE: This workflow is maintained in the https://github.com/bitnami/support repository
 name: '[Support] PR review comment card movements'
 on:
   pull_request_review_comment:

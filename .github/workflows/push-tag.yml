@@ -86,3 +86,14 @@ jobs:
             git tag ${CHART}/${chart_version}
             git push --tags
           fi
+  notify:
+    name: Send notification
+    needs:
+      - push-tag
+    if: ${{ always() && (needs.push-tag.result == 'failure') }}
+    uses: bitnami/support/.github/workflows/gchat-notification.yml@main
+    with:
+      workflow: ${{ github.workflow }}
+      job-url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+    secrets:
+      webhook-url: ${{ secrets.GCHAT_CONTENT_ALERTS_WEBHOOK_URL }}
