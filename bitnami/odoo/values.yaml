@@ -601,6 +601,9 @@ persistence:
   ## @param persistence.enabled Enable persistence using Persistent Volume Claims
   ##
   enabled: true
+  ## @param persistence.subPath Include subPath on volumeMounts for Odoo data
+  ##
+  subPath: null
   ## @param persistence.resourcePolicy Setting it to "keep" to avoid removing PVCs during a helm delete operation. Leaving it empty will delete PVCs after the chart deleted
   ##
   resourcePolicy: ""
