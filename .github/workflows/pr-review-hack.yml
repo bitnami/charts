@@ -3,6 +3,7 @@
 
 # This is a hack to run reusable workflows in the main repo context and not from the forked repository.
 # We this hack we can use secrets configured in the organization.
+# NOTE: This workflow is maintained in the https://github.com/bitnami/support repository
 name: '[Support] PR review comment trigger'
 on:
   workflow_run:
