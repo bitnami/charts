@@ -86,8 +86,9 @@ jobs:
     name: Send notification
     needs: [deploy]
     if: ${{ always() && needs.deploy.outputs.result != 'ok' }}
-    uses: bitnami/charts/.github/workflows/gchat-notification.yml@main
+    uses: bitnami/support/.github/workflows/gchat-notification.yml@main
     with:
       workflow: ${{ github.workflow }}
       job-url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-    secrets: inherit
+    secrets:
+      webhook-url: ${{ secrets.GCHAT_WEBHOOK_URL }}
