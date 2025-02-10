@@ -1,8 +1,13 @@
 # Changelog
 
-## 15.2.5 (2025-01-31)
+## 15.3.0 (2025-02-09)
 
-* [bitnami/rabbitmq] Release 15.2.5 ([#31684](https://github.com/bitnami/charts/pull/31684))
+* [bitnami/rabbitmq]: add hostPort support to the chart ([#31836](https://github.com/bitnami/charts/pull/31836))
+
+## <small>15.2.5 (2025-02-03)</small>
+
+* [bitnami/rabbitmq] Release 15.2.5 (#31684) ([9f2b108](https://github.com/bitnami/charts/commit/9f2b108e450d4bc837335432333fde78d946c031)), closes [#31684](https://github.com/bitnami/charts/issues/31684)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
 
 ## <small>15.2.4 (2025-01-25)</small>
 
