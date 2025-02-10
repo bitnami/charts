@@ -451,7 +451,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ### To 19.0.0
 
-The [module ngx_http_dav_module](http://nginx.org/en/docs/http/ngx_http_dav_module.html), WebDAV protocol, has been converted into a dynamic module under the `/opt/bitnami/nginx/modules` directory. You need to include a `load_module /opt/bitnami/nginx/modules/ngx_http_dav_module.so;` directive to use it.
+The [module ngx_http_dav_module](http://nginx.org/en/docs/http/ngx_http_dav_module.html), WebDAV protocol, has been converted into a dynamic module under the `/opt/bitnami/nginx/modules` directory. It is necessary to include the directive `load_module /opt/bitnami/nginx/modules/ngx_http_dav_module.so;` to enable its functionality.
 
 ### To 18.3.0
 
