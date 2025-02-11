@@ -24,7 +24,7 @@ jobs:
       review_state: ${{ steps.get-info.outputs.review_state }}
       labels: ${{ steps.get-info.outputs.labels }}
       resource_url: ${{ steps.get-info.outputs.resource_url }}
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.repository_owner == 'bitnami' && github.event.workflow_run.conclusion == 'success' }}
     steps:
       - id: get-info
         env:

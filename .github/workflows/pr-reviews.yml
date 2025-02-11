@@ -19,6 +19,7 @@ jobs:
   just-notice:
     # This is a dummy workflow that triggers a workflow_run
     runs-on: ubuntu-latest
+    if: ${{ github.repository_owner == 'bitnami' }}
     steps:
       - run: |
           echo "::notice:: Comment on PR #${{ github.event.pull_request.number }}"

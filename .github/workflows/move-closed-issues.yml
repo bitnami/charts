@@ -18,5 +18,6 @@ concurrency:
   group: card-movement-${{ github.event.issue != null && github.event.issue.number || github.event.number }}
 jobs:
   call-move-closed-workflow:
+    if: ${{ github.repository_owner == 'bitnami' }}
     uses: bitnami/support/.github/workflows/item-closed.yml@main
     secrets: inherit
