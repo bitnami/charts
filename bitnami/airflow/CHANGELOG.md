@@ -1,6 +1,6 @@
 # Changelog
 
-## 22.4.9 (2025-02-10)
+## 22.4.9 (2025-02-11)
 
 * [bitnami/airflow] Release 22.4.9 ([#31857](https://github.com/bitnami/charts/pull/31857))
 
