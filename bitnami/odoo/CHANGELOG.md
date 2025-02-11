@@ -1,6 +1,6 @@
 # Changelog
 
-## 28.1.3 (2025-02-10)
+## 28.1.3 (2025-02-11)
 
 * [bitnami/odoo] fix issue #31612 - Incompatibility with OCI FSS persistent volumes (.snapshot read-only file system) ([#31860](https://github.com/bitnami/charts/pull/31860))
 
