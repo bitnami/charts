@@ -13,6 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       actions: write
+    if: ${{ github.repository_owner == 'bitnami' }}
     steps:
       - name: Retry "CI Pipeline" failed runs in releases PRs
         env:
