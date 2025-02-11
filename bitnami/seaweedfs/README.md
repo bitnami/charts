@@ -166,7 +166,7 @@ You can manually create the required TLS certificates for each SeaweedFS compone
 #### S3 Authentication
 
 Authentication can be enabled in the SeaweedFS S3 API by setting the `s3.auth.enabled` parameter to `true`.
-You can provide your custom authentication configuration creating a secret with the configuration and setting the `s3.auth.cexistingSecret` parameter with the name of the secret.
+You can provide your custom authentication configuration creating a secret with the configuration and setting the `s3.auth.existingSecret` parameter with the name of the secret.
 Alternatively, you can rely on the chart to create a basic configuration with two main users: `admin` and `read-only`. You can provide the admin user credentials using the `s3.auth.adminAccessKeyId` and `s3.auth.adminSecretAccessKey` parameters, and the read-only user credentials using the `s3.auth.readAccessKeyId` and `s3.auth.readSecretAccessKey` parameters.
 
 ### Additional environment variables
