@@ -13,6 +13,7 @@ permissions: {}
 jobs:
   stale:
     runs-on: ubuntu-latest
+    if: ${{ github.repository_owner == 'bitnami' }}
     permissions:
       issues: write
       pull-requests: write

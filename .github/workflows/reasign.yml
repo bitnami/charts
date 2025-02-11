@@ -19,5 +19,6 @@ concurrency:
   group: card-movement-${{ github.event.issue != null && github.event.issue.number || github.event.number }}
 jobs:
   call-reasign-workflow:
+    if: ${{ github.repository_owner == 'bitnami' }}
     uses: bitnami/support/.github/workflows/item-labeled.yml@main
     secrets: inherit
