@@ -16,6 +16,7 @@ jobs:
       contents: read
     outputs:
       result: ${{ steps.integrity-check.outputs.result }}
+    if: ${{ github.repository_owner == 'bitnami' }}
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
@@ -62,6 +63,7 @@ jobs:
       contents: read
     outputs:
       result: ${{ steps.validation-check.outputs.result }}
+    if: ${{ github.repository_owner == 'bitnami' }}
     steps:
       - name: Install helm
         run: |
