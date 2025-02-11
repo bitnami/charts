@@ -4,9 +4,33 @@ overrideConfiguration:
   logging:
     colored_console_log: 'True'
 loadExamples: true
+defaultInitContainers:
+  prepareConfig:
+    containerSecurityContext:
+      runAsUser: 1002
+  waitForDBMigrations:
+    containerSecurityContext:
+      runAsUser: 1002
+  loadDAGsPlugins:
+    containerSecurityContext:
+      runAsUser: 1002
+defaultSidecars:
+  syncDAGsPlugins:
+    containerSecurityContext:
+      runAsUser: 1002
+scheduler:
+  podSecurityContext:
+    fsGroup: 1002
+  containerSecurityContext:
+    runAsUser: 1002
 web:
   containerPorts:
     http: 8080
+  podSecurityContext:
+    fsGroup: 1002
+  containerSecurityContext:
+    runAsUser: 1002
+worker:
   podSecurityContext:
     fsGroup: 1002
   containerSecurityContext:
@@ -17,8 +41,16 @@ service:
   type: LoadBalancer
 dagProcessor:
   enabled: true
+  podSecurityContext:
+    fsGroup: 1002
+  containerSecurityContext:
+    runAsUser: 1002
 triggerer:
   enabled: true
+  podSecurityContext:
+    fsGroup: 1002
+  containerSecurityContext:
+    runAsUser: 1002
 dags:
   enabled: true
   repositories:

@@ -1,8 +1,12 @@
 # Changelog
 
-## 15.1.6 (2025-01-13)
+## 15.1.7 (2025-02-02)
 
-* [bitnami/postgresql-ha] Release 15.1.6 ([#31341](https://github.com/bitnami/charts/pull/31341))
+* [bitnami/postgresql-ha] Release 15.1.7 ([#31701](https://github.com/bitnami/charts/pull/31701))
+
+## <small>15.1.6 (2025-01-13)</small>
+
+* [bitnami/postgresql-ha] Release 15.1.6 (#31341) ([30c2b39](https://github.com/bitnami/charts/commit/30c2b394da7c7438ac98f56767c1d45b517a396c)), closes [#31341](https://github.com/bitnami/charts/issues/31341)
 
 ## <small>15.1.5 (2025-01-13)</small>
 

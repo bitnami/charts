@@ -1,8 +1,16 @@
 # Changelog
 
-## 1.3.3 (2025-01-17)
+## 1.3.5 (2025-02-05)
 
-* [bitnami/kuberay] Adding the list and watch for endpoints resource to the cluster role to solve #30648 ([#31226](https://github.com/bitnami/charts/pull/31226))
+* [bitnami/kuberay] Release 1.3.5 ([#31766](https://github.com/bitnami/charts/pull/31766))
+
+## <small>1.3.4 (2025-01-24)</small>
+
+* [bitnami/kuberay] Release 1.3.4 (#31566) ([2e9f322](https://github.com/bitnami/charts/commit/2e9f32244b3da94655726be429e0603396b37433)), closes [#31566](https://github.com/bitnami/charts/issues/31566)
+
+## <small>1.3.3 (2025-01-20)</small>
+
+* [bitnami/kuberay] Adding the list and watch for endpoints resource to the cluster role to solve #306 ([173f920](https://github.com/bitnami/charts/commit/173f9209b057ea150870a867258e8cbc345a3c3e)), closes [#30648](https://github.com/bitnami/charts/issues/30648) [#31226](https://github.com/bitnami/charts/issues/31226) [#30648](https://github.com/bitnami/charts/issues/30648)
 
 ## <small>1.3.2 (2025-01-17)</small>
 

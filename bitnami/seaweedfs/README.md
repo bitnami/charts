@@ -436,16 +436,26 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 
 | Name                                                      | Description                                                                                             | Value               |
 | --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | ------------------- |
-| `master.persistence.enabled`                              | Enable persistence on Master Server using Persistent Volume Claims                                      | `true`              |
+| `master.persistence.enabled`                              | Enable data persistence on Master Server using Persistent Volume Claims                                 | `true`              |
 | `master.persistence.mountPath`                            | Path to mount the volume at.                                                                            | `/data`             |
 | `master.persistence.subPath`                              | The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services | `""`                |
 | `master.persistence.storageClass`                         | Storage class of backing PVC                                                                            | `""`                |
 | `master.persistence.annotations`                          | Persistent Volume Claim annotations                                                                     | `{}`                |
 | `master.persistence.accessModes`                          | Persistent Volume Access Modes                                                                          | `["ReadWriteOnce"]` |
 | `master.persistence.size`                                 | Size of data volume                                                                                     | `8Gi`               |
-| `master.persistence.existingClaim`                        | The name of an existing PVC to use for persistence                                                      | `""`                |
+| `master.persistence.existingClaim`                        | The name of an existing PVC to use for data persistence                                                 | `""`                |
 | `master.persistence.selector`                             | Selector to match an existing Persistent Volume for data PVC                                            | `{}`                |
 | `master.persistence.dataSource`                           | Custom PVC data source                                                                                  | `{}`                |
+| `master.logPersistence.enabled`                           | Enable logs persistence on Master Server using Persistent Volume Claims                                 | `false`             |
+| `master.logPersistence.mountPath`                         | Path to mount the volume at.                                                                            | `/logs`             |
+| `master.logPersistence.subPath`                           | The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services | `""`                |
+| `master.logPersistence.storageClass`                      | Storage class of backing PVC                                                                            | `""`                |
+| `master.logPersistence.annotations`                       | Persistent Volume Claim annotations                                                                     | `{}`                |
+| `master.logPersistence.accessModes`                       | Persistent Volume Access Modes                                                                          | `["ReadWriteOnce"]` |
+| `master.logPersistence.size`                              | Size of logs volume                                                                                     | `8Gi`               |
+| `master.logPersistence.existingClaim`                     | The name of an existing PVC to use for logs persistence                                                 | `""`                |
+| `master.logPersistence.selector`                          | Selector to match an existing Persistent Volume for logs PVC                                            | `{}`                |
+| `master.logPersistence.dataSource`                        | Custom PVC data source                                                                                  | `{}`                |
 | `master.persistentVolumeClaimRetentionPolicy.enabled`     | Controls if and how PVCs are deleted during the lifecycle of the Master Server StatefulSet              | `false`             |
 | `master.persistentVolumeClaimRetentionPolicy.whenScaled`  | Volume retention behavior when the replica count of the StatefulSet is reduced                          | `Retain`            |
 | `master.persistentVolumeClaimRetentionPolicy.whenDeleted` | Volume retention behavior that applies when the StatefulSet is deleted                                  | `Retain`            |
@@ -615,6 +625,16 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 | `volume.dataVolumes[0].persistence.existingClaim`         | The name of an existing PVC to use for persistence                                                                                                                            | `""`                |
 | `volume.dataVolumes[0].persistence.selector`              | Selector to match an existing Persistent Volume for data PVC                                                                                                                  | `{}`                |
 | `volume.dataVolumes[0].persistence.dataSource`            | Custom PVC data source                                                                                                                                                        | `{}`                |
+| `volume.logPersistence.enabled`                           | Enable logs persistence on Volume Server using Persistent Volume Claims                                                                                                       | `false`             |
+| `volume.logPersistence.mountPath`                         | Path to mount the volume at.                                                                                                                                                  | `/logs`             |
+| `volume.logPersistence.subPath`                           | The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services                                                                       | `""`                |
+| `volume.logPersistence.storageClass`                      | Storage class of backing PVC                                                                                                                                                  | `""`                |
+| `volume.logPersistence.annotations`                       | Persistent Volume Claim annotations                                                                                                                                           | `{}`                |
+| `volume.logPersistence.accessModes`                       | Persistent Volume Access Modes                                                                                                                                                | `["ReadWriteOnce"]` |
+| `volume.logPersistence.size`                              | Size of logs volume                                                                                                                                                           | `8Gi`               |
+| `volume.logPersistence.existingClaim`                     | The name of an existing PVC to use for logs persistence                                                                                                                       | `""`                |
+| `volume.logPersistence.selector`                          | Selector to match an existing Persistent Volume for logs PVC                                                                                                                  | `{}`                |
+| `volume.logPersistence.dataSource`                        | Custom PVC data source                                                                                                                                                        | `{}`                |
 | `volume.persistentVolumeClaimRetentionPolicy.enabled`     | Controls if and how PVCs are deleted during the lifecycle of the Volume Server StatefulSet                                                                                    | `false`             |
 | `volume.persistentVolumeClaimRetentionPolicy.whenScaled`  | Volume retention behavior when the replica count of the StatefulSet is reduced                                                                                                | `Retain`            |
 | `volume.persistentVolumeClaimRetentionPolicy.whenDeleted` | Volume retention behavior that applies when the StatefulSet is deleted                                                                                                        | `Retain`            |
@@ -692,6 +712,8 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 enabled = false
 ` |
 | `filer.existingConfigmap`                                 | The name of an existing ConfigMap with your custom configuration for Filer Server                                                                                                                                                   | `""`                          |
+| `filer.notificationConfig`                                | Filer Server notification configuration                                                                                                                                                                                             | `""`                          |
+| `filer.existingNotificationConfigmap`                     | The name of an existing ConfigMap with your custom notification configuration for Filer Server                                                                                                                                      | `""`                          |
 | `filer.command`                                           | Override default Filer Server container command (useful when using custom images)                                                                                                                                                   | `[]`                          |
 | `filer.args`                                              | Override default Filer Server container args (useful when using custom images)                                                                                                                                                      | `[]`                          |
 | `filer.automountServiceAccountToken`                      | Mount Service Account token in Filer Server pods                                                                                                                                                                                    | `false`                       |
@@ -769,6 +791,24 @@ enabled = false
 | `filer.ingress.extraTls`                      | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
 | `filer.ingress.secrets`                       | Custom TLS certificates as secrets                                                                                               | `[]`                     |
 | `filer.ingress.extraRules`                    | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
+
+### Filer Server Persistence Parameters
+
+| Name                                                     | Description                                                                                             | Value               |
+| -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | ------------------- |
+| `filer.logPersistence.enabled`                           | Enable logs persistence on Filer Server using Persistent Volume Claims                                  | `false`             |
+| `filer.logPersistence.mountPath`                         | Path to mount the volume at.                                                                            | `/logs`             |
+| `filer.logPersistence.subPath`                           | The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services | `""`                |
+| `filer.logPersistence.storageClass`                      | Storage class of backing PVC                                                                            | `""`                |
+| `filer.logPersistence.annotations`                       | Persistent Volume Claim annotations                                                                     | `{}`                |
+| `filer.logPersistence.accessModes`                       | Persistent Volume Access Modes                                                                          | `["ReadWriteOnce"]` |
+| `filer.logPersistence.size`                              | Size of logs volume                                                                                     | `8Gi`               |
+| `filer.logPersistence.existingClaim`                     | The name of an existing PVC to use for logs persistence                                                 | `""`                |
+| `filer.logPersistence.selector`                          | Selector to match an existing Persistent Volume for logs PVC                                            | `{}`                |
+| `filer.logPersistence.dataSource`                        | Custom PVC data source                                                                                  | `{}`                |
+| `filer.persistentVolumeClaimRetentionPolicy.enabled`     | Controls if and how PVCs are deleted during the lifecycle of the Master Server StatefulSet              | `false`             |
+| `filer.persistentVolumeClaimRetentionPolicy.whenScaled`  | Volume retention behavior when the replica count of the StatefulSet is reduced                          | `Retain`            |
+| `filer.persistentVolumeClaimRetentionPolicy.whenDeleted` | Volume retention behavior that applies when the StatefulSet is deleted                                  | `Retain`            |
 
 ### Filer Server Metrics Parameters
 
@@ -1324,7 +1364,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

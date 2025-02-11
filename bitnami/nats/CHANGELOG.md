@@ -1,8 +1,24 @@
 # Changelog
 
-## 8.5.3 (2025-01-17)
+## 9.0.2 (2025-02-07)
 
-* [bitnami/nats] Release 8.5.3 ([#31435](https://github.com/bitnami/charts/pull/31435))
+* [bitnami/nats] Release 9.0.2 ([#31833](https://github.com/bitnami/charts/pull/31833))
+
+## <small>9.0.1 (2025-01-24)</small>
+
+* [bitnami/nats] Release 9.0.1 (#31572) ([c381adb](https://github.com/bitnami/charts/commit/c381adb2c648402d8b88b8d211a9538e1aafd087)), closes [#31572](https://github.com/bitnami/charts/issues/31572)
+
+## 9.0.0 (2025-01-23)
+
+* [bitnami/nats] NATS chart based on scratch image (#31516) ([37c61ed](https://github.com/bitnami/charts/commit/37c61ed57feb0c18938fc18ce7099e51662d924a)), closes [#31516](https://github.com/bitnami/charts/issues/31516)
+
+## <small>8.5.4 (2025-01-23)</small>
+
+* [bitnami/nats] Improve NATS routes configuration (#31523) ([293d9e2](https://github.com/bitnami/charts/commit/293d9e20aa93cf76f020561a38f5380f55e5567b)), closes [#31523](https://github.com/bitnami/charts/issues/31523) [#30124](https://github.com/bitnami/charts/issues/30124)
+
+## <small>8.5.3 (2025-01-17)</small>
+
+* [bitnami/nats] Release 8.5.3 (#31435) ([cac021d](https://github.com/bitnami/charts/commit/cac021d449a1235e44e88bb383ad377518710340)), closes [#31435](https://github.com/bitnami/charts/issues/31435)
 
 ## <small>8.5.2 (2024-12-17)</small>
 

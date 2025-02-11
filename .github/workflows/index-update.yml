@@ -19,7 +19,7 @@ jobs:
         with:
           ref: index
           path: index
-      - uses: oras-project/setup-oras@9c92598691bfef1424de2f8fae81941568f5889c
+      - uses: oras-project/setup-oras@5c0b487ce3fe0ce3ab0d034e63669e426e294e4d
       - id: get-oci-index
         name: Get OCI index
         run: |
@@ -115,3 +115,14 @@ jobs:
           # Push changes
           git add bitnami/index.yaml && git commit --signoff --amend --no-edit
           git push origin index --force-with-lease=index:${current_commit_id}
+  notify:
+    name: Send notification
+    needs:
+      - update-index
+    if: ${{ always() && (needs.update-index.result == 'failure') }}
+    uses: bitnami/support/.github/workflows/gchat-notification.yml@main
+    with:
+      workflow: ${{ github.workflow }}
+      job-url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+    secrets:
+      webhook-url: ${{ secrets.GCHAT_CONTENT_ALERTS_WEBHOOK_URL }}

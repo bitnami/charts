@@ -1,8 +1,16 @@
 # Changelog
 
-## 8.0.1 (2025-01-10)
+## 8.0.3 (2025-02-03)
 
-* [bitnami/sonarqube] Release 8.0.1 ([#31298](https://github.com/bitnami/charts/pull/31298))
+* [bitnami/sonarqube] Release 8.0.3 ([#31716](https://github.com/bitnami/charts/pull/31716))
+
+## <small>8.0.2 (2025-01-28)</small>
+
+* [bitnami/sonarqube] Release 8.0.2 (#31621) ([c17658f](https://github.com/bitnami/charts/commit/c17658f89453407adf0cbafe7cd041a942730ba7)), closes [#31621](https://github.com/bitnami/charts/issues/31621)
+
+## <small>8.0.1 (2025-01-10)</small>
+
+* [bitnami/sonarqube] Release 8.0.1 (#31298) ([d0b154f](https://github.com/bitnami/charts/commit/d0b154fbcfde88e39df58e163c3335254ca4d8e6)), closes [#31298](https://github.com/bitnami/charts/issues/31298)
 
 ## 8.0.0 (2025-01-09)
 

@@ -477,6 +477,10 @@ Because they expose different sets of data, a valid use case is to scrape metric
 | `containerPorts.manager`                     |                                                                                                                                                                         | `15672`                                           |
 | `containerPorts.epmd`                        |                                                                                                                                                                         | `4369`                                            |
 | `containerPorts.metrics`                     |                                                                                                                                                                         | `9419`                                            |
+| `hostPorts.amqp`                             |                                                                                                                                                                         | `""`                                              |
+| `hostPorts.amqpTls`                          |                                                                                                                                                                         | `""`                                              |
+| `hostPorts.manager`                          |                                                                                                                                                                         | `""`                                              |
+| `hostPorts.metrics`                          |                                                                                                                                                                         | `""`                                              |
 | `initScripts`                                | Dictionary of init scripts. Evaluated as a template.                                                                                                                    | `{}`                                              |
 | `initScriptsCM`                              | ConfigMap with the init scripts. Evaluated as a template.                                                                                                               | `""`                                              |
 | `initScriptsSecret`                          | Secret containing `/docker-entrypoint-initdb.d` scripts to be executed at initialization time that contain sensitive data. Evaluated as a template.                     | `""`                                              |
@@ -944,7 +948,7 @@ Bitnami Kubernetes documentation is available at [https://docs.bitnami.com/](htt
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

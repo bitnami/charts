@@ -94,7 +94,7 @@ spec:
             - /bin/bash
             - -ec
             - |
-              find {{ .Values.master.persistence.path }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs chown -R {{ printf "%d:%d" (int .Values.master.containerSecurityContext.runAsUser) (int .Values.master.podSecurityContext.fsGroup) }}
+              find {{ .Values.master.persistence.mountPath }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs -r chown -R {{ printf "%d:%d" (int .Values.master.containerSecurityContext.runAsUser) (int .Values.master.podSecurityContext.fsGroup) }}
           {{- if .Values.volumePermissions.containerSecurityContext.enabled }}
           securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.volumePermissions.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}

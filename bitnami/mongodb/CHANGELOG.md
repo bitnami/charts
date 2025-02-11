@@ -1,13 +1,8 @@
 # Changelog
 
-## 16.4.3 (2025-02-08)
+## 16.4.3 (2025-02-03)
 
-* [bitnami/mongodb] Enable publishNotReadyAddresses for ClusterIP services ([#31145](https://github.com/bitnami/charts/pull/31145))
-
-## <small>16.4.3 (2025-02-03)</small>
-
-* [bitnami/mongodb] Release 16.4.3 (#31699) ([701d9dc](https://github.com/bitnami/charts/commit/701d9dc6b719f9202b60374f8d8855ef717478ca)), closes [#31699](https://github.com/bitnami/charts/issues/31699)
-* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+* [bitnami/mongodb] Release 16.4.3 ([#31699](https://github.com/bitnami/charts/pull/31699))
 
 ## <small>16.4.2 (2025-01-20)</small>
 

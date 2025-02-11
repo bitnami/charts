@@ -32,23 +32,23 @@ var _ = Describe("NATS", Ordered, func() {
 	})
 
 	When("a bucket is created and is scaled down to 0 replicas and back up", func() {
-		It("should have access to the created database", func() {
+		It("should have access to NATS", func() {
 			getAvailableReplicas := func(ss *appsv1.StatefulSet) int32 { return ss.Status.AvailableReplicas }
 			getRestartedAtAnnotation := func(pod *v1.Pod) string { return pod.Annotations["kubectl.kubernetes.io/restartedAt"] }
 			getSucceededJobs := func(j *batchv1.Job) int32 { return j.Status.Succeeded }
 			getOpts := metav1.GetOptions{}
 
 			By("checking all the replicas are available")
-			ss, err := c.AppsV1().StatefulSets(namespace).Get(ctx, stsName, getOpts)
+			ss, err := c.AppsV1().StatefulSets(namespace).Get(ctx, releaseName, getOpts)
 			Expect(err).NotTo(HaveOccurred())
 			Expect(ss.Status.Replicas).NotTo(BeZero())
 			origReplicas := *ss.Spec.Replicas
 
 			Eventually(func() (*appsv1.StatefulSet, error) {
-				return c.AppsV1().StatefulSets(namespace).Get(ctx, stsName, getOpts)
+				return c.AppsV1().StatefulSets(namespace).Get(ctx, releaseName, getOpts)
 			}, timeout, PollingInterval).Should(WithTransform(getAvailableReplicas, Equal(origReplicas)))
 
-			svc, err := c.CoreV1().Services(namespace).Get(ctx, stsName, getOpts)
+			svc, err := c.CoreV1().Services(namespace).Get(ctx, releaseName, getOpts)
 			Expect(err).NotTo(HaveOccurred())
 
 			port, err := utils.SvcGetPortByName(svc, "tcp-client")
@@ -57,34 +57,34 @@ var _ = Describe("NATS", Ordered, func() {
 			// Use current time for allowing the test suite to repeat
 			jobSuffix := time.Now().Format("20060102150405")
 
-			By("creating a job to create a new test bucket")
-			createDBJobName := fmt.Sprintf("%s-createbc-%s",
-				stsName, jobSuffix)
-			bucketName := fmt.Sprintf("test%s", jobSuffix)
+			By("creating a job to create a new KV Store Bucket")
+			addKVBucketJobName := fmt.Sprintf("%s-add-kv-bucket-%s",
+				releaseName, jobSuffix)
+			storeBucketName := fmt.Sprintf("test%s", jobSuffix)
 
-			err = createJob(ctx, c, createDBJobName, port, "add", bucketName)
+			err = createJob(ctx, c, addKVBucketJobName, port, "add", storeBucketName)
 			Expect(err).NotTo(HaveOccurred())
 
 			Eventually(func() (*batchv1.Job, error) {
-				return c.BatchV1().Jobs(namespace).Get(ctx, createDBJobName, getOpts)
+				return c.BatchV1().Jobs(namespace).Get(ctx, addKVBucketJobName, getOpts)
 			}, timeout, PollingInterval).Should(WithTransform(getSucceededJobs, Equal(int32(1))))
 
 			By("deleting the job once it has succeeded")
-			err = c.BatchV1().Jobs(namespace).Delete(ctx, createDBJobName, metav1.DeleteOptions{})
+			err = c.BatchV1().Jobs(namespace).Delete(ctx, addKVBucketJobName, metav1.DeleteOptions{})
 			Expect(err).NotTo(HaveOccurred())
 
-			By("puting a value into a key")
-			putJobName := fmt.Sprintf("%s-putbc-%s",
-				stsName, jobSuffix)
-			err = createJob(ctx, c, putJobName, port, "put", bucketName, "testKey", "testValue")
+			By("creating a job to put some key-value pair")
+			putKVJobName := fmt.Sprintf("%s-put-kv-%s",
+				releaseName, jobSuffix)
+			err = createJob(ctx, c, putKVJobName, port, "put", storeBucketName, "testKey", "testValue")
 			Expect(err).NotTo(HaveOccurred())
 
 			Eventually(func() (*batchv1.Job, error) {
-				return c.BatchV1().Jobs(namespace).Get(ctx, putJobName, getOpts)
+				return c.BatchV1().Jobs(namespace).Get(ctx, putKVJobName, getOpts)
 			}, timeout, PollingInterval).Should(WithTransform(getSucceededJobs, Equal(int32(1))))
 
 			By("deleting the job once it has succeeded")
-			err = c.BatchV1().Jobs(namespace).Delete(ctx, putJobName, metav1.DeleteOptions{})
+			err = c.BatchV1().Jobs(namespace).Delete(ctx, putKVJobName, metav1.DeleteOptions{})
 			Expect(err).NotTo(HaveOccurred())
 
 			// Give the application some time to sync the data
@@ -96,40 +96,40 @@ var _ = Describe("NATS", Ordered, func() {
 
 			for i := int(origReplicas) - 1; i >= 0; i-- {
 				Eventually(func() (*v1.Pod, error) {
-					return c.CoreV1().Pods(namespace).Get(ctx, fmt.Sprintf("%s-%d", stsName, i), getOpts)
+					return c.CoreV1().Pods(namespace).Get(ctx, fmt.Sprintf("%s-%d", releaseName, i), getOpts)
 				}, timeout, PollingInterval).Should(WithTransform(getRestartedAtAnnotation, Not(BeEmpty())))
 			}
 
 			Eventually(func() (*appsv1.StatefulSet, error) {
-				return c.AppsV1().StatefulSets(namespace).Get(ctx, stsName, getOpts)
+				return c.AppsV1().StatefulSets(namespace).Get(ctx, releaseName, getOpts)
 			}, timeout, PollingInterval).Should(WithTransform(getAvailableReplicas, Equal(origReplicas)))
 
 			By("creating a job to get a value for a key")
-			getJobName := fmt.Sprintf("%s-getbc-%s",
-				stsName, jobSuffix)
-			err = createJob(ctx, c, getJobName, port, "get", bucketName, "testKey")
+			getKVJobName := fmt.Sprintf("%s-get-key-%s",
+				releaseName, jobSuffix)
+			err = createJob(ctx, c, getKVJobName, port, "get", storeBucketName, "testKey")
 			Expect(err).NotTo(HaveOccurred())
 
 			Eventually(func() (*batchv1.Job, error) {
-				return c.BatchV1().Jobs(namespace).Get(ctx, getJobName, getOpts)
+				return c.BatchV1().Jobs(namespace).Get(ctx, getKVJobName, getOpts)
 			}, timeout, PollingInterval).Should(WithTransform(getSucceededJobs, Equal(int32(1))))
 
 			By("deleting the job once it has succeeded")
-			err = c.BatchV1().Jobs(namespace).Delete(ctx, getJobName, metav1.DeleteOptions{})
+			err = c.BatchV1().Jobs(namespace).Delete(ctx, getKVJobName, metav1.DeleteOptions{})
 			Expect(err).NotTo(HaveOccurred())
 
-			By("creating a job to get the test bucket")
-			deleteDBJobName := fmt.Sprintf("%s-delbc-%s",
-				stsName, jobSuffix)
-			err = createJob(ctx, c, deleteDBJobName, port, "del", bucketName, "-f")
+			By("creating a job to get the delete the KV Store Bucket")
+			deleteKVBucketJobName := fmt.Sprintf("%s-del-kv-bucket-%s",
+				releaseName, jobSuffix)
+			err = createJob(ctx, c, deleteKVBucketJobName, port, "del", storeBucketName, "-f")
 			Expect(err).NotTo(HaveOccurred())
 
 			Eventually(func() (*batchv1.Job, error) {
-				return c.BatchV1().Jobs(namespace).Get(ctx, deleteDBJobName, getOpts)
+				return c.BatchV1().Jobs(namespace).Get(ctx, deleteKVBucketJobName, getOpts)
 			}, timeout, PollingInterval).Should(WithTransform(getSucceededJobs, Equal(int32(1))))
 
 			By("deleting the job once it has succeeded")
-			err = c.BatchV1().Jobs(namespace).Delete(ctx, deleteDBJobName, metav1.DeleteOptions{})
+			err = c.BatchV1().Jobs(namespace).Delete(ctx, deleteKVBucketJobName, metav1.DeleteOptions{})
 			Expect(err).NotTo(HaveOccurred())
 		})
 	})

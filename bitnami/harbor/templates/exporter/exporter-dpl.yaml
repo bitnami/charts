@@ -117,13 +117,21 @@ spec:
               value: {{ ternary "true" "false" .Values.exporter.image.debug | quote }}
             - name: HARBOR_DATABASE_PASSWORD
               valueFrom:
+                {{- if and .Values.externalDatabase.existingSecret (not .Values.postgresql.enabled) }}
                 secretKeyRef:
-                  {{- if .Values.core.existingEnvVarsSecret }}
+                  name: {{ .Values.externalDatabase.existingSecret }}
+                  key: {{ .Values.externalDatabase.existingSecretPasswordKey }}
+                {{- else }}
+                {{- if .Values.core.existingEnvVarsSecret }}
+                secretKeyRef:
                   name: {{ .Values.core.existingEnvVarsSecret }}
-                  {{- else }}
-                  name: {{ printf "%s-envvars" (include "harbor.core" .) }}
-                  {{- end }}
                   key: POSTGRESQL_PASSWORD
+                {{- else }}
+                secretKeyRef:
+                  name: {{ printf "%s-envvars" (include "harbor.core" .) }}
+                  key: POSTGRESQL_PASSWORD
+                {{- end }}
+                {{- end }}
             - name: HARBOR_ADMIN_PASSWORD
               valueFrom:
                 secretKeyRef:

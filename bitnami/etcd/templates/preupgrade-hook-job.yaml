@@ -39,6 +39,9 @@ spec:
         podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "component" "etcd-pre-upgrade-job" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
+      {{- if .Values.podSecurityContext.enabled }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.podSecurityContext "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
@@ -57,12 +60,12 @@ spec:
       restartPolicy: Never
       containers:
         {{- $replicaCount := int .Values.replicaCount }}
-        {{- $peerPort := int .Values.containerPorts.peer }}
+        {{- $clientPort := int .Values.containerPorts.client }}
         {{- $etcdFullname := include "common.names.fullname" . }}
         {{- $releaseNamespace := .Release.Namespace }}
         {{- $etcdHeadlessServiceName := (printf "%s-%s" $etcdFullname "headless" | trunc 63 | trimSuffix "-") }}
         {{- $clusterDomain := .Values.clusterDomain }}
-        {{- $etcdPeerProtocol := include "etcd.peerProtocol" . }}
+        {{- $etcdClientProtocol := include "etcd.clientProtocol" . }}
         - name: pre-upgrade-job
           image: {{ include "etcd.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
@@ -85,14 +88,12 @@ spec:
                   name: {{ include "etcd.secretName" . }}
                   key: {{ include "etcd.secretPasswordKey" . }}
             {{- end }}
-            {{- if gt $replicaCount 1 }}
             {{- $initialCluster := list }}
             {{- range $e, $i := until $replicaCount }}
-            {{- $initialCluster = append $initialCluster (printf "%s-%d=%s://%s-%d.%s.%s.svc.%s:%d" $etcdFullname $i $etcdPeerProtocol $etcdFullname $i $etcdHeadlessServiceName $releaseNamespace $clusterDomain $peerPort) }}
+            {{- $initialCluster = append $initialCluster (printf "%s-%d=%s://%s-%d.%s.%s.svc.%s:%d" $etcdFullname $i $etcdClientProtocol $etcdFullname $i $etcdHeadlessServiceName $releaseNamespace $clusterDomain $clientPort) }}
             {{- end }}
             - name: ETCD_INITIAL_CLUSTER
               value: {{ join "," $initialCluster | quote }}
-            {{- end }}
             {{- if and .Values.auth.client.secureTransport .Values.auth.client.useAutoTLS }}
             - name: ETCD_AUTO_TLS
               value: "true"

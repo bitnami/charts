@@ -1,8 +1,12 @@
 # Changelog
 
-## 21.4.3 (2025-01-21)
+## 21.4.4 (2025-01-29)
 
-* [bitnami/elasticsearch] Release 21.4.3 ([#31498](https://github.com/bitnami/charts/pull/31498))
+* [bitnami/elasticsearch] Release 21.4.4 ([#31666](https://github.com/bitnami/charts/pull/31666))
+
+## <small>21.4.3 (2025-01-21)</small>
+
+* [bitnami/elasticsearch] Release 21.4.3 (#31498) ([64f4223](https://github.com/bitnami/charts/commit/64f42238458b7115e706e9ad14d1e70f4a578c7a)), closes [#31498](https://github.com/bitnami/charts/issues/31498)
 
 ## <small>21.4.2 (2025-01-08)</small>
 

@@ -1,8 +1,16 @@
 # Changelog
 
-## 2.4.2 (2025-01-17)
+## 2.4.4 (2025-02-04)
 
-* [bitnami/flux] Release 2.4.2 ([#31416](https://github.com/bitnami/charts/pull/31416))
+* [bitnami/flux] Release 2.4.4 ([#31752](https://github.com/bitnami/charts/pull/31752))
+
+## <small>2.4.3 (2025-01-24)</small>
+
+* [bitnami/flux] Release 2.4.3 (#31552) ([c04c1dc](https://github.com/bitnami/charts/commit/c04c1dce4009eb066fb20e4704bfa0b0fa45c51d)), closes [#31552](https://github.com/bitnami/charts/issues/31552)
+
+## <small>2.4.2 (2025-01-17)</small>
+
+* [bitnami/flux] Release 2.4.2 (#31416) ([640bfd8](https://github.com/bitnami/charts/commit/640bfd8b53078ebca0b9a87aa576931253c84196)), closes [#31416](https://github.com/bitnami/charts/issues/31416)
 
 ## <small>2.4.1 (2025-01-13)</small>
 

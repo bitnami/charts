@@ -1,8 +1,20 @@
 # Changelog
 
-## 24.1.7 (2025-01-17)
+## 24.3.0 (2025-01-27)
 
-* [bitnami/harbor] Release 24.1.7 ([#31457](https://github.com/bitnami/charts/pull/31457))
+* [bitnami/harbor] Added existingSecret parameter for external database ([#31492](https://github.com/bitnami/charts/pull/31492))
+
+## 24.2.0 (2025-01-27)
+
+* [bitnami/harbor] allow custom trivy db repository (#31594) ([1041261](https://github.com/bitnami/charts/commit/1041261ac0c42618da3e0357e18ac200052ff31f)), closes [#31594](https://github.com/bitnami/charts/issues/31594)
+
+## <small>24.1.8 (2025-01-23)</small>
+
+* [bitnami/harbor] Clarify usage of custom POSTGRESQL_PASSWORD (#31507) ([b871457](https://github.com/bitnami/charts/commit/b8714574f24519dcec83895fb19cb7819c6e016e)), closes [#31507](https://github.com/bitnami/charts/issues/31507)
+
+## <small>24.1.7 (2025-01-17)</small>
+
+* [bitnami/harbor] Release 24.1.7 (#31457) ([a607b9f](https://github.com/bitnami/charts/commit/a607b9faa767ef8ed65f535c0a4563ebfb39429e)), closes [#31457](https://github.com/bitnami/charts/issues/31457)
 
 ## <small>24.1.6 (2025-01-07)</small>
 

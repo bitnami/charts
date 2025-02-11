@@ -1,8 +1,16 @@
 # Changelog
 
-## 4.7.2 (2025-01-17)
+## 4.7.4 (2025-02-04)
 
-* [bitnami/grafana-loki] Release 4.7.2 ([#31418](https://github.com/bitnami/charts/pull/31418))
+* [bitnami/grafana-loki] Release 4.7.4 ([#31755](https://github.com/bitnami/charts/pull/31755))
+
+## <small>4.7.3 (2025-01-24)</small>
+
+* [bitnami/grafana-loki] Release 4.7.3 (#31555) ([0b13d6c](https://github.com/bitnami/charts/commit/0b13d6ca01415d39b86f59e0b11e53aa9ccdd0a7)), closes [#31555](https://github.com/bitnami/charts/issues/31555)
+
+## <small>4.7.2 (2025-01-17)</small>
+
+* [bitnami/grafana-loki] Release 4.7.2 (#31418) ([2ec50f1](https://github.com/bitnami/charts/commit/2ec50f1a6d09f974b2d45dd78f438466d3449233)), closes [#31418](https://github.com/bitnami/charts/issues/31418)
 
 ## <small>4.7.1 (2024-12-18)</small>
 

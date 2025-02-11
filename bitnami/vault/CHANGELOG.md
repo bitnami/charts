@@ -1,8 +1,24 @@
 # Changelog
 
-## 1.6.2 (2025-01-17)
+## 1.6.6 (2025-02-05)
 
-* [bitnami/vault] Release 1.6.2 ([#31445](https://github.com/bitnami/charts/pull/31445))
+* [bitnami/vault] Release 1.6.6 ([#31781](https://github.com/bitnami/charts/pull/31781))
+
+## <small>1.6.5 (2025-01-31)</small>
+
+* [bitnami/vault] Release 1.6.5 (#31681) ([54af143](https://github.com/bitnami/charts/commit/54af143ef4abf2746aadfec114ece49bfafdbdfa)), closes [#31681](https://github.com/bitnami/charts/issues/31681)
+
+## <small>1.6.4 (2025-01-24)</small>
+
+* [bitnami/vault] Release 1.6.4 (#31586) ([1151ff3](https://github.com/bitnami/charts/commit/1151ff31c6004424c9983246b2735673f0149cc6)), closes [#31586](https://github.com/bitnami/charts/issues/31586)
+
+## <small>1.6.3 (2025-01-23)</small>
+
+* [bitnami/vault] Fix missing existing PVC volume declaration (#31202) (#31211) ([f743319](https://github.com/bitnami/charts/commit/f743319c46b75d6382bfd4af7e578dbc2cedea52)), closes [#31202](https://github.com/bitnami/charts/issues/31202) [#31211](https://github.com/bitnami/charts/issues/31211) [#31202](https://github.com/bitnami/charts/issues/31202)
+
+## <small>1.6.2 (2025-01-17)</small>
+
+* [bitnami/vault] Release 1.6.2 (#31445) ([b34be1a](https://github.com/bitnami/charts/commit/b34be1a754898b376f2aff703d68609ce81b6994)), closes [#31445](https://github.com/bitnami/charts/issues/31445)
 
 ## <small>1.6.1 (2024-12-19)</small>
 

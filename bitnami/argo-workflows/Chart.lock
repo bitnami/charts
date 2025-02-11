@@ -1,12 +1,12 @@
 dependencies:
 - name: postgresql
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 16.4.3
+  version: 16.4.7
 - name: mysql
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 12.2.1
+  version: 12.2.2
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 2.29.0
-digest: sha256:a046413a81d954bd49748bf291d2c14de80ef2f06b2c1f2a3e5245c6c1406757
-generated: "2025-01-16T23:11:38.628767778Z"
+  version: 2.29.1
+digest: sha256:e142d6995a7622b73b7aee4ad2585640cf3d1f989fcdd19100f0ae558de18069
+generated: "2025-02-10T15:02:04.753293238Z"

@@ -1,8 +1,12 @@
 # Changelog
 
-## 9.1.3 (2025-01-16)
+## 9.2.0 (2025-01-29)
 
-* [bitnami/mastodon] Release 9.1.3 ([#31400](https://github.com/bitnami/charts/pull/31400))
+* [bitnami/mastodon] feature(minio): Bump MinIO subchart ([#31660](https://github.com/bitnami/charts/pull/31660))
+
+## <small>9.1.3 (2025-01-16)</small>
+
+* [bitnami/mastodon] Release 9.1.3 (#31400) ([a5b97a0](https://github.com/bitnami/charts/commit/a5b97a0c64ce4cabccde11f94e3a641d63cd125b)), closes [#31400](https://github.com/bitnami/charts/issues/31400)
 
 ## <small>9.1.2 (2025-01-12)</small>
 
