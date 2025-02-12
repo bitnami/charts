@@ -23,7 +23,7 @@ dependencies:
   version: 2.x.x
 description: Apache Solr is an extremely powerful, open source enterprise search platform built on Apache Lucene. It is highly reliable and flexible, scalable, and designed to add value very quickly after launch.
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/solr/img/solr-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/solr/img/solr-stack-220x234.png
 keywords:
 - solr
 - zookeeper

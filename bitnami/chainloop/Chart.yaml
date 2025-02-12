@@ -31,7 +31,7 @@ dependencies:
   version: 1.4.x
 description: Chainloop is an open-source Software Supply Chain control plane, a single source of truth for metadata and artifacts, plus a declarative attestation process.
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/chainloop/img/chainloop-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/chainloop/img/chainloop-stack-220x234.png
 keywords:
 - chainloop
 - evidence-store

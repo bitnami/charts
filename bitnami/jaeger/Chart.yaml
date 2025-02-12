@@ -23,7 +23,7 @@ dependencies:
   version: 12.x.x
 description: Jaeger is a distributed tracing system. It is used for monitoring and troubleshooting microservices-based distributed systems.
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/jaeger/img/jaeger-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/jaeger/img/jaeger-stack-220x234.png
 keywords:
 - jaeger
 - tracing

@@ -21,7 +21,7 @@ dependencies:
   version: 2.x.x
 description: HashiCorp Consul is a tool for discovering and configuring services in your infrastructure.
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/consul/img/consul-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/consul/img/consul-stack-220x234.png
 keywords:
 - discovering
 - configuring

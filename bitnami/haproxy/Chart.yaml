@@ -17,7 +17,7 @@ dependencies:
   version: 2.x.x
 description: HAProxy is a TCP proxy and a HTTP reverse proxy. It supports SSL termination and offloading, TCP and HTTP normalization, traffic regulation, caching and protection against DDoS attacks.
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/haproxy/img/haproxy-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/haproxy/img/haproxy-stack-220x234.png
 keywords:
 - haproxy
 - proxy

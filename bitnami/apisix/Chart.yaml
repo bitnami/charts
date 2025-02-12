@@ -27,7 +27,7 @@ dependencies:
   version: 2.x.x
 description: Apache APISIX is high-performance, real-time API Gateway. Features load balancing, dynamic upstream, canary release, circuit breaking, authentication, observability, amongst others.
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/apisix/img/apisix-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/apisix/img/apisix-stack-220x234.png
 keywords:
 - apisix
 - ingress

@@ -23,7 +23,7 @@ dependencies:
   version: 2.x.x
 description: Prometheus is an open source monitoring and alerting system. It enables sysadmins to monitor their infrastructures by collecting metrics from configured targets at given intervals.
 home: https://github.com/prometheus/prometheus
-icon: https://bitnami.com/assets/stacks/prometheus/img/prometheus-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/prometheus/img/prometheus-stack-220x234.png
 keywords:
 - prometheus
 - monitoring

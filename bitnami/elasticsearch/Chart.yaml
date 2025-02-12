@@ -25,7 +25,7 @@ dependencies:
   version: 2.x.x
 description: Elasticsearch is a distributed search and analytics engine. It is used for web search, log monitoring, and real-time analytics. Ideal for Big Data applications.
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/elasticsearch/img/elasticsearch-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/elasticsearch/img/elasticsearch-stack-220x234.png
 keywords:
 - elasticsearch
 maintainers:

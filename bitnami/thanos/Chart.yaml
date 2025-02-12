@@ -23,7 +23,7 @@ dependencies:
   version: 2.x.x
 description: Thanos is a highly available metrics system that can be added on top of existing Prometheus deployments, providing a global query view across all Prometheus installations.
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/thanos/img/thanos-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/thanos/img/thanos-stack-220x234.png
 keywords:
 - analytics
 - monitoring

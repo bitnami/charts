@@ -21,7 +21,7 @@ dependencies:
   version: 2.x.x
 description: PostgreSQL (Postgres) is an open source object-relational database known for reliability and data integrity. ACID-compliant, it supports foreign keys, joins, views, triggers and stored procedures.
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/postgresql/img/postgresql-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/postgresql/img/postgresql-stack-220x234.png
 keywords:
 - postgresql
 - postgres

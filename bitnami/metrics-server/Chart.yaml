@@ -17,7 +17,7 @@ dependencies:
   version: 2.x.x
 description: Metrics Server aggregates resource usage data, such as container CPU and memory usage, in a Kubernetes cluster and makes it available via the Metrics API.
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/metrics-server/img/metrics-server-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/metrics-server/img/metrics-server-stack-220x234.png
 keywords:
 - metrics-server
 - cluster

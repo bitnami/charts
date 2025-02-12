@@ -25,7 +25,7 @@ dependencies:
   version: 2.x.x
 description: Ghost is an open source publishing platform designed to create blogs, magazines, and news sites. It includes a simple markdown editor with preview, theming, and SEO built-in to simplify editing.
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/ghost/img/ghost-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/ghost/img/ghost-stack-220x234.png
 keywords:
 - ghost
 - blog

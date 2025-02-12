@@ -19,7 +19,7 @@ dependencies:
   version: 2.x.x
 description: Logstash is an open source data processing engine. It ingests data from multiple sources, processes it, and sends the output to final destination in real-time. It is a core component of the ELK stack.
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/logstash/img/logstash-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/logstash/img/logstash-stack-220x234.png
 keywords:
 - logstash
 - logging

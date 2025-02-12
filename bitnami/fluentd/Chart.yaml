@@ -17,7 +17,7 @@ dependencies:
   version: 2.x.x
 description: Fluentd collects events from various data sources and writes them to files, RDBMS, NoSQL, IaaS, SaaS, Hadoop and so on.
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/fluentd/img/fluentd-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/fluentd/img/fluentd-stack-220x234.png
 keywords:
 - fluentd
 - logging

@@ -25,7 +25,7 @@ dependencies:
   version: 2.x.x
 description: InfluxDB(TM) is an open source time-series database. It is a core component of the TICK (Telegraf, InfluxDB(TM), Chronograf, Kapacitor) stack.
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/influxdb/img/influxdb-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/influxdb/img/influxdb-stack-220x234.png
 keywords:
 - influxdb
 - tick

@@ -21,7 +21,7 @@ dependencies:
   version: 2.x.x
 description: Memcached is an high-performance, distributed memory object caching system, generic in nature, but intended for use in speeding up dynamic web applications by alleviating database load.
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/memcached/img/memcached-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/memcached/img/memcached-stack-220x234.png
 keywords:
 - memcached
 - cache

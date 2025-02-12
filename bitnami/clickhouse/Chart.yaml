@@ -23,7 +23,7 @@ dependencies:
   version: 2.x.x
 description: ClickHouse is an open-source column-oriented OLAP database management system. Use it to boost your database performance while providing linear scalability and hardware efficiency.
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/clickhouse/img/clickhouse-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/clickhouse/img/clickhouse-stack-220x234.png
 keywords:
 - database
 - sharding
