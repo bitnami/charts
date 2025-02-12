@@ -1,8 +1,13 @@
 # Changelog
 
-## 2.2.5 (2025-02-05)
+## 2.2.6 (2025-02-12)
 
-* [bitnami/multus-cni] Release 2.2.5 ([#31767](https://github.com/bitnami/charts/pull/31767))
+* [bitnami/multus-cni] Release 2.2.6 ([#31896](https://github.com/bitnami/charts/pull/31896))
+
+## <small>2.2.5 (2025-02-05)</small>
+
+* [bitnami/multus-cni] Release 2.2.5 (#31767) ([83f268d](https://github.com/bitnami/charts/commit/83f268dee40dde1ab9ce7fe0aa43ce34bba10edc)), closes [#31767](https://github.com/bitnami/charts/issues/31767)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
 
 ## <small>2.2.4 (2025-01-24)</small>
 
