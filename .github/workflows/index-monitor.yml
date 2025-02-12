@@ -106,7 +106,7 @@ jobs:
   upload:
     name: Re-upload index.yaml
     needs: [validation-check, integrity-check]
-    if: ${{ always() && (needs.validation-check.outputs.result != 'ok' || needs.integrity-check.outputs.result != 'ok') }}
+    if: ${{ always() && github.repository_owner == 'bitnami' && (needs.validation-check.outputs.result != 'ok' || needs.integrity-check.outputs.result != 'ok') }}
     uses: bitnami/charts/.github/workflows/sync-chart-cloudflare-index.yml@index
     secrets: inherit
     permissions:
@@ -114,7 +114,7 @@ jobs:
   notify:
     name: Send notification
     needs: [validation-check, integrity-check]
-    if: ${{ always() && (needs.validation-check.outputs.result != 'ok' || needs.integrity-check.outputs.result != 'ok') }}
+    if: ${{ always() && github.repository_owner == 'bitnami' && (needs.validation-check.outputs.result != 'ok' || needs.integrity-check.outputs.result != 'ok') }}
     uses: bitnami/support/.github/workflows/gchat-notification.yml@main
     with:
       workflow: ${{ github.workflow }}
