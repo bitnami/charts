@@ -1,8 +1,13 @@
 # Changelog
 
-## 6.5.4 (2025-02-04)
+## 6.5.5 (2025-02-12)
 
-* [bitnami/influxdb] Release 6.5.4 ([#31761](https://github.com/bitnami/charts/pull/31761))
+* [bitnami/influxdb] Release 6.5.5 ([#31891](https://github.com/bitnami/charts/pull/31891))
+
+## <small>6.5.4 (2025-02-04)</small>
+
+* [bitnami/influxdb] Release 6.5.4 (#31761) ([12626a7](https://github.com/bitnami/charts/commit/12626a7766e8f7236c31acf52e2adc24c4bed28a)), closes [#31761](https://github.com/bitnami/charts/issues/31761)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
 
 ## <small>6.5.3 (2025-01-24)</small>
 
