@@ -47,7 +47,7 @@ dependencies:
   version: 2.x.x
 description: Grafana Mimir is an open source, horizontally scalable, highly available, multi-tenant, long-term storage for Prometheus.
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/grafana-mimir/img/grafana-mimir-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/grafana-mimir/img/grafana-mimir-stack-220x234.png
 keywords:
 - grafana
 - tracing

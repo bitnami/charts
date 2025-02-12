@@ -21,7 +21,7 @@ dependencies:
   version: 2.x.x
 description: DeepSpeed is deep learning software suite for empowering ChatGPT-like model training. Features dense or sparse model inference, high throughput and high compression.
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/deepspeed/img/deepspeed-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/deepspeed/img/deepspeed-stack-220x234.png
 keywords:
 - deepspeed
 - pytorch

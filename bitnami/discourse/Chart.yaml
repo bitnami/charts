@@ -27,7 +27,7 @@ dependencies:
   version: 2.x.x
 description: Discourse is an open source discussion platform with built-in moderation and governance systems that let discussion communities protect themselves from bad actors even without official moderators.
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/discourse/img/discourse-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/discourse/img/discourse-stack-220x234.png
 keywords:
 - community
 - forum

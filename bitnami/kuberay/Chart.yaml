@@ -21,7 +21,7 @@ dependencies:
   version: 2.x.x
 description: KubeRay is a Kubernetes operator for deploying and management of Ray applications on Kubernetes using CustomResourceDefinitions.
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/kuberay/img/kuberay-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/kuberay/img/kuberay-stack-220x234.png
 keywords:
 - ray
 - machine-learning

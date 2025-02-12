@@ -19,7 +19,7 @@ dependencies:
   version: 2.x.x
 description: Wildfly is a lightweight, open source application server, formerly known as JBoss, that implements the latest enterprise Java standards.
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/wildfly/img/wildfly-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/wildfly/img/wildfly-stack-220x234.png
 keywords:
 - wildfly
 - java

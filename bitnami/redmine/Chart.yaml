@@ -27,7 +27,7 @@ dependencies:
   version: 2.x.x
 description: Redmine is an open source management application. It includes a tracking issue system, Gantt charts for a visual view of projects and deadlines, and supports SCM integration for version control.
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/redmine/img/redmine-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/redmine/img/redmine-stack-220x234.png
 keywords:
 - redmine
 - project management

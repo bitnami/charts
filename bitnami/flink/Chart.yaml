@@ -17,7 +17,7 @@ dependencies:
   version: 2.x.x
 description: Apache Flink is a framework and distributed processing engine for stateful computations over unbounded and bounded data streams.
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/flink/img/flink-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/flink/img/flink-stack-220x234.png
 keywords:
 - flink
 - stream-processing

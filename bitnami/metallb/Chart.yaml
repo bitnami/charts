@@ -19,7 +19,7 @@ dependencies:
   version: 2.x.x
 description: MetalLB is a load-balancer implementation for bare metal Kubernetes clusters, using standard routing protocols.
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/metallb-speaker/img/metallb-speaker-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/metallb-speaker/img/metallb-speaker-stack-220x234.png
 keywords:
 - load-balancer
 - balancer

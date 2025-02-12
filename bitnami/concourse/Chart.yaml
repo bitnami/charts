@@ -23,7 +23,7 @@ dependencies:
   version: 2.x.x
 description: Concourse is an automation system written in Go. It is most commonly used for CI/CD, and is built to scale to any kind of automation pipeline, from simple to complex.
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/concourse/img/concourse-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/concourse/img/concourse-stack-220x234.png
 keywords:
 - concourse
 - ci

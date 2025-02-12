@@ -25,7 +25,7 @@ dependencies:
   version: 2.x.x
 description: Moodle(TM) LMS is an open source online Learning Management System widely used at universities, schools, and corporations. It is modular and highly adaptable to any type of online learning.
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/moodle/img/moodle-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/moodle/img/moodle-stack-220x234.png
 keywords:
 - moodle
 - learning

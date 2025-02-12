@@ -27,7 +27,7 @@ dependencies:
   version: 2.x.x
 description: JupyterHub brings the power of notebooks to groups of users. It gives users access to computational environments and resources without burdening the users with installation and maintenance tasks.
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/jupyterhub/img/jupyterhub-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/jupyterhub/img/jupyterhub-stack-220x234.png
 keywords:
 - python
 - scientific

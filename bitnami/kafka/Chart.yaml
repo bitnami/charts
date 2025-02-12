@@ -27,7 +27,7 @@ dependencies:
   version: 2.x.x
 description: Apache Kafka is a distributed streaming platform designed to build real-time pipelines and can be used as a message broker or as a replacement for a log aggregation solution for big data applications.
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/kafka/img/kafka-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/kafka/img/kafka-stack-220x234.png
 keywords:
 - kafka
 - zookeeper

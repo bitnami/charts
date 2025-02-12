@@ -25,7 +25,7 @@ dependencies:
   version: 2.x.x
 description: Nessie is an open-source version control system for data lakes, enabling isolated data experimentation before committing changes.
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/nessie/img/nessie-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/nessie/img/nessie-stack-220x234.png
 keywords:
 - nessie
 - graph

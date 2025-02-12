@@ -29,7 +29,7 @@ dependencies:
   version: 2.x.x
 description: Argo Workflows is meant to orchestrate Kubernetes jobs in parallel. It uses DAG and step-based workflows
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/argo-workflows/img/argo-workflows-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/argo-workflows/img/argo-workflows-stack-220x234.png
 keywords:
 - Devops
 - Kubernetes

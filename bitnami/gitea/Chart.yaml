@@ -23,7 +23,7 @@ dependencies:
   version: 2.x.x
 description: Gitea is a lightweight code hosting solution. Written in Go, features low resource consumption, easy upgrades and multiple databases.
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/gitea/img/gitea-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/gitea/img/gitea-stack-220x234.png
 keywords:
 - gitea
 - analytics
