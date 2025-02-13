@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.4.8 (2025-02-05)
+## 1.4.9 (2025-02-13)
 
-* [bitnami/cert-manager] Update rules for controller-certificates ClusterRole ([#31794](https://github.com/bitnami/charts/pull/31794))
+* [bitnami/cert-manager] Updated cert-manager RBAC ([#31906](https://github.com/bitnami/charts/pull/31906))
+
+## <small>1.4.8 (2025-02-05)</small>
+
+* [bitnami/cert-manager] Update rules for controller-certificates ClusterRole (#31794) ([2a023c1](https://github.com/bitnami/charts/commit/2a023c106adc6c08019beec9ad5d11f250d22012)), closes [#31794](https://github.com/bitnami/charts/issues/31794)
 
 ## <small>1.4.7 (2025-02-04)</small>
 
