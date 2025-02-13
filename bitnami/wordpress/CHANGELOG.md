@@ -1,8 +1,18 @@
 # Changelog
 
-## 24.1.9 (2025-01-27)
+## 24.1.11 (2025-02-13)
 
-* [bitnami/wordpress] Release 24.1.9 ([#31604](https://github.com/bitnami/charts/pull/31604))
+* [bitnami/wordpress] Release 24.1.11 ([#31911](https://github.com/bitnami/charts/pull/31911))
+
+## <small>24.1.10 (2025-02-13)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/wordpress] Release 24.1.10 updating components versions (#31811) ([c45f515](https://github.com/bitnami/charts/commit/c45f515c1c2a84aa8a1cf6dacef25768a3aa6eca)), closes [#31811](https://github.com/bitnami/charts/issues/31811)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>24.1.9 (2025-01-27)</small>
+
+* [bitnami/wordpress] Release 24.1.9 (#31604) ([ca40161](https://github.com/bitnami/charts/commit/ca40161f5ce8c3c4ccbb658f2f84f3005d3b14f2)), closes [#31604](https://github.com/bitnami/charts/issues/31604)
 
 ## <small>24.1.8 (2025-01-27)</small>
 
