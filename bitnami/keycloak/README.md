@@ -408,6 +408,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 | `extraEnvVars`                   | Extra environment variables to be set on Keycloak container                                                                                            | `[]`                          |
 | `extraEnvVarsCM`                 | Name of existing ConfigMap containing extra env vars                                                                                                   | `""`                          |
 | `extraEnvVarsSecret`             | Name of existing Secret containing extra env vars                                                                                                      | `""`                          |
+| `extraJavaOptsAppend`            | Extra Java options to append to the default ones                                                                                                       | `[]`                          |
 
 ### Keycloak statefulset parameters
 

@@ -85,6 +85,7 @@ data:
   {{- end }}
   KEYCLOAK_SPI_TRUSTSTORE_FILE: {{ printf "/opt/bitnami/keycloak/spi-certs/%s" .Values.spi.truststoreFilename }}
   {{- end }}
+  {{- $javaOptsAppend := "" -}}
   {{- if .Values.cache.enabled }}
   KEYCLOAK_CACHE_TYPE: "ispn"
   {{- if .Values.cache.stackName }}
@@ -93,13 +94,22 @@ data:
   {{- if .Values.cache.stackFile }}
   KEYCLOAK_CACHE_CONFIG_FILE: {{ .Values.cache.stackFile | quote }}
   {{- end }}
+  {{- $javaOptsAppend = printf "-Djgroups.dns.query=%s-headless.%s.svc.%s" (include "common.names.fullname" .) (include "common.names.namespace" .) .Values.clusterDomain -}}
   {{- if .Values.cache.useHeadlessServiceWithAppVersion }}
-  JAVA_OPTS_APPEND: {{ printf "-Djgroups.dns.query=%s-headless-ispn-%s.%s.svc.%s" (include "common.names.fullname" .) (replace "." "-" .Chart.AppVersion) (include "common.names.namespace" .) .Values.clusterDomain | quote }}
-  {{- else }}
-  JAVA_OPTS_APPEND: {{ printf "-Djgroups.dns.query=%s-headless.%s.svc.%s" (include "common.names.fullname" .) (include "common.names.namespace" .) .Values.clusterDomain | quote }}
+    {{- $javaOptsAppend = printf "-Djgroups.dns.query=%s-headless-ispn-%s.%s.svc.%s" (include "common.names.fullname" .) (replace "." "-" .Chart.AppVersion) (include "common.names.namespace" .) .Values.clusterDomain -}}
   {{- end }}
   {{- else }}
   KEYCLOAK_CACHE_TYPE: "local"
+  {{- end }}
+  {{- if .Values.extraJavaOptsAppend }}
+    {{- $space := "" -}}
+    {{- if and (ne $javaOptsAppend "") }}
+      {{- $space = " " -}}
+    {{- end }}
+    {{- $javaOptsAppend = printf "%s%s%s" ($javaOptsAppend) ($space) (join " " .Values.extraJavaOptsAppend) -}}
+  {{- end }}
+  {{- if (ne $javaOptsAppend "") }}
+  JAVA_OPTS_APPEND: {{ $javaOptsAppend | quote }}
   {{- end }}
   {{- if .Values.logging }}
   KEYCLOAK_LOG_OUTPUT: {{ .Values.logging.output | quote }}
