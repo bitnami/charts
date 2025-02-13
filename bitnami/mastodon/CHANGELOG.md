@@ -1,8 +1,14 @@
 # Changelog
 
-## 9.2.1 (2025-02-13)
+## 9.2.2 (2025-02-13)
 
-* [bitnami/mastodon] Release 9.2.1 ([#31916](https://github.com/bitnami/charts/pull/31916))
+* [bitnami/mastodon] Release 9.2.2 ([#31920](https://github.com/bitnami/charts/pull/31920))
+
+## <small>9.2.1 (2025-02-13)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/mastodon] Release 9.2.1 (#31916) ([27d24fb](https://github.com/bitnami/charts/commit/27d24fbec625ce5c4ca93018e618da004a4df131)), closes [#31916](https://github.com/bitnami/charts/issues/31916)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
 
 ## 9.2.0 (2025-01-29)
 
