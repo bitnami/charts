@@ -5,6 +5,7 @@
 ## Please, note that this will override the parameters, including dependencies, configured to use the global value
 ##
 global:
+  iam: true
   ## @param global.imageRegistry Global Docker image registry
   ##
   imageRegistry: ""

@@ -453,3 +453,46 @@ Return the path to the CA cert file.
     {{ tpl (required "A secret containing TLS certificates is required when TLS is enabled" .Values.tls.certificatesSecret) . }}
 {{- end -}}
 {{- end -}}
+
+
+
+{{/*
+Function to get postgres user. Default to postgres if .Values.global.postgresql.remote.user is not defined
+*/}}
+
+{{- define "getPostgresUser" -}}
+{{- "postgres" }}
+{{- end -}}
+{{/*
+Function to get postgres host. Default to postgres if .Values.global.postgresql.remote.host is not defined
+*/}}
+
+{{- define "getPostgresHost" -}}
+{{- "postgres" }}
+{{- end -}}
+{{/*
+Function to get postgres port. Default to 5432 if .Values.global.postgresql.remote.port is not defined
+*/}}
+
+{{- define "getPostgresPort" -}}
+{{- "5432" }}
+{{- end -}}
+{{/*
+Function to get postgres url.
+*/}}
+
+{{- define "getPostgresUrl" -}}
+{{- printf "jdbc:postgresql://%s:%s/" (include "getPostgresHost" .) (include "getPostgresPort" .) -}}
+{{- end -}}
+
+{{/*
+Function to get postgres password. Use .Values.global.postgresql.auth.postgresPassword if not empty,
+otherwise take secretRef from .Values.global.postgresql.auth.secretName
+*/}}
+
+{{- define "getPostgresPassword" -}}
+valueFrom:
+  secretKeyRef:
+    name: postgres-secret
+    key: postgress-password
+{{- end -}}

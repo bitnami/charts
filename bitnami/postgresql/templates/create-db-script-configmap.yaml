@@ -1,0 +1,81 @@
+{{- if .Values.global.iam }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgresql-bootstrap-scripts-configmap
+  namespace: {{ .Release.Namespace }}
+data:
+  createDatabasesScript: |
+    #! /bin/bash
+    set -e
+
+    host=${PGHOST}
+    user=${PGUSER}
+    cryptoTemplate=""
+
+    psql -h $host -U $user -tc "SELECT 1 FROM pg_database WHERE datname = 'template_pgcrypto'" | grep -q 1 || psql -h $host -U $user -d postgres -tc "CREATE DATABASE template_pgcrypto;"
+    psql -h $host -U $user -d template_pgcrypto -tc "CREATE EXTENSION IF NOT EXISTS pgcrypto;"
+    psql -h $host -U $user -d template_pgcrypto -tc "CREATE EXTENSION IF NOT EXISTS \"uuid-ossp\";"
+    cryptoTemplate="TEMPLATE template_pgcrypto"
+
+    echo "Refreshing COLLATION VERSION in template1"
+    psql -h $host -U $user -tc "ALTER DATABASE template1 REFRESH COLLATION VERSION;" 
+    
+    echo "Rebuilding INDEX in template1"
+    psql -h $host -U $user -d template1 -tc "REINDEX DATABASE template1;"
+
+    for filename in ${SECRETS_DIR}/*; do
+      
+      pass=$(cat $filename)
+      base=$(basename "$filename")
+      name=${base%-*}
+
+      if [ $name = "keycloak-db" ]; then
+        name="keycloak"
+      fi
+      {{- else }}
+        psql -h $host -U $user -c "ALTER ROLE keycloak WITH NOCREATEDB;"
+
+      if [ $name = "postgres" ] || [ $name = "hzpadmin" ] || [ $name = "keycloak-db" ]; then
+        echo "Skipping $name"
+        continue
+      fi
+
+      if [ $name = "test" ]; then
+        psql -h $host -U $user -tc "SELECT 1 FROM pg_database WHERE datname = '$name'" | grep -q 1 || psql -h $host -U $user -c "CREATE DATABASE \"$name\" $cryptoTemplate;"
+        psql -h $host -U $user -tc "SELECT 1 FROM pg_catalog.pg_roles WHERE rolname = '$name'" | grep -q 1 || psql -h $host -U $user -c "CREATE ROLE \"$name\" WITH SUPERUSER LOGIN ENCRYPTED PASSWORD '$pass'"
+        psql -h $host -U $user -tc "SELECT 1 FROM pg_catalog.pg_database WHERE datname = '$name' and pg_catalog.pg_get_userbyid(datdba) = '$name'" | grep -q 1 || psql -h $host -U $user -c "ALTER DATABASE \"$name\" OWNER TO \"$name\"" && psql -h $host -U $user -d $name -c "GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO \"$name\"" && for tbl in `psql -h $host -U $user -tc "SELECT tablename FROM pg_tables WHERE schemaname = 'public';" $name` ; do  psql -h $host -U $user -c "ALTER TABLE \"$tbl\" OWNER to $name" $name ; done
+        continue
+      fi
+
+      echo "Creating database $name"
+      psql -h $host -U $user -tc "SELECT 1 FROM pg_database WHERE datname = '$name'" | grep -q 1 || psql -h $host -U $user -c "CREATE DATABASE \"$name\" $cryptoTemplate;"
+      psql -h $host -U $user -tc "SELECT 1 FROM pg_catalog.pg_roles WHERE rolname = '$name'" | grep -q 1 || psql -h $host -U $user -c "CREATE ROLE \"$name\""
+      if ! (psql -h $host -U $user -tc "SELECT 1 FROM pg_catalog.pg_database WHERE datname = '$name' and pg_catalog.pg_get_userbyid(datdba) = '$name'" | grep -q 1); then
+        psql -h $host -U $user -c "ALTER DATABASE \"$name\" OWNER TO \"$name\""
+        psql -h $host -U $user -d $name -c "GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO \"$name\""
+        for tbl in `psql -h $host -U $user -tc "SELECT tablename FROM pg_tables WHERE schemaname = 'public';" $name`; do
+          psql -h $host -U $user -c "ALTER TABLE \"$tbl\" OWNER to $name" $name
+        done
+        for matview in `psql -h $host -U $user -tc "SELECT matviewname FROM pg_matviews WHERE schemaname = 'public';" $name`
+        do
+          psql -h $host -U $user -c "ALTER MATERIALIZED VIEW \"$matview\" OWNER to $name" $name;
+        done
+        for oid in `psql -h $host -U $user -tc "SELECT oid FROM pg_largeobject_metadata;" $name`
+        do
+          psql -h $host -U $user -tc "GRANT SELECT ON LARGE OBJECT $oid TO $name;" $name
+        done
+      fi
+      echo "Creating password for user: $name"
+      psql -h $host -U $user -tc "ALTER ROLE \"$name\" WITH LOGIN ENCRYPTED PASSWORD '$pass'"
+      if ( psql -h $host -U $user -d $name -tc "SELECT 1 FROM pg_catalog.pg_namespace WHERE nspname = 'locales'" | grep -q 1 ); then
+        localetable=$(psql -h $host -U $user -d $name -c "select tablename from pg_tables where schemaname='locales';" | sed -n '3p' | awk '{print $1}')
+        psql -h $host -U $user -d $name -c "ALTER TABLE locales.$localetable OWNER TO \"$name\""
+        psql -h $host -U $user -d $name -c "ALTER SCHEMA locales OWNER TO \"$name\""
+        psql -h $host -U $user -d $name -c "GRANT USAGE ON SCHEMA locales TO \"$name\""
+      fi
+    done
+
+    # Delete redundant spire table
+    psql -h $host -U $user -tc "DROP DATABASE IF EXISTS spire;"
+{{ end }}
