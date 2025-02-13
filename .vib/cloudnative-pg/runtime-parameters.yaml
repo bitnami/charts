@@ -1,0 +1,105 @@
+extraDeploy:
+# Taken from https://cloudnative-pg.io/documentation/1.25/declarative_role_management/
+- apiVersion: v1
+  kind: Secret
+  metadata:
+    name: vib-cluster-example-user
+    labels:
+      cnpg.io/reload: "true"
+  type: kubernetes.io/basic-auth
+  stringData:
+    username: vib_user
+    password: bitnami1234
+- apiVersion: postgresql.cnpg.io/v1
+  kind: Cluster
+  metadata:
+    name: vib-cluster-example
+  spec:
+    instances: 3
+    storage:
+      size: 1Gi
+    managed:
+      roles:
+        - name: vib_user
+          ensure: present
+          comment: VIB User
+          login: true
+          superuser: true
+          passwordSecret:
+            name: vib-cluster-example-user
+# We cannot run goss tests in the actual instances because it's ReadOnlyRootFilesystem and it is not configurable
+# Instead we deploy a PostgreSQL client
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    labels:
+      app: postgresql
+    name: vib-postgresql-test
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app: postgresql
+    template:
+      metadata:
+        labels:
+          app: postgresql
+      spec:
+        containers:
+        - image: docker.io/bitnami/postgresql:latest
+          command:
+            - /bin/bash
+          args:
+            - -ec
+            - |
+              echo 0 > /tmp/ready
+              # Wait until the cluster is formed
+              while true; do
+                if PGPASSWORD=bitnami1234 psql -U vib_user -d postgres -h vib-cluster-example-rw -c "SELECT client_addr, state FROM pg_stat_replication;" | grep "2 rows"; then
+                    echo 1 > /tmp/.ready
+                    break
+                else
+                    sleep 10
+                fi
+              done
+              sleep infinity
+          name: postgresql
+          startupProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - |
+                  if [ $(cat /tmp/ready) = "1" ]; then
+                    exit 0
+                  else
+                    exit 1
+                  fi
+            initialDelaySeconds: 40
+            periodSeconds: 20
+            timeoutSeconds: 1
+            failureThreshold: 15
+            successThreshold: 1
+          securityContext:
+            runAsNonRoot: true
+            privileged: false
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+            seccompProfile:
+              type: "RuntimeDefault"
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+        volumes:
+          - name: empty-dir
+            emptyDir: {}
+service:
+  ports:
+    webhook: 443
+  type: LoadBalancer
+metrics:
+  enabled: true
+  service:
+    ports:
+      metrics: 2311

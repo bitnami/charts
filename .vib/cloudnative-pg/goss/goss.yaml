@@ -1,0 +1,26 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+http:
+  http://cnpg-webhook-service:{{ .Vars.service.ports.webhook }}:
+    status: 400
+  http://cloudnative-pg-metrics:{{ .Vars.metrics.service.ports.metrics }}/metrics:
+    status: 200
+    body:
+      - /controller_runtime_reconcile_time_seconds_bucket/
+# Ports hardcoded in the operator
+addr:
+  tcp://vib-cluster-example-r:5432:
+    reachable: true
+  tcp://vib-cluster-example-rw:5432:
+    reachable: true
+  tcp://vib-cluster-example-ro:5432:
+    reachable: true
+{{- $username := (index .Vars.extraDeploy 0).stringData.username }}
+{{- $password := (index .Vars.extraDeploy 0).stringData.password }}
+command:
+  check-auth-and-cluster-status:
+    exec: PGPASSWORD=bitnami1234 psql -U vib_user -d postgres -h vib-cluster-example-rw -c "SELECT client_addr, state FROM pg_stat_replication;"
+    exit-status: 0
+    stdout:
+      - /2 rows/
