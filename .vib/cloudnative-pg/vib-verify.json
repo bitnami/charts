@@ -49,7 +49,7 @@
             "vars_file": "cloudnative-pg/runtime-parameters.yaml",
             "remote": {
               "pod": {
-                "workload": "pod-vib-postgresql-test"
+                "workload": "deploy-vib-postgresql-test"
               }
             }
           }
