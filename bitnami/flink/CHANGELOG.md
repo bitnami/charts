@@ -1,8 +1,17 @@
 # Changelog
 
-## 1.4.1 (2024-12-26)
+## 1.4.3 (2025-02-12)
 
-* [bitnami/flink] Release 1.4.1 ([#31170](https://github.com/bitnami/charts/pull/31170))
+* [bitnami/flink] Release 1.4.3 ([#31905](https://github.com/bitnami/charts/pull/31905))
+
+## <small>1.4.2 (2025-01-28)</small>
+
+* [bitnami/flink] Release 1.4.2 (#31636) ([420ed14](https://github.com/bitnami/charts/commit/420ed144c8967af027f6c11a8e64800f394005ad)), closes [#31636](https://github.com/bitnami/charts/issues/31636)
+
+## <small>1.4.1 (2024-12-26)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/flink] Release 1.4.1 (#31170) ([f07b771](https://github.com/bitnami/charts/commit/f07b771b405429185de6fdb6d631e87040cf6425)), closes [#31170](https://github.com/bitnami/charts/issues/31170)
 
 ## 1.4.0 (2024-12-10)
 

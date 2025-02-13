@@ -6,9 +6,9 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: cassandra
-      image: docker.io/bitnami/cassandra:5.0.2-debian-12-r4
+      image: docker.io/bitnami/cassandra:5.0.2-debian-12-r6
     - name: zipkin
-      image: docker.io/bitnami/zipkin:3.4.4-debian-12-r0
+      image: docker.io/bitnami/zipkin:3.4.4-debian-12-r1
 apiVersion: v2
 appVersion: 3.4.4
 dependencies:
@@ -23,7 +23,7 @@ dependencies:
   version: 2.x.x
 description: Zipkin is a distributed tracing system that helps collect and analyze timing data to troubleshoot latency issues in service architectures, providing visibility into service call performance.
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/zipkin/img/zipkin-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/zipkin/img/zipkin-stack-220x234.png
 keywords:
 - zipkin
 - tracing
@@ -35,4 +35,4 @@ sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/zipkin
 - https://github.com/bitnami/containers/tree/main/bitnami/zipkin
 - https://github.com/openzipkin/zipkin
-version: 1.1.2
+version: 1.1.4

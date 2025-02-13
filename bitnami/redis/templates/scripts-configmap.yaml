@@ -136,6 +136,10 @@ data:
         debug "$(cat /opt/bitnami/redis-sentinel/etc/sentinel.conf | grep monitor)"
     fi
 
+    if [[ -f /opt/bitnami/redis/mounted-etc/users.acl ]];then
+        cp /opt/bitnami/redis/mounted-etc/users.acl /opt/bitnami/redis/etc/users.acl
+    fi
+
     if [[ $redisRetVal -ne 0 ]]; then
         if [[ "$master_in_persisted_conf" == "$(get_full_hostname "$HOSTNAME")" ]]; then
             # Case 1: No active sentinel and in previous sentinel.conf we were the master --> MASTER
@@ -631,6 +635,9 @@ data:
     if [[ -f /opt/bitnami/redis/mounted-etc/redis.conf ]];then
         cp /opt/bitnami/redis/mounted-etc/redis.conf /opt/bitnami/redis/etc/redis.conf
     fi
+    if [[ -f /opt/bitnami/redis/mounted-etc/users.acl ]];then
+        cp /opt/bitnami/redis/mounted-etc/users.acl /opt/bitnami/redis/etc/users.acl
+    fi
     {{- if .Values.tls.enabled }}
     ARGS=("--port" "0")
     ARGS+=("--tls-port" "${REDIS_TLS_PORT}")
@@ -735,6 +742,9 @@ data:
     fi
     if [[ -f /opt/bitnami/redis/mounted-etc/redis.conf ]];then
         cp /opt/bitnami/redis/mounted-etc/redis.conf /opt/bitnami/redis/etc/redis.conf
+    fi
+    if [[ -f /opt/bitnami/redis/mounted-etc/users.acl ]];then
+        cp /opt/bitnami/redis/mounted-etc/users.acl /opt/bitnami/redis/etc/users.acl
     fi
 
     echo "" >> /opt/bitnami/redis/etc/replica.conf

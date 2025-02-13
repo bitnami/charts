@@ -1,8 +1,12 @@
 # Changelog
 
-## 9.5.2 (2025-01-24)
+## 9.5.3 (2025-01-28)
 
-* [bitnami/solr] Release 9.5.2 ([#31585](https://github.com/bitnami/charts/pull/31585))
+* [bitnami/solr] Release 9.5.3 ([#31641](https://github.com/bitnami/charts/pull/31641))
+
+## <small>9.5.2 (2025-01-24)</small>
+
+* [bitnami/solr] Release 9.5.2 (#31585) ([405bf4f](https://github.com/bitnami/charts/commit/405bf4fa231f37b7b19e5944a22d03d6496164ba)), closes [#31585](https://github.com/bitnami/charts/issues/31585)
 
 ## <small>9.5.1 (2025-01-08)</small>
 

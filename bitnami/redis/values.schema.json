@@ -222,6 +222,22 @@
                     "type": "boolean",
                     "description": "Mount password file from secret",
                     "default": true
+                },
+                "acl": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enables the support of the Redis ACL system",
+                            "default": false
+                        },
+                        "users": {
+                            "type": "array",
+                            "description": "A list of the configured users in the Redis ACL system",
+                            "default": [],
+                            "items": {}
+                        }
+                    }
                 }
             }
         },

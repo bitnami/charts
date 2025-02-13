@@ -147,6 +147,17 @@ Return the Filer Server configuration configmap.
 {{- end -}}
 
 {{/*
+Return the Filer Server notification configuration configmap.
+*/}}
+{{- define "seaweedfs.filer.notificationConfigmapName" -}}
+{{- if .Values.filer.existingNotificationConfigmap -}}
+    {{- print (tpl .Values.filer.existingNotificationConfigmap .) -}}
+{{- else -}}
+    {{- printf "%s-notification" (include "seaweedfs.filer.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the Master Server peers
 */}}
 {{- define "seaweedfs.master.servers" -}}
@@ -528,6 +539,7 @@ Compile all warnings into a single message.
 {{- $messages := list -}}
 {{- $messages := append $messages (include "seaweedfs.validateValues.security.mTLS" .) -}}
 {{- $messages := append $messages (include "seaweedfs.validateValues.master.replicaCount" .) -}}
+{{- $messages := append $messages (include "seaweedfs.validateValues.filer.replicaCount" .) -}}
 {{- $messages := append $messages (include "seaweedfs.validateValues.volume.replicaCount" .) -}}
 {{- $messages := append $messages (include "seaweedfs.validateValues.volume.dataVolumes" .) -}}
 {{- $messages := append $messages (include "seaweedfs.validateValues.filer.database" .) -}}
@@ -572,12 +584,27 @@ Validate values of SeaweedFS - number of Master server replicas
 */}}
 {{- define "seaweedfs.validateValues.master.replicaCount" -}}
 {{- $masterReplicaCount := int .Values.master.replicaCount }}
-{{- if and .Values.master.persistence.enabled .Values.master.persistence.existingClaim (gt $masterReplicaCount 1) -}}
+{{- if and (or (and .Values.master.persistence.enabled .Values.master.persistence.existingClaim) (and .Values.master.logPersistence.enabled .Values.master.logPersistence.existingClaim)) (gt $masterReplicaCount 1) -}}
 master.replicaCount
     A single existing PVC cannot be shared between multiple Master Server replicas.
     Please set a valid number of replicas (--set master.replicaCount=1), disable persistence
-    (--set master.persistence.enabled=false) or rely on dynamic provisioning via Persitent
-    Volume Claims (--set master.persistence.existingClaim="").
+    (--set master.persistence.enabled=false,master.logPersistence.enabled=false) or
+    rely on dynamic provisioning via Persistent Volume Claims
+    (--set master.persistence.existingClaim="",master.logPersistence.existingClaim="").
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate values of SeaweedFS - number of Filer server replicas
+*/}}
+{{- define "seaweedfs.validateValues.filer.replicaCount" -}}
+{{- $filerReplicaCount := int .Values.filer.replicaCount }}
+{{- if and .Values.filer.enabled .Values.filer.logPersistence.enabled .Values.filer.logPersistence.existingClaim (gt $filerReplicaCount 1) -}}
+filer.replicaCount
+    A single existing PVC cannot be shared between multiple Filer Server replicas.
+    Please set a valid number of replicas (--set filer.replicaCount=1), disable persistence
+    (--set filer.logPersistence.enabled=false) or rely on dynamic provisioning via
+    Persistent Volume Claims (--set filer.logPersistence.existingClaim="").
 {{- end -}}
 {{- end -}}
 
@@ -594,6 +621,13 @@ volume.replicaCount
     (--set volume.dataVolumes[].persistence.enabled=false) or rely on dynamic provisioning via Persitent
     Volume Claims (--set volume.dataVolumes[].persistence.existingClaim="").
 {{- end -}}
+{{- end -}}
+{{- if and .Values.volume.logPersistence.enabled .Values.volume.logPersistence.existingClaim (gt $volumeReplicaCount 1) -}}
+volume.replicaCount
+    A single existing PVC cannot be shared between multiple Volume Server replicas.
+    Please set a valid number of replicas (--set volume.replicaCount=1), disable persistence
+    (--set volume.logPersistence.enabled=false) or rely on dynamic provisioning via Persistent Volume Claims
+    (--set volume.logPersistence.existingClaim="").
 {{- end -}}
 {{- end -}}
 

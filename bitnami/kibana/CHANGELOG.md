@@ -1,8 +1,16 @@
 # Changelog
 
-## 11.4.3 (2025-01-23)
+## 11.4.5 (2025-02-11)
 
-* [bitnami/kibana] Fix publicBaseUrl value when inferred from ingress configuration ([#31193](https://github.com/bitnami/charts/pull/31193))
+* [bitnami/kibana] Release 11.4.5 ([#31871](https://github.com/bitnami/charts/pull/31871))
+
+## <small>11.4.4 (2025-01-30)</small>
+
+* [bitnami/kibana] Release 11.4.4 (#31675) ([78e07d6](https://github.com/bitnami/charts/commit/78e07d6801aad0461c4c371ca0c83ad921465a62)), closes [#31675](https://github.com/bitnami/charts/issues/31675)
+
+## <small>11.4.3 (2025-01-23)</small>
+
+* [bitnami/kibana] Fix publicBaseUrl value when inferred from ingress configuration (#31193) ([bfc5ecf](https://github.com/bitnami/charts/commit/bfc5ecf0cb05d1831aec4d0e937f4c23c114933a)), closes [#31193](https://github.com/bitnami/charts/issues/31193)
 
 ## <small>11.4.2 (2025-01-22)</small>
 

@@ -1,8 +1,16 @@
 # Changelog
 
-## 1.1.2 (2025-01-21)
+## 1.1.4 (2025-02-11)
 
-* bitnami/zipkin Remove quote for the host ([#31374](https://github.com/bitnami/charts/pull/31374))
+* bitnami/zipkin Remove quote for the host ([#31866](https://github.com/bitnami/charts/pull/31866))
+
+## <small>1.1.3 (2025-01-28)</small>
+
+* [bitnami/zipkin] Release 1.1.3 (#31630) ([48a4008](https://github.com/bitnami/charts/commit/48a400808a562d555cca8731a9adb395989ae743)), closes [#31630](https://github.com/bitnami/charts/issues/31630)
+
+## <small>1.1.2 (2025-01-21)</small>
+
+* bitnami/zipkin Remove quote for the host (#31374) ([5955255](https://github.com/bitnami/charts/commit/595525518d251b8e5c4597b7261d3b0c00ef30e2)), closes [#31374](https://github.com/bitnami/charts/issues/31374)
 
 ## <small>1.1.1 (2025-01-07)</small>
 

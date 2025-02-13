@@ -1,8 +1,17 @@
 # Changelog
 
-## 6.4.2 (2025-01-21)
+## 6.4.4 (2025-02-11)
 
-* [bitnami/logstash] Release 6.4.2 ([#31497](https://github.com/bitnami/charts/pull/31497))
+* [bitnami/logstash] Release 6.4.4 ([#31870](https://github.com/bitnami/charts/pull/31870))
+
+## <small>6.4.3 (2025-01-29)</small>
+
+* [bitnami/logstash] Release 6.4.3 (#31667) ([46f003b](https://github.com/bitnami/charts/commit/46f003b12847591e12fa2e5b4dad9025c14fb1e3)), closes [#31667](https://github.com/bitnami/charts/issues/31667)
+
+## <small>6.4.2 (2025-01-21)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/logstash] Release 6.4.2 (#31497) ([826cea9](https://github.com/bitnami/charts/commit/826cea9060cdb0c7d2c7ec54d7abbdd68b565d00)), closes [#31497](https://github.com/bitnami/charts/issues/31497)
 
 ## <small>6.4.1 (2024-12-12)</small>
 

@@ -1,8 +1,16 @@
 # Changelog
 
-## 11.5.1 (2025-01-14)
+## 11.5.3 (2025-02-11)
 
-* [bitnami/tomcat] Release 11.5.1 ([#31370](https://github.com/bitnami/charts/pull/31370))
+* [bitnami/tomcat] Release 11.5.3 ([#31875](https://github.com/bitnami/charts/pull/31875))
+
+## <small>11.5.2 (2025-01-28)</small>
+
+* [bitnami/tomcat] Release 11.5.2 (#31626) ([8df20cf](https://github.com/bitnami/charts/commit/8df20cf13c0b7c0edcbbb46e406c5e12a1d4b892)), closes [#31626](https://github.com/bitnami/charts/issues/31626)
+
+## <small>11.5.1 (2025-01-14)</small>
+
+* [bitnami/tomcat] Release 11.5.1 (#31370) ([b524bc1](https://github.com/bitnami/charts/commit/b524bc1571c226de23cb9f058ddb8fe7387b065c)), closes [#31370](https://github.com/bitnami/charts/issues/31370)
 
 ## 11.5.0 (2024-12-19)
 

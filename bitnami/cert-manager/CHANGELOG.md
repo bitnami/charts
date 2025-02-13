@@ -1,8 +1,29 @@
 # Changelog
 
-## 1.4.4 (2025-01-24)
+## 1.4.9 (2025-02-13)
 
-* [bitnami/cert-manager] Release 1.4.4 ([#31543](https://github.com/bitnami/charts/pull/31543))
+* [bitnami/cert-manager] Updated cert-manager RBAC ([#31906](https://github.com/bitnami/charts/pull/31906))
+
+## <small>1.4.8 (2025-02-05)</small>
+
+* [bitnami/cert-manager] Update rules for controller-certificates ClusterRole (#31794) ([2a023c1](https://github.com/bitnami/charts/commit/2a023c106adc6c08019beec9ad5d11f250d22012)), closes [#31794](https://github.com/bitnami/charts/issues/31794)
+
+## <small>1.4.7 (2025-02-04)</small>
+
+* [bitnami/cert-manager] Release 1.4.7 (#31744) ([cb8d670](https://github.com/bitnami/charts/commit/cb8d670d78acdaa9dfbc271b9b0ffe7160c838e3)), closes [#31744](https://github.com/bitnami/charts/issues/31744)
+
+## <small>1.4.6 (2025-02-04)</small>
+
+* [bitnami/cert-manager] Release 1.4.6 (#31728) ([80efd90](https://github.com/bitnami/charts/commit/80efd904e6fc5f341a240fb5ce3d75b01565085b)), closes [#31728](https://github.com/bitnami/charts/issues/31728)
+
+## <small>1.4.5 (2025-02-03)</small>
+
+* [bitnami/cert-manager] Release 1.4.5 (#31714) ([46a27b5](https://github.com/bitnami/charts/commit/46a27b5e4dbebe843ab3e15029e92ace7d3b3f79)), closes [#31714](https://github.com/bitnami/charts/issues/31714)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>1.4.4 (2025-01-24)</small>
+
+* [bitnami/cert-manager] Release 1.4.4 (#31543) ([857c1cb](https://github.com/bitnami/charts/commit/857c1cbc3b0f874d3f819acda7a5f56bc2933ac9)), closes [#31543](https://github.com/bitnami/charts/issues/31543)
 
 ## <small>1.4.3 (2025-01-16)</small>
 

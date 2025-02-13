@@ -1,8 +1,12 @@
 # Changelog
 
-## 31.3.0 (2025-01-21)
+## 31.3.1 (2025-01-28)
 
-* [binami/kafka] Setting broker.rack for azure based on brokerRackAssignment parameter ([#31496](https://github.com/bitnami/charts/pull/31496))
+* [bitnami/kafka] Release 31.3.1 ([#31624](https://github.com/bitnami/charts/pull/31624))
+
+## 31.3.0 (2025-01-23)
+
+* [binami/kafka] Setting broker.rack for azure based on brokerRackAssignment parameter (#31496) ([43c0dd0](https://github.com/bitnami/charts/commit/43c0dd099f1feb3df890ba3852dff2e143f496bb)), closes [#31496](https://github.com/bitnami/charts/issues/31496)
 
 ## 31.2.0 (2025-01-08)
 

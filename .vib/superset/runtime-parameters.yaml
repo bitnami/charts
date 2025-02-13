@@ -1,0 +1,29 @@
+auth:
+  password: ComplicatedPassword123!4
+loadExamples: true
+web:
+  waitForExamples:
+    enabled: true
+  containerPorts:
+    http: 8081
+  service:
+    ports:
+      http: 80
+    type: LoadBalancer
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1002
+beat:
+  enabled: true
+flower:
+  enabled: true
+  service:
+    ports:
+      flower: 5556
+  auth:
+    enabled: true
+    username: "vib-user"
+    password: "ComplicatedPassword123!4"
+serviceAccount:
+  create: true
+  automountServiceAccountToken: true

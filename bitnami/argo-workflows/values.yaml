@@ -80,7 +80,7 @@ server:
   image:
     registry: docker.io
     repository: bitnami/argo-workflow-cli
-    tag: 3.6.2-debian-12-r4
+    tag: 3.6.4-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -567,7 +567,7 @@ controller:
   image:
     registry: docker.io
     repository: bitnami/argo-workflow-controller
-    tag: 3.6.2-debian-12-r5
+    tag: 3.6.4-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1120,7 +1120,7 @@ executor:
   image:
     registry: docker.io
     repository: bitnami/argo-workflow-exec
-    tag: 3.6.2-debian-12-r3
+    tag: 3.6.4-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
