@@ -1,8 +1,13 @@
 # Changelog
 
-## 1.4.9 (2025-02-13)
+## 1.4.10 (2025-02-13)
 
-* [bitnami/cert-manager] Updated cert-manager RBAC ([#31906](https://github.com/bitnami/charts/pull/31906))
+* [bitnami/cert-manager] Release 1.4.10 ([#31913](https://github.com/bitnami/charts/pull/31913))
+
+## <small>1.4.9 (2025-02-13)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/cert-manager] Updated cert-manager RBAC (#31906) ([a24b680](https://github.com/bitnami/charts/commit/a24b6802f54f22d228b83fba8a76c14db5224d2b)), closes [#31906](https://github.com/bitnami/charts/issues/31906)
 
 ## <small>1.4.8 (2025-02-05)</small>
 
