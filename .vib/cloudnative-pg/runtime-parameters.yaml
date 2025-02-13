@@ -56,9 +56,11 @@ extraDeploy:
               # Wait until the cluster is formed
               while true; do
                 if PGPASSWORD=bitnami1234 psql -U vib_user -d postgres -h vib-cluster-example-rw -c "SELECT client_addr, state FROM pg_stat_replication;" | grep "2 rows"; then
-                    echo 1 > /tmp/.ready
+                    echo 1 > /tmp/ready
+                    echo "Connected to PostgreSQL"
                     break
                 else
+                    echo "Connection failed. Sleeping 10 seconds"
                     sleep 10
                 fi
               done
