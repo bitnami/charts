@@ -1,6 +1,6 @@
 # Changelog
 
-## 25.0.0 (2025-01-28)
+## 25.0.0 (2025-02-14)
 
 * [bitnami/harbor] Upgrade postgres to version 17.2.0 ([#31159](https://github.com/bitnami/charts/pull/31159))
 
