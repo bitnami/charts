@@ -1,8 +1,14 @@
 # Changelog
 
-## 4.4.4 (2025-02-14)
+## 4.4.5 (2025-02-14)
 
-* [bitnami/rabbitmq-cluster-operator] Release 4.4.4 ([#31830](https://github.com/bitnami/charts/pull/31830))
+* [bitnami/rabbitmq-cluster-operator] Release 4.4.5 ([#31927](https://github.com/bitnami/charts/pull/31927))
+
+## <small>4.4.4 (2025-02-14)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/rabbitmq-cluster-operator] Release 4.4.4 (#31830) ([4842a9a](https://github.com/bitnami/charts/commit/4842a9a0ce9f02b9aa1ba6bcb62333ac5ad8af82)), closes [#31830](https://github.com/bitnami/charts/issues/31830)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
 
 ## <small>4.4.3 (2025-01-24)</small>
 
