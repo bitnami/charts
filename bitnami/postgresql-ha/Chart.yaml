@@ -12,7 +12,7 @@ annotations:
     - name: postgres-exporter
       image: docker.io/bitnami/postgres-exporter:0.16.0-debian-12-r8
     - name: postgresql-repmgr
-      image: docker.io/bitnami/postgresql-repmgr:17.3.0-debian-12-r0
+      image: docker.io/bitnami/postgresql-repmgr:17.3.0-debian-12-r1
 apiVersion: v2
 appVersion: 17.3.0
 dependencies:
@@ -40,4 +40,4 @@ maintainers:
 name: postgresql-ha
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/postgresql-ha
-version: 15.1.8
+version: 15.1.9
