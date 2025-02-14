@@ -1,8 +1,13 @@
 # Changelog
 
-## 2.4.5 (2025-02-12)
+## 2.4.6 (2025-02-14)
 
-* [bitnami/flux] Release 2.4.5 ([#31887](https://github.com/bitnami/charts/pull/31887))
+* [bitnami/flux] Release 2.4.6 ([#31932](https://github.com/bitnami/charts/pull/31932))
+
+## <small>2.4.5 (2025-02-12)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/flux] Release 2.4.5 (#31887) ([a2e0596](https://github.com/bitnami/charts/commit/a2e0596f08bb4213f1c8973536fb6d310483c85a)), closes [#31887](https://github.com/bitnami/charts/issues/31887)
 
 ## <small>2.4.4 (2025-02-04)</small>
 
