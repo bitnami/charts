@@ -1,6 +1,6 @@
 # Changelog
 
-## 4.4.4 (2025-02-07)
+## 4.4.4 (2025-02-14)
 
 * [bitnami/rabbitmq-cluster-operator] Release 4.4.4 ([#31830](https://github.com/bitnami/charts/pull/31830))
 
