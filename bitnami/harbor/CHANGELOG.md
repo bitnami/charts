@@ -1,8 +1,12 @@
 # Changelog
 
+## 24.3.1 (2025-02-15)
+
+* [bitnami/harbor] Added tpl to externalURL ([#31940](https://github.com/bitnami/charts/pull/31940))
+
 ## 24.3.0 (2025-01-27)
 
-* [bitnami/harbor] Added existingSecret parameter for external database ([#31492](https://github.com/bitnami/charts/pull/31492))
+* [bitnami/harbor] Added existingSecret parameter for external database (#31492) ([4cf7499](https://github.com/bitnami/charts/commit/4cf749975ff948cae80d961af7c75debf9fc49a3)), closes [#31492](https://github.com/bitnami/charts/issues/31492)
 
 ## 24.2.0 (2025-01-27)
 
