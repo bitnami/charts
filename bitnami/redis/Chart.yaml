@@ -25,7 +25,7 @@ dependencies:
   version: 2.x.x
 description: Redis(R) is an open source, advanced key-value store. It is often referred to as a data structure server since keys can contain strings, hashes, lists, sets and sorted sets.
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/redis/img/redis-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/redis/img/redis-stack-220x234.png
 keywords:
 - redis
 - keyvalue
@@ -36,4 +36,4 @@ maintainers:
 name: redis
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/redis
-version: 20.6.3
+version: 20.7.0

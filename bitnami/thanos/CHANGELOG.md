@@ -1,8 +1,25 @@
 # Changelog
 
-## 15.11.0 (2025-01-29)
+## 15.12.3 (2025-02-14)
 
-* [bitnami/thanos] feature(minio): Bump MinIO subchart ([#31663](https://github.com/bitnami/charts/pull/31663))
+* [bitnami/thanos] Add common annotations to pod templates ([#31928](https://github.com/bitnami/charts/pull/31928))
+
+## <small>15.12.2 (2025-02-07)</small>
+
+* [bitnami/thanos] Release 15.12.2 (#31831) ([bd298e4](https://github.com/bitnami/charts/commit/bd298e442152ae47a719974e87e48dc61705f061)), closes [#31831](https://github.com/bitnami/charts/issues/31831)
+
+## <small>15.12.1 (2025-02-05)</small>
+
+* [bitnami/thanos] Release 15.12.1 (#31780) ([c49cedb](https://github.com/bitnami/charts/commit/c49cedba45928f20ceba5e6f723e725e09219c30)), closes [#31780](https://github.com/bitnami/charts/issues/31780)
+
+## 15.12.0 (2025-02-04)
+
+* [bitnami/thanos] Enable Can'N'Proto replication protocol for Receiver (#31715) ([58ff639](https://github.com/bitnami/charts/commit/58ff63927a319abbdf8b3efe0c26eee68a48a7aa)), closes [#31715](https://github.com/bitnami/charts/issues/31715)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## 15.11.0 (2025-01-30)
+
+* [bitnami/thanos] feature(minio): Bump MinIO subchart (#31663) ([32912fd](https://github.com/bitnami/charts/commit/32912fd449cdadc7f30a1400a084bb8977101571)), closes [#31663](https://github.com/bitnami/charts/issues/31663)
 
 ## <small>15.10.3 (2025-01-24)</small>
 

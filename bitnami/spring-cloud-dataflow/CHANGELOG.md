@@ -1,8 +1,13 @@
 # Changelog
 
-## 34.1.1 (2025-01-17)
+## 34.1.2 (2025-01-31)
 
-* [bitnami/spring-cloud-dataflow] Release 34.1.1 ([#31451](https://github.com/bitnami/charts/pull/31451))
+* [bitnami/spring-cloud-dataflow] Release 34.1.2 ([#31688](https://github.com/bitnami/charts/pull/31688))
+
+## <small>34.1.1 (2025-01-17)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/spring-cloud-dataflow] Release 34.1.1 (#31451) ([2faecca](https://github.com/bitnami/charts/commit/2faeccac20cff398acfa3036c62140e1cfc70c14)), closes [#31451](https://github.com/bitnami/charts/issues/31451)
 
 ## 34.1.0 (2024-12-10)
 
@@ -856,7 +861,7 @@
 
 ## 4.0.0 (2021-08-02)
 
-* [bitnami/several] Update READMEs ([eb3c291](https://github.com/bitnami/charts/commit/eb3c2916be233280f2226d9cdceb57b08ab4a23b))
+* [bitnami/several] Upadte READMEs ([eb3c291](https://github.com/bitnami/charts/commit/eb3c2916be233280f2226d9cdceb57b08ab4a23b))
 * [bitnami/several] Use the latest major version in subcharts (#7117) ([3c1c105](https://github.com/bitnami/charts/commit/3c1c105ce61d24a81e34bf7be5250bfe07068efb)), closes [#7117](https://github.com/bitnami/charts/issues/7117)
 
 ## <small>3.0.3 (2021-07-26)</small>

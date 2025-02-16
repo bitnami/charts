@@ -1,8 +1,17 @@
 # Changelog
 
-## 5.1.10 (2025-01-30)
+## 5.1.12 (2025-02-13)
 
-* [bitnami/appsmith] Release 5.1.10 ([#31674](https://github.com/bitnami/charts/pull/31674))
+* [bitnami/appsmith] Release 5.1.12 ([#31915](https://github.com/bitnami/charts/pull/31915))
+
+## <small>5.1.11 (2025-02-07)</small>
+
+* [bitnami/appsmith] Release 5.1.11 (#31821) ([22cf9eb](https://github.com/bitnami/charts/commit/22cf9eb5c5b8c7e1b6abc92e92618895d360e3ac)), closes [#31821](https://github.com/bitnami/charts/issues/31821)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>5.1.10 (2025-01-30)</small>
+
+* [bitnami/appsmith] Release 5.1.10 (#31674) ([95873fd](https://github.com/bitnami/charts/commit/95873fdd0c8f9a3f479938a449a52add89f017d7)), closes [#31674](https://github.com/bitnami/charts/issues/31674)
 
 ## <small>5.1.9 (2025-01-28)</small>
 

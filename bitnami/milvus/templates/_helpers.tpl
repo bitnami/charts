@@ -854,7 +854,7 @@ Init container definition for waiting for the database to be ready
 */}}
 {{- define "milvus.waitForKafkaInitContainer" -}}
 - name: wait-for-kafka
-  image: {{ template "milvus.image" . }} {{/* Bitnami shell does not have wait-for-port */}}
+  image: {{ template "milvus.wait-container.image" . }}
   imagePullPolicy: {{ .Values.waitContainer.image.pullPolicy }}
   {{- if .Values.waitContainer.containerSecurityContext.enabled }}
   securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.waitContainer.containerSecurityContext "context" $) | nindent 4 }}
@@ -920,7 +920,7 @@ Init container definition for waiting for the database to be ready
 */}}
 {{- define "milvus.waitForProxyInitContainer" -}}
 - name: wait-for-proxy
-  image: {{ template "milvus.image" . }} {{/* Bitnami shell does not have wait-for-port */}}
+  image: {{ template "milvus.wait-container.image" . }}
   imagePullPolicy: {{ .Values.waitContainer.image.pullPolicy }}
   {{- if .Values.waitContainer.containerSecurityContext.enabled }}
   securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.waitContainer.containerSecurityContext "context" $) | nindent 4 }}

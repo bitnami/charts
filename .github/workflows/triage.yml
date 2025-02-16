@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 # This workflow is built to manage the triage support by using GH issues.
+# NOTE: This workflow is maintained in the https://github.com/bitnami/support repository
 name: '[Support] Organize triage'
 on:
   issues:
@@ -21,5 +22,6 @@ concurrency:
   group: card-movement-${{ github.event.issue != null && github.event.issue.number || github.event.number }}
 jobs:
   call-triage-workflow:
+    if: ${{ github.repository_owner == 'bitnami' }}
     uses: bitnami/support/.github/workflows/item-opened.yml@main
     secrets: inherit

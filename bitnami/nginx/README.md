@@ -449,6 +449,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 19.0.0
+
+The [module ngx_http_dav_module](http://nginx.org/en/docs/http/ngx_http_dav_module.html), WebDAV protocol, has been converted into a dynamic module under the `/opt/bitnami/nginx/modules` directory. It is necessary to include the directive `load_module /opt/bitnami/nginx/modules/ngx_http_dav_module.so;` to enable its functionality.
+
 ### To 18.3.0
 
 This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
@@ -542,7 +546,7 @@ kubectl patch deployment nginx --type=json -p='[{"op": "remove", "path": "/spec/
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

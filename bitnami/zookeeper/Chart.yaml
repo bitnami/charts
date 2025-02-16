@@ -19,7 +19,7 @@ dependencies:
   version: 2.x.x
 description: Apache ZooKeeper provides a reliable, centralized register of configuration data and services for distributed applications.
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/zookeeper/img/zookeeper-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/zookeeper/img/zookeeper-stack-220x234.png
 keywords:
 - zookeeper
 maintainers:
