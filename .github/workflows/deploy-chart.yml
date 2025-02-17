@@ -71,7 +71,7 @@ jobs:
     - name: Login to Amazon ECR
       uses: aws-actions/amazon-ecr-login@v2
       with:
-        registry: "702886132326.dkr.ecr.eu-west-1.amazonaws.com"
+        registry: "702886132326"
     - name: Deploy to EKS
       run: |
         helm pull oci://702886132326.dkr.ecr.eu-west-1.amazonaws.com/bitnami/${{ inputs.chart-name}} --version ${{ inputs.chart-version }}
