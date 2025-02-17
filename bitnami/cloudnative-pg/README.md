@@ -14,11 +14,11 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/cloudnative-pg
 ```
 
-Looking to use cloudnative-pg in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
+Looking to use CloudNativePG in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
-This chart bootstraps a [cloudnative-pg](https://github.com/bitnami/containers/tree/main/bitnami/cloudnative-pg) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [CloudNativePG](https://github.com/bitnami/containers/tree/main/bitnami/cloudnative-pg) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
@@ -37,7 +37,7 @@ helm install my-release REGISTRY_NAME/REPOSITORY_NAME/cloudnative-pg
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
-The command deploys cloudnative-pg on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
+The command deploys CloudNativePG on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
 > **Tip**: List all releases using `helm list`
 
@@ -45,7 +45,7 @@ The command deploys cloudnative-pg on the Kubernetes cluster in the default conf
 
 ### Operator configuration
 
-The Bitnami cloudnative-pg chart allows [configuring the operator](https://cloudnative-pg.io/documentation/current/operator_conf/#available-options) using ConfigMaps and Secrets. This is done using the `configuration` and `secretConfiguration` parameters. Both are values are compatible, and the configuration in the `secretConfiguration` section takes precedence over the `configuration` section. In the example below we add extra configuration parameters to the operator:
+The Bitnami CloudNativePG chart allows [configuring the operator](https://cloudnative-pg.io/documentation/current/operator_conf/#available-options) using ConfigMaps and Secrets. This is done using the `configuration` and `secretConfiguration` parameters. Both are values are compatible, and the configuration in the `secretConfiguration` section takes precedence over the `configuration` section. In the example below we add extra configuration parameters to the operator:
 
 ```yaml
 configuration:
@@ -175,7 +175,7 @@ extraDeploy:
             name: my-cluster-example-user
 ```
 
-Check the [cloudnative-pg official documentation](https://cloudnative-pg.io/documentation/current/) for the list of available objects.
+Check the [CloudNativePG official documentation](https://cloudnative-pg.io/documentation/current/) for the list of available objects.
 
 ### Pod affinity
 
