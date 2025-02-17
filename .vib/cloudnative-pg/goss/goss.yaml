@@ -2,8 +2,8 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 http:
-  http://cnpg-webhook-service:{{ .Vars.service.ports.webhook }}:
-    status: 400
+  https://cnpg-webhook-service:{{ .Vars.service.ports.webhook }}/readyz:
+    status: 200
   http://cloudnative-pg-metrics:{{ .Vars.metrics.service.ports.metrics }}/metrics:
     status: 200
     body:
@@ -20,7 +20,7 @@ addr:
 {{- $password := (index .Vars.extraDeploy 0).stringData.password }}
 command:
   check-auth-and-cluster-status:
-    exec: PGPASSWORD=bitnami1234 psql -U vib_user -d postgres -h vib-cluster-example-rw -c "SELECT client_addr, state FROM pg_stat_replication;"
+    exec: PGPASSWORD=bitnami1234 psql -U {{ $username }} -d postgres -h {{ $password }} -c "SELECT client_addr, state FROM pg_stat_replication;"
     exit-status: 0
     stdout:
       - /2 rows/

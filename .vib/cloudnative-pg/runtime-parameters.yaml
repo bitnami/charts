@@ -55,7 +55,7 @@ extraDeploy:
               echo 0 > /tmp/ready
               # Wait until the cluster is formed
               while true; do
-                if PGPASSWORD=bitnami1234 psql -U vib_user -d postgres -h vib-cluster-example-rw -c "SELECT client_addr, state FROM pg_stat_replication;" | grep "2 rows"; then
+                if PGPASSWORD=$POSTGRES_PASSWORD psql -U $POSTGRES_USER -d postgres -h vib-cluster-example-rw -c "SELECT client_addr, state FROM pg_stat_replication;" | grep "2 rows"; then
                     echo 1 > /tmp/ready
                     echo "Connected to PostgreSQL"
                     break
@@ -66,6 +66,17 @@ extraDeploy:
               done
               sleep infinity
           name: postgresql
+          env:
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: vib-cluster-example-user
+                  key: password
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: vib-cluster-example-user
+                  key: username
           startupProbe:
             exec:
               command:
