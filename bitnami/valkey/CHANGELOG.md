@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.2.3 (2025-01-10)
+## 2.2.4 (2025-02-17)
 
-* [bitnami/valkey] bugfix: instructions to obtain password on installation notes ([#31287](https://github.com/bitnami/charts/pull/31287))
+* [bitnami/valkey] Release 2.2.4 ([#31946](https://github.com/bitnami/charts/pull/31946))
+
+## <small>2.2.3 (2025-01-10)</small>
+
+* [bitnami/valkey] bugfix: instructions to obtain password on installation notes (#31287) ([a1d5cd2](https://github.com/bitnami/charts/commit/a1d5cd259aaf9b96fb447ade0bc5827ac6e49531)), closes [#31287](https://github.com/bitnami/charts/issues/31287)
 
 ## <small>2.2.2 (2025-01-08)</small>
 
