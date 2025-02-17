@@ -91,6 +91,10 @@ diagnosticMode:
   ##
   args:
     - infinity
+## @param disableChecksums Disable configmap and secret checksums used to trigger rolling updates
+##
+disableChecksums: false
+
 ## @section Redis&reg; Image parameters
 ##
 

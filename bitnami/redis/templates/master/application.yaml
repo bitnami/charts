@@ -46,18 +46,20 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.podLabels "context" $ ) | nindent 8 }}
         {{- end }}
       annotations:
+      {{- if not .Values.disableChecksums }}
         {{- if (include "redis.createConfigmap" .) }}
         checksum/configmap: {{ pick ( include (print $.Template.BasePath "/configmap.yaml") . | fromYaml ) "data" | toYaml | sha256sum }}
         {{- end }}
         checksum/health: {{ pick ( include (print $.Template.BasePath "/health-configmap.yaml") . | fromYaml ) "data" | toYaml | sha256sum }}
         checksum/scripts: {{ pick ( include (print $.Template.BasePath "/scripts-configmap.yaml") . | fromYaml ) "data" | toYaml | sha256sum }}
         checksum/secret: {{ pick ( include (print $.Template.BasePath "/secret.yaml") . | fromYaml ) "data" | toYaml | sha256sum }}
-        {{- if .Values.master.podAnnotations }}
+      {{- end }}
+      {{- if .Values.master.podAnnotations }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.master.podAnnotations "context" $ ) | nindent 8 }}
-        {{- end }}
-        {{- if and .Values.metrics.enabled .Values.metrics.podAnnotations }}
+      {{- end }}
+      {{- if and .Values.metrics.enabled .Values.metrics.podAnnotations }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.podAnnotations "context" $ ) | nindent 8 }}
-        {{- end }}
+      {{- end }}
     spec:
       {{- if .Values.master.extraPodSpec }}
       {{- include "common.tplvalues.render" (dict "value" .Values.master.extraPodSpec "context" $) | nindent 6 }}

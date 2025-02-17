@@ -487,6 +487,7 @@ helm install my-release --set master.persistence.existingClaim=PVC_NAME oci://RE
 | `diagnosticMode.enabled`  | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                        | `false`         |
 | `diagnosticMode.command`  | Command to override all containers in the deployment                                                           | `["sleep"]`     |
 | `diagnosticMode.args`     | Args to override all containers in the deployment                                                              | `["infinity"]`  |
+| `disableChecksums`        | Disable configmap and secret checksums used to trigger rolling updates                                         | `false`         |
 
 ### Redis&reg; Image parameters
 
