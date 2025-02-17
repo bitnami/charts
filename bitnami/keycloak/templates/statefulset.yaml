@@ -109,6 +109,7 @@ spec:
               cp -r --preserve=mode /opt/bitnami/keycloak/lib/quarkus /emptydir/app-quarkus-dir
               cp -r --preserve=mode /opt/bitnami/keycloak/data /emptydir/app-data-dir
               cp -r --preserve=mode /opt/bitnami/keycloak/providers /emptydir/app-providers-dir
+              cp -r --preserve=mode /opt/bitnami/keycloak/conf /emptydir/app-conf-dir
               info "Copy operation completed"
           {{- if .Values.containerSecurityContext.enabled }}
           securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
