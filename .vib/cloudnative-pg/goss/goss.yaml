@@ -4,7 +4,7 @@
 http:
   https://cnpg-webhook-service:{{ .Vars.service.ports.webhook }}/readyz:
     status: 200
-    allow-insecure: false
+    allow-insecure: true
   http://cloudnative-pg-metrics:{{ .Vars.metrics.service.ports.metrics }}/metrics:
     status: 200
     body:
