@@ -1,8 +1,12 @@
+{{- if and .Values.global.iam.enbaled }}
 apiVersion: batch/v1
 kind: Job
 metadata:
   name: "{{ .Release.Name }}-create-db-job"
   namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": "post-install,post-upgrade"
+    "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
 spec:
   template:
     spec:
@@ -44,10 +48,12 @@ spec:
 
             # List of databases to create
             databases="keycloak hzp_iam_policy_svc hzp_iam_session_svc hzp_iam_org_svc"
-            keycloak_password="{{ include "keycloak-db-password" . }}"
-            hzp_iam_policy_svc_password="{{ include "dsp-iam-policy-svc-password" . }}"
-            hzp_iam_session_svc_password="{{ include "dsp-iam-session-svc-password" . }}"
-            hzp_iam_org_svc_password="{{ include "dsp-iam-org-svc-password" . }}"
+
+            # Passwords
+            keycloak_password="$KEYCLOAK_PASSWORD"
+            hzp_iam_policy_svc_password="$POLICY_PASSWORD"word
+            hzp_iam_session_svc_password="$SESSION_PASSWORD"
+            hzp_iam_org_svc_password="$ORG_PASSWORD"
 
             for name in $databases; do
               echo "Creating database: $name"
@@ -97,3 +103,25 @@ spec:
               secretKeyRef:
                 name: "postgres-secret"
                 key: "postgres-password"
+          - name: KEYCLOAK_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: "postgres-secret"
+                key: "keycloak-db-password"
+          - name: SESSION_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: "postgres-secret"
+                key: "dsp-iam-session-svc-password"
+          - name: ORG_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: "postgres-secret"
+                key: "dsp-iam-org-svc-password"
+          - name: POLICY_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: "postgres-secret"
+                key: "dsp-iam-policy-svc-password"
+              
+{{ end }}
