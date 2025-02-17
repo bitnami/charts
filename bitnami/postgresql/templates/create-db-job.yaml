@@ -1,0 +1,99 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: "{{ .Release.Name }}-create-db-job"
+  namespace: {{ .Release.Namespace }}
+spec:
+  template:
+    spec:
+      serviceAccountName: {{ include "postgresql.v1.serviceAccountName" . }}
+      restartPolicy: Never
+      containers:
+      - name: postgres-create-db
+        image: ubuntu:20.04
+        command: ["/bin/bash", "-c"]
+        args:
+          - |
+            set -e
+            apt-get update
+            apt-get install -y curl postgresql-client
+
+            curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+            install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+            kubectl version --client
+
+            # Set PostgreSQL connection details
+            host="$POSTGRES_HOST"
+            echo $host
+            user="postgres"
+
+            export PGPASSWORD=$POSTGRES_PASSWORD
+
+            sleep 60 
+
+            # Create a template database with pgcrypto and uuid-ossp extensions
+            psql -h $host -U $user -tc "SELECT 1 FROM pg_database WHERE datname = 'template_pgcrypto'" | grep -q 1 || \
+            psql -h $host -U $user -d postgres -c "CREATE DATABASE template_pgcrypto;"
+
+            psql -h $host -U $user -d template_pgcrypto -c "CREATE EXTENSION IF NOT EXISTS pgcrypto;"
+            psql -h $host -U $user -d template_pgcrypto -c "CREATE EXTENSION IF NOT EXISTS \"uuid-ossp\";"
+
+            # Refresh collation version and reindex template1 to avoid future issues
+            psql -h $host -U $user -d postgres -c "ALTER DATABASE template1 REFRESH COLLATION VERSION;"
+            psql -h $host -U $user -d template1 -c "REINDEX DATABASE template1;"
+
+            # List of databases to create
+            databases="keycloak hzp_iam_policy_svc hzp_iam_session_svc hzp_iam_org_svc"
+            keycloak_password="{{ include "keycloak-db-password" . }}"
+            hzp_iam_policy_svc_password="{{ include "dsp-iam-policy-svc-password" . }}"
+            hzp_iam_session_svc_password="{{ include "dsp-iam-session-svc-password" . }}"
+            hzp_iam_org_svc_password="{{ include "dsp-iam-org-svc-password" . }}"
+
+            for name in $databases; do
+              echo "Creating database: $name"
+              password_var="${name}_password"
+              password="${!password_var}"
+              
+              psql -h $host -U $user -tc "SELECT 1 FROM pg_database WHERE datname = '$name'" | grep -q 1 || \
+              psql -h $host -U $user -c "CREATE DATABASE \"$name\" TEMPLATE template_pgcrypto;"
+
+              psql -h $host -U $user -tc "SELECT 1 FROM pg_roles WHERE rolname = '$name'" | grep -q 1 || \
+              psql -h $host -U $user -c "CREATE ROLE \"$name\";"
+
+              psql -h $host -U $user -c "ALTER DATABASE \"$name\" OWNER TO \"$name\""
+              psql -h $host -U $user -d $name -c "GRANT ALL PRIVILEGES ON DATABASE \"$name\" TO \"$name\""
+              psql -h $host -U $user -d $name -c "GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO \"$name\""
+
+              for tbl in $(psql -h $host -U $user -d $name -Atc "SELECT tablename FROM pg_tables WHERE schemaname = 'public';"); do
+                psql -h $host -U $user -d $name -c "ALTER TABLE \"$tbl\" OWNER TO \"$name\""
+              done
+
+              for matview in $(psql -h $host -U $user -d $name -Atc "SELECT matviewname FROM pg_matviews WHERE schemaname = 'public';"); do
+                psql -h $host -U $user -d $name -c "ALTER MATERIALIZED VIEW \"$matview\" OWNER TO \"$name\""
+              done
+
+              for oid in $(psql -h $host -U $user -d $name -Atc "SELECT oid FROM pg_largeobject_metadata;"); do
+                psql -h $host -U $user -d $name -c "GRANT SELECT ON LARGE OBJECT $oid TO \"$name\""
+              done
+              echo "user: $name, password: $password"
+              psql -h $host -U $user -c "ALTER ROLE \"$name\" WITH LOGIN ENCRYPTED PASSWORD '$password'"
+
+              if psql -h $host -U $user -d $name -tc "SELECT 1 FROM pg_namespace WHERE nspname = 'locales'" | grep -q 1; then
+                localetable=$(psql -h $host -U $user -d $name -Atc "SELECT tablename FROM pg_tables WHERE schemaname = 'locales' LIMIT 1;")
+                if [ -n "$localetable" ]; then
+                  psql -h $host -U $user -d $name -c "ALTER TABLE locales.$localetable OWNER TO \"$name\""
+                fi
+                psql -h $host -U $user -d $name -c "ALTER SCHEMA locales OWNER TO \"$name\""
+                psql -h $host -U $user -d $name -c "GRANT USAGE ON SCHEMA locales TO \"$name\""
+              fi
+            done
+
+            psql -h $host -U $user -c "DROP DATABASE IF EXISTS spire;"
+        env:
+          - name: POSTGRES_HOST
+            value: {{ include "postgresql.v1.primary.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local 
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: "postgres-secret"
+                key: "postgres-password"

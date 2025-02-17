@@ -5,7 +5,7 @@
 ## Please, note that this will override the parameters, including dependencies, configured to use the global value
 ##
 global:
-  iam: true
+  iam: false
   ## @param global.imageRegistry Global Docker image registry
   ##
   imageRegistry: ""
@@ -132,7 +132,7 @@ image:
   pullSecrets: []
   ## Set to true if you would like to see extra information on logs
   ##
-  debug: false
+  debug: true
 ## Authentication parameters
 ## ref: https://github.com/bitnami/containers/tree/main/bitnami/postgresql#setting-the-root-password-on-first-run
 ## ref: https://github.com/bitnami/containers/tree/main/bitnami/postgresql#creating-a-database-on-first-run
@@ -351,8 +351,119 @@ primary:
     ##      #!/bin/sh
     ##      echo "Do something."
     ##
-    scripts: {}
-    ## @param primary.initdb.scriptsConfigMap ConfigMap with scripts to be run at first boot
+    scripts: []
+        # init-databases.sh: |
+        #   #!/bin/bash
+        #   set -e
+
+        #   # Set PostgreSQL connection details
+        #   host="localhost"
+        #   user="postgres"
+          
+        #   export PGPASSWORD=$POSTGRES_PASSWORD
+        #   echo $PGPASSWORD
+
+        #   # Create a template database with pgcrypto and uuid-ossp extensions
+        #   psql -h $host -U $user -tc "SELECT 1 FROM pg_database WHERE datname = 'template_pgcrypto'" | grep -q 1 || \
+        #   psql -h $host -U $user -d postgres -c "CREATE DATABASE template_pgcrypto;"
+
+        #   psql -h $host -U $user -d template_pgcrypto -c "CREATE EXTENSION IF NOT EXISTS pgcrypto;"
+        #   psql -h $host -U $user -d template_pgcrypto -c "CREATE EXTENSION IF NOT EXISTS \"uuid-ossp\";"
+
+        #   # Define the template for creating new databases
+        #   cryptoTemplate="TEMPLATE template_pgcrypto"
+
+        #   # Refresh collation version and reindex template1 to avoid future issues
+        #   psql -h $host -U $user -d postgres -c "ALTER DATABASE template1 REFRESH COLLATION VERSION;"
+        #   psql -h $host -U $user -d template1 -c "REINDEX DATABASE template1;"
+
+        #   # List of databases to create
+        #   databases="keycloak hzp_iam_policy_svc hzp_iam_session_svc hzp_iam_org_svc"
+        #   keycloak_password=$(openssl rand -base64 12)
+        #   hzp_iam_policy_svc_password=$(openssl rand -base64 12)
+        #   hzp_iam_session_svc_password=$(openssl rand -base64 12)
+        #   hzp_iam_org_svc_password=$(openssl rand -base64 12)
+
+        #   # Create databases and corresponding users
+        #   for name in $databases; do
+        #     echo "Creating database: $name"
+
+        #     password_var="${name}_password"
+        #     # Use indirect reference to get the actual password value
+        #     password="${!password_var}"
+            
+        #     echo "Database: $name, Password: $password"
+
+        #     # Create database if it does not exist
+        #     psql -h $host -U $user -tc "SELECT 1 FROM pg_database WHERE datname = '$name'" | grep -q 1 || \
+        #     psql -h $host -U $user -c "CREATE DATABASE \"$name\" $cryptoTemplate;"
+
+        #     # Create user (role) if it does not exist
+        #     psql -h $host -U $user -tc "SELECT 1 FROM pg_roles WHERE rolname = '$name'" | grep -q 1 || \
+        #     psql -h $host -U $user -c "CREATE ROLE \"$name\";"
+
+        #     # Assign ownership of the database to the corresponding user
+        #     psql -h $host -U $user -c "ALTER DATABASE \"$name\" OWNER TO \"$name\""
+
+        #     # Grant all privileges to the user on the database
+        #     psql -h $host -U $user -d $name -c "GRANT ALL PRIVILEGES ON DATABASE \"$name\" TO \"$name\""
+
+        #     # Ensure all existing tables in the public schema are owned by the user
+        #     psql -h $host -U $user -d $name -c "GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO \"$name\""
+
+        #     # Change ownership of all tables and materialized views to the database owner
+        #     for tbl in $(psql -h $host -U $user -d $name -Atc "SELECT tablename FROM pg_tables WHERE schemaname = 'public';"); do
+        #       psql -h $host -U $user -d $name -c "ALTER TABLE \"$tbl\" OWNER TO \"$name\""
+        #     done
+
+        #     for matview in $(psql -h $host -U $user -d $name -Atc "SELECT matviewname FROM pg_matviews WHERE schemaname = 'public';"); do
+        #       psql -h $host -U $user -d $name -c "ALTER MATERIALIZED VIEW \"$matview\" OWNER TO \"$name\""
+        #     done
+
+        #     # Grant privileges on large objects if they exist
+        #     for oid in $(psql -h $host -U $user -d $name -Atc "SELECT oid FROM pg_largeobject_metadata;"); do
+        #       psql -h $host -U $user -d $name -c "GRANT SELECT ON LARGE OBJECT $oid TO \"$name\""
+        #     done
+
+        #     # Set a password for the user
+        #     echo "Setting password for user: $name"
+        #     psql -h $host -U $user -c "ALTER ROLE \"$name\" WITH LOGIN ENCRYPTED PASSWORD '$password'"
+
+        #     # Handle 'locales' schema if it exists
+        #     if psql -h $host -U $user -d $name -tc "SELECT 1 FROM pg_namespace WHERE nspname = 'locales'" | grep -q 1; then
+        #       localetable=$(psql -h $host -U $user -d $name -Atc "SELECT tablename FROM pg_tables WHERE schemaname = 'locales' LIMIT 1;")
+        #       if [ -n "$localetable" ]; then
+        #         psql -h $host -U $user -d $name -c "ALTER TABLE locales.$localetable OWNER TO \"$name\""
+        #       fi
+        #       psql -h $host -U $user -d $name -c "ALTER SCHEMA locales OWNER TO \"$name\""
+        #       psql -h $host -U $user -d $name -c "GRANT USAGE ON SCHEMA locales TO \"$name\""
+        #     fi
+        #   done
+
+        #   # Drop redundant 'spire' database if it exists
+        #   psql -h $host -U $user -c "DROP DATABASE IF EXISTS spire;"
+
+        #   curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+        #   chmod +x kubectl
+        #   mv kubectl /usr/local/bin/
+
+        #   # Create a Kubernetes secret with the generated passwords
+        #   cat <<EOF | kubectl apply -f -
+        #   apiVersion: v1
+        #   kind: Secret
+        #   metadata:
+        #     name: postgres-secret2
+        #   type: Opaque
+        #   data:
+        #     keycloak-db-password: $(echo -n "$keycloak_password" | base64)
+        #     dsp-iam-session-svc-password: $(echo -n "$hzp_iam_session_svc_password" | base64)
+        #     dsp-iam-policy-svc-password: $(echo -n "$hzp_iam_policy_svc_password" | base64)
+        #     dsp-iam-org-svc-password: $(echo -n "$hzp_iam_org_svc_password" | base64)
+        #     dsp-iam-org-svc-user: $(echo -n "hzp_iam_org_svc" | base64)
+        #     dsp-iam-session-svc-user: $(echo -n "hzp_iam_session_svc" | base64)
+        #     dsp-iam-policy-svc-user: $(echo -n "hzp_iam_policy_svc" | base64)
+        #   EOF
+    ## @param primary.initdb.scriptsConfigMap ConfigMap with scripts tnameo be run at first boot
     ## NOTE: This will override `primary.initdb.scripts`
     ##
     scriptsConfigMap: ""
@@ -1662,7 +1773,7 @@ serviceAccount:
 ## @param rbac.create Create Role and RoleBinding (required for PSP to work)
 ##
 rbac:
-  create: false
+  create: true
   ## @param rbac.rules Custom RBAC rules to set
   ## e.g:
   ## rules:
@@ -1674,7 +1785,22 @@ rbac:
   ##       - get
   ##       - list
   ##
-  rules: []
+  rules:
+    - apiGroups:
+        - ""
+      resources:
+        - secrets
+      verbs:
+        - create
+        - get
+        - update
+        - patch
+    - apiGroups:
+        - ""
+      resources:
+        - pods
+      verbs:
+        - get
 ## Pod Security Policy
 ## ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/
 ## @param psp.create Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later

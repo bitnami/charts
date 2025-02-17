@@ -95,7 +95,9 @@ Return the name for a custom database to create
 Get the password secret.
 */}}
 {{- define "postgresql.v1.secretName" -}}
-{{- if .Values.global.postgresql.auth.existingSecret -}}
+{{- if .Values.global.iam -}}
+    {{- "postgres-secret" -}}
+{{- else if .Values.global.postgresql.auth.existingSecret -}}
     {{- printf "%s" (tpl .Values.global.postgresql.auth.existingSecret $) -}}
 {{- else if .Values.auth.existingSecret -}}
     {{- printf "%s" (tpl .Values.auth.existingSecret $) -}}
@@ -495,4 +497,24 @@ valueFrom:
   secretKeyRef:
     name: postgres-secret
     key: postgress-password
+{{- end -}}
+
+
+
+
+{{/* Generate DBs passwords */}}
+{{- define "keycloak-db-password" -}}
+{{- randAlphaNum 10 -}}
+{{- end -}}
+
+{{- define "dsp-iam-session-svc-password" -}}
+{{- randAlphaNum 10 -}}
+{{- end -}}
+
+{{- define "dsp-iam-policy-svc-password" -}}
+{{- randAlphaNum 10 -}}
+{{- end -}}
+
+{{- define "dsp-iam-org-svc-password" -}}
+{{- randAlphaNum 10 -}}
 {{- end -}}
