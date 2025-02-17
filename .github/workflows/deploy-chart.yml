@@ -42,19 +42,19 @@ permissions:
     contents: read
 
 jobs:
-#  block:
-#    name: Blocked branches
-#    runs-on: arc-runner-eks-small
-#    if: github.ref != 'refs/heads/stable'
-#    steps:
-#    - name: Check branch
-#      run: |
-#        echo "Workflows allowed only from stable"
-#        exit 1
+  block:
+    name: Blocked branches
+    runs-on: arc-runner-eks-small
+    if: github.ref != 'refs/heads/stable'
+    steps:
+    - name: Check branch
+      run: |
+        echo "Workflows allowed only from stable"
+        exit 1
   deploy:
     name: Deploy chart from ECR to EKS
     runs-on: arc-runner-eks-small
-#    if: github.ref == 'refs/heads/stable'
+    if: github.ref == 'refs/heads/stable'
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
