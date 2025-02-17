@@ -2216,6 +2216,22 @@ backup:
     ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
     ##
     tolerations: []
+    ## backup cronjob container resource requests and limits
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+    ## @param backup.cronjob.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if backup.cronjob.resources is set (backup.cronjob.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+    ##
+    resourcesPreset: "nano"
+    ## @param backup.cronjob.resources Set container requests and limits for different resources like CPU or memory
+    ## Example:
+    resources: {}
+    ## resources:
+    ##   requests:
+    ##     cpu: 1
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 2
+    ##     memory: 1024Mi    
     ## @param backup.cronjob.extraEnvVars Array containing extra environment variables
     ## For example:
     ##  - name: BEARER_AUTH
