@@ -1,6 +1,6 @@
 # Changelog
 
-## 24.3.1 (2025-02-15)
+## 24.3.1 (2025-02-17)
 
 * [bitnami/harbor] Added tpl to externalURL ([#31940](https://github.com/bitnami/charts/pull/31940))
 
