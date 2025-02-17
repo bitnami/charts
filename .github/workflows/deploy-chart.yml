@@ -54,7 +54,7 @@ jobs:
   deploy:
     name: Deploy chart from ECR to EKS
     runs-on: arc-runner-eks-small
-    if: github.ref == 'refs/heads/stable'
+#    if: github.ref == 'refs/heads/stable'
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
