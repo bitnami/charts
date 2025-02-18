@@ -105,7 +105,7 @@ spec:
               {{- end }}
               {{- if .Values.passwordUpdateJob.extraCommands }}
               info "Running extra commmands"
-              {{- include "common.tplValues.render" (dict "value" .Values.passwordUpdateJob.extraCommands "context" $) | nindent 14 }}
+              {{- include "common.tplvalues.render" (dict "value" .Values.passwordUpdateJob.extraCommands "context" $) | nindent 14 }}
               {{- end }}
               info "Password update job finished successfully"
           {{- end }}
