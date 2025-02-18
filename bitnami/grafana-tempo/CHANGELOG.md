@@ -1,12 +1,13 @@
 # Changelog
 
-## 3.9.0 (2025-01-31)
+## 3.9.0 (2025-02-18)
 
 * [bitnami/grafana-tempo] Add persistence options for Grafana Tempo metrics generator ([#31495](https://github.com/bitnami/charts/pull/31495))
 
-## 3.8.6 (2025-02-14)
+## <small>3.8.6 (2025-02-14)</small>
 
-* [bitnami/grafana-tempo] Release 3.8.6 ([#31936](https://github.com/bitnami/charts/pull/31936))
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/grafana-tempo] Release 3.8.6 (#31936) ([3032c3c](https://github.com/bitnami/charts/commit/3032c3c4b84eb75e2b6e1e0370ef4635d5976aa8)), closes [#31936](https://github.com/bitnami/charts/issues/31936)
 
 ## <small>3.8.5 (2025-02-04)</small>
 
