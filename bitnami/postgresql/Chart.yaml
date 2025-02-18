@@ -35,4 +35,4 @@ maintainers:
 name: postgresql-chart
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/postgresql
-version: 16.3.2
+version: 16.3.3
