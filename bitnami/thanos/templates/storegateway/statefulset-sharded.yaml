@@ -55,8 +55,11 @@ spec:
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: storegateway
         shard: {{ $index | quote }}
-      {{- if or $.Values.storegateway.podAnnotations (include "thanos.storegateway.createConfigmap" $) (include "thanos.createObjstoreSecret" $) }}
+      {{- if or $.Values.commonAnnotations $.Values.storegateway.podAnnotations (include "thanos.storegateway.createConfigmap" $) (include "thanos.createObjstoreSecret" $) }}
       annotations:
+        {{- if $.Values.commonAnnotations }}
+        {{- include "common.tplvalues.render" ( dict "value" $.Values.commonAnnotations "context" $ ) | nindent 8 }}
+        {{- end }}
         {{- if (include "thanos.createObjstoreSecret" $) }}
         checksum/objstore-configuration: {{ include "thanos.objstoreConfig" $ | sha256sum }}
         {{- end }}

@@ -1,8 +1,12 @@
 # Changelog
 
-## 15.12.2 (2025-02-07)
+## 15.12.3 (2025-02-14)
 
-* [bitnami/thanos] Release 15.12.2 ([#31831](https://github.com/bitnami/charts/pull/31831))
+* [bitnami/thanos] Add common annotations to pod templates ([#31928](https://github.com/bitnami/charts/pull/31928))
+
+## <small>15.12.2 (2025-02-07)</small>
+
+* [bitnami/thanos] Release 15.12.2 (#31831) ([bd298e4](https://github.com/bitnami/charts/commit/bd298e442152ae47a719974e87e48dc61705f061)), closes [#31831](https://github.com/bitnami/charts/issues/31831)
 
 ## <small>15.12.1 (2025-02-05)</small>
 

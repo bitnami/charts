@@ -23,7 +23,7 @@ dependencies:
   version: 2.x.x
 description: Vault is a tool for securely managing and accessing secrets using a unified interface. Features secure storage, dynamic secrets, data encryption and revocation.
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/vault/img/vault-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/vault/img/vault-stack-220x234.png
 keywords:
 - security
 - secrets

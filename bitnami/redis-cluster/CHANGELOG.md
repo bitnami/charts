@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.4.1 (2025-01-21)
+## 11.4.2 (2025-02-16)
 
-* [bitnami/redis-cluster] Address chart not working with external access enabled ([#31494](https://github.com/bitnami/charts/pull/31494))
+* [bitnami/redis-cluster] Release 11.4.2 ([#31942](https://github.com/bitnami/charts/pull/31942))
+
+## <small>11.4.1 (2025-01-23)</small>
+
+* [bitnami/redis-cluster] Address chart not working with external access enabled (#31494) ([89e4605](https://github.com/bitnami/charts/commit/89e460598d8a5373174d597941ff36b0f9315177)), closes [#31494](https://github.com/bitnami/charts/issues/31494)
 
 ## 11.4.0 (2025-01-13)
 

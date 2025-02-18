@@ -1,8 +1,17 @@
 # Changelog
 
-## 16.4.7 (2025-02-09)
+## 16.4.9 (2025-02-14)
 
-* [bitnami/postgresql] use adminPassword for metrics user when custom user is not set on primary ([#31840](https://github.com/bitnami/charts/pull/31840))
+* [bitnami/postgresql] Release 16.4.9 ([#31935](https://github.com/bitnami/charts/pull/31935))
+
+## <small>16.4.8 (2025-02-13)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/postgresql] Release 16.4.8 (#31919) ([3a013d5](https://github.com/bitnami/charts/commit/3a013d5224e3bf9db42a1540f66c5c1aa2eeecfd)), closes [#31919](https://github.com/bitnami/charts/issues/31919)
+
+## <small>16.4.7 (2025-02-10)</small>
+
+* [bitnami/postgresql] use adminPassword for metrics user when custom user is not set on primary (#318 ([ca8f930](https://github.com/bitnami/charts/commit/ca8f9307b80e6a192b51d333fbe8b927b2949be1)), closes [#31840](https://github.com/bitnami/charts/issues/31840)
 
 ## <small>16.4.6 (2025-02-03)</small>
 

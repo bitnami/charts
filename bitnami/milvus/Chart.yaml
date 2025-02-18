@@ -35,7 +35,7 @@ dependencies:
   version: 2.x.x
 description: Milvus is a cloud-native, open-source vector database solution for AI applications and similarity search. Features high scalability, hibrid search and unified lambda structure.
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/milvus/img/milvus-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/milvus/img/milvus-stack-220x234.png
 keywords:
 - milvus
 - ai

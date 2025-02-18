@@ -12,6 +12,7 @@ jobs:
       new-releases: ${{ steps.get-new-releases.outputs.new-releases }}
     permissions:
       contents: read
+    if: ${{ github.repository_owner == 'bitnami' }}
     steps:
       - id: checkout-repo
         name: Checkout repo

@@ -1,8 +1,12 @@
 # Changelog
 
-## 8.1.2 (2025-01-07)
+## 8.1.3 (2025-02-16)
 
-* [bitnami/jupyterhub] Release 8.1.2 ([#31229](https://github.com/bitnami/charts/pull/31229))
+* [bitnami/jupyterhub] Release 8.1.3 ([#31941](https://github.com/bitnami/charts/pull/31941))
+
+## <small>8.1.2 (2025-01-07)</small>
+
+* [bitnami/jupyterhub] Release 8.1.2 (#31229) ([f96d50c](https://github.com/bitnami/charts/commit/f96d50c3544e5adccf4e16511b974a65fe0ea654)), closes [#31229](https://github.com/bitnami/charts/issues/31229)
 
 ## <small>8.1.1 (2024-12-19)</small>
 

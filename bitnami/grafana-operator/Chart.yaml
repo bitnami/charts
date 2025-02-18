@@ -19,7 +19,7 @@ dependencies:
   version: 2.x.x
 description: Grafana Operator is a Kubernetes operator that enables the installation and management of Grafana instances, dashboards and plugins.
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/grafana/img/grafana-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/grafana/img/grafana-stack-220x234.png
 keywords:
 - grafana
 - operator

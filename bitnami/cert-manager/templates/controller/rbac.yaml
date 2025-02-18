@@ -139,7 +139,7 @@ metadata:
 rules:
   - apiGroups: ["acme.cert-manager.io"]
     resources: ["orders", "orders/status"]
-    verbs: ["update"]
+    verbs: ["update", "patch"]
   - apiGroups: ["acme.cert-manager.io"]
     resources: ["orders", "challenges"]
     verbs: ["get", "list", "watch"]
@@ -172,7 +172,7 @@ rules:
   # Use to update challenge resource status
   - apiGroups: ["acme.cert-manager.io"]
     resources: ["challenges", "challenges/status"]
-    verbs: ["update"]
+    verbs: ["update", "patch"]
   # Used to watch challenge resources
   - apiGroups: ["acme.cert-manager.io"]
     resources: ["challenges"]
@@ -380,6 +380,9 @@ rules:
   - apiGroups: ["cert-manager.io"]
     resources: ["certificates", "certificaterequests", "issuers"]
     verbs: ["create", "delete", "deletecollection", "patch", "update"]
+  - apiGroups: ["cert-manager.io"]
+    resources: ["certificates/status"]
+    verbs: ["update"]
   - apiGroups: ["acme.cert-manager.io"]
     resources: ["challenges", "orders"]
     verbs: ["create", "delete", "deletecollection", "patch", "update"]

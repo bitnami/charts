@@ -21,7 +21,7 @@ dependencies:
   version: 2.x.x
 description: MinIO(R) is an object storage server, compatible with Amazon S3 cloud storage service, mainly used for storing unstructured data (such as photos, videos, log files, etc.).
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/minio/img/minio-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/minio/img/minio-stack-220x234.png
 keywords:
 - minio
 - storage

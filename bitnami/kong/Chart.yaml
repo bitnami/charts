@@ -27,7 +27,7 @@ dependencies:
   version: 12.x.x
 description: Kong is an open source Microservice API gateway and platform designed for managing microservices requests of high-availability, fault-tolerance, and distributed systems.
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/kong/img/kong-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/kong/img/kong-stack-220x234.png
 keywords:
 - kong
 - ingress

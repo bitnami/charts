@@ -19,7 +19,7 @@ dependencies:
   version: 2.x.x
 description: NGINX Ingress Controller is an Ingress controller that manages external access to HTTP services in a Kubernetes cluster using NGINX.
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/nginx-ingress-controller/img/nginx-ingress-controller-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/nginx-ingress-controller/img/nginx-ingress-controller-stack-220x234.png
 keywords:
 - ingress
 - nginx
