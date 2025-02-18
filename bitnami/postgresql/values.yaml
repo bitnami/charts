@@ -5,6 +5,9 @@
 ## Please, note that this will override the parameters, including dependencies, configured to use the global value
 ##
 global:
+  createDatabases:
+    enbaled: false
+
   ## @param global.imageRegistry Global Docker image registry
   ##
   imageRegistry: ""
@@ -69,7 +72,7 @@ kubeVersion: ""
 nameOverride: ""
 ## @param fullnameOverride String to fully override common.names.fullname template
 ##
-fullnameOverride: ""
+fullnameOverride: "postgresql"
 ## @param namespaceOverride String to fully override common.names.namespace
 ##
 namespaceOverride: ""

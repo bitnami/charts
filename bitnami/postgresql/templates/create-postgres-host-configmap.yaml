@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: create-postgres-host-configmap
+  labels:
+    app: hzp
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation
+data:
+  postgresHost: {{ include "getPostgresHost" . | quote }}
+  postgresPort: {{ include "getPostgresPort" . | quote }}
+  postgresUrl: {{ include "getPostgresUrl" . | quote }}
