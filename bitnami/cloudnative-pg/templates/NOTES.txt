@@ -21,7 +21,7 @@ WARNING: CloudNative-PG can access all secrets in the cluster. This could pose a
 You can limit allowed namespaces by setting watchAllNamespaces = false and configuring watchNamespaces
 {{- else }}
 
-RabbitMQ Cluster Operator can ONLY access resources in the following namespaces:
+CloudNative-PG can ONLY access resources in the following namespaces:
 {{ $namespaces := .Values.watchNamespaces | default (list (include "common.names.namespace" .)) }}
 {{- range $namespace := $namespaces }}
   - {{ $namespace }}
