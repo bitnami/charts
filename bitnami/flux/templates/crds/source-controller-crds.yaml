@@ -1,5 +1,5 @@
 # Source: https://github.com/fluxcd/source-controller/releases/download/v{version}/source-controller.crds.yaml
-# Version: 1.4.1
+# Version: 1.5.0
 # VersionOf: fluxcd-source-controller
 # Conditional: .Values.sourceController.installCRDs
 {{- if .Values.sourceController.installCRDs }}
@@ -1093,11 +1093,12 @@ spec:
                 type: string
               provider:
                 description: |-
-                  Provider used for authentication, can be 'azure', 'generic'.
+                  Provider used for authentication, can be 'azure', 'github', 'generic'.
                   When not specified, defaults to 'generic'.
                 enum:
                 - generic
                 - azure
+                - github
                 type: string
               proxySecretRef:
                 description: |-

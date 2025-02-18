@@ -13,17 +13,38 @@ Return the proper OS image name
 {{- end -}}
 
 {{/*
-Return the proper Docker Image Registry Secret Names
-*/}}
-{{- define "opensearch.imagePullSecrets" -}}
-{{ include "common.images.renderPullSecrets" (dict "images" (list .Values.image .Values.sysctlImage .Values.volumePermissions.image) "context" $) }}
-{{- end -}}
-
-{{/*
 Return the proper sysctl image name
 */}}
 {{- define "opensearch.sysctl.image" -}}
 {{ include "common.images.image" (dict "imageRoot" .Values.sysctlImage "global" .Values.global) }}
+{{- end -}}
+
+{{/*
+Return the proper image name (for the init container volume-permissions image)
+*/}}
+{{- define "opensearch.volumePermissions.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.volumePermissions.image "global" .Values.global) }}
+{{- end -}}
+
+{{/*
+Return the proper OpenSearch Dashboards image name
+*/}}
+{{- define "opensearch.dashboards.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.dashboards.image "global" .Values.global) }}
+{{- end -}}
+
+{{/*
+Return the proper OpenSearch Snapshots image name
+*/}}
+{{- define "opensearch.snapshots.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.snapshots.image "global" .Values.global) }}
+{{- end -}}
+
+{{/*
+Return the proper Docker Image Registry Secret Names
+*/}}
+{{- define "opensearch.imagePullSecrets" -}}
+{{ include "common.images.renderPullSecrets" (dict "images" (list .Values.image .Values.sysctlImage .Values.volumePermissions.image .Values.dashboards.image .Values.snapshots.image) "context" $) }}
 {{- end -}}
 
 {{/*
@@ -135,15 +156,7 @@ Set Elasticsearch PVC.
 {{- end -}}
 
 {{/*
-Return the proper image name (for the init container volume-permissions image)
-*/}}
-{{- define "opensearch.volumePermissions.image" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.volumePermissions.image "global" .Values.global) }}
-{{- end -}}
-
-
-{{/*
-Name for the Opensearch service
+Name for the OpenSearch service
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
 {{- define "opensearch.service.name" -}}
@@ -151,7 +164,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{/*
-Port number for the Opensearch service REST API port
+Port number for the OpenSearch service REST API port
 */}}
 {{- define "opensearch.service.ports.restAPI" -}}
 {{- printf "%d" (int .Values.service.ports.restAPI) -}}
@@ -505,7 +518,7 @@ Return true if an authentication credentials secret object should be created
 {{- end -}}
 
 {{/*
-Return the Opensearch authentication credentials secret name
+Return the OpenSearch authentication credentials secret name
 */}}
 {{- define "opensearch.secretName" -}}
 {{- if .Values.security.existingSecret -}}
@@ -525,7 +538,7 @@ Return true if a TLS password secret object should be created
 {{- end -}}
 
 {{/*
-Return the Opensearch TLS password secret name
+Return the OpenSearch TLS password secret name
 */}}
 {{- define "opensearch.tlsPasswordsSecret" -}}
 {{- if .Values.security.tls.passwordsSecret -}}
@@ -658,47 +671,47 @@ Returns true if at least 1 existing secret was provided
 {{- end -}}
 {{- end -}}
 
-{{/* Validate values of Opensearch - Existing secret not provided for master nodes */}}
+{{/* Validate values of OpenSearch - Existing secret not provided for master nodes */}}
 {{- define "opensearch.validateValues.security.missingTlsSecrets.master" -}}
 {{- $masterSecret := (and (include "opensearch.master.enabled" .) (not .Values.security.tls.master.existingSecret)) -}}
 {{- if and .Values.security.enabled (include "opensearch.security.tlsSecretsProvided" .) $masterSecret -}}
 opensearch: security.tls.master.existingSecret
-    Missing secret containing the TLS certificates for the Opensearch master nodes.
+    Missing secret containing the TLS certificates for the OpenSearch master nodes.
     Provide the certificates using --set .security.tls.master.existingSecret="my-secret".
 {{- end -}}
 {{- end -}}
 
-{{/* Validate values of Opensearch - Existing secret not provided for coordinating-only nodes */}}
+{{/* Validate values of OpenSearch - Existing secret not provided for coordinating-only nodes */}}
 {{- define "opensearch.validateValues.security.missingTlsSecrets.coordinating" -}}
 {{- $coordinatingSecret := (and (include "opensearch.coordinating.enabled" .) (not .Values.security.tls.coordinating.existingSecret)) -}}
 {{- if and .Values.security.enabled (include "opensearch.security.tlsSecretsProvided" .) $coordinatingSecret -}}
 opensearch: security.tls.coordinating.existingSecret
-    Missing secret containing the TLS certificates for the Opensearch coordinating-only nodes.
+    Missing secret containing the TLS certificates for the OpenSearch coordinating-only nodes.
     Provide the certificates using --set .security.tls.coordinating.existingSecret="my-secret".
 {{- end -}}
 {{- end -}}
 
-{{/* Validate values of Opensearch - Existing secret not provided for data nodes */}}
+{{/* Validate values of OpenSearch - Existing secret not provided for data nodes */}}
 {{- define "opensearch.validateValues.security.missingTlsSecrets.data" -}}
 {{- $dataSecret := (and (include "opensearch.data.enabled" .) (not .Values.security.tls.data.existingSecret)) -}}
 {{- if and .Values.security.enabled (include "opensearch.security.tlsSecretsProvided" .) $dataSecret -}}
 opensearch: security.tls.data.existingSecret
-    Missing secret containing the TLS certificates for the Opensearch data nodes.
+    Missing secret containing the TLS certificates for the OpenSearch data nodes.
     Provide the certificates using --set .security.tls.data.existingSecret="my-secret".
 {{- end -}}
 {{- end -}}
 
-{{/* Validate values of Opensearch - Existing secret not provided for ingest nodes */}}
+{{/* Validate values of OpenSearch - Existing secret not provided for ingest nodes */}}
 {{- define "opensearch.validateValues.security.missingTlsSecrets.ingest" -}}
 {{- $ingestSecret := (and (include "opensearch.ingest.enabled" .) (not .Values.security.tls.ingest.existingSecret)) -}}
 {{- if and .Values.security.enabled (include "opensearch.security.tlsSecretsProvided" .) $ingestSecret -}}
 opensearch: security.tls.ingest.existingSecret
-    Missing secret containing the TLS certificates for the Opensearch ingest nodes.
+    Missing secret containing the TLS certificates for the OpenSearch ingest nodes.
     Provide the certificates using --set .security.tls.ingest.existingSecret="my-secret".
 {{- end -}}
 {{- end -}}
 
-{{/* Validate values of Opensearch - TLS enabled but no certificates provided */}}
+{{/* Validate values of OpenSearch - TLS enabled but no certificates provided */}}
 {{- define "opensearch.validateValues.security.tls" -}}
 {{- if and .Values.security.enabled (not .Values.security.tls.autoGenerated) (not (include "opensearch.security.tlsSecretsProvided" .)) -}}
 opensearch: security.tls
@@ -712,11 +725,11 @@ opensearch: security.tls
 {{- end -}}
 {{- end -}}
 
-{{/* Validate at least Opensearch one master node is configured */}}
+{{/* Validate at least OpenSearch one master node is configured */}}
 {{- define "opensearch.validateValues.master.replicas" -}}
 {{- if not (include "opensearch.master.enabled" .) -}}
 opensearch: master.replicas
-    Opensearch needs at least one master-eligible node to form a cluster.
+    OpenSearch needs at least one master-eligible node to form a cluster.
 {{- end -}}
 {{- end -}}
 
@@ -787,15 +800,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{/*
-Return the proper Opensearch Dashboards image name
-*/}}
-{{- define "opensearch.dashboards.image" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.dashboards.image "global" .Values.global) }}
-{{- end -}}
-
-
-{{/*
-Set Opensearch URL.
+Set OpenSearch URL.
 */}}
 {{- define "opensearch.url" -}}
 {{- $protocol := ternary "https" "http" .Values.security.tls.restEncryption -}}
@@ -855,11 +860,4 @@ Create name for snapshot API policy data ConfigMap
 */}}
 {{- define "opensearch.snapshots.policyDataConfigMap" -}}
 {{- printf "%s-policy-data" (include "opensearch.snapshots.fullname" $) -}}
-{{- end -}}
-
-{{/*
-Return the proper Opensearch Snapshots image name
-*/}}
-{{- define "opensearch.snapshots.image" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.snapshots.image "global" .Values.global) }}
 {{- end -}}

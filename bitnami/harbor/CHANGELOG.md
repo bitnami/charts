@@ -1,8 +1,18 @@
 # Changelog
 
+## 24.3.2 (2025-02-18)
+
+* [bitnami/harbor] Release 24.3.2 ([#31965](https://github.com/bitnami/charts/pull/31965))
+
+## <small>24.3.1 (2025-02-17)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/harbor] Added tpl to externalURL (#31940) ([4b9c79f](https://github.com/bitnami/charts/commit/4b9c79fdf34d9f38cfbd65640152b3484cc43ed5)), closes [#31940](https://github.com/bitnami/charts/issues/31940)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
 ## 24.3.0 (2025-01-27)
 
-* [bitnami/harbor] Added existingSecret parameter for external database ([#31492](https://github.com/bitnami/charts/pull/31492))
+* [bitnami/harbor] Added existingSecret parameter for external database (#31492) ([4cf7499](https://github.com/bitnami/charts/commit/4cf749975ff948cae80d961af7c75debf9fc49a3)), closes [#31492](https://github.com/bitnami/charts/issues/31492)
 
 ## 24.2.0 (2025-01-27)
 

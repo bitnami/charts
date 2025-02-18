@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.9.5 (2025-01-24)
+## 4.9.6 (2025-02-04)
 
-* [bitnami/grafana-operator] Release 4.9.5 ([#31556](https://github.com/bitnami/charts/pull/31556))
+* [bitnami/grafana-operator] Release 4.9.6 ([#31756](https://github.com/bitnami/charts/pull/31756))
+
+## <small>4.9.5 (2025-01-24)</small>
+
+* [bitnami/grafana-operator] Release 4.9.5 (#31556) ([5527847](https://github.com/bitnami/charts/commit/5527847778d863eca1d4754ec611f88552335988)), closes [#31556](https://github.com/bitnami/charts/issues/31556)
 
 ## <small>4.9.4 (2025-01-21)</small>
 

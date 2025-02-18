@@ -1,6 +1,7 @@
 # Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
+# NOTE: This workflow is maintained in the https://github.com/bitnami/support repository
 name: '[Support] PR review comment card movements'
 on:
   pull_request_review_comment:
@@ -18,6 +19,7 @@ jobs:
   just-notice:
     # This is a dummy workflow that triggers a workflow_run
     runs-on: ubuntu-latest
+    if: ${{ github.repository_owner == 'bitnami' }}
     steps:
       - run: |
           echo "::notice:: Comment on PR #${{ github.event.pull_request.number }}"

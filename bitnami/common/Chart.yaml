@@ -9,7 +9,7 @@ apiVersion: v2
 appVersion: 2.29.1
 description: A Library Helm Chart for grouping common logic between bitnami charts. This chart is not deployable by itself.
 home: https://bitnami.com
-icon: https://bitnami.com/downloads/logos/bitnami-mark.png
+icon: https://dyltqmyl993wv.cloudfront.net/downloads/logos/bitnami-mark.png
 keywords:
   - common
   - helper

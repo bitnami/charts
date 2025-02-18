@@ -19,7 +19,7 @@ dependencies:
   version: 2.x.x
 description: TensorFlow ResNet is a client utility for use with TensorFlow Serving and ResNet models.
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/tensorflow-inception/img/tensorflow-inception-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/tensorflow-inception/img/tensorflow-inception-stack-220x234.png
 keywords:
 - tensorflow
 - serving

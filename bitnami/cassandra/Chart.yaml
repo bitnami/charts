@@ -21,7 +21,7 @@ dependencies:
   version: 2.x.x
 description: Apache Cassandra is an open source distributed database management system designed to handle large amounts of data across many servers, providing high availability with no single point of failure.
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/cassandra/img/cassandra-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/cassandra/img/cassandra-stack-220x234.png
 keywords:
 - cassandra
 - database

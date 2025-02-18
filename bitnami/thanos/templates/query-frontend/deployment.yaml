@@ -30,8 +30,11 @@ spec:
     metadata:
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: query-frontend
-      {{- if or .Values.queryFrontend.podAnnotations (include "thanos.queryFrontend.createConfigmap" .) }}
+      {{- if or .Values.commonAnnotations .Values.queryFrontend.podAnnotations (include "thanos.queryFrontend.createConfigmap" .) }}
       annotations:
+        {{- if .Values.commonAnnotations }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
+        {{- end }}
         {{- if (include "thanos.queryFrontend.createConfigmap" .) }}
         checksum/query-frontend-configuration: {{ include "thanos.queryFrontendConfigMap" . | sha256sum }}
         {{- end }}

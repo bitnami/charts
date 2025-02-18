@@ -13,14 +13,15 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 Set the http prefix if the externalURl doesn't have it
 */}}
 {{- define "harbor.externalUrl" -}}
-{{- if hasPrefix "http" .Values.externalURL -}}
-    {{- print .Values.externalURL -}}
+{{- $templatedExternalUrl := tpl .Values.externalURL . -}}
+{{- if hasPrefix "http" $templatedExternalUrl -}}
+    {{- print $templatedExternalUrl -}}
 {{- else if and (eq .Values.exposureType "proxy") .Values.nginx.tls.enabled -}}
-    {{- printf "https://%s" .Values.externalURL -}}
+    {{- printf "https://%s" $templatedExternalUrl -}}
 {{- else if and (eq .Values.exposureType "ingress") .Values.ingress.core.tls -}}
-    {{- printf "https://%s" .Values.externalURL -}}
+    {{- printf "https://%s" $templatedExternalUrl -}}
 {{- else -}}
-    {{- printf "http://%s" .Values.externalURL -}}
+    {{- printf "http://%s" $templatedExternalUrl -}}
 {{- end -}}
 {{- end -}}
 

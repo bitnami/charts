@@ -21,7 +21,7 @@ dependencies:
   version: 2.x.x
 description: Confluent Schema Registry provides a RESTful interface by adding a serving layer for your metadata on top of Kafka. It expands Kafka enabling support for Apache Avro, JSON, and Protobuf schemas.
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/schema-registry/img/schema-registry-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/schema-registry/img/schema-registry-stack-220x234.png
 keywords:
 - schema-registry
 - confluent

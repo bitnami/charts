@@ -6,7 +6,7 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: oauth2-proxy
-      image: docker.io/bitnami/oauth2-proxy:7.8.1-debian-12-r2
+      image: docker.io/bitnami/oauth2-proxy:7.8.1-debian-12-r5
 apiVersion: v2
 appVersion: 7.8.1
 dependencies:
@@ -21,7 +21,7 @@ dependencies:
   version: 2.x.x
 description: A reverse proxy and static file server that provides authentication using Providers (Google, GitHub, and others) to validate accounts by email, domain or group.
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/oauth2-proxy/img/oauth2-proxy-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/oauth2-proxy/img/oauth2-proxy-stack-220x234.png
 keywords:
 - kubernetes
 - oauth
@@ -35,4 +35,4 @@ maintainers:
 name: oauth2-proxy
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/oauth2-proxy
-version: 6.2.5
+version: 6.2.7

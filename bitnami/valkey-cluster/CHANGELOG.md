@@ -1,8 +1,13 @@
 # Changelog
 
-## 2.1.1 (2025-01-08)
+## 2.1.2 (2025-02-17)
 
-* [bitnami/valkey-cluster] Release 2.1.1 ([#31247](https://github.com/bitnami/charts/pull/31247))
+* [bitnami/valkey-cluster] Release 2.1.2 ([#31945](https://github.com/bitnami/charts/pull/31945))
+
+## <small>2.1.1 (2025-01-08)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/valkey-cluster] Release 2.1.1 (#31247) ([d49d243](https://github.com/bitnami/charts/commit/d49d2432841a1042c4a750763a5ba65317302604)), closes [#31247](https://github.com/bitnami/charts/issues/31247)
 
 ## 2.1.0 (2024-12-10)
 

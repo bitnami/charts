@@ -1,8 +1,13 @@
 # Changelog
 
-## 7.1.1 (2025-01-08)
+## 7.1.2 (2025-02-17)
 
-* [bitnami/fluentd] Release 7.1.1 ([#31254](https://github.com/bitnami/charts/pull/31254))
+* [bitnami/fluentd] Release 7.1.2 ([#31949](https://github.com/bitnami/charts/pull/31949))
+
+## <small>7.1.1 (2025-01-08)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/fluentd] Release 7.1.1 (#31254) ([129caa5](https://github.com/bitnami/charts/commit/129caa5399d71d14c819a38db77e216683b956cd)), closes [#31254](https://github.com/bitnami/charts/issues/31254)
 
 ## 7.1.0 (2024-12-10)
 

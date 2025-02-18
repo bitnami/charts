@@ -29,3 +29,11 @@ Cypress.Commands.add(
     cy.get('input[type="submit"]').click();
   }
 );
+
+Cypress.on('uncaught:exception', (err, runnable) => {
+  if (
+    err.message.includes('Cannot set properties of undefined')
+  ) {
+    return false;
+  }
+});

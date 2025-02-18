@@ -539,16 +539,16 @@ spec:
               value: {{ printf "127.0.0.1:%d/postgres?sslmode=disable" (int (include "postgresql.v1.service.port" .)) }}
             {{- if .Values.auth.usePasswordFiles }}
             - name: DATA_SOURCE_PASS_FILE
-              value: {{ printf "/opt/bitnami/postgresql/secrets/%s" (include "postgresql.v1.adminPasswordKey" .) }}
+              value: {{ printf "/opt/bitnami/postgresql/secrets/%s" (include (ternary "postgresql.v1.adminPasswordKey" "postgresql.v1.userPasswordKey" (empty $customUser)) .) }}
             {{- else }}
             - name: DATA_SOURCE_PASS
               valueFrom:
                 secretKeyRef:
                   name: {{ include "postgresql.v1.secretName" . }}
-                  key: {{ include "postgresql.v1.adminPasswordKey" . }}
+                  key: {{ include (ternary "postgresql.v1.adminPasswordKey" "postgresql.v1.userPasswordKey" (empty $customUser)) . }}
             {{- end }}
             - name: DATA_SOURCE_USER
-              value: "postgres"
+              value: {{ default "postgres" $customUser | quote }}
             {{- if .Values.metrics.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.metrics.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}

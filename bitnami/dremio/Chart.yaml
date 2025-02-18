@@ -29,7 +29,7 @@ dependencies:
   version: 2.x.x
 description: Dremio is an open-source self-service data access tool that provides high-performance queries for interactive analytics on data lakes.
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/dremio/img/dremio-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/dremio/img/dremio-stack-220x234.png
 keywords:
 - dremio
 - data-lake

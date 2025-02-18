@@ -1,8 +1,13 @@
 # Changelog
 
-## 7.6.2 (2025-02-03)
+## 7.6.3 (2025-02-05)
 
-* [bitnami/memcached] Release 7.6.2 ([#31709](https://github.com/bitnami/charts/pull/31709))
+* [bitnami/memcached] Release 7.6.3 ([#31777](https://github.com/bitnami/charts/pull/31777))
+
+## <small>7.6.2 (2025-02-03)</small>
+
+* [bitnami/memcached] Release 7.6.2 (#31709) ([f210fa1](https://github.com/bitnami/charts/commit/f210fa1b5aec282e7565cfe3d43583106feea06b)), closes [#31709](https://github.com/bitnami/charts/issues/31709)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
 
 ## <small>7.6.1 (2024-12-23)</small>
 

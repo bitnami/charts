@@ -21,7 +21,7 @@ dependencies:
   version: 2.x.x
 description: MySQL is a fast, reliable, scalable, and easy to use open source relational database system. Designed to handle mission-critical, heavy-load production applications.
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/mysql/img/mysql-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/mysql/img/mysql-stack-220x234.png
 keywords:
 - mysql
 - database

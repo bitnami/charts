@@ -25,7 +25,7 @@ dependencies:
   version: 2.x.x
 description: Superset is a modern data exploration and data visualization platform. 
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/superset/img/superset-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/superset/img/superset-stack-220x234.png
 keywords:
 - superset
 - analytics

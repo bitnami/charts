@@ -3,62 +3,142 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if $.Values.snapshots.enabled -}}
-{{- $host := (include "opensearch.service.name" $) -}}
-{{- $port := (include "opensearch.service.ports.restAPI" $) -}}
+{{- if .Values.snapshots.enabled }}
 apiVersion: batch/v1
 kind: Job
 metadata:
-  annotations:
-    helm.sh/hook: post-install
-  {{- if .Values.commonAnnotations }}
-  {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-  {{- end }}
-  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
-    app.kubernetes.io/component: snapshots
   name: {{ include "opensearch.snapshots.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" . ) | nindent 4 }}
+    app.kubernetes.io/component: snapshots
+  {{- $defaultAnnotations := dict "helm.sh/hook" "post-install" "helm.sh/hook-delete-policy" "hook-succeeded" }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonAnnotations $defaultAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" . ) | nindent 4 }}
 spec:
   template:
     spec:
+      {{- include "opensearch.imagePullSecrets" . | nindent 6 }}
       automountServiceAccountToken: false
+      initContainers:
+        - name: wait-for-opensearch
+          image: {{ template "opensearch.snapshots.image" . }}
+          imagePullPolicy: {{ .Values.snapshots.image.pullPolicy }}
+          {{- if .Values.snapshots.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.snapshots.containerSecurityContext "context" .) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.snapshots.resources }}
+          resources: {{- toYaml .Values.snapshots.resources | nindent 12 }}
+          {{- else if ne .Values.snapshots.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.snapshots.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          command:
+          - bash
+          args:
+          - -ec
+          - |
+            retry_while() {
+                local -r cmd="${1:?cmd is missing}"
+                local -r retries="${2:-12}"
+                local -r sleep_time="${3:-5}"
+                local return_value=1
+
+                read -r -a command <<< "$cmd"
+                for ((i = 1 ; i <= retries ; i+=1 )); do
+                    "${command[@]}" && return_value=0 && break
+                    sleep "$sleep_time"
+                done
+                return $return_value
+            }
+
+            check_opensearch() {
+                if wait-for-port --timeout=5 --host="$OPENSEARCH_HOST" --state=inuse $OPENSEARCH_PORT_NUMBER; then
+                    return 0
+                else
+                    return 1
+                fi
+            }
+
+            echo "Checking connection to OpenSearch"
+            if retry_while "check_opensearch"; then
+                echo "Connected to OpenSearch"
+                exit 0
+            else
+                echo "Error connecting to OpenSearch"
+                exit 1
+            fi
+          env:
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" (or .Values.snapshots.image.debug .Values.diagnosticMode.enabled) | quote }}
+            - name: OPENSEARCH_HOST
+              value: {{ include "opensearch.service.name" . | quote }}
+            - name: OPENSEARCH_PORT_NUMBER
+              value: {{ include "opensearch.service.ports.restAPI" . | quote }}
       containers:
         - args:
             - --silent
             - --show-error
-            - "file:///dev/null" # Starting with curl 8, a URL is required before the first `--next`
-          {{- range $name, $_ := $.Values.snapshots.repositories }}
+            # Starting with curl 8, a URL is required before the first `--next`
+            - "file:///dev/null"
+          {{- range $name, $_ := .Values.snapshots.repositories }}
             # Register snapshot repository:
             - --next
             - -w
             - '\n'
             - -XPUT
+            {{- if $.Values.security.enabled }}
+            - -u
+            - admin:$(OPENSEARCH_PASSWORD)
+            {{- if $.Values.security.tls.restEncryption }}
+            - --cacert
+            - /certs/ca.crt
+            {{- end }}
+            {{- end }}
             - -H
             - "Content-Type: application/json"
             - -d
             - "@/run/repo-data/{{ $name }}"
-            - http://{{ $host }}:{{ $port }}/_snapshot/{{ $name }}
+            - "$(OPENSEARCH_ORIGIN)/_snapshot/{{ $name }}"
           {{- end }}
-          {{- range $name, $_ := $.Values.snapshots.policies }}
+          {{- range $name, $_ := .Values.snapshots.policies }}
             # Register snapshot policy:
             - --next
             - -w
             - '\n'
+            {{- if $.Values.security.enabled }}
+            - -u
+            - admin:$(OPENSEARCH_PASSWORD)
+            {{- if $.Values.security.tls.restEncryption }}
+            - --cacert
+            - /certs/ca.crt
+            {{- end }}
+            {{- end }}
             - -H
             - "Content-Type: application/json"
             - -d
             - "@/run/policy-data/{{ $name }}"
-            - http://{{ $host }}:{{ $port }}/_plugins/_sm/policies/{{ $name }}
+            - "$(OPENSEARCH_ORIGIN)/_plugins/_sm/policies/{{ $name }}"
           {{- end }}
-          command: {{- include "common.tplvalues.render" (dict "value" .Values.snapshots.command "context" $) | nindent 12 }}
+          command:
+          {{- if .Values.snapshots.command }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.snapshots.command "context" .) | nindent 12 }}
+          {{- else }}
+            - /usr/bin/curl
+          {{- end }}
           env:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" (or .Values.snapshots.image.debug .Values.diagnosticMode.enabled) | quote }}
+            - name: OPENSEARCH_ORIGIN
+              value: {{ printf "%s://%s:%d" (ternary "https" "http" (and .Values.security.enabled .Values.security.tls.restEncryption)) (include "opensearch.service.name" .) (include "opensearch.service.ports.restAPI" . | int) | quote }}
+            - name: OPENSEARCH_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                    name: {{ include "opensearch.secretName" . }}
+                    key: opensearch-password
           image: {{ template "opensearch.snapshots.image" . }}
           imagePullPolicy: {{ .Values.snapshots.image.pullPolicy }}
-          name: {{ include "opensearch.snapshots.fullname" . }}
+          name: shell
           {{- if .Values.snapshots.containerSecurityContext.enabled }}
-          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.snapshots.containerSecurityContext "context" $) | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.snapshots.containerSecurityContext "context" .) | nindent 12 }}
           {{- end }}
           {{- if .Values.snapshots.resources }}
           resources: {{- toYaml .Values.snapshots.resources | nindent 12 }}
@@ -70,15 +150,14 @@ spec:
               mountPath: /run/repo-data/
             - name: policy-data
               mountPath: /run/policy-data/
-      {{- with .Values.snapshots.image.pullSecrets }}
-      imagePullPolicy:
-      {{- range . }}
-        - name: {{ . }}
-      {{- end }}
-      {{- end }}
+            {{- if .Values.security.enabled }}
+            - name: opensearch-certificates
+              mountPath: /certs
+              readOnly: true
+            {{- end }}
       restartPolicy: Never
       {{- if .Values.dashboards.podSecurityContext.enabled }}
-      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.dashboards.podSecurityContext "context" $) | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.dashboards.podSecurityContext "context" .) | nindent 8 }}
       {{- end }}
       volumes:
         - name: policy-data
@@ -87,4 +166,13 @@ spec:
         - name: repo-data
           configMap:
             name: {{ include "opensearch.snapshots.repoDataConfigMap" . }}
+        {{- if and .Values.security.enabled .Values.security.tls.restEncryption }}
+        - name: opensearch-certificates
+          projected:
+            defaultMode: 256
+            sources:
+              - secret:
+                  name: {{ include "opensearch.node.tlsSecretName" (dict "nodeRole" "master" "context" $) }}
+                  items: {{- include "opensearch.node.tlsSecretItems" (dict "nodeRole" "master" "context" $) | nindent 20 }}
+        {{- end }}
 {{- end -}}

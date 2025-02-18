@@ -113,14 +113,16 @@ In order to replicate the container startup scripts execute this command:
 
     kubectl port-forward --namespace {{ include "common.names.namespace" . }} svc/{{ template "opensearch.service.name" . }} {{ include "opensearch.service.ports.restAPI" . }}:9200 &
     curl http://127.0.0.1:9200/
-{{- end }}
-
-{{- include "common.warnings.rollingTag" .Values.image }}
-{{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
-{{- include "common.warnings.rollingTag" .Values.sysctlImage }}
 
 {{- end }}
+{{- end }}
+
 {{ include "opensearch.validateValues" . }}
-{{- include "common.warnings.resources" (dict "sections" (list "coordinating" "dashboards" "data" "ingest" "master" "sysctlImage" "volumePermissions") "context" $) }}
+{{- include "common.warnings.rollingTag" .Values.image }}
+{{- include "common.warnings.rollingTag" .Values.sysctlImage }}
+{{- include "common.warnings.rollingTag" .Values.dashboards.image }}
+{{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
+{{- include "common.warnings.rollingTag" .Values.snapshots.image }}
+{{- include "common.warnings.resources" (dict "sections" (list "coordinating" "dashboards" "data" "ingest" "master" "sysctlImage" "volumePermissions" "snapshots") "context" $) }}
 {{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.volumePermissions.image .Values.sysctlImage .Values.dashboards.image .Values.snapshots.image) "context" $) }}
 {{- include "common.errors.insecureImages" (dict "images" (list .Values.image .Values.volumePermissions.image .Values.sysctlImage .Values.dashboards.image .Values.snapshots.image) "context" $) }}

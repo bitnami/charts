@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.5.3 (2025-01-28)
+## 1.5.4 (2025-02-06)
 
-* [bitnami/opensearch] Release 1.5.3 ([#31638](https://github.com/bitnami/charts/pull/31638))
+* [bitnami/opensearch] bugfix: snapshots init-job to consider security settings ([#31809](https://github.com/bitnami/charts/pull/31809))
+
+## <small>1.5.3 (2025-01-28)</small>
+
+* [bitnami/opensearch] Release 1.5.3 (#31638) ([d5a7ed3](https://github.com/bitnami/charts/commit/d5a7ed377bda0f7899e2d6335ad1860b50687360)), closes [#31638](https://github.com/bitnami/charts/issues/31638)
 
 ## <small>1.5.2 (2025-01-25)</small>
 

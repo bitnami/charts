@@ -39,7 +39,7 @@ dependencies:
   version: 2.x.x
 description: Kubeapps is a web-based UI for launching and managing applications on Kubernetes. It allows users to deploy trusted applications and operators to control users access to the cluster.
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/kubeapps/img/kubeapps-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/kubeapps/img/kubeapps-stack-220x234.png
 keywords:
 - helm
 - dashboard

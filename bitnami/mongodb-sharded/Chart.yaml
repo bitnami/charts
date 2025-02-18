@@ -21,7 +21,7 @@ dependencies:
   version: 2.x.x
 description: MongoDB(R) is an open source NoSQL database that uses JSON for data storage. MongoDB(TM) Sharded improves scalability and reliability for large datasets by distributing data across multiple machines.
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/mongodb/img/mongodb-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/mongodb/img/mongodb-stack-220x234.png
 keywords:
 - mongodb
 - database

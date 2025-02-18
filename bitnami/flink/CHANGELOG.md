@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.4.2 (2025-01-28)
+## 1.4.3 (2025-02-12)
 
-* [bitnami/flink] Release 1.4.2 ([#31636](https://github.com/bitnami/charts/pull/31636))
+* [bitnami/flink] Release 1.4.3 ([#31905](https://github.com/bitnami/charts/pull/31905))
+
+## <small>1.4.2 (2025-01-28)</small>
+
+* [bitnami/flink] Release 1.4.2 (#31636) ([420ed14](https://github.com/bitnami/charts/commit/420ed144c8967af027f6c11a8e64800f394005ad)), closes [#31636](https://github.com/bitnami/charts/issues/31636)
 
 ## <small>1.4.1 (2024-12-26)</small>
 

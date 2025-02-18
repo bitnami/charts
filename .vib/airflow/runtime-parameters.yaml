@@ -54,10 +54,10 @@ triggerer:
 dags:
   enabled: true
   repositories:
-    - repository: https://github.com/astronomer/2-9-example-dags
+    - repository: https://github.com/astronomer/2-10-example-dags
       branch: main
-      name: toys
-      path: dags/toys
+      name: UI
+      path: dags/UI
 metrics:
   enabled: true
   service:

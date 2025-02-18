@@ -1,8 +1,17 @@
 # Changelog
 
-## 2.4.7 (2025-01-24)
+## 2.4.9 (2025-02-07)
 
-* [bitnami/pinniped] Ensure rbac and networkpolicy is not created for Concierge when disabled ([#31564](https://github.com/bitnami/charts/pull/31564))
+* [bitnami/pinniped] Release 2.4.9 ([#31826](https://github.com/bitnami/charts/pull/31826))
+
+## <small>2.4.8 (2025-02-05)</small>
+
+* [bitnami/pinniped] Release 2.4.8 (#31774) ([d35eec7](https://github.com/bitnami/charts/commit/d35eec7815622f4f0c7ee710ca4fc19a3f4d9c1c)), closes [#31774](https://github.com/bitnami/charts/issues/31774)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>2.4.7 (2025-01-27)</small>
+
+* [bitnami/pinniped] Ensure rbac and networkpolicy is not created for Concierge when disabled (#31564) ([0405f84](https://github.com/bitnami/charts/commit/0405f8474f0b47e7a93cd37c9dddbe5547a72c5f)), closes [#31564](https://github.com/bitnami/charts/issues/31564)
 
 ## <small>2.4.6 (2025-01-24)</small>
 

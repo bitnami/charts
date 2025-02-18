@@ -73,6 +73,9 @@ spec:
       initContainers:
         {{- include "airflow.defaultInitContainers.prepareConfig" . | nindent 8 }}
         {{- include "airflow.defaultInitContainers.prepareWebConfig" . | nindent 8 }}
+        {{- if .Values.dags.enabled }}
+        {{- include "airflow.defaultInitContainers.loadDAGs" . | nindent 8 }}
+        {{- end }}
         {{- if .Values.plugins.enabled }}
         {{- include "airflow.defaultInitContainers.loadPlugins" . | nindent 8 }}
         {{- end }}
@@ -231,6 +234,9 @@ spec:
               mountPath: /opt/bitnami/airflow/certs
               readOnly: true
             {{- end }}
+            {{- if .Values.dags.enabled }}
+            {{- include "airflow.dags.volumeMounts" . | nindent 12 }}
+            {{- end }}
             {{- if .Values.plugins.enabled }}
             {{- include "airflow.plugins.volumeMounts" . | nindent 12 }}
             {{- end }}
@@ -240,6 +246,9 @@ spec:
             {{- if .Values.web.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.web.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
+        {{- if and .Values.dags.enabled }}
+        {{- include "airflow.defaultSidecars.syncDAGs" . | nindent 8 }}
+        {{- end }}
         {{- if .Values.plugins.enabled }}
         {{- include "airflow.defaultSidecars.syncPlugins" . | nindent 8 }}
         {{- end }}
@@ -259,6 +268,9 @@ spec:
         - name: webserver-configuration
           configMap:
             name: {{ include "airflow.web.configMapName" . }}
+        {{- if .Values.dags.enabled }}
+        {{- include "airflow.dags.volumes" . | nindent 8 }}
+        {{- end }}
         {{- if .Values.plugins.enabled }}
         {{- include "airflow.plugins.volumes" . | nindent 8 }}
         {{- end }}

@@ -1,8 +1,25 @@
 # Changelog
 
-## 1.4.6 (2025-02-04)
+## 1.4.10 (2025-02-13)
 
-* [bitnami/cert-manager] Release 1.4.6 ([#31728](https://github.com/bitnami/charts/pull/31728))
+* [bitnami/cert-manager] Release 1.4.10 ([#31913](https://github.com/bitnami/charts/pull/31913))
+
+## <small>1.4.9 (2025-02-13)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/cert-manager] Updated cert-manager RBAC (#31906) ([a24b680](https://github.com/bitnami/charts/commit/a24b6802f54f22d228b83fba8a76c14db5224d2b)), closes [#31906](https://github.com/bitnami/charts/issues/31906)
+
+## <small>1.4.8 (2025-02-05)</small>
+
+* [bitnami/cert-manager] Update rules for controller-certificates ClusterRole (#31794) ([2a023c1](https://github.com/bitnami/charts/commit/2a023c106adc6c08019beec9ad5d11f250d22012)), closes [#31794](https://github.com/bitnami/charts/issues/31794)
+
+## <small>1.4.7 (2025-02-04)</small>
+
+* [bitnami/cert-manager] Release 1.4.7 (#31744) ([cb8d670](https://github.com/bitnami/charts/commit/cb8d670d78acdaa9dfbc271b9b0ffe7160c838e3)), closes [#31744](https://github.com/bitnami/charts/issues/31744)
+
+## <small>1.4.6 (2025-02-04)</small>
+
+* [bitnami/cert-manager] Release 1.4.6 (#31728) ([80efd90](https://github.com/bitnami/charts/commit/80efd904e6fc5f341a240fb5ce3d75b01565085b)), closes [#31728](https://github.com/bitnami/charts/issues/31728)
 
 ## <small>1.4.5 (2025-02-03)</small>
 

@@ -126,7 +126,7 @@ serviceAccount:
 image:
   registry: docker.io
   repository: bitnami/kube-state-metrics
-  tag: 2.15.0-debian-12-r0
+  tag: 2.15.0-debian-12-r1
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images

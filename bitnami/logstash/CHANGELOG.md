@@ -1,8 +1,12 @@
 # Changelog
 
-## 6.4.3 (2025-01-29)
+## 6.4.4 (2025-02-11)
 
-* [bitnami/logstash] Release 6.4.3 ([#31667](https://github.com/bitnami/charts/pull/31667))
+* [bitnami/logstash] Release 6.4.4 ([#31870](https://github.com/bitnami/charts/pull/31870))
+
+## <small>6.4.3 (2025-01-29)</small>
+
+* [bitnami/logstash] Release 6.4.3 (#31667) ([46f003b](https://github.com/bitnami/charts/commit/46f003b12847591e12fa2e5b4dad9025c14fb1e3)), closes [#31667](https://github.com/bitnami/charts/issues/31667)
 
 ## <small>6.4.2 (2025-01-21)</small>
 

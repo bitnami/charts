@@ -41,7 +41,7 @@ dependencies:
   version: 2.x.x
 description: Spring Cloud Data Flow is a microservices-based toolkit for building streaming and batch data processing pipelines in Cloud Foundry and Kubernetes.
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/spring-cloud-dataflow/img/spring-cloud-dataflow-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/spring-cloud-dataflow/img/spring-cloud-dataflow-stack-220x234.png
 keywords:
 - spring-cloud
 - dataflow
