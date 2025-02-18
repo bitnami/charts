@@ -1,0 +1,29 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: arangojobs.apps.arangodb.com
+spec:
+  group: apps.arangodb.com
+  names:
+    kind: ArangoJob
+    listKind: ArangoJobList
+    plural: arangojobs
+    singular: arangojob
+    shortNames:
+      - arangojob
+  scope: Namespaced
+  versions:
+    - name: v1
+      schema:
+        openAPIV3Schema:
+          type: object
+          x-kubernetes-preserve-unknown-fields: true
+      served: true
+      storage: true
+      additionalPrinterColumns:
+        - jsonPath: .spec.arangoDeploymentName
+          description: Deployment name
+          name: ArangoDeploymentName
+          type: string
+      subresources:
+        status: {}

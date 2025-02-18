@@ -1,0 +1,55 @@
+{{ if and .Values.rbac.create .Values.features.deployment }}
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
+kind: Role
+metadata:
+  name: {{ printf "%s-deployment" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: kube-arangodb
+    app.kubernetes.io/component: operator
+rules:
+  - apiGroups: ["database.arangodb.com"]
+    resources: ["arangodeployments", "arangodeployments/status","arangomembers", "arangomembers/status"]
+    verbs: ["*"]
+  {{- if .Values.rbac.extensions.acs }}
+  - apiGroups: ["database.arangodb.com"]
+    resources: ["arangoclustersynchronizations", "arangoclustersynchronizations/status"]
+    verbs: ["*"]
+  {{- end }}
+  {{- if .Values.rbac.extensions.at }}
+  - apiGroups: ["database.arangodb.com"]
+    resources: ["arangotasks", "arangotasks/status"]
+    verbs: ["*"]
+  {{- end }}
+  - apiGroups: [""]
+    resources: ["pods", "services", "endpoints", "persistentvolumeclaims", "events", "secrets", "serviceaccounts", "configmaps"]
+    verbs: ["*"]
+  - apiGroups: ["apps"]
+    resources: ["deployments", "replicasets"]
+    verbs: ["get"]
+  - apiGroups: ["policy"]
+    resources: ["poddisruptionbudgets"]
+    verbs: ["*"]
+  - apiGroups: ["coordination.k8s.io"]
+    resources: ["leases"]
+    verbs: ["*"]
+  - apiGroups: ["platform.arangodb.com"]
+    resources: ["arangoplatformstorages", "arangoplatformstorages/status"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: ["backup.arangodb.com"]
+    resources: ["arangobackuppolicies", "arangobackups"]
+    verbs: ["get", "list", "watch"]
+  {{- if .Values.rbac.extensions.debug }}
+  - apiGroups: ["events.k8s.io"]
+    resources: ["pods/log"]
+    verbs: ["list"]
+  - apiGroups: [""]
+    resources: ["pods/log"]
+    verbs: ["get", "list"]
+  {{- end }}
+  {{- if .Values.rbac.extensions.monitoring }}
+  - apiGroups: ["monitoring.coreos.com"]
+    resources: ["servicemonitors"]
+    verbs: ["get", "create", "delete", "update", "list", "watch", "patch"]
+  {{- end }}
+{{- end }}

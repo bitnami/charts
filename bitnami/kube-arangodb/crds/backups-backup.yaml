@@ -1,0 +1,103 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: arangobackups.backup.arangodb.com
+spec:
+  group: backup.arangodb.com
+  names:
+    kind: ArangoBackup
+    listKind: ArangoBackupList
+    plural: arangobackups
+    shortNames:
+      - arangobackup
+    singular: arangobackup
+  scope: Namespaced
+  versions:
+    - name: v1
+      schema:
+        openAPIV3Schema:
+          type: object
+          x-kubernetes-preserve-unknown-fields: true
+      served: true
+      storage: true
+      additionalPrinterColumns:
+        - jsonPath: .spec.policyName
+          description: Policy name
+          name: Policy
+          type: string
+        - jsonPath: .spec.deployment.name
+          description: Deployment name
+          name: Deployment
+          type: string
+        - jsonPath: .status.backup.version
+          description: Backup Version
+          name: Version
+          type: string
+        - jsonPath: .status.backup.createdAt
+          description: Backup Creation Timestamp
+          name: Created
+          type: string
+        - jsonPath: .status.backup.sizeInBytes
+          description: Backup Size in Bytes
+          name: Size
+          type: integer
+          format: byte
+        - jsonPath: .status.backup.numberOfDBServers
+          description: Backup Number of the DB Servers
+          name: DBServers
+          type: integer
+        - jsonPath: .status.state
+          description: The actual state of the ArangoBackup
+          name: State
+          type: string
+        - jsonPath: .status.message
+          priority: 1
+          description: Message of the ArangoBackup object
+          name: Message
+          type: string
+      subresources:
+        status: {}
+    - name: v1alpha
+      schema:
+        openAPIV3Schema:
+          type: object
+          x-kubernetes-preserve-unknown-fields: true
+      served: false
+      storage: false
+      additionalPrinterColumns:
+        - jsonPath: .spec.policyName
+          description: Policy name
+          name: Policy
+          type: string
+        - jsonPath: .spec.deployment.name
+          description: Deployment name
+          name: Deployment
+          type: string
+        - jsonPath: .status.backup.version
+          description: Backup Version
+          name: Version
+          type: string
+        - jsonPath: .status.backup.createdAt
+          description: Backup Creation Timestamp
+          name: Created
+          type: string
+        - jsonPath: .status.backup.sizeInBytes
+          description: Backup Size in Bytes
+          name: Size
+          type: integer
+          format: byte
+        - jsonPath: .status.backup.numberOfDBServers
+          description: Backup Number of the DB Servers
+          name: DBServers
+          type: integer
+        - jsonPath: .status.state
+          description: The actual state of the ArangoBackup
+          name: State
+          type: string
+        - jsonPath: .status.message
+          priority: 1
+          description: Message of the ArangoBackup object
+          name: Message
+          type: string
+      subresources:
+        status: {}
