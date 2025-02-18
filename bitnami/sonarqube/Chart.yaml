@@ -25,7 +25,7 @@ dependencies:
   version: 2.x.x
 description: SonarQube(TM) is an open source quality management platform that analyzes and measures code's technical quality. It enables developers to detect code issues, vulnerabilities, and bugs in early stages.
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/sonarqube/img/sonarqube-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/sonarqube/img/sonarqube-stack-220x234.png
 keywords:
 - sonarqube
 - code-quality

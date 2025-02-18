@@ -6,19 +6,19 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: cilium
-      image: docker.io/bitnami/cilium:1.17.0-debian-12-r1
+      image: docker.io/bitnami/cilium:1.17.1-debian-12-r0
     - name: cilium-operator
-      image: docker.io/bitnami/cilium-operator:1.17.0-debian-12-r1
+      image: docker.io/bitnami/cilium-operator:1.17.1-debian-12-r0
     - name: cilium-proxy
-      image: docker.io/bitnami/cilium-proxy:1.29.10-debian-12-r6
+      image: docker.io/bitnami/cilium-proxy:1.29.10-debian-12-r8
     - name: hubble-relay
-      image: docker.io/bitnami/hubble-relay:1.17.0-debian-12-r0
+      image: docker.io/bitnami/hubble-relay:1.17.1-debian-12-r0
     - name: hubble-ui
-      image: docker.io/bitnami/hubble-ui:0.13.1-debian-12-r12
+      image: docker.io/bitnami/hubble-ui:0.13.1-debian-12-r14
     - name: hubble-ui-backend
-      image: docker.io/bitnami/hubble-ui-backend:0.13.1-debian-12-r19
+      image: docker.io/bitnami/hubble-ui-backend:0.13.1-debian-12-r21
 apiVersion: v2
-appVersion: 1.17.0
+appVersion: 1.17.1
 dependencies:
 - condition: etcd.enabled
   name: etcd
@@ -33,7 +33,7 @@ dependencies:
   version: 2.x.x
 description: Cilium is an eBPF-based networking, observability, and security for Linux container management platforms like Docker and Kubernetes.
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/cilium/img/cilium-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/cilium/img/cilium-stack-220x234.png
 keywords:
 - cilium
 - cni
@@ -52,4 +52,4 @@ sources:
 - https://github.com/bitnami/containers/tree/main/bitnami/hubble-relay
 - https://github.com/bitnami/containers/tree/main/bitnami/hubble-ui
 - https://github.com/bitnami/containers/tree/main/bitnami/hubble-ui-backend
-version: 2.0.3
+version: 2.0.4

@@ -1,8 +1,12 @@
 # Changelog
 
+## 4.0.1 (2025-02-18)
+
+* [bitnami/apisix] Release 4.0.1 ([#31964](https://github.com/bitnami/charts/pull/31964))
+
 ## 4.0.0 (2025-01-22)
 
-* [bitnami/apisix] Update ETCD to major 11 ([#31508](https://github.com/bitnami/charts/pull/31508))
+* [bitnami/apisix] Update ETCD to major 11 (#31508) ([9561660](https://github.com/bitnami/charts/commit/9561660522ef445652d58becbf3a39bf29836464)), closes [#31508](https://github.com/bitnami/charts/issues/31508)
 
 ## <small>3.7.2 (2025-01-17)</small>
 

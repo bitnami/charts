@@ -1,8 +1,13 @@
 # Changelog
 
-## 1.4.5 (2025-02-05)
+## 1.4.6 (2025-02-12)
 
-* [bitnami/prometheus] Release 1.4.5 ([#31776](https://github.com/bitnami/charts/pull/31776))
+* [bitnami/prometheus] Release 1.4.6 ([#31900](https://github.com/bitnami/charts/pull/31900))
+
+## <small>1.4.5 (2025-02-05)</small>
+
+* [bitnami/prometheus] Release 1.4.5 (#31776) ([8d72f34](https://github.com/bitnami/charts/commit/8d72f34addc80047ac7fdf2dc5035b74f8f1d51d)), closes [#31776](https://github.com/bitnami/charts/issues/31776)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
 
 ## <small>1.4.4 (2025-01-24)</small>
 

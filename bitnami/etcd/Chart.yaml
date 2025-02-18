@@ -6,9 +6,9 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: etcd
-      image: docker.io/bitnami/etcd:3.5.18-debian-12-r1
+      image: docker.io/bitnami/etcd:3.5.18-debian-12-r3
     - name: os-shell
-      image: docker.io/bitnami/os-shell:12-debian-12-r36
+      image: docker.io/bitnami/os-shell:12-debian-12-r37
 apiVersion: v2
 appVersion: 3.5.18
 dependencies:
@@ -19,7 +19,7 @@ dependencies:
   version: 2.x.x
 description: etcd is a distributed key-value store designed to securely store data across a cluster. etcd is widely used in production on account of its reliability, fault-tolerance and ease of use.
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/etcd/img/etcd-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/etcd/img/etcd-stack-220x234.png
 keywords:
 - etcd
 - cluster
@@ -32,4 +32,4 @@ maintainers:
 name: etcd
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/etcd
-version: 11.0.6
+version: 11.0.7

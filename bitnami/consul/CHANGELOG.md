@@ -1,8 +1,18 @@
 # Changelog
 
-## 11.4.4 (2025-02-04)
+## 11.4.6 (2025-02-13)
 
-* [bitnami/consul] Release 11.4.4 ([#31748](https://github.com/bitnami/charts/pull/31748))
+* [bitnami/consul] Release 11.4.6 ([#31914](https://github.com/bitnami/charts/pull/31914))
+
+## <small>11.4.5 (2025-02-12)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/consul] Release 11.4.5 (#31885) ([7fbd92d](https://github.com/bitnami/charts/commit/7fbd92db9094378cc77a6383760b13a55e1cc339)), closes [#31885](https://github.com/bitnami/charts/issues/31885)
+
+## <small>11.4.4 (2025-02-04)</small>
+
+* [bitnami/consul] Release 11.4.4 (#31748) ([519ca9c](https://github.com/bitnami/charts/commit/519ca9c99a05013258d83b24aab9bfbf8673e9ff)), closes [#31748](https://github.com/bitnami/charts/issues/31748)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
 
 ## <small>11.4.3 (2025-01-24)</small>
 

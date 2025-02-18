@@ -1,8 +1,13 @@
 # Changelog
 
-## 22.4.8 (2025-02-04)
+## 22.4.9 (2025-02-11)
 
-* [bitnami/airflow] Add dag volume mounts to web deployment for configmap-based dags ([#31620](https://github.com/bitnami/charts/pull/31620))
+* [bitnami/airflow] Release 22.4.9 ([#31857](https://github.com/bitnami/charts/pull/31857))
+
+## <small>22.4.8 (2025-02-05)</small>
+
+* [bitnami/airflow] Add dag volume mounts to web deployment for configmap-based dags (#31620) ([e1e00f5](https://github.com/bitnami/charts/commit/e1e00f59dce468e40b0d8d7b1d88fe8630dea6a7)), closes [#31620](https://github.com/bitnami/charts/issues/31620)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
 
 ## <small>22.4.7 (2025-01-22)</small>
 

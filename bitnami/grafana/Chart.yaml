@@ -19,7 +19,7 @@ dependencies:
   version: 2.x.x
 description: Grafana is an open source metric analytics and visualization suite for visualizing time series data that supports various types of data sources.
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/grafana/img/grafana-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/grafana/img/grafana-stack-220x234.png
 keywords:
 - analytics
 - monitoring

@@ -24,7 +24,7 @@ dependencies:
   version: 2.x.x
 description: Parse is a platform that enables users to add a scalable and powerful backend to launch a full-featured app for iOS, Android, JavaScript, Windows, Unity, and more.
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/parse/img/parse-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/parse/img/parse-stack-220x234.png
 keywords:
 - parse
 - backend

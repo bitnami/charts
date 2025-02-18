@@ -43,7 +43,7 @@ dependencies:
   version: 2.x.x
 description: Grafana Loki is a horizontally scalable, highly available, and multi-tenant log aggregation system. It provides real-time long tailing and full persistence to object storage.
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/grafana-loki/img/grafana-loki-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/grafana-loki/img/grafana-loki-stack-220x234.png
 keywords:
 - grafana
 - tracing

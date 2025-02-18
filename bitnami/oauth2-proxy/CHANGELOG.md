@@ -1,8 +1,13 @@
 # Changelog
 
-## 6.2.6 (2025-02-05)
+## 6.2.7 (2025-02-12)
 
-* [bitnami/oauth2-proxy] Release 6.2.6 ([#31773](https://github.com/bitnami/charts/pull/31773))
+* [bitnami/oauth2-proxy] Release 6.2.7 ([#31899](https://github.com/bitnami/charts/pull/31899))
+
+## <small>6.2.6 (2025-02-05)</small>
+
+* [bitnami/oauth2-proxy] Release 6.2.6 (#31773) ([4851a17](https://github.com/bitnami/charts/commit/4851a17bd2244c0d485d1d0c2caa82b06a87f84d)), closes [#31773](https://github.com/bitnami/charts/issues/31773)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
 
 ## <small>6.2.5 (2025-01-24)</small>
 

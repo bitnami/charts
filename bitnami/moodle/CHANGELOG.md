@@ -1,8 +1,12 @@
 # Changelog
 
-## 25.1.2 (2025-01-18)
+## 25.1.3 (2025-02-10)
 
-* [bitnami/moodle] Release 25.1.2 ([#31464](https://github.com/bitnami/charts/pull/31464))
+* [bitnami/moodle] Release 25.1.3 ([#31845](https://github.com/bitnami/charts/pull/31845))
+
+## <small>25.1.2 (2025-01-18)</small>
+
+* [bitnami/moodle] Release 25.1.2 (#31464) ([2dac33a](https://github.com/bitnami/charts/commit/2dac33a352eb558e87134eb8d91029ace3e9dbbb)), closes [#31464](https://github.com/bitnami/charts/issues/31464)
 
 ## <small>25.1.1 (2025-01-08)</small>
 

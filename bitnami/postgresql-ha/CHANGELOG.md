@@ -1,8 +1,18 @@
 # Changelog
 
-## 15.1.7 (2025-02-02)
+## 15.1.9 (2025-02-14)
 
-* [bitnami/postgresql-ha] Release 15.1.7 ([#31701](https://github.com/bitnami/charts/pull/31701))
+* [bitnami/postgresql-ha] Release 15.1.9 ([#31934](https://github.com/bitnami/charts/pull/31934))
+
+## <small>15.1.8 (2025-02-13)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/postgresql-ha] Release 15.1.8 (#31918) ([b9b90af](https://github.com/bitnami/charts/commit/b9b90afdac2ec76a269aa902057a06fd17b44da0)), closes [#31918](https://github.com/bitnami/charts/issues/31918)
+
+## <small>15.1.7 (2025-02-03)</small>
+
+* [bitnami/postgresql-ha] Release 15.1.7 (#31701) ([b9ab51b](https://github.com/bitnami/charts/commit/b9ab51b67afa6603a28951a9d86a475b4f4fb5f4)), closes [#31701](https://github.com/bitnami/charts/issues/31701)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
 
 ## <small>15.1.6 (2025-01-13)</small>
 
