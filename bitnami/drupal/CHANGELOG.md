@@ -1,8 +1,12 @@
 # Changelog
 
-## 21.1.2 (2025-01-07)
+## 21.1.3 (2025-02-06)
 
-* [bitnami/drupal] Release 21.1.2 ([#31232](https://github.com/bitnami/charts/pull/31232))
+* [bitnami/drupal] Release 21.1.3 ([#31803](https://github.com/bitnami/charts/pull/31803))
+
+## <small>21.1.2 (2025-01-07)</small>
+
+* [bitnami/drupal] Release 21.1.2 (#31232) ([299ae8d](https://github.com/bitnami/charts/commit/299ae8da5e8f007515709607ac7a3ad9b103e27f)), closes [#31232](https://github.com/bitnami/charts/issues/31232)
 
 ## <small>21.1.1 (2024-12-16)</small>
 

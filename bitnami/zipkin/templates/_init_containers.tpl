@@ -43,7 +43,7 @@ Init container definition for waiting for the database to be ready
       fi
   env:
     - name: CQLSH_HOST
-      value: {{ include "zipkin.cassandra.host" . }}
+      value: {{ include "zipkin.cassandra.host" . | quote }}
     - name: BITNAMI_DEBUG
       value: {{ ternary "true" "false" .Values.defaultInitContainers.waitForCassandra.image.debug | quote }}
     - name: CQLSH_PORT

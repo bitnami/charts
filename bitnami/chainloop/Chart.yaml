@@ -6,15 +6,15 @@ annotations:
   license: Apache-2.0
   images: |
     - name: chainloop-artifact-cas
-      image: docker.io/bitnami/chainloop-artifact-cas:0.156.0-debian-12-r0
+      image: docker.io/bitnami/chainloop-artifact-cas:0.165.0-debian-12-r0
     - name: chainloop-control-plane
-      image: docker.io/bitnami/chainloop-control-plane:0.156.0-debian-12-r0
+      image: docker.io/bitnami/chainloop-control-plane:0.165.0-debian-12-r0
     - name: chainloop-control-plane-migrations
-      image: docker.io/bitnami/chainloop-control-plane-migrations:0.155.0-debian-12-r0
+      image: docker.io/bitnami/chainloop-control-plane-migrations:0.163.0-debian-12-r0
     - name: dex
-      image: docker.io/bitnami/dex:2.41.1-debian-12-r12
+      image: docker.io/bitnami/dex:2.41.1-debian-12-r16
 apiVersion: v2
-appVersion: 0.156.0
+appVersion: 0.165.0
 dependencies:
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
@@ -31,7 +31,7 @@ dependencies:
   version: 1.4.x
 description: Chainloop is an open-source Software Supply Chain control plane, a single source of truth for metadata and artifacts, plus a declarative attestation process.
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/chainloop/img/chainloop-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/chainloop/img/chainloop-stack-220x234.png
 keywords:
 - chainloop
 - evidence-store
@@ -63,4 +63,4 @@ sources:
 - https://github.com/bitnami/containers/tree/main/bitnami/chainloop-control-plane-migrations
 - https://github.com/bitnami/containers/tree/main/bitnami/chainloop-artifact-cas
 - https://github.com/chainloop-dev/chainloop
-version: 2.1.20
+version: 2.1.30

@@ -36,8 +36,11 @@ spec:
     metadata:
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: receive
-      {{- if or .Values.receive.podAnnotations (include "thanos.receive.createConfigmap" $) (include "thanos.createObjstoreSecret" $) }}
+      {{- if or .Values.commonAnnotations .Values.receive.podAnnotations (include "thanos.receive.createConfigmap" $) (include "thanos.createObjstoreSecret" $) }}
       annotations:
+        {{- if .Values.commonAnnotations }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
+        {{- end }}
         {{- if (include "thanos.createObjstoreSecret" .) }}
         checksum/objstore-configuration: {{ include "thanos.objstoreConfig" . | sha256sum }}
         {{- end }}
@@ -135,6 +138,7 @@ spec:
             - --grpc-address=0.0.0.0:{{ .Values.receive.containerPorts.grpc }}
             - --http-address=0.0.0.0:{{ .Values.receive.containerPorts.http }}
             - --remote-write.address=0.0.0.0:{{ .Values.receive.containerPorts.remote }}
+            - --receive.capnproto-address=0.0.0.0:{{ .Values.receive.containerPorts.capnproto }}
             {{- if or .Values.objstoreConfig .Values.existingObjstoreSecret }}
             - --objstore.config=$(OBJSTORE_CONFIG)
             {{- end }}
@@ -152,10 +156,11 @@ spec:
             {{- if not .Values.receive.service.additionalHeadless }}
             - --receive.local-endpoint=127.0.0.1:{{ .Values.receive.containerPorts.grpc }}
             {{- else }}
-            - --receive.local-endpoint=$(NAME).{{ include "thanos.receive.fullname" . }}-headless.$(NAMESPACE).svc.{{ .Values.clusterDomain }}:10901
+            - --receive.local-endpoint=$(NAME).{{ include "thanos.receive.fullname" . }}-headless.$(NAMESPACE).svc.{{ .Values.clusterDomain }}:{{ .Values.receive.containerPorts.grpc }}
             {{- end }}
             {{- if eq .Values.receive.mode "standalone" }}
             - --receive.hashrings-file=/var/lib/thanos-receive/hashrings.json
+            - --receive.replication-protocol={{ .Values.receive.replicationProtocol }}
             - --receive.replication-factor={{ .Values.receive.replicationFactor }}
             {{- end }}
             {{- if .Values.receive.grpc.server.tls.enabled }}
@@ -208,6 +213,9 @@ spec:
               protocol: TCP
             - containerPort: {{ .Values.receive.containerPorts.remote }}
               name: remote-write
+              protocol: TCP
+            - containerPort: {{ .Values.receive.containerPorts.capnproto }}
+              name: capnproto
               protocol: TCP
           {{- if .Values.receive.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.receive.customLivenessProbe "context" $) | nindent 12 }}

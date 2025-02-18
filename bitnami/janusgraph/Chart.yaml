@@ -25,7 +25,7 @@ dependencies:
   version: 2.x.x
 description: JanusGraph is a scalable graph database optimized for storing and querying graphs containing hundreds of billions of vertices and edges distributed across a multi-machine cluster.
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/janusgraph/img/janusgraph-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/janusgraph/img/janusgraph-stack-220x234.png
 keywords:
 - janusgraph
 - graph

@@ -13,11 +13,11 @@ dependencies:
 - condition: redis.enabled
   name: redis
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 19.x.x
+  version: 20.x.x
 - condition: postgresql.enabled
   name: postgresql
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 15.x.x
+  version: 16.x.x
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
   tags:
@@ -25,7 +25,7 @@ dependencies:
   version: 2.x.x
 description: Superset is a modern data exploration and data visualization platform. 
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/superset/img/superset-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/superset/img/superset-stack-220x234.png
 keywords:
 - superset
 - analytics
@@ -37,4 +37,4 @@ sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/superset
 - https://github.com/bitnami/containers/tree/main/bitnami/superset
 - https://github.com/apache/superset
-version: 0.2.1
+version: 1.0.0

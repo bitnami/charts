@@ -13,8 +13,11 @@ metadata:
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.compactor.podLabels .Values.commonLabels ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: compactor
-  {{- if or .Values.compactor.podAnnotations (include "thanos.createObjstoreSecret" .) }}
+  {{- if or .Values.commonAnnotations .Values.compactor.podAnnotations (include "thanos.createObjstoreSecret" .) }}
   annotations:
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
     {{- if (include "thanos.createObjstoreSecret" .) }}
     checksum/objstore-configuration: {{ include "thanos.objstoreConfig" . | sha256sum }}
     {{- end }}
