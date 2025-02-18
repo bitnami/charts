@@ -1,6 +1,6 @@
 # Changelog
 
-## 15.1.10 (2025-02-17)
+## 15.1.10 (2025-02-18)
 
 * [bitnami/postgresql-ha] Add resources for backup cronjob ([#31957](https://github.com/bitnami/charts/pull/31957))
 
