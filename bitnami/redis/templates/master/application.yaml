@@ -46,12 +46,14 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.podLabels "context" $ ) | nindent 8 }}
         {{- end }}
       annotations:
-      {{- if not .Values.disableChecksums }}
+      {{- if .Values.configmapChecksumAnnotations }}
         {{- if (include "redis.createConfigmap" .) }}
         checksum/configmap: {{ pick ( include (print $.Template.BasePath "/configmap.yaml") . | fromYaml ) "data" | toYaml | sha256sum }}
         {{- end }}
         checksum/health: {{ pick ( include (print $.Template.BasePath "/health-configmap.yaml") . | fromYaml ) "data" | toYaml | sha256sum }}
         checksum/scripts: {{ pick ( include (print $.Template.BasePath "/scripts-configmap.yaml") . | fromYaml ) "data" | toYaml | sha256sum }}
+      {{- end }}
+      {{- if .Values.secretChecksumAnnotations }}
         checksum/secret: {{ pick ( include (print $.Template.BasePath "/secret.yaml") . | fromYaml ) "data" | toYaml | sha256sum }}
       {{- end }}
       {{- if .Values.master.podAnnotations }}

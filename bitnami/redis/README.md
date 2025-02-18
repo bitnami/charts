@@ -470,24 +470,25 @@ helm install my-release --set master.persistence.existingClaim=PVC_NAME oci://RE
 
 ### Common parameters
 
-| Name                      | Description                                                                                                    | Value           |
-| ------------------------- | -------------------------------------------------------------------------------------------------------------- | --------------- |
-| `kubeVersion`             | Override Kubernetes version                                                                                    | `""`            |
-| `nameOverride`            | String to partially override common.names.fullname                                                             | `""`            |
-| `fullnameOverride`        | String to fully override common.names.fullname                                                                 | `""`            |
-| `namespaceOverride`       | String to fully override common.names.namespace                                                                | `""`            |
-| `commonLabels`            | Labels to add to all deployed objects                                                                          | `{}`            |
-| `commonAnnotations`       | Annotations to add to all deployed objects                                                                     | `{}`            |
-| `secretAnnotations`       | Annotations to add to secret                                                                                   | `{}`            |
-| `clusterDomain`           | Kubernetes cluster domain name                                                                                 | `cluster.local` |
-| `extraDeploy`             | Array of extra objects to deploy with the release                                                              | `[]`            |
-| `useHostnames`            | Use hostnames internally when announcing replication. If false, the hostname will be resolved to an IP address | `true`          |
-| `nameResolutionThreshold` | Failure threshold for internal hostnames resolution                                                            | `5`             |
-| `nameResolutionTimeout`   | Timeout seconds between probes for internal hostnames resolution                                               | `5`             |
-| `diagnosticMode.enabled`  | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                        | `false`         |
-| `diagnosticMode.command`  | Command to override all containers in the deployment                                                           | `["sleep"]`     |
-| `diagnosticMode.args`     | Args to override all containers in the deployment                                                              | `["infinity"]`  |
-| `disableChecksums`        | Disable configmap and secret checksums used to trigger rolling updates                                         | `false`         |
+| Name                           | Description                                                                                                    | Value           |
+| ------------------------------ | -------------------------------------------------------------------------------------------------------------- | --------------- |
+| `kubeVersion`                  | Override Kubernetes version                                                                                    | `""`            |
+| `nameOverride`                 | String to partially override common.names.fullname                                                             | `""`            |
+| `fullnameOverride`             | String to fully override common.names.fullname                                                                 | `""`            |
+| `namespaceOverride`            | String to fully override common.names.namespace                                                                | `""`            |
+| `commonLabels`                 | Labels to add to all deployed objects                                                                          | `{}`            |
+| `commonAnnotations`            | Annotations to add to all deployed objects                                                                     | `{}`            |
+| `configmapChecksumAnnotations` | Enable checksum annotations used to trigger rolling updates when ConfigMap(s) change                           | `true`          |
+| `secretChecksumAnnotations`    | Enable checksum annotations used to trigger rolling updates when Secret(s) change                              | `true`          |
+| `secretAnnotations`            | Annotations to add to secret                                                                                   | `{}`            |
+| `clusterDomain`                | Kubernetes cluster domain name                                                                                 | `cluster.local` |
+| `extraDeploy`                  | Array of extra objects to deploy with the release                                                              | `[]`            |
+| `useHostnames`                 | Use hostnames internally when announcing replication. If false, the hostname will be resolved to an IP address | `true`          |
+| `nameResolutionThreshold`      | Failure threshold for internal hostnames resolution                                                            | `5`             |
+| `nameResolutionTimeout`        | Timeout seconds between probes for internal hostnames resolution                                               | `5`             |
+| `diagnosticMode.enabled`       | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                        | `false`         |
+| `diagnosticMode.command`       | Command to override all containers in the deployment                                                           | `["sleep"]`     |
+| `diagnosticMode.args`          | Args to override all containers in the deployment                                                              | `["infinity"]`  |
 
 ### Redis&reg; Image parameters
 
