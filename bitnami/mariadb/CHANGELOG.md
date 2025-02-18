@@ -1,12 +1,13 @@
 # Changelog
 
-## 20.3.0 (2025-02-05)
+## 20.3.0 (2025-02-18)
 
 * [bitnami/mariadb] feat: Add Transparent Data Encryption support ([#31706](https://github.com/bitnami/charts/pull/31706))
 
-## 20.2.4 (2025-02-17)
+## <small>20.2.4 (2025-02-17)</small>
 
-* [bitnami/mariadb] chore(resources): Increase primary resources ([#31959](https://github.com/bitnami/charts/pull/31959))
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/mariadb] chore(resources): Increase primary resources (#31959) ([04f85f5](https://github.com/bitnami/charts/commit/04f85f5b9d464b8f9670affa339ab277692308ad)), closes [#31959](https://github.com/bitnami/charts/issues/31959)
 
 ## <small>20.2.3 (2025-02-05)</small>
 
