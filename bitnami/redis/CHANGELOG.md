@@ -8,6 +8,10 @@
 
 * [bitnami/redis] Release 20.7.2 (#32033) ([829c44e](https://github.com/bitnami/charts/commit/829c44eddcc0f0fdc3e80d49acd7b4ee41b0408a)), closes [#32033](https://github.com/bitnami/charts/issues/32033)
 
+## <small>20.7.2 (2025-02-20)</small>
+
+* [bitnami/redis] Release 20.7.2 (#32033) ([829c44e](https://github.com/bitnami/charts/commit/829c44eddcc0f0fdc3e80d49acd7b4ee41b0408a)), closes [#32033](https://github.com/bitnami/charts/issues/32033)
+
 ## <small>20.7.1 (2025-02-16)</small>
 
 * [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
