@@ -1,6 +1,6 @@
 # Changelog
 
-## 21.4.6 (2025-02-17)
+## 21.4.6 (2025-02-18)
 
 * [bitnami/elasticsearch] remove copyTlsCerts init container ([#31960](https://github.com/bitnami/charts/pull/31960))
 
