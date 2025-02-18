@@ -286,6 +286,7 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 | Name                                                             | Description                                                                                                                                                                                                                                           | Value            |
 | ---------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
 | `persistence.enabled`                                            | Enable persistence using Persistent Volume Claims                                                                                                                                                                                                     | `true`           |
+| `persistence.subPath`                                            | Include subPath on volumeMounts for Odoo data                                                                                                                                                                                                         | `""`             |
 | `persistence.resourcePolicy`                                     | Setting it to "keep" to avoid removing PVCs during a helm delete operation. Leaving it empty will delete PVCs after the chart deleted                                                                                                                 | `""`             |
 | `persistence.storageClass`                                       | Persistent Volume storage class                                                                                                                                                                                                                       | `""`             |
 | `persistence.accessModes`                                        | Persistent Volume access modes                                                                                                                                                                                                                        | `[]`             |
@@ -548,7 +549,7 @@ kubectl delete pod odoo-postgresql-0
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

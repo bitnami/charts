@@ -85,7 +85,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/seaweedfs
-  tag: 3.82.0-debian-12-r1
+  tag: 3.84.0-debian-12-r3
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -324,7 +324,7 @@ master:
   ##
   volumeSizeLimitMB: 1000
   ## @param master.config Master Server configuration
-  ## Specify content for master.yml
+  ## Specify content for master.toml
   ##
   config: ""
   ## @param master.existingConfigmap The name of an existing ConfigMap with your custom configuration for Master Server
@@ -716,11 +716,11 @@ master:
   ## @section Master Server Persistence Parameters
   ##
 
-  ## Enable persistence using Persistent Volume Claims
+  ## Enable Master data persistence using Persistent Volume Claims
   ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ##
   persistence:
-    ## @param master.persistence.enabled Enable persistence on Master Server using Persistent Volume Claims
+    ## @param master.persistence.enabled Enable data persistence on Master Server using Persistent Volume Claims
     ##
     enabled: true
     ## @param master.persistence.mountPath Path to mount the volume at.
@@ -747,7 +747,7 @@ master:
     ## @param master.persistence.size Size of data volume
     ##
     size: 8Gi
-    ## @param master.persistence.existingClaim The name of an existing PVC to use for persistence
+    ## @param master.persistence.existingClaim The name of an existing PVC to use for data persistence
     ##
     existingClaim: ""
     ## @param master.persistence.selector Selector to match an existing Persistent Volume for data PVC
@@ -759,6 +759,51 @@ master:
     ##
     selector: {}
     ## @param master.persistence.dataSource Custom PVC data source
+    ##
+    dataSource: {}
+  ## Enable Master logs persistence using Persistent Volume Claims
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
+  ##
+  logPersistence:
+    ## @param master.logPersistence.enabled Enable logs persistence on Master Server using Persistent Volume Claims
+    ##
+    enabled: false
+    ## @param master.logPersistence.mountPath Path to mount the volume at.
+    ##
+    mountPath: /logs
+    ## @param master.logPersistence.subPath The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services
+    ##
+    subPath: ""
+    ## @param master.logPersistence.storageClass Storage class of backing PVC
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
+    storageClass: ""
+    ## @param master.logPersistence.annotations Persistent Volume Claim annotations
+    ##
+    annotations: {}
+    ## @param master.logPersistence.accessModes Persistent Volume Access Modes
+    ##
+    accessModes:
+      - ReadWriteOnce
+    ## @param master.logPersistence.size Size of logs volume
+    ##
+    size: 8Gi
+    ## @param master.logPersistence.existingClaim The name of an existing PVC to use for logs persistence
+    ##
+    existingClaim: ""
+    ## @param master.logPersistence.selector Selector to match an existing Persistent Volume for logs PVC
+    ## If set, the PVC can't have a PV dynamically provisioned for it
+    ## E.g.
+    ## selector:
+    ##   matchLabels:
+    ##     app: my-app
+    ##
+    selector: {}
+    ## @param master.logPersistence.dataSource Custom PVC data source
     ##
     dataSource: {}
   ## persistentVolumeClaimRetentionPolicy
@@ -974,7 +1019,7 @@ volume:
   ##
   publicUrl: ""
   ## @param volume.config Volume Server configuration
-  ## Specify content for volume.yml
+  ## Specify content for volume.toml
   ##
   config: ""
   ## @param volume.existingConfigmap The name of an existing ConfigMap with your custom configuration for Volume Server
@@ -1421,6 +1466,51 @@ volume:
         ## @param volume.dataVolumes[0].persistence.dataSource Custom PVC data source
         ##
         dataSource: {}
+  ## Enable Volume logs persistence using Persistent Volume Claims
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
+  ##
+  logPersistence:
+    ## @param volume.logPersistence.enabled Enable logs persistence on Volume Server using Persistent Volume Claims
+    ##
+    enabled: false
+    ## @param volume.logPersistence.mountPath Path to mount the volume at.
+    ##
+    mountPath: /logs
+    ## @param volume.logPersistence.subPath The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services
+    ##
+    subPath: ""
+    ## @param volume.logPersistence.storageClass Storage class of backing PVC
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
+    storageClass: ""
+    ## @param volume.logPersistence.annotations Persistent Volume Claim annotations
+    ##
+    annotations: {}
+    ## @param volume.logPersistence.accessModes Persistent Volume Access Modes
+    ##
+    accessModes:
+      - ReadWriteOnce
+    ## @param volume.logPersistence.size Size of logs volume
+    ##
+    size: 8Gi
+    ## @param volume.logPersistence.existingClaim The name of an existing PVC to use for logs persistence
+    ##
+    existingClaim: ""
+    ## @param volume.logPersistence.selector Selector to match an existing Persistent Volume for logs PVC
+    ## If set, the PVC can't have a PV dynamically provisioned for it
+    ## E.g.
+    ## selector:
+    ##   matchLabels:
+    ##     app: my-app
+    ##
+    selector: {}
+    ## @param volume.logPersistence.dataSource Custom PVC data source
+    ##
+    dataSource: {}
   ## persistentVolumeClaimRetentionPolicy
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#persistentvolumeclaim-retention
   ## @param volume.persistentVolumeClaimRetentionPolicy.enabled Controls if and how PVCs are deleted during the lifecycle of the Volume Server StatefulSet
@@ -1634,7 +1724,7 @@ filer:
   ##
   bindAddress: 0.0.0.0
   ## @param filer.config Filer Server configuration
-  ## Specify content for filer.yml
+  ## Specify content for filer.toml
   ##
   config: |
     [leveldb2]
@@ -1642,6 +1732,13 @@ filer:
   ## @param filer.existingConfigmap The name of an existing ConfigMap with your custom configuration for Filer Server
   ##
   existingConfigmap: ""
+  ## @param filer.notificationConfig Filer Server notification configuration
+  ## Specify content for custom notification.toml
+  ##
+  notificationConfig: ""
+  ## @param filer.existingNotificationConfigmap The name of an existing ConfigMap with your custom notification configuration for Filer Server
+  ##
+  existingNotificationConfigmap: ""
   ## @param filer.command Override default Filer Server container command (useful when using custom images)
   ##
   command: []
@@ -2024,6 +2121,65 @@ filer:
     ##             name: http
     ##
     extraRules: []
+
+  ## @section Filer Server Persistence Parameters
+  ##
+
+  ## Enable Filer logs persistence using Persistent Volume Claims
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
+  ##
+  logPersistence:
+    ## @param filer.logPersistence.enabled Enable logs persistence on Filer Server using Persistent Volume Claims
+    ##
+    enabled: false
+    ## @param filer.logPersistence.mountPath Path to mount the volume at.
+    ##
+    mountPath: /logs
+    ## @param filer.logPersistence.subPath The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services
+    ##
+    subPath: ""
+    ## @param filer.logPersistence.storageClass Storage class of backing PVC
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
+    storageClass: ""
+    ## @param filer.logPersistence.annotations Persistent Volume Claim annotations
+    ##
+    annotations: {}
+    ## @param filer.logPersistence.accessModes Persistent Volume Access Modes
+    ##
+    accessModes:
+      - ReadWriteOnce
+    ## @param filer.logPersistence.size Size of logs volume
+    ##
+    size: 8Gi
+    ## @param filer.logPersistence.existingClaim The name of an existing PVC to use for logs persistence
+    ##
+    existingClaim: ""
+    ## @param filer.logPersistence.selector Selector to match an existing Persistent Volume for logs PVC
+    ## If set, the PVC can't have a PV dynamically provisioned for it
+    ## E.g.
+    ## selector:
+    ##   matchLabels:
+    ##     app: my-app
+    ##
+    selector: {}
+    ## @param filer.logPersistence.dataSource Custom PVC data source
+    ##
+    dataSource: {}
+  ## persistentVolumeClaimRetentionPolicy
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#persistentvolumeclaim-retention
+  ## @param filer.persistentVolumeClaimRetentionPolicy.enabled Controls if and how PVCs are deleted during the lifecycle of the Master Server StatefulSet
+  ## @param filer.persistentVolumeClaimRetentionPolicy.whenScaled Volume retention behavior when the replica count of the StatefulSet is reduced
+  ## @param filer.persistentVolumeClaimRetentionPolicy.whenDeleted Volume retention behavior that applies when the StatefulSet is deleted
+  ##
+  persistentVolumeClaimRetentionPolicy:
+    enabled: false
+    whenScaled: Retain
+    whenDeleted: Retain
 
   ## @section Filer Server Metrics Parameters
   ##
@@ -3565,7 +3721,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r35
+    tag: 12-debian-12-r37
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -3649,7 +3805,7 @@ mariadb:
   image:
     registry: docker.io
     repository: bitnami/mariadb
-    tag: 11.4.4-debian-12-r3
+    tag: 11.4.5-debian-12-r2
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -3750,7 +3906,7 @@ postgresql:
   image:
     registry: docker.io
     repository: bitnami/postgresql
-    tag: 17.2.0-debian-12-r8
+    tag: 17.2.0-debian-12-r12
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images

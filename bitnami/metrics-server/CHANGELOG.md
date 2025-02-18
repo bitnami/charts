@@ -1,8 +1,17 @@
 # Changelog
 
-## 7.3.3 (2025-01-24)
+## 7.3.5 (2025-02-12)
 
-* [bitnami/metrics-server] Release 7.3.3 ([#31569](https://github.com/bitnami/charts/pull/31569))
+* [bitnami/metrics-server] Release 7.3.5 ([#31897](https://github.com/bitnami/charts/pull/31897))
+
+## <small>7.3.4 (2025-02-05)</small>
+
+* [bitnami/metrics-server] Release 7.3.4 (#31765) ([4d013b8](https://github.com/bitnami/charts/commit/4d013b8026cafe1b4c8bed3cc14e80a69f124b21)), closes [#31765](https://github.com/bitnami/charts/issues/31765)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>7.3.3 (2025-01-24)</small>
+
+* [bitnami/metrics-server] Release 7.3.3 (#31569) ([fd917c4](https://github.com/bitnami/charts/commit/fd917c450c4415cd8b083041582c0fb7e9cc4dc3)), closes [#31569](https://github.com/bitnami/charts/issues/31569)
 
 ## <small>7.3.2 (2025-01-17)</small>
 

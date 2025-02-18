@@ -30,8 +30,11 @@ spec:
     metadata:
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: receive-distributor
-      {{- if or .Values.receiveDistributor.podAnnotations (include "thanos.receive.createConfigmap" .) (include "thanos.createObjstoreSecret" .) }}
+      {{- if or .Values.commonAnnotations .Values.receiveDistributor.podAnnotations (include "thanos.receive.createConfigmap" .) (include "thanos.createObjstoreSecret" .) }}
       annotations:
+        {{- if .Values.commonAnnotations }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
+        {{- end }}
         {{- if (include "thanos.createObjstoreSecret" .) }}
         checksum/objstore-configuration: {{ include "thanos.objstoreConfig" . | sha256sum }}
         {{- end }}
@@ -110,9 +113,11 @@ spec:
             - --grpc-address=0.0.0.0:{{ .Values.receive.containerPorts.grpc }}
             - --http-address=0.0.0.0:{{ .Values.receive.containerPorts.http }}
             - --remote-write.address=0.0.0.0:{{ .Values.receive.containerPorts.remote }}
+            - --receive.capnproto-address=0.0.0.0:{{ .Values.receive.containerPorts.capnproto }}
             - --label={{ .Values.receiveDistributor.replicaLabel }}="$(NAME)"
             - --label=receive="true"
             - --receive.hashrings-file=/var/lib/thanos-receive/hashrings.json
+            - --receive.replication-protocol={{ .Values.receiveDistributor.replicationProtocol }}
             - --receive.replication-factor={{ .Values.receiveDistributor.replicationFactor }}
             {{- if (include "thanos.httpConfigEnabled" .) }}
             - --http.config=/conf/http/http-config.yml
@@ -158,6 +163,9 @@ spec:
               protocol: TCP
             - containerPort: {{ .Values.receive.service.ports.remote }}
               name: remote-write
+              protocol: TCP
+            - containerPort: {{ .Values.receive.containerPorts.capnproto }}
+              name: capnproto
               protocol: TCP
           {{- if .Values.receiveDistributor.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.receiveDistributor.customLivenessProbe "context" $) | nindent 12 }}

@@ -293,17 +293,29 @@ spec:
           ports:
             - name: amqp
               containerPort: {{ .Values.containerPorts.amqp }}
+              {{- if .Values.hostPorts.amqp }}
+              hostPort: {{ .Values.hostPorts.amqp }}
+              {{- end }}
             - name: dist
               containerPort: {{ .Values.containerPorts.dist }}
             - name: stats
               containerPort: {{ .Values.containerPorts.manager }}
+              {{- if .Values.hostPorts.manager }}
+              hostPort: {{ .Values.hostPorts.manager }}
+              {{- end }}
             - name: epmd
               containerPort: {{ .Values.containerPorts.epmd }}
             - name: metrics
               containerPort: {{ .Values.containerPorts.metrics }}
+              {{- if .Values.hostPorts.metrics }}
+              hostPort: {{ .Values.hostPorts.metrics }}
+              {{- end }}
             {{- if .Values.auth.tls.enabled }}
             - name: amqp-tls
               containerPort: {{ .Values.containerPorts.amqpTls }}
+              {{- if .Values.hostPorts.amqpTls }}
+              hostPort: {{ .Values.hostPorts.amqpTls }}
+              {{- end }}
             {{- end }}
             {{- if .Values.extraContainerPorts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraContainerPorts "context" $) | nindent 12 }}
