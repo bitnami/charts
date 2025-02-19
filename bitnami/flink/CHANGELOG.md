@@ -1,8 +1,14 @@
 # Changelog
 
-## 1.4.3 (2025-02-12)
+## 1.4.4 (2025-02-19)
 
-* [bitnami/flink] Release 1.4.3 ([#31905](https://github.com/bitnami/charts/pull/31905))
+* [bitnami/flink] Release 1.4.4 ([#31995](https://github.com/bitnami/charts/pull/31995))
+
+## <small>1.4.3 (2025-02-12)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/flink] Release 1.4.3 (#31905) ([cc6d993](https://github.com/bitnami/charts/commit/cc6d99384d62416d9b7265539d99f047833d6966)), closes [#31905](https://github.com/bitnami/charts/issues/31905)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
 
 ## <small>1.4.2 (2025-01-28)</small>
 
