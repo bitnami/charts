@@ -382,7 +382,8 @@ jobs:
           fi
       - id: update-prometheus-rules
         name: Update Prometheus rules on kube-prometheus based on upstream
-        if: needs.get-chart.outputs.chart == 'kube-prometheus'
+        # To avoid malicious executions, only PRs performed by the bitnami-bot will perform the CRDs update
+        if: github.event.pull_request.user.login == 'bitnami-bot' && needs.get-chart.outputs.chart == 'kube-prometheus'
         run: |
           cd "${GITHUB_WORKSPACE}/charts" || exit 1
           
@@ -447,7 +448,7 @@ jobs:
             namespace: {{ include "common.names.namespace" . | quote }}
             labels: {{ include "kube-prometheus.prometheus.labels" . | nindent 4 }}
             {{- if .Values.commonAnnotations }}
-            annotations: {{- include "common.tplvalues.render" ( dict "value" ..Values.commonAnnotations "context" . ) | nindent 4 }}
+            annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" . ) | nindent 4 }}
             {{- end }}
           $spec
           {{- end }}
