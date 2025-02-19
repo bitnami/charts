@@ -22,8 +22,6 @@ jobs:
   update-prometheus-rules:
     runs-on: ubuntu-latest
     name: Automatically update default Prometheus rules based on upstream
-    permissions:
-      contents: write
     outputs:
       result: ${{ steps.update-prometheus-rules.outputs.result }}
     steps:
@@ -45,8 +43,6 @@ jobs:
           curl -SsLfO "https://get.helm.sh/${HELM_TARBALL}" && sudo tar xf "$HELM_TARBALL" --strip-components 1 -C /usr/local/bin
       - id: update-rules
         name: Update Prometheus rules
-        env:
-          GITHUB_TOKEN: "${{ github.token }}"
         run: |
           # This function returns the chart parameter name based on the rule name
           rule_parameter_from_rule_name() {
@@ -127,7 +123,4 @@ jobs:
           # Push all the new commits, if any
           if [[ $(git cherry -v) ]]; then
             git push
-            echo "result=ok" >> $GITHUB_OUTPUT
-          else
-            echo "result=skip" >> $GITHUB_OUTPUT
           fi
