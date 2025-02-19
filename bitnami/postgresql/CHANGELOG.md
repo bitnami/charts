@@ -1,5 +1,13 @@
 # Changelog
 
+## 16.4.11 (2025-02-19)
+
+* [bitnami/postgresql] Add secretAnnotations value ([#31984](https://github.com/bitnami/charts/pull/31984))
+
+## 16.4.10 (2025-02-18)
+
+* [bitnami/*] Fix typo in named template name ([#31858](https://github.com/bitnami/charts/pull/31858))
+
 ## 16.4.9 (2025-02-14)
 
 * [bitnami/postgresql] Release 16.4.9 ([#31935](https://github.com/bitnami/charts/pull/31935))
