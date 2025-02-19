@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.29.1 (2025-01-10)
+## 2.30.0 (2025-01-30)
 
-* [bitnami/common] Removing seLinuxOptions from omission ([#31279](https://github.com/bitnami/charts/pull/31279))
+* [bitnami/common] Option to add "app.kubernetes.io/component" label ([#31302](https://github.com/bitnami/charts/pull/31302))
+
+## <small>2.29.1 (2025-01-23)</small>
+
+* [bitnami/common] Removing seLinuxOptions from omission (#31279) ([e7cb168](https://github.com/bitnami/charts/commit/e7cb168ca2bccd57e28bb985e099953a4f7e3b38)), closes [#31279](https://github.com/bitnami/charts/issues/31279) [#31278](https://github.com/bitnami/charts/issues/31278)
 
 ## 2.29.0 (2025-01-03)
 
