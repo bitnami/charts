@@ -1,8 +1,12 @@
 # Changelog
 
-## 8.0.2 (2025-02-19)
+## 8.0.3 (2025-02-19)
 
-* [bitnami/clickhouse] Release 8.0.2 ([#31978](https://github.com/bitnami/charts/pull/31978))
+* [bitnami/clickhouse] Release 8.0.3 ([#31992](https://github.com/bitnami/charts/pull/31992))
+
+## <small>8.0.2 (2025-02-19)</small>
+
+* [bitnami/clickhouse] Release 8.0.2 (#31978) ([a05641e](https://github.com/bitnami/charts/commit/a05641ec0e0b76d763dd0dead06a2acfb3e7002b)), closes [#31978](https://github.com/bitnami/charts/issues/31978)
 
 ## <small>8.0.1 (2025-02-14)</small>
 
