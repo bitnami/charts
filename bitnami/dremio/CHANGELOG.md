@@ -1,8 +1,12 @@
 # Changelog
 
+## 0.4.1 (2025-02-19)
+
+* [bitnami/dremio] Release 0.4.1 ([#31986](https://github.com/bitnami/charts/pull/31986))
+
 ## 0.4.0 (2025-01-29)
 
-* [bitnami/dremio] feature(minio): Bump MinIO subchart ([#31658](https://github.com/bitnami/charts/pull/31658))
+* [bitnami/dremio] feature(minio): Bump MinIO subchart (#31658) ([fd83e08](https://github.com/bitnami/charts/commit/fd83e0870ccc01ef4f311cf787bc82f700e94577)), closes [#31658](https://github.com/bitnami/charts/issues/31658)
 
 ## <small>0.3.2 (2025-01-28)</small>
 
