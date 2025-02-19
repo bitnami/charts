@@ -295,6 +295,8 @@ jobs:
         name: 'Update CRDs'
         # To avoid malicious executions, only PRs performed by the bitnami-bot will perform the CRDs update
         if: github.event.pull_request.user.login == 'bitnami-bot'
+        env:
+          CHART: ${{ needs.get-chart.outputs.chart }}
         run: |
           cd "${GITHUB_WORKSPACE}/charts" || exit 1
 
@@ -381,8 +383,6 @@ jobs:
       - id: update-prometheus-rules
         name: Update Prometheus rules on kube-prometheus based on upstream
         if: needs.get-chart.outputs.chart == 'kube-prometheus'
-        env:
-          CHART: ${{ needs.get-chart.outputs.chart }}
         run: |
           cd "${GITHUB_WORKSPACE}/charts" || exit 1
           
