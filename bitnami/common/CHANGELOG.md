@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.30.0 (2025-02-18)
+## 2.30.0 (2025-02-19)
 
 * [bitnami/common] Add helper to check API versions ([#31969](https://github.com/bitnami/charts/pull/31969))
 
