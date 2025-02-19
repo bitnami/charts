@@ -519,6 +519,19 @@ The [Bitnami grafana-tempo](https://github.com/bitnami/containers/tree/main/bitn
 | `metricsGenerator.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `metricsGenerator.pdb.minAvailable` and `metricsGenerator.pdb.maxUnavailable` are empty.                                                                    | `""`             |
 | `metricsGenerator.enableServiceLinks`                                | Whether information about services should be injected into pod's environment variable                                                                                                                                                               | `true`           |
 
+### Metrics Generator Persistence Parameters
+
+| Name                                         | Description                                                                      | Value               |
+| -------------------------------------------- | -------------------------------------------------------------------------------- | ------------------- |
+| `metricsGenerator.persistence.enabled`       | Enable persistence in Metrics Generator instances                                | `false`             |
+| `metricsGenerator.persistence.existingClaim` | Name of an existing PVC to use                                                   | `""`                |
+| `metricsGenerator.persistence.storageClass`  | PVC Storage Class for Metrics Generator data volume                              | `""`                |
+| `metricsGenerator.persistence.subPath`       | The subdirectory of the volume to mount to                                       | `""`                |
+| `metricsGenerator.persistence.accessModes`   | PVC Access modes                                                                 | `["ReadWriteOnce"]` |
+| `metricsGenerator.persistence.size`          | PVC Storage Request for Metrics Generator data volume                            | `8Gi`               |
+| `metricsGenerator.persistence.annotations`   | Additional PVC annotations                                                       | `{}`                |
+| `metricsGenerator.persistence.selector`      | Selector to match an existing Persistent Volume for Metrics Generator's data PVC | `{}`                |
+
 ### Metrics Generator Traffic Exposure Parameters
 
 | Name                                                     | Description                                                                                                                    | Value       |
