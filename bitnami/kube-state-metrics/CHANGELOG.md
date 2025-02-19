@@ -1,8 +1,12 @@
 # Changelog
 
-## 5.0.2 (2025-02-04)
+## 5.0.3 (2025-02-19)
 
-* [bitnami/kube-state-metrics] Release 5.0.2 ([#31763](https://github.com/bitnami/charts/pull/31763))
+* [bitnami/kube-state-metrics] Release 5.0.3 ([#32010](https://github.com/bitnami/charts/pull/32010))
+
+## <small>5.0.2 (2025-02-04)</small>
+
+* [bitnami/kube-state-metrics] Release 5.0.2 (#31763) ([89d1993](https://github.com/bitnami/charts/commit/89d1993add6aa3bd7fb897adb101c40deb692f5d)), closes [#31763](https://github.com/bitnami/charts/issues/31763)
 
 ## <small>5.0.1 (2025-02-03)</small>
 
@@ -834,7 +838,7 @@
 
 ## 0.3.0 (2020-06-08)
 
-* [bitnami/kube-state-metrics] Add missing collectors (#2781) ([93a4afe](https://github.com/bitnami/charts/commit/93a4afed8cd8713c2726e761dec45e1af0dd8dbc)), closes [#2781](https://github.com/bitnami/charts/issues/2781) [/github.com/kubernetes/kube-state-metrics/blob/release-1.9/pkg/options/collector.go#L28](https://github.com//github.com/kubernetes/kube-state-metrics/blob/release-1.9/pkg/options/collector.go/issues/L28)
+* [bitnami/kube-state-metrics] Add missing collectors (#2781) ([93a4afe](https://github.com/bitnami/charts/commit/93a4afed8cd8713c2726e761dec45e1af0dd8dbc)), closes [#2781](https://github.com/bitnami/charts/issues/2781)
 
 ## <small>0.2.3 (2020-06-03)</small>
 
