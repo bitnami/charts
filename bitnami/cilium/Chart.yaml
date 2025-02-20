@@ -52,4 +52,4 @@ sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/hubble-relay
   - https://github.com/bitnami/containers/tree/main/bitnami/hubble-ui
   - https://github.com/bitnami/containers/tree/main/bitnami/hubble-ui-backend
-version: 2.0.5
+version: 2.1.0
