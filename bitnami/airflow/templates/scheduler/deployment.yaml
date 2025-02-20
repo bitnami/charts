@@ -216,6 +216,10 @@ spec:
             - name: empty-dir
               mountPath: /opt/bitnami/airflow/config/airflow_local_settings.py
               subPath: app-conf-dir/airflow_local_settings.py
+            {{- if  .Values.auth.usePasswordFiles }}
+            - name: airflow-secrets
+              mountPath: /opt/bitnami/airflow/secrets
+            {{- end }}
             {{- if $kube }}
             - name: pod-template
               mountPath: /opt/bitnami/airflow/config/pod_template.yaml
@@ -252,6 +256,15 @@ spec:
           configMap:
             name: {{ include "airflow.configMapName"  . }}
             optional: true
+        {{- if .Values.auth.usePasswordFiles }}
+        - name: airflow-secrets
+          projected:
+            sources:
+              - secret:
+                  name:  {{ include "airflow.secretName" . }}
+              - secret:
+                  name: {{ include "airflow.database.secretName" . }}
+        {{- end }}
         {{- if $kube }}
         - name: pod-template
           configMap:
