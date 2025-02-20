@@ -1,6 +1,6 @@
 # Changelog
 
-## 11.1.5 (2025-02-20)
+## 11.2.0 (2025-02-20)
 
 * [bitnami/milvus] feat: use new helper for checking API versions ([#32057](https://github.com/bitnami/charts/pull/32057))
 
