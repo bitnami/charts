@@ -1,8 +1,13 @@
 # Changelog
 
-## 20.7.1 (2025-02-16)
+## 20.7.2 (2025-02-20)
 
-* [bitnami/redis] Release 20.7.1 ([#31943](https://github.com/bitnami/charts/pull/31943))
+* [bitnami/redis] Release 20.7.2 ([#32033](https://github.com/bitnami/charts/pull/32033))
+
+## <small>20.7.1 (2025-02-16)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/redis] Release 20.7.1 (#31943) ([e82cc74](https://github.com/bitnami/charts/commit/e82cc74d4bcdf5a352d0de26c600c7aa9098390f)), closes [#31943](https://github.com/bitnami/charts/issues/31943)
 
 ## 20.7.0 (2025-02-04)
 
@@ -716,7 +721,7 @@
 
 ## <small>17.4.2 (2023-01-09)</small>
 
-* [bitnami/redis] Sentinel deployment: Fix Failover at graceful shutdown (#14133) ([0274e44](https://github.com/bitnami/charts/commit/0274e44ae4460f91a3e25c20e12be11bc8874c95)), closes [#14133](https://github.com/bitnami/charts/issues/14133) [#13021](https://github.com/bitnami/charts/issues/13021) [#12598](https://github.com/bitnami/charts/issues/12598) [#13956](https://github.com/bitnami/charts/issues/13956) [/github.com/bitnami/charts/pull/13021#issuecomment-1289177976](https://github.com//github.com/bitnami/charts/pull/13021/issues/issuecomment-1289177976) [#13956](https://github.com/bitnami/charts/issues/13956)
+* [bitnami/redis] Sentinel deployment: Fix Failover at graceful shutdown (#14133) ([0274e44](https://github.com/bitnami/charts/commit/0274e44ae4460f91a3e25c20e12be11bc8874c95)), closes [#14133](https://github.com/bitnami/charts/issues/14133) [#13021](https://github.com/bitnami/charts/issues/13021) [#12598](https://github.com/bitnami/charts/issues/12598) [#13956](https://github.com/bitnami/charts/issues/13956) [#13956](https://github.com/bitnami/charts/issues/13956)
 
 ## <small>17.4.1 (2023-01-03)</small>
 
