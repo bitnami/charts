@@ -1,8 +1,14 @@
 # Changelog
 
-## 2.2.4 (2025-02-17)
+## 2.2.5 (2025-02-20)
 
-* [bitnami/valkey] Release 2.2.4 ([#31946](https://github.com/bitnami/charts/pull/31946))
+* [bitnami/valkey] feat: use new helper for checking API versions ([#32064](https://github.com/bitnami/charts/pull/32064))
+
+## <small>2.2.4 (2025-02-17)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/valkey] Release 2.2.4 (#31946) ([f578883](https://github.com/bitnami/charts/commit/f578883ec3e15a7781b72be5ecdf40beb7b353af)), closes [#31946](https://github.com/bitnami/charts/issues/31946)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
 
 ## <small>2.2.3 (2025-01-10)</small>
 
