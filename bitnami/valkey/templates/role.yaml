@@ -24,7 +24,7 @@ rules:
       - 'use'
     resourceNames: [{{ printf "%s-primary" (include "common.names.fullname" .) }}]
   {{- end }}
-  {{- if and .Values.sentinel.enabled .Values.sentinel.service.createPrimary}}
+  {{- if and .Values.sentinel.enabled .Values.sentinel.service.createPrimary.enabled}}
   - apiGroups: [""]
     resources: ["pods"]
     verbs: ["list", "patch"]
