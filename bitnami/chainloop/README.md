@@ -493,14 +493,18 @@ chainloop config save \
 
 ### Common parameters
 
-| Name                | Description                                        | Value   |
-| ------------------- | -------------------------------------------------- | ------- |
-| `kubeVersion`       | Override Kubernetes version                        | `""`    |
-| `commonAnnotations` | Annotations to add to all deployed objects         | `{}`    |
-| `commonLabels`      | Labels to add to all deployed objects              | `{}`    |
-| `extraDeploy`       | Array of extra objects to deploy with the release  | `[]`    |
-| `rbac.create`       | Specifies whether RBAC resources should be created | `false` |
-| `rbac.rules`        | Custom RBAC rules to set                           | `[]`    |
+| Name                | Description                                                | Value   |
+| ------------------- | ---------------------------------------------------------- | ------- |
+| `kubeVersion`       | Override Kubernetes version                                | `""`    |
+| `apiVersions`       | Override Kubernetes API versions reported by .Capabilities | `[]`    |
+| `nameOverride`      | String to partially override common.names.name             | `""`    |
+| `fullnameOverride`  | String to fully override common.names.fullname             | `""`    |
+| `namespaceOverride` | String to fully override common.names.namespace            | `""`    |
+| `commonAnnotations` | Annotations to add to all deployed objects                 | `{}`    |
+| `commonLabels`      | Labels to add to all deployed objects                      | `{}`    |
+| `extraDeploy`       | Array of extra objects to deploy with the release          | `[]`    |
+| `rbac.create`       | Specifies whether RBAC resources should be created         | `false` |
+| `rbac.rules`        | Custom RBAC rules to set                                   | `[]`    |
 
 ### Secrets Backend
 
