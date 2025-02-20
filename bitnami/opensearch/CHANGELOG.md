@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.5.5 (2025-02-20)
+## 1.6.0 (2025-02-20)
 
 * [bitnami/opensearch] feat: use new helper for checking API versions ([#32061](https://github.com/bitnami/charts/pull/32061))
 
