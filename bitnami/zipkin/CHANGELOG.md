@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.3.0 (2025-02-20)
+## 1.2.0 (2025-02-20)
 
 * [bitnami/zipkin] feat: use new helper for checking API versions ([#32065](https://github.com/bitnami/charts/pull/32065))
 
