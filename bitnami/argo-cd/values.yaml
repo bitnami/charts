@@ -57,6 +57,10 @@ clusterDomain: cluster.local
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
+## @param usePasswordFiles Mount credentials as files instead of using environment variables
+##
+usePasswordFiles: true
+
 ## @section Argo CD image parameters
 
 ## Bitnami Argo CD image
