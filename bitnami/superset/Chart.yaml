@@ -37,4 +37,4 @@ sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/superset
   - https://github.com/bitnami/containers/tree/main/bitnami/superset
   - https://github.com/apache/superset
-version: 1.0.1
+version: 1.1.0
