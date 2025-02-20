@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.3.3 (2025-01-28)
+## 4.3.4 (2025-02-20)
 
-* [bitnami/tensorflow-resnet] Release 4.3.3 ([#31634](https://github.com/bitnami/charts/pull/31634))
+* [bitnami/tensorflow-resnet] Release 4.3.4 ([#32039](https://github.com/bitnami/charts/pull/32039))
+
+## <small>4.3.3 (2025-01-28)</small>
+
+* [bitnami/tensorflow-resnet] Release 4.3.3 (#31634) ([729d0dd](https://github.com/bitnami/charts/commit/729d0dd7c886b82ff3b3f609175cf6b657a2ce6d)), closes [#31634](https://github.com/bitnami/charts/issues/31634)
 
 ## <small>4.3.2 (2025-01-20)</small>
 
@@ -858,7 +862,7 @@
 ## <small>0.1.4 (2019-05-29)</small>
 
 * Check secondary images ([5327cfa](https://github.com/bitnami/charts/commit/5327cfa319191dd8067ce538d53f4c44edfdc012))
-* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79)), closes [#issuecomment-496883321](https://github.com/bitnami/charts/issues/issuecomment-496883321)
+* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79))
 * Fix tensorflow and others ([6252f12](https://github.com/bitnami/charts/commit/6252f125d307e55fd638687eac09f1df8451f22f))
 * Use immutable tags in the main images ([17ca4f5](https://github.com/bitnami/charts/commit/17ca4f5c91da33da03f9e2d411fe5e004e825c4d))
 
