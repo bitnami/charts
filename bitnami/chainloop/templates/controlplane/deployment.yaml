@@ -82,15 +82,29 @@ spec:
             - migrate
             - apply
             - --url
+            {{- if .Values.usePasswordFiles }}
             - $(CONNECTION_STRING)
+            {{- else }}
+            - "$(< $CONNECTION_STRING_FILE)"
+            {{- end }}
             - --dir
             - file:///migrations
           env:
+            {{- if .Values.usePasswordFiles }}
+            - name: CONNECTION_STRING_FILE
+              value: "/opt/bitnami/chainloop/secrets/db_migrate_source"
+            {{- else }}
             - name: CONNECTION_STRING
               valueFrom:
                 secretKeyRef:
                   name: {{ include "chainloop.controlplane.fullname" . }}
                   key: db_migrate_source
+            {{- end }}
+          {{- if .Values.usePasswordFiles }}
+          volumeMounts:
+            - name: chainloop-secrets
+              mountPath: /opt/bitnami/chainloop/secrets
+          {{- end }}
       containers:
         - name: controlplane
           {{- if .Values.controlplane.containerSecurityContext.enabled }}
@@ -187,12 +201,19 @@ spec:
                 name: {{ include "chainloop.controlplane.fullname" . }}
             - configMap:
                name: {{ include "chainloop.controlplane.fullname" . }}
+        {{- if .Values.usePasswordFiles }}
+        - name: chainloop-secrets
+          projected:
+            sources:
+              - secret:
+                  name: {{ include "chainloop.controlplane.fullname" . }}
+        {{- end }}
         {{- if (not (empty .Values.controlplane.customCAs)) }}
         - name: custom-cas
           projected:
             sources:
             - secret:
-               name: {{ include "chainloop.controlplane.fullname" . }}-custom-cas
+                name: {{ include "chainloop.controlplane.fullname" . }}-custom-cas
         {{- end }}
         # required for the plugins to store the socket files
         - name: tmp
