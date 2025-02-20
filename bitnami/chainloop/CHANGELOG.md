@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.1.30 (2025-02-18)
+## 2.2.0 (2025-02-20)
 
-* [bitnami/chainloop] Release 2.1.30 ([#31968](https://github.com/bitnami/charts/pull/31968))
+* [bitnami/chainloop] feat: use new helper for checking API versions ([#32046](https://github.com/bitnami/charts/pull/32046))
+
+## <small>2.1.30 (2025-02-18)</small>
+
+* [bitnami/chainloop] Release 2.1.30 (#31968) ([fb759e9](https://github.com/bitnami/charts/commit/fb759e97967b7e7dd860687a02444d6c08da40d2)), closes [#31968](https://github.com/bitnami/charts/issues/31968)
 
 ## <small>2.1.29 (2025-02-18)</small>
 
