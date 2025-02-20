@@ -1,6 +1,6 @@
 # Changelog
 
-## 4.0.3 (2025-02-20)
+## 4.1.0 (2025-02-20)
 
 * [bitnami/apisix] feat: use new helper for checking API versions ([#32045](https://github.com/bitnami/charts/pull/32045))
 
