@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.2.9 (2025-02-19)
+## 2.2.10 (2025-02-20)
 
-* [bitnami/haproxy] Release 2.2.9 ([#32005](https://github.com/bitnami/charts/pull/32005))
+* [bitnami/haproxy] Release 2.2.10 ([#32083](https://github.com/bitnami/charts/pull/32083))
+
+## <small>2.2.9 (2025-02-19)</small>
+
+* [bitnami/haproxy] Release 2.2.9 (#32005) ([275b708](https://github.com/bitnami/charts/commit/275b70884a7150c49bc3ba82c24a24a25950b29a)), closes [#32005](https://github.com/bitnami/charts/issues/32005)
 
 ## <small>2.2.8 (2025-02-12)</small>
 
