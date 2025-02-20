@@ -1,6 +1,6 @@
 # Changelog
 
-## 11.6.9 (2025-02-19)
+## 11.6.9 (2025-02-20)
 
 * [bitnami/nginx-ingress-controller] Release 11.6.9 ([#32023](https://github.com/bitnami/charts/pull/32023))
 
