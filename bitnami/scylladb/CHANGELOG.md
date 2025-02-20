@@ -1,6 +1,6 @@
 # Changelog
 
-## 3.1.10 (2025-02-20)
+## 3.2.0 (2025-02-20)
 
 * [bitnami/scylladb] feat: use new helper for checking API versions ([#32062](https://github.com/bitnami/charts/pull/32062))
 
