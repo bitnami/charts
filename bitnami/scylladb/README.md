@@ -162,6 +162,7 @@ As the image run as non-root by default, it is necessary to adjust the ownership
 
 | Name                     | Description                                                                             | Value           |
 | ------------------------ | --------------------------------------------------------------------------------------- | --------------- |
+| `apiVersions`            | Override Kubernetes API versions reported by .Capabilities                              | `[]`            |
 | `nameOverride`           | String to partially override common.names.fullname                                      | `""`            |
 | `fullnameOverride`       | String to fully override common.names.fullname                                          | `""`            |
 | `kubeVersion`            | Force target Kubernetes version (using Helm capabilities if not set)                    | `""`            |
