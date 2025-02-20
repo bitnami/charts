@@ -1,6 +1,6 @@
 # Changelog
 
-## 3.3.6 (2025-02-20)
+## 3.4.0 (2025-02-20)
 
 * [bitnami/kubernetes-event-exporter] feat: use new helper for checking API versions ([#32055](https://github.com/bitnami/charts/pull/32055))
 
