@@ -1,0 +1,24 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.prometheus.enabled .Values.prometheus.defaultRules.create .Values.prometheus.defaultRules.rules.kubePrometheusGeneral }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: {{ printf "%s-kube-prometheus-general.rules" (include "kube-prometheus.prometheus.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{ include "kube-prometheus.prometheus.labels" . | nindent 4 }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" . ) | nindent 4 }}
+  {{- end }}
+spec:
+  groups:
+    - name: kube-prometheus-general.rules
+      rules:
+        - expr: count without(instance, pod, node) (up == 1)
+          record: count:up1
+        - expr: count without(instance, pod, node) (up == 0)
+          record: count:up0
+{{- end }}

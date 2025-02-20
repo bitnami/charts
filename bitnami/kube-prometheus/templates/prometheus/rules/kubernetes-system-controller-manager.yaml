@@ -1,0 +1,29 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.prometheus.enabled .Values.prometheus.defaultRules.create .Values.prometheus.defaultRules.rules.kubeControllerManager }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: {{ printf "%s-kubernetes-system-controller-manager" (include "kube-prometheus.prometheus.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{ include "kube-prometheus.prometheus.labels" . | nindent 4 }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" . ) | nindent 4 }}
+  {{- end }}
+spec:
+  groups:
+    - name: kubernetes-system-controller-manager
+      rules:
+        - alert: KubeControllerManagerDown
+          annotations:
+            description: KubeControllerManager has disappeared from Prometheus target discovery.
+            runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubecontrollermanagerdown
+            summary: Target disappeared from Prometheus target discovery.
+          expr: absent(up{job="kube-controller-manager"} == 1)
+          for: 15m
+          labels:
+            severity: critical
+{{- end }}
