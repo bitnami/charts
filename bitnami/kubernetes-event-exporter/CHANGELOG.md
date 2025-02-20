@@ -1,6 +1,6 @@
 # Changelog
 
-## 3.3.6 (2025-02-19)
+## 3.3.6 (2025-02-20)
 
 * [bitnami/kubernetes-event-exporter] Release 3.3.6 ([#32011](https://github.com/bitnami/charts/pull/32011))
 
