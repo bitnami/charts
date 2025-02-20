@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.4.2 (2025-02-20)
+## 0.5.0 (2025-02-20)
 
 * [bitnami/dremio] feat: use new helper for checking API versions ([#32048](https://github.com/bitnami/charts/pull/32048))
 
