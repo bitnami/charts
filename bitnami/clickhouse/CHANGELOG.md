@@ -1,8 +1,21 @@
 # Changelog
 
+## 8.0.3 (2025-02-19)
+
+* [bitnami/clickhouse] Release 8.0.3 ([#31992](https://github.com/bitnami/charts/pull/31992))
+
+## <small>8.0.2 (2025-02-19)</small>
+
+* [bitnami/clickhouse] Release 8.0.2 (#31978) ([a05641e](https://github.com/bitnami/charts/commit/a05641ec0e0b76d763dd0dead06a2acfb3e7002b)), closes [#31978](https://github.com/bitnami/charts/issues/31978)
+
+## <small>8.0.1 (2025-02-14)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/clickhouse] Release 8.0.1 (#31930) ([38df2f9](https://github.com/bitnami/charts/commit/38df2f906e48433c8bc3e4346f3021b49299a458)), closes [#31930](https://github.com/bitnami/charts/issues/31930)
+
 ## 8.0.0 (2025-02-05)
 
-* [bitnami/clickhouse] Release 8.0.0 ([#31786](https://github.com/bitnami/charts/pull/31786))
+* [bitnami/clickhouse] Release 8.0.0 (#31786) ([4741129](https://github.com/bitnami/charts/commit/47411290720e640cb2950efa5329efe3bf971106)), closes [#31786](https://github.com/bitnami/charts/issues/31786)
 
 ## <small>7.2.1 (2025-02-04)</small>
 

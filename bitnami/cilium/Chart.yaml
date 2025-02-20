@@ -20,36 +20,36 @@ annotations:
 apiVersion: v2
 appVersion: 1.17.1
 dependencies:
-- condition: etcd.enabled
-  name: etcd
-  repository: oci://registry-1.docker.io/bitnamicharts
-  tags:
-  - cilium-database
-  version: 11.x.x
-- name: common
-  repository: oci://registry-1.docker.io/bitnamicharts
-  tags:
-  - bitnami-common
-  version: 2.x.x
+  - condition: etcd.enabled
+    name: etcd
+    repository: oci://registry-1.docker.io/bitnamicharts
+    tags:
+      - cilium-database
+    version: 11.x.x
+  - name: common
+    repository: oci://registry-1.docker.io/bitnamicharts
+    tags:
+      - bitnami-common
+    version: 2.x.x
 description: Cilium is an eBPF-based networking, observability, and security for Linux container management platforms like Docker and Kubernetes.
 home: https://bitnami.com
 icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/cilium/img/cilium-stack-220x234.png
 keywords:
-- cilium
-- cni
-- networking
-- observability
-- security
+  - cilium
+  - cni
+  - networking
+  - observability
+  - security
 maintainers:
-- name: Broadcom, Inc. All Rights Reserved.
-  url: https://github.com/bitnami/charts
+  - name: Broadcom, Inc. All Rights Reserved.
+    url: https://github.com/bitnami/charts
 name: cilium
 sources:
-- https://github.com/bitnami/charts/tree/main/bitnami/cilium
-- https://github.com/bitnami/containers/tree/main/bitnami/cilium
-- https://github.com/bitnami/containers/tree/main/bitnami/cilium-operator
-- https://github.com/bitnami/containers/tree/main/bitnami/cilium-proxy
-- https://github.com/bitnami/containers/tree/main/bitnami/hubble-relay
-- https://github.com/bitnami/containers/tree/main/bitnami/hubble-ui
-- https://github.com/bitnami/containers/tree/main/bitnami/hubble-ui-backend
-version: 2.0.4
+  - https://github.com/bitnami/charts/tree/main/bitnami/cilium
+  - https://github.com/bitnami/containers/tree/main/bitnami/cilium
+  - https://github.com/bitnami/containers/tree/main/bitnami/cilium-operator
+  - https://github.com/bitnami/containers/tree/main/bitnami/cilium-proxy
+  - https://github.com/bitnami/containers/tree/main/bitnami/hubble-relay
+  - https://github.com/bitnami/containers/tree/main/bitnami/hubble-ui
+  - https://github.com/bitnami/containers/tree/main/bitnami/hubble-ui-backend
+version: 2.1.0

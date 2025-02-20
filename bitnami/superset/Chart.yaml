@@ -10,31 +10,31 @@ annotations:
 apiVersion: v2
 appVersion: 4.1.1
 dependencies:
-- condition: redis.enabled
-  name: redis
-  repository: oci://registry-1.docker.io/bitnamicharts
-  version: 20.x.x
-- condition: postgresql.enabled
-  name: postgresql
-  repository: oci://registry-1.docker.io/bitnamicharts
-  version: 16.x.x
-- name: common
-  repository: oci://registry-1.docker.io/bitnamicharts
-  tags:
-  - bitnami-common
-  version: 2.x.x
-description: Superset is a modern data exploration and data visualization platform. 
+  - condition: redis.enabled
+    name: redis
+    repository: oci://registry-1.docker.io/bitnamicharts
+    version: 20.x.x
+  - condition: postgresql.enabled
+    name: postgresql
+    repository: oci://registry-1.docker.io/bitnamicharts
+    version: 16.x.x
+  - name: common
+    repository: oci://registry-1.docker.io/bitnamicharts
+    tags:
+      - bitnami-common
+    version: 2.x.x
+description: Superset is a modern data exploration and data visualization platform.
 home: https://bitnami.com
 icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/superset/img/superset-stack-220x234.png
 keywords:
-- superset
-- analytics
+  - superset
+  - analytics
 maintainers:
-- name: Broadcom, Inc. All Rights Reserved.
-  url: https://github.com/bitnami/charts
+  - name: Broadcom, Inc. All Rights Reserved.
+    url: https://github.com/bitnami/charts
 name: superset
 sources:
-- https://github.com/bitnami/charts/tree/main/bitnami/superset
-- https://github.com/bitnami/containers/tree/main/bitnami/superset
-- https://github.com/apache/superset
-version: 1.0.0
+  - https://github.com/bitnami/charts/tree/main/bitnami/superset
+  - https://github.com/bitnami/containers/tree/main/bitnami/superset
+  - https://github.com/apache/superset
+version: 1.1.0

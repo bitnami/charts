@@ -1,8 +1,13 @@
 # Changelog
 
-## 3.3.5 (2025-02-12)
+## 3.4.0 (2025-02-20)
 
-* [bitnami/kubernetes-event-exporter] Release 3.3.5 ([#31894](https://github.com/bitnami/charts/pull/31894))
+* [bitnami/kubernetes-event-exporter] feat: use new helper for checking API versions ([#32055](https://github.com/bitnami/charts/pull/32055))
+
+## <small>3.3.5 (2025-02-12)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/kubernetes-event-exporter] Release 3.3.5 (#31894) ([cd0fea6](https://github.com/bitnami/charts/commit/cd0fea6315f24d97c50e26951ad70f644ed37787)), closes [#31894](https://github.com/bitnami/charts/issues/31894)
 
 ## <small>3.3.4 (2025-02-05)</small>
 

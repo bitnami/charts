@@ -1,8 +1,13 @@
 # Changelog
 
-## 22.1.13 (2025-02-13)
+## 22.1.14 (2025-02-14)
 
-* [bitnami/ghost] Release 22.1.13 ([#31910](https://github.com/bitnami/charts/pull/31910))
+* [bitnami/ghost] Release 22.1.14 ([#31938](https://github.com/bitnami/charts/pull/31938))
+
+## <small>22.1.13 (2025-02-13)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/ghost] Release 22.1.13 (#31910) ([5572452](https://github.com/bitnami/charts/commit/5572452b3bde9bb8faf0881caaa36325461eba54)), closes [#31910](https://github.com/bitnami/charts/issues/31910)
 
 ## <small>22.1.12 (2025-02-07)</small>
 

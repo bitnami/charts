@@ -103,6 +103,7 @@ To back up and restore Helm chart deployments on Kubernetes, you need to back up
 | Name                     | Description                                                                                              | Value          |
 | ------------------------ | -------------------------------------------------------------------------------------------------------- | -------------- |
 | `kubeVersion`            | Override Kubernetes version                                                                              | `""`           |
+| `apiVersions`            | Override Kubernetes API versions reported by .Capabilities                                               | `[]`           |
 | `nameOverride`           | String to partially override kubernetes-event-exporter.fullname include (will maintain the release name) | `""`           |
 | `fullnameOverride`       | String to fully override kubernetes-event-exporter.fullname template                                     | `""`           |
 | `commonAnnotations`      | Annotations to add to all deployed objects                                                               | `{}`           |
