@@ -1,12 +1,14 @@
 # Changelog
 
-## 2.5.1 (2025-02-21)
+## 2.5.1 (2025-02-20)
 
 * [bitnami/mlflow] Release 2.5.1 ([#31921](https://github.com/bitnami/charts/pull/31921))
 
 ## 2.5.0 (2025-02-20)
 
-* [bitnami/mlflow] feat: use new helper for checking API versions ([#32058](https://github.com/bitnami/charts/pull/32058))
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/mlflow] feat: use new helper for checking API versions (#32058) ([6fb67a6](https://github.com/bitnami/charts/commit/6fb67a63dcbd1284efd29a141eb81e7410232a03)), closes [#32058](https://github.com/bitnami/charts/issues/32058)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
 
 ## <small>2.4.1 (2025-01-30)</small>
 
