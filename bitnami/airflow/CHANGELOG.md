@@ -1,6 +1,6 @@
 # Changelog
 
-## 22.4.10 (2025-02-20)
+## 22.5.0 (2025-02-20)
 
 * [bitnami/airflow] feat: use new helper for checking API versions ([#32044](https://github.com/bitnami/charts/pull/32044))
 
