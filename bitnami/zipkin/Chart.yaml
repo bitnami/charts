@@ -12,27 +12,27 @@ annotations:
 apiVersion: v2
 appVersion: 3.5.0
 dependencies:
-- condition: cassandra.enabled
-  name: cassandra
-  repository: oci://registry-1.docker.io/bitnamicharts
-  version: 12.x.x
-- name: common
-  repository: oci://registry-1.docker.io/bitnamicharts
-  tags:
-  - bitnami-common
-  version: 2.x.x
+  - condition: cassandra.enabled
+    name: cassandra
+    repository: oci://registry-1.docker.io/bitnamicharts
+    version: 12.x.x
+  - name: common
+    repository: oci://registry-1.docker.io/bitnamicharts
+    tags:
+      - bitnami-common
+    version: 2.x.x
 description: Zipkin is a distributed tracing system that helps collect and analyze timing data to troubleshoot latency issues in service architectures, providing visibility into service call performance.
 home: https://bitnami.com
 icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/zipkin/img/zipkin-stack-220x234.png
 keywords:
-- zipkin
-- tracing
+  - zipkin
+  - tracing
 maintainers:
-- name: Broadcom, Inc. All Rights Reserved.
-  url: https://github.com/bitnami/charts
+  - name: Broadcom, Inc. All Rights Reserved.
+    url: https://github.com/bitnami/charts
 name: zipkin
 sources:
-- https://github.com/bitnami/charts/tree/main/bitnami/zipkin
-- https://github.com/bitnami/containers/tree/main/bitnami/zipkin
-- https://github.com/openzipkin/zipkin
-version: 1.1.5
+  - https://github.com/bitnami/charts/tree/main/bitnami/zipkin
+  - https://github.com/bitnami/containers/tree/main/bitnami/zipkin
+  - https://github.com/openzipkin/zipkin
+version: 1.1.6
