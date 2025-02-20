@@ -1,6 +1,6 @@
 # Changelog
 
-## 11.1.0 (2025-02-19)
+## 11.1.0 (2025-02-20)
 
 * [bitnami/kube-prometheus] feat: Add default Prometheus rules ([#31989](https://github.com/bitnami/charts/pull/31989))
 
