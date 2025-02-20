@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.1.11 (2025-02-20)
+## 1.2.0 (2025-02-20)
 
 * [bitnami/nessie] feat: use new helper for checking API versions ([#32060](https://github.com/bitnami/charts/pull/32060))
 
