@@ -148,7 +148,7 @@ spec:
       port: {{ .Values.sentinel.service.createPrimary.service.ports.valkey }}
       {{- end }}
       targetPort: {{ .Values.replica.containerPorts.valkey }}
-      {{- if and (or (eq .Values.sentinel.service.createPrimary.service.type "NodePort") (eq .Values.sentinel.service.createPrimary.service.type "LoadBalancer")) .Values.sentinel.service.nodePorts.createPrimary.service.valkey }}
+      {{- if and (or (eq .Values.sentinel.service.createPrimary.service.type "NodePort") (eq .Values.sentinel.service.createPrimary.service.type "LoadBalancer")) .Values.sentinel.service.createPrimary.service.nodePorts.valkey }}
       nodePort: {{ .Values.sentinel.service.createPrimary.service.nodePorts.valkey }}
       {{- else if eq .Values.sentinel.service.createPrimary.service.type "ClusterIP" }}
       nodePort: null
