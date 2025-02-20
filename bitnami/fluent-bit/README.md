@@ -150,6 +150,7 @@ The [Bitnami Fluent Bit](https://github.com/bitnami/containers/tree/main/bitnami
 
 | Name                     | Description                                                                             | Value          |
 | ------------------------ | --------------------------------------------------------------------------------------- | -------------- |
+| `apiVersions`            | Override Kubernetes API versions reported by .Capabilities                              | `[]`           |
 | `nameOverride`           | String to partially override common.names.fullname                                      | `""`           |
 | `fullnameOverride`       | String to fully override common.names.fullname                                          | `""`           |
 | `kubeVersion`            | Force target Kubernetes version (using Helm capabilities if not set)                    | `""`           |
