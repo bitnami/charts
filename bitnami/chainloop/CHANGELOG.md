@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.1.31 (2025-02-20)
+## 2.2.0 (2025-02-20)
 
 * [bitnami/chainloop] feat: use new helper for checking API versions ([#32046](https://github.com/bitnami/charts/pull/32046))
 
