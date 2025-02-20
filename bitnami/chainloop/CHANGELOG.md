@@ -1,8 +1,12 @@
 # Changelog
 
+## 2.3.0 (2025-02-20)
+
+* [bitnami/chainloop] Add support for `usePasswordFiles` ([#32081](https://github.com/bitnami/charts/pull/32081))
+
 ## 2.2.0 (2025-02-20)
 
-* [bitnami/chainloop] feat: use new helper for checking API versions ([#32046](https://github.com/bitnami/charts/pull/32046))
+* [bitnami/chainloop] feat: use new helper for checking API versions (#32046) ([6c2f944](https://github.com/bitnami/charts/commit/6c2f944a521470d4ddb0e0db6ec4bf184a83c1d0)), closes [#32046](https://github.com/bitnami/charts/issues/32046)
 
 ## <small>2.1.30 (2025-02-18)</small>
 

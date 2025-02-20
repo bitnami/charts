@@ -68,6 +68,10 @@ commonLabels: {}
 ##
 extraDeploy: []
 
+## @param usePasswordFiles Mount credentials as files instead of using environment variables
+##
+usePasswordFiles: true
+
 ## RBAC configuration
 ##
 rbac:
