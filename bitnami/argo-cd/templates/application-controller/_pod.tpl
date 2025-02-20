@@ -87,11 +87,21 @@ initContainers:
           fi
     {{- if include "argocd.redis.auth.enabled" . }}
     env:
+      {{- if .Values.usePasswordFiles }}
+      - name: REDISCLI_AUTH_FILE
+        value: {{ printf "/opt/bitnami/argo-cd/secrets/%s" (include "argocd.redis.secretPasswordKey" .) }}
+      {{- else }}
       - name: REDISCLI_AUTH
         valueFrom:
           secretKeyRef:
             name: {{ include "argocd.redis.secretName" . }}
             key: {{ include "argocd.redis.secretPasswordKey" . }}
+      {{- end }}
+    {{- if .Values.usePasswordFiles }}
+    volumeMounts:
+      - name: argocd-secrets
+        mountPath: /opt/bitnami/argo-cd/secrets
+    {{- end }}
     {{- end }}
   {{- end }}
   {{- if .Values.controller.initContainers }}
@@ -157,21 +167,16 @@ containers:
       {{- end }}
       {{- end }}
       {{- if and .Values.redis.enabled (include "argocd.redis.auth.enabled" .) }}
+      {{- if .Values.usePasswordFiles }}
+      - name: REDIS_PASSWORD_FILE
+        value: {{ printf "/opt/bitnami/argo-cd/secrets/%s" (include "argocd.redis.secretPasswordKey" .) }}
+      {{- else }}
       - name: REDIS_PASSWORD
         valueFrom:
           secretKeyRef:
             name: {{ include "argocd.redis.secretName" . }}
             key: {{ include "argocd.redis.secretPasswordKey" . }}
-      {{- else if .Values.externalRedis.enabled }}
-      - name: REDIS_PASSWORD
-        {{- if not ( eq "" .Values.externalRedis.password ) }}
-        value: {{ .Values.externalRedis.password }}
-        {{- else }}
-        valueFrom:
-          secretKeyRef:
-            name: {{ .Values.externalRedis.existingSecret }}
-            key: {{ .Values.externalRedis.existingSecretPasswordKey }}
-        {{- end }}
+      {{- end }}
       {{- end }}
       {{- if .Values.controller.extraEnvVars }}
       {{- include "common.tplvalues.render" (dict "value" .Values.controller.extraEnvVars "context" $) | nindent 6 }}
@@ -237,6 +242,10 @@ containers:
       - name: empty-dir
         mountPath: /tmp
         subPath: tmp-dir
+      {{- if and .Values.usePasswordFiles (include "argocd.redis.auth.enabled" .)}}
+      - name: argocd-secrets
+        mountPath: /opt/bitnami/argo-cd/secrets
+      {{- end }}
       {{- if .Values.controller.extraVolumeMounts }}
       {{- include "common.tplvalues.render" (dict "value" .Values.controller.extraVolumeMounts "context" $) | nindent 6 }}
       {{- end }}
@@ -257,6 +266,13 @@ volumes:
           path: ca.crt
       optional: true
       secretName: argocd-repo-server-tls
+  {{- if and .Values.usePasswordFiles (include "argocd.redis.auth.enabled" .)}}
+  - name: argocd-secrets
+    projected:
+      sources:
+        - secret:
+            name: {{ include "argocd.redis.secretName" . }}
+  {{- end }}
   {{- if .Values.controller.extraVolumes }}
   {{- include "common.tplvalues.render" (dict "value" .Values.controller.extraVolumes "context" $) | nindent 2 }}
   {{- end }}
