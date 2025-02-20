@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.4.2 (2025-02-20)
+## 2.5.0 (2025-02-20)
 
 * [bitnami/mlflow] feat: use new helper for checking API versions ([#32058](https://github.com/bitnami/charts/pull/32058))
 
