@@ -112,11 +112,16 @@ spec:
             {{- if not .Values.setupDBJob.enabled }}
             - name: AIRFLOW_USERNAME
               value: {{ .Values.auth.username }}
+            {{- if .Values.auth.usePasswordFiles }}
+            - name: AIRFLOW_PASSWORD_FILE
+              value: "/opt/bitnami/airflow/secrets/airflow-password"
+            {{- else }}
             - name: AIRFLOW_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "airflow.secretName" . }}
                   key: airflow-password
+            {{- end }}
             {{- end }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
@@ -224,6 +229,10 @@ spec:
             - name: empty-dir
               mountPath: /opt/bitnami/airflow/webserver_config.py
               subPath: app-base-dir/webserver_config.py
+            {{- if  .Values.auth.usePasswordFiles }}
+            - name: airflow-secrets
+              mountPath: /opt/bitnami/airflow/secrets
+            {{- end }}
             {{- if and .Values.ldap.enabled .Values.ldap.tls.enabled }}
             - name: airflow-ldap-ca-certificate
               mountPath: {{ .Values.ldap.tls.certificatesMountPath }}
@@ -268,6 +277,19 @@ spec:
         - name: webserver-configuration
           configMap:
             name: {{ include "airflow.web.configMapName" . }}
+        {{- if .Values.auth.usePasswordFiles }}
+        - name: airflow-secrets
+          projected:
+            sources:
+              - secret:
+                  name:  {{ include "airflow.secretName" . }}
+              - secret:
+                  name: {{ include "airflow.database.secretName" . }}
+              {{- if .Values.ldap.enabled }}
+              - secret:
+                  name: {{ include "airflow.ldap.secretName" . }}
+              {{- end }}
+        {{- end }}
         {{- if .Values.dags.enabled }}
         {{- include "airflow.dags.volumes" . | nindent 8 }}
         {{- end }}

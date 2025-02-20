@@ -221,6 +221,10 @@ spec:
             - name: empty-dir
               mountPath: /opt/bitnami/airflow/webserver_config.py
               subPath: app-base-dir/webserver_config.py
+            {{- if  .Values.auth.usePasswordFiles }}
+            - name: airflow-secrets
+              mountPath: /opt/bitnami/airflow/secrets
+            {{- end }}
             {{- if .Values.dags.enabled }}
             {{- include "airflow.dags.volumeMounts" . | nindent 12 }}
             {{- end }}
@@ -265,6 +269,19 @@ spec:
           secret:
             secretName: {{ template "airflow.web.tls.secretName" . }}
             defaultMode: 256
+        {{- end }}
+        {{- if .Values.auth.usePasswordFiles }}
+        - name: airflow-secrets
+          projected:
+            sources:
+              - secret:
+                  name:  {{ include "airflow.secretName" . }}
+              - secret:
+                  name: {{ include "airflow.database.secretName" . }}
+              {{- if .Values.ldap.enabled }}
+              - secret:
+                  name: {{ include "airflow.ldap.secretName" . }}
+              {{- end }}
         {{- end }}
         {{- if .Values.dags.enabled }}
         {{- include "airflow.dags.volumes" . | nindent 8 }}
