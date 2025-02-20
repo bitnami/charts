@@ -1,12 +1,12 @@
 # Changelog
 
+## 20.9.0 (2025-02-20)
+
+* [bitnami/redis] Add ACL Authentication for Sentinel Nodes ([#31974](https://github.com/bitnami/charts/pull/31974))
+
 ## 20.8.0 (2025-02-20)
 
-* [bitnami/redis] feat: add parameter to disable checksums ([#31948](https://github.com/bitnami/charts/pull/31948))
-
-## <small>20.7.2 (2025-02-20)</small>
-
-* [bitnami/redis] Release 20.7.2 (#32033) ([829c44e](https://github.com/bitnami/charts/commit/829c44eddcc0f0fdc3e80d49acd7b4ee41b0408a)), closes [#32033](https://github.com/bitnami/charts/issues/32033)
+* [bitnami/redis] feat: add parameter to disable checksums (#31948) ([990014f](https://github.com/bitnami/charts/commit/990014f4d627d9a681d9775af69d11ad207c156a)), closes [#31948](https://github.com/bitnami/charts/issues/31948)
 
 ## <small>20.7.2 (2025-02-20)</small>
 
