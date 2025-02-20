@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.2.5 (2025-02-20)
+## 2.3.0 (2025-02-20)
 
 * [bitnami/valkey] feat: use new helper for checking API versions ([#32064](https://github.com/bitnami/charts/pull/32064))
 
