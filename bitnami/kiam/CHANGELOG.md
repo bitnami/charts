@@ -1,8 +1,13 @@
 # Changelog
 
-## 2.3.5 (2025-02-12)
+## 2.3.6 (2025-02-19)
 
-* [bitnami/kiam] Release 2.3.5 ([#31893](https://github.com/bitnami/charts/pull/31893))
+* [bitnami/kiam] Release 2.3.6 ([#32008](https://github.com/bitnami/charts/pull/32008))
+
+## <small>2.3.5 (2025-02-12)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/kiam] Release 2.3.5 (#31893) ([16987ea](https://github.com/bitnami/charts/commit/16987eab7a94e91424e7517417034f8c37dbf749)), closes [#31893](https://github.com/bitnami/charts/issues/31893)
 
 ## <small>2.3.4 (2025-02-04)</small>
 

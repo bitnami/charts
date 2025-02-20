@@ -1,8 +1,13 @@
 # Changelog
 
-## 0.3.3 (2025-02-05)
+## 0.3.4 (2025-02-19)
 
-* [bitnami/keydb] Release 0.3.3 ([#31787](https://github.com/bitnami/charts/pull/31787))
+* [bitnami/keydb] Release 0.3.4 ([#32007](https://github.com/bitnami/charts/pull/32007))
+
+## <small>0.3.3 (2025-02-05)</small>
+
+* [bitnami/keydb] Release 0.3.3 (#31787) ([7ea8952](https://github.com/bitnami/charts/commit/7ea89524304a34a8e52e495abb055c44df3b7c18)), closes [#31787](https://github.com/bitnami/charts/issues/31787)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
 
 ## <small>0.3.2 (2025-01-23)</small>
 

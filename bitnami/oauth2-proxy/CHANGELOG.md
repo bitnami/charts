@@ -1,8 +1,13 @@
 # Changelog
 
-## 6.2.7 (2025-02-12)
+## 6.2.8 (2025-02-20)
 
-* [bitnami/oauth2-proxy] Release 6.2.7 ([#31899](https://github.com/bitnami/charts/pull/31899))
+* [bitnami/oauth2-proxy] Release 6.2.8 ([#32025](https://github.com/bitnami/charts/pull/32025))
+
+## <small>6.2.7 (2025-02-12)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/oauth2-proxy] Release 6.2.7 (#31899) ([40b41aa](https://github.com/bitnami/charts/commit/40b41aaa03bc66f4e7596992d06138b284448a6d)), closes [#31899](https://github.com/bitnami/charts/issues/31899)
 
 ## <small>6.2.6 (2025-02-05)</small>
 

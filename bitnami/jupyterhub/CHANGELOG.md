@@ -1,8 +1,14 @@
 # Changelog
 
-## 8.1.3 (2025-02-16)
+## 8.1.4 (2025-02-19)
 
-* [bitnami/jupyterhub] Release 8.1.3 ([#31941](https://github.com/bitnami/charts/pull/31941))
+* [bitnami/jupyterhub] Release 8.1.4 ([#32006](https://github.com/bitnami/charts/pull/32006))
+
+## <small>8.1.3 (2025-02-16)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/jupyterhub] Release 8.1.3 (#31941) ([c882833](https://github.com/bitnami/charts/commit/c882833b8e0382c86f22fd511058096bfe073221)), closes [#31941](https://github.com/bitnami/charts/issues/31941)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
 
 ## <small>8.1.2 (2025-01-07)</small>
 

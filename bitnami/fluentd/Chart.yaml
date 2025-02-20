@@ -6,7 +6,7 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: fluentd
-      image: docker.io/bitnami/fluentd:1.18.0-debian-12-r7
+      image: docker.io/bitnami/fluentd:1.18.0-debian-12-r9
 apiVersion: v2
 appVersion: 1.18.0
 dependencies:
@@ -30,4 +30,4 @@ maintainers:
 name: fluentd
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/fluentd
-version: 7.1.2
+version: 7.1.3

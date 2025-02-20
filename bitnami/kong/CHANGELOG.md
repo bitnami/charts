@@ -1,8 +1,13 @@
 # Changelog
 
-## 15.1.2 (2025-02-04)
+## 15.1.3 (2025-02-19)
 
-* [bitnami/kong] Release 15.1.2 ([#31736](https://github.com/bitnami/charts/pull/31736))
+* [bitnami/kong] Release 15.1.3 ([#32009](https://github.com/bitnami/charts/pull/32009))
+
+## <small>15.1.2 (2025-02-04)</small>
+
+* [bitnami/kong] Release 15.1.2 (#31736) ([7a87721](https://github.com/bitnami/charts/commit/7a8772124ee0655f9470669101342c65e644e55c)), closes [#31736](https://github.com/bitnami/charts/issues/31736)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
 
 ## <small>15.1.1 (2025-01-07)</small>
 

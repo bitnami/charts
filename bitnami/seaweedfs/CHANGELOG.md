@@ -1,8 +1,14 @@
 # Changelog
 
-## 4.6.1 (2025-02-12)
+## 4.6.2 (2025-02-20)
 
-* [bitnami/seaweedfs] Release 4.6.1 ([#31902](https://github.com/bitnami/charts/pull/31902))
+* [bitnami/seaweedfs] Release 4.6.2 ([#32035](https://github.com/bitnami/charts/pull/32035))
+
+## <small>4.6.1 (2025-02-12)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/seaweedfs] Release 4.6.1 (#31902) ([f15c5ed](https://github.com/bitnami/charts/commit/f15c5ed37c1829961a0ba4391809c524237382fb)), closes [#31902](https://github.com/bitnami/charts/issues/31902)
+* [bitnami/seaweedfs]: correct typo in README (#31867) ([bb5c61b](https://github.com/bitnami/charts/commit/bb5c61b6fe4c89ac0b115b63ebed43b312f31809)), closes [#31867](https://github.com/bitnami/charts/issues/31867)
 
 ## 4.6.0 (2025-02-05)
 

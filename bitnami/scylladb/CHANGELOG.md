@@ -1,8 +1,13 @@
 # Changelog
 
-## 3.1.8 (2025-02-09)
+## 3.1.9 (2025-02-20)
 
-* [bitnami/scylladb] Release 3.1.8 ([#31843](https://github.com/bitnami/charts/pull/31843))
+* [bitnami/scylladb] Release 3.1.9 ([#32036](https://github.com/bitnami/charts/pull/32036))
+
+## <small>3.1.8 (2025-02-09)</small>
+
+* [bitnami/scylladb] Release 3.1.8 (#31843) ([a9eaac8](https://github.com/bitnami/charts/commit/a9eaac81a11fa24b0192687c0e733e849f07a627)), closes [#31843](https://github.com/bitnami/charts/issues/31843)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
 
 ## <small>3.1.7 (2025-01-28)</small>
 
