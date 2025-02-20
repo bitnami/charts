@@ -2,7 +2,7 @@
 
 ## 11.5.0 (2025-02-20)
 
-* [bitnami/kibana] template server.publicBaseUrl in all variants ([#30807](https://github.com/bitnami/charts/pull/30807))
+* [bitnami/kibana] Template hostname everywhere ([#30807](https://github.com/bitnami/charts/pull/30807))
 
 ## <small>11.4.5 (2025-02-11)</small>
 
