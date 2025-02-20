@@ -1,6 +1,6 @@
 # Changelog
 
-## 15.1.4 (2025-02-20)
+## 15.2.0 (2025-02-20)
 
 * [bitnami/kong] feat: use new helper for checking API versions ([#32053](https://github.com/bitnami/charts/pull/32053))
 
