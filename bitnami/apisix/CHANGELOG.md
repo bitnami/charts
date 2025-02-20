@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.0.2 (2025-02-18)
+## 4.0.3 (2025-02-20)
 
-* [bitnami/apisix] Release 4.0.2 ([#31972](https://github.com/bitnami/charts/pull/31972))
+* [bitnami/apisix] feat: use new helper for checking API versions ([#32045](https://github.com/bitnami/charts/pull/32045))
+
+## <small>4.0.2 (2025-02-18)</small>
+
+* [bitnami/apisix] Release 4.0.2 (#31972) ([d014094](https://github.com/bitnami/charts/commit/d014094260366d1b17e60bbc9a2aee09542d3147)), closes [#31972](https://github.com/bitnami/charts/issues/31972)
 
 ## <small>4.0.1 (2025-02-18)</small>
 
