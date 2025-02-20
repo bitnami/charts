@@ -59,6 +59,12 @@ commonLabels: {}
 ## @param commonAnnotations Annotations to add to all deployed objects
 ##
 commonAnnotations: {}
+## @param configmapChecksumAnnotations Enable checksum annotations used to trigger rolling updates when ConfigMap(s) change
+##
+configmapChecksumAnnotations: true
+## @param secretChecksumAnnotations Enable checksum annotations used to trigger rolling updates when Secret(s) change
+##
+secretChecksumAnnotations: true
 ## @param secretAnnotations Annotations to add to secret
 ##
 secretAnnotations: {}
@@ -91,6 +97,7 @@ diagnosticMode:
   ##
   args:
     - infinity
+
 ## @section Redis&reg; Image parameters
 ##
 
