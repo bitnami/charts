@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.0.5 (2025-02-20)
+## 2.1.0 (2025-02-20)
 
 * [bitnami/cilium] feat: use new helper for checking API versions ([#32047](https://github.com/bitnami/charts/pull/32047))
 
