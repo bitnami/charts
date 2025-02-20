@@ -14,7 +14,7 @@ SPDX-License-Identifier: APACHE-2.0
 {{- range $engine := .Values.executor.engines }}
 {{- $executorValues := mustMergeOverwrite $.Values.executor.common $engine.overrides }}
 
-{{- if and ($.Capabilities.APIVersions.Has "autoscaling.k8s.io/v1/VerticalPodAutoscaler") $executorValues.autoscaling.vpa.enabled }}
+{{- if and ($include "common.capabilities.apiVersions.has" ( dict "version" "autoscaling.k8s.io/v1/VerticalPodAutoscaler" "context" . )) $executorValues.autoscaling.vpa.enabled }}
 ---
 apiVersion: {{ include "common.capabilities.vpa.apiVersion" (dict "context" $) }}
 kind: VerticalPodAutoscaler
