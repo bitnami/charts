@@ -1,8 +1,13 @@
 # Changelog
 
-## 2.0.4 (2025-02-12)
+## 2.0.5 (2025-02-20)
 
-* [bitnami/cilium] Release 2.0.4 ([#31884](https://github.com/bitnami/charts/pull/31884))
+* [bitnami/cilium] feat: use new helper for checking API versions ([#32047](https://github.com/bitnami/charts/pull/32047))
+
+## <small>2.0.4 (2025-02-12)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/cilium] Release 2.0.4 (#31884) ([ad40116](https://github.com/bitnami/charts/commit/ad40116c062a9ead17080e22c5cc597f5466d360)), closes [#31884](https://github.com/bitnami/charts/issues/31884)
 
 ## <small>2.0.3 (2025-02-04)</small>
 
