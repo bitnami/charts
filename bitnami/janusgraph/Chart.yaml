@@ -38,4 +38,4 @@ sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/janusgraph
   - https://github.com/bitnami/containers/tree/main/bitnami/janusgraph
   - https://github.com/janusgraph/janusgraph
-version: 1.2.4
+version: 1.3.0
