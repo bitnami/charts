@@ -1,0 +1,26 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.prometheus.enabled .Values.prometheus.defaultRules.create .Values.prometheus.defaultRules.rules.k8sContainerMemoryRss }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: {{ printf "%s-k8s.rules.container-memory-rss" (include "kube-prometheus.prometheus.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{ include "kube-prometheus.prometheus.labels" . | nindent 4 }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" . ) | nindent 4 }}
+  {{- end }}
+spec:
+  groups:
+    - name: k8s.rules.container_memory_rss
+      rules:
+        - expr: |-
+            container_memory_rss{job="kubelet", metrics_path="/metrics/cadvisor", image!=""}
+            * on (cluster, namespace, pod) group_left(node) topk by (cluster, namespace, pod) (1,
+              max by (cluster, namespace, pod, node) (kube_pod_info{node!=""})
+            )
+          record: node_namespace_pod_container:container_memory_rss
+{{- end }}

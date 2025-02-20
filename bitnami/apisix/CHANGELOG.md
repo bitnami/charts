@@ -1,8 +1,18 @@
 # Changelog
 
+## 4.0.2 (2025-02-18)
+
+* [bitnami/apisix] Release 4.0.2 ([#31972](https://github.com/bitnami/charts/pull/31972))
+
+## <small>4.0.1 (2025-02-18)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/apisix] Release 4.0.1 (#31964) ([7870a08](https://github.com/bitnami/charts/commit/7870a082176ef14922db8d72a317ee490ba39747)), closes [#31964](https://github.com/bitnami/charts/issues/31964)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
 ## 4.0.0 (2025-01-22)
 
-* [bitnami/apisix] Update ETCD to major 11 ([#31508](https://github.com/bitnami/charts/pull/31508))
+* [bitnami/apisix] Update ETCD to major 11 (#31508) ([9561660](https://github.com/bitnami/charts/commit/9561660522ef445652d58becbf3a39bf29836464)), closes [#31508](https://github.com/bitnami/charts/issues/31508)
 
 ## <small>3.7.2 (2025-01-17)</small>
 

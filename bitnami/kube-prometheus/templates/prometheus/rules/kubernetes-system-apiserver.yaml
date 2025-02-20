@@ -1,0 +1,80 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.prometheus.enabled .Values.prometheus.defaultRules.create .Values.prometheus.defaultRules.rules.kubernetesSystem }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: {{ printf "%s-kubernetes-system-apiserver" (include "kube-prometheus.prometheus.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{ include "kube-prometheus.prometheus.labels" . | nindent 4 }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" . ) | nindent 4 }}
+  {{- end }}
+spec:
+  groups:
+    - name: kubernetes-system-apiserver
+      rules:
+        - alert: KubeClientCertificateExpiration
+          annotations:
+            description: A client certificate used to authenticate to kubernetes apiserver is expiring in less than 7.0 days on cluster {{`{{`}} $labels.cluster {{`}}`}}.
+            runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeclientcertificateexpiration
+            summary: Client certificate is about to expire.
+          expr: |-
+            histogram_quantile(0.01, sum without (namespace, service, endpoint) (rate(apiserver_client_certificate_expiration_seconds_bucket{job="apiserver"}[5m]))) < 604800
+            and
+            on (job, cluster, instance) apiserver_client_certificate_expiration_seconds_count{job="apiserver"} > 0
+          for: 5m
+          labels:
+            severity: warning
+        - alert: KubeClientCertificateExpiration
+          annotations:
+            description: A client certificate used to authenticate to kubernetes apiserver is expiring in less than 24.0 hours on cluster {{`{{`}} $labels.cluster {{`}}`}}.
+            runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeclientcertificateexpiration
+            summary: Client certificate is about to expire.
+          expr: |-
+            histogram_quantile(0.01, sum without (namespace, service, endpoint) (rate(apiserver_client_certificate_expiration_seconds_bucket{job="apiserver"}[5m]))) < 86400
+            and
+            on (job, cluster, instance) apiserver_client_certificate_expiration_seconds_count{job="apiserver"} > 0
+          for: 5m
+          labels:
+            severity: critical
+        - alert: KubeAggregatedAPIErrors
+          annotations:
+            description: Kubernetes aggregated API {{`{{`}} $labels.instance {{`}}`}}/{{`{{`}} $labels.name {{`}}`}} has reported {{`{{`}} $labels.reason {{`}}`}} errors on cluster {{`{{`}} $labels.cluster {{`}}`}}.
+            runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeaggregatedapierrors
+            summary: Kubernetes aggregated API has reported errors.
+          expr: sum by (cluster, instance, name, reason)(increase(aggregator_unavailable_apiservice_total{job="apiserver"}[1m])) > 0
+          for: 10m
+          labels:
+            severity: warning
+        - alert: KubeAggregatedAPIDown
+          annotations:
+            description: Kubernetes aggregated API {{`{{`}} $labels.name {{`}}`}}/{{`{{`}} $labels.namespace {{`}}`}} has been only {{`{{`}} $value | humanize {{`}}`}}% available over the last 10m on cluster {{`{{`}} $labels.cluster {{`}}`}}.
+            runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeaggregatedapidown
+            summary: Kubernetes aggregated API is down.
+          expr: (1 - max by (name, namespace, cluster)(avg_over_time(aggregator_unavailable_apiservice{job="apiserver"}[10m]))) * 100 < 85
+          for: 5m
+          labels:
+            severity: warning
+        - alert: KubeAPIDown
+          annotations:
+            description: KubeAPI has disappeared from Prometheus target discovery.
+            runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeapidown
+            summary: Target disappeared from Prometheus target discovery.
+          expr: absent(up{job="apiserver"} == 1)
+          for: 15m
+          labels:
+            severity: critical
+        - alert: KubeAPITerminatedRequests
+          annotations:
+            description: The kubernetes apiserver has terminated {{`{{`}} $value | humanizePercentage {{`}}`}} of its incoming requests on cluster {{`{{`}} $labels.cluster {{`}}`}}.
+            runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeapiterminatedrequests
+            summary: The kubernetes apiserver has terminated {{`{{`}} $value | humanizePercentage {{`}}`}} of its incoming requests.
+          expr: sum by (cluster) (rate(apiserver_request_terminations_total{job="apiserver"}[10m])) / ( sum by (cluster) (rate(apiserver_request_total{job="apiserver"}[10m])) + sum by (cluster) (rate(apiserver_request_terminations_total{job="apiserver"}[10m])) ) > 0.20
+          for: 5m
+          labels:
+            severity: warning
+{{- end }}

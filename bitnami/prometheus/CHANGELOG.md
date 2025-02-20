@@ -1,8 +1,13 @@
 # Changelog
 
-## 1.4.6 (2025-02-12)
+## 1.4.7 (2025-02-20)
 
-* [bitnami/prometheus] Release 1.4.6 ([#31900](https://github.com/bitnami/charts/pull/31900))
+* [bitnami/prometheus] Release 1.4.7 ([#32031](https://github.com/bitnami/charts/pull/32031))
+
+## <small>1.4.6 (2025-02-12)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/prometheus] Release 1.4.6 (#31900) ([89f7e53](https://github.com/bitnami/charts/commit/89f7e53a19af293a4ce2fcd1261abcb5c0803feb)), closes [#31900](https://github.com/bitnami/charts/issues/31900)
 
 ## <small>1.4.5 (2025-02-05)</small>
 

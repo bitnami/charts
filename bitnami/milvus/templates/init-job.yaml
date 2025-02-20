@@ -100,7 +100,7 @@ spec:
               echo "Credentials updated"
               {{- end }}
               {{- if .Values.initJob.extraCommands }}
-              {{- include "common.tplValues.render" (dict "value" .Values.initJob.extraCommands "context" $) | nindent 14 }}
+              {{- include "common.tplvalues.render" (dict "value" .Values.initJob.extraCommands "context" $) | nindent 14 }}
               {{- end }}
           env:
             {{- if .Values.milvus.auth.enabled }}

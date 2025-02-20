@@ -1,8 +1,17 @@
 # Changelog
 
-## 2.1.28 (2025-02-13)
+## 2.1.30 (2025-02-18)
 
-* [bitnami/chainloop] Release 2.1.28 ([#31909](https://github.com/bitnami/charts/pull/31909))
+* [bitnami/chainloop] Release 2.1.30 ([#31968](https://github.com/bitnami/charts/pull/31968))
+
+## <small>2.1.29 (2025-02-18)</small>
+
+* [bitnami/chainloop] Release 2.1.29 (#31967) ([07345d0](https://github.com/bitnami/charts/commit/07345d0dd96ea836d3f32b4b50ea15867367c92e)), closes [#31967](https://github.com/bitnami/charts/issues/31967)
+
+## <small>2.1.28 (2025-02-13)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/chainloop] Release 2.1.28 (#31909) ([9b505d5](https://github.com/bitnami/charts/commit/9b505d5402b8ff7d99efb2ab2472a5f27f6cf94b)), closes [#31909](https://github.com/bitnami/charts/issues/31909)
 
 ## <small>2.1.27 (2025-02-12)</small>
 
