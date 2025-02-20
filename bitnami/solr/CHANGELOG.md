@@ -1,8 +1,12 @@
 # Changelog
 
-## 9.5.3 (2025-01-28)
+## 9.5.4 (2025-02-20)
 
-* [bitnami/solr] Release 9.5.3 ([#31641](https://github.com/bitnami/charts/pull/31641))
+* [bitnami/solr] Release 9.5.4 ([#32037](https://github.com/bitnami/charts/pull/32037))
+
+## <small>9.5.3 (2025-01-28)</small>
+
+* [bitnami/solr] Release 9.5.3 (#31641) ([0c077af](https://github.com/bitnami/charts/commit/0c077afd708fa31ff3db7395214e147f23ddd81e)), closes [#31641](https://github.com/bitnami/charts/issues/31641)
 
 ## <small>9.5.2 (2025-01-24)</small>
 
@@ -783,7 +787,7 @@
 
 ## <small>2.0.5 (2021-09-20)</small>
 
-* Workaround/Fix for https://github.com/kubernetes/ingress-gce/pull/1462 (#7384) ([4155070](https://github.com/bitnami/charts/commit/4155070df5406a0daa026e302517c3a00500fbb9)), closes [#7384](https://github.com/bitnami/charts/issues/7384)
+* Workaround/Fix for https://github.com/kubernetes/ingress-gce/pull/1462 (#7384) ([4155070](https://github.com/bitnami/charts/commit/4155070df5406a0daa026e302517c3a00500fbb9))
 
 ## <small>2.0.4 (2021-09-02)</small>
 
