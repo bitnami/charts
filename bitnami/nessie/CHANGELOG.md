@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.1.10 (2025-02-06)
+## 1.1.11 (2025-02-20)
 
-* [bitnami/nessie] Release 1.1.10 ([#31800](https://github.com/bitnami/charts/pull/31800))
+* [bitnami/nessie] feat: use new helper for checking API versions ([#32060](https://github.com/bitnami/charts/pull/32060))
+
+## <small>1.1.10 (2025-02-06)</small>
+
+* [bitnami/nessie] Release 1.1.10 (#31800) ([086e2b1](https://github.com/bitnami/charts/commit/086e2b1e0f63b02568e23b4a8020d92d89aa4e1f)), closes [#31800](https://github.com/bitnami/charts/issues/31800)
 
 ## <small>1.1.9 (2025-02-03)</small>
 
