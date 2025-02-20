@@ -1,8 +1,13 @@
 # Changelog
 
-## 3.1.9 (2025-02-20)
+## 3.1.10 (2025-02-20)
 
-* [bitnami/scylladb] Release 3.1.9 ([#32036](https://github.com/bitnami/charts/pull/32036))
+* [bitnami/scylladb] feat: use new helper for checking API versions ([#32062](https://github.com/bitnami/charts/pull/32062))
+
+## <small>3.1.9 (2025-02-20)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/scylladb] Release 3.1.9 (#32036) ([9d9a8aa](https://github.com/bitnami/charts/commit/9d9a8aabd2414041109b06df909eda3e203f1749)), closes [#32036](https://github.com/bitnami/charts/issues/32036)
 
 ## <small>3.1.8 (2025-02-09)</small>
 
