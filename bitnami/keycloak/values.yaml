@@ -288,6 +288,14 @@ extraEnvVarsCM: ""
 ## @param extraEnvVarsSecret Name of existing Secret containing extra env vars
 ##
 extraEnvVarsSecret: ""
+## @param extraJavaOptsAppend Additional Java options to append to the default options
+## Example:
+## extraJavaOptsAppend:
+##   - "-XX:+UseContainerSupport"
+##   - "-XX:MaxRAMPercentage=75.0"
+##   - "-Dorg.infinispan.threads.virtual=false"
+##
+extraJavaOptsAppend: []
 ## @section Keycloak statefulset parameters
 
 ## @param replicaCount Number of Keycloak replicas to deploy
