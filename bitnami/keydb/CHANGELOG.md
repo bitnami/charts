@@ -1,8 +1,13 @@
 # Changelog
 
-## 0.3.4 (2025-02-19)
+## 0.3.5 (2025-02-20)
 
-* [bitnami/keydb] Release 0.3.4 ([#32007](https://github.com/bitnami/charts/pull/32007))
+* [bitnami/keydb] feat: use new helper for checking API versions ([#32052](https://github.com/bitnami/charts/pull/32052))
+
+## <small>0.3.4 (2025-02-19)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/keydb] Release 0.3.4 (#32007) ([ef47c33](https://github.com/bitnami/charts/commit/ef47c33b9933fe9404ac26c535aec9b4c4fdfd15)), closes [#32007](https://github.com/bitnami/charts/issues/32007)
 
 ## <small>0.3.3 (2025-02-05)</small>
 
