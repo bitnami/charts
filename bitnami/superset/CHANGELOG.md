@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.0.1 (2025-02-20)
+## 1.1.0 (2025-02-20)
 
 * [bitnami/superset] feat: use new helper for checking API versions ([#32063](https://github.com/bitnami/charts/pull/32063))
 
