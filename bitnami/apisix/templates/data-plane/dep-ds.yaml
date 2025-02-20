@@ -196,6 +196,21 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.dataPlane.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        {{- if .Values.usePasswordFiles }}
+        - name: apisix-secrets
+          projected:
+            sources:
+              - secret:
+                  name:  {{ include "apisix.dashboard.secretName" . }}
+              {{- if (include "apisix.etcd.authEnabled" .) }}
+              - secret:
+                  name:  {{ include "apisix.etcd.secretName" . }}
+              {{- end }}
+              {{- if .Values.controlPlane.enabled }}
+              - secret:
+                  name: {{ include "apisix.control-plane.secretName" . }}
+              {{- end }}
+        {{- end }}
         - name: config
           configMap:
             name: {{ include "apisix.data-plane.defaultConfigmapName" . }}

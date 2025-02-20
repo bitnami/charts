@@ -336,6 +336,18 @@ Init container definition for waiting for the database to be ready
       ln -sf /opt/bitnami/apisix/deps /usr/local/apisix
       ln -sf /opt/bitnami/apisix/openresty/luajit/share/lua/*/apisix /usr/local/apisix
       mkdir -p /usr/local/apisix/logs
+    {{- if .Values.usePasswordFiles }}
+      {{- if .context.Values.controlPlane.enabled }}
+      export APISIX_ADMIN_API_TOKEN="$(< $APISIX_ADMIN_API_TOKEN_FILE)"
+      export APISIX_VIEWER_API_TOKEN="$(< $APISIX_VIEWER_API_TOKEN_FILE)"
+      {{- end }}
+      {{- if (include "apisix.etcd.authEnabled" .context) }}
+      export APISIX_ETCD_PASSWORD="$(< $APISIX_ETCD_PASSWORD_FILE)"
+      {{- end}}
+      {{- if eq .component "dashboard" }}
+      export APISIX_DASHBOARD_PASSWORD="$(< $APISIX_DASHBOARD_PASSWORD_FILE)"
+      {{- end }}
+    {{- end }}
       # Build final config.yaml with the sections of the different files
       cp /bitnami/apisix/rendered-conf/config.yaml /usr/local/apisix/conf/
       chmod 644 /usr/local/apisix/conf/config.yaml
@@ -352,6 +364,12 @@ Init container definition for waiting for the database to be ready
     - name: BITNAMI_DEBUG
       value: {{ ternary "true" "false" (or .context.Values.image.debug .context.Values.diagnosticMode.enabled) | quote }}
     {{- if .context.Values.controlPlane.enabled }}
+    {{- if .Values.usePasswordFiles }}
+    - name: APISIX_ADMIN_API_TOKEN_FILE
+      value: {{ printf "/opt/bitnami/apisix/secrets/%s" (include "apisix.control-plane.adminTokenKey" .context) }}
+    - name: APISIX_VIEWER_API_TOKEN_FILE
+      value: {{ printf "/opt/bitnami/apisix/secrets/%s" (include "apisix.control-plane.viewerTokenKey" .context) }}
+    {{- else }}
     - name: APISIX_ADMIN_API_TOKEN
       valueFrom:
         secretKeyRef:
@@ -363,14 +381,20 @@ Init container definition for waiting for the database to be ready
           name: {{ include "apisix.control-plane.secretName" .context }}
           key: {{ include "apisix.control-plane.viewerTokenKey" .context }}
     {{- end }}
+    {{- end }}
     {{- if (include "apisix.etcd.authEnabled" .context) }}
     - name: APISIX_ETCD_USER
       value: {{ include "apisix.etcd.user" .context }}
+    {{- if .Values.usePasswordFiles }}
+    - name: APISIX_ETCD_PASSWORD_FILE
+      value: {{ printf "/opt/bitnami/apisix/secrets/%s" (include "apisix.etcd.secretPasswordKey" .context) }}
+    {{- else }}
     - name: APISIX_ETCD_PASSWORD
       valueFrom:
         secretKeyRef:
           name: {{ include "apisix.etcd.secretName" .context }}
           key: {{ include "apisix.etcd.secretPasswordKey" .context }}
+    {{- end }}
     {{- end }}
     {{- if $block.extraEnvVars }}
     {{- include "common.tplvalues.render" (dict "value" $block.extraEnvVars "context" .context) | nindent 4 }}
@@ -394,6 +418,10 @@ Init container definition for waiting for the database to be ready
     - name: empty-dir
       mountPath: /tmp
       subPath: tmp-dir
+    {{- if .Values.usePasswordFiles }}
+    - name: apisix-secrets
+      mountPath: /opt/bitnami/apisix/secrets
+    {{- end }}
     {{- if $block.tls.enabled }}
     - name: certs
       mountPath: /bitnami/certs
@@ -559,6 +587,18 @@ Render configuration for the dashboard and ingress-controller components
     - |
       #!/bin/bash
       # Build final config.yaml with the sections of the different files
+    {{- if .Values.usePasswordFiles }}
+      {{- if .context.Values.controlPlane.enabled }}
+      export APISIX_ADMIN_API_TOKEN="$(< $APISIX_ADMIN_API_TOKEN_FILE)"
+      export APISIX_VIEWER_API_TOKEN="$(< $APISIX_VIEWER_API_TOKEN_FILE)"
+      {{- end }}
+      {{- if (include "apisix.etcd.authEnabled" .context) }}
+      export APISIX_ETCD_PASSWORD="$(< $APISIX_ETCD_PASSWORD_FILE)"
+      {{- end}}
+      {{- if eq .component "dashboard" }}
+      export APISIX_DASHBOARD_PASSWORD="$(< $APISIX_DASHBOARD_PASSWORD_FILE)"
+      {{- end }}
+    {{- end }}
       find /bitnami/apisix/conf -type f -name *.yaml -print0 | sort -z | xargs -0 yq eval-all '. as $item ireduce ({}; . * $item )' > /bitnami/apisix/rendered-conf/pre-render-config.yaml
       render-template /bitnami/apisix/rendered-conf/pre-render-config.yaml > /bitnami/apisix/rendered-conf/config.yaml
       chmod 644 /bitnami/apisix/rendered-conf/config.yaml
@@ -567,6 +607,12 @@ Render configuration for the dashboard and ingress-controller components
     - name: BITNAMI_DEBUG
       value: {{ ternary "true" "false" (or .context.Values.image.debug .context.Values.diagnosticMode.enabled) | quote }}
     {{- if .context.Values.controlPlane.enabled }}
+    {{- if .Values.usePasswordFiles }}
+    - name: APISIX_ADMIN_API_TOKEN_FILE
+      value: {{ printf "/opt/bitnami/apisix/secrets/%s" (include "apisix.control-plane.adminTokenKey" .context) }}
+    - name: APISIX_VIEWER_API_TOKEN_FILE
+      value: {{ printf "/opt/bitnami/apisix/secrets/%s" (include "apisix.control-plane.viewerTokenKey" .context) }}
+    {{- else }}
     - name: APISIX_ADMIN_API_TOKEN
       valueFrom:
         secretKeyRef:
@@ -578,23 +624,34 @@ Render configuration for the dashboard and ingress-controller components
           name: {{ include "apisix.control-plane.secretName" .context }}
           key: {{ include "apisix.control-plane.viewerTokenKey" .context }}
     {{- end }}
+    {{- end }}
     {{- if (include "apisix.etcd.authEnabled" .context) }}
     - name: APISIX_ETCD_USER
       value: {{ include "apisix.etcd.user" .context }}
+    {{- if .Values.usePasswordFiles }}
+    - name: APISIX_ETCD_PASSWORD_FILE
+      value: {{ printf "/opt/bitnami/apisix/secrets/%s" (include "apisix.etcd.secretPasswordKey" .context) }}
+    {{- else }}
     - name: APISIX_ETCD_PASSWORD
       valueFrom:
         secretKeyRef:
           name: {{ include "apisix.etcd.secretName" .context }}
           key: {{ include "apisix.etcd.secretPasswordKey" .context }}
     {{- end }}
+    {{- end }}
     {{- if eq .component "dashboard" }}
     - name: APISIX_DASHBOARD_USER
       value: {{ $block.username | quote }}
+    {{- if .Values.usePasswordFiles }}
+    - name: APISIX_DASHBOARD_PASSWORD_FILE
+      value: {{ printf "/opt/bitnami/apisix/secrets/%s" (include "apisix.dashboard.secretPasswordKey" .context) }}
+    {{- else }}
     - name: APISIX_DASHBOARD_PASSWORD
       valueFrom:
         secretKeyRef:
           name: {{ include "apisix.dashboard.secretName" .context }}
           key: {{ include "apisix.dashboard.secretPasswordKey" .context }}
+    {{- end }}
     {{- end }}
     {{- if $block.extraEnvVars }}
     {{- include "common.tplvalues.render" (dict "value" $block.extraEnvVars "context" $) | nindent 4 }}
@@ -614,6 +671,10 @@ Render configuration for the dashboard and ingress-controller components
       subPath: app-conf-dir
     - name: config
       mountPath: /bitnami/apisix/conf/00_default
+    {{- if .Values.usePasswordFiles }}
+    - name: apisix-secrets
+      mountPath: /opt/bitnami/apisix/secrets
+    {{- end }}
     {{- if or $block.extraConfig $block.extraConfigExistingConfigMap }}
     - name: extra-config
       mountPath: /bitnami/apisix/conf/01_extra
