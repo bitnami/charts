@@ -1,8 +1,12 @@
 # Changelog
 
-## 15.1.9 (2025-02-14)
+## 15.1.10 (2025-02-20)
 
-* [bitnami/postgresql-ha] Release 15.1.9 ([#31934](https://github.com/bitnami/charts/pull/31934))
+* [bitnami/postgresql-ha] Release 15.1.10 ([#32028](https://github.com/bitnami/charts/pull/32028))
+
+## <small>15.1.9 (2025-02-14)</small>
+
+* [bitnami/postgresql-ha] Release 15.1.9 (#31934) ([6e9d889](https://github.com/bitnami/charts/commit/6e9d889c4d44815eb87367ddfcb22ba5d81286a4)), closes [#31934](https://github.com/bitnami/charts/issues/31934)
 
 ## <small>15.1.8 (2025-02-13)</small>
 
@@ -1715,7 +1719,7 @@
 
 ## 4.0.0 (2020-10-08)
 
-* [bitnami/postgresql-ha] Revert https://github.com/bitnami/charts/pull/3681 (#3953) ([739b4b9](https://github.com/bitnami/charts/commit/739b4b948368367ef38d50013a1da380c8d77225)), closes [#3953](https://github.com/bitnami/charts/issues/3953)
+* [bitnami/postgresql-ha] Revert https://github.com/bitnami/charts/pull/3681 (#3953) ([739b4b9](https://github.com/bitnami/charts/commit/739b4b948368367ef38d50013a1da380c8d77225))
 
 ## 3.10.0 (2020-10-08)
 
@@ -1778,7 +1782,7 @@
 
 ## <small>3.5.7 (2020-08-26)</small>
 
-* [bitnami/postgresql-ha] Show correct default for pgpool replicaCount (#3407) ([dae6058](https://github.com/bitnami/charts/commit/dae60580b386e5698fda3f9d3ed047bab176384b)), closes [#3407](https://github.com/bitnami/charts/issues/3407) [/github.com/bitnami/charts/blob/07bf067a628615aa8b182da90c0fc733d3a792ff/bitnami/postgresql-ha/values.yaml#L348](https://github.com//github.com/bitnami/charts/blob/07bf067a628615aa8b182da90c0fc733d3a792ff/bitnami/postgresql-ha/values.yaml/issues/L348)
+* [bitnami/postgresql-ha] Show correct default for pgpool replicaCount (#3407) ([dae6058](https://github.com/bitnami/charts/commit/dae60580b386e5698fda3f9d3ed047bab176384b)), closes [#3407](https://github.com/bitnami/charts/issues/3407)
 
 ## <small>3.5.6 (2020-08-21)</small>
 
