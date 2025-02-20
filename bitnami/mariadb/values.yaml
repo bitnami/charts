@@ -100,7 +100,7 @@ serviceBindings:
 image:
   registry: docker.io
   repository: bitnami/mariadb
-  tag: 11.4.5-debian-12-r2
+  tag: 11.4.5-debian-12-r4
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -215,6 +215,58 @@ tls:
       duration: 2160h
       renewBefore: 360h
 
+## @section Transparent Data Encryption parameters
+## ref: https://mariadb.com/kb/en/file-key-management-encryption-plugin/
+##
+## @param tde.enabled Enable Transparent Data Encryption using the File Key Management Encryption Plugin for MariaDB
+## @param tde.existingSecret Existing secret that contains Transparent Data Encryption key files used when secretsStoreProvider is not enabled
+## @param tde.randomKeyFilename File name of the 'random keyfile' when it is different from the default (keyfile.key), is also used for key name in the existingSecret
+## @param tde.encryptedKeyFilename File name of the 'encrypted keyfile' when it is different from the default (keyfile.enc), is also used for key name in the existingSecret
+## @param tde.fileKeyManagementEncryptionAlgorithm Encryption algorithm used for encrypting data (allowed values: AES_CTR, AES_CBC | default: AES_CTR)
+## @param tde.innodbEncryptTables Enables automatic encryption of all InnoDB tablespaces (allowed values: FORCE, ON, OFF | default: FORCE)
+## @param tde.innodbEncryptLog Enables encryption of the InnoDB redo log (allowed values: ON, OFF | default: ON)
+## @param tde.innodbEncryptTemporaryTables Enables automatic encryption of the InnoDB temporary tablespace (allowed values: ON, OFF | default: ON)
+## @param tde.innodbEncryptionThreads Number of threads to use for encryption (default: 4)
+## @param tde.encryptTmpDiskTables Enables automatic encryption of all internal on-disk temporary tables that are created during query execution (allowed values: ON, OFF | default: ON)
+## @param tde.encryptTmpTiles Enables automatic encryption of temporary files, such as those created for filesort operations, binary log file caches, etc. (allowed values: ON, OFF | default: ON)
+## @param tde.encryptBINLOG Enables encrypting binary logs including relay logs (allowed values: ON, OFF | default: ON)
+## @param tde.ariaEncryptTables Enables automatic encryption of all Aria tablespaces (allowed values: ON, OFF | default: ON)
+##
+tde:
+  enabled: false
+  existingSecret: ""
+  randomKeyFilename: keyfile.key
+  encryptedKeyFilename: keyfile.enc
+  fileKeyManagementEncryptionAlgorithm: AES_CTR
+  innodbEncryptTables: FORCE
+  innodbEncryptLog: "ON"
+  innodbEncryptTemporaryTables: "ON"
+  encryptTmpDiskTables: "ON"
+  encryptTmpTiles: "ON"
+  encryptBINLOG: "ON"
+  ariaEncryptTables: "ON"
+  innodbEncryptionThreads: 4
+  ## @param tde.secretsStoreProvider.enabled Enable use of secrets store provider for Transparent Data Encryption key files
+  ## @param tde.secretsStoreProvider.provider Type of provider used in secrets store provider class (allowed values: vault)
+  secretsStoreProvider:
+    enabled: false
+    provider: vault
+    ## @param tde.secretsStoreProvider.vault.roleName The name of the HashiCorp Vault role used for accessing the key files (only for `vault` provider)
+    ## @param tde.secretsStoreProvider.vault.address The URL of the HashiCorp Vault server (only for `vault` provider)
+    ## @param tde.secretsStoreProvider.vault.authMountPath The HashiCorp Vault auth mount path (only for `vault` provider)
+    ## @param tde.secretsStoreProvider.vault.randomKeySecretPath The HashiCorp Vault secret path for the 'random keyfile' (only for `vault` provider)
+    ## @param tde.secretsStoreProvider.vault.randomKeySecretKey The HashiCorp Vault secret key for the 'random keyfile' (only for `vault` provider)
+    ## @param tde.secretsStoreProvider.vault.encryptedKeySecretPath The HashiCorp Vault secret path for the 'encrypted keyfile' (only for `vault` provider)
+    ## @param tde.secretsStoreProvider.vault.encryptedKeySecretKey The HashiCorp Vault secret key for the 'encrypted keyfile' (only for `vault` provider)
+    vault:
+      roleName: ""
+      address: ""
+      authMountPath: ""
+      randomKeySecretPath: ""
+      randomKeySecretKey: ""
+      encryptedKeySecretPath: ""
+      encryptedKeySecretKey: ""
+
 ## @section MariaDB Primary parameters
 ##
 
@@ -273,6 +325,21 @@ primary:
     ssl_ca={{ include "mariadb.tlsCACert" . }}
     {{- end }}
     {{- end }}
+    {{- if .Values.tde.enabled }}
+    plugin_load_add=file_key_management
+    file_key_management_filename=/opt/bitnami/mariadb/tde/{{ .Values.tde.encryptedKeyFilename }}
+    file_key_management_filekey=FILE:/opt/bitnami/mariadb/tde/{{ .Values.tde.randomKeyFilename }}
+    file_key_management_encryption_algorithm={{ .Values.tde.fileKeyManagementEncryptionAlgorithm }}
+    innodb_encrypt_tables={{ .Values.tde.innodbEncryptTables }}
+    innodb_encrypt_log={{ .Values.tde.innodbEncryptLog }}
+    innodb_encrypt_temporary_tables={{ .Values.tde.innodbEncryptTemporaryTables }}
+    innodb_encryption_threads={{ .Values.tde.innodbEncryptionThreads }}
+    encrypt_tmp_disk_tables={{ .Values.tde.encryptTmpDiskTables }}
+    encrypt_tmp_files={{ .Values.tde.encryptTmpTiles }}
+    encrypt_binlog={{ .Values.tde.encryptBINLOG }}
+    aria_encrypt_tables={{ .Values.tde.ariaEncryptTables }}
+    {{- end }}
+    
     [client]
     port=3306
     socket=/opt/bitnami/mariadb/tmp/mysql.sock
@@ -1252,7 +1319,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r36
+    tag: 12-debian-12-r38
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
@@ -1296,7 +1363,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mysqld-exporter
-    tag: 0.16.0-debian-12-r7
+    tag: 0.16.0-debian-12-r10
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)

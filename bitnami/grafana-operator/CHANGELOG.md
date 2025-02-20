@@ -1,8 +1,13 @@
 # Changelog
 
-## 4.9.6 (2025-02-04)
+## 4.9.7 (2025-02-19)
 
-* [bitnami/grafana-operator] Release 4.9.6 ([#31756](https://github.com/bitnami/charts/pull/31756))
+* [bitnami/grafana-operator] Release 4.9.7 ([#32000](https://github.com/bitnami/charts/pull/32000))
+
+## <small>4.9.6 (2025-02-04)</small>
+
+* [bitnami/grafana-operator] Release 4.9.6 (#31756) ([66d597e](https://github.com/bitnami/charts/commit/66d597ebb1387d54c489b7aa61e869dbf304045f)), closes [#31756](https://github.com/bitnami/charts/issues/31756)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
 
 ## <small>4.9.5 (2025-01-24)</small>
 
@@ -617,7 +622,7 @@
 
 ## <small>2.7.9 (2022-11-08)</small>
 
-* [bitnami/grafana-operator] Fix wrong argument name for parameter `zapLevel` (#13372) ([4bbbd0f](https://github.com/bitnami/charts/commit/4bbbd0f25ff19f20e92a38c761147b94f3f45b00)), closes [#13372](https://github.com/bitnami/charts/issues/13372) [1#L87](https://github.com/1/issues/L87)
+* [bitnami/grafana-operator] Fix wrong argument name for parameter `zapLevel` (#13372) ([4bbbd0f](https://github.com/bitnami/charts/commit/4bbbd0f25ff19f20e92a38c761147b94f3f45b00)), closes [#13372](https://github.com/bitnami/charts/issues/13372)
 
 ## <small>2.7.8 (2022-10-19)</small>
 

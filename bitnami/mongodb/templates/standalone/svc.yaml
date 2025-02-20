@@ -44,6 +44,7 @@ spec:
   {{- if (or (eq .Values.service.type "LoadBalancer") (eq .Values.service.type "NodePort")) }}
   externalTrafficPolicy: {{ .Values.service.externalTrafficPolicy | quote }}
   {{- end }}
+  publishNotReadyAddresses: {{ .Values.service.publishNotReadyAddresses }}
   ports:
     - name: {{ .Values.service.portName | quote }}
       port: {{ .Values.service.ports.mongodb }}

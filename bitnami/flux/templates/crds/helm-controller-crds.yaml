@@ -1,5 +1,5 @@
 # Source: https://github.com/fluxcd/helm-controller/releases/download/v{version}/helm-controller.crds.yaml
-# Version: 1.1.0
+# Version: 1.2.0
 # VersionOf: fluxcd-helm-controller
 # Conditional: .Values.helmController.installCRDs
 {{- if .Values.helmController.installCRDs }}
@@ -373,6 +373,11 @@ spec:
                     description: |-
                       DisableSchemaValidation prevents the Helm install action from validating
                       the values against the JSON Schema.
+                    type: boolean
+                  disableTakeOwnership:
+                    description: |-
+                      DisableTakeOwnership disables taking ownership of existing resources
+                      during the Helm install action. Defaults to false.
                     type: boolean
                   disableWait:
                     description: |-
@@ -787,6 +792,11 @@ spec:
                     description: |-
                       DisableSchemaValidation prevents the Helm upgrade action from validating
                       the values against the JSON Schema.
+                    type: boolean
+                  disableTakeOwnership:
+                    description: |-
+                      DisableTakeOwnership disables taking ownership of existing resources
+                      during the Helm upgrade action. Defaults to false.
                     type: boolean
                   disableWait:
                     description: |-

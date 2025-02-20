@@ -1,8 +1,8 @@
 # Changelog
 
-## 20.8.0 (2025-02-18)
+## 20.7.2 (2025-02-20)
 
-* [bitnami/redis] feat: add parameter to disable checksums ([#31948](https://github.com/bitnami/charts/pull/31948))
+* [bitnami/redis] Release 20.7.2 ([#32033](https://github.com/bitnami/charts/pull/32033))
 
 ## <small>20.7.1 (2025-02-16)</small>
 

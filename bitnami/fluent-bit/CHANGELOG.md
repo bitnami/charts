@@ -1,8 +1,13 @@
 # Changelog
 
-## 2.4.5 (2025-02-07)
+## 2.5.0 (2025-02-20)
 
-* [bitnami/fluent-bit] Release 2.4.5 ([#31835](https://github.com/bitnami/charts/pull/31835))
+* [bitnami/fluent-bit] feat: use new helper for checking API versions ([#32049](https://github.com/bitnami/charts/pull/32049))
+
+## <small>2.4.5 (2025-02-07)</small>
+
+* [bitnami/fluent-bit] Release 2.4.5 (#31835) ([ade7a48](https://github.com/bitnami/charts/commit/ade7a48bd37b52a6d70cecb1fa2670eb25480c72)), closes [#31835](https://github.com/bitnami/charts/issues/31835)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
 
 ## <small>2.4.4 (2025-01-24)</small>
 

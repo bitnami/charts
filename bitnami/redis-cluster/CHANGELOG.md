@@ -1,8 +1,15 @@
 # Changelog
 
-## 11.4.2 (2025-02-16)
+## 11.4.3 (2025-02-20)
 
-* [bitnami/redis-cluster] Release 11.4.2 ([#31942](https://github.com/bitnami/charts/pull/31942))
+* [bitnami/redis-cluster] Release 11.4.3 ([#32032](https://github.com/bitnami/charts/pull/32032))
+
+## <small>11.4.2 (2025-02-16)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/redis-cluster] Release 11.4.2 (#31942) ([0229928](https://github.com/bitnami/charts/commit/022992851c0b19d1a89f719f95b117a0f72ebd83)), closes [#31942](https://github.com/bitnami/charts/issues/31942)
+* [bitnami/redis-cluster] Update README.md (#31705) ([1b1c34a](https://github.com/bitnami/charts/commit/1b1c34a879fd2726ac21c3f2ceb111b15aab8cab)), closes [#31705](https://github.com/bitnami/charts/issues/31705)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
 
 ## <small>11.4.1 (2025-01-23)</small>
 
