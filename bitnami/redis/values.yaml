@@ -145,7 +145,7 @@ auth:
   ## @param auth.enabled Enable password authentication
   ##
   enabled: true
-  ## @param auth.sentinel Enable password authentication on sentinels too
+  ## @param auth.sentinel Enable authentication on sentinels too
   ##
   sentinel: true
   ## @param auth.password Redis&reg; password
@@ -173,6 +173,9 @@ auth:
     ## @param auth.acl.enabled Enables the support of the Redis ACL system
     ##
     enabled: false
+    ## @param auth.acl.sentinel Enables the support of the Redis ACL system for Sentinel Nodes
+    ##
+    sentinel: false
     ## @param auth.acl.users A list of the configured users in the Redis ACL system
     ##
     ## Example:
