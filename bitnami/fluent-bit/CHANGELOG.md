@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.4.6 (2025-02-20)
+## 2.5.0 (2025-02-20)
 
 * [bitnami/fluent-bit] feat: use new helper for checking API versions ([#32049](https://github.com/bitnami/charts/pull/32049))
 
