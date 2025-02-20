@@ -220,7 +220,7 @@ Compile all warnings into a single message, and call fail.
 {{- $messages := append $messages (include "valkey.validateValues.architecture" .) -}}
 {{- $messages := append $messages (include "valkey.validateValues.podSecurityPolicy.create" .) -}}
 {{- $messages := append $messages (include "valkey.validateValues.tls" .) -}}
-{{- $messages := append $messages (include "valkey.validateValues.createPrimary" .) -}}
+{{- $messages := append $messages (include "valkey.validateValues.createPrimary.enabled" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
@@ -273,9 +273,9 @@ valkey: tls.enabled
 {{- end -}}
 
 {{/* Validate values of Valkey - primary service enabled */}}
-{{- define "valkey.validateValues.createPrimary" -}}
-{{- if and .Values.sentinel.service.createPrimary (or (not .Values.rbac.create) (not .Values.replica.automountServiceAccountToken) (not .Values.serviceAccount.create)) }}
-valkey: sentinel.service.createPrimary
+{{- define "valkey.validateValues.createPrimary.enabled" -}}
+{{- if and .Values.sentinel.service.createPrimary.enabled (or (not .Values.rbac.create) (not .Values.replica.automountServiceAccountToken) (not .Values.serviceAccount.create)) }}
+valkey: sentinel.service.createPrimary.enabled
     In order to redirect requests only to the primary pod via the service, you also need to
     create rbac and serviceAccount. In addition, you need to enable
     replica.automountServiceAccountToken.
