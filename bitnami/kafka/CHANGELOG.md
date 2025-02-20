@@ -1,6 +1,6 @@
 # Changelog
 
-## 31.3.3 (2025-02-20)
+## 31.4.0 (2025-02-20)
 
 * [bitnami/kafka] feat: use new helper for checking API versions ([#32051](https://github.com/bitnami/charts/pull/32051))
 
