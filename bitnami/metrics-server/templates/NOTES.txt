@@ -8,7 +8,7 @@ Did you know there are enterprise versions of the Bitnami catalog? For enhanced 
 
 The metric server has been deployed.
 
-{{- if or .Values.apiService.create (.Capabilities.APIVersions.Has "metrics.k8s.io/v1beta1") }}
+{{- if or .Values.apiService.create (include "common.capabilities.apiVersions.has" ( dict "version" "metrics.k8s.io/v1beta1" "context" . )) }}
 {{- if .Values.diagnosticMode.enabled }}
 The chart has been deployed in diagnostic mode. All probes have been disabled and the command has been overwritten with:
 

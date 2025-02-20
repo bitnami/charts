@@ -1,8 +1,14 @@
 # Changelog
 
-## 0.4.1 (2025-02-19)
+## 0.5.0 (2025-02-20)
 
-* [bitnami/dremio] Release 0.4.1 ([#31986](https://github.com/bitnami/charts/pull/31986))
+* [bitnami/dremio] feat: use new helper for checking API versions ([#32048](https://github.com/bitnami/charts/pull/32048))
+
+## <small>0.4.1 (2025-02-19)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/dremio] Release 0.4.1 (#31986) ([f8e6c4a](https://github.com/bitnami/charts/commit/f8e6c4a2bfb8abe94ba5d52a19a496860a1f1a4f)), closes [#31986](https://github.com/bitnami/charts/issues/31986)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
 
 ## 0.4.0 (2025-01-29)
 

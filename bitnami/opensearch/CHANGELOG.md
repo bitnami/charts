@@ -1,8 +1,13 @@
 # Changelog
 
-## 1.5.4 (2025-02-06)
+## 1.6.0 (2025-02-20)
 
-* [bitnami/opensearch] bugfix: snapshots init-job to consider security settings ([#31809](https://github.com/bitnami/charts/pull/31809))
+* [bitnami/opensearch] feat: use new helper for checking API versions ([#32061](https://github.com/bitnami/charts/pull/32061))
+
+## <small>1.5.4 (2025-02-06)</small>
+
+* [bitnami/opensearch] bugfix: snapshots init-job to consider security settings (#31809) ([72bced5](https://github.com/bitnami/charts/commit/72bced59eb12b715f924bec907df3dacd175e8cb)), closes [#31809](https://github.com/bitnami/charts/issues/31809)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
 
 ## <small>1.5.3 (2025-01-28)</small>
 

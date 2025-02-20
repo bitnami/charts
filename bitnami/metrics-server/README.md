@@ -89,6 +89,7 @@ To back up and restore Helm chart deployments on Kubernetes, you need to back up
 | Name                     | Description                                                                                  | Value          |
 | ------------------------ | -------------------------------------------------------------------------------------------- | -------------- |
 | `kubeVersion`            | Force target Kubernetes version (using Helm capabilities if not set)                         | `""`           |
+| `apiVersions`            | Override Kubernetes API versions reported by .Capabilities                                   | `[]`           |
 | `nameOverride`           | String to partially override common.names.fullname template (will maintain the release name) | `""`           |
 | `fullnameOverride`       | String to fully override common.names.fullname template                                      | `""`           |
 | `namespaceOverride`      | String to fully override common.names.namespace                                              | `""`           |

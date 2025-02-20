@@ -1,8 +1,12 @@
 # Changelog
 
-## 7.3.6 (2025-02-19)
+## 7.4.0 (2025-02-20)
 
-* [bitnami/metrics-server] Release 7.3.6 ([#32017](https://github.com/bitnami/charts/pull/32017))
+* [bitnami/metrics-server] feat: use new helper for checking API versions ([#32056](https://github.com/bitnami/charts/pull/32056))
+
+## <small>7.3.6 (2025-02-19)</small>
+
+* [bitnami/metrics-server] Release 7.3.6 (#32017) ([acd94b1](https://github.com/bitnami/charts/commit/acd94b1f2c3fa2f62d6340f8394b3fddc0144724)), closes [#32017](https://github.com/bitnami/charts/issues/32017)
 
 ## <small>7.3.5 (2025-02-12)</small>
 

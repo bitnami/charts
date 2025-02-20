@@ -14,24 +14,24 @@ annotations:
 apiVersion: v2
 appVersion: 6.3.4
 dependencies:
-- name: common
-  repository: oci://registry-1.docker.io/bitnamicharts
-  tags:
-  - bitnami-common
-  version: 2.x.x
+  - name: common
+    repository: oci://registry-1.docker.io/bitnamicharts
+    tags:
+      - bitnami-common
+    version: 2.x.x
 description: KeyDB is a high performance fork of Redis with a focus on multithreading, memory efficiency, and high throughput.
 home: https://bitnami.com
 icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/keydb/img/keydb-stack-220x234.png
 keywords:
-- keydb
-- keyvalue
-- database
-- cache
+  - keydb
+  - keyvalue
+  - database
+  - cache
 maintainers:
-- name: Broadcom, Inc. All Rights Reserved.
-  url: https://github.com/bitnami/charts
+  - name: Broadcom, Inc. All Rights Reserved.
+    url: https://github.com/bitnami/charts
 name: keydb
 sources:
-- https://github.com/bitnami/charts/tree/main/bitnami/keydb
-- https://github.com/bitnami/containers/tree/main/bitnami/keydb
-version: 0.3.4
+  - https://github.com/bitnami/charts/tree/main/bitnami/keydb
+  - https://github.com/bitnami/containers/tree/main/bitnami/keydb
+version: 0.4.0
