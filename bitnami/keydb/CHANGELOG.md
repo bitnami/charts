@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.3.5 (2025-02-20)
+## 0.4.0 (2025-02-20)
 
 * [bitnami/keydb] feat: use new helper for checking API versions ([#32052](https://github.com/bitnami/charts/pull/32052))
 
