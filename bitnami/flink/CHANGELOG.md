@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.4.4 (2025-02-19)
+## 1.4.4 (2025-02-21)
 
 * [bitnami/flink] Release 1.4.4 ([#31995](https://github.com/bitnami/charts/pull/31995))
 
