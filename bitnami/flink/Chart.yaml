@@ -6,7 +6,7 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: flink
-      image: docker.io/bitnami/flink:1.20.1-debian-12-r2
+      image: docker.io/bitnami/flink:1.20.1-debian-12-r4
 apiVersion: v2
 appVersion: 1.20.1
 dependencies:
