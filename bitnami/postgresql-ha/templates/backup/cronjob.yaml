@@ -108,6 +108,11 @@ spec:
             {{- if .Values.backup.cronjob.containerSecurityContext.enabled }}
             securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.backup.cronjob.containerSecurityContext "context" $) | nindent 14 }}
             {{- end }}
+            {{- if .Values.backup.cronjob.resources }}
+            resources: {{- toYaml .Values.backup.cronjob.resources | nindent 14 }}
+            {{- else if ne .Values.backup.cronjob.resourcesPreset "none" }}
+            resources: {{- include "common.resources.preset" (dict "type" .Values.backup.cronjob.resourcesPreset) | nindent 14 }}
+            {{- end }}            
           restartPolicy: {{ .Values.backup.cronjob.restartPolicy }}
           {{- if .Values.backup.cronjob.podSecurityContext.enabled }}
           securityContext:

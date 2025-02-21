@@ -404,8 +404,8 @@ jobs:
             }
 
             case "$rule_name" in
-              "config-reloaders" | "etcd" | "kube-state-metrics" | "kubernetes-apps" | "kubernetes-resources" | "kubernetes-storage" | "prometheus" | "prometheus-operator") kebab_to_camel "$rule_name" ;;
-              "alertmanager.rules" | "general.rules" | "kubelet.rules" | "node.rules" | "kube-apiserver-availability.rules" | "kube-apiserver-burnrate.rules" | "kube-apiserver-histogram.rules" | "kube-apiserver-slos.rules" | "kube-prometheus-general.rules" | "kube-prometheus-node-recording.rules") kebab_to_camel "${rule_name%.rules}" ;;
+              "config-reloaders" | "etcd" | "kube-state-metrics" | "kubernetes-apps" | "kubernetes-resources" | "kubernetes-storage" | "kube-apiserver-slos" | "prometheus" | "prometheus-operator") kebab_to_camel "$rule_name" ;;
+              "alertmanager.rules" | "general.rules" | "kubelet.rules" | "node.rules" | "kube-apiserver-availability.rules" | "kube-apiserver-burnrate.rules" | "kube-apiserver-histogram.rules" | "kube-prometheus-general.rules" | "kube-prometheus-node-recording.rules") kebab_to_camel "${rule_name%.rules}" ;;
               "k8s.rules.container-cpu-usage-seconds-total" | "k8s.rules.container-memory-cache" | "k8s.rules.container-memory-rss" | "k8s.rules.container-memory-swap" | "k8s.rules.container-memory-working-set-bytes" | "k8s.rules.container-resource" | "k8s.rules.pod-owner") kebab_to_camel "${rule_name//.rules./-}" ;;
               "kubernetes-system-apiserver" | "kubernetes-system-kubelet" | "kubernetes-system") echo "kubernetesSystem" ;;
               "kube-scheduler.rules") echo "kubeSchedulerAlerting" ;;
@@ -434,6 +434,8 @@ jobs:
             # We're just interested in the .spec given we build apiVersion, kind and metadata
             # based in Bitnami standards
             spec="$(yq '{"spec": .spec}' "$m")"
+            # We need to escape curly braces to avoid issues with Go templates
+            spec=$(echo "$spec" | sed -E 's/\{\{/__OPEN__/g' | sed -E 's/\}\}/__CLOSE__/g' | sed -E 's/__OPEN__/{{\`{{\`}}/g' | sed -E 's/__CLOSE__/{{\`}}\`}}/g')
             cat > "$m" << EOF
           {{- /*
           Copyright Broadcom, Inc. All Rights Reserved.
