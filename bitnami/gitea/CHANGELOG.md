@@ -1,6 +1,6 @@
 # Changelog
 
-## 3.1.11 (2025-02-20)
+## 3.1.11 (2025-02-21)
 
 * [bitnami/gitea] Release 3.1.11 ([#32040](https://github.com/bitnami/charts/pull/32040))
 
