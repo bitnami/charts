@@ -2,7 +2,7 @@
 
 ## 0.6.0 (2025-02-21)
 
-* [bitnami/dremio] Set `usePasswordFiles=true` by default ([#32105](https://github.com/bitnami/charts/pull/32105))
+* [bitnami/dremio] Rename `usePasswordFile` as `usePasswordFiles` and set 'true' by default ([#32105](https://github.com/bitnami/charts/pull/32105))
 
 ## 0.5.0 (2025-02-20)
 
