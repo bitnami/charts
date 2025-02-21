@@ -1,8 +1,13 @@
 # Changelog
 
-## 7.6.4 (2025-02-19)
+## 7.6.5 (2025-02-20)
 
-* [bitnami/memcached] Release 7.6.4 ([#32015](https://github.com/bitnami/charts/pull/32015))
+* [bitnami/memcached] Release 7.6.5 ([#32095](https://github.com/bitnami/charts/pull/32095))
+
+## <small>7.6.4 (2025-02-19)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/memcached] Release 7.6.4 (#32015) ([ab78084](https://github.com/bitnami/charts/commit/ab780848530f132440643bda0577062b2342660d)), closes [#32015](https://github.com/bitnami/charts/issues/32015)
 
 ## <small>7.6.3 (2025-02-05)</small>
 

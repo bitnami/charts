@@ -1,8 +1,14 @@
 # Changelog
 
-## 25.1.3 (2025-02-10)
+## 25.1.4 (2025-02-21)
 
-* [bitnami/moodle] Release 25.1.3 ([#31845](https://github.com/bitnami/charts/pull/31845))
+* [bitnami/moodle] Release 25.1.4 ([#32103](https://github.com/bitnami/charts/pull/32103))
+
+## <small>25.1.3 (2025-02-10)</small>
+
+* [bitnami/clickhouse][bitnami/moodle] Remove references to deprecated kube-lego (#31726) ([4e44ec5](https://github.com/bitnami/charts/commit/4e44ec50d9144f8c3c017afa4e518c43d8f3847b)), closes [#31726](https://github.com/bitnami/charts/issues/31726)
+* [bitnami/moodle] Release 25.1.3 (#31845) ([bfa6335](https://github.com/bitnami/charts/commit/bfa63352e071c36ae8d2399e102ce96891422353)), closes [#31845](https://github.com/bitnami/charts/issues/31845)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
 
 ## <small>25.1.2 (2025-01-18)</small>
 

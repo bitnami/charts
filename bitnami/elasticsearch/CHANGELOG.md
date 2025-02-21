@@ -1,8 +1,13 @@
 # Changelog
 
-## 21.4.5 (2025-02-11)
+## 21.4.6 (2025-02-21)
 
-* [bitnami/elasticsearch] Release 21.4.5 ([#31869](https://github.com/bitnami/charts/pull/31869))
+* [bitnami/elasticsearch] Release 21.4.6 ([#31990](https://github.com/bitnami/charts/pull/31990))
+
+## <small>21.4.5 (2025-02-11)</small>
+
+* [bitnami/elasticsearch] Release 21.4.5 (#31869) ([5b89741](https://github.com/bitnami/charts/commit/5b89741af8a02f9192c24596600d73a2ae9cac2c)), closes [#31869](https://github.com/bitnami/charts/issues/31869)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
 
 ## <small>21.4.4 (2025-01-29)</small>
 
@@ -1984,7 +1989,7 @@
 
 ## <small>5.1.5 (2019-05-29)</small>
 
-* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79)), closes [#issuecomment-496883321](https://github.com/bitnami/charts/issues/issuecomment-496883321)
+* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79))
 
 ## <small>5.1.4 (2019-05-28)</small>
 
