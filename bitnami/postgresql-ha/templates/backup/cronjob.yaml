@@ -54,7 +54,7 @@ spec:
             env:
               - name: PGUSER
                 value: "postgres"
-              {{- if .Values.postgresql.usePasswordFile }}
+              {{- if .Values.postgresql.usePasswordFiles }}
               - name: PGPASSFILE
                 value: "/opt/bitnami/postgresql/secrets/postgres-password"
               {{- else }}
@@ -112,7 +112,7 @@ spec:
             resources: {{- toYaml .Values.backup.cronjob.resources | nindent 14 }}
             {{- else if ne .Values.backup.cronjob.resourcesPreset "none" }}
             resources: {{- include "common.resources.preset" (dict "type" .Values.backup.cronjob.resourcesPreset) | nindent 14 }}
-            {{- end }}            
+            {{- end }}
           restartPolicy: {{ .Values.backup.cronjob.restartPolicy }}
           {{- if .Values.backup.cronjob.podSecurityContext.enabled }}
           securityContext:
