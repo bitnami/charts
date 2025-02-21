@@ -40,7 +40,7 @@ spec:
         app.kubernetes.io/component: s3
     spec:
       {{- include "seaweedfs.imagePullSecrets" . | nindent 6 }}
-      serviceAccountName: {{ template "seaweedfs.serviceAccountName" . }}    
+      serviceAccountName: {{ template "seaweedfs.serviceAccountName" . }}
       automountServiceAccountToken: {{ .Values.s3.automountServiceAccountToken }}
       {{- if .Values.s3.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.s3.hostAliases "context" $) | nindent 8 }}
@@ -230,6 +230,11 @@ spec:
       volumes:
         - name: empty-dir
           emptyDir: {}
+        {{- if .Values.usePasswordFiles }}
+        - name: seaweed-secrets
+          secret:
+            secretName: {{ printf "%s-auth" (include "seaweedfs.s3.fullname" .) }}
+        {{- end }}
         {{- if and .Values.s3.auth.enabled .Values.s3.auth.existingSecret }}
         - name: auth
           secret:

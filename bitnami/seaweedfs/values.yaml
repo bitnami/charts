@@ -3836,7 +3836,6 @@ mariadb:
     database: bitnami_seaweedfs
     username: bn_seaweedfs
     password: ""
-    usePasswordFiles: false
   ## @param mariadb.initdbScripts [object] Specify dictionary of scripts to be run at first boot
   ##
   initdbScripts:
