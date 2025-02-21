@@ -35,4 +35,4 @@ maintainers:
 name: postgresql
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/postgresql
-version: 16.4.11
+version: 16.5.0
