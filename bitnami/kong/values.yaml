@@ -908,7 +908,7 @@ postgresql:
     database: kong
     postgresPassword: ""
     existingSecret: ""
-    usePasswordFiles: false
+    usePasswordFiles: true
   architecture: standalone
   primary:
     ## PostgreSQL Primary resource requests and limits
@@ -955,7 +955,7 @@ postgresql:
 ## @param cassandra.dbUser.user Cassandra admin user
 ## @param cassandra.dbUser.password Password for `cassandra.dbUser.user`. Randomly generated if empty
 ## @param cassandra.dbUser.existingSecret Name of existing secret to use for Cassandra credentials
-## @param cassandra.usePasswordFile Mount credentials as a files instead of using an environment variable
+## @param cassandra.usePasswordFiles Mount credentials as a files instead of using an environment variable
 ## @param cassandra.replicaCount Number of Cassandra replicas
 ##
 cassandra:
@@ -964,7 +964,7 @@ cassandra:
     user: kong
     password: ""
     existingSecret: ""
-  usePasswordFile: false
+  usePasswordFiles: true
   replicaCount: 1
   ## External Cassandra configuration
   ## All of these values are only used when cassandra.enabled is set to false
