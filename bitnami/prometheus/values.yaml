@@ -1539,6 +1539,9 @@ server:
   ## Prometheus service parameters
   ##
   service:
+    ## @param server.service.enabled Specifies whether a Service should be created
+    ##
+    enabled: true
     ## @param server.service.type Prometheus service type
     ##
     type: LoadBalancer
