@@ -12,27 +12,27 @@ annotations:
 apiVersion: v2
 appVersion: 5.26.2
 dependencies:
-- name: common
-  repository: oci://registry-1.docker.io/bitnamicharts
-  tags:
-  - bitnami-common
-  version: 2.x.x
+  - name: common
+    repository: oci://registry-1.docker.io/bitnamicharts
+    tags:
+      - bitnami-common
+    version: 2.x.x
 description: Neo4j is a high performance graph store with all the features expected of a mature and robust database, like a friendly query language and ACID transactions.
 home: https://bitnami.com
 icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/neo4j/img/neo4j-stack-220x234.png
 keywords:
-- database
-- neo4j
-- graph
-- graphdb
-- graph-database
-- nosql
+  - database
+  - neo4j
+  - graph
+  - graphdb
+  - graph-database
+  - nosql
 maintainers:
-- name: Broadcom, Inc. All Rights Reserved.
-  url: https://github.com/bitnami/charts
+  - name: Broadcom, Inc. All Rights Reserved.
+    url: https://github.com/bitnami/charts
 name: neo4j
 sources:
-- https://github.com/bitnami/charts/tree/main/bitnami/neo4j
-- https://github.com/bitnami/containers/tree/main/bitnami/neo4j
-- https://github.com/neo4j/neo4j
-version: 0.2.5
+  - https://github.com/bitnami/charts/tree/main/bitnami/neo4j
+  - https://github.com/bitnami/containers/tree/main/bitnami/neo4j
+  - https://github.com/neo4j/neo4j
+version: 0.3.0

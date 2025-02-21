@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.4.1 (2025-01-30)
+## 2.5.0 (2025-02-20)
 
-* [bitnami/mlflow] Release 2.4.1 ([#31679](https://github.com/bitnami/charts/pull/31679))
+* [bitnami/mlflow] feat: use new helper for checking API versions ([#32058](https://github.com/bitnami/charts/pull/32058))
+
+## <small>2.4.1 (2025-01-30)</small>
+
+* [bitnami/mlflow] Release 2.4.1 (#31679) ([c06f0c7](https://github.com/bitnami/charts/commit/c06f0c7ebd4860319a1f0282c775be9c7e27d147)), closes [#31679](https://github.com/bitnami/charts/issues/31679)
 
 ## 2.4.0 (2025-01-29)
 

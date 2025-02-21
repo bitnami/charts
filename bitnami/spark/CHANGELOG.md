@@ -1,8 +1,12 @@
 # Changelog
 
-## 9.3.3 (2025-01-28)
+## 9.3.4 (2025-02-20)
 
-* [bitnami/spark] Release 9.3.3 ([#31629](https://github.com/bitnami/charts/pull/31629))
+* [bitnami/spark] Release 9.3.4 ([#32043](https://github.com/bitnami/charts/pull/32043))
+
+## <small>9.3.3 (2025-01-28)</small>
+
+* [bitnami/spark] Release 9.3.3 (#31629) ([e3b25fd](https://github.com/bitnami/charts/commit/e3b25fd171105803c76475111ffd44474f92ae12)), closes [#31629](https://github.com/bitnami/charts/issues/31629)
 
 ## <small>9.3.2 (2024-12-21)</small>
 
