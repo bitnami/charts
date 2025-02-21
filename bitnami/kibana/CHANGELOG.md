@@ -1,6 +1,6 @@
 # Changelog
 
-## 11.5.0 (2025-02-20)
+## 11.5.0 (2025-02-21)
 
 * [bitnami/kibana] Template hostname everywhere ([#30807](https://github.com/bitnami/charts/pull/30807))
 
