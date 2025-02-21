@@ -1,12 +1,8 @@
 # Changelog
 
-## 16.5.0 (2025-02-21)
+## 16.4.13 (2025-02-21)
 
-* [bitnami/postgresql] Set `usePasswordFiles=true` by default ([#32115](https://github.com/bitnami/charts/pull/32115))
-
-## <small>16.4.13 (2025-02-21)</small>
-
-* [bitnami/postgresql] Release 16.4.13 (#32097) ([9817d01](https://github.com/bitnami/charts/commit/9817d0155847035dc6c7edba6422ce9f56223909)), closes [#32097](https://github.com/bitnami/charts/issues/32097)
+* [bitnami/postgresql] Release 16.4.13 ([#32097](https://github.com/bitnami/charts/pull/32097))
 
 ## <small>16.4.12 (2025-02-20)</small>
 
