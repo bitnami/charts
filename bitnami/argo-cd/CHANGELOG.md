@@ -1,6 +1,6 @@
 # Changelog
 
-## 7.2.0 (2025-02-20)
+## 7.2.0 (2025-02-21)
 
 * [bitnami/argo-cd] Add support for `usePasswordFiles` ([#32079](https://github.com/bitnami/charts/pull/32079))
 
