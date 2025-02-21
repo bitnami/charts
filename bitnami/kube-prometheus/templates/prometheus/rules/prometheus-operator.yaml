@@ -1,0 +1,92 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.prometheus.enabled .Values.prometheus.defaultRules.create .Values.prometheus.defaultRules.rules.prometheusOperator }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: {{ printf "%s-prometheus-operator" (include "kube-prometheus.prometheus.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{ include "kube-prometheus.prometheus.labels" . | nindent 4 }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" . ) | nindent 4 }}
+  {{- end }}
+spec:
+  groups:
+    - name: prometheus-operator
+      rules:
+        - alert: PrometheusOperatorListErrors
+          annotations:
+            description: Errors while performing List operations in controller {{`{{`}}$labels.controller{{`}}`}} in {{`{{`}}$labels.namespace{{`}}`}} namespace.
+            runbook_url: https://runbooks.prometheus-operator.dev/runbooks/prometheus-operator/prometheusoperatorlisterrors
+            summary: Errors while performing list operations in controller.
+          expr: (sum by (cluster,controller,namespace) (rate(prometheus_operator_list_operations_failed_total{job="foo-operator",namespace="default"}[10m])) / sum by (cluster,controller,namespace) (rate(prometheus_operator_list_operations_total{job="foo-operator",namespace="default"}[10m]))) > 0.4
+          for: 15m
+          labels:
+            severity: warning
+        - alert: PrometheusOperatorWatchErrors
+          annotations:
+            description: Errors while performing watch operations in controller {{`{{`}}$labels.controller{{`}}`}} in {{`{{`}}$labels.namespace{{`}}`}} namespace.
+            runbook_url: https://runbooks.prometheus-operator.dev/runbooks/prometheus-operator/prometheusoperatorwatcherrors
+            summary: Errors while performing watch operations in controller.
+          expr: (sum by (cluster,controller,namespace) (rate(prometheus_operator_watch_operations_failed_total{job="foo-operator",namespace="default"}[5m])) / sum by (cluster,controller,namespace) (rate(prometheus_operator_watch_operations_total{job="foo-operator",namespace="default"}[5m]))) > 0.4
+          for: 15m
+          labels:
+            severity: warning
+        - alert: PrometheusOperatorSyncFailed
+          annotations:
+            description: Controller {{`{{`}} $labels.controller {{`}}`}} in {{`{{`}} $labels.namespace {{`}}`}} namespace fails to reconcile {{`{{`}} $value {{`}}`}} objects.
+            runbook_url: https://runbooks.prometheus-operator.dev/runbooks/prometheus-operator/prometheusoperatorsyncfailed
+            summary: Last controller reconciliation failed
+          expr: min_over_time(prometheus_operator_syncs{status="failed",job="foo-operator",namespace="default"}[5m]) > 0
+          for: 10m
+          labels:
+            severity: warning
+        - alert: PrometheusOperatorReconcileErrors
+          annotations:
+            description: '{{`{{`}} $value | humanizePercentage {{`}}`}} of reconciling operations failed for {{`{{`}} $labels.controller {{`}}`}} controller in {{`{{`}} $labels.namespace {{`}}`}} namespace.'
+            runbook_url: https://runbooks.prometheus-operator.dev/runbooks/prometheus-operator/prometheusoperatorreconcileerrors
+            summary: Errors while reconciling objects.
+          expr: (sum by (cluster,controller,namespace) (rate(prometheus_operator_reconcile_errors_total{job="foo-operator",namespace="default"}[5m]))) / (sum by (cluster,controller,namespace) (rate(prometheus_operator_reconcile_operations_total{job="foo-operator",namespace="default"}[5m]))) > 0.1
+          for: 10m
+          labels:
+            severity: warning
+        - alert: PrometheusOperatorStatusUpdateErrors
+          annotations:
+            description: '{{`{{`}} $value | humanizePercentage {{`}}`}} of status update operations failed for {{`{{`}} $labels.controller {{`}}`}} controller in {{`{{`}} $labels.namespace {{`}}`}} namespace.'
+            runbook_url: https://runbooks.prometheus-operator.dev/runbooks/prometheus-operator/prometheusoperatorstatusupdateerrors
+            summary: Errors while updating objects status.
+          expr: (sum by (cluster,controller,namespace) (rate(prometheus_operator_status_update_errors_total{job="foo-operator",namespace="default"}[5m]))) / (sum by (cluster,controller,namespace) (rate(prometheus_operator_status_update_operations_total{job="foo-operator",namespace="default"}[5m]))) > 0.1
+          for: 10m
+          labels:
+            severity: warning
+        - alert: PrometheusOperatorNodeLookupErrors
+          annotations:
+            description: Errors while reconciling Prometheus in {{`{{`}} $labels.namespace {{`}}`}} Namespace.
+            runbook_url: https://runbooks.prometheus-operator.dev/runbooks/prometheus-operator/prometheusoperatornodelookuperrors
+            summary: Errors while reconciling Prometheus.
+          expr: rate(prometheus_operator_node_address_lookup_errors_total{job="foo-operator",namespace="default"}[5m]) > 0.1
+          for: 10m
+          labels:
+            severity: warning
+        - alert: PrometheusOperatorNotReady
+          annotations:
+            description: Prometheus operator in {{`{{`}} $labels.namespace {{`}}`}} namespace isn't ready to reconcile {{`{{`}} $labels.controller {{`}}`}} resources.
+            runbook_url: https://runbooks.prometheus-operator.dev/runbooks/prometheus-operator/prometheusoperatornotready
+            summary: Prometheus operator not ready
+          expr: min by (cluster,controller,namespace) (max_over_time(prometheus_operator_ready{job="foo-operator",namespace="default"}[5m]) == 0)
+          for: 5m
+          labels:
+            severity: warning
+        - alert: PrometheusOperatorRejectedResources
+          annotations:
+            description: Prometheus operator in {{`{{`}} $labels.namespace {{`}}`}} namespace rejected {{`{{`}} printf "%0.0f" $value {{`}}`}} {{`{{`}} $labels.controller {{`}}`}}/{{`{{`}} $labels.resource {{`}}`}} resources.
+            runbook_url: https://runbooks.prometheus-operator.dev/runbooks/prometheus-operator/prometheusoperatorrejectedresources
+            summary: Resources rejected by Prometheus operator
+          expr: min_over_time(prometheus_operator_managed_resources{state="rejected",job="foo-operator",namespace="default"}[5m]) > 0
+          for: 5m
+          labels:
+            severity: warning
+{{- end }}

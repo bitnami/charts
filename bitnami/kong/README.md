@@ -242,6 +242,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 | Name                     | Description                                                                                               | Value           |
 | ------------------------ | --------------------------------------------------------------------------------------------------------- | --------------- |
 | `kubeVersion`            | Force target Kubernetes version (using Helm capabilities if not set)                                      | `""`            |
+| `apiVersions`            | Override Kubernetes API versions reported by .Capabilities                                                | `[]`            |
 | `nameOverride`           | String to partially override common.names.fullname template with a string (will prepend the release name) | `""`            |
 | `fullnameOverride`       | String to fully override common.names.fullname template with a string                                     | `""`            |
 | `commonAnnotations`      | Common annotations to add to all Kong resources (sub-charts are not considered). Evaluated as a template  | `{}`            |

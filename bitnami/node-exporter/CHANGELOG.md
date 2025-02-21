@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.5.6 (2025-02-17)
+## 4.5.7 (2025-02-20)
 
-* [bitnami/node-exporter] Release 4.5.6 ([#31950](https://github.com/bitnami/charts/pull/31950))
+* [bitnami/node-exporter] Release 4.5.7 ([#32024](https://github.com/bitnami/charts/pull/32024))
+
+## <small>4.5.6 (2025-02-17)</small>
+
+* [bitnami/node-exporter] Release 4.5.6 (#31950) ([d5c57ee](https://github.com/bitnami/charts/commit/d5c57ee01ff2ba388b64fa7437c25ba6f2721b56)), closes [#31950](https://github.com/bitnami/charts/issues/31950)
 
 ## <small>4.5.5 (2025-02-12)</small>
 

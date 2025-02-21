@@ -1,0 +1,29 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.prometheus.enabled .Values.prometheus.defaultRules.create .Values.prometheus.defaultRules.rules.configReloaders }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: {{ printf "%s-config-reloaders" (include "kube-prometheus.prometheus.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{ include "kube-prometheus.prometheus.labels" . | nindent 4 }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" . ) | nindent 4 }}
+  {{- end }}
+spec:
+  groups:
+    - name: config-reloaders
+      rules:
+        - alert: ConfigReloaderSidecarErrors
+          annotations:
+            description: 'Errors encountered while the {{`{{`}}$labels.pod{{`}}`}} config-reloader sidecar attempts to sync config in {{`{{`}}$labels.namespace{{`}}`}} namespace. As a result, configuration for service running in {{`{{`}}$labels.pod{{`}}`}} may be stale and cannot be updated anymore.'
+            runbook_url: https://runbooks.prometheus-operator.dev/runbooks/prometheus-operator/configreloadersidecarerrors
+            summary: config-reloader sidecar has not had a successful reload for 10m
+          expr: max_over_time(reloader_last_reload_successful{namespace=~".+"}[5m]) == 0
+          for: 10m
+          labels:
+            severity: warning
+{{- end }}
