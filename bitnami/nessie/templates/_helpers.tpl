@@ -282,7 +282,7 @@ Return the volume-permissions init container
       value: {{ include "nessie.database.port" . | quote }}
     {{- if .Values.usePasswordFiles }}
     - name: DATABASE_PASSWORD_FILE
-      value: {{ printf "/bitnami/nessie/secrets/database/%s" (include "nessie.database.passwordKey" .) }}
+      value: "/bitnami/nessie/secrets/database/QUARKUS_DATASOURCE_POSTGRESQL_PASSWORD"
     {{- else -}}
     - name: DATABASE_PASSWORD
       valueFrom:
