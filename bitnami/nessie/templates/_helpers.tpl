@@ -251,7 +251,7 @@ Return the volume-permissions init container
       . /opt/bitnami/scripts/postgresql-env.sh
 
       {{- if .Values.usePasswordFiles }}
-      export AIRFLOW_DATABASE_SQL_CONN="$(< $AIRFLOW_DATABASE_SQL_CONN_FILE)"
+      export DATABASE_PASSWORD="$(< $DATABASE_PASSWORD_FILE)"
       {{- end }}
       info "Waiting for host $DATABASE_HOST:$DATABASE_PORT_NUMBER"
       export PGCONNECT_TIMEOUT="5"
@@ -282,7 +282,7 @@ Return the volume-permissions init container
       value: {{ include "nessie.database.port" . | quote }}
     {{- if .Values.usePasswordFiles }}
     - name: DATABASE_PASSWORD_FILE
-      value:
+      value: {{ printf "/bitnami/nessie/secrets/database/%s" (include "nessie.database.passwordKey" .) }}
     {{- else -}}
     - name: DATABASE_PASSWORD
       valueFrom:
