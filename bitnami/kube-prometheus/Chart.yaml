@@ -6,15 +6,15 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: alertmanager
-      image: docker.io/bitnami/alertmanager:0.28.0-debian-12-r7
+      image: docker.io/bitnami/alertmanager:0.28.0-debian-12-r8
     - name: blackbox-exporter
-      image: docker.io/bitnami/blackbox-exporter:0.25.0-debian-12-r29
+      image: docker.io/bitnami/blackbox-exporter:0.25.0-debian-12-r30
     - name: prometheus
-      image: docker.io/bitnami/prometheus:2.55.1-debian-12-r11
+      image: docker.io/bitnami/prometheus:2.55.1-debian-12-r13
     - name: prometheus-operator
-      image: docker.io/bitnami/prometheus-operator:0.80.1-debian-12-r0
+      image: docker.io/bitnami/prometheus-operator:0.80.1-debian-12-r1
     - name: thanos
-      image: docker.io/bitnami/thanos:0.37.2-debian-12-r5
+      image: docker.io/bitnami/thanos:0.37.2-debian-12-r7
 apiVersion: v2
 appVersion: 0.80.1
 dependencies:
