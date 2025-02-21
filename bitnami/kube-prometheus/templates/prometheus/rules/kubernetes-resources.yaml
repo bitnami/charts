@@ -19,7 +19,7 @@ spec:
       rules:
         - alert: KubeCPUOvercommit
           annotations:
-            description: Cluster {{ $labels.cluster }} has overcommitted CPU resource requests for Pods by {{ $value }} CPU shares and cannot tolerate node failure.
+            description: Cluster {{`{{`}} $labels.cluster {{`}}`}} has overcommitted CPU resource requests for Pods by {{`{{`}} $value {{`}}`}} CPU shares and cannot tolerate node failure.
             runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubecpuovercommit
             summary: Cluster has overcommitted CPU resource requests.
           expr: |-
@@ -31,7 +31,7 @@ spec:
             severity: warning
         - alert: KubeMemoryOvercommit
           annotations:
-            description: Cluster {{ $labels.cluster }} has overcommitted memory resource requests for Pods by {{ $value | humanize }} bytes and cannot tolerate node failure.
+            description: Cluster {{`{{`}} $labels.cluster {{`}}`}} has overcommitted memory resource requests for Pods by {{`{{`}} $value | humanize {{`}}`}} bytes and cannot tolerate node failure.
             runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubememoryovercommit
             summary: Cluster has overcommitted memory resource requests.
           expr: |-
@@ -43,7 +43,7 @@ spec:
             severity: warning
         - alert: KubeCPUQuotaOvercommit
           annotations:
-            description: Cluster {{ $labels.cluster }}  has overcommitted CPU resource requests for Namespaces.
+            description: Cluster {{`{{`}} $labels.cluster {{`}}`}}  has overcommitted CPU resource requests for Namespaces.
             runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubecpuquotaovercommit
             summary: Cluster has overcommitted CPU resource requests.
           expr: |-
@@ -56,7 +56,7 @@ spec:
             severity: warning
         - alert: KubeMemoryQuotaOvercommit
           annotations:
-            description: Cluster {{ $labels.cluster }}  has overcommitted memory resource requests for Namespaces.
+            description: Cluster {{`{{`}} $labels.cluster {{`}}`}}  has overcommitted memory resource requests for Namespaces.
             runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubememoryquotaovercommit
             summary: Cluster has overcommitted memory resource requests.
           expr: |-
@@ -69,7 +69,7 @@ spec:
             severity: warning
         - alert: KubeQuotaAlmostFull
           annotations:
-            description: Namespace {{ $labels.namespace }} is using {{ $value | humanizePercentage }} of its {{ $labels.resource }} quota on cluster {{ $labels.cluster }}.
+            description: Namespace {{`{{`}} $labels.namespace {{`}}`}} is using {{`{{`}} $value | humanizePercentage {{`}}`}} of its {{`{{`}} $labels.resource {{`}}`}} quota on cluster {{`{{`}} $labels.cluster {{`}}`}}.
             runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubequotaalmostfull
             summary: Namespace quota is going to be full.
           expr: |-
@@ -82,7 +82,7 @@ spec:
             severity: info
         - alert: KubeQuotaFullyUsed
           annotations:
-            description: Namespace {{ $labels.namespace }} is using {{ $value | humanizePercentage }} of its {{ $labels.resource }} quota on cluster {{ $labels.cluster }}.
+            description: Namespace {{`{{`}} $labels.namespace {{`}}`}} is using {{`{{`}} $value | humanizePercentage {{`}}`}} of its {{`{{`}} $labels.resource {{`}}`}} quota on cluster {{`{{`}} $labels.cluster {{`}}`}}.
             runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubequotafullyused
             summary: Namespace quota is fully used.
           expr: |-
@@ -95,7 +95,7 @@ spec:
             severity: info
         - alert: KubeQuotaExceeded
           annotations:
-            description: Namespace {{ $labels.namespace }} is using {{ $value | humanizePercentage }} of its {{ $labels.resource }} quota on cluster {{ $labels.cluster }}.
+            description: Namespace {{`{{`}} $labels.namespace {{`}}`}} is using {{`{{`}} $value | humanizePercentage {{`}}`}} of its {{`{{`}} $labels.resource {{`}}`}} quota on cluster {{`{{`}} $labels.cluster {{`}}`}}.
             runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubequotaexceeded
             summary: Namespace quota has exceeded the limits.
           expr: |-
@@ -108,7 +108,7 @@ spec:
             severity: warning
         - alert: CPUThrottlingHigh
           annotations:
-            description: '{{ $value | humanizePercentage }} throttling of CPU in namespace {{ $labels.namespace }} for container {{ $labels.container }} in pod {{ $labels.pod }} on cluster {{ $labels.cluster }}.'
+            description: '{{`{{`}} $value | humanizePercentage {{`}}`}} throttling of CPU in namespace {{`{{`}} $labels.namespace {{`}}`}} for container {{`{{`}} $labels.container {{`}}`}} in pod {{`{{`}} $labels.pod {{`}}`}} on cluster {{`{{`}} $labels.cluster {{`}}`}}.'
             runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/cputhrottlinghigh
             summary: Processes experience elevated CPU throttling.
           expr: |-

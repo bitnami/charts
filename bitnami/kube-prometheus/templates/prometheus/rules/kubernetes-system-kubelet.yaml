@@ -19,7 +19,7 @@ spec:
       rules:
         - alert: KubeNodeNotReady
           annotations:
-            description: '{{ $labels.node }} has been unready for more than 15 minutes on cluster {{ $labels.cluster }}.'
+            description: '{{`{{`}} $labels.node {{`}}`}} has been unready for more than 15 minutes on cluster {{`{{`}} $labels.cluster {{`}}`}}.'
             runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubenodenotready
             summary: Node is not ready.
           expr: |-
@@ -31,7 +31,7 @@ spec:
             severity: warning
         - alert: KubeNodeUnreachable
           annotations:
-            description: '{{ $labels.node }} is unreachable and some workloads may be rescheduled on cluster {{ $labels.cluster }}.'
+            description: '{{`{{`}} $labels.node {{`}}`}} is unreachable and some workloads may be rescheduled on cluster {{`{{`}} $labels.cluster {{`}}`}}.'
             runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubenodeunreachable
             summary: Node is unreachable.
           expr: (kube_node_spec_taint{job="kube-state-metrics",key="node.kubernetes.io/unreachable",effect="NoSchedule"} unless ignoring(key,value) kube_node_spec_taint{job="kube-state-metrics",key=~"ToBeDeletedByClusterAutoscaler|cloud.google.com/impending-node-termination|aws-node-termination-handler/spot-itn"}) == 1
@@ -40,7 +40,7 @@ spec:
             severity: warning
         - alert: KubeletTooManyPods
           annotations:
-            description: Kubelet '{{ $labels.node }}' is running at {{ $value | humanizePercentage }} of its Pod capacity on cluster {{ $labels.cluster }}.
+            description: Kubelet '{{`{{`}} $labels.node {{`}}`}}' is running at {{`{{`}} $value | humanizePercentage {{`}}`}} of its Pod capacity on cluster {{`{{`}} $labels.cluster {{`}}`}}.
             runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubelettoomanypods
             summary: Kubelet is running at capacity.
           expr: |-
@@ -60,7 +60,7 @@ spec:
             severity: info
         - alert: KubeNodeReadinessFlapping
           annotations:
-            description: The readiness status of node {{ $labels.node }} has changed {{ $value }} times in the last 15 minutes on cluster {{ $labels.cluster }}.
+            description: The readiness status of node {{`{{`}} $labels.node {{`}}`}} has changed {{`{{`}} $value {{`}}`}} times in the last 15 minutes on cluster {{`{{`}} $labels.cluster {{`}}`}}.
             runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubenodereadinessflapping
             summary: Node readiness status is flapping.
           expr: |-
@@ -72,7 +72,7 @@ spec:
             severity: warning
         - alert: KubeletPlegDurationHigh
           annotations:
-            description: The Kubelet Pod Lifecycle Event Generator has a 99th percentile duration of {{ $value }} seconds on node {{ $labels.node }} on cluster {{ $labels.cluster }}.
+            description: The Kubelet Pod Lifecycle Event Generator has a 99th percentile duration of {{`{{`}} $value {{`}}`}} seconds on node {{`{{`}} $labels.node {{`}}`}} on cluster {{`{{`}} $labels.cluster {{`}}`}}.
             runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeletplegdurationhigh
             summary: Kubelet Pod Lifecycle Event Generator is taking too long to relist.
           expr: node_quantile:kubelet_pleg_relist_duration_seconds:histogram_quantile{quantile="0.99"} >= 10
@@ -81,7 +81,7 @@ spec:
             severity: warning
         - alert: KubeletPodStartUpLatencyHigh
           annotations:
-            description: Kubelet Pod startup 99th percentile latency is {{ $value }} seconds on node {{ $labels.node }} on cluster {{ $labels.cluster }}.
+            description: Kubelet Pod startup 99th percentile latency is {{`{{`}} $value {{`}}`}} seconds on node {{`{{`}} $labels.node {{`}}`}} on cluster {{`{{`}} $labels.cluster {{`}}`}}.
             runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeletpodstartuplatencyhigh
             summary: Kubelet Pod startup latency is too high.
           expr: histogram_quantile(0.99, sum(rate(kubelet_pod_worker_duration_seconds_bucket{job="kubelet", metrics_path="/metrics"}[5m])) by (cluster, instance, le)) * on (cluster, instance) group_left(node) kubelet_node_name{job="kubelet", metrics_path="/metrics"} > 60
@@ -90,7 +90,7 @@ spec:
             severity: warning
         - alert: KubeletClientCertificateExpiration
           annotations:
-            description: Client certificate for Kubelet on node {{ $labels.node }} expires in {{ $value | humanizeDuration }} on cluster {{ $labels.cluster }}.
+            description: Client certificate for Kubelet on node {{`{{`}} $labels.node {{`}}`}} expires in {{`{{`}} $value | humanizeDuration {{`}}`}} on cluster {{`{{`}} $labels.cluster {{`}}`}}.
             runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeletclientcertificateexpiration
             summary: Kubelet client certificate is about to expire.
           expr: kubelet_certificate_manager_client_ttl_seconds < 604800
@@ -98,7 +98,7 @@ spec:
             severity: warning
         - alert: KubeletClientCertificateExpiration
           annotations:
-            description: Client certificate for Kubelet on node {{ $labels.node }} expires in {{ $value | humanizeDuration }} on cluster {{ $labels.cluster }}.
+            description: Client certificate for Kubelet on node {{`{{`}} $labels.node {{`}}`}} expires in {{`{{`}} $value | humanizeDuration {{`}}`}} on cluster {{`{{`}} $labels.cluster {{`}}`}}.
             runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeletclientcertificateexpiration
             summary: Kubelet client certificate is about to expire.
           expr: kubelet_certificate_manager_client_ttl_seconds < 86400
@@ -106,7 +106,7 @@ spec:
             severity: critical
         - alert: KubeletServerCertificateExpiration
           annotations:
-            description: Server certificate for Kubelet on node {{ $labels.node }} expires in {{ $value | humanizeDuration }} on cluster {{ $labels.cluster }}.
+            description: Server certificate for Kubelet on node {{`{{`}} $labels.node {{`}}`}} expires in {{`{{`}} $value | humanizeDuration {{`}}`}} on cluster {{`{{`}} $labels.cluster {{`}}`}}.
             runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeletservercertificateexpiration
             summary: Kubelet server certificate is about to expire.
           expr: kubelet_certificate_manager_server_ttl_seconds < 604800
@@ -114,7 +114,7 @@ spec:
             severity: warning
         - alert: KubeletServerCertificateExpiration
           annotations:
-            description: Server certificate for Kubelet on node {{ $labels.node }} expires in {{ $value | humanizeDuration }} on cluster {{ $labels.cluster }}.
+            description: Server certificate for Kubelet on node {{`{{`}} $labels.node {{`}}`}} expires in {{`{{`}} $value | humanizeDuration {{`}}`}} on cluster {{`{{`}} $labels.cluster {{`}}`}}.
             runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeletservercertificateexpiration
             summary: Kubelet server certificate is about to expire.
           expr: kubelet_certificate_manager_server_ttl_seconds < 86400
@@ -122,7 +122,7 @@ spec:
             severity: critical
         - alert: KubeletClientCertificateRenewalErrors
           annotations:
-            description: Kubelet on node {{ $labels.node }} has failed to renew its client certificate ({{ $value | humanize }} errors in the last 5 minutes) on cluster {{ $labels.cluster }}.
+            description: Kubelet on node {{`{{`}} $labels.node {{`}}`}} has failed to renew its client certificate ({{`{{`}} $value | humanize {{`}}`}} errors in the last 5 minutes) on cluster {{`{{`}} $labels.cluster {{`}}`}}.
             runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeletclientcertificaterenewalerrors
             summary: Kubelet has failed to renew its client certificate.
           expr: increase(kubelet_certificate_manager_client_expiration_renew_errors[5m]) > 0
@@ -131,7 +131,7 @@ spec:
             severity: warning
         - alert: KubeletServerCertificateRenewalErrors
           annotations:
-            description: Kubelet on node {{ $labels.node }} has failed to renew its server certificate ({{ $value | humanize }} errors in the last 5 minutes) on cluster {{ $labels.cluster }}.
+            description: Kubelet on node {{`{{`}} $labels.node {{`}}`}} has failed to renew its server certificate ({{`{{`}} $value | humanize {{`}}`}} errors in the last 5 minutes) on cluster {{`{{`}} $labels.cluster {{`}}`}}.
             runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeletservercertificaterenewalerrors
             summary: Kubelet has failed to renew its server certificate.
           expr: increase(kubelet_server_expiration_renew_errors[5m]) > 0

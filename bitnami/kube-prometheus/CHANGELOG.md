@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.0.3 (2025-02-20)
+## 11.1.1 (2025-02-20)
 
-* [bitnami/kube-prometheus] Release 11.0.3 ([#32030](https://github.com/bitnami/charts/pull/32030))
+* [bitnami/kube-prometheus] Release 11.1.1 ([#32030](https://github.com/bitnami/charts/pull/32030))
+
+## 11.1.0 (2025-02-20)
+
+* [bitnami/kube-prometheus] feat: Add default Prometheus rules ([#31989](https://github.com/bitnami/charts/pull/31989))
 
 ## <small>11.0.2 (2025-02-07)</small>
 

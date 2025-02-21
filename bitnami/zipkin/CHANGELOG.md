@@ -1,8 +1,13 @@
 # Changelog
 
-## 1.1.5 (2025-02-16)
+## 1.2.0 (2025-02-20)
 
-* [bitnami/zipkin] Release 1.1.5 ([#31944](https://github.com/bitnami/charts/pull/31944))
+* [bitnami/zipkin] feat: use new helper for checking API versions ([#32065](https://github.com/bitnami/charts/pull/32065))
+
+## <small>1.1.5 (2025-02-16)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/zipkin] Release 1.1.5 (#31944) ([5072271](https://github.com/bitnami/charts/commit/5072271dff68637bd7b6654bfd4fbb7875b4cd61)), closes [#31944](https://github.com/bitnami/charts/issues/31944)
 
 ## <small>1.1.4 (2025-02-11)</small>
 

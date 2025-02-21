@@ -1,8 +1,20 @@
 # Changelog
 
-## 15.1.10 (2025-02-20)
+## 15.2.2 (2025-02-21)
 
-* [bitnami/postgresql-ha] Release 15.1.10 ([#32028](https://github.com/bitnami/charts/pull/32028))
+* [bitnami/postgresql-ha] Release 15.2.2 ([#32096](https://github.com/bitnami/charts/pull/32096))
+
+## <small>15.2.1 (2025-02-20)</small>
+
+* [bitnami/postgresql-ha] Release 15.2.1 (#32082) ([97d1814](https://github.com/bitnami/charts/commit/97d1814fabc335ca4c789612f0f6ac88d29cb66b)), closes [#32082](https://github.com/bitnami/charts/issues/32082)
+
+## 15.2.0 (2025-02-20)
+
+* [bitnami/postgresql-ha] Add resources for backup cronjob (#31957) ([c11a433](https://github.com/bitnami/charts/commit/c11a4331eebba0bd59f7ca64f633119ff5e90e9f)), closes [#31957](https://github.com/bitnami/charts/issues/31957)
+
+## <small>15.1.10 (2025-02-20)</small>
+
+* [bitnami/postgresql-ha] Release 15.1.10 (#32028) ([10e7f83](https://github.com/bitnami/charts/commit/10e7f83460ee3c2a359b4bf563ce2e035a55b57b)), closes [#32028](https://github.com/bitnami/charts/issues/32028)
 
 ## <small>15.1.9 (2025-02-14)</small>
 

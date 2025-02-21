@@ -12,4 +12,4 @@ dependencies:
   repository: file://./charts/kube-prometheus-crds
   version: 0.1.0
 digest: sha256:452fb446a980f92ca89025fa6d5d69075c3aedd327a7d333989dfb30f9d5da81
-generated: "2025-02-20T02:59:58.508465873Z"
+generated: "2025-02-19T16:25:01.116262+01:00"
