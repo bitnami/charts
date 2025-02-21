@@ -1,8 +1,22 @@
 # Changelog
 
-## 7.3.4 (2025-02-05)
+## 7.4.0 (2025-02-20)
 
-* [bitnami/metrics-server] Release 7.3.4 ([#31765](https://github.com/bitnami/charts/pull/31765))
+* [bitnami/metrics-server] feat: use new helper for checking API versions ([#32056](https://github.com/bitnami/charts/pull/32056))
+
+## <small>7.3.6 (2025-02-19)</small>
+
+* [bitnami/metrics-server] Release 7.3.6 (#32017) ([acd94b1](https://github.com/bitnami/charts/commit/acd94b1f2c3fa2f62d6340f8394b3fddc0144724)), closes [#32017](https://github.com/bitnami/charts/issues/32017)
+
+## <small>7.3.5 (2025-02-12)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/metrics-server] Release 7.3.5 (#31897) ([79cfa28](https://github.com/bitnami/charts/commit/79cfa280f7d0a491d3f7e3626a69413d1effe07a)), closes [#31897](https://github.com/bitnami/charts/issues/31897)
+
+## <small>7.3.4 (2025-02-05)</small>
+
+* [bitnami/metrics-server] Release 7.3.4 (#31765) ([4d013b8](https://github.com/bitnami/charts/commit/4d013b8026cafe1b4c8bed3cc14e80a69f124b21)), closes [#31765](https://github.com/bitnami/charts/issues/31765)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
 
 ## <small>7.3.3 (2025-01-24)</small>
 
@@ -934,7 +948,7 @@
 ## <small>2.3.6 (2019-05-29)</small>
 
 * Change syntax because of linter failing ([adfc357](https://github.com/bitnami/charts/commit/adfc35728c2a8a9def9e1897b3772d64df621354))
-* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79)), closes [#issuecomment-496883321](https://github.com/bitnami/charts/issues/issuecomment-496883321)
+* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79))
 * Use immutable tags in the main images ([17ca4f5](https://github.com/bitnami/charts/commit/17ca4f5c91da33da03f9e2d411fe5e004e825c4d))
 
 ## <small>2.3.5 (2019-05-28)</small>

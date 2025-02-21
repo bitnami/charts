@@ -25,7 +25,7 @@ dependencies:
   version: 2.x.x
 description: Matomo, formerly known as Piwik, is a real time web analytics program. It provides detailed reports on website visitors.
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/matomo/img/matomo-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/matomo/img/matomo-stack-220x234.png
 keywords:
 - matomo
 - analytics

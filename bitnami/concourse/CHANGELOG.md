@@ -1,8 +1,21 @@
 # Changelog
 
-## 5.1.11 (2025-02-04)
+## 5.1.14 (2025-02-19)
 
-* [bitnami/concourse] Release 5.1.11 ([#31747](https://github.com/bitnami/charts/pull/31747))
+* [bitnami/concourse] Release 5.1.14 ([#31979](https://github.com/bitnami/charts/pull/31979))
+
+## <small>5.1.13 (2025-02-14)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/concourse] Release 5.1.13 (#31923) ([0f72679](https://github.com/bitnami/charts/commit/0f726790be67f367a5828f335c86ce12dc354e76)), closes [#31923](https://github.com/bitnami/charts/issues/31923)
+
+## <small>5.1.12 (2025-02-05)</small>
+
+* [bitnami/concourse] Release 5.1.12 (#31796) ([67d7ab2](https://github.com/bitnami/charts/commit/67d7ab24868dd35ecc34c2177d3e46e149f6ea80)), closes [#31796](https://github.com/bitnami/charts/issues/31796)
+
+## <small>5.1.11 (2025-02-04)</small>
+
+* [bitnami/concourse] Release 5.1.11 (#31747) ([7fb2fc5](https://github.com/bitnami/charts/commit/7fb2fc52e50ba82efe9959d5607511e4be618377)), closes [#31747](https://github.com/bitnami/charts/issues/31747)
 
 ## <small>5.1.10 (2025-02-04)</small>
 

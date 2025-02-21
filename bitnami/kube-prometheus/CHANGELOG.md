@@ -1,8 +1,21 @@
 # Changelog
 
-## 11.0.1 (2025-02-05)
+## 11.1.1 (2025-02-21)
 
-* [bitnami/kube-prometheus] Release 11.0.1 ([#31734](https://github.com/bitnami/charts/pull/31734))
+* [bitnami/kube-prometheus] Release 11.1.1 ([#32030](https://github.com/bitnami/charts/pull/32030))
+
+## 11.1.0 (2025-02-20)
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/kube-prometheus] feat: Add default Prometheus rules (#31989) ([a3b425c](https://github.com/bitnami/charts/commit/a3b425c465d117da7f7ce1bbe4e4eb2662023c64)), closes [#31989](https://github.com/bitnami/charts/issues/31989)
+
+## <small>11.0.2 (2025-02-07)</small>
+
+* [bitnami/kube-prometheus] Release 11.0.2 (#31785) ([0f4e507](https://github.com/bitnami/charts/commit/0f4e507bce3b1040dd74358ec95ea37589e51b4f)), closes [#31785](https://github.com/bitnami/charts/issues/31785)
+
+## <small>11.0.1 (2025-02-05)</small>
+
+* [bitnami/kube-prometheus] Release 11.0.1 (#31734) ([dbaf453](https://github.com/bitnami/charts/commit/dbaf453121a2c4fd9d7ff7aa525ceb378165836c)), closes [#31734](https://github.com/bitnami/charts/issues/31734)
 
 ## 11.0.0 (2025-02-04)
 

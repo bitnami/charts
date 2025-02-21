@@ -1,8 +1,22 @@
 # Changelog
 
-## 2.4.4 (2025-01-24)
+## 2.5.1 (2025-02-20)
 
-* [bitnami/fluent-bit] Release 2.4.4 ([#31551](https://github.com/bitnami/charts/pull/31551))
+* [bitnami/fluent-bit] Release 2.5.1 ([#32090](https://github.com/bitnami/charts/pull/32090))
+
+## 2.5.0 (2025-02-20)
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/fluent-bit] feat: use new helper for checking API versions (#32049) ([d098ed1](https://github.com/bitnami/charts/commit/d098ed13754597c257fd32a09228b09f31b09b0b)), closes [#32049](https://github.com/bitnami/charts/issues/32049)
+
+## <small>2.4.5 (2025-02-07)</small>
+
+* [bitnami/fluent-bit] Release 2.4.5 (#31835) ([ade7a48](https://github.com/bitnami/charts/commit/ade7a48bd37b52a6d70cecb1fa2670eb25480c72)), closes [#31835](https://github.com/bitnami/charts/issues/31835)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>2.4.4 (2025-01-24)</small>
+
+* [bitnami/fluent-bit] Release 2.4.4 (#31551) ([67f7f3b](https://github.com/bitnami/charts/commit/67f7f3b8fe90c9edf097e323e9b530fe55887155)), closes [#31551](https://github.com/bitnami/charts/issues/31551)
 
 ## <small>2.4.3 (2024-12-30)</small>
 

@@ -6,7 +6,7 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: whereabouts
-      image: docker.io/bitnami/whereabouts:0.8.0-debian-12-r14
+      image: docker.io/bitnami/whereabouts:0.8.0-debian-12-r18
 apiVersion: v2
 appVersion: 0.8.0
 dependencies:
@@ -17,7 +17,7 @@ dependencies:
   version: 2.x.x
 description: Whereabouts is a CNI IPAM plugin for Kubernetes clusters. It dynamically assigns IP addresses cluster-wide. Features both IPv4 and IPv6 addressing.
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/whereabouts/img/whereabouts-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/whereabouts/img/whereabouts-stack-220x234.png
 keywords:
 - whereabouts
 - cni
@@ -29,4 +29,4 @@ maintainers:
 name: whereabouts
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/whereabouts
-version: 1.2.4
+version: 1.2.6

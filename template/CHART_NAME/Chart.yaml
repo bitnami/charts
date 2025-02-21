@@ -18,7 +18,7 @@ dependencies:
     version: 2.x.x
 description: %%DESCRIPTION%%
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/%%IMAGE_NAME%%/img/%%IMAGE_NAME%%-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/%%IMAGE_NAME%%/img/%%IMAGE_NAME%%-stack-220x234.png
 keywords:
   - %%UPSTREAM_PROJECT_KEYWORD%%
   - %%UPSTREAM_PROJECT_KEYWORD%%

@@ -443,6 +443,7 @@ helm install my-release --set primary.persistence.existingClaim=PVC_NAME oci://R
 | Name                      | Description                                                                                                    | Value           |
 | ------------------------- | -------------------------------------------------------------------------------------------------------------- | --------------- |
 | `kubeVersion`             | Override Kubernetes version                                                                                    | `""`            |
+| `apiVersions`             | Override Kubernetes API versions reported by .Capabilities                                                     | `[]`            |
 | `nameOverride`            | String to partially override common.names.fullname                                                             | `""`            |
 | `fullnameOverride`        | String to fully override common.names.fullname                                                                 | `""`            |
 | `namespaceOverride`       | String to fully override common.names.namespace                                                                | `""`            |

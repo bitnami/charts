@@ -1,8 +1,25 @@
 # Changelog
 
-## 1.4.7 (2025-02-04)
+## 1.4.11 (2025-02-19)
 
-* [bitnami/cert-manager] Release 1.4.7 ([#31744](https://github.com/bitnami/charts/pull/31744))
+* [bitnami/cert-manager] Release 1.4.11 ([#31976](https://github.com/bitnami/charts/pull/31976))
+
+## <small>1.4.10 (2025-02-13)</small>
+
+* [bitnami/cert-manager] Release 1.4.10 (#31913) ([06f8a3d](https://github.com/bitnami/charts/commit/06f8a3d74d5299a9effb6797bc789a1d09935953)), closes [#31913](https://github.com/bitnami/charts/issues/31913)
+
+## <small>1.4.9 (2025-02-13)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/cert-manager] Updated cert-manager RBAC (#31906) ([a24b680](https://github.com/bitnami/charts/commit/a24b6802f54f22d228b83fba8a76c14db5224d2b)), closes [#31906](https://github.com/bitnami/charts/issues/31906)
+
+## <small>1.4.8 (2025-02-05)</small>
+
+* [bitnami/cert-manager] Update rules for controller-certificates ClusterRole (#31794) ([2a023c1](https://github.com/bitnami/charts/commit/2a023c106adc6c08019beec9ad5d11f250d22012)), closes [#31794](https://github.com/bitnami/charts/issues/31794)
+
+## <small>1.4.7 (2025-02-04)</small>
+
+* [bitnami/cert-manager] Release 1.4.7 (#31744) ([cb8d670](https://github.com/bitnami/charts/commit/cb8d670d78acdaa9dfbc271b9b0ffe7160c838e3)), closes [#31744](https://github.com/bitnami/charts/issues/31744)
 
 ## <small>1.4.6 (2025-02-04)</small>
 
@@ -871,7 +888,7 @@
 
 ## <small>0.1.3 (2021-06-07)</small>
 
-* fix: service account specific annotations not being used. See https://github.com/bitnami/charts/issu ([fb917a9](https://github.com/bitnami/charts/commit/fb917a9b51d1a3d1173af530e8296749f2d372bb)), closes [#6574](https://github.com/bitnami/charts/issues/6574)
+* fix: service account specific annotations not being used. See https://github.com/bitnami/charts/issu ([fb917a9](https://github.com/bitnami/charts/commit/fb917a9b51d1a3d1173af530e8296749f2d372bb))
 
 ## <small>0.1.2 (2021-05-24)</small>
 

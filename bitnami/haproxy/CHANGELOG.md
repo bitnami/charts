@@ -1,8 +1,22 @@
 # Changelog
 
-## 2.2.7 (2025-02-04)
+## 2.2.10 (2025-02-20)
 
-* [bitnami/haproxy] Release 2.2.7 ([#31759](https://github.com/bitnami/charts/pull/31759))
+* [bitnami/haproxy] Release 2.2.10 ([#32083](https://github.com/bitnami/charts/pull/32083))
+
+## <small>2.2.9 (2025-02-19)</small>
+
+* [bitnami/haproxy] Release 2.2.9 (#32005) ([275b708](https://github.com/bitnami/charts/commit/275b70884a7150c49bc3ba82c24a24a25950b29a)), closes [#32005](https://github.com/bitnami/charts/issues/32005)
+
+## <small>2.2.8 (2025-02-12)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/haproxy] Release 2.2.8 (#31890) ([cb84b0c](https://github.com/bitnami/charts/commit/cb84b0cef5e1ba778adec03030c3e5a2d62238bb)), closes [#31890](https://github.com/bitnami/charts/issues/31890)
+
+## <small>2.2.7 (2025-02-04)</small>
+
+* [bitnami/haproxy] Release 2.2.7 (#31759) ([34021cb](https://github.com/bitnami/charts/commit/34021cb4a569af9278cfae48918bf746a373b1f7)), closes [#31759](https://github.com/bitnami/charts/issues/31759)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
 
 ## <small>2.2.6 (2025-01-29)</small>
 

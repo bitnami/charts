@@ -6,9 +6,9 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: fluent-bit
-      image: docker.io/bitnami/fluent-bit:3.2.5-debian-12-r0
+      image: docker.io/bitnami/fluent-bit:3.2.6-debian-12-r4
 apiVersion: v2
-appVersion: 3.2.5
+appVersion: 3.2.6
 dependencies:
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
@@ -17,7 +17,7 @@ dependencies:
   version: 2.x.x
 description: Fluent Bit is a Fast and Lightweight Log Processor and Forwarder. It has been made with a strong focus on performance to allow the collection of events from different sources without complexity.
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/fluent-bit/img/fluent-bit-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/fluent-bit/img/fluent-bit-stack-220x234.png
 keywords:
 - fluent-bit
 - logging
@@ -28,4 +28,4 @@ maintainers:
 name: fluent-bit
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/fluent-bit
-version: 2.4.4
+version: 2.5.1

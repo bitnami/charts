@@ -1,8 +1,17 @@
 # Changelog
 
-## 0.2.4 (2025-02-05)
+## 0.3.0 (2025-02-20)
 
-* [bitnami/neo4j] Release 0.2.4 ([#31770](https://github.com/bitnami/charts/pull/31770))
+* [bitnami/neo4j] feat: use new helper for checking API versions ([#32059](https://github.com/bitnami/charts/pull/32059))
+
+## <small>0.2.5 (2025-02-20)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/neo4j] Release 0.2.5 (#32022) ([0fe999a](https://github.com/bitnami/charts/commit/0fe999af5041f466a4b0913670c16adf766ef693)), closes [#32022](https://github.com/bitnami/charts/issues/32022)
+
+## <small>0.2.4 (2025-02-05)</small>
+
+* [bitnami/neo4j] Release 0.2.4 (#31770) ([78e2a9f](https://github.com/bitnami/charts/commit/78e2a9f8451f8f159f3d1768080205ba784b686b)), closes [#31770](https://github.com/bitnami/charts/issues/31770)
 
 ## <small>0.2.3 (2025-02-04)</small>
 

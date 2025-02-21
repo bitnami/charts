@@ -1,8 +1,17 @@
 # Changelog
 
-## 15.12.2 (2025-02-05)
+## 15.12.4 (2025-02-21)
 
-* [bitnami/thanos] Remove quotes from --rule-file arg ([#31649](https://github.com/bitnami/charts/pull/31649))
+* [bitnami/thanos] Release 15.12.4 ([#32102](https://github.com/bitnami/charts/pull/32102))
+
+## <small>15.12.3 (2025-02-14)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/thanos] Add common annotations to pod templates (#31928) ([11e4087](https://github.com/bitnami/charts/commit/11e4087799b594ba4a592d70667195c2d3af0dd8)), closes [#31928](https://github.com/bitnami/charts/issues/31928)
+
+## <small>15.12.2 (2025-02-07)</small>
+
+* [bitnami/thanos] Release 15.12.2 (#31831) ([bd298e4](https://github.com/bitnami/charts/commit/bd298e442152ae47a719974e87e48dc61705f061)), closes [#31831](https://github.com/bitnami/charts/issues/31831)
 
 ## <small>15.12.1 (2025-02-05)</small>
 
