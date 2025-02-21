@@ -78,6 +78,10 @@ initContainers:
             fi
           }
 
+          {{- if .Values.usePasswordFiles }}
+            export REDISCLI_AUTH="$(< $REDISCLI_AUTH_FILE)"
+          {{- end }}
+
           info "Checking redis connection..."
           if ! retry_while "check_redis_connection"; then
               error "Could not connect to the Redis server"
