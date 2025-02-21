@@ -1,8 +1,17 @@
 # Changelog
 
-## 16.4.11 (2025-02-20)
+## 16.4.13 (2025-02-21)
 
-* [bitnami/postgresql] Release 16.4.11 ([#32029](https://github.com/bitnami/charts/pull/32029))
+* [bitnami/postgresql] Release 16.4.13 ([#32097](https://github.com/bitnami/charts/pull/32097))
+
+## <small>16.4.12 (2025-02-20)</small>
+
+* [bitnami/postgresql] Release 16.4.12 (#32086) ([3847abe](https://github.com/bitnami/charts/commit/3847abe0791e4d01718d221c215306b6a23a26b7)), closes [#32086](https://github.com/bitnami/charts/issues/32086)
+
+## <small>16.4.11 (2025-02-20)</small>
+
+* [bitnami/*] Fix typo in named template name (#31858) ([b739b69](https://github.com/bitnami/charts/commit/b739b69532e637bd33b4a44eeb422c3e749eac77)), closes [#31858](https://github.com/bitnami/charts/issues/31858)
+* [bitnami/postgresql] Release 16.4.11 (#32029) ([12c6e53](https://github.com/bitnami/charts/commit/12c6e531eafa7cfed5f78a98fec9062eaaa8c133)), closes [#32029](https://github.com/bitnami/charts/issues/32029)
 
 ## <small>16.4.9 (2025-02-14)</small>
 
