@@ -1,6 +1,6 @@
 # Changelog
 
-## 21.4.6 (2025-02-19)
+## 21.4.6 (2025-02-21)
 
 * [bitnami/elasticsearch] Release 21.4.6 ([#31990](https://github.com/bitnami/charts/pull/31990))
 
