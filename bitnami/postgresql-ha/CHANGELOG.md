@@ -1,8 +1,20 @@
 # Changelog
 
+## 15.3.0 (2025-02-21)
+
+* [bitnami/postgresql-ha] Set `usePasswordFiles=true` by default ([#32116](https://github.com/bitnami/charts/pull/32116))
+
+## <small>15.2.2 (2025-02-21)</small>
+
+* [bitnami/postgresql-ha] Release 15.2.2 (#32096) ([9aa77e8](https://github.com/bitnami/charts/commit/9aa77e84b4473cc488ebfb2645f882ddeb612b69)), closes [#32096](https://github.com/bitnami/charts/issues/32096)
+
+## <small>15.2.1 (2025-02-20)</small>
+
+* [bitnami/postgresql-ha] Release 15.2.1 (#32082) ([97d1814](https://github.com/bitnami/charts/commit/97d1814fabc335ca4c789612f0f6ac88d29cb66b)), closes [#32082](https://github.com/bitnami/charts/issues/32082)
+
 ## 15.2.0 (2025-02-20)
 
-* [bitnami/postgresql-ha] Add resources for backup cronjob ([#31957](https://github.com/bitnami/charts/pull/31957))
+* [bitnami/postgresql-ha] Add resources for backup cronjob (#31957) ([c11a433](https://github.com/bitnami/charts/commit/c11a4331eebba0bd59f7ca64f633119ff5e90e9f)), closes [#31957](https://github.com/bitnami/charts/issues/31957)
 
 ## <small>15.1.10 (2025-02-20)</small>
 
