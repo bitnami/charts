@@ -35,12 +35,12 @@ Returns an init-container that prepares the Airflow configuration files for main
       # Apply changes affecting credentials
       export AIRFLOW_CONF_FILE="/emptydir/app-base-dir/airflow.cfg"
     {{- if (include "airflow.database.useSqlConnection" .) }}
-    {{- if and .Values.auth.usePasswordFiles }}
+    {{- if and .Values.usePasswordFiles }}
       export AIRFLOW_DATABASE_SQL_CONN="$(< $AIRFLOW_DATABASE_SQL_CONN_FILE)"
     {{- end }}
       airflow_conf_set "database" "sql_alchemy_conn" "$AIRFLOW_DATABASE_SQL_CONN"
     {{- else }}
-      {{- if and .Values.auth.usePasswordFiles }}
+      {{- if and .Values.usePasswordFiles }}
       ls -laR /opt/bitnami/airflow
       export AIRFLOW_DATABASE_PASSWORD="$(< $AIRFLOW_DATABASE_PASSWORD_FILE)"
       {{- end }}
@@ -73,7 +73,7 @@ Returns an init-container that prepares the Airflow configuration files for main
     - name: BITNAMI_DEBUG
       value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
     {{- if (include "airflow.database.useSqlConnection" .) }}
-    {{- if .Values.auth.usePasswordFiles }}
+    {{- if .Values.usePasswordFiles }}
     - name: AIRFLOW_DATABASE_SQL_CONN_FILE
       value: {{ printf "/opt/bitnami/airflow/secrets/%s" (include "airflow.database.secretKey" .) }}
     {{- else }}
@@ -88,7 +88,7 @@ Returns an init-container that prepares the Airflow configuration files for main
       value: {{ include "airflow.database.name" . }}
     - name: AIRFLOW_DATABASE_USERNAME
       value: {{ include "airflow.database.user" . }}
-    {{- if .Values.auth.usePasswordFiles }}
+    {{- if .Values.usePasswordFiles }}
     - name: AIRFLOW_DATABASE_PASSWORD_FILE
       value: {{ printf "/opt/bitnami/airflow/secrets/%s" (include "airflow.database.secretKey" .) }}
     {{- else }}
@@ -112,7 +112,7 @@ Returns an init-container that prepares the Airflow configuration files for main
     - name: REDIS_USER
       value: {{ .Values.externalRedis.username | quote }}
     {{- end }}
-    {{- if .Values.auth.usePasswordFiles }}
+    {{- if .Values.usePasswordFiles }}
     - name: REDIS_PASSWORD_FILE
       value: "/opt/bitnami/airflow/secrets/redis-password"
     {{- else }}
@@ -132,7 +132,7 @@ Returns an init-container that prepares the Airflow configuration files for main
     - name: configuration
       mountPath: /opt/bitnami/airflow/config/airflow_local_settings.py
       subPath: airflow_local_settings.py
-    {{- if  .Values.auth.usePasswordFiles }}
+    {{- if  .Values.usePasswordFiles }}
     - name: airflow-secrets
       mountPath: /opt/bitnami/airflow/secrets
     {{- end }}
@@ -163,7 +163,7 @@ Returns an init-container that prepares the Airflow Webserver configuration file
       # Copy the configuration files to the writable directory
       cp /opt/bitnami/airflow/webserver_config.py /emptydir/app-base-dir/webserver_config.py
     {{- if .Values.ldap.enabled }}
-      {{- if .Values.auth.usePasswordFiles }}
+      {{- if .Values.usePasswordFiles }}
       export AIRFLOW_LDAP_BIND_PASSWORD="$(< $AIRFLOW_LDAP_BIND_PASSWORD_FILE)"
       {{- end }}
       export AIRFLOW_WEBSERVER_CONF_FILE="/emptydir/app-base-dir/webserver_config.py"
@@ -174,7 +174,7 @@ Returns an init-container that prepares the Airflow Webserver configuration file
     - name: BITNAMI_DEBUG
       value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
     {{- if .Values.ldap.enabled }}
-    {{- if .Values.auth.usePasswordFiles }}
+    {{- if .Values.usePasswordFiles }}
     - name: AIRFLOW_LDAP_BIND_PASSWORD_FILE
       value: "/opt/bitnami/airflow/secrets/bind-password"
     {{- else }}
@@ -191,7 +191,7 @@ Returns an init-container that prepares the Airflow Webserver configuration file
     - name: webserver-configuration
       mountPath: /opt/bitnami/airflow/webserver_config.py
       subPath: webserver_config.py
-    {{- if  .Values.auth.usePasswordFiles }}
+    {{- if  .Values.usePasswordFiles }}
     - name: airflow-secrets
       mountPath: /opt/bitnami/airflow/secrets
     {{- end }}

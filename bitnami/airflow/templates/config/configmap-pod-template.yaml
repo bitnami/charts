@@ -202,7 +202,7 @@ data:
             - name: empty-dir
               mountPath: /opt/bitnami/airflow/webserver_config.py
               subPath: app-base-dir/webserver_config.py
-            {{- if  .Values.auth.usePasswordFiles }}
+            {{- if  .Values.usePasswordFiles }}
             - name: airflow-secrets
               mountPath: /opt/bitnami/airflow/secrets
             {{- end }}
@@ -238,7 +238,7 @@ data:
         - name: webserver-configuration
           configMap:
             name: {{ include "airflow.web.configMapName" . }}
-        {{- if .Values.auth.usePasswordFiles }}
+        {{- if .Values.usePasswordFiles }}
         - name: airflow-secrets
           projected:
             sources:

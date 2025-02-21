@@ -347,7 +347,7 @@ Add environment variables to configure airflow common values
 {{- define "airflow.configure.airflow.common" -}}
 - name: BITNAMI_DEBUG
   value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
-{{- if .Values.auth.usePasswordFiles }}
+{{- if .Values.usePasswordFiles }}
 - name: AIRFLOW__CORE__FERNET_KEY_CMD
   value: "cat /opt/bitnami/airflow/secrets/airflow-fernet-key"
 - name: AIRFLOW__WEBSERVER__SECRET_KEY_CMD
