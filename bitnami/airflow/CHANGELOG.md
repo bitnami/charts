@@ -1,6 +1,6 @@
 # Changelog
 
-## 22.6.0 (2025-02-20)
+## 22.6.0 (2025-02-21)
 
 * [bitnami/airflow] Add support for `usePasswordFiles` ([#32076](https://github.com/bitnami/charts/pull/32076))
 
