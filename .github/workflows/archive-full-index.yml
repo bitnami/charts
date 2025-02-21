@@ -10,13 +10,13 @@ jobs:
     steps:
       - id: checkout-repo-index
         name: Checkout repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: index
           path: index
       - id: checkout-repo-full-index
         name: Checkout repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: archive-full-index
           path: full-index
@@ -27,7 +27,7 @@ jobs:
           cp full-index/bitnami/index.yaml ./previous_index.yaml
       - id: upload-artifact
         name: Upload artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: indexes
           path: ./*index.yaml
@@ -40,7 +40,7 @@ jobs:
     steps:
       - id: download-artifact
         name: Download artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: indexes
       - id: merge
@@ -52,7 +52,7 @@ jobs:
         run: yq eval '.entries[] |= unique_by(.digest)' duplicates_index.yaml > index.yaml
       - id: upload-artifact
         name: Upload artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: archive-full-index
           path: index.yaml
@@ -65,7 +65,7 @@ jobs:
     steps:
       - id: download-artifacts
         name: Download artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
       - id: index-lint
         name: Lint archive full index
         # Lint the resulting archive full index using ignoring identation and lin-length rules.
@@ -103,13 +103,13 @@ jobs:
     steps:
       - id: checkout-repo
         name: Checkout repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: archive-full-index
           token: ${{ secrets.BITNAMI_BOT_TOKEN }}
       - id: download-artifact-archive-full-index
         name: Download artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: archive-full-index
       - id: update-index
