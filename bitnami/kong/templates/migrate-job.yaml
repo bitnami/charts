@@ -59,9 +59,9 @@ spec:
             - name: KONG_DATABASE
               value: {{ include "kong.database" . | quote }}
             {{- if (eq .Values.database "postgresql") }}
-            {{- if .Values.postgresql.auth.usePasswordFiles }}
+            {{- if .Values.usePasswordFiles }}
             - name: KONG_PG_PASSWORD_FILE
-              value: {{ printf "/bitnami/kong/secrets/%s" (include "kong.postgresql.databaseSecretKey" .) }}
+              value: {{ printf "/opt/bitnami/kong/secrets/%s" (include "kong.postgresql.databaseSecretKey" .) }}
             {{- else }}
             - name: KONG_PG_PASSWORD
               valueFrom:
@@ -77,9 +77,9 @@ spec:
               value: {{ include "kong.postgresql.user" . }}
             {{- end }}
             {{- if (eq .Values.database "cassandra") }}
-            {{- if .Values.cassandra.usePasswordFiles }}
+            {{- if .Values.usePasswordFiles }}
             - name: KONG_CASSANDRA_PASSWORD_FILE
-              value: {{ printf "/bitnami/kong/secrets/%s" (include "kong.cassandra.databaseSecretKey" .) }}
+              value: {{ printf "/opt/bitnami/kong/secrets/%s" (include "kong.cassandra.databaseSecretKey" .) }}
             {{- else }}
             - name: KONG_CASSANDRA_PASSWORD
               valueFrom:
@@ -115,6 +115,10 @@ spec:
             - name: empty-dir
               mountPath: /opt/bitnami/kong/server
               subPath: app-server-dir
+            {{- if and .Values.usePasswordFiles (or (eq .Values.database "cassandra") (eq .Values.database "postgresql")) }}
+            - name: kong-secrets
+              mountPath: /opt/bitnami/kong/secrets
+            {{- end -}}
             {{- if .Values.migration.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.migration.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
@@ -126,6 +130,15 @@ spec:
       volumes:
         - name: empty-dir
           emptyDir: {}
+        {{- if and .Values.usePasswordFiles (or (eq .Values.database "cassandra") (eq .Values.database "postgresql")) }}
+        - name: kong-secrets
+          secret:
+            {{- if (eq .Values.database "cassandra") }}
+            secretName: {{ include "kong.cassandra.secretName" . }}
+            {{- else if (eq .Values.database "postgresql") }}
+            secretName: {{ include "kong.postgresql.secretName" . }}
+            {{- end }}
+        {{- end -}}
         {{- if .Values.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
         {{- end }}

@@ -61,6 +61,9 @@ clusterDomain: cluster.local
 ## @param extraDeploy Array of extra objects to deploy with the release (evaluated as a template).
 ##
 extraDeploy: []
+## @param usePasswordFiles Mount credentials as files instead of using environment variables
+##
+usePasswordFiles: true
 ## Enable diagnostic mode in the daemonset/deployment
 ##
 diagnosticMode:
@@ -897,7 +900,6 @@ migration:
 ## @param postgresql.auth.password Password for the custom user to create
 ## @param postgresql.auth.database Name for a custom database to create
 ## @param postgresql.auth.existingSecret Name of existing secret to use for PostgreSQL credentials
-## @param postgresql.auth.usePasswordFiles Mount credentials as a files instead of using an environment variable
 ## @param postgresql.architecture PostgreSQL architecture (`standalone` or `replication`)
 ##
 postgresql:
@@ -908,7 +910,6 @@ postgresql:
     database: kong
     postgresPassword: ""
     existingSecret: ""
-    usePasswordFiles: true
   architecture: standalone
   primary:
     ## PostgreSQL Primary resource requests and limits
@@ -955,7 +956,6 @@ postgresql:
 ## @param cassandra.dbUser.user Cassandra admin user
 ## @param cassandra.dbUser.password Password for `cassandra.dbUser.user`. Randomly generated if empty
 ## @param cassandra.dbUser.existingSecret Name of existing secret to use for Cassandra credentials
-## @param cassandra.usePasswordFiles Mount credentials as a files instead of using an environment variable
 ## @param cassandra.replicaCount Number of Cassandra replicas
 ##
 cassandra:
@@ -964,7 +964,6 @@ cassandra:
     user: kong
     password: ""
     existingSecret: ""
-  usePasswordFiles: true
   replicaCount: 1
   ## External Cassandra configuration
   ## All of these values are only used when cassandra.enabled is set to false
