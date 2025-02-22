@@ -49,7 +49,7 @@ global:
 image:
   registry: docker.io
   repository: bitnami/rabbitmq
-  tag: 4.0.5-debian-12-r2
+  tag: 4.0.6-debian-12-r3
   digest: ""
   ## set to true if you would like to see extra information on logs
   ## It turns BASH and/or NAMI debugging in the image
@@ -1587,7 +1587,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r36
+    tag: 12-debian-12-r39
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images

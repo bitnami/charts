@@ -1,8 +1,18 @@
 # Changelog
 
-## 15.1.2 (2025-02-04)
+## 15.2.0 (2025-02-20)
 
-* [bitnami/kong] Release 15.1.2 ([#31736](https://github.com/bitnami/charts/pull/31736))
+* [bitnami/kong] feat: use new helper for checking API versions ([#32053](https://github.com/bitnami/charts/pull/32053))
+
+## <small>15.1.3 (2025-02-19)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/kong] Release 15.1.3 (#32009) ([3a82c75](https://github.com/bitnami/charts/commit/3a82c757bc8f0a231eb9884aebca1f11d58949e6)), closes [#32009](https://github.com/bitnami/charts/issues/32009)
+
+## <small>15.1.2 (2025-02-04)</small>
+
+* [bitnami/kong] Release 15.1.2 (#31736) ([7a87721](https://github.com/bitnami/charts/commit/7a8772124ee0655f9470669101342c65e644e55c)), closes [#31736](https://github.com/bitnami/charts/issues/31736)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
 
 ## <small>15.1.1 (2025-01-07)</small>
 

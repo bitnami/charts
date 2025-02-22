@@ -17,7 +17,7 @@ dependencies:
   version: 2.x.x
 description: Pinniped is an identity service provider for Kubernetes. It supplies a consistent and unified login experience across all your clusters. Pinniped is securely integrated with enterprise IDP protocols.
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/pinniped/img/pinniped-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/pinniped/img/pinniped-stack-220x234.png
 keywords:
 - identity
 - infrastructure

@@ -14,28 +14,28 @@ annotations:
 apiVersion: v2
 appVersion: 0.102.5
 dependencies:
-- condition: postgresql.enabled
-  name: postgresql
-  repository: oci://registry-1.docker.io/bitnamicharts
-  version: 16.x.x
-- name: common
-  repository: oci://registry-1.docker.io/bitnamicharts
-  tags:
-  - bitnami-common
-  version: 2.x.x
+  - condition: postgresql.enabled
+    name: postgresql
+    repository: oci://registry-1.docker.io/bitnamicharts
+    version: 16.x.x
+  - name: common
+    repository: oci://registry-1.docker.io/bitnamicharts
+    tags:
+      - bitnami-common
+    version: 2.x.x
 description: Nessie is an open-source version control system for data lakes, enabling isolated data experimentation before committing changes.
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/nessie/img/nessie-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/nessie/img/nessie-stack-220x234.png
 keywords:
-- nessie
-- graph
-- database
+  - nessie
+  - graph
+  - database
 maintainers:
-- name: Broadcom, Inc. All Rights Reserved.
-  url: https://github.com/bitnami/charts
+  - name: Broadcom, Inc. All Rights Reserved.
+    url: https://github.com/bitnami/charts
 name: nessie
 sources:
-- https://github.com/bitnami/charts/tree/main/bitnami/nessie
-- https://github.com/bitnami/containers/tree/main/bitnami/nessie
-- https://github.com/nessie/nessie
-version: 1.1.10
+  - https://github.com/bitnami/charts/tree/main/bitnami/nessie
+  - https://github.com/bitnami/containers/tree/main/bitnami/nessie
+  - https://github.com/nessie/nessie
+version: 1.2.0

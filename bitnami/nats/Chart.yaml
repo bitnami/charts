@@ -6,9 +6,9 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: nats
-      image: docker.io/bitnami/nats:2.10.25-debian-12-r1
+      image: docker.io/bitnami/nats:2.10.25-debian-12-r2
     - name: nats-exporter
-      image: docker.io/bitnami/nats-exporter:0.16.0-debian-12-r4
+      image: docker.io/bitnami/nats-exporter:0.16.0-debian-12-r6
 apiVersion: v2
 appVersion: 2.10.25
 dependencies:
@@ -19,7 +19,7 @@ dependencies:
   version: 2.x.x
 description: NATS is an open source, lightweight and high-performance messaging system. It is ideal for distributed systems and supports modern cloud architectures and pub-sub, request-reply and queuing models.
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/nats/img/nats-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/nats/img/nats-stack-220x234.png
 keywords:
 - nats
 - messaging
@@ -31,4 +31,4 @@ maintainers:
 name: nats
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/nats
-version: 9.0.2
+version: 9.0.3

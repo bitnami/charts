@@ -1,8 +1,18 @@
 # Changelog
 
-## 2.2.5 (2025-02-05)
+## 2.2.7 (2025-02-19)
 
-* [bitnami/multus-cni] Release 2.2.5 ([#31767](https://github.com/bitnami/charts/pull/31767))
+* [bitnami/multus-cni] Release 2.2.7 ([#32020](https://github.com/bitnami/charts/pull/32020))
+
+## <small>2.2.6 (2025-02-12)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/multus-cni] Release 2.2.6 (#31896) ([ff35e8d](https://github.com/bitnami/charts/commit/ff35e8d034d602d904d2979bdb8bff64c7698387)), closes [#31896](https://github.com/bitnami/charts/issues/31896)
+
+## <small>2.2.5 (2025-02-05)</small>
+
+* [bitnami/multus-cni] Release 2.2.5 (#31767) ([83f268d](https://github.com/bitnami/charts/commit/83f268dee40dde1ab9ce7fe0aa43ce34bba10edc)), closes [#31767](https://github.com/bitnami/charts/issues/31767)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
 
 ## <small>2.2.4 (2025-01-24)</small>
 

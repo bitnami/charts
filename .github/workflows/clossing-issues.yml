@@ -12,6 +12,7 @@ permissions: {}
 jobs:
   stale:
     runs-on: ubuntu-latest
+    if: ${{ github.repository_owner == 'bitnami' }}
     steps:
       - uses: actions/stale@5bef64f19d7facfb25b37b414482c7164d639639
         with:

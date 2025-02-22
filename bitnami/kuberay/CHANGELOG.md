@@ -1,8 +1,22 @@
 # Changelog
 
-## 1.3.5 (2025-02-05)
+## 1.4.0 (2025-02-20)
 
-* [bitnami/kuberay] Release 1.3.5 ([#31766](https://github.com/bitnami/charts/pull/31766))
+* [bitnami/kuberay] feat: use new helper for checking API versions ([#32054](https://github.com/bitnami/charts/pull/32054))
+
+## <small>1.3.7 (2025-02-19)</small>
+
+* [bitnami/kuberay] Release 1.3.7 (#32012) ([3a282d6](https://github.com/bitnami/charts/commit/3a282d6e4d9a70037d7c4cde9bc7b009d113741c)), closes [#32012](https://github.com/bitnami/charts/issues/32012)
+
+## <small>1.3.6 (2025-02-12)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/kuberay] Release 1.3.6 (#31895) ([9502a06](https://github.com/bitnami/charts/commit/9502a066497ae0aa77223e5d2733dcdde129230f)), closes [#31895](https://github.com/bitnami/charts/issues/31895)
+
+## <small>1.3.5 (2025-02-05)</small>
+
+* [bitnami/kuberay] Release 1.3.5 (#31766) ([4cee30e](https://github.com/bitnami/charts/commit/4cee30e10cb7ee2c57e38b6ffad000f685e05b95)), closes [#31766](https://github.com/bitnami/charts/issues/31766)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
 
 ## <small>1.3.4 (2025-01-24)</small>
 

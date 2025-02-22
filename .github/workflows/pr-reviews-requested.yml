@@ -15,5 +15,6 @@ concurrency:
   group: card-movement-${{ github.event.number }}
 jobs:
   call-pr-review-workflow:
+    if: ${{ github.repository_owner == 'bitnami' }}
     uses: bitnami/support/.github/workflows/pr-review-requested-sync.yml@main
     secrets: inherit
