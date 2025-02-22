@@ -21,7 +21,7 @@ dependencies:
   version: 2.x.x
 description: NGINX Open Source is a web server that can be also used as a reverse proxy, load balancer, and HTTP cache. Recommended for high-demanding sites due to its ability to provide faster content.
 home: https://bitnami.com
-icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/nginx/img/nginx-stack-220x234.png
+icon: https://bitnami.com/assets/stacks/nginx/img/nginx-stack-220x234.png
 keywords:
 - nginx
 - http
@@ -34,4 +34,4 @@ maintainers:
 name: nginx
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/nginx
-version: 19.0.0
+version: 18.3.6
