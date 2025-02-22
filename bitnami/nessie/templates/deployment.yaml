@@ -112,7 +112,7 @@ spec:
           args:
             - -ec
             - |
-              {{- if .Values.usePasswordFile }}
+              {{- if .Values.usePasswordFiles }}
               # We need to load all the secret env vars to the system
               for file in $(find /bitnami/nessie/secrets -type f); do
                   env_var_name="$(basename $file)"
@@ -125,7 +125,7 @@ spec:
           env:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
-            {{- if and (eq .Values.versionStoreType "JDBC_POSTGRESQL") (not .Values.usePasswordFile) }}
+            {{- if and (eq .Values.versionStoreType "JDBC_POSTGRESQL") (not .Values.usePasswordFiles) }}
             - name: QUARKUS_DATASOURCE_POSTGRESQL_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -138,7 +138,7 @@ spec:
           envFrom:
             - configMapRef:
                 name: {{ include "nessie.configmapName" . }}
-            {{- if and (not .Values.usePasswordFile) (or .Values.secretConfigOverrides .Values.existingSecret) }}
+            {{- if and (not .Values.usePasswordFiles) (or .Values.secretConfigOverrides .Values.existingSecret) }}
             - secretRef:
                 name: {{ include "nessie.secretName" . }}
             {{- end }}
@@ -206,7 +206,7 @@ spec:
               subPath: {{ .Values.persistence.subPath }}
             {{- end }}
             {{- end }}
-            {{- if .Values.usePasswordFile }}
+            {{- if .Values.usePasswordFiles }}
             {{- if (eq .Values.versionStoreType "JDBC_POSTGRESQL") }}
             - name: database-password
               mountPath: /bitnami/nessie/secrets/database
@@ -228,7 +228,7 @@ spec:
         {{- end }}
         - name: empty-dir
           emptyDir: {}
-        {{- if .Values.usePasswordFile }}
+        {{- if .Values.usePasswordFiles }}
         {{- if (eq .Values.versionStoreType "JDBC_POSTGRESQL") }}
         - name: database-password
           secret:
