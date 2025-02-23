@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.4.8 (2025-02-21)
+## 1.4.8 (2025-02-23)
 
 * [bitnami/prometheus] Add toggle for Prometheus Kubernetes Service ([#32128](https://github.com/bitnami/charts/pull/32128))
 
