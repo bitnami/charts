@@ -1,8 +1,14 @@
 # Changelog
 
+## 1.3.1 (2025-02-24)
+
+* [bitnami/janusgraph] Release 1.3.1 ([#32140](https://github.com/bitnami/charts/pull/32140))
+
 ## 1.3.0 (2025-02-20)
 
-* [bitnami/janusgraph] feat: use new helper for checking API versions ([#32050](https://github.com/bitnami/charts/pull/32050))
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/janusgraph] feat: use new helper for checking API versions (#32050) ([7b30ac8](https://github.com/bitnami/charts/commit/7b30ac8e4c15b963ba52af27f7265b92b852fec3)), closes [#32050](https://github.com/bitnami/charts/issues/32050)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
 
 ## <small>1.2.3 (2025-01-28)</small>
 
