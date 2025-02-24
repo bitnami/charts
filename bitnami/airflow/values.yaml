@@ -1247,20 +1247,6 @@ dagProcessor:
     timeoutSeconds: 15
     failureThreshold: 6
     successThreshold: 1
-  ## @param dagProcessor.readinessProbe.enabled Enable readinessProbe on Airflow Dag Processor containers
-  ## @param dagProcessor.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
-  ## @param dagProcessor.readinessProbe.periodSeconds Period seconds for readinessProbe
-  ## @param dagProcessor.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
-  ## @param dagProcessor.readinessProbe.failureThreshold Failure threshold for readinessProbe
-  ## @param dagProcessor.readinessProbe.successThreshold Success threshold for readinessProbe
-  ##
-  readinessProbe:
-    enabled: true
-    initialDelaySeconds: 30
-    periodSeconds: 10
-    timeoutSeconds: 15
-    failureThreshold: 6
-    successThreshold: 1
   ## @param dagProcessor.startupProbe.enabled Enable startupProbe on Airflow Dag Processor containers
   ## @param dagProcessor.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
   ## @param dagProcessor.startupProbe.periodSeconds Period seconds for startupProbe
