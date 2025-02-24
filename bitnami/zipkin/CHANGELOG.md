@@ -1,8 +1,12 @@
 # Changelog
 
+## 1.3.0 (2025-02-21)
+
+* [bitnami/zipkin] Set `usePasswordFiles=true` by default ([#32123](https://github.com/bitnami/charts/pull/32123))
+
 ## 1.2.0 (2025-02-20)
 
-* [bitnami/zipkin] feat: use new helper for checking API versions ([#32065](https://github.com/bitnami/charts/pull/32065))
+* [bitnami/zipkin] feat: use new helper for checking API versions (#32065) ([bf89424](https://github.com/bitnami/charts/commit/bf894249b47cefa40e7dc44e8f8948c827415c54)), closes [#32065](https://github.com/bitnami/charts/issues/32065)
 
 ## <small>1.1.5 (2025-02-16)</small>
 
