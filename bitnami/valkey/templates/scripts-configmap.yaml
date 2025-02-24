@@ -357,7 +357,7 @@ data:
         export VALKEY_REPLICATION_MODE="replica"
     fi
 
-    {{- if .Values.sentinel.service.createPrimary }}
+    {{- if .Values.sentinel.service.createPrimary.enabled }}
     if [[ "${VALKEY_REPLICATION_MODE}" == "primary" ]]; then
         # Add isPrimary label to primary node for primary service
         echo "${VALKEY_PRIMARY_HOST/.*}" > /etc/shared/current
@@ -597,7 +597,7 @@ data:
         exit 0
     fi
 
-  {{- if .Values.sentinel.service.createPrimary}}
+  {{- if .Values.sentinel.service.createPrimary.enabled}}
   push-primary-label.sh: |
     #!/bin/bash
     # https://download.valkey.io/valkey-stable/sentinel.conf
@@ -765,7 +765,7 @@ data:
   {{- end }}
 {{- end }}
 ---
-{{- if .Values.sentinel.service.createPrimary}}
+{{- if .Values.sentinel.service.createPrimary.enabled}}
 apiVersion: v1
 kind: ConfigMap
 metadata:

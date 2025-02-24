@@ -1444,11 +1444,7 @@ sentinel:
     ## @param sentinel.service.createPrimary Enable primary service pointing to the current primary (experimental)
     ## NOTE: rbac.create need to be set to true
     ##
-    createPrimary: false
 
-    ## @param sentinel.service.loadBalancerIP Valkey Sentinel service Load Balancer IP
-    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
-    ##
     loadBalancerIP: ""
     ## @param sentinel.service.loadBalancerClass sentinel service Load Balancer class if service type is `LoadBalancer` (optional, cloud specific)
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
@@ -1481,6 +1477,28 @@ sentinel:
       ## @param sentinel.service.headless.annotations Annotations for the headless service.
       ##
       annotations: {}
+    ## Create experemental primary service with dedicated configuration options.
+    createPrimary: 
+      enabled: false
+      service:
+        type: ClusterIP
+        ports:
+          valkey: 6379
+          sentinel: 26379
+        nodePorts:
+          valkey: ""
+          sentinel: ""
+        externalTrafficPolicy: Cluster
+        extraPorts: []
+        clusterIP: ""
+        loadBalancerIP: ""
+        loadBalancerClass: ""
+        loadBalancerSourceRanges: []
+        annotations: {}
+        sessionAffinity: None
+        sessionAffinityConfig: {}
+        headless:
+          annotations: {}
   ## @param sentinel.terminationGracePeriodSeconds Integer setting the termination grace period for the valkey-node pods
   ##
   terminationGracePeriodSeconds: 30

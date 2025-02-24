@@ -53,7 +53,7 @@ data:
     sentinel down-after-milliseconds {{ .Values.sentinel.primarySet }} {{ .Values.sentinel.downAfterMilliseconds }}
     sentinel failover-timeout {{ .Values.sentinel.primarySet }} {{ .Values.sentinel.failoverTimeout }}
     sentinel parallel-syncs {{ .Values.sentinel.primarySet }} {{ .Values.sentinel.parallelSyncs }}
-    {{- if .Values.sentinel.service.createPrimary}}
+    {{- if .Values.sentinel.service.createPrimary.enabled}}
       sentinel client-reconfig-script {{ .Values.sentinel.primarySet }} /opt/bitnami/scripts/start-scripts/push-primary-label.sh
     {{- end }}
     # User-supplied sentinel configuration:
