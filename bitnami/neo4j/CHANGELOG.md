@@ -1,8 +1,12 @@
 # Changelog
 
+## 0.3.1 (2025-02-24)
+
+* [bitnami/neo4j] Release 0.3.1 ([#32145](https://github.com/bitnami/charts/pull/32145))
+
 ## 0.3.0 (2025-02-20)
 
-* [bitnami/neo4j] feat: use new helper for checking API versions ([#32059](https://github.com/bitnami/charts/pull/32059))
+* [bitnami/neo4j] feat: use new helper for checking API versions (#32059) ([5a8d661](https://github.com/bitnami/charts/commit/5a8d661156facd094be4bd1597ba58cb6d0988e8)), closes [#32059](https://github.com/bitnami/charts/issues/32059)
 
 ## <small>0.2.5 (2025-02-20)</small>
 
