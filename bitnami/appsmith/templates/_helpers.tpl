@@ -236,15 +236,25 @@ Return the MongoDB Secret Name
       value: {{ include "appsmith.mongodb.hosts" . | quote }}
     - name: APPSMITH_DATABASE_PORT_NUMBER
       value: {{ include "appsmith.mongodb.port" . | quote }}
+    {{- if .Values.usePasswordFiles }}
+    - name: APPSMITH_DATABASE_PASSWORD_FILE
+      value: {{ printf "/opt/bitnami/appsmith/secrets/%s" (include "appsmith.mongodb.secretKey" .) }}
+    {{- else }}
     - name: APPSMITH_DATABASE_PASSWORD
       valueFrom:
         secretKeyRef:
           name: {{ include "appsmith.mongodb.secretName" . }}
           key: {{ include "appsmith.mongodb.secretKey" . }}
+    {{- end }}
     - name: APPSMITH_DATABASE_USER
       value: {{ ternary (index .Values.mongodb.auth.usernames 0) .Values.externalDatabase.username .Values.mongodb.enabled | quote }}
     - name: APPSMITH_DATABASE_NAME
       value: {{ ternary (index .Values.mongodb.auth.databases 0) .Values.externalDatabase.database .Values.mongodb.enabled | quote }}
+  {{- if  .Values.usePasswordFiles }}
+  volumeMounts:
+    - name: appsmith-secrets
+      mountPath: /opt/bitnami/appsmith/secrets
+  {{- end }}
 {{- end -}}
 
 {{- define "appsmith.waitForBackendInitContainer" -}}

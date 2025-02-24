@@ -117,9 +117,9 @@ spec:
             - name: KONG_DATABASE
               value: {{ include "kong.database" . | quote }}
             {{- if (eq .Values.database "postgresql") }}
-            {{- if .Values.postgresql.auth.usePasswordFiles }}
-            - name: KONG_POSTGRESQL_PASSWORD_FILE
-              value: {{ printf "/bitnami/kong/secrets/%s" (include "kong.postgresql.databaseSecretKey" .) }}
+            {{- if .Values.usePasswordFiles }}
+            - name: KONG_PG_PASSWORD_FILE
+              value: {{ printf "/opt/bitnami/kong/secrets/%s" (include "kong.postgresql.databaseSecretKey" .) }}
             {{- else }}
             - name: KONG_PG_PASSWORD
               valueFrom:
@@ -135,9 +135,9 @@ spec:
               value: {{ include "kong.postgresql.user" . }}
             {{- end }}
             {{- if (eq .Values.database "cassandra") }}
-            {{- if .Values.cassandra.usePasswordFile }}
+            {{- if .Values.usePasswordFiles }}
             - name: KONG_CASSANDRA_PASSWORD_FILE
-              value: {{ printf "/bitnami/kong/secrets/%s" (include "kong.cassandra.databaseSecretKey" .) }}
+              value: {{ printf "/opt/bitnami/kong/secrets/%s" (include "kong.cassandra.databaseSecretKey" .) }}
             {{- else }}
             - name: KONG_CASSANDRA_PASSWORD
               valueFrom:
@@ -246,6 +246,10 @@ spec:
               subPath: app-server-dir
             - name: health
               mountPath: /health
+            {{- if and .Values.usePasswordFiles (or (eq .Values.database "cassandra") (eq .Values.database "postgresql")) }}
+            - name: kong-secrets
+              mountPath: /opt/bitnami/kong/secrets
+            {{- end -}}
             {{- if .Values.metrics.enabled }}
             - name: metrics-init-scripts
               mountPath: /docker-entrypoint-initdb.d/metrics-init
@@ -377,6 +381,15 @@ spec:
           configMap:
             name: {{ template "common.names.fullname" . }}-scripts
             defaultMode: 0755
+        {{- if and .Values.usePasswordFiles (or (eq .Values.database "cassandra") (eq .Values.database "postgresql")) }}
+        - name: kong-secrets
+          secret:
+            {{- if (eq .Values.database "cassandra") }}
+            secretName: {{ include "kong.cassandra.secretName" . }}
+            {{- else if (eq .Values.database "postgresql") }}
+            secretName: {{ include "kong.postgresql.secretName" . }}
+            {{- end }}
+        {{- end -}}
         {{- if .Values.metrics.enabled }}
         - name: metrics-init-scripts
           configMap:
@@ -395,7 +408,7 @@ spec:
         {{- if .Values.kong.initScriptsSecret }}
         - name: custom-init-scripts-secret
           secret:
-            name: {{ include "common.tplvalues.render" (dict "value" .Values.kong.initScriptsSecret "context" $) }}
+            secretName: {{ include "common.tplvalues.render" (dict "value" .Values.kong.initScriptsSecret "context" $) }}
             defaultMode: 0755
         {{- end }}
         {{- if (include "kong.declarativeConfigMap" .) }}

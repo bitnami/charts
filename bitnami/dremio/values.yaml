@@ -78,9 +78,9 @@ diagnosticMode:
   args:
     - infinity
 
-## @param usePasswordFile Mount secrets as files
+## @param usePasswordFiles Mount secrets as files
 ##
-usePasswordFile: true
+usePasswordFiles: true
 
 ## @section Dremio common configuration settings
 ##
