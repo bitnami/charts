@@ -8,7 +8,7 @@ annotations:
     - name: cloudnative-pg
       image: docker.io/bitnami/cloudnative-pg:1.25.0-debian-12-r1
     - name: postgresql
-      image: docker.io/bitnami/postgresql:17.2.0-debian-12-r12
+      image: docker.io/bitnami/postgresql:17.4.0-debian-12-r2
 apiVersion: v2
 appVersion: 1.25.0
 dependencies:
