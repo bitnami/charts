@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.5.1 (2025-02-20)
+## 2.5.1 (2025-02-24)
 
 * [bitnami/mlflow] Release 2.5.1 ([#31921](https://github.com/bitnami/charts/pull/31921))
 
