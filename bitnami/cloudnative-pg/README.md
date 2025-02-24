@@ -1,10 +1,10 @@
-<!--- app-name: CloudNative-PG -->
+<!--- app-name: CloudNativePG -->
 
-# Bitnami package for CloudNative-PG
+# Bitnami package for CloudNativePG
 
-CloudNativePG is an open-source tool for managing PostgreSQL databases on Kubernetes, from setup to ongoing upkeep
+CloudNativePG is an open-source tool for managing PostgreSQL databases on Kubernetes, from setup to ongoing upkeep.
 
-[Overview of cloudnative-pg](https://cloudnative-pg.io)
+[Overview of CloudNativePG](https://cloudnative-pg.io/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
