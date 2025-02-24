@@ -418,7 +418,7 @@ Init container definition for waiting for the database to be ready
     - name: empty-dir
       mountPath: /tmp
       subPath: tmp-dir
-    {{- if .context.Values.usePasswordFiles }}
+    {{- if and .context.Values.usePasswordFiles (or (eq .component "dashboard") .context.Values.controlPlane.enabled (include "apisix.etcd.authEnabled" .)) }}
     - name: apisix-secrets
       mountPath: /opt/bitnami/apisix/secrets
     {{- end }}
@@ -671,7 +671,7 @@ Render configuration for the dashboard and ingress-controller components
       subPath: app-conf-dir
     - name: config
       mountPath: /bitnami/apisix/conf/00_default
-    {{- if .context.Values.usePasswordFiles }}
+    {{- if and .context.Values.usePasswordFiles (or (eq .component "dashboard") .context.Values.controlPlane.enabled (include "apisix.etcd.authEnabled" .)) }}
     - name: apisix-secrets
       mountPath: /opt/bitnami/apisix/secrets
     {{- end }}
