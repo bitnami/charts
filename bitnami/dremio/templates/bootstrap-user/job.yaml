@@ -52,7 +52,7 @@ spec:
           args:
             - |
               set -e
-              {{- if .Values.usePasswordFile }}
+              {{- if .Values.usePasswordFiles }}
               # We need to load all the secret env vars to the system
               for file in $(find /bitnami/dremio/secrets -type f); do
                   env_var_name="$(basename $file)"
@@ -73,7 +73,7 @@ spec:
               {{- end }}
               echo "Initialization finished"
           env:
-            {{- if not .Values.usePasswordFile }}
+            {{- if not .Values.usePasswordFiles }}
             - name: DREMIO_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -107,7 +107,7 @@ spec:
             - name: empty-dir
               mountPath: /tmp
               subPath: tmp-dir
-            {{- if .Values.usePasswordFile }}
+            {{- if .Values.usePasswordFiles }}
             - name: password
               mountPath: /bitnami/dremio/secrets/password
             {{- end }}
@@ -122,7 +122,7 @@ spec:
       volumes:
         - name: empty-dir
           emptyDir: {}
-        {{- if .Values.usePasswordFile }}
+        {{- if .Values.usePasswordFiles }}
         - name: password
           secret:
             secretName: {{ include "dremio.auth.secretName" . }}

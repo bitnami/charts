@@ -1,8 +1,12 @@
 # Changelog
 
+## 0.6.0 (2025-02-21)
+
+* [bitnami/dremio] Rename `usePasswordFile` as `usePasswordFiles` and set 'true' by default ([#32105](https://github.com/bitnami/charts/pull/32105))
+
 ## 0.5.0 (2025-02-20)
 
-* [bitnami/dremio] feat: use new helper for checking API versions ([#32048](https://github.com/bitnami/charts/pull/32048))
+* [bitnami/dremio] feat: use new helper for checking API versions (#32048) ([3c3abd5](https://github.com/bitnami/charts/commit/3c3abd5f99cd1ad0c50a55e2bb63819d14672374)), closes [#32048](https://github.com/bitnami/charts/issues/32048)
 
 ## <small>0.4.1 (2025-02-19)</small>
 
