@@ -1,8 +1,8 @@
 # Changelog
 
-## 1.6.1 (2025-02-21)
+## 1.6.1 (2025-02-24)
 
-* [bitnami/opensearch] Release 1.5.5 ([#32027](https://github.com/bitnami/charts/pull/32027))
+* [bitnami/opensearch] Release 1.6.1 ([#32027](https://github.com/bitnami/charts/pull/32027))
 
 ## 1.6.0 (2025-02-20)
 
