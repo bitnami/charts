@@ -65,6 +65,9 @@ clusterDomain: cluster.local
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
+## @param usePasswordFiles Mount credentials as files instead of using environment variables
+##
+usePasswordFiles: true
 ## Enable diagnostic mode in the deployment
 ##
 diagnosticMode:
@@ -1845,7 +1848,7 @@ dashboard:
       - ai
       - cas-auth
       - multi-auth
-      
+
   ## @param dashboard.extraConfig extra configuration settings for APISIX Dashboard
   ##
   extraConfig: {}
