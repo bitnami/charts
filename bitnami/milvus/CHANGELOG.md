@@ -1,8 +1,18 @@
 # Changelog
 
-## 11.1.2 (2025-02-05)
+## 11.2.0 (2025-02-20)
 
-* [bitnami/milvus] Release 11.1.2 ([#31783](https://github.com/bitnami/charts/pull/31783))
+* [bitnami/milvus] feat: use new helper for checking API versions ([#32057](https://github.com/bitnami/charts/pull/32057))
+
+## <small>11.1.4 (2025-02-19)</small>
+
+* [bitnami/*] Fix typo in named template name (#31858) ([b739b69](https://github.com/bitnami/charts/commit/b739b69532e637bd33b4a44eeb422c3e749eac77)), closes [#31858](https://github.com/bitnami/charts/issues/31858)
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/milvus] Release 11.1.4 (#32018) ([26279ff](https://github.com/bitnami/charts/commit/26279fffdefd8d2aa44828cc4508f246d718248d)), closes [#32018](https://github.com/bitnami/charts/issues/32018)
+
+## <small>11.1.2 (2025-02-05)</small>
+
+* [bitnami/milvus] Release 11.1.2 (#31783) ([830393c](https://github.com/bitnami/charts/commit/830393c91796d9fd82cc6d7bd6dd459ec3a0abfb)), closes [#31783](https://github.com/bitnami/charts/issues/31783)
 
 ## <small>11.1.1 (2025-02-04)</small>
 

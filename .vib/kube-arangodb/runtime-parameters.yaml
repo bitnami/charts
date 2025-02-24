@@ -1,0 +1,43 @@
+containerPorts:
+  server: 9023
+  apiHttp: 9024
+  apiGrpc: 9025
+service:
+  type: LoadBalancer
+  ports:
+    server: 443
+    apiHttp: 9628
+    apiGrpc: 9728
+auth:
+  username: vib-user
+  password: "ComplicatedPassword123!4"
+serviceAccount:
+  create: true
+automountServiceAccountToken: true
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1002
+  runAsGroup: 1002
+podSecurityContext:
+  fsGroup: 1002
+metrics:
+  enabled: true
+extraVolumes:
+  - name: empty-dir
+    emptyDir: {}
+extraVolumeMounts:
+  - name: empty-dir
+    mountPath: /tmp
+webhook:
+  containerPorts:
+    webhook: 9999
+  service:
+    ports:
+      webhook: 443
+extraDeploy:
+  - apiVersion: "database.arangodb.com/v1"
+    kind: "ArangoDeployment"
+    metadata:
+      name: "vib-arangodb"
+    spec:
+      mode: Single

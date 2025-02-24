@@ -40,6 +40,9 @@ global:
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
 ##
 kubeVersion: ""
+## @param apiVersions Override Kubernetes API versions reported by .Capabilities
+##
+apiVersions: []
 ## @param nameOverride String to partially override common.names.fullname template with a string (will prepend the release name)
 ##
 nameOverride: ""
@@ -58,6 +61,9 @@ clusterDomain: cluster.local
 ## @param extraDeploy Array of extra objects to deploy with the release (evaluated as a template).
 ##
 extraDeploy: []
+## @param usePasswordFiles Mount credentials as files instead of using environment variables
+##
+usePasswordFiles: true
 ## Enable diagnostic mode in the daemonset/deployment
 ##
 diagnosticMode:
@@ -88,7 +94,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/kong
-  tag: 3.9.0-debian-12-r8
+  tag: 3.9.0-debian-12-r12
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -668,7 +674,7 @@ ingressController:
   image:
     registry: docker.io
     repository: bitnami/kong-ingress-controller
-    tag: 3.4.1-debian-12-r2
+    tag: 3.4.2-debian-12-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -894,7 +900,6 @@ migration:
 ## @param postgresql.auth.password Password for the custom user to create
 ## @param postgresql.auth.database Name for a custom database to create
 ## @param postgresql.auth.existingSecret Name of existing secret to use for PostgreSQL credentials
-## @param postgresql.auth.usePasswordFiles Mount credentials as a files instead of using an environment variable
 ## @param postgresql.architecture PostgreSQL architecture (`standalone` or `replication`)
 ##
 postgresql:
@@ -905,7 +910,6 @@ postgresql:
     database: kong
     postgresPassword: ""
     existingSecret: ""
-    usePasswordFiles: false
   architecture: standalone
   primary:
     ## PostgreSQL Primary resource requests and limits
@@ -952,7 +956,6 @@ postgresql:
 ## @param cassandra.dbUser.user Cassandra admin user
 ## @param cassandra.dbUser.password Password for `cassandra.dbUser.user`. Randomly generated if empty
 ## @param cassandra.dbUser.existingSecret Name of existing secret to use for Cassandra credentials
-## @param cassandra.usePasswordFile Mount credentials as a files instead of using an environment variable
 ## @param cassandra.replicaCount Number of Cassandra replicas
 ##
 cassandra:
@@ -961,7 +964,6 @@ cassandra:
     user: kong
     password: ""
     existingSecret: ""
-  usePasswordFile: false
   replicaCount: 1
   ## External Cassandra configuration
   ## All of these values are only used when cassandra.enabled is set to false

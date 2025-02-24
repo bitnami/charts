@@ -3,7 +3,7 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if and .Values.triggerer.enabled (.Capabilities.APIVersions.Has "autoscaling.k8s.io/v1/VerticalPodAutoscaler") .Values.triggerer.autoscaling.vpa.enabled }}
+{{- if and .Values.triggerer.enabled (include "common.capabilities.apiVersions.has" ( dict "version" "autoscaling.k8s.io/v1/VerticalPodAutoscaler" "context" . )) .Values.triggerer.autoscaling.vpa.enabled }}
 apiVersion: autoscaling.k8s.io/v1
 kind: VerticalPodAutoscaler
 metadata:

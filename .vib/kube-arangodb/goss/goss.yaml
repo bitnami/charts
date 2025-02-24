@@ -1,0 +1,40 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+http:
+  https://kube-arangodb:{{ .Vars.service.ports.apiHttp }}/health:
+    status: 200
+    allow-insecure: true
+  https://127.0.0.1:{{ .Vars.containerPorts.apiHttp }}/health:
+    status: 200
+    allow-insecure: true
+  https://kube-arangodb-webhook:{{ .Vars.webhook.service.ports.webhook }}/health:
+    status: 200
+    allow-insecure: true
+  https://kube-arangodb:{{ .Vars.service.ports.server }}/metrics:
+    status: 200
+    allow-insecure: true
+    body:
+      - /arangodb_operator_kubernetes_client_requests/
+  https://127.0.0.1:{{ .Vars.containerPorts.server }}/metrics:
+    status: 200
+    allow-insecure: true
+    body:
+      - /arangodb_operator_kubernetes_client_requests/
+addr:
+  # Container ports
+  tcp://kube-arangodb:{{ .Vars.service.ports.apiGrpc }}:
+    reachable: true
+    timeout: 180000
+  tcp://127.0.0.1:{{ .Vars.containerPorts.apiGrpc }}:
+    reachable: true
+    timeout: 180000
+
+command:
+  {{- $uid := .Vars.containerSecurityContext.runAsUser }}
+  {{- $gid := .Vars.podSecurityContext.fsGroup }}
+  check-user-info:
+    # The UID and GID should always be either the one specified as vars (always a bigger number that the default)
+    # or the one randomly defined by openshift (larger values). Otherwise, the chart is still using the default value.
+    exec: if [ $(id -u) -lt {{ $uid }} ] || [ $(id -G | awk '{print $2}') -lt {{ $gid }} ]; then exit 1; fi
+    exit-status: 0

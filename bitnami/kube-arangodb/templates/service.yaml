@@ -42,10 +42,10 @@ spec:
   loadBalancerIP: {{ .Values.service.loadBalancerIP }}
   {{- end }}
   ports:
-    - name: http-server
+    - name: https-server
       port: {{ .Values.service.ports.server }}
       protocol: TCP
-      targetPort: http-server
+      targetPort: https-server
       {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.server)) }}
       nodePort: {{ .Values.service.nodePorts.server }}
       {{- else if eq .Values.service.type "ClusterIP" }}
@@ -64,7 +64,7 @@ spec:
     - name: grpc-api
       port: {{ .Values.service.ports.apiGrpc }}
       protocol: TCP
-      targetPort: http-grpc
+      targetPort: grpc-api
       {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.apiGrpc)) }}
       nodePort: {{ .Values.service.nodePorts.apiGrpc }}
       {{- else if eq .Values.service.type "ClusterIP" }}

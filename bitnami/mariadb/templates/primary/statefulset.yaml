@@ -313,6 +313,10 @@ spec:
             - name: cert
               mountPath: /opt/bitnami/mariadb/certs
             {{- end }}
+            {{- if .Values.tde.enabled }}
+            - name: tde
+              mountPath: /opt/bitnami/mariadb/tde
+            {{- end }}
             - name: empty-dir
               mountPath: /tmp
               subPath: tmp-dir
@@ -429,6 +433,24 @@ spec:
           secret:
             secretName: {{ include "mariadb.tlsSecretName" . }}
             defaultMode: 256
+        {{- end }}
+        {{- if and .Values.tde.enabled ( not .Values.tde.secretsStoreProvider.enabled ) }}
+        - name: tde
+          secret:
+            secretName: {{ .Values.tde.existingSecret }}
+            items:
+              - key: {{ .Values.tde.randomKeyFilename }}
+                path: {{ .Values.tde.randomKeyFilename }}
+              - key: {{ .Values.tde.encryptedKeyFilename }}
+                path: {{ .Values.tde.encryptedKeyFilename }}
+            defaultMode: 256
+        {{- else if and .Values.tde.enabled ( .Values.tde.secretsStoreProvider.enabled ) }}
+        - name: tde
+          csi:
+            driver: 'secrets-store.csi.k8s.io'
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: {{ include "mariadb.tde.secretProviderClassName" . }}     
         {{- end }}
         {{- if .Values.primary.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.primary.extraVolumes "context" $) | nindent 8 }}

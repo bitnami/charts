@@ -1,0 +1,56 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.prometheus.enabled .Values.prometheus.defaultRules.create .Values.prometheus.defaultRules.rules.node }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: {{ printf "%s-node.rules" (include "kube-prometheus.prometheus.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{ include "kube-prometheus.prometheus.labels" . | nindent 4 }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" . ) | nindent 4 }}
+  {{- end }}
+spec:
+  groups:
+    - name: node.rules
+      rules:
+        - expr: |-
+            topk by (cluster, namespace, pod) (1,
+              max by (cluster, node, namespace, pod) (
+                label_replace(kube_pod_info{job="kube-state-metrics",node!=""}, "pod", "$1", "pod", "(.*)")
+            ))
+          record: 'node_namespace_pod:kube_pod_info:'
+        - expr: |-
+            count by (cluster, node) (
+              node_cpu_seconds_total{mode="idle",job="node-exporter"}
+              * on (cluster, namespace, pod) group_left(node)
+              topk by (cluster, namespace, pod) (1, node_namespace_pod:kube_pod_info:)
+            )
+          record: node:node_num_cpu:sum
+        - expr: |-
+            sum(
+              node_memory_MemAvailable_bytes{job="node-exporter"} or
+              (
+                node_memory_Buffers_bytes{job="node-exporter"} +
+                node_memory_Cached_bytes{job="node-exporter"} +
+                node_memory_MemFree_bytes{job="node-exporter"} +
+                node_memory_Slab_bytes{job="node-exporter"}
+              )
+            ) by (cluster)
+          record: :node_memory_MemAvailable_bytes:sum
+        - expr: |-
+            avg by (cluster, node) (
+              sum without (mode) (
+                rate(node_cpu_seconds_total{mode!="idle",mode!="iowait",mode!="steal",job="node-exporter"}[5m])
+              )
+            )
+          record: node:node_cpu_utilization:ratio_rate5m
+        - expr: |-
+            avg by (cluster) (
+              node:node_cpu_utilization:ratio_rate5m
+            )
+          record: cluster:node_cpu:ratio_rate5m
+{{- end }}

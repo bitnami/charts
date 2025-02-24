@@ -1,8 +1,25 @@
 # Changelog
 
-## 16.4.9 (2025-02-14)
+## 16.4.14 (2025-02-21)
 
-* [bitnami/postgresql] Release 16.4.9 ([#31935](https://github.com/bitnami/charts/pull/31935))
+* [bitnami/postgresql] Release 16.4.14 ([#32131](https://github.com/bitnami/charts/pull/32131))
+
+## <small>16.4.13 (2025-02-21)</small>
+
+* [bitnami/postgresql] Release 16.4.13 (#32097) ([9817d01](https://github.com/bitnami/charts/commit/9817d0155847035dc6c7edba6422ce9f56223909)), closes [#32097](https://github.com/bitnami/charts/issues/32097)
+
+## <small>16.4.12 (2025-02-20)</small>
+
+* [bitnami/postgresql] Release 16.4.12 (#32086) ([3847abe](https://github.com/bitnami/charts/commit/3847abe0791e4d01718d221c215306b6a23a26b7)), closes [#32086](https://github.com/bitnami/charts/issues/32086)
+
+## <small>16.4.11 (2025-02-20)</small>
+
+* [bitnami/*] Fix typo in named template name (#31858) ([b739b69](https://github.com/bitnami/charts/commit/b739b69532e637bd33b4a44eeb422c3e749eac77)), closes [#31858](https://github.com/bitnami/charts/issues/31858)
+* [bitnami/postgresql] Release 16.4.11 (#32029) ([12c6e53](https://github.com/bitnami/charts/commit/12c6e531eafa7cfed5f78a98fec9062eaaa8c133)), closes [#32029](https://github.com/bitnami/charts/issues/32029)
+
+## <small>16.4.9 (2025-02-14)</small>
+
+* [bitnami/postgresql] Release 16.4.9 (#31935) ([2a9fe24](https://github.com/bitnami/charts/commit/2a9fe2448aedccf5779c7f73ad45328edaa11156)), closes [#31935](https://github.com/bitnami/charts/issues/31935)
 
 ## <small>16.4.8 (2025-02-13)</small>
 
@@ -2091,7 +2108,7 @@ Co-authored-by: Carlos Rodríguez Hernández <carlosrh@vmware.com>
 
 ## <small>8.10.12 (2020-07-02)</small>
 
-* [bitnami/postgresql] Fix typo on README.md (#2999) ([0d46f5d](https://github.com/bitnami/charts/commit/0d46f5d893e9f4b7cc358247de8b8ffd92c1815a)), closes [#2999](https://github.com/bitnami/charts/issues/2999) [/github.com/bitnami/charts/blob/master/bitnami/postgresql/values.yaml#L93](https://github.com//github.com/bitnami/charts/blob/master/bitnami/postgresql/values.yaml/issues/L93) [/github.com/bitnami/charts/blob/master/bitnami/postgresql/templates/statefulset.yaml#L70](https://github.com//github.com/bitnami/charts/blob/master/bitnami/postgresql/templates/statefulset.yaml/issues/L70)
+* [bitnami/postgresql] Fix typo on README.md (#2999) ([0d46f5d](https://github.com/bitnami/charts/commit/0d46f5d893e9f4b7cc358247de8b8ffd92c1815a)), closes [#2999](https://github.com/bitnami/charts/issues/2999)
 
 ## <small>8.10.11 (2020-06-29)</small>
 
