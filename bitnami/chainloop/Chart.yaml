@@ -6,61 +6,61 @@ annotations:
   license: Apache-2.0
   images: |
     - name: chainloop-artifact-cas
-      image: docker.io/bitnami/chainloop-artifact-cas:0.165.0-debian-12-r0
+      image: docker.io/bitnami/chainloop-artifact-cas:0.171.0-debian-12-r0
     - name: chainloop-control-plane
-      image: docker.io/bitnami/chainloop-control-plane:0.165.0-debian-12-r0
+      image: docker.io/bitnami/chainloop-control-plane:0.171.0-debian-12-r0
     - name: chainloop-control-plane-migrations
-      image: docker.io/bitnami/chainloop-control-plane-migrations:0.163.0-debian-12-r0
+      image: docker.io/bitnami/chainloop-control-plane-migrations:0.171.0-debian-12-r0
     - name: dex
-      image: docker.io/bitnami/dex:2.41.1-debian-12-r16
+      image: docker.io/bitnami/dex:2.42.0-debian-12-r1
 apiVersion: v2
-appVersion: 0.165.0
+appVersion: 0.171.0
 dependencies:
-  - name: common
-    repository: oci://registry-1.docker.io/bitnamicharts
-    tags:
-      - bitnami-common
-    version: 2.x.x
-  - condition: postgresql.enabled
-    name: postgresql
-    repository: oci://registry-1.docker.io/bitnamicharts
-    version: 16.x.x
-  - condition: development
-    name: vault
-    repository: oci://registry-1.docker.io/bitnamicharts
-    version: 1.4.x
+- name: common
+  repository: oci://registry-1.docker.io/bitnamicharts
+  tags:
+  - bitnami-common
+  version: 2.x.x
+- condition: postgresql.enabled
+  name: postgresql
+  repository: oci://registry-1.docker.io/bitnamicharts
+  version: 16.x.x
+- condition: development
+  name: vault
+  repository: oci://registry-1.docker.io/bitnamicharts
+  version: 1.x.x
 description: Chainloop is an open-source Software Supply Chain control plane, a single source of truth for metadata and artifacts, plus a declarative attestation process.
 home: https://bitnami.com
 icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/chainloop/img/chainloop-stack-220x234.png
 keywords:
-  - chainloop
-  - evidence-store
-  - supply-chain-security
-  - devops
-  - devsecops
-  - security
-  - compliance
-  - cyclonedx
-  - spdx
-  - sbom
-  - attestation
-  - oss-compliance
-  - in-toto
-  - slsa
-  - sbom-distribution
-  - open-source-licensing
-  - slsa-provenance
-  - metadata-platform
-  - sbom-discovery
-  - regulated-industry
+- chainloop
+- evidence-store
+- supply-chain-security
+- devops
+- devsecops
+- security
+- compliance
+- cyclonedx
+- spdx
+- sbom
+- attestation
+- oss-compliance
+- in-toto
+- slsa
+- sbom-distribution
+- open-source-licensing
+- slsa-provenance
+- metadata-platform
+- sbom-discovery
+- regulated-industry
 maintainers:
-  - name: Broadcom, Inc. All Rights Reserved.
-    url: https://github.com/bitnami/charts
+- name: Broadcom, Inc. All Rights Reserved.
+  url: https://github.com/bitnami/charts
 name: chainloop
 sources:
-  - https://github.com/bitnami/charts/tree/main/bitnami/chainloop
-  - https://github.com/bitnami/containers/tree/main/bitnami/chainloop-control-plane
-  - https://github.com/bitnami/containers/tree/main/bitnami/chainloop-control-plane-migrations
-  - https://github.com/bitnami/containers/tree/main/bitnami/chainloop-artifact-cas
-  - https://github.com/chainloop-dev/chainloop
-version: 2.2.0
+- https://github.com/bitnami/charts/tree/main/bitnami/chainloop
+- https://github.com/bitnami/containers/tree/main/bitnami/chainloop-control-plane
+- https://github.com/bitnami/containers/tree/main/bitnami/chainloop-control-plane-migrations
+- https://github.com/bitnami/containers/tree/main/bitnami/chainloop-artifact-cas
+- https://github.com/chainloop-dev/chainloop
+version: 2.2.4

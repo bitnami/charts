@@ -1,8 +1,12 @@
 # Changelog
 
-## 20.3.1 (2025-02-19)
+## 20.4.0 (2025-02-21)
 
-* [bitnami/mariadb] Release 20.3.1 ([#32014](https://github.com/bitnami/charts/pull/32014))
+* [bitnami/mariadb] Set `usePasswordFiles=true` by default ([#32110](https://github.com/bitnami/charts/pull/32110))
+
+## <small>20.3.1 (2025-02-19)</small>
+
+* [bitnami/mariadb] Release 20.3.1 (#32014) ([63c32e1](https://github.com/bitnami/charts/commit/63c32e150638ce4bc742ee8a083514eaa7903d8d)), closes [#32014](https://github.com/bitnami/charts/issues/32014)
 
 ## 20.3.0 (2025-02-19)
 

@@ -192,6 +192,17 @@ spec:
         - name: config
           configMap:
             name: {{ include "apisix.control-plane.defaultConfigmapName" . }}
+        {{- if .Values.usePasswordFiles }}
+        - name: apisix-secrets
+          projected:
+            sources:
+              - secret:
+                  name: {{ include "apisix.control-plane.secretName" . }}
+              {{- if (include "apisix.etcd.authEnabled" .) }}
+              - secret:
+                  name:  {{ include "apisix.etcd.secretName" . }}
+              {{- end }}
+        {{- end }}
         {{- if or .Values.controlPlane.extraConfig .Values.controlPlane.extraConfigExistingConfigMap }}
         - name: extra-config
           configMap:

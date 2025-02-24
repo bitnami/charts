@@ -1,8 +1,8 @@
 # Changelog
 
-## 15.3.0 (2025-02-21)
+## 15.2.3 (2025-02-21)
 
-* [bitnami/postgresql-ha] Set `usePasswordFiles=true` by default ([#32116](https://github.com/bitnami/charts/pull/32116))
+* [bitnami/postgresql-ha] Release 15.2.3 ([#32132](https://github.com/bitnami/charts/pull/32132))
 
 ## <small>15.2.2 (2025-02-21)</small>
 

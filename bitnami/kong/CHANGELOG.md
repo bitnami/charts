@@ -1,8 +1,12 @@
 # Changelog
 
+## 15.3.0 (2025-02-21)
+
+* [bitnami/kong] Set `usePasswordFiles=true` by default ([#32109](https://github.com/bitnami/charts/pull/32109))
+
 ## 15.2.0 (2025-02-20)
 
-* [bitnami/kong] feat: use new helper for checking API versions ([#32053](https://github.com/bitnami/charts/pull/32053))
+* [bitnami/kong] feat: use new helper for checking API versions (#32053) ([28a9be8](https://github.com/bitnami/charts/commit/28a9be8cc91b30bae601544cc0500f7534c3a663)), closes [#32053](https://github.com/bitnami/charts/issues/32053)
 
 ## <small>15.1.3 (2025-02-19)</small>
 
