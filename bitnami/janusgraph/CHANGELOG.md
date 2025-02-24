@@ -1,8 +1,8 @@
 # Changelog
 
-## 1.4.0 (2025-02-24)
+## 1.3.1 (2025-02-24)
 
-* [bitnami/janusgraph] Set `usePasswordFiles=true` by default ([#32107](https://github.com/bitnami/charts/pull/32107))
+* [bitnami/janusgraph] Release 1.3.1 ([#32140](https://github.com/bitnami/charts/pull/32140))
 
 ## 1.3.0 (2025-02-20)
 

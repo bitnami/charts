@@ -1,8 +1,12 @@
 # Changelog
 
-## 3.1.10 (2025-02-06)
+## 3.1.11 (2025-02-21)
 
-* [bitnami/gitea] Release 3.1.10 ([#31806](https://github.com/bitnami/charts/pull/31806))
+* [bitnami/gitea] Release 3.1.11 ([#32040](https://github.com/bitnami/charts/pull/32040))
+
+## <small>3.1.10 (2025-02-06)</small>
+
+* [bitnami/gitea] Release 3.1.10 (#31806) ([b32c026](https://github.com/bitnami/charts/commit/b32c0264329e5914869a5ab25e22f0c53037b782)), closes [#31806](https://github.com/bitnami/charts/issues/31806)
 
 ## <small>3.1.9 (2025-02-05)</small>
 
