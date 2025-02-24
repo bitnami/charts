@@ -1,8 +1,12 @@
 # Changelog
 
-## 23.1.2 (2025-01-28)
+## 23.1.3 (2025-02-21)
 
-* [bitnami/schema-registry] Release 23.1.2 ([#31640](https://github.com/bitnami/charts/pull/31640))
+* [bitnami/schema-registry] Release 23.1.3 ([#32104](https://github.com/bitnami/charts/pull/32104))
+
+## <small>23.1.2 (2025-01-28)</small>
+
+* [bitnami/schema-registry] Release 23.1.2 (#31640) ([4658912](https://github.com/bitnami/charts/commit/465891264547c39d6ef0530c61ba2536308791c7)), closes [#31640](https://github.com/bitnami/charts/issues/31640)
 
 ## <small>23.1.1 (2025-01-13)</small>
 

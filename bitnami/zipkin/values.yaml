@@ -161,9 +161,9 @@ deploymentAnnotations: {}
 ## @param logLevel Set application log level
 ##
 logLevel: INFO
-## @param usePasswordFile Mount all sensitive information as files
+## @param usePasswordFiles Mount all sensitive information as files
 ##
-usePasswordFile: true
+usePasswordFiles: true
 ## @param storageType Set version store type. The chart natively supports cassandra3, mem or other. Any other type requires you to add the configuration in configOverrides and secretConfigOverrides.
 ##
 storageType: cassandra3
