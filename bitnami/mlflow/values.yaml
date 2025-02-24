@@ -95,7 +95,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mlflow
-  tag: 2.20.1-debian-12-r0
+  tag: 2.20.2-debian-12-r3
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -124,7 +124,7 @@ image:
 gitImage:
   registry: docker.io
   repository: bitnami/git
-  tag: 2.48.1-debian-12-r3
+  tag: 2.48.1-debian-12-r8
   digest: ""
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -1220,7 +1220,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r36
+    tag: 12-debian-12-r39
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1269,7 +1269,7 @@ waitContainer:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r36
+    tag: 12-debian-12-r39
     digest: ""
     ## @param waitContainer.image.pullPolicy Init container wait-container image pull policy
     ##
