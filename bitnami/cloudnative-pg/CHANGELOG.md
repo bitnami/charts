@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.1.2 (2025-02-25)
+## 0.1.3 (2025-02-25)
 
-* [bitnami/cloudnative-pg] fix: :bug: Set proper pull secret name ([#32155](https://github.com/bitnami/charts/pull/32155))
+* [bitnami/cloudnative-pg] test: :white_check_mark: Add imagePullSecrets to the cluster ([#32163](https://github.com/bitnami/charts/pull/32163))
+
+## <small>0.1.2 (2025-02-25)</small>
+
+* [bitnami/cloudnative-pg] fix: :bug: Set proper pull secret name (#32155) ([7f0db45](https://github.com/bitnami/charts/commit/7f0db451da4b457ce14ef6c0617c5d1e98916a07)), closes [#32155](https://github.com/bitnami/charts/issues/32155)
 
 ## <small>0.1.1 (2025-02-24)</small>
 
