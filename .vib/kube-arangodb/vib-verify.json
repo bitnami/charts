@@ -13,7 +13,7 @@
         ],
         "resources": {
           "url": "{SHA_ARCHIVE}",
-          "path": "/bitnami/kuberay"
+          "path": "/bitnami/kube-arangodb"
         }
       },
       "actions": [
@@ -29,7 +29,7 @@
       "context": {
         "resources": {
           "url": "{SHA_ARCHIVE}",
-          "path": "/bitnami/kuberay"
+          "path": "/bitnami/kube-arangodb"
         },
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
@@ -45,11 +45,11 @@
             "resources": {
               "path": "/.vib"
             },
-            "tests_file": "kuberay/goss/goss.yaml",
-            "vars_file": "kuberay/runtime-parameters.yaml",
+            "tests_file": "kube-arangodb/goss/goss.yaml",
+            "vars_file": "kube-arangodb/runtime-parameters.yaml",
             "remote": {
               "pod": {
-                "workload": "deploy-kuberay-operator"
+                "workload": "deploy-kube-arangodb"
               }
             }
           }
@@ -58,7 +58,7 @@
           "action_id": "cypress",
           "params": {
             "resources": {
-              "path": "/.vib/kuberay/cypress"
+              "path": "/.vib/kube-arangodb/cypress"
             },
             "env": {
               "username": "vib-user",
