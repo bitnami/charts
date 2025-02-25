@@ -1,8 +1,63 @@
 # Changelog
 
-## 24.2.0 (2024-12-18)
+## 24.2.0 (2025-02-25)
 
 * [bitnami/harbor] made generating existing/default secret secrets an option ([#31079](https://github.com/bitnami/charts/pull/31079))
+
+## <small>24.3.3 (2025-02-20)</small>
+
+* [bitnami/harbor] Release 24.3.3 (#32091) ([97774de](https://github.com/bitnami/charts/commit/97774dec2db1ae1011be7053dcc835b48d5bdac6)), closes [#32091](https://github.com/bitnami/charts/issues/32091)
+
+## <small>24.3.2 (2025-02-18)</small>
+
+* [bitnami/harbor] Release 24.3.2 (#31965) ([273fa3f](https://github.com/bitnami/charts/commit/273fa3fd0c3da7da24a8f5ed25e38615deafba8b)), closes [#31965](https://github.com/bitnami/charts/issues/31965)
+
+## <small>24.3.1 (2025-02-17)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/harbor] Added tpl to externalURL (#31940) ([4b9c79f](https://github.com/bitnami/charts/commit/4b9c79fdf34d9f38cfbd65640152b3484cc43ed5)), closes [#31940](https://github.com/bitnami/charts/issues/31940)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## 24.3.0 (2025-01-27)
+
+* [bitnami/harbor] Added existingSecret parameter for external database (#31492) ([4cf7499](https://github.com/bitnami/charts/commit/4cf749975ff948cae80d961af7c75debf9fc49a3)), closes [#31492](https://github.com/bitnami/charts/issues/31492)
+
+## 24.2.0 (2025-01-27)
+
+* [bitnami/harbor] allow custom trivy db repository (#31594) ([1041261](https://github.com/bitnami/charts/commit/1041261ac0c42618da3e0357e18ac200052ff31f)), closes [#31594](https://github.com/bitnami/charts/issues/31594)
+
+## <small>24.1.8 (2025-01-23)</small>
+
+* [bitnami/harbor] Clarify usage of custom POSTGRESQL_PASSWORD (#31507) ([b871457](https://github.com/bitnami/charts/commit/b8714574f24519dcec83895fb19cb7819c6e016e)), closes [#31507](https://github.com/bitnami/charts/issues/31507)
+
+## <small>24.1.7 (2025-01-17)</small>
+
+* [bitnami/harbor] Release 24.1.7 (#31457) ([a607b9f](https://github.com/bitnami/charts/commit/a607b9faa767ef8ed65f535c0a4563ebfb39429e)), closes [#31457](https://github.com/bitnami/charts/issues/31457)
+
+## <small>24.1.6 (2025-01-07)</small>
+
+* [bitnami/harbor] Fix REGISTRY_HTTP_SECRET creation when not using an existing secret (#31013) ([a58ae98](https://github.com/bitnami/charts/commit/a58ae9883672f4f8b55733b143a17279fd3c9e81)), closes [#31013](https://github.com/bitnami/charts/issues/31013)
+
+## <small>24.1.5 (2025-01-02)</small>
+
+* [bitnami/harbor] Release 24.1.5 (#31196) ([588d3b5](https://github.com/bitnami/charts/commit/588d3b5967169f644d976d2f8f607a935a0beb26)), closes [#31196](https://github.com/bitnami/charts/issues/31196)
+
+## <small>24.1.4 (2024-12-31)</small>
+
+* [bitnami/harbor] Release 24.1.4 (#31190) ([8dc6466](https://github.com/bitnami/charts/commit/8dc6466ae516b27785c0a42b8a56614e89824ac5)), closes [#31190](https://github.com/bitnami/charts/issues/31190)
+
+## <small>24.1.3 (2024-12-31)</small>
+
+* [bitnami/harbor] Release 24.1.3 (#31187) ([520af96](https://github.com/bitnami/charts/commit/520af96aab6a5f0edcc92dbe33b6d1f27616248f)), closes [#31187](https://github.com/bitnami/charts/issues/31187)
+
+## <small>24.1.2 (2024-12-24)</small>
+
+* [bitnami/harbor] Release 24.1.2 (#31156) ([7b7e8e0](https://github.com/bitnami/charts/commit/7b7e8e0453d3c47b0b65051ecb0e4b4648a1aef0)), closes [#31156](https://github.com/bitnami/charts/issues/31156)
+
+## <small>24.1.1 (2024-12-23)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/harbor] Only set metric environment variables for exporter when enabled, set environment va ([7a204c4](https://github.com/bitnami/charts/commit/7a204c472c24a6b38344010f4907c0e189188b26)), closes [#31122](https://github.com/bitnami/charts/issues/31122)
 
 ## 24.1.0 (2024-12-10)
 
