@@ -1,5 +1,6 @@
 {
   "deployment": {
-    "name": "vib-arangodb"
+    "name": "vib-arangodb",
+    "status": "green"
   }
 }

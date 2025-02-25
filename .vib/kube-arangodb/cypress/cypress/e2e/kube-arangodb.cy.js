@@ -33,7 +33,7 @@ it('Can access the API and get the deployed Arango Database status', () => {
         cy.fixture('deployments').then((d) => {
           // This ensures that the script in the job was run
           expect(apiResponse.body.deployments[0].name).to.eq(d.deployment.name);
-          expect(apiResponse.body.deployments[0].state_color).to.eq('green');
+          expect(apiResponse.body.deployments[0].state_color).to.eq(d.deployment.status);
         });
       }
     });
