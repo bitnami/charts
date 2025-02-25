@@ -23,7 +23,8 @@ icon: https://bitnami.com/assets/stacks/kube-arangodb/img/kube-arangodb-stack-22
 keywords:
 - kube-arangodb
 - operator
-- postgresql
+- arangodb
+- database
 maintainers:
 - name: Broadcom, Inc. All Rights Reserved.
   url: https://github.com/bitnami/charts

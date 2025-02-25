@@ -18,7 +18,7 @@ Return the proper kube-arangodb Operator image name
 {{- end -}}
 
 {{/*
-Return the proper PostgreSQL image name
+Return the proper ArangoDB image name
 */}}
 {{- define "kube-arangodb.arangodb.image" -}}
 {{ include "common.images.image" (dict "imageRoot" .Values.arangodbImage "global" .Values.global) }}
