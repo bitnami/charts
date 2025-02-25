@@ -28,12 +28,12 @@ extraVolumes:
 extraVolumeMounts:
   - name: empty-dir
     mountPath: /tmp
-webhook:
+webhooks:
   containerPorts:
     webhook: 9999
   service:
     ports:
-      webhook: 443
+      webhook: 4443
 extraDeploy:
   - apiVersion: "database.arangodb.com/v1"
     kind: "ArangoDeployment"

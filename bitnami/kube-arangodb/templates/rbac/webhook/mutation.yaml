@@ -37,7 +37,7 @@ webhooks:
         namespace: {{ include "common.names.namespace" . | quote }}
         name: {{ printf "%s-webhook" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
         path: /webhook/core/v1/pods/policies/mutate
-        port: {{ .Values.webhook.service.ports.webhook }}
+        port: {{ .Values.webhooks.service.ports.webhook }}
     admissionReviewVersions: ["v1"]
     sideEffects: None
     timeoutSeconds: 5
@@ -63,7 +63,7 @@ webhooks:
         namespace: {{ include "common.names.namespace" . | quote }}
         name: {{ printf "%s-webhook" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
         path: /webhook/core/v1/pods/policies/mutate
-        port: {{ .Values.webhook.service.ports.webhook }}
+        port: {{ .Values.webhooks.service.ports.webhook }}
     admissionReviewVersions: ["v1"]
     sideEffects: None
     timeoutSeconds: 5

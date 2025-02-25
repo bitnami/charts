@@ -8,7 +8,10 @@ http:
   https://127.0.0.1:{{ .Vars.containerPorts.apiHttp }}/health:
     status: 200
     allow-insecure: true
-  https://kube-arangodb-webhook:{{ .Vars.webhook.service.ports.webhook }}/health:
+  https://kube-arangodb-webhook:{{ .Vars.webhooks.service.ports.webhook }}/health:
+    status: 200
+    allow-insecure: true
+  https://127.0.0.1:{{ .Vars.webhooks.containerPorts.webhook }}/health:
     status: 200
     allow-insecure: true
   https://kube-arangodb:{{ .Vars.service.ports.server }}/metrics:
