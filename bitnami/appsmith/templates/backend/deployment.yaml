@@ -145,6 +145,14 @@ spec:
               value: {{ .Values.backend.adminUser | quote }}
             - name: APPSMITH_EMAIL
               value: {{ .Values.backend.adminEmail | quote }}
+            {{- if .Values.usePasswordFiles }}
+            - name: APPSMITH_PASSWORD_FILE
+              value: {{ printf "/opt/bitnami/appsmith/secrets/%s" (include "appsmith.backend.password.secretKey" .) }}
+            - name: APPSMITH_ENCRYPTION_PASSWORD_FILE
+              value: {{ printf "/opt/bitnami/appsmith/secrets/%s" (include "appsmith.backend.encryptionPassword.secretKey" .) }}
+            - name: APPSMITH_ENCRYPTION_SALT_FILE
+              value: {{ printf "/opt/bitnami/appsmith/secrets/%s" (include "appsmith.backend.encryptionSalt.secretKey" .) }}
+            {{- else }}
             - name: APPSMITH_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -160,15 +168,21 @@ spec:
                 secretKeyRef:
                   name: {{ include "appsmith.backend.secretName" . }}
                   key: {{ include "appsmith.backend.encryptionSalt.secretKey" . }}
+            {{- end }}
             - name: APPSMITH_DATABASE_HOST
               value: {{ include "appsmith.mongodb.hosts" . | quote }}
             - name: APPSMITH_DATABASE_PORT_NUMBER
               value: {{ include "appsmith.mongodb.port" . | quote }}
+            {{- if .Values.usePasswordFiles }}
+            - name: APPSMITH_DATABASE_PASSWORD_FILE
+              value: {{ printf "/opt/bitnami/appsmith/secrets/%s" (include "appsmith.mongodb.secretKey" .) }}
+            {{- else }}
             - name: APPSMITH_DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "appsmith.mongodb.secretName" . }}
                   key: {{ include "appsmith.mongodb.secretKey" . }}
+            {{- end }}
             - name: APPSMITH_DATABASE_USER
               value: {{ ternary (index .Values.mongodb.auth.usernames 0) .Values.externalDatabase.username .Values.mongodb.enabled | quote }}
             - name: APPSMITH_DATABASE_NAME
@@ -179,11 +193,16 @@ spec:
               value: {{ include "appsmith.redis.host" . | quote }}
             - name: APPSMITH_REDIS_PORT_NUMBER
               value: {{ include "appsmith.redis.port" . | quote }}
+            {{- if .Values.usePasswordFiles }}
+            - name: APPSMITH_REDIS_PASSWORD_FILE
+              value: {{ printf "/opt/bitnami/appsmith/secrets/%s" (include "appsmith.redis.secretKey" .) }}
+            {{- else }}
             - name: APPSMITH_REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "appsmith.redis.secretName" . }}
                   key: {{ include "appsmith.redis.secretKey" . }}
+            {{- end }}
             - name: APPSMITH_RTS_PORT
               value: {{ .Values.rts.containerPorts.http | quote }}
             {{- if .Values.backend.persistence.gitDataPath }}
@@ -263,6 +282,10 @@ spec:
             - name: empty-dir
               mountPath: /tmp
               subPath: tmp-dir
+            {{- if .Values.usePasswordFiles }}
+            - name: appsmith-secrets
+              mountPath: /opt/bitnami/appsmith/secrets
+            {{- end }}
             - name: data
               mountPath: {{ .Values.backend.persistence.mountPath }}
               {{- if .Values.backend.persistence.subPath }}
@@ -356,6 +379,17 @@ spec:
         - name: haproxy-conf
           configMap:
             name: {{ include "appsmith.redirect.fullname" . }}
+        {{- if .Values.usePasswordFiles }}
+        - name: appsmith-secrets
+          projected:
+            sources:
+              - secret:
+                  name:  {{ include "appsmith.backend.secretName" . }}
+              - secret:
+                  name:  {{ include "appsmith.mongodb.secretName" . }}
+              - secret:
+                  name:  {{ include "appsmith.redis.secretName" . }}
+        {{- end }}
         - name: data
         {{- if .Values.backend.persistence.enabled }}
           persistentVolumeClaim:

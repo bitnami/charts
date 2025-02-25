@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.6.2 (2025-02-20)
+## 4.7.0 (2025-02-21)
 
-* [bitnami/seaweedfs] Release 4.6.2 ([#32035](https://github.com/bitnami/charts/pull/32035))
+* [bitnami/seaweedfs] Set `usePasswordFiles=true` by default ([#32119](https://github.com/bitnami/charts/pull/32119))
+
+## <small>4.6.2 (2025-02-20)</small>
+
+* [bitnami/seaweedfs] Release 4.6.2 (#32035) ([efa99db](https://github.com/bitnami/charts/commit/efa99db7094cc5f19ec968634b5a87850c40cb73)), closes [#32035](https://github.com/bitnami/charts/issues/32035)
 
 ## <small>4.6.1 (2025-02-12)</small>
 

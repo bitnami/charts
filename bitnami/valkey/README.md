@@ -480,7 +480,7 @@ helm install my-release --set primary.persistence.existingClaim=PVC_NAME oci://R
 | `auth.password`                  | Valkey password                                                                   | `""`          |
 | `auth.existingSecret`            | The name of an existing secret with Valkey credentials                            | `""`          |
 | `auth.existingSecretPasswordKey` | Password key to be retrieved from existing secret                                 | `""`          |
-| `auth.usePasswordFiles`          | Mount credentials as files instead of using an environment variable               | `false`       |
+| `auth.usePasswordFiles`          | Mount credentials as files instead of using an environment variable               | `true`        |
 | `auth.usePasswordFileFromSecret` | Mount password file from secret                                                   | `true`        |
 | `commonConfiguration`            | Common configuration to be added into the ConfigMap                               | `""`          |
 | `existingConfigmap`              | The name of an existing ConfigMap with your custom configuration for Valkey nodes | `""`          |

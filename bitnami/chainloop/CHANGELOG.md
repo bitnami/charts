@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.3.0 (2025-02-21)
+## 2.2.5 (2025-02-24)
 
-* [bitnami/chainloop] Add support for `usePasswordFiles` ([#32081](https://github.com/bitnami/charts/pull/32081))
+* [bitnami/chainloop] Release 2.2.5 ([#32151](https://github.com/bitnami/charts/pull/32151))
+
+## <small>2.2.4 (2025-02-24)</small>
+
+* [bitnami/chainloop] Update deps (#32143) ([d4bc8f8](https://github.com/bitnami/charts/commit/d4bc8f853b0f73ac11cdbbced51ab985035a61df)), closes [#32143](https://github.com/bitnami/charts/issues/32143)
 
 ## <small>2.2.3 (2025-02-21)</small>
 

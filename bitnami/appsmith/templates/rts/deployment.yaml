@@ -99,11 +99,16 @@ spec:
               value: {{ include "appsmith.mongodb.hosts" . | quote }}
             - name: APPSMITH_DATABASE_PORT_NUMBER
               value: {{ include "appsmith.mongodb.port" . | quote }}
+            {{- if .Values.usePasswordFiles }}
+            - name: APPSMITH_DATABASE_PASSWORD_FILE
+              value: {{ printf "/opt/bitnami/appsmith/secrets/%s" (include "appsmith.mongodb.secretKey" .) }}
+            {{- else }}
             - name: APPSMITH_DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "appsmith.mongodb.secretName" . }}
                   key: {{ include "appsmith.mongodb.secretKey" . }}
+            {{- end }}
             - name: APPSMITH_DATABASE_USER
               value: {{ ternary (index .Values.mongodb.auth.usernames 0) .Values.externalDatabase.username .Values.mongodb.enabled | quote }}
             - name: APPSMITH_DATABASE_NAME
@@ -187,6 +192,10 @@ spec:
             - name: empty-dir
               mountPath: /tmp
               subPath: tmp-dir
+            {{- if .Values.usePasswordFiles }}
+            - name: appsmith-secrets
+              mountPath: /opt/bitnami/appsmith/secrets
+            {{- end }}
           {{- if .Values.rts.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.rts.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -196,6 +205,17 @@ spec:
       volumes:
         - name: empty-dir
           emptyDir: {}
+        {{- if .Values.usePasswordFiles }}
+        - name: appsmith-secrets
+          projected:
+            sources:
+              - secret:
+                  name:  {{ include "appsmith.mongodb.secretName" . }}
+                  items:
+                    # Only copy database password
+                    - key: {{ include "appsmith.mongodb.secretKey" . }}
+                      path: {{ include "appsmith.mongodb.secretKey" . }}
+        {{- end }}
         {{- if .Values.rts.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.rts.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
