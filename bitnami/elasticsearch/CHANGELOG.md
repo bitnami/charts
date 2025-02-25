@@ -1,8 +1,30 @@
 # Changelog
 
-## 21.4.1 (2024-12-12)
+## 21.4.6 (2025-02-21)
 
-* [bitnami/elasticsearch] Release 21.4.1 ([#31023](https://github.com/bitnami/charts/pull/31023))
+* [bitnami/elasticsearch] Release 21.4.6 ([#31990](https://github.com/bitnami/charts/pull/31990))
+
+## <small>21.4.5 (2025-02-11)</small>
+
+* [bitnami/elasticsearch] Release 21.4.5 (#31869) ([5b89741](https://github.com/bitnami/charts/commit/5b89741af8a02f9192c24596600d73a2ae9cac2c)), closes [#31869](https://github.com/bitnami/charts/issues/31869)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>21.4.4 (2025-01-29)</small>
+
+* [bitnami/elasticsearch] Release 21.4.4 (#31666) ([138e966](https://github.com/bitnami/charts/commit/138e966874b8eabc8e37ef92b175723383f2e52b)), closes [#31666](https://github.com/bitnami/charts/issues/31666)
+
+## <small>21.4.3 (2025-01-21)</small>
+
+* [bitnami/elasticsearch] Release 21.4.3 (#31498) ([64f4223](https://github.com/bitnami/charts/commit/64f42238458b7115e706e9ad14d1e70f4a578c7a)), closes [#31498](https://github.com/bitnami/charts/issues/31498)
+
+## <small>21.4.2 (2025-01-08)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* bitnami/elasticsearch: mount cerst to master node instead empty-dir (#30989) ([bb91a17](https://github.com/bitnami/charts/commit/bb91a17b630dc07a7ff0bb1f9d198f0916177fff)), closes [#30989](https://github.com/bitnami/charts/issues/30989)
+
+## <small>21.4.1 (2024-12-12)</small>
+
+* [bitnami/elasticsearch] Release 21.4.1 (#31023) ([53a4725](https://github.com/bitnami/charts/commit/53a4725c3a3eea865a91fc352308f1f8c0a09fea)), closes [#31023](https://github.com/bitnami/charts/issues/31023)
 
 ## 21.4.0 (2024-12-10)
 
@@ -1967,7 +1989,7 @@
 
 ## <small>5.1.5 (2019-05-29)</small>
 
-* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79)), closes [#issuecomment-496883321](https://github.com/bitnami/charts/issues/issuecomment-496883321)
+* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79))
 
 ## <small>5.1.4 (2019-05-28)</small>
 

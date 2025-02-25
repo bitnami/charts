@@ -1,8 +1,43 @@
 # Changelog
 
+## 11.1.8 (2025-02-20)
+
+* [bitnami/argo-workflows] Release 11.1.8 ([#32087](https://github.com/bitnami/charts/pull/32087))
+
+## <small>11.1.7 (2025-02-10)</small>
+
+* [bitnami/argo-workflows] Release 11.1.7 (#31853) ([01abe92](https://github.com/bitnami/charts/commit/01abe92e2e1ca50450f2096b5492652b05c10227)), closes [#31853](https://github.com/bitnami/charts/issues/31853)
+
+## <small>11.1.6 (2025-02-07)</small>
+
+* [bitnami/argo-workflows] Release 11.1.6 (#31839) ([49dd6d4](https://github.com/bitnami/charts/commit/49dd6d4ec3586701659a6112083ff8618d8c67fe)), closes [#31839](https://github.com/bitnami/charts/issues/31839)
+
+## <small>11.1.5 (2025-02-07)</small>
+
+* [bitnami/argo-workflows] Release 11.1.5 (#31824) ([bd9a9a2](https://github.com/bitnami/charts/commit/bd9a9a26567b0c76c40ba9d1d5c09bf25c0611a0)), closes [#31824](https://github.com/bitnami/charts/issues/31824)
+
+## <small>11.1.4 (2025-02-04)</small>
+
+* [bitnami/argo-workflows] Release 11.1.4 (#31743) ([03714fc](https://github.com/bitnami/charts/commit/03714fc841dcf5199a8c841d9b3b5876fa80c821)), closes [#31743](https://github.com/bitnami/charts/issues/31743)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>11.1.3 (2025-01-24)</small>
+
+* [bitnami/argo-workflows] Release 11.1.3 (#31542) ([08db052](https://github.com/bitnami/charts/commit/08db052141e48c2f28d920d2ec923da8c7953f7e)), closes [#31542](https://github.com/bitnami/charts/issues/31542)
+
+## <small>11.1.2 (2025-01-16)</small>
+
+* [bitnami/argo-workflows] Release 11.1.2 (#31408) ([fc7398e](https://github.com/bitnami/charts/commit/fc7398e8b2d6b1e29fe2e2730b2af217dc307af3)), closes [#31408](https://github.com/bitnami/charts/issues/31408)
+
+## <small>11.1.1 (2025-01-12)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/argo-workflows] Release 11.1.1 (#31309) ([bd97fdc](https://github.com/bitnami/charts/commit/bd97fdc65c501405bc15950b778ae954a3959bf7)), closes [#31309](https://github.com/bitnami/charts/issues/31309)
+
 ## 11.1.0 (2024-12-10)
 
-* [bitnami/argo-workflows] Detect non-standard images ([#30864](https://github.com/bitnami/charts/pull/30864))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/argo-workflows] Detect non-standard images (#30864) ([f47e86a](https://github.com/bitnami/charts/commit/f47e86a9b51dee8812bf752f2946fc6e5c24e3e0)), closes [#30864](https://github.com/bitnami/charts/issues/30864)
 
 ## <small>11.0.3 (2024-12-03)</small>
 

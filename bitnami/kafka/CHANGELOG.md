@@ -1,8 +1,40 @@
 # Changelog
 
+## 31.4.0 (2025-02-20)
+
+* [bitnami/kafka] feat: use new helper for checking API versions ([#32051](https://github.com/bitnami/charts/pull/32051))
+
+## <small>31.3.2 (2025-02-20)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/kafka] Release 31.3.2 (#32034) ([3f4ca72](https://github.com/bitnami/charts/commit/3f4ca729b3192c7cc742da1ccefc0676e93cdd38)), closes [#32034](https://github.com/bitnami/charts/issues/32034)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>31.3.1 (2025-01-28)</small>
+
+* [bitnami/kafka] Release 31.3.1 (#31624) ([21e8180](https://github.com/bitnami/charts/commit/21e8180f88d4f0f85e31086fa609220ae1b853e0)), closes [#31624](https://github.com/bitnami/charts/issues/31624)
+
+## 31.3.0 (2025-01-23)
+
+* [binami/kafka] Setting broker.rack for azure based on brokerRackAssignment parameter (#31496) ([43c0dd0](https://github.com/bitnami/charts/commit/43c0dd099f1feb3df890ba3852dff2e143f496bb)), closes [#31496](https://github.com/bitnami/charts/issues/31496)
+
+## 31.2.0 (2025-01-08)
+
+* [bitnami/kafka] chore(jmx-exporter): Upgrade image and change args (#31108) ([70d7aac](https://github.com/bitnami/charts/commit/70d7aac72b9adf6496589418054d5b4f66c16b18)), closes [#31108](https://github.com/bitnami/charts/issues/31108)
+
+## <small>31.1.1 (2024-12-22)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/kafka] Release 31.1.1 (#31139) ([61131de](https://github.com/bitnami/charts/commit/61131de7b63913f4ef1cb9e7b5b2e8c593178b42)), closes [#31139](https://github.com/bitnami/charts/issues/31139)
+
 ## 31.1.0 (2024-12-10)
 
-* [bitnami/kafka] Detect non-standard images ([#30903](https://github.com/bitnami/charts/pull/30903))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 3) (#30666) ([82fc7e2](https://github.com/bitnami/charts/commit/82fc7e2fc12e2648ed22069942203c02bf5d4cc6)), closes [#30666](https://github.com/bitnami/charts/issues/30666)
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 2) (#30687) ([c457848](https://github.com/bitnami/charts/commit/c457848b2a111aad59830b98f85ffa1e29918e10)), closes [#30687](https://github.com/bitnami/charts/issues/30687)
+* [bitnami/kafka] Add upgrade notes for version 31.0.0 (#30427) ([fe6422c](https://github.com/bitnami/charts/commit/fe6422cb722627ccd5db8138ad27cd7993947146)), closes [#30427](https://github.com/bitnami/charts/issues/30427)
+* [bitnami/kafka] Detect non-standard images (#30903) ([885bbcd](https://github.com/bitnami/charts/commit/885bbcd5b7b0b0fe7d12e5126659ee1d9dd0efee)), closes [#30903](https://github.com/bitnami/charts/issues/30903)
 
 ## 31.0.0 (2024-11-12)
 
@@ -2240,7 +2272,7 @@
 ## <small>2.2.3 (2019-05-29)</small>
 
 * Change syntax because of linter failing ([adfc357](https://github.com/bitnami/charts/commit/adfc35728c2a8a9def9e1897b3772d64df62135428c2a8a9def9e1897b3772d64df621354))
-* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c796430f28ec3593053afb0bfccb75703c79)), closes [#issuecomment-496883321](https://github.com/bitnami/charts/issues/issuecomment-496883321)
+* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c796430f28ec3593053afb0bfccb75703c79))
 * Use immutable tags in the main images ([17ca4f5](https://github.com/bitnami/charts/commit/17ca4f5c91da33da03f9e2d411fe5e004e825c4dc91da33da03f9e2d411fe5e004e825c4d))
 
 ## <small>2.2.2 (2019-05-28)</small>
@@ -2267,7 +2299,7 @@
 ## <small>2.2.3 (2019-05-29)</small>
 
 * Change syntax because of linter failing ([adfc357](https://github.com/bitnami/charts/commit/adfc35728c2a8a9def9e1897b3772d64df62135428c2a8a9def9e1897b3772d64df621354))
-* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c796430f28ec3593053afb0bfccb75703c79)), closes [#issuecomment-496883321](https://github.com/bitnami/charts/issues/issuecomment-496883321)
+* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c796430f28ec3593053afb0bfccb75703c79))
 * Use immutable tags in the main images ([17ca4f5](https://github.com/bitnami/charts/commit/17ca4f5c91da33da03f9e2d411fe5e004e825c4dc91da33da03f9e2d411fe5e004e825c4d))
 
 ## <small>2.2.2 (2019-05-28)</small>

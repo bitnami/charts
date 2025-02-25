@@ -1,6 +1,6 @@
 # Changelog
 
-## 24.2.0 (2025-02-25)
+## 24.4.0 (2025-02-25)
 
 * [bitnami/harbor] made generating existing/default secret secrets an option ([#31079](https://github.com/bitnami/charts/pull/31079))
 

@@ -299,6 +299,8 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `prometheus.image.digest`                                             | Prometheus image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                                                            | `""`                         |
 | `prometheus.image.pullPolicy`                                         | Prometheus image pull policy                                                                                                                                                                                                                          | `IfNotPresent`               |
 | `prometheus.image.pullSecrets`                                        | Specify docker-registry secret names as an array                                                                                                                                                                                                      | `[]`                         |
+| `prometheus.defaultRules.create`                                      | Create default rules for Prometheus                                                                                                                                                                                                                   | `true`                       |
+| `prometheus.defaultRules.rules`                                       | Set of default rules for Prometheus that can be enabled/disabled                                                                                                                                                                                      | `{}`                         |
 | `prometheus.serviceAccount.create`                                    | Specify whether to create a ServiceAccount for Prometheus                                                                                                                                                                                             | `true`                       |
 | `prometheus.serviceAccount.name`                                      | The name of the ServiceAccount to create                                                                                                                                                                                                              | `""`                         |
 | `prometheus.serviceAccount.annotations`                               | Additional annotations for created Prometheus ServiceAccount                                                                                                                                                                                          | `{}`                         |
@@ -935,6 +937,10 @@ While upgrading a chart, please note that there are certain limitations to upgra
 
 ## Upgrading
 
+### To 11.0.0
+
+This major updates the kube-state-metrics subchart to its newest major, 5.0.0. For more information, please refer to [kube-state-metrics upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/kube-state-metrics#to-500).
+
 ### To 10.2.0
 
 This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
@@ -1099,7 +1105,7 @@ helm upgrade my-release --set prometheus.thanos.create=true oci://REGISTRY_NAME/
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

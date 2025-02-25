@@ -1,8 +1,30 @@
 # Changelog
 
-## 11.4.1 (2024-12-12)
+## 11.5.0 (2025-02-24)
 
-* [bitnami/kibana] Release 11.4.1 ([#31024](https://github.com/bitnami/charts/pull/31024))
+* [bitnami/kibana] Template hostname everywhere ([#30807](https://github.com/bitnami/charts/pull/30807))
+
+## <small>11.4.5 (2025-02-11)</small>
+
+* [bitnami/kibana] Release 11.4.5 (#31871) ([b99a5eb](https://github.com/bitnami/charts/commit/b99a5eb6f8510efc5d3a5c75e176889c176fb00f)), closes [#31871](https://github.com/bitnami/charts/issues/31871)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>11.4.4 (2025-01-30)</small>
+
+* [bitnami/kibana] Release 11.4.4 (#31675) ([78e07d6](https://github.com/bitnami/charts/commit/78e07d6801aad0461c4c371ca0c83ad921465a62)), closes [#31675](https://github.com/bitnami/charts/issues/31675)
+
+## <small>11.4.3 (2025-01-23)</small>
+
+* [bitnami/kibana] Fix publicBaseUrl value when inferred from ingress configuration (#31193) ([bfc5ecf](https://github.com/bitnami/charts/commit/bfc5ecf0cb05d1831aec4d0e937f4c23c114933a)), closes [#31193](https://github.com/bitnami/charts/issues/31193)
+
+## <small>11.4.2 (2025-01-22)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/kibana] Release 11.4.2 (#31500) ([1c02f27](https://github.com/bitnami/charts/commit/1c02f279df736d12e9360518a2bf1dca270261fb)), closes [#31500](https://github.com/bitnami/charts/issues/31500)
+
+## <small>11.4.1 (2024-12-13)</small>
+
+* [bitnami/kibana] Release 11.4.1 (#31024) ([e6d89b9](https://github.com/bitnami/charts/commit/e6d89b9f651965a7bd5d6e9a25b8ed07cc56873f)), closes [#31024](https://github.com/bitnami/charts/issues/31024)
 
 ## 11.4.0 (2024-12-10)
 

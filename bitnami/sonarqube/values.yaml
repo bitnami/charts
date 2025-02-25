@@ -89,7 +89,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/sonarqube
-  tag: 10.7.0-debian-12-r1
+  tag: 25.2.0-debian-12-r3
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -721,7 +721,7 @@ caCerts:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r32
+    tag: 12-debian-12-r38
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -810,7 +810,7 @@ plugins:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r32
+    tag: 12-debian-12-r38
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -919,7 +919,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r32
+    tag: 12-debian-12-r38
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -981,7 +981,7 @@ sysctl:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r32
+    tag: 12-debian-12-r38
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1081,7 +1081,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/jmx-exporter
-      tag: 1.0.1-debian-12-r9
+      tag: 1.1.0-debian-12-r6
       digest: ""
       pullPolicy: IfNotPresent
       ## Optionally specify an array of imagePullSecrets.
@@ -1113,6 +1113,38 @@ metrics:
     ##     memory: 1024Mi
     ##
     resources: {}
+    ## Configure extra options for liveness probe
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+    ## @param metrics.jmx.livenessProbe.enabled Enable livenessProbe
+    ## @param metrics.jmx.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+    ## @param metrics.jmx.livenessProbe.periodSeconds Period seconds for livenessProbe
+    ## @param metrics.jmx.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+    ## @param metrics.jmx.livenessProbe.failureThreshold Failure threshold for livenessProbe
+    ## @param metrics.jmx.livenessProbe.successThreshold Success threshold for livenessProbe
+    ##
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 60
+      periodSeconds: 10
+      timeoutSeconds: 10
+      successThreshold: 1
+      failureThreshold: 3
+    ## Configure extra options for readiness probe
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+    ## @param metrics.jmx.readinessProbe.enabled Enable readinessProbe
+    ## @param metrics.jmx.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+    ## @param metrics.jmx.readinessProbe.periodSeconds Period seconds for readinessProbe
+    ## @param metrics.jmx.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+    ## @param metrics.jmx.readinessProbe.failureThreshold Failure threshold for readinessProbe
+    ## @param metrics.jmx.readinessProbe.successThreshold Success threshold for readinessProbe
+    ##
+    readinessProbe:
+      enabled: true
+      initialDelaySeconds: 30
+      periodSeconds: 10
+      timeoutSeconds: 10
+      successThreshold: 1
+      failureThreshold: 3
     ## Configure Container Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
     ## @param metrics.jmx.containerSecurityContext.enabled Enabled containers' Security Context

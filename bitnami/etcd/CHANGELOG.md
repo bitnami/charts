@@ -1,8 +1,59 @@
 # Changelog
 
-## 10.7.1 (2024-12-11)
+## 11.1.0 (2025-02-21)
 
-* [bitnami/etcd] keep snapshot-pvc ([#30815](https://github.com/bitnami/charts/pull/30815))
+* [bitnami/etcd] feat: basic customization params for etcd upgrade-job ([#32099](https://github.com/bitnami/charts/pull/32099))
+
+## <small>11.0.8 (2025-02-19)</small>
+
+* [bitnami/etcd] Release 11.0.8 (#31993) ([d854fdd](https://github.com/bitnami/charts/commit/d854fdd029c002ec6591bd948a1c69a5c5bdb2c4)), closes [#31993](https://github.com/bitnami/charts/issues/31993)
+
+## <small>11.0.7 (2025-02-12)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/etcd] Release 11.0.7 (#31886) ([04e29ce](https://github.com/bitnami/charts/commit/04e29ce87c72cb596b1e504e3ee89ebf2a786f98)), closes [#31886](https://github.com/bitnami/charts/issues/31886)
+
+## <small>11.0.6 (2025-02-04)</small>
+
+* [bitnami/etcd] Release 11.0.6 (#31750) ([a99c4ae](https://github.com/bitnami/charts/commit/a99c4ae6f11749ed920bcc9fd05b81f7ebdf0f6b)), closes [#31750](https://github.com/bitnami/charts/issues/31750)
+
+## <small>11.0.5 (2025-01-31)</small>
+
+* [bitnami/etcd] Fix: issue with preupgrade job during scale down (#31539) ([36f16bf](https://github.com/bitnami/charts/commit/36f16bf90cc1461000a8f73341e0b770be0b6413)), closes [#31539](https://github.com/bitnami/charts/issues/31539)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>11.0.4 (2025-01-24)</small>
+
+* [bitnami/etcd] Release 11.0.4 (#31591) ([b342ec8](https://github.com/bitnami/charts/commit/b342ec844c9106fb724ec952fa4abbe7f26844d1)), closes [#31591](https://github.com/bitnami/charts/issues/31591)
+
+## <small>11.0.3 (2025-01-24)</small>
+
+* [bitnami/etcd] Release 11.0.3 (#31549) ([a3b65e5](https://github.com/bitnami/charts/commit/a3b65e57e2030811813cfcd132c94efa45f57eb5)), closes [#31549](https://github.com/bitnami/charts/issues/31549)
+
+## <small>11.0.2 (2025-01-23)</small>
+
+* [bitnami/etcd] fix for PreUpgrade Job Issue (#31524) ([3bf5de8](https://github.com/bitnami/charts/commit/3bf5de8c881d945a4542784a3628fd8fd7c2f668)), closes [#31524](https://github.com/bitnami/charts/issues/31524)
+
+## <small>11.0.1 (2025-01-20)</small>
+
+* [bitnami/etcd] fixed tls enable handling and v3 environment variable support for defrag cronjob (#31 ([c3c3e43](https://github.com/bitnami/charts/commit/c3c3e4327129db9fa1a88ee7a79227647404d63f)), closes [#31270](https://github.com/bitnami/charts/issues/31270)
+
+## 11.0.0 (2025-01-20)
+
+* [bitnami/etcd] Add pre-upgrade hook (#31161) ([38be6c5](https://github.com/bitnami/charts/commit/38be6c5dcd4ed7bff0c830d8eefe98962310c54d)), closes [#31161](https://github.com/bitnami/charts/issues/31161)
+
+## <small>10.7.3 (2025-01-17)</small>
+
+* [bitnami/etcd] Release 10.7.3 (#31419) ([7ef8d56](https://github.com/bitnami/charts/commit/7ef8d562ec9953460d675b02cfbce336ab66bceb)), closes [#31419](https://github.com/bitnami/charts/issues/31419)
+
+## <small>10.7.2 (2025-01-12)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/etcd] Release 10.7.2 (#31312) ([0e47c54](https://github.com/bitnami/charts/commit/0e47c5464e650b9149a87fbeac84f5a497012f36)), closes [#31312](https://github.com/bitnami/charts/issues/31312)
+
+## <small>10.7.1 (2024-12-11)</small>
+
+* [bitnami/etcd] keep snapshot-pvc (#30815) ([2a63958](https://github.com/bitnami/charts/commit/2a639583f613184bb1e05346ba25169d872db3cf)), closes [#30815](https://github.com/bitnami/charts/issues/30815)
 
 ## 10.7.0 (2024-12-10)
 
@@ -1216,7 +1267,7 @@
 
 ## <small>4.8.4 (2020-06-16)</small>
 
-* [bitnami/etcd] make cluster state variable configurable to fix https://github.com/bitnami/charts/iss ([bd7f575](https://github.com/bitnami/charts/commit/bd7f575ebad9c200cd8e90f9fb3e17451ce607f5)), closes [#2837](https://github.com/bitnami/charts/issues/2837)
+* [bitnami/etcd] make cluster state variable configurable to fix https://github.com/bitnami/charts/iss ([bd7f575](https://github.com/bitnami/charts/commit/bd7f575ebad9c200cd8e90f9fb3e17451ce607f5))
 
 ## <small>4.8.3 (2020-06-15)</small>
 
@@ -1498,7 +1549,7 @@
 ## <small>2.2.5 (2019-05-29)</small>
 
 * Change syntax because of linter failing ([adfc357](https://github.com/bitnami/charts/commit/adfc35728c2a8a9def9e1897b3772d64df621354))
-* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79)), closes [#issuecomment-496883321](https://github.com/bitnami/charts/issues/issuecomment-496883321)
+* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79))
 * Use immutable tags in the main images ([17ca4f5](https://github.com/bitnami/charts/commit/17ca4f5c91da33da03f9e2d411fe5e004e825c4d))
 
 ## <small>2.2.4 (2019-05-28)</small>

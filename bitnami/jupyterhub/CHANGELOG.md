@@ -1,8 +1,31 @@
 # Changelog
 
+## 8.1.4 (2025-02-19)
+
+* [bitnami/jupyterhub] Release 8.1.4 ([#32006](https://github.com/bitnami/charts/pull/32006))
+
+## <small>8.1.3 (2025-02-16)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/jupyterhub] Release 8.1.3 (#31941) ([c882833](https://github.com/bitnami/charts/commit/c882833b8e0382c86f22fd511058096bfe073221)), closes [#31941](https://github.com/bitnami/charts/issues/31941)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>8.1.2 (2025-01-07)</small>
+
+* [bitnami/jupyterhub] Release 8.1.2 (#31229) ([f96d50c](https://github.com/bitnami/charts/commit/f96d50c3544e5adccf4e16511b974a65fe0ea654)), closes [#31229](https://github.com/bitnami/charts/issues/31229)
+
+## <small>8.1.1 (2024-12-19)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/jupyterhub] Release 8.1.1 (#31107) ([9d2c8b2](https://github.com/bitnami/charts/commit/9d2c8b20accdffd94ca714987cc36b932f4835e7)), closes [#31107](https://github.com/bitnami/charts/issues/31107)
+
 ## 8.1.0 (2024-12-10)
 
-* [bitnami/jupyterhub] Detect non-standard images ([#30904](https://github.com/bitnami/charts/pull/30904))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 3) (#30666) ([82fc7e2](https://github.com/bitnami/charts/commit/82fc7e2fc12e2648ed22069942203c02bf5d4cc6)), closes [#30666](https://github.com/bitnami/charts/issues/30666)
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 2) (#30687) ([c457848](https://github.com/bitnami/charts/commit/c457848b2a111aad59830b98f85ffa1e29918e10)), closes [#30687](https://github.com/bitnami/charts/issues/30687)
+* [bitnami/jupyterhub] Detect non-standard images (#30904) ([68c74f9](https://github.com/bitnami/charts/commit/68c74f9cbaf86f0a0434e5d4ff1a309a973e2746)), closes [#30904](https://github.com/bitnami/charts/issues/30904)
 
 ## <small>8.0.1 (2024-11-09)</small>
 

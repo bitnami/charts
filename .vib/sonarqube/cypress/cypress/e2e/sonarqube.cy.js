@@ -8,6 +8,14 @@ import { random } from '../support/utils';
 
 it('allows adding a project and a quality gate', () => {
   cy.login();
+  // Skip welcome tour
+  cy.wait(5000);
+  cy.get('body').then(($body) => {
+    if ($body.find('img[src*=mode-tour]').is(':visible')) {
+      cy.get('span').contains('Later').click({force: true});
+      cy.get('button[data-action=skip]').click({force: true});
+    }
+  });
   cy.visit('/projects');
   // Step 1: Create a project
   cy.fixture('projects').then((projects) => {
@@ -18,7 +26,7 @@ it('allows adding a project and a quality gate', () => {
         cy.get('#project-creation-menu-trigger').click();
       }
     });
-    cy.get('[href="/projects/create?mode=manual"]').click();
+    cy.get('[href="/projects/create?mode=manual"]').click({force: true});
     cy.get('#project-name').type(`${projects.newProject.name} ${random}`);
     cy.get('[type="submit"]').contains('Next').click();
     cy.get('span').contains('Use the global setting').click();

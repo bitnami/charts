@@ -111,14 +111,10 @@ extraDeploy:
                 value: "admin123"
               - name: LDAP_ROOT
                 value: {{ printf "dc=%s" (include "pinniped.supervisor.fullname" . ) }}
-              - name: LDAP_USER_DC
-                value: "users"
               - name: LDAP_USERS
                 value: "vibuser"
               - name: LDAP_PASSWORDS
                 value: "vibUser123"
-              - name: LDAP_GROUP
-                value: "users"
               - name: LDAP_ENABLE_TLS
                 value: "yes"
               - name: LDAP_TLS_CERT_FILE

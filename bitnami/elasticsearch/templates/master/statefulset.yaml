@@ -353,9 +353,8 @@ spec:
               subPath: my_elasticsearch.yml
             {{- end }}
             {{- if .Values.security.enabled }}
-            - name: empty-dir
+            - name: elasticsearch-certificates
               mountPath: /opt/bitnami/elasticsearch/config/certs
-              subPath: certs
             {{- end }}
             {{- if .Values.initScripts }}
             - name: custom-init-scripts

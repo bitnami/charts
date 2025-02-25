@@ -477,11 +477,16 @@ Because they expose different sets of data, a valid use case is to scrape metric
 | `containerPorts.manager`                     |                                                                                                                                                                         | `15672`                                           |
 | `containerPorts.epmd`                        |                                                                                                                                                                         | `4369`                                            |
 | `containerPorts.metrics`                     |                                                                                                                                                                         | `9419`                                            |
+| `hostPorts.amqp`                             |                                                                                                                                                                         | `""`                                              |
+| `hostPorts.amqpTls`                          |                                                                                                                                                                         | `""`                                              |
+| `hostPorts.manager`                          |                                                                                                                                                                         | `""`                                              |
+| `hostPorts.metrics`                          |                                                                                                                                                                         | `""`                                              |
 | `initScripts`                                | Dictionary of init scripts. Evaluated as a template.                                                                                                                    | `{}`                                              |
 | `initScriptsCM`                              | ConfigMap with the init scripts. Evaluated as a template.                                                                                                               | `""`                                              |
 | `initScriptsSecret`                          | Secret containing `/docker-entrypoint-initdb.d` scripts to be executed at initialization time that contain sensitive data. Evaluated as a template.                     | `""`                                              |
 | `extraContainerPorts`                        | Extra ports to be included in container spec, primarily informational                                                                                                   | `[]`                                              |
 | `configuration`                              | RabbitMQ Configuration file content: required cluster configuration                                                                                                     | `""`                                              |
+| `tcpListenOptions.enabled`                   | Enable TCP listen options of RabbitMQ                                                                                                                                   | `true`                                            |
 | `tcpListenOptions.backlog`                   | Maximum size of the unaccepted TCP connections queue                                                                                                                    | `128`                                             |
 | `tcpListenOptions.nodelay`                   | When set to true, deactivates Nagle's algorithm. Default is true. Highly recommended for most users.                                                                    | `true`                                            |
 | `tcpListenOptions.linger.lingerOn`           | Enable Server socket lingering                                                                                                                                          | `true`                                            |
@@ -943,7 +948,7 @@ Bitnami Kubernetes documentation is available at [https://docs.bitnami.com/](htt
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

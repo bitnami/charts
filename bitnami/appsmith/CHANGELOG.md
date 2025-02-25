@@ -1,8 +1,59 @@
 # Changelog
 
-## 5.1.1 (2024-12-11)
+## 5.2.0 (2025-02-20)
 
-* [bitnami/appsmith] Release 5.1.1 ([#30984](https://github.com/bitnami/charts/pull/30984))
+* [bitnami/appsmith] Add support for `usePasswordFiles` ([#32078](https://github.com/bitnami/charts/pull/32078))
+
+## <small>5.1.12 (2025-02-13)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/appsmith] Release 5.1.12 (#31915) ([30ffee6](https://github.com/bitnami/charts/commit/30ffee66df76f98c23d157dd3ba6ef441e0869a0)), closes [#31915](https://github.com/bitnami/charts/issues/31915)
+
+## <small>5.1.11 (2025-02-07)</small>
+
+* [bitnami/appsmith] Release 5.1.11 (#31821) ([22cf9eb](https://github.com/bitnami/charts/commit/22cf9eb5c5b8c7e1b6abc92e92618895d360e3ac)), closes [#31821](https://github.com/bitnami/charts/issues/31821)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>5.1.10 (2025-01-30)</small>
+
+* [bitnami/appsmith] Release 5.1.10 (#31674) ([95873fd](https://github.com/bitnami/charts/commit/95873fdd0c8f9a3f479938a449a52add89f017d7)), closes [#31674](https://github.com/bitnami/charts/issues/31674)
+
+## <small>5.1.9 (2025-01-28)</small>
+
+* [bitnami/appsmith] Release 5.1.9 (#31643) ([c1289ad](https://github.com/bitnami/charts/commit/c1289ad737b591de32984fa074fbfe938459319f)), closes [#31643](https://github.com/bitnami/charts/issues/31643)
+
+## <small>5.1.8 (2025-01-23)</small>
+
+* [bitnami/appsmith] Release 5.1.8 (#31531) ([d0e2f65](https://github.com/bitnami/charts/commit/d0e2f6510a248afb638a21faaed8073315e5e556)), closes [#31531](https://github.com/bitnami/charts/issues/31531)
+
+## <small>5.1.7 (2025-01-16)</small>
+
+* [bitnami/appsmith] Release 5.1.7 (#31402) ([160c8a5](https://github.com/bitnami/charts/commit/160c8a5a75bb4782c00b9afff3f686f63b0c24a3)), closes [#31402](https://github.com/bitnami/charts/issues/31402)
+
+## <small>5.1.6 (2025-01-11)</small>
+
+* [bitnami/appsmith] Release 5.1.6 (#31304) ([c816b8a](https://github.com/bitnami/charts/commit/c816b8ac783cafc7664953245ab26f2c1c84b687)), closes [#31304](https://github.com/bitnami/charts/issues/31304)
+
+## <small>5.1.5 (2025-01-08)</small>
+
+* [bitnami/appsmith] Release 5.1.5 (#31264) ([c29ae6c](https://github.com/bitnami/charts/commit/c29ae6c8ea8a8ab5ca8fac8fbef73976517eb4c1)), closes [#31264](https://github.com/bitnami/charts/issues/31264)
+
+## <small>5.1.4 (2024-12-25)</small>
+
+* [bitnami/appsmith] Release 5.1.4 (#31160) ([c9e8970](https://github.com/bitnami/charts/commit/c9e8970f152559f69e1bfe40b068c92abe17ce67)), closes [#31160](https://github.com/bitnami/charts/issues/31160)
+
+## <small>5.1.3 (2024-12-20)</small>
+
+* [bitnami/appsmith] Release 5.1.3 (#31129) ([73f3378](https://github.com/bitnami/charts/commit/73f337817a69b8fb4aae9d43ca1ca4bc9d23e1e6)), closes [#31129](https://github.com/bitnami/charts/issues/31129)
+
+## <small>5.1.2 (2024-12-18)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/appsmith] Release 5.1.2 (#31092) ([5aa88f7](https://github.com/bitnami/charts/commit/5aa88f7099c975df1bc52ca83b9993e7328af989)), closes [#31092](https://github.com/bitnami/charts/issues/31092)
+
+## <small>5.1.1 (2024-12-11)</small>
+
+* [bitnami/appsmith] Release 5.1.1 (#30984) ([0e4fe7e](https://github.com/bitnami/charts/commit/0e4fe7ea2ada0592f7d69b03452ea6f522945f51)), closes [#30984](https://github.com/bitnami/charts/issues/30984)
 
 ## 5.1.0 (2024-12-10)
 

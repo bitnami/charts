@@ -1,8 +1,42 @@
 # Changelog
 
-## 2.4.1 (2024-12-10)
+## 2.4.9 (2025-02-07)
 
-* [bitnami/pinniped] Release 2.4.1 ([#30975](https://github.com/bitnami/charts/pull/30975))
+* [bitnami/pinniped] Release 2.4.9 ([#31826](https://github.com/bitnami/charts/pull/31826))
+
+## <small>2.4.8 (2025-02-05)</small>
+
+* [bitnami/pinniped] Release 2.4.8 (#31774) ([d35eec7](https://github.com/bitnami/charts/commit/d35eec7815622f4f0c7ee710ca4fc19a3f4d9c1c)), closes [#31774](https://github.com/bitnami/charts/issues/31774)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>2.4.7 (2025-01-27)</small>
+
+* [bitnami/pinniped] Ensure rbac and networkpolicy is not created for Concierge when disabled (#31564) ([0405f84](https://github.com/bitnami/charts/commit/0405f8474f0b47e7a93cd37c9dddbe5547a72c5f)), closes [#31564](https://github.com/bitnami/charts/issues/31564)
+
+## <small>2.4.6 (2025-01-24)</small>
+
+* [bitnami/pinniped] Release 2.4.6 (#31578) ([bdb886b](https://github.com/bitnami/charts/commit/bdb886b13ad7b43e211f601eccbccb4460c3de00)), closes [#31578](https://github.com/bitnami/charts/issues/31578)
+
+## <small>2.4.5 (2025-01-23)</small>
+
+* [bitnami/pinniped] Ensure rbac and networkpolicy is not created for s… (#31515) ([29d041b](https://github.com/bitnami/charts/commit/29d041b4e34ffa0e6aea5d6f8681db57435372db)), closes [#31515](https://github.com/bitnami/charts/issues/31515)
+
+## <small>2.4.4 (2025-01-17)</small>
+
+* [bitnami/pinniped] Release 2.4.4 (#31440) ([c198f0f](https://github.com/bitnami/charts/commit/c198f0f46df6ceec39eda8f66177fc586a791082)), closes [#31440](https://github.com/bitnami/charts/issues/31440)
+
+## <small>2.4.3 (2025-01-15)</small>
+
+* [bitnami/pinniped] Release 2.4.3 (#31388) ([5431593](https://github.com/bitnami/charts/commit/5431593572ef413843aed94fb50978fce9a77c6a)), closes [#31388](https://github.com/bitnami/charts/issues/31388)
+
+## <small>2.4.2 (2025-01-13)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/pinniped] bugfix: remove deprecated vars to configure OpenLDAP on VIB (#31337) ([e24fab4](https://github.com/bitnami/charts/commit/e24fab4b2cb9d6e5e0c3b4e3b93fd87bca011c2b)), closes [#31337](https://github.com/bitnami/charts/issues/31337)
+
+## <small>2.4.1 (2024-12-10)</small>
+
+* [bitnami/pinniped] Release 2.4.1 (#30975) ([0505a7e](https://github.com/bitnami/charts/commit/0505a7eadfbcd76a857100c0676f36069b03bf79)), closes [#30975](https://github.com/bitnami/charts/issues/30975)
 
 ## 2.4.0 (2024-12-10)
 

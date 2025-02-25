@@ -49,7 +49,7 @@ global:
 image:
   registry: docker.io
   repository: bitnami/rabbitmq
-  tag: 4.0.5-debian-12-r0
+  tag: 4.0.6-debian-12-r3
   digest: ""
   ## set to true if you would like to see extra information on logs
   ## It turns BASH and/or NAMI debugging in the image
@@ -352,6 +352,18 @@ containerPorts:
   manager: 15672
   epmd: 4369
   metrics: 9419
+## Host Ports
+## @param hostPorts.amqp
+## @param hostPorts.amqpTls
+## @param hostPorts.manager
+## @param hostPorts.metrics
+##
+hostPorts:
+  amqp: ""
+  amqpTls: ""
+  manager: ""
+  metrics: ""
+
 ## @param initScripts Dictionary of init scripts. Evaluated as a template.
 ## Specify dictionary of scripts to be run at first boot
 ## Alternatively, you can put your scripts under the files/docker-entrypoint-initdb.d directory
@@ -385,6 +397,9 @@ extraContainerPorts: []
 ## See : https://www.rabbitmq.com/networking.html for additional information
 ##
 tcpListenOptions:
+  ## @param tcpListenOptions.enabled Enable TCP listen options of RabbitMQ
+  ##
+  enabled: true
   ## @param tcpListenOptions.backlog Maximum size of the unaccepted TCP connections queue
   ##
   backlog: 128
@@ -511,6 +526,8 @@ configuration: |-
   {{- else if (eq .Values.memoryHighWatermark.type "relative") }}
   vm_memory_high_watermark.{{ .Values.memoryHighWatermark.type }} = {{ .Values.memoryHighWatermark.value }}
   {{- end }}
+  {{- end }}
+  {{- if .Values.tcpListenOptions.enabled }}
   ## TCP Listen Options
   ##
   tcp_listen_options.backlog = {{ .Values.tcpListenOptions.backlog }}
@@ -1570,7 +1587,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r34
+    tag: 12-debian-12-r39
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images

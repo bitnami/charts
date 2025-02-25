@@ -1,8 +1,40 @@
 # Changelog
 
+## 9.2.3 (2025-02-14)
+
+* [bitnami/mastodon] Release 9.2.3 ([#31933](https://github.com/bitnami/charts/pull/31933))
+
+## <small>9.2.2 (2025-02-13)</small>
+
+* [bitnami/mastodon] Release 9.2.2 (#31920) ([7d7cc5b](https://github.com/bitnami/charts/commit/7d7cc5bb02f8d539f3e4e2b32f0f0ec4c59d8631)), closes [#31920](https://github.com/bitnami/charts/issues/31920)
+
+## <small>9.2.1 (2025-02-13)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/mastodon] Release 9.2.1 (#31916) ([27d24fb](https://github.com/bitnami/charts/commit/27d24fbec625ce5c4ca93018e618da004a4df131)), closes [#31916](https://github.com/bitnami/charts/issues/31916)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## 9.2.0 (2025-01-29)
+
+* [bitnami/mastodon] feature(minio): Bump MinIO subchart (#31660) ([fcdd884](https://github.com/bitnami/charts/commit/fcdd88475b946b0a56e1738dc8d4c3d775416dba)), closes [#31660](https://github.com/bitnami/charts/issues/31660)
+
+## <small>9.1.3 (2025-01-16)</small>
+
+* [bitnami/mastodon] Release 9.1.3 (#31400) ([a5b97a0](https://github.com/bitnami/charts/commit/a5b97a0c64ce4cabccde11f94e3a641d63cd125b)), closes [#31400](https://github.com/bitnami/charts/issues/31400)
+
+## <small>9.1.2 (2025-01-12)</small>
+
+* [bitnami/mastodon] Release 9.1.2 (#31308) ([712bf25](https://github.com/bitnami/charts/commit/712bf2565a95cc41b01448f2551d19f40ea12898)), closes [#31308](https://github.com/bitnami/charts/issues/31308)
+
+## <small>9.1.1 (2024-12-30)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/mastodon] Avoid mkdir issue when restarting (#31183) ([3e3b679](https://github.com/bitnami/charts/commit/3e3b6794ef9d0fa28a953d0c7932d46788b6d7a9)), closes [#31183](https://github.com/bitnami/charts/issues/31183)
+
 ## 9.1.0 (2024-12-10)
 
-* [bitnami/mastodon] Detect non-standard images ([#30921](https://github.com/bitnami/charts/pull/30921))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/mastodon] Detect non-standard images (#30921) ([eea0814](https://github.com/bitnami/charts/commit/eea08143bfe95dfbd356d5f5fa8eb663b9bf130e)), closes [#30921](https://github.com/bitnami/charts/issues/30921)
 
 ## <small>9.0.5 (2024-12-03)</small>
 

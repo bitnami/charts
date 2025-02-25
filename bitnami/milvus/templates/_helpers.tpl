@@ -716,7 +716,6 @@ Init container definition for waiting for the database to be ready
     - bash
     - -ec
     - |
-      #!/bin/bash
       retry_while() {
         local -r cmd="${1:?cmd is missing}"
         local -r retries="${2:-12}"
@@ -797,7 +796,6 @@ Init container definition for waiting for the database to be ready
     - bash
     - -ec
     - |
-      #!/bin/bash
       retry_while() {
         local -r cmd="${1:?cmd is missing}"
         local -r retries="${2:-12}"
@@ -856,7 +854,7 @@ Init container definition for waiting for the database to be ready
 */}}
 {{- define "milvus.waitForKafkaInitContainer" -}}
 - name: wait-for-kafka
-  image: {{ template "milvus.image" . }} {{/* Bitnami shell does not have wait-for-port */}}
+  image: {{ template "milvus.wait-container.image" . }}
   imagePullPolicy: {{ .Values.waitContainer.image.pullPolicy }}
   {{- if .Values.waitContainer.containerSecurityContext.enabled }}
   securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.waitContainer.containerSecurityContext "context" $) | nindent 4 }}
@@ -870,7 +868,6 @@ Init container definition for waiting for the database to be ready
     - bash
     - -ec
     - |
-      #!/bin/bash
       retry_while() {
         local -r cmd="${1:?cmd is missing}"
         local -r retries="${2:-12}"
@@ -923,7 +920,7 @@ Init container definition for waiting for the database to be ready
 */}}
 {{- define "milvus.waitForProxyInitContainer" -}}
 - name: wait-for-proxy
-  image: {{ template "milvus.image" . }} {{/* Bitnami shell does not have wait-for-port */}}
+  image: {{ template "milvus.wait-container.image" . }}
   imagePullPolicy: {{ .Values.waitContainer.image.pullPolicy }}
   {{- if .Values.waitContainer.containerSecurityContext.enabled }}
   securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.waitContainer.containerSecurityContext "context" $) | nindent 4 }}
@@ -937,7 +934,6 @@ Init container definition for waiting for the database to be ready
     - bash
     - -ec
     - |
-      #!/bin/bash
       retry_while() {
         local -r cmd="${1:?cmd is missing}"
         local -r retries="${2:-12}"
@@ -980,9 +976,7 @@ Init container definition for waiting for the database to be ready
 Init container definition for waiting for the database to be ready
 */}}
 {{- define "milvus.prepareMilvusInitContainer" -}}
-# This init container renders and merges the Milvus configuration files.
-# We need to use a volume because we're working with ReadOnlyRootFilesystem
-- name: prepare-milvus
+- name: copy-default-configuration
   image: {{ template "milvus.image" .context }}
   imagePullPolicy: {{ .context.Values.milvus.image.pullPolicy }}
   {{- $block := index .context.Values .component }}
@@ -998,10 +992,30 @@ Init container definition for waiting for the database to be ready
     - bash
     - -ec
     - |
-      #!/bin/bash
-      # Remove previously existing files and copy the default configuration files to ensure they are present in mounted configs directory
-      rm -rf /bitnami/milvus/rendered-conf/*
+      echo "Copying milvus default configuration"
       cp -r /opt/bitnami/milvus/configs/. /bitnami/milvus/rendered-conf
+  volumeMounts:
+    - name: empty-dir
+      mountPath: /bitnami/milvus/rendered-conf
+      subPath: app-rendered-conf-dir
+# This init container renders and merges the Milvus configuration files.
+# We need to use a volume because we're working with ReadOnlyRootFilesystem
+- name: prepare-milvus
+  image: {{ template "milvus.wait-container.image" .context }}
+  imagePullPolicy: {{ .context.Values.milvus.image.pullPolicy }}
+  {{- $block := index .context.Values .component }}
+  {{- if $block.containerSecurityContext.enabled }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" $block.containerSecurityContext "context" .context) | nindent 4 }}
+  {{- end }}
+  {{- if $block.resources }}
+  resources: {{- toYaml $block.resources | nindent 4 }}
+  {{- else if ne $block.resourcesPreset "none" }}
+  resources: {{- include "common.resources.preset" (dict "type" $block.resourcesPreset) | nindent 4 }}
+  {{- end }}
+  command:
+    - bash
+    - -ec
+    - |
       # Build final milvus.yaml with the sections of the different files
       find /bitnami/milvus/conf -type f -name *.yaml -print0 | sort -z | xargs -0 yq eval-all '. as $item ireduce ({}; . * $item )' /bitnami/milvus/rendered-conf/milvus.yaml > /bitnami/milvus/rendered-conf/pre-render-config_00.yaml
 

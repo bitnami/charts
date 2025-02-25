@@ -1,8 +1,22 @@
 # Changelog
 
+## 11.3.3 (2025-02-18)
+
+* [bitnami/apache] Release 11.3.3 ([#31970](https://github.com/bitnami/charts/pull/31970))
+
+## <small>11.3.2 (2025-01-24)</small>
+
+* [bitnami/apache] Release 11.3.2 (#31540) ([8771ff7](https://github.com/bitnami/charts/commit/8771ff797f7c9ef19c66f2a3d597535c280a295f)), closes [#31540](https://github.com/bitnami/charts/issues/31540)
+
+## <small>11.3.1 (2025-01-17)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/apache] Release 11.3.1 (#31449) ([9a77ff2](https://github.com/bitnami/charts/commit/9a77ff22affb31fae8ad04bb098d97112695e0cb)), closes [#31449](https://github.com/bitnami/charts/issues/31449)
+
 ## 11.3.0 (2024-12-10)
 
-* [bitnami/apache] Detect non-standard images ([#30857](https://github.com/bitnami/charts/pull/30857))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/apache] Detect non-standard images (#30857) ([5666175](https://github.com/bitnami/charts/commit/5666175ae207b9527bb15070daf92f616aaa6c6a)), closes [#30857](https://github.com/bitnami/charts/issues/30857)
 
 ## <small>11.2.23 (2024-12-08)</small>
 
@@ -1202,7 +1216,7 @@
 
 * Change syntax because of linter failing ([adfc357](https://github.com/bitnami/charts/commit/adfc35728c2a8a9def9e1897b3772d64df621354))
 * Create NOTES.txt for apache and nginx ([f564ac1](https://github.com/bitnami/charts/commit/f564ac1dedbb88abaa6f3a1c79790a5dff950c33))
-* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79)), closes [#issuecomment-496883321](https://github.com/bitnami/charts/issues/issuecomment-496883321)
+* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79))
 
 ## <small>4.2.3 (2019-05-28)</small>
 

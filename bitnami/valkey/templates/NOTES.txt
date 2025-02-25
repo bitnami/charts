@@ -100,7 +100,7 @@ Valkey can be accessed via port {{ .Values.primary.service.ports.valkey }} on th
 
 To get your password run:
 
-    export VALKEY_PASSWORD=$(kubectl get secret --namespace {{ include "common.names.namespace" . }} {{ template "valkey.secretName" . }} -o jsonpath="{.data.valkey-password}" | base64 -d)
+    export VALKEY_PASSWORD=$(kubectl get secret --namespace {{ include "common.names.namespace" . }} {{ include "valkey.secretName" . }} -o jsonpath="{.data.{{ include "valkey.secretPasswordKey" . }}}" | base64 -d)
 
 {{- end }}
 

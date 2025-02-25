@@ -1,8 +1,24 @@
 # Changelog
 
+## 24.1.3 (2025-02-02)
+
+* [bitnami/parse] Release 24.1.3 ([#31704](https://github.com/bitnami/charts/pull/31704))
+
+## <small>24.1.2 (2024-12-24)</small>
+
+* [bitnami/parse] Release 24.1.2 (#31158) ([d5df113](https://github.com/bitnami/charts/commit/d5df113d2e550d22591bbae7fca978569ddc1a00)), closes [#31158](https://github.com/bitnami/charts/issues/31158)
+
+## <small>24.1.1 (2024-12-24)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/parse] Release 24.1.1 (#31157) ([96d743d](https://github.com/bitnami/charts/commit/96d743d10370263773b03be1e24edf29b5ba9d88)), closes [#31157](https://github.com/bitnami/charts/issues/31157)
+
 ## 24.1.0 (2024-12-10)
 
-* [bitnami/parse] Detect non-standard images ([#30962](https://github.com/bitnami/charts/pull/30962))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 3) (#30688) ([10a49f9](https://github.com/bitnami/charts/commit/10a49f9ff2db1d9d11a6edd1c40a9f61803241bc)), closes [#30688](https://github.com/bitnami/charts/issues/30688)
+* [bitnami/parse] Detect non-standard images (#30962) ([cd40d8b](https://github.com/bitnami/charts/commit/cd40d8b162e95ca5b9a834b55fd62a0f63732b7f)), closes [#30962](https://github.com/bitnami/charts/issues/30962)
 
 ## <small>24.0.2 (2024-12-01)</small>
 

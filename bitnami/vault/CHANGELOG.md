@@ -1,8 +1,43 @@
 # Changelog
 
+## 1.6.8 (2025-02-25)
+
+* [bitnami/vault] Release 1.6.8 ([#32152](https://github.com/bitnami/charts/pull/32152))
+
+## <small>1.6.7 (2025-02-20)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/vault] Release 1.6.7 (#32069) ([cec553b](https://github.com/bitnami/charts/commit/cec553b088e13dc80a6f049758906436832db447)), closes [#32069](https://github.com/bitnami/charts/issues/32069)
+
+## <small>1.6.6 (2025-02-05)</small>
+
+* [bitnami/vault] Release 1.6.6 (#31781) ([87925bc](https://github.com/bitnami/charts/commit/87925bcff431278154fac514c292b2ec8feccabf)), closes [#31781](https://github.com/bitnami/charts/issues/31781)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>1.6.5 (2025-01-31)</small>
+
+* [bitnami/vault] Release 1.6.5 (#31681) ([54af143](https://github.com/bitnami/charts/commit/54af143ef4abf2746aadfec114ece49bfafdbdfa)), closes [#31681](https://github.com/bitnami/charts/issues/31681)
+
+## <small>1.6.4 (2025-01-24)</small>
+
+* [bitnami/vault] Release 1.6.4 (#31586) ([1151ff3](https://github.com/bitnami/charts/commit/1151ff31c6004424c9983246b2735673f0149cc6)), closes [#31586](https://github.com/bitnami/charts/issues/31586)
+
+## <small>1.6.3 (2025-01-23)</small>
+
+* [bitnami/vault] Fix missing existing PVC volume declaration (#31202) (#31211) ([f743319](https://github.com/bitnami/charts/commit/f743319c46b75d6382bfd4af7e578dbc2cedea52)), closes [#31202](https://github.com/bitnami/charts/issues/31202) [#31211](https://github.com/bitnami/charts/issues/31211) [#31202](https://github.com/bitnami/charts/issues/31202)
+
+## <small>1.6.2 (2025-01-17)</small>
+
+* [bitnami/vault] Release 1.6.2 (#31445) ([b34be1a](https://github.com/bitnami/charts/commit/b34be1a754898b376f2aff703d68609ce81b6994)), closes [#31445](https://github.com/bitnami/charts/issues/31445)
+
+## <small>1.6.1 (2024-12-19)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/vault] Release 1.6.1 (#31110) ([99abcba](https://github.com/bitnami/charts/commit/99abcba5ae865a78096c8b26632a299d08480635)), closes [#31110](https://github.com/bitnami/charts/issues/31110)
+
 ## 1.6.0 (2024-12-12)
 
-* [bitnami/vault] Parametize caBundle in mutatingwebhook ([#30709](https://github.com/bitnami/charts/pull/30709))
+* [bitnami/vault] Parametize caBundle in mutatingwebhook (#30709) ([bbac787](https://github.com/bitnami/charts/commit/bbac7879e5179dce88e00195e480169f7fa4032d)), closes [#30709](https://github.com/bitnami/charts/issues/30709)
 
 ## 1.5.0 (2024-12-10)
 

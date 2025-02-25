@@ -1,12 +1,12 @@
 # Source: https://github.com/kong/kubernetes-ingress-controller/config/crd?ref=v{version}
-# Version: 3.3.1
+# Version: 3.4.2
 # VersionOf: kong-ingress-controller
 # UseKustomize: true
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.16.1
+    kubernetes-configuration.konghq.com/channels: ingress-controller
   name: ingressclassparameterses.configuration.konghq.com
 spec:
   group: configuration.konghq.com
@@ -63,7 +63,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.16.1
+    kubernetes-configuration.konghq.com/channels: ingress-controller
   name: kongclusterplugins.configuration.konghq.com
 spec:
   group: configuration.konghq.com
@@ -369,7 +369,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.16.1
+    kubernetes-configuration.konghq.com/channels: ingress-controller,gateway-operator
   name: kongconsumergroups.configuration.konghq.com
 spec:
   group: configuration.konghq.com
@@ -414,17 +414,101 @@ spec:
             type: string
           metadata:
             type: object
+          spec:
+            description: KongConsumerGroupSpec defines the desired state of KongConsumerGroup.
+            properties:
+              controlPlaneRef:
+                description: ControlPlaneRef is a reference to a ControlPlane this
+                  ConsumerGroup is associated with.
+                properties:
+                  konnectID:
+                    description: |-
+                      KonnectID is the schema for the KonnectID type.
+                      This field is required when the Type is konnectID.
+                    type: string
+                  konnectNamespacedRef:
+                    description: |-
+                      KonnectNamespacedRef is a reference to a Konnect Control Plane entity inside the cluster.
+                      It contains the name of the Konnect Control Plane.
+                      This field is required when the Type is konnectNamespacedRef.
+                    properties:
+                      name:
+                        description: Name is the name of the Konnect Control Plane.
+                        type: string
+                      namespace:
+                        description: |-
+                          Namespace is the namespace where the Konnect Control Plane is in.
+                          Currently only cluster scoped resources (KongVault) are allowed to set `konnectNamespacedRef.namespace`.
+                        type: string
+                    required:
+                    - name
+                    type: object
+                  type:
+                    default: kic
+                    description: |-
+                      Type indicates the type of the control plane being referenced. Allowed values:
+                      - konnectID
+                      - konnectNamespacedRef
+                      - kic
+
+                      The default is kic, which implies that the Control Plane is KIC.
+                    enum:
+                    - konnectID
+                    - konnectNamespacedRef
+                    - kic
+                    type: string
+                type: object
+                x-kubernetes-validations:
+                - message: when type is konnectNamespacedRef, konnectNamespacedRef
+                    must be set
+                  rule: '(has(self.type) && self.type == ''konnectNamespacedRef'')
+                    ? has(self.konnectNamespacedRef) : true'
+                - message: when type is konnectNamespacedRef, konnectID must not be
+                    set
+                  rule: '(has(self.type) && self.type == ''konnectNamespacedRef'')
+                    ? !has(self.konnectID) : true'
+                - message: when type is konnectID, konnectID must be set
+                  rule: '(has(self.type) && self.type == ''konnectID'') ? has(self.konnectID)
+                    : true'
+                - message: when type is konnectID, konnectNamespacedRef must not be
+                    set
+                  rule: '(has(self.type) && self.type == ''konnectID'') ? !has(self.konnectNamespacedRef)
+                    : true'
+                - message: when type is kic, konnectID must not be set
+                  rule: '(has(self.type) && self.type == ''kic'') ? !has(self.konnectID)
+                    : true'
+                - message: when type is kic, konnectNamespacedRef must not be set
+                  rule: '(has(self.type) && self.type == ''kic'') ? !has(self.konnectNamespacedRef)
+                    : true'
+                - message: when type is unset, konnectID must not be set
+                  rule: '!has(self.type) ? !has(self.konnectID) : true'
+                - message: when type is unset, konnectNamespacedRef must not be set
+                  rule: '!has(self.type) ? !has(self.konnectNamespacedRef) : true'
+              name:
+                description: Name is the name of the ConsumerGroup in Kong.
+                type: string
+              tags:
+                description: Tags is an optional set of tags applied to the ConsumerGroup.
+                items:
+                  type: string
+                maxItems: 20
+                type: array
+                x-kubernetes-validations:
+                - message: tags entries must not be longer than 128 characters
+                  rule: self.all(tag, size(tag) >= 1 && size(tag) <= 128)
+            type: object
           status:
+            default:
+              conditions:
+              - lastTransitionTime: "1970-01-01T00:00:00Z"
+                message: Waiting for controller
+                reason: Pending
+                status: Unknown
+                type: Programmed
             description: Status represents the current status of the KongConsumerGroup
               resource.
             properties:
               conditions:
-                default:
-                - lastTransitionTime: "1970-01-01T00:00:00Z"
-                  message: Waiting for controller
-                  reason: Pending
-                  status: Unknown
-                  type: Programmed
                 description: |-
                   Conditions describe the current conditions of the KongConsumerGroup.
 
@@ -490,8 +574,39 @@ spec:
                 x-kubernetes-list-map-keys:
                 - type
                 x-kubernetes-list-type: map
+              konnect:
+                description: Konnect contains the Konnect entity status.
+                properties:
+                  controlPlaneID:
+                    description: ControlPlaneID is the Konnect ID of the ControlPlane
+                      this Route is associated with.
+                    type: string
+                  id:
+                    description: |-
+                      ID is the unique identifier of the Konnect entity as assigned by Konnect API.
+                      If it's unset (empty string), it means the Konnect entity hasn't been created yet.
+                    type: string
+                  organizationID:
+                    description: OrgID is ID of Konnect Org that this entity has been
+                      created in.
+                    type: string
+                  serverURL:
+                    description: ServerURL is the URL of the Konnect server in which
+                      the entity exists.
+                    type: string
+                type: object
             type: object
         type: object
+        x-kubernetes-validations:
+        - message: controlPlaneRef is required once set
+          rule: (!has(oldSelf.spec) || !has(oldSelf.spec.controlPlaneRef)) || has(self.spec.controlPlaneRef)
+        - message: spec.controlPlaneRef cannot specify namespace for namespaced resource
+          rule: '(!has(self.spec) || !has(self.spec.controlPlaneRef) || !has(self.spec.controlPlaneRef.konnectNamespacedRef))
+            ? true : !has(self.spec.controlPlaneRef.konnectNamespacedRef.__namespace__)'
+        - message: spec.controlPlaneRef is immutable when an entity is already Programmed
+          rule: '(!has(oldSelf.spec) || !has(oldSelf.spec.controlPlaneRef)) ? true
+            : (!has(self.status) || !self.status.conditions.exists(c, c.type == ''Programmed''
+            && c.status == ''True'')) ? true : oldSelf.spec.controlPlaneRef == self.spec.controlPlaneRef'
     served: true
     storage: true
     subresources:
@@ -501,7 +616,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.16.1
+    kubernetes-configuration.konghq.com/channels: ingress-controller,gateway-operator
   name: kongconsumers.configuration.konghq.com
 spec:
   group: configuration.konghq.com
@@ -571,17 +686,98 @@ spec:
             type: string
           metadata:
             type: object
+          spec:
+            description: KongConsumerSpec defines the specification of the KongConsumer.
+            properties:
+              controlPlaneRef:
+                description: ControlPlaneRef is a reference to a ControlPlane this
+                  Consumer is associated with.
+                properties:
+                  konnectID:
+                    description: |-
+                      KonnectID is the schema for the KonnectID type.
+                      This field is required when the Type is konnectID.
+                    type: string
+                  konnectNamespacedRef:
+                    description: |-
+                      KonnectNamespacedRef is a reference to a Konnect Control Plane entity inside the cluster.
+                      It contains the name of the Konnect Control Plane.
+                      This field is required when the Type is konnectNamespacedRef.
+                    properties:
+                      name:
+                        description: Name is the name of the Konnect Control Plane.
+                        type: string
+                      namespace:
+                        description: |-
+                          Namespace is the namespace where the Konnect Control Plane is in.
+                          Currently only cluster scoped resources (KongVault) are allowed to set `konnectNamespacedRef.namespace`.
+                        type: string
+                    required:
+                    - name
+                    type: object
+                  type:
+                    default: kic
+                    description: |-
+                      Type indicates the type of the control plane being referenced. Allowed values:
+                      - konnectID
+                      - konnectNamespacedRef
+                      - kic
+
+                      The default is kic, which implies that the Control Plane is KIC.
+                    enum:
+                    - konnectID
+                    - konnectNamespacedRef
+                    - kic
+                    type: string
+                type: object
+                x-kubernetes-validations:
+                - message: when type is konnectNamespacedRef, konnectNamespacedRef
+                    must be set
+                  rule: '(has(self.type) && self.type == ''konnectNamespacedRef'')
+                    ? has(self.konnectNamespacedRef) : true'
+                - message: when type is konnectNamespacedRef, konnectID must not be
+                    set
+                  rule: '(has(self.type) && self.type == ''konnectNamespacedRef'')
+                    ? !has(self.konnectID) : true'
+                - message: when type is konnectID, konnectID must be set
+                  rule: '(has(self.type) && self.type == ''konnectID'') ? has(self.konnectID)
+                    : true'
+                - message: when type is konnectID, konnectNamespacedRef must not be
+                    set
+                  rule: '(has(self.type) && self.type == ''konnectID'') ? !has(self.konnectNamespacedRef)
+                    : true'
+                - message: when type is kic, konnectID must not be set
+                  rule: '(has(self.type) && self.type == ''kic'') ? !has(self.konnectID)
+                    : true'
+                - message: when type is kic, konnectNamespacedRef must not be set
+                  rule: '(has(self.type) && self.type == ''kic'') ? !has(self.konnectNamespacedRef)
+                    : true'
+                - message: when type is unset, konnectID must not be set
+                  rule: '!has(self.type) ? !has(self.konnectID) : true'
+                - message: when type is unset, konnectNamespacedRef must not be set
+                  rule: '!has(self.type) ? !has(self.konnectNamespacedRef) : true'
+              tags:
+                description: Tags is an optional set of tags applied to the consumer.
+                items:
+                  type: string
+                maxItems: 20
+                type: array
+                x-kubernetes-validations:
+                - message: tags entries must not be longer than 128 characters
+                  rule: self.all(tag, size(tag) >= 1 && size(tag) <= 128)
+            type: object
           status:
+            default:
+              conditions:
+              - lastTransitionTime: "1970-01-01T00:00:00Z"
+                message: Waiting for controller
+                reason: Pending
+                status: Unknown
+                type: Programmed
             description: Status represents the current status of the KongConsumer
               resource.
             properties:
               conditions:
-                default:
-                - lastTransitionTime: "1970-01-01T00:00:00Z"
-                  message: Waiting for controller
-                  reason: Pending
-                  status: Unknown
-                  type: Programmed
                 description: |-
                   Conditions describe the current conditions of the KongConsumer.
 
@@ -647,6 +843,27 @@ spec:
                 x-kubernetes-list-map-keys:
                 - type
                 x-kubernetes-list-type: map
+              konnect:
+                description: Konnect contains the Konnect entity status.
+                properties:
+                  controlPlaneID:
+                    description: ControlPlaneID is the Konnect ID of the ControlPlane
+                      this Route is associated with.
+                    type: string
+                  id:
+                    description: |-
+                      ID is the unique identifier of the Konnect entity as assigned by Konnect API.
+                      If it's unset (empty string), it means the Konnect entity hasn't been created yet.
+                    type: string
+                  organizationID:
+                    description: OrgID is ID of Konnect Org that this entity has been
+                      created in.
+                    type: string
+                  serverURL:
+                    description: ServerURL is the URL of the Konnect server in which
+                      the entity exists.
+                    type: string
+                type: object
             type: object
           username:
             description: Username is a Kong cluster-unique username of the consumer.
@@ -655,6 +872,15 @@ spec:
         x-kubernetes-validations:
         - message: Need to provide either username or custom_id
           rule: has(self.username) || has(self.custom_id)
+        - message: controlPlaneRef is required once set
+          rule: (!has(oldSelf.spec) || !has(oldSelf.spec.controlPlaneRef)) || has(self.spec.controlPlaneRef)
+        - message: spec.controlPlaneRef cannot specify namespace for namespaced resource
+          rule: '(!has(self.spec) || !has(self.spec.controlPlaneRef) || !has(self.spec.controlPlaneRef.konnectNamespacedRef))
+            ? true : !has(self.spec.controlPlaneRef.konnectNamespacedRef.__namespace__)'
+        - message: spec.controlPlaneRef is immutable when an entity is already Programmed
+          rule: '(!has(self.spec) || !has(self.spec.controlPlaneRef)) ? true : (!has(self.status)
+            || !self.status.conditions.exists(c, c.type == ''Programmed'' && c.status
+            == ''True'')) ? true : oldSelf.spec.controlPlaneRef == self.spec.controlPlaneRef'
     served: true
     storage: true
     subresources:
@@ -664,7 +890,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.16.1
+    kubernetes-configuration.konghq.com/channels: ingress-controller
   name: kongcustomentities.configuration.konghq.com
 spec:
   group: configuration.konghq.com
@@ -715,6 +941,7 @@ spec:
           metadata:
             type: object
           spec:
+            description: KongCustomEntitySpec defines the specification of the KongCustomEntity.
             properties:
               controllerName:
                 description: ControllerName specifies the controller that should reconcile
@@ -730,10 +957,16 @@ spec:
                   to the entity(service/route/consumer) where the plugin is attached.
                 properties:
                   group:
+                    description: Group defines the API group of the referred object.
                     type: string
                   kind:
+                    description: Kind defines the kind of the referred object.
+                    enum:
+                    - KongPlugin
+                    - KongClusterPlugin
                     type: string
                   name:
+                    description: Name defines the name of the referred object.
                     type: string
                   namespace:
                     description: Empty namespace means the same namespace of the owning
@@ -751,6 +984,9 @@ spec:
             - fields
             - type
             type: object
+            x-kubernetes-validations:
+            - message: The type field cannot be one of the known Kong entity types
+              rule: '!(self.type in [''services'',''routes'',''upstreams'',''targets'',''plugins'',''consumers'',''consumer_groups''])'
           status:
             description: Status stores the reconciling status of the resource.
             properties:
@@ -835,8 +1071,6 @@ spec:
         x-kubernetes-validations:
         - message: The spec.type field is immutable
           rule: self.spec.type == oldSelf.spec.type
-        - message: The spec.type field cannot be known Kong entity types
-          rule: '!(self.spec.type in [''services'',''routes'',''upstreams'',''targets'',''plugins'',''consumers'',''consumer_groups''])'
     served: true
     storage: true
     subresources:
@@ -846,7 +1080,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.16.1
+    kubernetes-configuration.konghq.com/channels: ingress-controller
   name: kongingresses.configuration.konghq.com
 spec:
   group: configuration.konghq.com
@@ -1237,7 +1471,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.16.1
+    kubernetes-configuration.konghq.com/channels: ingress-controller,gateway-operator
   name: konglicenses.configuration.konghq.com
 spec:
   group: configuration.konghq.com
@@ -1435,7 +1669,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.16.1
+    kubernetes-configuration.konghq.com/channels: ingress-controller,gateway-operator
   name: kongplugins.configuration.konghq.com
 spec:
   group: configuration.konghq.com
@@ -1735,7 +1969,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.16.1
+    kubernetes-configuration.konghq.com/channels: ingress-controller
   labels:
     gateway.networking.k8s.io/policy: direct
   name: kongupstreampolicies.configuration.konghq.com
@@ -2421,7 +2655,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.16.1
+    kubernetes-configuration.konghq.com/channels: ingress-controller,gateway-operator
   name: kongvaults.configuration.konghq.com
 spec:
   group: configuration.konghq.com
@@ -2496,6 +2730,73 @@ spec:
                 description: Config is the configuration of the vault. Varies for
                   different backends.
                 x-kubernetes-preserve-unknown-fields: true
+              controlPlaneRef:
+                description: ControlPlaneRef is a reference to a Konnect ControlPlane
+                  this KongVault is associated with.
+                properties:
+                  konnectID:
+                    description: |-
+                      KonnectID is the schema for the KonnectID type.
+                      This field is required when the Type is konnectID.
+                    type: string
+                  konnectNamespacedRef:
+                    description: |-
+                      KonnectNamespacedRef is a reference to a Konnect Control Plane entity inside the cluster.
+                      It contains the name of the Konnect Control Plane.
+                      This field is required when the Type is konnectNamespacedRef.
+                    properties:
+                      name:
+                        description: Name is the name of the Konnect Control Plane.
+                        type: string
+                      namespace:
+                        description: |-
+                          Namespace is the namespace where the Konnect Control Plane is in.
+                          Currently only cluster scoped resources (KongVault) are allowed to set `konnectNamespacedRef.namespace`.
+                        type: string
+                    required:
+                    - name
+                    type: object
+                  type:
+                    default: kic
+                    description: |-
+                      Type indicates the type of the control plane being referenced. Allowed values:
+                      - konnectID
+                      - konnectNamespacedRef
+                      - kic
+
+                      The default is kic, which implies that the Control Plane is KIC.
+                    enum:
+                    - konnectID
+                    - konnectNamespacedRef
+                    - kic
+                    type: string
+                type: object
+                x-kubernetes-validations:
+                - message: when type is konnectNamespacedRef, konnectNamespacedRef
+                    must be set
+                  rule: '(has(self.type) && self.type == ''konnectNamespacedRef'')
+                    ? has(self.konnectNamespacedRef) : true'
+                - message: when type is konnectNamespacedRef, konnectID must not be
+                    set
+                  rule: '(has(self.type) && self.type == ''konnectNamespacedRef'')
+                    ? !has(self.konnectID) : true'
+                - message: when type is konnectID, konnectID must be set
+                  rule: '(has(self.type) && self.type == ''konnectID'') ? has(self.konnectID)
+                    : true'
+                - message: when type is konnectID, konnectNamespacedRef must not be
+                    set
+                  rule: '(has(self.type) && self.type == ''konnectID'') ? !has(self.konnectNamespacedRef)
+                    : true'
+                - message: when type is kic, konnectID must not be set
+                  rule: '(has(self.type) && self.type == ''kic'') ? !has(self.konnectID)
+                    : true'
+                - message: when type is kic, konnectNamespacedRef must not be set
+                  rule: '(has(self.type) && self.type == ''kic'') ? !has(self.konnectNamespacedRef)
+                    : true'
+                - message: when type is unset, konnectID must not be set
+                  rule: '!has(self.type) ? !has(self.konnectID) : true'
+                - message: when type is unset, konnectNamespacedRef must not be set
+                  rule: '!has(self.type) ? !has(self.konnectNamespacedRef) : true'
               description:
                 description: Description is the additional information about the vault.
                 type: string
@@ -2505,6 +2806,16 @@ spec:
                   It is immutable after created.
                 minLength: 1
                 type: string
+              tags:
+                description: Tags are the tags associated to the vault for grouping
+                  and filtering.
+                items:
+                  type: string
+                maxItems: 20
+                type: array
+                x-kubernetes-validations:
+                - message: tags entries must not be longer than 128 characters
+                  rule: self.all(tag, size(tag) >= 1 && size(tag) <= 128)
             required:
             - backend
             - prefix
@@ -2585,6 +2896,27 @@ spec:
                 x-kubernetes-list-map-keys:
                 - type
                 x-kubernetes-list-type: map
+              konnect:
+                description: Konnect contains the Konnect entity status.
+                properties:
+                  controlPlaneID:
+                    description: ControlPlaneID is the Konnect ID of the ControlPlane
+                      this Route is associated with.
+                    type: string
+                  id:
+                    description: |-
+                      ID is the unique identifier of the Konnect entity as assigned by Konnect API.
+                      If it's unset (empty string), it means the Konnect entity hasn't been created yet.
+                    type: string
+                  organizationID:
+                    description: OrgID is ID of Konnect Org that this entity has been
+                      created in.
+                    type: string
+                  serverURL:
+                    description: ServerURL is the URL of the Konnect server in which
+                      the entity exists.
+                    type: string
+                type: object
             required:
             - conditions
             type: object
@@ -2594,6 +2926,12 @@ spec:
         x-kubernetes-validations:
         - message: The spec.prefix field is immutable
           rule: self.spec.prefix == oldSelf.spec.prefix
+        - message: controlPlaneRef is required once set
+          rule: '!has(oldSelf.spec.controlPlaneRef) || has(self.spec.controlPlaneRef)'
+        - message: spec.controlPlaneRef is immutable when an entity is already Programmed
+          rule: '(!has(self.status) || !self.status.conditions.exists(c, c.type ==
+            ''Programmed'' && c.status == ''True'') || !has(self.spec.controlPlaneRef))
+            ? true : oldSelf.spec.controlPlaneRef == self.spec.controlPlaneRef'
     served: true
     storage: true
     subresources:
@@ -2603,7 +2941,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.16.1
+    kubernetes-configuration.konghq.com/channels: ingress-controller
   name: tcpingresses.configuration.konghq.com
 spec:
   group: configuration.konghq.com
@@ -2766,6 +3104,8 @@ spec:
                             Ports is a list of records of service ports
                             If used, every port defined in the service should have an entry in it
                           items:
+                            description: PortStatus represents the error condition
+                              of a service port
                             properties:
                               error:
                                 description: |-
@@ -2810,7 +3150,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.16.1
+    kubernetes-configuration.konghq.com/channels: ingress-controller
   name: udpingresses.configuration.konghq.com
 spec:
   group: configuration.konghq.com
@@ -2937,6 +3277,8 @@ spec:
                             Ports is a list of records of service ports
                             If used, every port defined in the service should have an entry in it
                           items:
+                            description: PortStatus represents the error condition
+                              of a service port
                             properties:
                               error:
                                 description: |-

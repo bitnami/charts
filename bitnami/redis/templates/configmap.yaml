@@ -19,6 +19,10 @@ data:
     {{- if .Values.commonConfiguration }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonConfiguration "context" $ ) | nindent 4 }}
     {{- end }}
+    {{- if .Values.auth.acl.enabled }}
+    # The file with Redis ACL rules
+    aclfile /opt/bitnami/redis/etc/users.acl
+    {{- end }}
     # End of common configuration
   master.conf: |-
     dir {{ .Values.master.persistence.path }}
@@ -44,6 +48,20 @@ data:
     {{- end }}
     {{- end }}
     # End of replica configuration
+  users.acl: |-
+    {{- /* User-supplied ACL configuration */ -}}
+    {{- if .Values.auth.acl.enabled}}
+    {{- /* The default user uses the same password from `redis.password`; otherwise, it sets the nopass value. */ -}}
+    {{- $password := include "redis.password" . }}
+    user default on {{ if $password}}#{{ sha256sum $password}}{{ else }}nopass{{ end }} ~* &* +@all
+    {{- if .Values.auth.acl.users -}}
+    {{- /* custom users */ -}}
+    {{- range .Values.auth.acl.users }}
+    user {{ .username }} {{ default "on" .enabled}} {{ if .password}}#{{ sha256sum .password}}{{ else }}nopass{{ end }} {{ default "~*" .keys}} {{ default "&*" .channels }} {{ default "+@all" .commands }}
+    {{- end }}
+    {{- end }}
+    {{- end }}
+    {{- /* End of ACL configuration */ -}}
   {{- if .Values.sentinel.enabled }}
   sentinel.conf: |-
     dir "/tmp"
@@ -54,6 +72,16 @@ data:
     sentinel parallel-syncs {{ .Values.sentinel.masterSet }} {{ .Values.sentinel.parallelSyncs }}
     {{- if or .Values.sentinel.masterService.enabled .Values.sentinel.service.createMaster }}
       sentinel client-reconfig-script {{ .Values.sentinel.masterSet }} /opt/bitnami/scripts/start-scripts/push-master-label.sh
+    {{- end }}
+    {{- if .Values.auth.acl.sentinel }}
+    {{- range .Values.auth.acl.users }}
+    # Sentinel ACL configuration, only for users with password
+    {{ if .password }}
+    user {{ .username }} {{ default "on" .enabled }} {{ if .password }}#{{ sha256sum .password }}{{ else }}nopass{{ end }} ~* &* +@all
+    sentinel sentinel-user {{ .username }}
+    sentinel sentinel-pass {{ .password }} 
+    {{- end }}
+    {{- end }}
     {{- end }}
     # User-supplied sentinel configuration:
     {{- if .Values.sentinel.configuration }}

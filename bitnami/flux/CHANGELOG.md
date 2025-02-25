@@ -1,8 +1,40 @@
 # Changelog
 
+## 2.4.7 (2025-02-19)
+
+* [bitnami/flux] Release 2.4.7 ([#31997](https://github.com/bitnami/charts/pull/31997))
+
+## <small>2.4.6 (2025-02-14)</small>
+
+* [bitnami/flux] Release 2.4.6 (#31932) ([53dd799](https://github.com/bitnami/charts/commit/53dd7992f23da58019c9036ec5c784e0160c082e)), closes [#31932](https://github.com/bitnami/charts/issues/31932)
+
+## <small>2.4.5 (2025-02-12)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/flux] Release 2.4.5 (#31887) ([a2e0596](https://github.com/bitnami/charts/commit/a2e0596f08bb4213f1c8973536fb6d310483c85a)), closes [#31887](https://github.com/bitnami/charts/issues/31887)
+
+## <small>2.4.4 (2025-02-04)</small>
+
+* [bitnami/flux] Release 2.4.4 (#31752) ([f67fea0](https://github.com/bitnami/charts/commit/f67fea02ec9dce765009b91189af28ceab524819)), closes [#31752](https://github.com/bitnami/charts/issues/31752)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>2.4.3 (2025-01-24)</small>
+
+* [bitnami/flux] Release 2.4.3 (#31552) ([c04c1dc](https://github.com/bitnami/charts/commit/c04c1dce4009eb066fb20e4704bfa0b0fa45c51d)), closes [#31552](https://github.com/bitnami/charts/issues/31552)
+
+## <small>2.4.2 (2025-01-17)</small>
+
+* [bitnami/flux] Release 2.4.2 (#31416) ([640bfd8](https://github.com/bitnami/charts/commit/640bfd8b53078ebca0b9a87aa576931253c84196)), closes [#31416](https://github.com/bitnami/charts/issues/31416)
+
+## <small>2.4.1 (2025-01-13)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/flux] Release 2.4.1 (#31313) ([0ed2580](https://github.com/bitnami/charts/commit/0ed2580d9f39676cb6b12ab5c9f5df680fca7efc)), closes [#31313](https://github.com/bitnami/charts/issues/31313)
+
 ## 2.4.0 (2024-12-10)
 
-* [bitnami/flux] Detect non-standard images ([#30892](https://github.com/bitnami/charts/pull/30892))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/flux] Detect non-standard images (#30892) ([a4f4a9c](https://github.com/bitnami/charts/commit/a4f4a9c2bdc0bd2f5b91a307ddded6c22f9b4f03)), closes [#30892](https://github.com/bitnami/charts/issues/30892)
 
 ## <small>2.3.22 (2024-12-03)</small>
 

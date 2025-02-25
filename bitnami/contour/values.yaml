@@ -108,7 +108,7 @@ contour:
   image:
     registry: docker.io
     repository: bitnami/contour
-    tag: 1.30.1-debian-12-r3
+    tag: 1.30.2-debian-12-r7
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -668,7 +668,7 @@ envoy:
   image:
     registry: docker.io
     repository: bitnami/envoy
-    tag: 1.31.3-debian-12-r1
+    tag: 1.31.5-debian-12-r3
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1350,7 +1350,7 @@ defaultBackend:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.27.3-debian-12-r0
+    tag: 1.27.4-debian-12-r3
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1858,3 +1858,5 @@ rbac:
 ## @param tlsExistingSecret Name of the existingSecret to be use in both contour and envoy. If it is not nil `contour.certgen` will be disabled.
 ##
 tlsExistingSecret: ""
+## @param useCertManager Use Cert-manager instead of Contour certgen to issue certificates for TLS connection between Contour and Envoy.
+useCertManager: false

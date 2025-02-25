@@ -1,8 +1,63 @@
 # Changelog
 
-## 5.1.1 (2024-12-11)
+## 5.1.14 (2025-02-19)
 
-* [bitnami/concourse] Release 5.1.1 ([#30977](https://github.com/bitnami/charts/pull/30977))
+* [bitnami/concourse] Release 5.1.14 ([#31979](https://github.com/bitnami/charts/pull/31979))
+
+## <small>5.1.13 (2025-02-14)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/concourse] Release 5.1.13 (#31923) ([0f72679](https://github.com/bitnami/charts/commit/0f726790be67f367a5828f335c86ce12dc354e76)), closes [#31923](https://github.com/bitnami/charts/issues/31923)
+
+## <small>5.1.12 (2025-02-05)</small>
+
+* [bitnami/concourse] Release 5.1.12 (#31796) ([67d7ab2](https://github.com/bitnami/charts/commit/67d7ab24868dd35ecc34c2177d3e46e149f6ea80)), closes [#31796](https://github.com/bitnami/charts/issues/31796)
+
+## <small>5.1.11 (2025-02-04)</small>
+
+* [bitnami/concourse] Release 5.1.11 (#31747) ([7fb2fc5](https://github.com/bitnami/charts/commit/7fb2fc52e50ba82efe9959d5607511e4be618377)), closes [#31747](https://github.com/bitnami/charts/issues/31747)
+
+## <small>5.1.10 (2025-02-04)</small>
+
+* [bitnami/concourse] Release 5.1.10 (#31723) ([52eb3d0](https://github.com/bitnami/charts/commit/52eb3d0ec4414068111b37500ca096fc77d672e8)), closes [#31723](https://github.com/bitnami/charts/issues/31723)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>5.1.9 (2025-01-24)</small>
+
+* [bitnami/concourse] Release 5.1.9 (#31546) ([211f0e9](https://github.com/bitnami/charts/commit/211f0e96531c13be6d077d601902272145f80ad1)), closes [#31546](https://github.com/bitnami/charts/issues/31546)
+
+## <small>5.1.8 (2025-01-22)</small>
+
+* [bitnami/concourse] Release 5.1.8 (#31519) ([aed29d3](https://github.com/bitnami/charts/commit/aed29d3709ec249595de424a7d6fe3a3a8fdaf27)), closes [#31519](https://github.com/bitnami/charts/issues/31519)
+
+## <small>5.1.7 (2025-01-17)</small>
+
+* [bitnami/concourse] Release 5.1.7 (#31462) ([590f617](https://github.com/bitnami/charts/commit/590f617f65a5ba1ad4600e492e849233437e30fd)), closes [#31462](https://github.com/bitnami/charts/issues/31462)
+
+## <small>5.1.6 (2025-01-17)</small>
+
+* [bitnami/concourse] Release 5.1.6 (#31414) ([beffcf4](https://github.com/bitnami/charts/commit/beffcf486baeb7bb52b710c13ccc00f49cb75bff)), closes [#31414](https://github.com/bitnami/charts/issues/31414)
+
+## <small>5.1.5 (2025-01-10)</small>
+
+* [bitnami/concourse] Release 5.1.5 (#31282) ([fd3fc4b](https://github.com/bitnami/charts/commit/fd3fc4b09ae5873c4f3a83aeebf5abedc3328c28)), closes [#31282](https://github.com/bitnami/charts/issues/31282)
+
+## <small>5.1.4 (2025-01-07)</small>
+
+* [bitnami/concourse] Release 5.1.4 (#31245) ([17527c5](https://github.com/bitnami/charts/commit/17527c53d4651a78710b4c5165c90170045557f0)), closes [#31245](https://github.com/bitnami/charts/issues/31245)
+
+## <small>5.1.3 (2025-01-04)</small>
+
+* [bitnami/concourse] Release 5.1.3 (#31214) ([3c19446](https://github.com/bitnami/charts/commit/3c19446fba280bab739179dd962fcbd8688336cc)), closes [#31214](https://github.com/bitnami/charts/issues/31214)
+
+## <small>5.1.2 (2024-12-20)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/concourse] Release 5.1.2 (#31130) ([a16f095](https://github.com/bitnami/charts/commit/a16f0953ab89087823fed9afab3fecf1430d9638)), closes [#31130](https://github.com/bitnami/charts/issues/31130)
+
+## <small>5.1.1 (2024-12-11)</small>
+
+* [bitnami/concourse] Release 5.1.1 (#30977) ([9e2c209](https://github.com/bitnami/charts/commit/9e2c20934cb7848b042aed0c8f87a2d4ed627006)), closes [#30977](https://github.com/bitnami/charts/issues/30977)
 
 ## 5.1.0 (2024-12-10)
 

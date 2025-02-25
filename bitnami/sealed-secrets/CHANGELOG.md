@@ -1,8 +1,35 @@
 # Changelog
 
+## 2.5.6 (2025-02-07)
+
+* [bitnami/sealed-secrets] Release 2.5.6 ([#31827](https://github.com/bitnami/charts/pull/31827))
+
+## <small>2.5.5 (2025-02-05)</small>
+
+* [bitnami/sealed-secrets] Release 2.5.5 (#31778) ([8858250](https://github.com/bitnami/charts/commit/88582507ed3d95f9667363006449112fa2ae0087)), closes [#31778](https://github.com/bitnami/charts/issues/31778)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>2.5.4 (2025-01-24)</small>
+
+* [bitnami/sealed-secrets] Release 2.5.4 (#31582) ([7f6be1f](https://github.com/bitnami/charts/commit/7f6be1ff6bea655f0b08e563b9aba0d1458332a9)), closes [#31582](https://github.com/bitnami/charts/issues/31582)
+
+## <small>2.5.3 (2025-01-17)</small>
+
+* [bitnami/sealed-secrets] Release 2.5.3 (#31442) ([3c5c031](https://github.com/bitnami/charts/commit/3c5c0310c48459c7f01584265ed28551632ccd09)), closes [#31442](https://github.com/bitnami/charts/issues/31442)
+
+## <small>2.5.2 (2025-01-16)</small>
+
+* [bitnami/sealed-secrets] Release 2.5.2 (#31399) ([de224a6](https://github.com/bitnami/charts/commit/de224a6bfe3372ec8ad75884d9dd2f7d3f42b126)), closes [#31399](https://github.com/bitnami/charts/issues/31399)
+
+## <small>2.5.1 (2025-01-14)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/sealed-secrets] Release 2.5.1 (#31361) ([c62acfb](https://github.com/bitnami/charts/commit/c62acfbf97d610a3e2d58d3ec41d0ea556fb33c6)), closes [#31361](https://github.com/bitnami/charts/issues/31361)
+
 ## 2.5.0 (2024-12-10)
 
-* [bitnami/sealed-secrets] Detect non-standard images ([#30966](https://github.com/bitnami/charts/pull/30966))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/sealed-secrets] Detect non-standard images (#30966) ([7ee255a](https://github.com/bitnami/charts/commit/7ee255a1d61e589fc0c093bb9d3bcf8ac4d99f28)), closes [#30966](https://github.com/bitnami/charts/issues/30966)
 
 ## <small>2.4.14 (2024-12-05)</small>
 

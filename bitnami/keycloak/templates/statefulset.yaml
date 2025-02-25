@@ -44,6 +44,7 @@ spec:
         {{- end }}
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: keycloak
+        app.kubernetes.io/app-version: {{ .Chart.AppVersion }}
     spec:
       serviceAccountName: {{ template "keycloak.serviceAccountName" . }}
       {{- include "keycloak.imagePullSecrets" . | nindent 6 }}
@@ -153,7 +154,7 @@ spec:
                   fieldPath: metadata.namespace
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" .Values.image.debug | quote }}
-            - name: KEYCLOAK_ADMIN_PASSWORD
+            - name: KC_BOOTSTRAP_ADMIN_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "keycloak.secretName" . }}

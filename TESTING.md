@@ -108,13 +108,13 @@ This guide will focus in the `verify` phase section, in which there are some thi
 
 * The installation of the chart can be customized via runtime parameters, which are provided using the `runtimes-parameters.yaml` file. See the [Runtime parameters](#runtime-parameters) section for further information.
 
-* The runtime parameters are shared accross all `actions`, which guarantees that each release of the chart is based on the exact same configuration.
+* The runtime parameters are shared across all `actions`, which guarantees that each release of the chart is based on the exact same configuration.
 
 ### vib-verify.json vs vib-publish.json
 
-There are different events that will trigger the execution of the workflows and automations in this repository. These two files are associated to two events respectively (`vib-verify.json` to the creation of a PR, meanwhile `vib-publish.json` to the merging of changes to `main`), and define what VIB should do when they are triggered.
+There are different events that will trigger the execution of the workflows and automation in this repository. These two files are associated with two events respectively (`vib-verify.json` to the creation of a PR, meanwhile `vib-publish.json` to the merging of changes to `main`), and define what VIB should do when they are triggered.
 
-Hence, tweaking the files allows to define different action policies depending on the event that was fired. It was decided that the verification process (i.e. the tests) should only take place when a new PR is created, and hence that is the reason for `verify` section to appear in `vib-verify.json`.
+Hence, tweaking the files allows to define of different action policies depending on the event that was fired. It was decided that the verification process (i.e. the tests) should only take place when a new PR is created, and hence that is the reason for the `verify` section to appear in `vib-verify.json`.
 
 ## Testing strategy
 
@@ -122,7 +122,7 @@ Hence, tweaking the files allows to define different action policies depending o
 
 The general aim of the tests should be to verify the Chart package works as expected. As such, the focus IS NOT on the application OR the container images, which should be regarded as trustful components (i.e. they should have been respectively tested at a previous stage), but in the Chart itself and the different features it provides. It is expected though to assert the CORE functionality (or functionalities) of the application works, but checks defined in this repository should never aim to replace the official test suite.
 
-Some examples on the suitability of tests for the `bitnami/wordpress` chart:
+Some examples of the suitability of tests for the `bitnami/wordpress` chart:
 
 * ✅ Creating a blog post (represents the CORE functionality of the asset)
 * ❌ Creating a comment in a post (far too specific, not useful)
@@ -135,13 +135,13 @@ The tests may be regarded as _deployment_ tests since their goal is to verify th
 
 Before writing any test scenario, understand the primary purpose of the chart and its components. Take a look at [the documentation about the chart under test](https://github.com/bitnami/charts/tree/main/bitnami), explore the different templates and configurations in `values.yaml` and glance over the [docker image documentation](https://github.com/bitnami/containers). This will give you a solid base for creating valuable test scenarios.
 
-As Charts are usually composed of a number of different components, it is also essential to test their integrations and the Chart as a whole. As a general guideline, testing a `bitnami/chart` can be reduced to:
+As Charts are usually composed of several different components, it is also essential to test their integrations and the Chart as a whole. As a general guideline, testing a `bitnami/chart` can be reduced to:
 
 1. Identifying the components of the Chart and verifying their integration. _e.g. WordPress + MariaDB + PHP + Data Volume_
 2. Summarizing the main area features the asset offers and asserting the Chart delivers them. _e.g. Creating a post in a blog_
 3. Focusing on the unique features the Chart offers. _e.g. ConfigMaps, PVCs, Services, secrets, etc._
 
-It is easily noticeable though that Charts are usually highly configurable artifacts. Through parameters exposed in `values.yaml`, it is fairly common to perform customizations that range from enabling simple features (e.g. exporting metrics to Prometheus) to complete changes in the architecture of the application that will be deployed (e.g. standalone vs. main-secondary replication in DBs). In order to cope with this high variability, we should:
+It is easily noticeable though that Charts are usually highly configurable artifacts. Through parameters exposed in `values.yaml`, it is fairly common to perform customizations that range from enabling simple features (e.g. exporting metrics to Prometheus) to complete changes in the architecture of the application that will be deployed (e.g. standalone vs. main-secondary replication in DBs). To cope with this high variability, we should:
 
 * Stick to the KISS (Keep It Short and Simple) principle: only test/consider the features that are enabled by default.
 * When params allow to customize the deployment architecture, give preference to: (1) the more representative blueprint and (2) the one that provides more code-covering.
@@ -155,9 +155,9 @@ When designing a new test suite for an asset, the runtime parameters used for it
 
 > Does the parameter have a direct influence over any of the tests?
 
-This guarantees that the information in `runtime-parameters.yaml` is kept to the essential and prevents lengthy, unrelated params. Let's use a real example for a better undertanding:
+This guarantees that the information in `runtime-parameters.yaml` is kept to the essential and prevents lengthy, unrelated params. Let's use a real example for a better understanding:
 
-```bash
+```console
 $ cat .vib/moodle/runtime-parameters.yaml
 moodleUsername: test_user
 moodlePassword: ComplicatedPassword123!4
@@ -181,11 +181,12 @@ containerPorts:
   https: 8444
 ```
 
-> ℹ️ We used to inject the parameters directly into the VIB pipelines under `phases.verify.context.runtime_parameters` and encoded them as a base64 string. This approach was deprecated in favor of using a separate `.yaml` file under `.vib/ASSET/runtime-parameters.yaml`.
+> [!NOTE]
+> We used to inject the parameters directly into the VIB pipelines under `phases.verify.context.runtime_parameters` and encoded them as a base64 string. This approach was deprecated in favor of using a separate `.yaml` file under `.vib/ASSET/runtime-parameters.yaml`.
 
 1. Why was `moodleUsername` included?
 
-    The default vale for `moodleUsername` is `user` (you can check in [values.yaml](https://github.com/bitnami/charts/blob/main/bitnami/moodle/values.yaml)). Following the strategy, the default value was changed to see if the Chart is able to correctly pick it up. This is later checked [in one the tests](https://github.com/bitnami/charts/blob/30f2069e0b8ce5331987d06dc744b6d1bc1f04ec/.vib/moodle/cypress/cypress/support/commands.js#L19).
+    The default value for `moodleUsername` is `user` (you can check in [values.yaml](https://github.com/bitnami/charts/blob/main/bitnami/moodle/values.yaml)). Following the strategy, the default value was changed to see if the Chart can correctly pick it up. This is later checked [in one of the tests](https://github.com/bitnami/charts/blob/30f2069e0b8ce5331987d06dc744b6d1bc1f04ec/.vib/moodle/cypress/cypress/support/commands.js#L19).
 
 2. Why were other properties, like `moodleEmail`, NOT included?
 
@@ -193,7 +194,7 @@ containerPorts:
 
 3. Does that mean that every property in `runtime-parameters.yaml` should have an associated test?
 
-    No, there is no need to have an specific test for each property, but the property **should have influence over the tests** to include it in the installation parameters. For instance, the property `service.type=LoadBalancer` does not have an associated test, but it is crucial for [Cypress](#cypress) to succeed.
+    No, there is no need to have a specific test for each property, but the property **should influence the tests** to include it in the installation parameters. For instance, the property `service.type=LoadBalancer` does not have an associated test, but it is crucial for [Cypress](#cypress) to succeed.
 
     Put it this way: if the property had another value, the verification process would fail.
 
@@ -201,14 +202,14 @@ containerPorts:
 
 Although VIB pipeline files include static testing for the generated code, it does not need specific test implementations per se. Thus, this guide focuses on dynamic testing, which happens during the verification phase and represents the bulk of test implementation files in this repository.
 
-Below is a list of the different tests types and the associated tools that may be used:
+Below is a list of the different test types and the associated tools that may be used:
 
 * Functional tests: [Cypress](#cypress)
 * Integration tests: [Goss](#goss) & [Ginkgo](#ginkgo)
 
 ## Generic acceptance criteria
 
-In order for your test code PR to be accepted the following criteria must be fulfilled:
+For your test code PR to be accepted the following criteria must be fulfilled:
 
 * [ ] Key features of the asset need to be covered
 * [ ] Tests need to contain assertions
@@ -232,8 +233,9 @@ Depending on the tool used, additional acceptance criteria may apply. Please, re
 
 [Cypress](https://docs.cypress.io/guides/overview/why-cypress) is the framework used to implement functional tests. Related files should be located under `/.vib/ASSET/cypress`.
 
-In order for VIB to execute Cypress tests, the following block of code needs to be defined in the corresponding [VIB pipeline files](#vib-pipeline-files) (`/.vib/ASSET/vib-{verify,publish}.json`).
+For VIB to execute Cypress tests, the following block of code needs to be defined in the corresponding [VIB pipeline files](#vib-pipeline-files) (`/.vib/ASSET/vib-{verify,publish}.json`).
 
+> [!TIP]
 > Values denoted withing dollar signs (`$$VALUE$$`) should be treated as placeholders
 
 ```json
@@ -253,7 +255,8 @@ In order for VIB to execute Cypress tests, the following block of code needs to 
         }
 ```
 
-> ℹ️❗️ Cypress tests needs the UI to be accessible from outside the K8s testing cluster. This means (in most cases) that the service of the chart which exposes such UI should be set to use a `LoadBalancer` type and port `80` or `443`.
+> [!NOTE]
+> Cypress tests need the UI to be accessible from outside the K8s testing cluster. This means (in most cases) that the service of the chart that exposes such UI should be set to use a `LoadBalancer` type and port `80` or `443`.
 
 ### Run Cypress locally
 
@@ -293,9 +296,10 @@ Sometimes it is of interest to run the tests locally, for example during develop
     }
     ```
 
-    > NOTE: There are assets that require to have a host configured instead of a plain IP address to properly work. In this cases, you may find a `hosts` entry in the `cypress.config.js` file instead of the `baseUrl`. Proceed as follows:
+> [!NOTE]
+> Some assets require a host configured instead of a plain IP address to properly work. In this case, you may find a `hosts` entry in the `cypress.config.js` file instead of the `baseUrl`. Proceed as follows:
 
-    ```bash
+    ```console
     $ cd .vib/prestashop/cypress
     $ cat cypress.config.js
     {
@@ -319,7 +323,7 @@ Sometimes it is of interest to run the tests locally, for example during develop
 
 4. Launch Cypress indicating the folder where tests are located
 
-    ```bash
+    ```console
     $ cypress run .
 
     =====================================================================================
@@ -337,7 +341,7 @@ Sometimes it is of interest to run the tests locally, for example during develop
     ✔  All specs passed!                        371ms        1        1
     ```
 
-### Useful Cypress information
+### Useful Cypress 
 
 * In most cases, a single test which covers the following topics is enough:
   * Login/Logout: Checks the UI, app, and DB are working together
@@ -372,8 +376,9 @@ Sometimes it is of interest to run the tests locally, for example during develop
 
 [Ginkgo](https://onsi.github.io/ginkgo/#top) is one of the frameworks used to implement integration tests. Related files should be located under `/.vib/ASSET/ginkgo`. It is the reference tool to use when tests require interaction with the K8s cluster.
 
-In order for VIB to execute Ginkgo tests, the following block of code needs to be defined in the corresponding [VIB pipeline files](#vib-pipeline-files) (`/.vib/ASSET/vib-{verify,publish}.json`).
+For VIB to execute Ginkgo tests, the following block of code needs to be defined in the corresponding [VIB pipeline files](#vib-pipeline-files) (`/.vib/ASSET/vib-{verify,publish}.json`).
 
+> [!TIP]
 > Values denoted withing dollar signs (`$$VALUE$$`) should be treated as placeholders
 
 ```json
@@ -399,14 +404,14 @@ Sometimes it is of interest to run the tests locally, for example during develop
 
 1. Deploy the target Chart in your cluster, using the same installation parameters specified in the `vib-verify.json` pipeline file
 
-    ```bash
+    ```console
     helm install metallb bitnami/metallb -f .vib/metallb/runtime-parameters.yaml
     ```
 
 2. Download and [install Ginkgo](https://onsi.github.io/ginkgo/#installing-ginkgo) in your system
-3. Execute the tests. Provide the necessary params (usually, the path to the kubeconfig file and namespace name, but check `vib-verify.json`).
+3. Execute the tests. Provide the necessary parameters (usually, the path to the kubeconfig file and namespace name, but check `vib-verify.json`).
 
-    ```bash
+    ```console
     $ cd .vib/metallb/ginkgo
     $ ginkgo -- --kubeconfig=./kube.config --namespace=default
       Running Suite: MetalLB Integration Tests - /.vib/metallb/ginkgo
@@ -427,7 +432,7 @@ Sometimes it is of interest to run the tests locally, for example during develop
 Ginkgo provides extreme flexibility when it comes to tests. Nonetheless, here are the most frequent use cases we have used it for so far:
 
 * Checking logs produced by a scratch or a k8s-native pod
-* Deploying, managing and interacting with K8s resources: CRDs, Ingresses, Secrets... Really useful for **K8s operators**
+* Deploying, managing, and interacting with K8s resources: CRDs, Ingresses, Secrets... Really useful for **K8s operators**
 * Directly interacting (instead of managing) resources deployed at installation time using the `extraDeploy` param, available in bitnami charts
 
 ### Specific Ginkgo acceptance criteria
@@ -440,8 +445,9 @@ Ginkgo provides extreme flexibility when it comes to tests. Nonetheless, here ar
 
 [GOSS](https://github.com/aelsabbahy/goss/blob/master/docs/manual.md) is one of the frameworks used to implement integration tests. Related files should be located under `/.vib/ASSET/goss`. It is the reference tool to use when tests require interaction with a specific pod. Unlike Cypress or Ginkgo, GOSS tests are executed from within the pod.
 
-In order for VIB to execute GOSS tests, the following block of code needs to be defined in the corresponding [VIB pipeline files](#vib-pipeline-files) (`/.vib/ASSET/vib-{verify,publish}.json`).
+For VIB to execute GOSS tests, the following block of code needs to be defined in the corresponding [VIB pipeline files](#vib-pipeline-files) (`/.vib/ASSET/vib-{verify,publish}.json`).
 
+> [!TIP]
 > Values denoted withing dollar signs (`$$VALUE$$`) should be treated as placeholders
 
 ```json
@@ -462,7 +468,8 @@ In order for VIB to execute GOSS tests, the following block of code needs to be 
         }
 ```
 
-> ℹ️ Goss will use the `runtime-parameters.yaml` file containing the chart's deployment parameters as its vars file.
+> [!NOTE]
+> Goss will use the `runtime-parameters.yaml` file containing the chart's deployment parameters as its vars file.
 
 ### Run GOSS locally
 
@@ -477,7 +484,7 @@ Sometimes it is of interest to run the tests locally, for example during develop
 2. Download the [GOSS binary for Linux AMD64](https://github.com/goss-org/goss/releases/)
 3. Copy the binary and test files to the target pod where it should be executed
 
-    ```bash
+    ```console
     $ kubectl get pods
     NAME                    READY   STATUS    RESTARTS   AGE
     nginx-5fbc8786f-95rpl   1/1     Running   0          17m
@@ -489,7 +496,7 @@ Sometimes it is of interest to run the tests locally, for example during develop
 
 4. Grant execution permissions to the binary and launch the tests
 
-    ```bash
+    ```console
     $ kubectl exec -it nginx-5fbc8786f-95rpl -- chmod +x /tmp/goss-linux-amd64
     $ kubectl exec -it nginx-5fbc8786f-95rpl -- /tmp/goss-linux-amd64 --gossfile /tmp/goss.yaml --vars /tmp/runtime-parameters.yaml validate
     .........
@@ -500,12 +507,12 @@ Sometimes it is of interest to run the tests locally, for example during develop
 
 ### Useful GOSS information
 
-As our Charts implement some standardized properties, there are a number of test cases that have been found recurrently throughout the catalog:
+As our Charts implement some standardized properties, there are some test cases that have been found recurrently throughout the catalog:
 
 * Correct user ID and Group of the running container
 * Reachability of the different ports exposed through services
 * Existence of mounted volumes
-* Correct configuration was applied to a config file or enviroment variable
+* Correct configuration was applied to a config file or environment variable
 * Existence of a created Service Account
 * Restricted capabilities are applied to a running container
 * Valuable CLI checks (when available)
@@ -517,4 +524,4 @@ As our Charts implement some standardized properties, there are a number of test
 * [ ] Main test file name should be `goss.yaml`
 * [ ] Tests should not rely on system packages (e.g. `curl`). Favor built-in GOSS primitives instead
 * [ ] Prefer checking the exit status of a command rather than looking for a specific output. This will avoid most of the potential flakiness
-* [ ] Use templating to parametrize tests with the help of the `runtime-parameters.yaml` file. This `.yaml` can only contain chart's defined parameters and Goss tests should conform to its structure, not the other way around.
+* [ ] Use templating to parametrize tests with the help of the `runtime-parameters.yaml` file. This `.yaml` can only contain the chart's defined parameters and Goss tests should conform to its structure, not the other way around.

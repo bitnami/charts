@@ -1,8 +1,31 @@
 # Changelog
 
+## 4.7.5 (2025-02-19)
+
+* [bitnami/grafana-loki] Release 4.7.5 ([#31998](https://github.com/bitnami/charts/pull/31998))
+
+## <small>4.7.4 (2025-02-04)</small>
+
+* [bitnami/grafana-loki] Release 4.7.4 (#31755) ([be0b82c](https://github.com/bitnami/charts/commit/be0b82c2bfab634f0a8bd34bfff69e3d75022cc7)), closes [#31755](https://github.com/bitnami/charts/issues/31755)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>4.7.3 (2025-01-24)</small>
+
+* [bitnami/grafana-loki] Release 4.7.3 (#31555) ([0b13d6c](https://github.com/bitnami/charts/commit/0b13d6ca01415d39b86f59e0b11e53aa9ccdd0a7)), closes [#31555](https://github.com/bitnami/charts/issues/31555)
+
+## <small>4.7.2 (2025-01-17)</small>
+
+* [bitnami/grafana-loki] Release 4.7.2 (#31418) ([2ec50f1](https://github.com/bitnami/charts/commit/2ec50f1a6d09f974b2d45dd78f438466d3449233)), closes [#31418](https://github.com/bitnami/charts/issues/31418)
+
+## <small>4.7.1 (2024-12-18)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/grafana-loki] Release 4.7.1 (#31097) ([9ccfb23](https://github.com/bitnami/charts/commit/9ccfb23668ecb1a785c0aa12f18b69fce21a7400)), closes [#31097](https://github.com/bitnami/charts/issues/31097)
+
 ## 4.7.0 (2024-12-10)
 
-* [bitnami/grafana-loki] Detect non-standard images ([#30876](https://github.com/bitnami/charts/pull/30876))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/grafana-loki] Detect non-standard images (#30876) ([cb2d1b1](https://github.com/bitnami/charts/commit/cb2d1b14eda9779e2da95aa80108590f968ddcb0)), closes [#30876](https://github.com/bitnami/charts/issues/30876)
 
 ## <small>4.6.25 (2024-12-05)</small>
 

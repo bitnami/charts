@@ -109,7 +109,6 @@ Here is an example of the environment configuration bootstrapping an etcd cluste
 | 2       | ETCD_NAME                        | etcd-2                                                                                                                                                                                                |
 | 2       | ETCD_INITIAL_ADVERTISE_PEER_URLS | <http://etcd-2.etcd-headless.default.svc.cluster.local:2380>                                                                                                                                            |
 |---------|----------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| *       | ETCD_INITIAL_CLUSTER_STATE       | new                                                                                                                                                                                                   |
 | *       | ETCD_INITIAL_CLUSTER_TOKEN       | etcd-cluster-k8s                                                                                                                                                                                      |
 | *       | ETCD_INITIAL_CLUSTER             | etcd-0=<http://etcd-0.etcd-headless.default.svc.cluster.local:2380>,etcd-1=<http://etcd-1.etcd-headless.default.svc.cluster.local:2380>,etcd-2=<http://etcd-2.etcd-headless.default.svc.cluster.local:2380> |
 
@@ -405,11 +404,9 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 | `auth.peer.caFilename`                 | Name of the file containing the peer CA certificate                                                                  | `""`                   |
 | `autoCompactionMode`                   | Auto compaction mode, by default periodic. Valid values: "periodic", "revision".                                     | `""`                   |
 | `autoCompactionRetention`              | Auto compaction retention for mvcc key value store in hour, by default 0, means disabled                             | `""`                   |
-| `initialClusterState`                  | Initial cluster state. Allowed values: 'new' or 'existing'                                                           | `""`                   |
 | `initialClusterToken`                  | Initial cluster token. Can be used to protect etcd from cross-cluster-interaction, which might corrupt the clusters. | `etcd-cluster-k8s`     |
 | `logLevel`                             | Sets the log level for the etcd process. Allowed values: 'debug', 'info', 'warn', 'error', 'panic', 'fatal'          | `info`                 |
 | `maxProcs`                             | Limits the number of operating system threads that can execute user-level                                            | `""`                   |
-| `removeMemberOnContainerTermination`   | Use a PreStop hook to remove the etcd members from the etcd cluster on container termination                         | `true`                 |
 | `configuration`                        | etcd configuration. Specify content for etcd.conf.yml                                                                | `""`                   |
 | `existingConfigmap`                    | Existing ConfigMap with etcd configuration                                                                           | `""`                   |
 | `extraEnvVars`                         | Extra environment variables to be set on etcd container                                                              | `[]`                   |
@@ -628,6 +625,33 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 | `serviceAccount.annotations`                  | Additional annotations to be included on the service account | `{}`    |
 | `serviceAccount.labels`                       | Additional labels to be included on the service account      | `{}`    |
 
+### etcd "pre-upgrade" K8s Job parameters
+
+| Name                                                              | Description                                                                                                                                                                                                                                                     | Value            |
+| ----------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
+| `preUpgradeJob.enabled`                                           | Enable running a pre-upgrade job on Helm upgrades that removes obsolete members                                                                                                                                                                                 | `true`           |
+| `preUpgradeJob.annotations`                                       | Add annotations to the etcd "pre-upgrade" job                                                                                                                                                                                                                   | `{}`             |
+| `preUpgradeJob.podLabels`                                         | Additional pod labels for etcd "pre-upgrade" job                                                                                                                                                                                                                | `{}`             |
+| `preUpgradeJob.podAnnotations`                                    | Additional pod annotations for etcd "pre-upgrade" job                                                                                                                                                                                                           | `{}`             |
+| `preUpgradeJob.containerSecurityContext.enabled`                  | Enabled "pre-upgrade" job's containers' Security Context                                                                                                                                                                                                        | `true`           |
+| `preUpgradeJob.containerSecurityContext.seLinuxOptions`           | Set SELinux options in "pre-upgrade" job's containers                                                                                                                                                                                                           | `{}`             |
+| `preUpgradeJob.containerSecurityContext.runAsUser`                | Set runAsUser in "pre-upgrade" job's containers' Security Context                                                                                                                                                                                               | `1001`           |
+| `preUpgradeJob.containerSecurityContext.runAsGroup`               | Set runAsUser in "pre-upgrade" job's containers' Security Context                                                                                                                                                                                               | `1001`           |
+| `preUpgradeJob.containerSecurityContext.runAsNonRoot`             | Set runAsNonRoot in "pre-upgrade" job's containers' Security Context                                                                                                                                                                                            | `true`           |
+| `preUpgradeJob.containerSecurityContext.readOnlyRootFilesystem`   | Set readOnlyRootFilesystem in "pre-upgrade" job's containers' Security Context                                                                                                                                                                                  | `true`           |
+| `preUpgradeJob.containerSecurityContext.privileged`               | Set privileged in "pre-upgrade" job's containers' Security Context                                                                                                                                                                                              | `false`          |
+| `preUpgradeJob.containerSecurityContext.allowPrivilegeEscalation` | Set allowPrivilegeEscalation in "pre-upgrade" job's containers' Security Context                                                                                                                                                                                | `false`          |
+| `preUpgradeJob.containerSecurityContext.capabilities.add`         | List of capabilities to be added in "pre-upgrade" job's containers                                                                                                                                                                                              | `[]`             |
+| `preUpgradeJob.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped in "pre-upgrade" job's containers                                                                                                                                                                                            | `["ALL"]`        |
+| `preUpgradeJob.containerSecurityContext.seccompProfile.type`      | Set seccomp profile in "pre-upgrade" job's containers                                                                                                                                                                                                           | `RuntimeDefault` |
+| `preUpgradeJob.podSecurityContext.enabled`                        | Enabled "pre-upgrade" job's pods' Security Context                                                                                                                                                                                                              | `true`           |
+| `preUpgradeJob.podSecurityContext.fsGroupChangePolicy`            | Set fsGroupChangePolicy in "pre-upgrade" job's pods' Security Context                                                                                                                                                                                           | `Always`         |
+| `preUpgradeJob.podSecurityContext.sysctls`                        | List of sysctls to allow in "pre-upgrade" job's pods' Security Context                                                                                                                                                                                          | `[]`             |
+| `preUpgradeJob.podSecurityContext.supplementalGroups`             | List of supplemental groups to add to "pre-upgrade" job's pods' Security Context                                                                                                                                                                                | `[]`             |
+| `preUpgradeJob.podSecurityContext.fsGroup`                        | Set fsGroup in "pre-upgrade" job's pods' Security Context                                                                                                                                                                                                       | `1001`           |
+| `preUpgradeJob.resourcesPreset`                                   | Set etcd "pre-upgrade" job's container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if preUpgradeJob.resources is set (preUpgradeJob.resources is recommended for production). | `micro`          |
+| `preUpgradeJob.resources`                                         | Set etcd "pre-upgrade" job's container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                      | `{}`             |
+
 ### Defragmentation parameters
 
 | Name                                                               | Description                                                                                                                                | Value            |
@@ -703,6 +727,14 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/etcd
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 11.0.0
+
+This version introduces the following breaking changes:
+
+- Remove `initialClusterState` which was unreliable at detecting cluster state. From now on, each node will contact other members to determine cluster state. If no members are available and the data dir is empty, then it bootstraps a new cluster.
+- Remove `removeMemberOnContainerTermination` which was unreliable at removing stale members during replica count updates. Instead, a pre-upgrade hook is added to check and remove stale members.
+- Remove support for manual scaling with `kubectl` or autoscaler. Upgrading of any kind including increasing replica count must be done with `helm upgrade` exclusively. CD automation tools that respect Helm hooks such as ArgoCD can also be used.
 
 ### To 10.7.0
 
@@ -826,7 +858,7 @@ kubectl delete statefulset etcd --cascade=false
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

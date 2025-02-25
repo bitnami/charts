@@ -1,8 +1,21 @@
 # Changelog
 
-## 9.3.1 (2024-12-14)
+## 9.3.4 (2025-02-20)
 
-* [bitnami/spark] Release 9.3.1 ([#31041](https://github.com/bitnami/charts/pull/31041))
+* [bitnami/spark] Release 9.3.4 ([#32043](https://github.com/bitnami/charts/pull/32043))
+
+## <small>9.3.3 (2025-01-28)</small>
+
+* [bitnami/spark] Release 9.3.3 (#31629) ([e3b25fd](https://github.com/bitnami/charts/commit/e3b25fd171105803c76475111ffd44474f92ae12)), closes [#31629](https://github.com/bitnami/charts/issues/31629)
+
+## <small>9.3.2 (2024-12-21)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/spark] Release 9.3.2 (#31136) ([a1c8548](https://github.com/bitnami/charts/commit/a1c854821dca9f467d4ae999880d15dc702f5afc)), closes [#31136](https://github.com/bitnami/charts/issues/31136)
+
+## <small>9.3.1 (2024-12-14)</small>
+
+* [bitnami/spark] Release 9.3.1 (#31041) ([092c28c](https://github.com/bitnami/charts/commit/092c28c197402c2d06ec821a86d6656df696f568)), closes [#31041](https://github.com/bitnami/charts/issues/31041)
 
 ## 9.3.0 (2024-12-10)
 

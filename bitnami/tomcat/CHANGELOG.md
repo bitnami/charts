@@ -1,8 +1,31 @@
 # Changelog
 
+## 11.5.4 (2025-02-14)
+
+* [bitnami/tomcat] Release 11.5.4 ([#31926](https://github.com/bitnami/charts/pull/31926))
+
+## <small>11.5.3 (2025-02-11)</small>
+
+* [bitnami/tomcat] Release 11.5.3 (#31875) ([823f656](https://github.com/bitnami/charts/commit/823f656236b559e07e61fd99d47ea05488ee0ca4)), closes [#31875](https://github.com/bitnami/charts/issues/31875)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>11.5.2 (2025-01-28)</small>
+
+* [bitnami/tomcat] Release 11.5.2 (#31626) ([8df20cf](https://github.com/bitnami/charts/commit/8df20cf13c0b7c0edcbbb46e406c5e12a1d4b892)), closes [#31626](https://github.com/bitnami/charts/issues/31626)
+
+## <small>11.5.1 (2025-01-14)</small>
+
+* [bitnami/tomcat] Release 11.5.1 (#31370) ([b524bc1](https://github.com/bitnami/charts/commit/b524bc1571c226de23cb9f058ddb8fe7387b065c)), closes [#31370](https://github.com/bitnami/charts/issues/31370)
+
+## 11.5.0 (2024-12-19)
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/tomcat] chore(jmx-exporter): Upgrade image and change args (#31104) ([95b6681](https://github.com/bitnami/charts/commit/95b66814b50b2ac7b23d9f1987d207700f222d24)), closes [#31104](https://github.com/bitnami/charts/issues/31104)
+
 ## 11.4.0 (2024-12-10)
 
-* [bitnami/tomcat] Detect non-standard images ([#30949](https://github.com/bitnami/charts/pull/30949))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/tomcat] Detect non-standard images (#30949) ([936a5de](https://github.com/bitnami/charts/commit/936a5dee502a7761e05d5e2254bb0ddba15a4a0b)), closes [#30949](https://github.com/bitnami/charts/issues/30949)
 
 ## <small>11.3.3 (2024-12-10)</small>
 

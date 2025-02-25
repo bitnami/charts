@@ -83,7 +83,7 @@ spec:
               #!/bin/bash
               # HACK: Mastodon does not allow having a /tmp directory world-writable, so we need to create a /tmp dir
               # with more restricted permissions
-              mkdir /tmp/tmp-dir
+              mkdir -p /tmp/tmp-dir
           {{- if .Values.defaultInitContainers.prepareDirs.resources }}
           resources: {{- toYaml .Values.defaultInitContainers.prepareDirs.resources | nindent 12 }}
           {{- else if ne .Values.defaultInitContainers.prepareDirs.resourcesPreset "none" }}

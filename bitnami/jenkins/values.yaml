@@ -89,7 +89,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/jenkins
-  tag: 2.479.2-debian-12-r0
+  tag: 2.492.1-debian-12-r3
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -385,7 +385,7 @@ agent:
   image:
     registry: docker.io
     repository: bitnami/jenkins-agent
-    tag: 0.3283.0-debian-12-r1
+    tag: 0.3283.0-debian-12-r7
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1040,7 +1040,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r33
+    tag: 12-debian-12-r38
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

@@ -13,6 +13,20 @@ Return the target Kubernetes version
 {{- end -}}
 
 {{/*
+Return true if the apiVersion is supported
+Usage:
+{{ include "common.capabilities.apiVersions.has" (dict "version" "batch/v1" "context" $) }}
+*/}}
+{{- define "common.capabilities.apiVersions.has" -}}
+{{- $providedAPIVersions := default .context.Values.apiVersions ((.context.Values.global).apiVersions) -}}
+{{- if and (empty $providedAPIVersions) (.context.Capabilities.APIVersions.Has .version) -}}
+    {{- true -}}
+{{- else if has .version $providedAPIVersions -}}
+    {{- true -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the appropriate apiVersion for poddisruptionbudget.
 */}}
 {{- define "common.capabilities.policy.apiVersion" -}}
@@ -33,6 +47,18 @@ Return the appropriate apiVersion for networkpolicy.
 {{- print "extensions/v1beta1" -}}
 {{- else -}}
 {{- print "networking.k8s.io/v1" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the appropriate apiVersion for job.
+*/}}
+{{- define "common.capabilities.job.apiVersion" -}}
+{{- $kubeVersion := include "common.capabilities.kubeVersion" . -}}
+{{- if and (not (empty $kubeVersion)) (semverCompare "<1.21-0" $kubeVersion) -}}
+{{- print "batch/v1beta1" -}}
+{{- else -}}
+{{- print "batch/v1" -}}
 {{- end -}}
 {{- end -}}
 

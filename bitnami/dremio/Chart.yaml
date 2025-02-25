@@ -6,39 +6,39 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: dremio
-      image: docker.io/bitnami/dremio:25.2.0-debian-12-r1
+      image: docker.io/bitnami/dremio:25.2.0-debian-12-r7
     - name: jmx-exporter
-      image: docker.io/bitnami/jmx-exporter:1.0.1-debian-12-r10
+      image: docker.io/bitnami/jmx-exporter:1.1.0-debian-12-r5
     - name: os-shell
-      image: docker.io/bitnami/os-shell:12-debian-12-r33
+      image: docker.io/bitnami/os-shell:12-debian-12-r38
 apiVersion: v2
 appVersion: 25.2.0
 dependencies:
-- condition: minio.enabled
-  name: minio
-  repository: oci://registry-1.docker.io/bitnamicharts
-  version: 14.x.x
-- condition: zookeeper.enabled
-  name: zookeeper
-  repository: oci://registry-1.docker.io/bitnamicharts
-  version: 13.x.x
-- name: common
-  repository: oci://registry-1.docker.io/bitnamicharts
-  tags:
-  - bitnami-common
-  version: 2.x.x
+  - condition: minio.enabled
+    name: minio
+    repository: oci://registry-1.docker.io/bitnamicharts
+    version: 15.x.x
+  - condition: zookeeper.enabled
+    name: zookeeper
+    repository: oci://registry-1.docker.io/bitnamicharts
+    version: 13.x.x
+  - name: common
+    repository: oci://registry-1.docker.io/bitnamicharts
+    tags:
+      - bitnami-common
+    version: 2.x.x
 description: Dremio is an open-source self-service data access tool that provides high-performance queries for interactive analytics on data lakes.
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/dremio/img/dremio-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/dremio/img/dremio-stack-220x234.png
 keywords:
-- dremio
-- data-lake
+  - dremio
+  - data-lake
 maintainers:
-- name: Broadcom, Inc. All Rights Reserved.
-  url: https://github.com/bitnami/charts
+  - name: Broadcom, Inc. All Rights Reserved.
+    url: https://github.com/bitnami/charts
 name: dremio
 sources:
-- https://github.com/bitnami/charts/tree/main/bitnami/dremio
-- https://github.com/bitnami/containers/tree/main/bitnami/dremio
-- https://github.com/dremio/dremio-oss
-version: 0.2.0
+  - https://github.com/bitnami/charts/tree/main/bitnami/dremio
+  - https://github.com/bitnami/containers/tree/main/bitnami/dremio
+  - https://github.com/dremio/dremio-oss
+version: 0.6.0

@@ -1,8 +1,29 @@
 # Changelog
 
+## 2.2.0 (2025-02-21)
+
+* [bitnami/valkey-cluster] Set `usePasswordFiles=true` by default ([#32122](https://github.com/bitnami/charts/pull/32122))
+
+## <small>2.1.3 (2025-02-20)</small>
+
+* [bitnami/valkey-cluster] Release 2.1.3 (#32066) ([6d565b3](https://github.com/bitnami/charts/commit/6d565b3a18fd2efee3764e826503fdb29b91e75b)), closes [#32066](https://github.com/bitnami/charts/issues/32066)
+
+## <small>2.1.2 (2025-02-17)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/valkey-cluster] Release 2.1.2 (#31945) ([c94c869](https://github.com/bitnami/charts/commit/c94c869389a1a09e6e1e8cda2175c3adce4aa776)), closes [#31945](https://github.com/bitnami/charts/issues/31945)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>2.1.1 (2025-01-08)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/valkey-cluster] Release 2.1.1 (#31247) ([d49d243](https://github.com/bitnami/charts/commit/d49d2432841a1042c4a750763a5ba65317302604)), closes [#31247](https://github.com/bitnami/charts/issues/31247)
+
 ## 2.1.0 (2024-12-10)
 
-* [bitnami/valkey-cluster] Detect non-standard images ([#30951](https://github.com/bitnami/charts/pull/30951))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 3) (#30688) ([10a49f9](https://github.com/bitnami/charts/commit/10a49f9ff2db1d9d11a6edd1c40a9f61803241bc)), closes [#30688](https://github.com/bitnami/charts/issues/30688)
+* [bitnami/valkey-cluster] Detect non-standard images (#30951) ([82e7a6a](https://github.com/bitnami/charts/commit/82e7a6aedc9a3534b7fa4f46f968a74623858bae)), closes [#30951](https://github.com/bitnami/charts/issues/30951)
 
 ## <small>2.0.2 (2024-12-01)</small>
 

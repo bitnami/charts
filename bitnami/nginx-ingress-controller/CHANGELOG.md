@@ -1,8 +1,47 @@
 # Changelog
 
+## 11.6.9 (2025-02-20)
+
+* [bitnami/nginx-ingress-controller] Release 11.6.9 ([#32023](https://github.com/bitnami/charts/pull/32023))
+
+## <small>11.6.8 (2025-02-05)</small>
+
+* [bitnami/nginx-ingress-controller] Release 11.6.8 (#31771) ([d4abec8](https://github.com/bitnami/charts/commit/d4abec8c5e8807f09f9a0b9b50abee0f431ad09c)), closes [#31771](https://github.com/bitnami/charts/issues/31771)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>11.6.7 (2025-01-29)</small>
+
+* [bitnami/nginx-ingress-controller] Add --enable-metrics command line argument (#31605) ([a0952e6](https://github.com/bitnami/charts/commit/a0952e66f47fd798b940f6b48705626aa8f66cb5)), closes [#31605](https://github.com/bitnami/charts/issues/31605)
+
+## <small>11.6.6 (2025-01-24)</small>
+
+* [bitnami/nginx-ingress-controller] Release 11.6.6 (#31576) ([e107d55](https://github.com/bitnami/charts/commit/e107d55a9114bc30359e4c2805cd17b4eb6b78c2)), closes [#31576](https://github.com/bitnami/charts/issues/31576)
+
+## <small>11.6.5 (2025-01-17)</small>
+
+* [bitnami/nginx-ingress-controller] Release 11.6.5 (#31437) ([94ca4e6](https://github.com/bitnami/charts/commit/94ca4e6c730d99c34d2a52d9c7bcfd12f5a25e1b)), closes [#31437](https://github.com/bitnami/charts/issues/31437)
+
+## <small>11.6.4 (2025-01-10)</small>
+
+* [bitnami/nginx-ingress-controller] Release 11.6.4 (#31300) ([dafa15f](https://github.com/bitnami/charts/commit/dafa15f8e54bd49618a0c8e64ca630307c6aab32)), closes [#31300](https://github.com/bitnami/charts/issues/31300)
+
+## <small>11.6.3 (2025-01-08)</small>
+
+* [bitnami/nginx-ingress-controller] Release 11.6.3 (#31266) ([99d2e46](https://github.com/bitnami/charts/commit/99d2e4646714a801a0576d0bbc3307793aed780a)), closes [#31266](https://github.com/bitnami/charts/issues/31266)
+
+## <small>11.6.2 (2025-01-08)</small>
+
+* [bitnami/nginx-ingress-controller] Release 11.6.2 (#31250) ([04b60b7](https://github.com/bitnami/charts/commit/04b60b7c47f7df12d5712c698d659b925041df5e)), closes [#31250](https://github.com/bitnami/charts/issues/31250)
+
+## <small>11.6.1 (2024-12-31)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/nginx-ingress-controller] Release 11.6.1 (#31188) ([cf402b9](https://github.com/bitnami/charts/commit/cf402b9b53fe6aa48a1d10e1cbd57a5145ef4479)), closes [#31188](https://github.com/bitnami/charts/issues/31188)
+
 ## 11.6.0 (2024-12-10)
 
-* [bitnami/nginx-ingress-controller] Detect non-standard images ([#30961](https://github.com/bitnami/charts/pull/30961))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/nginx-ingress-controller] Detect non-standard images (#30961) ([705a15e](https://github.com/bitnami/charts/commit/705a15efcb568567837cb5e53df6b1f5391231c8)), closes [#30961](https://github.com/bitnami/charts/issues/30961)
 
 ## <small>11.5.5 (2024-12-04)</small>
 
@@ -1494,7 +1533,7 @@
 ## <small>3.4.7 (2019-05-29)</small>
 
 * Change syntax because of linter failing ([adfc357](https://github.com/bitnami/charts/commit/adfc35728c2a8a9def9e1897b3772d64df621354))
-* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79)), closes [#issuecomment-496883321](https://github.com/bitnami/charts/issues/issuecomment-496883321)
+* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79))
 * Use immutable tags in the main images ([17ca4f5](https://github.com/bitnami/charts/commit/17ca4f5c91da33da03f9e2d411fe5e004e825c4d))
 
 ## <small>3.4.6 (2019-05-28)</small>

@@ -1,8 +1,44 @@
 # Changelog
 
+## 20.9.0 (2025-02-20)
+
+* [bitnami/redis] Add ACL Authentication for Sentinel Nodes ([#31974](https://github.com/bitnami/charts/pull/31974))
+
+## 20.8.0 (2025-02-20)
+
+* [bitnami/redis] feat: add parameter to disable checksums (#31948) ([990014f](https://github.com/bitnami/charts/commit/990014f4d627d9a681d9775af69d11ad207c156a)), closes [#31948](https://github.com/bitnami/charts/issues/31948)
+
+## <small>20.7.2 (2025-02-20)</small>
+
+* [bitnami/redis] Release 20.7.2 (#32033) ([829c44e](https://github.com/bitnami/charts/commit/829c44eddcc0f0fdc3e80d49acd7b4ee41b0408a)), closes [#32033](https://github.com/bitnami/charts/issues/32033)
+
+## <small>20.7.1 (2025-02-16)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/redis] Release 20.7.1 (#31943) ([e82cc74](https://github.com/bitnami/charts/commit/e82cc74d4bcdf5a352d0de26c600c7aa9098390f)), closes [#31943](https://github.com/bitnami/charts/issues/31943)
+
+## 20.7.0 (2025-02-04)
+
+* [bitnami/redis] Redis ACL support to the Bitnami Redis Helm Chart (#31707) ([9c6e5d6](https://github.com/bitnami/charts/commit/9c6e5d6fa4460281e1275bf4e5ba9dfd482d79e2)), closes [#31707](https://github.com/bitnami/charts/issues/31707)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>20.6.3 (2025-01-14)</small>
+
+* [bitnami/redis] fix: update JSON schema to allow string values for values passed to tpl (#30526) ([2c78a06](https://github.com/bitnami/charts/commit/2c78a06e5e351506a02a4ebbd7b706ebbe987169)), closes [#30526](https://github.com/bitnami/charts/issues/30526)
+
+## <small>20.6.2 (2025-01-07)</small>
+
+* [bitnami/redis] Release 20.6.2 (#31238) ([f24c74c](https://github.com/bitnami/charts/commit/f24c74cf287e64a25688ae0aab0362c3119f9f20)), closes [#31238](https://github.com/bitnami/charts/issues/31238)
+
+## <small>20.6.1 (2024-12-21)</small>
+
+* [bitnami/redis] Release 20.6.1 (#31138) ([2da450b](https://github.com/bitnami/charts/commit/2da450bd72c598237763760d9128e11a7599ec32)), closes [#31138](https://github.com/bitnami/charts/issues/31138)
+
 ## 20.6.0 (2024-12-16)
 
-* [bitname/redis] Add support for master and replicas resources to be annotated ([#31034](https://github.com/bitnami/charts/pull/31034))
+* [bitname/redis] Add support for master and replicas resources to be annotated (#31034) ([5111fa5](https://github.com/bitnami/charts/commit/5111fa5201b1cec4bf3c9aab8806bee45d07e4c6)), closes [#31034](https://github.com/bitnami/charts/issues/31034)
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* Redis Readme: fix typo in value key name (#31007) ([4a8c60a](https://github.com/bitnami/charts/commit/4a8c60aa11316a73e846c3316b36132822e30956)), closes [#31007](https://github.com/bitnami/charts/issues/31007)
 
 ## 20.5.0 (2024-12-10)
 
@@ -693,7 +729,7 @@
 
 ## <small>17.4.2 (2023-01-09)</small>
 
-* [bitnami/redis] Sentinel deployment: Fix Failover at graceful shutdown (#14133) ([0274e44](https://github.com/bitnami/charts/commit/0274e44ae4460f91a3e25c20e12be11bc8874c95)), closes [#14133](https://github.com/bitnami/charts/issues/14133) [#13021](https://github.com/bitnami/charts/issues/13021) [#12598](https://github.com/bitnami/charts/issues/12598) [#13956](https://github.com/bitnami/charts/issues/13956) [/github.com/bitnami/charts/pull/13021#issuecomment-1289177976](https://github.com//github.com/bitnami/charts/pull/13021/issues/issuecomment-1289177976) [#13956](https://github.com/bitnami/charts/issues/13956)
+* [bitnami/redis] Sentinel deployment: Fix Failover at graceful shutdown (#14133) ([0274e44](https://github.com/bitnami/charts/commit/0274e44ae4460f91a3e25c20e12be11bc8874c95)), closes [#14133](https://github.com/bitnami/charts/issues/14133) [#13021](https://github.com/bitnami/charts/issues/13021) [#12598](https://github.com/bitnami/charts/issues/12598) [#13956](https://github.com/bitnami/charts/issues/13956) [#13956](https://github.com/bitnami/charts/issues/13956)
 
 ## <small>17.4.1 (2023-01-03)</small>
 

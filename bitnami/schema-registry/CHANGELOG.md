@@ -1,8 +1,22 @@
 # Changelog
 
+## 23.1.3 (2025-02-21)
+
+* [bitnami/schema-registry] Release 23.1.3 ([#32104](https://github.com/bitnami/charts/pull/32104))
+
+## <small>23.1.2 (2025-01-28)</small>
+
+* [bitnami/schema-registry] Release 23.1.2 (#31640) ([4658912](https://github.com/bitnami/charts/commit/465891264547c39d6ef0530c61ba2536308791c7)), closes [#31640](https://github.com/bitnami/charts/issues/31640)
+
+## <small>23.1.1 (2025-01-13)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/schema-registry] Release 23.1.1 (#31325) ([8d00a21](https://github.com/bitnami/charts/commit/8d00a21f9a7b4c1c9dad0981ff73a4c23a1419d2)), closes [#31325](https://github.com/bitnami/charts/issues/31325)
+
 ## 23.1.0 (2024-12-10)
 
-* [bitnami/schema-registry] Detect non-standard images ([#30965](https://github.com/bitnami/charts/pull/30965))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/schema-registry] Detect non-standard images (#30965) ([fbbcc3f](https://github.com/bitnami/charts/commit/fbbcc3f9f48f692cb9c316f4d317c3fa0795ea3b)), closes [#30965](https://github.com/bitnami/charts/issues/30965)
 
 ## 23.0.0 (2024-12-04)
 

@@ -1,8 +1,28 @@
 # Changelog
 
+## 6.3.4 (2025-02-18)
+
+* [bitnami/aspnet-core] Release 6.3.4 ([#31973](https://github.com/bitnami/charts/pull/31973))
+
+## <small>6.3.3 (2025-02-11)</small>
+
+* [bitnami/aspnet-core] Release 6.3.3 (#31874) ([db3c9e4](https://github.com/bitnami/charts/commit/db3c9e400b8152027d120b00eaba06e23f98a562)), closes [#31874](https://github.com/bitnami/charts/issues/31874)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>6.3.2 (2025-01-14)</small>
+
+* [bitnami/aspnet-core] Release 6.3.2 (#31366) ([512fab2](https://github.com/bitnami/charts/commit/512fab283eed06406546218f56fad376799945c3)), closes [#31366](https://github.com/bitnami/charts/issues/31366)
+
+## <small>6.3.1 (2024-12-28)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/aspnet-core] Release 6.3.1 (#31180) ([55d9d5f](https://github.com/bitnami/charts/commit/55d9d5f9eef1c62c1a126b5262ee78b5ecaa0a2b)), closes [#31180](https://github.com/bitnami/charts/issues/31180)
+
 ## 6.3.0 (2024-12-10)
 
-* [bitnami/aspnet-core] Detect non-standard images ([#30865](https://github.com/bitnami/charts/pull/30865))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/aspnet-core] Detect non-standard images (#30865) ([1329644](https://github.com/bitnami/charts/commit/13296445b45cfa3c696d0bfbe289f61fafc1467e)), closes [#30865](https://github.com/bitnami/charts/issues/30865)
 
 ## <small>6.2.21 (2024-11-18)</small>
 

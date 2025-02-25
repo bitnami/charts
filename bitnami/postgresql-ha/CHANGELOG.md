@@ -1,8 +1,64 @@
 # Changelog
 
-## 15.1.1 (2024-12-12)
+## 15.2.3 (2025-02-21)
 
-* [bitnami/postgresql-ha]Add Storage Class Configuration to Templates ([#30993](https://github.com/bitnami/charts/pull/30993))
+* [bitnami/postgresql-ha] Release 15.2.3 ([#32132](https://github.com/bitnami/charts/pull/32132))
+
+## <small>15.2.2 (2025-02-21)</small>
+
+* [bitnami/postgresql-ha] Release 15.2.2 (#32096) ([9aa77e8](https://github.com/bitnami/charts/commit/9aa77e84b4473cc488ebfb2645f882ddeb612b69)), closes [#32096](https://github.com/bitnami/charts/issues/32096)
+
+## <small>15.2.1 (2025-02-20)</small>
+
+* [bitnami/postgresql-ha] Release 15.2.1 (#32082) ([97d1814](https://github.com/bitnami/charts/commit/97d1814fabc335ca4c789612f0f6ac88d29cb66b)), closes [#32082](https://github.com/bitnami/charts/issues/32082)
+
+## 15.2.0 (2025-02-20)
+
+* [bitnami/postgresql-ha] Add resources for backup cronjob (#31957) ([c11a433](https://github.com/bitnami/charts/commit/c11a4331eebba0bd59f7ca64f633119ff5e90e9f)), closes [#31957](https://github.com/bitnami/charts/issues/31957)
+
+## <small>15.1.10 (2025-02-20)</small>
+
+* [bitnami/postgresql-ha] Release 15.1.10 (#32028) ([10e7f83](https://github.com/bitnami/charts/commit/10e7f83460ee3c2a359b4bf563ce2e035a55b57b)), closes [#32028](https://github.com/bitnami/charts/issues/32028)
+
+## <small>15.1.9 (2025-02-14)</small>
+
+* [bitnami/postgresql-ha] Release 15.1.9 (#31934) ([6e9d889](https://github.com/bitnami/charts/commit/6e9d889c4d44815eb87367ddfcb22ba5d81286a4)), closes [#31934](https://github.com/bitnami/charts/issues/31934)
+
+## <small>15.1.8 (2025-02-13)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/postgresql-ha] Release 15.1.8 (#31918) ([b9b90af](https://github.com/bitnami/charts/commit/b9b90afdac2ec76a269aa902057a06fd17b44da0)), closes [#31918](https://github.com/bitnami/charts/issues/31918)
+
+## <small>15.1.7 (2025-02-03)</small>
+
+* [bitnami/postgresql-ha] Release 15.1.7 (#31701) ([b9ab51b](https://github.com/bitnami/charts/commit/b9ab51b67afa6603a28951a9d86a475b4f4fb5f4)), closes [#31701](https://github.com/bitnami/charts/issues/31701)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>15.1.6 (2025-01-13)</small>
+
+* [bitnami/postgresql-ha] Release 15.1.6 (#31341) ([30c2b39](https://github.com/bitnami/charts/commit/30c2b394da7c7438ac98f56767c1d45b517a396c)), closes [#31341](https://github.com/bitnami/charts/issues/31341)
+
+## <small>15.1.5 (2025-01-13)</small>
+
+* [bitnami/postgresql-ha] setting ServiceAccount also when is not created by the bitnami chart (#31293 ([2316c35](https://github.com/bitnami/charts/commit/2316c354ab2b1cb54f57e0b5f0e108faec7d523b)), closes [#31293](https://github.com/bitnami/charts/issues/31293)
+
+## <small>15.1.4 (2024-12-23)</small>
+
+* [bitnami/postgresql-ha] Release 15.1.4 (#31144) ([6a0ca8f](https://github.com/bitnami/charts/commit/6a0ca8f0d148a69e005f39bb2bef839ac8fb35ad)), closes [#31144](https://github.com/bitnami/charts/issues/31144)
+
+## <small>15.1.3 (2024-12-23)</small>
+
+* [bitnami/postgresql-ha] Release 15.1.3 (#31135) ([b1fde05](https://github.com/bitnami/charts/commit/b1fde05a5dcb73ca619da5300686562f70d8fb1c)), closes [#31135](https://github.com/bitnami/charts/issues/31135)
+
+## <small>15.1.2 (2024-12-20)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/postgresql-ha] Fix typo in documentation (#31069) ([b3b4ac7](https://github.com/bitnami/charts/commit/b3b4ac71e48c593a1e4da42b00445fb0ec47b1c1)), closes [#31069](https://github.com/bitnami/charts/issues/31069)
+* [bitnami/postgresql-ha] Release 15.1.2 (#31132) ([a352680](https://github.com/bitnami/charts/commit/a352680c0b1a3c92b24b2888ed5fb8d532f9ba6d)), closes [#31132](https://github.com/bitnami/charts/issues/31132)
+
+## <small>15.1.1 (2024-12-13)</small>
+
+* [bitnami/postgresql-ha]Add Storage Class Configuration to Templates (#30993) ([485796b](https://github.com/bitnami/charts/commit/485796bfe633a508a8d679548d0fdb024a8ad92e)), closes [#30993](https://github.com/bitnami/charts/issues/30993)
 
 ## 15.1.0 (2024-12-10)
 
@@ -1679,7 +1735,7 @@
 
 ## 4.0.0 (2020-10-08)
 
-* [bitnami/postgresql-ha] Revert https://github.com/bitnami/charts/pull/3681 (#3953) ([739b4b9](https://github.com/bitnami/charts/commit/739b4b948368367ef38d50013a1da380c8d77225)), closes [#3953](https://github.com/bitnami/charts/issues/3953)
+* [bitnami/postgresql-ha] Revert https://github.com/bitnami/charts/pull/3681 (#3953) ([739b4b9](https://github.com/bitnami/charts/commit/739b4b948368367ef38d50013a1da380c8d77225))
 
 ## 3.10.0 (2020-10-08)
 
@@ -1742,7 +1798,7 @@
 
 ## <small>3.5.7 (2020-08-26)</small>
 
-* [bitnami/postgresql-ha] Show correct default for pgpool replicaCount (#3407) ([dae6058](https://github.com/bitnami/charts/commit/dae60580b386e5698fda3f9d3ed047bab176384b)), closes [#3407](https://github.com/bitnami/charts/issues/3407) [/github.com/bitnami/charts/blob/07bf067a628615aa8b182da90c0fc733d3a792ff/bitnami/postgresql-ha/values.yaml#L348](https://github.com//github.com/bitnami/charts/blob/07bf067a628615aa8b182da90c0fc733d3a792ff/bitnami/postgresql-ha/values.yaml/issues/L348)
+* [bitnami/postgresql-ha] Show correct default for pgpool replicaCount (#3407) ([dae6058](https://github.com/bitnami/charts/commit/dae60580b386e5698fda3f9d3ed047bab176384b)), closes [#3407](https://github.com/bitnami/charts/issues/3407)
 
 ## <small>3.5.6 (2020-08-21)</small>
 

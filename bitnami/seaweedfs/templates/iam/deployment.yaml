@@ -1,0 +1,226 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.filer.enabled .Values.iam.enabled }}
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: {{ template "seaweedfs.iam.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: iam
+  {{- if or .Values.iam.statefulsetAnnotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.iam.statefulsetAnnotations .Values.commonAnnotations) "context" .) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.iam.replicaCount }}
+  {{- $podLabels := include "common.tplvalues.merge" (dict "values" (list .Values.iam.podLabels .Values.commonLabels) "context" .) }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/component: iam
+  {{- if .Values.iam.updateStrategy }}
+  strategy: {{- toYaml .Values.iam.updateStrategy | nindent 4 }}
+  {{- end }}
+  template:
+    metadata:
+      annotations:
+        checksum/security-config: {{ include (print $.Template.BasePath "/security-configmap.yaml") . | sha256sum }}
+        {{- if .Values.iam.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.iam.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/component: iam
+    spec:
+      {{- include "seaweedfs.imagePullSecrets" . | nindent 6 }}
+      serviceAccountName: {{ template "seaweedfs.serviceAccountName" . }}    
+      automountServiceAccountToken: {{ .Values.iam.automountServiceAccountToken }}
+      {{- if .Values.iam.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.iam.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.iam.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.iam.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        {{- if not (empty .Values.iam.podAffinityPreset) }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.iam.podAffinityPreset "component" "iam" "customLabels" $podLabels "context" $) | nindent 10 }}
+        {{- end }}
+        {{- if not (empty .Values.iam.podAntiAffinityPreset) }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.iam.podAntiAffinityPreset "component" "iam" "customLabels" $podLabels "context" $) | nindent 10 }}
+        {{- end }}
+        {{- if not (empty .Values.iam.nodeAffinityPreset.type) }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.iam.nodeAffinityPreset.type "key" .Values.iam.nodeAffinityPreset.key "values" .Values.iam.nodeAffinityPreset.values) | nindent 10 }}
+        {{- end }}
+      {{- end }}
+      {{- if .Values.iam.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.iam.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.iam.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.iam.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.iam.priorityClassName }}
+      priorityClassName: {{ .Values.iam.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.iam.schedulerName }}
+      schedulerName: {{ .Values.iam.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.iam.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.iam.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.iam.podSecurityContext.enabled }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.iam.podSecurityContext "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.iam.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.iam.terminationGracePeriodSeconds }}
+      {{- end }}
+      initContainers:
+        {{- if .Values.iam.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.iam.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+      containers:
+        - name: seaweedfs
+          image: {{ template "seaweedfs.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.iam.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.iam.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.iam.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.iam.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.iam.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.iam.args "context" $) | nindent 12 }}
+          {{- else }}
+          args:
+            - -logtostderr=true
+            - -v={{ .Values.iam.logLevel }}
+            - iam
+            - -port={{ .Values.iam.containerPorts.http }}
+            - -filer={{ printf "%s:%d" (include "seaweedfs.filer.fullname" .) (int .Values.filer.service.ports.http) }}
+            - -master={{ printf "%s:%d" (include "seaweedfs.master.fullname" .) (int .Values.master.service.ports.http) }}
+          {{- end }}
+          env:
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
+            - name: WEED_CLUSTER_DEFAULT
+              value: {{ .Values.clusterDefault | quote }}
+            {{- if .Values.iam.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.iam.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if or .Values.iam.extraEnvVarsCM .Values.iam.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.iam.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.iam.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.iam.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.iam.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- end }}
+          {{- if .Values.iam.resources }}
+          resources: {{- toYaml .Values.iam.resources | nindent 12 }}
+          {{- else if ne .Values.iam.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.iam.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          ports:
+            - name: "http"
+              containerPort: {{ .Values.iam.containerPorts.http }}
+            {{- if .Values.iam.extraContainerPorts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.iam.extraContainerPorts "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.iam.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.iam.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.iam.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.iam.livenessProbe "enabled") "context" $) | nindent 12 }}
+            exec:
+              command:
+                - pgrep
+                - -f
+                - iam
+          {{- end }}
+          {{- if .Values.iam.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.iam.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.iam.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.iam.readinessProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: "http"
+          {{- end }}
+          {{- if .Values.iam.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.iam.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.iam.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.iam.startupProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: "http"
+          {{- end }}
+          {{- end }}
+          {{- if .Values.iam.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.iam.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: security-config
+              mountPath: /etc/seaweedfs/security.toml
+              subPath: security.toml
+              readOnly: true
+            {{- if .Values.security.mTLS.enabled  }}
+            - name: ca-cert
+              readOnly: true
+              mountPath: /certs/ca
+            - name: master-cert
+              readOnly: true
+              mountPath: /certs/master
+            - name: filer-cert
+              readOnly: true
+              mountPath: /certs/filer
+            - name: volume-cert
+              readOnly: true
+              mountPath: /certs/volume
+            - name: client-cert
+              readOnly: true
+              mountPath: /certs/client
+            {{- end }}
+          {{- if .Values.iam.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.iam.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+        {{- if .Values.iam.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.iam.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        - name: empty-dir
+          emptyDir: {}
+        - name: security-config
+          configMap:
+            name: {{ printf "%s-security" (include "common.names.fullname" .) }}
+        {{- if .Values.security.mTLS.enabled  }}
+        - name: ca-cert
+          secret:
+            secretName: {{ template "seaweedfs.security.mTLS.caSecretName" . }}
+            items:
+              - key: tls.crt
+                path: tls.crt
+        - name: master-cert
+          secret:
+            secretName: {{ template "seaweedfs.security.mTLS.master.secretName" . }}
+        - name: filer-cert
+          secret:
+            secretName: {{ template "seaweedfs.security.mTLS.filer.secretName" . }}
+        - name: volume-cert
+          secret:
+            secretName: {{ template "seaweedfs.security.mTLS.volume.secretName" . }}
+        - name: client-cert
+          secret:
+            secretName: {{ template "seaweedfs.security.mTLS.client.secretName" . }}
+        {{- end }}
+        {{- if .Values.iam.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.iam.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+{{- end }}

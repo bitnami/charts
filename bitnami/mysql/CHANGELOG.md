@@ -1,8 +1,33 @@
 # Changelog
 
+## 12.3.0 (2025-02-21)
+
+* [bitnami/mysql] Set `usePasswordFiles=true` by default ([#32113](https://github.com/bitnami/charts/pull/32113))
+
+## <small>12.2.4 (2025-02-19)</small>
+
+* [bitnami/*] Fix typo in named template name (#31858) ([b739b69](https://github.com/bitnami/charts/commit/b739b69532e637bd33b4a44eeb422c3e749eac77)), closes [#31858](https://github.com/bitnami/charts/issues/31858)
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/mysql] Release 12.2.4 (#32021) ([8c5baf6](https://github.com/bitnami/charts/commit/8c5baf6a53374260ce741b8565d87cbd53c0d781)), closes [#32021](https://github.com/bitnami/charts/issues/32021)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>12.2.2 (2025-01-22)</small>
+
+* [bitnami/mysql] Release 12.2.2 (#31512) ([289c6ca](https://github.com/bitnami/charts/commit/289c6caf9700c024f2b0202eb9a5dd3ec7c4d581)), closes [#31512](https://github.com/bitnami/charts/issues/31512)
+
+## <small>12.2.1 (2025-01-04)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/mysql] Release 12.2.1 (#31215) ([65fb2fa](https://github.com/bitnami/charts/commit/65fb2fa98b20f187dfecca09042fd8fbf70f6b95)), closes [#31215](https://github.com/bitnami/charts/issues/31215)
+
 ## 12.2.0 (2024-12-10)
 
-* [bitnami/mysql] Detect non-standard images ([#30929](https://github.com/bitnami/charts/pull/30929))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 4) (#30669) ([a4ec006](https://github.com/bitnami/charts/commit/a4ec00624589023a70a7094fcfb9f12e382bc280)), closes [#30669](https://github.com/bitnami/charts/issues/30669)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 6) (#30675) ([7b9cd04](https://github.com/bitnami/charts/commit/7b9cd04c2ffc730a0d62da787f2d4967c0ede47c)), closes [#30675](https://github.com/bitnami/charts/issues/30675)
+* [bitnami/*] docs: :memo: Unify "Securing Traffic using TLS" section (#30707) ([b572333](https://github.com/bitnami/charts/commit/b57233336e4fe9af928ecb4f2a5f334011efb1bc)), closes [#30707](https://github.com/bitnami/charts/issues/30707)
+* [bitnami/mysql] Detect non-standard images (#30929) ([183be06](https://github.com/bitnami/charts/commit/183be06fea3080ab24f24c3c960efe79b186f5ef)), closes [#30929](https://github.com/bitnami/charts/issues/30929)
 
 ## 12.1.0 (2024-11-27)
 
@@ -1251,7 +1276,7 @@
 ## <small>5.0.3 (2019-05-29)</small>
 
 * Change syntax because of linter failing ([adfc357](https://github.com/bitnami/charts/commit/adfc35728c2a8a9def9e1897b3772d64df621354))
-* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79)), closes [#issuecomment-496883321](https://github.com/bitnami/charts/issues/issuecomment-496883321)
+* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79))
 * Use immutable tags in the main images ([17ca4f5](https://github.com/bitnami/charts/commit/17ca4f5c91da33da03f9e2d411fe5e004e825c4d))
 
 ## <small>5.0.2 (2019-05-28)</small>

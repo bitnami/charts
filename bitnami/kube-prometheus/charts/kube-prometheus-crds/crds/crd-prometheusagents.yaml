@@ -1,12 +1,12 @@
 # Source: https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v{version}/example/prometheus-operator-crd/monitoring.coreos.com_prometheusagents.yaml
-# Version: 0.79.0
+# Version: 0.80.1
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.16.5
-    operator.prometheus.io/version: 0.79.0
+    controller-gen.kubebuilder.io/version: v0.17.1
+    operator.prometheus.io/version: 0.80.1
   name: prometheusagents.monitoring.coreos.com
 spec:
   group: monitoring.coreos.com
@@ -4730,7 +4730,6 @@ spec:
               mode:
                 description: |-
                   Mode defines how the Prometheus operator deploys the PrometheusAgent pod(s).
-                  For now this field has no effect.
 
                   (Alpha) Using this field requires the `PrometheusAgentDaemonSet` feature gate to be enabled.
                 enum:
@@ -4754,6 +4753,13 @@ spec:
                   Settings related to the OTLP receiver feature.
                   It requires Prometheus >= v2.55.0.
                 properties:
+                  keepIdentifyingResourceAttributes:
+                    description: |-
+                      Enables adding `service.name`, `service.namespace` and `service.instance.id`
+                      resource attributes to the `target_info` metric, on top of converting them into the `instance` and `job` labels.
+
+                      It requires Prometheus >= v3.1.0.
+                    type: boolean
                   promoteResourceAttributes:
                     description: List of OpenTelemetry Attributes that should be promoted
                       to metric labels, defaults to none.
@@ -4766,7 +4772,6 @@ spec:
                   translationStrategy:
                     description: |-
                       Configures how the OTLP receiver endpoint translates the incoming metrics.
-                      If unset, Prometheus uses its default value.
 
                       It requires Prometheus >= v3.0.0.
                     enum:
@@ -6368,6 +6373,19 @@ spec:
 
                         Only one scrape class can be set as the default.
                       type: boolean
+                    fallbackScrapeProtocol:
+                      description: |-
+                        The protocol to use if a scrape returns blank, unparseable, or otherwise invalid Content-Type.
+                        It will only apply if the scrape resource doesn't specify any FallbackScrapeProtocol
+
+                        It requires Prometheus >= v3.0.0.
+                      enum:
+                      - PrometheusProto
+                      - OpenMetricsText0.0.1
+                      - OpenMetricsText1.0.0
+                      - PrometheusText0.0.4
+                      - PrometheusText1.0.0
+                      type: string
                     metricRelabelings:
                       description: |-
                         MetricRelabelings configures the relabeling rules to apply to all samples before ingestion.
@@ -6857,17 +6875,17 @@ spec:
                     type: object
                 type: object
                 x-kubernetes-map-type: atomic
-              scrapeFallbackProtocol:
+              scrapeFailureLogFile:
                 description: |-
-                  The protocol to use if a scrape returns blank, unparseable, or otherwise invalid Content-Type.
+                  File to which scrape failures are logged.
+                  Reloading the configuration will reopen the file.
 
-                  It requires Prometheus >= v3.0.0.
-                enum:
-                - PrometheusProto
-                - OpenMetricsText0.0.1
-                - OpenMetricsText1.0.0
-                - PrometheusText0.0.4
-                - PrometheusText1.0.0
+                  If the filename has an empty path, e.g. 'file.log', The Prometheus Pods
+                  will mount the file into an emptyDir volume at `/var/log/prometheus`.
+                  If a full path is provided, e.g. '/var/log/prometheus/file.log', you
+                  must mount a volume in the specified directory and it must be writable.
+                  It requires Prometheus >= v2.55.0.
+                minLength: 1
                 type: string
               scrapeInterval:
                 default: 30s
@@ -6906,8 +6924,9 @@ spec:
                 type: array
                 x-kubernetes-list-type: set
               scrapeTimeout:
-                description: Number of seconds to wait until a scrape request times
-                  out.
+                description: |-
+                  Number of seconds to wait until a scrape request times out.
+                  The value cannot be greater than the scrape interval otherwise the operator will reject the resource.
                 pattern: ^(0|(([0-9]+)y)?(([0-9]+)w)?(([0-9]+)d)?(([0-9]+)h)?(([0-9]+)m)?(([0-9]+)s)?(([0-9]+)ms)?)$
                 type: string
               secrets:
@@ -7276,6 +7295,16 @@ spec:
                     type: object
                 type: object
                 x-kubernetes-map-type: atomic
+              serviceName:
+                description: |-
+                  The name of the service name used by the underlying StatefulSet(s) as the governing service.
+                  If defined, the Service  must be created before the Prometheus/PrometheusAgent resource in the same namespace and it must define a selector that matches the pod labels.
+                  If empty, the operator will create and manage a headless service named `prometheus-operated` for Prometheus resources,
+                  or `prometheus-agent-operated` for PrometheusAgent resources.
+                  When deploying multiple Prometheus/PrometheusAgent resources in the same namespace, it is recommended to specify a different value for each.
+                  See https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#stable-network-id for more details.
+                minLength: 1
+                type: string
               shards:
                 description: |-
                   Number of shards to distribute scraped targets onto.
@@ -10436,7 +10465,12 @@ spec:
                     description: Defines the TLS parameters for HTTPS.
                     properties:
                       cert:
-                        description: Contains the TLS certificate for the server.
+                        description: |-
+                          Secret or ConfigMap containing the TLS certificate for the web server.
+
+                          Either `keySecret` or `keyFile` must be defined.
+
+                          It is mutually exclusive with `certFile`.
                         properties:
                           configMap:
                             description: ConfigMap containing data to use for the
@@ -10489,20 +10523,28 @@ spec:
                         type: object
                       certFile:
                         description: |-
-                          Path to the TLS certificate file in the Prometheus container for the server.
-                          Mutually exclusive with `cert`.
+                          Path to the TLS certificate file in the container for the web server.
+
+                          Either `keySecret` or `keyFile` must be defined.
+
+                          It is mutually exclusive with `cert`.
                         type: string
                       cipherSuites:
                         description: |-
-                          List of supported cipher suites for TLS versions up to TLS 1.2. If empty,
-                          Go default cipher suites are used. Available cipher suites are documented
-                          in the go documentation: https://golang.org/pkg/crypto/tls/#pkg-constants
+                          List of supported cipher suites for TLS versions up to TLS 1.2.
+
+                          If not defined, the Go default cipher suites are used.
+                          Available cipher suites are documented in the Go documentation:
+                          https://golang.org/pkg/crypto/tls/#pkg-constants
                         items:
                           type: string
                         type: array
                       client_ca:
-                        description: Contains the CA certificate for client certificate
+                        description: |-
+                          Secret or ConfigMap containing the CA certificate for client certificate
                           authentication to the server.
+
+                          It is mutually exclusive with `clientCAFile`.
                         properties:
                           configMap:
                             description: ConfigMap containing data to use for the
@@ -10555,30 +10597,43 @@ spec:
                         type: object
                       clientAuthType:
                         description: |-
-                          Server policy for client authentication. Maps to ClientAuth Policies.
+                          The server policy for client TLS authentication.
+
                           For more detail on clientAuth options:
                           https://golang.org/pkg/crypto/tls/#ClientAuthType
                         type: string
                       clientCAFile:
                         description: |-
-                          Path to the CA certificate file for client certificate authentication to the server.
-                          Mutually exclusive with `client_ca`.
+                          Path to the CA certificate file for client certificate authentication to
+                          the server.
+
+                          It is mutually exclusive with `client_ca`.
                         type: string
                       curvePreferences:
                         description: |-
                           Elliptic curves that will be used in an ECDHE handshake, in preference
-                          order. Available curves are documented in the go documentation:
+                          order.
+
+                          Available curves are documented in the Go documentation:
                           https://golang.org/pkg/crypto/tls/#CurveID
                         items:
                           type: string
                         type: array
                       keyFile:
                         description: |-
-                          Path to the TLS key file in the Prometheus container for the server.
-                          Mutually exclusive with `keySecret`.
+                          Path to the TLS private key file in the container for the web server.
+
+                          If defined, either `cert` or `certFile` must be defined.
+
+                          It is mutually exclusive with `keySecret`.
                         type: string
                       keySecret:
-                        description: Secret containing the TLS key for the server.
+                        description: |-
+                          Secret containing the TLS private key for the web server.
+
+                          Either `cert` or `certFile` must be defined.
+
+                          It is mutually exclusive with `keyFile`.
                         properties:
                           key:
                             description: The key of the secret to select from.  Must
@@ -10602,18 +10657,17 @@ spec:
                         type: object
                         x-kubernetes-map-type: atomic
                       maxVersion:
-                        description: Maximum TLS version that is acceptable. Defaults
-                          to TLS13.
+                        description: Maximum TLS version that is acceptable.
                         type: string
                       minVersion:
-                        description: Minimum TLS version that is acceptable. Defaults
-                          to TLS12.
+                        description: Minimum TLS version that is acceptable.
                         type: string
                       preferServerCipherSuites:
                         description: |-
-                          Controls whether the server selects the
-                          client's most preferred cipher suite, or the server's most preferred
-                          cipher suite. If true then the server's preference, as expressed in
+                          Controls whether the server selects the client's most preferred cipher
+                          suite, or the server's most preferred cipher suite.
+
+                          If true then the server's preference, as expressed in
                           the order of elements in cipherSuites, is used.
                         type: boolean
                     type: object

@@ -1,8 +1,27 @@
 # Changelog
 
+## 14.1.4 (2025-02-19)
+
+* [bitnami/mariadb-galera] Release 14.1.4 ([#32013](https://github.com/bitnami/charts/pull/32013))
+
+## <small>14.1.3 (2025-02-07)</small>
+
+* [bitnami/mariadb-galera] Release 14.1.3 (#31790) ([dc056e9](https://github.com/bitnami/charts/commit/dc056e927ffd96cfcbc8037f17a8b263e80d1c55)), closes [#31790](https://github.com/bitnami/charts/issues/31790)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>14.1.2 (2025-01-15)</small>
+
+* [bitnami/mariadb-galera] Release 14.1.2 (#31381) ([54eddfc](https://github.com/bitnami/charts/commit/54eddfcd09984cca6de3f3ed85f5c6064fdaa74d)), closes [#31381](https://github.com/bitnami/charts/issues/31381)
+
+## <small>14.1.1 (2025-01-12)</small>
+
+* [bitnami/mariadb-galera] Release 14.1.1 (#31307) ([48ae84d](https://github.com/bitnami/charts/commit/48ae84d4ea739100fa94661e0efe1419ff482dbb)), closes [#31307](https://github.com/bitnami/charts/issues/31307)
+* Update README.md (#31195) ([d5777a0](https://github.com/bitnami/charts/commit/d5777a0a496ea4ff9f7f587934dc7630fc6c7fb7)), closes [#31195](https://github.com/bitnami/charts/issues/31195)
+
 ## 14.1.0 (2024-12-10)
 
-* [bitnami/mariadb-galera] Detect non-standard images ([#30920](https://github.com/bitnami/charts/pull/30920))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/mariadb-galera] Detect non-standard images (#30920) ([f1dd6c8](https://github.com/bitnami/charts/commit/f1dd6c867e871139ba31ff28ba208ae25248a556)), closes [#30920](https://github.com/bitnami/charts/issues/30920)
 
 ## <small>14.0.14 (2024-12-03)</small>
 

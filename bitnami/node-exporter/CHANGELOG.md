@@ -1,8 +1,40 @@
 # Changelog
 
+## 4.5.7 (2025-02-20)
+
+* [bitnami/node-exporter] Release 4.5.7 ([#32024](https://github.com/bitnami/charts/pull/32024))
+
+## <small>4.5.6 (2025-02-17)</small>
+
+* [bitnami/node-exporter] Release 4.5.6 (#31950) ([d5c57ee](https://github.com/bitnami/charts/commit/d5c57ee01ff2ba388b64fa7437c25ba6f2721b56)), closes [#31950](https://github.com/bitnami/charts/issues/31950)
+
+## <small>4.5.5 (2025-02-12)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/node-exporter] Release 4.5.5 (#31904) ([3853ffd](https://github.com/bitnami/charts/commit/3853ffd2338c526cc7108b7ee6adc082efb5eddf)), closes [#31904](https://github.com/bitnami/charts/issues/31904)
+
+## <small>4.5.4 (2025-02-05)</small>
+
+* [bitnami/node-exporter] Release 4.5.4 (#31772) ([f06a76e](https://github.com/bitnami/charts/commit/f06a76e802690eec4ef4efd997c4be21f1b784b3)), closes [#31772](https://github.com/bitnami/charts/issues/31772)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>4.5.3 (2025-01-24)</small>
+
+* [bitnami/node-exporter] Release 4.5.3 (#31574) ([6c16122](https://github.com/bitnami/charts/commit/6c1612203c16b46cbd65f9ff0013a33c0f4c45ca)), closes [#31574](https://github.com/bitnami/charts/issues/31574)
+
+## <small>4.5.2 (2025-01-17)</small>
+
+* [bitnami/node-exporter] Release 4.5.2 (#31438) ([5b52be5](https://github.com/bitnami/charts/commit/5b52be5d111931d193fe2abd369838f2b8368299)), closes [#31438](https://github.com/bitnami/charts/issues/31438)
+
+## <small>4.5.1 (2025-01-13)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/node-exporter] Release 4.5.1 (#31322) ([2a79a91](https://github.com/bitnami/charts/commit/2a79a9190d05e3994acae2a2775deeba261f0143)), closes [#31322](https://github.com/bitnami/charts/issues/31322)
+
 ## 4.5.0 (2024-12-10)
 
-* [bitnami/node-exporter] Detect non-standard images ([#30932](https://github.com/bitnami/charts/pull/30932))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/node-exporter] Detect non-standard images (#30932) ([1550707](https://github.com/bitnami/charts/commit/1550707a5720a351ee35855e3ae7dfe8dfc439f2)), closes [#30932](https://github.com/bitnami/charts/issues/30932)
 
 ## <small>4.4.18 (2024-12-04)</small>
 

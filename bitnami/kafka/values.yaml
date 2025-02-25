@@ -41,6 +41,9 @@ global:
 ## @param kubeVersion Override Kubernetes version
 ##
 kubeVersion: ""
+## @param apiVersions Override Kubernetes API versions reported by .Capabilities
+##
+apiVersions: []
 ## @param nameOverride String to partially override common.names.fullname
 ##
 nameOverride: ""
@@ -94,7 +97,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/kafka
-  tag: 3.9.0-debian-12-r1
+  tag: 3.9.0-debian-12-r10
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -153,10 +156,12 @@ existingLog4jConfigMap: ""
 ## @param heapOpts Kafka Java Heap configuration
 ##
 heapOpts: -XX:InitialRAMPercentage=75 -XX:MaxRAMPercentage=75
-## @param brokerRackAssignment Set Broker Assignment for multi tenant environment Allowed values: `aws-az`
+## @param brokerRackAssignment Set Broker Assignment for multi tenant environment Allowed values: `aws-az`, `azure`
 ## ref: https://cwiki.apache.org/confluence/display/KAFKA/KIP-392%3A+Allow+consumers+to+fetch+from+closest+replica
 ##
 brokerRackAssignment: ""
+## @param brokerRackAssignmentApiVersion Set Broker Assignment API version when brokerRackAssignment set to : `azure`
+brokerRackAssignmentApiVersion: "2023-11-15"
 ## @param interBrokerProtocolVersion Override the setting 'inter.broker.protocol.version' during the ZK migration.
 ## Ref. https://docs.confluent.io/platform/current/installation/migrate-zk-kraft.html
 ##
@@ -1517,7 +1522,7 @@ externalAccess:
     image:
       registry: docker.io
       repository: bitnami/kubectl
-      tag: 1.31.2-debian-12-r6
+      tag: 1.32.2-debian-12-r2
       digest: ""
       ## Specify a imagePullPolicy
       ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1835,7 +1840,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r33
+    tag: 12-debian-12-r38
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1929,7 +1934,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/jmx-exporter
-      tag: 1.0.1-debian-12-r9
+      tag: 1.1.0-debian-12-r6
       digest: ""
       ## Specify a imagePullPolicy
       ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1990,6 +1995,38 @@ metrics:
     ##     memory: 1024Mi
     ##
     resources: {}
+    ## Configure extra options for liveness probe
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+    ## @param metrics.jmx.livenessProbe.enabled Enable livenessProbe
+    ## @param metrics.jmx.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+    ## @param metrics.jmx.livenessProbe.periodSeconds Period seconds for livenessProbe
+    ## @param metrics.jmx.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+    ## @param metrics.jmx.livenessProbe.failureThreshold Failure threshold for livenessProbe
+    ## @param metrics.jmx.livenessProbe.successThreshold Success threshold for livenessProbe
+    ##
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 60
+      periodSeconds: 10
+      timeoutSeconds: 10
+      successThreshold: 1
+      failureThreshold: 3
+    ## Configure extra options for readiness probe
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+    ## @param metrics.jmx.readinessProbe.enabled Enable readinessProbe
+    ## @param metrics.jmx.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+    ## @param metrics.jmx.readinessProbe.periodSeconds Period seconds for readinessProbe
+    ## @param metrics.jmx.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+    ## @param metrics.jmx.readinessProbe.failureThreshold Failure threshold for readinessProbe
+    ## @param metrics.jmx.readinessProbe.successThreshold Success threshold for readinessProbe
+    ##
+    readinessProbe:
+      enabled: true
+      initialDelaySeconds: 30
+      periodSeconds: 10
+      timeoutSeconds: 10
+      successThreshold: 1
+      failureThreshold: 3
     ## Prometheus JMX exporter service configuration
     ##
     service:

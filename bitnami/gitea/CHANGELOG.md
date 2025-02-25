@@ -1,8 +1,46 @@
 # Changelog
 
-## 3.1.2 (2024-12-13)
+## 3.1.11 (2025-02-21)
 
-* [bitnami/gitea] Release 3.1.2 ([#31031](https://github.com/bitnami/charts/pull/31031))
+* [bitnami/gitea] Release 3.1.11 ([#32040](https://github.com/bitnami/charts/pull/32040))
+
+## <small>3.1.10 (2025-02-06)</small>
+
+* [bitnami/gitea] Release 3.1.10 (#31806) ([b32c026](https://github.com/bitnami/charts/commit/b32c0264329e5914869a5ab25e22f0c53037b782)), closes [#31806](https://github.com/bitnami/charts/issues/31806)
+
+## <small>3.1.9 (2025-02-05)</small>
+
+* [bitnami/gitea] Release 3.1.9 (#31799) ([1f04ad3](https://github.com/bitnami/charts/commit/1f04ad3e970269382ff2586e244c9b202e26fb08)), closes [#31799](https://github.com/bitnami/charts/issues/31799)
+
+## <small>3.1.8 (2025-02-04)</small>
+
+* [bitnami/gitea] Release 3.1.8 (#31753) ([987ba6c](https://github.com/bitnami/charts/commit/987ba6c0cd5f5c157a7cd314a4aecd50bbfe47ff)), closes [#31753](https://github.com/bitnami/charts/issues/31753)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>3.1.7 (2025-01-24)</small>
+
+* [bitnami/gitea] Release 3.1.7 (#31553) ([bca599d](https://github.com/bitnami/charts/commit/bca599dce849e43865249c76024417786a3fb5b5)), closes [#31553](https://github.com/bitnami/charts/issues/31553)
+
+## <small>3.1.6 (2025-01-23)</small>
+
+* [bitnami/gitea] Release 3.1.6 (#31530) ([85b96e6](https://github.com/bitnami/charts/commit/85b96e69b4087501b590240f2ad0a7840af544d5)), closes [#31530](https://github.com/bitnami/charts/issues/31530)
+
+## <small>3.1.5 (2025-01-17)</small>
+
+* [bitnami/gitea] Release 3.1.5 (#31417) ([c941f2d](https://github.com/bitnami/charts/commit/c941f2d742e004a5b13163187c5b77a6a1be3ecc)), closes [#31417](https://github.com/bitnami/charts/issues/31417)
+
+## <small>3.1.4 (2025-01-10)</small>
+
+* [bitnami/gitea] Release 3.1.4 (#31285) ([6afa662](https://github.com/bitnami/charts/commit/6afa662c1cb7c25a9e165b607ffa404364ebf8d4)), closes [#31285](https://github.com/bitnami/charts/issues/31285)
+
+## <small>3.1.3 (2025-01-09)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/gitea] Release 3.1.3 (#31276) ([50dc1bd](https://github.com/bitnami/charts/commit/50dc1bd4f77cc356862d39c919d31cba2d671b58)), closes [#31276](https://github.com/bitnami/charts/issues/31276)
+
+## <small>3.1.2 (2024-12-13)</small>
+
+* [bitnami/gitea] Release 3.1.2 (#31031) ([f137d21](https://github.com/bitnami/charts/commit/f137d2178d93c2c257339ca6fd8688cbb5a74034)), closes [#31031](https://github.com/bitnami/charts/issues/31031)
 
 ## <small>3.1.1 (2024-12-11)</small>
 

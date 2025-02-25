@@ -1,8 +1,43 @@
 # Changelog
 
-## 11.4.1 (2024-12-17)
+## 11.4.9 (2025-02-20)
 
-* [bitnami/grafana] Release 11.4.1 ([#31066](https://github.com/bitnami/charts/pull/31066))
+* [bitnami/grafana] Release 11.4.9 ([#32092](https://github.com/bitnami/charts/pull/32092))
+
+## <small>11.4.8 (2025-02-20)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/grafana] Release 11.4.8 (#32042) ([52642ef](https://github.com/bitnami/charts/commit/52642ef968fc7746c95715b13f16aebe376bdfa2)), closes [#32042](https://github.com/bitnami/charts/issues/32042)
+
+## <small>11.4.7 (2025-02-04)</small>
+
+* [bitnami/grafana] Release 11.4.7 (#31758) ([206a4c6](https://github.com/bitnami/charts/commit/206a4c6d60df350df8687d3e3f2184ab5a1512c7)), closes [#31758](https://github.com/bitnami/charts/issues/31758)
+
+## <small>11.4.6 (2025-02-04)</small>
+
+* [bitnami/grafana] Release 11.4.6 (#31732) ([33a296b](https://github.com/bitnami/charts/commit/33a296b36137ffec23b2ff26b2c3329acbe149dc)), closes [#31732](https://github.com/bitnami/charts/issues/31732)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>11.4.5 (2025-01-29)</small>
+
+* [bitnami/grafana] Release 11.4.5 (#31668) ([e45b2db](https://github.com/bitnami/charts/commit/e45b2db0e916bd7fbea3dda3e6dfbf3a69f6d294)), closes [#31668](https://github.com/bitnami/charts/issues/31668)
+
+## <small>11.4.4 (2025-01-24)</small>
+
+* [bitnami/grafana] Release 11.4.4 (#31588) ([5cd8160](https://github.com/bitnami/charts/commit/5cd8160d55d70bdc12c7dfd7e2367ff565be4ed7)), closes [#31588](https://github.com/bitnami/charts/issues/31588)
+
+## <small>11.4.3 (2025-01-17)</small>
+
+* [bitnami/grafana] Release 11.4.3 (#31424) ([b514de2](https://github.com/bitnami/charts/commit/b514de25da7da4ea5a76f27176edf271667012fc)), closes [#31424](https://github.com/bitnami/charts/issues/31424)
+
+## <small>11.4.2 (2024-12-18)</small>
+
+* [bitnami/grafana] Release 11.4.2 (#31091) ([8dd034c](https://github.com/bitnami/charts/commit/8dd034c5430463f7a813b70985ee4bb2ba50b0c5)), closes [#31091](https://github.com/bitnami/charts/issues/31091)
+
+## <small>11.4.1 (2024-12-17)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/grafana] Release 11.4.1 (#31066) ([fb58a54](https://github.com/bitnami/charts/commit/fb58a54eb763f4320640745419567f9a286f1ce3)), closes [#31066](https://github.com/bitnami/charts/issues/31066)
 
 ## 11.4.0 (2024-12-10)
 

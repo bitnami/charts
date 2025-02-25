@@ -25,6 +25,13 @@ Return the proper SeaweedFS Filer Server fullname
 {{- end -}}
 
 {{/*
+Return the proper SeaweedFS IAM Server fullname
+*/}}
+{{- define "seaweedfs.iam.fullname" -}}
+{{- printf "%s-iam" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
 Return the proper SeaweedFS Amazon S3 API fullname
 */}}
 {{- define "seaweedfs.s3.fullname" -}}
@@ -78,6 +85,17 @@ Return the proper init external database job image name
 {{- end -}}
 
 {{/*
+Returns whether wait for external database is enabled
+*/}}
+{{- define "seaweedfs.waitForDatabase.enabled" -}}
+{{- if or .Values.mariadb.enabled .Values.postgresql.enabled (and .Values.externalDatabase.enabled (eq .Values.externalDatabase.waitForDatabaseEnabled true) ) }}
+    {{- print "true" -}}
+  {{- else }}
+    {{- print "false" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "seaweedfs.imagePullSecrets" -}}
@@ -125,6 +143,17 @@ Return the Filer Server configuration configmap.
     {{- print (tpl .Values.filer.existingConfigmap .) -}}
 {{- else -}}
     {{- print (include "seaweedfs.filer.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the Filer Server notification configuration configmap.
+*/}}
+{{- define "seaweedfs.filer.notificationConfigmapName" -}}
+{{- if .Values.filer.existingNotificationConfigmap -}}
+    {{- print (tpl .Values.filer.existingNotificationConfigmap .) -}}
+{{- else -}}
+    {{- printf "%s-notification" (include "seaweedfs.filer.fullname" .) -}}
 {{- end -}}
 {{- end -}}
 
@@ -339,6 +368,7 @@ Return the database secret key name
 Returns an init-container that waits for the database to be ready
 */}}
 {{- define "seaweedfs.filer.waitForDBInitContainer" -}}
+{{ if eq "true" ( include "seaweedfs.waitForDatabase.enabled" . ) }}
 - name: wait-for-db
   image: {{ include "seaweedfs.initDatabaseJob.image" . }}
   {{- if or .Values.mariadb.enabled (and .Values.externalDatabase.enabled (eq .Values.externalDatabase.store "mariadb") ) }}
@@ -410,6 +440,7 @@ Returns an init-container that waits for the database to be ready
     - name: db-credentials
       mountPath: /secrets
 {{- end -}}
+{{- end -}}
 
 {{/*
 Returns an init-container that generates auth configuration for the Amazon S3 API
@@ -426,7 +457,12 @@ Returns an init-container that generates auth configuration for the Amazon S3 AP
   args:
     - -ec
     - |
-      #!/bin/bash
+      {{- if .Values.usePasswordFiles }}
+      export ADMIN_ACCESS_KEY_ID="$(< $ADMIN_ACCESS_KEY_ID_FILE)"
+      export ADMIN_SECRET_ACCESS_KEY="$(< $ADMIN_SECRET_ACCESS_KEY_FILE)"
+      export READ_ACCESS_KEY_ID="$(< $READ_ACCESS_KEY_ID_FILE)"
+      export READ_SECRET_ACCESS_KEY="$(< $READ_SECRET_ACCESS_KEY_FILE)"
+      {{- end }}
 
       cat > "/auth/config.json" <<EOF
       {
@@ -463,6 +499,16 @@ Returns an init-container that generates auth configuration for the Amazon S3 AP
       }
       EOF
   env:
+    {{- if .Values.usePasswordFiles }}
+    - name: ADMIN_ACCESS_KEY_ID_FILE
+      value: "/opt/bitnami/seaweed/secrets/admin_access_key_id"
+    - name: ADMIN_SECRET_ACCESS_KEY_FILE
+      value: "/opt/bitnami/seaweed/secrets/admin_secret_access_key"
+    - name: READ_ACCESS_KEY_ID_FILE
+      value: "/opt/bitnami/seaweed/secrets/read_access_key_id"
+    - name: READ_SECRET_ACCESS_KEY_FILE
+      value: "/opt/bitnami/seaweed/secrets/read_secret_access_key"
+    {{- else }}
     - name: ADMIN_ACCESS_KEY_ID
       valueFrom:
         secretKeyRef:
@@ -483,10 +529,15 @@ Returns an init-container that generates auth configuration for the Amazon S3 AP
         secretKeyRef:
           name: {{ printf "%s-auth" (include "seaweedfs.s3.fullname" .) }}
           key: read_secret_access_key
+    {{- end }}
   volumeMounts:
     - name: empty-dir
       mountPath: /auth
       subPath: auth-dir
+    {{- if .Values.usePasswordFiles }}
+    - name: seaweed-secrets
+      mountPath: /opt/bitnami/seaweed/secrets
+    {{- end}}
 {{- end -}}
 
 {{/*
@@ -508,6 +559,7 @@ Compile all warnings into a single message.
 {{- $messages := list -}}
 {{- $messages := append $messages (include "seaweedfs.validateValues.security.mTLS" .) -}}
 {{- $messages := append $messages (include "seaweedfs.validateValues.master.replicaCount" .) -}}
+{{- $messages := append $messages (include "seaweedfs.validateValues.filer.replicaCount" .) -}}
 {{- $messages := append $messages (include "seaweedfs.validateValues.volume.replicaCount" .) -}}
 {{- $messages := append $messages (include "seaweedfs.validateValues.volume.dataVolumes" .) -}}
 {{- $messages := append $messages (include "seaweedfs.validateValues.filer.database" .) -}}
@@ -552,12 +604,27 @@ Validate values of SeaweedFS - number of Master server replicas
 */}}
 {{- define "seaweedfs.validateValues.master.replicaCount" -}}
 {{- $masterReplicaCount := int .Values.master.replicaCount }}
-{{- if and .Values.master.persistence.enabled .Values.master.persistence.existingClaim (gt $masterReplicaCount 1) -}}
+{{- if and (or (and .Values.master.persistence.enabled .Values.master.persistence.existingClaim) (and .Values.master.logPersistence.enabled .Values.master.logPersistence.existingClaim)) (gt $masterReplicaCount 1) -}}
 master.replicaCount
     A single existing PVC cannot be shared between multiple Master Server replicas.
     Please set a valid number of replicas (--set master.replicaCount=1), disable persistence
-    (--set master.persistence.enabled=false) or rely on dynamic provisioning via Persitent
-    Volume Claims (--set master.persistence.existingClaim="").
+    (--set master.persistence.enabled=false,master.logPersistence.enabled=false) or
+    rely on dynamic provisioning via Persistent Volume Claims
+    (--set master.persistence.existingClaim="",master.logPersistence.existingClaim="").
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate values of SeaweedFS - number of Filer server replicas
+*/}}
+{{- define "seaweedfs.validateValues.filer.replicaCount" -}}
+{{- $filerReplicaCount := int .Values.filer.replicaCount }}
+{{- if and .Values.filer.enabled .Values.filer.logPersistence.enabled .Values.filer.logPersistence.existingClaim (gt $filerReplicaCount 1) -}}
+filer.replicaCount
+    A single existing PVC cannot be shared between multiple Filer Server replicas.
+    Please set a valid number of replicas (--set filer.replicaCount=1), disable persistence
+    (--set filer.logPersistence.enabled=false) or rely on dynamic provisioning via
+    Persistent Volume Claims (--set filer.logPersistence.existingClaim="").
 {{- end -}}
 {{- end -}}
 
@@ -574,6 +641,13 @@ volume.replicaCount
     (--set volume.dataVolumes[].persistence.enabled=false) or rely on dynamic provisioning via Persitent
     Volume Claims (--set volume.dataVolumes[].persistence.existingClaim="").
 {{- end -}}
+{{- end -}}
+{{- if and .Values.volume.logPersistence.enabled .Values.volume.logPersistence.existingClaim (gt $volumeReplicaCount 1) -}}
+volume.replicaCount
+    A single existing PVC cannot be shared between multiple Volume Server replicas.
+    Please set a valid number of replicas (--set volume.replicaCount=1), disable persistence
+    (--set volume.logPersistence.enabled=false) or rely on dynamic provisioning via Persistent Volume Claims
+    (--set volume.logPersistence.existingClaim="").
 {{- end -}}
 {{- end -}}
 

@@ -59,6 +59,12 @@ commonLabels: {}
 ## @param commonAnnotations Annotations to add to all deployed objects
 ##
 commonAnnotations: {}
+## @param configmapChecksumAnnotations Enable checksum annotations used to trigger rolling updates when ConfigMap(s) change
+##
+configmapChecksumAnnotations: true
+## @param secretChecksumAnnotations Enable checksum annotations used to trigger rolling updates when Secret(s) change
+##
+secretChecksumAnnotations: true
 ## @param secretAnnotations Annotations to add to secret
 ##
 secretAnnotations: {}
@@ -91,6 +97,7 @@ diagnosticMode:
   ##
   args:
     - infinity
+
 ## @section Redis&reg; Image parameters
 ##
 
@@ -107,7 +114,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/redis
-  tag: 7.4.1-debian-12-r2
+  tag: 7.4.2-debian-12-r4
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -138,7 +145,7 @@ auth:
   ## @param auth.enabled Enable password authentication
   ##
   enabled: true
-  ## @param auth.sentinel Enable password authentication on sentinels too
+  ## @param auth.sentinel Enable authentication on sentinels too
   ##
   sentinel: true
   ## @param auth.password Redis&reg; password
@@ -159,6 +166,27 @@ auth:
   ## @param auth.usePasswordFileFromSecret Mount password file from secret
   ##
   usePasswordFileFromSecret: true
+  ## Redis ACL restricts connections by limiting commands and key access with auth management.
+  ## ref: https://redis.io/docs/latest/operate/oss_and_stack/management/security/acl/
+  ##
+  acl:
+    ## @param auth.acl.enabled Enables the support of the Redis ACL system
+    ##
+    enabled: false
+    ## @param auth.acl.sentinel Enables the support of the Redis ACL system for Sentinel Nodes
+    ##
+    sentinel: false
+    ## @param auth.acl.users A list of the configured users in the Redis ACL system
+    ##
+    ## Example:
+    ## users:
+    ##   - username: "my-user"
+    ##     password: "mypassword"
+    ##     enabled: "on"
+    ##     commands: "+@all"
+    ##     keys: "~*"
+    ##     channels: "&*"
+    users: [ ]
 ## @param commonConfiguration [string] Common configuration to be added into the ConfigMap
 ## ref: https://redis.io/topics/config
 ##
@@ -1156,7 +1184,7 @@ sentinel:
   image:
     registry: docker.io
     repository: bitnami/redis-sentinel
-    tag: 7.4.1-debian-12-r2
+    tag: 7.4.2-debian-12-r4
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1717,7 +1745,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/redis-exporter
-    tag: 1.66.0-debian-12-r2
+    tag: 1.67.0-debian-12-r9
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -2089,7 +2117,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r33
+    tag: 12-debian-12-r38
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -2153,7 +2181,7 @@ kubectl:
   image:
     registry: docker.io
     repository: bitnami/kubectl
-    tag: 1.31.2-debian-12-r6
+    tag: 1.32.2-debian-12-r2
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -2222,7 +2250,7 @@ sysctl:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r33
+    tag: 12-debian-12-r38
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

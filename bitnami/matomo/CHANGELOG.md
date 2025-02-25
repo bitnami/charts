@@ -1,8 +1,25 @@
 # Changelog
 
+## 9.2.4 (2025-02-23)
+
+* [bitnami/matomo] Release 9.2.4 ([#32138](https://github.com/bitnami/charts/pull/32138))
+
+## <small>9.2.3 (2025-01-24)</small>
+
+* [bitnami/matomo] Release 9.2.3 (#31589) ([73a1abc](https://github.com/bitnami/charts/commit/73a1abcac62e24a371d1916c960f342a93b8f81b)), closes [#31589](https://github.com/bitnami/charts/issues/31589)
+
+## <small>9.2.2 (2025-01-15)</small>
+
+* [bitnami/matomo] Release 9.2.2 (#31382) ([fdbdfdf](https://github.com/bitnami/charts/commit/fdbdfdfc90f8fa6f2f55569d48359e6c29c67111)), closes [#31382](https://github.com/bitnami/charts/issues/31382)
+
+## <small>9.2.1 (2024-12-23)</small>
+
+* [bitnami/matomo] Release 9.2.1 (#31134) ([c0307c7](https://github.com/bitnami/charts/commit/c0307c7717372da54334ff98d4e8ac1155cb035d)), closes [#31134](https://github.com/bitnami/charts/issues/31134)
+
 ## 9.2.0 (2024-12-17)
 
-* [bitnami/matomo] add initContainers parameter to CronJob pods ([#31065](https://github.com/bitnami/charts/pull/31065))
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/matomo] add initContainers parameter to CronJob pods (#31065) ([27feba9](https://github.com/bitnami/charts/commit/27feba938379638644aae8e61f8f90c30d331b79)), closes [#31065](https://github.com/bitnami/charts/issues/31065)
 
 ## <small>9.1.1 (2024-12-12)</small>
 

@@ -1,8 +1,23 @@
 # Changelog
 
+## 9.1.3 (2025-02-21)
+
+* [bitnami/mongodb-sharded] Release 9.1.3 ([#32134](https://github.com/bitnami/charts/pull/32134))
+
+## <small>9.1.2 (2025-02-03)</small>
+
+* [bitnami/mongodb-sharded] Release 9.1.2 (#31698) ([ae3a2f2](https://github.com/bitnami/charts/commit/ae3a2f21844f4a2f585800ae5b21e7c731fa96fa)), closes [#31698](https://github.com/bitnami/charts/issues/31698)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>9.1.1 (2025-01-15)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/mongodb-sharded] Release 9.1.1 (#31389) ([3792427](https://github.com/bitnami/charts/commit/379242754da4f52c1d5cecfa6746124c75341fe5)), closes [#31389](https://github.com/bitnami/charts/issues/31389)
+
 ## 9.1.0 (2024-12-10)
 
-* [bitnami/mongodb-sharded] Detect non-standard images ([#30927](https://github.com/bitnami/charts/pull/30927))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/mongodb-sharded] Detect non-standard images (#30927) ([3c8ef42](https://github.com/bitnami/charts/commit/3c8ef421a131f3c69c1bf6b95bbae8d1c7ef6b31)), closes [#30927](https://github.com/bitnami/charts/issues/30927)
 
 ## <small>9.0.5 (2024-12-06)</small>
 
@@ -682,7 +697,7 @@
 
 ## <small>4.0.6 (2022-02-23)</small>
 
-* Merge branch 'master' of https://github.com/bitnami/charts (#9163) ([7413cdb](https://github.com/bitnami/charts/commit/7413cdb88d22c2f158b6f47285c2ebdb653b9896)), closes [#9163](https://github.com/bitnami/charts/issues/9163)
+* Merge branch 'master' of https://github.com/bitnami/charts (#9163) ([7413cdb](https://github.com/bitnami/charts/commit/7413cdb88d22c2f158b6f47285c2ebdb653b9896))
 
 ## <small>4.0.5 (2022-02-21)</small>
 
@@ -894,7 +909,7 @@
 
 ## 3.6.0 (2021-06-11)
 
-* [bitnami/mongodb-sharded] Added `dataNodeSelectorLoopId` and `dataNodeTolerationLoopId` to /shard/sh ([ccae74f](https://github.com/bitnami/charts/commit/ccae74f2316acf0fe879b10a914739047a874178)), closes [#6601](https://github.com/bitnami/charts/issues/6601) [/github.com/bitnami/charts/pull/6601#pullrequestreview-679450792](https://github.com//github.com/bitnami/charts/pull/6601/issues/pullrequestreview-679450792)
+* [bitnami/mongodb-sharded] Added `dataNodeSelectorLoopId` and `dataNodeTolerationLoopId` to /shard/sh ([ccae74f](https://github.com/bitnami/charts/commit/ccae74f2316acf0fe879b10a914739047a874178)), closes [#6601](https://github.com/bitnami/charts/issues/6601)
 
 ## 3.5.0 (2021-06-09)
 

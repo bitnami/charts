@@ -1,8 +1,31 @@
 # Changelog
 
-## 3.1.5 (2024-12-15)
+## 3.2.0 (2025-02-20)
 
-* [bitnami/scylladb] Release 3.1.5 ([#31047](https://github.com/bitnami/charts/pull/31047))
+* [bitnami/scylladb] feat: use new helper for checking API versions ([#32062](https://github.com/bitnami/charts/pull/32062))
+
+## <small>3.1.9 (2025-02-20)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/scylladb] Release 3.1.9 (#32036) ([9d9a8aa](https://github.com/bitnami/charts/commit/9d9a8aabd2414041109b06df909eda3e203f1749)), closes [#32036](https://github.com/bitnami/charts/issues/32036)
+
+## <small>3.1.8 (2025-02-09)</small>
+
+* [bitnami/scylladb] Release 3.1.8 (#31843) ([a9eaac8](https://github.com/bitnami/charts/commit/a9eaac81a11fa24b0192687c0e733e849f07a627)), closes [#31843](https://github.com/bitnami/charts/issues/31843)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>3.1.7 (2025-01-28)</small>
+
+* [bitnami/scylladb] Release 3.1.7 (#31639) ([a122513](https://github.com/bitnami/charts/commit/a1225132b61778f056e07df4d66938b56da43afc)), closes [#31639](https://github.com/bitnami/charts/issues/31639)
+
+## <small>3.1.6 (2025-01-24)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/scylladb] Release 3.1.6 (#31590) ([3eb07e9](https://github.com/bitnami/charts/commit/3eb07e97379d284b72019d903db189e17285f295)), closes [#31590](https://github.com/bitnami/charts/issues/31590)
+
+## <small>3.1.5 (2024-12-15)</small>
+
+* [bitnami/scylladb] Release 3.1.5 (#31047) ([c02b9fa](https://github.com/bitnami/charts/commit/c02b9fa57c91e06b31ecee338e585bba0526f47e)), closes [#31047](https://github.com/bitnami/charts/issues/31047)
 
 ## <small>3.1.4 (2024-12-12)</small>
 

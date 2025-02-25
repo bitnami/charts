@@ -1,8 +1,38 @@
 # Changelog
 
+## 4.9.7 (2025-02-19)
+
+* [bitnami/grafana-operator] Release 4.9.7 ([#32000](https://github.com/bitnami/charts/pull/32000))
+
+## <small>4.9.6 (2025-02-04)</small>
+
+* [bitnami/grafana-operator] Release 4.9.6 (#31756) ([66d597e](https://github.com/bitnami/charts/commit/66d597ebb1387d54c489b7aa61e869dbf304045f)), closes [#31756](https://github.com/bitnami/charts/issues/31756)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>4.9.5 (2025-01-24)</small>
+
+* [bitnami/grafana-operator] Release 4.9.5 (#31556) ([5527847](https://github.com/bitnami/charts/commit/5527847778d863eca1d4754ec611f88552335988)), closes [#31556](https://github.com/bitnami/charts/issues/31556)
+
+## <small>4.9.4 (2025-01-21)</small>
+
+* [bitnami/grafana-operator] Add another missing CRD (#31406) ([09c1d15](https://github.com/bitnami/charts/commit/09c1d1585739f1c4e640dee8ef98a4b675d72482)), closes [#31406](https://github.com/bitnami/charts/issues/31406)
+
+## <small>4.9.3 (2025-01-17)</small>
+
+* [bitnami/grafana-operator] Release 4.9.3 (#31422) ([cd7288a](https://github.com/bitnami/charts/commit/cd7288a5a6afefe811fdcda6023863ad3dfc1ed3)), closes [#31422](https://github.com/bitnami/charts/issues/31422)
+
+## <small>4.9.2 (2025-01-16)</small>
+
+* [bitnami/grafana-operator] Release 4.9.2 (#31393) ([f4b98a6](https://github.com/bitnami/charts/commit/f4b98a615b5a98828edd0de67d40f7f7ce1358f4)), closes [#31393](https://github.com/bitnami/charts/issues/31393)
+
+## <small>4.9.1 (2025-01-12)</small>
+
+* [bitnami/grafana-operator] Release 4.9.1 (#31314) ([cff5398](https://github.com/bitnami/charts/commit/cff53987779d2a3f4151564a27c25ba235fdc3c4)), closes [#31314](https://github.com/bitnami/charts/issues/31314)
+
 ## 4.9.0 (2024-12-10)
 
-* [bitnami/grafana-operator] Detect non-standard images ([#30886](https://github.com/bitnami/charts/pull/30886))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/grafana-operator] Detect non-standard images (#30886) ([0fd9040](https://github.com/bitnami/charts/commit/0fd904034666713debda0e1e937e0f547c34dfb2)), closes [#30886](https://github.com/bitnami/charts/issues/30886)
 
 ## <small>4.8.1 (2024-12-03)</small>
 
@@ -592,7 +622,7 @@
 
 ## <small>2.7.9 (2022-11-08)</small>
 
-* [bitnami/grafana-operator] Fix wrong argument name for parameter `zapLevel` (#13372) ([4bbbd0f](https://github.com/bitnami/charts/commit/4bbbd0f25ff19f20e92a38c761147b94f3f45b00)), closes [#13372](https://github.com/bitnami/charts/issues/13372) [1#L87](https://github.com/1/issues/L87)
+* [bitnami/grafana-operator] Fix wrong argument name for parameter `zapLevel` (#13372) ([4bbbd0f](https://github.com/bitnami/charts/commit/4bbbd0f25ff19f20e92a38c761147b94f3f45b00)), closes [#13372](https://github.com/bitnami/charts/issues/13372)
 
 ## <small>2.7.8 (2022-10-19)</small>
 

@@ -24,6 +24,13 @@ data:
   SCANNER_TRIVY_SEVERITY: {{ .Values.trivy.severity | quote }}
   SCANNER_TRIVY_IGNORE_UNFIXED: {{ .Values.trivy.ignoreUnfixed | quote }}
   SCANNER_TRIVY_SKIP_UPDATE: {{ .Values.trivy.skipUpdate | quote }}
+  SCANNER_TRIVY_SKIP_JAVA_DB_UPDATE: {{ .Values.trivy.skipJavaDbUpdate | quote }}
+  {{- if .Values.trivy.dbRepository }}
+  SCANNER_TRIVY_DB_REPOSITORY: {{ .Values.trivy.dbRepository | quote }}
+  {{- end }}
+  {{- if .Values.trivy.javaDbRepository }}
+  SCANNER_TRIVY_JAVA_DB_REPOSITORY: {{ .Values.trivy.javaDbRepository | quote }}
+  {{- end }}
   SCANNER_TRIVY_INSECURE: {{ .Values.trivy.insecure | quote }}
   SCANNER_API_SERVER_ADDR: {{ printf ":%d" (ternary .Values.trivy.containerPorts.https .Values.trivy.containerPorts.http .Values.internalTLS.enabled | int) | quote }}
   {{- if .Values.internalTLS.enabled }}

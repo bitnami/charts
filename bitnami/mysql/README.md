@@ -276,7 +276,7 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 | `auth.replicationUser`      | MySQL replication user                                                                                                                                                              | `replicator`            |
 | `auth.replicationPassword`  | MySQL replication user password. Ignored if existing secret is provided                                                                                                             | `""`                    |
 | `auth.existingSecret`       | Use existing secret for password details. The secret has to contain the keys `mysql-root-password`, `mysql-replication-password` and `mysql-password`                               | `""`                    |
-| `auth.usePasswordFiles`     | Mount credentials as files instead of using an environment variable                                                                                                                 | `false`                 |
+| `auth.usePasswordFiles`     | Mount credentials as files instead of using an environment variable                                                                                                                 | `true`                  |
 | `auth.customPasswordFiles`  | Use custom password files when `auth.usePasswordFiles` is set to `true`. Define path for keys `root` and `user`, also define `replicator` if `architecture` is set to `replication` | `{}`                    |
 | `auth.authenticationPolicy` | Sets the authentication policy, by default it will use `* ,,`                                                                                                                       | `""`                    |
 | `initdbScripts`             | Dictionary of initdb scripts                                                                                                                                                        | `{}`                    |
@@ -798,7 +798,7 @@ kubectl delete statefulset mysql-slave --cascade=false
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

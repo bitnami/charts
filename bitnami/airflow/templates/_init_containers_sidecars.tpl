@@ -311,7 +311,8 @@ Returns an init-container that loads DAGs from a ConfigMap or Git repositories
       is_dir_empty "/dags/{{ include "airflow.dagsPlugins.repository.name" . }}" && git clone {{ .repository }} --depth 1 --branch {{ .branch }} /dags/{{ include "airflow.dagsPlugins.repository.name" . }}
     {{- end }}
     {{- if not (empty .Values.dags.existingConfigmap) }}
-      cp /configmap/* /dags/external
+      mkdir -p /dags/external
+      cp -v /configmap/* /dags/external
     {{- end }}
   {{- end }}
   name: load-dags

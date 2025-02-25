@@ -1,8 +1,34 @@
 # Changelog
 
-## 18.3.1 (2024-12-13)
+## 19.0.0 (2025-02-10)
 
-* [bitnami/nginx] fix nginx init containers with writable file system ([#30810](https://github.com/bitnami/charts/pull/30810))
+* [bitnami/nginx] Release 19.0.0 ([#31852](https://github.com/bitnami/charts/pull/31852))
+
+## <small>18.3.6 (2025-02-05)</small>
+
+* [bitnami/nginx] Release 18.3.6 (#31797) ([1aa9efc](https://github.com/bitnami/charts/commit/1aa9efc97be21ef2d4eb51e83d75113e784e1c4c)), closes [#31797](https://github.com/bitnami/charts/issues/31797)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>18.3.5 (2025-01-10)</small>
+
+* [bitnami/nginx] Release 18.3.5 (#31299) ([39b16f8](https://github.com/bitnami/charts/commit/39b16f8c763702a522ec35a7effd5440ff3cda85)), closes [#31299](https://github.com/bitnami/charts/issues/31299)
+
+## <small>18.3.4 (2025-01-08)</small>
+
+* [bitnami/nginx] Release 18.3.4 (#31265) ([4a91230](https://github.com/bitnami/charts/commit/4a912308f58b5b36993828007e3dfb98a277f095)), closes [#31265](https://github.com/bitnami/charts/issues/31265)
+
+## <small>18.3.3 (2025-01-08)</small>
+
+* [bitnami/nginx] Release 18.3.3 (#31248) ([f4f89f6](https://github.com/bitnami/charts/commit/f4f89f6ee2a15e6a277959f58e96f78b36571c7e)), closes [#31248](https://github.com/bitnami/charts/issues/31248)
+
+## <small>18.3.2 (2025-01-01)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/nginx] Release 18.3.2 (#31191) ([a921fd9](https://github.com/bitnami/charts/commit/a921fd9f388032c02e6a625595f394d7680b0c41)), closes [#31191](https://github.com/bitnami/charts/issues/31191)
+
+## <small>18.3.1 (2024-12-13)</small>
+
+* [bitnami/nginx] fix nginx init containers with writable file system (#30810) ([4688b13](https://github.com/bitnami/charts/commit/4688b13bf34325945954f62dc73cf925272e8248)), closes [#30810](https://github.com/bitnami/charts/issues/30810)
 
 ## 18.3.0 (2024-12-10)
 

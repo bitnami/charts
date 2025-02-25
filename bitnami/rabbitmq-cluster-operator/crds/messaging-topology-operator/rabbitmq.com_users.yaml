@@ -1,12 +1,12 @@
 # Source: https://raw.githubusercontent.com/rabbitmq/messaging-topology-operator/v{version}/config/crd/bases/rabbitmq.com_users.yaml
-# Version: 1.15.0
+# Version: 1.16.0
 # VersionOf: rmq-messaging-topology-operator
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.15.0
+    controller-gen.kubebuilder.io/version: v0.17.1
   name: users.rabbitmq.com
 spec:
   group: rabbitmq.com
@@ -49,12 +49,10 @@ spec:
                   Defines a Secret containing the credentials for the User. If this field is omitted, random a username and
                   password will be generated. The Secret must have the following keys in its Data field:
 
-
                    * `username` – Must be present or the import will fail.
                    * `passwordHash` – The SHA-512 hash of the password. If the hash is an empty string, a passwordless user
                      will be created. For more information, see https://www.rabbitmq.com/docs/passwords.
                    * `password` – Plain-text password. Will be used only if the `passwordHash` key is missing.
-
 
                   Note that this import only occurs at creation time, and is ignored once a password has been set on a User.
                 properties:
@@ -65,9 +63,7 @@ spec:
                       This field is effectively required, but due to backwards compatibility is
                       allowed to be empty. Instances of this type with an empty value here are
                       almost certainly wrong.
-                      TODO: Add other useful fields. apiVersion, kind, uid?
                       More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
-                      TODO: Drop `kubebuilder:default` when controller-gen doesn't need it https://github.com/kubernetes-sigs/kubebuilder/issues/3896.
                     type: string
                 type: object
                 x-kubernetes-map-type: atomic
@@ -89,9 +85,7 @@ spec:
                           This field is effectively required, but due to backwards compatibility is
                           allowed to be empty. Instances of this type with an empty value here are
                           almost certainly wrong.
-                          TODO: Add other useful fields. apiVersion, kind, uid?
                           More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
-                          TODO: Drop `kubebuilder:default` when controller-gen doesn't need it https://github.com/kubernetes-sigs/kubebuilder/issues/3896.
                         type: string
                     type: object
                     x-kubernetes-map-type: atomic
@@ -167,9 +161,7 @@ spec:
                       This field is effectively required, but due to backwards compatibility is
                       allowed to be empty. Instances of this type with an empty value here are
                       almost certainly wrong.
-                      TODO: Add other useful fields. apiVersion, kind, uid?
                       More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
-                      TODO: Drop `kubebuilder:default` when controller-gen doesn't need it https://github.com/kubernetes-sigs/kubebuilder/issues/3896.
                     type: string
                 type: object
                 x-kubernetes-map-type: atomic

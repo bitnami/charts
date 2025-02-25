@@ -1,8 +1,35 @@
 # Changelog
 
-## 2.2.1 (2024-12-17)
+## 2.4.0 (2025-02-21)
 
-* [bitnami/valkey] fix: sentinel pdb ([#31020](https://github.com/bitnami/charts/pull/31020))
+* [bitnami/valkey] Set `usePasswordFiles=true` by default ([#32121](https://github.com/bitnami/charts/pull/32121))
+
+## 2.3.0 (2025-02-20)
+
+* [bitnami/valkey] feat: use new helper for checking API versions (#32064) ([b780cc1](https://github.com/bitnami/charts/commit/b780cc181c1f22e89f01aa5f2eb5f2516a0986de)), closes [#32064](https://github.com/bitnami/charts/issues/32064)
+
+## <small>2.2.5 (2025-02-20)</small>
+
+* [bitnami/valkey] Release 2.2.5 (#32067) ([a410e1e](https://github.com/bitnami/charts/commit/a410e1e40380759aa5721748ca9ba7c276df5c8a)), closes [#32067](https://github.com/bitnami/charts/issues/32067)
+
+## <small>2.2.4 (2025-02-17)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/valkey] Release 2.2.4 (#31946) ([f578883](https://github.com/bitnami/charts/commit/f578883ec3e15a7781b72be5ecdf40beb7b353af)), closes [#31946](https://github.com/bitnami/charts/issues/31946)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>2.2.3 (2025-01-10)</small>
+
+* [bitnami/valkey] bugfix: instructions to obtain password on installation notes (#31287) ([a1d5cd2](https://github.com/bitnami/charts/commit/a1d5cd259aaf9b96fb447ade0bc5827ac6e49531)), closes [#31287](https://github.com/bitnami/charts/issues/31287)
+
+## <small>2.2.2 (2025-01-08)</small>
+
+* [bitnami/valkey] Release 2.2.2 (#31246) ([8b7bfe3](https://github.com/bitnami/charts/commit/8b7bfe3148a3a068b39c0afdf30ced26829f088b)), closes [#31246](https://github.com/bitnami/charts/issues/31246)
+
+## <small>2.2.1 (2024-12-17)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/valkey] fix: sentinel pdb (#31020) ([711d831](https://github.com/bitnami/charts/commit/711d8319865931adc84705188b23ab575597b12f)), closes [#31020](https://github.com/bitnami/charts/issues/31020)
 
 ## 2.2.0 (2024-12-10)
 

@@ -689,6 +689,7 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 | `service.sessionAffinity`                                     | Control where client requests go, to the same pod or round-robin                                                                                                                                                                                                            | `None`                    |
 | `service.sessionAffinityConfig`                               | Additional settings for the sessionAffinity                                                                                                                                                                                                                                 | `{}`                      |
 | `service.headless.annotations`                                | Annotations for the headless service.                                                                                                                                                                                                                                       | `{}`                      |
+| `service.publishNotReadyAddresses`                            | Indicates that any agent which deals with endpoints for this Service should disregard any indications of ready/not-ready                                                                                                                                                    | `false`                   |
 | `externalAccess.enabled`                                      | Enable Kubernetes external cluster access to MongoDB(&reg;) nodes (only for replicaset architecture)                                                                                                                                                                        | `false`                   |
 | `externalAccess.autoDiscovery.enabled`                        | Enable using an init container to auto-detect external IPs by querying the K8s API                                                                                                                                                                                          | `false`                   |
 | `externalAccess.autoDiscovery.image.registry`                 | Init container auto-discovery image registry                                                                                                                                                                                                                                | `REGISTRY_NAME`           |
@@ -1311,7 +1312,7 @@ extraDeploy:
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

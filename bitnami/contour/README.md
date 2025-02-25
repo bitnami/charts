@@ -681,11 +681,12 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 
 ### Other parameters
 
-| Name                | Description                                                                                                          | Value  |
-| ------------------- | -------------------------------------------------------------------------------------------------------------------- | ------ |
-| `rbac.create`       | Create the RBAC roles for API accessibility                                                                          | `true` |
-| `rbac.rules`        | Custom RBAC rules to set                                                                                             | `[]`   |
-| `tlsExistingSecret` | Name of the existingSecret to be use in both contour and envoy. If it is not nil `contour.certgen` will be disabled. | `""`   |
+| Name                | Description                                                                                                          | Value   |
+| ------------------- | -------------------------------------------------------------------------------------------------------------------- | ------- |
+| `rbac.create`       | Create the RBAC roles for API accessibility                                                                          | `true`  |
+| `rbac.rules`        | Custom RBAC rules to set                                                                                             | `[]`    |
+| `tlsExistingSecret` | Name of the existingSecret to be use in both contour and envoy. If it is not nil `contour.certgen` will be disabled. | `""`    |
+| `useCertManager`    | Use Cert-manager instead of Contour certgen to issue certificates for TLS connection between Contour and Envoy.      | `false` |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -848,7 +849,7 @@ This version also introduces `bitnami/common`, a [library chart](https://helm.sh
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

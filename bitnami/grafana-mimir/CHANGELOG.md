@@ -1,8 +1,40 @@
 # Changelog
 
+## 1.4.3 (2025-02-19)
+
+* [bitnami/grafana-mimir] Release 1.4.3 ([#31999](https://github.com/bitnami/charts/pull/31999))
+
+## <small>1.4.2 (2025-02-12)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/grafana-mimir] Release 1.4.2 (#31889) ([7a5eb92](https://github.com/bitnami/charts/commit/7a5eb922f54c3eac0387838a282077d464abcd70)), closes [#31889](https://github.com/bitnami/charts/issues/31889)
+
+## <small>1.4.1 (2025-02-04)</small>
+
+* [bitnami/grafana-mimir] Release 1.4.1 (#31754) ([f074715](https://github.com/bitnami/charts/commit/f074715115f99341605d19b2b132ca15e66a61f7)), closes [#31754](https://github.com/bitnami/charts/issues/31754)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## 1.4.0 (2025-01-29)
+
+* [bitnami/grafana-mimir] feature(minio): Bump MinIO subchart (#31659) ([423f680](https://github.com/bitnami/charts/commit/423f68052a6aeb6a2f389b560515f74570143b3c)), closes [#31659](https://github.com/bitnami/charts/issues/31659)
+
+## <small>1.3.3 (2025-01-24)</small>
+
+* [bitnami/grafana-mimir] Release 1.3.3 (#31554) ([576476f](https://github.com/bitnami/charts/commit/576476fb99dd6f2e7b57ee913d06967320750066)), closes [#31554](https://github.com/bitnami/charts/issues/31554)
+
+## <small>1.3.2 (2025-01-17)</small>
+
+* [bitnami/grafana-mimir] Release 1.3.2 (#31421) ([a6aa537](https://github.com/bitnami/charts/commit/a6aa537eb1bd157e41a3805b2dd3b1a09d613ae2)), closes [#31421](https://github.com/bitnami/charts/issues/31421)
+
+## <small>1.3.1 (2025-01-03)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/grafana-mimir] Release 1.3.1 (#31205) ([9e53dc4](https://github.com/bitnami/charts/commit/9e53dc4f22e3d226d08ec3dec07cbfcbe04029ef)), closes [#31205](https://github.com/bitnami/charts/issues/31205)
+
 ## 1.3.0 (2024-12-10)
 
-* [bitnami/grafana-mimir] Detect non-standard images ([#30887](https://github.com/bitnami/charts/pull/30887))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/grafana-mimir] Detect non-standard images (#30887) ([b56f760](https://github.com/bitnami/charts/commit/b56f7600bebb18d442055540590355888463d60f)), closes [#30887](https://github.com/bitnami/charts/issues/30887)
 
 ## <small>1.2.23 (2024-12-03)</small>
 

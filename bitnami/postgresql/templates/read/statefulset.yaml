@@ -577,9 +577,6 @@ spec:
         {{- if .Values.readReplicas.persistence.dataSource }}
         dataSource: {{- include "common.tplvalues.render" (dict "value" .Values.readReplicas.persistence.dataSource "context" $) | nindent 10 }}
         {{- end }}
-        {{- if .Values.readReplicas.persistence.storageClass }}
-        storageClassName: {{ .Values.readReplicas.persistence.storageClass }}
-        {{- end }}
         resources:
           requests:
             storage: {{ .Values.readReplicas.persistence.size | quote }}

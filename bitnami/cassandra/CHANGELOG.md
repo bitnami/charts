@@ -1,8 +1,29 @@
 # Changelog
 
+## 12.1.4 (2025-02-19)
+
+* [bitnami/cassandra] Release 12.1.4 ([#31975](https://github.com/bitnami/charts/pull/31975))
+
+## <small>12.1.3 (2025-02-04)</small>
+
+* [bitnami/cassandra] Release 12.1.3 (#31721) ([ab93c8e](https://github.com/bitnami/charts/commit/ab93c8e988f52f22486e0cfbc7a6cd03ea89dde2)), closes [#31721](https://github.com/bitnami/charts/issues/31721)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>12.1.2 (2025-01-28)</small>
+
+* [bitnami/cassandra] Release 12.1.2 (#31642) ([f17fef7](https://github.com/bitnami/charts/commit/f17fef71fe687224f58eb4334b522fab535d4e5b)), closes [#31642](https://github.com/bitnami/charts/issues/31642)
+
+## <small>12.1.1 (2025-01-07)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/cassandra] Release 12.1.1 (#31233) ([bdd9622](https://github.com/bitnami/charts/commit/bdd9622b7bf579ae71d61a2e014d0dfaaf29497d)), closes [#31233](https://github.com/bitnami/charts/issues/31233)
+
 ## 12.1.0 (2024-12-10)
 
-* [bitnami/cassandra] Detect non-standard images ([#30866](https://github.com/bitnami/charts/pull/30866))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 1) (#30660) ([7409ca4](https://github.com/bitnami/charts/commit/7409ca4c21869fabe1532dd4f3ff24895df71c6d)), closes [#30660](https://github.com/bitnami/charts/issues/30660)
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 1) (#30685) ([be6aa1d](https://github.com/bitnami/charts/commit/be6aa1df0bd4479173a78400fef7295de15b408d)), closes [#30685](https://github.com/bitnami/charts/issues/30685)
+* [bitnami/cassandra] Detect non-standard images (#30866) ([30196ed](https://github.com/bitnami/charts/commit/30196ed6054c6c611ceb03bc71fedeccb36aeb1a)), closes [#30866](https://github.com/bitnami/charts/issues/30866)
 
 ## <small>12.0.5 (2024-11-28)</small>
 
@@ -1263,7 +1284,7 @@
 ## <small>2.3.5 (2019-05-29)</small>
 
 * Change syntax because of linter failing ([adfc357](https://github.com/bitnami/charts/commit/adfc35728c2a8a9def9e1897b3772d64df621354))
-* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79)), closes [#issuecomment-496883321](https://github.com/bitnami/charts/issues/issuecomment-496883321)
+* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79))
 * Fix tensorflow and others ([6252f12](https://github.com/bitnami/charts/commit/6252f125d307e55fd638687eac09f1df8451f22f))
 * Use immutable tags in the main images ([17ca4f5](https://github.com/bitnami/charts/commit/17ca4f5c91da33da03f9e2d411fe5e004e825c4d))
 

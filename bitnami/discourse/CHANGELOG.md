@@ -1,8 +1,36 @@
 # Changelog
 
+## 15.1.5 (2025-02-24)
+
+* [bitnami/discourse] Release 15.1.5 ([#32148](https://github.com/bitnami/charts/pull/32148))
+
+## <small>15.1.4 (2025-02-14)</small>
+
+* [bitnami/discourse] Release 15.1.4 (#31937) ([24250f9](https://github.com/bitnami/charts/commit/24250f952c8d6609aeffb9a37c10fc92332d9506)), closes [#31937](https://github.com/bitnami/charts/issues/31937)
+
+## <small>15.1.3 (2025-02-14)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/discourse] Release 15.1.3 (#31917) ([97ce821](https://github.com/bitnami/charts/commit/97ce821549b2cf41b5087308b64306b8df7d9932)), closes [#31917](https://github.com/bitnami/charts/issues/31917)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>15.1.2 (2025-01-15)</small>
+
+* [bitnami/discourse] Release 15.1.2 (#31384) ([d93fa41](https://github.com/bitnami/charts/commit/d93fa41ed6b13b35ff8be4b10c0f342b93193af1)), closes [#31384](https://github.com/bitnami/charts/issues/31384)
+
+## <small>15.1.1 (2024-12-19)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/discourse] Release 15.1.1 (#31121) ([8caa1dd](https://github.com/bitnami/charts/commit/8caa1ddfb20a6201d7847c4029c2cfa9996e94fb)), closes [#31121](https://github.com/bitnami/charts/issues/31121)
+
 ## 15.1.0 (2024-12-10)
 
-* [bitnami/discourse] Detect non-standard images ([#30896](https://github.com/bitnami/charts/pull/30896))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 1) (#30685) ([be6aa1d](https://github.com/bitnami/charts/commit/be6aa1df0bd4479173a78400fef7295de15b408d)), closes [#30685](https://github.com/bitnami/charts/issues/30685)
+* [bitnami/*] docs: :memo: Unify "Securing Traffic using TLS" section (#30707) ([b572333](https://github.com/bitnami/charts/commit/b57233336e4fe9af928ecb4f2a5f334011efb1bc)), closes [#30707](https://github.com/bitnami/charts/issues/30707)
+* [bitnami/*] docs: fix copy-paste typos with wrong references to Airflow (#30541) ([0a225d4](https://github.com/bitnami/charts/commit/0a225d44c1969429573b4e2630068eff129b6a96)), closes [#30541](https://github.com/bitnami/charts/issues/30541)
+* [bitnami/discourse] Detect non-standard images (#30896) ([fd7e138](https://github.com/bitnami/charts/commit/fd7e1380bb9d29cf437adef3c86ef97025de6eab)), closes [#30896](https://github.com/bitnami/charts/issues/30896)
 
 ## <small>15.0.5 (2024-11-14)</small>
 

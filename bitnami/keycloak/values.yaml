@@ -108,7 +108,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/keycloak
-  tag: 26.0.7-debian-12-r0
+  tag: 26.1.2-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1132,7 +1132,7 @@ keycloakConfigCli:
   image:
     registry: docker.io
     repository: bitnami/keycloak-config-cli
-    tag: 6.1.6-debian-12-r6
+    tag: 6.3.0-debian-12-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1235,12 +1235,6 @@ keycloakConfigCli:
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
-  ## @param keycloakConfigCli.extraEnvVars Additional environment variables to set
-  ## Example:
-  ## extraEnvVars:
-  ##   - name: FOO
-  ##     value: "bar"
-  ##
   ## @param keycloakConfigCli.nodeSelector Node labels for pod assignment
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
@@ -1250,6 +1244,12 @@ keycloakConfigCli:
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   podTolerations: []
+  ## @param keycloakConfigCli.extraEnvVars Additional environment variables to set
+  ## Example:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
   extraEnvVars: []
   ## @param keycloakConfigCli.extraEnvVarsCM ConfigMap with extra environment variables
   ##
@@ -1371,11 +1371,13 @@ externalDatabase:
 ## NOTE: Set to false to use 'local' cache (only supported when replicaCount=1).
 ## @param cache.stackName Set infinispan cache stack to use
 ## @param cache.stackFile Set infinispan cache stack filename to use
+## @param cache.useHeadlessServiceWithAppVersion Set to true to create the headless service used for ispn containing the app version
 ##
 cache:
   enabled: true
   stackName: kubernetes
   stackFile: ""
+  useHeadlessServiceWithAppVersion: false
 ## @section Keycloak Logging parameters
 
 ## Keycloak logging configuration

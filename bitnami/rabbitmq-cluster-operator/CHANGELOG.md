@@ -1,8 +1,32 @@
 # Changelog
 
+## 4.4.5 (2025-02-14)
+
+* [bitnami/rabbitmq-cluster-operator] Release 4.4.5 ([#31927](https://github.com/bitnami/charts/pull/31927))
+
+## <small>4.4.4 (2025-02-14)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/rabbitmq-cluster-operator] Release 4.4.4 (#31830) ([4842a9a](https://github.com/bitnami/charts/commit/4842a9a0ce9f02b9aa1ba6bcb62333ac5ad8af82)), closes [#31830](https://github.com/bitnami/charts/issues/31830)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>4.4.3 (2025-01-24)</small>
+
+* [bitnami/rabbitmq-cluster-operator] Release 4.4.3 (#31581) ([f16551b](https://github.com/bitnami/charts/commit/f16551b6fcfb6d4bc727575030a70ae9fa5d3f77)), closes [#31581](https://github.com/bitnami/charts/issues/31581)
+
+## <small>4.4.2 (2025-01-17)</small>
+
+* [bitnami/rabbitmq-cluster-operator] Release 4.4.2 (#31448) ([0656c74](https://github.com/bitnami/charts/commit/0656c7413772219335816bfab8d3d4affaec3153)), closes [#31448](https://github.com/bitnami/charts/issues/31448)
+
+## <small>4.4.1 (2024-12-20)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/rabbitmq-cluster-operator] Release 4.4.1 (#31126) ([22f7911](https://github.com/bitnami/charts/commit/22f79115cfdde74662fc06f76ac372fffd557023)), closes [#31126](https://github.com/bitnami/charts/issues/31126)
+
 ## 4.4.0 (2024-12-10)
 
-* [bitnami/rabbitmq-cluster-operator] Detect non-standard images ([#30941](https://github.com/bitnami/charts/pull/30941))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/rabbitmq-cluster-operator] Detect non-standard images (#30941) ([b95e85b](https://github.com/bitnami/charts/commit/b95e85b077668be0add122fad290e7eecdcdf16c)), closes [#30941](https://github.com/bitnami/charts/issues/30941)
 
 ## <small>4.3.29 (2024-12-04)</small>
 

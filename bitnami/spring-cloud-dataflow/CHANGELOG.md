@@ -1,8 +1,18 @@
 # Changelog
 
+## 34.1.2 (2025-01-31)
+
+* [bitnami/spring-cloud-dataflow] Release 34.1.2 ([#31688](https://github.com/bitnami/charts/pull/31688))
+
+## <small>34.1.1 (2025-01-17)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/spring-cloud-dataflow] Release 34.1.1 (#31451) ([2faecca](https://github.com/bitnami/charts/commit/2faeccac20cff398acfa3036c62140e1cfc70c14)), closes [#31451](https://github.com/bitnami/charts/issues/31451)
+
 ## 34.1.0 (2024-12-10)
 
-* [bitnami/spring-cloud-dataflow] Detect non-standard images ([#30968](https://github.com/bitnami/charts/pull/30968))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/spring-cloud-dataflow] Detect non-standard images (#30968) ([f1ceafb](https://github.com/bitnami/charts/commit/f1ceafba996e8b44a30abdff8594376a7e3b0399)), closes [#30968](https://github.com/bitnami/charts/issues/30968)
 
 ## <small>34.0.1 (2024-12-08)</small>
 

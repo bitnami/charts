@@ -1,6 +1,7 @@
 # Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
+# NOTE: This workflow is maintained in the https://github.com/bitnami/support repository
 name: '[Support] Close Solved issues'
 on:
   schedule:
@@ -11,11 +12,12 @@ permissions: {}
 jobs:
   stale:
     runs-on: ubuntu-latest
+    if: ${{ github.repository_owner == 'bitnami' }}
     steps:
-      - uses: actions/stale@28ca1036281a5e5922ead5184a1bbf96e5fc984e
+      - uses: actions/stale@5bef64f19d7facfb25b37b414482c7164d639639
         with:
           any-of-labels: 'solved'
           stale-issue-label: 'solved'
           days-before-stale: 0
           days-before-close: 0
-          repo-token: ${{ secrets.BITNAMI_BOT_TOKEN }}
+          repo-token: ${{ secrets.BITNAMI_SUPPORT_BOARD_TOKEN }}

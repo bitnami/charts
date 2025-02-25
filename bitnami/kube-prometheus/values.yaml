@@ -78,7 +78,7 @@ operator:
   image:
     registry: docker.io
     repository: bitnami/prometheus-operator
-    tag: 0.79.0-debian-12-r0
+    tag: 0.80.1-debian-12-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -638,7 +638,7 @@ prometheus:
   image:
     registry: docker.io
     repository: bitnami/prometheus
-    tag: 2.55.1-debian-12-r4
+    tag: 2.55.1-debian-12-r13
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -649,6 +649,45 @@ prometheus:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
+  ## @param prometheus.defaultRules.create Create default rules for Prometheus
+  ## @param prometheus.defaultRules.rules [object] Set of default rules for Prometheus that can be enabled/disabled
+  ##
+  defaultRules:
+    create: true
+    rules:
+      alertmanager: true
+      etcd: true
+      configReloaders: true
+      general: true
+      k8sContainerCpuUsageSecondsTotal: true
+      k8sContainerMemoryCache: true
+      k8sContainerMemoryRss: true
+      k8sContainerMemorySwap: true
+      k8sContainerResource: true
+      k8sContainerMemoryWorkingSetBytes: true
+      k8sPodOwner: true
+      kubeApiserverAvailability: true
+      kubeApiserverBurnrate: true
+      kubeApiserverHistogram: true
+      kubeApiserverSlos: true
+      kubeControllerManager: true
+      kubelet: true
+      kubeProxy: true
+      kubePrometheusGeneral: true
+      kubePrometheusNodeRecording: true
+      kubernetesApps: true
+      kubernetesResources: true
+      kubernetesStorage: true
+      kubernetesSystem: true
+      kubeSchedulerAlerting: true
+      kubeSchedulerRecording: true
+      kubeStateMetrics: true
+      network: true
+      node: true
+      nodeExporterAlerting: true
+      nodeExporterRecording: true
+      prometheus: true
+      prometheusOperator: true
   ## Service account for Prometheus to use.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
   ##
@@ -1397,7 +1436,7 @@ prometheus:
     image:
       registry: docker.io
       repository: bitnami/thanos
-      tag: 0.37.2-debian-12-r0
+      tag: 0.37.2-debian-12-r7
       digest: ""
       ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
       ##
@@ -1826,7 +1865,7 @@ alertmanager:
   image:
     registry: docker.io
     repository: bitnami/alertmanager
-    tag: 0.27.0-debian-12-r28
+    tag: 0.28.0-debian-12-r8
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -2515,7 +2554,7 @@ blackboxExporter:
   image:
     registry: docker.io
     repository: bitnami/blackbox-exporter
-    tag: 0.25.0-debian-12-r21
+    tag: 0.25.0-debian-12-r30
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

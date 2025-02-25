@@ -67,7 +67,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/moodle
-  tag: 4.5.1-debian-12-r0
+  tag: 4.5.2-debian-12-r4
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -87,7 +87,7 @@ image:
 ## @param replicaCount Number of Moodle replicas (requires ReadWriteMany PVC support)
 ## Setting this will fix the number replica count needed for Moodle&trade;
 ## This can be overridden by setting autoscaling.enabled to true
-## For upgrades set the autoscaling.enabled to false and replicaCount to the desired number of replicas 
+## For upgrades set the autoscaling.enabled to false and replicaCount to the desired number of replicas
 ##
 replicaCount: 1
 ## When enabled, the number of Moodle&trade; replicas will be automatically adjusted based on targets on given metrics.
@@ -759,7 +759,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r33
+    tag: 12-debian-12-r39
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -804,7 +804,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 1.0.9-debian-12-r6
+    tag: 1.0.9-debian-12-r16
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -932,7 +932,7 @@ certificates:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r33
+    tag: 12-debian-12-r39
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
