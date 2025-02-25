@@ -117,7 +117,7 @@ spec:
               value: {{ include "cloudnative-pg.operator.image" . | quote }}
             - name: POSTGRES_IMAGE_NAME
               value: {{ include "cloudnative-pg.postgresql.image" . }}
-            {{- if (include "cloudnative-pg.operator.imagePullSecret" . ) | quote }}
+            {{- if (include "cloudnative-pg.operator.imagePullSecret" .) }}
             - name: PULL_SECRET_NAME
               value: {{ include "cloudnative-pg.operator.imagePullSecret" . | quote }}
             {{- end }}

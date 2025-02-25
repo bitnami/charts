@@ -10,11 +10,13 @@ extraDeploy:
   stringData:
     username: vib_user
     password: bitnami1234
-- apiVersion: postgresql.cnpg.io/v1
+- |
+  apiVersion: postgresql.cnpg.io/v1
   kind: Cluster
   metadata:
     name: vib-cluster-example
   spec:
+    {{- include "cloudnative-pg.imagePullSecrets" . | nindent 2 }}
     instances: 3
     storage:
       size: 1Gi
