@@ -43,6 +43,18 @@ development: true
 ## @param kubeVersion Override Kubernetes version
 ##
 kubeVersion: ""
+## @param apiVersions Override Kubernetes API versions reported by .Capabilities
+##
+apiVersions: []
+## @param nameOverride String to partially override common.names.name
+##
+nameOverride: ""
+## @param fullnameOverride String to fully override common.names.fullname
+##
+fullnameOverride: ""
+## @param namespaceOverride String to fully override common.names.namespace
+##
+namespaceOverride: ""
 
 ## @param commonAnnotations Annotations to add to all deployed objects
 ##
@@ -169,7 +181,7 @@ controlplane:
   image:
     registry: docker.io
     repository: bitnami/chainloop-control-plane
-    tag: 0.165.0-debian-12-r0
+    tag: 0.172.0-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -246,7 +258,7 @@ controlplane:
     image:
       registry: docker.io
       repository: bitnami/chainloop-control-plane-migrations
-      tag: 0.163.0-debian-12-r0
+      tag: 0.172.0-debian-12-r0
       digest: ""
       ## Specify a imagePullPolicy
       ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -993,7 +1005,7 @@ cas:
   image:
     registry: docker.io
     repository: bitnami/chainloop-artifact-cas
-    tag: 0.165.0-debian-12-r0
+    tag: 0.172.0-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1746,7 +1758,7 @@ dex:
   image:
     registry: docker.io
     repository: bitnami/dex
-    tag: 2.41.1-debian-12-r16
+    tag: 2.42.0-debian-12-r1
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##

@@ -100,7 +100,7 @@ serviceBindings:
 image:
   registry: docker.io
   repository: bitnami/mariadb
-  tag: 11.4.5-debian-12-r2
+  tag: 11.4.5-debian-12-r4
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -154,7 +154,7 @@ auth:
   forcePassword: false
   ## @param auth.usePasswordFiles Mount credentials as files instead of using environment variables
   ##
-  usePasswordFiles: false
+  usePasswordFiles: true
   ## @param auth.customPasswordFiles Use custom password files when `auth.usePasswordFiles` is set to `true`. Define path for keys `root` and `user`, also define `replicator` if `architecture` is set to `replication`
   ## Example:
   ## customPasswordFiles:
@@ -339,7 +339,7 @@ primary:
     encrypt_binlog={{ .Values.tde.encryptBINLOG }}
     aria_encrypt_tables={{ .Values.tde.ariaEncryptTables }}
     {{- end }}
-    
+
     [client]
     port=3306
     socket=/opt/bitnami/mariadb/tmp/mysql.sock
@@ -1319,7 +1319,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r36
+    tag: 12-debian-12-r38
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
@@ -1363,7 +1363,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mysqld-exporter
-    tag: 0.16.0-debian-12-r7
+    tag: 0.16.0-debian-12-r10
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)

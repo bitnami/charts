@@ -380,6 +380,88 @@ jobs:
             git add "bitnami/${CHART}"
             git commit -m "Update CRDs automatically" --signoff
           fi
+      - id: update-prometheus-rules
+        name: Update Prometheus rules on kube-prometheus based on upstream
+        # To avoid malicious executions, only PRs performed by the bitnami-bot will perform the CRDs update
+        if: github.event.pull_request.user.login == 'bitnami-bot' && needs.get-chart.outputs.chart == 'kube-prometheus'
+        run: |
+          cd "${GITHUB_WORKSPACE}/charts" || exit 1
+          
+          # This function returns the chart parameter name based on the rule name
+          rule_parameter_from_rule_name() {
+            local -r rule_name="${1:-missing rule_name}"
+
+            kebab_to_camel() {
+              IFS='-' read -r -a parts <<< "$1"
+              for i in "${!parts[@]}"; do
+                if [[ $i -eq 0 ]]; then
+                  camelCase="${parts[i]}"
+                else
+                  camelCase+=$(tr '[:lower:]' '[:upper:]' <<< ${parts[i]:0:1})${parts[i]:1}
+                fi
+              done
+              echo "$camelCase"
+            }
+
+            case "$rule_name" in
+              "config-reloaders" | "etcd" | "kube-state-metrics" | "kubernetes-apps" | "kubernetes-resources" | "kubernetes-storage" | "kube-apiserver-slos" | "prometheus" | "prometheus-operator") kebab_to_camel "$rule_name" ;;
+              "alertmanager.rules" | "general.rules" | "kubelet.rules" | "node.rules" | "kube-apiserver-availability.rules" | "kube-apiserver-burnrate.rules" | "kube-apiserver-histogram.rules" | "kube-prometheus-general.rules" | "kube-prometheus-node-recording.rules") kebab_to_camel "${rule_name%.rules}" ;;
+              "k8s.rules.container-cpu-usage-seconds-total" | "k8s.rules.container-memory-cache" | "k8s.rules.container-memory-rss" | "k8s.rules.container-memory-swap" | "k8s.rules.container-memory-working-set-bytes" | "k8s.rules.container-resource" | "k8s.rules.pod-owner") kebab_to_camel "${rule_name//.rules./-}" ;;
+              "kubernetes-system-apiserver" | "kubernetes-system-kubelet" | "kubernetes-system") echo "kubernetesSystem" ;;
+              "kube-scheduler.rules") echo "kubeSchedulerAlerting" ;;
+              "kubernetes-system-controller-manager") echo "kubeControllerManager" ;;
+              "kubernetes-system-kube-proxy") echo "kubeProxy" ;;
+              "kubernetes-system-scheduler") echo "kubeSchedulerRecording" ;;
+              "node-exporter") echo "nodeExporterAlerting" ;;
+              "node-exporter.rules") echo "nodeExporterRecording" ;;
+              "node-network") echo "network" ;;
+              *) echo "" ;;
+            esac
+          }
+
+          mkdir -p "bitnami/kube-prometheus/templates/prometheus/rules"
+          cd "bitnami/kube-prometheus/templates/prometheus/rules"
+          helm repo add prometheus-community https://prometheus-community.github.io/helm-charts 2>&1 >/dev/null 2>&1
+          helm repo update >/dev/null 2>&1
+          helm template prometheus-community/kube-prometheus-stack \
+            --set fullnameOverride=foo \
+            --set defaultRules.create=true \
+            --show-only templates/prometheus/rules-1.14/* \
+            | awk 'NF' | yq --no-doc -s '.metadata.name | sub("^foo-"; "") + ".yaml"'
+          for m in *.yaml; do
+            rule_name="${m%.yaml}"
+            rule_parameter="$(rule_parameter_from_rule_name "$rule_name")"
+            # We're just interested in the .spec given we build apiVersion, kind and metadata
+            # based in Bitnami standards
+            spec="$(yq '{"spec": .spec}' "$m")"
+            # We need to escape curly braces to avoid issues with Go templates
+            spec=$(echo "$spec" | sed -E 's/\{\{/__OPEN__/g' | sed -E 's/\}\}/__CLOSE__/g' | sed -E 's/__OPEN__/{{\`{{\`}}/g' | sed -E 's/__CLOSE__/{{\`}}\`}}/g')
+            cat > "$m" << EOF
+          {{- /*
+          Copyright Broadcom, Inc. All Rights Reserved.
+          SPDX-License-Identifier: APACHE-2.0
+          */}}
+
+          {{- if and .Values.prometheus.enabled .Values.prometheus.defaultRules.create .Values.prometheus.defaultRules.rules.$rule_parameter }}
+          apiVersion: monitoring.coreos.com/v1
+          kind: PrometheusRule
+          metadata:
+            name: {{ printf "%s-$rule_name" (include "kube-prometheus.prometheus.fullname" .) }}
+            namespace: {{ include "common.names.namespace" . | quote }}
+            labels: {{ include "kube-prometheus.prometheus.labels" . | nindent 4 }}
+            {{- if .Values.commonAnnotations }}
+            annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" . ) | nindent 4 }}
+            {{- end }}
+          $spec
+          {{- end }}
+          EOF
+          done
+
+          cd "${GITHUB_WORKSPACE}/charts"
+          if git status -s | grep "bitnami/kube-prometheus/templates/prometheus/rules"; then
+            git add "bitnami/kube-prometheus/templates/prometheus/rules"
+            git commit -m "Update Prometheus rules" --signoff
+          fi
       - id: update-pr
         name: Push changes
         run: |
