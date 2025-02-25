@@ -338,7 +338,7 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | Name                                    | Description                                                                                                                      | Value                    |
 | --------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
 | `service.type`                          | kube-arangodb Operator service type                                                                                              | `LoadBalancer`           |
-| `service.ports.server`                  | kube-arangodb Operator service server port                                                                                       | `80`                     |
+| `service.ports.server`                  | kube-arangodb Operator service server port                                                                                       | `443`                    |
 | `service.ports.apiHttp`                 | kube-arangodb Operator service API HTTP port                                                                                     | `8628`                   |
 | `service.ports.apiGrpc`                 | kube-arangodb Operator service API GRPC port                                                                                     | `8728`                   |
 | `service.nodePorts.server`              | Node port for the server                                                                                                         | `""`                     |
