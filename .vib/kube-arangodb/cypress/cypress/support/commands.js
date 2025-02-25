@@ -17,16 +17,6 @@ for (const command of ['click']) {
   });
 }
 
-Cypress.Commands.add(
-  'login',
-  (username = Cypress.env('username'), password = Cypress.env('password')) => {
-    cy.visit('/');
-    cy.get('input[focus]').type(username);
-    cy.get('input[type="password"]').type(password);
-    cy.contains('button', 'Login').click();
-  }
-);
-
 Cypress.on('uncaught:exception', (err, runnable, promise) => {
   // when the exception originated from an unhandled promise
   // rejection, the promise is provided as a third argument

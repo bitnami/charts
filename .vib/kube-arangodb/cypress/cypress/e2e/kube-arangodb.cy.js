@@ -6,27 +6,40 @@
 /// <reference types="cypress" />
 
 it('can access the script run and cluster status', () => {
-  cy.login();
-  // HACK: This approach is not recommended by Cypress but there is no clear way to
-  // workaround the following race condition. In some test runs, the ArangoDeployment
-  // has not finished deployming and therefore it is not visible in the UI. In this case, we would need to reload the page
-  // to see if the run is there or not. There is discussion in the Cypress repo on how to
-  // workaround that: https://github.com/cypress-io/cypress/issues/3757
-  cy.contains('Deployments');
-  const max_attempts = 5;
-  let runFound = false;
-  for (let i = 0; i < max_attempts && !runFound; i += 1)
-  cy.get('body').then(($body) => {
-    if ($body.find('i.green').length === 0) {
-      // run job has not finished executing, so we wait and reload the page
-      cy.wait(5000);
-      cy.reload();
-    } else {
-      runFound = true;
-    }
+  let token;
+  let deploymentFound = false;
+
+  cy.request({
+    method: 'POST',
+    url: '/login',
+    body: {
+      username: Cypress.env('username'),
+      password: Cypress.env('password'),
+    },
+  }).then((response) => {
+    expect(response.status).to.eq(200);
+    token = response.body.token;
   });
-  cy.fixture('deployments').then((d) => {
-    // This ensures that the script in the job was run
-    cy.contains(d.deployment.name);
+  cy.then(() => {
+    cy.wait(20000);
+    cy.request({
+      method: 'GET',
+      url: '/api/deployment',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    }).then((apiResponse) => {
+      expect(apiResponse.status).to.eq(200);
+      if (apiResponse.body.deployments[0]) {
+        deploymentFound = true;
+        cy.fixture('deployments').then((d) => {
+          // This ensures that the script in the job was run
+          expect(apiResponse.body.deployments[0].name).to.eq(d.deployment.name);
+        });
+      }
+    });
   });
+  cy.then(() => {
+    expect(deploymentFound).to.be.true;
+  })
 });
