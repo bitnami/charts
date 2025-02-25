@@ -1,3 +1,8 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{ if and .Values.rbac.create .Values.features.k8sToK8sClusterSync }}
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: Role

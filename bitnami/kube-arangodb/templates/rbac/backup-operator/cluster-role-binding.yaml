@@ -1,6 +1,9 @@
-{{ if .Values.rbac.create -}}
-{{ if not (eq .Values.scope "namespaced") -}}
-{{ if .Values.features.backup -}}
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{ if and .Values.rbac.create (ne .Values.scope "namespaced") .Values.features.backup -}}
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRoleBinding
 metadata:
@@ -16,6 +19,4 @@ subjects:
   - kind: ServiceAccount
     name: {{ include "kube-arangodb.serviceAccountName" . }}
     namespace: {{ include "common.names.namespace" . | quote }}
-{{- end }}
-{{- end }}
 {{- end }}
