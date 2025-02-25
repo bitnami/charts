@@ -1,8 +1,12 @@
 # Changelog
 
+## 2.4.0 (2025-02-21)
+
+* [bitnami/valkey] Set `usePasswordFiles=true` by default ([#32121](https://github.com/bitnami/charts/pull/32121))
+
 ## 2.3.0 (2025-02-20)
 
-* [bitnami/valkey] feat: use new helper for checking API versions ([#32064](https://github.com/bitnami/charts/pull/32064))
+* [bitnami/valkey] feat: use new helper for checking API versions (#32064) ([b780cc1](https://github.com/bitnami/charts/commit/b780cc181c1f22e89f01aa5f2eb5f2516a0986de)), closes [#32064](https://github.com/bitnami/charts/issues/32064)
 
 ## <small>2.2.5 (2025-02-20)</small>
 

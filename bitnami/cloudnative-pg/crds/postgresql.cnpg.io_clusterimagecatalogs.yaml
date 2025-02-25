@@ -1,0 +1,83 @@
+# Source: https://github.com/cloudnative-pg/cloudnative-pg/blob/v{version}/config/crd/bases/postgresql.cnpg.io_clusterimagecatalogs.yaml
+# Version: 1.25.0
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.16.5
+  name: clusterimagecatalogs.postgresql.cnpg.io
+spec:
+  group: postgresql.cnpg.io
+  names:
+    kind: ClusterImageCatalog
+    listKind: ClusterImageCatalogList
+    plural: clusterimagecatalogs
+    singular: clusterimagecatalog
+  scope: Cluster
+  versions:
+  - additionalPrinterColumns:
+    - jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    name: v1
+    schema:
+      openAPIV3Schema:
+        description: ClusterImageCatalog is the Schema for the clusterimagecatalogs
+          API
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: |-
+              Specification of the desired behavior of the ClusterImageCatalog.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status
+            properties:
+              images:
+                description: List of CatalogImages available in the catalog
+                items:
+                  description: CatalogImage defines the image and major version
+                  properties:
+                    image:
+                      description: The image reference
+                      type: string
+                    major:
+                      description: The PostgreSQL major version of the image. Must
+                        be unique within the catalog.
+                      minimum: 10
+                      type: integer
+                  required:
+                  - image
+                  - major
+                  type: object
+                maxItems: 8
+                minItems: 1
+                type: array
+                x-kubernetes-validations:
+                - message: Images must have unique major versions
+                  rule: self.all(e, self.filter(f, f.major==e.major).size() == 1)
+            required:
+            - images
+            type: object
+        required:
+        - metadata
+        - spec
+        type: object
+    served: true
+    storage: true
+    subresources: {}

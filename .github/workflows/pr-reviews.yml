@@ -25,7 +25,7 @@ jobs:
           echo "::notice:: Comment on PR #${{ github.event.pull_request.number }}"
           jq -n --arg issue '${{ github.event.pull_request.number }}' --arg state '${{ github.event.review != null && github.event.review.state || '' }}' '{"issue": {"number": $issue }, "review": { "state": $state }}' > pull_request_info.json
       - name: Upload the PR info
-        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08
+        uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1
         with:
           name: pull_request_info.json
           path: ./pull_request_info.json

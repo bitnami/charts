@@ -64,14 +64,21 @@ Return the MLflow Tracking Secret Name
 Return the MLflow Tracking Secret key for the password
 */}}
 {{- define "mlflow.v0.tracking.passwordKey" -}}
-{{- coalesce .Values.tracking.auth.existingSecretPasswordKey "admin-password" -}}
+{{- default "admin-password" .Values.tracking.auth.existingSecretPasswordKey -}}
 {{- end -}}
 
 {{/*
 Return the MLflow Tracking Secret key for the user
 */}}
 {{- define "mlflow.v0.tracking.userKey" -}}
-{{- coalesce .Values.tracking.auth.existingSecretUserKey "admin-user" -}}
+{{- default "admin-user" .Values.tracking.auth.existingSecretUserKey -}}
+{{- end -}}
+
+{{/*
+Return the MLflow Tracking Secret key for the Flask Server secret key
+*/}}
+{{- define "mlflow.v0.tracking.flaskServerSecretKey" -}}
+{{- default .Values.tracking.auth.existingSecretFlaskServerSecretKey "flask-server-secret-key" -}}
 {{- end -}}
 
 {{/*

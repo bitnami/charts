@@ -1,8 +1,12 @@
 # Changelog
 
-## 9.2.3 (2025-01-24)
+## 9.2.4 (2025-02-23)
 
-* [bitnami/matomo] Release 9.2.3 ([#31589](https://github.com/bitnami/charts/pull/31589))
+* [bitnami/matomo] Release 9.2.4 ([#32138](https://github.com/bitnami/charts/pull/32138))
+
+## <small>9.2.3 (2025-01-24)</small>
+
+* [bitnami/matomo] Release 9.2.3 (#31589) ([73a1abc](https://github.com/bitnami/charts/commit/73a1abcac62e24a371d1916c960f342a93b8f81b)), closes [#31589](https://github.com/bitnami/charts/issues/31589)
 
 ## <small>9.2.2 (2025-01-15)</small>
 

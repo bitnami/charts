@@ -154,7 +154,7 @@ auth:
   forcePassword: false
   ## @param auth.usePasswordFiles Mount credentials as files instead of using environment variables
   ##
-  usePasswordFiles: false
+  usePasswordFiles: true
   ## @param auth.customPasswordFiles Use custom password files when `auth.usePasswordFiles` is set to `true`. Define path for keys `root` and `user`, also define `replicator` if `architecture` is set to `replication`
   ## Example:
   ## customPasswordFiles:
@@ -339,7 +339,7 @@ primary:
     encrypt_binlog={{ .Values.tde.encryptBINLOG }}
     aria_encrypt_tables={{ .Values.tde.ariaEncryptTables }}
     {{- end }}
-    
+
     [client]
     port=3306
     socket=/opt/bitnami/mariadb/tmp/mysql.sock

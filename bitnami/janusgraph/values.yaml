@@ -88,7 +88,7 @@ storageBackend:
   ## @param storageBackend.usePasswordFiles Mount credentials as a files instead of using an environment variable
   ## Note: ignored when backend does not require authentication
   ##
-  usePasswordFiles: false
+  usePasswordFiles: true
   ## Cassandra storage backend
   ##
   cassandra:
@@ -187,7 +187,7 @@ javaOptions: ""
 image:
   registry: docker.io
   repository: bitnami/janusgraph
-  tag: 1.1.0-debian-12-r5
+  tag: 1.1.0-debian-12-r10
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -644,7 +644,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/jmx-exporter
-    tag: 1.1.0-debian-12-r3
+    tag: 1.1.0-debian-12-r7
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -846,7 +846,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r35
+    tag: 12-debian-12-r39
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

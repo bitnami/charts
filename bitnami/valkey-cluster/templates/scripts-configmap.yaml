@@ -19,7 +19,7 @@ data:
 
     VALKEY_STATUS_FILE=/tmp/.valkey_cluster_check
 
-    {{- if .Values.usePasswordFile }}
+    {{- if .Values.usePasswordFiles }}
     password_aux=`cat ${VALKEY_PASSWORD_FILE}`
     export REDISCLI_AUTH=$password_aux
     {{- else }}
@@ -81,7 +81,7 @@ data:
     #!/bin/sh
     set -e
 
-    {{- if .Values.usePasswordFile }}
+    {{- if .Values.usePasswordFiles }}
     password_aux=`cat ${VALKEY_PASSWORD_FILE}`
     export REDISCLI_AUTH=$password_aux
     {{- else }}

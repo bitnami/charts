@@ -58,6 +58,9 @@ it('allows deploying a healthy app for a new project', () => {
       cy.contains(`${applications.newApplication.name}-${random}`, {timeout: 60000}).click({force: true});
     });
   });
+  // Wait and reload to prevent stationary issues
+  cy.wait(5000);
+  cy.reload();
   // Ensure that UI shows the basic K8s objects
   cy.contains('svc');
   cy.contains('deploy');

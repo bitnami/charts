@@ -1,8 +1,14 @@
 # Changelog
 
-## 11.3.3 (2025-02-18)
+## 11.3.4 (2025-02-25)
 
-* [bitnami/apache] Release 11.3.3 ([#31970](https://github.com/bitnami/charts/pull/31970))
+* [bitnami/apache] Release 11.3.4 ([#32165](https://github.com/bitnami/charts/pull/32165))
+
+## <small>11.3.3 (2025-02-18)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/apache] Release 11.3.3 (#31970) ([56da85d](https://github.com/bitnami/charts/commit/56da85d3049ab35e4f346717dcce09abac47c4f9)), closes [#31970](https://github.com/bitnami/charts/issues/31970)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
 
 ## <small>11.3.2 (2025-01-24)</small>
 

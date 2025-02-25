@@ -218,8 +218,10 @@ spec:
             items:
               - key: mariadb-root-password
                 path: MARIADB_PREVIOUS_ROOT_PASSWORD
+              {{- if .Values.auth.username }}
               - key: mariadb-password
                 path: MARIADB_PREVIOUS_PASSWORD
+              {{- end }}
               {{- if eq .Values.architecture "replication" }}
               - key: mariadb-replication-password
                 path: MARIADB_PREVIOUS_REPLICATION_PASSWORD
@@ -230,8 +232,10 @@ spec:
             items:
               - key: mariadb-root-password
                 path: MARIADB_NEW_ROOT_PASSWORD
+              {{- if .Values.auth.username }}
               - key: mariadb-password
                 path: MARIADB_NEW_PASSWORD
+              {{- end }}
               {{- if eq .Values.architecture "replication" }}
               - key: mariadb-replication-password
                 path: MARIADB_NEW_REPLICATION_PASSWORD

@@ -457,7 +457,12 @@ Returns an init-container that generates auth configuration for the Amazon S3 AP
   args:
     - -ec
     - |
-      #!/bin/bash
+      {{- if .Values.usePasswordFiles }}
+      export ADMIN_ACCESS_KEY_ID="$(< $ADMIN_ACCESS_KEY_ID_FILE)"
+      export ADMIN_SECRET_ACCESS_KEY="$(< $ADMIN_SECRET_ACCESS_KEY_FILE)"
+      export READ_ACCESS_KEY_ID="$(< $READ_ACCESS_KEY_ID_FILE)"
+      export READ_SECRET_ACCESS_KEY="$(< $READ_SECRET_ACCESS_KEY_FILE)"
+      {{- end }}
 
       cat > "/auth/config.json" <<EOF
       {
@@ -494,6 +499,16 @@ Returns an init-container that generates auth configuration for the Amazon S3 AP
       }
       EOF
   env:
+    {{- if .Values.usePasswordFiles }}
+    - name: ADMIN_ACCESS_KEY_ID_FILE
+      value: "/opt/bitnami/seaweed/secrets/admin_access_key_id"
+    - name: ADMIN_SECRET_ACCESS_KEY_FILE
+      value: "/opt/bitnami/seaweed/secrets/admin_secret_access_key"
+    - name: READ_ACCESS_KEY_ID_FILE
+      value: "/opt/bitnami/seaweed/secrets/read_access_key_id"
+    - name: READ_SECRET_ACCESS_KEY_FILE
+      value: "/opt/bitnami/seaweed/secrets/read_secret_access_key"
+    {{- else }}
     - name: ADMIN_ACCESS_KEY_ID
       valueFrom:
         secretKeyRef:
@@ -514,10 +529,15 @@ Returns an init-container that generates auth configuration for the Amazon S3 AP
         secretKeyRef:
           name: {{ printf "%s-auth" (include "seaweedfs.s3.fullname" .) }}
           key: read_secret_access_key
+    {{- end }}
   volumeMounts:
     - name: empty-dir
       mountPath: /auth
       subPath: auth-dir
+    {{- if .Values.usePasswordFiles }}
+    - name: seaweed-secrets
+      mountPath: /opt/bitnami/seaweed/secrets
+    {{- end}}
 {{- end -}}
 
 {{/*

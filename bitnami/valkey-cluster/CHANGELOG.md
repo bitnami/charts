@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.1.3 (2025-02-20)
+## 2.2.0 (2025-02-21)
 
-* [bitnami/valkey-cluster] Release 2.1.3 ([#32066](https://github.com/bitnami/charts/pull/32066))
+* [bitnami/valkey-cluster] Set `usePasswordFiles=true` by default ([#32122](https://github.com/bitnami/charts/pull/32122))
+
+## <small>2.1.3 (2025-02-20)</small>
+
+* [bitnami/valkey-cluster] Release 2.1.3 (#32066) ([6d565b3](https://github.com/bitnami/charts/commit/6d565b3a18fd2efee3764e826503fdb29b91e75b)), closes [#32066](https://github.com/bitnami/charts/issues/32066)
 
 ## <small>2.1.2 (2025-02-17)</small>
 

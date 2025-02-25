@@ -1,8 +1,13 @@
 # Changelog
 
-## 11.4.5 (2025-02-11)
+## 11.5.0 (2025-02-24)
 
-* [bitnami/kibana] Release 11.4.5 ([#31871](https://github.com/bitnami/charts/pull/31871))
+* [bitnami/kibana] Template hostname everywhere ([#30807](https://github.com/bitnami/charts/pull/30807))
+
+## <small>11.4.5 (2025-02-11)</small>
+
+* [bitnami/kibana] Release 11.4.5 (#31871) ([b99a5eb](https://github.com/bitnami/charts/commit/b99a5eb6f8510efc5d3a5c75e176889c176fb00f)), closes [#31871](https://github.com/bitnami/charts/issues/31871)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
 
 ## <small>11.4.4 (2025-01-30)</small>
 
