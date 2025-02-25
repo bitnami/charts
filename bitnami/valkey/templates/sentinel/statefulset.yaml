@@ -323,9 +323,11 @@ spec:
               mountPath: /health
             - name: sentinel-data
               mountPath: /opt/bitnami/valkey-sentinel/etc
+            {{- if .Values.auth.enabled }}
             {{- if .Values.auth.usePasswordFiles }}
             - name: valkey-password
               mountPath: /opt/bitnami/valkey/secrets/
+            {{- end }}
             {{- end }}
             - name: valkey-data
               mountPath: {{ .Values.replica.persistence.path }}
@@ -511,9 +513,11 @@ spec:
             {{- end }}
             - name: sentinel-data
               mountPath: /opt/bitnami/valkey-sentinel/etc
+            {{- if .Values.auth.enabled }}
             {{- if .Values.auth.usePasswordFiles }}
             - name: valkey-password
               mountPath: /opt/bitnami/valkey/secrets/
+            {{- end }}
             {{- end }}
             - name: valkey-data
               mountPath: {{ .Values.replica.persistence.path }}
@@ -624,9 +628,11 @@ spec:
             - name: empty-dir
               mountPath: /tmp
               subPath: tmp-dir
+            {{- if .Values.auth.enabled }}
             {{- if .Values.auth.usePasswordFiles }}
             - name: valkey-password
               mountPath: /secrets/
+            {{- end }}
             {{- end }}
             {{- if .Values.tls.enabled }}
             - name: valkey-certificates
@@ -674,6 +680,7 @@ spec:
             name: {{ printf "%s-kubectl-scripts" (include "common.names.fullname" .) }}
             defaultMode: 0755
         {{- end }}
+        {{- if .Values.auth.enabled }}
         {{- if .Values.auth.usePasswordFiles }}
         - name: valkey-password
           {{ if .Values.auth.usePasswordFileFromSecret }}
@@ -685,6 +692,7 @@ spec:
           {{- else }}
           emptyDir: {}
           {{- end }}
+        {{- end }}
         {{- end }}
         - name: config
           configMap:

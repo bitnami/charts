@@ -277,9 +277,11 @@ spec:
               mountPath: /opt/bitnami/scripts/start-scripts
             - name: health
               mountPath: /health
+            {{- if .Values.auth.enabled }}
             {{- if .Values.auth.usePasswordFiles }}
             - name: valkey-password
               mountPath: /opt/bitnami/valkey/secrets/
+            {{- end }}
             {{- end }}
             - name: valkey-data
               mountPath: {{ .Values.primary.persistence.path }}
@@ -398,9 +400,11 @@ spec:
             - name: empty-dir
               mountPath: /tmp
               subPath: app-tmp-dir
+            {{- if .Values.auth.enabled }}
             {{- if .Values.auth.usePasswordFiles }}
             - name: valkey-password
               mountPath: /secrets/
+            {{- end }}
             {{- end }}
             {{- if .Values.tls.enabled }}
             - name: valkey-certificates
@@ -423,6 +427,7 @@ spec:
           configMap:
             name: {{ printf "%s-health" (include "common.names.fullname" .) }}
             defaultMode: 0755
+        {{- if .Values.auth.enabled }}
         {{- if .Values.auth.usePasswordFiles }}
         - name: valkey-password
           {{ if .Values.auth.usePasswordFileFromSecret }}
@@ -434,6 +439,7 @@ spec:
           {{- else }}
           emptyDir: {}
           {{- end }}
+        {{- end }}
         {{- end }}
         - name: config
           configMap:
