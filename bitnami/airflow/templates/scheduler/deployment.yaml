@@ -264,6 +264,10 @@ spec:
                   name:  {{ include "airflow.secretName" . }}
               - secret:
                   name: {{ include "airflow.database.secretName" . }}
+              {{- if or (eq .Values.executor "CeleryExecutor") (eq .Values.executor "CeleryKubernetesExecutor") }}
+              - secret:
+                  name: {{ include "airflow.redis.secretName" . }}
+              {{- end }}
         {{- end }}
         {{- if $kube }}
         - name: pod-template

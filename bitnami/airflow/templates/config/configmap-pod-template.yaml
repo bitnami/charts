@@ -250,6 +250,10 @@ data:
               - secret:
                   name: {{ include "airflow.ldap.secretName" . }}
               {{- end }}
+              {{- if or (eq .Values.executor "CeleryExecutor") (eq .Values.executor "CeleryKubernetesExecutor") }}
+              - secret:
+                  name: {{ include "airflow.redis.secretName" . }}
+              {{- end }}
         {{- end }}
         {{- if .Values.web.tls.enabled }}
         - name: tls-certificates

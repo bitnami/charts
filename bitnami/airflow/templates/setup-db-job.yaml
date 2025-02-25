@@ -149,6 +149,10 @@ spec:
                   name:  {{ include "airflow.secretName" . }}
               - secret:
                   name: {{ include "airflow.database.secretName" . }}
+              {{- if or (eq .Values.executor "CeleryExecutor") (eq .Values.executor "CeleryKubernetesExecutor") }}
+              - secret:
+                  name: {{ include "airflow.redis.secretName" . }}
+              {{- end }}
         {{- end }}
         {{- if .Values.setupDBJob.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.setupDBJob.extraVolumes "context" $) | nindent 8 }}
