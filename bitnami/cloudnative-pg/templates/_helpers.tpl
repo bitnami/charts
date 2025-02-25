@@ -17,7 +17,7 @@ Note: This env var only allows one pull secret, so we will use the first one ret
 {{- define "cloudnative-pg.operator.imagePullSecret" -}}
 {{- $pullSecretsYaml := include "common.images.pullSecrets" (dict "images" (list .Values.image) "global" .Values.global) | fromYaml -}}
 {{- if $pullSecretsYaml }}
-{{- print (index $pullSecretsYaml.imagePullSecrets 0) }}
+{{- print (index $pullSecretsYaml.imagePullSecrets 0).name }}
 {{- end -}}
 {{- end -}}
 
