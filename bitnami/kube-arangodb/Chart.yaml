@@ -1,0 +1,34 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+annotations:
+  category: Infrastructure
+  licenses: Apache-2.0
+  images: |
+    - name: arangodb
+      image: docker.io/bitnami/arangodb:3.11.13-debian-12-r2
+    - name: kube-arangodb
+      image: docker.io/bitnami/kube-arangodb:1.2.46-debian-12-r0
+apiVersion: v2
+appVersion: 1.2.46
+dependencies:
+- name: common
+  repository: oci://registry-1.docker.io/bitnamicharts
+  tags:
+  - bitnami-common
+  version: 2.x.x
+description: kube-arangodb is a Kubernetes Operator that manages ArangoDB clusters, ensuring automatic deployment, scaling, and healing of database instances.
+home: https://bitnami.com
+icon: https://bitnami.com/assets/stacks/kube-arangodb/img/kube-arangodb-stack-220x234.png
+keywords:
+- kube-arangodb
+- operator
+- arangodb
+- database
+maintainers:
+- name: Broadcom, Inc. All Rights Reserved.
+  url: https://github.com/bitnami/charts
+name: kube-arangodb
+sources:
+- https://github.com/bitnami/charts/tree/main/bitnami/kube-arangodb
+version: 0.1.3

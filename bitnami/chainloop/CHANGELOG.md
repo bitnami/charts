@@ -1,8 +1,20 @@
 # Changelog
 
-## 2.2.3 (2025-02-21)
+## 2.2.6 (2025-02-25)
 
-* [bitnami/chainloop] Release 2.2.3 ([#32126](https://github.com/bitnami/charts/pull/32126))
+* [bitnami/chainloop] Release 2.2.6 ([#32159](https://github.com/bitnami/charts/pull/32159))
+
+## <small>2.2.5 (2025-02-24)</small>
+
+* [bitnami/chainloop] Release 2.2.5 (#32151) ([8a41298](https://github.com/bitnami/charts/commit/8a41298370569fb1ed67e3d7fd7137be3cafcf17)), closes [#32151](https://github.com/bitnami/charts/issues/32151)
+
+## <small>2.2.4 (2025-02-24)</small>
+
+* [bitnami/chainloop] Update deps (#32143) ([d4bc8f8](https://github.com/bitnami/charts/commit/d4bc8f853b0f73ac11cdbbced51ab985035a61df)), closes [#32143](https://github.com/bitnami/charts/issues/32143)
+
+## <small>2.2.3 (2025-02-21)</small>
+
+* [bitnami/chainloop] Release 2.2.3 (#32126) ([2ee6e17](https://github.com/bitnami/charts/commit/2ee6e174a9da9e3b769b819e0fb6892d3b6793c0)), closes [#32126](https://github.com/bitnami/charts/issues/32126)
 
 ## <small>2.2.2 (2025-02-21)</small>
 

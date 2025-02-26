@@ -4,7 +4,6 @@ containerSecurityContext:
   runAsUser: 1002
 containerPorts:
   http: 6555
-usePasswordFile: true
 configOverrides:
   AUTOCOMPLETE_TTL: "1000000"
 secretConfigOverrides:

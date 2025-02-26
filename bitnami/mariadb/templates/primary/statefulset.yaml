@@ -421,8 +421,10 @@ spec:
             items:
               - key: mariadb-root-password
                 path: mariadb-root-password
+              {{- if .Values.auth.username }}
               - key: mariadb-password
                 path: mariadb-password
+              {{- end -}}
               {{- if eq .Values.architecture "replication" }}
               - key: mariadb-replication-password
                 path: mariadb-replication-password
@@ -450,7 +452,7 @@ spec:
             driver: 'secrets-store.csi.k8s.io'
             readOnly: true
             volumeAttributes:
-              secretProviderClass: {{ include "mariadb.tde.secretProviderClassName" . }}     
+              secretProviderClass: {{ include "mariadb.tde.secretProviderClassName" . }}
         {{- end }}
         {{- if .Values.primary.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.primary.extraVolumes "context" $) | nindent 8 }}
