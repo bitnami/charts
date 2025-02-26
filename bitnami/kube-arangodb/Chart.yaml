@@ -5,10 +5,10 @@ annotations:
   category: Infrastructure
   licenses: Apache-2.0
   images: |
-    - name: kube-arangodb
-      image: docker.io/bitnami/kube-arangodb:1.2.46-debian-12-r0
     - name: arangodb
       image: docker.io/bitnami/arangodb:3.11.13-debian-12-r2
+    - name: kube-arangodb
+      image: docker.io/bitnami/kube-arangodb:1.2.46-debian-12-r0
 apiVersion: v2
 appVersion: 1.2.46
 dependencies:
@@ -17,7 +17,7 @@ dependencies:
   tags:
   - bitnami-common
   version: 2.x.x
-description: kube-arangodb is the ArangoDB Kubernetes Operator. It simplifies the deployment and management of ArangoDB in a Kubernetes environment. It handles tasks such as creating and managing ArangoDB deployments, backups, persistent storage, and datacenter replication, ensuring optimal performance and scalability.
+description: kube-arangodb is a Kubernetes Operator that manages ArangoDB clusters, ensuring automatic deployment, scaling, and healing of database instances.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/kube-arangodb/img/kube-arangodb-stack-220x234.png
 keywords:
@@ -31,4 +31,4 @@ maintainers:
 name: kube-arangodb
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/kube-arangodb
-version: 0.1.0
+version: 0.1.1
