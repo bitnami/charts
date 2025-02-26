@@ -19,13 +19,11 @@ http:
     allow-insecure: true
     body:
       - /arangodb_operator_kubernetes_client_requests/
-      - /vib-arangodb/
   https://127.0.0.1:{{ .Vars.containerPorts.server }}/metrics:
     status: 200
     allow-insecure: true
     body:
       - /arangodb_operator_kubernetes_client_requests/
-      - /vib-arangodb/
 addr:
   # Container ports
   tcp://kube-arangodb:{{ .Vars.service.ports.apiGrpc }}:

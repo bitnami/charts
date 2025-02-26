@@ -35,10 +35,11 @@ webhooks:
     ports:
       webhook: 4443
 extraDeploy:
-  - |
-    apiVersion: "database.arangodb.com/v1"
-    kind: "ArangoDeployment"
-    metadata:
-      name: "vib-arangodb"
-    spec:
-      mode: Single
+- |
+  apiVersion: "database.arangodb.com/v1"
+  kind: "ArangoDeployment"
+  metadata:
+    name: "vib-arangodb"
+  spec:
+    {{- include "kube-arangodb.imagePullSecrets" . | nindent 2 }}
+    mode: Single
