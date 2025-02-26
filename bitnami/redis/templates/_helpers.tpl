@@ -231,6 +231,15 @@ Return Redis&reg; password
 {{- end }}
 {{- end }}
 
+{{- define "common.secrets.get" -}}
+{{- $secret := (lookup "v1" "Secret" .context.Release.Namespace .secret) -}}
+{{- if and $secret (index $secret.data .key) -}}
+    {{- index $secret.data .key | b64dec -}}
+{{- else -}}
+    {{- "" -}}
+{{- end }}
+{{- end }}
+
 {{/* Check if there are rolling tags in the images */}}
 {{- define "redis.checkRollingTags" -}}
 {{- include "common.warnings.rollingTag" .Values.image }}
