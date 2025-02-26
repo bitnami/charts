@@ -35,7 +35,8 @@ webhooks:
     ports:
       webhook: 4443
 extraDeploy:
-  - apiVersion: "database.arangodb.com/v1"
+  - |
+    apiVersion: "database.arangodb.com/v1"
     kind: "ArangoDeployment"
     metadata:
       name: "vib-arangodb"

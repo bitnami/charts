@@ -7,6 +7,8 @@
 
 it('Can access the API and get the deployed Arango Database status', () => {
   let token;
+  // /login returns an API token so we can access
+  // other API endpoints
   cy.request({
     method: 'POST',
     url: '/login',
@@ -31,7 +33,12 @@ it('Can access the API and get the deployed Arango Database status', () => {
       expect(apiResponse.status).to.eq(200);
       if (apiResponse.body.deployments[0]) {
         cy.fixture('deployments').then((d) => {
-          // This ensures that the script in the job was run
+          // This is a sample output of /api/deployment
+          // {"deployments":[{"name":"vib-arangodb","namespace":"test","mode":"Single","environment":"Development",
+          // "state_color":"green","pod_count":1,"ready_pod_count":1,"volume_count":1,"ready_volume_count":1,
+          // "storage_classes":[""],"database_url":"","database_version":"3.11.13","database_license":"community"}]}
+          //
+          // We will check that the name is correct and the status is green
           expect(apiResponse.body.deployments[0].name).to.eq(d.deployment.name);
           expect(apiResponse.body.deployments[0].state_color).to.eq(d.deployment.status);
         });
