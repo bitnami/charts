@@ -1,8 +1,8 @@
 # Changelog
 
-## 9.2.0 (2025-02-21)
+## 9.1.3 (2025-02-21)
 
-* [bitnami/mongodb-sharded] Set `usePasswordFiles=true` by default ([#32112](https://github.com/bitnami/charts/pull/32112))
+* [bitnami/mongodb-sharded] Release 9.1.3 ([#32134](https://github.com/bitnami/charts/pull/32134))
 
 ## <small>9.1.2 (2025-02-03)</small>
 

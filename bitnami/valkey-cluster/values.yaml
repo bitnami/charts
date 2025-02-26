@@ -265,9 +265,9 @@ existingSecret: ""
 ## @param existingSecretPasswordKey Name of key containing password to be retrieved from the existing secret
 ##
 existingSecretPasswordKey: ""
-## @param usePasswordFile Mount passwords as files instead of environment variables
+## @param usePasswordFiles Mount passwords as files instead of environment variables
 ##
-usePasswordFile: false
+usePasswordFiles: true
 ##
 ## TLS configuration
 ##
