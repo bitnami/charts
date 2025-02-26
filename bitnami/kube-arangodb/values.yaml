@@ -260,7 +260,7 @@ deploymentFeatures:
   securedContainers: true
 ## kube-arangodb Operator resource requests and limits
 ## ref: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
-## @param resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if operator.resources is set (operator.resources is recommended for production).
+## @param resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if `resources` is set (`resources` is recommended for production).
 ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
 ##
 resourcesPreset: "nano"
@@ -607,7 +607,7 @@ ingress:
   ## @param ingress.extraHosts An array with additional hostname(s) to be covered with the ingress record
   ## e.g:
   ## extraHosts:
-  ##   - name: neo4j.local
+  ##   - name: kube-arangodb.local
   ##     path: /
   ##
   extraHosts: []
@@ -626,7 +626,7 @@ ingress:
   ## extraTls:
   ## - hosts:
   ##     - neo4j.local
-  ##   secretName: neo4j.local-tls
+  ##   secretName: kube-arangodb.local-tls
   ##
   extraTls: []
   ## @param ingress.secrets Custom TLS certificates as secrets
@@ -638,7 +638,7 @@ ingress:
   ## Please see README.md for more information
   ## e.g:
   ## secrets:
-  ##   - name: neo4j.local-tls
+  ##   - name: kube-arangodb.local-tls
   ##     key: |-
   ##       -----BEGIN RSA PRIVATE KEY-----
   ##       ...
@@ -850,7 +850,7 @@ webhooks:
   customStartupProbe: {}
   ## webhook resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
-  ## @param webhooks.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if operator.resources is set (operator.resources is recommended for production).
+  ## @param webhooks.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if `webhooks.resources` is set (`webhooks.resources` is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
   resourcesPreset: "nano"
