@@ -22,14 +22,10 @@ http:
     status: 200
     timeout: 10000
     allow-insecure: true
-    body:
-      - /arangodb_operator_kubernetes_client_requests/
   https://127.0.0.1:{{ .Vars.containerPorts.server }}/metrics:
     status: 200
     timeout: 10000
     allow-insecure: true
-    body:
-      - /arangodb_operator_kubernetes_client_requests/
 addr:
   # Container ports
   tcp://kube-arangodb:{{ .Vars.service.ports.apiGrpc }}:
