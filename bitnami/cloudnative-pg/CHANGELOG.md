@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.1.3 (2025-02-26)
+## 0.1.3 (2025-02-25)
 
 * [bitnami/cloudnative-pg] test: :white_check_mark: Add imagePullSecrets to the cluster ([#32163](https://github.com/bitnami/charts/pull/32163))
 
