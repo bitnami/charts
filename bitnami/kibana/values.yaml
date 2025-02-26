@@ -159,6 +159,9 @@ savedObjects:
   ## @param savedObjects.configmap Configmap containing NDJSON files to be imported during Kibana initialization (evaluated as a template)
   ##
   configmap: ""
+  ## @param SavedObjectsOverWrite Overwrite saved objects
+  SavedObjectsOverWrite: false
+  ##
 ## @param extraConfiguration Extra settings to be added to the default kibana.yml configmap that the chart creates (unless replaced using `configurationCM`). Evaluated as a template
 ##
 extraConfiguration: {}
