@@ -4,23 +4,29 @@
 http:
   https://kube-arangodb:{{ .Vars.service.ports.apiHttp }}/health:
     status: 200
+    timeout: 10000
     allow-insecure: true
   https://127.0.0.1:{{ .Vars.containerPorts.apiHttp }}/health:
     status: 200
+    timeout: 10000
     allow-insecure: true
   https://kube-arangodb-webhook:{{ .Vars.webhooks.service.ports.webhook }}/health:
     status: 200
+    timeout: 10000
     allow-insecure: true
   https://127.0.0.1:{{ .Vars.webhooks.containerPorts.webhook }}/health:
     status: 200
+    timeout: 10000
     allow-insecure: true
   https://kube-arangodb:{{ .Vars.service.ports.server }}/metrics:
     status: 200
+    timeout: 10000
     allow-insecure: true
     body:
       - /arangodb_operator_kubernetes_client_requests/
   https://127.0.0.1:{{ .Vars.containerPorts.server }}/metrics:
     status: 200
+    timeout: 10000
     allow-insecure: true
     body:
       - /arangodb_operator_kubernetes_client_requests/
