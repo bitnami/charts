@@ -1,8 +1,12 @@
 # Changelog
 
-## 20.9.0 (2025-02-20)
+## 20.10.0 (2025-02-26)
 
-* [bitnami/redis] Add ACL Authentication for Sentinel Nodes ([#31974](https://github.com/bitnami/charts/pull/31974))
+* [bitnami/redis] Support retrieving Redis ACL user passwords from Kubernetes Secrets  ([#32179](https://github.com/bitnami/charts/pull/32179))
+
+## 20.9.0 (2025-02-24)
+
+* [bitnami/redis] Add ACL Authentication for Sentinel Nodes (#31974) ([61b2888](https://github.com/bitnami/charts/commit/61b2888198b718ca7d9ada49ee40d6e11c60ed50)), closes [#31974](https://github.com/bitnami/charts/issues/31974)
 
 ## 20.8.0 (2025-02-20)
 
