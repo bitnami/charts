@@ -10,7 +10,7 @@ annotations:
     - name: arangodb
       image: docker.io/bitnami/arangodb:3.11.13-debian-12-r2
 apiVersion: v2
-appVersion: 1.2.44
+appVersion: 1.2.46
 dependencies:
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts

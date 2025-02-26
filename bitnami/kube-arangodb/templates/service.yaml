@@ -11,7 +11,7 @@ metadata:
   {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels .Values.service.labels) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: kube-arangodb
-    app.kubernetes.io/component: metrics
+    app.kubernetes.io/component: operator
   {{- $defaultAnnotations := dict }}
   {{- if .Values.metrics.enabled }}
   {{- $defaultAnnotations = dict "prometheus.io/scrape" "true" "prometheus.io/port" (.Values.service.ports.server | quote) "prometheus.io/path" "/metrics" }}
