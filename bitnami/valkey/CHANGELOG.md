@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.4.1 (2025-02-25)
+## 2.4.1 (2025-02-26)
 
 * [bitnami/valkey] Check is auth.enabled before auth.usePasswordFiles ([#32157](https://github.com/bitnami/charts/pull/32157))
 
