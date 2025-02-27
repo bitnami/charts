@@ -423,8 +423,7 @@ spec:
           configMap:
             name: {{ printf "%s-health" (include "common.names.fullname" .) }}
             defaultMode: 0755
-        {{- if .Values.auth.enabled }}
-        {{- if .Values.auth.usePasswordFiles }}
+            {{- if and .Values.auth.enabled .Values.auth.usePasswordFiles }}
         - name: valkey-password
           {{ if .Values.auth.usePasswordFileFromSecret }}
           secret:
