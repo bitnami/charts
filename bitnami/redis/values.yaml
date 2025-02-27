@@ -162,7 +162,7 @@ auth:
   existingSecretPasswordKey: ""
   ## @param auth.usePasswordFiles Mount credentials as files instead of using an environment variable
   ##
-  usePasswordFiles: false
+  usePasswordFiles: true
   ## @param auth.usePasswordFileFromSecret Mount password file from secret
   ##
   usePasswordFileFromSecret: true
