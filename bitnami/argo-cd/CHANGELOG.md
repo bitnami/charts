@@ -1,8 +1,13 @@
 # Changelog
 
+## 7.2.1 (2025-02-27)
+
+* [bitnami/argo-cd] Release 7.2.1 ([#32207](https://github.com/bitnami/charts/pull/32207))
+
 ## 7.2.0 (2025-02-24)
 
-* [bitnami/argo-cd] Add support for `usePasswordFiles` ([#32079](https://github.com/bitnami/charts/pull/32079))
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/argo-cd] Add support for `usePasswordFiles` (#32079) ([d9a4702](https://github.com/bitnami/charts/commit/d9a4702bfd5ac892d2cebaa9fc076dc39d0ca792)), closes [#32079](https://github.com/bitnami/charts/issues/32079)
 
 ## <small>7.1.10 (2025-02-06)</small>
 
