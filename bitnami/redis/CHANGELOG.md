@@ -1,8 +1,12 @@
 # Changelog
 
-## 20.9.0 (2025-02-21)
+## 20.10.0 (2025-02-26)
 
 * [bitnami/redis] Set `usePasswordFiles=true` by default ([#32117](https://github.com/bitnami/charts/pull/32117))
+
+## 20.9.0 (2025-02-20)
+
+* [bitnami/redis] Add ACL Authentication for Sentinel Nodes ([#31974](https://github.com/bitnami/charts/pull/31974))
 
 ## 20.8.0 (2025-02-20)
 

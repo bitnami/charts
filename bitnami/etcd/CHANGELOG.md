@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.0.8 (2025-02-19)
+## 11.1.0 (2025-02-21)
 
-* [bitnami/etcd] Release 11.0.8 ([#31993](https://github.com/bitnami/charts/pull/31993))
+* [bitnami/etcd] feat: basic customization params for etcd upgrade-job ([#32099](https://github.com/bitnami/charts/pull/32099))
+
+## <small>11.0.8 (2025-02-19)</small>
+
+* [bitnami/etcd] Release 11.0.8 (#31993) ([d854fdd](https://github.com/bitnami/charts/commit/d854fdd029c002ec6591bd948a1c69a5c5bdb2c4)), closes [#31993](https://github.com/bitnami/charts/issues/31993)
 
 ## <small>11.0.7 (2025-02-12)</small>
 

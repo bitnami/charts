@@ -175,6 +175,14 @@ spec:
           env:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
+            {{- if .Values.tracking.auth.enabled }}
+            - name: MLFLOW_FLASK_SERVER_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "mlflow.v0.tracking.secretName" . }}
+                  key: {{ include "mlflow.v0.tracking.flaskServerSecretKey" . | quote }}
+            {{- end }}
+
             {{- if (include "mlflow.v0.database.enabled" .) }}
             - name: MLFLOW_DATABASE_PASSWORD
               valueFrom:

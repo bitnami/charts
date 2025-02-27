@@ -1,0 +1,62 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{ if and .Values.rbac.create .Values.features.scheduler }}
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
+kind: Role
+metadata:
+  name: {{ printf "%s-scheduler" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: kube-arangodb
+    app.kubernetes.io/component: operator
+rules:
+  - apiGroups:
+      - "scheduler.arangodb.com"
+    resources:
+      - "arangoprofiles"
+      - "arangoprofiles/status"
+      - "arangoschedulerpods"
+      - "arangoschedulerpods/status"
+      - "arangoschedulerdeployments"
+      - "arangoschedulerdeployments/status"
+      - "arangoschedulerbatchjobs"
+      - "arangoschedulerbatchjobs/status"
+      - "arangoschedulercronjobs"
+      - "arangoschedulercronjobs/status"
+    verbs:
+      - "*"
+  - apiGroups:
+      - ""
+    resources:
+      - "pods"
+      - "pods/status"
+    verbs:
+      - "*"
+  - apiGroups:
+      - "apps"
+    resources:
+      - "deployments"
+      - "deployments/status"
+    verbs:
+      - "*"
+  - apiGroups:
+      - "batch"
+    resources:
+      - "jobs"
+      - "jobs/status"
+      - "cronjobs"
+      - "cronjobs/status"
+    verbs:
+      - "*"
+  - apiGroups:
+      - "database.arangodb.com"
+    resources:
+      - "arangodeployments"
+    verbs:
+      - "get"
+      - "list"
+      - "watch"
+{{- end }}

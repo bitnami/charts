@@ -507,13 +507,14 @@ helm install my-release --set master.persistence.existingClaim=PVC_NAME oci://RE
 | -------------------------------- | ------------------------------------------------------------------------------------- | ------------- |
 | `architecture`                   | Redis&reg; architecture. Allowed values: `standalone` or `replication`                | `replication` |
 | `auth.enabled`                   | Enable password authentication                                                        | `true`        |
-| `auth.sentinel`                  | Enable password authentication on sentinels too                                       | `true`        |
+| `auth.sentinel`                  | Enable authentication on sentinels too                                                | `true`        |
 | `auth.password`                  | Redis&reg; password                                                                   | `""`          |
 | `auth.existingSecret`            | The name of an existing secret with Redis&reg; credentials                            | `""`          |
 | `auth.existingSecretPasswordKey` | Password key to be retrieved from existing secret                                     | `""`          |
 | `auth.usePasswordFiles`          | Mount credentials as files instead of using an environment variable                   | `true`        |
 | `auth.usePasswordFileFromSecret` | Mount password file from secret                                                       | `true`        |
 | `auth.acl.enabled`               | Enables the support of the Redis ACL system                                           | `false`       |
+| `auth.acl.sentinel`              | Enables the support of the Redis ACL system for Sentinel Nodes                        | `false`       |
 | `auth.acl.users`                 | A list of the configured users in the Redis ACL system                                | `[]`          |
 | `commonConfiguration`            | Common configuration to be added into the ConfigMap                                   | `""`          |
 | `existingConfigmap`              | The name of an existing ConfigMap with your custom configuration for Redis&reg; nodes | `""`          |
