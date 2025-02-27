@@ -1,8 +1,12 @@
 # Changelog
 
-## 24.3.3 (2025-02-20)
+## 24.4.0 (2025-02-25)
 
-* [bitnami/harbor] Release 24.3.3 ([#32091](https://github.com/bitnami/charts/pull/32091))
+* [bitnami/harbor] made generating existing/default secret secrets an option ([#31079](https://github.com/bitnami/charts/pull/31079))
+
+## <small>24.3.3 (2025-02-20)</small>
+
+* [bitnami/harbor] Release 24.3.3 (#32091) ([97774de](https://github.com/bitnami/charts/commit/97774dec2db1ae1011be7053dcc835b48d5bdac6)), closes [#32091](https://github.com/bitnami/charts/issues/32091)
 
 ## <small>24.3.2 (2025-02-18)</small>
 
