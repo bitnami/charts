@@ -41,7 +41,6 @@ Returns an init-container that prepares the Airflow configuration files for main
       airflow_conf_set "database" "sql_alchemy_conn" "$AIRFLOW_DATABASE_SQL_CONN"
     {{- else }}
       {{- if and .Values.usePasswordFiles }}
-      ls -laR /opt/bitnami/airflow
       export AIRFLOW_DATABASE_PASSWORD="$(< $AIRFLOW_DATABASE_PASSWORD_FILE)"
       {{- end }}
       db_user="$(airflow_encode_url "$AIRFLOW_DATABASE_USERNAME")"
