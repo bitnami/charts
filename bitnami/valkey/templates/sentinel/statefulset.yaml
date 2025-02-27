@@ -518,7 +518,6 @@ spec:
             - name: valkey-password
               mountPath: /opt/bitnami/valkey/secrets/
             {{- end }}
-            {{- end }}
             - name: valkey-data
               mountPath: {{ .Values.replica.persistence.path }}
               {{- if .Values.replica.persistence.subPath }}
