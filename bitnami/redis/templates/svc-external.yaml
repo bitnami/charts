@@ -5,7 +5,7 @@ SPDX-License-Identifier: APACHE-2.0
 
 {{- if .Values.sentinel.externalAccess.enabled }}
 {{- $fullName := include "common.names.fullname" . }}
-{{- $nodesCount := .Values.sentinel.replica.replicaCount | int }}
+{{- $nodesCount := .Values.replica.replicaCount | int }}
 {{- $root := . }}
 
 {{- range $i, $e := until $nodesCount }}
