@@ -455,7 +455,6 @@ spec:
           emptyDir: {}
           {{- end }}
         {{- end }}
-        {{- end }}
         - name: config
           configMap:
             name: {{ include "valkey.configmapName" . }}
