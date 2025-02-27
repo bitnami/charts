@@ -402,7 +402,6 @@ spec:
             - name: valkey-password
               mountPath: /secrets/
             {{- end }}
-            {{- end }}
             {{- if .Values.tls.enabled }}
             - name: valkey-certificates
               mountPath: /opt/bitnami/valkey/certs
