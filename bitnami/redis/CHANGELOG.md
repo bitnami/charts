@@ -2,7 +2,7 @@
 
 ## 20.10.0 (2025-02-27)
 
-* [bitnami/redis] feat: Add external access service for redis sentinel ([#32190](https://github.com/bitnami/charts/pull/32190))
+* [bitnami/redis] Set `usePasswordFiles=true` by default ([#32117](https://github.com/bitnami/charts/pull/32117))
 
 ## 20.9.0 (2025-02-24)
 

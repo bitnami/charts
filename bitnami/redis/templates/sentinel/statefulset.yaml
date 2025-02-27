@@ -165,9 +165,9 @@ spec:
             {{- if .Values.auth.enabled }}
             {{- if .Values.auth.usePasswordFiles }}
             - name: REDIS_PASSWORD_FILE
-              value: "/opt/bitnami/redis/secrets/redis-password"
+              value: {{ printf "/opt/bitnami/redis/secrets/%s" (include "redis.secretPasswordKey" .) }}
             - name: REDIS_MASTER_PASSWORD_FILE
-              value: "/opt/bitnami/redis/secrets/redis-password"
+              value: {{ printf "/opt/bitnami/redis/secrets/%s" (include "redis.secretPasswordKey" .) }}
             {{- else }}
             - name: REDIS_PASSWORD
               valueFrom:
@@ -386,7 +386,7 @@ spec:
             {{- if .Values.auth.enabled }}
             {{- if .Values.auth.usePasswordFiles }}
             - name: REDIS_PASSWORD_FILE
-              value: "/opt/bitnami/redis/secrets/redis-password"
+              value: {{ printf "/opt/bitnami/redis/secrets/%s" (include "redis.secretPasswordKey" .) }}
             {{- else }}
             - name: REDIS_PASSWORD
               valueFrom:
@@ -542,9 +542,9 @@ spec:
             - /bin/bash
             - -c
             - |
-              if [[ -f '/secrets/redis-password' ]]; then
-                  export REDIS_PASSWORD=$(cat /secrets/redis-password)
-              fi
+              {{- if .Values.usePasswordFiles }}
+              export REDIS_PASSWORD="$(< $REDIS_PASSWORD_FILE)"
+              {{- end }}
               redis_exporter{{- range $key, $value := .Values.metrics.extraArgs }} --{{ $key }}={{ $value }}{{- end }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
@@ -558,7 +558,10 @@ spec:
             {{- if .Values.auth.enabled }}
             - name: REDIS_USER
               value: default
-            {{- if (not .Values.auth.usePasswordFiles) }}
+            {{- if .Values.auth.usePasswordFiles }}
+            - name: REDIS_PASSWORD_FILE
+              value: {{ printf "/secrets/%s" (include "redis.secretPasswordKey" .) }}
+            {{- else }}
             - name: REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:

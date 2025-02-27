@@ -1,8 +1,13 @@
 # Changelog
 
-## 9.1.3 (2025-02-21)
+## 9.2.0 (2025-02-26)
 
-* [bitnami/mongodb-sharded] Release 9.1.3 ([#32134](https://github.com/bitnami/charts/pull/32134))
+* [bitnami/mongodb-sharded] Set `usePasswordFiles=true` by default ([#32112](https://github.com/bitnami/charts/pull/32112))
+
+## <small>9.1.3 (2025-02-21)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/mongodb-sharded] Release 9.1.3 (#32134) ([65a30fa](https://github.com/bitnami/charts/commit/65a30fab023ed5b9d85d9bf80b435237c7a04226)), closes [#32134](https://github.com/bitnami/charts/issues/32134)
 
 ## <small>9.1.2 (2025-02-03)</small>
 
