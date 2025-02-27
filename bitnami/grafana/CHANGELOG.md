@@ -1,8 +1,17 @@
 # Changelog
 
-## 11.4.7 (2025-02-04)
+## 11.4.9 (2025-02-20)
 
-* [bitnami/grafana] Release 11.4.7 ([#31758](https://github.com/bitnami/charts/pull/31758))
+* [bitnami/grafana] Release 11.4.9 ([#32092](https://github.com/bitnami/charts/pull/32092))
+
+## <small>11.4.8 (2025-02-20)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/grafana] Release 11.4.8 (#32042) ([52642ef](https://github.com/bitnami/charts/commit/52642ef968fc7746c95715b13f16aebe376bdfa2)), closes [#32042](https://github.com/bitnami/charts/issues/32042)
+
+## <small>11.4.7 (2025-02-04)</small>
+
+* [bitnami/grafana] Release 11.4.7 (#31758) ([206a4c6](https://github.com/bitnami/charts/commit/206a4c6d60df350df8687d3e3f2184ab5a1512c7)), closes [#31758](https://github.com/bitnami/charts/issues/31758)
 
 ## <small>11.4.6 (2025-02-04)</small>
 

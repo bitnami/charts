@@ -44,18 +44,22 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.podLabels "context" $ ) | nindent 8 }}
         {{- end }}
       annotations:
+      {{- if .Values.configmapChecksumAnnotations }}
         {{- if (include "redis.createConfigmap" .) }}
         checksum/configmap: {{ pick ( include (print $.Template.BasePath "/configmap.yaml") . | fromYaml ) "data" | toYaml | sha256sum }}
         {{- end }}
         checksum/health: {{ pick ( include (print $.Template.BasePath "/health-configmap.yaml") . | fromYaml ) "data" | toYaml | sha256sum }}
         checksum/scripts: {{ pick ( include (print $.Template.BasePath "/scripts-configmap.yaml") . | fromYaml ) "data" | toYaml | sha256sum }}
+      {{- end }}
+      {{- if .Values.secretChecksumAnnotations }}
         checksum/secret: {{ pick ( include (print $.Template.BasePath "/secret.yaml") . | fromYaml ) "data" | toYaml | sha256sum }}
-        {{- if .Values.replica.podAnnotations }}
+      {{- end }}
+      {{- if .Values.replica.podAnnotations }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.replica.podAnnotations "context" $ ) | nindent 8 }}
-        {{- end }}
-        {{- if and .Values.metrics.enabled .Values.metrics.podAnnotations }}
+      {{- end }}
+      {{- if and .Values.metrics.enabled .Values.metrics.podAnnotations }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.podAnnotations "context" $ ) | nindent 8 }}
-        {{- end }}
+      {{- end }}
     spec:
       {{- if .Values.replica.extraPodSpec }}
       {{- include "common.tplvalues.render" (dict "value" .Values.replica.extraPodSpec "context" $) | nindent 6 }}
@@ -156,9 +160,9 @@ spec:
             {{- if .Values.auth.enabled }}
             {{- if .Values.auth.usePasswordFiles }}
             - name: REDIS_PASSWORD_FILE
-              value: "/opt/bitnami/redis/secrets/redis-password"
+              value: {{ printf "/opt/bitnami/redis/secrets/%s" (include "redis.secretPasswordKey" .) }}
             - name: REDIS_MASTER_PASSWORD_FILE
-              value: "/opt/bitnami/redis/secrets/redis-password"
+              value: {{ printf "/opt/bitnami/redis/secrets/%s" (include "redis.secretPasswordKey" .) }}
             {{- else }}
             - name: REDIS_PASSWORD
               valueFrom:
@@ -304,9 +308,9 @@ spec:
             - /bin/bash
             - -c
             - |
-              if [[ -f '/secrets/redis-password' ]]; then
-              export REDIS_PASSWORD=$(cat /secrets/redis-password)
-              fi
+              {{- if .Values.usePasswordFiles }}
+              export REDIS_PASSWORD="$(< $REDIS_PASSWORD_FILE)"
+              {{- end }}
               redis_exporter{{- range $key, $value := .Values.metrics.extraArgs }} --{{ $key }}={{ $value }}{{- end }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
@@ -320,7 +324,10 @@ spec:
             {{- if .Values.auth.enabled }}
             - name: REDIS_USER
               value: default
-            {{- if (not .Values.auth.usePasswordFiles) }}
+            {{- if .Values.auth.usePasswordFiles }}
+            - name: REDIS_PASSWORD_FILE
+              value: {{ printf "/secrets/%s" (include "redis.secretPasswordKey" .) }}
+            {{- else }}
             - name: REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:

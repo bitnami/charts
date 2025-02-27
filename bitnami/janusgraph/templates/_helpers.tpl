@@ -144,10 +144,10 @@ Return the wait-for-storage init container
     - name: JANUSGRAPH_CFG_STORAGE_USERNAME
       value: {{ include "janusgraph.storage.username" . | quote }}
     {{- if .Values.storageBackend.usePasswordFiles }}
-    - name: JANUSGRAPH_CFG_STORAGE_PASSWORD_FILE
+    - name: JANUSGRAPH_STORAGE_PASSWORD_FILE
       value: {{ printf "/opt/bitnami/janusgraph/secrets/%s" (include "janusgraph.storage.password.secretKey" .) }}
     {{- else }}
-    - name: JANUSGRAPH_CFG_STORAGE_PASSWORD
+    - name: JANUSGRAPH_STORAGE_PASSWORD
       valueFrom:
         secretKeyRef:
           name: {{ include "janusgraph.storage.password.secretName" . }}

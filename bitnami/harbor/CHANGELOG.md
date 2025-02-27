@@ -1,8 +1,12 @@
 # Changelog
 
-## 24.3.2 (2025-02-18)
+## 24.3.3 (2025-02-20)
 
-* [bitnami/harbor] Release 24.3.2 ([#31965](https://github.com/bitnami/charts/pull/31965))
+* [bitnami/harbor] Release 24.3.3 ([#32091](https://github.com/bitnami/charts/pull/32091))
+
+## <small>24.3.2 (2025-02-18)</small>
+
+* [bitnami/harbor] Release 24.3.2 (#31965) ([273fa3f](https://github.com/bitnami/charts/commit/273fa3fd0c3da7da24a8f5ed25e38615deafba8b)), closes [#31965](https://github.com/bitnami/charts/issues/31965)
 
 ## <small>24.3.1 (2025-02-17)</small>
 

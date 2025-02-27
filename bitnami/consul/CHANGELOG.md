@@ -1,8 +1,16 @@
 # Changelog
 
-## 11.4.6 (2025-02-13)
+## 11.4.8 (2025-02-26)
 
-* [bitnami/consul] Release 11.4.6 ([#31914](https://github.com/bitnami/charts/pull/31914))
+* [bitnami/consul] Release 11.4.8 ([#32176](https://github.com/bitnami/charts/pull/32176))
+
+## <small>11.4.7 (2025-02-19)</small>
+
+* [bitnami/consul] Release 11.4.7 (#31981) ([1a9a009](https://github.com/bitnami/charts/commit/1a9a009bcacc416e3a230315eb4063a3baf498e3)), closes [#31981](https://github.com/bitnami/charts/issues/31981)
+
+## <small>11.4.6 (2025-02-13)</small>
+
+* [bitnami/consul] Release 11.4.6 (#31914) ([8a6808c](https://github.com/bitnami/charts/commit/8a6808c9d601e276e4f585a157a76f8d8f0b0bf0)), closes [#31914](https://github.com/bitnami/charts/issues/31914)
 
 ## <small>11.4.5 (2025-02-12)</small>
 
@@ -1280,7 +1288,7 @@
 ## <small>4.2.8 (2019-05-29)</small>
 
 * Change syntax because of linter failing ([adfc357](https://github.com/bitnami/charts/commit/adfc35728c2a8a9def9e1897b3772d64df621354))
-* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79)), closes [#issuecomment-496883321](https://github.com/bitnami/charts/issues/issuecomment-496883321)
+* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79))
 * Use immutable tags in the main images ([17ca4f5](https://github.com/bitnami/charts/commit/17ca4f5c91da33da03f9e2d411fe5e004e825c4d))
 
 ## <small>4.2.7 (2019-05-28)</small>
