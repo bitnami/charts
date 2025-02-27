@@ -297,8 +297,7 @@ spec:
               mountPath: /opt/bitnami/scripts/start-scripts
             - name: health
               mountPath: /health
-            {{- if .Values.auth.enabled }}
-            {{- if .Values.auth.usePasswordFiles }}
+            {{- if and .Values.auth.enabled .Values.auth.usePasswordFiles }}
             - name: valkey-password
               mountPath: /opt/bitnami/valkey/secrets/
             {{- end }}
