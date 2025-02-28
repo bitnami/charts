@@ -16,7 +16,7 @@ kind: Service
 metadata:
   name: {{ template "common.names.fullname" $ }}-{{ $i }}-svc
   namespace: {{ include "common.names.namespace" $ | quote }}
-  labels: {{- include "common.labels.standard" ( dict "customLabels" $root.Values.sentinel.commonLabels "context" $ ) | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $root.Values.commonLabels "context" $ ) | nindent 4 }}
     pod: {{ $targetPod }}
   {{- if or
     (ne $root.Values.sentinel.externalAccess.service.loadBalancerIPAnnotaion "") }}
