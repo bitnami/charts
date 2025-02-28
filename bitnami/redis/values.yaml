@@ -1591,9 +1591,9 @@ sentinel:
         ##
       redisPort: 6379
     
-      ## @param sentinel.externalAccess.service.sentineelPort Port for the services used to expose redis-sentinel
+      ## @param sentinel.externalAccess.service.sentinelPort Port for the services used to expose redis-sentinel
         ##   
-      sentineelPort: 6379 
+      sentinelPort: 26379 
         ## @param sentinel.externalAccess.service.loadBalancerIP Array of load balancer IPs for each Redis&reg; node. Length must be the same as sentinel.replicaCount
         ##
       loadBalancerIP: []

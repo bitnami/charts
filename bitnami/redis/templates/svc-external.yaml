@@ -52,11 +52,11 @@ spec:
   {{- end }}
   ports:
     - name: tcp-redis
-      port: {{ $root.Values.sentinel.externalAccess.service.port }}
+      port: {{ $root.Values.sentinel.externalAccess.service.redisPort }}
       protocol: TCP
       targetPort: 6379
     - name: tcp-sentinel
-      port: 26379
+      port: {{ $root.Values.sentinel.externalAccess.service.sentinelPort }}
       protocol: TCP
       targetPort: 26379
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list $root.Values.sentinel.commonLabels ) "context" $ ) }}
