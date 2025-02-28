@@ -1,8 +1,16 @@
 # Changelog
 
-## 20.9.0 (2025-02-20)
+## 20.10.1 (2025-02-28)
 
-* [bitnami/redis] Add ACL Authentication for Sentinel Nodes ([#31974](https://github.com/bitnami/charts/pull/31974))
+* [bitnami/redis] - handle SIGTERM in `kubectl-shared` container ([#32085](https://github.com/bitnami/charts/pull/32085))
+
+## 20.10.0 (2025-02-27)
+
+* [bitnami/redis] Set `usePasswordFiles=true` by default (#32117) ([2f80b74](https://github.com/bitnami/charts/commit/2f80b749c9a2e692d51beb3e001708694b94c17f)), closes [#32117](https://github.com/bitnami/charts/issues/32117)
+
+## 20.9.0 (2025-02-24)
+
+* [bitnami/redis] Add ACL Authentication for Sentinel Nodes (#31974) ([61b2888](https://github.com/bitnami/charts/commit/61b2888198b718ca7d9ada49ee40d6e11c60ed50)), closes [#31974](https://github.com/bitnami/charts/issues/31974)
 
 ## 20.8.0 (2025-02-20)
 
