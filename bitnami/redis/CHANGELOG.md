@@ -1,8 +1,12 @@
 # Changelog
 
+## 20.10.1 (2025-02-28)
+
+* [bitnami/redis] fix 32214 - REDIS_PASSWORD_FILE uses wrong filename from volume ([#32215](https://github.com/bitnami/charts/pull/32215))
+
 ## 20.10.0 (2025-02-27)
 
-* [bitnami/redis] Set `usePasswordFiles=true` by default ([#32117](https://github.com/bitnami/charts/pull/32117))
+* [bitnami/redis] Set `usePasswordFiles=true` by default (#32117) ([2f80b74](https://github.com/bitnami/charts/commit/2f80b749c9a2e692d51beb3e001708694b94c17f)), closes [#32117](https://github.com/bitnami/charts/issues/32117)
 
 ## 20.9.0 (2025-02-24)
 
