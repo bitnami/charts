@@ -1,6 +1,6 @@
 # Changelog
 
-## 20.11.0 (2025-02-27)
+## 20.11.0 (2025-02-28)
 
 * [bitnami/redis] feat: Add external access service for redis sentinel ([#32190](https://github.com/bitnami/charts/pull/32190))
 
