@@ -1,8 +1,13 @@
 # Changelog
 
-## 15.0.4 (2025-02-19)
+## 15.0.5 (2025-02-28)
 
-* [bitnami/minio] Release 15.0.4 ([#32019](https://github.com/bitnami/charts/pull/32019))
+* [bitnami/minio] Release 15.0.5 ([#32222](https://github.com/bitnami/charts/pull/32222))
+
+## <small>15.0.4 (2025-02-19)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/minio] Release 15.0.4 (#32019) ([cb930d3](https://github.com/bitnami/charts/commit/cb930d302faf70eccc8a6383df4584ba44a2a4cc)), closes [#32019](https://github.com/bitnami/charts/issues/32019)
 
 ## <small>15.0.3 (2025-02-08)</small>
 

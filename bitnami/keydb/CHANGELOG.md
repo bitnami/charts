@@ -1,8 +1,12 @@
 # Changelog
 
+## 0.5.0 (2025-02-21)
+
+* [bitnami/keydb] Set `usePasswordFiles=true` by default ([#32108](https://github.com/bitnami/charts/pull/32108))
+
 ## 0.4.0 (2025-02-20)
 
-* [bitnami/keydb] feat: use new helper for checking API versions ([#32052](https://github.com/bitnami/charts/pull/32052))
+* [bitnami/keydb] feat: use new helper for checking API versions (#32052) ([a264f60](https://github.com/bitnami/charts/commit/a264f60d384378ba60508d4431a2412991282633)), closes [#32052](https://github.com/bitnami/charts/issues/32052)
 
 ## <small>0.3.4 (2025-02-19)</small>
 

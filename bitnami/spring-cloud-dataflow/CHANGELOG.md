@@ -1,8 +1,14 @@
 # Changelog
 
-## 34.1.2 (2025-01-31)
+## 34.2.0 (2025-02-21)
 
-* [bitnami/spring-cloud-dataflow] Release 34.1.2 ([#31688](https://github.com/bitnami/charts/pull/31688))
+* [bitnami/spring-cloud-dataflow] Set `usePasswordFiles=true` by default ([#32120](https://github.com/bitnami/charts/pull/32120))
+
+## <small>34.1.2 (2025-02-03)</small>
+
+* [bitnami/spring-cloud-dataflow] Release 34.1.2 (#31688) ([d39f48a](https://github.com/bitnami/charts/commit/d39f48aec34ce2a277bece9196709afa63c32ec3)), closes [#31688](https://github.com/bitnami/charts/issues/31688)
+* Typo fix  CHANGELOG.md (#31536) ([315f9c2](https://github.com/bitnami/charts/commit/315f9c2f9b1c582eee30d983cc358bf66d3da0ad)), closes [#31536](https://github.com/bitnami/charts/issues/31536)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
 
 ## <small>34.1.1 (2025-01-17)</small>
 

@@ -1,8 +1,13 @@
 # Changelog
 
+## 1.1.1 (2025-02-26)
+
+* [bitnami/superset] Release 1.1.1 ([#32170](https://github.com/bitnami/charts/pull/32170))
+
 ## 1.1.0 (2025-02-20)
 
-* [bitnami/superset] feat: use new helper for checking API versions ([#32063](https://github.com/bitnami/charts/pull/32063))
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/superset] feat: use new helper for checking API versions (#32063) ([9d61546](https://github.com/bitnami/charts/commit/9d615468c4e99e6b392a9b36865baee606eca9e6)), closes [#32063](https://github.com/bitnami/charts/issues/32063)
 
 ## 1.0.0 (2025-02-03)
 

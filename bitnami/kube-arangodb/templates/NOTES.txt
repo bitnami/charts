@@ -1,0 +1,103 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
+Did you know there are enterprise versions of the Bitnami catalog? For enhanced secure software supply chain features, unlimited pulls from Docker, LTS support, or application customization, see Bitnami Premium or Tanzu Application Catalog. See https://www.arrow.com/globalecs/na/vendors/bitnami for more information.
+
+** Please be patient while the chart is being deployed **
+
+{{- if .Values.diagnosticMode.enabled }}
+
+The chart has been deployed in diagnostic mode. All probes have been disabled and the command has been overwritten with:
+
+  command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 4 }}
+  args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 4 }}
+
+Get the list of pods by executing:
+
+    kubectl get pods --namespace {{ include "common.names.namespace" . }} -l app.kubernetes.io/instance={{ .Release.Name }}
+
+Access the pod you want to debug by executing
+
+    kubectl exec --namespace {{ include "common.names.namespace" . }} -ti <NAME OF THE POD> -- bash
+
+{{- else }}
+
+Check the status of the pods by running this command:
+
+  kubectl get pods --namespace {{ include "common.names.namespace" . | quote }} -l app.kubernetes.io/instance={{ .Release.Name }}
+
+Check the kube-arangodb documentation for instructions on how to deploy ArangoDeployments and other *.arangodb.com objects:
+
+https://arangodb.github.io/kube-arangodb/
+
+{{- if .Values.rbac.create }}
+{{- if (eq .Values.scope "legacy") }}
+WARNING: ArangoDB Kubernetes Operator can access all secrets in the cluster. This could pose a security risk if the application gets compromised.
+
+You can limit allowed namespaces by setting scope = "namespaced"
+{{- else }}
+
+ArangoDB Kubernetes Operator can ONLY access resources in the {{ include "common.names.namespace" . }} namespace:
+
+ArangoDB Kubernetes Operator won't be able to access resources in other namespaces. You can configure this behavior by setting scope = "legacy"
+
+{{- end }}
+{{- end }}
+
+The ArangoDB Kubernetes Operator dashboard can be accessed through the following DNS name from within your cluster:
+
+    {{ include "common.names.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }} (port {{ .Values.service.ports.server }})
+
+To access the dashboard site from outside the cluster follow the steps below:
+
+{{- if .Values.ingress.enabled }}
+
+1. Get the dashboard URL and associate its hostname to your cluster external IP:
+
+    export CLUSTER_IP=$(minikube ip) # On Minikube. Use: `kubectl cluster-info` on others K8s clusters
+    echo "Dashboard URL: http{{ if .Values.ingress.tls }}s{{ end }}://{{ .Values.ingress.hostname }}/"
+    echo "$CLUSTER_IP  {{ .Values.ingress.hostname }}" | sudo tee -a /etc/hosts
+
+{{- else }}
+{{- $port := .Values.service.ports.server | toString }}
+
+1. Get the dashboard URL by running these commands:
+
+{{- if contains "NodePort" .Values.service.type }}
+
+    export NODE_PORT=$(kubectl get --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "common.names.fullname" . }})
+    export NODE_IP=$(kubectl get nodes --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.items[0].status.addresses[0].address}")
+    echo "Dashboard URL: https://$NODE_IP:$NODE_PORT/"
+
+{{- else if contains "LoadBalancer" .Values.service.type }}
+
+  NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+        Watch the status with: 'kubectl get svc --namespace {{ include "common.names.namespace" . }} -w {{ include "common.names.fullname" . }}'
+
+    export SERVICE_IP=$(kubectl get svc --namespace {{ include "common.names.namespace" . }} {{ include "common.names.fullname" . }} --include "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
+    echo "Dashboard URL: https://$SERVICE_IP{{- if ne $port "443" }}:{{ .Values.service.ports.server }}{{ end }}/"
+
+{{- else if contains "ClusterIP"  .Values.service.type }}
+
+    kubectl port-forward --namespace {{ include "common.names.namespace" . }} svc/{{ include "common.names.fullname" . }} {{ .Values.service.ports.server }}:{{ .Values.service.ports.server }} &
+    echo "Dashboard URL: https://127.0.0.1{{- if ne $port "443" }}:{{ .Values.service.ports.server }}{{ end }}//"
+
+{{- end }}
+{{- end }}
+
+2. Open a browser and access ArangoDB Kubernetes Operator Dashboard using the obtained URL.
+
+3. Login with the following credentials below:
+
+  echo Username: {{ .Values.auth.username }}
+  echo Password: $(kubectl get secret --namespace {{ include "common.names.namespace" . }} {{ include "kube-arangodb.secretName" . }} -o jsonpath="{.data.password}" | base64 -d)
+
+{{- end }}
+
+{{- include "common.warnings.rollingTag" .Values.image }}
+{{- include "common.warnings.rollingTag" .Values.arangodbImage }}
+{{- include "kube-arangodb.validateValues" . }}
+{{- include "common.warnings.resources" (dict "sections" (list "" "webhooks") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.arangodbImage .Values.image) "context" $) }}
+{{- include "common.errors.insecureImages" (dict "images" (list .Values.arangodbImage .Values.image) "context" $) }}

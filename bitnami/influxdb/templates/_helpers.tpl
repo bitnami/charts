@@ -71,6 +71,17 @@ Return the InfluxDB&trade; credentials secret.
 {{- end -}}
 
 {{/*
+Return the InfluxDB&trade; backup S3 secret.
+*/}}
+{{- define "influxdb.backup.secretName" -}}
+{{- if .Values.backup.uploadProviders.aws.existingSecret -}}
+    {{- printf "%s" (tpl .Values.backup.uploadProviders.aws.existingSecret $) -}}
+{{- else -}}
+    {{- printf "%s-backup-aws" (include "common.names.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the InfluxDB&trade; configuration configmap.
 */}}
 {{- define "influxdb.configmapName" -}}

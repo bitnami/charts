@@ -1,8 +1,13 @@
 # Changelog
 
-## 11.6.9 (2025-02-20)
+## 11.6.10 (2025-02-27)
 
-* [bitnami/nginx-ingress-controller] Release 11.6.9 ([#32023](https://github.com/bitnami/charts/pull/32023))
+* [bitnami/nginx-ingress-controller] Release 11.6.10 ([#32193](https://github.com/bitnami/charts/pull/32193))
+
+## <small>11.6.9 (2025-02-20)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/nginx-ingress-controller] Release 11.6.9 (#32023) ([4751c26](https://github.com/bitnami/charts/commit/4751c26bbfbabb368b90a3b70f59e0275a6b1101)), closes [#32023](https://github.com/bitnami/charts/issues/32023)
 
 ## <small>11.6.8 (2025-02-05)</small>
 

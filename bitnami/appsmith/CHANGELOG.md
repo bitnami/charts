@@ -1,8 +1,12 @@
 # Changelog
 
-## 5.2.0 (2025-02-20)
+## 5.2.1 (2025-02-26)
 
-* [bitnami/appsmith] Add support for `usePasswordFiles` ([#32078](https://github.com/bitnami/charts/pull/32078))
+* [bitnami/appsmith] Release 5.2.1 ([#32175](https://github.com/bitnami/charts/pull/32175))
+
+## 5.2.0 (2025-02-24)
+
+* [bitnami/appsmith] Add support for `usePasswordFiles` (#32078) ([c4826b8](https://github.com/bitnami/charts/commit/c4826b82e2f2d2d9eee65ae8472ca28748a401ef)), closes [#32078](https://github.com/bitnami/charts/issues/32078)
 
 ## <small>5.1.12 (2025-02-13)</small>
 

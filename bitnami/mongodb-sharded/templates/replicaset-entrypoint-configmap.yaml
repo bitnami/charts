@@ -27,7 +27,7 @@ data:
     else
       info "Setting node as secondary"
       export MONGODB_REPLICA_SET_MODE=secondary
-      {{- if .Values.auth.usePasswordFile }}
+      {{- if .Values.auth.usePasswordFiles }}
       export MONGODB_INITIAL_PRIMARY_ROOT_PASSWORD_FILE="$MONGODB_ROOT_PASSWORD_FILE"
       unset MONGODB_ROOT_PASSWORD_FILE
       {{- else }}

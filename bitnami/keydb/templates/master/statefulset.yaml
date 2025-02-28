@@ -264,9 +264,9 @@ spec:
             - /bin/bash
             - -c
             - |
-              if [[ -f "$REDIS_PASSWORD_FILE" ]]; then
-              export REDIS_PASSWORD=$(cat "$REDIS_PASSWORD_FILE")
-              fi
+              {{- if .Values.auth.usePasswordFiles }}
+              export REDIS_PASSWORD="$(< $REDIS_PASSWORD_FILE)"
+              {{- end }}
               redis_exporter{{- range $key, $value := .Values.metrics.extraArgs }} --{{ $key }}={{ $value }}{{- end }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}

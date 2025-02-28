@@ -1,0 +1,33 @@
+# Source: https://github.com/arangodb/kube-arangodb/blob/{version}/chart/kube-arangodb/crds/ml-storage.yaml
+# Version: 1.2.46
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: arangomlstorages.ml.arangodb.com
+spec:
+  group: ml.arangodb.com
+  names:
+    kind: ArangoMLStorage
+    listKind: ArangoMLStorageList
+    plural: arangomlstorages
+    singular: arangomlstorage
+  scope: Namespaced
+  versions:
+    - name: v1alpha1
+      schema:
+        openAPIV3Schema:
+          type: object
+          x-kubernetes-preserve-unknown-fields: true
+      served: true
+      storage: false
+      subresources:
+        status: {}
+    - name: v1beta1
+      schema:
+        openAPIV3Schema:
+          type: object
+          x-kubernetes-preserve-unknown-fields: true
+      served: true
+      storage: true
+      subresources:
+        status: {}

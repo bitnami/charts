@@ -1,8 +1,13 @@
 # Changelog
 
-## 12.1.4 (2025-02-19)
+## 12.2.0 (2025-02-20)
 
-* [bitnami/cassandra] Release 12.1.4 ([#31975](https://github.com/bitnami/charts/pull/31975))
+* [bitnami/cassandra] Add support for `usePasswordFiles` ([#32080](https://github.com/bitnami/charts/pull/32080))
+
+## <small>12.1.4 (2025-02-19)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/cassandra] Release 12.1.4 (#31975) ([93617a2](https://github.com/bitnami/charts/commit/93617a28affb1ab251083cc52c9ec61c76ba647e)), closes [#31975](https://github.com/bitnami/charts/issues/31975)
 
 ## <small>12.1.3 (2025-02-04)</small>
 

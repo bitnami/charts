@@ -1851,9 +1851,6 @@ mariadb:
     ## @param mariadb.auth.forcePassword Force users to specify required passwords in the database
     ##
     forcePassword: false
-    ## @param mariadb.auth.usePasswordFiles Mount credentials as a file instead of using an environment variable
-    ##
-    usePasswordFiles: false
   ## @param mariadb.initdbScripts [object] Specify dictionary of scripts to be run at first boot
   ## We can only create one database on MariaDB using parameters. However, when streaming
   ## is enabled we need a second database for Skipper.

@@ -129,17 +129,14 @@ spec:
             {{- if .Values.auth.usePasswordFiles }}
             - name: INFLUXDB_ADMIN_USER_PASSWORD_FILE
               value: "/opt/bitnami/influxdb/secrets/admin-user-password"
+            - name: INFLUXDB_ADMIN_USER_TOKEN_FILE
+              value: "/opt/bitnami/influxdb/secrets/admin-user-token"
             {{- else }}
             - name: INFLUXDB_ADMIN_USER_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "influxdb.secretName" . }}
                   key: admin-user-password
-            {{- end }}
-            {{- if .Values.auth.usePasswordFiles }}
-            - name: INFLUXDB_ADMIN_USER_TOKEN_FILE
-              value: "/opt/bitnami/influxdb/secrets/admin-user-token"
-            {{- else }}
             - name: INFLUXDB_ADMIN_USER_TOKEN
               valueFrom:
                 secretKeyRef:

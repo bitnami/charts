@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.4.7 (2025-02-19)
+## 11.4.8 (2025-02-26)
 
-* [bitnami/consul] Release 11.4.7 ([#31981](https://github.com/bitnami/charts/pull/31981))
+* [bitnami/consul] Release 11.4.8 ([#32176](https://github.com/bitnami/charts/pull/32176))
+
+## <small>11.4.7 (2025-02-19)</small>
+
+* [bitnami/consul] Release 11.4.7 (#31981) ([1a9a009](https://github.com/bitnami/charts/commit/1a9a009bcacc416e3a230315eb4063a3baf498e3)), closes [#31981](https://github.com/bitnami/charts/issues/31981)
 
 ## <small>11.4.6 (2025-02-13)</small>
 

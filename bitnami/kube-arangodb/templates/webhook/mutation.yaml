@@ -1,0 +1,70 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{ if and .Values.webhooks.enabled .Values.webhooks.mutating.create }}
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: {{ include "common.names.fullname.namespace" . }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: kube-arangodb
+    app.kubernetes.io/component: operator
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+webhooks:
+  - name: "pods.policies.scheduler.arangodb.com"
+    namespaceSelector:
+      matchExpressions:
+        - key: kubernetes.io/metadata.name
+          operator: In
+          values:
+            - {{ include "common.names.namespace" . | quote }}
+    objectSelector:
+      matchExpressions:
+        - key: profiles.arangodb.com/deployment
+          operator: Exists
+    rules:
+      - apiGroups: [""]
+        apiVersions: ["v1"]
+        operations: ["CREATE"]
+        resources: ["pods"]
+        scope: "Namespaced"
+    clientConfig:
+      service:
+        namespace: {{ include "common.names.namespace" . | quote }}
+        name: {{ printf "%s-webhook" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+        path: /webhook/core/v1/pods/policies/mutate
+        port: {{ .Values.webhooks.service.ports.webhook }}
+    admissionReviewVersions: ["v1"]
+    sideEffects: None
+    timeoutSeconds: 5
+  - name: "generic.pod.policies.scheduler.arangodb.com"
+    namespaceSelector:
+      matchExpressions:
+        - key: kubernetes.io/metadata.name
+          operator: In
+          values:
+            - {{ include "common.names.namespace" . | quote }}
+    objectSelector:
+      matchExpressions:
+        - key: profiles.arangodb.com/apply
+          operator: Exists
+    rules:
+      - apiGroups: [""]
+        apiVersions: ["v1"]
+        operations: ["CREATE"]
+        resources: ["pods"]
+        scope: "Namespaced"
+    clientConfig:
+      service:
+        namespace: {{ include "common.names.namespace" . | quote }}
+        name: {{ printf "%s-webhook" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+        path: /webhook/core/v1/pods/policies/mutate
+        port: {{ .Values.webhooks.service.ports.webhook }}
+    admissionReviewVersions: ["v1"]
+    sideEffects: None
+    timeoutSeconds: 5
+{{- end }}

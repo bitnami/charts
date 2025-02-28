@@ -1,0 +1,33 @@
+# Source: https://github.com/arangodb/kube-arangodb/blob/{version}/chart/kube-arangodb/crds/ml-extension.yaml
+# Version: 1.2.46
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: arangomlextensions.ml.arangodb.com
+spec:
+  group: ml.arangodb.com
+  names:
+    kind: ArangoMLExtension
+    listKind: ArangoMLExtensionList
+    plural: arangomlextensions
+    singular: arangomlextension
+  scope: Namespaced
+  versions:
+    - name: v1alpha1
+      schema:
+        openAPIV3Schema:
+          type: object
+          x-kubernetes-preserve-unknown-fields: true
+      served: true
+      storage: false
+      subresources:
+        status: {}
+    - name: v1beta1
+      schema:
+        openAPIV3Schema:
+          type: object
+          x-kubernetes-preserve-unknown-fields: true
+      served: true
+      storage: true
+      subresources:
+        status: {}

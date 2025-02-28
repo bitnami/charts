@@ -1,0 +1,40 @@
+# Source: https://github.com/arangodb/kube-arangodb/blob/{version}/chart/kube-arangodb/crds/replication-deploymentreplication.yaml
+# Version: 1.2.46
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: arangodeploymentreplications.replication.database.arangodb.com
+spec:
+  group: replication.database.arangodb.com
+  names:
+    kind: ArangoDeploymentReplication
+    listKind: ArangoDeploymentReplicationList
+    plural: arangodeploymentreplications
+    shortNames:
+      - arangorepl
+    singular: arangodeploymentreplication
+  scope: Namespaced
+  versions:
+    - name: v1
+      schema:
+        openAPIV3Schema:
+          type: object
+          x-kubernetes-preserve-unknown-fields: true
+      served: true
+      storage: true
+    - name: v1alpha
+      schema:
+        openAPIV3Schema:
+          type: object
+          x-kubernetes-preserve-unknown-fields: true
+      served: false
+      storage: false
+    - name: v2alpha1
+      schema:
+        openAPIV3Schema:
+          type: object
+          x-kubernetes-preserve-unknown-fields: true
+      served: true
+      storage: false
+      subresources:
+        status: {}

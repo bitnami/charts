@@ -130,9 +130,9 @@ auth:
   ## NOTE: When it's set the previous parameters are ignored.
   ##
   existingSecret: ""
-  ## @param auth.usePasswordFile Mount credentials as files instead of using environment variables
+  ## @param auth.usePasswordFiles Mount credentials as files instead of using environment variables
   ##
-  usePasswordFile: false
+  usePasswordFiles: true
 ## @param shards Number of shards to be created
 ## ref: https://docs.mongodb.com/manual/core/sharded-cluster-shards/
 ##
