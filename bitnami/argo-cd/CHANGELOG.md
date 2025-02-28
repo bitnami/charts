@@ -1,6 +1,6 @@
 # Changelog
 
-## 7.2.1 (2025-02-27)
+## 7.2.1 (2025-02-28)
 
 * [bitnami/argo-cd] Release 7.2.1 ([#32207](https://github.com/bitnami/charts/pull/32207))
 
