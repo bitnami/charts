@@ -511,7 +511,7 @@ helm install my-release --set master.persistence.existingClaim=PVC_NAME oci://RE
 | `auth.password`                  | Redis&reg; password                                                                       | `""`          |
 | `auth.existingSecret`            | The name of an existing secret with Redis&reg; credentials                                | `""`          |
 | `auth.existingSecretPasswordKey` | Password key to be retrieved from existing secret                                         | `""`          |
-| `auth.usePasswordFiles`          | Mount credentials as files instead of using an environment variable                       | `false`       |
+| `auth.usePasswordFiles`          | Mount credentials as files instead of using an environment variable                       | `true`        |
 | `auth.usePasswordFileFromSecret` | Mount password file from secret                                                           | `true`        |
 | `auth.acl.enabled`               | Enables the support of the Redis ACL system                                               | `false`       |
 | `auth.acl.sentinel`              | Enables the support of the Redis ACL system for Sentinel Nodes                            | `false`       |
