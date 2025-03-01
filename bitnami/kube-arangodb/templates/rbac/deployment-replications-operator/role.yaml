@@ -1,0 +1,28 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{ if and .Values.rbac.create .Values.features.deploymentReplications }}
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
+kind: Role
+metadata:
+  name: {{ printf "%s-deployment-replication" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: kube-arangodb
+    app.kubernetes.io/component: operator
+rules:
+  - apiGroups: ["replication.database.arangodb.com"]
+    resources: ["arangodeploymentreplications", "arangodeploymentreplications/status"]
+    verbs: ["*"]
+  - apiGroups: ["database.arangodb.com"]
+    resources: ["arangodeployments"]
+    verbs: ["get"]
+  - apiGroups: [""]
+    resources: ["pods", "services", "endpoints", "persistentvolumeclaims", "events", "secrets"]
+    verbs: ["*"]
+  - apiGroups: ["apps"]
+    resources: ["deployments", "replicasets"]
+    verbs: ["get"]
+{{- end }}

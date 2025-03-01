@@ -37,3 +37,4 @@ name: redis
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/redis
 version: 20.11.0
+

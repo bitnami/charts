@@ -139,7 +139,7 @@ auth:
   existingSecretPasswordKey: ""
   ## @param auth.usePasswordFiles Mount credentials as files instead of using an environment variable
   ##
-  usePasswordFiles: false
+  usePasswordFiles: true
 ## TLS configuration
 ##
 tls:
