@@ -1,8 +1,8 @@
 # Changelog
 
-## 20.10.0 (2025-02-26)
+## 20.10.0 (2025-02-27)
 
-* [bitnami/redis] Support retrieving Redis ACL user passwords from Kubernetes Secrets  ([#32179](https://github.com/bitnami/charts/pull/32179))
+* [bitnami/redis] Set `usePasswordFiles=true` by default ([#32117](https://github.com/bitnami/charts/pull/32117))
 
 ## 20.9.0 (2025-02-24)
 
