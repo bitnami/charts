@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.4.2 (2025-02-28)
+## 2.4.2 (2025-03-01)
 
 * [bitnami/valkey] Fix usage of valkey .metrics.serviceMonitor.additionalEndpoints ([#32217](https://github.com/bitnami/charts/pull/32217))
 
