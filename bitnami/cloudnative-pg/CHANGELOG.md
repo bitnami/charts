@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.1.5 (2025-02-28)
+## 0.1.5 (2025-03-01)
 
 * [bitnami/cloudnative-pg] Release 0.1.5 ([#32223](https://github.com/bitnami/charts/pull/32223))
 
