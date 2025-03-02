@@ -1,8 +1,13 @@
 # Changelog
 
-## 34.2.0 (2025-02-21)
+## 34.2.1 (2025-03-02)
 
-* [bitnami/spring-cloud-dataflow] Set `usePasswordFiles=true` by default ([#32120](https://github.com/bitnami/charts/pull/32120))
+* [bitnami/spring-cloud-dataflow] Release 34.2.1 ([#32230](https://github.com/bitnami/charts/pull/32230))
+
+## 34.2.0 (2025-02-26)
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/spring-cloud-dataflow] Use subchart default value for `usePasswordFiles` (#32120) ([b9d42d0](https://github.com/bitnami/charts/commit/b9d42d04ad7b8ba4a8bbd66e3e4570853a9acf64)), closes [#32120](https://github.com/bitnami/charts/issues/32120)
 
 ## <small>34.1.2 (2025-02-03)</small>
 
