@@ -761,6 +761,13 @@ query:
     ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
     ##
     ingressClassName: ""
+    ## @param query.ingress.labels Additional label for the Ingress resource. 
+    ## Use this parameter to set the required labels for your needs
+    ## e.g:
+    ## labels:
+    ##   dns-managed-by-external-dns: 'true'
+    ##
+    labels: {}
     ## @param query.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
     ## For a full list of possible ingress annotations, please see
     ## ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md
