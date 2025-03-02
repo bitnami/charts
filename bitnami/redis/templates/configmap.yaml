@@ -56,8 +56,11 @@ data:
     user default on {{ if $password}}#{{ sha256sum $password}}{{ else }}nopass{{ end }} ~* &* +@all
     {{- if .Values.auth.acl.users -}}
     {{- /* custom users */ -}}
+    {{- $userSecret := .Values.auth.acl.userSecret -}}
     {{- range .Values.auth.acl.users }}
-    user {{ .username }} {{ default "on" .enabled}} {{ if .password}}#{{ sha256sum .password}}{{ else }}nopass{{ end }} {{ default "~*" .keys}} {{ default "&*" .channels }} {{ default "+@all" .commands }}
+    {{- $userPassword := .password | default "" }}
+    {{- $secretPassword := (include "common.secrets.get" (dict "secret" $userSecret "key" .username "context" $))}}
+    user {{ .username }} {{ default "on" .enabled }} {{ if $secretPassword }}#{{ sha256sum $secretPassword }}{{ else if $userPassword }}#{{ sha256sum $userPassword }}{{ else }}nopass{{ end }} {{ default "~*" .keys }} {{ default "&*" .channels }} {{ default "+@all" .commands }}
     {{- end }}
     {{- end }}
     {{- end }}
@@ -72,16 +75,6 @@ data:
     sentinel parallel-syncs {{ .Values.sentinel.masterSet }} {{ .Values.sentinel.parallelSyncs }}
     {{- if or .Values.sentinel.masterService.enabled .Values.sentinel.service.createMaster }}
       sentinel client-reconfig-script {{ .Values.sentinel.masterSet }} /opt/bitnami/scripts/start-scripts/push-master-label.sh
-    {{- end }}
-    {{- if .Values.auth.acl.sentinel }}
-    {{- range .Values.auth.acl.users }}
-    # Sentinel ACL configuration, only for users with password
-    {{ if .password }}
-    user {{ .username }} {{ default "on" .enabled }} {{ if .password }}#{{ sha256sum .password }}{{ else }}nopass{{ end }} ~* &* +@all
-    sentinel sentinel-user {{ .username }}
-    sentinel sentinel-pass {{ .password }} 
-    {{- end }}
-    {{- end }}
     {{- end }}
     # User-supplied sentinel configuration:
     {{- if .Values.sentinel.configuration }}
