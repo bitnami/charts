@@ -72,7 +72,7 @@ Return the secret containing Valkey TLS certificates
 */}}
 {{- define "valkey.tlsSecretName" -}}
 {{- if .Values.tls.existingSecret -}}
-    {{- print .Values.tls.existingSecret -}}
+    {{- printf "%s" (tpl .Values.tls.existingSecret $) -}}
 {{- else -}}
     {{- printf "%s-crt" (include "common.names.fullname" .) -}}
 {{- end -}}
