@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.5.1 (2025-02-20)
+## 2.5.2 (2025-03-03)
 
-* [bitnami/fluent-bit] Release 2.5.1 ([#32090](https://github.com/bitnami/charts/pull/32090))
+* [bitnami/fluent-bit] Release 2.5.2 ([#32242](https://github.com/bitnami/charts/pull/32242))
+
+## <small>2.5.1 (2025-02-20)</small>
+
+* [bitnami/fluent-bit] Release 2.5.1 (#32090) ([5e1ff1f](https://github.com/bitnami/charts/commit/5e1ff1f9c34224f8053af5051f28b56155d720ea)), closes [#32090](https://github.com/bitnami/charts/issues/32090)
 
 ## 2.5.0 (2025-02-20)
 
