@@ -46,7 +46,7 @@ spec:
       {{- if .honorLabels }}
       honorLabels: {{ .honorLabels }}
       {{- end }}
-      {{- with .Values.metrics.serviceMonitor.relabelings }}
+      {{- with $.Values.metrics.serviceMonitor.relabelings }}
       relabelings: {{- toYaml . | nindent 6 }}
       {{- end }}
       {{- if .metricRelabelings }}
