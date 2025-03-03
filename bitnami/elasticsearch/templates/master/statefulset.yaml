@@ -340,9 +340,6 @@ spec:
             - name: empty-dir
               mountPath: /opt/bitnami/elasticsearch/plugins
               subPath: app-plugins-dir
-            - name: empty-dir
-              mountPath: /bitnami/elasticsearch
-              subPath: app-volume-dir
             - name: data
               mountPath: /bitnami/elasticsearch/data
             {{- if .Values.config }}
