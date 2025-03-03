@@ -3,7 +3,7 @@ auth:
 overrideConfiguration:
   logging:
     colored_console_log: 'True'
-loadExamples: true
+loadExamples: false
 defaultInitContainers:
   prepareConfig:
     containerSecurityContext:
