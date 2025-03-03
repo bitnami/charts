@@ -27,8 +27,8 @@ data:
     {{- else }}
     {{- if .Values.ingress.enabled }}
     {{- $protocol := ternary "https" "http" (or .Values.ingress.tls .Values.ingress.extraTls) -}}
-    {{- $hostname := required "Ingress hostname must be specified" .Values.ingress.hostname -}}
-    server.publicBaseUrl: {{ printf "%s://%s" $protocol ( include "common.tplvalues.render" ( dict "value" $hostname ) "context" $ ) }}
+    {{- $hostname := required "Ingress hostname must be specified" .Values.ingress.hostname }}
+    server.publicBaseUrl: {{ printf "%s://%s" $protocol $hostname }}
     {{- end }}
     {{- end }}
     server.rewriteBasePath: {{ .Values.configuration.server.rewriteBasePath }}
