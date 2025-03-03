@@ -143,35 +143,40 @@ spec:
           {{- if .Values.dagProcessor.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.dagProcessor.customLivenessProbe "context" $) | trim | nindent 12 }}
           {{- else if .Values.dagProcessor.livenessProbe.enabled }}
+          {{- $livenessTimeout := sub (int .Values.dagProcessor.livenessProbe.timeoutSeconds) 1 }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.dagProcessor.livenessProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command:
                 - /bin/bash
                 - -ec
                 - |
-                  CONNECTION_CHECK_MAX_COUNT=0 airflow jobs check --job-type DagProcessorJob --local {{- if not .Values.diagnosticMode.enabled }} 2>/dev/null {{- end }}
+                  export CONNECTION_CHECK_MAX_COUNT=0
+                  timeout {{ $livenessTimeout }} airflow jobs check --job-type DagProcessorJob --local {{- if not .Values.diagnosticMode.enabled }} 2>/dev/null {{- end }}
           {{- end }}
           {{- if .Values.dagProcessor.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.dagProcessor.customReadinessProbe "context" $) | trim | nindent 12 }}
           {{- else if .Values.dagProcessor.readinessProbe.enabled }}
+          {{- $readinessTimeout := sub (int .Values.dagProcessor.readinessProbe.timeoutSeconds) 1 }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.dagProcessor.readinessProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command:
                 - /bin/bash
                 - -ec
                 - |
-                  airflow jobs check --job-type DagProcessorJob --local {{- if not .Values.diagnosticMode.enabled }} 2>/dev/null {{- end }}
+                  timeout {{ $readinessTimeout }} airflow jobs check --job-type DagProcessorJob --local {{- if not .Values.diagnosticMode.enabled }} 2>/dev/null {{- end }}
           {{- end }}
           {{- if .Values.dagProcessor.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.dagProcessor.customStartupProbe "context" $) | nindent 12 }}
           {{- else if .Values.dagProcessor.startupProbe.enabled }}
+          {{- $startupTimeout := sub (int .Values.dagProcessor.startupProbe.timeoutSeconds) 1 }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.dagProcessor.startupProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command:
                 - /bin/bash
                 - -ec
                 - |
-                  CONNECTION_CHECK_MAX_COUNT=0 airflow jobs check --job-type DagProcessorJob --local {{- if not .Values.diagnosticMode.enabled }} 2>/dev/null {{- end }}
+                  export CONNECTION_CHECK_MAX_COUNT=0
+                  timeout {{ $startupTimeout }} airflow jobs check --job-type DagProcessorJob --local {{- if not .Values.diagnosticMode.enabled }} 2>/dev/null {{- end }}
           {{- end }}
           {{- end }}
           {{- if .Values.dagProcessor.lifecycleHooks }}
