@@ -2382,6 +2382,8 @@ s3:
   ## @param s3.bindAddress Amazon S3 API bind address
   ##
   bindAddress: 0.0.0.0
+  ## @param s3.allowEmptyFolder Allow empty folders in Amazon S3 API
+  allowEmptyFolder: true
   ## S3 Authentication
   ## ref: https://github.com/seaweedfs/seaweedfs/wiki/Amazon-S3-API#s3-authentication
   ## @param s3.auth.enabled Enable Amazon S3 API authentication
