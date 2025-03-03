@@ -172,7 +172,7 @@ auth:
     replicationPasswordKey: replication-password
   ## @param auth.usePasswordFiles Mount credentials as a files instead of using an environment variable
   ##
-  usePasswordFiles: false
+  usePasswordFiles: true
 ## @param architecture PostgreSQL architecture (`standalone` or `replication`)
 ##
 architecture: standalone
@@ -1384,7 +1384,7 @@ backup:
       ##
       enabled: true
     storage:
-      ## @param backup.cronjob.storage.enabled Enable using a `PersistentVolumeClaim` as backup data volume 
+      ## @param backup.cronjob.storage.enabled Enable using a `PersistentVolumeClaim` as backup data volume
       ##
       enabled: true
       ## @param backup.cronjob.storage.existingClaim Provide an existing `PersistentVolumeClaim` (only when `architecture=standalone`)
