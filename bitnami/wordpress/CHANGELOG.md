@@ -1,8 +1,12 @@
 # Changelog
 
-## 24.1.13 (2025-02-24)
+## 24.1.14 (2025-02-27)
 
-* [bitnami/wordpress] Release 24.1.13 ([#32142](https://github.com/bitnami/charts/pull/32142))
+* [bitnami/wordpress] Release 24.1.14 ([#32198](https://github.com/bitnami/charts/pull/32198))
+
+## <small>24.1.13 (2025-02-24)</small>
+
+* [bitnami/wordpress] Release 24.1.13 (#32142) ([81907c7](https://github.com/bitnami/charts/commit/81907c74f7d63f829091ba25273317d4cea034d5)), closes [#32142](https://github.com/bitnami/charts/issues/32142)
 
 ## <small>24.1.12 (2025-02-21)</small>
 

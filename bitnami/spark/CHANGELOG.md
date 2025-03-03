@@ -1,8 +1,14 @@
 # Changelog
 
-## 9.3.4 (2025-02-20)
+## 9.3.5 (2025-02-27)
 
-* [bitnami/spark] Release 9.3.4 ([#32043](https://github.com/bitnami/charts/pull/32043))
+* [bitnami/spark] Release 9.3.5 ([#32206](https://github.com/bitnami/charts/pull/32206))
+
+## <small>9.3.4 (2025-02-20)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/spark] Release 9.3.4 (#32043) ([68cc908](https://github.com/bitnami/charts/commit/68cc908851f185068b83d033b63933f11781ea6b)), closes [#32043](https://github.com/bitnami/charts/issues/32043)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
 
 ## <small>9.3.3 (2025-01-28)</small>
 
