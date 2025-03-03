@@ -1,6 +1,6 @@
 # Changelog
 
-## 15.13.0 (2025-02-28)
+## 15.13.0 (2025-03-03)
 
 * [bitnami/thanos] feature: allow configuring labels fir query ingress ([#32202](https://github.com/bitnami/charts/pull/32202))
 
