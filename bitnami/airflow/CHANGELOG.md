@@ -1,8 +1,12 @@
 # Changelog
 
+## 22.6.1 (2025-03-03)
+
+* [bitnami/airflow] feat: timeouts for probes ([#32235](https://github.com/bitnami/charts/pull/32235))
+
 ## 22.6.0 (2025-02-27)
 
-* [bitnami/airflow] Add support for `usePasswordFiles` ([#32076](https://github.com/bitnami/charts/pull/32076))
+* [bitnami/airflow] Add support for `usePasswordFiles` (#32076) ([186a302](https://github.com/bitnami/charts/commit/186a302e024765179c80bae1594d80ae2361f5b9)), closes [#32076](https://github.com/bitnami/charts/issues/32076)
 
 ## 22.5.0 (2025-02-20)
 
