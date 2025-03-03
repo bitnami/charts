@@ -1576,6 +1576,44 @@ sentinel:
   ## @param sentinel.extraPodSpec Optionally specify extra PodSpec for the Redis&reg; Sentinel pod(s)
   ##
   extraPodSpec: {}
+  
+  externalAccess:
+    ## @param sentinel.externalAccess.enabled Enable external access to the Redis
+    ##
+    enabled: false
+    service:
+        ## @param sentinel.externalAccess.service.loadBalancerIPAnnotaion Name of annotation to specify fixed IP for service in.
+        ##
+      loadBalancerIPAnnotaion: ""
+        ## @param sentinel.externalAccess.service.type Type for the services used to expose every Pod
+        ## At this moment only LoadBalancer is supported
+        ##
+      type: LoadBalancer
+      ## @param sentinel.externalAccess.service.redisPort Port for the services used to expose redis-server
+        ##
+      redisPort: 6379
+    
+      ## @param sentinel.externalAccess.service.sentinelPort Port for the services used to expose redis-sentinel
+        ##   
+      sentinelPort: 26379 
+        ## @param sentinel.externalAccess.service.loadBalancerIP Array of load balancer IPs for each Redis&reg; node. Length must be the same as sentinel.replicaCount
+        ##
+      loadBalancerIP: []
+        ## @param sentinel.externalAccess.service.loadBalancerClass Load Balancer class if service type is `LoadBalancer` (optional, cloud specific)
+        ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+        ##
+      loadBalancerClass: ""
+        ## @param sentinel.externalAccess.service.loadBalancerSourceRanges Service Load Balancer sources
+        ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+        ## e.g:
+        ## loadBalancerSourceRanges:
+        ##   - 10.10.10.0/24
+        ##
+      loadBalancerSourceRanges: []
+        ## @param sentinel.externalAccess.service.annotations Annotations to add to the services used to expose every Pod of the Redis&reg; Cluster
+        ##
+      annotations: {}
+
 ## @section Other Parameters
 ##
 

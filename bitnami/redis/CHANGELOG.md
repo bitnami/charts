@@ -1,8 +1,16 @@
 # Changelog
 
-## 20.11.0 (2025-03-01)
+## 20.12.0 (2025-03-01)
 
 * [bitnami/redis] Support retrieving Redis ACL user passwords from Kubernetes Secrets  ([#32179](https://github.com/bitnami/charts/pull/32179))
+
+## 20.11.0 (2025-03-03)
+
+* [bitnami/redis] feat: Add external access service for redis sentinel ([#32190](https://github.com/bitnami/charts/pull/32190))
+
+## <small>20.10.1 (2025-03-03)</small>
+
+* [bitnami/redis]: only use auth.usePasswordFiles if auth.enabled is set (#32208) ([1d96748](https://github.com/bitnami/charts/commit/1d96748d8f8231ac4b3fa98b3f8fff234e0bffe7)), closes [#32208](https://github.com/bitnami/charts/issues/32208)
 
 ## 20.10.0 (2025-02-27)
 
