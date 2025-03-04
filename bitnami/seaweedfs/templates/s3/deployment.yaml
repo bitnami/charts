@@ -118,6 +118,7 @@ spec:
             - -metricsPort={{ .Values.s3.containerPorts.metrics }}
             {{- end }}
             - -filer={{ printf "%s:%d" (include "seaweedfs.filer.fullname" .) (int .Values.filer.service.ports.http) }}
+            - -allowEmptyFolder={{ .Values.s3.allowEmptyFolder }}
           {{- end }}
           env:
             - name: BITNAMI_DEBUG

@@ -1,8 +1,17 @@
 # Changelog
 
+## 22.6.1 (2025-03-03)
+
+* [bitnami/airflow] feat: timeouts for probes ([#32235](https://github.com/bitnami/charts/pull/32235))
+
+## 22.6.0 (2025-02-27)
+
+* [bitnami/airflow] Add support for `usePasswordFiles` (#32076) ([186a302](https://github.com/bitnami/charts/commit/186a302e024765179c80bae1594d80ae2361f5b9)), closes [#32076](https://github.com/bitnami/charts/issues/32076)
+
 ## 22.5.0 (2025-02-20)
 
-* [bitnami/airflow] feat: use new helper for checking API versions ([#32044](https://github.com/bitnami/charts/pull/32044))
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/airflow] feat: use new helper for checking API versions (#32044) ([4c3e161](https://github.com/bitnami/charts/commit/4c3e161e24fc14625b9ceef0cdc213c9301466cf)), closes [#32044](https://github.com/bitnami/charts/issues/32044)
 
 ## <small>22.4.9 (2025-02-11)</small>
 

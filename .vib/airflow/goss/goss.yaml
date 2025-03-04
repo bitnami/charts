@@ -3,7 +3,7 @@
 
 command:
   airflow-trigger-dag:
-    exec: airflow dags trigger example_bash_operator
+    exec: airflow dags trigger UI_dag
     exit-status: 0
     timeout: 40000
   {{- $uid := .Vars.web.containerSecurityContext.runAsUser }}
