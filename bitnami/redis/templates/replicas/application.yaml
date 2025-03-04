@@ -308,7 +308,7 @@ spec:
             - /bin/bash
             - -c
             - |
-              {{- if .Values.usePasswordFiles }}
+              {{- if and .Values.auth.enabled .Values.auth.usePasswordFiles }}
               export REDIS_PASSWORD="$(< $REDIS_PASSWORD_FILE)"
               {{- end }}
               redis_exporter{{- range $key, $value := .Values.metrics.extraArgs }} --{{ $key }}={{ $value }}{{- end }}
