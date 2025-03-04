@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.1.1 (2025-03-04)
+## 11.1.2 (2025-03-04)
 
-* [bitnami/etcd] bugfix: probes to use healthcheck when TLS client-to-server authentication ([#32258](https://github.com/bitnami/charts/pull/32258))
+* [bitnami/etcd] Release 11.1.2 ([#32286](https://github.com/bitnami/charts/pull/32286))
+
+## <small>11.1.1 (2025-03-04)</small>
+
+* [bitnami/etcd] bugfix: probes to use healthcheck when TLS client-to-server authentication (#32258) ([a6791c5](https://github.com/bitnami/charts/commit/a6791c5ee6b83f963406a8b046d424949269e06c)), closes [#32258](https://github.com/bitnami/charts/issues/32258)
 
 ## 11.1.0 (2025-02-24)
 
