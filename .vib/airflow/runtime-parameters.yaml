@@ -24,6 +24,9 @@ scheduler:
   containerSecurityContext:
     runAsUser: 1002
 web:
+  extraConfiguration: |
+    # Theme CONFIG
+    APP_THEME = "amelia.css"
   containerPorts:
     http: 8080
   podSecurityContext:
