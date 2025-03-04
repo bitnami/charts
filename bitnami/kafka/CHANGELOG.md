@@ -1,8 +1,22 @@
 # Changelog
 
-## 31.3.2 (2025-02-18)
+## 31.4.2 (2025-03-04)
 
 * [bitnami/kafka] IpFamilies and IpFamilyPolicy configurables ([#31456](https://github.com/bitnami/charts/pull/31456))
+
+## <small>31.4.1 (2025-03-04)</small>
+
+* [bitnami/kafka] Release 31.4.1 (#32257) ([5136e86](https://github.com/bitnami/charts/commit/5136e8603c2c5402ba07026948965da7011cae8e)), closes [#32257](https://github.com/bitnami/charts/issues/32257)
+
+## 31.4.0 (2025-02-20)
+
+* [bitnami/kafka] feat: use new helper for checking API versions (#32051) ([8abc389](https://github.com/bitnami/charts/commit/8abc389c429c32d900b68429730dfbfad02c8208)), closes [#32051](https://github.com/bitnami/charts/issues/32051)
+
+## <small>31.3.2 (2025-02-20)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/kafka] Release 31.3.2 (#32034) ([3f4ca72](https://github.com/bitnami/charts/commit/3f4ca729b3192c7cc742da1ccefc0676e93cdd38)), closes [#32034](https://github.com/bitnami/charts/issues/32034)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
 
 ## <small>31.3.1 (2025-01-28)</small>
 
