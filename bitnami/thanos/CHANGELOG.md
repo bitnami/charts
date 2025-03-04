@@ -1,8 +1,12 @@
 # Changelog
 
-## 15.12.5 (2025-02-28)
+## 15.13.1 (2025-03-04)
 
 * [bitnami/thanos] fix: remove quotes from ruler.ruleFile parameter ([#32201](https://github.com/bitnami/charts/pull/32201))
+
+## 15.13.0 (2025-03-03)
+
+* [bitnami/thanos] feature: allow configuring labels for query ingress (#32240) ([a49eff3](https://github.com/bitnami/charts/commit/a49eff3cf435a92a021e741870fce2dcdb429d4b)), closes [#32240](https://github.com/bitnami/charts/issues/32240)
 
 ## <small>15.12.4 (2025-02-21)</small>
 
