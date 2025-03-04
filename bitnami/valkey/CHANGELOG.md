@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.4.2 (2025-02-27)
+## 2.4.3 (2025-03-04)
 
-* [bitnami]/valkey update _helpers.tpl to be in line with Valkey-Cluster. ([#32203](https://github.com/bitnami/charts/pull/32203))
+* [bitnami/valkey] Fix usePasswordFile typo in metrics container ([#32260](https://github.com/bitnami/charts/pull/32260))
+
+## <small>2.4.2 (2025-03-03)</small>
+
+* [bitnami]/valkey update _helpers.tpl to be in line with Valkey-Cluster. (#32203) ([5619378](https://github.com/bitnami/charts/commit/5619378c4014210b2934ad3e803bf72361cafdea)), closes [#32203](https://github.com/bitnami/charts/issues/32203)
 
 ## <small>2.4.1 (2025-02-27)</small>
 
