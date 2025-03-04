@@ -166,7 +166,7 @@ spec:
                 secretKeyRef:
                   name: {{ template "redis-cluster.secretName" . }}
                   key: {{ template "redis-cluster.secretPasswordKey" . }}
-            {{- if .Values.usePasswordFile }}
+            {{- if .Values.usePasswordFiles }}
             - name: REDIS_PASSWORD_FILE
               value: "/opt/bitnami/redis/secrets/redis-password"
             {{- else }}
@@ -279,7 +279,7 @@ spec:
           volumeMounts:
             - name: scripts
               mountPath: /scripts
-            {{- if .Values.usePasswordFile }}
+            {{- if .Values.usePasswordFiles }}
             - name: redis-password
               mountPath: /opt/bitnami/redis/secrets/
             {{- end }}
@@ -324,7 +324,7 @@ spec:
             - /bin/bash
             - -c
             - |
-              {{- if .Values.usePasswordFile }}
+              {{- if and .Values.usePassword .Values.usePasswordFiles }}
               export REDIS_PASSWORD="$(< "${REDIS_PASSWORD_FILE}")"
               {{- end }}
               redis_exporter{{- range $key, $value := .Values.metrics.extraArgs }} --{{ $key }}={{ $value }}{{- end }}
@@ -336,16 +336,17 @@ spec:
               value: {{ template "common.names.fullname" . }}
             - name: REDIS_ADDR
               value: {{ printf "%s://127.0.0.1:%g" (ternary "rediss" "redis" .Values.tls.enabled) .Values.redis.containerPorts.redis | quote }}
-            {{- if and .Values.usePassword (not .Values.usePasswordFile) }}
+            {{- if .Values.usePassword }}
+            {{- if .Values.usePasswordFiles }}
+            - name: REDIS_PASSWORD_FILE
+              value: "/opt/bitnami/redis/secrets/redis-password"
+            {{- else }}
             - name: REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ template "redis-cluster.secretName" . }}
                   key: {{ template "redis-cluster.secretPasswordKey" . }}
             {{- end }}
-            {{- if .Values.usePasswordFile }}
-            - name: REDIS_PASSWORD_FILE
-              value: "/opt/bitnami/redis/secrets/redis-password"
             {{- end }}
             {{- if .Values.tls.enabled }}
             - name: REDIS_EXPORTER_TLS_CLIENT_KEY_FILE
@@ -360,12 +361,12 @@ spec:
             {{- if .Values.metrics.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.metrics.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
-          {{- if or .Values.usePasswordFile .Values.tls.enabled }}
+          {{- if or .Values.usePasswordFiles .Values.tls.enabled }}
           volumeMounts:
             - name: empty-dir
               mountPath: /tmp
               subPath: tmp-dir
-            {{- if .Values.usePasswordFile }}
+            {{- if .Values.usePasswordFiles }}
             - name: redis-password
               mountPath: /opt/bitnami/redis/secrets/
             {{- end }}
@@ -442,7 +443,7 @@ spec:
           configMap:
             name: {{ include "common.names.fullname" . }}-scripts
             defaultMode: 0755
-        {{- if .Values.usePasswordFile }}
+        {{- if .Values.usePasswordFiles }}
         - name: redis-password
           secret:
             secretName: {{ include "redis-cluster.secretName" . }}
