@@ -35,10 +35,10 @@ spec:
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: broker
     app.kubernetes.io/part-of: kafka
-  ipFamilyPolicy: {{ .Values.global.ipFamilyPolicy | default "SingleStack" }}
+  ipFamilyPolicy: {{ .Values.service.headless.ipFamilyPolicy | default "SingleStack" }}
   ipFamilies:
-  {{- if .Values.global.ipFamily -}}
-  {{ .Values.global.ipFamily | toYaml | nindent 2 }}
+  {{- if .Values.service.headless.ipFamilies -}}
+  {{ .Values.service.headless.ipFamilies | toYaml | nindent 2 }}
   {{- else }}
   - IPv4
   {{- end }}
