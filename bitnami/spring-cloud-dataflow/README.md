@@ -123,10 +123,11 @@ mariadb.enabled=false
 externalDatabase.scheme=mariadb
 externalDatabase.host=myexternalhost
 externalDatabase.port=3306
-externalDatabase.password=mypassword
-externalDatabase.dataflow.user=mydataflowuser
+externalDatabase.dataflow.username=mydataflowuser
+externalDatabase.dataflow.password=mydataflowpassword
 externalDatabase.dataflow.database=mydataflowdatabase
-externalDatabase.skipper.user=myskipperuser
+externalDatabase.skipper.username=myskipperuser
+externalDatabase.skipper.password=myskipperpassword
 externalDatabase.skipper.database=myskipperdatabase
 ```
 
@@ -136,11 +137,12 @@ To use an alternate database vendor (other than MariaDB) you can use the `extern
 
 ```console
 mariadb.enabled=false
-externalDatabase.password=mypassword
 externalDatabase.dataflow.url=jdbc:sqlserver://mssql-server:1433
-externalDatabase.dataflow.user=mydataflowuser
+externalDatabase.dataflow.username=mydataflowuser
+externalDatabase.dataflow.password=mydataflowpassword
 externalDatabase.skipper.url=jdbc:sqlserver://mssql-server:1433
-externalDatabase.skipper.user=myskipperuser
+externalDatabase.skipper.username=myskipperuser
+externalDatabase.skipper.password=myskipperpassword
 externalDatabase.hibernateDialect=org.hibernate.dialect.SQLServer2012Dialect
 ```
 
