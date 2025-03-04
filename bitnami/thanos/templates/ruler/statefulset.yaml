@@ -153,7 +153,7 @@ spec:
             - --label=ruler_cluster="{{ .Values.ruler.clusterName }}"
             - --alert.label-drop={{ .Values.ruler.replicaLabel }}
             - --objstore.config-file=/conf/objstore/objstore.yml
-            - --rule-file="{{ .Values.ruler.ruleFile }}"
+            - --rule-file={{ .Values.ruler.ruleFile }}
             {{- range .Values.ruler.queries }}
             - --query={{ . }}
             {{- end }}
