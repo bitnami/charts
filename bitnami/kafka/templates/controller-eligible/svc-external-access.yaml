@@ -64,6 +64,13 @@ spec:
     app.kubernetes.io/part-of: kafka
     app.kubernetes.io/component: controller-eligible
     statefulset.kubernetes.io/pod-name: {{ $targetPod }}
+  ipFamilyPolicy: {{  $.Values.externalAccess.controller.service.ipFamilyPolicy | default "SingleStack" }}
+  ipFamilies:
+  {{- if  $.Values.externalAccess.controller.service.ipFamilies -}}
+  {{ $.Values.externalAccess.controller.service.ipFamilies | toYaml | nindent 2 }}
+  {{- else }}
+  - IPv4
+  {{- end }}
 ---
 {{- end }}
 {{- end }}

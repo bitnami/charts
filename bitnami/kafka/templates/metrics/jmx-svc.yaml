@@ -28,4 +28,11 @@ spec:
       targetPort: metrics
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: kafka
+  ipFamilyPolicy: {{ .Values.metrics.jmx.service.ipFamilyPolicy | default "SingleStack" }}
+  ipFamilies:
+  {{- if .Values.metrics.jmx.service.ipFamilies -}}
+  {{ .Values.metrics.jmx.service.ipFamilies | toYaml | nindent 2 }}
+  {{- else }}
+  - IPv4
+  {{- end }}
 {{- end }}

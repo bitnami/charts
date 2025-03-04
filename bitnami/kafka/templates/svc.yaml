@@ -67,3 +67,10 @@ spec:
     {{- if and .Values.kraft.enabled .Values.controller.controllerOnly }}
     app.kubernetes.io/component: broker
     {{- end }}
+  ipFamilyPolicy: {{ .Values.service.ipFamilyPolicy | default "SingleStack" }}
+  ipFamilies:
+  {{- if .Values.service.ipFamilies -}}
+  {{ .Values.service.ipFamilies | toYaml | nindent 2 }}
+  {{- else }}
+  - IPv4
+  {{- end }}
