@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.5.0 (2025-02-21)
+## 0.5.1 (2025-03-03)
 
-* [bitnami/keydb] Set `usePasswordFiles=true` by default ([#32108](https://github.com/bitnami/charts/pull/32108))
+* fix: change svc target port in servicemonitor ([#32236](https://github.com/bitnami/charts/pull/32236))
+
+## 0.5.0 (2025-02-27)
+
+* [bitnami/keydb] Set `usePasswordFiles=true` by default (#32108) ([68a1f40](https://github.com/bitnami/charts/commit/68a1f4048a6aac040a9a6567508bddf8bbe061a6)), closes [#32108](https://github.com/bitnami/charts/issues/32108)
 
 ## 0.4.0 (2025-02-20)
 
