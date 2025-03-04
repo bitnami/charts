@@ -1,8 +1,13 @@
 # Changelog
 
-## 11.1.8 (2025-02-20)
+## 11.1.9 (2025-03-04)
 
-* [bitnami/argo-workflows] Release 11.1.8 ([#32087](https://github.com/bitnami/charts/pull/32087))
+* [bitnami/argo-workflows] Release 11.1.9 ([#32277](https://github.com/bitnami/charts/pull/32277))
+
+## <small>11.1.8 (2025-02-20)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/argo-workflows] Release 11.1.8 (#32087) ([db716bb](https://github.com/bitnami/charts/commit/db716bbde52b9b6a47732be5107edc04215505a1)), closes [#32087](https://github.com/bitnami/charts/issues/32087)
 
 ## <small>11.1.7 (2025-02-10)</small>
 
