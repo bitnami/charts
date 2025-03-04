@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.7.0 (2025-02-21)
+## 4.8.0 (2025-03-03)
 
-* [bitnami/seaweedfs] Set `usePasswordFiles=true` by default ([#32119](https://github.com/bitnami/charts/pull/32119))
+* [bitnami/seaweedfs] Add support for `s3.allowEmptyFolder` ([#32234](https://github.com/bitnami/charts/pull/32234))
+
+## 4.7.0 (2025-02-24)
+
+* [bitnami/seaweedfs] Set `usePasswordFiles=true` by default (#32119) ([dbc5cb6](https://github.com/bitnami/charts/commit/dbc5cb6ebacef3036f8bbb32ae1d761f171b8bdd)), closes [#32119](https://github.com/bitnami/charts/issues/32119)
 
 ## <small>4.6.2 (2025-02-20)</small>
 

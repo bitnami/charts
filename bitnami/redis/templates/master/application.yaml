@@ -245,7 +245,7 @@ spec:
               mountPath: /opt/bitnami/scripts/start-scripts
             - name: health
               mountPath: /health
-            {{- if .Values.auth.usePasswordFiles }}
+            {{- if and .Values.auth.enabled .Values.auth.usePasswordFiles }}
             - name: redis-password
               mountPath: /opt/bitnami/redis/secrets/
             {{- end }}
@@ -288,7 +288,7 @@ spec:
             - /bin/bash
             - -c
             - |
-              {{- if .Values.usePasswordFiles }}
+              {{- if and .Values.auth.enabled .Values.usePasswordFiles }}
               export REDIS_PASSWORD="$(< $REDIS_PASSWORD_FILE)"
               {{- end }}
               redis_exporter{{- range $key, $value := .Values.metrics.extraArgs }} --{{ $key }}={{ $value }}{{- end }}
@@ -368,7 +368,7 @@ spec:
             - name: empty-dir
               mountPath: /tmp
               subPath: app-tmp-dir
-            {{- if .Values.auth.usePasswordFiles }}
+            {{- if and .Values.auth.enabled .Values.auth.usePasswordFiles }}
             - name: redis-password
               mountPath: /secrets/
             {{- end }}
@@ -463,7 +463,7 @@ spec:
           configMap:
             name: {{ printf "%s-health" (include "common.names.fullname" .) }}
             defaultMode: 0755
-        {{- if .Values.auth.usePasswordFiles }}
+        {{- if and .Values.auth.enabled .Values.auth.usePasswordFiles }}
         - name: redis-password
           {{ if .Values.auth.usePasswordFileFromSecret }}
           secret:
