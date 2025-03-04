@@ -1,8 +1,30 @@
 # Changelog
 
-## 1.5.3 (2025-01-28)
+## 1.6.3 (2025-03-03)
 
-* [bitnami/opensearch] Release 1.5.3 ([#31638](https://github.com/bitnami/charts/pull/31638))
+* [bitnami/opensearch] Release 1.6.3 ([#32239](https://github.com/bitnami/charts/pull/32239))
+
+## <small>1.6.2 (2025-02-25)</small>
+
+* [bitnami/opensearch] Release 1.6.2 (#32168) ([bb3f465](https://github.com/bitnami/charts/commit/bb3f4656caea7f38c423548874c06a55a261fe1e)), closes [#32168](https://github.com/bitnami/charts/issues/32168)
+
+## <small>1.6.1 (2025-02-25)</small>
+
+* [bitnami/opensearch] Release 1.6.1 (#32027) ([fdbd862](https://github.com/bitnami/charts/commit/fdbd862be60ddbea1ea1e919cac7cbdf0814048e)), closes [#32027](https://github.com/bitnami/charts/issues/32027)
+
+## 1.6.0 (2025-02-20)
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/opensearch] feat: use new helper for checking API versions (#32061) ([5e7a94f](https://github.com/bitnami/charts/commit/5e7a94fae9e873dc14e0c2743fa1d9597cef24b6)), closes [#32061](https://github.com/bitnami/charts/issues/32061)
+
+## <small>1.5.4 (2025-02-06)</small>
+
+* [bitnami/opensearch] bugfix: snapshots init-job to consider security settings (#31809) ([72bced5](https://github.com/bitnami/charts/commit/72bced59eb12b715f924bec907df3dacd175e8cb)), closes [#31809](https://github.com/bitnami/charts/issues/31809)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>1.5.3 (2025-01-28)</small>
+
+* [bitnami/opensearch] Release 1.5.3 (#31638) ([d5a7ed3](https://github.com/bitnami/charts/commit/d5a7ed377bda0f7899e2d6335ad1860b50687360)), closes [#31638](https://github.com/bitnami/charts/issues/31638)
 
 ## <small>1.5.2 (2025-01-25)</small>
 

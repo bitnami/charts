@@ -1,8 +1,17 @@
 # Changelog
 
-## 16.4.2 (2025-01-20)
+## 16.4.5 (2025-02-21)
 
-* [bitnami/mongodb] remove undefined rts key from network policy template ([#31356](https://github.com/bitnami/charts/pull/31356))
+* [bitnami/mongodb] Release 16.4.5 ([#32135](https://github.com/bitnami/charts/pull/32135))
+
+## <small>16.4.3 (2025-02-03)</small>
+
+* [bitnami/mongodb] Release 16.4.3 (#31699) ([701d9dc](https://github.com/bitnami/charts/commit/701d9dc6b719f9202b60374f8d8855ef717478ca)), closes [#31699](https://github.com/bitnami/charts/issues/31699)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>16.4.2 (2025-01-20)</small>
+
+* [bitnami/mongodb] remove undefined rts key from network policy template (#31356) ([53dc708](https://github.com/bitnami/charts/commit/53dc708eaf3daa0b265b8ed956a1eccaa2f443d7)), closes [#31356](https://github.com/bitnami/charts/issues/31356)
 
 ## <small>16.4.1 (2025-01-15)</small>
 
@@ -905,7 +914,7 @@
 
 ## <small>12.1.17 (2022-06-06)</small>
 
-* [bitnami/mongodb] Fix wrongly named mongodb secret key 'mongodb-passwords' (#10546) ([56a2b5d](https://github.com/bitnami/charts/commit/56a2b5dc53143a6ead1878963dcb330251547628)), closes [#10546](https://github.com/bitnami/charts/issues/10546) [/github.com/bitnami/charts/blob/master/bitnami/mongodb/templates/secrets.yaml#L33](https://github.com//github.com/bitnami/charts/blob/master/bitnami/mongodb/templates/secrets.yaml/issues/L33)
+* [bitnami/mongodb] Fix wrongly named mongodb secret key 'mongodb-passwords' (#10546) ([56a2b5d](https://github.com/bitnami/charts/commit/56a2b5dc53143a6ead1878963dcb330251547628)), closes [#10546](https://github.com/bitnami/charts/issues/10546)
 
 ## <small>12.1.16 (2022-06-01)</small>
 
@@ -1377,7 +1386,7 @@
 
 ## 10.19.0 (2021-06-03)
 
-* [bitnami/mongodb] support https://github.com/combor/k8s-mongo-labeler-sidecar - a very … (#6435) ([8a5cc0d](https://github.com/bitnami/charts/commit/8a5cc0df3279b97bb36aa7617dfaf908f0ffdbe6)), closes [#6435](https://github.com/bitnami/charts/issues/6435)
+* [bitnami/mongodb] support https://github.com/combor/k8s-mongo-labeler-sidecar - a very … (#6435) ([8a5cc0d](https://github.com/bitnami/charts/commit/8a5cc0df3279b97bb36aa7617dfaf908f0ffdbe6))
 
 ## 10.18.0 (2021-06-02)
 
@@ -1558,7 +1567,7 @@
 
 ## 10.5.0 (2021-01-20)
 
-* [bitnami/mongodb] Enable psp for mongodb (#5020) ([d109865](https://github.com/bitnami/charts/commit/d10986573a3a79f1943afcb7315b80e5c69d8543)), closes [#5020](https://github.com/bitnami/charts/issues/5020) [/github.com/bitnami/charts/pull/5020#discussion_r560125253](https://github.com//github.com/bitnami/charts/pull/5020/issues/discussion_r560125253)
+* [bitnami/mongodb] Enable psp for mongodb (#5020) ([d109865](https://github.com/bitnami/charts/commit/d10986573a3a79f1943afcb7315b80e5c69d8543)), closes [#5020](https://github.com/bitnami/charts/issues/5020)
 
 ## <small>10.4.1 (2021-01-19)</small>
 

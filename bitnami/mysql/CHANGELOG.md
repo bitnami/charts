@@ -1,8 +1,19 @@
 # Changelog
 
-## 12.2.2 (2025-01-22)
+## 12.3.0 (2025-02-21)
 
-* [bitnami/mysql] Release 12.2.2 ([#31512](https://github.com/bitnami/charts/pull/31512))
+* [bitnami/mysql] Set `usePasswordFiles=true` by default ([#32113](https://github.com/bitnami/charts/pull/32113))
+
+## <small>12.2.4 (2025-02-19)</small>
+
+* [bitnami/*] Fix typo in named template name (#31858) ([b739b69](https://github.com/bitnami/charts/commit/b739b69532e637bd33b4a44eeb422c3e749eac77)), closes [#31858](https://github.com/bitnami/charts/issues/31858)
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/mysql] Release 12.2.4 (#32021) ([8c5baf6](https://github.com/bitnami/charts/commit/8c5baf6a53374260ce741b8565d87cbd53c0d781)), closes [#32021](https://github.com/bitnami/charts/issues/32021)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>12.2.2 (2025-01-22)</small>
+
+* [bitnami/mysql] Release 12.2.2 (#31512) ([289c6ca](https://github.com/bitnami/charts/commit/289c6caf9700c024f2b0202eb9a5dd3ec7c4d581)), closes [#31512](https://github.com/bitnami/charts/issues/31512)
 
 ## <small>12.2.1 (2025-01-04)</small>
 
@@ -1265,7 +1276,7 @@
 ## <small>5.0.3 (2019-05-29)</small>
 
 * Change syntax because of linter failing ([adfc357](https://github.com/bitnami/charts/commit/adfc35728c2a8a9def9e1897b3772d64df621354))
-* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79)), closes [#issuecomment-496883321](https://github.com/bitnami/charts/issues/issuecomment-496883321)
+* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79))
 * Use immutable tags in the main images ([17ca4f5](https://github.com/bitnami/charts/commit/17ca4f5c91da33da03f9e2d411fe5e004e825c4d))
 
 ## <small>5.0.2 (2019-05-28)</small>

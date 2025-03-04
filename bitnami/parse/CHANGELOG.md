@@ -1,8 +1,17 @@
 # Changelog
 
-## 24.1.2 (2024-12-24)
+## 24.1.4 (2025-03-04)
 
-* [bitnami/parse] Release 24.1.2 ([#31158](https://github.com/bitnami/charts/pull/31158))
+* [bitnami/parse] Release 24.1.4 ([#32266](https://github.com/bitnami/charts/pull/32266))
+
+## <small>24.1.3 (2025-02-03)</small>
+
+* [bitnami/parse] Release 24.1.3 (#31704) ([0b74962](https://github.com/bitnami/charts/commit/0b749624bf96d6cc8c08cad321c12f89ea9f9437)), closes [#31704](https://github.com/bitnami/charts/issues/31704)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>24.1.2 (2024-12-24)</small>
+
+* [bitnami/parse] Release 24.1.2 (#31158) ([d5df113](https://github.com/bitnami/charts/commit/d5df113d2e550d22591bbae7fca978569ddc1a00)), closes [#31158](https://github.com/bitnami/charts/issues/31158)
 
 ## <small>24.1.1 (2024-12-24)</small>
 

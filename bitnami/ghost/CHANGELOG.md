@@ -1,8 +1,54 @@
 # Changelog
 
-## 22.1.7 (2025-01-26)
+## 22.1.18 (2025-03-03)
 
-* [bitnami/ghost] Release 22.1.7 ([#31595](https://github.com/bitnami/charts/pull/31595))
+* [bitnami/ghost] Release 22.1.18 ([#32248](https://github.com/bitnami/charts/pull/32248))
+
+## <small>22.1.17 (2025-02-28)</small>
+
+* [bitnami/ghost] Release 22.1.17 (#32219) ([5dd7af9](https://github.com/bitnami/charts/commit/5dd7af943ac48f498127d37fe3d4ebab964518ef)), closes [#32219](https://github.com/bitnami/charts/issues/32219)
+
+## <small>22.1.16 (2025-02-24)</small>
+
+* [bitnami/ghost] Release 22.1.16 (#32141) ([42800ad](https://github.com/bitnami/charts/commit/42800addd0e8fb19f7669e88eac775394e09b8ed)), closes [#32141](https://github.com/bitnami/charts/issues/32141)
+
+## <small>22.1.15 (2025-02-21)</small>
+
+* [bitnami/ghost] Release 22.1.15 (#32129) ([2a17e47](https://github.com/bitnami/charts/commit/2a17e4738b902b6d7c1f52b400b5a67915af6180)), closes [#32129](https://github.com/bitnami/charts/issues/32129)
+
+## <small>22.1.14 (2025-02-14)</small>
+
+* [bitnami/ghost] Release 22.1.14 (#31938) ([32d6857](https://github.com/bitnami/charts/commit/32d68577a4fc743f612f84e7781a40ed466b80fc)), closes [#31938](https://github.com/bitnami/charts/issues/31938)
+
+## <small>22.1.13 (2025-02-13)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/ghost] Release 22.1.13 (#31910) ([5572452](https://github.com/bitnami/charts/commit/5572452b3bde9bb8faf0881caaa36325461eba54)), closes [#31910](https://github.com/bitnami/charts/issues/31910)
+
+## <small>22.1.12 (2025-02-07)</small>
+
+* [bitnami/ghost] Release 22.1.12 (#31838) ([4b4ba4e](https://github.com/bitnami/charts/commit/4b4ba4ea23f2d959ab0b7f87f0d7c54cae4fd897)), closes [#31838](https://github.com/bitnami/charts/issues/31838)
+
+## <small>22.1.11 (2025-02-04)</small>
+
+* [bitnami/ghost] Release 22.1.11 (#31738) ([119298b](https://github.com/bitnami/charts/commit/119298b413c540fab6767e0e6a11b7e8a00c0a38)), closes [#31738](https://github.com/bitnami/charts/issues/31738)
+
+## <small>22.1.10 (2025-02-03)</small>
+
+* [bitnami/ghost] Release 22.1.10 (#31717) ([0a6ed76](https://github.com/bitnami/charts/commit/0a6ed76c67e6fdaac47a59390bc72be431006a6f)), closes [#31717](https://github.com/bitnami/charts/issues/31717)
+
+## <small>22.1.9 (2025-02-03)</small>
+
+* [bitnami/ghost] Release 22.1.9 (#31694) ([181a004](https://github.com/bitnami/charts/commit/181a004c1d004c535ffa9034818791a7abf676a9)), closes [#31694](https://github.com/bitnami/charts/issues/31694)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>22.1.8 (2025-01-30)</small>
+
+* [bitnami/ghost] Release 22.1.8 (#31678) ([0298c73](https://github.com/bitnami/charts/commit/0298c73534991028e68cd4362f28aa99128fd9d6)), closes [#31678](https://github.com/bitnami/charts/issues/31678)
+
+## <small>22.1.7 (2025-01-26)</small>
+
+* [bitnami/ghost] Release 22.1.7 (#31595) ([29d9167](https://github.com/bitnami/charts/commit/29d916774ecd61dcd089023c62016251a11bfe3d)), closes [#31595](https://github.com/bitnami/charts/issues/31595)
 
 ## <small>22.1.6 (2025-01-21)</small>
 

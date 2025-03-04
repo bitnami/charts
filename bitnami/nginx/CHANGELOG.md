@@ -1,8 +1,21 @@
 # Changelog
 
-## 18.3.5 (2025-01-10)
+## 19.0.1 (2025-03-04)
 
-* [bitnami/nginx] Release 18.3.5 ([#31299](https://github.com/bitnami/charts/pull/31299))
+* [bitnami/nginx] Release 19.0.1 ([#32261](https://github.com/bitnami/charts/pull/32261))
+
+## 19.0.0 (2025-02-10)
+
+* [bitnami/nginx] Release 19.0.0 (#31852) ([3af1f49](https://github.com/bitnami/charts/commit/3af1f49c473b8edbcf890583e3f54ad22bc3a7bc)), closes [#31852](https://github.com/bitnami/charts/issues/31852)
+
+## <small>18.3.6 (2025-02-05)</small>
+
+* [bitnami/nginx] Release 18.3.6 (#31797) ([1aa9efc](https://github.com/bitnami/charts/commit/1aa9efc97be21ef2d4eb51e83d75113e784e1c4c)), closes [#31797](https://github.com/bitnami/charts/issues/31797)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>18.3.5 (2025-01-10)</small>
+
+* [bitnami/nginx] Release 18.3.5 (#31299) ([39b16f8](https://github.com/bitnami/charts/commit/39b16f8c763702a522ec35a7effd5440ff3cda85)), closes [#31299](https://github.com/bitnami/charts/issues/31299)
 
 ## <small>18.3.4 (2025-01-08)</small>
 
@@ -1482,7 +1495,7 @@
 
 * Change syntax because of linter failing ([adfc357](https://github.com/bitnami/charts/commit/adfc35728c2a8a9def9e1897b3772d64df621354))
 * Create NOTES.txt for apache and nginx ([f564ac1](https://github.com/bitnami/charts/commit/f564ac1dedbb88abaa6f3a1c79790a5dff950c33))
-* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79)), closes [#issuecomment-496883321](https://github.com/bitnami/charts/issues/issuecomment-496883321)
+* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79))
 * Use immutable tags in the main images ([17ca4f5](https://github.com/bitnami/charts/commit/17ca4f5c91da33da03f9e2d411fe5e004e825c4d))
 
 ## <small>3.2.1 (2019-05-28)</small>

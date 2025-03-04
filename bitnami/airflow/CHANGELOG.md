@@ -1,8 +1,34 @@
 # Changelog
 
-## 22.4.7 (2025-01-22)
+## 22.7.0 (2025-03-04)
 
-* [bitnami/airflow] Release 22.4.7 ([#31476](https://github.com/bitnami/charts/pull/31476))
+* [bitnami/airflow] feat: add support to extend webserver configuration ([#32254](https://github.com/bitnami/charts/pull/32254))
+
+## <small>22.6.1 (2025-03-03)</small>
+
+* [bitnami/airflow] feat: timeouts for probes (#32235) ([67cbd50](https://github.com/bitnami/charts/commit/67cbd50c2251ab320a15e226e6862fdeadc5677d)), closes [#32235](https://github.com/bitnami/charts/issues/32235)
+
+## 22.6.0 (2025-02-27)
+
+* [bitnami/airflow] Add support for `usePasswordFiles` (#32076) ([186a302](https://github.com/bitnami/charts/commit/186a302e024765179c80bae1594d80ae2361f5b9)), closes [#32076](https://github.com/bitnami/charts/issues/32076)
+
+## 22.5.0 (2025-02-20)
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/airflow] feat: use new helper for checking API versions (#32044) ([4c3e161](https://github.com/bitnami/charts/commit/4c3e161e24fc14625b9ceef0cdc213c9301466cf)), closes [#32044](https://github.com/bitnami/charts/issues/32044)
+
+## <small>22.4.9 (2025-02-11)</small>
+
+* [bitnami/airflow] Release 22.4.9 (#31857) ([c9f0c60](https://github.com/bitnami/charts/commit/c9f0c60eadda3984450299bd264825b87919905b)), closes [#31857](https://github.com/bitnami/charts/issues/31857)
+
+## <small>22.4.8 (2025-02-05)</small>
+
+* [bitnami/airflow] Add dag volume mounts to web deployment for configmap-based dags (#31620) ([e1e00f5](https://github.com/bitnami/charts/commit/e1e00f59dce468e40b0d8d7b1d88fe8630dea6a7)), closes [#31620](https://github.com/bitnami/charts/issues/31620)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>22.4.7 (2025-01-22)</small>
+
+* [bitnami/airflow] Release 22.4.7 (#31476) ([b846dd0](https://github.com/bitnami/charts/commit/b846dd03bb8ef9303cc3c68b1c052b89258632c3)), closes [#31476](https://github.com/bitnami/charts/issues/31476)
 
 ## <small>22.4.6 (2025-01-22)</small>
 
@@ -44,7 +70,7 @@
 * [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 1) (#30660) ([7409ca4](https://github.com/bitnami/charts/commit/7409ca4c21869fabe1532dd4f3ff24895df71c6d)), closes [#30660](https://github.com/bitnami/charts/issues/30660)
 * [bitnami/*] docs: :memo: Add "Update Credentials" (batch 1) (#30685) ([be6aa1d](https://github.com/bitnami/charts/commit/be6aa1df0bd4479173a78400fef7295de15b408d)), closes [#30685](https://github.com/bitnami/charts/issues/30685)
 * [bitnami/*] docs: :memo: Unify "Securing Traffic using TLS" section (#30707) ([b572333](https://github.com/bitnami/charts/commit/b57233336e4fe9af928ecb4f2a5f334011efb1bc)), closes [#30707](https://github.com/bitnami/charts/issues/30707)
-* [bitnami/airflow] bugfix: Fix Airflow HPA, VPA for Worker and Triggerer typo (#30834) (#30836) ([4b5e443](https://github.com/bitnami/charts/commit/4b5e443c026be15e1e8236f6a098155d0dcea376)), closes [#30834](https://github.com/bitnami/charts/issues/30834) [#30836](https://github.com/bitnami/charts/issues/30836) [#30834](https://github.com/bitnami/charts/issues/30834)
+* [bitnami/airflow] bugfix: Fix Airflow HPA, VPA for Worker and Triggerer typo (#30834) (#30836) ([4b5e443](https://github.com/bitnami/charts/commit/4b5e443c026be15e1e8236f6a098155d0dcea376)), closes [#30834](https://github.com/bitnami/charts/issues/30834) [#30836](https://github.com/bitnami/charts/issues/30836)
 
 ## <small>22.3.1 (2024-11-28)</small>
 
@@ -1884,7 +1910,7 @@
 ## <small>0.1.2 (2019-05-29)</small>
 
 * Check secondary images ([5327cfa](https://github.com/bitnami/charts/commit/5327cfa319191dd8067ce538d53f4c44edfdc012))
-* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79)), closes [#issuecomment-496883321](https://github.com/bitnami/charts/issues/issuecomment-496883321)
+* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79))
 * Use immutable tags in the main images ([17ca4f5](https://github.com/bitnami/charts/commit/17ca4f5c91da33da03f9e2d411fe5e004e825c4d))
 
 ## <small>0.1.1 (2019-05-28)</small>

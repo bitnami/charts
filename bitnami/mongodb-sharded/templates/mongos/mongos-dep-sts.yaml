@@ -107,7 +107,7 @@ spec:
             {{- if $.Values.auth.enabled }}
             - name: MONGODB_ROOT_USER
               value: {{ .Values.auth.rootUser | quote }}
-            {{- if .Values.auth.usePasswordFile }}
+            {{- if .Values.auth.usePasswordFiles }}
             - name: MONGODB_ROOT_PASSWORD_FILE
               value: "/bitnami/mongodb/secrets/mongodb-root-password"
             - name: MONGODB_REPLICA_SET_KEY_FILE
@@ -247,7 +247,7 @@ spec:
             - name: empty-dir
               mountPath: /.mongodb
               subPath: app-mongosh-dir
-            {{- if .Values.auth.usePasswordFile }}
+            {{- if .Values.auth.usePasswordFiles }}
             - name: secrets
               mountPath: /bitnami/mongodb/secrets/
             {{- end }}
@@ -277,7 +277,7 @@ spec:
           {{- if $.Values.auth.enabled }}
             - name: MONGODB_ROOT_USER
               value: {{ .Values.auth.rootUser | quote }}
-          {{- if .Values.auth.usePasswordFile }}
+          {{- if .Values.auth.usePasswordFiles }}
             - name: MONGODB_ROOT_PASSWORD_FILE
               value: "/bitnami/mongodb/secrets/mongodb-root-password"
           {{- else }}
@@ -297,7 +297,7 @@ spec:
             - -ec
             - |-
               #!/bin/sh
-              {{- if .Values.auth.usePasswordFile }}
+              {{- if .Values.auth.usePasswordFiles }}
               export MONGODB_ROOT_PASSWORD="$(cat "${MONGODB_ROOT_PASSWORD_FILE}")"
               {{- end }}
               /bin/mongodb_exporter --collect-all --compatible-mode --web.listen-address ":{{ .Values.metrics.containerPorts.metrics }}" --mongodb.uri mongodb://$(echo $MONGODB_ROOT_USER):$(echo $MONGODB_ROOT_PASSWORD | sed -r "s/@/%40/g;s/:/%3A/g")@localhost:{{ .Values.common.containerPorts.mongodb }}/admin{{ ternary "?ssl=true" "" $.Values.metrics.useTLS }} {{ .Values.metrics.extraArgs }}
@@ -306,7 +306,7 @@ spec:
             - name: empty-dir
               mountPath: /tmp
               subPath: tmp-dir
-            {{- if .Values.auth.usePasswordFile }}
+            {{- if .Values.auth.usePasswordFiles }}
             - name: secrets
               mountPath: /bitnami/mongodb/secrets/
             {{- end }}
@@ -352,7 +352,7 @@ spec:
       volumes:
         - name: empty-dir
           emptyDir: {}
-        {{- if .Values.auth.usePasswordFile }}
+        {{- if .Values.auth.usePasswordFiles }}
         - name: secrets
           secret:
             secretName: {{ include "mongodb-sharded.secret" . }}

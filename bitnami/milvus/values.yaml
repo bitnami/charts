@@ -39,6 +39,9 @@ global:
 ## @param kubeVersion Override Kubernetes version
 ##
 kubeVersion: ""
+## @param apiVersions Override Kubernetes API versions reported by .Capabilities
+##
+apiVersions: []
 ## @param nameOverride String to partially override common.names.fullname
 ##
 nameOverride: ""
@@ -92,7 +95,7 @@ milvus:
   image:
     registry: docker.io
     repository: bitnami/milvus
-    tag: 2.5.3-debian-12-r2
+    tag: 2.5.5-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -272,7 +275,7 @@ initJob:
   image:
     registry: docker.io
     repository: bitnami/pymilvus
-    tag: 2.5.3-debian-12-r0
+    tag: 2.5.4-debian-12-r4
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -4604,7 +4607,7 @@ attu:
   image:
     registry: docker.io
     repository: bitnami/attu
-    tag: 2.5.0-debian-12-r0
+    tag: 2.5.4-debian-12-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -5162,7 +5165,7 @@ waitContainer:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r35
+    tag: 12-debian-12-r39
     digest: ""
     ## @param waitContainer.image.pullPolicy Init container wait-container image pull policy
     ##

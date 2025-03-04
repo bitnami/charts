@@ -137,6 +137,7 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `hostAliases`                                       | Add deployment host aliases                                                                                                                                                                                       | `[]`                                 |
 | `rbac.create`                                       | Whether to create & use RBAC resources or not                                                                                                                                                                     | `true`                               |
 | `rbac.pspEnabled`                                   | Whether to create a PodSecurityPolicy and bound it with RBAC. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later                                                | `true`                               |
+| `rbac.rules`                                        | Custom RBAC rules to set                                                                                                                                                                                          | `[]`                                 |
 | `serviceAccount.create`                             | Specifies whether a ServiceAccount should be created                                                                                                                                                              | `true`                               |
 | `serviceAccount.name`                               | Name of the service account to use. If not set and create is true, a name is generated using the fullname template.                                                                                               | `""`                                 |
 | `serviceAccount.automountServiceAccountToken`       | Automount service account token for the server service account                                                                                                                                                    | `false`                              |
@@ -187,9 +188,10 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `kubeResources.services`                            | Enable the `services` resource                                                                                                                                                                                    | `true`                               |
 | `kubeResources.statefulsets`                        | Enable the `statefulsets` resource                                                                                                                                                                                | `true`                               |
 | `kubeResources.storageclasses`                      | Enable the `storageclasses` resource                                                                                                                                                                              | `true`                               |
-| `kubeResources.verticalpodautoscalers`              | Enable the `verticalpodautoscalers` resource                                                                                                                                                                      | `false`                              |
 | `kubeResources.validatingwebhookconfigurations`     | Enable the `validatingwebhookconfigurations` resource                                                                                                                                                             | `false`                              |
 | `kubeResources.volumeattachments`                   | Enable the `volumeattachments` resource                                                                                                                                                                           | `true`                               |
+| `customResourceState.enabled`                       | Enabled custom resource state metrics                                                                                                                                                                             | `false`                              |
+| `customResourceState.configuration`                 | Configuration of the CustomResourceStateMetrics to be added. Evaluated as a template.                                                                                                                             | `{}`                                 |
 | `podSecurityContext.enabled`                        | Enabled kube-state-metrics pods' Security Context                                                                                                                                                                 | `true`                               |
 | `podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                                                                | `Always`                             |
 | `podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                                                                                                                    | `[]`                                 |
@@ -306,6 +308,21 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 5.0.0
+
+Removal of `kubeResources.verticalpodautoscalers` which no longer work since version `2.9.0` of kube-state-metrics. If you are using an older version and want to keep this metric, use the following configuration:
+
+```yaml
+rbac:
+  rules:
+    - apiGroups: ["autoscaling.k8s.io"]
+      resources:
+        - verticalpodautoscalers
+      verbs: ["list", "watch"]
+extraArgs:
+  resources: verticalpodautoscalers
+```
+
 ### To 4.3.0
 
 This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
@@ -357,7 +374,7 @@ This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

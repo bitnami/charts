@@ -1,8 +1,34 @@
 # Changelog
 
-## 11.0.4 (2025-01-24)
+## 11.1.1 (2025-03-04)
 
-* [bitnami/etcd] Release 11.0.4 ([#31591](https://github.com/bitnami/charts/pull/31591))
+* [bitnami/etcd] bugfix: probes to use healthcheck when TLS client-to-server authentication ([#32258](https://github.com/bitnami/charts/pull/32258))
+
+## 11.1.0 (2025-02-24)
+
+* [bitnami/etcd] feat: basic customization params for etcd upgrade-job (#32099) ([b820c10](https://github.com/bitnami/charts/commit/b820c10df5a2066e25ef101f1a279819a83c238b)), closes [#32099](https://github.com/bitnami/charts/issues/32099)
+
+## <small>11.0.8 (2025-02-19)</small>
+
+* [bitnami/etcd] Release 11.0.8 (#31993) ([d854fdd](https://github.com/bitnami/charts/commit/d854fdd029c002ec6591bd948a1c69a5c5bdb2c4)), closes [#31993](https://github.com/bitnami/charts/issues/31993)
+
+## <small>11.0.7 (2025-02-12)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/etcd] Release 11.0.7 (#31886) ([04e29ce](https://github.com/bitnami/charts/commit/04e29ce87c72cb596b1e504e3ee89ebf2a786f98)), closes [#31886](https://github.com/bitnami/charts/issues/31886)
+
+## <small>11.0.6 (2025-02-04)</small>
+
+* [bitnami/etcd] Release 11.0.6 (#31750) ([a99c4ae](https://github.com/bitnami/charts/commit/a99c4ae6f11749ed920bcc9fd05b81f7ebdf0f6b)), closes [#31750](https://github.com/bitnami/charts/issues/31750)
+
+## <small>11.0.5 (2025-01-31)</small>
+
+* [bitnami/etcd] Fix: issue with preupgrade job during scale down (#31539) ([36f16bf](https://github.com/bitnami/charts/commit/36f16bf90cc1461000a8f73341e0b770be0b6413)), closes [#31539](https://github.com/bitnami/charts/issues/31539)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>11.0.4 (2025-01-24)</small>
+
+* [bitnami/etcd] Release 11.0.4 (#31591) ([b342ec8](https://github.com/bitnami/charts/commit/b342ec844c9106fb724ec952fa4abbe7f26844d1)), closes [#31591](https://github.com/bitnami/charts/issues/31591)
 
 ## <small>11.0.3 (2025-01-24)</small>
 
@@ -1245,7 +1271,7 @@
 
 ## <small>4.8.4 (2020-06-16)</small>
 
-* [bitnami/etcd] make cluster state variable configurable to fix https://github.com/bitnami/charts/iss ([bd7f575](https://github.com/bitnami/charts/commit/bd7f575ebad9c200cd8e90f9fb3e17451ce607f5)), closes [#2837](https://github.com/bitnami/charts/issues/2837)
+* [bitnami/etcd] make cluster state variable configurable to fix https://github.com/bitnami/charts/iss ([bd7f575](https://github.com/bitnami/charts/commit/bd7f575ebad9c200cd8e90f9fb3e17451ce607f5))
 
 ## <small>4.8.3 (2020-06-15)</small>
 
@@ -1527,7 +1553,7 @@
 ## <small>2.2.5 (2019-05-29)</small>
 
 * Change syntax because of linter failing ([adfc357](https://github.com/bitnami/charts/commit/adfc35728c2a8a9def9e1897b3772d64df621354))
-* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79)), closes [#issuecomment-496883321](https://github.com/bitnami/charts/issues/issuecomment-496883321)
+* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79))
 * Use immutable tags in the main images ([17ca4f5](https://github.com/bitnami/charts/commit/17ca4f5c91da33da03f9e2d411fe5e004e825c4d))
 
 ## <small>2.2.4 (2019-05-28)</small>

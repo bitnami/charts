@@ -1,8 +1,22 @@
 # Changelog
 
-## 9.0.1 (2025-01-24)
+## 9.0.4 (2025-02-25)
 
-* [bitnami/nats] Release 9.0.1 ([#31572](https://github.com/bitnami/charts/pull/31572))
+* [bitnami/nats] Release 9.0.4 ([#32167](https://github.com/bitnami/charts/pull/32167))
+
+## <small>9.0.3 (2025-02-12)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/nats] Release 9.0.3 (#31901) ([21d36d6](https://github.com/bitnami/charts/commit/21d36d6aebea4cde7c02efc6dc2c4299943e9f74)), closes [#31901](https://github.com/bitnami/charts/issues/31901)
+
+## <small>9.0.2 (2025-02-07)</small>
+
+* [bitnami/nats] Release 9.0.2 (#31833) ([c3c402f](https://github.com/bitnami/charts/commit/c3c402f1c143fb06c3cb43df4fa8bf1744920068)), closes [#31833](https://github.com/bitnami/charts/issues/31833)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>9.0.1 (2025-01-24)</small>
+
+* [bitnami/nats] Release 9.0.1 (#31572) ([c381adb](https://github.com/bitnami/charts/commit/c381adb2c648402d8b88b8d211a9538e1aafd087)), closes [#31572](https://github.com/bitnami/charts/issues/31572)
 
 ## 9.0.0 (2025-01-23)
 

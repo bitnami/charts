@@ -1,8 +1,17 @@
 # Changelog
 
-## 21.1.2 (2025-01-07)
+## 21.1.4 (2025-02-26)
 
-* [bitnami/drupal] Release 21.1.2 ([#31232](https://github.com/bitnami/charts/pull/31232))
+* [bitnami/drupal] Release 21.1.4 ([#32174](https://github.com/bitnami/charts/pull/32174))
+
+## <small>21.1.3 (2025-02-06)</small>
+
+* [bitnami/drupal] Release 21.1.3 (#31803) ([5f4890c](https://github.com/bitnami/charts/commit/5f4890c2c54371b3e06660fd1c7e65315a742225)), closes [#31803](https://github.com/bitnami/charts/issues/31803)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>21.1.2 (2025-01-07)</small>
+
+* [bitnami/drupal] Release 21.1.2 (#31232) ([299ae8d](https://github.com/bitnami/charts/commit/299ae8da5e8f007515709607ac7a3ad9b103e27f)), closes [#31232](https://github.com/bitnami/charts/issues/31232)
 
 ## <small>21.1.1 (2024-12-16)</small>
 

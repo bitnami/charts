@@ -1,8 +1,26 @@
 # Changelog
 
-## 15.1.2 (2025-01-15)
+## 15.1.6 (2025-02-26)
 
-* [bitnami/discourse] Release 15.1.2 ([#31384](https://github.com/bitnami/charts/pull/31384))
+* [bitnami/discourse] Release 15.1.6 ([#32182](https://github.com/bitnami/charts/pull/32182))
+
+## <small>15.1.5 (2025-02-24)</small>
+
+* [bitnami/discourse] Release 15.1.5 (#32148) ([6241712](https://github.com/bitnami/charts/commit/6241712d3953f532613bd3eb06e9ae385a89e6e8)), closes [#32148](https://github.com/bitnami/charts/issues/32148)
+
+## <small>15.1.4 (2025-02-14)</small>
+
+* [bitnami/discourse] Release 15.1.4 (#31937) ([24250f9](https://github.com/bitnami/charts/commit/24250f952c8d6609aeffb9a37c10fc92332d9506)), closes [#31937](https://github.com/bitnami/charts/issues/31937)
+
+## <small>15.1.3 (2025-02-14)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/discourse] Release 15.1.3 (#31917) ([97ce821](https://github.com/bitnami/charts/commit/97ce821549b2cf41b5087308b64306b8df7d9932)), closes [#31917](https://github.com/bitnami/charts/issues/31917)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>15.1.2 (2025-01-15)</small>
+
+* [bitnami/discourse] Release 15.1.2 (#31384) ([d93fa41](https://github.com/bitnami/charts/commit/d93fa41ed6b13b35ff8be4b10c0f342b93193af1)), closes [#31384](https://github.com/bitnami/charts/issues/31384)
 
 ## <small>15.1.1 (2024-12-19)</small>
 

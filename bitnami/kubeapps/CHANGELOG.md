@@ -1,8 +1,18 @@
 # Changelog
 
-## 17.1.1 (2024-12-24)
+## 17.1.3 (2025-02-20)
 
-* [bitnami/kubeapps] Release 17.1.1 ([#31153](https://github.com/bitnami/charts/pull/31153))
+* [bitnami/kubeapps] Release 17.1.3 ([#32093](https://github.com/bitnami/charts/pull/32093))
+
+## <small>17.1.2 (2025-02-03)</small>
+
+* [bitnami/kubeapps] Release 17.1.2 (#31703) ([f12f39a](https://github.com/bitnami/charts/commit/f12f39ab142fd10d7e1303b2706ad57c6231c8bd)), closes [#31703](https://github.com/bitnami/charts/issues/31703)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>17.1.1 (2024-12-24)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/kubeapps] Release 17.1.1 (#31153) ([1229341](https://github.com/bitnami/charts/commit/12293419b20d4194dc3095d7ef2ec6974eb41bf9)), closes [#31153](https://github.com/bitnami/charts/issues/31153)
 
 ## 17.1.0 (2024-12-10)
 
@@ -579,7 +589,7 @@
 
 ## <small>8.0.16 (2022-05-05)</small>
 
-* [bitnami/kubeapps] Values references postgresPassword used by Kubeapps. (#10006) ([ec5fbdd](https://github.com/bitnami/charts/commit/ec5fbdd0148f1c2de0ba40d649508b8a636b1a32)), closes [#10006](https://github.com/bitnami/charts/issues/10006) [/github.com/bitnami/charts/pull/9441/files#diff-0f1b69af1b7c9c48d9d4f43c74fd880405aec305533aa650e1c26d7a2d20c300R1976-R1988](https://github.com//github.com/bitnami/charts/pull/9441/files/issues/diff-0f1b69af1b7c9c48d9d4f43c74fd880405aec305533aa650e1c26d7a2d20c300R1976-R1988)
+* [bitnami/kubeapps] Values references postgresPassword used by Kubeapps. (#10006) ([ec5fbdd](https://github.com/bitnami/charts/commit/ec5fbdd0148f1c2de0ba40d649508b8a636b1a32)), closes [#10006](https://github.com/bitnami/charts/issues/10006)
 
 ## <small>8.0.15 (2022-04-30)</small>
 

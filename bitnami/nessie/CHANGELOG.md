@@ -1,8 +1,30 @@
 # Changelog
 
-## 1.1.7 (2025-01-28)
+## 1.2.1 (2025-02-24)
 
-* [bitnami/nessie] Release 1.1.7 ([#31632](https://github.com/bitnami/charts/pull/31632))
+* [bitnami/nessie] Release 1.2.1 ([#32144](https://github.com/bitnami/charts/pull/32144))
+
+## 1.2.0 (2025-02-20)
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/nessie] feat: use new helper for checking API versions (#32060) ([ddd3062](https://github.com/bitnami/charts/commit/ddd30620658739d77770ca05dd98cfa5ca9fb35e)), closes [#32060](https://github.com/bitnami/charts/issues/32060)
+
+## <small>1.1.10 (2025-02-06)</small>
+
+* [bitnami/nessie] Release 1.1.10 (#31800) ([086e2b1](https://github.com/bitnami/charts/commit/086e2b1e0f63b02568e23b4a8020d92d89aa4e1f)), closes [#31800](https://github.com/bitnami/charts/issues/31800)
+
+## <small>1.1.9 (2025-02-03)</small>
+
+* [bitnami/nessie] Release 1.1.9 (#31695) ([4fb4018](https://github.com/bitnami/charts/commit/4fb40180e98e3ac9a5795e3f47452bea5a584e98)), closes [#31695](https://github.com/bitnami/charts/issues/31695)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>1.1.8 (2025-01-30)</small>
+
+* [bitnami/nessie] Release 1.1.8 (#31676) ([f2d4caa](https://github.com/bitnami/charts/commit/f2d4caa470a6729efecd7c8e8479f75f173b7c53)), closes [#31676](https://github.com/bitnami/charts/issues/31676)
+
+## <small>1.1.7 (2025-01-28)</small>
+
+* [bitnami/nessie] Release 1.1.7 (#31632) ([cbb2262](https://github.com/bitnami/charts/commit/cbb2262339ae8e62e075d2913dcc8151aa29716d)), closes [#31632](https://github.com/bitnami/charts/issues/31632)
 
 ## <small>1.1.6 (2025-01-24)</small>
 

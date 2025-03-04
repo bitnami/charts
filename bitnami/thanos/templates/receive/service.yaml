@@ -63,6 +63,15 @@ spec:
       {{- else if eq .Values.receive.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
+    - port: {{ .Values.receive.service.ports.capnproto }}
+      targetPort: capnproto
+      protocol: TCP
+      name: capnproto
+      {{- if and (or (eq .Values.receive.service.type "NodePort") (eq .Values.receive.service.type "LoadBalancer")) .Values.receive.service.nodePorts.capnproto }}
+      nodePort: {{ .Values.receive.service.nodePorts.capnproto }}
+      {{- else if eq .Values.receive.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
     {{- if .Values.receive.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.receive.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}

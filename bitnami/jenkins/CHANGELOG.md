@@ -1,8 +1,17 @@
 # Changelog
 
-## 13.5.4 (2025-01-28)
+## 13.5.6 (2025-02-19)
 
-* [bitnami/jenkins] Release 13.5.4 ([#31637](https://github.com/bitnami/charts/pull/31637))
+* [bitnami/jenkins] Release 13.5.6 ([#32004](https://github.com/bitnami/charts/pull/32004))
+
+## <small>13.5.5 (2025-02-05)</small>
+
+* [bitnami/jenkins] Release 13.5.5 (#31798) ([f2db75f](https://github.com/bitnami/charts/commit/f2db75f22dcaaf7c50a16447f495988103e95cce)), closes [#31798](https://github.com/bitnami/charts/issues/31798)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>13.5.4 (2025-01-28)</small>
+
+* [bitnami/jenkins] Release 13.5.4 (#31637) ([c3396df](https://github.com/bitnami/charts/commit/c3396dfc832122b344ad4b9a19dc263b748526f2)), closes [#31637](https://github.com/bitnami/charts/issues/31637)
 
 ## <small>13.5.3 (2025-01-08)</small>
 
@@ -1248,7 +1257,7 @@
 ## <small>2.3.4 (2019-05-29)</small>
 
 * Change syntax because of linter failing ([adfc357](https://github.com/bitnami/charts/commit/adfc35728c2a8a9def9e1897b3772d64df621354))
-* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79)), closes [#issuecomment-496883321](https://github.com/bitnami/charts/issues/issuecomment-496883321)
+* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79))
 * Use immutable tags in the main images ([17ca4f5](https://github.com/bitnami/charts/commit/17ca4f5c91da33da03f9e2d411fe5e004e825c4d))
 
 ## <small>2.3.3 (2019-05-28)</small>

@@ -1,8 +1,26 @@
 # Changelog
 
-## 14.1.2 (2025-01-15)
+## 14.2.1 (2025-03-02)
 
-* [bitnami/mariadb-galera] Release 14.1.2 ([#31381](https://github.com/bitnami/charts/pull/31381))
+* [bitnami/mariadb-galera] Release 14.2.1 ([#32229](https://github.com/bitnami/charts/pull/32229))
+
+## 14.2.0 (2025-02-26)
+
+* [bitnami/mariadb-galera] Set `usePasswordFiles=true` by default (#32111) ([d312db4](https://github.com/bitnami/charts/commit/d312db4016edce2d8a4dbb8ea3d49886bb1cb918)), closes [#32111](https://github.com/bitnami/charts/issues/32111)
+
+## <small>14.1.4 (2025-02-19)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/mariadb-galera] Release 14.1.4 (#32013) ([622c686](https://github.com/bitnami/charts/commit/622c68659e0c9085b0ba3240ff231de266565352)), closes [#32013](https://github.com/bitnami/charts/issues/32013)
+
+## <small>14.1.3 (2025-02-07)</small>
+
+* [bitnami/mariadb-galera] Release 14.1.3 (#31790) ([dc056e9](https://github.com/bitnami/charts/commit/dc056e927ffd96cfcbc8037f17a8b263e80d1c55)), closes [#31790](https://github.com/bitnami/charts/issues/31790)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>14.1.2 (2025-01-15)</small>
+
+* [bitnami/mariadb-galera] Release 14.1.2 (#31381) ([54eddfc](https://github.com/bitnami/charts/commit/54eddfcd09984cca6de3f3ed85f5c6064fdaa74d)), closes [#31381](https://github.com/bitnami/charts/issues/31381)
 
 ## <small>14.1.1 (2025-01-12)</small>
 

@@ -41,6 +41,9 @@ global:
 ## @param kubeVersion Override Kubernetes version
 ##
 kubeVersion: ""
+## @param apiVersions Override Kubernetes API versions reported by .Capabilities
+##
+apiVersions: []
 ## @param nameOverride String to partially override common.names.name
 ##
 nameOverride: ""
@@ -89,7 +92,7 @@ diagnosticMode:
 rayImage:
   registry: docker.io
   repository: bitnami/ray
-  tag: 2.41.0-debian-12-r0
+  tag: 2.42.1-debian-12-r1
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -125,7 +128,7 @@ operator:
   image:
     registry: docker.io
     repository: bitnami/kuberay-operator
-    tag: 1.2.2-debian-12-r8
+    tag: 1.3.0-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -776,7 +779,7 @@ apiserver:
   image:
     registry: docker.io
     repository: bitnami/kuberay-apiserver
-    tag: 1.2.2-debian-12-r8
+    tag: 1.2.2-debian-12-r11
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images

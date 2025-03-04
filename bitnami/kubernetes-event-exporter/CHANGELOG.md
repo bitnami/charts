@@ -1,8 +1,30 @@
 # Changelog
 
-## 3.3.3 (2025-01-24)
+## 3.4.2 (2025-03-04)
 
-* [bitnami/kubernetes-event-exporter] Release 3.3.3 ([#31567](https://github.com/bitnami/charts/pull/31567))
+* [bitnami/kubernetes-event-exporter] Release 3.4.2 ([#32262](https://github.com/bitnami/charts/pull/32262))
+
+## <small>3.4.1 (2025-02-21)</small>
+
+* [bitnami/kubernetes-event-exporter] Release 3.4.1 (#32011) ([9fffa0c](https://github.com/bitnami/charts/commit/9fffa0c7f5e6ca6edad485fd6867bf6720615e1c)), closes [#32011](https://github.com/bitnami/charts/issues/32011)
+
+## 3.4.0 (2025-02-20)
+
+* [bitnami/kubernetes-event-exporter] feat: use new helper for checking API versions (#32055) ([b4998a2](https://github.com/bitnami/charts/commit/b4998a228434f7bbdfec1d381b5dbf7aa0411fb0)), closes [#32055](https://github.com/bitnami/charts/issues/32055)
+
+## <small>3.3.5 (2025-02-12)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/kubernetes-event-exporter] Release 3.3.5 (#31894) ([cd0fea6](https://github.com/bitnami/charts/commit/cd0fea6315f24d97c50e26951ad70f644ed37787)), closes [#31894](https://github.com/bitnami/charts/issues/31894)
+
+## <small>3.3.4 (2025-02-05)</small>
+
+* [bitnami/kubernetes-event-exporter] Release 3.3.4 (#31764) ([1673dbe](https://github.com/bitnami/charts/commit/1673dbe9d1f675a39c7b892a5f3b1993c13ed65e)), closes [#31764](https://github.com/bitnami/charts/issues/31764)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>3.3.3 (2025-01-24)</small>
+
+* [bitnami/kubernetes-event-exporter] Release 3.3.3 (#31567) ([73307f5](https://github.com/bitnami/charts/commit/73307f5c5fed480faaa3c9f165441e259feb0525)), closes [#31567](https://github.com/bitnami/charts/issues/31567)
 
 ## <small>3.3.2 (2025-01-17)</small>
 

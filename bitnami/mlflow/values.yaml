@@ -41,6 +41,9 @@ global:
 ## @param kubeVersion Override Kubernetes version
 ##
 kubeVersion: ""
+## @param apiVersions Override Kubernetes API versions reported by .Capabilities
+##
+apiVersions: []
 ## @param nameOverride String to partially override common.names.name
 ##
 nameOverride: ""
@@ -92,7 +95,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mlflow
-  tag: 2.20.0-debian-12-r0
+  tag: 2.20.3-debian-12-r1
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -121,7 +124,7 @@ image:
 gitImage:
   registry: docker.io
   repository: bitnami/git
-  tag: 2.48.1-debian-12-r0
+  tag: 2.48.1-debian-12-r8
   digest: ""
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -262,18 +265,22 @@ tracking:
   ## @param tracking.auth.enabled Enable basic authentication
   ## @param tracking.auth.username Admin username
   ## @param tracking.auth.password Admin password
+  ## @param tracking.auth.flaskServerSecretKey Flask server secret key (required for enabling CSRF protection)
   ## @param tracking.auth.existingSecret Name of a secret containing the admin password
   ## @param tracking.auth.existingSecretUserKey Key inside the secret containing the admin password
   ## @param tracking.auth.existingSecretPasswordKey Key inside the secret containing the admin password
+  ## @param tracking.auth.existingSecretFlaskServerSecretKey Key inside the secret containing the flask server secret key
   ## @param tracking.auth.extraOverrides Add extra settings to the basic_auth.ini file
   ## @param tracking.auth.overridesConfigMap Name of a ConfigMap containing overrides to the basic_auth.ini file
   auth:
     enabled: true
     username: user
     password: ""
+    flaskServerSecretKey: ""
     existingSecret: ""
     existingSecretUserKey: ""
     existingSecretPasswordKey: ""
+    existingSecretFlaskServerSecretKey: ""
     extraOverrides: {}
     overridesConfigMap: ""
   ## TLS configuration
@@ -1217,7 +1224,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r35
+    tag: 12-debian-12-r39
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1266,7 +1273,7 @@ waitContainer:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r35
+    tag: 12-debian-12-r39
     digest: ""
     ## @param waitContainer.image.pullPolicy Init container wait-container image pull policy
     ##

@@ -1,8 +1,8 @@
-<!--- app-name: superset -->
+<!--- app-name: Apache Superset -->
 
 # Bitnami package for Apache Superset
 
-Superset is an open source Data Visualization and Data Exploration Platform.
+Superset is a modern data exploration and data visualization platform.
 
 [Overview of Apache Superset](https://superset.apache.org/)
 
@@ -164,6 +164,7 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | Name                     | Description                                                                             | Value           |
 | ------------------------ | --------------------------------------------------------------------------------------- | --------------- |
 | `kubeVersion`            | Override Kubernetes version                                                             | `""`            |
+| `apiVersions`            | Override Kubernetes API versions reported by .Capabilities                              | `[]`            |
 | `nameOverride`           | String to partially override common.names.name                                          | `""`            |
 | `fullnameOverride`       | String to fully override common.names.fullname                                          | `""`            |
 | `namespaceOverride`      | String to fully override common.names.namespace                                         | `""`            |
@@ -741,7 +742,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

@@ -1,8 +1,26 @@
 # Changelog
 
-## 0.3.2 (2025-01-28)
+## 0.6.0 (2025-02-21)
 
-* [bitnami/dremio] Release 0.3.2 ([#31622](https://github.com/bitnami/charts/pull/31622))
+* [bitnami/dremio] Rename `usePasswordFile` as `usePasswordFiles` and set 'true' by default ([#32105](https://github.com/bitnami/charts/pull/32105))
+
+## 0.5.0 (2025-02-20)
+
+* [bitnami/dremio] feat: use new helper for checking API versions (#32048) ([3c3abd5](https://github.com/bitnami/charts/commit/3c3abd5f99cd1ad0c50a55e2bb63819d14672374)), closes [#32048](https://github.com/bitnami/charts/issues/32048)
+
+## <small>0.4.1 (2025-02-19)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/dremio] Release 0.4.1 (#31986) ([f8e6c4a](https://github.com/bitnami/charts/commit/f8e6c4a2bfb8abe94ba5d52a19a496860a1f1a4f)), closes [#31986](https://github.com/bitnami/charts/issues/31986)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## 0.4.0 (2025-01-29)
+
+* [bitnami/dremio] feature(minio): Bump MinIO subchart (#31658) ([fd83e08](https://github.com/bitnami/charts/commit/fd83e0870ccc01ef4f311cf787bc82f700e94577)), closes [#31658](https://github.com/bitnami/charts/issues/31658)
+
+## <small>0.3.2 (2025-01-28)</small>
+
+* [bitnami/dremio] Release 0.3.2 (#31622) ([c1d043d](https://github.com/bitnami/charts/commit/c1d043dbf110462759bdfe38f94e7202da23d829)), closes [#31622](https://github.com/bitnami/charts/issues/31622)
 
 ## <small>0.3.1 (2025-01-16)</small>
 

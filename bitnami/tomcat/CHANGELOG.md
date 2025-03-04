@@ -1,8 +1,22 @@
 # Changelog
 
-## 11.5.2 (2025-01-28)
+## 11.5.5 (2025-02-26)
 
-* [bitnami/tomcat] Release 11.5.2 ([#31626](https://github.com/bitnami/charts/pull/31626))
+* [bitnami/tomcat] Release 11.5.5 ([#32173](https://github.com/bitnami/charts/pull/32173))
+
+## <small>11.5.4 (2025-02-14)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/tomcat] Release 11.5.4 (#31926) ([a401c96](https://github.com/bitnami/charts/commit/a401c96b685d790344f960eab46e5aba87308f63)), closes [#31926](https://github.com/bitnami/charts/issues/31926)
+
+## <small>11.5.3 (2025-02-11)</small>
+
+* [bitnami/tomcat] Release 11.5.3 (#31875) ([823f656](https://github.com/bitnami/charts/commit/823f656236b559e07e61fd99d47ea05488ee0ca4)), closes [#31875](https://github.com/bitnami/charts/issues/31875)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>11.5.2 (2025-01-28)</small>
+
+* [bitnami/tomcat] Release 11.5.2 (#31626) ([8df20cf](https://github.com/bitnami/charts/commit/8df20cf13c0b7c0edcbbb46e406c5e12a1d4b892)), closes [#31626](https://github.com/bitnami/charts/issues/31626)
 
 ## <small>11.5.1 (2025-01-14)</small>
 
@@ -1374,7 +1388,7 @@
 ## <small>3.0.3 (2019-05-29)</small>
 
 * Change syntax because of linter failing ([adfc357](https://github.com/bitnami/charts/commit/adfc35728c2a8a9def9e1897b3772d64df621354))
-* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79)), closes [#issuecomment-496883321](https://github.com/bitnami/charts/issues/issuecomment-496883321)
+* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79))
 * Use immutable tags in the main images ([17ca4f5](https://github.com/bitnami/charts/commit/17ca4f5c91da33da03f9e2d411fe5e004e825c4d))
 
 ## <small>3.0.2 (2019-05-28)</small>

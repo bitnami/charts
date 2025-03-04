@@ -211,6 +211,7 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 | Name                     | Description                                                                             | Value           |
 | ------------------------ | --------------------------------------------------------------------------------------- | --------------- |
 | `kubeVersion`            | Override Kubernetes version                                                             | `""`            |
+| `apiVersions`            | Override Kubernetes API versions reported by .Capabilities                              | `[]`            |
 | `nameOverride`           | String to partially override common.names.fullname                                      | `""`            |
 | `fullnameOverride`       | String to fully override common.names.fullname                                          | `""`            |
 | `commonLabels`           | Labels to add to all deployed objects                                                   | `{}`            |
@@ -1027,7 +1028,7 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 | Name                                                          | Description                                                                                                                                                                                                                           | Value                      |
 | ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
 | `snapshots.enabled`                                           | Enable automatic setup of repositories and snapshot policies                                                                                                                                                                          | `false`                    |
-| `snapshots.command`                                           | Override default container command (useful when using custom images)                                                                                                                                                                  | `["/usr/bin/curl"]`        |
+| `snapshots.command`                                           | Override default container command (useful when using custom images)                                                                                                                                                                  | `[]`                       |
 | `snapshots.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                                                  | `true`                     |
 | `snapshots.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                                      | `nil`                      |
 | `snapshots.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                                            | `1001`                     |
@@ -1110,7 +1111,7 @@ This could potentially break any customization or init scripts used in your depl
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

@@ -1,8 +1,43 @@
 # Changelog
 
-## 4.5.2 (2025-01-24)
+## 4.8.0 (2025-03-03)
 
-* [bitnami/seaweedfs] Release 4.5.2 ([#31583](https://github.com/bitnami/charts/pull/31583))
+* [bitnami/seaweedfs] Add support for `s3.allowEmptyFolder` ([#32234](https://github.com/bitnami/charts/pull/32234))
+
+## 4.7.0 (2025-02-24)
+
+* [bitnami/seaweedfs] Set `usePasswordFiles=true` by default (#32119) ([dbc5cb6](https://github.com/bitnami/charts/commit/dbc5cb6ebacef3036f8bbb32ae1d761f171b8bdd)), closes [#32119](https://github.com/bitnami/charts/issues/32119)
+
+## <small>4.6.2 (2025-02-20)</small>
+
+* [bitnami/seaweedfs] Release 4.6.2 (#32035) ([efa99db](https://github.com/bitnami/charts/commit/efa99db7094cc5f19ec968634b5a87850c40cb73)), closes [#32035](https://github.com/bitnami/charts/issues/32035)
+
+## <small>4.6.1 (2025-02-12)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/seaweedfs] Release 4.6.1 (#31902) ([f15c5ed](https://github.com/bitnami/charts/commit/f15c5ed37c1829961a0ba4391809c524237382fb)), closes [#31902](https://github.com/bitnami/charts/issues/31902)
+* [bitnami/seaweedfs]: correct typo in README (#31867) ([bb5c61b](https://github.com/bitnami/charts/commit/bb5c61b6fe4c89ac0b115b63ebed43b312f31809)), closes [#31867](https://github.com/bitnami/charts/issues/31867)
+
+## 4.6.0 (2025-02-05)
+
+* [bitnami/seaweedfs] Add support for log persistence (#31793) ([2561c2a](https://github.com/bitnami/charts/commit/2561c2aaba3b08507f1c10bdae3b933d74f01427)), closes [#31793](https://github.com/bitnami/charts/issues/31793)
+
+## <small>4.5.5 (2025-02-05)</small>
+
+* [bitnami/seaweedfs] Release 4.5.5 (#31779) ([db2813f](https://github.com/bitnami/charts/commit/db2813f08e07f03142c8acd5b587c47bf66a0057)), closes [#31779](https://github.com/bitnami/charts/issues/31779)
+
+## <small>4.5.4 (2025-02-03)</small>
+
+* [bitnami/seaweedfs] Release 4.5.4 (#31718) ([b4de2a7](https://github.com/bitnami/charts/commit/b4de2a7edbae2d1bba926a18ffc1415c39a5ca9d)), closes [#31718](https://github.com/bitnami/charts/issues/31718)
+
+## <small>4.5.3 (2025-02-03)</small>
+
+* [bitnami/seaweedfs] Release 4.5.3 (#31700) ([6752afa](https://github.com/bitnami/charts/commit/6752afab2f7805c38dfca3ab7e75afffcb0db3e7)), closes [#31700](https://github.com/bitnami/charts/issues/31700)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>4.5.2 (2025-01-24)</small>
+
+* [bitnami/seaweedfs] Release 4.5.2 (#31583) ([fd84724](https://github.com/bitnami/charts/commit/fd8472445476e56d22e2f54014e90d54fef780db)), closes [#31583](https://github.com/bitnami/charts/issues/31583)
 
 ## <small>4.5.1 (2025-01-21)</small>
 

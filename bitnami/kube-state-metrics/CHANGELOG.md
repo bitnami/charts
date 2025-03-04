@@ -1,8 +1,29 @@
 # Changelog
 
-## 4.3.4 (2025-01-24)
+## 5.0.3 (2025-02-19)
 
-* [bitnami/kube-state-metrics] Release 4.3.4 ([#31562](https://github.com/bitnami/charts/pull/31562))
+* [bitnami/kube-state-metrics] Release 5.0.3 ([#32010](https://github.com/bitnami/charts/pull/32010))
+
+## <small>5.0.2 (2025-02-04)</small>
+
+* [bitnami/kube-state-metrics] Release 5.0.2 (#31763) ([89d1993](https://github.com/bitnami/charts/commit/89d1993add6aa3bd7fb897adb101c40deb692f5d)), closes [#31763](https://github.com/bitnami/charts/issues/31763)
+
+## <small>5.0.1 (2025-02-03)</small>
+
+* [bitnami/kube-state-metrics] Release 5.0.1 (#31712) ([5d2bf0f](https://github.com/bitnami/charts/commit/5d2bf0f99ba64f2b39f72fb2ad65750d4c5d673b)), closes [#31712](https://github.com/bitnami/charts/issues/31712)
+
+## 5.0.0 (2025-02-03)
+
+* [bitnami/kube-state-metrics] Remove resource VPA no longer available since v2.9.0 (#31689) ([bbf5101](https://github.com/bitnami/charts/commit/bbf510172dc4a2835fb3620a17309be8a8b6ffaf)), closes [#31689](https://github.com/bitnami/charts/issues/31689)
+
+## 4.4.0 (2025-02-03)
+
+* [bitnami/kube-state-metrics] allow creation of custom resource state (#31687) ([e77870b](https://github.com/bitnami/charts/commit/e77870b5c15230186ce3091f2b620b7de986999f)), closes [#31687](https://github.com/bitnami/charts/issues/31687)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>4.3.4 (2025-01-24)</small>
+
+* [bitnami/kube-state-metrics] Release 4.3.4 (#31562) ([62970ac](https://github.com/bitnami/charts/commit/62970acb89b03bd6169fc418e5562c5e186bbc07)), closes [#31562](https://github.com/bitnami/charts/issues/31562)
 
 ## <small>4.3.3 (2025-01-17)</small>
 
@@ -817,7 +838,7 @@
 
 ## 0.3.0 (2020-06-08)
 
-* [bitnami/kube-state-metrics] Add missing collectors (#2781) ([93a4afe](https://github.com/bitnami/charts/commit/93a4afed8cd8713c2726e761dec45e1af0dd8dbc)), closes [#2781](https://github.com/bitnami/charts/issues/2781) [/github.com/kubernetes/kube-state-metrics/blob/release-1.9/pkg/options/collector.go#L28](https://github.com//github.com/kubernetes/kube-state-metrics/blob/release-1.9/pkg/options/collector.go/issues/L28)
+* [bitnami/kube-state-metrics] Add missing collectors (#2781) ([93a4afe](https://github.com/bitnami/charts/commit/93a4afed8cd8713c2726e761dec45e1af0dd8dbc)), closes [#2781](https://github.com/bitnami/charts/issues/2781)
 
 ## <small>0.2.3 (2020-06-03)</small>
 

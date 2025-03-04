@@ -329,15 +329,16 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 
 ### Common parameters
 
-| Name                | Description                                        | Value           |
-| ------------------- | -------------------------------------------------- | --------------- |
-| `kubeVersion`       | Override Kubernetes version                        | `""`            |
-| `nameOverride`      | String to partially override common.names.fullname | `""`            |
-| `fullnameOverride`  | String to fully override common.names.fullname     | `""`            |
-| `commonLabels`      | Labels to add to all deployed objects              | `{}`            |
-| `commonAnnotations` | Annotations to add to all deployed objects         | `{}`            |
-| `clusterDomain`     | Kubernetes cluster domain name                     | `cluster.local` |
-| `extraDeploy`       | Array of extra objects to deploy with the release  | `[]`            |
+| Name                | Description                                                       | Value           |
+| ------------------- | ----------------------------------------------------------------- | --------------- |
+| `kubeVersion`       | Override Kubernetes version                                       | `""`            |
+| `nameOverride`      | String to partially override common.names.fullname                | `""`            |
+| `fullnameOverride`  | String to fully override common.names.fullname                    | `""`            |
+| `commonLabels`      | Labels to add to all deployed objects                             | `{}`            |
+| `commonAnnotations` | Annotations to add to all deployed objects                        | `{}`            |
+| `clusterDomain`     | Kubernetes cluster domain name                                    | `cluster.local` |
+| `extraDeploy`       | Array of extra objects to deploy with the release                 | `[]`            |
+| `usePasswordFiles`  | Mount credentials as files instead of using environment variables | `true`          |
 
 ### Argo CD image parameters
 
@@ -1422,7 +1423,7 @@ See [PR#7113](https://github.com/bitnami/charts/pull/7113) for more info about t
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

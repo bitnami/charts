@@ -1,8 +1,18 @@
 # Changelog
 
-## 11.3.2 (2025-01-24)
+## 11.3.4 (2025-02-25)
 
-* [bitnami/apache] Release 11.3.2 ([#31540](https://github.com/bitnami/charts/pull/31540))
+* [bitnami/apache] Release 11.3.4 ([#32165](https://github.com/bitnami/charts/pull/32165))
+
+## <small>11.3.3 (2025-02-18)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/apache] Release 11.3.3 (#31970) ([56da85d](https://github.com/bitnami/charts/commit/56da85d3049ab35e4f346717dcce09abac47c4f9)), closes [#31970](https://github.com/bitnami/charts/issues/31970)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>11.3.2 (2025-01-24)</small>
+
+* [bitnami/apache] Release 11.3.2 (#31540) ([8771ff7](https://github.com/bitnami/charts/commit/8771ff797f7c9ef19c66f2a3d597535c280a295f)), closes [#31540](https://github.com/bitnami/charts/issues/31540)
 
 ## <small>11.3.1 (2025-01-17)</small>
 
@@ -1212,7 +1222,7 @@
 
 * Change syntax because of linter failing ([adfc357](https://github.com/bitnami/charts/commit/adfc35728c2a8a9def9e1897b3772d64df621354))
 * Create NOTES.txt for apache and nginx ([f564ac1](https://github.com/bitnami/charts/commit/f564ac1dedbb88abaa6f3a1c79790a5dff950c33))
-* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79)), closes [#issuecomment-496883321](https://github.com/bitnami/charts/issues/issuecomment-496883321)
+* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79))
 
 ## <small>4.2.3 (2019-05-28)</small>
 

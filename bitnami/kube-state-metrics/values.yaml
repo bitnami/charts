@@ -89,6 +89,19 @@ rbac:
   ## @param rbac.pspEnabled Whether to create a PodSecurityPolicy and bound it with RBAC. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later
   ##
   pspEnabled: true
+  ## @param rbac.rules Custom RBAC rules to set
+  ## e.g:
+  ## rules:
+  ##   - apiGroups:
+  ##       - ""
+  ##     resources:
+  ##       - pods
+  ##     verbs:
+  ##       - get
+  ##       - list
+  ##
+  rules: []
+
 ## Service account for kube-state-metrics to use.
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
 ## @param serviceAccount.create Specifies whether a ServiceAccount should be created
@@ -113,7 +126,7 @@ serviceAccount:
 image:
   registry: docker.io
   repository: bitnami/kube-state-metrics
-  tag: 2.14.0-debian-12-r6
+  tag: 2.15.0-debian-12-r4
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -221,7 +234,6 @@ namespaces: ""
 ## @param kubeResources.services Enable the `services` resource
 ## @param kubeResources.statefulsets Enable the `statefulsets` resource
 ## @param kubeResources.storageclasses Enable the `storageclasses` resource
-## @param kubeResources.verticalpodautoscalers Enable the `verticalpodautoscalers` resource
 ## @param kubeResources.validatingwebhookconfigurations Enable the `validatingwebhookconfigurations` resource
 ## @param kubeResources.volumeattachments Enable the `volumeattachments` resource
 ##
@@ -252,9 +264,16 @@ kubeResources:
   services: true
   statefulsets: true
   storageclasses: true
-  verticalpodautoscalers: false
   validatingwebhookconfigurations: false
   volumeattachments: true
+## Configure custom resource state metrics
+## ref: https://github.com/kubernetes/kube-state-metrics/blob/main/docs/metrics/extend/customresourcestate-metrics.md
+## @param customResourceState.enabled Enabled custom resource state metrics
+## @param customResourceState.configuration Configuration of the CustomResourceStateMetrics to be added. Evaluated as a template.
+customResourceState:
+  enabled: false
+  configuration: {}
+##
 ## Configure Pods Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param podSecurityContext.enabled Enabled kube-state-metrics pods' Security Context

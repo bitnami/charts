@@ -86,7 +86,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/etcd
-  tag: 3.5.18-debian-12-r0
+  tag: 3.5.18-debian-12-r5
   digest: ""
   ## @param image.pullPolicy etcd image pull policy
   ## Specify a imagePullPolicy
@@ -670,7 +670,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r35
+    tag: 12-debian-12-r38
     digest: ""
     ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
     ##
@@ -990,6 +990,84 @@ serviceAccount:
   ## @param serviceAccount.labels [object] Additional labels to be included on the service account
   ##
   labels: {}
+
+## @section etcd "pre-upgrade" K8s Job parameters
+##
+preUpgradeJob:
+  ## @param preUpgradeJob.enabled Enable running a pre-upgrade job on Helm upgrades that removes obsolete members
+  ##
+  enabled: true
+  ## @param preUpgradeJob.annotations [object] Add annotations to the etcd "pre-upgrade" job
+  ##
+  annotations: {}
+  ## @param preUpgradeJob.podLabels Additional pod labels for etcd "pre-upgrade" job
+  ## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param preUpgradeJob.podAnnotations Additional pod annotations for etcd "pre-upgrade" job
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## Configure "pre-upgrade" job's container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param preUpgradeJob.containerSecurityContext.enabled Enabled "pre-upgrade" job's containers' Security Context
+  ## @param preUpgradeJob.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in "pre-upgrade" job's containers
+  ## @param preUpgradeJob.containerSecurityContext.runAsUser Set runAsUser in "pre-upgrade" job's containers' Security Context
+  ## @param preUpgradeJob.containerSecurityContext.runAsGroup Set runAsUser in "pre-upgrade" job's containers' Security Context
+  ## @param preUpgradeJob.containerSecurityContext.runAsNonRoot Set runAsNonRoot in "pre-upgrade" job's containers' Security Context
+  ## @param preUpgradeJob.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in "pre-upgrade" job's containers' Security Context
+  ## @param preUpgradeJob.containerSecurityContext.privileged Set privileged in "pre-upgrade" job's containers' Security Context
+  ## @param preUpgradeJob.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in "pre-upgrade" job's containers' Security Context
+  ## @param preUpgradeJob.containerSecurityContext.capabilities.add List of capabilities to be added in "pre-upgrade" job's containers
+  ## @param preUpgradeJob.containerSecurityContext.capabilities.drop List of capabilities to be dropped in "pre-upgrade" job's containers
+  ## @param preUpgradeJob.containerSecurityContext.seccompProfile.type Set seccomp profile in "pre-upgrade" job's containers
+  ##
+  containerSecurityContext:
+    enabled: true
+    seLinuxOptions: {}
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    readOnlyRootFilesystem: true
+    privileged: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      add: []
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
+  ## Configure "pre-upgrade" job's pod Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param preUpgradeJob.podSecurityContext.enabled Enabled "pre-upgrade" job's pods' Security Context
+  ## @param preUpgradeJob.podSecurityContext.fsGroupChangePolicy Set fsGroupChangePolicy in "pre-upgrade" job's pods' Security Context
+  ## @param preUpgradeJob.podSecurityContext.sysctls List of sysctls to allow in "pre-upgrade" job's pods' Security Context
+  ## @param preUpgradeJob.podSecurityContext.supplementalGroups List of supplemental groups to add to "pre-upgrade" job's pods' Security Context
+  ## @param preUpgradeJob.podSecurityContext.fsGroup Set fsGroup in "pre-upgrade" job's pods' Security Context
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
+    fsGroup: 1001
+  ## etcd "pre-upgrade" job's container resource requests and limits
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param preUpgradeJob.resourcesPreset Set etcd "pre-upgrade" job's container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if preUpgradeJob.resources is set (preUpgradeJob.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "micro"
+  ## @param preUpgradeJob.resources Set etcd "pre-upgrade" job's container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## E.g:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
+
 ## @section Defragmentation parameters
 ##
 

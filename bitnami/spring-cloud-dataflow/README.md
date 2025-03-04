@@ -710,7 +710,6 @@ As an alternative, you can use the preset configurations for pod affinity, pod a
 | `mariadb.auth.password`                               | Password for the new user                                                                                                                                                                                                  | `change-me`               |
 | `mariadb.auth.database`                               | Database name to create                                                                                                                                                                                                    | `dataflow`                |
 | `mariadb.auth.forcePassword`                          | Force users to specify required passwords in the database                                                                                                                                                                  | `false`                   |
-| `mariadb.auth.usePasswordFiles`                       | Mount credentials as a file instead of using an environment variable                                                                                                                                                       | `false`                   |
 | `mariadb.initdbScripts`                               | Specify dictionary of scripts to be run at first boot                                                                                                                                                                      | `{}`                      |
 | `mariadb.primary.resourcesPreset`                     | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if primary.resources is set (primary.resources is recommended for production). | `micro`                   |
 | `mariadb.primary.resources`                           | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                          | `{}`                      |
@@ -1050,7 +1049,7 @@ mariadb 12:13:25.01 INFO  ==> Running mysql_upgrade
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

@@ -71,7 +71,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/thanos
-  tag: 0.37.2-debian-12-r3
+  tag: 0.37.2-debian-12-r7
   digest: ""
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
@@ -761,6 +761,13 @@ query:
     ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
     ##
     ingressClassName: ""
+    ## @param query.ingress.labels Additional label for the Ingress resource. 
+    ## Use this parameter to set the required labels for your needs
+    ## e.g:
+    ## labels:
+    ##   dns-managed-by-external-dns: 'true'
+    ##
+    labels: {}    
     ## @param query.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
     ## For a full list of possible ingress annotations, please see
     ## ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md
@@ -3896,6 +3903,10 @@ receive:
   ## @param receive.tsdbRetention Thanos Receive TSDB retention period
   ##
   tsdbRetention: 15d
+  ## @param receive.replicationProtocol Thanos Receive replication-protocol
+  ## ref: https://thanos.io/tip/components/receive.md/#replication-protocols
+  ##
+  replicationProtocol: capnproto
   ## @param receive.replicationFactor Thanos Receive replication-factor
   ##
   replicationFactor: 1
@@ -3991,12 +4002,14 @@ receive:
   minReadySeconds: 0
   ## @param receive.containerPorts.http HTTP container port
   ## @param receive.containerPorts.grpc GRPC container port
-  ## @param receive.containerPorts.remote remote-write container port
+  ## @param receive.containerPorts.remote Remote-write container port
+  ## @param receive.containerPorts.capnproto Cap'n'Proto container port
   ##
   containerPorts:
     http: 10902
     grpc: 10901
     remote: 19291
+    capnproto: 19391
   ## K8s Pod Security Context for Thanos Receive pods
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param receive.podSecurityContext.enabled Enable security context for the Thanos Receive pods
@@ -4286,24 +4299,28 @@ receive:
     ## @param receive.service.type Kubernetes service type
     ##
     type: ClusterIP
-    ## @param receive.service.ports.http Thanos Ruler service HTTP port
-    ## @param receive.service.ports.grpc Thanos Ruler service GRPC port
-    ## @param receive.service.ports.remote Thanos Ruler service remote port
+    ## @param receive.service.ports.http Thanos Receive service HTTP port
+    ## @param receive.service.ports.grpc Thanos Receive service GRPC port
+    ## @param receive.service.ports.remote Thanos Receive service Remote-write port
+    ## @param receive.service.ports.capnproto Thanos Receive service Cap'n'Proto port
     ##
     ports:
       http: 10902
       grpc: 10901
       remote: 19291
-    ## @param receive.service.nodePorts.http Specify the Thanos Ruler HTTP nodePort value for the LoadBalancer and NodePort service types
-    ## @param receive.service.nodePorts.grpc Specify the Thanos Ruler GRPC nodePort value for the LoadBalancer and NodePort service types
-    ## @param receive.service.nodePorts.remote Specify the Thanos Ruler remote nodePort value for the LoadBalancer and NodePort service types
+      capnproto: 19391
+    ## @param receive.service.nodePorts.http Specify the Thanos Receive HTTP nodePort value for the LoadBalancer and NodePort service types
+    ## @param receive.service.nodePorts.grpc Specify the Thanos Receive GRPC nodePort value for the LoadBalancer and NodePort service types
+    ## @param receive.service.nodePorts.remote Specify the Thanos Receive Remote-write nodePort value for the LoadBalancer and NodePort service types
+    ## @param receive.service.nodePorts.capnproto Specify the Thanos Receive Cap'n'Proto nodePort value for the LoadBalancer and NodePort service types
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
     ##
     nodePorts:
       http: ""
       grpc: ""
       remote: ""
-    ## @param receive.service.clusterIP Thanos Ruler service clusterIP IP
+      capnproto: ""
+    ## @param receive.service.clusterIP Thanos Receive service clusterIP IP
     ## e.g:
     ## clusterIP: None
     ##
@@ -4319,7 +4336,7 @@ receive:
     ## - 10.10.10.0/24
     ##
     loadBalancerSourceRanges: []
-    ## @param receive.service.externalTrafficPolicy Thanos Ruler service externalTrafficPolicy
+    ## @param receive.service.externalTrafficPolicy Thanos Receive service externalTrafficPolicy
     ## Denotes if this Service desires to route external traffic to node-local or cluster-wide endpoints
     ##
     externalTrafficPolicy: Cluster
@@ -4532,6 +4549,10 @@ receiveDistributor:
   ## @param receiveDistributor.replicaLabel Label to treat as a replica indicator along which data is de-duplicated
   ##
   replicaLabel: replica
+  ## @param receiveDistributor.replicationProtocol Thanos Receive Distributor replication-protocol
+  ## ref: https://thanos.io/tip/components/receive.md/#replication-protocols
+  ##
+  replicationProtocol: capnproto
   ## @param receiveDistributor.replicationFactor Thanos Receive Distributor replication-factor
   ##
   replicationFactor: 1
@@ -4993,7 +5014,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r35
+    tag: 12-debian-12-r39
     digest: ""
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##

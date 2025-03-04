@@ -470,23 +470,25 @@ helm install my-release --set master.persistence.existingClaim=PVC_NAME oci://RE
 
 ### Common parameters
 
-| Name                      | Description                                                                                                    | Value           |
-| ------------------------- | -------------------------------------------------------------------------------------------------------------- | --------------- |
-| `kubeVersion`             | Override Kubernetes version                                                                                    | `""`            |
-| `nameOverride`            | String to partially override common.names.fullname                                                             | `""`            |
-| `fullnameOverride`        | String to fully override common.names.fullname                                                                 | `""`            |
-| `namespaceOverride`       | String to fully override common.names.namespace                                                                | `""`            |
-| `commonLabels`            | Labels to add to all deployed objects                                                                          | `{}`            |
-| `commonAnnotations`       | Annotations to add to all deployed objects                                                                     | `{}`            |
-| `secretAnnotations`       | Annotations to add to secret                                                                                   | `{}`            |
-| `clusterDomain`           | Kubernetes cluster domain name                                                                                 | `cluster.local` |
-| `extraDeploy`             | Array of extra objects to deploy with the release                                                              | `[]`            |
-| `useHostnames`            | Use hostnames internally when announcing replication. If false, the hostname will be resolved to an IP address | `true`          |
-| `nameResolutionThreshold` | Failure threshold for internal hostnames resolution                                                            | `5`             |
-| `nameResolutionTimeout`   | Timeout seconds between probes for internal hostnames resolution                                               | `5`             |
-| `diagnosticMode.enabled`  | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                        | `false`         |
-| `diagnosticMode.command`  | Command to override all containers in the deployment                                                           | `["sleep"]`     |
-| `diagnosticMode.args`     | Args to override all containers in the deployment                                                              | `["infinity"]`  |
+| Name                           | Description                                                                                                    | Value           |
+| ------------------------------ | -------------------------------------------------------------------------------------------------------------- | --------------- |
+| `kubeVersion`                  | Override Kubernetes version                                                                                    | `""`            |
+| `nameOverride`                 | String to partially override common.names.fullname                                                             | `""`            |
+| `fullnameOverride`             | String to fully override common.names.fullname                                                                 | `""`            |
+| `namespaceOverride`            | String to fully override common.names.namespace                                                                | `""`            |
+| `commonLabels`                 | Labels to add to all deployed objects                                                                          | `{}`            |
+| `commonAnnotations`            | Annotations to add to all deployed objects                                                                     | `{}`            |
+| `configmapChecksumAnnotations` | Enable checksum annotations used to trigger rolling updates when ConfigMap(s) change                           | `true`          |
+| `secretChecksumAnnotations`    | Enable checksum annotations used to trigger rolling updates when Secret(s) change                              | `true`          |
+| `secretAnnotations`            | Annotations to add to secret                                                                                   | `{}`            |
+| `clusterDomain`                | Kubernetes cluster domain name                                                                                 | `cluster.local` |
+| `extraDeploy`                  | Array of extra objects to deploy with the release                                                              | `[]`            |
+| `useHostnames`                 | Use hostnames internally when announcing replication. If false, the hostname will be resolved to an IP address | `true`          |
+| `nameResolutionThreshold`      | Failure threshold for internal hostnames resolution                                                            | `5`             |
+| `nameResolutionTimeout`        | Timeout seconds between probes for internal hostnames resolution                                               | `5`             |
+| `diagnosticMode.enabled`       | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                        | `false`         |
+| `diagnosticMode.command`       | Command to override all containers in the deployment                                                           | `["sleep"]`     |
+| `diagnosticMode.args`          | Args to override all containers in the deployment                                                              | `["infinity"]`  |
 
 ### Redis&reg; Image parameters
 
@@ -505,12 +507,15 @@ helm install my-release --set master.persistence.existingClaim=PVC_NAME oci://RE
 | -------------------------------- | ------------------------------------------------------------------------------------- | ------------- |
 | `architecture`                   | Redis&reg; architecture. Allowed values: `standalone` or `replication`                | `replication` |
 | `auth.enabled`                   | Enable password authentication                                                        | `true`        |
-| `auth.sentinel`                  | Enable password authentication on sentinels too                                       | `true`        |
+| `auth.sentinel`                  | Enable authentication on sentinels too                                                | `true`        |
 | `auth.password`                  | Redis&reg; password                                                                   | `""`          |
 | `auth.existingSecret`            | The name of an existing secret with Redis&reg; credentials                            | `""`          |
 | `auth.existingSecretPasswordKey` | Password key to be retrieved from existing secret                                     | `""`          |
-| `auth.usePasswordFiles`          | Mount credentials as files instead of using an environment variable                   | `false`       |
+| `auth.usePasswordFiles`          | Mount credentials as files instead of using an environment variable                   | `true`        |
 | `auth.usePasswordFileFromSecret` | Mount password file from secret                                                       | `true`        |
+| `auth.acl.enabled`               | Enables the support of the Redis ACL system                                           | `false`       |
+| `auth.acl.sentinel`              | Enables the support of the Redis ACL system for Sentinel Nodes                        | `false`       |
+| `auth.acl.users`                 | A list of the configured users in the Redis ACL system                                | `[]`          |
 | `commonConfiguration`            | Common configuration to be added into the ConfigMap                                   | `""`          |
 | `existingConfigmap`              | The name of an existing ConfigMap with your custom configuration for Redis&reg; nodes | `""`          |
 
@@ -879,6 +884,15 @@ helm install my-release --set master.persistence.existingClaim=PVC_NAME oci://RE
 | `sentinel.masterService.sessionAffinityConfig`               | Additional settings for the sessionAffinity                                                                                                                                                                                         | `{}`                             |
 | `sentinel.terminationGracePeriodSeconds`                     | Integer setting the termination grace period for the redis-node pods                                                                                                                                                                | `30`                             |
 | `sentinel.extraPodSpec`                                      | Optionally specify extra PodSpec for the Redis&reg; Sentinel pod(s)                                                                                                                                                                 | `{}`                             |
+| `sentinel.externalAccess.enabled`                            | Enable external access to the Redis                                                                                                                                                                                                 | `false`                          |
+| `sentinel.externalAccess.service.loadBalancerIPAnnotaion`    | Name of annotation to specify fixed IP for service in.                                                                                                                                                                              | `""`                             |
+| `sentinel.externalAccess.service.type`                       | Type for the services used to expose every Pod                                                                                                                                                                                      | `LoadBalancer`                   |
+| `sentinel.externalAccess.service.redisPort`                  | Port for the services used to expose redis-server                                                                                                                                                                                   | `6379`                           |
+| `sentinel.externalAccess.service.sentinelPort`               | Port for the services used to expose redis-sentinel                                                                                                                                                                                 | `26379`                          |
+| `sentinel.externalAccess.service.loadBalancerIP`             | Array of load balancer IPs for each Redis&reg; node. Length must be the same as sentinel.replicaCount                                                                                                                               | `[]`                             |
+| `sentinel.externalAccess.service.loadBalancerClass`          | Load Balancer class if service type is `LoadBalancer` (optional, cloud specific)                                                                                                                                                    | `""`                             |
+| `sentinel.externalAccess.service.loadBalancerSourceRanges`   | Service Load Balancer sources                                                                                                                                                                                                       | `[]`                             |
+| `sentinel.externalAccess.service.annotations`                | Annotations to add to the services used to expose every Pod of the Redis&reg; Cluster                                                                                                                                               | `{}`                             |
 
 ### Other Parameters
 
@@ -1306,7 +1320,7 @@ kubectl patch deployments my-release-redis-metrics --type=json -p='[{"op": "remo
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

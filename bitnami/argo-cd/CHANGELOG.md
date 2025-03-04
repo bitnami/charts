@@ -1,8 +1,38 @@
 # Changelog
 
-## 7.1.5 (2025-01-24)
+## 7.2.1 (2025-02-28)
 
-* [bitnami/argo-cd] Release 7.1.5 ([#31541](https://github.com/bitnami/charts/pull/31541))
+* [bitnami/argo-cd] Release 7.2.1 ([#32207](https://github.com/bitnami/charts/pull/32207))
+
+## 7.2.0 (2025-02-24)
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/argo-cd] Add support for `usePasswordFiles` (#32079) ([d9a4702](https://github.com/bitnami/charts/commit/d9a4702bfd5ac892d2cebaa9fc076dc39d0ca792)), closes [#32079](https://github.com/bitnami/charts/issues/32079)
+
+## <small>7.1.10 (2025-02-06)</small>
+
+* [bitnami/argo-cd] Release 7.1.10 (#31804) ([c0db7b0](https://github.com/bitnami/charts/commit/c0db7b02d6129b86c343c8d65fa920b8e848670f)), closes [#31804](https://github.com/bitnami/charts/issues/31804)
+
+## <small>7.1.9 (2025-02-04)</small>
+
+* [bitnami/argo-cd] Release 7.1.9 (#31742) ([9b9fcab](https://github.com/bitnami/charts/commit/9b9fcab97ce33907aa00c9eed1df6b34cd523db6)), closes [#31742](https://github.com/bitnami/charts/issues/31742)
+
+## <small>7.1.8 (2025-02-03)</small>
+
+* [bitnami/argo-cd] Release 7.1.8 (#31722) ([3db13e6](https://github.com/bitnami/charts/commit/3db13e640b2abcc8a44e0048876ce18af6e6c89c)), closes [#31722](https://github.com/bitnami/charts/issues/31722)
+
+## <small>7.1.7 (2025-02-03)</small>
+
+* [bitnami/argo-cd] Release 7.1.7 (#31720) ([6582c58](https://github.com/bitnami/charts/commit/6582c58974517ed00e5fe29396f2158944a54ac5)), closes [#31720](https://github.com/bitnami/charts/issues/31720)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>7.1.6 (2025-01-29)</small>
+
+* [bitnami/argo-cd] Release 7.1.6 (#31669) ([6408979](https://github.com/bitnami/charts/commit/640897954d9a69e87b9f6de76bde9db27e1d3454)), closes [#31669](https://github.com/bitnami/charts/issues/31669)
+
+## <small>7.1.5 (2025-01-24)</small>
+
+* [bitnami/argo-cd] Release 7.1.5 (#31541) ([71993b6](https://github.com/bitnami/charts/commit/71993b6e801a3c0d1308e4be88d8f14ce26a8cab)), closes [#31541](https://github.com/bitnami/charts/issues/31541)
 
 ## <small>7.1.4 (2025-01-16)</small>
 

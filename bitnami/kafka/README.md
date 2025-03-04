@@ -453,6 +453,7 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 | Name                      | Description                                                                             | Value           |
 | ------------------------- | --------------------------------------------------------------------------------------- | --------------- |
 | `kubeVersion`             | Override Kubernetes version                                                             | `""`            |
+| `apiVersions`             | Override Kubernetes API versions reported by .Capabilities                              | `[]`            |
 | `nameOverride`            | String to partially override common.names.fullname                                      | `""`            |
 | `fullnameOverride`        | String to fully override common.names.fullname                                          | `""`            |
 | `clusterDomain`           | Default Kubernetes cluster domain                                                       | `cluster.local` |
@@ -1555,7 +1556,7 @@ kubectl delete statefulset kafka-zookeeper --cascade=false
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

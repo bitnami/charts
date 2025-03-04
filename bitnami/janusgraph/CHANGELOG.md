@@ -1,8 +1,22 @@
 # Changelog
 
-## 1.2.3 (2025-01-28)
+## 1.4.0 (2025-02-24)
 
-* [bitnami/janusgraph] Release 1.2.3 ([#31623](https://github.com/bitnami/charts/pull/31623))
+* [bitnami/janusgraph] Set `usePasswordFiles=true` by default ([#32107](https://github.com/bitnami/charts/pull/32107))
+
+## <small>1.3.1 (2025-02-24)</small>
+
+* [bitnami/janusgraph] Release 1.3.1 (#32140) ([8cef05e](https://github.com/bitnami/charts/commit/8cef05e10f079ed402adba00a2f849ad472721a9)), closes [#32140](https://github.com/bitnami/charts/issues/32140)
+
+## 1.3.0 (2025-02-20)
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/janusgraph] feat: use new helper for checking API versions (#32050) ([7b30ac8](https://github.com/bitnami/charts/commit/7b30ac8e4c15b963ba52af27f7265b92b852fec3)), closes [#32050](https://github.com/bitnami/charts/issues/32050)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>1.2.3 (2025-01-28)</small>
+
+* [bitnami/janusgraph] Release 1.2.3 (#31623) ([6b46ea1](https://github.com/bitnami/charts/commit/6b46ea1284885a7d18edf92858c10e81fbed384e)), closes [#31623](https://github.com/bitnami/charts/issues/31623)
 
 ## <small>1.2.2 (2025-01-28)</small>
 

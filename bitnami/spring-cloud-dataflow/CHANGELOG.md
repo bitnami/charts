@@ -1,8 +1,24 @@
 # Changelog
 
-## 34.1.1 (2025-01-17)
+## 34.2.1 (2025-03-02)
 
-* [bitnami/spring-cloud-dataflow] Release 34.1.1 ([#31451](https://github.com/bitnami/charts/pull/31451))
+* [bitnami/spring-cloud-dataflow] Release 34.2.1 ([#32230](https://github.com/bitnami/charts/pull/32230))
+
+## 34.2.0 (2025-02-26)
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/spring-cloud-dataflow] Use subchart default value for `usePasswordFiles` (#32120) ([b9d42d0](https://github.com/bitnami/charts/commit/b9d42d04ad7b8ba4a8bbd66e3e4570853a9acf64)), closes [#32120](https://github.com/bitnami/charts/issues/32120)
+
+## <small>34.1.2 (2025-02-03)</small>
+
+* [bitnami/spring-cloud-dataflow] Release 34.1.2 (#31688) ([d39f48a](https://github.com/bitnami/charts/commit/d39f48aec34ce2a277bece9196709afa63c32ec3)), closes [#31688](https://github.com/bitnami/charts/issues/31688)
+* Typo fix  CHANGELOG.md (#31536) ([315f9c2](https://github.com/bitnami/charts/commit/315f9c2f9b1c582eee30d983cc358bf66d3da0ad)), closes [#31536](https://github.com/bitnami/charts/issues/31536)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>34.1.1 (2025-01-17)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/spring-cloud-dataflow] Release 34.1.1 (#31451) ([2faecca](https://github.com/bitnami/charts/commit/2faeccac20cff398acfa3036c62140e1cfc70c14)), closes [#31451](https://github.com/bitnami/charts/issues/31451)
 
 ## 34.1.0 (2024-12-10)
 
@@ -856,7 +872,7 @@
 
 ## 4.0.0 (2021-08-02)
 
-* [bitnami/several] Update READMEs ([eb3c291](https://github.com/bitnami/charts/commit/eb3c2916be233280f2226d9cdceb57b08ab4a23b))
+* [bitnami/several] Upadte READMEs ([eb3c291](https://github.com/bitnami/charts/commit/eb3c2916be233280f2226d9cdceb57b08ab4a23b))
 * [bitnami/several] Use the latest major version in subcharts (#7117) ([3c1c105](https://github.com/bitnami/charts/commit/3c1c105ce61d24a81e34bf7be5250bfe07068efb)), closes [#7117](https://github.com/bitnami/charts/issues/7117)
 
 ## <small>3.0.3 (2021-07-26)</small>
