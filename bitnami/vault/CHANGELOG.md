@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.6.9 (2025-03-05)
+## 1.6.10 (2025-03-05)
 
-* [bitnami/vault] Release 1.6.9 ([#32320](https://github.com/bitnami/charts/pull/32320))
+* [bitnami/vault] Release 1.6.10 ([#32331](https://github.com/bitnami/charts/pull/32331))
+
+## <small>1.6.9 (2025-03-05)</small>
+
+* [bitnami/vault] Release 1.6.9 (#32320) ([4a78adb](https://github.com/bitnami/charts/commit/4a78adb19a9882149d5ebdb6195b96d2422b0bc3)), closes [#32320](https://github.com/bitnami/charts/issues/32320)
 
 ## <small>1.6.8 (2025-02-25)</small>
 
