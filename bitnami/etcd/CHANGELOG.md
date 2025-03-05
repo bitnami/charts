@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.1.2 (2025-03-05)
+## 11.1.3 (2025-03-05)
 
-* [bitnami/etcd] Release 11.1.2 ([#32286](https://github.com/bitnami/charts/pull/32286))
+* [bitnami/etcd] Release 11.1.3 ([#32330](https://github.com/bitnami/charts/pull/32330))
+
+## <small>11.1.2 (2025-03-05)</small>
+
+* [bitnami/etcd] Release 11.1.2 (#32286) ([447bd72](https://github.com/bitnami/charts/commit/447bd72be474be3ddacc90c4dc52c80a66254d2f)), closes [#32286](https://github.com/bitnami/charts/issues/32286)
 
 ## <small>11.1.1 (2025-03-04)</small>
 
