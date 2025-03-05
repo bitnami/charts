@@ -132,19 +132,30 @@ spec:
           {{- else if .Values.replica.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.replica.command "context" $) | nindent 12 }}
           {{- else }}
-          command:
-            - /bin/bash
+          command: ['/bin/bash', '-c']
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
           {{- else if .Values.replica.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.replica.args "context" $) | nindent 12 }}
+          {{- else if .Values.sentinel.externalAccess.enabled }}
+          args:
+            - |
+              pod_index=($(echo "$POD_NAME" | tr "-" "\n"))
+              pod_index="${pod_index[-1]}"
+              ips=($(echo "{{ .Values.sentinel.externalAccess.service.loadBalancerIP }}" | cut -d [ -f2 | cut -d ] -f 1))
+              export REDIS_CLUSTER_ANNOUNCE_IP="${ips[$pod_index]}"
+              export REDIS_NODES="${ips[@]}"
+              /opt/bitnami/scripts/start-scripts/start-node.sh
           {{- else }}
           args:
-            - -c
             - /opt/bitnami/scripts/start-scripts/start-node.sh
           {{- end }}
           env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
             - name: REDIS_MASTER_PORT_NUMBER
@@ -295,7 +306,7 @@ spec:
               mountPath: /health
             - name: sentinel-data
               mountPath: /opt/bitnami/redis-sentinel/etc
-            {{- if .Values.auth.usePasswordFiles }}
+            {{- if and .Values.auth.enabled .Values.auth.usePasswordFiles }}
             - name: redis-password
               mountPath: /opt/bitnami/redis/secrets/
             {{- end }}
@@ -346,19 +357,30 @@ spec:
           {{- else if .Values.sentinel.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.sentinel.command "context" $) | nindent 12 }}
           {{- else }}
-          command:
-            - /bin/bash
+          command: ['/bin/bash', '-c']
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
           {{- else if .Values.sentinel.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.sentinel.args "context" $) | nindent 12 }}
+          {{- else if .Values.sentinel.externalAccess.enabled }}
+          args:
+            - |
+              pod_index=($(echo "$POD_NAME" | tr "-" "\n"))
+              pod_index="${pod_index[-1]}"
+              ips=($(echo "{{ .Values.sentinel.externalAccess.service.loadBalancerIP }}" | cut -d [ -f2 | cut -d ] -f 1))
+              export REDIS_CLUSTER_ANNOUNCE_IP="${ips[$pod_index]}"
+              export REDIS_NODES="${ips[@]}"
+              /opt/bitnami/scripts/start-scripts/start-sentinel.sh
           {{- else }}
           args:
-            - -c
             - /opt/bitnami/scripts/start-scripts/start-sentinel.sh
           {{- end }}
           env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" (or .Values.sentinel.image.debug .Values.diagnosticMode.enabled) | quote }}
             {{- if .Values.auth.enabled }}
@@ -485,7 +507,7 @@ spec:
             {{- end }}
             - name: sentinel-data
               mountPath: /opt/bitnami/redis-sentinel/etc
-            {{- if .Values.auth.usePasswordFiles }}
+            {{- if and .Values.auth.enabled .Values.auth.usePasswordFiles }}
             - name: redis-password
               mountPath: /opt/bitnami/redis/secrets/
             {{- end }}
@@ -520,7 +542,7 @@ spec:
             - /bin/bash
             - -c
             - |
-              {{- if .Values.usePasswordFiles }}
+              {{- if and .Values.auth.enabled .Values.auth.usePasswordFiles }}
               export REDIS_PASSWORD="$(< $REDIS_PASSWORD_FILE)"
               {{- end }}
               redis_exporter{{- range $key, $value := .Values.metrics.extraArgs }} --{{ $key }}={{ $value }}{{- end }}
@@ -600,7 +622,7 @@ spec:
             - name: empty-dir
               mountPath: /tmp
               subPath: tmp-dir
-            {{- if .Values.auth.usePasswordFiles }}
+            {{- if and .Values.auth.enabled .Values.auth.usePasswordFiles }}
             - name: redis-password
               mountPath: /secrets/
             {{- end }}
@@ -720,7 +742,7 @@ spec:
             name: {{ printf "%s-kubectl-scripts" (include "common.names.fullname" .) }}
             defaultMode: 0755
         {{- end }}
-        {{- if .Values.auth.usePasswordFiles }}
+        {{- if and .Values.auth.enabled .Values.auth.usePasswordFiles }}
         - name: redis-password
           {{ if .Values.auth.usePasswordFileFromSecret }}
           secret:

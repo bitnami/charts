@@ -1,8 +1,12 @@
 # Changelog
 
+## 19.0.1 (2025-03-04)
+
+* [bitnami/nginx] Release 19.0.1 ([#32261](https://github.com/bitnami/charts/pull/32261))
+
 ## 19.0.0 (2025-02-10)
 
-* [bitnami/nginx] Release 19.0.0 ([#31852](https://github.com/bitnami/charts/pull/31852))
+* [bitnami/nginx] Release 19.0.0 (#31852) ([3af1f49](https://github.com/bitnami/charts/commit/3af1f49c473b8edbcf890583e3f54ad22bc3a7bc)), closes [#31852](https://github.com/bitnami/charts/issues/31852)
 
 ## <small>18.3.6 (2025-02-05)</small>
 
@@ -1491,7 +1495,7 @@
 
 * Change syntax because of linter failing ([adfc357](https://github.com/bitnami/charts/commit/adfc35728c2a8a9def9e1897b3772d64df621354))
 * Create NOTES.txt for apache and nginx ([f564ac1](https://github.com/bitnami/charts/commit/f564ac1dedbb88abaa6f3a1c79790a5dff950c33))
-* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79)), closes [#issuecomment-496883321](https://github.com/bitnami/charts/issues/issuecomment-496883321)
+* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79))
 * Use immutable tags in the main images ([17ca4f5](https://github.com/bitnami/charts/commit/17ca4f5c91da33da03f9e2d411fe5e004e825c4d))
 
 ## <small>3.2.1 (2019-05-28)</small>

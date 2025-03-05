@@ -1,8 +1,20 @@
 # Changelog
 
+## 20.11.1 (2025-03-04)
+
+* [bitnami/redis] Disable all usages of usePasswordFiles if auth.enabled is unset ([#32253](https://github.com/bitnami/charts/pull/32253))
+
+## 20.11.0 (2025-03-03)
+
+* [bitnami/redis] feat: Add external access service for redis sentinel (#32190) ([0582ac3](https://github.com/bitnami/charts/commit/0582ac395c8aa9ef5e9d9df7772775397dd674b1)), closes [#32190](https://github.com/bitnami/charts/issues/32190)
+
+## <small>20.10.1 (2025-03-03)</small>
+
+* [bitnami/redis]: only use auth.usePasswordFiles if auth.enabled is set (#32208) ([1d96748](https://github.com/bitnami/charts/commit/1d96748d8f8231ac4b3fa98b3f8fff234e0bffe7)), closes [#32208](https://github.com/bitnami/charts/issues/32208)
+
 ## 20.10.0 (2025-02-27)
 
-* [bitnami/redis] Set `usePasswordFiles=true` by default ([#32117](https://github.com/bitnami/charts/pull/32117))
+* [bitnami/redis] Set `usePasswordFiles=true` by default (#32117) ([2f80b74](https://github.com/bitnami/charts/commit/2f80b749c9a2e692d51beb3e001708694b94c17f)), closes [#32117](https://github.com/bitnami/charts/issues/32117)
 
 ## 20.9.0 (2025-02-24)
 

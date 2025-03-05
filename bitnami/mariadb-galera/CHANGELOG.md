@@ -1,8 +1,12 @@
 # Changelog
 
-## 14.2.0 (2025-02-21)
+## 14.2.1 (2025-03-02)
 
-* [bitnami/mariadb-galera] Set `usePasswordFiles=true` by default ([#32111](https://github.com/bitnami/charts/pull/32111))
+* [bitnami/mariadb-galera] Release 14.2.1 ([#32229](https://github.com/bitnami/charts/pull/32229))
+
+## 14.2.0 (2025-02-26)
+
+* [bitnami/mariadb-galera] Set `usePasswordFiles=true` by default (#32111) ([d312db4](https://github.com/bitnami/charts/commit/d312db4016edce2d8a4dbb8ea3d49886bb1cb918)), closes [#32111](https://github.com/bitnami/charts/issues/32111)
 
 ## <small>14.1.4 (2025-02-19)</small>
 
