@@ -1,8 +1,8 @@
 # Changelog
 
-## 15.13.1 (2025-03-04)
+## 15.13.1 (2025-03-05)
 
-* [bitnami/thanos] fix: remove quotes from ruler.ruleFile parameter ([#32201](https://github.com/bitnami/charts/pull/32201))
+* [bitnami/thanos] Release 15.13.1 ([#32318](https://github.com/bitnami/charts/pull/32318))
 
 ## 15.13.0 (2025-03-03)
 

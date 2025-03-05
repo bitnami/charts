@@ -1,8 +1,16 @@
 # Changelog
 
+## 20.11.2 (2025-03-05)
+
+* [bitnami/redis] Fix usePasswordFile typo in metrics container ([#32259](https://github.com/bitnami/charts/pull/32259))
+
+## <small>20.11.1 (2025-03-04)</small>
+
+* [bitnami/redis] Disable all usages of usePasswordFiles if auth.enabled is unset (#32253) ([1642f81](https://github.com/bitnami/charts/commit/1642f819c11793ff688f96b831a80bef863d7f98)), closes [#32253](https://github.com/bitnami/charts/issues/32253)
+
 ## 20.11.0 (2025-03-03)
 
-* [bitnami/redis] feat: Add external access service for redis sentinel ([#32190](https://github.com/bitnami/charts/pull/32190))
+* [bitnami/redis] feat: Add external access service for redis sentinel (#32190) ([0582ac3](https://github.com/bitnami/charts/commit/0582ac395c8aa9ef5e9d9df7772775397dd674b1)), closes [#32190](https://github.com/bitnami/charts/issues/32190)
 
 ## <small>20.10.1 (2025-03-03)</small>
 

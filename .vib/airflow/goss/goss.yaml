@@ -26,6 +26,9 @@ file:
     mode: "0644"
     filetype: file
     exists: true
+    # Ensure extra configuration is applied
+    contents:
+      - /APP_THEME = "amelia.css"/
   /opt/bitnami/airflow/dags:
     filetype: directory
     exists: true

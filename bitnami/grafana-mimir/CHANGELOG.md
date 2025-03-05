@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.4.3 (2025-02-19)
+## 1.4.4 (2025-03-05)
 
-* [bitnami/grafana-mimir] Release 1.4.3 ([#31999](https://github.com/bitnami/charts/pull/31999))
+* [bitnami/grafana-mimir] Release 1.4.4 ([#32291](https://github.com/bitnami/charts/pull/32291))
+
+## <small>1.4.3 (2025-02-19)</small>
+
+* [bitnami/grafana-mimir] Release 1.4.3 (#31999) ([b3ca92d](https://github.com/bitnami/charts/commit/b3ca92d8ce4143b3fdb25f2d7a6909d002d7271c)), closes [#31999](https://github.com/bitnami/charts/issues/31999)
 
 ## <small>1.4.2 (2025-02-12)</small>
 

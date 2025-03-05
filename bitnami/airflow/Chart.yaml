@@ -39,4 +39,4 @@ maintainers:
 name: airflow
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/airflow
-version: 22.6.1
+version: 22.7.0

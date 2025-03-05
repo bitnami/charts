@@ -1,8 +1,12 @@
 # Changelog
 
-## 21.4.7 (2025-02-27)
+## 21.4.8 (2025-03-04)
 
-* [bitnami/elasticsearch] fix: 🐛 Mount emptyDir in /bitnami/elasticsear… ([#31607](https://github.com/bitnami/charts/pull/31607))
+* [bitnami/elasticsearch] Release 21.4.8 ([#32267](https://github.com/bitnami/charts/pull/32267))
+
+## <small>21.4.7 (2025-02-27)</small>
+
+* [bitnami/elasticsearch] fix: 🐛 Mount emptyDir in /bitnami/elasticsear… (#31607) ([5d7d47f](https://github.com/bitnami/charts/commit/5d7d47f34e21d61c8e117a75dcf8713554140f7b)), closes [#31607](https://github.com/bitnami/charts/issues/31607)
 
 ## <small>21.4.6 (2025-02-21)</small>
 
