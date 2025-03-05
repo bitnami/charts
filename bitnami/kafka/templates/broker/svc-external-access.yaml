@@ -63,12 +63,12 @@ spec:
     app.kubernetes.io/part-of: kafka
     app.kubernetes.io/component: broker
     statefulset.kubernetes.io/pod-name: {{ $targetPod }}
-  ipFamilyPolicy: {{ $.Values.externalAccess.broker.service.ipFamilyPolicy | default "SingleStack" }}
+  {{- with $.Values.externalAccess.broker.service.ipFamilyPolicy }}
+  ipFamilyPolicy: {{ . | quote }}
+  {{- end }}
+  {{- with $.Values.externalAccess.broker.service.ipFamilies }}
   ipFamilies:
-  {{- if $.Values.externalAccess.broker.service.ipFamilies -}}
-  {{ $.Values.externalAccess.broker.service.ipFamilies | toYaml | nindent 2 }}
-  {{- else }}
-  - IPv4
+  {{- . | toYaml | nindent 2 }}
   {{- end }}
 ---
 {{- end }}

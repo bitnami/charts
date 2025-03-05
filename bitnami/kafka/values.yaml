@@ -1498,11 +1498,10 @@ service:
       labels: {}
     ## @param service.headless.ipFamilies IP families for the headless service
     ## 
-    ipFamilies:
-    - IPv4
+    ipFamilies: []
     ## @param service.headless.ipFamilyPolicy IP family policy for the headless service
     ##
-    ipFamilyPolicy: SingleStack
+    ipFamilyPolicy: ""
 ## External Access to Kafka brokers configuration
 ##
 externalAccess:
@@ -1681,11 +1680,10 @@ externalAccess:
       extraPorts: []
       ## @param externalAccess.controller.service.ipFamilies IP families for the external controller service
       ##
-      ipFamilies:
-      - IPv4
+      ipFamilies: []
       ## @param externalAccess.controller.service.ipFamilyPolicy IP family policy for the external controller service
       ##
-      ipFamilyPolicy: SingleStack
+      ipFamilyPolicy: ""
   broker:
     ## Parameters to configure K8s service(s) used to externally access Kafka brokers
     ## Note: A new service per broker will be created
@@ -1774,11 +1772,10 @@ externalAccess:
       extraPorts: []
       ## @param externalAccess.broker.service.ipFamilies IP families for the external broker service
       ##
-      ipFamilies:
-      - IPv4
+      ipFamilies: []
       ## @param externalAccess.broker.service.ipFamilyPolicy IP family policy for the external broker service
       ##
-      ipFamilyPolicy: SingleStack
+      ipFamilyPolicy: ""
 ## Network policies
 ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
 ##
@@ -2072,11 +2069,10 @@ metrics:
         prometheus.io/path: "/metrics"
       ## @param metrics.jmx.service.ipFamilies IP families for the jmx metrics service
       ##
-      ipFamilies:
-      - IPv4
+      ipFamilies: [] 
       ## @param metrics.jmx.service.ipFamilyPolicy IP family policy for the jmx metrics service
       ##
-      ipFamilyPolicy: SingleStack
+      ipFamilyPolicy: ""
     ## @param metrics.jmx.whitelistObjectNames Allows setting which JMX objects you want to expose to via JMX stats to JMX exporter
     ## Only whitelisted values will be exposed via JMX exporter. They must also be exposed via Rules. To expose all metrics
     ## (warning its crazy excessive and they aren't formatted in a prometheus style) (1) `whitelistObjectNames: []`

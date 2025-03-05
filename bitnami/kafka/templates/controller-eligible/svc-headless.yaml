@@ -43,11 +43,11 @@ spec:
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: controller-eligible
     app.kubernetes.io/part-of: kafka
-  ipFamilyPolicy: {{ .Values.service.headless.ipFamilyPolicy | default "SingleStack" }}
+  {{- with .Values.service.headless.ipFamilyPolicy }}
+  ipFamilyPolicy: {{ . | quote }}
+  {{- end }}
+  {{- with .Values.service.headless.ipFamilies }}
   ipFamilies:
-  {{- if .Values.service.headless.ipFamilies -}}
-  {{ .Values.service.headless.ipFamilies | toYaml | nindent 2 }}
-  {{- else }}
-  - IPv4
+  {{- . | toYaml | nindent 2 }}
   {{- end }}
 {{- end }}
