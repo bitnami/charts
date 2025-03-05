@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.4.3 (2025-03-04)
+## 2.4.4 (2025-03-05)
 
-* [bitnami/valkey] Fix usePasswordFile typo in metrics container ([#32260](https://github.com/bitnami/charts/pull/32260))
+* [bitnami/valkey] Fix usage of valkey .metrics.serviceMonitor.additionalEndpoints ([#32217](https://github.com/bitnami/charts/pull/32217))
+
+## <small>2.4.3 (2025-03-04)</small>
+
+* [bitnami/valkey] Fix usePasswordFile typo in metrics container (#32260) ([956a457](https://github.com/bitnami/charts/commit/956a457bae2a4eb0049fbf9443acf8ee2e28939f)), closes [#32260](https://github.com/bitnami/charts/issues/32260)
 
 ## <small>2.4.2 (2025-03-03)</small>
 
