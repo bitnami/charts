@@ -1,5 +1,9 @@
 # Changelog
 
+## <small>12.3.1 (2025-03-05)</small>
+
+* [bitnami/mysql] Fix network policy extraEgress bug ([#32328](https://github.com/bitnami/charts/pull/32328))
+
 ## 12.3.0 (2025-02-21)
 
 * [bitnami/mysql] Set `usePasswordFiles=true` by default ([#32113](https://github.com/bitnami/charts/pull/32113))
