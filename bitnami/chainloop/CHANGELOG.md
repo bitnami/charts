@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.2.11 (2025-03-04)
+## 2.2.12 (2025-03-05)
 
-* [bitnami/chainloop] Release 2.2.11 ([#32280](https://github.com/bitnami/charts/pull/32280))
+* [bitnami/chainloop] Release 2.2.12 ([#32325](https://github.com/bitnami/charts/pull/32325))
+
+## <small>2.2.11 (2025-03-04)</small>
+
+* [bitnami/chainloop] Release 2.2.11 (#32280) ([3649ab7](https://github.com/bitnami/charts/commit/3649ab7fdcf8a693c44521ce17083cc4a9c53c34)), closes [#32280](https://github.com/bitnami/charts/issues/32280)
 
 ## <small>2.2.10 (2025-03-04)</small>
 
