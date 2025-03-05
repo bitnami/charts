@@ -1,8 +1,13 @@
 # Changelog
 
-## 28.1.3 (2025-02-11)
+## 28.1.4 (2025-03-05)
 
-* [bitnami/odoo] fix issue #31612 - Incompatibility with OCI FSS persistent volumes (.snapshot read-only file system) ([#31860](https://github.com/bitnami/charts/pull/31860))
+* [bitnami/odoo] Release 28.1.4 ([#32324](https://github.com/bitnami/charts/pull/32324))
+
+## <small>28.1.3 (2025-02-12)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/odoo] fix issue #31612 - Incompatibility with OCI FSS persistent volumes (.snapshot read-on ([def5382](https://github.com/bitnami/charts/commit/def53822ed43722111c399a00394757b2f1f920b)), closes [#31612](https://github.com/bitnami/charts/issues/31612) [#31860](https://github.com/bitnami/charts/issues/31860)
 
 ## <small>28.1.2 (2025-02-06)</small>
 
