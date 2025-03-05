@@ -1,6 +1,6 @@
 # Changelog
 
-## 8.7.6 (2025-03-04)
+## 8.7.6 (2025-03-05)
 
 * [bitnami/external-dns] Release 8.7.6 ([#32287](https://github.com/bitnami/charts/pull/32287))
 
