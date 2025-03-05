@@ -16,10 +16,25 @@
                     "default": [],
                     "items": {}
                 },
+                "defaultStorageClass": {
+                    "type": "string",
+                    "description": "Global default StorageClass for Persistent Volume(s)",
+                    "default": ""
+                },
                 "storageClass": {
                     "type": "string",
-                    "description": "Global StorageClass for Persistent Volume(s)",
+                    "description": "DEPRECATED: use global.defaultStorageClass instead",
                     "default": ""
+                },
+                "security": {
+                    "type": "object",
+                    "properties": {
+                        "allowInsecureImages": {
+                            "type": "boolean",
+                            "description": "Allows skipping image verification",
+                            "default": false
+                        }
+                    }
                 },
                 "compatibility": {
                     "type": "object",
@@ -713,6 +728,11 @@
                         "allowExternalEgress": {
                             "type": "boolean",
                             "description": "Allow the pod to access any range of port and all destinations.",
+                            "default": true
+                        },
+                        "addExternalClientAccess": {
+                            "type": "boolean",
+                            "description": "Allow access from pods with client label set to \"true\". Ignored if `alertmanager.networkPolicy.allowExternal` is true.",
                             "default": true
                         },
                         "extraIngress": {
@@ -1912,6 +1932,11 @@
                             "description": "Allow the pod to access any range of port and all destinations.",
                             "default": true
                         },
+                        "addExternalClientAccess": {
+                            "type": "boolean",
+                            "description": "Allow access from pods with client label set to \"true\". Ignored if `server.networkPolicy.allowExternal` is true.",
+                            "default": true
+                        },
                         "extraIngress": {
                             "type": "array",
                             "description": "Add extra ingress rules to the NetworkPolicy",
@@ -1933,6 +1958,11 @@
                 "service": {
                     "type": "object",
                     "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Specifies whether a Service should be created",
+                            "default": true
+                        },
                         "type": {
                             "type": "string",
                             "description": "Prometheus service type",
