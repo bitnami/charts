@@ -1,5 +1,5 @@
-# Source: https://github.com/cloudnative-pg/cloudnative-pg/blob/v{version}/config/crd/bases/postgresql.cnpg.io_imagecatalogs.yaml
-# Version: 1.25.1
+# Source: https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/refs/tags/v{version}/config/crd/bases/postgresql.cnpg.io_imagecatalogs.yaml
+# Version: 1.25.0
 
 
 
