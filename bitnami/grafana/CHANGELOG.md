@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.4.9 (2025-02-20)
+## 11.4.10 (2025-03-05)
 
-* [bitnami/grafana] Release 11.4.9 ([#32092](https://github.com/bitnami/charts/pull/32092))
+* [bitnami/grafana] Release 11.4.10 ([#32294](https://github.com/bitnami/charts/pull/32294))
+
+## <small>11.4.9 (2025-02-20)</small>
+
+* [bitnami/grafana] Release 11.4.9 (#32092) ([58bd78a](https://github.com/bitnami/charts/commit/58bd78aec8dba598955a16bd6672834281de59ca)), closes [#32092](https://github.com/bitnami/charts/issues/32092)
 
 ## <small>11.4.8 (2025-02-20)</small>
 

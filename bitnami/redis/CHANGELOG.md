@@ -2,7 +2,7 @@
 
 ## 20.11.1 (2025-03-04)
 
-* [bitnami/redis] Fix usePasswordFile typo in metrics container ([#32259](https://github.com/bitnami/charts/pull/32259))
+* [bitnami/redis] Disable all usages of usePasswordFiles if auth.enabled is unset ([#32253](https://github.com/bitnami/charts/pull/32253))
 
 ## 20.11.0 (2025-03-03)
 

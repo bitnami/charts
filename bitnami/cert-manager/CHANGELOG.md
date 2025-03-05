@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.4.11 (2025-02-19)
+## 1.4.12 (2025-03-04)
 
-* [bitnami/cert-manager] Release 1.4.11 ([#31976](https://github.com/bitnami/charts/pull/31976))
+* [bitnami/cert-manager] Release 1.4.12 ([#32278](https://github.com/bitnami/charts/pull/32278))
+
+## <small>1.4.11 (2025-02-19)</small>
+
+* [bitnami/cert-manager] Release 1.4.11 (#31976) ([fdae78a](https://github.com/bitnami/charts/commit/fdae78ab44c71383dfa46ba8149c800f4efe3571)), closes [#31976](https://github.com/bitnami/charts/issues/31976)
 
 ## <small>1.4.10 (2025-02-13)</small>
 

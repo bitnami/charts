@@ -1,8 +1,16 @@
 # Changelog
 
-## 11.1.0 (2025-02-21)
+## 11.1.2 (2025-03-05)
 
-* [bitnami/etcd] feat: basic customization params for etcd upgrade-job ([#32099](https://github.com/bitnami/charts/pull/32099))
+* [bitnami/etcd] Release 11.1.2 ([#32286](https://github.com/bitnami/charts/pull/32286))
+
+## <small>11.1.1 (2025-03-04)</small>
+
+* [bitnami/etcd] bugfix: probes to use healthcheck when TLS client-to-server authentication (#32258) ([a6791c5](https://github.com/bitnami/charts/commit/a6791c5ee6b83f963406a8b046d424949269e06c)), closes [#32258](https://github.com/bitnami/charts/issues/32258)
+
+## 11.1.0 (2025-02-24)
+
+* [bitnami/etcd] feat: basic customization params for etcd upgrade-job (#32099) ([b820c10](https://github.com/bitnami/charts/commit/b820c10df5a2066e25ef101f1a279819a83c238b)), closes [#32099](https://github.com/bitnami/charts/issues/32099)
 
 ## <small>11.0.8 (2025-02-19)</small>
 

@@ -1,8 +1,13 @@
 # Changelog
 
-## 6.4.4 (2025-02-11)
+## 6.4.5 (2025-03-04)
 
-* [bitnami/logstash] Release 6.4.4 ([#31870](https://github.com/bitnami/charts/pull/31870))
+* [bitnami/logstash] Release 6.4.5 ([#32268](https://github.com/bitnami/charts/pull/32268))
+
+## <small>6.4.4 (2025-02-11)</small>
+
+* [bitnami/logstash] Release 6.4.4 (#31870) ([fa6db9e](https://github.com/bitnami/charts/commit/fa6db9edb33444f39e4c8d7fcdf16a5fd9d820e8)), closes [#31870](https://github.com/bitnami/charts/issues/31870)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
 
 ## <small>6.4.3 (2025-01-29)</small>
 
@@ -866,7 +871,7 @@
 
 ## 3.3.0 (2021-04-16)
 
-* [bitnami/logstash] Added support for kubernetes secrets in environment (#6117) ([51fff54](https://github.com/bitnami/charts/commit/51fff54b0b5a8bf7316be90a9682abbf181e7ce2)), closes [#6117](https://github.com/bitnami/charts/issues/6117) [/github.com/bitnami/charts/pull/6117#discussion_r614623386](https://github.com//github.com/bitnami/charts/pull/6117/issues/discussion_r614623386)
+* [bitnami/logstash] Added support for kubernetes secrets in environment (#6117) ([51fff54](https://github.com/bitnami/charts/commit/51fff54b0b5a8bf7316be90a9682abbf181e7ce2)), closes [#6117](https://github.com/bitnami/charts/issues/6117)
 
 ## <small>3.2.3 (2021-03-24)</small>
 

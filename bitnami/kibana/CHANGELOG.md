@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.5.1 (2025-03-03)
+## 11.5.2 (2025-03-04)
 
-* [bitnami/kibana] Update configmap definition ([#32246](https://github.com/bitnami/charts/pull/32246))
+* [bitnami/kibana] Release 11.5.2 ([#32270](https://github.com/bitnami/charts/pull/32270))
+
+## <small>11.5.1 (2025-03-04)</small>
+
+* [bitnami/kibana] Update configmap definition (#32246) ([9c6ab89](https://github.com/bitnami/charts/commit/9c6ab89a2ad4ffee6fd96617add1dd46bf486e6d)), closes [#32246](https://github.com/bitnami/charts/issues/32246)
 
 ## 11.5.0 (2025-02-24)
 
