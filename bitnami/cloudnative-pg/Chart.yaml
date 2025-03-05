@@ -6,7 +6,7 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: cloudnative-pg
-      image: docker.io/bitnami/cloudnative-pg:1.25.1-debian-12-r2
+      image: docker.io/bitnami/cloudnative-pg:1.25.1-debian-12-r3
     - name: postgresql
       image: docker.io/bitnami/postgresql:17.4.0-debian-12-r4
 apiVersion: v2
@@ -30,4 +30,4 @@ maintainers:
 name: cloudnative-pg
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/cloudnative-pg
-version: 0.1.5
+version: 0.1.6
