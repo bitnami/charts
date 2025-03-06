@@ -1,8 +1,17 @@
 # Changelog
 
-## 21.1.4 (2025-02-26)
+## 21.2.0 (2025-03-06)
 
-* [bitnami/drupal] Release 21.1.4 ([#32174](https://github.com/bitnami/charts/pull/32174))
+* [bitnami/drupal] Set `usePasswordFiles=true` by default ([#32342](https://github.com/bitnami/charts/pull/32342))
+
+## <small>21.1.5 (2025-03-05)</small>
+
+* [bitnami/drupal] Release 21.1.5 (#32333) ([b8409f0](https://github.com/bitnami/charts/commit/b8409f0940c9bd07719981b049eed6dd05252fa9)), closes [#32333](https://github.com/bitnami/charts/issues/32333)
+
+## <small>21.1.4 (2025-02-26)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/drupal] Release 21.1.4 (#32174) ([d01701e](https://github.com/bitnami/charts/commit/d01701e2a86f8653eabdec8875d57213fe6c0c8a)), closes [#32174](https://github.com/bitnami/charts/issues/32174)
 
 ## <small>21.1.3 (2025-02-06)</small>
 
