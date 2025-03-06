@@ -135,11 +135,16 @@ spec:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.grafana.extraEnvVarsSecret "context" $) }}
             {{- end }}
           env:
+            {{- if .Values.usePasswordFiles }}
+            - name: GF_SECURITY_ADMIN_PASSWORD_FILE
+              value: {{ printf "/opt/bitnami/grafana/secrets/%s" (include "grafana.adminSecretPasswordKey" .) }}
+            {{- else }}
             - name: GF_SECURITY_ADMIN_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "grafana.adminSecretName" . }}
                   key: {{ include "grafana.adminSecretPasswordKey" . }}
+            {{- end }}
             {{- if .Values.smtp.enabled }}
             - name: GF_SMTP_ENABLED
               value: "true"
@@ -159,6 +164,12 @@ spec:
             - name: GF_SMTP_SKIP_VERIFY
               value: "{{ .Values.smtp.skipVerify }}"
             {{- end }}
+            {{- if .Values.usePasswordFiles }}
+            - name: GF_SMTP_USER_FILE
+              value: {{ printf "/opt/bitnami/grafana/secrets/%s" (include "grafana.smtpSecretUserKey" .) }}
+            - name: GF_SMTP_PASSWORD_FILE
+              value: {{ printf "/opt/bitnami/grafana/secrets/%s" (include "grafana.smtpSecretPasswordKey" .) }}
+            {{- else }}
             - name: GF_SMTP_USER
               valueFrom:
                 secretKeyRef:
@@ -169,6 +180,7 @@ spec:
                 secretKeyRef:
                   name: {{ include "grafana.smtpSecretName" . }}
                   key: {{ include "grafana.smtpSecretPasswordKey" . }}
+            {{- end }}
             {{- end }}
             {{- if .Values.grafana.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.grafana.extraEnvVars "context" $) | nindent 12 }}
@@ -186,6 +198,10 @@ spec:
             - name: empty-dir
               mountPath: /bitnami/grafana
               subPath: app-volume-dir
+            {{- if and .Values.usePasswordFiles }}
+            - name: grafana-secrets
+              mountPath: /opt/bitnami/grafana/secrets
+            {{- end }}
             {{- if .Values.config.useGrafanaIniFile }}
             - name: grafana-ini
               mountPath: /opt/bitnami/grafana/conf/grafana.ini
@@ -297,6 +313,17 @@ spec:
       volumes:
         - name: empty-dir
           emptyDir: {}
+        {{- if and .Values.usePasswordFiles }}
+        - name: grafana-secrets
+          projected:
+            sources:
+              - secret:
+                  name:  {{ include "grafana.adminSecretName" . }}
+              {{- if .Values.smtp.enabled }}
+              - secret:
+                  name:  {{ include "grafana.smtpSecretName" . }}
+              {{- end }}
+        {{- end }}
         - name: data
         {{- if .Values.persistence.enabled }}
           persistentVolumeClaim:

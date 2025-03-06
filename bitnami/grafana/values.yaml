@@ -57,6 +57,9 @@ commonLabels: {}
 ## @param commonAnnotations Annotations to add to all deployed objects
 ##
 commonAnnotations: {}
+## @param usePasswordFiles Mount credentials as files instead of using environment variables
+##
+usePasswordFiles: true
 ## @section Grafana parameters
 
 ## Bitnami Grafana image version
