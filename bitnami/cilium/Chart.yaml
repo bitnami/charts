@@ -6,50 +6,50 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: cilium
-      image: docker.io/bitnami/cilium:1.17.1-debian-12-r0
+      image: docker.io/bitnami/cilium:1.17.1-debian-12-r6
     - name: cilium-operator
-      image: docker.io/bitnami/cilium-operator:1.17.1-debian-12-r0
+      image: docker.io/bitnami/cilium-operator:1.17.1-debian-12-r6
     - name: cilium-proxy
-      image: docker.io/bitnami/cilium-proxy:1.29.10-debian-12-r8
+      image: docker.io/bitnami/cilium-proxy:1.29.10-debian-12-r14
     - name: hubble-relay
-      image: docker.io/bitnami/hubble-relay:1.17.1-debian-12-r0
+      image: docker.io/bitnami/hubble-relay:1.17.1-debian-12-r4
     - name: hubble-ui
-      image: docker.io/bitnami/hubble-ui:0.13.1-debian-12-r14
+      image: docker.io/bitnami/hubble-ui:0.13.2-debian-12-r3
     - name: hubble-ui-backend
-      image: docker.io/bitnami/hubble-ui-backend:0.13.1-debian-12-r21
+      image: docker.io/bitnami/hubble-ui-backend:0.13.2-debian-12-r3
 apiVersion: v2
 appVersion: 1.17.1
 dependencies:
-  - condition: etcd.enabled
-    name: etcd
-    repository: oci://registry-1.docker.io/bitnamicharts
-    tags:
-      - cilium-database
-    version: 11.x.x
-  - name: common
-    repository: oci://registry-1.docker.io/bitnamicharts
-    tags:
-      - bitnami-common
-    version: 2.x.x
+- condition: etcd.enabled
+  name: etcd
+  repository: oci://registry-1.docker.io/bitnamicharts
+  tags:
+  - cilium-database
+  version: 11.x.x
+- name: common
+  repository: oci://registry-1.docker.io/bitnamicharts
+  tags:
+  - bitnami-common
+  version: 2.x.x
 description: Cilium is an eBPF-based networking, observability, and security for Linux container management platforms like Docker and Kubernetes.
 home: https://bitnami.com
 icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/cilium/img/cilium-stack-220x234.png
 keywords:
-  - cilium
-  - cni
-  - networking
-  - observability
-  - security
+- cilium
+- cni
+- networking
+- observability
+- security
 maintainers:
-  - name: Broadcom, Inc. All Rights Reserved.
-    url: https://github.com/bitnami/charts
+- name: Broadcom, Inc. All Rights Reserved.
+  url: https://github.com/bitnami/charts
 name: cilium
 sources:
-  - https://github.com/bitnami/charts/tree/main/bitnami/cilium
-  - https://github.com/bitnami/containers/tree/main/bitnami/cilium
-  - https://github.com/bitnami/containers/tree/main/bitnami/cilium-operator
-  - https://github.com/bitnami/containers/tree/main/bitnami/cilium-proxy
-  - https://github.com/bitnami/containers/tree/main/bitnami/hubble-relay
-  - https://github.com/bitnami/containers/tree/main/bitnami/hubble-ui
-  - https://github.com/bitnami/containers/tree/main/bitnami/hubble-ui-backend
-version: 2.1.0
+- https://github.com/bitnami/charts/tree/main/bitnami/cilium
+- https://github.com/bitnami/containers/tree/main/bitnami/cilium
+- https://github.com/bitnami/containers/tree/main/bitnami/cilium-operator
+- https://github.com/bitnami/containers/tree/main/bitnami/cilium-proxy
+- https://github.com/bitnami/containers/tree/main/bitnami/hubble-relay
+- https://github.com/bitnami/containers/tree/main/bitnami/hubble-ui
+- https://github.com/bitnami/containers/tree/main/bitnami/hubble-ui-backend
+version: 2.1.2

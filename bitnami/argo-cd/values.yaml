@@ -57,6 +57,10 @@ clusterDomain: cluster.local
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
+## @param usePasswordFiles Mount credentials as files instead of using environment variables
+##
+usePasswordFiles: true
+
 ## @section Argo CD image parameters
 
 ## Bitnami Argo CD image
@@ -72,7 +76,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/argo-cd
-  tag: 2.14.2-debian-12-r0
+  tag: 2.14.4-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -3313,7 +3317,7 @@ dex:
   image:
     registry: docker.io
     repository: bitnami/dex
-    tag: 2.41.1-debian-12-r13
+    tag: 2.42.0-debian-12-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -4010,7 +4014,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r36
+    tag: 12-debian-12-r39
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -4072,7 +4076,7 @@ redis:
   image:
     registry: docker.io
     repository: bitnami/redis
-    tag: 7.4.2-debian-12-r1
+    tag: 7.4.2-debian-12-r5
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images

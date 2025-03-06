@@ -1,0 +1,83 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.webhook.mutating.create }}
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingWebhookConfiguration
+metadata:
+  # Hardcoded in source code
+  # https://github.com/cloudnative-pg/cloudnative-pg/blob/main/internal/cmd/manager/controller/controller.go#L51
+  name: cnpg-mutating-webhook-configuration
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: cloudnative-pg
+    app.kubernetes.io/component: operator
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+webhooks:
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      service:
+        name: cnpg-webhook-service
+        namespace: {{ include "common.names.namespace" . }}
+        path: /mutate-postgresql-cnpg-io-v1-backup
+        port: {{ .Values.service.port }}
+    failurePolicy: {{ .Values.webhook.mutating.failurePolicy }}
+    name: mbackup.cnpg.io
+    rules:
+      - apiGroups:
+          - postgresql.cnpg.io
+        apiVersions:
+          - v1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+        - backups
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      service:
+        name: cnpg-webhook-service
+        namespace: {{ include "common.names.namespace" . }}
+        path: /mutate-postgresql-cnpg-io-v1-cluster
+        port: {{ .Values.service.ports.webhook }}
+    failurePolicy: {{ .Values.webhook.mutating.failurePolicy }}
+    name: mcluster.cnpg.io
+    rules:
+      - apiGroups:
+          - postgresql.cnpg.io
+        apiVersions:
+          - v1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+        - clusters
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      service:
+        name: cnpg-webhook-service
+        namespace: {{ include "common.names.namespace" . }}
+        path: /mutate-postgresql-cnpg-io-v1-scheduledbackup
+        port: {{ .Values.service.port }}
+    failurePolicy: {{ .Values.webhook.mutating.failurePolicy }}
+    name: mscheduledbackup.cnpg.io
+    rules:
+      - apiGroups:
+          - postgresql.cnpg.io
+        apiVersions:
+          - v1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - scheduledbackups
+    sideEffects: None
+{{- end }}

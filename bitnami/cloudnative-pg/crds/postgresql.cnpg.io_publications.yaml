@@ -1,0 +1,197 @@
+# Source: https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/refs/tags/v{version}/config/crd/bases/postgresql.cnpg.io_publications.yaml
+# Version: 1.25.1
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.17.2
+  name: publications.postgresql.cnpg.io
+spec:
+  group: postgresql.cnpg.io
+  names:
+    kind: Publication
+    listKind: PublicationList
+    plural: publications
+    singular: publication
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns:
+    - jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    - jsonPath: .spec.cluster.name
+      name: Cluster
+      type: string
+    - jsonPath: .spec.name
+      name: PG Name
+      type: string
+    - jsonPath: .status.applied
+      name: Applied
+      type: boolean
+    - description: Latest reconciliation message
+      jsonPath: .status.message
+      name: Message
+      type: string
+    name: v1
+    schema:
+      openAPIV3Schema:
+        description: Publication is the Schema for the publications API
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: PublicationSpec defines the desired state of Publication
+            properties:
+              cluster:
+                description: The name of the PostgreSQL cluster that identifies the
+                  "publisher"
+                properties:
+                  name:
+                    default: ""
+                    description: |-
+                      Name of the referent.
+                      This field is effectively required, but due to backwards compatibility is
+                      allowed to be empty. Instances of this type with an empty value here are
+                      almost certainly wrong.
+                      More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                    type: string
+                type: object
+                x-kubernetes-map-type: atomic
+              dbname:
+                description: |-
+                  The name of the database where the publication will be installed in
+                  the "publisher" cluster
+                type: string
+                x-kubernetes-validations:
+                - message: dbname is immutable
+                  rule: self == oldSelf
+              name:
+                description: The name of the publication inside PostgreSQL
+                type: string
+                x-kubernetes-validations:
+                - message: name is immutable
+                  rule: self == oldSelf
+              parameters:
+                additionalProperties:
+                  type: string
+                description: |-
+                  Publication parameters part of the `WITH` clause as expected by
+                  PostgreSQL `CREATE PUBLICATION` command
+                type: object
+              publicationReclaimPolicy:
+                default: retain
+                description: The policy for end-of-life maintenance of this publication
+                enum:
+                - delete
+                - retain
+                type: string
+              target:
+                description: Target of the publication as expected by PostgreSQL `CREATE
+                  PUBLICATION` command
+                properties:
+                  allTables:
+                    description: |-
+                      Marks the publication as one that replicates changes for all tables
+                      in the database, including tables created in the future.
+                      Corresponding to `FOR ALL TABLES` in PostgreSQL.
+                    type: boolean
+                    x-kubernetes-validations:
+                    - message: allTables is immutable
+                      rule: self == oldSelf
+                  objects:
+                    description: Just the following schema objects
+                    items:
+                      description: PublicationTargetObject is an object to publish
+                      properties:
+                        table:
+                          description: |-
+                            Specifies a list of tables to add to the publication. Corresponding
+                            to `FOR TABLE` in PostgreSQL.
+                          properties:
+                            columns:
+                              description: The columns to publish
+                              items:
+                                type: string
+                              type: array
+                            name:
+                              description: The table name
+                              type: string
+                            only:
+                              description: Whether to limit to the table only or include
+                                all its descendants
+                              type: boolean
+                            schema:
+                              description: The schema name
+                              type: string
+                          required:
+                          - name
+                          type: object
+                        tablesInSchema:
+                          description: |-
+                            Marks the publication as one that replicates changes for all tables
+                            in the specified list of schemas, including tables created in the
+                            future. Corresponding to `FOR TABLES IN SCHEMA` in PostgreSQL.
+                          type: string
+                      type: object
+                      x-kubernetes-validations:
+                      - message: tablesInSchema and table are mutually exclusive
+                        rule: (has(self.tablesInSchema) && !has(self.table)) || (!has(self.tablesInSchema)
+                          && has(self.table))
+                    maxItems: 100000
+                    type: array
+                    x-kubernetes-validations:
+                    - message: specifying a column list when the publication also
+                        publishes tablesInSchema is not supported
+                      rule: '!(self.exists(o, has(o.table) && has(o.table.columns))
+                        && self.exists(o, has(o.tablesInSchema)))'
+                type: object
+                x-kubernetes-validations:
+                - message: allTables and objects are mutually exclusive
+                  rule: (has(self.allTables) && !has(self.objects)) || (!has(self.allTables)
+                    && has(self.objects))
+            required:
+            - cluster
+            - dbname
+            - name
+            - target
+            type: object
+          status:
+            description: PublicationStatus defines the observed state of Publication
+            properties:
+              applied:
+                description: Applied is true if the publication was reconciled correctly
+                type: boolean
+              message:
+                description: Message is the reconciliation output message
+                type: string
+              observedGeneration:
+                description: |-
+                  A sequence number representing the latest
+                  desired state that was synchronized
+                format: int64
+                type: integer
+            type: object
+        required:
+        - metadata
+        - spec
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}

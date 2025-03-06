@@ -1,8 +1,21 @@
 # Changelog
 
-## 3.1.10 (2025-02-06)
+## 3.1.13 (2025-03-05)
 
-* [bitnami/gitea] Release 3.1.10 ([#31806](https://github.com/bitnami/charts/pull/31806))
+* [bitnami/gitea] Release 3.1.13 ([#32299](https://github.com/bitnami/charts/pull/32299))
+
+## <small>3.1.12 (2025-03-05)</small>
+
+* [bitnami/gitea] Release 3.1.12 (#32289) ([7e1b8f8](https://github.com/bitnami/charts/commit/7e1b8f8163da5e9724da1c0f76ec5e3b94262fb8)), closes [#32289](https://github.com/bitnami/charts/issues/32289)
+
+## <small>3.1.11 (2025-02-21)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/gitea] Release 3.1.11 (#32040) ([158c59f](https://github.com/bitnami/charts/commit/158c59fef6c9af660e63e983b10476c366919834)), closes [#32040](https://github.com/bitnami/charts/issues/32040)
+
+## <small>3.1.10 (2025-02-06)</small>
+
+* [bitnami/gitea] Release 3.1.10 (#31806) ([b32c026](https://github.com/bitnami/charts/commit/b32c0264329e5914869a5ab25e22f0c53037b782)), closes [#31806](https://github.com/bitnami/charts/issues/31806)
 
 ## <small>3.1.9 (2025-02-05)</small>
 

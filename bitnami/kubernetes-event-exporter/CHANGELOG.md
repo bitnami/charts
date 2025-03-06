@@ -1,8 +1,20 @@
 # Changelog
 
+## 3.4.3 (2025-03-05)
+
+* [bitnami/kubernetes-event-exporter] Release 3.4.3 ([#32300](https://github.com/bitnami/charts/pull/32300))
+
+## <small>3.4.2 (2025-03-04)</small>
+
+* [bitnami/kubernetes-event-exporter] Release 3.4.2 (#32262) ([dfc690e](https://github.com/bitnami/charts/commit/dfc690ea013d3847cba2e0a5f4ad5ac588d700d5)), closes [#32262](https://github.com/bitnami/charts/issues/32262)
+
+## <small>3.4.1 (2025-02-21)</small>
+
+* [bitnami/kubernetes-event-exporter] Release 3.4.1 (#32011) ([9fffa0c](https://github.com/bitnami/charts/commit/9fffa0c7f5e6ca6edad485fd6867bf6720615e1c)), closes [#32011](https://github.com/bitnami/charts/issues/32011)
+
 ## 3.4.0 (2025-02-20)
 
-* [bitnami/kubernetes-event-exporter] feat: use new helper for checking API versions ([#32055](https://github.com/bitnami/charts/pull/32055))
+* [bitnami/kubernetes-event-exporter] feat: use new helper for checking API versions (#32055) ([b4998a2](https://github.com/bitnami/charts/commit/b4998a228434f7bbdfec1d381b5dbf7aa0411fb0)), closes [#32055](https://github.com/bitnami/charts/issues/32055)
 
 ## <small>3.3.5 (2025-02-12)</small>
 
