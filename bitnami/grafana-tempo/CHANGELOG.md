@@ -1,12 +1,12 @@
 # Changelog
 
-## 3.9.0 (2025-02-16)
+## 3.9.0 (2025-03-06)
 
 * [bitnami/grafana-tempo] support new deployment mode: scaling-monolithic ([#31028](https://github.com/bitnami/charts/pull/31028))
 
 ## <small>3.8.8 (2025-03-05)</small>
 
-* [bitnami/grafana-tempo] Release 3.8.8 ([#32293](https://github.com/bitnami/charts/pull/32293))
+* [bitnami/grafana-tempo] Release 3.8.8 (#32293) ([db224f4](https://github.com/bitnami/charts/commit/db224f45293da4a8d9ef81b3e1620272f4e83c8c)), closes [#32293](https://github.com/bitnami/charts/issues/32293)
 
 ## <small>3.8.7 (2025-02-19)</small>
 
