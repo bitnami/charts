@@ -114,11 +114,16 @@ spec:
                 {{- end }}
                 {{- end }}
                 {{- if or .Values.auth.rbac.create .Values.auth.rbac.enabled }}
+                {{- if .Values.usePasswordFiles }}
+                - name: ETCD_ROOT_PASSWORD_FILE
+                  value: {{ printf "/opt/bitnami/etcd/secrets/%s" (include "etcd.secretPasswordKey" .) }}
+                {{- else }}
                 - name: ETCD_ROOT_PASSWORD
                   valueFrom:
                     secretKeyRef:
                       name: {{ include "etcd.secretName" . }}
                       key: {{ include "etcd.secretPasswordKey" . }}
+                {{- end }}
                 {{- end }}
               {{- if .Values.disasterRecovery.cronjob.resources }}
               resources: {{- toYaml .Values.disasterRecovery.cronjob.resources | nindent 16 }}
@@ -139,6 +144,10 @@ spec:
                   mountPath: /opt/bitnami/etcd/certs/client
                   readOnly: true
                 {{- end }}
+                {{- if and .Values.usePasswordFiles (or .Values.auth.rbac.create .Values.auth.rbac.enabled) }}
+                - name: etcd-secrets
+                  mountPath: /opt/bitnami/etcd/secrets
+                {{- end }}
           volumes:
             - name: empty-dir
               emptyDir: {}
@@ -147,6 +156,13 @@ spec:
               secret:
                 secretName: {{ required "A secret containing the client certificates is required" (tpl .Values.auth.client.existingSecret .) }}
                 defaultMode: 256
+            {{- end }}
+            {{- if and .Values.usePasswordFiles (or .Values.auth.rbac.create .Values.auth.rbac.enabled) }}
+            - name: etcd-secrets
+              projected:
+                sources:
+                  - secret:
+                      name:  {{ include "etcd.secretName" . }}
             {{- end }}
             - name: snapshot-volume
               persistentVolumeClaim:
