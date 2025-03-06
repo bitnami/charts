@@ -35,4 +35,11 @@ spec:
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: broker
     app.kubernetes.io/part-of: kafka
+  {{- with .Values.service.headless.ipFamilyPolicy }}
+  ipFamilyPolicy: {{ . | quote }}
+  {{- end }}
+  {{- with .Values.service.headless.ipFamilies }}
+  ipFamilies:
+  {{- . | toYaml | nindent 2 }}
+  {{- end }}
 {{- end }}

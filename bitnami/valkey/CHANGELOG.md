@@ -1,8 +1,20 @@
 # Changelog
 
-## 2.4.1 (2025-02-27)
+## 2.4.4 (2025-03-05)
 
-* [bitnami/valkey] Check is auth.enabled before auth.usePasswordFiles ([#32157](https://github.com/bitnami/charts/pull/32157))
+* [bitnami/valkey] Fix usage of valkey .metrics.serviceMonitor.additionalEndpoints ([#32217](https://github.com/bitnami/charts/pull/32217))
+
+## <small>2.4.3 (2025-03-04)</small>
+
+* [bitnami/valkey] Fix usePasswordFile typo in metrics container (#32260) ([956a457](https://github.com/bitnami/charts/commit/956a457bae2a4eb0049fbf9443acf8ee2e28939f)), closes [#32260](https://github.com/bitnami/charts/issues/32260)
+
+## <small>2.4.2 (2025-03-03)</small>
+
+* [bitnami]/valkey update _helpers.tpl to be in line with Valkey-Cluster. (#32203) ([5619378](https://github.com/bitnami/charts/commit/5619378c4014210b2934ad3e803bf72361cafdea)), closes [#32203](https://github.com/bitnami/charts/issues/32203)
+
+## <small>2.4.1 (2025-02-27)</small>
+
+* [bitnami/valkey] Check is auth.enabled before auth.usePasswordFiles (#32157) ([a3059b7](https://github.com/bitnami/charts/commit/a3059b7e78e7eca71778cf1a0c591b6f8d2314f9)), closes [#32157](https://github.com/bitnami/charts/issues/32157)
 
 ## 2.4.0 (2025-02-24)
 
