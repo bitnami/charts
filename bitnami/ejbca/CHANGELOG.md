@@ -1,8 +1,13 @@
 # Changelog
 
-## 17.0.2 (2025-02-05)
+## 17.1.0 (2025-03-06)
 
-* [bitnami/ejbca] Release 17.0.2 ([#31802](https://github.com/bitnami/charts/pull/31802))
+* [bitnami/ejbca] Set `usePasswordFiles=true` by default ([#32343](https://github.com/bitnami/charts/pull/32343))
+
+## <small>17.0.2 (2025-02-05)</small>
+
+* [bitnami/ejbca] Release 17.0.2 (#31802) ([2878ff7](https://github.com/bitnami/charts/commit/2878ff7b71b392b49e189bfc1f2e94de971ecd2e)), closes [#31802](https://github.com/bitnami/charts/issues/31802)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
 
 ## <small>17.0.1 (2024-12-27)</small>
 
