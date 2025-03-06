@@ -1,8 +1,16 @@
 # Changelog
 
-## 21.4.7 (2025-02-27)
+## 21.5.0 (2025-03-06)
 
-* [bitnami/elasticsearch] fix: 🐛 Mount emptyDir in /bitnami/elasticsear… ([#31607](https://github.com/bitnami/charts/pull/31607))
+* [bitnami/elasticsearch] Set `usePasswordFiles=true` by default ([#32344](https://github.com/bitnami/charts/pull/32344))
+
+## <small>21.4.8 (2025-03-04)</small>
+
+* [bitnami/elasticsearch] Release 21.4.8 (#32267) ([cf51c62](https://github.com/bitnami/charts/commit/cf51c629158459e458f2957971aeb190581a54cd)), closes [#32267](https://github.com/bitnami/charts/issues/32267)
+
+## <small>21.4.7 (2025-02-27)</small>
+
+* [bitnami/elasticsearch] fix: 🐛 Mount emptyDir in /bitnami/elasticsear… (#31607) ([5d7d47f](https://github.com/bitnami/charts/commit/5d7d47f34e21d61c8e117a75dcf8713554140f7b)), closes [#31607](https://github.com/bitnami/charts/issues/31607)
 
 ## <small>21.4.6 (2025-02-21)</small>
 
