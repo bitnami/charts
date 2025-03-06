@@ -7,7 +7,7 @@ SPDX-License-Identifier: APACHE-2.0
 apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
-  name: {{ printf "%s-witness" (include "postgresql-ha.postgresql" .) }} 
+  name: {{ printf "%s-witness" (include "postgresql-ha.postgresql" .) }}
   namespace: {{ include "common.names.namespace" . | quote }}
   {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.witness.labels .Values.commonLabels ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
@@ -180,7 +180,7 @@ spec:
             - name: PGDATA
               value: {{ printf "%s/%s" .Values.persistence.mountPath "data" | quote }}
             {{- if and (not (eq (include "postgresql-ha.postgresqlUsername" .) "postgres")) (or (not (include "postgresql-ha.postgresqlCreateSecret" .)) (include "postgresql-ha.postgresqlPasswordProvided" .)) }}
-            {{- if .Values.witness.usePasswordFile }}
+            {{- if .Values.witness.usePasswordFiles }}
             - name: POSTGRES_POSTGRES_PASSWORD_FILE
               value: "/opt/bitnami/postgresql/secrets/postgres-password"
             {{- else }}
@@ -193,7 +193,7 @@ spec:
             {{- end }}
             - name: POSTGRES_USER
               value: {{ (include "postgresql-ha.postgresqlUsername" .) | quote }}
-            {{- if .Values.witness.usePasswordFile }}
+            {{- if .Values.witness.usePasswordFiles }}
             - name: POSTGRES_PASSWORD_FILE
               value: "/opt/bitnami/postgresql/secrets/password"
             {{- else }}
@@ -324,7 +324,7 @@ spec:
               value: {{ .Values.witness.repmgrReconnectInterval | quote }}
             - name: REPMGR_USERNAME
               value: {{ (include "postgresql-ha.postgresqlRepmgrUsername" .) | quote }}
-            {{- if .Values.witness.usePasswordFile }}
+            {{- if .Values.witness.usePasswordFiles }}
             - name: REPMGR_PASSWORD_FILE
               value: "/opt/bitnami/postgresql/secrets/repmgr-password"
             {{- else }}
@@ -432,7 +432,7 @@ spec:
             - name: custom-init-scripts-secret
               mountPath: /docker-entrypoint-initdb.d/secret
             {{- end }}
-            {{- if .Values.witness.usePasswordFile }}
+            {{- if .Values.witness.usePasswordFiles }}
             - name: password
               mountPath: /opt/bitnami/postgresql/secrets/
             {{- end }}
@@ -460,7 +460,7 @@ spec:
               value: :{{ .Values.metrics.containerPorts.http }}
             - name: DATA_SOURCE_URI
               value: {{ printf "127.0.0.1:%d/%s?sslmode=disable" (.Values.witness.containerPorts.postgresql | int64) (include "postgresql-ha.postgresqlDatabase" .) | quote }}
-            {{- if .Values.witness.usePasswordFile }}
+            {{- if .Values.witness.usePasswordFiles }}
             - name: DATA_SOURCE_PASS_FILE
               value: "/opt/bitnami/postgresql/secrets/password"
             {{- else }}
@@ -522,7 +522,7 @@ spec:
             - name: empty-dir
               mountPath: /tmp
               subPath: tmp-dir
-            {{- if .Values.postgresql.usePasswordFile }}
+            {{- if .Values.postgresql.usePasswordFiles }}
             - name: password
               mountPath: /opt/bitnami/postgresql/secrets/
             {{- end }}
@@ -573,7 +573,7 @@ spec:
           secret:
             secretName: {{ template "postgresql-ha.postgresqlInitdbScriptsSecret" . }}
         {{- end }}
-        {{- if .Values.witness.usePasswordFile }}
+        {{- if .Values.witness.usePasswordFiles }}
         - name: password
           secret:
             secretName: {{ include "postgresql-ha.postgresqlSecretName" . }}

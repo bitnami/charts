@@ -1,8 +1,21 @@
 # Changelog
 
-## 15.0.3 (2025-02-08)
+## 15.0.6 (2025-03-05)
 
-* [bitnami/minio] Release 15.0.3 ([#31841](https://github.com/bitnami/charts/pull/31841))
+* [bitnami/minio] Release 15.0.6 ([#32305](https://github.com/bitnami/charts/pull/32305))
+
+## <small>15.0.5 (2025-02-28)</small>
+
+* [bitnami/minio] Release 15.0.5 (#32222) ([a1e4a21](https://github.com/bitnami/charts/commit/a1e4a216587f5caab4653cbee8f83b615bd73934)), closes [#32222](https://github.com/bitnami/charts/issues/32222)
+
+## <small>15.0.4 (2025-02-19)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/minio] Release 15.0.4 (#32019) ([cb930d3](https://github.com/bitnami/charts/commit/cb930d302faf70eccc8a6383df4584ba44a2a4cc)), closes [#32019](https://github.com/bitnami/charts/issues/32019)
+
+## <small>15.0.3 (2025-02-08)</small>
+
+* [bitnami/minio] Release 15.0.3 (#31841) ([4d202ee](https://github.com/bitnami/charts/commit/4d202eee46ee58372c9b906b1426a3cd80fba4e9)), closes [#31841](https://github.com/bitnami/charts/issues/31841)
 
 ## <small>15.0.2 (2025-02-05)</small>
 
@@ -2564,7 +2577,7 @@
 
 ## <small>0.1.6 (2019-05-29)</small>
 
-* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79)), closes [#issuecomment-496883321](https://github.com/bitnami/charts/issues/issuecomment-496883321)
+* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79))
 
 ## <small>0.1.5 (2019-05-28)</small>
 

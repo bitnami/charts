@@ -73,7 +73,7 @@ server:
   image:
     registry: docker.io
     repository: bitnami/spring-cloud-dataflow
-    tag: 2.11.5-debian-12-r6
+    tag: 2.11.5-debian-12-r9
     digest: ""
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
@@ -107,7 +107,7 @@ server:
     image:
       registry: docker.io
       repository: bitnami/spring-cloud-dataflow-composed-task-runner
-      tag: 2.11.5-debian-12-r5
+      tag: 2.11.5-debian-12-r9
       digest: ""
   ## Spring Cloud Dataflow Server configuration parameters
   ##
@@ -710,7 +710,7 @@ skipper:
   image:
     registry: docker.io
     repository: bitnami/spring-cloud-skipper
-    tag: 2.11.5-debian-12-r6
+    tag: 2.11.5-debian-12-r10
     digest: ""
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
@@ -1275,7 +1275,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/prometheus-rsocket-proxy
-    tag: 1.5.3-debian-12-r34
+    tag: 1.5.3-debian-12-r39
     digest: ""
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
@@ -1744,7 +1744,7 @@ waitForBackends:
   image:
     registry: docker.io
     repository: bitnami/kubectl
-    tag: 1.32.1-debian-12-r4
+    tag: 1.32.2-debian-12-r3
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1825,7 +1825,7 @@ mariadb:
   image:
     registry: docker.io
     repository: bitnami/mariadb
-    tag: 10.11.10-debian-12-r3
+    tag: 10.11.11-debian-12-r7
     digest: ""
   ## @param mariadb.architecture MariaDB architecture. Allowed values: `standalone` or `replication`
   ##
@@ -1851,9 +1851,6 @@ mariadb:
     ## @param mariadb.auth.forcePassword Force users to specify required passwords in the database
     ##
     forcePassword: false
-    ## @param mariadb.auth.usePasswordFiles Mount credentials as a file instead of using an environment variable
-    ##
-    usePasswordFiles: false
   ## @param mariadb.initdbScripts [object] Specify dictionary of scripts to be run at first boot
   ## We can only create one database on MariaDB using parameters. However, when streaming
   ## is enabled we need a second database for Skipper.

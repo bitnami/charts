@@ -1,8 +1,17 @@
 # Changelog
 
-## 6.4.6 (2025-02-12)
+## 6.4.8 (2025-03-05)
 
-* [bitnami/metallb] Release 6.4.6 ([#31898](https://github.com/bitnami/charts/pull/31898))
+* [bitnami/metallb] Release 6.4.8 ([#32302](https://github.com/bitnami/charts/pull/32302))
+
+## <small>6.4.7 (2025-02-19)</small>
+
+* [bitnami/metallb] Release 6.4.7 (#32016) ([03c24da](https://github.com/bitnami/charts/commit/03c24dafe4a4fc25f273906da9c61f1aab4f0aa4)), closes [#32016](https://github.com/bitnami/charts/issues/32016)
+
+## <small>6.4.6 (2025-02-12)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/metallb] Release 6.4.6 (#31898) ([e640853](https://github.com/bitnami/charts/commit/e640853c1ec61bca446d3a1971b4e10b128f6fc5)), closes [#31898](https://github.com/bitnami/charts/issues/31898)
 
 ## <small>6.4.5 (2025-02-05)</small>
 
@@ -387,7 +396,7 @@
 ## <small>4.5.3 (2023-06-07)</small>
 
 * [bitnami/*] Change copyright section in READMEs (#17006) ([ef986a1](https://github.com/bitnami/charts/commit/ef986a1605241102b3dcafe9fd8089e6fc1201ad)), closes [#17006](https://github.com/bitnami/charts/issues/17006)
-* [bitnami/metallb] Add missing rule to controller role (#16992) ([bbc3a6d](https://github.com/bitnami/charts/commit/bbc3a6d00d0f11e92c19c4658df87c356410a78d)), closes [#16992](https://github.com/bitnami/charts/issues/16992) [/github.com/metallb/metallb/blob/e708fc9010afb80c379bdfadd5d543931164ca5e/config/rbac/role.yaml#L17-L22](https://github.com//github.com/metallb/metallb/blob/e708fc9010afb80c379bdfadd5d543931164ca5e/config/rbac/role.yaml/issues/L17-L22)
+* [bitnami/metallb] Add missing rule to controller role (#16992) ([bbc3a6d](https://github.com/bitnami/charts/commit/bbc3a6d00d0f11e92c19c4658df87c356410a78d)), closes [#16992](https://github.com/bitnami/charts/issues/16992)
 * [bitnami/several] Change copyright section in READMEs (#16989) ([5b6a5cf](https://github.com/bitnami/charts/commit/5b6a5cfb7625a751848a2e5cd796bd7278f406ca)), closes [#16989](https://github.com/bitnami/charts/issues/16989)
 
 ## <small>4.5.2 (2023-05-31)</small>

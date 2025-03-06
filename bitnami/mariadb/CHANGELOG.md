@@ -1,8 +1,31 @@
 # Changelog
 
-## 20.2.3 (2025-02-05)
+## 20.4.1 (2025-02-25)
 
-* [bitnami/mariadb] Release 20.2.3 ([#31789](https://github.com/bitnami/charts/pull/31789))
+* [bitnami/mariadb] hotfix: Fix issue when `auth.username` is not set and `usePasswordFiles=true` ([#32161](https://github.com/bitnami/charts/pull/32161))
+
+## 20.4.0 (2025-02-24)
+
+* [bitnami/mariadb] Set `usePasswordFiles=true` by default (#32110) ([67bee27](https://github.com/bitnami/charts/commit/67bee2740826d26850942add477ff8ecb97e5259)), closes [#32110](https://github.com/bitnami/charts/issues/32110)
+
+## <small>20.3.1 (2025-02-19)</small>
+
+* [bitnami/mariadb] Release 20.3.1 (#32014) ([63c32e1](https://github.com/bitnami/charts/commit/63c32e150638ce4bc742ee8a083514eaa7903d8d)), closes [#32014](https://github.com/bitnami/charts/issues/32014)
+
+## 20.3.0 (2025-02-19)
+
+* [bitnami/*] Fix typo in named template name (#31858) ([b739b69](https://github.com/bitnami/charts/commit/b739b69532e637bd33b4a44eeb422c3e749eac77)), closes [#31858](https://github.com/bitnami/charts/issues/31858)
+* [bitnami/mariadb] feat: Add Transparent Data Encryption support (#31706) ([486712d](https://github.com/bitnami/charts/commit/486712d975d5fd85fe764e42f042b4a185599155)), closes [#31706](https://github.com/bitnami/charts/issues/31706)
+
+## <small>20.2.4 (2025-02-17)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/mariadb] chore(resources): Increase primary resources (#31959) ([04f85f5](https://github.com/bitnami/charts/commit/04f85f5b9d464b8f9670affa339ab277692308ad)), closes [#31959](https://github.com/bitnami/charts/issues/31959)
+
+## <small>20.2.3 (2025-02-05)</small>
+
+* [bitnami/mariadb] Release 20.2.3 (#31789) ([896aebc](https://github.com/bitnami/charts/commit/896aebc4920cb3f3493cfc922d5e5673aa862d64)), closes [#31789](https://github.com/bitnami/charts/issues/31789)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
 
 ## <small>20.2.2 (2025-01-23)</small>
 
@@ -648,7 +671,7 @@
 
 ## 10.4.0 (2022-03-08)
 
-* [bitnami/mariadb] Don't overwrite existing secrets (#9268) ([3d5945a](https://github.com/bitnami/charts/commit/3d5945a08afac40a812f2d48f888e374582dbcc3)), closes [#9268](https://github.com/bitnami/charts/issues/9268) [#7403](https://github.com/bitnami/charts/issues/7403)
+* [bitnami/mariadb] Don't overwrite existing secrets (#9268) ([3d5945a](https://github.com/bitnami/charts/commit/3d5945a08afac40a812f2d48f888e374582dbcc3)), closes [#9268](https://github.com/bitnami/charts/issues/9268)
 
 ## <small>10.3.7 (2022-02-27)</small>
 

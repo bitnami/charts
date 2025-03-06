@@ -1,8 +1,16 @@
 # Changelog
 
-## 1.4.10 (2025-02-13)
+## 1.4.12 (2025-03-04)
 
-* [bitnami/cert-manager] Release 1.4.10 ([#31913](https://github.com/bitnami/charts/pull/31913))
+* [bitnami/cert-manager] Release 1.4.12 ([#32278](https://github.com/bitnami/charts/pull/32278))
+
+## <small>1.4.11 (2025-02-19)</small>
+
+* [bitnami/cert-manager] Release 1.4.11 (#31976) ([fdae78a](https://github.com/bitnami/charts/commit/fdae78ab44c71383dfa46ba8149c800f4efe3571)), closes [#31976](https://github.com/bitnami/charts/issues/31976)
+
+## <small>1.4.10 (2025-02-13)</small>
+
+* [bitnami/cert-manager] Release 1.4.10 (#31913) ([06f8a3d](https://github.com/bitnami/charts/commit/06f8a3d74d5299a9effb6797bc789a1d09935953)), closes [#31913](https://github.com/bitnami/charts/issues/31913)
 
 ## <small>1.4.9 (2025-02-13)</small>
 
@@ -884,7 +892,7 @@
 
 ## <small>0.1.3 (2021-06-07)</small>
 
-* fix: service account specific annotations not being used. See https://github.com/bitnami/charts/issu ([fb917a9](https://github.com/bitnami/charts/commit/fb917a9b51d1a3d1173af530e8296749f2d372bb)), closes [#6574](https://github.com/bitnami/charts/issues/6574)
+* fix: service account specific annotations not being used. See https://github.com/bitnami/charts/issu ([fb917a9](https://github.com/bitnami/charts/commit/fb917a9b51d1a3d1173af530e8296749f2d372bb))
 
 ## <small>0.1.2 (2021-05-24)</small>
 

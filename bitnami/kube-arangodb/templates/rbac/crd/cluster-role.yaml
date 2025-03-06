@@ -1,0 +1,90 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{ if and .Values.rbac.create (ne .Values.scope "namespaced") .Values.enableCRDManagement }}
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
+kind: ClusterRole
+metadata:
+  name: {{ printf "%s-crd" (include "common.names.fullname.namespace" .) | trunc 63 | trimSuffix "-" }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: kube-arangodb
+    app.kubernetes.io/component: operator
+rules:
+  {{ if .Values.features.analytics -}}
+  # analytics.arangodb.com
+  - apiGroups: ["apiextensions.k8s.io"]
+    resources: ["customresourcedefinitions"]
+    verbs: ["get", "list", "watch", "update", "delete"]
+    resourceNames:
+      - "graphanalyticsengines.analytics.arangodb.com"
+  {{- end }}
+  {{ if .Values.features.apps -}}
+  # apps.arangodb.com
+  - apiGroups: ["apiextensions.k8s.io"]
+    resources: ["customresourcedefinitions"]
+    verbs: ["get", "list", "watch", "update", "delete"]
+    resourceNames:
+      - "arangojobs.apps.arangodb.com"
+  {{- end }}
+  {{ if .Values.features.backup -}}
+  # backup.arangodb.com
+  - apiGroups: ["apiextensions.k8s.io"]
+    resources: ["customresourcedefinitions"]
+    verbs: ["get", "list", "watch", "update", "delete"]
+    resourceNames:
+      - "arangobackuppolicies.backup.arangodb.com"
+      - "arangobackups.backup.arangodb.com"
+  {{- end }}
+  {{ if .Values.features.deployment -}}
+  # database.arangodb.com
+  - apiGroups: ["apiextensions.k8s.io"]
+    resources: ["customresourcedefinitions"]
+    verbs: ["get", "list", "watch", "update", "delete"]
+    resourceNames:
+      - "arangoclustersynchronizations.database.arangodb.com"
+      - "arangodeployments.database.arangodb.com"
+      - "arangomembers.database.arangodb.com"
+      - "arangotasks.database.arangodb.com"
+  {{- end }}
+  {{ if .Values.features.ml -}}
+  # ml.arangodb.com
+  - apiGroups: ["apiextensions.k8s.io"]
+    resources: ["customresourcedefinitions"]
+    verbs: ["get", "list", "watch", "update", "delete"]
+    resourceNames:
+      - "arangomlbatchjobs.ml.arangodb.com"
+      - "arangomlcronjobs.ml.arangodb.com"
+      - "arangomlextensions.ml.arangodb.com"
+      - "arangomlstorages.ml.arangodb.com"
+  {{- end }}
+  {{ if .Values.features.networking -}}
+  # networking.arangodb.com
+  - apiGroups: ["apiextensions.k8s.io"]
+    resources: ["customresourcedefinitions"]
+    verbs: ["get", "list", "watch", "update", "delete"]
+    resourceNames:
+      - "arangoroutes.networking.arangodb.com"
+  {{- end }}
+  {{ if .Values.features.deploymentReplications -}}
+  # replication.database.arangodb.com
+  - apiGroups: ["apiextensions.k8s.io"]
+    resources: ["customresourcedefinitions"]
+    verbs: ["get", "list", "watch", "update", "delete"]
+    resourceNames:
+      - "arangodeploymentreplications.replication.database.arangodb.com"
+  {{- end }}
+  {{ if .Values.features.scheduler }}
+  # scheduler.arangodb.com
+  - apiGroups: ["apiextensions.k8s.io"]
+    resources: ["customresourcedefinitions"]
+    verbs: ["get", "list", "watch", "update", "delete"]
+    resourceNames:
+      - "arangoprofiles.scheduler.arangodb.com"
+      - "arangoschedulerpods.scheduler.arangodb.com"
+      - "arangoschedulerdeploymets.scheduler.arangodb.com"
+      - "arangoschedulerbatchjobs.scheduler.arangodb.com"
+      - "arangoschedulercronjobs.scheduler.arangodb.com"
+  {{- end }}
+{{- end }}

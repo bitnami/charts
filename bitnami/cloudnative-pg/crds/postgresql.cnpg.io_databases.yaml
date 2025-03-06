@@ -1,0 +1,264 @@
+# Source: https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/refs/tags/v{version}/config/crd/bases/postgresql.cnpg.io_databases.yaml
+# Version: 1.25.1
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.17.2
+  name: databases.postgresql.cnpg.io
+spec:
+  group: postgresql.cnpg.io
+  names:
+    kind: Database
+    listKind: DatabaseList
+    plural: databases
+    singular: database
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns:
+    - jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    - jsonPath: .spec.cluster.name
+      name: Cluster
+      type: string
+    - jsonPath: .spec.name
+      name: PG Name
+      type: string
+    - jsonPath: .status.applied
+      name: Applied
+      type: boolean
+    - description: Latest reconciliation message
+      jsonPath: .status.message
+      name: Message
+      type: string
+    name: v1
+    schema:
+      openAPIV3Schema:
+        description: Database is the Schema for the databases API
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: |-
+              Specification of the desired Database.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status
+            properties:
+              allowConnections:
+                description: |-
+                  Maps to the `ALLOW_CONNECTIONS` parameter of `CREATE DATABASE` and
+                  `ALTER DATABASE`. If false then no one can connect to this database.
+                type: boolean
+              builtinLocale:
+                description: |-
+                  Maps to the `BUILTIN_LOCALE` parameter of `CREATE DATABASE`. This
+                  setting cannot be changed. Specifies the locale name when the
+                  builtin provider is used. This option requires `localeProvider` to
+                  be set to `builtin`. Available from PostgreSQL 17.
+                type: string
+                x-kubernetes-validations:
+                - message: builtinLocale is immutable
+                  rule: self == oldSelf
+              cluster:
+                description: The name of the PostgreSQL cluster hosting the database.
+                properties:
+                  name:
+                    default: ""
+                    description: |-
+                      Name of the referent.
+                      This field is effectively required, but due to backwards compatibility is
+                      allowed to be empty. Instances of this type with an empty value here are
+                      almost certainly wrong.
+                      More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                    type: string
+                type: object
+                x-kubernetes-map-type: atomic
+              collationVersion:
+                description: |-
+                  Maps to the `COLLATION_VERSION` parameter of `CREATE DATABASE`. This
+                  setting cannot be changed.
+                type: string
+                x-kubernetes-validations:
+                - message: collationVersion is immutable
+                  rule: self == oldSelf
+              connectionLimit:
+                description: |-
+                  Maps to the `CONNECTION LIMIT` clause of `CREATE DATABASE` and
+                  `ALTER DATABASE`. How many concurrent connections can be made to
+                  this database. -1 (the default) means no limit.
+                type: integer
+              databaseReclaimPolicy:
+                default: retain
+                description: The policy for end-of-life maintenance of this database.
+                enum:
+                - delete
+                - retain
+                type: string
+              encoding:
+                description: |-
+                  Maps to the `ENCODING` parameter of `CREATE DATABASE`. This setting
+                  cannot be changed. Character set encoding to use in the database.
+                type: string
+                x-kubernetes-validations:
+                - message: encoding is immutable
+                  rule: self == oldSelf
+              ensure:
+                default: present
+                description: Ensure the PostgreSQL database is `present` or `absent`
+                  - defaults to "present".
+                enum:
+                - present
+                - absent
+                type: string
+              icuLocale:
+                description: |-
+                  Maps to the `ICU_LOCALE` parameter of `CREATE DATABASE`. This
+                  setting cannot be changed. Specifies the ICU locale when the ICU
+                  provider is used. This option requires `localeProvider` to be set to
+                  `icu`. Available from PostgreSQL 15.
+                type: string
+                x-kubernetes-validations:
+                - message: icuLocale is immutable
+                  rule: self == oldSelf
+              icuRules:
+                description: |-
+                  Maps to the `ICU_RULES` parameter of `CREATE DATABASE`. This setting
+                  cannot be changed. Specifies additional collation rules to customize
+                  the behavior of the default collation. This option requires
+                  `localeProvider` to be set to `icu`. Available from PostgreSQL 16.
+                type: string
+                x-kubernetes-validations:
+                - message: icuRules is immutable
+                  rule: self == oldSelf
+              isTemplate:
+                description: |-
+                  Maps to the `IS_TEMPLATE` parameter of `CREATE DATABASE` and `ALTER
+                  DATABASE`. If true, this database is considered a template and can
+                  be cloned by any user with `CREATEDB` privileges.
+                type: boolean
+              locale:
+                description: |-
+                  Maps to the `LOCALE` parameter of `CREATE DATABASE`. This setting
+                  cannot be changed. Sets the default collation order and character
+                  classification in the new database.
+                type: string
+                x-kubernetes-validations:
+                - message: locale is immutable
+                  rule: self == oldSelf
+              localeCType:
+                description: |-
+                  Maps to the `LC_CTYPE` parameter of `CREATE DATABASE`. This setting
+                  cannot be changed.
+                type: string
+                x-kubernetes-validations:
+                - message: localeCType is immutable
+                  rule: self == oldSelf
+              localeCollate:
+                description: |-
+                  Maps to the `LC_COLLATE` parameter of `CREATE DATABASE`. This
+                  setting cannot be changed.
+                type: string
+                x-kubernetes-validations:
+                - message: localeCollate is immutable
+                  rule: self == oldSelf
+              localeProvider:
+                description: |-
+                  Maps to the `LOCALE_PROVIDER` parameter of `CREATE DATABASE`. This
+                  setting cannot be changed. This option sets the locale provider for
+                  databases created in the new cluster. Available from PostgreSQL 16.
+                type: string
+                x-kubernetes-validations:
+                - message: localeProvider is immutable
+                  rule: self == oldSelf
+              name:
+                description: The name of the database to create inside PostgreSQL.
+                  This setting cannot be changed.
+                type: string
+                x-kubernetes-validations:
+                - message: name is immutable
+                  rule: self == oldSelf
+                - message: the name postgres is reserved
+                  rule: self != 'postgres'
+                - message: the name template0 is reserved
+                  rule: self != 'template0'
+                - message: the name template1 is reserved
+                  rule: self != 'template1'
+              owner:
+                description: |-
+                  Maps to the `OWNER` parameter of `CREATE DATABASE`.
+                  Maps to the `OWNER TO` command of `ALTER DATABASE`.
+                  The role name of the user who owns the database inside PostgreSQL.
+                type: string
+              tablespace:
+                description: |-
+                  Maps to the `TABLESPACE` parameter of `CREATE DATABASE`.
+                  Maps to the `SET TABLESPACE` command of `ALTER DATABASE`.
+                  The name of the tablespace (in PostgreSQL) that will be associated
+                  with the new database. This tablespace will be the default
+                  tablespace used for objects created in this database.
+                type: string
+              template:
+                description: |-
+                  Maps to the `TEMPLATE` parameter of `CREATE DATABASE`. This setting
+                  cannot be changed. The name of the template from which to create
+                  this database.
+                type: string
+                x-kubernetes-validations:
+                - message: template is immutable
+                  rule: self == oldSelf
+            required:
+            - cluster
+            - name
+            - owner
+            type: object
+            x-kubernetes-validations:
+            - message: builtinLocale is only available when localeProvider is set
+                to `builtin`
+              rule: '!has(self.builtinLocale) || self.localeProvider == ''builtin'''
+            - message: icuLocale is only available when localeProvider is set to `icu`
+              rule: '!has(self.icuLocale) || self.localeProvider == ''icu'''
+            - message: icuRules is only available when localeProvider is set to `icu`
+              rule: '!has(self.icuRules) || self.localeProvider == ''icu'''
+          status:
+            description: |-
+              Most recently observed status of the Database. This data may not be up to
+              date. Populated by the system. Read-only.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status
+            properties:
+              applied:
+                description: Applied is true if the database was reconciled correctly
+                type: boolean
+              message:
+                description: Message is the reconciliation output message
+                type: string
+              observedGeneration:
+                description: |-
+                  A sequence number representing the latest
+                  desired state that was synchronized
+                format: int64
+                type: integer
+            type: object
+        required:
+        - metadata
+        - spec
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}

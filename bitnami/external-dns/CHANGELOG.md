@@ -1,8 +1,18 @@
 # Changelog
 
-## 8.7.4 (2025-02-04)
+## 8.7.6 (2025-03-05)
 
-* [bitnami/external-dns] Release 8.7.4 ([#31751](https://github.com/bitnami/charts/pull/31751))
+* [bitnami/external-dns] Release 8.7.6 ([#32287](https://github.com/bitnami/charts/pull/32287))
+
+## <small>8.7.5 (2025-02-19)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/external-dns] Release 8.7.5 (#31994) ([e3b3a39](https://github.com/bitnami/charts/commit/e3b3a39ab1eef6f71c5ca0317c9ab4ab51103915)), closes [#31994](https://github.com/bitnami/charts/issues/31994)
+
+## <small>8.7.4 (2025-02-04)</small>
+
+* [bitnami/external-dns] Release 8.7.4 (#31751) ([422f3f0](https://github.com/bitnami/charts/commit/422f3f051332279ce68c9a4d723259972e2fabd4)), closes [#31751](https://github.com/bitnami/charts/issues/31751)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
 
 ## <small>8.7.3 (2025-01-24)</small>
 
@@ -837,7 +847,7 @@
 ## 5.6.0 (2021-12-09)
 
 * [bitnami/external-dns] Add value for controlling Google zone visibility (#8278) ([8188013](https://github.com/bitnami/charts/commit/8188013219f3182d838286ff145f49aa1f393a61)), closes [#8278](https://github.com/bitnami/charts/issues/8278)
-* state correct version (#8260) ([e5d2e7d](https://github.com/bitnami/charts/commit/e5d2e7db1cfb96ac7e04bf4af9c1d20734cf7cb4)), closes [#8260](https://github.com/bitnami/charts/issues/8260) [/github.com/kubernetes-sigs/external-dns/issues/2168#issuecomment-947841020](https://github.com//github.com/kubernetes-sigs/external-dns/issues/2168/issues/issuecomment-947841020)
+* state correct version (#8260) ([e5d2e7d](https://github.com/bitnami/charts/commit/e5d2e7db1cfb96ac7e04bf4af9c1d20734cf7cb4)), closes [#8260](https://github.com/bitnami/charts/issues/8260)
 
 ## <small>5.5.2 (2021-11-29)</small>
 
@@ -896,7 +906,7 @@
 
 ## <small>5.4.7 (2021-09-13)</small>
 
-* Fix transip SecretVolumeSource (#7463) ([0ba7d76](https://github.com/bitnami/charts/commit/0ba7d761ff79cfb0581c88b10a632304f9f10b29)), closes [#7463](https://github.com/bitnami/charts/issues/7463) [/v1-18.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.18/#secretvolumesource-v1](https://github.com//v1-18.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.18//issues/secretvolumesource-v1)
+* Fix transip SecretVolumeSource (#7463) ([0ba7d76](https://github.com/bitnami/charts/commit/0ba7d761ff79cfb0581c88b10a632304f9f10b29)), closes [#7463](https://github.com/bitnami/charts/issues/7463)
 
 ## <small>5.4.6 (2021-09-10)</small>
 
@@ -904,7 +914,7 @@
 
 ## <small>5.4.5 (2021-09-03)</small>
 
-* [bitnami/external-dns] Allow empty value for zoneType filter ([818a29d](https://github.com/bitnami/charts/commit/818a29d764e3cd64456a067cb134b4754ed214bd)), closes [/github.com/kubernetes-sigs/external-dns/blob/master/provider/zone_type_filter.go#L42](https://github.com//github.com/kubernetes-sigs/external-dns/blob/master/provider/zone_type_filter.go/issues/L42)
+* [bitnami/external-dns] Allow empty value for zoneType filter ([818a29d](https://github.com/bitnami/charts/commit/818a29d764e3cd64456a067cb134b4754ed214bd))
 * [bitnami/several] Regenerate README tables ([64d5d74](https://github.com/bitnami/charts/commit/64d5d747b84299ca9f63ea8a586b13870abe31a6))
 
 ## <small>5.4.4 (2021-08-26)</small>
@@ -1383,7 +1393,7 @@
 ## <small>1.5.6 (2019-05-29)</small>
 
 * Change syntax because of linter failing ([adfc357](https://github.com/bitnami/charts/commit/adfc35728c2a8a9def9e1897b3772d64df621354))
-* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79)), closes [#issuecomment-496883321](https://github.com/bitnami/charts/issues/issuecomment-496883321)
+* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79))
 * Use immutable tags in the main images ([17ca4f5](https://github.com/bitnami/charts/commit/17ca4f5c91da33da03f9e2d411fe5e004e825c4d))
 
 ## <small>1.5.5 (2019-05-28)</small>

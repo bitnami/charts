@@ -1,8 +1,21 @@
 # Changelog
 
-## 4.5.5 (2025-02-12)
+## 4.5.8 (2025-03-05)
 
-* [bitnami/node-exporter] Release 4.5.5 ([#31904](https://github.com/bitnami/charts/pull/31904))
+* [bitnami/node-exporter] Release 4.5.8 ([#32309](https://github.com/bitnami/charts/pull/32309))
+
+## <small>4.5.7 (2025-02-20)</small>
+
+* [bitnami/node-exporter] Release 4.5.7 (#32024) ([af56254](https://github.com/bitnami/charts/commit/af56254abd92dc5f594e0960efcd763e30d1c4ca)), closes [#32024](https://github.com/bitnami/charts/issues/32024)
+
+## <small>4.5.6 (2025-02-17)</small>
+
+* [bitnami/node-exporter] Release 4.5.6 (#31950) ([d5c57ee](https://github.com/bitnami/charts/commit/d5c57ee01ff2ba388b64fa7437c25ba6f2721b56)), closes [#31950](https://github.com/bitnami/charts/issues/31950)
+
+## <small>4.5.5 (2025-02-12)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/node-exporter] Release 4.5.5 (#31904) ([3853ffd](https://github.com/bitnami/charts/commit/3853ffd2338c526cc7108b7ee6adc082efb5eddf)), closes [#31904](https://github.com/bitnami/charts/issues/31904)
 
 ## <small>4.5.4 (2025-02-05)</small>
 

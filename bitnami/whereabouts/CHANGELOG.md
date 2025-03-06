@@ -1,8 +1,17 @@
 # Changelog
 
-## 1.2.5 (2025-02-12)
+## 1.2.7 (2025-03-05)
 
-* [bitnami/whereabouts] Release 1.2.5 ([#31903](https://github.com/bitnami/charts/pull/31903))
+* [bitnami/whereabouts] Release 1.2.7 ([#32319](https://github.com/bitnami/charts/pull/32319))
+
+## <small>1.2.6 (2025-02-20)</small>
+
+* [bitnami/whereabouts] Release 1.2.6 (#32070) ([4b36606](https://github.com/bitnami/charts/commit/4b36606ceccee96e4b5ade45df4ad3ce713d2095)), closes [#32070](https://github.com/bitnami/charts/issues/32070)
+
+## <small>1.2.5 (2025-02-12)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/whereabouts] Release 1.2.5 (#31903) ([7d59616](https://github.com/bitnami/charts/commit/7d59616e053f98fdc7e04c09c99cd9eb9e997e0a)), closes [#31903](https://github.com/bitnami/charts/issues/31903)
 
 ## <small>1.2.4 (2025-02-05)</small>
 

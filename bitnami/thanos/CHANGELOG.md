@@ -1,8 +1,25 @@
 # Changelog
 
-## 15.12.3 (2025-02-14)
+## 15.13.2 (2025-03-05)
 
-* [bitnami/thanos] Add common annotations to pod templates ([#31928](https://github.com/bitnami/charts/pull/31928))
+* [bitnami/thanos] fix: remove quotes from ruler.ruleFile parameter ([#32201](https://github.com/bitnami/charts/pull/32201))
+
+## <small>15.13.1 (2025-03-05)</small>
+
+* [bitnami/thanos] Release 15.13.1 (#32318) ([daa1b61](https://github.com/bitnami/charts/commit/daa1b61c13d2859964313c13dfa9bc6558be7f0d)), closes [#32318](https://github.com/bitnami/charts/issues/32318)
+
+## 15.13.0 (2025-03-03)
+
+* [bitnami/thanos] feature: allow configuring labels for query ingress (#32240) ([a49eff3](https://github.com/bitnami/charts/commit/a49eff3cf435a92a021e741870fce2dcdb429d4b)), closes [#32240](https://github.com/bitnami/charts/issues/32240)
+
+## <small>15.12.4 (2025-02-21)</small>
+
+* [bitnami/thanos] Release 15.12.4 (#32102) ([7063858](https://github.com/bitnami/charts/commit/7063858b70a50657dcd25755270cafd12b74b86f)), closes [#32102](https://github.com/bitnami/charts/issues/32102)
+
+## <small>15.12.3 (2025-02-14)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/thanos] Add common annotations to pod templates (#31928) ([11e4087](https://github.com/bitnami/charts/commit/11e4087799b594ba4a592d70667195c2d3af0dd8)), closes [#31928](https://github.com/bitnami/charts/issues/31928)
 
 ## <small>15.12.2 (2025-02-07)</small>
 

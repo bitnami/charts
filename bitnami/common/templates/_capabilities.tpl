@@ -13,6 +13,20 @@ Return the target Kubernetes version
 {{- end -}}
 
 {{/*
+Return true if the apiVersion is supported
+Usage:
+{{ include "common.capabilities.apiVersions.has" (dict "version" "batch/v1" "context" $) }}
+*/}}
+{{- define "common.capabilities.apiVersions.has" -}}
+{{- $providedAPIVersions := default .context.Values.apiVersions ((.context.Values.global).apiVersions) -}}
+{{- if and (empty $providedAPIVersions) (.context.Capabilities.APIVersions.Has .version) -}}
+    {{- true -}}
+{{- else if has .version $providedAPIVersions -}}
+    {{- true -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the appropriate apiVersion for poddisruptionbudget.
 */}}
 {{- define "common.capabilities.policy.apiVersion" -}}

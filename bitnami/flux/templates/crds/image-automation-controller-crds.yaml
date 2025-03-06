@@ -1,5 +1,5 @@
 # Source: https://github.com/fluxcd/image-automation-controller/releases/download/v{version}/image-automation-controller.crds.yaml
-# Version: 0.39.0
+# Version: 0.40.0
 # VersionOf: fluxcd-image-automation-controller
 # Conditional: .Values.imageAutomationController.installCRDs
 {{- if .Values.imageAutomationController.installCRDs }}
@@ -431,6 +431,13 @@ spec:
                           MessageTemplate provides a template for the commit message,
                           into which will be interpolated the details of the change made.
                         type: string
+                      messageTemplateValues:
+                        additionalProperties:
+                          type: string
+                        description: |-
+                          MessageTemplateValues provides additional values to be available to the
+                          templating rendering.
+                        type: object
                       signingKey:
                         description: SigningKey provides the option to sign commits
                           with a GPG key

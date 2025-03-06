@@ -1,8 +1,26 @@
 # Changelog
 
-## 4.6.1 (2025-02-12)
+## 4.8.1 (2025-03-05)
 
-* [bitnami/seaweedfs] Release 4.6.1 ([#31902](https://github.com/bitnami/charts/pull/31902))
+* [bitnami/seaweedfs] Release 4.8.1 ([#32317](https://github.com/bitnami/charts/pull/32317))
+
+## 4.8.0 (2025-03-03)
+
+* [bitnami/seaweedfs] Add support for `s3.allowEmptyFolder` (#32234) ([ce208fa](https://github.com/bitnami/charts/commit/ce208faae53c07ca52f4f239604f37af7ae1786a)), closes [#32234](https://github.com/bitnami/charts/issues/32234)
+
+## 4.7.0 (2025-02-24)
+
+* [bitnami/seaweedfs] Set `usePasswordFiles=true` by default (#32119) ([dbc5cb6](https://github.com/bitnami/charts/commit/dbc5cb6ebacef3036f8bbb32ae1d761f171b8bdd)), closes [#32119](https://github.com/bitnami/charts/issues/32119)
+
+## <small>4.6.2 (2025-02-20)</small>
+
+* [bitnami/seaweedfs] Release 4.6.2 (#32035) ([efa99db](https://github.com/bitnami/charts/commit/efa99db7094cc5f19ec968634b5a87850c40cb73)), closes [#32035](https://github.com/bitnami/charts/issues/32035)
+
+## <small>4.6.1 (2025-02-12)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/seaweedfs] Release 4.6.1 (#31902) ([f15c5ed](https://github.com/bitnami/charts/commit/f15c5ed37c1829961a0ba4391809c524237382fb)), closes [#31902](https://github.com/bitnami/charts/issues/31902)
+* [bitnami/seaweedfs]: correct typo in README (#31867) ([bb5c61b](https://github.com/bitnami/charts/commit/bb5c61b6fe4c89ac0b115b63ebed43b312f31809)), closes [#31867](https://github.com/bitnami/charts/issues/31867)
 
 ## 4.6.0 (2025-02-05)
 

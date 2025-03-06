@@ -22,7 +22,7 @@ command:
   manage-keyspace:
     exec: "cqlsh -u {{ $dbUser }} -p {{ $dbPassword }} -e 'CREATE KEYSPACE {{ $keyspace }} WITH REPLICATION = { $$class$$: $$SimpleStrategy$$, $$replication_factor$$ : {{ $nodes }} };' cassandra-0.cassandra-headless {{ $port }}{{ range $e, $i := until $nodes }} && cqlsh -u {{ $dbUser }} -p {{ $dbPassword }} -e 'USE {{ $keyspace }};' cassandra-{{ $i }}.cassandra-headless {{ $port }}{{ end }}"
     exit-status: 0
-    timeout: 20000
+    timeout: 60000
   cluster-size:
     exec: if [ "$(nodetool status | grep {{ .Vars.cluster.numTokens }} | wc -l)" -ne {{ $nodes }} ]; then exit 1; fi
     exit-status: 0
