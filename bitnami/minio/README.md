@@ -287,7 +287,7 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 | `auth.rootUserSecretKey`     | Key where the MINIO_ROOT_USER username is being stored inside the existing secret `auth.existingSecret`                               | `""`                           |
 | `auth.rootPasswordSecretKey` | Key where the MINIO_ROOT_USER password is being stored inside the existing secret `auth.existingSecret`                               | `""`                           |
 | `auth.forcePassword`         | Force users to specify required passwords                                                                                             | `false`                        |
-| `auth.useCredentialsFiles`   | Mount credentials as a files instead of using an environment variable                                                                 | `false`                        |
+| `auth.usePasswordFiles`      | Mount credentials as a files instead of using an environment variable                                                                 | `true`                         |
 | `auth.useSecret`             | Uses a secret to mount the credential files.                                                                                          | `true`                         |
 | `auth.forceNewKeys`          | Force root credentials (user and password) to be reconfigured every time they change in the secrets                                   | `false`                        |
 | `defaultBuckets`             | Comma, semi-colon or space separated list of buckets to create at initialization (only in standalone mode)                            | `""`                           |
