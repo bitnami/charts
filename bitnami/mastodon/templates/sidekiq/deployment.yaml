@@ -104,19 +104,35 @@ spec:
               value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
             - name: MASTODON_MODE
               value: "sidekiq"
+            {{- if .Values.usePasswordFiles }}
+            - name: MASTODON_DATABASE_PASSWORD_FILE
+              value: {{ printf "/opt/bitnami/mastodon/secrets/%s" (include "mastodon.database.passwordKey" .) }}
+            {{- else }}
             - name: MASTODON_DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "mastodon.database.secretName" . }}
                   key: {{ include "mastodon.database.passwordKey" . | quote }}
+            {{- end }}
             {{- if (include "mastodon.redis.auth.enabled" .) }}
+            {{- if .Values.usePasswordFiles }}
+            - name: MASTODON_REDIS_PASSWORD_FILE
+              value: {{ printf "/opt/bitnami/mastodon/secrets/%s" (include "mastodon.redis.passwordKey" .) }}
+            {{- else }}
             - name: MASTODON_REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "mastodon.redis.secretName" . }}
                   key: {{ include "mastodon.redis.passwordKey" . | quote }}
             {{- end }}
+            {{- end }}
             {{- if .Values.enableS3 }}
+            {{- if .Values.usePasswordFiles }}
+            - name: MASTODON_AWS_ACCESS_KEY_ID_FILE
+              value: {{ printf "/opt/bitnami/mastodon/secrets/%s" (include "mastodon.s3.accessKeyIDKey" .) }}
+            - name: MASTODON_AWS_SECRET_ACCESS_KEY_FILE
+              value: {{ printf "/opt/bitnami/mastodon/secrets/%s" (include "mastodon.s3.secretAccessKeyKey" .) }}
+            {{- else }}
             - name: MASTODON_AWS_ACCESS_KEY_ID
               valueFrom:
                 secretKeyRef:
@@ -128,14 +144,26 @@ spec:
                   name: {{ include "mastodon.s3.secretName" . }}
                   key: {{ include "mastodon.s3.secretAccessKeyKey" . | quote }}
             {{- end }}
+            {{- end }}
             {{- if and .Values.enableSearches (include "mastodon.elasticsearch.auth.enabled" .) }}
+            {{- if .Values.usePasswordFiles }}
+            - name: MASTODON_ELASTICSEARCH_PASSWORD_FILE
+              value: {{ printf "/opt/bitnami/mastodon/secrets/%s" (include "mastodon.elasticsearch.passwordKey" .) }}
+            {{- else }}
             - name: MASTODON_ELASTICSEARCH_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "mastodon.elasticsearch.secretName" . }}
                   key: {{ include "mastodon.elasticsearch.passwordKey" . | quote }}
             {{- end }}
+            {{- end }}
             {{- if ne .Values.smtp.auth_method "none" }}
+            {{- if .Values.usePasswordFiles }}
+            - name: SMTP_LOGIN_FILE
+              value: {{ printf "/opt/bitnami/mastodon/secrets/%s" (include "mastodon.smtp.loginKey" .) }}
+            - name: SMTP_PASSWORD_FILE
+              value: {{ printf "/opt/bitnami/mastodon/secrets/%s" (include "mastodon.smtp.passwordKey" .) }}
+            {{- else }}
             - name: SMTP_LOGIN
               valueFrom:
                 secretKeyRef:
@@ -146,6 +174,7 @@ spec:
                 secretKeyRef:
                   name: {{ include "mastodon.smtp.secretName" . }}
                   key: {{ include "mastodon.smtp.passwordKey" . | quote }}
+            {{- end }}
             {{- end }}
             {{- if .Values.sidekiq.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.sidekiq.extraEnvVars "context" $) | nindent 12 }}
@@ -215,6 +244,10 @@ spec:
             - name: empty-dir
               mountPath: /tmp
               subPath: tmp-dir
+            {{- if .Values.usePasswordFiles }}
+            - name: mastodon-secrets
+              mountPath: /opt/bitnami/mastodon/secrets
+            {{- end }}
           {{- if not .Values.enableS3 }}
             - name: data
               mountPath: {{ .Values.persistence.mountPath }}
@@ -229,6 +262,29 @@ spec:
         - name: empty-dir
           emptyDir:
             medium: Memory
+        {{- if .Values.usePasswordFiles }}
+        - name: mastodon-secrets
+          projected:
+            sources:
+              - secret:
+                  name: {{ include "mastodon.database.secretName" . }}
+              {{- if (include "mastodon.redis.auth.enabled" .) }}
+              - secret:
+                  name: {{ include "mastodon.redis.secretName" . }}
+              {{- end }}
+              {{- if (include "mastodon.elasticsearch.auth.enabled" .) }}
+              - secret:
+                  name: {{ include "mastodon.elasticsearch.secretName" . }}
+              {{- end }}
+              {{- if .Values.enableS3 }}
+              - secret:
+                  name:  {{ include "mastodon.s3.secretName" . }}
+              {{- end }}
+              {{- if ne .Values.smtp.auth_method "none" }}
+              - secret:
+                  name: {{ include "mastodon.smtp.secretName" . }}
+              {{- end }}
+        {{- end }}
         {{- if not .Values.enableS3 }}
         - name: data
           {{- if .Values.persistence.enabled }}
