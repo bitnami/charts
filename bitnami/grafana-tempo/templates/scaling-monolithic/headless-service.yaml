@@ -1,0 +1,40 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if eq .Values.tempo.deploymentMode "scalingMonolithic" }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "grafana-tempo.scaling-monolithic.fullname" . }}-headless
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.scalingMonolithic.query.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: scaling-monolithic
+  {{- if or .Values.commonAnnotations .Values.scalingMonolithic.service.headless.annotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.scalingMonolithic.service.headless.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  # NOTE: this is based on this https://github.com/grafana/helm-charts/pull/451. Should be reviewed if it is actually necessary in the future
+  publishNotReadyAddresses: true
+  type: ClusterIP
+  clusterIP: None
+  ports:
+    - name: http
+      port: {{ .Values.scalingMonolithic.service.ports.http }}
+      targetPort: http
+      protocol: TCP
+    - name: grpc
+      port: {{ .Values.scalingMonolithic.service.ports.grpc }}
+      targetPort: grpc
+      protocol: TCP
+    {{- if .Values.scalingMonolithic.service.headless.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.scalingMonolithic.service.headless.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.scalingMonolithic.podLabels .Values.commonLabels ) "context" . ) }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: scaling-monolithic
+{{- end }}
