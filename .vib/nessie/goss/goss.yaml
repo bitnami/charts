@@ -32,12 +32,12 @@ command:
     exit-status: 0
     stdout:
       - /QUARKUS_LOG_LEVEL.*{{ .Vars.configOverrides.quarkus.log.level }}/
-      {{- if not .Vars.usePasswordFile }}
+      {{- if not .Vars.usePasswordFiles }}
       # The secret configuration should be set via env
       - /QUARKUS_LOG_FILE_LEVEL.*{{ .Vars.secretConfigOverrides.quarkus.log.file.level }}/
       {{- end }}
 
-{{- if .Vars.usePasswordFile }}
+{{- if .Vars.usePasswordFiles }}
 # The secret configuration should be mounted as a file
 file:
   /bitnami/nessie/secrets/configuration/QUARKUS_LOG_FILE_LEVEL:

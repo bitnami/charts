@@ -167,9 +167,9 @@ deploymentAnnotations: {}
 ## @param logLevel Set application log level
 ##
 logLevel: INFO
-## @param usePasswordFile Mount all sensitive information as files
+## @param usePasswordFiles Mount all sensitive information as files
 ##
-usePasswordFile: true
+usePasswordFiles: true
 ## @param versionStoreType Set version store type. The chart natively supports JDBC_POSTGRESQL, ROCKSDB and IN_MEMORY. Any other type requires you to add the configuration in configOverrides and secretConfigOverrides.
 ##
 versionStoreType: JDBC_POSTGRESQL

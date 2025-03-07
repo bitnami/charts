@@ -250,8 +250,8 @@ Return the volume-permissions init container
       . /opt/bitnami/scripts/libpostgresql.sh
       . /opt/bitnami/scripts/postgresql-env.sh
 
-      {{- if .Values.usePasswordFile }}
-      export DATABASE_PASSWORD="$(< "/bitnami/nessie/secrets/database/QUARKUS_DATASOURCE_POSTGRESQL_PASSWORD")"
+      {{- if .Values.usePasswordFiles }}
+      export DATABASE_PASSWORD="$(< $DATABASE_PASSWORD_FILE)"
       {{- end }}
       info "Waiting for host $DATABASE_HOST:$DATABASE_PORT_NUMBER"
       export PGCONNECT_TIMEOUT="5"
@@ -280,7 +280,10 @@ Return the volume-permissions init container
       value: {{ include "nessie.database.host" . | quote }}
     - name: DATABASE_PORT_NUMBER
       value: {{ include "nessie.database.port" . | quote }}
-    {{- if not .Values.usePasswordFile }}
+    {{- if .Values.usePasswordFiles }}
+    - name: DATABASE_PASSWORD_FILE
+      value: "/bitnami/nessie/secrets/database/QUARKUS_DATASOURCE_POSTGRESQL_PASSWORD"
+    {{- else -}}
     - name: DATABASE_PASSWORD
       valueFrom:
         secretKeyRef:
@@ -292,7 +295,7 @@ Return the volume-permissions init container
     - name: DATABASE_NAME
       value: {{ include "nessie.database.name" . | quote }}
   volumeMounts:
-    {{- if .Values.usePasswordFile }}
+    {{- if .Values.usePasswordFiles }}
     - name: database-password
       mountPath: /bitnami/nessie/secrets/database
     {{- end }}
