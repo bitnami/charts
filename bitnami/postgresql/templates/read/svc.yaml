@@ -10,8 +10,8 @@ metadata:
   name: {{ include "postgresql.v1.readReplica.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   {{- $labels := .Values.commonLabels }}
-  {{- if .Values.read.service.labels }}
-  {{- $labels = include "common.tplvalues.merge" ( dict "values" ( list .Values.read.service.labels $labels ) "context" . ) }}
+  {{- if .Values.readReplicas.service.labels }}
+  {{- $labels = include "common.tplvalues.merge" ( dict "values" ( list .Values.readReplicas.service.labels $labels ) "context" . ) }}
   {{- end }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: read
