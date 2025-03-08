@@ -1,6 +1,6 @@
 # Changelog
 
-## 24.3.4 (2025-03-07)
+## 24.3.4 (2025-03-08)
 
 * [bitnami/harbor] removed /etc/core/token mount since it's unused ([#32364](https://github.com/bitnami/charts/pull/32364))
 
