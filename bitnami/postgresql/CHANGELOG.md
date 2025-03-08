@@ -1,6 +1,6 @@
 # Changelog
 
-## 16.4.17 (2025-03-07)
+## 16.4.17 (2025-03-08)
 
 * [bitnami/postgresql] allow custom service labels for primary and read ([#32368](https://github.com/bitnami/charts/pull/32368))
 
