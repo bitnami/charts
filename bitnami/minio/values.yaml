@@ -129,9 +129,9 @@ auth:
   ## @param auth.forcePassword Force users to specify required passwords
   ##
   forcePassword: false
-  ## @param auth.useCredentialsFiles Mount credentials as a files instead of using an environment variable
+  ## @param auth.usePasswordFiles Mount credentials as a files instead of using an environment variable
   ##
-  useCredentialsFiles: false
+  usePasswordFiles: true
   ## @param auth.useSecret Uses a secret to mount the credential files.
   ##
   useSecret: true
