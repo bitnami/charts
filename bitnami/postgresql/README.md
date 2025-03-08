@@ -372,6 +372,7 @@ If you already have data in it, you will fail to sync to standby nodes for all c
 | `extraDeploy`            | Array of extra objects to deploy with the release (evaluated as a template)                  | `[]`            |
 | `commonLabels`           | Add labels to all the deployed resources                                                     | `{}`            |
 | `commonAnnotations`      | Add annotations to all the deployed resources                                                | `{}`            |
+| `secretAnnotations`      | Add annotations to the secrets                                                               | `{}`            |
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)      | `false`         |
 | `diagnosticMode.command` | Command to override all containers in the statefulset                                        | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the statefulset                                           | `["infinity"]`  |
