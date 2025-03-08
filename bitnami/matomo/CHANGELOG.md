@@ -1,8 +1,14 @@
 # Changelog
 
-## 9.2.4 (2025-02-23)
+## 9.3.0 (2025-03-07)
 
-* [bitnami/matomo] Release 9.2.4 ([#32138](https://github.com/bitnami/charts/pull/32138))
+* [bitnami/matomo] Set `usePasswordFiles=true` by default ([#32363](https://github.com/bitnami/charts/pull/32363))
+
+## <small>9.2.4 (2025-02-23)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/matomo] Release 9.2.4 (#32138) ([a276308](https://github.com/bitnami/charts/commit/a2763082856d2e1eb93f4adc9ed26c36b3e13156)), closes [#32138](https://github.com/bitnami/charts/issues/32138)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
 
 ## <small>9.2.3 (2025-01-24)</small>
 
