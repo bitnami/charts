@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.5.1 (2025-03-03)
+## 0.5.2 (2025-03-07)
 
-* fix: change svc target port in servicemonitor ([#32236](https://github.com/bitnami/charts/pull/32236))
+* [bitnami/keydb] only use password files if auth is enabled ([#32358](https://github.com/bitnami/charts/pull/32358))
+
+## <small>0.5.1 (2025-03-04)</small>
+
+* fix: change svc target port in servicemonitor (#32236) ([f5056c8](https://github.com/bitnami/charts/commit/f5056c8b66d7d83574c446d3779704b9a84c7b3c)), closes [#32236](https://github.com/bitnami/charts/issues/32236)
 
 ## 0.5.0 (2025-02-27)
 
