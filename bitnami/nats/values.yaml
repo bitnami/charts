@@ -177,10 +177,12 @@ cluster:
 ## ref: https://docs.nats.io/running-a-nats-service/configuration/resource_management
 ## @param jetstream.enabled Switch to enable/disable JetStream
 ## @param jetstream.maxMemory Max memory usage for JetStream
+## @param jetstream.storeDirectory Directory to store JetStream data
 ##
 jetstream:
   enabled: false
   maxMemory: 1G
+  storeDirectory: /data
 ## Logging parameters
 ## ref: https://github.com/nats-io/gnatsd#command-line-arguments
 ## @param debug.enabled Switch to enable/disable debug on logging
