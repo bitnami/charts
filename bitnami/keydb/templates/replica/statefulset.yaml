@@ -169,9 +169,9 @@ spec:
             {{- if .Values.auth.enabled }}
             {{- if .Values.auth.usePasswordFiles }}
             - name: KEYDB_PASSWORD_FILE
-              value: {{ printf "/opt/bitnami/keydb/secrets/%s" (include "keydb.secretPasswordKey" .) }}
+              value: "/opt/bitnami/keydb/secrets/keydb-password"
             - name: KEYDB_MASTER_PASSWORD_FILE
-              value: {{ printf "/opt/bitnami/keydb/secrets/%s" (include "keydb.secretPasswordKey" .) }}
+              value: "/opt/bitnami/keydb/secrets/keydb-password"
             {{- else }}
             - name: KEYDB_PASSWORD
               valueFrom:
@@ -304,7 +304,7 @@ spec:
               value: default
             {{- if .Values.auth.usePasswordFiles }}
             - name: REDIS_PASSWORD_FILE
-              value: {{ printf "/secrets/%s" (include "keydb.secretPasswordKey" .) }}
+              value: "/secrets/keydb-password"
             {{- else }}
             - name: REDIS_PASSWORD
               valueFrom:

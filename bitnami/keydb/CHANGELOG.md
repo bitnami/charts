@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.5.2 (2025-03-10)
+## 0.5.3 (2025-03-10)
 
-* [bitnami/keydb] only use password files if auth is enabled ([#32358](https://github.com/bitnami/charts/pull/32358))
+* [bitnami/keydb] Fix issue when using custom password secret key ([#32376](https://github.com/bitnami/charts/pull/32376))
+
+## <small>0.5.2 (2025-03-10)</small>
+
+* [bitnami/keydb] only use password files if auth is enabled (#32358) ([dcdf3ca](https://github.com/bitnami/charts/commit/dcdf3caf48f91f1055b6e124ed2b62611a599c26)), closes [#32358](https://github.com/bitnami/charts/issues/32358)
 
 ## <small>0.5.1 (2025-03-04)</small>
 
