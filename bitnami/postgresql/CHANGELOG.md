@@ -1,6 +1,6 @@
 # Changelog
 
-## 16.4.17 (2025-03-04)
+## 16.5.0 (2025-03-10)
 
 * [bitnami/postgresql] Add secretAnnotation value ([#31984](https://github.com/bitnami/charts/pull/31984))
 
