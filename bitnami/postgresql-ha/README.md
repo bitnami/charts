@@ -770,7 +770,7 @@ A default `StorageClass` is needed in the Kubernetes cluster to dynamically prov
 ### LDAP parameters
 
 | Name                            | Description                                                  | Value        |
-|---------------------------------|--------------------------------------------------------------| ------------ |
+| ------------------------------- | ------------------------------------------------------------ | ------------ |
 | `ldap.enabled`                  | Enable LDAP support                                          | `false`      |
 | `ldap.existingSecret`           | Name of existing secret to use for LDAP passwords            | `""`         |
 | `ldap.uri`                      | LDAP URL beginning in the form `ldap[s]://<hostname>:<port>` | `""`         |
