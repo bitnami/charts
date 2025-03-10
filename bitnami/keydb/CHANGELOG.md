@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.5.2 (2025-03-07)
+## 0.5.2 (2025-03-10)
 
 * [bitnami/keydb] only use password files if auth is enabled ([#32358](https://github.com/bitnami/charts/pull/32358))
 
