@@ -1,8 +1,12 @@
 # Changelog
 
-## 8.7.6 (2025-03-05)
+## 8.7.7 (2025-03-07)
 
-* [bitnami/external-dns] Release 8.7.6 ([#32287](https://github.com/bitnami/charts/pull/32287))
+* [bitnami/external-dns] Fix TXT AES key being read from incorrect secret ([#32360](https://github.com/bitnami/charts/pull/32360))
+
+## <small>8.7.6 (2025-03-05)</small>
+
+* [bitnami/external-dns] Release 8.7.6 (#32287) ([ebfa0ef](https://github.com/bitnami/charts/commit/ebfa0ef1854fa21e9ed8b5294fa7ac821a0c80b7)), closes [#32287](https://github.com/bitnami/charts/issues/32287)
 
 ## <small>8.7.5 (2025-02-19)</small>
 

@@ -1,8 +1,12 @@
 # Changelog
 
-## 20.11.2 (2025-03-05)
+## 20.11.3 (2025-03-10)
 
-* [bitnami/redis] Fix usePasswordFile typo in metrics container ([#32259](https://github.com/bitnami/charts/pull/32259))
+* [bitnami/redis] fix 32214 - REDIS_PASSWORD_FILE uses wrong filename from volume ([#32215](https://github.com/bitnami/charts/pull/32215))
+
+## <small>20.11.2 (2025-03-05)</small>
+
+* [bitnami/redis] Fix usePasswordFile typo in metrics container (#32259) ([a2cb202](https://github.com/bitnami/charts/commit/a2cb202e10168a70dae7b569eec62168e9e0f654)), closes [#32259](https://github.com/bitnami/charts/issues/32259)
 
 ## <small>20.11.1 (2025-03-04)</small>
 

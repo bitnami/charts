@@ -300,6 +300,15 @@ spec:
           for: 5m
           labels:
             severity: warning
+        - alert: NodeSystemdServiceCrashlooping
+          annotations:
+            description: Systemd service {{`{{`}} $labels.name {{`}}`}} has being restarted too many times at {{`{{`}} $labels.instance {{`}}`}} for the last 15 minutes. Please check if service is crash looping.
+            runbook_url: https://runbooks.prometheus-operator.dev/runbooks/node/nodesystemdservicecrashlooping
+            summary: Systemd service keeps restaring, possibly crash looping.
+          expr: increase(node_systemd_service_restart_total{job="node-exporter"}[5m]) > 2
+          for: 15m
+          labels:
+            severity: warning
         - alert: NodeBondingDegraded
           annotations:
             description: Bonding interface {{`{{`}} $labels.master {{`}}`}} on {{`{{`}} $labels.instance {{`}}`}} is in degraded state due to one or more slave failures.

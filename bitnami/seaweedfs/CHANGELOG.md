@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.8.1 (2025-03-05)
+## 4.8.2 (2025-03-07)
 
-* [bitnami/seaweedfs] Release 4.8.1 ([#32317](https://github.com/bitnami/charts/pull/32317))
+* [bitnami/seaweedfs]: fix README for loglevel ([#31735](https://github.com/bitnami/charts/pull/31735))
+
+## <small>4.8.1 (2025-03-05)</small>
+
+* [bitnami/seaweedfs] Release 4.8.1 (#32317) ([f248247](https://github.com/bitnami/charts/commit/f248247c983ac0c353a3ddc214dba911883b11a2)), closes [#32317](https://github.com/bitnami/charts/issues/32317)
 
 ## 4.8.0 (2025-03-03)
 

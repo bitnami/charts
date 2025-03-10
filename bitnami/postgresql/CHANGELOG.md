@@ -1,8 +1,8 @@
 # Changelog
 
-## 16.4.17 (2025-03-08)
+## 16.5.0 (2025-03-10)
 
-* [bitnami/postgresql] allow custom service labels for primary and read ([#32368](https://github.com/bitnami/charts/pull/32368))
+* [bitnami/postgresql] Add secretAnnotation value ([#31984](https://github.com/bitnami/charts/pull/31984))
 
 ## <small>16.4.16 (2025-03-03)</small>
 
