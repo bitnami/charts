@@ -1,8 +1,18 @@
 # Changelog
 
-## 21.1.3 (2025-02-06)
+## 21.1.5 (2025-03-05)
 
-* [bitnami/drupal] Release 21.1.3 ([#31803](https://github.com/bitnami/charts/pull/31803))
+* [bitnami/drupal] Release 21.1.5 ([#32333](https://github.com/bitnami/charts/pull/32333))
+
+## <small>21.1.4 (2025-02-26)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/drupal] Release 21.1.4 (#32174) ([d01701e](https://github.com/bitnami/charts/commit/d01701e2a86f8653eabdec8875d57213fe6c0c8a)), closes [#32174](https://github.com/bitnami/charts/issues/32174)
+
+## <small>21.1.3 (2025-02-06)</small>
+
+* [bitnami/drupal] Release 21.1.3 (#31803) ([5f4890c](https://github.com/bitnami/charts/commit/5f4890c2c54371b3e06660fd1c7e65315a742225)), closes [#31803](https://github.com/bitnami/charts/issues/31803)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
 
 ## <small>21.1.2 (2025-01-07)</small>
 

@@ -155,10 +155,10 @@ spec:
             {{- $clusterDomain := .Values.clusterDomain }}
             {{- $masterPort := int .Values.master.containerPorts.keydb }}
             {{- range $i := until $masterReplicaCount }}
-              args+=("--replicaof" "{{ printf "%s-%d.%s.%s.svc.%s" $masterFullname $i $masterHlSvcName $releaseNamespace $clusterDomain }}" {{ $masterPort }})              
+              args+=("--replicaof" "{{ printf "%s-%d.%s.%s.svc.%s" $masterFullname $i $masterHlSvcName $releaseNamespace $clusterDomain }}" {{ $masterPort }})
             {{- end }}
               args+=("--replica-announce-ip" "${HOSTNAME}.{{ printf "%s.%s.svc.%s" $replicaHlSvcName $releaseNamespace $clusterDomain }}")
-          
+
               exec keydb-server "${args[@]}"
           {{- end }}
           env:
@@ -251,7 +251,7 @@ spec:
             - name: health-scripts
               mountPath: /opt/bitnami/scripts/health
               readOnly: true
-            {{- if .Values.auth.usePasswordFiles }}
+            {{- if and .Values.auth.enabled .Values.auth.usePasswordFiles }}
             - name: keydb-password
               mountPath: /opt/bitnami/keydb/secrets
               readOnly: true
@@ -286,9 +286,9 @@ spec:
             - /bin/bash
             - -c
             - |
-              if [[ -f "$REDIS_PASSWORD_FILE" ]]; then
-              export REDIS_PASSWORD=$(cat "$REDIS_PASSWORD_FILE")
-              fi
+              {{- if and .Values.auth.enabled .Values.auth.usePasswordFiles }}
+              export REDIS_PASSWORD="$(< $REDIS_PASSWORD_FILE)"
+              {{- end }}
               redis_exporter{{- range $key, $value := .Values.metrics.extraArgs }} --{{ $key }}={{ $value }}{{- end }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
@@ -362,7 +362,7 @@ spec:
             - name: empty-dir
               mountPath: /tmp
               subPath: app-tmp-dir
-            {{- if .Values.auth.usePasswordFiles }}
+            {{- if and .Values.auth.enabled .Values.auth.usePasswordFiles }}
             - name: keydb-password
               mountPath: /secrets
               readOnly: true
@@ -389,7 +389,7 @@ spec:
         - name: config
           configMap:
             name: {{ template "keydb.replica.configmapName" . }}
-        {{- if .Values.auth.usePasswordFiles }}
+        {{- if and .Values.auth.enabled .Values.auth.usePasswordFiles }}
         - name: keydb-password
           secret:
             secretName: {{ template "keydb.secretName" . }}

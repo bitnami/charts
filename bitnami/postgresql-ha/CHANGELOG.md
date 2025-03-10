@@ -1,8 +1,28 @@
 # Changelog
 
-## 15.2.2 (2025-02-21)
+## 15.3.3 (2025-03-03)
 
-* [bitnami/postgresql-ha] Release 15.2.2 ([#32096](https://github.com/bitnami/charts/pull/32096))
+* [bitnami/postgresql-ha] Release 15.3.3 ([#32249](https://github.com/bitnami/charts/pull/32249))
+
+## <small>15.3.2 (2025-03-03)</small>
+
+* [bitnami/postgresql-ha] Release 15.3.2 (#32244) ([d68c231](https://github.com/bitnami/charts/commit/d68c231d91c3993c329ab6513d575ab35b5d6cd7)), closes [#32244](https://github.com/bitnami/charts/issues/32244)
+
+## <small>15.3.1 (2025-03-03)</small>
+
+* [bitnami/postgresql-ha] Release 15.3.1 (#32243) ([2bcc51c](https://github.com/bitnami/charts/commit/2bcc51cbe305fe723dd14a3642885459be1b9f5a)), closes [#32243](https://github.com/bitnami/charts/issues/32243)
+
+## 15.3.0 (2025-02-27)
+
+* [bitnami/postgresql-ha] Set `usePasswordFiles=true` by default (#32116) ([7fb6d1a](https://github.com/bitnami/charts/commit/7fb6d1ad4db1382a561a81a8bf37ee5f04831935)), closes [#32116](https://github.com/bitnami/charts/issues/32116)
+
+## <small>15.2.3 (2025-02-21)</small>
+
+* [bitnami/postgresql-ha] Release 15.2.3 (#32132) ([7fd61cd](https://github.com/bitnami/charts/commit/7fd61cd76b751a68024b86f0d634705e3d494e90)), closes [#32132](https://github.com/bitnami/charts/issues/32132)
+
+## <small>15.2.2 (2025-02-21)</small>
+
+* [bitnami/postgresql-ha] Release 15.2.2 (#32096) ([9aa77e8](https://github.com/bitnami/charts/commit/9aa77e84b4473cc488ebfb2645f882ddeb612b69)), closes [#32096](https://github.com/bitnami/charts/issues/32096)
 
 ## <small>15.2.1 (2025-02-20)</small>
 

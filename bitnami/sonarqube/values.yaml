@@ -89,7 +89,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/sonarqube
-  tag: 25.2.0-debian-12-r3
+  tag: 25.3.0-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -721,7 +721,7 @@ caCerts:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r38
+    tag: 12-debian-12-r39
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -810,7 +810,7 @@ plugins:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r38
+    tag: 12-debian-12-r39
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -919,7 +919,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r38
+    tag: 12-debian-12-r39
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -981,7 +981,7 @@ sysctl:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r38
+    tag: 12-debian-12-r39
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1081,7 +1081,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/jmx-exporter
-      tag: 1.1.0-debian-12-r6
+      tag: 1.1.0-debian-12-r7
       digest: ""
       pullPolicy: IfNotPresent
       ## Optionally specify an array of imagePullSecrets.
