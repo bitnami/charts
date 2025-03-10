@@ -280,7 +280,7 @@ spec:
             {{- if .Values.auth.enabled }}
             - name: REDIS_USER
               value: default
-            {{- if and .Values.auth.enabled .Values.auth.usePasswordFiles }}
+            {{- if .Values.auth.usePasswordFiles }}
             - name: REDIS_PASSWORD_FILE
               value: {{ printf "/secrets/%s" (include "keydb.secretPasswordKey" .) }}
             {{- else }}
