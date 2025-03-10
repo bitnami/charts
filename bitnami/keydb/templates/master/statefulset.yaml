@@ -229,7 +229,7 @@ spec:
             - name: health-scripts
               mountPath: /opt/bitnami/scripts/health
               readOnly: true
-            {{- and .Values.auth.enabled .Values.auth.usePasswordFiles }}
+            {{- if and .Values.auth.enabled .Values.auth.usePasswordFiles }}
             - name: keydb-password
               mountPath: /opt/bitnami/keydb/secrets
               readOnly: true
