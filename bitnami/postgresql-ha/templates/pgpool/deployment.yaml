@@ -193,6 +193,14 @@ spec:
             - name: LDAP_SCOPE
               value: {{ .Values.ldap.scope | quote }}
             {{- end }}
+            {{- if .Values.ldap.searchfilter }}
+            - name: LDAP_SEARCH_FILTER
+              value: {{ .Values.ldap.searchfilter | quote }}
+            {{- end }}
+            {{- if .Values.ldap.searchmap }}
+            - name: LDAP_SEARCH_MAP
+              value: {{ .Values.ldap.searchmap | quote }}
+            {{- end }}
             {{- if .Values.ldap.tlsReqcert }}
             - name: LDAP_TLS_REQCERT
               value: {{ .Values.ldap.tlsReqcert | quote }}

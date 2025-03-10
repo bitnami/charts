@@ -1644,6 +1644,8 @@ ldap:
   bindpw: ""
   bslookup: ""
   scope: ""
+  searchfilter: ""
+  searchmap: ""
   tlsReqcert: ""
   nssInitgroupsIgnoreusers: root,nslcd
 ## @section Other Parameters
