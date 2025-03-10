@@ -186,9 +186,9 @@ spec:
             {{- if .Values.auth.enabled }}
             {{- if .Values.auth.usePasswordFiles }}
             - name: VALKEY_PASSWORD_FILE
-              value: "/opt/bitnami/valkey/secrets/valkey-password"
+              value: {{ printf "/opt/bitnami/valkey/secrets/%s" (include "valkey.secretPasswordKey" .) }}
             - name: VALKEY_PRIMARY_PASSWORD_FILE
-              value: "/opt/bitnami/valkey/secrets/valkey-password"
+              value: {{ printf "/opt/bitnami/valkey/secrets/%s" (include "valkey.secretPasswordKey" .) }}
             {{- else }}
             - name: VALKEY_PASSWORD
               valueFrom:
@@ -323,7 +323,7 @@ spec:
               mountPath: /health
             - name: sentinel-data
               mountPath: /opt/bitnami/valkey-sentinel/etc
-            {{- if .Values.auth.usePasswordFiles }}
+            {{- if and .Values.auth.enabled .Values.auth.usePasswordFiles }}
             - name: valkey-password
               mountPath: /opt/bitnami/valkey/secrets/
             {{- end }}
@@ -392,7 +392,7 @@ spec:
             {{- if .Values.auth.enabled }}
             {{- if .Values.auth.usePasswordFiles }}
             - name: VALKEY_PASSWORD_FILE
-              value: "/opt/bitnami/valkey/secrets/valkey-password"
+              value: {{ printf "/opt/bitnami/valkey/secrets/%s" (include "valkey.secretPasswordKey" .) }}
             {{- else }}
             - name: VALKEY_PASSWORD
               valueFrom:
@@ -511,7 +511,7 @@ spec:
             {{- end }}
             - name: sentinel-data
               mountPath: /opt/bitnami/valkey-sentinel/etc
-            {{- if .Values.auth.usePasswordFiles }}
+            {{- if and .Values.auth.enabled .Values.auth.usePasswordFiles }}
             - name: valkey-password
               mountPath: /opt/bitnami/valkey/secrets/
             {{- end }}
@@ -546,9 +546,9 @@ spec:
             - /bin/bash
             - -c
             - |
-              if [[ -f '/secrets/valkey-password' ]]; then
-                  export REDIS_PASSWORD=$(cat /secrets/valkey-password)
-              fi
+              {{- if and .Values.auth.enabled .Values.auth.usePasswordFiles }}
+              export REDIS_PASSWORD="$(< $REDIS_PASSWORD_FILE)"
+              {{- end }}
               redis_exporter{{- range $key, $value := .Values.metrics.extraArgs }} --{{ $key }}={{ $value }}{{- end }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
@@ -562,7 +562,10 @@ spec:
             {{- if .Values.auth.enabled }}
             - name: REDIS_USER
               value: default
-            {{- if (not .Values.auth.usePasswordFiles) }}
+            {{- if .Values.auth.usePasswordFiles }}
+            - name: REDIS_PASSWORD_FILE
+              value: {{ printf "/secrets/%s" (include "valkey.secretPasswordKey" .) }}
+            {{- else }}
             - name: REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -621,7 +624,7 @@ spec:
             - name: empty-dir
               mountPath: /tmp
               subPath: tmp-dir
-            {{- if .Values.auth.usePasswordFiles }}
+            {{- if and .Values.auth.enabled .Values.auth.usePasswordFiles }}
             - name: valkey-password
               mountPath: /secrets/
             {{- end }}
@@ -671,7 +674,7 @@ spec:
             name: {{ printf "%s-kubectl-scripts" (include "common.names.fullname" .) }}
             defaultMode: 0755
         {{- end }}
-        {{- if .Values.auth.usePasswordFiles }}
+            {{- if and .Values.auth.enabled .Values.auth.usePasswordFiles }}
         - name: valkey-password
           {{ if .Values.auth.usePasswordFileFromSecret }}
           secret:
@@ -773,7 +776,9 @@ spec:
         {{- end }}
         {{- include "common.storage.class" (dict "persistence" .Values.replica.persistence "global" .Values.global) | nindent 8 }}
     {{- if .Values.sentinel.persistence.enabled }}
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         name: sentinel-data
         {{- $claimLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.sentinel.persistence.labels .Values.commonLabels ) "context" . ) }}
         labels: {{- include "common.labels.matchLabels" ( dict "customLabels" $claimLabels "context" $ ) | nindent 10 }}

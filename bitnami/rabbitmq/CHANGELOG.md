@@ -1,8 +1,13 @@
 # Changelog
 
-## 15.3.2 (2025-02-21)
+## 15.3.3 (2025-02-26)
 
-* [bitnami/rabbitmq] Release 15.3.2 ([#32101](https://github.com/bitnami/charts/pull/32101))
+* [bitnami/rabbitmq] Release 15.3.3 ([#32187](https://github.com/bitnami/charts/pull/32187))
+
+## <small>15.3.2 (2025-02-21)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/rabbitmq] Release 15.3.2 (#32101) ([6779add](https://github.com/bitnami/charts/commit/6779add4a0aeb64feb6e53d8b7123e94b367e017)), closes [#32101](https://github.com/bitnami/charts/issues/32101)
 
 ## <small>15.3.1 (2025-02-11)</small>
 

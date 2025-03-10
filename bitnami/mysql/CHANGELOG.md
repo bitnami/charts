@@ -1,8 +1,19 @@
 # Changelog
 
-## 12.2.4 (2025-02-19)
+## 12.3.1 (2025-03-06)
 
-* [bitnami/mysql] Release 12.2.4 ([#32021](https://github.com/bitnami/charts/pull/32021))
+* [bitnami/mysql] Fix network policy extraEgress bug ([#32328](https://github.com/bitnami/charts/pull/32328))
+
+## 12.3.0 (2025-02-24)
+
+* [bitnami/mysql] Set `usePasswordFiles=true` by default (#32113) ([b5b921b](https://github.com/bitnami/charts/commit/b5b921b063f21ec5e3c023869bd8bb01ffaf92a2)), closes [#32113](https://github.com/bitnami/charts/issues/32113)
+
+## <small>12.2.4 (2025-02-19)</small>
+
+* [bitnami/*] Fix typo in named template name (#31858) ([b739b69](https://github.com/bitnami/charts/commit/b739b69532e637bd33b4a44eeb422c3e749eac77)), closes [#31858](https://github.com/bitnami/charts/issues/31858)
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/mysql] Release 12.2.4 (#32021) ([8c5baf6](https://github.com/bitnami/charts/commit/8c5baf6a53374260ce741b8565d87cbd53c0d781)), closes [#32021](https://github.com/bitnami/charts/issues/32021)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
 
 ## <small>12.2.2 (2025-01-22)</small>
 

@@ -1,5 +1,5 @@
 # Source: https://github.com/fluxcd/kustomize-controller/releases/download/v{version}/kustomize-controller.crds.yaml
-# Version: 1.4.0
+# Version: 1.5.1
 # VersionOf: fluxcd-kustomize-controller
 # Conditional: .Values.kustomizeController.installCRDs
 {{- if .Values.kustomizeController.installCRDs }}
@@ -102,6 +102,17 @@ spec:
                 required:
                 - provider
                 type: object
+              deletionPolicy:
+                description: |-
+                  DeletionPolicy can be used to control garbage collection when this
+                  Kustomization is deleted. Valid values are ('MirrorPrune', 'Delete',
+                  'Orphan'). 'MirrorPrune' mirrors the Prune field (orphan if false,
+                  delete if true). Defaults to 'MirrorPrune'.
+                enum:
+                - MirrorPrune
+                - Delete
+                - Orphan
+                type: string
               dependsOn:
                 description: |-
                   DependsOn may contain a meta.NamespacedObjectReference slice
@@ -129,6 +140,42 @@ spec:
                   Force instructs the controller to recreate resources
                   when patching fails due to an immutable field change.
                 type: boolean
+              healthCheckExprs:
+                description: |-
+                  HealthCheckExprs is a list of healthcheck expressions for evaluating the
+                  health of custom resources using Common Expression Language (CEL).
+                  The expressions are evaluated only when Wait or HealthChecks are specified.
+                items:
+                  description: CustomHealthCheck defines the health check for custom
+                    resources.
+                  properties:
+                    apiVersion:
+                      description: APIVersion of the custom resource under evaluation.
+                      type: string
+                    current:
+                      description: |-
+                        Current is the CEL expression that determines if the status
+                        of the custom resource has reached the desired state.
+                      type: string
+                    failed:
+                      description: |-
+                        Failed is the CEL expression that determines if the status
+                        of the custom resource has failed to reach the desired state.
+                      type: string
+                    inProgress:
+                      description: |-
+                        InProgress is the CEL expression that determines if the status
+                        of the custom resource has not yet reached the desired state.
+                      type: string
+                    kind:
+                      description: Kind of the custom resource under evaluation.
+                      type: string
+                  required:
+                  - apiVersion
+                  - current
+                  - kind
+                  type: object
+                type: array
               healthChecks:
                 description: A list of resources to be included in the health assessment.
                 items:
@@ -513,6 +560,14 @@ spec:
                 required:
                 - entries
                 type: object
+              lastAppliedOriginRevision:
+                description: |-
+                  The last successfully applied origin revision.
+                  Equals the origin revision of the applied Artifact from the referenced Source.
+                  Usually present on the Metadata of the applied Artifact and depends on the
+                  Source type, e.g. for OCI it's the value associated with the key
+                  "org.opencontainers.image.revision".
+                type: string
               lastAppliedRevision:
                 description: |-
                   The last successfully applied revision.

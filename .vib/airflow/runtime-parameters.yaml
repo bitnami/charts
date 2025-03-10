@@ -3,7 +3,7 @@ auth:
 overrideConfiguration:
   logging:
     colored_console_log: 'True'
-loadExamples: true
+loadExamples: false
 defaultInitContainers:
   prepareConfig:
     containerSecurityContext:
@@ -23,7 +23,16 @@ scheduler:
     fsGroup: 1002
   containerSecurityContext:
     runAsUser: 1002
+  livenessProbe:
+    periodSeconds: 30
+    timeoutSeconds: 20
+  readinessProbe:
+    periodSeconds: 30
+    timeoutSeconds: 20
 web:
+  extraConfiguration: |
+    # Theme CONFIG
+    APP_THEME = "amelia.css"
   containerPorts:
     http: 8080
   podSecurityContext:
@@ -45,12 +54,24 @@ dagProcessor:
     fsGroup: 1002
   containerSecurityContext:
     runAsUser: 1002
+  livenessProbe:
+    periodSeconds: 30
+    timeoutSeconds: 20
+  readinessProbe:
+    periodSeconds: 30
+    timeoutSeconds: 20
 triggerer:
   enabled: true
   podSecurityContext:
     fsGroup: 1002
   containerSecurityContext:
     runAsUser: 1002
+  livenessProbe:
+    periodSeconds: 30
+    timeoutSeconds: 20
+  readinessProbe:
+    periodSeconds: 30
+    timeoutSeconds: 20
 dags:
   enabled: true
   repositories:

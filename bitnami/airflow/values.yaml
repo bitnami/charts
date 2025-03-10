@@ -65,6 +65,9 @@ clusterDomain: cluster.local
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
+## @param usePasswordFiles Mount credentials as files instead of using environment variables
+##
+usePasswordFiles: true
 ## Diagnostic mode
 ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
 ## @param diagnosticMode.command Command to override all containers in the chart release
@@ -91,7 +94,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/airflow
-  tag: 2.10.5-debian-12-r0
+  tag: 2.10.5-debian-12-r6
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -492,6 +495,9 @@ web:
   ## @param web.configuration Specify content for webserver_config.py (auto-generated based on other env. vars otherwise)
   ##
   configuration: ""
+  ## @param web.extraConfiguration Specify extra content to be appended to default webserver_config.py (ignored if `web.configuration` or `web.existingConfigmap` are set)
+  ##
+  extraConfiguration: ""
   ## @param web.existingConfigmap Name of an existing config map containing the Airflow webserver config file
   ##
   existingConfigmap: ""
@@ -2741,7 +2747,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/statsd-exporter
-    tag: 0.28.0-debian-12-r5
+    tag: 0.28.0-debian-12-r9
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
