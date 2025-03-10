@@ -1,0 +1,33 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+annotations:
+  category: Infrastructure
+  licenses: Apache-2.0
+  images: |
+    - name: cloudnative-pg
+      image: docker.io/bitnami/cloudnative-pg:1.25.1-debian-12-r3
+    - name: postgresql
+      image: docker.io/bitnami/postgresql:17.4.0-debian-12-r4
+apiVersion: v2
+appVersion: 1.25.1
+dependencies:
+- name: common
+  repository: oci://registry-1.docker.io/bitnamicharts
+  tags:
+  - bitnami-common
+  version: 2.x.x
+description: CloudNativePG is an open-source tool for managing PostgreSQL databases on Kubernetes, from setup to ongoing upkeep.
+home: https://bitnami.com
+icon: https://bitnami.com/assets/stacks/cloudnative-pg/img/cloudnative-pg-stack-220x234.png
+keywords:
+- cloudnative-pg
+- operator
+- postgresql
+maintainers:
+- name: Broadcom, Inc. All Rights Reserved.
+  url: https://github.com/bitnami/charts
+name: cloudnative-pg
+sources:
+- https://github.com/bitnami/charts/tree/main/bitnami/cloudnative-pg
+version: 0.1.6

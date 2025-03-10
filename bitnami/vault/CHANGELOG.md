@@ -1,8 +1,26 @@
 # Changelog
 
-## 1.6.6 (2025-02-05)
+## 1.6.10 (2025-03-05)
 
-* [bitnami/vault] Release 1.6.6 ([#31781](https://github.com/bitnami/charts/pull/31781))
+* [bitnami/vault] Release 1.6.10 ([#32331](https://github.com/bitnami/charts/pull/32331))
+
+## <small>1.6.9 (2025-03-05)</small>
+
+* [bitnami/vault] Release 1.6.9 (#32320) ([4a78adb](https://github.com/bitnami/charts/commit/4a78adb19a9882149d5ebdb6195b96d2422b0bc3)), closes [#32320](https://github.com/bitnami/charts/issues/32320)
+
+## <small>1.6.8 (2025-02-25)</small>
+
+* [bitnami/vault] Release 1.6.8 (#32152) ([5daa205](https://github.com/bitnami/charts/commit/5daa2050953fb6cabd33868e82602cbd788d1e41)), closes [#32152](https://github.com/bitnami/charts/issues/32152)
+
+## <small>1.6.7 (2025-02-20)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/vault] Release 1.6.7 (#32069) ([cec553b](https://github.com/bitnami/charts/commit/cec553b088e13dc80a6f049758906436832db447)), closes [#32069](https://github.com/bitnami/charts/issues/32069)
+
+## <small>1.6.6 (2025-02-05)</small>
+
+* [bitnami/vault] Release 1.6.6 (#31781) ([87925bc](https://github.com/bitnami/charts/commit/87925bcff431278154fac514c292b2ec8feccabf)), closes [#31781](https://github.com/bitnami/charts/issues/31781)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
 
 ## <small>1.6.5 (2025-01-31)</small>
 

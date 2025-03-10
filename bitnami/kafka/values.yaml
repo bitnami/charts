@@ -41,6 +41,9 @@ global:
 ## @param kubeVersion Override Kubernetes version
 ##
 kubeVersion: ""
+## @param apiVersions Override Kubernetes API versions reported by .Capabilities
+##
+apiVersions: []
 ## @param nameOverride String to partially override common.names.fullname
 ##
 nameOverride: ""
@@ -94,7 +97,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/kafka
-  tag: 3.9.0-debian-12-r6
+  tag: 3.9.0-debian-12-r12
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1493,6 +1496,12 @@ service:
       ## @param service.headless.broker.labels Labels for the broker-only headless service.
       ##
       labels: {}
+    ## @param service.headless.ipFamilies IP families for the headless service
+    ## 
+    ipFamilies: []
+    ## @param service.headless.ipFamilyPolicy IP family policy for the headless service
+    ##
+    ipFamilyPolicy: ""
 ## External Access to Kafka brokers configuration
 ##
 externalAccess:
@@ -1519,7 +1528,7 @@ externalAccess:
     image:
       registry: docker.io
       repository: bitnami/kubectl
-      tag: 1.32.1-debian-12-r3
+      tag: 1.32.2-debian-12-r3
       digest: ""
       ## Specify a imagePullPolicy
       ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1669,6 +1678,12 @@ externalAccess:
       ## @param externalAccess.controller.service.extraPorts Extra ports to expose in the Kafka external service
       ##
       extraPorts: []
+      ## @param externalAccess.controller.service.ipFamilies IP families for the external controller service
+      ##
+      ipFamilies: []
+      ## @param externalAccess.controller.service.ipFamilyPolicy IP family policy for the external controller service
+      ##
+      ipFamilyPolicy: ""
   broker:
     ## Parameters to configure K8s service(s) used to externally access Kafka brokers
     ## Note: A new service per broker will be created
@@ -1755,6 +1770,12 @@ externalAccess:
       ## @param externalAccess.broker.service.extraPorts Extra ports to expose in the Kafka external service
       ##
       extraPorts: []
+      ## @param externalAccess.broker.service.ipFamilies IP families for the external broker service
+      ##
+      ipFamilies: []
+      ## @param externalAccess.broker.service.ipFamilyPolicy IP family policy for the external broker service
+      ##
+      ipFamilyPolicy: ""
 ## Network policies
 ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
 ##
@@ -1837,7 +1858,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r35
+    tag: 12-debian-12-r39
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1931,7 +1952,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/jmx-exporter
-      tag: 1.1.0-debian-12-r3
+      tag: 1.1.0-debian-12-r7
       digest: ""
       ## Specify a imagePullPolicy
       ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -2046,6 +2067,12 @@ metrics:
         prometheus.io/scrape: "true"
         prometheus.io/port: "{{ .Values.metrics.jmx.service.ports.metrics }}"
         prometheus.io/path: "/metrics"
+      ## @param metrics.jmx.service.ipFamilies IP families for the jmx metrics service
+      ##
+      ipFamilies: [] 
+      ## @param metrics.jmx.service.ipFamilyPolicy IP family policy for the jmx metrics service
+      ##
+      ipFamilyPolicy: ""
     ## @param metrics.jmx.whitelistObjectNames Allows setting which JMX objects you want to expose to via JMX stats to JMX exporter
     ## Only whitelisted values will be exposed via JMX exporter. They must also be exposed via Rules. To expose all metrics
     ## (warning its crazy excessive and they aren't formatted in a prometheus style) (1) `whitelistObjectNames: []`

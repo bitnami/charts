@@ -6,7 +6,7 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: superset
-      image: docker.io/bitnami/superset:4.1.1-debian-12-r2
+      image: docker.io/bitnami/superset:4.1.1-debian-12-r8
 apiVersion: v2
 appVersion: 4.1.1
 dependencies:
@@ -23,7 +23,7 @@ dependencies:
   tags:
   - bitnami-common
   version: 2.x.x
-description: Superset is a modern data exploration and data visualization platform. 
+description: Superset is a modern data exploration and data visualization platform.
 home: https://bitnami.com
 icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/superset/img/superset-stack-220x234.png
 keywords:
@@ -37,4 +37,4 @@ sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/superset
 - https://github.com/bitnami/containers/tree/main/bitnami/superset
 - https://github.com/apache/superset
-version: 1.0.0
+version: 1.1.1

@@ -6,13 +6,13 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: acmesolver
-      image: docker.io/bitnami/acmesolver:1.17.1-debian-12-r0
+      image: docker.io/bitnami/acmesolver:1.17.1-debian-12-r6
     - name: cainjector
-      image: docker.io/bitnami/cainjector:1.17.1-debian-12-r0
+      image: docker.io/bitnami/cainjector:1.17.1-debian-12-r4
     - name: cert-manager
-      image: docker.io/bitnami/cert-manager:1.17.1-debian-12-r0
+      image: docker.io/bitnami/cert-manager:1.17.1-debian-12-r4
     - name: cert-manager-webhook
-      image: docker.io/bitnami/cert-manager-webhook:1.17.1-debian-12-r0
+      image: docker.io/bitnami/cert-manager-webhook:1.17.1-debian-12-r4
 apiVersion: v2
 appVersion: 1.17.1
 dependencies:
@@ -35,4 +35,4 @@ maintainers:
 name: cert-manager
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/cert-manager
-version: 1.4.10
+version: 1.4.12

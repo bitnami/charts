@@ -1,8 +1,18 @@
 # Changelog
 
-## 2.1.2 (2025-02-17)
+## 2.2.0 (2025-02-21)
 
-* [bitnami/valkey-cluster] Release 2.1.2 ([#31945](https://github.com/bitnami/charts/pull/31945))
+* [bitnami/valkey-cluster] Set `usePasswordFiles=true` by default ([#32122](https://github.com/bitnami/charts/pull/32122))
+
+## <small>2.1.3 (2025-02-20)</small>
+
+* [bitnami/valkey-cluster] Release 2.1.3 (#32066) ([6d565b3](https://github.com/bitnami/charts/commit/6d565b3a18fd2efee3764e826503fdb29b91e75b)), closes [#32066](https://github.com/bitnami/charts/issues/32066)
+
+## <small>2.1.2 (2025-02-17)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/valkey-cluster] Release 2.1.2 (#31945) ([c94c869](https://github.com/bitnami/charts/commit/c94c869389a1a09e6e1e8cda2175c3adce4aa776)), closes [#31945](https://github.com/bitnami/charts/issues/31945)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
 
 ## <small>2.1.1 (2025-01-08)</small>
 

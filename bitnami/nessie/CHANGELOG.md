@@ -1,8 +1,17 @@
 # Changelog
 
-## 1.1.10 (2025-02-06)
+## 1.2.1 (2025-02-24)
 
-* [bitnami/nessie] Release 1.1.10 ([#31800](https://github.com/bitnami/charts/pull/31800))
+* [bitnami/nessie] Release 1.2.1 ([#32144](https://github.com/bitnami/charts/pull/32144))
+
+## 1.2.0 (2025-02-20)
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/nessie] feat: use new helper for checking API versions (#32060) ([ddd3062](https://github.com/bitnami/charts/commit/ddd30620658739d77770ca05dd98cfa5ca9fb35e)), closes [#32060](https://github.com/bitnami/charts/issues/32060)
+
+## <small>1.1.10 (2025-02-06)</small>
+
+* [bitnami/nessie] Release 1.1.10 (#31800) ([086e2b1](https://github.com/bitnami/charts/commit/086e2b1e0f63b02568e23b4a8020d92d89aa4e1f)), closes [#31800](https://github.com/bitnami/charts/issues/31800)
 
 ## <small>1.1.9 (2025-02-03)</small>
 

@@ -1,8 +1,34 @@
 # Changelog
 
-## 0.3.3 (2025-02-05)
+## 0.5.3 (2025-03-10)
 
-* [bitnami/keydb] Release 0.3.3 ([#31787](https://github.com/bitnami/charts/pull/31787))
+* [bitnami/keydb] Fix issue when using custom password secret key ([#32376](https://github.com/bitnami/charts/pull/32376))
+
+## <small>0.5.2 (2025-03-10)</small>
+
+* [bitnami/keydb] only use password files if auth is enabled (#32358) ([dcdf3ca](https://github.com/bitnami/charts/commit/dcdf3caf48f91f1055b6e124ed2b62611a599c26)), closes [#32358](https://github.com/bitnami/charts/issues/32358)
+
+## <small>0.5.1 (2025-03-04)</small>
+
+* fix: change svc target port in servicemonitor (#32236) ([f5056c8](https://github.com/bitnami/charts/commit/f5056c8b66d7d83574c446d3779704b9a84c7b3c)), closes [#32236](https://github.com/bitnami/charts/issues/32236)
+
+## 0.5.0 (2025-02-27)
+
+* [bitnami/keydb] Set `usePasswordFiles=true` by default (#32108) ([68a1f40](https://github.com/bitnami/charts/commit/68a1f4048a6aac040a9a6567508bddf8bbe061a6)), closes [#32108](https://github.com/bitnami/charts/issues/32108)
+
+## 0.4.0 (2025-02-20)
+
+* [bitnami/keydb] feat: use new helper for checking API versions (#32052) ([a264f60](https://github.com/bitnami/charts/commit/a264f60d384378ba60508d4431a2412991282633)), closes [#32052](https://github.com/bitnami/charts/issues/32052)
+
+## <small>0.3.4 (2025-02-19)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/keydb] Release 0.3.4 (#32007) ([ef47c33](https://github.com/bitnami/charts/commit/ef47c33b9933fe9404ac26c535aec9b4c4fdfd15)), closes [#32007](https://github.com/bitnami/charts/issues/32007)
+
+## <small>0.3.3 (2025-02-05)</small>
+
+* [bitnami/keydb] Release 0.3.3 (#31787) ([7ea8952](https://github.com/bitnami/charts/commit/7ea89524304a34a8e52e495abb055c44df3b7c18)), closes [#31787](https://github.com/bitnami/charts/issues/31787)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
 
 ## <small>0.3.2 (2025-01-23)</small>
 

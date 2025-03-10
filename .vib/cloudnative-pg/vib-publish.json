@@ -1,0 +1,47 @@
+{
+  "phases": {
+    "package": {
+      "context": {
+        "credentials": [
+          {
+            "url": "{VIB_ENV_CHARTS_REGISTRY}",
+            "authn": {
+              "username": "{VIB_ENV_CHARTS_REGISTRY_USERNAME}",
+              "password": "{VIB_ENV_CHARTS_REGISTRY_PASSWORD}"
+            }
+          }
+        ],
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/cloudnative-pg"
+        }
+      },
+      "actions": [
+        {
+          "action_id": "helm-package"
+        },
+        {
+          "action_id": "helm-lint"
+        }
+      ]
+    },
+    "publish": {
+      "actions": [
+        {
+          "action_id": "helm-publish",
+          "params": {
+            "repository": {
+              "kind": "S3",
+              "url": "{VIB_ENV_S3_URL}",
+              "authn": {
+                "access_key_id": "{VIB_ENV_S3_ACCESS_KEY_ID}",
+                "secret_access_key": "{VIB_ENV_S3_SECRET_ACCESS_KEY}",
+                "role": "{VIB_ENV_S3_ROLE_ARN}"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

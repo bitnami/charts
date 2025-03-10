@@ -1,8 +1,21 @@
 # Changelog
 
-## 5.1.9 (2025-02-12)
+## 5.1.12 (2025-03-08)
 
-* [bitnami/jaeger] Release 5.1.9 ([#31892](https://github.com/bitnami/charts/pull/31892))
+* [bitnami/jaeger] Release 5.1.12 ([#32372](https://github.com/bitnami/charts/pull/32372))
+
+## <small>5.1.11 (2025-03-05)</small>
+
+* [bitnami/jaeger] Release 5.1.11 (#32311) ([2ddba1b](https://github.com/bitnami/charts/commit/2ddba1b315b59895bb47401ac339d9081517d2ec)), closes [#32311](https://github.com/bitnami/charts/issues/32311)
+
+## <small>5.1.10 (2025-02-19)</small>
+
+* [bitnami/jaeger] Release 5.1.10 (#32002) ([84c85d3](https://github.com/bitnami/charts/commit/84c85d35b58326f48d492979fabd9ef2a6da67a7)), closes [#32002](https://github.com/bitnami/charts/issues/32002)
+
+## <small>5.1.9 (2025-02-12)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/jaeger] Release 5.1.9 (#31892) ([d7f3794](https://github.com/bitnami/charts/commit/d7f37949bb03a4f47fd0c5ee1ced5c2992320755)), closes [#31892](https://github.com/bitnami/charts/issues/31892)
 
 ## <small>5.1.8 (2025-02-10)</small>
 

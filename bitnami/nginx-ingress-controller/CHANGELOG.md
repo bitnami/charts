@@ -1,8 +1,22 @@
 # Changelog
 
-## 11.6.8 (2025-02-05)
+## 11.6.11 (2025-03-05)
 
-* [bitnami/nginx-ingress-controller] Release 11.6.8 ([#31771](https://github.com/bitnami/charts/pull/31771))
+* [bitnami/nginx-ingress-controller] Release 11.6.11 ([#32308](https://github.com/bitnami/charts/pull/32308))
+
+## <small>11.6.10 (2025-02-27)</small>
+
+* [bitnami/nginx-ingress-controller] Release 11.6.10 (#32193) ([878e738](https://github.com/bitnami/charts/commit/878e738d72e5dc959f4a729177f5b7e80aef85e1)), closes [#32193](https://github.com/bitnami/charts/issues/32193)
+
+## <small>11.6.9 (2025-02-20)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/nginx-ingress-controller] Release 11.6.9 (#32023) ([4751c26](https://github.com/bitnami/charts/commit/4751c26bbfbabb368b90a3b70f59e0275a6b1101)), closes [#32023](https://github.com/bitnami/charts/issues/32023)
+
+## <small>11.6.8 (2025-02-05)</small>
+
+* [bitnami/nginx-ingress-controller] Release 11.6.8 (#31771) ([d4abec8](https://github.com/bitnami/charts/commit/d4abec8c5e8807f09f9a0b9b50abee0f431ad09c)), closes [#31771](https://github.com/bitnami/charts/issues/31771)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
 
 ## <small>11.6.7 (2025-01-29)</small>
 
@@ -1528,7 +1542,7 @@
 ## <small>3.4.7 (2019-05-29)</small>
 
 * Change syntax because of linter failing ([adfc357](https://github.com/bitnami/charts/commit/adfc35728c2a8a9def9e1897b3772d64df621354))
-* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79)), closes [#issuecomment-496883321](https://github.com/bitnami/charts/issues/issuecomment-496883321)
+* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79))
 * Use immutable tags in the main images ([17ca4f5](https://github.com/bitnami/charts/commit/17ca4f5c91da33da03f9e2d411fe5e004e825c4d))
 
 ## <small>3.4.6 (2019-05-28)</small>

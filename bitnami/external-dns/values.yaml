@@ -75,7 +75,7 @@ kubeVersion: ""
 image:
   registry: docker.io
   repository: bitnami/external-dns
-  tag: 0.15.1-debian-12-r3
+  tag: 0.15.1-debian-12-r8
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -846,12 +846,12 @@ forceTxtOwnerId: false
 ## ref: https://github.com/kubernetes-sigs/external-dns/blob/master/docs/registry/txt.md#encryption
 ##
 txtEncrypt:
-  ## @param txtEncrypt.enabled Enable TXT record encrypencryption
+  ## @param txtEncrypt.enabled Enable TXT record encryption
   ##
   enabled: false
   ## @param txtEncrypt.aesKey 32-byte AES-256-GCM encryption key.
   ## ref: https://github.com/kubernetes-sigs/external-dns/blob/master/docs/registry/txt.md#generating-the-txt-encryption-key
-  ## Note: If txtEncrypt.enabled is enabled and txtEncrypt.aesKey is not set a default key will be generated.
+  ## Note: If txtEncrypt.enabled is enabled and txtEncrypt.aesKey is not set, a default key will be generated.
   ##
   aesKey: ""
   ## @param txtEncrypt.secretName Use an existing secret with key "txt_aes_encryption_key" defined.

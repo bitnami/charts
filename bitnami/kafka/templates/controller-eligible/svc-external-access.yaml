@@ -64,6 +64,13 @@ spec:
     app.kubernetes.io/part-of: kafka
     app.kubernetes.io/component: controller-eligible
     statefulset.kubernetes.io/pod-name: {{ $targetPod }}
+  {{- with $.Values.externalAccess.controller.service.ipFamilyPolicy }}
+  ipFamilyPolicy: {{ . | quote }}
+  {{- end }}
+  {{- with $.Values.externalAccess.controller.service.ipFamilies }}
+  ipFamilies:
+  {{- . | toYaml | nindent 2 }}
+  {{- end }}
 ---
 {{- end }}
 {{- end }}

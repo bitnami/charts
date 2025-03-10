@@ -1,8 +1,17 @@
 # Changelog
 
-## 1.4.2 (2025-02-12)
+## 1.4.4 (2025-03-05)
 
-* [bitnami/grafana-mimir] Release 1.4.2 ([#31889](https://github.com/bitnami/charts/pull/31889))
+* [bitnami/grafana-mimir] Release 1.4.4 ([#32291](https://github.com/bitnami/charts/pull/32291))
+
+## <small>1.4.3 (2025-02-19)</small>
+
+* [bitnami/grafana-mimir] Release 1.4.3 (#31999) ([b3ca92d](https://github.com/bitnami/charts/commit/b3ca92d8ce4143b3fdb25f2d7a6909d002d7271c)), closes [#31999](https://github.com/bitnami/charts/issues/31999)
+
+## <small>1.4.2 (2025-02-12)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/grafana-mimir] Release 1.4.2 (#31889) ([7a5eb92](https://github.com/bitnami/charts/commit/7a5eb922f54c3eac0387838a282077d464abcd70)), closes [#31889](https://github.com/bitnami/charts/issues/31889)
 
 ## <small>1.4.1 (2025-02-04)</small>
 
