@@ -386,7 +386,7 @@ spec:
             {{- if .Values.auth.enabled }}
             {{- if .Values.auth.usePasswordFiles }}
             - name: REDIS_PASSWORD_FILE
-              value: {{ printf "/opt/bitnami/redis/secrets/%s" (include "redis.secretPasswordKey" .) }}
+              value: "/opt/bitnami/redis/secrets/redis-password"
             {{- else }}
             - name: REDIS_PASSWORD
               valueFrom:
