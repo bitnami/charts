@@ -2,7 +2,7 @@
 
 ## 16.4.7 (2025-03-10)
 
-* 27482 mongodb replicasetconfigs ([#32381](https://github.com/bitnami/charts/pull/32381))
+* [bitnami/mongodb] fix replicaset config handling (#27482) ([#32381](https://github.com/bitnami/charts/pull/32381))
 
 ## <small>16.4.6 (2025-03-10)</small>
 
