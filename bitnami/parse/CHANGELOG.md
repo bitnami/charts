@@ -1,8 +1,13 @@
 # Changelog
 
-## 24.1.4 (2025-03-04)
+## 25.0.0 (2025-03-10)
 
-* [bitnami/parse] Release 24.1.4 ([#32266](https://github.com/bitnami/charts/pull/32266))
+* [bitnami/parse] Release 25.0.0 ([#32374](https://github.com/bitnami/charts/pull/32374))
+
+## <small>24.1.4 (2025-03-04)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/parse] Release 24.1.4 (#32266) ([857b09a](https://github.com/bitnami/charts/commit/857b09a38cdbba1b9704aa5d07246b5cd6afd967)), closes [#32266](https://github.com/bitnami/charts/issues/32266)
 
 ## <small>24.1.3 (2025-02-03)</small>
 
