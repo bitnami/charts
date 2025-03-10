@@ -229,7 +229,7 @@ spec:
             - name: health-scripts
               mountPath: /opt/bitnami/scripts/health
               readOnly: true
-            {{- if .Values.auth.usePasswordFiles }}
+            {{- if and .Values.auth.enabled .Values.auth.usePasswordFiles }}
             - name: keydb-password
               mountPath: /opt/bitnami/keydb/secrets
               readOnly: true
@@ -264,7 +264,7 @@ spec:
             - /bin/bash
             - -c
             - |
-              {{- if .Values.auth.usePasswordFiles }}
+              {{- if and .Values.auth.enabled .Values.auth.usePasswordFiles }}
               export REDIS_PASSWORD="$(< $REDIS_PASSWORD_FILE)"
               {{- end }}
               redis_exporter{{- range $key, $value := .Values.metrics.extraArgs }} --{{ $key }}={{ $value }}{{- end }}
@@ -340,7 +340,7 @@ spec:
             - name: empty-dir
               mountPath: /tmp
               subPath: app-tmp-dir
-            {{- if .Values.auth.usePasswordFiles }}
+            {{- if and .Values.auth.enabled .Values.auth.usePasswordFiles }}
             - name: keydb-password
               mountPath: /secrets
               readOnly: true
@@ -367,7 +367,7 @@ spec:
         - name: config
           configMap:
             name: {{ template "keydb.master.configmapName" . }}
-        {{- if .Values.auth.usePasswordFiles }}
+        {{- if and .Values.auth.enabled .Values.auth.usePasswordFiles }}
         - name: keydb-password
           secret:
             secretName: {{ template "keydb.secretName" . }}
