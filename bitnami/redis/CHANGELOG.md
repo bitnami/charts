@@ -1,6 +1,6 @@
 # Changelog
 
-## 20.11.3 (2025-03-06)
+## 20.11.3 (2025-03-10)
 
 * [bitnami/redis] fix 32214 - REDIS_PASSWORD_FILE uses wrong filename from volume ([#32215](https://github.com/bitnami/charts/pull/32215))
 
