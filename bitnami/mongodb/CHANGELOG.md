@@ -1,8 +1,12 @@
 # Changelog
 
-## 16.4.6 (2025-02-27)
+## 16.4.7 (2025-03-10)
 
-* [bitnami/mongodb] Use actual hostname instead of localhost for mongodb_exporter URI string ([#32192](https://github.com/bitnami/charts/pull/32192))
+* 27482 mongodb replicasetconfigs ([#32381](https://github.com/bitnami/charts/pull/32381))
+
+## <small>16.4.6 (2025-03-10)</small>
+
+* [bitnami/mongodb] Use actual hostname instead of localhost for mongodb_exporter URI string (#32192) ([cbfec4f](https://github.com/bitnami/charts/commit/cbfec4f962119b505b5c81b6d61448506b7a6216)), closes [#32192](https://github.com/bitnami/charts/issues/32192)
 
 ## <small>16.4.5 (2025-02-21)</small>
 
