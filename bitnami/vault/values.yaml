@@ -112,9 +112,6 @@ server:
     ## Enable debug mode
     ##
     debug: false
-  ## @param server.replicaCount Number of Vault Server replicas to deploy
-  ##
-  replicaCount: 1
   ## @param server.podManagementPolicy Pod management policy
   ## Should be initialized one by one when building the replicaset for the first time
   ##
