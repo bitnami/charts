@@ -1,6 +1,6 @@
 # Changelog
 
-## 7.7.0 (2025-03-10)
+## 7.7.0 (2025-03-11)
 
 * [bitnami/memcached] Enables the ability to specify podTargetLabels on ServiceMonitor for memcached ([#32387](https://github.com/bitnami/charts/pull/32387))
 
