@@ -1,5 +1,5 @@
 # Source: https://raw.githubusercontent.com/grafana/grafana-operator/v{version}/deploy/helm/grafana-operator/crds/grafana.integreatly.org_grafanadatasources.yaml
-# Version: 5.16.0
+# Version: 5.17.0
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
@@ -167,8 +167,12 @@ spec:
                 pattern: ^([0-9]+(\.[0-9]+)?(ns|us|µs|ms|s|m|h))+$
                 type: string
               uid:
-                description: The UID, for the datasource, fallback to the deprecated
-                  spec.datasource.uid and metadata.uid
+                description: |-
+                  The UID, for the datasource, fallback to the deprecated spec.datasource.uid
+                  and metadata.uid. Can be any string consisting of alphanumeric characters,
+                  - and _ with a maximum length of 40 +optional
+                maxLength: 40
+                pattern: ^[a-zA-Z0-9-_]+$
                 type: string
                 x-kubernetes-validations:
                 - message: spec.uid is immutable
@@ -318,6 +322,7 @@ spec:
               hash:
                 type: string
               lastMessage:
+                description: 'Deprecated: Check status.conditions or operator logs'
                 type: string
               lastResync:
                 description: Last time the resource was synchronized with Grafana
@@ -327,6 +332,8 @@ spec:
               uid:
                 type: string
             type: object
+        required:
+        - spec
         type: object
     served: true
     storage: true
