@@ -1,5 +1,5 @@
 # Source: https://raw.githubusercontent.com/grafana/grafana-operator/v{version}/deploy/helm/grafana-operator/crds/grafana.integreatly.org_grafanas.yaml
-# Version: 5.16.0
+# Version: 5.17.0
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
@@ -8877,23 +8877,30 @@ spec:
                             kind is allowed. Use 'weight' field to emphasize one over others.
                           properties:
                             kind:
+                              default: Service
                               description: The kind of target that the route is referring
                                 to. Currently, only 'Service' is allowed
+                              enum:
+                              - Service
+                              - ""
                               type: string
                             name:
                               description: name of the service/target that is being
                                 referred to. e.g. name of the service
+                              minLength: 1
                               type: string
                             weight:
+                              default: 100
                               description: |-
                                 weight as an integer between 0 and 256, default 100, that specifies the target's relative weight
                                 against other target reference objects. 0 suppresses requests to this backend.
                               format: int32
+                              maximum: 256
+                              minimum: 0
                               type: integer
                           required:
                           - kind
                           - name
-                          - weight
                           type: object
                         type: array
                       host:
@@ -8925,7 +8932,9 @@ spec:
                               certificate contents
                             type: string
                           certificate:
-                            description: certificate provides certificate contents
+                            description: |-
+                              certificate provides certificate contents. This should be a single serving certificate, not a certificate
+                              chain. Do not include a CA certificate.
                             type: string
                           destinationCACertificate:
                             description: |-
@@ -8935,47 +8944,97 @@ spec:
                               the short service name (service.namespace.svc), which allows infrastructure generated certificates to automatically
                               verify.
                             type: string
+                          externalCertificate:
+                            description: |-
+                              externalCertificate provides certificate contents as a secret reference.
+                              This should be a single serving certificate, not a certificate
+                              chain. Do not include a CA certificate. The secret referenced should
+                              be present in the same namespace as that of the Route.
+                              Forbidden when `certificate` is set.
+                              The router service account needs to be granted with read-only access to this secret,
+                              please refer to openshift docs for additional details.
+                            properties:
+                              name:
+                                description: |-
+                                  name of the referent.
+                                  More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                type: string
+                            type: object
+                            x-kubernetes-map-type: atomic
                           insecureEdgeTerminationPolicy:
                             description: |-
                               insecureEdgeTerminationPolicy indicates the desired behavior for insecure connections to a route. While
                               each router may make its own decisions on which ports to expose, this is normally port 80.
 
-                              * Allow - traffic is sent to the server on the insecure port (default)
-                              * Disable - no traffic is allowed on the insecure port.
+                              If a route does not specify insecureEdgeTerminationPolicy, then the default behavior is "None".
+
+                              * Allow - traffic is sent to the server on the insecure port (edge/reencrypt terminations only).
+
+                              * None - no traffic is allowed on the insecure port (default).
+
                               * Redirect - clients are redirected to the secure port.
+                            enum:
+                            - Allow
+                            - None
+                            - Redirect
+                            - ""
                             type: string
                           key:
                             description: key provides key file contents
                             type: string
                           termination:
-                            description: termination indicates termination type.
+                            description: |-
+                              termination indicates termination type.
+
+                              * edge - TLS termination is done by the router and http is used to communicate with the backend (default)
+                              * passthrough - Traffic is sent straight to the destination without the router providing TLS termination
+                              * reencrypt - TLS termination is done by the router and https is used to communicate with the backend
+
+                              Note: passthrough termination is incompatible with httpHeader actions
+                            enum:
+                            - edge
+                            - reencrypt
+                            - passthrough
                             type: string
                         required:
                         - termination
                         type: object
+                        x-kubernetes-validations:
+                        - message: 'cannot have both spec.tls.termination: passthrough
+                            and spec.tls.insecureEdgeTerminationPolicy: Allow'
+                          rule: 'has(self.termination) && has(self.insecureEdgeTerminationPolicy)
+                            ? !((self.termination==''passthrough'') && (self.insecureEdgeTerminationPolicy==''Allow''))
+                            : true'
                       to:
                         description: |-
                           RouteTargetReference specifies the target that resolve into endpoints. Only the 'Service'
                           kind is allowed. Use 'weight' field to emphasize one over others.
                         properties:
                           kind:
+                            default: Service
                             description: The kind of target that the route is referring
                               to. Currently, only 'Service' is allowed
+                            enum:
+                            - Service
+                            - ""
                             type: string
                           name:
                             description: name of the service/target that is being
                               referred to. e.g. name of the service
+                            minLength: 1
                             type: string
                           weight:
+                            default: 100
                             description: |-
                               weight as an integer between 0 and 256, default 100, that specifies the target's relative weight
                               against other target reference objects. 0 suppresses requests to this backend.
                             format: int32
+                            maximum: 256
+                            minimum: 0
                             type: integer
                         required:
                         - kind
                         - name
-                        - weight
                         type: object
                       wildcardPolicy:
                         description: WildcardPolicyType indicates the type of wildcard
@@ -9454,6 +9513,10 @@ spec:
                 type: array
               lastMessage:
                 type: string
+              libraryPanels:
+                items:
+                  type: string
+                type: array
               stage:
                 type: string
               stageStatus:
@@ -9461,6 +9524,8 @@ spec:
               version:
                 type: string
             type: object
+        required:
+        - spec
         type: object
     served: true
     storage: true
