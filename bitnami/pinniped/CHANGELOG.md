@@ -2,7 +2,7 @@
 
 ## 2.4.11 (2025-03-11)
 
-* [bitnami/pinniped] Make topologySpreadConstraints default values an empty list instead of an empty object ([#32393](https://github.com/bitnami/charts/pull/32393))
+* Fix pinniped default values type ([#32395](https://github.com/bitnami/charts/pull/32395))
 
 ## <small>2.4.10 (2025-03-05)</small>
 
