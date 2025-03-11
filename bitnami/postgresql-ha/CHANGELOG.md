@@ -1,6 +1,6 @@
 # Changelog
 
-## 15.3.4 (2025-03-10)
+## 15.3.4 (2025-03-11)
 
 * [bitnami/postgresql-ha] Added missing LDAP configuation variables ([#32378](https://github.com/bitnami/charts/pull/32378))
 
