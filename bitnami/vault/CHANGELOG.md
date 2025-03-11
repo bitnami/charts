@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.7.0 (2025-03-10)
+## 1.7.0 (2025-03-11)
 
 * [bitnami/vault] Remove server.replicaCount parameter ([#32384](https://github.com/bitnami/charts/pull/32384))
 
