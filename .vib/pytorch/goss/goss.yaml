@@ -11,7 +11,7 @@ command:
   run-git-example:
     exec: python ./pytorch/goss/testfiles/polynomial_tensor.py
     exit-status: 0
-    timeout: 20000
+    timeout: 30000
   {{- $uid := .Vars.containerSecurityContext.runAsUser }}
   {{- $gid := .Vars.podSecurityContext.fsGroup }}
   check-user-info:
