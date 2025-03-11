@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.4.8 (2025-03-05)
+## 1.4.9 (2025-03-10)
 
-* [bitnami/prometheus] Release 1.4.8 ([#32314](https://github.com/bitnami/charts/pull/32314))
+* [bitnami/prometheus] Fix RBAC for Prometheus endpointslices role ([#31924](https://github.com/bitnami/charts/pull/31924))
+
+## <small>1.4.8 (2025-03-05)</small>
+
+* [bitnami/prometheus] Release 1.4.8 (#32314) ([13fdecf](https://github.com/bitnami/charts/commit/13fdecf57b33168f4d07b5e6185b40c23931ea3e)), closes [#32314](https://github.com/bitnami/charts/issues/32314)
 
 ## <small>1.4.7 (2025-02-20)</small>
 
