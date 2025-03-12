@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.1.4 (2025-03-11)
+## 11.1.5 (2025-03-12)
 
-* [bitnami/etcd] Release 11.1.4 ([#32397](https://github.com/bitnami/charts/pull/32397))
+* [bitnami/etcd] bugfix: skip TLS verification with self-signed certs ([#32417](https://github.com/bitnami/charts/pull/32417))
+
+## <small>11.1.4 (2025-03-11)</small>
+
+* [bitnami/etcd] Release 11.1.4 (#32397) ([0ce5db9](https://github.com/bitnami/charts/commit/0ce5db9b0e37162cec32789580d4892264783a88)), closes [#32397](https://github.com/bitnami/charts/issues/32397)
 
 ## <small>11.1.3 (2025-03-05)</small>
 
