@@ -1,8 +1,12 @@
 # Changelog
 
-## 23.1.4 (2025-03-04)
+## 24.0.0 (2025-03-12)
 
-* [bitnami/schema-registry] Release 23.1.4 ([#32264](https://github.com/bitnami/charts/pull/32264))
+* [bitnami/schema-registry] Release 24.0.0 ([#32424](https://github.com/bitnami/charts/pull/32424))
+
+## <small>23.1.4 (2025-03-04)</small>
+
+* [bitnami/schema-registry] Release 23.1.4 (#32264) ([3477fc1](https://github.com/bitnami/charts/commit/3477fc14499c31ae4280b0f49bd2b516bcda4c42)), closes [#32264](https://github.com/bitnami/charts/issues/32264)
 
 ## <small>23.1.3 (2025-02-21)</small>
 
