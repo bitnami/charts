@@ -183,6 +183,7 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 | `auth.username`               | Memcached admin user                                                                                      | `""`                        |
 | `auth.password`               | Memcached admin password                                                                                  | `""`                        |
 | `auth.existingPasswordSecret` | Existing secret with Memcached credentials (must contain a value for `memcached-password` key)            | `""`                        |
+| `auth.usePasswordFiles`       | Mount credentials as files instead of using environment variables                                         | `true`                      |
 | `command`                     | Override default container command (useful when using custom images)                                      | `[]`                        |
 | `args`                        | Override default container args (useful when using custom images)                                         | `[]`                        |
 | `extraEnvVars`                | Array with extra environment variables to add to Memcached nodes                                          | `[]`                        |

@@ -1,8 +1,12 @@
 # Changelog
 
-## 7.6.5 (2025-02-20)
+## 7.7.0 (2025-03-07)
 
-* [bitnami/memcached] Release 7.6.5 ([#32095](https://github.com/bitnami/charts/pull/32095))
+* [bitnami/memcached] Set `usePasswordFiles=true` by default ([#32362](https://github.com/bitnami/charts/pull/32362))
+
+## <small>7.6.5 (2025-02-20)</small>
+
+* [bitnami/memcached] Release 7.6.5 (#32095) ([e720816](https://github.com/bitnami/charts/commit/e7208161c5d9284d15baf184dc846dd32ed0db8b)), closes [#32095](https://github.com/bitnami/charts/issues/32095)
 
 ## <small>7.6.4 (2025-02-19)</small>
 
