@@ -1,8 +1,12 @@
 # Changelog
 
-## 19.0.2 (2025-03-12)
+## 19.0.3 (2025-03-12)
 
-* [bitnami/nginx] Release 19.0.2 ([#32416](https://github.com/bitnami/charts/pull/32416))
+* tpl the ingress hostname ([#32421](https://github.com/bitnami/charts/pull/32421))
+
+## <small>19.0.2 (2025-03-12)</small>
+
+* [bitnami/nginx] Release 19.0.2 (#32416) ([af1b19b](https://github.com/bitnami/charts/commit/af1b19b07b85e6b5ed81f159c2a141752610bf98)), closes [#32416](https://github.com/bitnami/charts/issues/32416)
 
 ## <small>19.0.1 (2025-03-04)</small>
 
