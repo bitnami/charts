@@ -560,9 +560,15 @@ grafana:
   ## @param grafana.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Grafana nodes
   ##
   extraEnvVarsCM: ""
+  ## @param grafana.extraEnvVarsCMOptional Whether to still run the Grafana node if the ConfigMap does not exist
+  ##
+  extraEnvVarsCMOptional: false
   ## @param grafana.extraEnvVarsSecret Name of existing Secret containing extra env vars for Grafana nodes
   ##
   extraEnvVarsSecret: ""
+  ## @param grafana.extraEnvVarsSecretOptional Whether to still run the Grafana node if the Secret does not exist
+  ##
+  extraEnvVarsSecretOptional: false
   ## @param grafana.extraEnvVars Array containing extra env vars to configure Grafana
   ## For example:
   ## extraEnvVars:
