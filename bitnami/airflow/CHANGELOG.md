@@ -1,8 +1,16 @@
 # Changelog
 
+## 22.7.0 (2025-03-04)
+
+* [bitnami/airflow] feat: add support to extend webserver configuration ([#32254](https://github.com/bitnami/charts/pull/32254))
+
+## <small>22.6.1 (2025-03-03)</small>
+
+* [bitnami/airflow] feat: timeouts for probes (#32235) ([67cbd50](https://github.com/bitnami/charts/commit/67cbd50c2251ab320a15e226e6862fdeadc5677d)), closes [#32235](https://github.com/bitnami/charts/issues/32235)
+
 ## 22.6.0 (2025-02-27)
 
-* [bitnami/airflow] Add support for `usePasswordFiles` ([#32076](https://github.com/bitnami/charts/pull/32076))
+* [bitnami/airflow] Add support for `usePasswordFiles` (#32076) ([186a302](https://github.com/bitnami/charts/commit/186a302e024765179c80bae1594d80ae2361f5b9)), closes [#32076](https://github.com/bitnami/charts/issues/32076)
 
 ## 22.5.0 (2025-02-20)
 

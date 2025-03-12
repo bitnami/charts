@@ -76,7 +76,7 @@ usePasswordFiles: true
 image:
   registry: docker.io
   repository: bitnami/argo-cd
-  tag: 2.14.3-debian-12-r0
+  tag: 2.14.5-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -3317,7 +3317,7 @@ dex:
   image:
     registry: docker.io
     repository: bitnami/dex
-    tag: 2.42.0-debian-12-r1
+    tag: 2.42.0-debian-12-r2
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images

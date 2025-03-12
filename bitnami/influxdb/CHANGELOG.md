@@ -1,8 +1,12 @@
 # Changelog
 
-## 6.6.0 (2025-02-21)
+## 6.6.1 (2025-03-05)
 
-* [bitnami/influxdb] Set `usePasswordFiles=true` by default ([#32106](https://github.com/bitnami/charts/pull/32106))
+* [bitnami/influxdb] Release 6.6.1 ([#32332](https://github.com/bitnami/charts/pull/32332))
+
+## 6.6.0 (2025-02-26)
+
+* [bitnami/influxdb] Set `usePasswordFiles=true` by default (#32106) ([dddc4ff](https://github.com/bitnami/charts/commit/dddc4fffacf074669c9e354adfdfd59fb012088e)), closes [#32106](https://github.com/bitnami/charts/issues/32106)
 
 ## <small>6.5.6 (2025-02-19)</small>
 
