@@ -44,14 +44,16 @@ spec:
             runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubelettoomanypods
             summary: Kubelet is running at capacity.
           expr: |-
-            count by (cluster, node) (
-              (kube_pod_status_phase{job="kube-state-metrics", phase="Running"} == 1)
-              * on (cluster, namespace, pod) group_left (node)
-              group by (cluster, namespace, pod, node) (
-                kube_pod_info{job="kube-state-metrics"}
+            (
+              max by (cluster, instance) (
+                kubelet_running_pods{job="kubelet", metrics_path="/metrics"} > 1
+              )
+              * on (cluster, instance) group_left(node)
+              max by (cluster, instance, node) (
+                kubelet_node_name{job="kubelet", metrics_path="/metrics"}
               )
             )
-            /
+            / on (cluster, node) group_left()
             max by (cluster, node) (
               kube_node_status_capacity{job="kube-state-metrics", resource="pods"} != 1
             ) > 0.95
