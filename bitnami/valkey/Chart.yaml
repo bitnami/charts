@@ -37,4 +37,4 @@ maintainers:
 name: valkey
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/valkey
-version: 2.4.5
+version: 2.4.6
