@@ -1,12 +1,12 @@
 # Changelog
 
-## 9.3.0 (2025-03-07)
+## 9.3.0 (2025-03-12)
 
 * [bitnami/mastodon] Set `usePasswordFiles=true` by default ([#32367](https://github.com/bitnami/charts/pull/32367))
 
 ## <small>9.2.6 (2025-03-10)</small>
 
-* [bitnami/mastodon] Release 9.2.6 (#32380) ([bb410bc](https://github.com/bitnami/charts/commit/bb410bc61d3e15edb683b5c264b8388628968ee0)), closes ([#32380](https://github.com/bitnami/charts/pull/32380))
+* [bitnami/mastodon] Release 9.2.6 (#32380) ([bb410bc](https://github.com/bitnami/charts/commit/bb410bc61d3e15edb683b5c264b8388628968ee0)), closes [#32380](https://github.com/bitnami/charts/issues/32380)
 
 ## <small>9.2.5 (2025-02-27)</small>
 
