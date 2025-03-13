@@ -35,18 +35,12 @@ data:
 
     {{- if .Values.initJob.migrateAndCreateAdmin.migrateDB }}
     info "Migrating database"
-    {{- if .Values.usePasswordFiles }}
-    export MASTODON_DATABASE_PASSWORD="$(< $MASTODON_DATABASE_PASSWORD_FILE)"
-    {{- end }}
     psql_connection_string="postgresql://${MASTODON_DATABASE_USERNAME}:${MASTODON_DATABASE_PASSWORD}@${MASTODON_DATABASE_HOST}:${MASTODON_DATABASE_PORT_NUMBER}/${MASTODON_DATABASE_NAME}"
     mastodon_wait_for_postgresql_connection "$psql_connection_string"
     mastodon_rake_execute db:migrate
     {{- end }}
 
     {{- if .Values.initJob.migrateAndCreateAdmin.migrateElasticsearch }}
-    {{- if .Values.usePasswordFiles }}
-    export MASTODON_ELASTICSEARCH_PASSWORD="$(< $MASTODON_ELASTICSEARCH_PASSWORD_FILE)"
-    {{- end }}
     elasticsearch_connection_string="http://${MASTODON_ELASTICSEARCH_HOST}:${MASTODON_ELASTICSEARCH_PORT_NUMBER}"
     mastodon_wait_for_elasticsearch_connection "$elasticsearch_connection_string"
     info "Migrating Elasticsearch"
@@ -71,17 +65,11 @@ data:
     . /opt/bitnami/scripts/mastodon-env.sh
 
     {{- if .Values.initJob.migrateAndCreateAdmin.migrateDB }}
-    {{- if .Values.usePasswordFiles }}
-    export MASTODON_DATABASE_PASSWORD="$(< $MASTODON_DATABASE_PASSWORD_FILE)"
-    {{- end }}
     psql_connection_string="postgresql://${MASTODON_DATABASE_USERNAME}:${MASTODON_DATABASE_PASSWORD}@${MASTODON_DATABASE_HOST}:${MASTODON_DATABASE_PORT_NUMBER}/${MASTODON_DATABASE_NAME}"
     mastodon_wait_for_postgresql_connection "$psql_connection_string"
     {{- end }}
 
     {{- if .Values.initJob.migrateAndCreateAdmin.migrateElasticsearch }}
-    {{- if .Values.usePasswordFiles }}
-    export MASTODON_ELASTICSEARCH_PASSWORD="$(< $MASTODON_ELASTICSEARCH_PASSWORD_FILE)"
-    {{- end }}
     elasticsearch_connection_string="http://${MASTODON_ELASTICSEARCH_HOST}:${MASTODON_ELASTICSEARCH_PORT_NUMBER}"
     mastodon_wait_for_elasticsearch_connection "$elasticsearch_connection_string"
     {{- end }}

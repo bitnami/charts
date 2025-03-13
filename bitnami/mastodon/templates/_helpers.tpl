@@ -589,10 +589,6 @@ Init container definition for waiting for the database to be ready
       . /opt/bitnami/scripts/libmastodon.sh
       . /opt/bitnami/scripts/mastodon-env.sh
 
-      {{- if .Values.usePasswordFiles }}
-      export MASTODON_DATABASE_PASSWORD="$(< $MASTODON_DATABASE_PASSWORD_FILE)"
-      {{- end }}
-
       mastodon_wait_for_postgresql_connection "postgresql://${MASTODON_DATABASE_USER}:${MASTODON_DATABASE_PASSWORD:-}@${MASTODON_DATABASE_HOST}:${MASTODON_DATABASE_PORT_NUMBER}/${MASTODON_DATABASE_NAME}"
       info "Database is ready"
   env:
@@ -604,7 +600,7 @@ Init container definition for waiting for the database to be ready
       value: {{ include "mastodon.database.port" . | quote }}
     {{- if .Values.usePasswordFiles }}
     - name: MASTODON_DATABASE_PASSWORD_FILE
-      value: {{ printf "/opt/bitnami/mastodon/secrets/%s" (include "mastodon.database.passwordKey" .) }}
+      value: "/opt/bitnami/mastodon/secrets/db-password"
     {{- else }}
     - name: MASTODON_DATABASE_PASSWORD
       valueFrom:
@@ -623,7 +619,6 @@ Init container definition for waiting for the database to be ready
     {{- if .Values.usePasswordFiles }}
     - name: mastodon-secrets
       mountPath: /opt/bitnami/mastodon/secrets
-      subPath: {{ include "mastodon.database.passwordKey" . | quote }}
     {{- end }}
 {{- end -}}
 
@@ -660,10 +655,6 @@ Init container definition for waiting for Redis(TM) to be ready
       . /opt/bitnami/scripts/libmastodon.sh
       . /opt/bitnami/scripts/mastodon-env.sh
 
-      {{- if and .Values.usePasswordFiles (include "mastodon.redis.auth.enabled" .) }}
-      export MASTODON_REDIS_PASSWORD="$(< $MASTODON_REDIS_PASSWORD_FILE)"
-      {{- end }}
-
       mastodon_wait_for_redis_connection "redis://${MASTODON_REDIS_PASSWORD:-}@${MASTODON_REDIS_HOST}:${MASTODON_REDIS_PORT_NUMBER}"
       info "Redis(TM) is ready"
   env:
@@ -692,7 +683,6 @@ Init container definition for waiting for Redis(TM) to be ready
     {{- if .Values.usePasswordFiles }}
     - name: mastodon-secrets
       mountPath: /opt/bitnami/mastodon/secrets
-      subPath: {{ include "mastodon.redis.passwordKey" . | quote }}
     {{- end }}
 {{- end -}}
 
@@ -726,9 +716,6 @@ Init container definition for waiting for Elasticsearch to be ready
       . /opt/bitnami/scripts/libmastodon.sh
       . /opt/bitnami/scripts/mastodon-env.sh
 
-      {{- if .Values.usePasswordFiles }}
-      export MASTODON_ELASTICSEARCH_PASSWORD="$(< $MASTODON_ELASTICSEARCH_PASSWORD_FILE)"
-      {{- end }}
       mastodon_wait_for_elasticsearch_connection "http://${MASTODON_ELASTICSEARCH_HOST}:${MASTODON_ELASTICSEARCH_PORT_NUMBER}"
       info "Mastodon web is ready"
   env:
@@ -757,7 +744,6 @@ Init container definition for waiting for Elasticsearch to be ready
     {{- if .Values.usePasswordFiles }}
     - name: mastodon-secrets
       mountPath: /opt/bitnami/mastodon/secrets
-      subPath: {{ include "mastodon.elasticsearch.passwordKey" . | quote }}
     {{- end }}
 {{- end -}}
 
