@@ -102,20 +102,30 @@ spec:
               value: {{ include "matomo.databaseName" . | quote }}
             - name: MATOMO_DATABASE_USER
               value: {{ include "matomo.databaseUser" . | quote }}
+            {{- if .Values.usePasswordFiles }}
+            - name: MATOMO_DATABASE_PASSWORD_FILE
+              value: {{ printf "/secrets/%s" (include "matomo.databasePasswordKey" .) }}
+            {{- else }}
             - name: MATOMO_DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "matomo.databaseSecretName" . }}
                   key: {{ include "matomo.databasePasswordKey" . | quote }}
+            {{- end }}
             - name: MATOMO_SKIP_BOOTSTRAP
               value: {{ ternary "yes" "no" .Values.matomoSkipInstall | quote }}
             - name: MATOMO_USERNAME
               value: {{ .Values.matomoUsername | quote }}
+            {{- if .Values.usePasswordFiles }}
+            - name: MATOMO_PASSWORD_FILE
+              value: "/secrets/matomo-password"
+            {{- else }}
             - name: MATOMO_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "matomo.secretName" . }}
                   key: matomo-password
+            {{- end }}
             - name: MATOMO_EMAIL
               value: {{ .Values.matomoEmail | quote }}
             - name: MATOMO_WEBSITE_NAME
@@ -139,11 +149,16 @@ spec:
               value: {{ .Values.smtpUser | quote }}
             {{- end }}
             {{- if or .Values.smtpPassword .Values.smtpExistingSecret }}
+            {{- if .Values.usePasswordFiles }}
+            - name: MATOMO_SMTP_PASSWORD_FILE
+              value: "/secrets/smtp-password"
+            {{- else }}
             - name: MATOMO_SMTP_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "matomo.smtpSecretName" . }}
                   key: smtp-password
+            {{- end }}
             {{- end }}
             {{- if .Values.smtpProtocol }}
             - name: MATOMO_SMTP_PROTOCOL
@@ -226,6 +241,10 @@ spec:
           volumeMounts:
             - name: matomo-data
               mountPath: /bitnami/matomo
+            {{- if .Values.usePasswordFiles }}
+            - name: matomo-secrets
+              mountPath: /secrets
+            {{- end }}
             {{- if .Values.certificates.customCertificate.certificateSecret }}
             - name: custom-certificate
               mountPath: {{ .Values.certificates.customCertificate.certificateLocation }}
@@ -279,6 +298,19 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        {{- if .Values.usePasswordFiles }}
+        - name: matomo-secrets
+          projected:
+            sources:
+              - secret:
+                  name:  {{ include "matomo.databaseSecretName" . }}
+              - secret:
+                  name:  {{ include "matomo.secretName" . }}
+              {{- if or .Values.smtpPassword .Values.smtpExistingSecret }}
+              - secret:
+                  name:  {{ include "matomo.smtpSecretName" . }}
+              {{- end }}
+        {{- end }}
         {{- if .Values.certificates.customCAs }}
         - name: etc-ssl-certs
           emptyDir:
