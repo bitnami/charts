@@ -361,7 +361,7 @@ wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
 | `deploymentLabels`                                  | Add extra labels to the Deployment object                                                                                                                                                                            | `{}`                     |
 | `deploymentAnnotations`                             | Add extra annotations to the Deployment object                                                                                                                                                                       | `{}`                     |
 | `logLevel`                                          | Set application log level                                                                                                                                                                                            | `INFO`                   |
-| `usePasswordFile`                                   | Mount all sensitive information as files                                                                                                                                                                             | `true`                   |
+| `usePasswordFiles`                                  | Mount all sensitive information as files                                                                                                                                                                             | `true`                   |
 | `versionStoreType`                                  | Set version store type. The chart natively supports JDBC_POSTGRESQL, ROCKSDB and IN_MEMORY. Any other type requires you to add the configuration in configOverrides and secretConfigOverrides.                       | `JDBC_POSTGRESQL`        |
 | `livenessProbe.enabled`                             | Enable livenessProbe on nessie containers                                                                                                                                                                            | `true`                   |
 | `livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                                                                                                              | `10`                     |
@@ -621,6 +621,10 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/nessi
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 2.0.0
+
+Value `usePasswordFile` has been renamed as `usePasswordFiles` to be aligned with the rest of the catalog. Its default value has changed from `false` to `true`.
 
 ### To 1.1.0
 
