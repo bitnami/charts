@@ -1,8 +1,12 @@
 # Changelog
 
-## 15.3.0 (2025-02-21)
+## 15.3.1 (2025-03-13)
 
-* [bitnami/kong] Set `usePasswordFiles=true` by default ([#32109](https://github.com/bitnami/charts/pull/32109))
+* [bitnami/kong] Release 15.3.1 ([#32451](https://github.com/bitnami/charts/pull/32451))
+
+## 15.3.0 (2025-02-24)
+
+* [bitnami/kong] Set `usePasswordFiles=true` by default (#32109) ([6db9a0e](https://github.com/bitnami/charts/commit/6db9a0ed7d8feeff61edac18b7f7dd38ab737412)), closes [#32109](https://github.com/bitnami/charts/issues/32109)
 
 ## 15.2.0 (2025-02-20)
 
