@@ -286,7 +286,7 @@ Dynamic Seed Discovery
 */}}
 {{- define "cassandra.dynamicSeedDiscovery" -}}
 - name: dynamic-seed-discovery
-  image: alpine:3.21.3
+  image: alpine:latest
   command:
       - "/bin/sh"
       - "-c"
@@ -299,12 +299,12 @@ Dynamic Seed Discovery
             echo "$NODE_IP" >> ${DYNAMIC_SEED_DIR}/seed-ips.lst; \
           done && \
         if [ ! -s ${DYNAMIC_SEED_DIR}/seed-ips.lst ]; then \
-          echo "No seed nodes found, using pod's own IP: $POD_IP" && \
+          echo "No seed nodes found, using pod's own IP" && \
           echo $POD_IP > ${DYNAMIC_SEED_DIR}/seed-ips.lst; \
         fi && \
-        echo "Seed nodes: " &&
-        cat ${DYNAMIC_SEED_DIR}/seed-ips.lst | head -2 | paste -sd, - > ${DYNAMIC_SEED_DIR}/seed-ips.txt &&
-        cat ${DYNAMIC_SEED_DIR}/seed-ips.txt
+        cat ${DYNAMIC_SEED_DIR}/seed-ips.lst | head -{{ .Values.cluster.seedCount }} | paste -sd, - > ${DYNAMIC_SEED_DIR}/seed-ips.txt &&
+        echo "Seed nodes: $(cat ${DYNAMIC_SEED_DIR}/seed-ips.txt)"
+
   env:
     - name: POD_IP
       valueFrom:
