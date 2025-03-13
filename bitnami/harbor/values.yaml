@@ -1478,8 +1478,10 @@ core:
   ## `POSTGRESQL_PASSWORD` (optional - alternatively uses weak upstream default. Read below if you set it. You must also set postgresql.auth.existingSecret to the same value as core.existingEnvVarsSecret for this to work!),
   ## `postgres-password` (required if POSTGRESQL_PASSWORD is set & must be the same as POSTGRESQL_PASSWORD.)
   ## `HARBOR_DATABASE_PASSWORD` (required if POSTGRESQL_PASSWORD is set & must be the same as POSTGRESQL_PASSWORD.)
-  ## `REGISTRY_CREDENTIAL_USERNAME` (optional - alternatively auto-generated),
-  ## `REGISTRY_CREDENTIAL_PASSWORD` (optional - alternatively auto-generated),
+  ## `REGISTRY_CREDENTIAL_USERNAME` (optional - alternatively weak defaults),
+  ## `REGISTRY_CREDENTIAL_PASSWORD` (optional - alternatively weak defaults),
+  ## `_REDIS_URL_CORE` (required - if using the internal Redis - set to base64 of "redis://harbor-redis-master:6379/0")
+  ## `_REDIS_URL_REG` (required - if using the internal Redis - set to base64 of "redis://harbor-redis-master:6379/2")
   ##
   ## If you do not know how to start, let the chart generate a full secret for you before defining an existingEnvVarsSecret
   ## Notes:
@@ -1892,8 +1894,8 @@ jobservice:
   existingSecret: ""
   ## @param jobservice.existingEnvVarsSecret Existing secret for jobservice envvars
   ## The secret must contain the keys:
-  ## `REGISTRY_CREDENTIAL_PASSWORD` (required),
-  ## `JOB_SERVICE_POOL_REDIS_URL` (required),
+  ## `REGISTRY_CREDENTIAL_PASSWORD` (optional),
+  ## `JOB_SERVICE_POOL_REDIS_URL` (required - if using the internal Redis - set to base64 of "redis://harbor-redis-master:6379/1"),
   ##
   ## If you do not know how to start, let the chart generate a full secret for you before defining an existingEnvVarsSecret
   existingEnvVarsSecret: ""
@@ -2252,8 +2254,8 @@ registry:
   secret: ""
   ## @param registry.existingSecret Existing secret for registry
   ## The secret must contain the keys:
-  ## `REGISTRY_HTPASSWD` (required),
-  ## `REGISTRY_HTTP_SECRET` (required),
+  ## `REGISTRY_HTPASSWD` (required - replaces insecure defaults),
+  ## `REGISTRY_HTTP_SECRET` (optional - generated on the fly if not secified),
   ## `REGISTRY_REDIS_PASSWORD` (optional),
   ##
   existingSecret: ""
@@ -2887,9 +2889,9 @@ trivy:
   ## @param trivy.existingEnvVarsSecret Existing secret for trivy
   ## The secret must contain the keys:
   ## `SCANNER_TRIVY_GITHUB_TOKEN` (optional)
-  ## `SCANNER_REDIS_URL` (required)
-  ## `SCANNER_STORE_REDIS_URL` (required)
-  ## `SCANNER_JOB_QUEUE_REDIS_URL` (required)
+  ## `SCANNER_REDIS_URL` (required - if using the internal Redis - set to base64 of "redis://harbor-redis-master:6379/5")
+  ## `SCANNER_STORE_REDIS_URL` (required - if using the internal Redis - set to base64 of "redis://harbor-redis-master:6379/5")
+  ## `SCANNER_JOB_QUEUE_REDIS_URL` (required - if using the internal Redis - set to base64 of "redis://harbor-redis-master:6379/5")
   ##
   existingEnvVarsSecret: ""
   ## @param trivy.gitHubToken The GitHub access token to download Trivy DB
