@@ -137,6 +137,7 @@ spec:
                   name: {{ .Values.ejbcaKeystoreExistingSecret }}
                   key: keystore-password
             {{- end }}
+            {{- end }}
             - name: EJBCA_ADMIN_USERNAME
               value: {{ .Values.ejbcaAdminUsername | quote }}
             - name: EJBCA_DATABASE_HOST
