@@ -154,6 +154,7 @@ existingConfiguration: ""
 ## @param cluster.clientEncryption Client Encryption
 ## @param cluster.extraSeeds For an external/second cassandra ring.
 ## @param cluster.enableUDF Enable User defined functions
+## @param cluster.dynamicSeedDiscovery.enabled Enable dynamic seed discovery
 ##
 cluster:
   name: cassandra
@@ -170,6 +171,10 @@ cluster:
   ##
   extraSeeds: []
   enableUDF: false
+  ## When enabled, an init container will dynamically resolve available Cassandra pods
+  ## and configure them as seed nodes at startup. This prevents split-brain issues by
+  ## ensuring new pods do not mistakenly form a separate cluster if static seed nodes
+  ## using pod numbers are unavailable.
   dynamicSeedDiscovery:
     enabled: false
 ## JVM Settings
