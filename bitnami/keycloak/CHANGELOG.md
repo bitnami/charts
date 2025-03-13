@@ -1,8 +1,12 @@
 # Changelog
 
-## 24.4.12 (2025-03-11)
+## 24.4.13 (2025-03-13)
 
-* [bitnami/keycloak] Update secret-external-db namespace to use common helper value ([#32379](https://github.com/bitnami/charts/pull/32379))
+* [bitnami/keycloak] Release 24.4.13 ([#32446](https://github.com/bitnami/charts/pull/32446))
+
+## <small>24.4.12 (2025-03-11)</small>
+
+* [bitnami/keycloak] Update secret-external-db namespace to use common helper value (#32379) ([8e0642d](https://github.com/bitnami/charts/commit/8e0642dbec69b757b4313e5bfed9065d4c9765d0)), closes [#32379](https://github.com/bitnami/charts/issues/32379)
 
 ## <small>24.4.11 (2025-02-28)</small>
 
