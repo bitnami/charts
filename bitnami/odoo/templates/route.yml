@@ -1,0 +1,18 @@
+{{- if .Values.route.enabled }}
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: {{ template "common.names.fullname" . }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+spec:
+  host: {{ .Values.route.hostname }}
+  path: /
+  port:
+    targetPort: http
+  to:
+    kind: Service
+    name: odoo
+    weight: 100
+  wildcardPolicy: None
+{{- end }}
+
