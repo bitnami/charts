@@ -96,7 +96,7 @@ spec:
         {{- if and .Values.externalAccess.hidden.enabled .Values.externalAccess.autoDiscovery.enabled (eq .Values.externalAccess.hidden.service.type "LoadBalancer") }}
         {{- include "mongodb.initContainers.autoDiscovery" . | indent 8 }}
         {{- end }}
-        {{- if and .Values.externalAccess.enabled ( or .Values.externalAccess.service.publicNames  .Values.externalAccess.service.domain ) }}
+        {{- if and .Values.externalAccess.enabled .Values.externalAccess.service.publicNames }}
         {{- include "mongodb.initContainers.dnsCheck" . | indent 8 }}
         {{- end }}
         {{- include "mongodb.initContainer.prepareLogDir" . | nindent 8 }}

@@ -1,8 +1,12 @@
 # Changelog
 
-## 15.3.3 (2025-03-03)
+## 15.3.4 (2025-03-11)
 
-* [bitnami/postgresql-ha] Release 15.3.3 ([#32249](https://github.com/bitnami/charts/pull/32249))
+* [bitnami/postgresql-ha] Added missing LDAP configuation variables ([#32378](https://github.com/bitnami/charts/pull/32378))
+
+## <small>15.3.3 (2025-03-03)</small>
+
+* [bitnami/postgresql-ha] Release 15.3.3 (#32249) ([d3b369d](https://github.com/bitnami/charts/commit/d3b369dc6839911d334a960887920d708067a57c)), closes [#32249](https://github.com/bitnami/charts/issues/32249)
 
 ## <small>15.3.2 (2025-03-03)</small>
 

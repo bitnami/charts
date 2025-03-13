@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.2.6 (2025-02-20)
+## 1.2.7 (2025-03-05)
 
-* [bitnami/whereabouts] Release 1.2.6 ([#32070](https://github.com/bitnami/charts/pull/32070))
+* [bitnami/whereabouts] Release 1.2.7 ([#32319](https://github.com/bitnami/charts/pull/32319))
+
+## <small>1.2.6 (2025-02-20)</small>
+
+* [bitnami/whereabouts] Release 1.2.6 (#32070) ([4b36606](https://github.com/bitnami/charts/commit/4b36606ceccee96e4b5ade45df4ad3ce713d2095)), closes [#32070](https://github.com/bitnami/charts/issues/32070)
 
 ## <small>1.2.5 (2025-02-12)</small>
 
