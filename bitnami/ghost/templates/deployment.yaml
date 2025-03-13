@@ -216,7 +216,7 @@ spec:
             {{- end }}
             {{- if .Values.smtpPassword }}
             {{- if .Values.usePasswordFiles }}
-            - name: GHOST_PASSWORD_FILE
+            - name: GHOST_SMTP_PASSWORD_FILE
               value: {{ printf "/opt/bitnami/ghost/secrets/%s" (include "common.secrets.key" (dict "existingSecret" .Values.existingSecret "key" "smtp-password")) }}
             {{- else }}
             - name: GHOST_SMTP_PASSWORD
@@ -348,7 +348,13 @@ spec:
           projected:
             sources:
               - secret:
-                  name:  {{ include "ghost.secretName" . }}
+                  name: {{ include "ghost.databaseSecretName" . }}
+              - secret:
+                  name: {{ include "common.secrets.name" (dict "existingSecret" .Values.existingSecret "context" $) }}
+              {{- if .Values.smtpPassword }}
+              - secret:
+                  name: {{ include "common.secrets.name" (dict "existingSecret" .Values.existingSecret "context" $) }}
+              {{- end }}
         {{- end }}
         - name: ghost-data
         {{- if .Values.persistence.enabled }}
