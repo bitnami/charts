@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.2.1 (2025-02-24)
+## 2.0.0 (2025-03-13)
 
-* [bitnami/nessie] Release 1.2.1 ([#32144](https://github.com/bitnami/charts/pull/32144))
+* [bitnami/nessie] Set `usePasswordFiles=true` by default ([#32114](https://github.com/bitnami/charts/pull/32114))
+
+## <small>1.2.1 (2025-02-24)</small>
+
+* [bitnami/nessie] Release 1.2.1 (#32144) ([6af5812](https://github.com/bitnami/charts/commit/6af5812bc806e92231e61f263b3da77017661199)), closes [#32144](https://github.com/bitnami/charts/issues/32144)
 
 ## 1.2.0 (2025-02-20)
 

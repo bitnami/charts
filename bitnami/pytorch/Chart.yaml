@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
+  tanzuCategory: application
   category: MachineLearning
   licenses: Apache-2.0
   images: |
@@ -33,4 +34,4 @@ maintainers:
 name: pytorch
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/pytorch
-version: 4.3.4
+version: 4.3.6

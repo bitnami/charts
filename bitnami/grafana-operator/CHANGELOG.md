@@ -1,8 +1,17 @@
 # Changelog
 
-## 4.9.7 (2025-02-19)
+## 4.9.9 (2025-03-11)
 
-* [bitnami/grafana-operator] Release 4.9.7 ([#32000](https://github.com/bitnami/charts/pull/32000))
+* [bitnami/grafana-operator] Release 4.9.9 ([#32410](https://github.com/bitnami/charts/pull/32410))
+
+## <small>4.9.8 (2025-03-05)</small>
+
+* [bitnami/grafana-operator] Release 4.9.8 (#32292) ([1f73e78](https://github.com/bitnami/charts/commit/1f73e78276778a4b18168d57f6b3cf1c45ec350f)), closes [#32292](https://github.com/bitnami/charts/issues/32292)
+
+## <small>4.9.7 (2025-02-19)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/grafana-operator] Release 4.9.7 (#32000) ([d4276b9](https://github.com/bitnami/charts/commit/d4276b97e573efbab9bd3626cd60d05185d143c1)), closes [#32000](https://github.com/bitnami/charts/issues/32000)
 
 ## <small>4.9.6 (2025-02-04)</small>
 
