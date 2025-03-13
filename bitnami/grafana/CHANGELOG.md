@@ -1,8 +1,8 @@
 # Changelog
 
-## 11.5.0 (2025-03-06)
+## 11.5.0 (2025-03-11)
 
-* [bitnami/grafana] Set `usePasswordFiles=true` by default ([#32348](https://github.com/bitnami/charts/pull/32348))
+* [bitnami/grafana] Add `optional` option to the extraEnvVars ([#32401](https://github.com/bitnami/charts/pull/32401))
 
 ## <small>11.4.10 (2025-03-05)</small>
 

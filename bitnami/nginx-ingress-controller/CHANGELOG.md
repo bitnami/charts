@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.6.10 (2025-02-27)
+## 11.6.11 (2025-03-05)
 
-* [bitnami/nginx-ingress-controller] Release 11.6.10 ([#32193](https://github.com/bitnami/charts/pull/32193))
+* [bitnami/nginx-ingress-controller] Release 11.6.11 ([#32308](https://github.com/bitnami/charts/pull/32308))
+
+## <small>11.6.10 (2025-02-27)</small>
+
+* [bitnami/nginx-ingress-controller] Release 11.6.10 (#32193) ([878e738](https://github.com/bitnami/charts/commit/878e738d72e5dc959f4a729177f5b7e80aef85e1)), closes [#32193](https://github.com/bitnami/charts/issues/32193)
 
 ## <small>11.6.9 (2025-02-20)</small>
 

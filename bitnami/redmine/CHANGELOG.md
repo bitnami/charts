@@ -1,8 +1,14 @@
 # Changelog
 
-## 32.1.5 (2025-02-28)
+## 32.1.6 (2025-03-11)
 
-* [bitnami/redmine] Release 32.1.5 ([#32212](https://github.com/bitnami/charts/pull/32212))
+* [bitnami/redmine] Release 32.1.6 ([#32389](https://github.com/bitnami/charts/pull/32389))
+
+## <small>32.1.5 (2025-02-28)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/redmine] Release 32.1.5 (#32212) ([0a274ed](https://github.com/bitnami/charts/commit/0a274ed096355dc04f6637ea1178b8b9d6a8fbc8)), closes [#32212](https://github.com/bitnami/charts/issues/32212)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
 
 ## <small>32.1.4 (2025-01-29)</small>
 

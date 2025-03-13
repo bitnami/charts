@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.1.4 (2025-02-26)
+## 0.1.5 (2025-03-05)
 
-* [bitnami/kube-arangodb] Release 0.1.4 ([#32186](https://github.com/bitnami/charts/pull/32186))
+* [bitnami/kube-arangodb] Release 0.1.5 ([#32298](https://github.com/bitnami/charts/pull/32298))
+
+## <small>0.1.4 (2025-02-26)</small>
+
+* [bitnami/kube-arangodb] Release 0.1.4 (#32186) ([98789f6](https://github.com/bitnami/charts/commit/98789f6b2c2cffaf7b6c469102fdd81a8e1c5567)), closes [#32186](https://github.com/bitnami/charts/issues/32186)
 
 ## <small>0.1.3 (2025-02-26)</small>
 

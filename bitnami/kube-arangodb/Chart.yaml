@@ -2,13 +2,14 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
+  tanzuCategory: service
   category: Infrastructure
   licenses: Apache-2.0
   images: |
     - name: arangodb
       image: docker.io/bitnami/arangodb:3.11.13-debian-12-r2
     - name: kube-arangodb
-      image: docker.io/bitnami/kube-arangodb:1.2.46-debian-12-r1
+      image: docker.io/bitnami/kube-arangodb:1.2.46-debian-12-r2
 apiVersion: v2
 appVersion: 1.2.46
 dependencies:
@@ -31,4 +32,4 @@ maintainers:
 name: kube-arangodb
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/kube-arangodb
-version: 0.1.4
+version: 0.1.5

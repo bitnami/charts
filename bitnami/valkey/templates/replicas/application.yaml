@@ -194,9 +194,9 @@ spec:
             {{- if .Values.auth.enabled }}
             {{- if .Values.auth.usePasswordFiles }}
             - name: VALKEY_PASSWORD_FILE
-              value: {{ printf "/opt/bitnami/valkey/secrets/%s" (include "valkey.secretPasswordKey" .) }}
+              value: "/opt/bitnami/valkey/secrets/valkey-password"
             - name: VALKEY_PRIMARY_PASSWORD_FILE
-              value: {{ printf "/opt/bitnami/valkey/secrets/%s" (include "valkey.secretPasswordKey" .) }}
+              value: "/opt/bitnami/valkey/secrets/valkey-password"
             {{- else }}
             - name: VALKEY_PASSWORD
               valueFrom:
@@ -340,7 +340,7 @@ spec:
             - /bin/bash
             - -c
             - |
-              {{- if .Values.usePasswordFiles }}
+              {{- if and .Values.auth.enabled .Values.auth.usePasswordFiles }}
               export REDIS_PASSWORD="$(< $REDIS_PASSWORD_FILE)"
               {{- end }}
               redis_exporter{{- range $key, $value := .Values.metrics.extraArgs }} --{{ $key }}={{ $value }}{{- end }}
@@ -358,7 +358,7 @@ spec:
               value: default
             {{- if .Values.auth.usePasswordFiles }}
             - name: REDIS_PASSWORD_FILE
-              value: {{ printf "/secrets/%s" (include "valkey.secretPasswordKey" .) }}
+              value: "/secrets/valkey-password"
             {{- else }}
             - name: REDIS_PASSWORD
               valueFrom:

@@ -1,8 +1,12 @@
 # Changelog
 
-## 12.2.0 (2025-02-20)
+## 12.2.1 (2025-03-05)
 
-* [bitnami/cassandra] Add support for `usePasswordFiles` ([#32080](https://github.com/bitnami/charts/pull/32080))
+* [bitnami/cassandra] Release 12.2.1 ([#32322](https://github.com/bitnami/charts/pull/32322))
+
+## 12.2.0 (2025-02-27)
+
+* [bitnami/cassandra] Add support for `usePasswordFiles` (#32080) ([0485a17](https://github.com/bitnami/charts/commit/0485a17a5c115454508c442121efbe6547fe73c6)), closes [#32080](https://github.com/bitnami/charts/issues/32080)
 
 ## <small>12.1.4 (2025-02-19)</small>
 
