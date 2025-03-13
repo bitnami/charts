@@ -1,6 +1,6 @@
 # Changelog
 
-## 9.3.0 (2025-03-07)
+## 9.3.0 (2025-03-13)
 
 * [bitnami/matomo] Set `usePasswordFiles=true` by default ([#32363](https://github.com/bitnami/charts/pull/32363))
 
