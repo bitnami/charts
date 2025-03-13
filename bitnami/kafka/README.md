@@ -386,7 +386,7 @@ extraDeploy:
         app.kubernetes.io/component: connector
     data:
       connect-standalone.properties: |-
-        bootstrap.servers = {{ include "common.names.fullname" . }}-0.{{ include "common.names.fullname" . }}-headless.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}:{{ .Values.service.port }}
+        bootstrap.servers = {{ include "common.names.fullname" . }}-controller-0.{{ include "common.names.fullname" . }}-controller-headless.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}:{{ .Values.service.ports.client }}
         ...
       mongodb.properties: |-
         connection.uri=mongodb://root:password@mongodb-hostname:27017
