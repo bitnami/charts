@@ -296,7 +296,13 @@ spec:
           projected:
             sources:
               - secret:
-                  name:  {{ include "gitea.secretName" . }}
+                  name: {{ include "gitea.secretName" . }}
+              - secret:
+                  name: {{ include "gitea.databaseSecretName" . }}
+              {{- if or .Values.smtpPassword .Values.smtpExistingSecret }}
+              - secret:
+                  name: {{ include "gitea.smtpSecretName" . }}
+              {{- end }}
         {{- end }}
         - name: gitea-data
           {{- if .Values.persistence.enabled }}
