@@ -622,6 +622,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 2.0.0
+
+Value `usePasswordFile` has been renamed as `usePasswordFiles` to be aligned with the rest of the catalog. Its default value has changed from `false` to `true`.
+
 ### To 1.1.0
 
 This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
