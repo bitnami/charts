@@ -495,6 +495,9 @@ web:
   ## @param web.configuration Specify content for webserver_config.py (auto-generated based on other env. vars otherwise)
   ##
   configuration: ""
+  ## @param web.extraConfiguration Specify extra content to be appended to default webserver_config.py (ignored if `web.configuration` or `web.existingConfigmap` are set)
+  ##
+  extraConfiguration: ""
   ## @param web.existingConfigmap Name of an existing config map containing the Airflow webserver config file
   ##
   existingConfigmap: ""

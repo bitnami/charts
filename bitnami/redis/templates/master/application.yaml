@@ -146,7 +146,7 @@ spec:
             {{- if .Values.auth.enabled }}
             {{- if .Values.auth.usePasswordFiles }}
             - name: REDIS_PASSWORD_FILE
-              value: {{ printf "/opt/bitnami/redis/secrets/%s" (include "redis.secretPasswordKey" .) }}
+              value: "/opt/bitnami/redis/secrets/redis-password"
             {{- else }}
             - name: REDIS_PASSWORD
               valueFrom:
@@ -288,7 +288,7 @@ spec:
             - /bin/bash
             - -c
             - |
-              {{- if and .Values.auth.enabled .Values.usePasswordFiles }}
+              {{- if and .Values.auth.enabled .Values.auth.usePasswordFiles }}
               export REDIS_PASSWORD="$(< $REDIS_PASSWORD_FILE)"
               {{- end }}
               redis_exporter{{- range $key, $value := .Values.metrics.extraArgs }} --{{ $key }}={{ $value }}{{- end }}
@@ -306,7 +306,7 @@ spec:
               value: default
             {{- if .Values.auth.usePasswordFiles }}
             - name: REDIS_PASSWORD_FILE
-              value: {{ printf "/secrets/%s" (include "redis.secretPasswordKey" .) }}
+              value: "/secrets/redis-password"
             {{- else }}
             - name: REDIS_PASSWORD
               valueFrom:

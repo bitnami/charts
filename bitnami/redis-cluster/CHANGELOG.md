@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.4.3 (2025-02-20)
+## 11.4.5 (2025-03-12)
 
-* [bitnami/redis-cluster] Release 11.4.3 ([#32032](https://github.com/bitnami/charts/pull/32032))
+* [bitnami/redis-cluster] Use ternary yes/no for useAOFPersistence ([#32418](https://github.com/bitnami/charts/pull/32418))
+
+## <small>11.4.3 (2025-02-20)</small>
+
+* [bitnami/redis-cluster] Release 11.4.3 (#32032) ([e652611](https://github.com/bitnami/charts/commit/e65261189935c2a97a9998e9fca715c08a262e44)), closes [#32032](https://github.com/bitnami/charts/issues/32032)
 
 ## <small>11.4.2 (2025-02-16)</small>
 

@@ -85,7 +85,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/seaweedfs
-  tag: 3.85.0-debian-12-r1
+  tag: 3.85.0-debian-12-r3
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -314,7 +314,7 @@ master:
       drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
-  ## @param master.logLevel Master Server log level [0|1|2|3|4]
+  ## @param master.logLevel Master Server log level (0, 1, 2, 3, or 4)
   ##
   logLevel: 1
   ## @param master.bindAddress Master Server bind address
@@ -1009,7 +1009,7 @@ volume:
       drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
-  ## @param volume.logLevel Volume Server log level [0|1|2|3|4]
+  ## @param volume.logLevel Volume Server log level (0, 1, 2, 3, or 4)
   ##
   logLevel: 1
   ## @param volume.bindAddress Volume Server bind address
@@ -1717,7 +1717,7 @@ filer:
       drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
-  ## @param filer.logLevel Filer Server log level [0|1|2|3|4]
+  ## @param filer.logLevel Filer Server log level (0, 1, 2, 3, or 4)
   ##
   logLevel: 1
   ## @param filer.bindAddress Filer Server bind address
@@ -2376,7 +2376,7 @@ s3:
       drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
-  ## @param s3.logLevel Amazon S3 API log level [0|1|2|3|4]
+  ## @param s3.logLevel Amazon S3 API log level (0, 1, 2, 3, or 4)
   ##
   logLevel: 1
   ## @param s3.bindAddress Amazon S3 API bind address
@@ -2972,7 +2972,7 @@ webdav:
       drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
-  ## @param webdav.logLevel WebDAV log level [0|1|2|3|4]
+  ## @param webdav.logLevel WebDAV log level (0, 1, 2, 3, or 4)
   ##
   logLevel: 1
   ## TLS configuration for WebDAV
@@ -3496,7 +3496,7 @@ iam:
       drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
-  ## @param iam.logLevel IAM log level [0|1|2|3|4]
+  ## @param iam.logLevel IAM log level (0, 1, 2, 3, or 4)
   ##
   logLevel: 1
   ## @param iam.command Override default IAM container command (useful when using custom images)
@@ -3723,7 +3723,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r38
+    tag: 12-debian-12-r39
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -3807,7 +3807,7 @@ mariadb:
   image:
     registry: docker.io
     repository: bitnami/mariadb
-    tag: 11.4.5-debian-12-r4
+    tag: 11.4.5-debian-12-r8
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -3906,7 +3906,7 @@ postgresql:
   image:
     registry: docker.io
     repository: bitnami/postgresql
-    tag: 17.3.0-debian-12-r3
+    tag: 17.4.0-debian-12-r4
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images

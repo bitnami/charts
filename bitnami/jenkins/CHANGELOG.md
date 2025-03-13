@@ -1,12 +1,8 @@
 # Changelog
 
-## 13.6.0 (2025-03-06)
+## 13.5.7 (2025-03-05)
 
-* [bitnami/jenkins] Set `usePasswordFiles=true` by default ([#32349](https://github.com/bitnami/charts/pull/32349))
-
-## <small>13.5.7 (2025-03-05)</small>
-
-* [bitnami/jenkins] Release 13.5.7 (#32326) ([9b1a7c4](https://github.com/bitnami/charts/commit/9b1a7c4495ad5f9642e2b26849f900c05d7e77a4)), closes [#32326](https://github.com/bitnami/charts/issues/32326)
+* [bitnami/jenkins] Release 13.5.7 ([#32326](https://github.com/bitnami/charts/pull/32326))
 
 ## <small>13.5.6 (2025-02-19)</small>
 

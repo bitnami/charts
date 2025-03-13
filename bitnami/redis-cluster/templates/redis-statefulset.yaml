@@ -181,7 +181,7 @@ spec:
               value: "yes"
             {{- end }}
             - name: REDIS_AOF_ENABLED
-              value: {{ .Values.redis.useAOFPersistence | quote }}
+              value: {{ include "redis-cluster.useAOFPersistence" . | quote }}
             - name: REDIS_TLS_ENABLED
               value: {{ ternary "yes" "no" .Values.tls.enabled | quote }}
             {{- if .Values.tls.enabled }}

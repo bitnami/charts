@@ -1,8 +1,20 @@
 # Changelog
 
-## 11.4.9 (2025-02-20)
+## 11.5.1 (2025-03-13)
 
-* [bitnami/grafana] Release 11.4.9 ([#32092](https://github.com/bitnami/charts/pull/32092))
+* [bitnami/grafana] Release 11.5.1 ([#32437](https://github.com/bitnami/charts/pull/32437))
+
+## 11.5.0 (2025-03-12)
+
+* [bitnami/grafana] Add `optional` option to the extraEnvVars (#32401) ([7b1e396](https://github.com/bitnami/charts/commit/7b1e3966d5c2433e828e61133c0f3a5d156ed67a)), closes [#32401](https://github.com/bitnami/charts/issues/32401)
+
+## <small>11.4.10 (2025-03-05)</small>
+
+* [bitnami/grafana] Release 11.4.10 (#32294) ([61e42e2](https://github.com/bitnami/charts/commit/61e42e2c2f16f44403f60e5c7e41252c5e5290bf)), closes [#32294](https://github.com/bitnami/charts/issues/32294)
+
+## <small>11.4.9 (2025-02-20)</small>
+
+* [bitnami/grafana] Release 11.4.9 (#32092) ([58bd78a](https://github.com/bitnami/charts/commit/58bd78aec8dba598955a16bd6672834281de59ca)), closes [#32092](https://github.com/bitnami/charts/issues/32092)
 
 ## <small>11.4.8 (2025-02-20)</small>
 

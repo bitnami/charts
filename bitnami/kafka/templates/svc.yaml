@@ -67,3 +67,10 @@ spec:
     {{- if and .Values.kraft.enabled .Values.controller.controllerOnly }}
     app.kubernetes.io/component: broker
     {{- end }}
+  {{- with .Values.service.ipFamilyPolicy }}
+  ipFamilyPolicy: {{ . | quote }}
+  {{- end }}
+  {{- with .Values.service.ipFamilies }}
+  ipFamilies:
+  {{- . | toYaml | nindent 2 }}
+  {{- end }}
