@@ -104,7 +104,7 @@ spec:
               value: {{ include "matomo.databaseUser" . | quote }}
             {{- if .Values.usePasswordFiles }}
             - name: MATOMO_DATABASE_PASSWORD_FILE
-              value: {{ printf "/opt/bitnami/matomo/secrets/%s" (include "matomo.databasePasswordKey" .) }}
+              value: {{ printf "/bitnami/matomo/secrets/%s" (include "matomo.databasePasswordKey" .) }}
             {{- else }}
             - name: MATOMO_DATABASE_PASSWORD
               valueFrom:
@@ -118,7 +118,7 @@ spec:
               value: {{ .Values.matomoUsername | quote }}
             {{- if .Values.usePasswordFiles }}
             - name: MATOMO_PASSWORD_FILE
-              value: "/opt/bitnami/matomo/secrets/matomo-password"
+              value: "/bitnami/matomo/secrets/matomo-password"
             {{- else }}
             - name: MATOMO_PASSWORD
               valueFrom:
@@ -151,7 +151,7 @@ spec:
             {{- if or .Values.smtpPassword .Values.smtpExistingSecret }}
             {{- if .Values.usePasswordFiles }}
             - name: MATOMO_SMTP_PASSWORD_FILE
-              value: "/opt/bitnami/matomo/secrets/smtp-password"
+              value: "/bitnami/matomo/secrets/smtp-password"
             {{- else }}
             - name: MATOMO_SMTP_PASSWORD
               valueFrom:
@@ -243,7 +243,7 @@ spec:
               mountPath: /bitnami/matomo
             {{- if .Values.usePasswordFiles }}
             - name: matomo-secrets
-              mountPath: /opt/bitnami/matomo/secrets
+              mountPath: /bitnami/matomo/secrets
             {{- end }}
             {{- if .Values.certificates.customCertificate.certificateSecret }}
             - name: custom-certificate
