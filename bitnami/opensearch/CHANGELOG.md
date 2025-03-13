@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.6.3 (2025-03-03)
+## 1.6.4 (2025-03-13)
 
-* [bitnami/opensearch] Release 1.6.3 ([#32239](https://github.com/bitnami/charts/pull/32239))
+* [bitnami/opensearch] allow to configure trafficDistribution ([#32442](https://github.com/bitnami/charts/pull/32442))
+
+## <small>1.6.3 (2025-03-03)</small>
+
+* [bitnami/opensearch] Release 1.6.3 (#32239) ([ee35be0](https://github.com/bitnami/charts/commit/ee35be0d9b67dd681723cffac287dac164f516be)), closes [#32239](https://github.com/bitnami/charts/issues/32239)
 
 ## <small>1.6.2 (2025-02-25)</small>
 
