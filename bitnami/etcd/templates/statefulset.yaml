@@ -291,10 +291,16 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.livenessProbe.enabled }}
           livenessProbe:
+            {{- if .Values.auth.client.secureTransport }}
+            exec:
+              command:
+                - /opt/bitnami/scripts/etcd/healthcheck.sh
+            {{- else }}
             httpGet:
               port: {{ .Values.containerPorts.client }}
               path: /livez
-              scheme: {{ ternary "HTTPS" "HTTP" .Values.auth.client.secureTransport | quote }}
+              scheme: "HTTP"
+            {{- end }}
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}

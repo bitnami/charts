@@ -1,8 +1,16 @@
 # Changelog
 
-## 2.5.2 (2025-02-26)
+## 2.5.4 (2025-03-13)
 
-* [bitnami/mlflow] Release 2.5.2 ([#32181](https://github.com/bitnami/charts/pull/32181))
+* [bitnami/mlflow] Release 2.5.4 ([#32435](https://github.com/bitnami/charts/pull/32435))
+
+## <small>2.5.3 (2025-03-04)</small>
+
+* [bitnami/mlflow] Release 2.5.3 (#32263) ([6c8cae9](https://github.com/bitnami/charts/commit/6c8cae96201e7c01c659b5c80d3ff7f881bf87e9)), closes [#32263](https://github.com/bitnami/charts/issues/32263)
+
+## <small>2.5.2 (2025-02-26)</small>
+
+* [bitnami/mlflow] Release 2.5.2 (#32181) ([5087ab8](https://github.com/bitnami/charts/commit/5087ab8183e3b012223f155cca13b762de45895d)), closes [#32181](https://github.com/bitnami/charts/issues/32181)
 
 ## <small>2.5.1 (2025-02-25)</small>
 

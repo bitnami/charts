@@ -110,7 +110,10 @@ spec:
                   value: "/opt/bitnami/etcd/certs/client/{{ .Values.auth.client.caFilename | default "ca.crt" }}"
                 {{- else if .Values.auth.client.caFilename }}
                 - name: ETCD_TRUSTED_CA_FILE
-                  value: "/opt/bitnami/etcd/certs/client/{{ .Values.auth.client.caFilename | default "ca.crt" }}"
+                  value: "/opt/bitnami/etcd/certs/client/{{ .Values.auth.client.caFilename }}"
+                {{- else }}
+                - name: ETCD_EXTRA_AUTH_FLAGS
+                  value: "--insecure-skip-tls-verify"
                 {{- end }}
                 {{- end }}
                 {{- if or .Values.auth.rbac.create .Values.auth.rbac.enabled }}

@@ -129,10 +129,12 @@ spec:
             {{- if .Values.grafana.extraEnvVarsCM }}
             - configMapRef:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.grafana.extraEnvVarsCM "context" $) }}
+                optional: {{ include "common.tplvalues.render" (dict "value" .Values.grafana.extraEnvVarsCMOptional "context" $) }}
             {{- end }}
             {{- if .Values.grafana.extraEnvVarsSecret }}
             - secretRef:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.grafana.extraEnvVarsSecret "context" $) }}
+                optional: {{ include "common.tplvalues.render" (dict "value" .Values.grafana.extraEnvVarsSecretOptional "context" $) }}
             {{- end }}
           env:
             - name: GF_SECURITY_ADMIN_PASSWORD
