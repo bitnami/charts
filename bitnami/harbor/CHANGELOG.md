@@ -1,6 +1,6 @@
 # Changelog
 
-## 24.4.0 (2025-03-12)
+## 24.4.0 (2025-03-13)
 
 * [bitnami/harbor] Revert merge chart generated env vart secret with existing secret ([#32382](https://github.com/bitnami/charts/pull/32382))
 
