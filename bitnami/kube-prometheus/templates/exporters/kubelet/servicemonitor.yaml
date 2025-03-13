@@ -51,6 +51,12 @@ spec:
       {{- if .Values.kubelet.serviceMonitor.relabelings }}
       relabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.kubelet.serviceMonitor.relabelings "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.kubelet.serviceMonitor.keepMetrics }}
+      metricRelabelings:
+        - sourceLabels: [__name__]
+          regex: "{{ .Values.kubelet.serviceMonitor.keepMetrics | default (list ".*") | join "|" }}"
+          action: keep
+      {{- end }}
       {{- if .Values.kubelet.serviceMonitor.cAdvisor }}
     - port: {{ printf "%s-metrics" $scheme }}
       scheme: {{$scheme}}

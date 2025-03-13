@@ -2515,6 +2515,9 @@ kubelet:
     ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config
     ##
     relabelings: []
+    ## @param serviceMonitor.keepMetrics ServiceMonitor keepMetrics
+    ##
+    keepMetrics: []
     ## @param kubelet.serviceMonitor.cAdvisor Enable scraping /metrics/cadvisor from kubelet's service
     ## ref: https://prometheus.io/docs/guides/cadvisor/#exploring-metrics-in-the-expression-browser
     ##
@@ -3011,6 +3014,9 @@ kubeApiServer:
     ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config
     ##
     relabelings: []
+    ## @param serviceMonitor.keepMetrics ServiceMonitor keepMetrics
+    ##
+    keepMetrics: []
     ## @param kubeApiServer.serviceMonitor.labels Extra labels for the ServiceMonitor
     ##
     labels: {}
@@ -3081,6 +3087,9 @@ kubeControllerManager:
     ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config
     ##
     relabelings: []
+    ## @param serviceMonitor.keepMetrics ServiceMonitor keepMetrics
+    ##
+    keepMetrics: []
     ## @param kubeControllerManager.serviceMonitor.labels Extra labels for the ServiceMonitor
     ##
     labels: {}
@@ -3159,6 +3168,9 @@ kubeScheduler:
     ##    action: replace
     ##
     relabelings: []
+    ## @param serviceMonitor.keepMetrics ServiceMonitor keepMetrics
+    ##
+    keepMetrics: []
     ## @param kubeScheduler.serviceMonitor.labels Extra labels for the ServiceMonitor
     ##
     labels: {}
@@ -3220,6 +3232,9 @@ coreDns:
     ##    action: replace
     ##
     relabelings: []
+    ## @param serviceMonitor.keepMetrics ServiceMonitor keepMetrics
+    ##
+    keepMetrics: []
     ## @param coreDns.serviceMonitor.labels Extra labels for the ServiceMonitor
     ##
     labels: {}
@@ -3283,6 +3298,9 @@ kubeProxy:
     ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config
     ##
     relabelings: []
+    ## @param serviceMonitor.keepMetrics ServiceMonitor keepMetrics
+    ##
+    keepMetrics: []
     ## @param kubeProxy.serviceMonitor.labels Extra labels for the ServiceMonitor
     ##
     labels: {}
