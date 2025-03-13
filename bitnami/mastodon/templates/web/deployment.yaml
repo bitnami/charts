@@ -197,6 +197,7 @@ spec:
                   name: {{ include "mastodon.s3.secretName" . }}
                   key: {{ include "mastodon.s3.secretAccessKeyKey" . | quote }}
             {{- end }}
+            {{- end }}
             {{- if and .Values.enableSearches (include "mastodon.elasticsearch.auth.enabled" .) }}
             {{- if .Values.usePasswordFiles }}
             - name: MASTODON_ELASTICSEARCH_PASSWORD_FILE

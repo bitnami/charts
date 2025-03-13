@@ -676,7 +676,7 @@ Init container definition for waiting for Redis(TM) to be ready
     {{- if (include "mastodon.redis.auth.enabled" .) }}
     {{- if .Values.usePasswordFiles }}
     - name: MASTODON_REDIS_PASSWORD_FILE
-        value: {{ printf "/opt/bitnami/mastodon/secrets/%s" (include "mastodon.redis.passwordKey" .) }}
+      value: {{ printf "/opt/bitnami/mastodon/secrets/%s" (include "mastodon.redis.passwordKey" .) }}
     {{- else }}
     - name: MASTODON_REDIS_PASSWORD
       valueFrom:
