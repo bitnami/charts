@@ -1,0 +1,14 @@
+apiVersion: authorization.openshift.io/v1
+kind: RoleBinding
+metadata:
+  name: anyuid
+  namespace: {{ .Values.namespaceOverride | default .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ .Release.Name }}sa
+    namespace: {{ .Values.namespaceOverride | default .Release.Namespace | quote }}
+roleRef:
+  kind: ClusterRole
+  name: system:openshift:scc:anyuid
+apiGroup: rbac.authorization.k8s.io
