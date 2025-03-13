@@ -1,8 +1,14 @@
 # Changelog
 
-## 9.5.4 (2025-02-20)
+## 9.5.5 (2025-03-12)
 
-* [bitnami/solr] Release 9.5.4 ([#32037](https://github.com/bitnami/charts/pull/32037))
+* [bitnami/solr] Release 9.5.5 ([#32414](https://github.com/bitnami/charts/pull/32414))
+
+## <small>9.5.4 (2025-02-20)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/solr] Release 9.5.4 (#32037) ([e5dfb89](https://github.com/bitnami/charts/commit/e5dfb896fe160c69a800206563312d98fb031ea4)), closes [#32037](https://github.com/bitnami/charts/issues/32037)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
 
 ## <small>9.5.3 (2025-01-28)</small>
 

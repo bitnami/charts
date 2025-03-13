@@ -180,7 +180,7 @@ spec:
             {{- if .Values.auth.enabled }}
             {{- if .Values.auth.usePasswordFiles }}
             - name: VALKEY_PASSWORD_FILE
-              value: {{ printf "/opt/bitnami/valkey/secrets/%s" (include "valkey.secretPasswordKey" .) }}
+              value: "/opt/bitnami/valkey/secrets/valkey-password"
             {{- else }}
             - name: VALKEY_PASSWORD
               valueFrom:
@@ -277,7 +277,7 @@ spec:
               mountPath: /opt/bitnami/scripts/start-scripts
             - name: health
               mountPath: /health
-            {{- if .Values.auth.usePasswordFiles }}
+            {{- if and .Values.auth.enabled .Values.auth.usePasswordFiles }}
             - name: valkey-password
               mountPath: /opt/bitnami/valkey/secrets/
             {{- end }}
@@ -320,7 +320,7 @@ spec:
             - /bin/bash
             - -c
             - |
-              {{- if .Values.usePasswordFiles }}
+              {{- if and .Values.auth.enabled .Values.auth.usePasswordFiles }}
               export REDIS_PASSWORD="$(< $REDIS_PASSWORD_FILE)"
               {{- end }}
               redis_exporter{{- range $key, $value := .Values.metrics.extraArgs }} --{{ $key }}={{ $value }}{{- end }}
@@ -338,7 +338,7 @@ spec:
               value: default
             {{- if .Values.auth.usePasswordFiles }}
             - name: REDIS_PASSWORD_FILE
-              value: {{ printf "/secrets/%s" (include "valkey.secretPasswordKey" .) }}
+              value: "/secrets/valkey-password"
             {{- else }}
             - name: REDIS_PASSWORD
               valueFrom:
@@ -398,7 +398,7 @@ spec:
             - name: empty-dir
               mountPath: /tmp
               subPath: app-tmp-dir
-            {{- if .Values.auth.usePasswordFiles }}
+            {{- if and .Values.auth.enabled .Values.auth.usePasswordFiles }}
             - name: valkey-password
               mountPath: /secrets/
             {{- end }}
@@ -423,7 +423,7 @@ spec:
           configMap:
             name: {{ printf "%s-health" (include "common.names.fullname" .) }}
             defaultMode: 0755
-        {{- if .Values.auth.usePasswordFiles }}
+            {{- if and .Values.auth.enabled .Values.auth.usePasswordFiles }}
         - name: valkey-password
           {{ if .Values.auth.usePasswordFileFromSecret }}
           secret:

@@ -1,8 +1,12 @@
 # Changelog
 
+## 1.4.1 (2025-03-05)
+
+* [bitnami/kuberay] Release 1.4.1 ([#32301](https://github.com/bitnami/charts/pull/32301))
+
 ## 1.4.0 (2025-02-20)
 
-* [bitnami/kuberay] feat: use new helper for checking API versions ([#32054](https://github.com/bitnami/charts/pull/32054))
+* [bitnami/kuberay] feat: use new helper for checking API versions (#32054) ([f81c75f](https://github.com/bitnami/charts/commit/f81c75f8bdd65bcf72b06556622aad5b9d1166fe)), closes [#32054](https://github.com/bitnami/charts/issues/32054)
 
 ## <small>1.3.7 (2025-02-19)</small>
 

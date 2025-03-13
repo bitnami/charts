@@ -145,6 +145,8 @@ LDAP support can be enabled in the chart by specifying the `ldap.` parameters wh
 - **ldap.bslookup**: LDAP base lookup. No defaults.
 - **ldap.nss_initgroups_ignoreusers**: LDAP ignored users. `root,nslcd`.
 - **ldap.scope**: LDAP search scope. No defaults.
+- **ldap.searchfilter**: LDAP search filter. No defaults.
+- **ldap.searchmap**: LDAP search map. No defaults.
 - **ldap.tls_reqcert**: LDAP TLS check on server certificates. No defaults.
 
 For example:
@@ -158,6 +160,8 @@ ldap.bindpw="admin"
 ldap.bslookup="ou=group-ok\,dc=example\,dc=org"
 ldap.nss_initgroups_ignoreusers="root\,nslcd"
 ldap.scope="sub"
+ldap.searchfilter="posixaccount"
+ldap.searchmap="uid"
 ldap.tls_reqcert="demand"
 ```
 
@@ -476,7 +480,7 @@ A default `StorageClass` is needed in the Kubernetes cluster to dynamically prov
 | `postgresql.database`                                          | PostgreSQL database                                                                                                                                                                                                                     | `""`                                |
 | `postgresql.existingSecret`                                    | PostgreSQL password using existing secret                                                                                                                                                                                               | `""`                                |
 | `postgresql.postgresPassword`                                  | PostgreSQL password for the `postgres` user when `username` is not `postgres`                                                                                                                                                           | `""`                                |
-| `postgresql.usePasswordFile`                                   | Set to `true` to mount PostgreSQL secret as a file instead of passing environment variable                                                                                                                                              | `""`                                |
+| `postgresql.usePasswordFiles`                                  | Set to `true` to mount PostgreSQL secret as a file instead of passing environment variable                                                                                                                                              | `true`                              |
 | `postgresql.repmgrUsePassfile`                                 | Set to `true` to configure repmgrl to use `passfile` instead of `password` vars*:*:*:username:password" and use it to configure Repmgr instead of using password (Requires Postgresql 10+, otherwise ignored)                           | `""`                                |
 | `postgresql.repmgrPassfilePath`                                | Custom path where `passfile` will be stored                                                                                                                                                                                             | `""`                                |
 | `postgresql.upgradeRepmgrExtension`                            | Upgrade repmgr extension in the database                                                                                                                                                                                                | `false`                             |
@@ -734,7 +738,7 @@ A default `StorageClass` is needed in the Kubernetes cluster to dynamically prov
 | `pgpool.minReadySeconds`                                   | How many seconds a pod needs to be ready before killing the next, during update                                                                                                                                                 | `""`                     |
 | `pgpool.adminUsername`                                     | Pgpool Admin username                                                                                                                                                                                                           | `admin`                  |
 | `pgpool.adminPassword`                                     | Pgpool Admin password                                                                                                                                                                                                           | `""`                     |
-| `pgpool.usePasswordFile`                                   | Set to `true` to mount pgpool secret as a file instead of passing environment variable                                                                                                                                          | `""`                     |
+| `pgpool.usePasswordFiles`                                  | Set to `true` to mount pgpool secret as a file instead of passing environment variable                                                                                                                                          | `true`                   |
 | `pgpool.authenticationMethod`                              | Pgpool authentication method. Use 'md5' for PSQL < 14.                                                                                                                                                                          | `scram-sha-256`          |
 | `pgpool.logConnections`                                    | Log all client connections (PGPOOL_ENABLE_LOG_CONNECTIONS)                                                                                                                                                                      | `false`                  |
 | `pgpool.logHostname`                                       | Log the client hostname instead of IP address (PGPOOL_ENABLE_LOG_HOSTNAME)                                                                                                                                                      | `true`                   |
@@ -775,6 +779,8 @@ A default `StorageClass` is needed in the Kubernetes cluster to dynamically prov
 | `ldap.bindpw`                   | LDAP bind password                                           | `""`         |
 | `ldap.bslookup`                 | LDAP base lookup                                             | `""`         |
 | `ldap.scope`                    | LDAP search scope                                            | `""`         |
+| `ldap.searchfilter`             | LDAP search filter                                           | `""`         |
+| `ldap.searchmap`                | LDAP search map                                              | `""`         |
 | `ldap.tlsReqcert`               | LDAP TLS check on server certificates                        | `""`         |
 | `ldap.nssInitgroupsIgnoreusers` | LDAP ignored users                                           | `root,nslcd` |
 

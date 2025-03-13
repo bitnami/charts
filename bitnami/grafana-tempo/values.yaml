@@ -88,7 +88,7 @@ tempo:
   image:
     registry: docker.io
     repository: bitnami/grafana-tempo
-    tag: 2.7.1-debian-12-r2
+    tag: 2.7.1-debian-12-r4
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1271,6 +1271,48 @@ metricsGenerator:
   ##
   enableServiceLinks: true
 
+  ## @section Metrics Generator Persistence Parameters
+
+  ## Enable persistence using Persistent Volume Claims
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
+  ##
+  persistence:
+    ## @param metricsGenerator.persistence.enabled Enable persistence in Metrics Generator instances
+    ##
+    enabled: false
+    ## @param metricsGenerator.persistence.existingClaim Name of an existing PVC to use
+    ##
+    existingClaim: ""
+    ## @param metricsGenerator.persistence.storageClass PVC Storage Class for Metrics Generator data volume
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
+    storageClass: ""
+    ## @param metricsGenerator.persistence.subPath The subdirectory of the volume to mount to
+    ##
+    subPath: ""
+    ## @param metricsGenerator.persistence.accessModes PVC Access modes
+    ##
+    accessModes:
+      - ReadWriteOnce
+    ## @param metricsGenerator.persistence.size PVC Storage Request for Metrics Generator data volume
+    ##
+    size: 8Gi
+    ## @param metricsGenerator.persistence.annotations Additional PVC annotations
+    ##
+    annotations: {}
+    ## @param metricsGenerator.persistence.selector Selector to match an existing Persistent Volume for Metrics Generator's data PVC
+    ## If set, the PVC can't have a PV dynamically provisioned for it
+    ## E.g.
+    ## selector:
+    ##   matchLabels:
+    ##     app: my-app
+    ##
+    selector: {}
+
   ## @section Metrics Generator Traffic Exposure Parameters
 
   ## metricsGenerator service parameters
@@ -2446,7 +2488,7 @@ queryFrontend:
     image:
       registry: docker.io
       repository: bitnami/grafana-tempo-query
-      tag: 2.7.1-debian-12-r2
+      tag: 2.7.1-debian-12-r4
       digest: ""
       ## Specify a imagePullPolicy
       ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -2746,7 +2788,7 @@ vulture:
   image:
     registry: docker.io
     repository: bitnami/grafana-tempo-vulture
-    tag: 2.7.1-debian-12-r2
+    tag: 2.7.1-debian-12-r4
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -3154,7 +3196,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r38
+    tag: 12-debian-12-r39
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

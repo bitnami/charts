@@ -155,35 +155,40 @@ spec:
           {{- if .Values.scheduler.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.scheduler.customLivenessProbe "context" $) | trim | nindent 12 }}
           {{- else if .Values.scheduler.livenessProbe.enabled }}
+          {{- $livenessTimeout := sub (int .Values.scheduler.livenessProbe.timeoutSeconds) 1 }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.scheduler.livenessProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command:
                 - /bin/bash
                 - -ec
                 - |
-                  CONNECTION_CHECK_MAX_COUNT=0 airflow jobs check --job-type SchedulerJob --local {{- if not .Values.diagnosticMode.enabled }} 2>/dev/null {{- end }}
+                  export CONNECTION_CHECK_MAX_COUNT=0
+                  timeout {{ $livenessTimeout }} airflow jobs check --job-type SchedulerJob --local {{- if not .Values.diagnosticMode.enabled }} 2>/dev/null {{- end }}
           {{- end }}
           {{- if .Values.scheduler.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.scheduler.customReadinessProbe "context" $) | trim | nindent 12 }}
           {{- else if .Values.scheduler.readinessProbe.enabled }}
+          {{- $readinessTimeout := sub (int .Values.scheduler.readinessProbe.timeoutSeconds) 1 }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.scheduler.readinessProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command:
                 - /bin/bash
                 - -ec
                 - |
-                  airflow jobs check --job-type SchedulerJob --local {{- if not .Values.diagnosticMode.enabled }} 2>/dev/null {{- end }}
+                  timeout {{ $readinessTimeout }} airflow jobs check --job-type SchedulerJob --local {{- if not .Values.diagnosticMode.enabled }} 2>/dev/null {{- end }}
           {{- end }}
           {{- if .Values.scheduler.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.scheduler.customStartupProbe "context" $) | nindent 12 }}
           {{- else if .Values.scheduler.startupProbe.enabled }}
+          {{- $startupTimeout := sub (int .Values.scheduler.startupProbe.timeoutSeconds) 1 }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.scheduler.startupProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command:
                 - /bin/bash
                 - -ec
                 - |
-                  CONNECTION_CHECK_MAX_COUNT=0 airflow jobs check --job-type SchedulerJob --local {{- if not .Values.diagnosticMode.enabled }} 2>/dev/null {{- end }}
+                  export CONNECTION_CHECK_MAX_COUNT=0
+                  timeout {{ $startupTimeout }} airflow jobs check --job-type SchedulerJob --local {{- if not .Values.diagnosticMode.enabled }} 2>/dev/null {{- end }}
           {{- end }}
           {{- end }}
           {{- if .Values.scheduler.lifecycleHooks }}
@@ -216,6 +221,10 @@ spec:
             - name: empty-dir
               mountPath: /opt/bitnami/airflow/config/airflow_local_settings.py
               subPath: app-conf-dir/airflow_local_settings.py
+            {{- if  .Values.usePasswordFiles }}
+            - name: airflow-secrets
+              mountPath: /opt/bitnami/airflow/secrets
+            {{- end }}
             {{- if $kube }}
             - name: pod-template
               mountPath: /opt/bitnami/airflow/config/pod_template.yaml
@@ -252,6 +261,19 @@ spec:
           configMap:
             name: {{ include "airflow.configMapName"  . }}
             optional: true
+        {{- if .Values.usePasswordFiles }}
+        - name: airflow-secrets
+          projected:
+            sources:
+              - secret:
+                  name:  {{ include "airflow.secretName" . }}
+              - secret:
+                  name: {{ include "airflow.database.secretName" . }}
+              {{- if or (eq .Values.executor "CeleryExecutor") (eq .Values.executor "CeleryKubernetesExecutor") }}
+              - secret:
+                  name: {{ include "airflow.redis.secretName" . }}
+              {{- end }}
+        {{- end }}
         {{- if $kube }}
         - name: pod-template
           configMap:

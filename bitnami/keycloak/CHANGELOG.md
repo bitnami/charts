@@ -1,8 +1,17 @@
 # Changelog
 
-## 24.4.10 (2025-02-17)
+## 24.4.12 (2025-03-11)
 
-* [bitnami/keycloak] Release 24.4.10 ([#31951](https://github.com/bitnami/charts/pull/31951))
+* [bitnami/keycloak] Update secret-external-db namespace to use common helper value ([#32379](https://github.com/bitnami/charts/pull/32379))
+
+## <small>24.4.11 (2025-02-28)</small>
+
+* [bitnami/keycloak] Release 24.4.11 (#32211) ([932c291](https://github.com/bitnami/charts/commit/932c2910f0b648bbdb006a1122792e6363b3b17a)), closes [#32211](https://github.com/bitnami/charts/issues/32211)
+
+## <small>24.4.10 (2025-02-17)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/keycloak] Release 24.4.10 (#31951) ([0e98679](https://github.com/bitnami/charts/commit/0e98679e34dd8dd0098f4b0e4db96f8c69aa5a58)), closes [#31951](https://github.com/bitnami/charts/issues/31951)
 
 ## <small>24.4.9 (2025-02-05)</small>
 

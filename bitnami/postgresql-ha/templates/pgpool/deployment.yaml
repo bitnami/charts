@@ -159,7 +159,7 @@ spec:
               value: {{ range $e, $i := until $postgresqlReplicaCount }}{{ $i }}:{{ $postgresqlFullname }}-{{ $i }}.{{ $postgresqlHeadlessServiceName }}:{{ $postgresalContainerPort }},{{ end }}
             - name: PGPOOL_SR_CHECK_USER
               value: {{ (include "postgresql-ha.postgresqlRepmgrUsername" .) | quote }}
-            {{- if .Values.postgresql.usePasswordFile }}
+            {{- if .Values.postgresql.usePasswordFiles }}
             - name: PGPOOL_SR_CHECK_PASSWORD_FILE
               value: "/opt/bitnami/pgpool/secrets/pgpool-sr-check-password"
             {{- else }}
@@ -193,6 +193,14 @@ spec:
             - name: LDAP_SCOPE
               value: {{ .Values.ldap.scope | quote }}
             {{- end }}
+            {{- if .Values.ldap.searchfilter }}
+            - name: LDAP_SEARCH_FILTER
+              value: {{ .Values.ldap.searchfilter | quote }}
+            {{- end }}
+            {{- if .Values.ldap.searchmap }}
+            - name: LDAP_SEARCH_MAP
+              value: {{ .Values.ldap.searchmap | quote }}
+            {{- end }}
             {{- if .Values.ldap.tlsReqcert }}
             - name: LDAP_TLS_REQCERT
               value: {{ .Values.ldap.tlsReqcert | quote }}
@@ -202,7 +210,7 @@ spec:
             {{- end }}
             - name: PGPOOL_POSTGRES_USERNAME
               value: {{ (include "postgresql-ha.postgresqlUsername" .) | quote }}
-            {{- if .Values.postgresql.usePasswordFile }}
+            {{- if .Values.postgresql.usePasswordFiles }}
             - name: PGPOOL_POSTGRES_PASSWORD_FILE
               value: "/opt/bitnami/pgpool/secrets/pgpool-password"
             {{- else }}
@@ -214,7 +222,7 @@ spec:
             {{- end }}
             - name: PGPOOL_ADMIN_USERNAME
               value: {{ (include "postgresql-ha.pgpoolAdminUsername" .) | quote }}
-            {{- if .Values.pgpool.usePasswordFile }}
+            {{- if .Values.pgpool.usePasswordFiles }}
             - name: PGPOOL_ADMIN_PASSWORD_FILE
               value: "/opt/bitnami/pgpool/secrets/admin-password"
             {{- else }}
@@ -360,7 +368,7 @@ spec:
             - name: empty-dir
               mountPath: /opt/bitnami/pgpool/logs
               subPath: app-logs-dir
-          {{- if or .Values.pgpool.configuration .Values.pgpool.configurationCM .Values.pgpool.initdbScripts .Values.pgpool.initdbScriptsCM .Values.pgpool.initdbScriptsSecret .Values.postgresql.usePasswordFile .Values.pgpool.usePasswordFile .Values.pgpool.tls.enabled .Values.pgpool.extraVolumeMounts }}
+          {{- if or .Values.pgpool.configuration .Values.pgpool.configurationCM .Values.pgpool.initdbScripts .Values.pgpool.initdbScriptsCM .Values.pgpool.initdbScriptsSecret .Values.postgresql.usePasswordFiles .Values.pgpool.usePasswordFiles .Values.pgpool.tls.enabled .Values.pgpool.extraVolumeMounts }}
             {{- if or .Values.pgpool.configuration .Values.pgpool.configurationCM }}
             - name: pgpool-config
               mountPath: /opt/bitnami/pgpool/user_config/
@@ -373,7 +381,7 @@ spec:
             - name: custom-init-scripts-secret
               mountPath: /docker-entrypoint-initdb.d/secret
             {{- end }}
-            {{- if .Values.postgresql.usePasswordFile }}
+            {{- if .Values.postgresql.usePasswordFiles }}
             - name: postgresql-password
               subPath: pgpool-password
               mountPath: /opt/bitnami/pgpool/secrets/pgpool-password
@@ -381,7 +389,7 @@ spec:
               subPath: pgpool-sr-check-password
               mountPath: /opt/bitnami/pgpool/secrets/pgpool-sr-check-password
             {{- end }}
-            {{- if .Values.pgpool.usePasswordFile }}
+            {{- if .Values.pgpool.usePasswordFiles }}
             - name: pgpool-password
               subPath: admin-password
               mountPath: /opt/bitnami/pgpool/secrets/admin-password
@@ -400,7 +408,7 @@ spec:
       volumes:
         - name: empty-dir
           emptyDir: {}
-      {{- if or .Values.pgpool.configuration .Values.pgpool.configurationCM .Values.pgpool.initdbScripts .Values.pgpool.initdbScriptsCM .Values.pgpool.initdbScriptsSecret .Values.pgpool.usePasswordFile .Values.postgresql.usePasswordFile .Values.pgpool.tls.enabled .Values.pgpool.extraVolumes }}
+      {{- if or .Values.pgpool.configuration .Values.pgpool.configurationCM .Values.pgpool.initdbScripts .Values.pgpool.initdbScriptsCM .Values.pgpool.initdbScriptsSecret .Values.pgpool.usePasswordFiles .Values.postgresql.usePasswordFiles .Values.pgpool.tls.enabled .Values.pgpool.extraVolumes }}
         {{- if or .Values.pgpool.configuration .Values.pgpool.configurationCM }}
         - name: pgpool-config
           configMap:
@@ -416,7 +424,7 @@ spec:
           secret:
             secretName: {{ template "postgresql-ha.pgpoolInitdbScriptsSecret" . }}
         {{- end }}
-        {{- if .Values.postgresql.usePasswordFile }}
+        {{- if .Values.postgresql.usePasswordFiles }}
         - name: postgresql-password
           secret:
             secretName: {{ include "postgresql-ha.postgresqlSecretName" . }}
@@ -426,7 +434,7 @@ spec:
               - key: repmgr-password
                 path: pgpool-sr-check-password
         {{- end }}
-        {{- if .Values.pgpool.usePasswordFile }}
+        {{- if .Values.pgpool.usePasswordFiles }}
         - name: pgpool-password
           secret:
             secretName: {{ include "postgresql-ha.pgpoolSecretName" . }}

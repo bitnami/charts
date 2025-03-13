@@ -1,8 +1,19 @@
 # Changelog
 
-## 34.1.2 (2025-01-31)
+## 34.2.1 (2025-03-02)
 
-* [bitnami/spring-cloud-dataflow] Release 34.1.2 ([#31688](https://github.com/bitnami/charts/pull/31688))
+* [bitnami/spring-cloud-dataflow] Release 34.2.1 ([#32230](https://github.com/bitnami/charts/pull/32230))
+
+## 34.2.0 (2025-02-26)
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/spring-cloud-dataflow] Use subchart default value for `usePasswordFiles` (#32120) ([b9d42d0](https://github.com/bitnami/charts/commit/b9d42d04ad7b8ba4a8bbd66e3e4570853a9acf64)), closes [#32120](https://github.com/bitnami/charts/issues/32120)
+
+## <small>34.1.2 (2025-02-03)</small>
+
+* [bitnami/spring-cloud-dataflow] Release 34.1.2 (#31688) ([d39f48a](https://github.com/bitnami/charts/commit/d39f48aec34ce2a277bece9196709afa63c32ec3)), closes [#31688](https://github.com/bitnami/charts/issues/31688)
+* Typo fix  CHANGELOG.md (#31536) ([315f9c2](https://github.com/bitnami/charts/commit/315f9c2f9b1c582eee30d983cc358bf66d3da0ad)), closes [#31536](https://github.com/bitnami/charts/issues/31536)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
 
 ## <small>34.1.1 (2025-01-17)</small>
 

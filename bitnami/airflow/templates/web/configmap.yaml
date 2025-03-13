@@ -17,7 +17,7 @@ metadata:
 data:
   webserver_config.py: |-
   {{- if .Values.web.configuration }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.web.configuration "context" .) | indent 4 }}
+    {{ include "common.tplvalues.render" (dict "value" .Values.web.configuration "context" .) | nindent 4 }}
   {{- else }}
     """Configuration for the Airflow webserver"""
 
@@ -52,6 +52,8 @@ data:
     # Flask-WTF flag for CSRF
     WTF_CSRF_ENABLED = True
     WTF_CSRF_TIME_LIMIT = None
-
+  {{- if .Values.web.extraConfiguration }}
+    {{ include "common.tplvalues.render" (dict "value" .Values.web.extraConfiguration "context" .) | nindent 4 }}
+  {{- end }}
   {{- end }}
 {{- end }}

@@ -85,6 +85,9 @@ commonLabels: {}
 ## @param commonAnnotations Add annotations to all the deployed resources
 ##
 commonAnnotations: {}
+## @param secretAnnotations Add annotations to the secrets
+##
+secretAnnotations: {}
 ## Enable diagnostic mode in the statefulset
 ##
 diagnosticMode:
@@ -115,7 +118,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/postgresql
-  tag: 17.4.0-debian-12-r2
+  tag: 17.4.0-debian-12-r4
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1696,7 +1699,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/postgres-exporter
-    tag: 0.16.0-debian-12-r11
+    tag: 0.17.1-debian-12-r0
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

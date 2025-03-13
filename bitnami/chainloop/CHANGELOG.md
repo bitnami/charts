@@ -1,8 +1,36 @@
 # Changelog
 
-## 2.2.6 (2025-02-25)
+## 2.2.13 (2025-03-11)
 
-* [bitnami/chainloop] Release 2.2.6 ([#32159](https://github.com/bitnami/charts/pull/32159))
+* [bitnami/chainloop] Release 2.2.13 ([#32405](https://github.com/bitnami/charts/pull/32405))
+
+## <small>2.2.12 (2025-03-05)</small>
+
+* [bitnami/chainloop] Release 2.2.12 (#32325) ([debdca4](https://github.com/bitnami/charts/commit/debdca4ca1815b9bfd1eaea26d929200f2259ac1)), closes [#32325](https://github.com/bitnami/charts/issues/32325)
+
+## <small>2.2.11 (2025-03-04)</small>
+
+* [bitnami/chainloop] Release 2.2.11 (#32280) ([3649ab7](https://github.com/bitnami/charts/commit/3649ab7fdcf8a693c44521ce17083cc4a9c53c34)), closes [#32280](https://github.com/bitnami/charts/issues/32280)
+
+## <small>2.2.10 (2025-03-04)</small>
+
+* [bitnami/chainloop] Release 2.2.10 (#32274) ([f0356b1](https://github.com/bitnami/charts/commit/f0356b16e7cea21adcd6314a7886c7e2c40738e0)), closes [#32274](https://github.com/bitnami/charts/issues/32274)
+
+## <small>2.2.9 (2025-03-03)</small>
+
+* [bitnami/chainloop] Release 2.2.9 (#32237) ([586138d](https://github.com/bitnami/charts/commit/586138d4d4c9fcaaa6ef1f8578d772f27a7b2f4c)), closes [#32237](https://github.com/bitnami/charts/issues/32237)
+
+## <small>2.2.8 (2025-03-03)</small>
+
+* [bitnami/chainloop] Release 2.2.8 (#32233) ([8dcc47c](https://github.com/bitnami/charts/commit/8dcc47cdd228c5c18df2589e0c328a91e63dbfc1)), closes [#32233](https://github.com/bitnami/charts/issues/32233)
+
+## <small>2.2.7 (2025-02-27)</small>
+
+* [bitnami/chainloop] Release 2.2.7 (#32196) ([3d4d32a](https://github.com/bitnami/charts/commit/3d4d32a8c1b8fcffd0268229bc0ee5197788fc3a)), closes [#32196](https://github.com/bitnami/charts/issues/32196)
+
+## <small>2.2.6 (2025-02-25)</small>
+
+* [bitnami/chainloop] Release 2.2.6 (#32159) ([226c1c9](https://github.com/bitnami/charts/commit/226c1c9cc992be95573fe3599cfa0110fe14e9b0)), closes [#32159](https://github.com/bitnami/charts/issues/32159)
 
 ## <small>2.2.5 (2025-02-24)</small>
 
