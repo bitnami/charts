@@ -1,8 +1,16 @@
 # Changelog
 
+## 31.5.0 (2025-03-06)
+
+* [bitnami/kafka] IpFamilies and IpFamilyPolicy configurables ([#31456](https://github.com/bitnami/charts/pull/31456))
+
+## <small>31.4.1 (2025-03-04)</small>
+
+* [bitnami/kafka] Release 31.4.1 (#32257) ([5136e86](https://github.com/bitnami/charts/commit/5136e8603c2c5402ba07026948965da7011cae8e)), closes [#32257](https://github.com/bitnami/charts/issues/32257)
+
 ## 31.4.0 (2025-02-20)
 
-* [bitnami/kafka] feat: use new helper for checking API versions ([#32051](https://github.com/bitnami/charts/pull/32051))
+* [bitnami/kafka] feat: use new helper for checking API versions (#32051) ([8abc389](https://github.com/bitnami/charts/commit/8abc389c429c32d900b68429730dfbfad02c8208)), closes [#32051](https://github.com/bitnami/charts/issues/32051)
 
 ## <small>31.3.2 (2025-02-20)</small>
 

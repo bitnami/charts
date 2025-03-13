@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
+  tanzuCategory: service
   category: Database
   licenses: Apache-2.0
   images: |
@@ -40,4 +41,4 @@ maintainers:
 name: postgresql-ha
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/postgresql-ha
-version: 15.3.3
+version: 15.3.4

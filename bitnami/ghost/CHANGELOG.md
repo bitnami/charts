@@ -1,12 +1,8 @@
 # Changelog
 
-## 22.2.0 (2025-03-06)
+## 22.1.19 (2025-03-05)
 
-* [bitnami/ghost] Set `usePasswordFiles=true` by default ([#32346](https://github.com/bitnami/charts/pull/32346))
-
-## <small>22.1.19 (2025-03-05)</small>
-
-* [bitnami/ghost] Release 22.1.19 (#32327) ([c968511](https://github.com/bitnami/charts/commit/c968511b976340a5ee89cedca19f7f034888e65c)), closes [#32327](https://github.com/bitnami/charts/issues/32327)
+* [bitnami/ghost] Release 22.1.19 ([#32327](https://github.com/bitnami/charts/pull/32327))
 
 ## <small>22.1.18 (2025-03-03)</small>
 
