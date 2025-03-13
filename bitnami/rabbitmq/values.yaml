@@ -1169,6 +1169,10 @@ service:
   ##     timeoutSeconds: 300
   ##
   sessionAffinityConfig: {}
+  ## @param service.trafficDistribution Traffic Distribution provides another
+  ## way to influence traffic routing within a Kubernetes Service.
+  ##
+  trafficDistribution: "PreferClose"
 ## Configure the ingress resource that allows you to access the
 ## RabbitMQ installation. Set up the URL
 ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
