@@ -1632,6 +1632,8 @@ pgpool:
 ## @param ldap.bindpw LDAP bind password
 ## @param ldap.bslookup LDAP base lookup
 ## @param ldap.scope LDAP search scope
+## @param ldap.searchfilter LDAP search filter
+## @param ldap.searchmap LDAP search map
 ## @param ldap.tlsReqcert LDAP TLS check on server certificates
 ## @param ldap.nssInitgroupsIgnoreusers LDAP ignored users
 ##
@@ -1644,6 +1646,8 @@ ldap:
   bindpw: ""
   bslookup: ""
   scope: ""
+  searchfilter: ""
+  searchmap: ""
   tlsReqcert: ""
   nssInitgroupsIgnoreusers: root,nslcd
 ## @section Other Parameters

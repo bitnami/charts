@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
+  tanzuCategory: application
   category: Infrastructure
   licenses: Apache-2.0
   images: |
@@ -55,4 +56,4 @@ maintainers:
 name: harbor
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/harbor
-version: 24.3.3
+version: 24.3.4

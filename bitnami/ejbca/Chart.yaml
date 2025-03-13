@@ -2,11 +2,12 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
+  tanzuCategory: application
   category: CertificateAuthority
   licenses: Apache-2.0
   images: |
     - name: ejbca
-      image: docker.io/bitnami/ejbca:9.0.0-debian-12-r2
+      image: docker.io/bitnami/ejbca:9.0.0-debian-12-r8
 apiVersion: v2
 appVersion: 9.0.0
 dependencies:
