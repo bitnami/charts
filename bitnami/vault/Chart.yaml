@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
+  tanzuCategory: clusterUtility
   category: Infrastructure
   licenses: Apache-2.0
   images: |
@@ -35,4 +36,4 @@ maintainers:
 name: vault
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/vault
-version: 1.6.10
+version: 1.7.0

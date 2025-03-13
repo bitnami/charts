@@ -1,8 +1,12 @@
 # Changelog
 
-## 24.1.17 (2025-03-06)
+## 24.1.18 (2025-03-06)
 
-* [bitnami/wordpress] Release 24.1.17 ([#32335](https://github.com/bitnami/charts/pull/32335))
+* [bitnami/wordpress] fix network policy when metrics enabled ([#32338](https://github.com/bitnami/charts/pull/32338))
+
+## <small>24.1.17 (2025-03-06)</small>
+
+* [bitnami/wordpress] Release 24.1.17 (#32335) ([1dec218](https://github.com/bitnami/charts/commit/1dec21880650c8b459025016068493a9fa063e01)), closes [#32335](https://github.com/bitnami/charts/issues/32335)
 
 ## <small>24.1.16 (2025-03-04)</small>
 

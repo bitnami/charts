@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
+  tanzuCategory: application
   category: Infrastructure
   licenses: Apache-2.0
   images: |
@@ -39,4 +40,4 @@ maintainers:
 name: grafana-tempo
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/grafana-tempo
-version: 3.8.8
+version: 4.0.0

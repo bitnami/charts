@@ -2,19 +2,20 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
+  tanzuCategory: application
   category: Infrastructure
   licenses: Apache-2.0
   images: |
     - name: argo-cd
-      image: docker.io/bitnami/argo-cd:2.14.4-debian-12-r0
+      image: docker.io/bitnami/argo-cd:2.14.5-debian-12-r0
     - name: dex
-      image: docker.io/bitnami/dex:2.42.0-debian-12-r1
+      image: docker.io/bitnami/dex:2.42.0-debian-12-r2
     - name: os-shell
       image: docker.io/bitnami/os-shell:12-debian-12-r39
     - name: redis
       image: docker.io/bitnami/redis:7.4.2-debian-12-r5
 apiVersion: v2
-appVersion: 2.14.4
+appVersion: 2.14.5
 dependencies:
 - condition: redis.enabled
   name: redis
@@ -39,4 +40,4 @@ maintainers:
 name: argo-cd
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/argo-cd
-version: 7.2.2
+version: 7.2.3

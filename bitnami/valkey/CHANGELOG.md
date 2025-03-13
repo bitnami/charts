@@ -1,8 +1,16 @@
 # Changelog
 
-## 2.4.4 (2025-03-05)
+## 2.4.6 (2025-03-10)
 
-* [bitnami/valkey] Fix usage of valkey .metrics.serviceMonitor.additionalEndpoints ([#32217](https://github.com/bitnami/charts/pull/32217))
+* [bitnami/valkey] Fix issue when using custom password secret key ([#32375](https://github.com/bitnami/charts/pull/32375))
+
+## <small>2.4.5 (2025-03-10)</small>
+
+* [bitnami/valkey]: add apiVersion and kind to sentinel statefulset (#32356) ([8c1620e](https://github.com/bitnami/charts/commit/8c1620e5cc40471808b0099a41d44fe7b1141f65)), closes [#32356](https://github.com/bitnami/charts/issues/32356)
+
+## <small>2.4.4 (2025-03-05)</small>
+
+* [bitnami/valkey] Fix usage of valkey .metrics.serviceMonitor.additionalEndpoints (#32217) ([304c018](https://github.com/bitnami/charts/commit/304c018c6ffbf6146eb88f095d7064daf878c793)), closes [#32217](https://github.com/bitnami/charts/issues/32217)
 
 ## <small>2.4.3 (2025-03-04)</small>
 

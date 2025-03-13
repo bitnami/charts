@@ -4,7 +4,7 @@ SPDX-License-Identifier: APACHE-2.0
 */}}
 
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: {{ template "grafana-tempo.metrics-generator.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
@@ -16,12 +16,13 @@ metadata:
 spec:
   replicas: {{ .Values.metricsGenerator.replicaCount }}
   {{- if .Values.metricsGenerator.updateStrategy }}
-  strategy: {{- toYaml .Values.metricsGenerator.updateStrategy | nindent 4 }}
+  updateStrategy: {{- toYaml .Values.metricsGenerator.updateStrategy | nindent 4 }}
   {{- end }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.metricsGenerator.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: metrics-generator
+  serviceName: {{ template "grafana-tempo.metrics-generator.fullname" . }}
   template:
     metadata:
       annotations:
@@ -69,6 +70,36 @@ spec:
       initContainers:
         {{- if .Values.metricsGenerator.initContainers }}
           {{- include "common.tplvalues.render" (dict "value" .Values.metricsGenerator.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if and .Values.volumePermissions.enabled .Values.metricsGenerator.persistence.enabled }}
+        - name: volume-permissions
+          image: {{ include "grafana-tempo.volumePermissions.image" . }}
+          imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
+          command:
+            - /bin/bash
+          args:
+            - -ec
+            - |
+              mkdir -p {{ .Values.tempo.dataDir }}{{- if .Values.metricsGenerator.persistence.subPath }}/{{ .Values.metricsGenerator.persistence.subPath }}{{- end }}
+              {{- if and .Values.metricsGenerator.podSecurityContext.enabled .Values.metricsGenerator.containerSecurityContext.enabled }}
+              find {{ .Values.tempo.dataDir }}{{- if .Values.metricsGenerator.persistence.subPath }}/{{ .Values.metricsGenerator.persistence.subPath }}{{- end }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs -r chown -R {{ .Values.metricsGenerator.containerSecurityContext.runAsUser }}:{{ .Values.metricsGenerator.podSecurityContext.fsGroup }}
+              {{- end }}
+          {{- if eq ( toString ( .Values.volumePermissions.containerSecurityContext.runAsUser )) "auto" }}
+          securityContext: {{- omit .Values.volumePermissions.containerSecurityContext "runAsUser" | toYaml | nindent 12 }}
+          {{- else }}
+          securityContext: {{- .Values.volumePermissions.containerSecurityContext | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.volumePermissions.resources }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.volumePermissions.resources "context" $) | nindent 12 }}
+          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: data
+              mountPath: {{ .Values.tempo.dataDir }}
         {{- end }}
       containers:
         - name: grafana-tempo-metrics-generator
@@ -164,8 +195,6 @@ spec:
       volumes:
         - name: empty-dir
           emptyDir: {}
-        - name: data
-          emptyDir: {}
         - name: tempo-config
           configMap:
             name: {{ template "grafana-tempo.tempoConfigmapName" . }}
@@ -175,3 +204,30 @@ spec:
         {{- if .Values.metricsGenerator.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.metricsGenerator.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
+  {{- if not .Values.metricsGenerator.persistence.enabled }}
+        - name: data
+          emptyDir: {}
+  {{- else }}
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+        {{- if or .Values.metricsGenerator.persistence.annotations .Values.commonAnnotations }}
+        {{- $claimAnnotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.metricsGenerator.persistence.annotations .Values.commonAnnotations ) "context" . ) }}
+        annotations: {{- include "common.tplvalues.render" ( dict "value" $claimAnnotations "context" $) | nindent 10 }}
+        {{- end }}
+        {{- if .Values.commonLabels }}
+        labels: {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 10 }}
+        {{- end }}
+      spec:
+        accessModes:
+        {{- range .Values.metricsGenerator.persistence.accessModes }}
+          - {{ . | quote }}
+        {{- end }}
+        resources:
+          requests:
+            storage: {{ .Values.metricsGenerator.persistence.size | quote }}
+        {{- if .Values.metricsGenerator.persistence.selector }}
+        selector: {{- include "common.tplvalues.render" (dict "value" .Values.metricsGenerator.persistence.selector "context" $) | nindent 10 }}
+        {{- end }}
+        {{- include "common.storage.class" (dict "persistence" .Values.metricsGenerator.persistence "global" .Values.global) | nindent 8 }}
+  {{- end }}

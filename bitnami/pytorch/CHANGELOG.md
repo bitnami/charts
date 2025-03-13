@@ -1,8 +1,17 @@
 # Changelog
 
-## 4.3.4 (2025-03-01)
+## 4.3.6 (2025-03-11)
 
-* [bitnami/pytorch] Release 4.3.4 ([#32224](https://github.com/bitnami/charts/pull/32224))
+* [bitnami/pytorch] Update Chart.yaml ([#32411](https://github.com/bitnami/charts/pull/32411))
+
+## <small>4.3.5 (2025-03-11)</small>
+
+* [bitnami/pytorch] Bump version to apply test changes (#32402) ([9540a5d](https://github.com/bitnami/charts/commit/9540a5d434b6b1e5750ecba704663cf1504593da)), closes [#32402](https://github.com/bitnami/charts/issues/32402)
+
+## <small>4.3.4 (2025-03-02)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/pytorch] Release 4.3.4 (#32224) ([366c617](https://github.com/bitnami/charts/commit/366c6174add0ac20742448b95c0af92592052516)), closes [#32224](https://github.com/bitnami/charts/issues/32224)
 
 ## <small>4.3.3 (2025-01-31)</small>
 
