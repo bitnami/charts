@@ -44,4 +44,10 @@ spec:
       {{- if .Values.kubeProxy.serviceMonitor.relabelings }}
       relabelings: {{- toYaml .Values.kubeProxy.serviceMonitor.relabelings | nindent 8 }}
       {{- end }}
+      {{- if .Values.kubeProxy.serviceMonitor.keepMetrics }}
+      metricRelabelings:
+        - sourceLabels: [__name__]
+          regex: "{{ .Values.kubeProxy.serviceMonitor.keepMetrics | default (list ".*") | join "|" }}"
+          action: keep
+      {{- end }}
 {{- end }}

@@ -50,4 +50,10 @@ spec:
       {{- if .Values.kubeControllerManager.serviceMonitor.relabelings }}
       relabelings: {{- include "common.tplvalues.render" (dict "value" .Values.kubeControllerManager.serviceMonitor.relabelings "context" $) | nindent 6 }}
       {{- end }}
+      {{- if .Values.kubeControllerManager.serviceMonitor.keepMetrics }}
+      metricRelabelings:
+        - sourceLabels: [__name__]
+          regex: "{{ .Values.kubeControllerManager.serviceMonitor.keepMetrics | default (list ".*") | join "|" }}"
+          action: keep
+      {{- end }}
 {{- end }}

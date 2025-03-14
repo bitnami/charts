@@ -61,6 +61,12 @@ spec:
       {{- if .Values.serviceMonitor.metricRelabelings }}
       metricRelabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.serviceMonitor.metricRelabelings "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.serviceMonitor.keepMetrics }}
+      metricRelabelings:
+        - sourceLabels: [__name__]
+          regex: "{{ .Values.serviceMonitor.keepMetrics | default (list ".*") | join "|" }}"
+          action: keep
+      {{- end }}
       {{- if .Values.serviceMonitor.extraParameters }}
       {{- toYaml .Values.serviceMonitor.extraParameters | nindent 6 }}
       {{- end }}

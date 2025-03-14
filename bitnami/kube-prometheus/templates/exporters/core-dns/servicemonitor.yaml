@@ -39,4 +39,10 @@ spec:
       {{- if .Values.coreDns.serviceMonitor.relabelings }}
       relabelings: {{- include "common.tplvalues.render" (dict "value" .Values.coreDns.serviceMonitor.relabelings "context" $) | nindent 6 }}
       {{- end }}
+      {{- if .Values.coreDns.serviceMonitor.keepMetrics }}
+      metricRelabelings:
+        - sourceLabels: [__name__]
+          regex: "{{ .Values.coreDns.serviceMonitor.keepMetrics | default (list ".*") | join "|" }}"
+          action: keep
+      {{- end }}
 {{- end }}

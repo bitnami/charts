@@ -45,4 +45,10 @@ spec:
       {{- if .Values.kubeApiServer.serviceMonitor.relabelings }}
       relabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.kubeApiServer.serviceMonitor.relabelings "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.kubeApiServer.serviceMonitor.keepMetrics }}
+      metricRelabelings:
+        - sourceLabels: [__name__]
+          regex: "{{ .Values.kubeApiServer.serviceMonitor.keepMetrics | default (list ".*") | join "|" }}"
+          action: keep
+      {{- end }}
 {{- end }}
