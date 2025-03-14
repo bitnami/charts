@@ -1,0 +1,178 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.vmauth.enabled }}
+{{- if eq .Values.vmauth.kind "daemonset" }}
+apiVersion: {{ include "common.capabilities.daemonset.apiVersion" . }}
+kind: DaemonSet
+{{- else }}
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+{{- end }}
+metadata:
+  name: {{ template "victoriametrics.vmauth.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.vmauth.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: victoriametrics
+    app.kubernetes.io/component: vmauth
+  {{- if or .Values.vmauth.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.vmauth.annotations .Values.commonAnnotations) "context" .) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if and (not .Values.vmauth.autoscaling.hpa.enabled) (eq .Values.vmauth.kind "deployment") }}
+  replicas: {{ .Values.vmauth.replicaCount }}
+  {{- end }}
+  {{- if .Values.vmauth.updateStrategy }}
+  {{ ternary "strategy" "updateStrategy" (eq .Values.vmauth.kind "deployment")}}: {{- toYaml .Values.vmauth.updateStrategy | nindent 4 }}
+  {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.vmauth.podLabels .Values.commonLabels $versionLabel ) "context" . ) }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/component: vmauth
+  template:
+    metadata:
+      {{- if or .Values.vmauth.podAnnotations (not .Values.vmauth.existingSecret) }}
+      annotations:
+        {{- if .Values.vmauth.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.vmauth.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if not .Values.vmauth.existingSecret }}
+        checksum/secret: {{ include (print $.Template.BasePath "/vmauth/secret.yaml") $ | sha256sum }}
+        {{- end }}
+      {{- end }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/part-of: victoriametrics
+        app.kubernetes.io/component: vmauth
+    spec:
+      serviceAccountName: {{ template "victoriametrics.vmauth.serviceAccountName" . }}
+      {{- include "victoriametrics.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.vmauth.automountServiceAccountToken }}
+      {{- if .Values.vmauth.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.vmauth.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.vmauth.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.vmauth.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.vmauth.podAffinityPreset "component" "vmauth" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.vmauth.podAntiAffinityPreset "component" "vmauth" "customLabels" $podLabels "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.vmauth.nodeAffinityPreset.type "key" .Values.vmauth.nodeAffinityPreset.key "values" .Values.vmauth.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.vmauth.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.vmauth.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.vmauth.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.vmauth.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.vmauth.priorityClassName }}
+      priorityClassName: {{ .Values.vmauth.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.vmauth.schedulerName }}
+      schedulerName: {{ .Values.vmauth.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.vmauth.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.vmauth.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.vmauth.podSecurityContext.enabled }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.vmauth.podSecurityContext "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.vmauth.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.vmauth.terminationGracePeriodSeconds }}
+      {{- end }}
+      {{- if .Values.vmauth.initContainers }}
+      initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.vmauth.initContainers "context" $) | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: vmauth
+          image: {{ template "victoriametrics.vmauth.image" . }}
+          imagePullPolicy: {{ .Values.vmauth.image.pullPolicy }}
+          {{- if .Values.vmauth.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.vmauth.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.vmauth.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.vmauth.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.vmauth.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.vmauth.args "context" $) | nindent 12 }}
+          {{- else }}
+          args:
+            {{- if .Values.envflagEnable }}
+            - --envflag.enable
+            - --envflag.prefix={{ .Values.envflagPrefix }}
+            {{- end }}
+            - --loggerFormat={{ .Values.loggerFormat }}
+            - --httpListenAddr=:{{ .Values.vmauth.containerPorts.http }}
+            - --auth.config=/config/auth.yml
+            {{- if .Values.vmauth.extraArgs }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.vmauth.extraArgs "context" $) | nindent 12 }}
+            {{- end }}
+          {{- end }}
+          env:
+            {{- if .Values.vmauth.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.vmauth.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- if .Values.vmauth.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.vmauth.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.vmauth.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.vmauth.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- if .Values.vmauth.resources }}
+          resources: {{- toYaml .Values.vmauth.resources | nindent 12 }}
+          {{- else if ne .Values.vmauth.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.vmauth.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.vmauth.containerPorts.http }}
+          {{- if .Values.vmauth.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.vmauth.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.vmauth.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.vmauth.livenessProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: http
+          {{- end }}
+          {{- if .Values.vmauth.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.vmauth.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.vmauth.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.vmauth.readinessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /health
+              port: http
+          {{- end }}
+          {{- if .Values.vmauth.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.vmauth.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.vmauth.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.vmauth.startupProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /health
+              port: http
+          {{- end }}
+          {{- if .Values.vmauth.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.vmauth.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: configuration
+              mountPath: /config
+          {{- if .Values.vmauth.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.vmauth.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+        {{- if .Values.vmauth.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.vmauth.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        - name: configuration
+          secret:
+            secretName: {{ include "victoriametrics.vmauth.secretName" . }}
+        {{- if .Values.vmauth.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.vmauth.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+{{- end }}

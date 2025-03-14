@@ -1,0 +1,63 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.vminsert.enabled .Values.vminsert.ingress.enabled }}
+apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
+kind: Ingress
+metadata:
+  name: {{ template "victoriametrics.vminsert.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.vminsert.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: victoriametrics
+    app.kubernetes.io/component: vminsert
+  {{- if or .Values.vminsert.ingress.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.vminsert.ingress.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if and .Values.vminsert.ingress.ingressClassName (eq "true" (include "common.ingress.supportsIngressClassname" .)) }}
+  ingressClassName: {{ .Values.vminsert.ingress.ingressClassName | quote }}
+  {{- end }}
+  rules:
+    {{- if .Values.vminsert.ingress.hostname }}
+    - host: {{ .Values.vminsert.ingress.hostname }}
+      http:
+        paths:
+          {{- if .Values.vminsert.ingress.extraPaths }}
+          {{- toYaml .Values.vminsert.ingress.extraPaths | nindent 10 }}
+          {{- end }}
+          - path: {{ .Values.vminsert.ingress.path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
+            pathType: {{ .Values.vminsert.ingress.pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "victoriametrics.vminsert.fullname" . | trunc 63 | trimSuffix "-") "servicePort" "http" "context" $)  | nindent 14 }}
+    {{- end }}
+    {{- range .Values.vminsert.ingress.extraHosts }}
+    - host: {{ .name | quote }}
+      http:
+        paths:
+          - path: {{ default "/" .path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
+            pathType: {{ default "ImplementationSpecific" .pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "victoriametrics.vminsert.fullname" $ | trunc 63 | trimSuffix "-") "servicePort" "http" "context" $) | nindent 14 }}
+    {{- end }}
+    {{- if .Values.vminsert.ingress.extraRules }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.vminsert.ingress.extraRules "context" $) | nindent 4 }}
+    {{- end }}
+  {{- if or (and .Values.vminsert.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.vminsert.ingress.annotations )) .Values.vminsert.ingress.selfSigned)) .Values.vminsert.ingress.extraTls }}
+  tls:
+    {{- if and .Values.vminsert.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.vminsert.ingress.annotations )) .Values.vminsert.ingress.selfSigned) }}
+    - hosts:
+        - {{ .Values.vminsert.ingress.hostname | quote }}
+      secretName: {{ printf "%s-tls" .Values.vminsert.ingress.hostname }}
+    {{- end }}
+    {{- if .Values.vminsert.ingress.extraTls }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.vminsert.ingress.extraTls "context" $) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+{{- end }}
