@@ -1,0 +1,21 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: odoohealthz-config-orbit
+  labels:
+    {{- include "odoo.labels" $ | nindent 4 }}
+data:
+  ODOO_HEALTHZ_URL: {{ .Values.odoohealthz.odoo_url | default "http://localhost:8069" | quote }}
+  ODOO_TIMEOUT: {{ .Values.odoohealthz.odoo_timeout | default "30" | quote }}
+  CHECK_STUCK_JOB_ENABLED: {{ .Values.odoohealthz.check_stuck_job | default "False" | quote }}
+  GET_MAX_JOB_DURATION: {{ .Values.odoohealthz.max_job_duration | default "3600" | quote }}
+  CHECK_LONG_TRANSACTION_ENABLED: {{ .Values.odoohealthz.check_long_transaction | default "False" | quote }}
+  GET_MAX_TRANSACTION_DURATION: {{ .Values.odoohealthz.max_transaction_duration | default "3600" | quote }}
+  LOGLEVEL: {{ .Values.odoohealthz.log_level | default "ERROR" | quote }}
+  CHECK_EXPIRED_DB: {{ .Values.odoohealthz.check_expired_db | default "False" | quote }}
+  COMPLETE_CHECK_OCCURENCE: {{ .Values.odoohealthz.complete_check_occurence | default "0" | quote }}
+  ODOO_MEMORY_LIMIT: {{ .Values.odoohealthz.odoo_memory_limit | default "0" | quote }}
+  ODOO_METRICS_URL: {{ .Values.odoohealthz.odoo_metrics_url | default "http://localhost:8069/metrics" | quote }}
+  ODOO_METRICS_TIMEOUT: {{ .Values.odoohealthz.odoo_metrics_timeout | default "2" | quote }}
+

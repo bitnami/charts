@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: odoo-config{{- include "odoo-cs-suffix" . }}
+  labels:
+    {{- include "odoo.labels" $ | nindent 4 }}
+data:
+  ODOO_BASE_URL: {{ .Values.odoo.base_url | default "http://localhost:8069" }}
+  ODOO_REPORT_URL: {{ .Values.odoo.report_url | default "http://localhost:8069" }}
+  {{- include "odoo.internal-resources" . | nindent 2 }}
+  LIMIT_REQUEST: {{ .Values.odoo.limits.request | default "8192" | quote }}
+  LIMIT_TIME_CPU: {{ .Values.odoo.limits.time_cpu | default "86400" | quote }}
+  LIMIT_TIME_REAL: {{ .Values.odoo.limits.time_real | default "86400" | quote }}
+  LIMIT_TIME_REAL_CRON: {{ .Values.odoo.limits.time_real_cron | default "600" | quote }}
+  MAX_CRON_THREADS: {{ .Values.odoo.limits.max_cron | default "1" | quote }}
+  DEMO: {{ .Values.odoo.demo | default "False" | quote }}
+  MARABUNTA_MODE: {{ .Values.odoo.marabunta.mode | default "Full" }}
+  MARABUNTA_ALLOW_SERIE: {{ .Values.odoo.marabunta.allow_series | default "False" | quote }}
+  MIGRATE: "False"
+  ODOO_LOGGING_JSON: '1'
+  {{- if .Values.odoo.redis.enabled }}
+  ODOO_SESSION_REDIS: '1'
+  ODOO_SESSION_REDIS_PREFIX: {{ include "odoo.name" . }}
+  {{- end }}
+  RUNNING_ENV: {{ .Values.odoo.env }}
+  SERVER_WIDE_MODULES: {{ .Values.odoo.server_wide_modules | default "web,attachment_azure,session_redis,logging_json" }}
+  SERVER_ENV_CONFIG: {{ toYaml .Values.odoo.server_env_config | indent 2 | default "" }}
+  LOG_HANDLER: {{ .Values.odoo.log_handler | default ":INFO,werkzeug:ERROR,azure:ERROR" }}
+  LOG_LEVEL: {{ .Values.odoo.log_level | default "info" }}
+  UNACCENT: {{ .Values.odoo.unaccent | default "False" | quote }}
+  KWKHTMLTOPDF_SERVER_URL: {{ .Values.odoo.kwkhtmltopdf_server_url | default "http://kwkhtmltopdf.bs-kwkhtmltopdf01250:8080" }}
+  PGCLIENTENCODING: UTF8

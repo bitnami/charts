@@ -116,89 +116,11 @@ spec:
           {{- else if .Values.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
           {{- end }}
-          env:
-            - name: BITNAMI_DEBUG
-              value: {{ ternary "true" "false" .Values.image.debug | quote }}
-            - name: ALLOW_EMPTY_PASSWORD
-              value: {{ ternary "yes" "no" .Values.allowEmptyPassword | quote }}
-            - name: ODOO_DATABASE_HOST
-              value: {{ template "odoo.databaseHost" . }}
-            - name: ODOO_DATABASE_PORT_NUMBER
-              value: {{ template "odoo.databasePort" . }}
-            - name: ODOO_DATABASE_NAME
-              value: {{ template "odoo.databaseName" . }}
-            - name: ODOO_DATABASE_FILTER
-              value: {{ .Values.odooDatabaseFilter | quote }}
-            - name: ODOO_DATABASE_USER
-              value: {{ template "odoo.databaseUser" . }}
-            - name: ODOO_DATABASE_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "odoo.databaseSecretName" . }}
-                  key: {{ include "odoo.databaseSecretPasswordKey" . }}
-            {{- if and (not .Values.postgresql.enabled) .Values.externalDatabase.create }}
-            - name: POSTGRESQL_CLIENT_DATABASE_HOST
-              value: {{ template "odoo.databaseHost" . }}
-            - name: POSTGRESQL_CLIENT_DATABASE_PORT_NUMBER
-              value: {{ template "odoo.databasePort" . }}
-            - name: POSTGRESQL_CLIENT_POSTGRES_USER
-              value: {{ .Values.externalDatabase.postgresqlPostgresUser }}
-            - name: POSTGRESQL_CLIENT_POSTGRES_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "odoo.databaseSecretName" . }}
-                  key: {{ include "odoo.databaseSecretPostgresPasswordKey" . }}
-            - name: POSTGRESQL_CLIENT_CREATE_DATABASE_NAME
-              value: {{ template "odoo.databaseName" . }}
-            - name: POSTGRESQL_CLIENT_CREATE_DATABASE_USERNAME
-              value: {{ template "odoo.databaseUser" . }}
-            - name: POSTGRESQL_CLIENT_CREATE_DATABASE_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "odoo.databaseSecretName" . }}
-                  key: {{ include "odoo.databaseSecretPasswordKey" . }}
-            {{- end }}
-            - name: ODOO_EMAIL
-              value: {{ .Values.odooEmail | quote }}
-            - name: ODOO_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ template "odoo.secretName" . }}
-                  key: odoo-password
-            - name: ODOO_SKIP_BOOTSTRAP
-              value: {{ ternary "yes" "no" .Values.odooSkipInstall | quote }}
-            - name: ODOO_LOAD_DEMO_DATA
-              value: {{ ternary "yes" "no" .Values.loadDemoData | quote }}
-            {{- if .Values.withoutDemo }}
-            - name: WITHOUT_DEMO
-              value: {{ .Values.withoutDemo | quote }}
-            {{- end }}
-            {{- if .Values.smtpHost }}
-            - name: ODOO_SMTP_HOST
-              value: {{ .Values.smtpHost | quote }}
-            {{- end }}
-            {{- if .Values.smtpPort }}
-            - name: ODOO_SMTP_PORT_NUMBER
-              value: {{ .Values.smtpPort | quote }}
-            {{- end }}
-            {{- if .Values.smtpUser }}
-            - name: ODOO_SMTP_USER
-              value: {{ .Values.smtpUser | quote }}
-            {{- end }}
-            {{- if or .Values.smtpPassword .Values.smtpExistingSecret }}
-            - name: ODOO_SMTP_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ template "odoo.smtpSecretName" . }}
-                  key: smtp-password
-            {{- end }}
-            {{- if .Values.smtpProtocol }}
-            - name: ODOO_SMTP_PROTOCOL
-              value: {{ .Values.smtpProtocol | quote }}
-            {{- end }}
-            {{- if .Values.extraEnvVars }}
-            {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
-            {{- end }}
+          envFrom:
+            - configMapRef:
+                name: odoo-config-orbit
+            - secretKeyRef:
+                name: odoo-secret-orbit
           envFrom:
             {{- if .Values.extraEnvVarsCM }}
             - configMapRef:
@@ -220,6 +142,7 @@ spec:
           {{- else if .Values.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.livenessProbe "enabled" "path") "context" $) | nindent 12 }}
             tcpSocket:
+              path: {{ .Values.livenessProbe.path }}
               port: http
           {{- end }}
           {{- if .Values.customReadinessProbe }}

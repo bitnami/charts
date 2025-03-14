@@ -108,6 +108,45 @@ image:
 ## ref: https://github.com/bitnami/containers/tree/main/bitnami/odoo#environment-variables
 ##
 
+odoo: 
+  base_url: http://localhost:8069
+  report_url: http://localhost:8069
+  limits:
+    request: 8192
+    time_cpu: 86400
+    time_real: 86400
+    time_real_cron: 600
+    max_cron: 1
+  demo: False
+  marabunta:
+    mode: Full
+    allow_series: False
+  env: dev
+  server_wide_modules: web,attachment_azure,session_redis,logging_json
+  log_handler: ":INFO,werkzeug:ERROR,azure:ERROR"
+  log_level: info
+  unaccent: true
+  kwkhtmltopdf_server_url: http://kwkhtmltopdf.bs-kwkhtmltopdf01250:8080
+  pgclientencoding: UTF8
+  redis:
+    enabled: false
+    host: redis-master
+
+odoohealthz: 
+  odoo_url: http://localhost:8069
+  odoo_timeout: 30
+  check_stuck_job: False
+  max_job_duration: 3600
+  check_long_transaction: False
+  max_transaction_duration: 3600
+  log_level: ERROR
+  check_expired_db: False
+  complete_check_occurence: 0
+  odoo_memory_limit: 0
+  odoo_metrics_url: http://localhost:8069/metrics
+  odoo_metrics_timeout: 2
+
+
 ## @param odooEmail Odoo user email
 ## ref: https://github.com/bitnami/containers/tree/main/bitnami/odoo#configuration
 ##
@@ -273,6 +312,7 @@ containerSecurityContext:
 ##
 livenessProbe:
   enabled: true
+  
   initialDelaySeconds: 600
   periodSeconds: 30
   timeoutSeconds: 5
