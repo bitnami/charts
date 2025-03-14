@@ -27,6 +27,14 @@ Return the proper image name (for the init container volume-permissions image)
 {{- end -}}
 
 {{/*
+Return the proper image name (for the init container dynamic-seed-discovery image)
+*/}}
+{{- define "cassandra.dynamicSeedDiscovery.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.cluster.dynamicSeedDiscovery.image "global" .Values.global) }}
+{{- end -}}
+
+
+{{/*
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "cassandra.imagePullSecrets" -}}
@@ -279,4 +287,39 @@ WARNING: JVM Max Heap Size not set in value jvm.maxHeapSize. When not set, the c
 WARNING: JVM New Heap Size not set in value jvm.newHeapSize. When not set, the chart will calculate the following size:
      MAX(Memory Limit (if set) / 64, 256M)
 {{- end }}
+{{- end -}}
+
+{{/*
+Dynamic Seed Discovery Init-Container
+*/}}
+{{- define "cassandra.dynamicSeedDiscovery" -}}
+- name: dynamic-seed-discovery
+  image: {{ include "cassandra.dynamicSeedDiscovery.image" .}}
+  imagePullPolicy: {{ .Values.cluster.dynamicSeedDiscovery.image.pullPolicy | quote }}
+  command:
+      - "/bin/sh"
+      - "-c"
+      - |
+        export DYNAMIC_SEED_DIR=/opt/bitnami/cassandra/tmp &&
+        apk add --no-cache bind-tools &&
+        dig +short {{ .Release.Name }}-headless.{{ .Release.Namespace}}.svc.{{ .Values.clusterDomain }} | grep -v $POD_IP | \
+          while read NODE_IP; do \
+            nc -zvw3 $NODE_IP 9042 && \
+            echo "$NODE_IP" >> ${DYNAMIC_SEED_DIR}/seed-ips.lst; \
+          done && \
+        if [ ! -s ${DYNAMIC_SEED_DIR}/seed-ips.lst ]; then \
+          echo "No seed nodes found, using pod's own IP: $POD_IP" && \
+          echo $POD_IP > ${DYNAMIC_SEED_DIR}/seed-ips.lst; \
+        fi && \
+        cat ${DYNAMIC_SEED_DIR}/seed-ips.lst | head -2 | paste -sd, - > ${DYNAMIC_SEED_DIR}/seed-ips.txt &&
+        echo "Seed nodes: $(cat ${DYNAMIC_SEED_DIR}/seed-ips.txt)"
+  env:
+    - name: POD_IP
+      valueFrom:
+        fieldRef:
+            fieldPath: status.podIP
+  volumeMounts:
+    - name: empty-dir
+      mountPath: /opt/bitnami/cassandra/tmp
+      subPath: app-tmp-dir
 {{- end -}}
