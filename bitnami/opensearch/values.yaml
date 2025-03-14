@@ -549,6 +549,10 @@ master:
   ## @param master.annotations [object] Annotations for the master statefulset
   ##
   annotations: {}
+  ## @param master.trafficDistribution String Traffic distribution for the master service
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#traffic-distribution
+  ##
+  trafficDistribution: "PreferClose"
   ## @param master.updateStrategy.type Master-eligible nodes statefulset strategy type
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
@@ -1074,6 +1078,10 @@ data:
   ## @param data.annotations [object] Annotations for the data statefulset
   ##
   annotations: {}
+  ## @param data.trafficDistribution String Traffic distribution for the coordinating-only service
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#traffic-distribution
+  ##
+  trafficDistribution: "PreferClose"
   ## @param data.updateStrategy.type Data-only nodes statefulset strategy type
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
@@ -1596,6 +1604,10 @@ coordinating:
   ## @param coordinating.annotations [object] Annotations for the coordinating-only statefulset
   ##
   annotations: {}
+  ## @param coordinating.trafficDistribution String Traffic distribution for the coordinating-only service
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#traffic-distribution
+  ##
+  trafficDistribution: "PreferClose"
   ## @param coordinating.updateStrategy.type Coordinating-only nodes statefulset strategy type
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
@@ -2081,6 +2093,10 @@ ingest:
   ## @param ingest.annotations [object] Annotations for the ingest statefulset
   ##
   annotations: {}
+  ## @param ingest.trafficDistribution String Traffic distribution for the ingest service
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#traffic-distribution
+  ##
+  trafficDistribution: "PreferClose"
   ## @param ingest.updateStrategy.type Ingest-only nodes statefulset strategy type
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
