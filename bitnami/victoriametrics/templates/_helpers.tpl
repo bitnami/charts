@@ -235,9 +235,49 @@ Validate values for victoriametrics.
 */}}
 {{- define "victoriametrics.validateValues" -}}
 {{- $messages := list -}}
+{{- $messages := append $messages (include "victoriametrics.vmselect.kind" .) -}}
+{{- $messages := append $messages (include "victoriametrics.vmauth.kind" .) -}}
+{{- $messages := append $messages (include "victoriametrics.vmagent.kind" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 {{- if $message -}}
 {{-   printf "\nVALUES VALIDATION:\n%s" $message -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Function to validate the vmagent kind
+*/}}
+{{- define "victoriametrics.vmagent.kind" -}}
+{{- if .Values.vmagent.enabled -}}
+{{- $kind := lower .Values.vmagent.kind -}}
+{{- $allowedKinds := list "daemonset" "deployment" -}}
+{{- if not (has $kind $allowedKinds) -}}
+vmagent: Incorrect kind {{ $kind }}. Allowed values: {{ join "," $allowedKinds }}
+{{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Function to validate the vmselect kind
+*/}}
+{{- define "victoriametrics.vmselect.kind" -}}
+{{- $kind := lower .Values.vmselect.kind -}}
+{{- $allowedKinds := list "statefulset" "deployment" -}}
+{{- if not (has $kind $allowedKinds) -}}
+vmselect: Incorrect kind {{ $kind }}. Allowed values: {{ join "," $allowedKinds }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Function to validate the vmauth kind
+*/}}
+{{- define "victoriametrics.vmauth.kind" -}}
+{{- if .Values.vmauth.enabled -}}
+{{- $kind := lower .Values.vmauth.kind -}}
+{{- $allowedKinds := list "deployment" "daemonset" -}}
+{{- if not (has $kind $allowedKinds) -}}
+vmauth: Incorrect kind {{ $kind }}. Allowed values: {{ join "," $allowedKinds }}
+{{- end -}}
 {{- end -}}
 {{- end -}}

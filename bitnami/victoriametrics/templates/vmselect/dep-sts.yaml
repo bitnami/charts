@@ -2,8 +2,8 @@
 Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
-
-{{- if eq .Values.vmselect.kind "statefulset" }}
+{{- $kind := lower .Values.vmselect.kind }}
+{{- if eq $kind "statefulset" }}
 apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 {{- else }}
@@ -26,12 +26,12 @@ spec:
   {{- if not .Values.vmselect.autoscaling.hpa.enabled }}
   replicas: {{ .Values.vmselect.replicaCount }}
   {{- end }}
-  {{- if eq .Values.vmselect.kind "statefulset" }}
+  {{- if eq $kind "statefulset" }}
   serviceName: {{ printf "%s-headless" (include "victoriametrics.vmstorage.fullname" .)  | trunc 63 | trimSuffix "-" }}
   podManagementPolicy: {{ .Values.vmselect.podManagementPolicy }}
   {{- end }}
   {{- if .Values.vmselect.updateStrategy }}
-  {{ ternary "strategy" "updateStrategy" (eq .Values.vmselect.kind "deployment")}}: {{- toYaml .Values.vmselect.updateStrategy | nindent 4 }}
+  {{ ternary "strategy" "updateStrategy" (eq $kind "deployment")}}: {{- toYaml .Values.vmselect.updateStrategy | nindent 4 }}
   {{- end }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.vmselect.podLabels .Values.commonLabels $versionLabel ) "context" . ) }}
   selector:

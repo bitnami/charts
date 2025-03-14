@@ -4,7 +4,8 @@ SPDX-License-Identifier: APACHE-2.0
 */}}
 
 {{- if .Values.vmauth.enabled }}
-{{- if eq .Values.vmauth.kind "daemonset" }}
+{{- $kind := lower .Values.vmauth.kind }}
+{{- if eq $kind "daemonset" }}
 apiVersion: {{ include "common.capabilities.daemonset.apiVersion" . }}
 kind: DaemonSet
 {{- else }}
@@ -24,11 +25,11 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  {{- if and (not .Values.vmauth.autoscaling.hpa.enabled) (eq .Values.vmauth.kind "deployment") }}
+  {{- if and (not .Values.vmauth.autoscaling.hpa.enabled) (eq $kind "deployment") }}
   replicas: {{ .Values.vmauth.replicaCount }}
   {{- end }}
   {{- if .Values.vmauth.updateStrategy }}
-  {{ ternary "strategy" "updateStrategy" (eq .Values.vmauth.kind "deployment")}}: {{- toYaml .Values.vmauth.updateStrategy | nindent 4 }}
+  {{ ternary "strategy" "updateStrategy" (eq $kind "deployment")}}: {{- toYaml .Values.vmauth.updateStrategy | nindent 4 }}
   {{- end }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.vmauth.podLabels .Values.commonLabels $versionLabel ) "context" . ) }}
   selector:

@@ -2963,10 +2963,16 @@ vmagent:
       influxdb: 8089
     ## Node ports to expose
     ## @param vmagent.service.nodePorts.http Node port for HTTP
+    ## @param vmagent.service.nodePorts.graphite Node port for graphite
+    ## @param vmagent.service.nodePorts.opentsdb Node port for opentsdb
+    ## @param vmagent.service.nodePorts.influxdb Node port for influxdb
     ## NOTE: choose port between <30000-32767>
     ##
     nodePorts:
       http: ""
+      graphite: ""
+      opentsdb: ""
+      influxdb: ""
     ## @param vmagent.service.clusterIP VictoriaMetrics Agent service Cluster IP
     ## e.g.:
     ## clusterIP: None
