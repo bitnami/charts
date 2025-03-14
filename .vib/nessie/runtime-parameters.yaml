@@ -8,7 +8,7 @@ containerSecurityContext:
 containerPorts:
   http: 6555
   management: 8078
-usePasswordFile: true
+usePasswordFiles: true
 configOverrides:
   quarkus:
     log:

@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.4.5 (2025-03-06)
+## 2.4.6 (2025-03-10)
 
-* [bitnami/valkey]: add apiVersion and kind to sentinel statefulset ([#32356](https://github.com/bitnami/charts/pull/32356))
+* [bitnami/valkey] Fix issue when using custom password secret key ([#32375](https://github.com/bitnami/charts/pull/32375))
+
+## <small>2.4.5 (2025-03-10)</small>
+
+* [bitnami/valkey]: add apiVersion and kind to sentinel statefulset (#32356) ([8c1620e](https://github.com/bitnami/charts/commit/8c1620e5cc40471808b0099a41d44fe7b1141f65)), closes [#32356](https://github.com/bitnami/charts/issues/32356)
 
 ## <small>2.4.4 (2025-03-05)</small>
 

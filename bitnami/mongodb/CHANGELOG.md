@@ -2,6 +2,7 @@
 
 ## 16.4.7 (2025-03-11)
 
+* [bitnami/mongodb] Update dns-check init container condition ([#32394](https://github.com/bitnami/charts/pull/32394))
 * [bitnami/mongodb] #27482 - fix replicaset config handling ([#32381](https://github.com/bitnami/charts/pull/32381))
 
 ## <small>16.4.6 (2025-03-10)</small>
