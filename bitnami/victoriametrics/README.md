@@ -931,6 +931,9 @@ wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
 | `vmagent.service.ports.opentsdb`           | VictoriaMetrics Agent service opentsdb port                                                      | `4242`      |
 | `vmagent.service.ports.influxdb`           | VictoriaMetrics Agent service influxdb port                                                      | `8089`      |
 | `vmagent.service.nodePorts.http`           | Node port for HTTP                                                                               | `""`        |
+| `vmagent.service.nodePorts.graphite`       | Node port for graphite                                                                           | `""`        |
+| `vmagent.service.nodePorts.opentsdb`       | Node port for opentsdb                                                                           | `""`        |
+| `vmagent.service.nodePorts.influxdb`       | Node port for influxdb                                                                           | `""`        |
 | `vmagent.service.clusterIP`                | VictoriaMetrics Agent service Cluster IP                                                         | `""`        |
 | `vmagent.service.loadBalancerIP`           | VictoriaMetrics Agent service Load Balancer IP                                                   | `""`        |
 | `vmagent.service.loadBalancerSourceRanges` | VictoriaMetrics Agent service Load Balancer sources                                              | `[]`        |
