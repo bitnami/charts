@@ -171,9 +171,6 @@ spec:
           volumeMounts:
             - name: rules-configuration
               mountPath: /config
-            - name: empty-dir
-              mountPath: /tmp
-              subPath: tmp-dir
           {{- if .Values.vmalert.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.vmalert.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -184,8 +181,6 @@ spec:
         - name: rules-configuration
           configMap:
             name: {{ include "victoriametrics.vmalert.rulesConfigMapName" . }}
-        - name: empty-dir
-          emptyDir: {}
         {{- if .Values.vmalert.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.vmalert.extraVolumes "context" $) | nindent 8 }}
         {{- end }}

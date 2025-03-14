@@ -149,19 +149,12 @@ spec:
           {{- if .Values.vminsert.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.vminsert.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
-          volumeMounts:
-            - name: empty-dir
-              mountPath: /tmp
-              subPath: tmp-dir
           {{- if .Values.vminsert.extraVolumeMounts }}
-          {{- include "common.tplvalues.render" (dict "value" .Values.vminsert.extraVolumeMounts "context" $) | nindent 12 }}
+          volumeMounts: {{- include "common.tplvalues.render" (dict "value" .Values.vminsert.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
         {{- if .Values.vminsert.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.vminsert.sidecars "context" $) | nindent 8 }}
         {{- end }}
-      volumes:
-        - name: empty-dir
-          emptyDir: {}
-        {{- if .Values.vminsert.extraVolumes }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.vminsert.extraVolumes "context" $) | nindent 8 }}
-        {{- end }}
+      {{- if .Values.vminsert.extraVolumes }}
+      volumes: {{- include "common.tplvalues.render" (dict "value" .Values.vminsert.extraVolumes "context" $) | nindent 8 }}
+      {{- end }}
