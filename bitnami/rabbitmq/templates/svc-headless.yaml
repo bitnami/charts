@@ -43,3 +43,7 @@ spec:
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
   publishNotReadyAddresses: true
+  {{- $kubeVersion := (include "common.capabilities.kubeVersion" .) }}
+  {{- if and (not (empty $kubeVersion)) (semverCompare ">=1.31-0" $kubeVersion) }}
+  trafficDistribution: {{ .Values.service.trafficDistribution }}
+  {{- end }}
