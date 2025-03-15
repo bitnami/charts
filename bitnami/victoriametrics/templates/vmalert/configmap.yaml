@@ -1,0 +1,31 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{/* Adding the helper in configmap.yaml for better readability */}}
+{{- define "victoriametrics.vmalert.defaultRulesConfig" -}}
+groups: []
+{{- end }}
+
+{{- if and .Values.vmalert.enabled (not .Values.vmalert.existingRulesConfigMap) }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "victoriametrics.vmalert.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: victoriametrics
+    app.kubernetes.io/component: vmalert
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+data:
+  {{- /* Convert the default configuration and extra overrides */ -}}
+  {{- $defaultConfiguration := include "victoriametrics.vmalert.defaultRulesConfig" . | fromYaml -}}
+  {{- $overrideConfiguration := include "common.tplvalues.render" (dict "value" .Values.vmalert.rulesConfigOverrides "context" $) | fromYaml -}}
+
+  {{- /* Merge both maps and render the configuration */}}
+  alert-rules.yaml: |
+    {{- mergeOverwrite $defaultConfiguration $overrideConfiguration | toYaml | nindent 4 }}
+{{- end }}

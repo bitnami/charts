@@ -1,0 +1,59 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "victoriametrics.vmstorage.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.vmstorage.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: victoriametrics
+    app.kubernetes.io/component: vmstorage
+  {{- if or .Values.vmstorage.service.annotations .Values.commonAnnotations .Values.vmstorage.metrics.enabled .Values.vmstorage.metrics.annotations }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.vmstorage.service.annotations .Values.commonAnnotations .Values.vmstorage.metrics.annotations) "context" .) }}
+  {{- if .Values.vmstorage.metrics.enabled }}
+  {{- $defaultMetricsAnnotations := dict "prometheus.io/scrape" "true" "prometheus.io/port" (.Values.vmstorage.service.ports.http) "prometheus.io/path" "/metrics" }}
+  {{- $annotations = include "common.tplvalues.merge" (dict "values" (list $annotations $defaultMetricsAnnotations) "context" .) }}
+  {{- end }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.vmstorage.service.type }}
+  {{- if and .Values.vmstorage.service.clusterIP (eq .Values.vmstorage.service.type "ClusterIP") }}
+  clusterIP: {{ .Values.vmstorage.service.clusterIP }}
+  {{- end }}
+  {{- if .Values.vmstorage.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.vmstorage.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.vmstorage.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.vmstorage.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if or (eq .Values.vmstorage.service.type "LoadBalancer") (eq .Values.vmstorage.service.type "NodePort") }}
+  externalTrafficPolicy: {{ .Values.vmstorage.service.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{- if and (eq .Values.vmstorage.service.type "LoadBalancer") (not (empty .Values.vmstorage.service.loadBalancerSourceRanges)) }}
+  loadBalancerSourceRanges: {{ .Values.vmstorage.service.loadBalancerSourceRanges }}
+  {{- end }}
+  {{- if and (eq .Values.vmstorage.service.type "LoadBalancer") (not (empty .Values.vmstorage.service.loadBalancerIP)) }}
+  loadBalancerIP: {{ .Values.vmstorage.service.loadBalancerIP }}
+  {{- end }}
+  ports:
+    - name: http
+      port: {{ .Values.vmstorage.service.ports.http }}
+      protocol: TCP
+      {{- if and (or (eq .Values.vmstorage.service.type "NodePort") (eq .Values.vmstorage.service.type "LoadBalancer")) (not (empty .Values.vmstorage.service.nodePorts.http)) }}
+      nodePort: {{ .Values.vmstorage.service.nodePorts.http }}
+      {{- else if eq .Values.vmstorage.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+      targetPort: http
+    {{- if .Values.vmstorage.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.vmstorage.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.vmstorage.podLabels .Values.commonLabels ) "context" . ) }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: vmstorage

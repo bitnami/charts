@@ -1,0 +1,10 @@
+# Use vmauth for accessing vminsert and vmselect
+vmauth:
+  enabled: true
+  service:
+    type: LoadBalancer
+    ports:
+      http: 80
+# Necessary for scraping metrics
+vmagent:
+  enabled: true
