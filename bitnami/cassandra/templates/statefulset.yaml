@@ -172,8 +172,8 @@ spec:
             fi
             {{- else }}
             if [[ -f "/certs/truststore" ]] && [[ -f "/certs/keystore" ]]; then
-                cp "/certs/truststore" "/opt/bitnami/cassandra/certs/truststore"
-                cp "/certs/keystore" "/opt/bitnami/cassandra/certs/keystore"
+                [[ -f "/opt/bitnami/cassandra/certs/truststore" ]] || cp "/certs/truststore" "/opt/bitnami/cassandra/certs/truststore"
+                [[ -f "/opt/bitnami/cassandra/certs/keystore" ]] || cp "/certs/keystore" "/opt/bitnami/cassandra/certs/keystore"
             else
                 echo "Couldn't find the expected Java Key Stores (JKS) files! They are mandatory when encryption via TLS is enabled."
                 exit 1
