@@ -1,8 +1,13 @@
 # Changelog
 
-## 17.0.3 (2025-03-07)
+## 17.1.0 (2025-03-13)
 
-* [bitnami/ejbca] Release 17.0.3 ([#32370](https://github.com/bitnami/charts/pull/32370))
+* [bitnami/ejbca] Set `usePasswordFiles=true` by default ([#32343](https://github.com/bitnami/charts/pull/32343))
+
+## <small>17.0.3 (2025-03-08)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/ejbca] Release 17.0.3 (#32370) ([f419d29](https://github.com/bitnami/charts/commit/f419d2908a049a6e9608bf2ea63939554baa14c2)), closes [#32370](https://github.com/bitnami/charts/issues/32370)
 
 ## <small>17.0.2 (2025-02-05)</small>
 
