@@ -1,8 +1,12 @@
 # Changelog
 
+## 16.6.0 (2025-03-13)
+
+* [bitnami/postgresql] Set `usePasswordFiles=true` by default ([#32115](https://github.com/bitnami/charts/pull/32115))
+
 ## 16.5.0 (2025-03-10)
 
-* [bitnami/postgresql] Add secretAnnotation value ([#31984](https://github.com/bitnami/charts/pull/31984))
+* [bitnami/postgresql] Add secretAnnotation value (#31984) ([7284b3f](https://github.com/bitnami/charts/commit/7284b3f65ac7a209ba65396bbc2f6cc8c188ddec)), closes [#31984](https://github.com/bitnami/charts/issues/31984)
 
 ## <small>16.4.16 (2025-03-03)</small>
 
