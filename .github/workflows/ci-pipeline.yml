@@ -187,8 +187,8 @@ jobs:
       - name: Setup git configuration
         run: |
           cd $GITHUB_WORKSPACE/charts
-          git config user.name "Bitnami Containers"
-          git config user.email "bitnami-bot@vmware.com"
+          git config user.name "Bitnami Bot"
+          git config user.email "bitnami.bot@broadcom.com"
       # In order to avoid doing a full clone (which would fetch the index branch), we
       # unshallow the clone only using the main branch. We need to get the tags to
       # regenerate the changelog too
