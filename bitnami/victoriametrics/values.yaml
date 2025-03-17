@@ -39,6 +39,9 @@ global:
 ## @param kubeVersion Override Kubernetes version
 ##
 kubeVersion: ""
+## @param apiVersions Override Kubernetes API versions reported by .Capabilities
+##
+apiVersions: []
 ## @param nameOverride String to partially override common.names.name
 ##
 nameOverride: ""
@@ -109,61 +112,6 @@ vmselect:
   ##
   containerPorts:
     http: 8481
-  ## Network Policies
-  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
-  ##
-  networkPolicy:
-    ## @param vmselect.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
-    ##
-    enabled: true
-    ## @param vmselect.networkPolicy.allowExternal Don't require server label for connections
-    ## The Policy model to apply. When set to false, only pods with the correct
-    ## server label will have network access to the ports server is listening
-    ## on. When true, server will accept connections from any source
-    ## (with the correct destination port).
-    ##
-    allowExternal: true
-    ## @param vmselect.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
-    ##
-    allowExternalEgress: true
-    ## @param vmselect.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
-    ## e.g:
-    ## extraIngress:
-    ##   - ports:
-    ##       - port: 1234
-    ##     from:
-    ##       - podSelector:
-    ##           - matchLabels:
-    ##               - role: frontend
-    ##       - podSelector:
-    ##           - matchExpressions:
-    ##               - key: role
-    ##                 operator: In
-    ##                 values:
-    ##                   - frontend
-    extraIngress: []
-    ## @param vmselect.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
-    ## e.g:
-    ## extraEgress:
-    ##   - ports:
-    ##       - port: 1234
-    ##     to:
-    ##       - podSelector:
-    ##           - matchLabels:
-    ##               - role: frontend
-    ##       - podSelector:
-    ##           - matchExpressions:
-    ##               - key: role
-    ##                 operator: In
-    ##                 values:
-    ##                   - frontend
-    ##
-    extraEgress: []
-    ## @param vmselect.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
-    ## @param vmselect.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
-    ##
-    ingressNSMatchLabels: {}
-    ingressNSPodMatchLabels: {}
   ## Configure extra options for VictoriaMetrics Select containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param vmselect.livenessProbe.enabled Enable livenessProbe on VictoriaMetrics Select containers
@@ -638,6 +586,61 @@ vmselect:
     ##             name: http
     ##
     extraRules: []
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param vmselect.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param vmselect.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param vmselect.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param vmselect.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param vmselect.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param vmselect.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param vmselect.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
 
   ## @section VictoriaMetrics Select Metrics Parameters
   ##
@@ -732,61 +735,6 @@ vminsert:
   ##
   containerPorts:
     http: 8480
-  ## Network Policies
-  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
-  ##
-  networkPolicy:
-    ## @param vminsert.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
-    ##
-    enabled: true
-    ## @param vminsert.networkPolicy.allowExternal Don't require server label for connections
-    ## The Policy model to apply. When set to false, only pods with the correct
-    ## server label will have network access to the ports server is listening
-    ## on. When true, server will accept connections from any source
-    ## (with the correct destination port).
-    ##
-    allowExternal: true
-    ## @param vminsert.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
-    ##
-    allowExternalEgress: true
-    ## @param vminsert.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
-    ## e.g:
-    ## extraIngress:
-    ##   - ports:
-    ##       - port: 1234
-    ##     from:
-    ##       - podSelector:
-    ##           - matchLabels:
-    ##               - role: frontend
-    ##       - podSelector:
-    ##           - matchExpressions:
-    ##               - key: role
-    ##                 operator: In
-    ##                 values:
-    ##                   - frontend
-    extraIngress: []
-    ## @param vminsert.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
-    ## e.g:
-    ## extraEgress:
-    ##   - ports:
-    ##       - port: 1234
-    ##     to:
-    ##       - podSelector:
-    ##           - matchLabels:
-    ##               - role: frontend
-    ##       - podSelector:
-    ##           - matchExpressions:
-    ##               - key: role
-    ##                 operator: In
-    ##                 values:
-    ##                   - frontend
-    ##
-    extraEgress: []
-    ## @param vminsert.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
-    ## @param vminsert.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
-    ##
-    ingressNSMatchLabels: {}
-    ingressNSPodMatchLabels: {}
   ## Configure extra options for VictoriaMetrics Insert containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param vminsert.livenessProbe.enabled Enable livenessProbe on VictoriaMetrics Insert containers
@@ -1246,6 +1194,61 @@ vminsert:
     ##             name: http
     ##
     extraRules: []
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param vminsert.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param vminsert.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param vminsert.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param vminsert.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param vminsert.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param vminsert.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param vminsert.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
 
   ## @section VictoriaMetrics Insert Metrics Parameters
   ##
@@ -1344,61 +1347,6 @@ vmstorage:
     http: 8482
     vmselect: 8401
     vminsert: 8400
-  ## Network Policies
-  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
-  ##
-  networkPolicy:
-    ## @param vmstorage.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
-    ##
-    enabled: true
-    ## @param vmstorage.networkPolicy.allowExternal Don't require server label for connections
-    ## The Policy model to apply. When set to false, only pods with the correct
-    ## server label will have network access to the ports server is listening
-    ## on. When true, server will accept connections from any source
-    ## (with the correct destination port).
-    ##
-    allowExternal: true
-    ## @param vmstorage.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
-    ##
-    allowExternalEgress: true
-    ## @param vmstorage.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
-    ## e.g:
-    ## extraIngress:
-    ##   - ports:
-    ##       - port: 1234
-    ##     from:
-    ##       - podSelector:
-    ##           - matchLabels:
-    ##               - role: frontend
-    ##       - podSelector:
-    ##           - matchExpressions:
-    ##               - key: role
-    ##                 operator: In
-    ##                 values:
-    ##                   - frontend
-    extraIngress: []
-    ## @param vmstorage.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
-    ## e.g:
-    ## extraEgress:
-    ##   - ports:
-    ##       - port: 1234
-    ##     to:
-    ##       - podSelector:
-    ##           - matchLabels:
-    ##               - role: frontend
-    ##       - podSelector:
-    ##           - matchExpressions:
-    ##               - key: role
-    ##                 operator: In
-    ##                 values:
-    ##                   - frontend
-    ##
-    extraEgress: []
-    ## @param vmstorage.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
-    ## @param vmstorage.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
-    ##
-    ingressNSMatchLabels: {}
-    ingressNSPodMatchLabels: {}
   ## Configure extra options for VictoriaMetrics Storage containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param vmstorage.livenessProbe.enabled Enable livenessProbe on VictoriaMetrics Storage containers
@@ -1767,6 +1715,61 @@ vmstorage:
       ## @param vmstorage.service.headless.annotations Annotations for the headless service.
       ##
       annotations: {}
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param vmstorage.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param vmstorage.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param vmstorage.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param vmstorage.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param vmstorage.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param vmstorage.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param vmstorage.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
 
   ## @section VictoriaMetrics Storage Persistence Parameters
   ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
@@ -1907,61 +1910,6 @@ vmauth:
   ##
   containerPorts:
     http: 8427
-  ## Network Policies
-  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
-  ##
-  networkPolicy:
-    ## @param vmauth.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
-    ##
-    enabled: true
-    ## @param vmauth.networkPolicy.allowExternal Don't require server label for connections
-    ## The Policy model to apply. When set to false, only pods with the correct
-    ## server label will have network access to the ports server is listening
-    ## on. When true, server will accept connections from any source
-    ## (with the correct destination port).
-    ##
-    allowExternal: true
-    ## @param vmauth.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
-    ##
-    allowExternalEgress: true
-    ## @param vmauth.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
-    ## e.g:
-    ## extraIngress:
-    ##   - ports:
-    ##       - port: 1234
-    ##     from:
-    ##       - podSelector:
-    ##           - matchLabels:
-    ##               - role: frontend
-    ##       - podSelector:
-    ##           - matchExpressions:
-    ##               - key: role
-    ##                 operator: In
-    ##                 values:
-    ##                   - frontend
-    extraIngress: []
-    ## @param vmauth.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
-    ## e.g:
-    ## extraEgress:
-    ##   - ports:
-    ##       - port: 1234
-    ##     to:
-    ##       - podSelector:
-    ##           - matchLabels:
-    ##               - role: frontend
-    ##       - podSelector:
-    ##           - matchExpressions:
-    ##               - key: role
-    ##                 operator: In
-    ##                 values:
-    ##                   - frontend
-    ##
-    extraEgress: []
-    ## @param vmauth.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
-    ## @param vmauth.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
-    ##
-    ingressNSMatchLabels: {}
-    ingressNSPodMatchLabels: {}
   ## Configure extra options for VictoriaMetrics Auth containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param vmauth.livenessProbe.enabled Enable livenessProbe on VictoriaMetrics Auth containers
@@ -2436,6 +2384,61 @@ vmauth:
     ##             name: http
     ##
     extraRules: []
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param vmauth.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param vmauth.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param vmauth.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param vmauth.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param vmauth.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param vmauth.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param vmauth.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
 
   ## @section VictoriaMetrics Auth Metrics Parameters
   ##
@@ -2539,62 +2542,6 @@ vmagent:
     graphite: 2003
     opentsdb: 4242
     influxdb: 8089
-  ## @param
-  ## Network Policies
-  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
-  ##
-  networkPolicy:
-    ## @param vmagent.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
-    ##
-    enabled: true
-    ## @param vmagent.networkPolicy.allowExternal Don't require server label for connections
-    ## The Policy model to apply. When set to false, only pods with the correct
-    ## server label will have network access to the ports server is listening
-    ## on. When true, server will accept connections from any source
-    ## (with the correct destination port).
-    ##
-    allowExternal: true
-    ## @param vmagent.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
-    ##
-    allowExternalEgress: true
-    ## @param vmagent.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
-    ## e.g:
-    ## extraIngress:
-    ##   - ports:
-    ##       - port: 1234
-    ##     from:
-    ##       - podSelector:
-    ##           - matchLabels:
-    ##               - role: frontend
-    ##       - podSelector:
-    ##           - matchExpressions:
-    ##               - key: role
-    ##                 operator: In
-    ##                 values:
-    ##                   - frontend
-    extraIngress: []
-    ## @param vmagent.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
-    ## e.g:
-    ## extraEgress:
-    ##   - ports:
-    ##       - port: 1234
-    ##     to:
-    ##       - podSelector:
-    ##           - matchLabels:
-    ##               - role: frontend
-    ##       - podSelector:
-    ##           - matchExpressions:
-    ##               - key: role
-    ##                 operator: In
-    ##                 values:
-    ##                   - frontend
-    ##
-    extraEgress: []
-    ## @param vmagent.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
-    ## @param vmagent.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
-    ##
-    ingressNSMatchLabels: {}
-    ingressNSPodMatchLabels: {}
   ## Configure extra options for VictoriaMetrics Agent containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param vmagent.livenessProbe.enabled Enable livenessProbe on VictoriaMetrics Agent containers
@@ -3010,6 +2957,61 @@ vmagent:
     ##     timeoutSeconds: 300
     ##
     sessionAffinityConfig: {}
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param vmagent.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param vmagent.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param vmagent.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param vmagent.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param vmagent.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param vmagent.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param vmagent.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
 
   ## @section VictoriaMetrics Agent Metrics Parameters
   ##
@@ -3107,62 +3109,6 @@ vmalert:
   ##
   containerPorts:
     http: 8429
-  ## @param
-  ## Network Policies
-  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
-  ##
-  networkPolicy:
-    ## @param vmalert.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
-    ##
-    enabled: true
-    ## @param vmalert.networkPolicy.allowExternal Don't require server label for connections
-    ## The Policy model to apply. When set to false, only pods with the correct
-    ## server label will have network access to the ports server is listening
-    ## on. When true, server will accept connections from any source
-    ## (with the correct destination port).
-    ##
-    allowExternal: true
-    ## @param vmalert.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
-    ##
-    allowExternalEgress: true
-    ## @param vmalert.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
-    ## e.g:
-    ## extraIngress:
-    ##   - ports:
-    ##       - port: 1234
-    ##     from:
-    ##       - podSelector:
-    ##           - matchLabels:
-    ##               - role: frontend
-    ##       - podSelector:
-    ##           - matchExpressions:
-    ##               - key: role
-    ##                 operator: In
-    ##                 values:
-    ##                   - frontend
-    extraIngress: []
-    ## @param vmalert.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
-    ## e.g:
-    ## extraEgress:
-    ##   - ports:
-    ##       - port: 1234
-    ##     to:
-    ##       - podSelector:
-    ##           - matchLabels:
-    ##               - role: frontend
-    ##       - podSelector:
-    ##           - matchExpressions:
-    ##               - key: role
-    ##                 operator: In
-    ##                 values:
-    ##                   - frontend
-    ##
-    extraEgress: []
-    ## @param vmalert.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
-    ## @param vmalert.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
-    ##
-    ingressNSMatchLabels: {}
-    ingressNSPodMatchLabels: {}
   ## Configure extra options for VictoriaMetrics Alert containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param vmalert.livenessProbe.enabled Enable livenessProbe on VictoriaMetrics Alert containers
@@ -3542,6 +3488,61 @@ vmalert:
     ##     timeoutSeconds: 300
     ##
     sessionAffinityConfig: {}
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param vmalert.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param vmalert.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param vmalert.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param vmalert.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param vmalert.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param vmalert.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param vmalert.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
 
   ## @section VictoriaMetrics Alert Metrics Parameters
   ##

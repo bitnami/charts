@@ -9,9 +9,7 @@ kind: ServiceMonitor
 metadata:
   name: {{ template "victoriametrics.vmalert.fullname" . }}
   namespace: {{ default (include "common.names.namespace" .) .Values.vmalert.metrics.serviceMonitor.namespace | quote }}
-  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.vmalert.image "chart" .Chart ) ) }}
-  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.vmalert.metrics.serviceMonitor.labels .Values.commonLabels $versionLabel ) "context" . ) }}
-  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: victoriametrics
     app.kubernetes.io/component: vmalert
   {{- if or .Values.vmalert.metrics.serviceMonitor.annotations .Values.commonAnnotations }}

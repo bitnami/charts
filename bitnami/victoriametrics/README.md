@@ -4,7 +4,7 @@
 
 VictoriaMetrics is a fast, cost-effective, and scalable monitoring solution and time series database, compatible with Prometheus and Graphite
 
-[Overview of victoriametrics](https://victoriametrics.com/)
+[Overview of VictoriaMetrics](https://victoriametrics.com/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
@@ -14,11 +14,11 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/victoriametrics
 ```
 
-Looking to use victoriametrics in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
+Looking to use VictoriaMetrics in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
-This chart bootstraps a [victoriametrics](https://github.com/bitnami/containers/tree/main/bitnami/victoriametrics-vmselect) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [VictoriaMetrics](https://github.com/bitnami/containers/tree/main/bitnami/victoriametrics-vmselect) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
@@ -38,7 +38,7 @@ helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/victoriametrics
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
-The command deploys victoriametrics on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
+The command deploys VictoriaMetrics on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
 > **Tip**: List all releases using `helm list`
 
@@ -66,7 +66,7 @@ To back up and restore Helm chart deployments on Kubernetes, you need to back up
 
 ### Prometheus metrics
 
-This chart can be integrated with Prometheus by setting `*.metrics.enabled` (under the `vminsert`, `vmselect`, `vmstorage`, `vmagent`, `vmalert` and `vmauth` sections) to `true`. This will expose victoriametrics native Prometheus ports in the containers. Additionally, it will deploy several `metrics` services, which can be configured under the `*.metrics.service` section (under the `vminsert`, `vmselect`, `vmstorage`, `vmagent`, `vmalert` and `vmauth` sections). These `metrics` services will have the necessary annotations to be automatically scraped by Prometheus.
+This chart can be integrated with Prometheus by setting `*.metrics.enabled` (under the `vminsert`, `vmselect`, `vmstorage`, `vmagent`, `vmalert` and `vmauth` sections) to `true`. This will expose VictoriaMetrics native Prometheus ports in the containers. Additionally, it will deploy several `metrics` services, which can be configured under the `*.metrics.service` section (under the `vminsert`, `vmselect`, `vmstorage`, `vmagent`, `vmalert` and `vmauth` sections). These `metrics` services will have the necessary annotations to be automatically scraped by Prometheus.
 
 #### Prometheus requirements
 
@@ -148,16 +148,17 @@ wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
 
 ### Common parameters
 
-| Name                | Description                                       | Value           |
-| ------------------- | ------------------------------------------------- | --------------- |
-| `kubeVersion`       | Override Kubernetes version                       | `""`            |
-| `nameOverride`      | String to partially override common.names.name    | `""`            |
-| `fullnameOverride`  | String to fully override common.names.fullname    | `""`            |
-| `namespaceOverride` | String to fully override common.names.namespace   | `""`            |
-| `commonLabels`      | Labels to add to all deployed objects             | `{}`            |
-| `commonAnnotations` | Annotations to add to all deployed objects        | `{}`            |
-| `clusterDomain`     | Kubernetes cluster domain name                    | `cluster.local` |
-| `extraDeploy`       | Array of extra objects to deploy with the release | `[]`            |
+| Name                | Description                                                | Value           |
+| ------------------- | ---------------------------------------------------------- | --------------- |
+| `kubeVersion`       | Override Kubernetes version                                | `""`            |
+| `apiVersions`       | Override Kubernetes API versions reported by .Capabilities | `[]`            |
+| `nameOverride`      | String to partially override common.names.name             | `""`            |
+| `fullnameOverride`  | String to fully override common.names.fullname             | `""`            |
+| `namespaceOverride` | String to fully override common.names.namespace            | `""`            |
+| `commonLabels`      | Labels to add to all deployed objects                      | `{}`            |
+| `commonAnnotations` | Annotations to add to all deployed objects                 | `{}`            |
+| `clusterDomain`     | Kubernetes cluster domain name                             | `cluster.local` |
+| `extraDeploy`       | Array of extra objects to deploy with the release          | `[]`            |
 
 ### VictoriaMetrics common parameters
 
@@ -178,13 +179,6 @@ wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
 | `vmselect.image.pullSecrets`                                 | VictoriaMetrics Select image pull secrets                                                                                                                                                                                           | `[]`                                       |
 | `vmselect.replicaCount`                                      | Number of VictoriaMetrics Select replicas to deploy                                                                                                                                                                                 | `1`                                        |
 | `vmselect.containerPorts.http`                               | VictoriaMetrics Select http container port                                                                                                                                                                                          | `8481`                                     |
-| `vmselect.networkPolicy.enabled`                             | Specifies whether a NetworkPolicy should be created                                                                                                                                                                                 | `true`                                     |
-| `vmselect.networkPolicy.allowExternal`                       | Don't require server label for connections                                                                                                                                                                                          | `true`                                     |
-| `vmselect.networkPolicy.allowExternalEgress`                 | Allow the pod to access any range of port and all destinations.                                                                                                                                                                     | `true`                                     |
-| `vmselect.networkPolicy.extraIngress`                        | Add extra ingress rules to the NetworkPolicy                                                                                                                                                                                        | `[]`                                       |
-| `vmselect.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy                                                                                                                                                                                        | `[]`                                       |
-| `vmselect.networkPolicy.ingressNSMatchLabels`                | Labels to match to allow traffic from other namespaces                                                                                                                                                                              | `{}`                                       |
-| `vmselect.networkPolicy.ingressNSPodMatchLabels`             | Pod labels to match to allow traffic from other namespaces                                                                                                                                                                          | `{}`                                       |
 | `vmselect.livenessProbe.enabled`                             | Enable livenessProbe on VictoriaMetrics Select containers                                                                                                                                                                           | `true`                                     |
 | `vmselect.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                                                                                                                             | `5`                                        |
 | `vmselect.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                                                                                                                                    | `10`                                       |
@@ -280,34 +274,41 @@ wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
 
 ### VictoriaMetrics Select Traffic Exposure Parameters
 
-| Name                                        | Description                                                                                                                      | Value                    |
-| ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `vmselect.service.type`                     | VictoriaMetrics Select service type                                                                                              | `ClusterIP`              |
-| `vmselect.service.ports.http`               | VictoriaMetrics Select service http port                                                                                         | `8481`                   |
-| `vmselect.service.nodePorts.http`           | Node port for HTTP                                                                                                               | `""`                     |
-| `vmselect.service.clusterIP`                | VictoriaMetrics Select service Cluster IP                                                                                        | `""`                     |
-| `vmselect.service.loadBalancerIP`           | VictoriaMetrics Select service Load Balancer IP                                                                                  | `""`                     |
-| `vmselect.service.loadBalancerSourceRanges` | VictoriaMetrics Select service Load Balancer sources                                                                             | `[]`                     |
-| `vmselect.service.externalTrafficPolicy`    | VictoriaMetrics Select service external traffic policy                                                                           | `Cluster`                |
-| `vmselect.service.annotations`              | Additional custom annotations for VictoriaMetrics Select service                                                                 | `{}`                     |
-| `vmselect.service.extraPorts`               | Extra ports to expose in VictoriaMetrics Select service (normally used with the `sidecars` value)                                | `[]`                     |
-| `vmselect.service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin                                                                 | `None`                   |
-| `vmselect.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
-| `vmselect.service.headless.annotations`     | Annotations for the headless service.                                                                                            | `{}`                     |
-| `vmselect.ingress.enabled`                  | Enable ingress record generation for VictoriaMetrics Select                                                                      | `false`                  |
-| `vmselect.ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
-| `vmselect.ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
-| `vmselect.ingress.hostname`                 | Default host for the ingress record                                                                                              | `vmselect.local`         |
-| `vmselect.ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
-| `vmselect.ingress.path`                     | Default path for the ingress record                                                                                              | `/`                      |
-| `vmselect.ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
-| `vmselect.ingress.tls`                      | Enable TLS configuration for the host defined at `vmselect.ingress.hostname` parameter                                           | `false`                  |
-| `vmselect.ingress.selfSigned`               | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
-| `vmselect.ingress.extraHosts`               | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                     |
-| `vmselect.ingress.extraPaths`               | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                     |
-| `vmselect.ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
-| `vmselect.ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
-| `vmselect.ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
+| Name                                             | Description                                                                                                                      | Value                    |
+| ------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `vmselect.service.type`                          | VictoriaMetrics Select service type                                                                                              | `ClusterIP`              |
+| `vmselect.service.ports.http`                    | VictoriaMetrics Select service http port                                                                                         | `8481`                   |
+| `vmselect.service.nodePorts.http`                | Node port for HTTP                                                                                                               | `""`                     |
+| `vmselect.service.clusterIP`                     | VictoriaMetrics Select service Cluster IP                                                                                        | `""`                     |
+| `vmselect.service.loadBalancerIP`                | VictoriaMetrics Select service Load Balancer IP                                                                                  | `""`                     |
+| `vmselect.service.loadBalancerSourceRanges`      | VictoriaMetrics Select service Load Balancer sources                                                                             | `[]`                     |
+| `vmselect.service.externalTrafficPolicy`         | VictoriaMetrics Select service external traffic policy                                                                           | `Cluster`                |
+| `vmselect.service.annotations`                   | Additional custom annotations for VictoriaMetrics Select service                                                                 | `{}`                     |
+| `vmselect.service.extraPorts`                    | Extra ports to expose in VictoriaMetrics Select service (normally used with the `sidecars` value)                                | `[]`                     |
+| `vmselect.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin                                                                 | `None`                   |
+| `vmselect.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
+| `vmselect.service.headless.annotations`          | Annotations for the headless service.                                                                                            | `{}`                     |
+| `vmselect.ingress.enabled`                       | Enable ingress record generation for VictoriaMetrics Select                                                                      | `false`                  |
+| `vmselect.ingress.pathType`                      | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `vmselect.ingress.apiVersion`                    | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
+| `vmselect.ingress.hostname`                      | Default host for the ingress record                                                                                              | `vmselect.local`         |
+| `vmselect.ingress.ingressClassName`              | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
+| `vmselect.ingress.path`                          | Default path for the ingress record                                                                                              | `/`                      |
+| `vmselect.ingress.annotations`                   | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `vmselect.ingress.tls`                           | Enable TLS configuration for the host defined at `vmselect.ingress.hostname` parameter                                           | `false`                  |
+| `vmselect.ingress.selfSigned`                    | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
+| `vmselect.ingress.extraHosts`                    | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                     |
+| `vmselect.ingress.extraPaths`                    | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                     |
+| `vmselect.ingress.extraTls`                      | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
+| `vmselect.ingress.secrets`                       | Custom TLS certificates as secrets                                                                                               | `[]`                     |
+| `vmselect.ingress.extraRules`                    | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
+| `vmselect.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                                                              | `true`                   |
+| `vmselect.networkPolicy.allowExternal`           | Don't require server label for connections                                                                                       | `true`                   |
+| `vmselect.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                                                  | `true`                   |
+| `vmselect.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                                                                                     | `[]`                     |
+| `vmselect.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                                                     | `[]`                     |
+| `vmselect.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                                                           | `{}`                     |
+| `vmselect.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                                                                       | `{}`                     |
 
 ### VictoriaMetrics Select Metrics Parameters
 
@@ -338,13 +339,6 @@ wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
 | `vminsert.image.pullSecrets`                                 | VictoriaMetrics Insert image pull secrets                                                                                                                                                                                           | `[]`                                       |
 | `vminsert.replicaCount`                                      | Number of VictoriaMetrics Insert replicas to deploy                                                                                                                                                                                 | `1`                                        |
 | `vminsert.containerPorts.http`                               | VictoriaMetrics Insert http container port                                                                                                                                                                                          | `8480`                                     |
-| `vminsert.networkPolicy.enabled`                             | Specifies whether a NetworkPolicy should be created                                                                                                                                                                                 | `true`                                     |
-| `vminsert.networkPolicy.allowExternal`                       | Don't require server label for connections                                                                                                                                                                                          | `true`                                     |
-| `vminsert.networkPolicy.allowExternalEgress`                 | Allow the pod to access any range of port and all destinations.                                                                                                                                                                     | `true`                                     |
-| `vminsert.networkPolicy.extraIngress`                        | Add extra ingress rules to the NetworkPolicy                                                                                                                                                                                        | `[]`                                       |
-| `vminsert.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy                                                                                                                                                                                        | `[]`                                       |
-| `vminsert.networkPolicy.ingressNSMatchLabels`                | Labels to match to allow traffic from other namespaces                                                                                                                                                                              | `{}`                                       |
-| `vminsert.networkPolicy.ingressNSPodMatchLabels`             | Pod labels to match to allow traffic from other namespaces                                                                                                                                                                          | `{}`                                       |
 | `vminsert.livenessProbe.enabled`                             | Enable livenessProbe on VictoriaMetrics Insert containers                                                                                                                                                                           | `true`                                     |
 | `vminsert.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                                                                                                                             | `5`                                        |
 | `vminsert.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                                                                                                                                    | `10`                                       |
@@ -433,33 +427,40 @@ wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
 
 ### VictoriaMetrics Insert Traffic Exposure Parameters
 
-| Name                                        | Description                                                                                                                      | Value                    |
-| ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `vminsert.service.type`                     | VictoriaMetrics Insert service type                                                                                              | `ClusterIP`              |
-| `vminsert.service.ports.http`               | VictoriaMetrics Insert service http port                                                                                         | `8480`                   |
-| `vminsert.service.nodePorts.http`           | Node port for HTTP                                                                                                               | `""`                     |
-| `vminsert.service.clusterIP`                | VictoriaMetrics Insert service Cluster IP                                                                                        | `""`                     |
-| `vminsert.service.loadBalancerIP`           | VictoriaMetrics Insert service Load Balancer IP                                                                                  | `""`                     |
-| `vminsert.service.loadBalancerSourceRanges` | VictoriaMetrics Insert service Load Balancer sources                                                                             | `[]`                     |
-| `vminsert.service.externalTrafficPolicy`    | VictoriaMetrics Insert service external traffic policy                                                                           | `Cluster`                |
-| `vminsert.service.annotations`              | Additional custom annotations for VictoriaMetrics Insert service                                                                 | `{}`                     |
-| `vminsert.service.extraPorts`               | Extra ports to expose in VictoriaMetrics Insert service (normally used with the `sidecars` value)                                | `[]`                     |
-| `vminsert.service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin                                                                 | `None`                   |
-| `vminsert.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
-| `vminsert.ingress.enabled`                  | Enable ingress record generation for VictoriaMetrics Insert                                                                      | `false`                  |
-| `vminsert.ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
-| `vminsert.ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
-| `vminsert.ingress.hostname`                 | Default host for the ingress record                                                                                              | `vminsert.local`         |
-| `vminsert.ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
-| `vminsert.ingress.path`                     | Default path for the ingress record                                                                                              | `/`                      |
-| `vminsert.ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
-| `vminsert.ingress.tls`                      | Enable TLS configuration for the host defined at `vminsert.ingress.hostname` parameter                                           | `false`                  |
-| `vminsert.ingress.selfSigned`               | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
-| `vminsert.ingress.extraHosts`               | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                     |
-| `vminsert.ingress.extraPaths`               | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                     |
-| `vminsert.ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
-| `vminsert.ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
-| `vminsert.ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
+| Name                                             | Description                                                                                                                      | Value                    |
+| ------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `vminsert.service.type`                          | VictoriaMetrics Insert service type                                                                                              | `ClusterIP`              |
+| `vminsert.service.ports.http`                    | VictoriaMetrics Insert service http port                                                                                         | `8480`                   |
+| `vminsert.service.nodePorts.http`                | Node port for HTTP                                                                                                               | `""`                     |
+| `vminsert.service.clusterIP`                     | VictoriaMetrics Insert service Cluster IP                                                                                        | `""`                     |
+| `vminsert.service.loadBalancerIP`                | VictoriaMetrics Insert service Load Balancer IP                                                                                  | `""`                     |
+| `vminsert.service.loadBalancerSourceRanges`      | VictoriaMetrics Insert service Load Balancer sources                                                                             | `[]`                     |
+| `vminsert.service.externalTrafficPolicy`         | VictoriaMetrics Insert service external traffic policy                                                                           | `Cluster`                |
+| `vminsert.service.annotations`                   | Additional custom annotations for VictoriaMetrics Insert service                                                                 | `{}`                     |
+| `vminsert.service.extraPorts`                    | Extra ports to expose in VictoriaMetrics Insert service (normally used with the `sidecars` value)                                | `[]`                     |
+| `vminsert.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin                                                                 | `None`                   |
+| `vminsert.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
+| `vminsert.ingress.enabled`                       | Enable ingress record generation for VictoriaMetrics Insert                                                                      | `false`                  |
+| `vminsert.ingress.pathType`                      | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `vminsert.ingress.apiVersion`                    | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
+| `vminsert.ingress.hostname`                      | Default host for the ingress record                                                                                              | `vminsert.local`         |
+| `vminsert.ingress.ingressClassName`              | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
+| `vminsert.ingress.path`                          | Default path for the ingress record                                                                                              | `/`                      |
+| `vminsert.ingress.annotations`                   | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `vminsert.ingress.tls`                           | Enable TLS configuration for the host defined at `vminsert.ingress.hostname` parameter                                           | `false`                  |
+| `vminsert.ingress.selfSigned`                    | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
+| `vminsert.ingress.extraHosts`                    | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                     |
+| `vminsert.ingress.extraPaths`                    | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                     |
+| `vminsert.ingress.extraTls`                      | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
+| `vminsert.ingress.secrets`                       | Custom TLS certificates as secrets                                                                                               | `[]`                     |
+| `vminsert.ingress.extraRules`                    | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
+| `vminsert.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                                                              | `true`                   |
+| `vminsert.networkPolicy.allowExternal`           | Don't require server label for connections                                                                                       | `true`                   |
+| `vminsert.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                                                  | `true`                   |
+| `vminsert.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                                                                                     | `[]`                     |
+| `vminsert.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                                                     | `[]`                     |
+| `vminsert.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                                                           | `{}`                     |
+| `vminsert.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                                                                       | `{}`                     |
 
 ### VictoriaMetrics Insert Metrics Parameters
 
@@ -492,13 +493,6 @@ wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
 | `vmstorage.containerPorts.http`                               | VictoriaMetrics Storage http container port                                                                                                                                                                                           | `8482`                                      |
 | `vmstorage.containerPorts.vmselect`                           | VictoriaMetrics Storage vmselect container port                                                                                                                                                                                       | `8401`                                      |
 | `vmstorage.containerPorts.vminsert`                           | VictoriaMetrics Storage vminsert container port                                                                                                                                                                                       | `8400`                                      |
-| `vmstorage.networkPolicy.enabled`                             | Specifies whether a NetworkPolicy should be created                                                                                                                                                                                   | `true`                                      |
-| `vmstorage.networkPolicy.allowExternal`                       | Don't require server label for connections                                                                                                                                                                                            | `true`                                      |
-| `vmstorage.networkPolicy.allowExternalEgress`                 | Allow the pod to access any range of port and all destinations.                                                                                                                                                                       | `true`                                      |
-| `vmstorage.networkPolicy.extraIngress`                        | Add extra ingress rules to the NetworkPolicy                                                                                                                                                                                          | `[]`                                        |
-| `vmstorage.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy                                                                                                                                                                                          | `[]`                                        |
-| `vmstorage.networkPolicy.ingressNSMatchLabels`                | Labels to match to allow traffic from other namespaces                                                                                                                                                                                | `{}`                                        |
-| `vmstorage.networkPolicy.ingressNSPodMatchLabels`             | Pod labels to match to allow traffic from other namespaces                                                                                                                                                                            | `{}`                                        |
 | `vmstorage.livenessProbe.enabled`                             | Enable livenessProbe on VictoriaMetrics Storage containers                                                                                                                                                                            | `true`                                      |
 | `vmstorage.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                                                                                                                               | `5`                                         |
 | `vmstorage.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                                                                                                                                      | `10`                                        |
@@ -589,20 +583,27 @@ wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
 
 ### VictoriaMetrics Storage Traffic Exposure Parameters
 
-| Name                                         | Description                                                                                        | Value       |
-| -------------------------------------------- | -------------------------------------------------------------------------------------------------- | ----------- |
-| `vmstorage.service.type`                     | VictoriaMetrics Storage service type                                                               | `ClusterIP` |
-| `vmstorage.service.ports.http`               | VictoriaMetrics Storage service http port                                                          | `80`        |
-| `vmstorage.service.nodePorts.http`           | Node port for HTTP                                                                                 | `""`        |
-| `vmstorage.service.clusterIP`                | VictoriaMetrics Storage service Cluster IP                                                         | `""`        |
-| `vmstorage.service.loadBalancerIP`           | VictoriaMetrics Storage service Load Balancer IP                                                   | `""`        |
-| `vmstorage.service.loadBalancerSourceRanges` | VictoriaMetrics Storage service Load Balancer sources                                              | `[]`        |
-| `vmstorage.service.externalTrafficPolicy`    | VictoriaMetrics Storage service external traffic policy                                            | `Cluster`   |
-| `vmstorage.service.annotations`              | Additional custom annotations for VictoriaMetrics Storage service                                  | `{}`        |
-| `vmstorage.service.extraPorts`               | Extra ports to expose in VictoriaMetrics Storage service (normally used with the `sidecars` value) | `[]`        |
-| `vmstorage.service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin                                   | `None`      |
-| `vmstorage.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                        | `{}`        |
-| `vmstorage.service.headless.annotations`     | Annotations for the headless service.                                                              | `{}`        |
+| Name                                              | Description                                                                                        | Value       |
+| ------------------------------------------------- | -------------------------------------------------------------------------------------------------- | ----------- |
+| `vmstorage.service.type`                          | VictoriaMetrics Storage service type                                                               | `ClusterIP` |
+| `vmstorage.service.ports.http`                    | VictoriaMetrics Storage service http port                                                          | `80`        |
+| `vmstorage.service.nodePorts.http`                | Node port for HTTP                                                                                 | `""`        |
+| `vmstorage.service.clusterIP`                     | VictoriaMetrics Storage service Cluster IP                                                         | `""`        |
+| `vmstorage.service.loadBalancerIP`                | VictoriaMetrics Storage service Load Balancer IP                                                   | `""`        |
+| `vmstorage.service.loadBalancerSourceRanges`      | VictoriaMetrics Storage service Load Balancer sources                                              | `[]`        |
+| `vmstorage.service.externalTrafficPolicy`         | VictoriaMetrics Storage service external traffic policy                                            | `Cluster`   |
+| `vmstorage.service.annotations`                   | Additional custom annotations for VictoriaMetrics Storage service                                  | `{}`        |
+| `vmstorage.service.extraPorts`                    | Extra ports to expose in VictoriaMetrics Storage service (normally used with the `sidecars` value) | `[]`        |
+| `vmstorage.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin                                   | `None`      |
+| `vmstorage.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                        | `{}`        |
+| `vmstorage.service.headless.annotations`          | Annotations for the headless service.                                                              | `{}`        |
+| `vmstorage.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                                | `true`      |
+| `vmstorage.networkPolicy.allowExternal`           | Don't require server label for connections                                                         | `true`      |
+| `vmstorage.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                    | `true`      |
+| `vmstorage.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                                                       | `[]`        |
+| `vmstorage.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                       | `[]`        |
+| `vmstorage.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                             | `{}`        |
+| `vmstorage.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                                         | `{}`        |
 
 ### VictoriaMetrics Storage Persistence Parameters
 
@@ -649,13 +650,6 @@ wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
 | `vmauth.image.pullSecrets`                                 | VictoriaMetrics Auth image pull secrets                                                                                                                                                                                         | `[]`                                     |
 | `vmauth.replicaCount`                                      | Number of VictoriaMetrics Auth replicas to deploy                                                                                                                                                                               | `1`                                      |
 | `vmauth.containerPorts.http`                               | VictoriaMetrics Auth http container port                                                                                                                                                                                        | `8427`                                   |
-| `vmauth.networkPolicy.enabled`                             | Specifies whether a NetworkPolicy should be created                                                                                                                                                                             | `true`                                   |
-| `vmauth.networkPolicy.allowExternal`                       | Don't require server label for connections                                                                                                                                                                                      | `true`                                   |
-| `vmauth.networkPolicy.allowExternalEgress`                 | Allow the pod to access any range of port and all destinations.                                                                                                                                                                 | `true`                                   |
-| `vmauth.networkPolicy.extraIngress`                        | Add extra ingress rules to the NetworkPolicy                                                                                                                                                                                    | `[]`                                     |
-| `vmauth.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy                                                                                                                                                                                    | `[]`                                     |
-| `vmauth.networkPolicy.ingressNSMatchLabels`                | Labels to match to allow traffic from other namespaces                                                                                                                                                                          | `{}`                                     |
-| `vmauth.networkPolicy.ingressNSPodMatchLabels`             | Pod labels to match to allow traffic from other namespaces                                                                                                                                                                      | `{}`                                     |
 | `vmauth.livenessProbe.enabled`                             | Enable livenessProbe on VictoriaMetrics Auth containers                                                                                                                                                                         | `true`                                   |
 | `vmauth.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                                                                                                                         | `5`                                      |
 | `vmauth.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                                                                                                                                | `10`                                     |
@@ -752,33 +746,40 @@ wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
 
 ### VictoriaMetrics Auth Traffic Exposure Parameters
 
-| Name                                      | Description                                                                                                                      | Value                    |
-| ----------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `vmauth.service.type`                     | VictoriaMetrics Auth service type                                                                                                | `ClusterIP`              |
-| `vmauth.service.ports.http`               | VictoriaMetrics Auth service http port                                                                                           | `8427`                   |
-| `vmauth.service.nodePorts.http`           | Node port for HTTP                                                                                                               | `""`                     |
-| `vmauth.service.clusterIP`                | VictoriaMetrics Auth service Cluster IP                                                                                          | `""`                     |
-| `vmauth.service.loadBalancerIP`           | VictoriaMetrics Auth service Load Balancer IP                                                                                    | `""`                     |
-| `vmauth.service.loadBalancerSourceRanges` | VictoriaMetrics Auth service Load Balancer sources                                                                               | `[]`                     |
-| `vmauth.service.externalTrafficPolicy`    | VictoriaMetrics Auth service external traffic policy                                                                             | `Cluster`                |
-| `vmauth.service.annotations`              | Additional custom annotations for VictoriaMetrics Auth service                                                                   | `{}`                     |
-| `vmauth.service.extraPorts`               | Extra ports to expose in VictoriaMetrics Auth service (normally used with the `sidecars` value)                                  | `[]`                     |
-| `vmauth.service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin                                                                 | `None`                   |
-| `vmauth.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
-| `vmauth.ingress.enabled`                  | Enable ingress record generation for VictoriaMetrics Auth                                                                        | `false`                  |
-| `vmauth.ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
-| `vmauth.ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
-| `vmauth.ingress.hostname`                 | Default host for the ingress record                                                                                              | `vmauth.local`           |
-| `vmauth.ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
-| `vmauth.ingress.path`                     | Default path for the ingress record                                                                                              | `/`                      |
-| `vmauth.ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
-| `vmauth.ingress.tls`                      | Enable TLS configuration for the host defined at `vmauth.ingress.hostname` parameter                                             | `false`                  |
-| `vmauth.ingress.selfSigned`               | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
-| `vmauth.ingress.extraHosts`               | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                     |
-| `vmauth.ingress.extraPaths`               | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                     |
-| `vmauth.ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
-| `vmauth.ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
-| `vmauth.ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
+| Name                                           | Description                                                                                                                      | Value                    |
+| ---------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `vmauth.service.type`                          | VictoriaMetrics Auth service type                                                                                                | `ClusterIP`              |
+| `vmauth.service.ports.http`                    | VictoriaMetrics Auth service http port                                                                                           | `8427`                   |
+| `vmauth.service.nodePorts.http`                | Node port for HTTP                                                                                                               | `""`                     |
+| `vmauth.service.clusterIP`                     | VictoriaMetrics Auth service Cluster IP                                                                                          | `""`                     |
+| `vmauth.service.loadBalancerIP`                | VictoriaMetrics Auth service Load Balancer IP                                                                                    | `""`                     |
+| `vmauth.service.loadBalancerSourceRanges`      | VictoriaMetrics Auth service Load Balancer sources                                                                               | `[]`                     |
+| `vmauth.service.externalTrafficPolicy`         | VictoriaMetrics Auth service external traffic policy                                                                             | `Cluster`                |
+| `vmauth.service.annotations`                   | Additional custom annotations for VictoriaMetrics Auth service                                                                   | `{}`                     |
+| `vmauth.service.extraPorts`                    | Extra ports to expose in VictoriaMetrics Auth service (normally used with the `sidecars` value)                                  | `[]`                     |
+| `vmauth.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin                                                                 | `None`                   |
+| `vmauth.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
+| `vmauth.ingress.enabled`                       | Enable ingress record generation for VictoriaMetrics Auth                                                                        | `false`                  |
+| `vmauth.ingress.pathType`                      | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `vmauth.ingress.apiVersion`                    | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
+| `vmauth.ingress.hostname`                      | Default host for the ingress record                                                                                              | `vmauth.local`           |
+| `vmauth.ingress.ingressClassName`              | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
+| `vmauth.ingress.path`                          | Default path for the ingress record                                                                                              | `/`                      |
+| `vmauth.ingress.annotations`                   | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `vmauth.ingress.tls`                           | Enable TLS configuration for the host defined at `vmauth.ingress.hostname` parameter                                             | `false`                  |
+| `vmauth.ingress.selfSigned`                    | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
+| `vmauth.ingress.extraHosts`                    | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                     |
+| `vmauth.ingress.extraPaths`                    | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                     |
+| `vmauth.ingress.extraTls`                      | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
+| `vmauth.ingress.secrets`                       | Custom TLS certificates as secrets                                                                                               | `[]`                     |
+| `vmauth.ingress.extraRules`                    | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
+| `vmauth.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                                                              | `true`                   |
+| `vmauth.networkPolicy.allowExternal`           | Don't require server label for connections                                                                                       | `true`                   |
+| `vmauth.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                                                  | `true`                   |
+| `vmauth.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                                                                                     | `[]`                     |
+| `vmauth.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                                                     | `[]`                     |
+| `vmauth.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                                                           | `{}`                     |
+| `vmauth.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                                                                       | `{}`                     |
 
 ### VictoriaMetrics Auth Metrics Parameters
 
@@ -813,13 +814,6 @@ wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
 | `vmagent.containerPorts.graphite`                           | VictoriaMetrics Agent graphite container port                                                                                                                                                                                     | `2003`                                    |
 | `vmagent.containerPorts.opentsdb`                           | VictoriaMetrics Agent opentsdb container port                                                                                                                                                                                     | `4242`                                    |
 | `vmagent.containerPorts.influxdb`                           | VictoriaMetrics Agent influxdb container port                                                                                                                                                                                     | `8089`                                    |
-| `vmagent.networkPolicy.enabled`                             | Specifies whether a NetworkPolicy should be created                                                                                                                                                                               | `true`                                    |
-| `vmagent.networkPolicy.allowExternal`                       | Don't require server label for connections                                                                                                                                                                                        | `true`                                    |
-| `vmagent.networkPolicy.allowExternalEgress`                 | Allow the pod to access any range of port and all destinations.                                                                                                                                                                   | `true`                                    |
-| `vmagent.networkPolicy.extraIngress`                        | Add extra ingress rules to the NetworkPolicy                                                                                                                                                                                      | `[]`                                      |
-| `vmagent.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy                                                                                                                                                                                      | `[]`                                      |
-| `vmagent.networkPolicy.ingressNSMatchLabels`                | Labels to match to allow traffic from other namespaces                                                                                                                                                                            | `{}`                                      |
-| `vmagent.networkPolicy.ingressNSPodMatchLabels`             | Pod labels to match to allow traffic from other namespaces                                                                                                                                                                        | `{}`                                      |
 | `vmagent.livenessProbe.enabled`                             | Enable livenessProbe on VictoriaMetrics Agent containers                                                                                                                                                                          | `true`                                    |
 | `vmagent.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                                                                                                                           | `5`                                       |
 | `vmagent.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                                                                                                                                  | `10`                                      |
@@ -923,25 +917,32 @@ wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
 
 ### VictoriaMetrics Agent Traffic Exposure Parameters
 
-| Name                                       | Description                                                                                      | Value       |
-| ------------------------------------------ | ------------------------------------------------------------------------------------------------ | ----------- |
-| `vmagent.service.type`                     | VictoriaMetrics Agent service type                                                               | `ClusterIP` |
-| `vmagent.service.ports.http`               | VictoriaMetrics Agent service http port                                                          | `8429`      |
-| `vmagent.service.ports.graphite`           | VictoriaMetrics Agent service graphite port                                                      | `2003`      |
-| `vmagent.service.ports.opentsdb`           | VictoriaMetrics Agent service opentsdb port                                                      | `4242`      |
-| `vmagent.service.ports.influxdb`           | VictoriaMetrics Agent service influxdb port                                                      | `8089`      |
-| `vmagent.service.nodePorts.http`           | Node port for HTTP                                                                               | `""`        |
-| `vmagent.service.nodePorts.graphite`       | Node port for graphite                                                                           | `""`        |
-| `vmagent.service.nodePorts.opentsdb`       | Node port for opentsdb                                                                           | `""`        |
-| `vmagent.service.nodePorts.influxdb`       | Node port for influxdb                                                                           | `""`        |
-| `vmagent.service.clusterIP`                | VictoriaMetrics Agent service Cluster IP                                                         | `""`        |
-| `vmagent.service.loadBalancerIP`           | VictoriaMetrics Agent service Load Balancer IP                                                   | `""`        |
-| `vmagent.service.loadBalancerSourceRanges` | VictoriaMetrics Agent service Load Balancer sources                                              | `[]`        |
-| `vmagent.service.externalTrafficPolicy`    | VictoriaMetrics Agent service external traffic policy                                            | `Cluster`   |
-| `vmagent.service.annotations`              | Additional custom annotations for VictoriaMetrics Agent service                                  | `{}`        |
-| `vmagent.service.extraPorts`               | Extra ports to expose in VictoriaMetrics Agent service (normally used with the `sidecars` value) | `[]`        |
-| `vmagent.service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin                                 | `None`      |
-| `vmagent.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                      | `{}`        |
+| Name                                            | Description                                                                                      | Value       |
+| ----------------------------------------------- | ------------------------------------------------------------------------------------------------ | ----------- |
+| `vmagent.service.type`                          | VictoriaMetrics Agent service type                                                               | `ClusterIP` |
+| `vmagent.service.ports.http`                    | VictoriaMetrics Agent service http port                                                          | `8429`      |
+| `vmagent.service.ports.graphite`                | VictoriaMetrics Agent service graphite port                                                      | `2003`      |
+| `vmagent.service.ports.opentsdb`                | VictoriaMetrics Agent service opentsdb port                                                      | `4242`      |
+| `vmagent.service.ports.influxdb`                | VictoriaMetrics Agent service influxdb port                                                      | `8089`      |
+| `vmagent.service.nodePorts.http`                | Node port for HTTP                                                                               | `""`        |
+| `vmagent.service.nodePorts.graphite`            | Node port for graphite                                                                           | `""`        |
+| `vmagent.service.nodePorts.opentsdb`            | Node port for opentsdb                                                                           | `""`        |
+| `vmagent.service.nodePorts.influxdb`            | Node port for influxdb                                                                           | `""`        |
+| `vmagent.service.clusterIP`                     | VictoriaMetrics Agent service Cluster IP                                                         | `""`        |
+| `vmagent.service.loadBalancerIP`                | VictoriaMetrics Agent service Load Balancer IP                                                   | `""`        |
+| `vmagent.service.loadBalancerSourceRanges`      | VictoriaMetrics Agent service Load Balancer sources                                              | `[]`        |
+| `vmagent.service.externalTrafficPolicy`         | VictoriaMetrics Agent service external traffic policy                                            | `Cluster`   |
+| `vmagent.service.annotations`                   | Additional custom annotations for VictoriaMetrics Agent service                                  | `{}`        |
+| `vmagent.service.extraPorts`                    | Extra ports to expose in VictoriaMetrics Agent service (normally used with the `sidecars` value) | `[]`        |
+| `vmagent.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin                                 | `None`      |
+| `vmagent.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                      | `{}`        |
+| `vmagent.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                              | `true`      |
+| `vmagent.networkPolicy.allowExternal`           | Don't require server label for connections                                                       | `true`      |
+| `vmagent.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                  | `true`      |
+| `vmagent.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                                                     | `[]`        |
+| `vmagent.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                     | `[]`        |
+| `vmagent.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                           | `{}`        |
+| `vmagent.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                                       | `{}`        |
 
 ### VictoriaMetrics Agent Metrics Parameters
 
@@ -973,13 +974,6 @@ wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
 | `vmalert.image.pullSecrets`                                 | VictoriaMetrics Alert image pull secrets                                                                                                                                                                                          | `[]`                                      |
 | `vmalert.replicaCount`                                      | Number of VictoriaMetrics Alert replicas to deploy                                                                                                                                                                                | `1`                                       |
 | `vmalert.containerPorts.http`                               | VictoriaMetrics Alert http container port                                                                                                                                                                                         | `8429`                                    |
-| `vmalert.networkPolicy.enabled`                             | Specifies whether a NetworkPolicy should be created                                                                                                                                                                               | `true`                                    |
-| `vmalert.networkPolicy.allowExternal`                       | Don't require server label for connections                                                                                                                                                                                        | `true`                                    |
-| `vmalert.networkPolicy.allowExternalEgress`                 | Allow the pod to access any range of port and all destinations.                                                                                                                                                                   | `true`                                    |
-| `vmalert.networkPolicy.extraIngress`                        | Add extra ingress rules to the NetworkPolicy                                                                                                                                                                                      | `[]`                                      |
-| `vmalert.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy                                                                                                                                                                                      | `[]`                                      |
-| `vmalert.networkPolicy.ingressNSMatchLabels`                | Labels to match to allow traffic from other namespaces                                                                                                                                                                            | `{}`                                      |
-| `vmalert.networkPolicy.ingressNSPodMatchLabels`             | Pod labels to match to allow traffic from other namespaces                                                                                                                                                                        | `{}`                                      |
 | `vmalert.livenessProbe.enabled`                             | Enable livenessProbe on VictoriaMetrics Alert containers                                                                                                                                                                          | `true`                                    |
 | `vmalert.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                                                                                                                           | `5`                                       |
 | `vmalert.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                                                                                                                                  | `10`                                      |
@@ -1072,19 +1066,26 @@ wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
 
 ### VictoriaMetrics Alert Traffic Exposure Parameters
 
-| Name                                       | Description                                                                                      | Value       |
-| ------------------------------------------ | ------------------------------------------------------------------------------------------------ | ----------- |
-| `vmalert.service.type`                     | VictoriaMetrics Alert service type                                                               | `ClusterIP` |
-| `vmalert.service.ports.http`               | VictoriaMetrics Alert service http port                                                          | `8429`      |
-| `vmalert.service.nodePorts.http`           | Node port for HTTP                                                                               | `""`        |
-| `vmalert.service.clusterIP`                | VictoriaMetrics Alert service Cluster IP                                                         | `""`        |
-| `vmalert.service.loadBalancerIP`           | VictoriaMetrics Alert service Load Balancer IP                                                   | `""`        |
-| `vmalert.service.loadBalancerSourceRanges` | VictoriaMetrics Alert service Load Balancer sources                                              | `[]`        |
-| `vmalert.service.externalTrafficPolicy`    | VictoriaMetrics Alert service external traffic policy                                            | `Cluster`   |
-| `vmalert.service.annotations`              | Additional custom annotations for VictoriaMetrics Alert service                                  | `{}`        |
-| `vmalert.service.extraPorts`               | Extra ports to expose in VictoriaMetrics Alert service (normally used with the `sidecars` value) | `[]`        |
-| `vmalert.service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin                                 | `None`      |
-| `vmalert.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                      | `{}`        |
+| Name                                            | Description                                                                                      | Value       |
+| ----------------------------------------------- | ------------------------------------------------------------------------------------------------ | ----------- |
+| `vmalert.service.type`                          | VictoriaMetrics Alert service type                                                               | `ClusterIP` |
+| `vmalert.service.ports.http`                    | VictoriaMetrics Alert service http port                                                          | `8429`      |
+| `vmalert.service.nodePorts.http`                | Node port for HTTP                                                                               | `""`        |
+| `vmalert.service.clusterIP`                     | VictoriaMetrics Alert service Cluster IP                                                         | `""`        |
+| `vmalert.service.loadBalancerIP`                | VictoriaMetrics Alert service Load Balancer IP                                                   | `""`        |
+| `vmalert.service.loadBalancerSourceRanges`      | VictoriaMetrics Alert service Load Balancer sources                                              | `[]`        |
+| `vmalert.service.externalTrafficPolicy`         | VictoriaMetrics Alert service external traffic policy                                            | `Cluster`   |
+| `vmalert.service.annotations`                   | Additional custom annotations for VictoriaMetrics Alert service                                  | `{}`        |
+| `vmalert.service.extraPorts`                    | Extra ports to expose in VictoriaMetrics Alert service (normally used with the `sidecars` value) | `[]`        |
+| `vmalert.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin                                 | `None`      |
+| `vmalert.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                      | `{}`        |
+| `vmalert.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                              | `true`      |
+| `vmalert.networkPolicy.allowExternal`           | Don't require server label for connections                                                       | `true`      |
+| `vmalert.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                  | `true`      |
+| `vmalert.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                                                     | `[]`        |
+| `vmalert.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                     | `[]`        |
+| `vmalert.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                           | `{}`        |
+| `vmalert.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                                       | `{}`        |
 
 ### VictoriaMetrics Alert Metrics Parameters
 
@@ -1119,6 +1120,21 @@ wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
 | `defaultInitContainers.volumePermissions.containerSecurityContext.enabled`        | Enable securityContext in the init container                                                                                                                                                                                                          | `true`                     |
 | `defaultInitContainers.volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                                                                                                                                                      | `{}`                       |
 | `defaultInitContainers.volumePermissions.containerSecurityContext.runAsUser`      | User ID for the init container                                                                                                                                                                                                                        | `0`                        |
+
+Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
+
+helm install my-release --set vmagent.enableListeners.influxdb=true oci://REGISTRY_NAME/REPOSITORY_NAME/victoriametrics
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+
+The above command install VictoriaMetrics chart with the InfluxDB listener enabled in the `vmagent` component.
+
+Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
+
+helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/victoriametrics
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+> **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/victoriametrics/values.yaml)
 
 ## Troubleshooting
 

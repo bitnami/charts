@@ -8,9 +8,7 @@ kind: Service
 metadata:
   name: {{ include "victoriametrics.vmselect.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.vmselect.image "chart" .Chart ) ) }}
-  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
-  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+  labels: {{- include "common.labels.standard" (dict "customLabels" .Values.commonLabels "context" $) | nindent 4 }}
     app.kubernetes.io/part-of: victoriametrics
     app.kubernetes.io/component: vmselect
   {{- if or .Values.vmselect.service.annotations .Values.commonAnnotations .Values.vmselect.metrics.enabled .Values.vmselect.metrics.annotations }}
