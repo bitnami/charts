@@ -9,8 +9,12 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
+## @param global.emptyDirSizeLimit Global emptyDir SizeLimit as string
 ##
 global:
+  ## Global limit for the tmp dir empty-dir mounts
+  ##
+  emptyDirSizeLimit: 100Mi
   imageRegistry: ""
   ## E.g.
   ## imagePullSecrets:

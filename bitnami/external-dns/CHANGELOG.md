@@ -1,8 +1,12 @@
 # Changelog
 
-## 8.7.7 (2025-03-07)
+## 8.8.0 (2025-03-22)
 
-* [bitnami/external-dns] Fix TXT AES key being read from incorrect secret ([#32360](https://github.com/bitnami/charts/pull/32360))
+* [external-dns] add configurable sizelimit for emptydir tmp mount ([#32487](https://github.com/bitnami/charts/pull/32487))
+
+## <small>8.7.7 (2025-03-10)</small>
+
+* [bitnami/external-dns] Fix TXT AES key being read from incorrect secret (#32360) ([fb7b925](https://github.com/bitnami/charts/commit/fb7b9259095f8c0f5b76872f416b22a5403d5949)), closes [#32360](https://github.com/bitnami/charts/issues/32360)
 
 ## <small>8.7.6 (2025-03-05)</small>
 
