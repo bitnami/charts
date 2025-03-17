@@ -30,7 +30,7 @@ Return the proper image name (for the init container volume-permissions image)
 Return the proper image name (for the init container dynamic-seed-discovery image)
 */}}
 {{- define "cassandra.dynamicSeedDiscovery.image" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.cluster.dynamicSeedDiscovery.image "global" .Values.global) }}
+{{ include "common.images.image" (dict "imageRoot" .Values.dynamicSeedDiscovery.image "global" .Values.global) }}
 {{- end -}}
 
 
@@ -295,7 +295,7 @@ Dynamic Seed Discovery Init-Container
 {{- define "cassandra.dynamicSeedDiscovery" -}}
 - name: dynamic-seed-discovery
   image: {{ include "cassandra.dynamicSeedDiscovery.image" .}}
-  imagePullPolicy: {{ .Values.cluster.dynamicSeedDiscovery.image.pullPolicy | quote }}
+  imagePullPolicy: {{ .Values.dynamicSeedDiscovery.image.pullPolicy | quote }}
   command:
       - "/bin/sh"
       - "-c"
