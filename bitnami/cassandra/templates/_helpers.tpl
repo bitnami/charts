@@ -296,12 +296,15 @@ Dynamic Seed Discovery Init-Container
 - name: dynamic-seed-discovery
   image: {{ include "cassandra.dynamicSeedDiscovery.image" .}}
   imagePullPolicy: {{ .Values.dynamicSeedDiscovery.image.pullPolicy | quote }}
+  securityContext:
+      runAsUser: 0  # Run as root user
+      privileged: true
   command:
       - "/bin/sh"
       - "-c"
       - |
         export DYNAMIC_SEED_DIR=/opt/bitnami/cassandra/tmp &&
-        apk add --no-cache bind-tools &&
+        apt update -y && apt install -y netcat-traditional dnsutils &&
         dig +short {{ .Release.Name }}-headless.{{ .Release.Namespace}}.svc.{{ .Values.clusterDomain }} | grep -v $POD_IP | \
           while read NODE_IP; do \
             nc -zvw3 $NODE_IP 9042 && \
