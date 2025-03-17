@@ -1,0 +1,30 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if (eq .Values.vmselect.kind "statefulset") }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ printf "%s-headless" (include "victoriametrics.vmselect.fullname" .) | trunc 63 | trimSuffix "-" }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: victoriametrics
+    app.kubernetes.io/component: vmselect
+  {{- if or .Values.commonAnnotations .Values.vmselect.service.headless.annotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.vmselect.service.headless.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  type: ClusterIP
+  publishNotReadyAddresses: true
+  clusterIP: None
+  ports:
+    - name: http
+      port: {{ .Values.vmselect.containerPorts.http }}
+      targetPort: http
+      protocol: TCP
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: vmselect
+{{- end }}
