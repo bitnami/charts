@@ -172,8 +172,8 @@ dynamicSeedDiscovery:
   ##
   image:
     registry: docker.io
-    repository: alpine
-    tag: 3.21.3
+    repository: bitnami/os-shell
+    tag: 12-debian-12-r39
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
