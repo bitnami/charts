@@ -1,6 +1,6 @@
 # Changelog
 
-## 15.3.4 (2025-03-13)
+## 15.4.0 (2025-03-17)
 
 * [bitnami/rabbitmq] allow to configure trafficDistribution ([#32443](https://github.com/bitnami/charts/pull/32443))
 
