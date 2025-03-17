@@ -1,8 +1,13 @@
 # Changelog
 
-## 16.5.1 (2025-03-17)
+## 16.5.2 (2025-03-17)
 
-* [bitnami/postgresql] Release 16.5.1 ([#32482](https://github.com/bitnami/charts/pull/32482))
+* [bitnami/postgresql] Release 16.5.2 ([#32484](https://github.com/bitnami/charts/pull/32484))
+
+## <small>16.5.1 (2025-03-17)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/postgresql] Release 16.5.1 (#32482) ([758a0c6](https://github.com/bitnami/charts/commit/758a0c6fe0de62873a475692ed2e12378784e051)), closes [#32482](https://github.com/bitnami/charts/issues/32482)
 
 ## 16.5.0 (2025-03-10)
 
