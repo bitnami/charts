@@ -1,8 +1,13 @@
 # Changelog
 
+## 22.2.1 (2025-03-17)
+
+* [bitnami/ghost] Release 22.2.1 ([#32483](https://github.com/bitnami/charts/pull/32483))
+
 ## 22.2.0 (2025-03-13)
 
-* [bitnami/ghost] Set `usePasswordFiles=true` by default ([#32346](https://github.com/bitnami/charts/pull/32346))
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/ghost] Set `usePasswordFiles=true` by default (#32346) ([1b85a12](https://github.com/bitnami/charts/commit/1b85a12d4d80968a403871b89843f7c3b568fdb2)), closes [#32346](https://github.com/bitnami/charts/issues/32346)
 
 ## <small>22.1.19 (2025-03-05)</small>
 
