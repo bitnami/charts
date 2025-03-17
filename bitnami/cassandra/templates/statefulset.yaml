@@ -68,9 +68,9 @@ spec:
       {{- if .Values.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
       {{- end }}
-      {{- if or .Values.initContainers .Values.cluster.dynamicSeedDiscovery.enabled (include "cassandra.tlsEncryption" . ) (and .Values.podSecurityContext.enabled .Values.volumePermissions.enabled .Values.persistence.enabled) }}
+      {{- if or .Values.initContainers .Values.dynamicSeedDiscovery.enabled (include "cassandra.tlsEncryption" . ) (and .Values.podSecurityContext.enabled .Values.volumePermissions.enabled .Values.persistence.enabled) }}
       initContainers:
-        {{- if .Values.cluster.dynamicSeedDiscovery.enabled -}}
+        {{- if .Values.dynamicSeedDiscovery.enabled -}}
         {{- include "cassandra.dynamicSeedDiscovery" . | nindent 8 }}
         {{- end }}
         {{- if and .Values.podSecurityContext.enabled .Values.volumePermissions.enabled .Values.persistence.enabled }}
@@ -255,7 +255,7 @@ spec:
                   # Only node 0 will execute the startup initdb scripts
                   export CASSANDRA_IGNORE_INITDB_SCRIPTS=1
               fi
-              {{- if .Values.cluster.dynamicSeedDiscovery.enabled }}
+              {{- if .Values.dynamicSeedDiscovery.enabled }}
               export CASSANDRA_SEEDS=$(cat /opt/bitnami/cassandra/tmp/seed-ips.txt ) && \
               echo "Setting Cassandra seeds: $CASSANDRA_SEEDS" && \
               {{- end }}
@@ -276,7 +276,7 @@ spec:
               value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
             - name: CASSANDRA_CLUSTER_NAME
               value: {{ .Values.cluster.name }}
-            {{- if not .Values.cluster.dynamicSeedDiscovery.enabled }}
+            {{- if not .Values.dynamicSeedDiscovery.enabled }}
             - name: CASSANDRA_SEEDS
               value: {{ (include "cassandra.seeds" .) | quote }}
             {{- end }}
