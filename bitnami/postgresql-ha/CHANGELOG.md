@@ -1,8 +1,13 @@
 # Changelog
 
-## 15.3.5 (2025-03-17)
+## 15.3.6 (2025-03-17)
 
-* [bitnami/postgresql-ha] Release 15.3.5 ([#32485](https://github.com/bitnami/charts/pull/32485))
+* [bitnami/postgresql-ha] Release 15.3.6 ([#32486](https://github.com/bitnami/charts/pull/32486))
+
+## <small>15.3.5 (2025-03-17)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/postgresql-ha] Release 15.3.5 (#32485) ([3f01165](https://github.com/bitnami/charts/commit/3f01165d7488844ebec789d3b81d83ae04e8fd9a)), closes [#32485](https://github.com/bitnami/charts/issues/32485)
 
 ## <small>15.3.4 (2025-03-11)</small>
 
