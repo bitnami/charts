@@ -1,8 +1,12 @@
 # Changelog
 
-## 7.2.3 (2025-03-11)
+## 7.2.4 (2025-03-17)
 
-* [bitnami/argo-cd] Release 7.2.3 ([#32390](https://github.com/bitnami/charts/pull/32390))
+* [bitnami/argo-cd] Fix redis password not read when using passwordFiles ([#32477](https://github.com/bitnami/charts/pull/32477))
+
+## <small>7.2.3 (2025-03-11)</small>
+
+* [bitnami/argo-cd] Release 7.2.3 (#32390) ([a2c149b](https://github.com/bitnami/charts/commit/a2c149b171e9dcb86ac2d67d06c08be894b4ca76)), closes [#32390](https://github.com/bitnami/charts/issues/32390)
 
 ## <small>7.2.2 (2025-03-04)</small>
 
