@@ -1,8 +1,13 @@
 # Changelog
 
-## 1.4.2 (2025-03-15)
+## 1.4.3 (2025-03-18)
 
-* [bitnami/kuberay] Release 1.4.2 ([#32468](https://github.com/bitnami/charts/pull/32468))
+* [bitnami/kuberay] Release 1.4.3 ([#32495](https://github.com/bitnami/charts/pull/32495))
+
+## <small>1.4.2 (2025-03-15)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/kuberay] Release 1.4.2 (#32468) ([1f302b9](https://github.com/bitnami/charts/commit/1f302b9decbd0890deb6a3b4c975b25fc9c8ec0b)), closes [#32468](https://github.com/bitnami/charts/issues/32468)
 
 ## <small>1.4.1 (2025-03-05)</small>
 
