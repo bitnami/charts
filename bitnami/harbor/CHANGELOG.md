@@ -1,8 +1,12 @@
 # Changelog
 
-## 24.3.4 (2025-03-08)
+## 24.4.0 (2025-03-13)
 
-* [bitnami/harbor] removed /etc/core/token mount since it's unused ([#32364](https://github.com/bitnami/charts/pull/32364))
+* [bitnami/harbor] Revert merge chart generated env vart secret with existing secret ([#32382](https://github.com/bitnami/charts/pull/32382))
+
+## <small>24.3.4 (2025-03-10)</small>
+
+* [bitnami/harbor] removed /etc/core/token mount since it's unused (#32364) ([a4ba8ad](https://github.com/bitnami/charts/commit/a4ba8ad7c4ba8a62dc9f945fa48d07f29565b4ad)), closes [#32364](https://github.com/bitnami/charts/issues/32364)
 
 ## <small>24.3.3 (2025-02-20)</small>
 

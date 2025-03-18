@@ -1,8 +1,12 @@
 # Changelog
 
-## 7.1.3 (2025-02-19)
+## 7.1.4 (2025-03-13)
 
-* [bitnami/fluentd] Release 7.1.3 ([#31996](https://github.com/bitnami/charts/pull/31996))
+* [bitnami/fluentd] Release 7.1.4 ([#32439](https://github.com/bitnami/charts/pull/32439))
+
+## <small>7.1.3 (2025-02-19)</small>
+
+* [bitnami/fluentd] Release 7.1.3 (#31996) ([71f10d1](https://github.com/bitnami/charts/commit/71f10d1f556145f87f4b487ce503806b7446507d)), closes [#31996](https://github.com/bitnami/charts/issues/31996)
 
 ## <small>7.1.2 (2025-02-17)</small>
 

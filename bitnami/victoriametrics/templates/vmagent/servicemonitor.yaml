@@ -1,0 +1,48 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.vmagent.enabled .Values.vmagent.metrics.enabled .Values.vmagent.metrics.serviceMonitor.enabled  }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ template "victoriametrics.vmagent.fullname" . }}
+  namespace: {{ default (include "common.names.namespace" .) .Values.vmagent.metrics.serviceMonitor.namespace | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: victoriametrics
+    app.kubernetes.io/component: vmagent
+  {{- if or .Values.vmagent.metrics.serviceMonitor.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.vmagent.metrics.serviceMonitor.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  jobLabel: {{ .Values.vmagent.metrics.serviceMonitor.jobLabel | quote }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/component: vmagent
+      {{- if .Values.vmagent.metrics.serviceMonitor.selector }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.vmagent.metrics.serviceMonitor.selector "context" $) | nindent 6 }}
+      {{- end }}
+  endpoints:
+    - port: http-metrics
+      path: "/metrics"
+      {{- if .Values.vmagent.metrics.serviceMonitor.interval }}
+      interval: {{ .Values.vmagent.metrics.serviceMonitor.interval }}
+      {{- end }}
+      {{- if .Values.vmagent.metrics.serviceMonitor.scrapeTimeout }}
+      scrapeTimeout: {{ .Values.vmagent.metrics.serviceMonitor.scrapeTimeout }}
+      {{- end }}
+      {{- if .Values.vmagent.metrics.serviceMonitor.honorLabels }}
+      honorLabels: {{ .Values.vmagent.metrics.serviceMonitor.honorLabels }}
+      {{- end }}
+      {{- if .Values.vmagent.metrics.serviceMonitor.metricRelabelings }}
+      metricRelabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.vmagent.metrics.serviceMonitor.metricRelabelings "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.vmagent.metrics.serviceMonitor.relabelings }}
+      relabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.vmagent.metrics.serviceMonitor.relabelings "context" $) | nindent 8 }}
+      {{- end }}
+  namespaceSelector:
+    matchNames:
+    - {{ include "common.names.namespace" . | quote }}
+{{- end }}

@@ -2,15 +2,16 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
+  tanzuCategory: application
   category: Infrastructure
   licenses: Apache-2.0
   images: |
     - name: kuberay-apiserver
       image: docker.io/bitnami/kuberay-apiserver:1.2.2-debian-12-r12
     - name: kuberay-operator
-      image: docker.io/bitnami/kuberay-operator:1.3.0-debian-12-r2
+      image: docker.io/bitnami/kuberay-operator:1.3.0-debian-12-r3
     - name: ray
-      image: docker.io/bitnami/ray:2.42.1-debian-12-r3
+      image: docker.io/bitnami/ray:2.43.0-debian-12-r1
 apiVersion: v2
 appVersion: 1.3.0
 dependencies:
@@ -32,4 +33,4 @@ maintainers:
 name: kuberay
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/kuberay
-version: 1.4.1
+version: 1.4.2

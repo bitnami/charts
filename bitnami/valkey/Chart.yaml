@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
+  tanzuCategory: service
   category: Database
   licenses: Apache-2.0
   images: |
@@ -36,4 +37,4 @@ maintainers:
 name: valkey
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/valkey
-version: 2.4.5
+version: 2.4.6

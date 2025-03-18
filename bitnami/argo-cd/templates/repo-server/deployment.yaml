@@ -194,7 +194,7 @@ spec:
           env:
             {{- if (include "argocd.redis.auth.enabled" .) }}
             {{- if .Values.usePasswordFiles }}
-            - name: REDISCLI_PASSWORD_FILE
+            - name: REDIS_PASSWORD_FILE
               value: {{ printf "/opt/bitnami/argo-cd/secrets/%s" (include "argocd.redis.secretPasswordKey" .) }}
             {{- else }}
             - name: REDIS_PASSWORD

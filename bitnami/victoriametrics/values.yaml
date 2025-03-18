@@ -1,0 +1,3663 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+## @section Global parameters
+## Global Docker image parameters
+## Please, note that this will override the image parameters, including dependencies, configured to use the global value
+## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+##
+
+## @param global.imageRegistry Global Docker image registry
+## @param global.imagePullSecrets Global Docker registry secret names as an array
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
+##
+global:
+  imageRegistry: ""
+  ## E.g.
+  ## imagePullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  imagePullSecrets: []
+  defaultStorageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: auto
+## @section Common parameters
+##
+
+## @param kubeVersion Override Kubernetes version
+##
+kubeVersion: ""
+## @param apiVersions Override Kubernetes API versions reported by .Capabilities
+##
+apiVersions: []
+## @param nameOverride String to partially override common.names.name
+##
+nameOverride: ""
+## @param fullnameOverride String to fully override common.names.fullname
+##
+fullnameOverride: ""
+## @param namespaceOverride String to fully override common.names.namespace
+##
+namespaceOverride: ""
+## @param commonLabels Labels to add to all deployed objects
+##
+commonLabels: {}
+## @param commonAnnotations Annotations to add to all deployed objects
+##
+commonAnnotations: {}
+## @param clusterDomain Kubernetes cluster domain name
+##
+clusterDomain: cluster.local
+## @param extraDeploy Array of extra objects to deploy with the release
+##
+extraDeploy: []
+
+## @section VictoriaMetrics common parameters
+##
+## @param envflagEnable Enable envflag
+##
+envflagEnable: true
+## @param envflagPrefix Prefix used for the envflag entries
+##
+envflagPrefix: VM_
+## @param loggerFormat Set format of the logs
+##
+loggerFormat: json
+
+## @section VictoriaMetrics Select Parameters
+##
+vmselect:
+  ## Bitnami VictoriaMetrics Select image
+  ## ref: https://hub.docker.com/r/bitnami/victoriametrics-vmselect/tags/
+  ## @param vmselect.image.registry [default: REGISTRY_NAME] VictoriaMetrics Select image registry
+  ## @param vmselect.image.repository [default: REPOSITORY_NAME/victoriametrics-vmselect] VictoriaMetrics Select image repository
+  ## @skip vmselect.image.tag VictoriaMetrics Select image tag (immutable tags are recommended)
+  ## @param vmselect.image.digest VictoriaMetrics Select image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
+  ## @param vmselect.image.pullPolicy VictoriaMetrics Select image pull policy
+  ## @param vmselect.image.pullSecrets VictoriaMetrics Select image pull secrets
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/victoriametrics-vmselect
+    tag: 1.113.0-debian-12-r0
+    digest: ""
+    ## Specify a imagePullPolicy
+    ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+  ## @param vmselect.replicaCount Number of VictoriaMetrics Select replicas to deploy
+  ##
+  replicaCount: 1
+  ## @param vmselect.containerPorts.http VictoriaMetrics Select http container port
+  ##
+  containerPorts:
+    http: 8481
+  ## Configure extra options for VictoriaMetrics Select containers' liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param vmselect.livenessProbe.enabled Enable livenessProbe on VictoriaMetrics Select containers
+  ## @param vmselect.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param vmselect.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param vmselect.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param vmselect.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param vmselect.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 5
+    successThreshold: 1
+  ## @param vmselect.readinessProbe.enabled Enable readinessProbe on VictoriaMetrics Select containers
+  ## @param vmselect.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param vmselect.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param vmselect.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param vmselect.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param vmselect.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 5
+    successThreshold: 1
+  ## @param vmselect.startupProbe.enabled Enable startupProbe on VictoriaMetrics Select containers
+  ## @param vmselect.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param vmselect.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param vmselect.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param vmselect.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param vmselect.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 5
+    successThreshold: 1
+  ## @param vmselect.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param vmselect.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param vmselect.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## VictoriaMetrics Select resource requests and limits
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param vmselect.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if vmselect.resources is set (vmselect.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "nano"
+  ## @param vmselect.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
+  ## @param vmselect.kind Define how to deploy VictoriaMetrics Select (allowed values: deployment or statefulset)
+  ##
+  kind: "deployment"
+  ## @param vmselect.podManagementPolicy Pod management policy for VictoriaMetrics Storage statefulset
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
+  ##
+  podManagementPolicy: Parallel
+  ## @param vmselect.annotations Annotations for VictoriaMetrics Select Deployment or StatefulSet
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  annotations: {}
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param vmselect.podSecurityContext.enabled Enabled VictoriaMetrics Select pods' Security Context
+  ## @param vmselect.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param vmselect.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param vmselect.podSecurityContext.supplementalGroups Set filesystem extra groups
+  ## @param vmselect.podSecurityContext.fsGroup Set VictoriaMetrics Select pod's Security Context fsGroup
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
+    fsGroup: 1001
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param vmselect.containerSecurityContext.enabled Enabled VictoriaMetrics Select containers' Security Context
+  ## @param vmselect.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param vmselect.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param vmselect.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+  ## @param vmselect.containerSecurityContext.runAsNonRoot Set VictoriaMetrics Select containers' Security Context runAsNonRoot
+  ## @param vmselect.containerSecurityContext.privileged Set VictoriaMetrics Select containers' Security Context privileged
+  ## @param vmselect.containerSecurityContext.readOnlyRootFilesystem Set VictoriaMetrics Select containers' Security Context runAsNonRoot
+  ## @param vmselect.containerSecurityContext.allowPrivilegeEscalation Set VictoriaMetrics Select container's privilege escalation
+  ## @param vmselect.containerSecurityContext.capabilities.drop Set VictoriaMetrics Select container's Security Context runAsNonRoot
+  ## @param vmselect.containerSecurityContext.seccompProfile.type Set VictoriaMetrics Select container's Security Context seccomp profile
+  ##
+  containerSecurityContext:
+    enabled: true
+    seLinuxOptions: {}
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: RuntimeDefault
+  ## @param vmselect.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param vmselect.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param vmselect.extraArgs Add extra arguments to the default command
+  ##
+  extraArgs: []
+  ## @param vmselect.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
+  ## @param vmselect.hostAliases VictoriaMetrics Select pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param vmselect.podLabels Extra labels for VictoriaMetrics Select pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param vmselect.podAnnotations Annotations for VictoriaMetrics Select pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param vmselect.podAffinityPreset Pod affinity preset. Ignored if `vmselect.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param vmselect.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `vmselect.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param vmselect.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param vmselect.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param vmselect.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
+  ## Autoscaling configuration
+  ## ref: https://kubernetes.io/docs/concepts/workloads/autoscaling/
+  ##
+  autoscaling:
+    ## @param vmselect.autoscaling.vpa.enabled Enable VPA for VictoriaMetrics Select pods
+    ## @param vmselect.autoscaling.vpa.annotations Annotations for VPA resource
+    ## @param vmselect.autoscaling.vpa.controlledResources VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory
+    ## @param vmselect.autoscaling.vpa.maxAllowed VPA Max allowed resources for the pod
+    ## @param vmselect.autoscaling.vpa.minAllowed VPA Min allowed resources for the pod
+    ##
+    vpa:
+      enabled: false
+      annotations: {}
+      controlledResources: []
+      maxAllowed: {}
+      minAllowed: {}
+      ## @param vmselect.autoscaling.vpa.updatePolicy.updateMode Autoscaling update policy
+      ## Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod
+      ## Possible values are "Off", "Initial", "Recreate", and "Auto".
+      ##
+      updatePolicy:
+        updateMode: Auto
+    ## @param vmselect.autoscaling.hpa.enabled Enable HPA for VictoriaMetrics Select pods
+    ## @param vmselect.autoscaling.hpa.minReplicas Minimum number of replicas
+    ## @param vmselect.autoscaling.hpa.maxReplicas Maximum number of replicas
+    ## @param vmselect.autoscaling.hpa.targetCPU Target CPU utilization percentage
+    ## @param vmselect.autoscaling.hpa.targetMemory Target Memory utilization percentage
+    ##
+    hpa:
+      enabled: false
+      minReplicas: ""
+      maxReplicas: ""
+      targetCPU: ""
+      targetMemory: ""
+  ## Node vmselect.affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param vmselect.nodeAffinityPreset.type Node affinity preset type. Ignored if `vmselect.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param vmselect.nodeAffinityPreset.key Node label key to match. Ignored if `vmselect.affinity` is set
+    ##
+    key: ""
+    ## @param vmselect.nodeAffinityPreset.values Node label values to match. Ignored if `vmselect.affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param vmselect.affinity Affinity for VictoriaMetrics Select pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `vmselect.podAffinityPreset`, `vmselect.podAntiAffinityPreset`, and `vmselect.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param vmselect.nodeSelector Node labels for VictoriaMetrics Select pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
+  ##
+  nodeSelector: {}
+  ## @param vmselect.tolerations Tolerations for VictoriaMetrics Select pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param vmselect.updateStrategy.type VictoriaMetrics Select statefulset strategy type
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy:
+    ## StrategyType
+    ## Can be set to RollingUpdate or OnDelete
+    ##
+    type: RollingUpdate
+  ## @param vmselect.priorityClassName VictoriaMetrics Select pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param vmselect.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
+  ## @param vmselect.schedulerName Name of the k8s scheduler (other than default) for VictoriaMetrics Select pods
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param vmselect.terminationGracePeriodSeconds Seconds Redmine pod needs to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## @param vmselect.lifecycleHooks for the VictoriaMetrics Select container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param vmselect.extraEnvVars Array with extra environment variables to add to VictoriaMetrics Select nodes
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param vmselect.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for VictoriaMetrics Select nodes
+  ##
+  extraEnvVarsCM: ""
+  ## @param vmselect.extraEnvVarsSecret Name of existing Secret containing extra env vars for VictoriaMetrics Select nodes
+  ##
+  extraEnvVarsSecret: ""
+  ## @param vmselect.extraVolumes Optionally specify extra list of additional volumes for the VictoriaMetrics Select pod(s)
+  ##
+  extraVolumes: []
+  ## @param vmselect.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the VictoriaMetrics Select container(s)
+  ##
+  extraVolumeMounts: []
+  ## @param vmselect.sidecars Add additional sidecar containers to the VictoriaMetrics Select pod(s)
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param vmselect.initContainers Add additional init containers to the VictoriaMetrics Select pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
+  ## @section VictoriaMetrics Select RBAC Parameters
+  ##
+
+  ## ServiceAccount configuration
+  ##
+  serviceAccount:
+    ## @param vmselect.serviceAccount.create Specifies whether a ServiceAccount should be created
+    ##
+    create: true
+    ## @param vmselect.serviceAccount.name The name of the ServiceAccount to use.
+    ## If not set and create is true, a name is generated using the common.names.fullname template
+    ##
+    name: ""
+    ## @param vmselect.serviceAccount.annotations Additional Service Account annotations (evaluated as a template)
+    ##
+    annotations: {}
+    ## @param vmselect.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+    ##
+    automountServiceAccountToken: false
+  ## @section VictoriaMetrics Select Traffic Exposure Parameters
+  ##
+  service:
+    ## @param vmselect.service.type VictoriaMetrics Select service type
+    ##
+    type: ClusterIP
+    ## @param vmselect.service.ports.http VictoriaMetrics Select service http port
+    ##
+    ports:
+      http: 8481
+    ## Node ports to expose
+    ## @param vmselect.service.nodePorts.http Node port for HTTP
+    ## NOTE: choose port between <30000-32767>
+    ##
+    nodePorts:
+      http: ""
+    ## @param vmselect.service.clusterIP VictoriaMetrics Select service Cluster IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param vmselect.service.loadBalancerIP VictoriaMetrics Select service Load Balancer IP
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerIP: ""
+    ## @param vmselect.service.loadBalancerSourceRanges VictoriaMetrics Select service Load Balancer sources
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param vmselect.service.externalTrafficPolicy VictoriaMetrics Select service external traffic policy
+    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param vmselect.service.annotations [object] Additional custom annotations for VictoriaMetrics Select service
+    ##
+    annotations: {}
+    ## @param vmselect.service.extraPorts Extra ports to expose in VictoriaMetrics Select service (normally used with the `sidecars` value)
+    ##
+    extraPorts: []
+    ## @param vmselect.service.sessionAffinity Control where client requests go, to the same pod or round-robin
+    ## Values: ClientIP or None
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
+    ##
+    sessionAffinity: None
+    ## @param vmselect.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
+    ## Headless service properties
+    ##
+    headless:
+      ## @param vmselect.service.headless.annotations Annotations for the headless service.
+      ##
+      annotations: {}
+  ## ref: http://kubernetes.io/docs/concepts/services-networking/ingress/
+  ##
+  ingress:
+    ## @param vmselect.ingress.enabled Enable ingress record generation for VictoriaMetrics Select
+    ##
+    enabled: false
+    ## @param vmselect.ingress.pathType Ingress path type
+    ##
+    pathType: ImplementationSpecific
+    ## @param vmselect.ingress.apiVersion Force Ingress API version (automatically detected if not set)
+    ##
+    apiVersion: ""
+    ## @param vmselect.ingress.hostname Default host for the ingress record
+    ##
+    hostname: vmselect.local
+    ## @param vmselect.ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+    ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+    ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+    ##
+    ingressClassName: ""
+    ## @param vmselect.ingress.path Default path for the ingress record
+    ## NOTE: You may need to set this to '/*' in order to use this with ALB ingress controllers
+    ##
+    path: /
+    ## @param vmselect.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
+    ## Use this parameter to set the required annotations for cert-manager, see
+    ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
+    ## e.g:
+    ## annotations:
+    ##   kubernetes.io/ingress.class: nginx
+    ##   cert-manager.io/cluster-issuer: cluster-issuer-name
+    ##
+    annotations: {}
+    ## @param vmselect.ingress.tls Enable TLS configuration for the host defined at `vmselect.ingress.hostname` parameter
+    ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.ingress.hostname }}`
+    ## You can:
+    ##   - Use the `vmselect.ingress.secrets` parameter to create this TLS secret
+    ##   - Rely on cert-manager to create it by setting the corresponding annotations
+    ##   - Rely on Helm to create self-signed certificates by setting `vmselect.ingress.selfSigned=true`
+    ##
+    tls: false
+    ## @param vmselect.ingress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
+    ##
+    selfSigned: false
+    ## @param vmselect.ingress.extraHosts An array with additional hostname(s) to be covered with the ingress record
+    ## e.g:
+    ## extraHosts:
+    ##   - name: victoriametrics select.local
+    ##     path: /
+    ##
+    extraHosts: []
+    ## @param vmselect.ingress.extraPaths An array with additional arbitrary paths that may need to be added to the ingress under the main host
+    ## e.g:
+    ## extraPaths:
+    ## - path: /*
+    ##   backend:
+    ##     serviceName: ssl-redirect
+    ##     servicePort: use-annotation
+    ##
+    extraPaths: []
+    ## @param vmselect.ingress.extraTls TLS configuration for additional hostname(s) to be covered with this ingress record
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+    ## e.g:
+    ## extraTls:
+    ## - hosts:
+    ##     - victoriametrics select.local
+    ##   secretName: victoriametrics select.local-tls
+    ##
+    extraTls: []
+    ## @param vmselect.ingress.secrets Custom TLS certificates as secrets
+    ## NOTE: 'key' and 'certificate' are expected in PEM format
+    ## NOTE: 'name' should line up with a 'secretName' set further up
+    ## If it is not set and you're using cert-manager, this is unneeded, as it will create a secret for you with valid certificates
+    ## If it is not set and you're NOT using cert-manager either, self-signed certificates will be created valid for 365 days
+    ## It is also possible to create and manage the certificates outside of this helm chart
+    ## Please see README.md for more information
+    ## e.g:
+    ## secrets:
+    ##   - name: victoriametrics select.local-tls
+    ##     key: |-
+    ##       -----BEGIN RSA PRIVATE KEY-----
+    ##       ...
+    ##       -----END RSA PRIVATE KEY-----
+    ##     certificate: |-
+    ##       -----BEGIN CERTIFICATE-----
+    ##       ...
+    ##       -----END CERTIFICATE-----
+    ##
+    secrets: []
+    ## @param vmselect.ingress.extraRules Additional rules to be covered with this ingress record
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+    ## e.g:
+    ## extraRules:
+    ## - host: example.local
+    ##     http:
+    ##       path: /
+    ##       backend:
+    ##         service:
+    ##           name: example-svc
+    ##           port:
+    ##             name: http
+    ##
+    extraRules: []
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param vmselect.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param vmselect.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param vmselect.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param vmselect.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param vmselect.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param vmselect.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param vmselect.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
+
+  ## @section VictoriaMetrics Select Metrics Parameters
+  ##
+  ## Prometheus metrics
+  ##
+  metrics:
+    ## @param vmselect.metrics.enabled Enable the export of Prometheus metrics
+    ##
+    enabled: false
+    ## @param vmselect.metrics.annotations Additional custom annotations for the service
+    ##
+    annotations: {}
+    ## Prometheus Operator ServiceMonitor configuration
+    ##
+    serviceMonitor:
+      ## @param vmselect.metrics.serviceMonitor.enabled if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)
+      ##
+      enabled: false
+      ## @param vmselect.metrics.serviceMonitor.namespace Namespace in which Prometheus is running
+      ##
+      namespace: ""
+      ## @param vmselect.metrics.serviceMonitor.annotations Additional custom annotations for the ServiceMonitor
+      ##
+      annotations: {}
+      ## @param vmselect.metrics.serviceMonitor.labels Extra labels for the ServiceMonitor
+      ##
+      labels: {}
+      ## @param vmselect.metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in Prometheus
+      ##
+      jobLabel: ""
+      ## @param vmselect.metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
+      ##
+      honorLabels: false
+      ## @param vmselect.metrics.serviceMonitor.interval Interval at which metrics should be scraped.
+      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+      ## e.g:
+      ## interval: 10s
+      ##
+      interval: ""
+      ## @param vmselect.metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
+      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+      ## e.g:
+      ## scrapeTimeout: 10s
+      ##
+      scrapeTimeout: ""
+      ## @param vmselect.metrics.serviceMonitor.metricRelabelings Specify additional relabeling of metrics
+      ##
+      metricRelabelings: []
+      ## @param vmselect.metrics.serviceMonitor.relabelings Specify general relabeling
+      ##
+      relabelings: []
+      ## @param vmselect.metrics.serviceMonitor.selector Prometheus instance selector labels
+      ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
+      ## selector:
+      ##   prometheus: my-prometheus
+      ##
+      selector: {}
+
+## @section VictoriaMetrics Insert Parameters
+##
+vminsert:
+  ## Bitnami VictoriaMetrics Insert image
+  ## ref: https://hub.docker.com/r/bitnami/victoriametrics-vminsert/tags/
+  ## @param vminsert.image.registry [default: REGISTRY_NAME] VictoriaMetrics Insert image registry
+  ## @param vminsert.image.repository [default: REPOSITORY_NAME/victoriametrics-vminsert] VictoriaMetrics Insert image repository
+  ## @skip vminsert.image.tag VictoriaMetrics Insert image tag (immutable tags are recommended)
+  ## @param vminsert.image.digest VictoriaMetrics Insert image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
+  ## @param vminsert.image.pullPolicy VictoriaMetrics Insert image pull policy
+  ## @param vminsert.image.pullSecrets VictoriaMetrics Insert image pull secrets
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/victoriametrics-vminsert
+    tag: 1.113.0-debian-12-r0
+    digest: ""
+    ## Specify a imagePullPolicy
+    ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+  ## @param vminsert.replicaCount Number of VictoriaMetrics Insert replicas to deploy
+  ##
+  replicaCount: 1
+  ## @param vminsert.containerPorts.http VictoriaMetrics Insert http container port
+  ##
+  containerPorts:
+    http: 8480
+  ## Configure extra options for VictoriaMetrics Insert containers' liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param vminsert.livenessProbe.enabled Enable livenessProbe on VictoriaMetrics Insert containers
+  ## @param vminsert.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param vminsert.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param vminsert.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param vminsert.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param vminsert.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 5
+    successThreshold: 1
+  ## @param vminsert.readinessProbe.enabled Enable readinessProbe on VictoriaMetrics Insert containers
+  ## @param vminsert.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param vminsert.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param vminsert.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param vminsert.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param vminsert.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 5
+    successThreshold: 1
+  ## @param vminsert.startupProbe.enabled Enable startupProbe on VictoriaMetrics Insert containers
+  ## @param vminsert.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param vminsert.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param vminsert.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param vminsert.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param vminsert.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 5
+    successThreshold: 1
+  ## @param vminsert.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param vminsert.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param vminsert.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## VictoriaMetrics Insert resource requests and limits
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param vminsert.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if vminsert.resources is set (vminsert.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "nano"
+  ## @param vminsert.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
+  ## @param vminsert.deploymentAnnotations Annotations for VictoriaMetrics Insert Deployment
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  deploymentAnnotations: {}
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param vminsert.podSecurityContext.enabled Enabled VictoriaMetrics Insert pods' Security Context
+  ## @param vminsert.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param vminsert.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param vminsert.podSecurityContext.supplementalGroups Set filesystem extra groups
+  ## @param vminsert.podSecurityContext.fsGroup Set VictoriaMetrics Insert pod's Security Context fsGroup
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
+    fsGroup: 1001
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param vminsert.containerSecurityContext.enabled Enabled VictoriaMetrics Insert containers' Security Context
+  ## @param vminsert.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param vminsert.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param vminsert.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+  ## @param vminsert.containerSecurityContext.runAsNonRoot Set VictoriaMetrics Insert containers' Security Context runAsNonRoot
+  ## @param vminsert.containerSecurityContext.privileged Set VictoriaMetrics Insert containers' Security Context privileged
+  ## @param vminsert.containerSecurityContext.readOnlyRootFilesystem Set VictoriaMetrics Insert containers' Security Context runAsNonRoot
+  ## @param vminsert.containerSecurityContext.allowPrivilegeEscalation Set VictoriaMetrics Insert container's privilege escalation
+  ## @param vminsert.containerSecurityContext.capabilities.drop Set VictoriaMetrics Insert container's Security Context runAsNonRoot
+  ## @param vminsert.containerSecurityContext.seccompProfile.type Set VictoriaMetrics Insert container's Security Context seccomp profile
+  ##
+  containerSecurityContext:
+    enabled: true
+    seLinuxOptions: {}
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: RuntimeDefault
+  ## @param vminsert.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param vminsert.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param vminsert.extraArgs Add extra arguments to the default command
+  ##
+  extraArgs: []
+  ## @param vminsert.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
+  ## @param vminsert.hostAliases VictoriaMetrics Insert pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param vminsert.podLabels Extra labels for VictoriaMetrics Insert pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param vminsert.podAnnotations Annotations for VictoriaMetrics Insert pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param vminsert.podAffinityPreset Pod affinity preset. Ignored if `vminsert.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param vminsert.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `vminsert.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param vminsert.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param vminsert.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param vminsert.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
+  ## Autoscaling configuration
+  ## ref: https://kubernetes.io/docs/concepts/workloads/autoscaling/
+  ##
+  autoscaling:
+    ## @param vminsert.autoscaling.vpa.enabled Enable VPA for VictoriaMetrics Insert pods
+    ## @param vminsert.autoscaling.vpa.annotations Annotations for VPA resource
+    ## @param vminsert.autoscaling.vpa.controlledResources VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory
+    ## @param vminsert.autoscaling.vpa.maxAllowed VPA Max allowed resources for the pod
+    ## @param vminsert.autoscaling.vpa.minAllowed VPA Min allowed resources for the pod
+    ##
+    vpa:
+      enabled: false
+      annotations: {}
+      controlledResources: []
+      maxAllowed: {}
+      minAllowed: {}
+      ## @param vminsert.autoscaling.vpa.updatePolicy.updateMode Autoscaling update policy
+      ## Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod
+      ## Possible values are "Off", "Initial", "Recreate", and "Auto".
+      ##
+      updatePolicy:
+        updateMode: Auto
+    ## @param vminsert.autoscaling.hpa.enabled Enable HPA for VictoriaMetrics Insert pods
+    ## @param vminsert.autoscaling.hpa.minReplicas Minimum number of replicas
+    ## @param vminsert.autoscaling.hpa.maxReplicas Maximum number of replicas
+    ## @param vminsert.autoscaling.hpa.targetCPU Target CPU utilization percentage
+    ## @param vminsert.autoscaling.hpa.targetMemory Target Memory utilization percentage
+    ##
+    hpa:
+      enabled: false
+      minReplicas: ""
+      maxReplicas: ""
+      targetCPU: ""
+      targetMemory: ""
+  ## Node vminsert.affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param vminsert.nodeAffinityPreset.type Node affinity preset type. Ignored if `vminsert.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param vminsert.nodeAffinityPreset.key Node label key to match. Ignored if `vminsert.affinity` is set
+    ##
+    key: ""
+    ## @param vminsert.nodeAffinityPreset.values Node label values to match. Ignored if `vminsert.affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param vminsert.affinity Affinity for VictoriaMetrics Insert pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `vminsert.podAffinityPreset`, `vminsert.podAntiAffinityPreset`, and `vminsert.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param vminsert.nodeSelector Node labels for VictoriaMetrics Insert pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
+  ##
+  nodeSelector: {}
+  ## @param vminsert.tolerations Tolerations for VictoriaMetrics Insert pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param vminsert.updateStrategy.type VictoriaMetrics Insert statefulset strategy type
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy:
+    ## StrategyType
+    ## Can be set to RollingUpdate or OnDelete
+    ##
+    type: RollingUpdate
+  ## @param vminsert.priorityClassName VictoriaMetrics Insert pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param vminsert.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
+  ## @param vminsert.schedulerName Name of the k8s scheduler (other than default) for VictoriaMetrics Insert pods
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param vminsert.terminationGracePeriodSeconds Seconds Redmine pod needs to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## @param vminsert.lifecycleHooks for the VictoriaMetrics Insert container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param vminsert.extraEnvVars Array with extra environment variables to add to VictoriaMetrics Insert nodes
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param vminsert.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for VictoriaMetrics Insert nodes
+  ##
+  extraEnvVarsCM: ""
+  ## @param vminsert.extraEnvVarsSecret Name of existing Secret containing extra env vars for VictoriaMetrics Insert nodes
+  ##
+  extraEnvVarsSecret: ""
+  ## @param vminsert.extraVolumes Optionally specify extra list of additional volumes for the VictoriaMetrics Insert pod(s)
+  ##
+  extraVolumes: []
+  ## @param vminsert.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the VictoriaMetrics Insert container(s)
+  ##
+  extraVolumeMounts: []
+  ## @param vminsert.sidecars Add additional sidecar containers to the VictoriaMetrics Insert pod(s)
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param vminsert.initContainers Add additional init containers to the VictoriaMetrics Insert pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
+
+  ## ServiceAccount configuration
+  ##
+  serviceAccount:
+    ## @param vminsert.serviceAccount.create Specifies whether a ServiceAccount should be created
+    ##
+    create: true
+    ## @param vminsert.serviceAccount.name The name of the ServiceAccount to use.
+    ## If not set and create is true, a name is generated using the common.names.fullname template
+    ##
+    name: ""
+    ## @param vminsert.serviceAccount.annotations Additional Service Account annotations (evaluated as a template)
+    ##
+    annotations: {}
+    ## @param vminsert.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+    ##
+    automountServiceAccountToken: false
+  ## @section VictoriaMetrics Insert Traffic Exposure Parameters
+  ##
+  service:
+    ## @param vminsert.service.type VictoriaMetrics Insert service type
+    ##
+    type: ClusterIP
+    ## @param vminsert.service.ports.http VictoriaMetrics Insert service http port
+    ##
+    ports:
+      http: 8480
+    ## Node ports to expose
+    ## @param vminsert.service.nodePorts.http Node port for HTTP
+    ## NOTE: choose port between <30000-32767>
+    ##
+    nodePorts:
+      http: ""
+    ## @param vminsert.service.clusterIP VictoriaMetrics Insert service Cluster IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param vminsert.service.loadBalancerIP VictoriaMetrics Insert service Load Balancer IP
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerIP: ""
+    ## @param vminsert.service.loadBalancerSourceRanges VictoriaMetrics Insert service Load Balancer sources
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param vminsert.service.externalTrafficPolicy VictoriaMetrics Insert service external traffic policy
+    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param vminsert.service.annotations [object] Additional custom annotations for VictoriaMetrics Insert service
+    ##
+    annotations: {}
+    ## @param vminsert.service.extraPorts Extra ports to expose in VictoriaMetrics Insert service (normally used with the `sidecars` value)
+    ##
+    extraPorts: []
+    ## @param vminsert.service.sessionAffinity Control where client requests go, to the same pod or round-robin
+    ## Values: ClientIP or None
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
+    ##
+    sessionAffinity: None
+    ## @param vminsert.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
+  ## ref: http://kubernetes.io/docs/concepts/services-networking/ingress/
+  ##
+  ingress:
+    ## @param vminsert.ingress.enabled Enable ingress record generation for VictoriaMetrics Insert
+    ##
+    enabled: false
+    ## @param vminsert.ingress.pathType Ingress path type
+    ##
+    pathType: ImplementationSpecific
+    ## @param vminsert.ingress.apiVersion Force Ingress API version (automatically detected if not set)
+    ##
+    apiVersion: ""
+    ## @param vminsert.ingress.hostname Default host for the ingress record
+    ##
+    hostname: vminsert.local
+    ## @param vminsert.ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+    ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+    ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+    ##
+    ingressClassName: ""
+    ## @param vminsert.ingress.path Default path for the ingress record
+    ## NOTE: You may need to set this to '/*' in order to use this with ALB ingress controllers
+    ##
+    path: /
+    ## @param vminsert.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
+    ## Use this parameter to set the required annotations for cert-manager, see
+    ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
+    ## e.g:
+    ## annotations:
+    ##   kubernetes.io/ingress.class: nginx
+    ##   cert-manager.io/cluster-issuer: cluster-issuer-name
+    ##
+    annotations: {}
+    ## @param vminsert.ingress.tls Enable TLS configuration for the host defined at `vminsert.ingress.hostname` parameter
+    ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.ingress.hostname }}`
+    ## You can:
+    ##   - Use the `vminsert.ingress.secrets` parameter to create this TLS secret
+    ##   - Rely on cert-manager to create it by setting the corresponding annotations
+    ##   - Rely on Helm to create self-signed certificates by setting `vminsert.ingress.selfSigned=true`
+    ##
+    tls: false
+    ## @param vminsert.ingress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
+    ##
+    selfSigned: false
+    ## @param vminsert.ingress.extraHosts An array with additional hostname(s) to be covered with the ingress record
+    ## e.g:
+    ## extraHosts:
+    ##   - name: victoriametrics select.local
+    ##     path: /
+    ##
+    extraHosts: []
+    ## @param vminsert.ingress.extraPaths An array with additional arbitrary paths that may need to be added to the ingress under the main host
+    ## e.g:
+    ## extraPaths:
+    ## - path: /*
+    ##   backend:
+    ##     serviceName: ssl-redirect
+    ##     servicePort: use-annotation
+    ##
+    extraPaths: []
+    ## @param vminsert.ingress.extraTls TLS configuration for additional hostname(s) to be covered with this ingress record
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+    ## e.g:
+    ## extraTls:
+    ## - hosts:
+    ##     - victoriametrics select.local
+    ##   secretName: victoriametrics select.local-tls
+    ##
+    extraTls: []
+    ## @param vminsert.ingress.secrets Custom TLS certificates as secrets
+    ## NOTE: 'key' and 'certificate' are expected in PEM format
+    ## NOTE: 'name' should line up with a 'secretName' set further up
+    ## If it is not set and you're using cert-manager, this is unneeded, as it will create a secret for you with valid certificates
+    ## If it is not set and you're NOT using cert-manager either, self-signed certificates will be created valid for 365 days
+    ## It is also possible to create and manage the certificates outside of this helm chart
+    ## Please see README.md for more information
+    ## e.g:
+    ## secrets:
+    ##   - name: victoriametrics select.local-tls
+    ##     key: |-
+    ##       -----BEGIN RSA PRIVATE KEY-----
+    ##       ...
+    ##       -----END RSA PRIVATE KEY-----
+    ##     certificate: |-
+    ##       -----BEGIN CERTIFICATE-----
+    ##       ...
+    ##       -----END CERTIFICATE-----
+    ##
+    secrets: []
+    ## @param vminsert.ingress.extraRules Additional rules to be covered with this ingress record
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+    ## e.g:
+    ## extraRules:
+    ## - host: example.local
+    ##     http:
+    ##       path: /
+    ##       backend:
+    ##         service:
+    ##           name: example-svc
+    ##           port:
+    ##             name: http
+    ##
+    extraRules: []
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param vminsert.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param vminsert.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param vminsert.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param vminsert.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param vminsert.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param vminsert.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param vminsert.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
+
+  ## @section VictoriaMetrics Insert Metrics Parameters
+  ##
+  ## Prometheus metrics
+  ##
+  metrics:
+    ## @param vminsert.metrics.enabled Enable the export of Prometheus metrics
+    ##
+    enabled: false
+    ## @param vminsert.metrics.annotations Additional custom annotations for the service
+    ##
+    annotations: {}
+    ## Prometheus Operator ServiceMonitor configuration
+    ##
+    serviceMonitor:
+      ## @param vminsert.metrics.serviceMonitor.enabled if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)
+      ##
+      enabled: false
+      ## @param vminsert.metrics.serviceMonitor.namespace Namespace in which Prometheus is running
+      ##
+      namespace: ""
+      ## @param vminsert.metrics.serviceMonitor.annotations Additional custom annotations for the ServiceMonitor
+      ##
+      annotations: {}
+      ## @param vminsert.metrics.serviceMonitor.labels Extra labels for the ServiceMonitor
+      ##
+      labels: {}
+      ## @param vminsert.metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in Prometheus
+      ##
+      jobLabel: ""
+      ## @param vminsert.metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
+      ##
+      honorLabels: false
+      ## @param vminsert.metrics.serviceMonitor.interval Interval at which metrics should be scraped.
+      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+      ## e.g:
+      ## interval: 10s
+      ##
+      interval: ""
+      ## @param vminsert.metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
+      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+      ## e.g:
+      ## scrapeTimeout: 10s
+      ##
+      scrapeTimeout: ""
+      ## @param vminsert.metrics.serviceMonitor.metricRelabelings Specify additional relabeling of metrics
+      ##
+      metricRelabelings: []
+      ## @param vminsert.metrics.serviceMonitor.relabelings Specify general relabeling
+      ##
+      relabelings: []
+      ## @param vminsert.metrics.serviceMonitor.selector Prometheus instance selector labels
+      ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
+      ## selector:
+      ##   prometheus: my-prometheus
+      ##
+      selector: {}
+
+## @section VictoriaMetrics Storage Parameters
+##
+vmstorage:
+  ## Bitnami VictoriaMetrics Storage image
+  ## ref: https://hub.docker.com/r/bitnami/victoriametrics-vmstorage/tags/
+  ## @param vmstorage.image.registry [default: REGISTRY_NAME] VictoriaMetrics Storage image registry
+  ## @param vmstorage.image.repository [default: REPOSITORY_NAME/victoriametrics-vmstorage] VictoriaMetrics Storage image repository
+  ## @skip vmstorage.image.tag VictoriaMetrics Storage image tag (immutable tags are recommended)
+  ## @param vmstorage.image.digest VictoriaMetrics Storage image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
+  ## @param vmstorage.image.pullPolicy VictoriaMetrics Storage image pull policy
+  ## @param vmstorage.image.pullSecrets VictoriaMetrics Storage image pull secrets
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/victoriametrics-vmstorage
+    tag: 1.113.0-debian-12-r0
+    digest: ""
+    ## Specify a imagePullPolicy
+    ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+  ## @param vmstorage.replicaCount Number of VictoriaMetrics Storage replicas to deploy
+  ##
+  replicaCount: 1
+  ## @param vmstorage.containerPorts.http VictoriaMetrics Storage http container port
+  ## @param vmstorage.containerPorts.vmselect VictoriaMetrics Storage vmselect container port
+  ## @param vmstorage.containerPorts.vminsert VictoriaMetrics Storage vminsert container port
+  ##
+  containerPorts:
+    http: 8482
+    vmselect: 8401
+    vminsert: 8400
+  ## Configure extra options for VictoriaMetrics Storage containers' liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param vmstorage.livenessProbe.enabled Enable livenessProbe on VictoriaMetrics Storage containers
+  ## @param vmstorage.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param vmstorage.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param vmstorage.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param vmstorage.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param vmstorage.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 5
+    successThreshold: 1
+  ## @param vmstorage.readinessProbe.enabled Enable readinessProbe on VictoriaMetrics Storage containers
+  ## @param vmstorage.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param vmstorage.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param vmstorage.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param vmstorage.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param vmstorage.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 5
+    successThreshold: 1
+  ## @param vmstorage.startupProbe.enabled Enable startupProbe on VictoriaMetrics Storage containers
+  ## @param vmstorage.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param vmstorage.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param vmstorage.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param vmstorage.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param vmstorage.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 5
+    successThreshold: 1
+  ## @param vmstorage.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param vmstorage.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param vmstorage.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## VictoriaMetrics Storage resource requests and limits
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param vmstorage.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if vmstorage.resources is set (vmstorage.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "small"
+  ## @param vmstorage.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
+  ## @param vmstorage.retentionPeriod Data retention period
+  ##
+  retentionPeriod: 1
+  ## @param vmstorage.statefulsetAnnotations Annotations for VictoriaMetrics Storage statefulset
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  statefulsetAnnotations: {}
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param vmstorage.podSecurityContext.enabled Enabled VictoriaMetrics Storage pods' Security Context
+  ## @param vmstorage.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param vmstorage.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param vmstorage.podSecurityContext.supplementalGroups Set filesystem extra groups
+  ## @param vmstorage.podSecurityContext.fsGroup Set VictoriaMetrics Storage pod's Security Context fsGroup
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
+    fsGroup: 1001
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param vmstorage.containerSecurityContext.enabled Enabled VictoriaMetrics Storage containers' Security Context
+  ## @param vmstorage.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param vmstorage.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param vmstorage.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+  ## @param vmstorage.containerSecurityContext.runAsNonRoot Set VictoriaMetrics Storage containers' Security Context runAsNonRoot
+  ## @param vmstorage.containerSecurityContext.privileged Set VictoriaMetrics Storage containers' Security Context privileged
+  ## @param vmstorage.containerSecurityContext.readOnlyRootFilesystem Set VictoriaMetrics Storage containers' Security Context runAsNonRoot
+  ## @param vmstorage.containerSecurityContext.allowPrivilegeEscalation Set VictoriaMetrics Storage container's privilege escalation
+  ## @param vmstorage.containerSecurityContext.capabilities.drop Set VictoriaMetrics Storage container's Security Context runAsNonRoot
+  ## @param vmstorage.containerSecurityContext.seccompProfile.type Set VictoriaMetrics Storage container's Security Context seccomp profile
+  ##
+  containerSecurityContext:
+    enabled: true
+    seLinuxOptions: {}
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: RuntimeDefault
+  ## @param vmstorage.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param vmstorage.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param vmstorage.extraArgs Add extra arguments to the default command
+  ##
+  extraArgs: []
+  ## @param vmstorage.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
+  ## @param vmstorage.hostAliases VictoriaMetrics Storage pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param vmstorage.podLabels Extra labels for VictoriaMetrics Storage pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param vmstorage.podAnnotations Annotations for VictoriaMetrics Storage pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param vmstorage.podAffinityPreset Pod affinity preset. Ignored if `vmstorage.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param vmstorage.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `vmstorage.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param vmstorage.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param vmstorage.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param vmstorage.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
+  ## Autoscaling configuration
+  ## ref: https://kubernetes.io/docs/concepts/workloads/autoscaling/
+  ##
+  autoscaling:
+    ## @param vmstorage.autoscaling.vpa.enabled Enable VPA for VictoriaMetrics Storage pods
+    ## @param vmstorage.autoscaling.vpa.annotations Annotations for VPA resource
+    ## @param vmstorage.autoscaling.vpa.controlledResources VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory
+    ## @param vmstorage.autoscaling.vpa.maxAllowed VPA Max allowed resources for the pod
+    ## @param vmstorage.autoscaling.vpa.minAllowed VPA Min allowed resources for the pod
+    ##
+    vpa:
+      enabled: false
+      annotations: {}
+      controlledResources: []
+      maxAllowed: {}
+      minAllowed: {}
+      ## @param vmstorage.autoscaling.vpa.updatePolicy.updateMode Autoscaling update policy
+      ## Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod
+      ## Possible values are "Off", "Initial", "Recreate", and "Auto".
+      ##
+      updatePolicy:
+        updateMode: Auto
+    ## @param vmstorage.autoscaling.hpa.enabled Enable HPA for VictoriaMetrics Storage pods
+    ## @param vmstorage.autoscaling.hpa.minReplicas Minimum number of replicas
+    ## @param vmstorage.autoscaling.hpa.maxReplicas Maximum number of replicas
+    ## @param vmstorage.autoscaling.hpa.targetCPU Target CPU utilization percentage
+    ## @param vmstorage.autoscaling.hpa.targetMemory Target Memory utilization percentage
+    ##
+    hpa:
+      enabled: false
+      minReplicas: ""
+      maxReplicas: ""
+      targetCPU: ""
+      targetMemory: ""
+  ## Node vmstorage.affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param vmstorage.nodeAffinityPreset.type Node affinity preset type. Ignored if `vmstorage.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param vmstorage.nodeAffinityPreset.key Node label key to match. Ignored if `vmstorage.affinity` is set
+    ##
+    key: ""
+    ## @param vmstorage.nodeAffinityPreset.values Node label values to match. Ignored if `vmstorage.affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param vmstorage.affinity Affinity for VictoriaMetrics Storage pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `vmstorage.podAffinityPreset`, `vmstorage.podAntiAffinityPreset`, and `vmstorage.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param vmstorage.nodeSelector Node labels for VictoriaMetrics Storage pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
+  ##
+  nodeSelector: {}
+  ## @param vmstorage.podManagementPolicy Pod management policy for VictoriaMetrics Storage statefulset
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
+  ##
+  podManagementPolicy: Parallel
+  ## @param vmstorage.tolerations Tolerations for VictoriaMetrics Storage pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param vmstorage.updateStrategy.type VictoriaMetrics Storage statefulset strategy type
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy:
+    ## StrategyType
+    ## Can be set to RollingUpdate or OnDelete
+    ##
+    type: RollingUpdate
+  ## @param vmstorage.priorityClassName VictoriaMetrics Storage pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param vmstorage.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
+  ## @param vmstorage.schedulerName Name of the k8s scheduler (other than default) for VictoriaMetrics Storage pods
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param vmstorage.terminationGracePeriodSeconds Seconds Redmine pod needs to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## @param vmstorage.lifecycleHooks for the VictoriaMetrics Storage container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param vmstorage.extraEnvVars Array with extra environment variables to add to VictoriaMetrics Storage nodes
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param vmstorage.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for VictoriaMetrics Storage nodes
+  ##
+  extraEnvVarsCM: ""
+  ## @param vmstorage.extraEnvVarsSecret Name of existing Secret containing extra env vars for VictoriaMetrics Storage nodes
+  ##
+  extraEnvVarsSecret: ""
+  ## @param vmstorage.extraVolumes Optionally specify extra list of additional volumes for the VictoriaMetrics Storage pod(s)
+  ##
+  extraVolumes: []
+  ## @param vmstorage.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the VictoriaMetrics Storage container(s)
+  ##
+  extraVolumeMounts: []
+  ## @param vmstorage.sidecars Add additional sidecar containers to the VictoriaMetrics Storage pod(s)
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param vmstorage.initContainers Add additional init containers to the VictoriaMetrics Storage pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
+  ## ServiceAccount configuration
+  ##
+  serviceAccount:
+    ## @param vmstorage.serviceAccount.create Specifies whether a ServiceAccount should be created
+    ##
+    create: true
+    ## @param vmstorage.serviceAccount.name The name of the ServiceAccount to use.
+    ## If not set and create is true, a name is generated using the common.names.fullname template
+    ##
+    name: ""
+    ## @param vmstorage.serviceAccount.annotations Additional Service Account annotations (evaluated as a template)
+    ##
+    annotations: {}
+    ## @param vmstorage.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+    ##
+    automountServiceAccountToken: false
+  ## @section VictoriaMetrics Storage Traffic Exposure Parameters
+  ##
+  service:
+    ## @param vmstorage.service.type VictoriaMetrics Storage service type
+    ##
+    type: ClusterIP
+    ## @param vmstorage.service.ports.http VictoriaMetrics Storage service http port
+    ##
+    ports:
+      http: 80
+    ## Node ports to expose
+    ## @param vmstorage.service.nodePorts.http Node port for HTTP
+    ## NOTE: choose port between <30000-32767>
+    ##
+    nodePorts:
+      http: ""
+    ## @param vmstorage.service.clusterIP VictoriaMetrics Storage service Cluster IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param vmstorage.service.loadBalancerIP VictoriaMetrics Storage service Load Balancer IP
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerIP: ""
+    ## @param vmstorage.service.loadBalancerSourceRanges VictoriaMetrics Storage service Load Balancer sources
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param vmstorage.service.externalTrafficPolicy VictoriaMetrics Storage service external traffic policy
+    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param vmstorage.service.annotations [object] Additional custom annotations for VictoriaMetrics Storage service
+    ##
+    annotations: {}
+    ## @param vmstorage.service.extraPorts Extra ports to expose in VictoriaMetrics Storage service (normally used with the `sidecars` value)
+    ##
+    extraPorts: []
+    ## @param vmstorage.service.sessionAffinity Control where client requests go, to the same pod or round-robin
+    ## Values: ClientIP or None
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
+    ##
+    sessionAffinity: None
+    ## @param vmstorage.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
+    ## Headless service properties
+    ##
+    headless:
+      ## @param vmstorage.service.headless.annotations Annotations for the headless service.
+      ##
+      annotations: {}
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param vmstorage.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param vmstorage.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param vmstorage.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param vmstorage.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param vmstorage.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param vmstorage.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param vmstorage.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
+
+  ## @section VictoriaMetrics Storage Persistence Parameters
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
+  ##
+  persistence:
+    ## @param vmstorage.persistence.enabled Enable persistence using Persistent Volume Claims
+    ##
+    enabled: true
+    ## @param vmstorage.persistence.mountPath Persistent Volume mount root path
+    ##
+    mountPath: /data
+    ## @param vmstorage.persistence.storageClass Persistent Volume storage class
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is set, choosing the default provisioner
+    ##
+    storageClass: ""
+    ## @param vmstorage.persistence.accessModes [array] Persistent Volume access modes
+    ##
+    accessModes:
+      - ReadWriteOnce
+    ## @param vmstorage.persistence.size Persistent Volume size
+    ##
+    size: 10Gi
+    ## @param vmstorage.persistence.dataSource Custom PVC data source
+    ##
+    dataSource: {}
+    ## @param vmstorage.persistence.annotations Annotations for the PVC
+    ##
+    annotations: {}
+    ## @param vmstorage.persistence.selector Selector to match an existing Persistent Volume (this value is evaluated as a template)
+    ## selector:
+    ##   matchLabels:
+    ##     app: my-app
+    ##
+    selector: {}
+    ## @param vmstorage.persistence.existingClaim The name of an existing PVC to use for persistence
+    ##
+    existingClaim: ""
+    ## @param vmstorage.persistence.extraVolumeClaimTemplates  Add additional VolumeClaimTemplates for enabling any plugins or any other purpose
+    ##
+    extraVolumeClaimTemplates: []
+
+  ## @section VictoriaMetrics Storage Metrics Parameters
+  ##
+
+  ## Prometheus metrics
+  ##
+  metrics:
+    ## @param vmstorage.metrics.enabled Enable the export of Prometheus metrics
+    ##
+    enabled: false
+    ## @param vmstorage.metrics.annotations Additional custom annotations for the service
+    ##
+    annotations: {}
+    ## Prometheus Operator ServiceMonitor configuration
+    ##
+    serviceMonitor:
+      ## @param vmstorage.metrics.serviceMonitor.enabled if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)
+      ##
+      enabled: false
+      ## @param vmstorage.metrics.serviceMonitor.namespace Namespace in which Prometheus is running
+      ##
+      namespace: ""
+      ## @param vmstorage.metrics.serviceMonitor.annotations Additional custom annotations for the ServiceMonitor
+      ##
+      annotations: {}
+      ## @param vmstorage.metrics.serviceMonitor.labels Extra labels for the ServiceMonitor
+      ##
+      labels: {}
+      ## @param vmstorage.metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in Prometheus
+      ##
+      jobLabel: ""
+      ## @param vmstorage.metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
+      ##
+      honorLabels: false
+      ## @param vmstorage.metrics.serviceMonitor.interval Interval at which metrics should be scraped.
+      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+      ## e.g:
+      ## interval: 10s
+      ##
+      interval: ""
+      ## @param vmstorage.metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
+      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+      ## e.g:
+      ## scrapeTimeout: 10s
+      ##
+      scrapeTimeout: ""
+      ## @param vmstorage.metrics.serviceMonitor.metricRelabelings Specify additional relabeling of metrics
+      ##
+      metricRelabelings: []
+      ## @param vmstorage.metrics.serviceMonitor.relabelings Specify general relabeling
+      ##
+      relabelings: []
+      ## @param vmstorage.metrics.serviceMonitor.selector Prometheus instance selector labels
+      ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
+      ## selector:
+      ##   prometheus: my-prometheus
+      ##
+      selector: {}
+
+## @section VictoriaMetrics Auth Parameters
+##
+vmauth:
+  ## @param vmauth.enabled Enable VictoriaMetrics Auth
+  ##
+  enabled: true
+  ## Bitnami VictoriaMetrics Auth image
+  ## ref: https://hub.docker.com/r/bitnami/victoriametrics-vmauth/tags/
+  ## @param vmauth.image.registry [default: REGISTRY_NAME] VictoriaMetrics Auth image registry
+  ## @param vmauth.image.repository [default: REPOSITORY_NAME/victoriametrics-vmauth] VictoriaMetrics Auth image repository
+  ## @skip vmauth.image.tag VictoriaMetrics Auth image tag (immutable tags are recommended)
+  ## @param vmauth.image.digest VictoriaMetrics Auth image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
+  ## @param vmauth.image.pullPolicy VictoriaMetrics Auth image pull policy
+  ## @param vmauth.image.pullSecrets VictoriaMetrics Auth image pull secrets
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/victoriametrics-vmauth
+    tag: 1.113.0-debian-12-r0
+    digest: ""
+    ## Specify a imagePullPolicy
+    ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+  ## @param vmauth.replicaCount Number of VictoriaMetrics Auth replicas to deploy
+  ##
+  replicaCount: 1
+  ## @param vmauth.containerPorts.http VictoriaMetrics Auth http container port
+  ##
+  containerPorts:
+    http: 8427
+  ## Configure extra options for VictoriaMetrics Auth containers' liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param vmauth.livenessProbe.enabled Enable livenessProbe on VictoriaMetrics Auth containers
+  ## @param vmauth.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param vmauth.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param vmauth.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param vmauth.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param vmauth.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 5
+    successThreshold: 1
+  ## @param vmauth.readinessProbe.enabled Enable readinessProbe on VictoriaMetrics Auth containers
+  ## @param vmauth.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param vmauth.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param vmauth.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param vmauth.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param vmauth.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 5
+    successThreshold: 1
+  ## @param vmauth.startupProbe.enabled Enable startupProbe on VictoriaMetrics Auth containers
+  ## @param vmauth.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param vmauth.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param vmauth.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param vmauth.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param vmauth.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 5
+    successThreshold: 1
+  ## @param vmauth.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param vmauth.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param vmauth.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## VictoriaMetrics Auth resource requests and limits
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param vmauth.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if vmauth.resources is set (vmauth.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "nano"
+  ## @param vmauth.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
+  ## @param vmauth.kind Define how to deploy VictoriaMetrics Auth (allowed values: deployment or daemonset)
+  ##
+  kind: "deployment"
+  ## @param vmauth.annotations Annotations for VictoriaMetrics Auth Deployment or StatefulSet
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  annotations: {}
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param vmauth.podSecurityContext.enabled Enabled VictoriaMetrics Auth pods' Security Context
+  ## @param vmauth.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param vmauth.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param vmauth.podSecurityContext.supplementalGroups Set filesystem extra groups
+  ## @param vmauth.podSecurityContext.fsGroup Set VictoriaMetrics Auth pod's Security Context fsGroup
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
+    fsGroup: 1001
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param vmauth.containerSecurityContext.enabled Enabled VictoriaMetrics Auth containers' Security Context
+  ## @param vmauth.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param vmauth.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param vmauth.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+  ## @param vmauth.containerSecurityContext.runAsNonRoot Set VictoriaMetrics Auth containers' Security Context runAsNonRoot
+  ## @param vmauth.containerSecurityContext.privileged Set VictoriaMetrics Auth containers' Security Context privileged
+  ## @param vmauth.containerSecurityContext.readOnlyRootFilesystem Set VictoriaMetrics Auth containers' Security Context runAsNonRoot
+  ## @param vmauth.containerSecurityContext.allowPrivilegeEscalation Set VictoriaMetrics Auth container's privilege escalation
+  ## @param vmauth.containerSecurityContext.capabilities.drop Set VictoriaMetrics Auth container's Security Context runAsNonRoot
+  ## @param vmauth.containerSecurityContext.seccompProfile.type Set VictoriaMetrics Auth container's Security Context seccomp profile
+  ##
+  containerSecurityContext:
+    enabled: true
+    seLinuxOptions: {}
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: RuntimeDefault
+  ## @param vmauth.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param vmauth.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param vmauth.extraArgs Add extra arguments to the default command
+  ##
+  extraArgs: []
+  ## @param vmauth.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
+  ## @param vmauth.hostAliases VictoriaMetrics Auth pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param vmauth.podLabels Extra labels for VictoriaMetrics Auth pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param vmauth.podAnnotations Annotations for VictoriaMetrics Auth pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param vmauth.podAffinityPreset Pod affinity preset. Ignored if `vmauth.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param vmauth.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `vmauth.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param vmauth.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param vmauth.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param vmauth.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
+  ## @param vmauth.configOverrides Overwrite or add extra configuration options to the chart default
+  ## Example:
+  ## configOverrides:
+  ##   ip_filters:
+  ##     allow_list: ["1.2.3.0/24", "127.0.0.1"]
+  ##
+  configOverrides: {}
+  ## @param vmauth.existingSecret The name of an existing Secret with configuration
+  ##
+  existingSecret: ""
+  ## Autoscaling configuration
+  ## ref: https://kubernetes.io/docs/concepts/workloads/autoscaling/
+  ##
+  autoscaling:
+    ## @param vmauth.autoscaling.vpa.enabled Enable VPA for VictoriaMetrics Auth pods
+    ## @param vmauth.autoscaling.vpa.annotations Annotations for VPA resource
+    ## @param vmauth.autoscaling.vpa.controlledResources VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory
+    ## @param vmauth.autoscaling.vpa.maxAllowed VPA Max allowed resources for the pod
+    ## @param vmauth.autoscaling.vpa.minAllowed VPA Min allowed resources for the pod
+    ##
+    vpa:
+      enabled: false
+      annotations: {}
+      controlledResources: []
+      maxAllowed: {}
+      minAllowed: {}
+      ## @param vmauth.autoscaling.vpa.updatePolicy.updateMode Autoscaling update policy
+      ## Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod
+      ## Possible values are "Off", "Initial", "Recreate", and "Auto".
+      ##
+      updatePolicy:
+        updateMode: Auto
+    ## @param vmauth.autoscaling.hpa.enabled Enable HPA for VictoriaMetrics Auth pods
+    ## @param vmauth.autoscaling.hpa.minReplicas Minimum number of replicas
+    ## @param vmauth.autoscaling.hpa.maxReplicas Maximum number of replicas
+    ## @param vmauth.autoscaling.hpa.targetCPU Target CPU utilization percentage
+    ## @param vmauth.autoscaling.hpa.targetMemory Target Memory utilization percentage
+    ##
+    hpa:
+      enabled: false
+      minReplicas: ""
+      maxReplicas: ""
+      targetCPU: ""
+      targetMemory: ""
+  ## Node vmauth.affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param vmauth.nodeAffinityPreset.type Node affinity preset type. Ignored if `vmauth.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param vmauth.nodeAffinityPreset.key Node label key to match. Ignored if `vmauth.affinity` is set
+    ##
+    key: ""
+    ## @param vmauth.nodeAffinityPreset.values Node label values to match. Ignored if `vmauth.affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param vmauth.affinity Affinity for VictoriaMetrics Auth pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `vmauth.podAffinityPreset`, `vmauth.podAntiAffinityPreset`, and `vmauth.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param vmauth.nodeSelector Node labels for VictoriaMetrics Auth pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
+  ##
+  nodeSelector: {}
+  ## @param vmauth.tolerations Tolerations for VictoriaMetrics Auth pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param vmauth.updateStrategy.type VictoriaMetrics Auth statefulset strategy type
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy:
+    ## StrategyType
+    ## Can be set to RollingUpdate or OnDelete
+    ##
+    type: RollingUpdate
+  ## @param vmauth.priorityClassName VictoriaMetrics Auth pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param vmauth.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
+  ## @param vmauth.schedulerName Name of the k8s scheduler (other than default) for VictoriaMetrics Auth pods
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param vmauth.terminationGracePeriodSeconds Seconds Redmine pod needs to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## @param vmauth.lifecycleHooks for the VictoriaMetrics Auth container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param vmauth.extraEnvVars Array with extra environment variables to add to VictoriaMetrics Auth nodes
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param vmauth.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for VictoriaMetrics Auth nodes
+  ##
+  extraEnvVarsCM: ""
+  ## @param vmauth.extraEnvVarsSecret Name of existing Secret containing extra env vars for VictoriaMetrics Auth nodes
+  ##
+  extraEnvVarsSecret: ""
+  ## @param vmauth.extraVolumes Optionally specify extra list of additional volumes for the VictoriaMetrics Auth pod(s)
+  ##
+  extraVolumes: []
+  ## @param vmauth.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the VictoriaMetrics Auth container(s)
+  ##
+  extraVolumeMounts: []
+  ## @param vmauth.sidecars Add additional sidecar containers to the VictoriaMetrics Auth pod(s)
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param vmauth.initContainers Add additional init containers to the VictoriaMetrics Auth pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
+  ## @section VictoriaMetrics Auth RBAC Parameters
+  ##
+
+  ## ServiceAccount configuration
+  ##
+  serviceAccount:
+    ## @param vmauth.serviceAccount.create Specifies whether a ServiceAccount should be created
+    ##
+    create: true
+    ## @param vmauth.serviceAccount.name The name of the ServiceAccount to use.
+    ## If not set and create is true, a name is generated using the common.names.fullname template
+    ##
+    name: ""
+    ## @param vmauth.serviceAccount.annotations Additional Service Account annotations (evaluated as a template)
+    ##
+    annotations: {}
+    ## @param vmauth.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+    ##
+    automountServiceAccountToken: false
+  ## @section VictoriaMetrics Auth Traffic Exposure Parameters
+  ##
+  service:
+    ## @param vmauth.service.type VictoriaMetrics Auth service type
+    ##
+    type: ClusterIP
+    ## @param vmauth.service.ports.http VictoriaMetrics Auth service http port
+    ##
+    ports:
+      http: 8427
+    ## Node ports to expose
+    ## @param vmauth.service.nodePorts.http Node port for HTTP
+    ## NOTE: choose port between <30000-32767>
+    ##
+    nodePorts:
+      http: ""
+    ## @param vmauth.service.clusterIP VictoriaMetrics Auth service Cluster IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param vmauth.service.loadBalancerIP VictoriaMetrics Auth service Load Balancer IP
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerIP: ""
+    ## @param vmauth.service.loadBalancerSourceRanges VictoriaMetrics Auth service Load Balancer sources
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param vmauth.service.externalTrafficPolicy VictoriaMetrics Auth service external traffic policy
+    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param vmauth.service.annotations [object] Additional custom annotations for VictoriaMetrics Auth service
+    ##
+    annotations: {}
+    ## @param vmauth.service.extraPorts Extra ports to expose in VictoriaMetrics Auth service (normally used with the `sidecars` value)
+    ##
+    extraPorts: []
+    ## @param vmauth.service.sessionAffinity Control where client requests go, to the same pod or round-robin
+    ## Values: ClientIP or None
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
+    ##
+    sessionAffinity: None
+    ## @param vmauth.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
+  ## ref: http://kubernetes.io/docs/concepts/services-networking/ingress/
+  ##
+  ingress:
+    ## @param vmauth.ingress.enabled Enable ingress record generation for VictoriaMetrics Auth
+    ##
+    enabled: false
+    ## @param vmauth.ingress.pathType Ingress path type
+    ##
+    pathType: ImplementationSpecific
+    ## @param vmauth.ingress.apiVersion Force Ingress API version (automatically detected if not set)
+    ##
+    apiVersion: ""
+    ## @param vmauth.ingress.hostname Default host for the ingress record
+    ##
+    hostname: vmauth.local
+    ## @param vmauth.ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+    ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+    ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+    ##
+    ingressClassName: ""
+    ## @param vmauth.ingress.path Default path for the ingress record
+    ## NOTE: You may need to set this to '/*' in order to use this with ALB ingress controllers
+    ##
+    path: /
+    ## @param vmauth.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
+    ## Use this parameter to set the required annotations for cert-manager, see
+    ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
+    ## e.g:
+    ## annotations:
+    ##   kubernetes.io/ingress.class: nginx
+    ##   cert-manager.io/cluster-issuer: cluster-issuer-name
+    ##
+    annotations: {}
+    ## @param vmauth.ingress.tls Enable TLS configuration for the host defined at `vmauth.ingress.hostname` parameter
+    ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.ingress.hostname }}`
+    ## You can:
+    ##   - Use the `vmauth.ingress.secrets` parameter to create this TLS secret
+    ##   - Rely on cert-manager to create it by setting the corresponding annotations
+    ##   - Rely on Helm to create self-signed certificates by setting `vmauth.ingress.selfSigned=true`
+    ##
+    tls: false
+    ## @param vmauth.ingress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
+    ##
+    selfSigned: false
+    ## @param vmauth.ingress.extraHosts An array with additional hostname(s) to be covered with the ingress record
+    ## e.g:
+    ## extraHosts:
+    ##   - name: victoriametrics select.local
+    ##     path: /
+    ##
+    extraHosts: []
+    ## @param vmauth.ingress.extraPaths An array with additional arbitrary paths that may need to be added to the ingress under the main host
+    ## e.g:
+    ## extraPaths:
+    ## - path: /*
+    ##   backend:
+    ##     serviceName: ssl-redirect
+    ##     servicePort: use-annotation
+    ##
+    extraPaths: []
+    ## @param vmauth.ingress.extraTls TLS configuration for additional hostname(s) to be covered with this ingress record
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+    ## e.g:
+    ## extraTls:
+    ## - hosts:
+    ##     - victoriametrics select.local
+    ##   secretName: victoriametrics select.local-tls
+    ##
+    extraTls: []
+    ## @param vmauth.ingress.secrets Custom TLS certificates as secrets
+    ## NOTE: 'key' and 'certificate' are expected in PEM format
+    ## NOTE: 'name' should line up with a 'secretName' set further up
+    ## If it is not set and you're using cert-manager, this is unneeded, as it will create a secret for you with valid certificates
+    ## If it is not set and you're NOT using cert-manager either, self-signed certificates will be created valid for 365 days
+    ## It is also possible to create and manage the certificates outside of this helm chart
+    ## Please see README.md for more information
+    ## e.g:
+    ## secrets:
+    ##   - name: victoriametrics select.local-tls
+    ##     key: |-
+    ##       -----BEGIN RSA PRIVATE KEY-----
+    ##       ...
+    ##       -----END RSA PRIVATE KEY-----
+    ##     certificate: |-
+    ##       -----BEGIN CERTIFICATE-----
+    ##       ...
+    ##       -----END CERTIFICATE-----
+    ##
+    secrets: []
+    ## @param vmauth.ingress.extraRules Additional rules to be covered with this ingress record
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+    ## e.g:
+    ## extraRules:
+    ## - host: example.local
+    ##     http:
+    ##       path: /
+    ##       backend:
+    ##         service:
+    ##           name: example-svc
+    ##           port:
+    ##             name: http
+    ##
+    extraRules: []
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param vmauth.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param vmauth.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param vmauth.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param vmauth.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param vmauth.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param vmauth.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param vmauth.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
+
+  ## @section VictoriaMetrics Auth Metrics Parameters
+  ##
+  ## Prometheus metrics
+  ##
+  metrics:
+    ## @param vmauth.metrics.enabled Enable the export of Prometheus metrics
+    ##
+    enabled: false
+    ## @param vmauth.metrics.annotations Additional custom annotations for the service
+    ##
+    annotations: {}
+    ## Prometheus Operator ServiceMonitor configuration
+    ##
+    serviceMonitor:
+      ## @param vmauth.metrics.serviceMonitor.enabled if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)
+      ##
+      enabled: false
+      ## @param vmauth.metrics.serviceMonitor.namespace Namespace in which Prometheus is running
+      ##
+      namespace: ""
+      ## @param vmauth.metrics.serviceMonitor.annotations Additional custom annotations for the ServiceMonitor
+      ##
+      annotations: {}
+      ## @param vmauth.metrics.serviceMonitor.labels Extra labels for the ServiceMonitor
+      ##
+      labels: {}
+      ## @param vmauth.metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in Prometheus
+      ##
+      jobLabel: ""
+      ## @param vmauth.metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
+      ##
+      honorLabels: false
+      ## @param vmauth.metrics.serviceMonitor.interval Interval at which metrics should be scraped.
+      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+      ## e.g:
+      ## interval: 10s
+      ##
+      interval: ""
+      ## @param vmauth.metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
+      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+      ## e.g:
+      ## scrapeTimeout: 10s
+      ##
+      scrapeTimeout: ""
+      ## @param vmauth.metrics.serviceMonitor.metricRelabelings Specify additional relabeling of metrics
+      ##
+      metricRelabelings: []
+      ## @param vmauth.metrics.serviceMonitor.relabelings Specify general relabeling
+      ##
+      relabelings: []
+      ## @param vmauth.metrics.serviceMonitor.selector Prometheus instance selector labels
+      ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
+      ## selector:
+      ##   prometheus: my-prometheus
+      ##
+      selector: {}
+
+## @section VictoriaMetrics Agent Parameters
+##
+vmagent:
+  ## @param vmagent.enabled Enable VictoriaMetrics Agent
+  ##
+  enabled: true
+  ## Bitnami VictoriaMetrics Agent image
+  ## ref: https://hub.docker.com/r/bitnami/victoriametrics-vmagent/tags/
+  ## @param vmagent.image.registry [default: REGISTRY_NAME] VictoriaMetrics Agent image registry
+  ## @param vmagent.image.repository [default: REPOSITORY_NAME/victoriametrics-vmagent] VictoriaMetrics Agent image repository
+  ## @skip vmagent.image.tag VictoriaMetrics Agent image tag (immutable tags are recommended)
+  ## @param vmagent.image.digest VictoriaMetrics Agent image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
+  ## @param vmagent.image.pullPolicy VictoriaMetrics Agent image pull policy
+  ## @param vmagent.image.pullSecrets VictoriaMetrics Agent image pull secrets
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/victoriametrics-vmagent
+    tag: 1.113.0-debian-12-r0
+    digest: ""
+    ## Specify a imagePullPolicy
+    ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+  ## @param vmagent.replicaCount Number of VictoriaMetrics Agent replicas to deploy
+  ##
+  replicaCount: 1
+  ## @param vmagent.containerPorts.http VictoriaMetrics Agent http container port
+  ## @param vmagent.containerPorts.graphite VictoriaMetrics Agent graphite container port
+  ## @param vmagent.containerPorts.opentsdb VictoriaMetrics Agent opentsdb container port
+  ## @param vmagent.containerPorts.influxdb VictoriaMetrics Agent influxdb container port
+  ##
+  containerPorts:
+    http: 8429
+    graphite: 2003
+    opentsdb: 4242
+    influxdb: 8089
+  ## Configure extra options for VictoriaMetrics Agent containers' liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param vmagent.livenessProbe.enabled Enable livenessProbe on VictoriaMetrics Agent containers
+  ## @param vmagent.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param vmagent.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param vmagent.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param vmagent.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param vmagent.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 5
+    successThreshold: 1
+  ## @param vmagent.readinessProbe.enabled Enable readinessProbe on VictoriaMetrics Agent containers
+  ## @param vmagent.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param vmagent.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param vmagent.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param vmagent.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param vmagent.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 5
+    successThreshold: 1
+  ## @param vmagent.startupProbe.enabled Enable startupProbe on VictoriaMetrics Agent containers
+  ## @param vmagent.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param vmagent.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param vmagent.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param vmagent.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param vmagent.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 5
+    successThreshold: 1
+  ## @param vmagent.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param vmagent.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param vmagent.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## VictoriaMetrics Agent resource requests and limits
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param vmagent.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if vmagent.resources is set (vmagent.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "nano"
+  ## @param vmagent.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
+  ## @param vmagent.kind Define how to deploy VictoriaMetrics Agent (allowed values: deployment or daemonset)
+  ##
+  kind: "deployment"
+  ## @param vmagent.annotations Annotations for VictoriaMetrics Agent Deployment or StatefulSet
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  annotations: {}
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param vmagent.podSecurityContext.enabled Enabled VictoriaMetrics Agent pods' Security Context
+  ## @param vmagent.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param vmagent.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param vmagent.podSecurityContext.supplementalGroups Set filesystem extra groups
+  ## @param vmagent.podSecurityContext.fsGroup Set VictoriaMetrics Agent pod's Security Context fsGroup
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
+    fsGroup: 1001
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param vmagent.containerSecurityContext.enabled Enabled VictoriaMetrics Agent containers' Security Context
+  ## @param vmagent.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param vmagent.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param vmagent.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+  ## @param vmagent.containerSecurityContext.runAsNonRoot Set VictoriaMetrics Agent containers' Security Context runAsNonRoot
+  ## @param vmagent.containerSecurityContext.privileged Set VictoriaMetrics Agent containers' Security Context privileged
+  ## @param vmagent.containerSecurityContext.readOnlyRootFilesystem Set VictoriaMetrics Agent containers' Security Context runAsNonRoot
+  ## @param vmagent.containerSecurityContext.allowPrivilegeEscalation Set VictoriaMetrics Agent container's privilege escalation
+  ## @param vmagent.containerSecurityContext.capabilities.drop Set VictoriaMetrics Agent container's Security Context runAsNonRoot
+  ## @param vmagent.containerSecurityContext.seccompProfile.type Set VictoriaMetrics Agent container's Security Context seccomp profile
+  ##
+  containerSecurityContext:
+    enabled: true
+    seLinuxOptions: {}
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: RuntimeDefault
+  ## @param vmagent.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param vmagent.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param vmagent.extraArgs Add extra arguments to the default command
+  ##
+  extraArgs: []
+  ## @param vmagent.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
+  ## @param vmagent.hostAliases VictoriaMetrics Agent pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param vmagent.podLabels Extra labels for VictoriaMetrics Agent pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param vmagent.podAnnotations Annotations for VictoriaMetrics Agent pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param vmagent.podAffinityPreset Pod affinity preset. Ignored if `vmagent.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param vmagent.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `vmagent.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param vmagent.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param vmagent.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param vmagent.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
+  ## @param vmagent.scrapeConfigOverrides Overwrite or add extra scraping configuration options to the chart default
+  ## Example:
+  ## configOverrides:
+  ##   ip_filters:
+  ##     allow_list: ["1.2.3.0/24", "127.0.0.1"]
+  ##
+  scrapeConfigOverrides: {}
+  ## @param vmagent.enableListeners.influxdb Enable influxdb listener
+  ## @param vmagent.enableListeners.opentsdb Enable graphite listener
+  ## @param vmagent.enableListeners.graphite Enable opentsdb listener
+  enableListeners:
+    influxdb: false
+    opentsdb: false
+    graphite: false
+  ## @param vmagent.existingScrapeConfigMap The name of an existing ConfigMap with the scrape configuration
+  ##
+  existingScrapeConfigMap: ""
+  ## @param vmagent.namespaced Only scrape in the deployed namespace
+  ##
+  namespaced: false
+  ## @param vmagent.allowedMetricsEndpoints [array] Allowed metrics endpoints to scrape (when not namespaced)
+  ##
+  allowedMetricsEndpoints:
+    - /metrics
+  ## Autoscaling configuration
+  ## ref: https://kubernetes.io/docs/concepts/workloads/autoscaling/
+  ##
+  autoscaling:
+    ## @param vmagent.autoscaling.vpa.enabled Enable VPA for VictoriaMetrics Agent pods
+    ## @param vmagent.autoscaling.vpa.annotations Annotations for VPA resource
+    ## @param vmagent.autoscaling.vpa.controlledResources VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory
+    ## @param vmagent.autoscaling.vpa.maxAllowed VPA Max allowed resources for the pod
+    ## @param vmagent.autoscaling.vpa.minAllowed VPA Min allowed resources for the pod
+    ##
+    vpa:
+      enabled: false
+      annotations: {}
+      controlledResources: []
+      maxAllowed: {}
+      minAllowed: {}
+      ## @param vmagent.autoscaling.vpa.updatePolicy.updateMode Autoscaling update policy
+      ## Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod
+      ## Possible values are "Off", "Initial", "Recreate", and "Auto".
+      ##
+      updatePolicy:
+        updateMode: Auto
+    ## @param vmagent.autoscaling.hpa.enabled Enable HPA for VictoriaMetrics Agent pods
+    ## @param vmagent.autoscaling.hpa.minReplicas Minimum number of replicas
+    ## @param vmagent.autoscaling.hpa.maxReplicas Maximum number of replicas
+    ## @param vmagent.autoscaling.hpa.targetCPU Target CPU utilization percentage
+    ## @param vmagent.autoscaling.hpa.targetMemory Target Memory utilization percentage
+    ##
+    hpa:
+      enabled: false
+      minReplicas: ""
+      maxReplicas: ""
+      targetCPU: ""
+      targetMemory: ""
+  ## Node vmagent.affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param vmagent.nodeAffinityPreset.type Node affinity preset type. Ignored if `vmagent.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param vmagent.nodeAffinityPreset.key Node label key to match. Ignored if `vmagent.affinity` is set
+    ##
+    key: ""
+    ## @param vmagent.nodeAffinityPreset.values Node label values to match. Ignored if `vmagent.affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param vmagent.affinity Affinity for VictoriaMetrics Agent pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `vmagent.podAffinityPreset`, `vmagent.podAntiAffinityPreset`, and `vmagent.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param vmagent.nodeSelector Node labels for VictoriaMetrics Agent pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
+  ##
+  nodeSelector: {}
+  ## @param vmagent.tolerations Tolerations for VictoriaMetrics Agent pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param vmagent.updateStrategy.type VictoriaMetrics Agent statefulset strategy type
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy:
+    ## StrategyType
+    ## Can be set to RollingUpdate or OnDelete
+    ##
+    type: RollingUpdate
+  ## @param vmagent.priorityClassName VictoriaMetrics Agent pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param vmagent.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
+  ## @param vmagent.schedulerName Name of the k8s scheduler (other than default) for VictoriaMetrics Agent pods
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param vmagent.terminationGracePeriodSeconds Seconds Redmine pod needs to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## @param vmagent.lifecycleHooks for the VictoriaMetrics Agent container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param vmagent.extraEnvVars Array with extra environment variables to add to VictoriaMetrics Agent nodes
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param vmagent.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for VictoriaMetrics Agent nodes
+  ##
+  extraEnvVarsCM: ""
+  ## @param vmagent.extraEnvVarsSecret Name of existing Secret containing extra env vars for VictoriaMetrics Agent nodes
+  ##
+  extraEnvVarsSecret: ""
+  ## @param vmagent.extraVolumes Optionally specify extra list of additional volumes for the VictoriaMetrics Agent pod(s)
+  ##
+  extraVolumes: []
+  ## @param vmagent.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the VictoriaMetrics Agent container(s)
+  ##
+  extraVolumeMounts: []
+  ## @param vmagent.sidecars Add additional sidecar containers to the VictoriaMetrics Agent pod(s)
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param vmagent.initContainers Add additional init containers to the VictoriaMetrics Agent pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
+  ## @section VictoriaMetrics Agent RBAC Parameters
+  ##
+  ## RBAC configuration
+  ##
+  rbac:
+    ## @param vmagent.rbac.create Specifies whether RBAC resources should be created
+    ##
+    create: true
+    ## @param vmagent.rbac.rules Custom RBAC rules to set
+    ## e.g:
+    ## rules:
+    ##   - apiGroups:
+    ##       - ""
+    ##     resources:
+    ##       - pods
+    ##     verbs:
+    ##       - get
+    ##       - list
+    ##
+    rules: []
+
+  ## ServiceAccount configuration
+  ##
+  serviceAccount:
+    ## @param vmagent.serviceAccount.create Specifies whether a ServiceAccount should be created
+    ##
+    create: true
+    ## @param vmagent.serviceAccount.name The name of the ServiceAccount to use.
+    ## If not set and create is true, a name is generated using the common.names.fullname template
+    ##
+    name: ""
+    ## @param vmagent.serviceAccount.annotations Additional Service Account annotations (evaluated as a template)
+    ##
+    annotations: {}
+    ## @param vmagent.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+    ##
+    automountServiceAccountToken: false
+  ## @section VictoriaMetrics Agent Traffic Exposure Parameters
+  ##
+  service:
+    ## @param vmagent.service.type VictoriaMetrics Agent service type
+    ##
+    type: ClusterIP
+    ## @param vmagent.service.ports.http VictoriaMetrics Agent service http port
+    ## @param vmagent.service.ports.graphite VictoriaMetrics Agent service graphite port
+    ## @param vmagent.service.ports.opentsdb VictoriaMetrics Agent service opentsdb port
+    ## @param vmagent.service.ports.influxdb VictoriaMetrics Agent service influxdb port
+    ##
+    ports:
+      http: 8429
+      graphite: 2003
+      opentsdb: 4242
+      influxdb: 8089
+    ## Node ports to expose
+    ## @param vmagent.service.nodePorts.http Node port for HTTP
+    ## @param vmagent.service.nodePorts.graphite Node port for graphite
+    ## @param vmagent.service.nodePorts.opentsdb Node port for opentsdb
+    ## @param vmagent.service.nodePorts.influxdb Node port for influxdb
+    ## NOTE: choose port between <30000-32767>
+    ##
+    nodePorts:
+      http: ""
+      graphite: ""
+      opentsdb: ""
+      influxdb: ""
+    ## @param vmagent.service.clusterIP VictoriaMetrics Agent service Cluster IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param vmagent.service.loadBalancerIP VictoriaMetrics Agent service Load Balancer IP
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerIP: ""
+    ## @param vmagent.service.loadBalancerSourceRanges VictoriaMetrics Agent service Load Balancer sources
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param vmagent.service.externalTrafficPolicy VictoriaMetrics Agent service external traffic policy
+    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param vmagent.service.annotations [object] Additional custom annotations for VictoriaMetrics Agent service
+    ##
+    annotations: {}
+    ## @param vmagent.service.extraPorts Extra ports to expose in VictoriaMetrics Agent service (normally used with the `sidecars` value)
+    ##
+    extraPorts: []
+    ## @param vmagent.service.sessionAffinity Control where client requests go, to the same pod or round-robin
+    ## Values: ClientIP or None
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
+    ##
+    sessionAffinity: None
+    ## @param vmagent.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param vmagent.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param vmagent.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param vmagent.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param vmagent.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param vmagent.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param vmagent.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param vmagent.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
+
+  ## @section VictoriaMetrics Agent Metrics Parameters
+  ##
+  ## Prometheus metrics
+  ##
+  metrics:
+    ## @param vmagent.metrics.enabled Enable the export of Prometheus metrics
+    ##
+    enabled: false
+    ## @param vmagent.metrics.annotations Additional custom annotations for the service
+    ##
+    annotations: {}
+    ## Prometheus Operator ServiceMonitor configuration
+    ##
+    serviceMonitor:
+      ## @param vmagent.metrics.serviceMonitor.enabled if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)
+      ##
+      enabled: false
+      ## @param vmagent.metrics.serviceMonitor.namespace Namespace in which Prometheus is running
+      ##
+      namespace: ""
+      ## @param vmagent.metrics.serviceMonitor.annotations Additional custom annotations for the ServiceMonitor
+      ##
+      annotations: {}
+      ## @param vmagent.metrics.serviceMonitor.labels Extra labels for the ServiceMonitor
+      ##
+      labels: {}
+      ## @param vmagent.metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in Prometheus
+      ##
+      jobLabel: ""
+      ## @param vmagent.metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
+      ##
+      honorLabels: false
+      ## @param vmagent.metrics.serviceMonitor.interval Interval at which metrics should be scraped.
+      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+      ## e.g:
+      ## interval: 10s
+      ##
+      interval: ""
+      ## @param vmagent.metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
+      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+      ## e.g:
+      ## scrapeTimeout: 10s
+      ##
+      scrapeTimeout: ""
+      ## @param vmagent.metrics.serviceMonitor.metricRelabelings Specify additional relabeling of metrics
+      ##
+      metricRelabelings: []
+      ## @param vmagent.metrics.serviceMonitor.relabelings Specify general relabeling
+      ##
+      relabelings: []
+      ## @param vmagent.metrics.serviceMonitor.selector Prometheus instance selector labels
+      ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
+      ## selector:
+      ##   prometheus: my-prometheus
+      ##
+      selector: {}
+
+## @section VictoriaMetrics Alert Parameters
+##
+vmalert:
+  ## @param vmalert.enabled Enable VictoriaMetrics Alert
+  ##
+  enabled: false
+  ## Bitnami VictoriaMetrics Alert image
+  ## ref: https://hub.docker.com/r/bitnami/victoriametrics-vmalert/tags/
+  ## @param vmalert.image.registry [default: REGISTRY_NAME] VictoriaMetrics Alert image registry
+  ## @param vmalert.image.repository [default: REPOSITORY_NAME/victoriametrics-vmalert] VictoriaMetrics Alert image repository
+  ## @skip vmalert.image.tag VictoriaMetrics Alert image tag (immutable tags are recommended)
+  ## @param vmalert.image.digest VictoriaMetrics Alert image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
+  ## @param vmalert.image.pullPolicy VictoriaMetrics Alert image pull policy
+  ## @param vmalert.image.pullSecrets VictoriaMetrics Alert image pull secrets
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/victoriametrics-vmalert
+    tag: 1.113.0-debian-12-r0
+    digest: ""
+    ## Specify a imagePullPolicy
+    ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+  ## @param vmalert.replicaCount Number of VictoriaMetrics Alert replicas to deploy
+  ##
+  replicaCount: 1
+  ## @param vmalert.containerPorts.http VictoriaMetrics Alert http container port
+  ##
+  containerPorts:
+    http: 8429
+  ## Configure extra options for VictoriaMetrics Alert containers' liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param vmalert.livenessProbe.enabled Enable livenessProbe on VictoriaMetrics Alert containers
+  ## @param vmalert.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param vmalert.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param vmalert.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param vmalert.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param vmalert.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 5
+    successThreshold: 1
+  ## @param vmalert.readinessProbe.enabled Enable readinessProbe on VictoriaMetrics Alert containers
+  ## @param vmalert.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param vmalert.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param vmalert.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param vmalert.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param vmalert.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 5
+    successThreshold: 1
+  ## @param vmalert.startupProbe.enabled Enable startupProbe on VictoriaMetrics Alert containers
+  ## @param vmalert.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param vmalert.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param vmalert.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param vmalert.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param vmalert.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 5
+    successThreshold: 1
+  ## @param vmalert.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param vmalert.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param vmalert.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## VictoriaMetrics Alert resource requests and limits
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param vmalert.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if vmalert.resources is set (vmalert.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "nano"
+  ## @param vmalert.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
+  ## @param vmalert.datasourceUrl URL to an external datasource (uses VictoriaMetrics Insert if not set)
+  ##
+  datasourceUrl: ""
+  ## @param vmalert.notifierUrl URL to a notifier like AlertManager (necessary when alert rules are set)
+  ##
+  notifierUrl: ""
+  ## @param vmalert.deploymentAnnotations Annotations for VictoriaMetrics Alert Deployment
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  deploymentAnnotations: {}
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param vmalert.podSecurityContext.enabled Enabled VictoriaMetrics Alert pods' Security Context
+  ## @param vmalert.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param vmalert.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param vmalert.podSecurityContext.supplementalGroups Set filesystem extra groups
+  ## @param vmalert.podSecurityContext.fsGroup Set VictoriaMetrics Alert pod's Security Context fsGroup
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
+    fsGroup: 1001
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param vmalert.containerSecurityContext.enabled Enabled VictoriaMetrics Alert containers' Security Context
+  ## @param vmalert.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param vmalert.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param vmalert.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+  ## @param vmalert.containerSecurityContext.runAsNonRoot Set VictoriaMetrics Alert containers' Security Context runAsNonRoot
+  ## @param vmalert.containerSecurityContext.privileged Set VictoriaMetrics Alert containers' Security Context privileged
+  ## @param vmalert.containerSecurityContext.readOnlyRootFilesystem Set VictoriaMetrics Alert containers' Security Context runAsNonRoot
+  ## @param vmalert.containerSecurityContext.allowPrivilegeEscalation Set VictoriaMetrics Alert container's privilege escalation
+  ## @param vmalert.containerSecurityContext.capabilities.drop Set VictoriaMetrics Alert container's Security Context runAsNonRoot
+  ## @param vmalert.containerSecurityContext.seccompProfile.type Set VictoriaMetrics Alert container's Security Context seccomp profile
+  ##
+  containerSecurityContext:
+    enabled: true
+    seLinuxOptions: {}
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: RuntimeDefault
+  ## @param vmalert.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param vmalert.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param vmalert.extraArgs Add extra arguments to the default command
+  ##
+  extraArgs: []
+  ## @param vmalert.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
+  ## @param vmalert.hostAliases VictoriaMetrics Alert pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param vmalert.podLabels Extra labels for VictoriaMetrics Alert pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param vmalert.podAnnotations Annotations for VictoriaMetrics Alert pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param vmalert.podAffinityPreset Pod affinity preset. Ignored if `vmalert.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param vmalert.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `vmalert.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param vmalert.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param vmalert.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param vmalert.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
+  ## @param vmalert.rulesConfigOverrides Overwrite or add extra rules configuration options to the chart default
+  ## Example:
+  ## rulesonfigOverrides:
+  ##  groups:
+  ##  - name: AlertGroupName
+  ##    rules:
+  ##     - alert: AlertName
+  ##       expr: any_metric > 100
+  ##       for: 30s
+  ##       labels:
+  ##          alertname: 'Any metric is too high'
+  ##          severity: 'warning'
+  ##
+  rulesConfigOverrides: {}
+  ## @param vmalert.existingRulesConfigMap The name of an existing ConfigMap with the rules configuration
+  ##
+  existingRulesConfigMap: ""
+  ## Autoscaling configuration
+  ## ref: https://kubernetes.io/docs/concepts/workloads/autoscaling/
+  ##
+  autoscaling:
+    ## @param vmalert.autoscaling.vpa.enabled Enable VPA for VictoriaMetrics Alert pods
+    ## @param vmalert.autoscaling.vpa.annotations Annotations for VPA resource
+    ## @param vmalert.autoscaling.vpa.controlledResources VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory
+    ## @param vmalert.autoscaling.vpa.maxAllowed VPA Max allowed resources for the pod
+    ## @param vmalert.autoscaling.vpa.minAllowed VPA Min allowed resources for the pod
+    ##
+    vpa:
+      enabled: false
+      annotations: {}
+      controlledResources: []
+      maxAllowed: {}
+      minAllowed: {}
+      ## @param vmalert.autoscaling.vpa.updatePolicy.updateMode Autoscaling update policy
+      ## Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod
+      ## Possible values are "Off", "Initial", "Recreate", and "Auto".
+      ##
+      updatePolicy:
+        updateMode: Auto
+    ## @param vmalert.autoscaling.hpa.enabled Enable HPA for VictoriaMetrics Alert pods
+    ## @param vmalert.autoscaling.hpa.minReplicas Minimum number of replicas
+    ## @param vmalert.autoscaling.hpa.maxReplicas Maximum number of replicas
+    ## @param vmalert.autoscaling.hpa.targetCPU Target CPU utilization percentage
+    ## @param vmalert.autoscaling.hpa.targetMemory Target Memory utilization percentage
+    ##
+    hpa:
+      enabled: false
+      minReplicas: ""
+      maxReplicas: ""
+      targetCPU: ""
+      targetMemory: ""
+  ## Node vmalert.affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param vmalert.nodeAffinityPreset.type Node affinity preset type. Ignored if `vmalert.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param vmalert.nodeAffinityPreset.key Node label key to match. Ignored if `vmalert.affinity` is set
+    ##
+    key: ""
+    ## @param vmalert.nodeAffinityPreset.values Node label values to match. Ignored if `vmalert.affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param vmalert.affinity Affinity for VictoriaMetrics Alert pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `vmalert.podAffinityPreset`, `vmalert.podAntiAffinityPreset`, and `vmalert.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param vmalert.nodeSelector Node labels for VictoriaMetrics Alert pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
+  ##
+  nodeSelector: {}
+  ## @param vmalert.tolerations Tolerations for VictoriaMetrics Alert pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param vmalert.updateStrategy.type VictoriaMetrics Alert statefulset strategy type
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy:
+    ## StrategyType
+    ## Can be set to RollingUpdate or OnDelete
+    ##
+    type: RollingUpdate
+  ## @param vmalert.priorityClassName VictoriaMetrics Alert pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param vmalert.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
+  ## @param vmalert.schedulerName Name of the k8s scheduler (other than default) for VictoriaMetrics Alert pods
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param vmalert.terminationGracePeriodSeconds Seconds Redmine pod needs to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## @param vmalert.lifecycleHooks for the VictoriaMetrics Alert container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param vmalert.extraEnvVars Array with extra environment variables to add to VictoriaMetrics Alert nodes
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param vmalert.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for VictoriaMetrics Alert nodes
+  ##
+  extraEnvVarsCM: ""
+  ## @param vmalert.extraEnvVarsSecret Name of existing Secret containing extra env vars for VictoriaMetrics Alert nodes
+  ##
+  extraEnvVarsSecret: ""
+  ## @param vmalert.extraVolumes Optionally specify extra list of additional volumes for the VictoriaMetrics Alert pod(s)
+  ##
+  extraVolumes: []
+  ## @param vmalert.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the VictoriaMetrics Alert container(s)
+  ##
+  extraVolumeMounts: []
+  ## @param vmalert.sidecars Add additional sidecar containers to the VictoriaMetrics Alert pod(s)
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param vmalert.initContainers Add additional init containers to the VictoriaMetrics Alert pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
+
+  ## ServiceAccount configuration
+  ##
+  serviceAccount:
+    ## @param vmalert.serviceAccount.create Specifies whether a ServiceAccount should be created
+    ##
+    create: true
+    ## @param vmalert.serviceAccount.name The name of the ServiceAccount to use.
+    ## If not set and create is true, a name is generated using the common.names.fullname template
+    ##
+    name: ""
+    ## @param vmalert.serviceAccount.annotations Additional Service Account annotations (evaluated as a template)
+    ##
+    annotations: {}
+    ## @param vmalert.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+    ##
+    automountServiceAccountToken: false
+  ## @section VictoriaMetrics Alert Traffic Exposure Parameters
+  ##
+  service:
+    ## @param vmalert.service.type VictoriaMetrics Alert service type
+    ##
+    type: ClusterIP
+    ## @param vmalert.service.ports.http VictoriaMetrics Alert service http port
+    ##
+    ports:
+      http: 8429
+    ## Node ports to expose
+    ## @param vmalert.service.nodePorts.http Node port for HTTP
+    ## NOTE: choose port between <30000-32767>
+    ##
+    nodePorts:
+      http: ""
+    ## @param vmalert.service.clusterIP VictoriaMetrics Alert service Cluster IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param vmalert.service.loadBalancerIP VictoriaMetrics Alert service Load Balancer IP
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerIP: ""
+    ## @param vmalert.service.loadBalancerSourceRanges VictoriaMetrics Alert service Load Balancer sources
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param vmalert.service.externalTrafficPolicy VictoriaMetrics Alert service external traffic policy
+    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param vmalert.service.annotations [object] Additional custom annotations for VictoriaMetrics Alert service
+    ##
+    annotations: {}
+    ## @param vmalert.service.extraPorts Extra ports to expose in VictoriaMetrics Alert service (normally used with the `sidecars` value)
+    ##
+    extraPorts: []
+    ## @param vmalert.service.sessionAffinity Control where client requests go, to the same pod or round-robin
+    ## Values: ClientIP or None
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
+    ##
+    sessionAffinity: None
+    ## @param vmalert.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param vmalert.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param vmalert.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param vmalert.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param vmalert.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param vmalert.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param vmalert.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param vmalert.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
+
+  ## @section VictoriaMetrics Alert Metrics Parameters
+  ##
+  ## Prometheus metrics
+  ##
+  metrics:
+    ## @param vmalert.metrics.enabled Enable the export of Prometheus metrics
+    ##
+    enabled: false
+    ## @param vmalert.metrics.annotations Additional custom annotations for the service
+    ##
+    annotations: {}
+    ## Prometheus Operator ServiceMonitor configuration
+    ##
+    serviceMonitor:
+      ## @param vmalert.metrics.serviceMonitor.enabled if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)
+      ##
+      enabled: false
+      ## @param vmalert.metrics.serviceMonitor.namespace Namespace in which Prometheus is running
+      ##
+      namespace: ""
+      ## @param vmalert.metrics.serviceMonitor.annotations Additional custom annotations for the ServiceMonitor
+      ##
+      annotations: {}
+      ## @param vmalert.metrics.serviceMonitor.labels Extra labels for the ServiceMonitor
+      ##
+      labels: {}
+      ## @param vmalert.metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in Prometheus
+      ##
+      jobLabel: ""
+      ## @param vmalert.metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
+      ##
+      honorLabels: false
+      ## @param vmalert.metrics.serviceMonitor.interval Interval at which metrics should be rulesd.
+      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+      ## e.g:
+      ## interval: 10s
+      ##
+      interval: ""
+      ## @param vmalert.metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
+      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+      ## e.g:
+      ## scrapeTimeout: 10s
+      ##
+      scrapeTimeout: ""
+      ## @param vmalert.metrics.serviceMonitor.metricRelabelings Specify additional relabeling of metrics
+      ##
+      metricRelabelings: []
+      ## @param vmalert.metrics.serviceMonitor.relabelings Specify general relabeling
+      ##
+      relabelings: []
+      ## @param vmalert.metrics.serviceMonitor.selector Prometheus instance selector labels
+      ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
+      ## selector:
+      ##   prometheus: my-prometheus
+      ##
+      selector: {}
+
+## @section Default Init Containers Parameters
+##
+defaultInitContainers:
+  ## volumePermissions: Change the owner and group of the persistent volume(s) mountpoint(s) to 'runAsUser:fsGroup' on each node
+  ##
+  volumePermissions:
+    ## @param defaultInitContainers.volumePermissions.enabled Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`
+    ##
+    enabled: false
+    ## OS Shell + Utility image
+    ## ref: https://hub.docker.com/r/bitnami/os-shell/tags/
+    ## @param defaultInitContainers.volumePermissions.image.registry [default: REGISTRY_NAME] OS Shell + Utility image registry
+    ## @param defaultInitContainers.volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] OS Shell + Utility image repository
+    ## @skip defaultInitContainers.volumePermissions.image.tag OS Shell + Utility image tag (immutable tags are recommended)
+    ## @param defaultInitContainers.volumePermissions.image.digest OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+    ## @param defaultInitContainers.volumePermissions.image.pullPolicy OS Shell + Utility image pull policy
+    ## @param defaultInitContainers.volumePermissions.image.pullSecrets OS Shell + Utility image pull secrets
+    ##
+    image:
+      registry: docker.io
+      repository: bitnami/os-shell
+      tag: 12-debian-12-r40
+      digest: ""
+      pullPolicy: IfNotPresent
+      ## Optionally specify an array of imagePullSecrets.
+      ## Secrets must be manually created in the namespace.
+      ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+      ## e.g:
+      ## pullSecrets:
+      ##   - myRegistryKeySecretName
+      ##
+      pullSecrets: []
+    ## Init container's resource requests and limits
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+    ## @param defaultInitContainers.volumePermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+    ##
+    resourcesPreset: "nano"
+    ## @param defaultInitContainers.volumePermissions.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## Example:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    resources: {}
+    ## Init container' Security Context
+    ## Note: the chown of the data folder is done to containerSecurityContext.runAsUser
+    ## and not the below volumePermissions.containerSecurityContext.runAsUser
+    ## @param defaultInitContainers.volumePermissions.containerSecurityContext.enabled Enable securityContext in the init container
+    ## @param defaultInitContainers.volumePermissions.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+    ## @param defaultInitContainers.volumePermissions.containerSecurityContext.runAsUser User ID for the init container
+    ##
+    containerSecurityContext:
+      enabled: true
+      seLinuxOptions: {}
+      runAsUser: 0

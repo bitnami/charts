@@ -172,6 +172,19 @@ Return Redis&reg; password
 {{- end -}}
 
 {{/*
+Returns true if useAOFPersistence should be enabled
+YAML will transform 'yes'/'no' into 'true'/'false' when quotes are missing, because it interprets the variable as boolean.
+Redis expects explicit 'yes'/'no', so this helper avoids issues when providing a boolean instead of a string.
+*/}}
+{{- define "redis-cluster.useAOFPersistence" -}}
+{{- if kindOf .Values.redis.useAOFPersistence | eq "bool" -}}
+    {{ ternary "yes" "no" .Values.redis.useAOFPersistence }}
+{{- else -}}
+    {{ print .Values.redis.useAOFPersistence }}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Determines whether or not to create the Statefulset
 */}}
 {{- define "redis-cluster.createStatefulSet" -}}
