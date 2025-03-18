@@ -1,8 +1,13 @@
 # Changelog
 
+## 2.0.1 (2025-03-18)
+
+* [bitnami/nessie] Release 2.0.1 ([#32496](https://github.com/bitnami/charts/pull/32496))
+
 ## 2.0.0 (2025-03-13)
 
-* [bitnami/nessie] Set `usePasswordFiles=true` by default ([#32114](https://github.com/bitnami/charts/pull/32114))
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/nessie] Set `usePasswordFiles=true` by default (#32114) ([7e2e48d](https://github.com/bitnami/charts/commit/7e2e48d97a122ac93bea56a28308acd8ed39b39d)), closes [#32114](https://github.com/bitnami/charts/issues/32114)
 
 ## <small>1.2.1 (2025-02-24)</small>
 
