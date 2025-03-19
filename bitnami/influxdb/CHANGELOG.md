@@ -1,8 +1,12 @@
 # Changelog
 
-## 6.6.1 (2025-03-05)
+## 6.6.2 (2025-03-19)
 
-* [bitnami/influxdb] Release 6.6.1 ([#32332](https://github.com/bitnami/charts/pull/32332))
+* bitnami/influxdb Add revisionHistoryLimit variable ([#32509](https://github.com/bitnami/charts/pull/32509))
+
+## <small>6.6.1 (2025-03-05)</small>
+
+* [bitnami/influxdb] Release 6.6.1 (#32332) ([c15d866](https://github.com/bitnami/charts/commit/c15d866508518a783f4cb6fd56f12609ace756fd)), closes [#32332](https://github.com/bitnami/charts/issues/32332)
 
 ## 6.6.0 (2025-02-26)
 
