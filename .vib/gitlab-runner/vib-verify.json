@@ -13,7 +13,7 @@
         ],
         "resources": {
           "url": "{SHA_ARCHIVE}",
-          "path": "/bitnami/cloudnative-pg"
+          "path": "/bitnami/gitlab-runner"
         }
       },
       "actions": [
@@ -29,7 +29,7 @@
       "context": {
         "resources": {
           "url": "{SHA_ARCHIVE}",
-          "path": "/bitnami/cloudnative-pg"
+          "path": "/bitnami/gitlab-runner"
         },
         "target_platform": {
           "target_platform_id": "{VIB_ENV_ALTERNATIVE_TARGET_PLATFORM}",
@@ -45,11 +45,11 @@
             "resources": {
               "path": "/.vib"
             },
-            "tests_file": "cloudnative-pg/goss/goss.yaml",
-            "vars_file": "cloudnative-pg/runtime-parameters.yaml",
+            "tests_file": "gitlab-runner/goss/goss.yaml",
+            "vars_file": "gitlab-runner/runtime-parameters.yaml",
             "remote": {
               "pod": {
-                "workload": "deploy-vib-postgresql-test"
+                "workload": "deploy-gitlab-runner"
               }
             }
           }

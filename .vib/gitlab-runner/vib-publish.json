@@ -13,7 +13,7 @@
         ],
         "resources": {
           "url": "{SHA_ARCHIVE}",
-          "path": "/bitnami/cloudnative-pg"
+          "path": "/bitnami/gitlab-runner"
         }
       },
       "actions": [
