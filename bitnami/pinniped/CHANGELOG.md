@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.4.11 (2025-03-11)
+## 2.4.12 (2025-03-19)
 
-* Fix pinniped default values type ([#32395](https://github.com/bitnami/charts/pull/32395))
+* [bitnami/pinniped] Release 2.4.12 ([#32523](https://github.com/bitnami/charts/pull/32523))
+
+## <small>2.4.11 (2025-03-12)</small>
+
+* Fix pinniped default values type (#32395) ([754d7c2](https://github.com/bitnami/charts/commit/754d7c2495bdee3c456643a594077086ee835fbd)), closes [#32395](https://github.com/bitnami/charts/issues/32395)
 
 ## <small>2.4.10 (2025-03-05)</small>
 
