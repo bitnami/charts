@@ -20,7 +20,7 @@ spec:
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.valkey.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
-  replicas: {{ .Values.cluster.nodes }}
+  replicas: {{ if eq (typeOf .Values.cluster.nodes) "float64" -}}{{ .Values.cluster.nodes }}{{- else -}}{{ tpl .Values.cluster.nodes . | int }}{{- end }}
   serviceName: {{ include "common.names.fullname" . }}-headless
   podManagementPolicy: {{ .Values.valkey.podManagementPolicy }}
   template:
@@ -116,7 +116,7 @@ spec:
               {{- if .Values.cluster.init }}
               if [[ "$pod_index" == "0" ]]; then
                 export VALKEY_CLUSTER_CREATOR="yes"
-                export VALKEY_CLUSTER_REPLICAS="{{ .Values.cluster.replicas }}"
+                export VALKEY_CLUSTER_REPLICAS="{{ if eq (typeOf .Values.cluster.replicas) "float64" -}}{{ .Values.cluster.replicas | quote }}{{- else -}}{{ tpl .Values.cluster.replicas . | int }}{{- end }}"
               fi
               {{- end }}
               /opt/bitnami/scripts/valkey-cluster/entrypoint.sh /opt/bitnami/scripts/valkey-cluster/run.sh
@@ -133,7 +133,7 @@ spec:
               pod_index="${pod_index[-1]}"
               if [[ "$pod_index" == "0" ]]; then
                 export VALKEY_CLUSTER_CREATOR="yes"
-                export VALKEY_CLUSTER_REPLICAS="{{ .Values.cluster.replicas }}"
+                export VALKEY_CLUSTER_REPLICAS="{{ if eq (typeOf .Values.cluster.replicas) "float64" -}}{{ .Values.cluster.replicas | quote }}{{- else -}}{{ tpl .Values.cluster.replicas . | int }}{{- end }}"
               fi
               {{- end }}
               /opt/bitnami/scripts/valkey-cluster/entrypoint.sh /opt/bitnami/scripts/valkey-cluster/run.sh
