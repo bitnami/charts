@@ -3,8 +3,7 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- $replicaCount := int .Values.broker.replicaCount }}
-{{- if and (gt $replicaCount 0) .Values.broker.autoscaling.hpa.enabled }}
+{{- if .Values.broker.autoscaling.hpa.enabled }}
 apiVersion: {{ include "common.capabilities.hpa.apiVersion" ( dict "context" $ ) }}
 kind: HorizontalPodAutoscaler
 metadata:

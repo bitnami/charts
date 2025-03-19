@@ -274,7 +274,7 @@ data:
       replace_placeholder "interbroker-client-secret-placeholder" "$KAFKA_INTER_BROKER_CLIENT_SECRET"
       {{- end }}
       {{- end -}}
-      {{- if and .Values.kraft.enabled (regexFind "SASL" (upper .Values.listeners.controller.protocol)) }}
+      {{- if regexFind "SASL" (upper .Values.listeners.controller.protocol) }}
       {{- if (include "kafka.saslUserPasswordsEnabled" .) }}
       replace_placeholder "controller-password-placeholder" "$KAFKA_CONTROLLER_PASSWORD"
       {{- end }}
@@ -316,9 +316,7 @@ data:
         fi
     else
         ID=$((POD_ID + KAFKA_MIN_ID))
-        {{- if .Values.kraft.enabled }}
         kafka_conf_set "$KAFKA_CONFIG_FILE" "node.id" "$ID"
-        {{- end }}
     fi
     {{- if not .Values.listeners.advertisedListeners }}
     replace_placeholder "advertised-address-placeholder" "${MY_POD_NAME}.{{ $fullname }}-${POD_ROLE}-headless.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}"

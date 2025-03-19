@@ -156,13 +156,11 @@ spec:
               value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
             - name: KAFKA_HEAP_OPTS
               value: {{ coalesce .Values.broker.heapOpts .Values.heapOpts | quote }}
-            {{- if .Values.kraft.enabled }}
             - name: KAFKA_KRAFT_CLUSTER_ID
               valueFrom:
                 secretKeyRef:
-                  name: {{ default (printf "%s-kraft-cluster-id" (include "common.names.fullname" .)) .Values.kraft.existingClusterIdSecret }}
-                  key: kraft-cluster-id
-            {{- end }}
+                  name: {{ default (printf "%s-kraft" (include "common.names.fullname" .)) .Values.existingClusterIdSecret }}
+                  key: cluster-id
             {{- if and (include "kafka.saslEnabled" .) (or (regexFind "SCRAM" (upper .Values.sasl.enabledMechanisms)) (regexFind "SCRAM" (upper .Values.sasl.controllerMechanism)) (regexFind "SCRAM" (upper .Values.sasl.interBrokerMechanism))) }}
             - name: KAFKA_KRAFT_BOOTSTRAP_SCRAM_USERS
               value: "true"
@@ -195,7 +193,7 @@ spec:
                   key: inter-broker-client-secret
             {{- end }}
             {{- end }}
-            {{- if and .Values.kraft.enabled (regexFind "SASL" (upper .Values.listeners.controller.protocol)) }}
+            {{- if regexFind "SASL" (upper .Values.listeners.controller.protocol) }}
             {{- if (include "kafka.saslUserPasswordsEnabled" .) }}
             - name: KAFKA_CONTROLLER_USER
               value: {{ .Values.sasl.controller.user | quote }}

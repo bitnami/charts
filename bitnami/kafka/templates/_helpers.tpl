@@ -63,15 +63,12 @@ Return true if encryption via TLS for client connections should be configured
 */}}
 {{- define "kafka.sslEnabled" -}}
 {{- $res := "" -}}
-{{- $listeners := list .Values.listeners.client .Values.listeners.interbroker -}}
+{{- $listeners := list .Values.listeners.client .Values.listeners.interbroker .Values.listeners.controller -}}
 {{- range $i := .Values.listeners.extraListeners -}}
 {{- $listeners = append $listeners $i -}}
 {{- end -}}
 {{- if and .Values.externalAccess.enabled -}}
 {{- $listeners = append $listeners .Values.listeners.external -}}
-{{- end -}}
-{{- if and .Values.kraft.enabled -}}
-{{- $listeners = append $listeners .Values.listeners.controller -}}
 {{- end -}}
 {{- range $listener := $listeners -}}
 {{- if regexFind "SSL" (upper $listener.protocol) -}}
@@ -88,13 +85,10 @@ Return true if SASL connections should be configured
 */}}
 {{- define "kafka.saslEnabled" -}}
 {{- $res := "" -}}
-{{- if (include "kafka.client.saslEnabled" .) -}}
+{{- if include "kafka.client.saslEnabled" . -}}
 {{- $res = "true" -}}
 {{- else -}}
-{{- $listeners := list .Values.listeners.interbroker -}}
-{{- if and .Values.kraft.enabled -}}
-{{- $listeners = append $listeners .Values.listeners.controller -}}
-{{- end -}}
+{{- $listeners := list .Values.listeners.interbroker .Values.listeners.controller -}}
 {{- range $listener := $listeners -}}
 {{- if regexFind "SASL" (upper $listener.protocol) -}}
 {{- $res = "true" -}}
@@ -415,11 +409,11 @@ Returns the Kafka listeners settings based on the listeners.* object
   {{- printf "%s" .context.Values.listeners.overrideListeners -}}
 {{- else -}}
   {{- $listeners := list .context.Values.listeners.client .context.Values.listeners.interbroker -}}
-  {{- if and .context.Values.externalAccess.enabled -}}
+  {{- if .context.Values.externalAccess.enabled -}}
   {{- $listeners = append $listeners .context.Values.listeners.external -}}
   {{- end -}}
-  {{- if and .context.Values.kraft.enabled .isController -}}
-  {{- if and .context.Values.controller.controllerOnly -}}
+  {{- if .isController -}}
+  {{- if .context.Values.controller.controllerOnly -}}
   {{- $listeners = list .context.Values.listeners.controller -}}
   {{- else -}}
   {{- $listeners = append $listeners .context.Values.listeners.controller -}}
@@ -462,12 +456,9 @@ Returns the value listener.security.protocol.map based on the values of 'listene
 {{- if .Values.listeners.securityProtocolMap -}}
   {{- printf "%s" .Values.listeners.securityProtocolMap -}}
 {{- else -}}
-  {{- $listeners := list .Values.listeners.client .Values.listeners.interbroker -}}
+  {{- $listeners := list .Values.listeners.client .Values.listeners.interbroker .Values.listeners.controller -}}
   {{- range $i := .Values.listeners.extraListeners -}}
   {{- $listeners = append $listeners $i -}}
-  {{- end -}}
-  {{- if .Values.kraft.enabled -}}
-  {{- $listeners = append $listeners .Values.listeners.controller -}}
   {{- end -}}
   {{- if and .Values.externalAccess.enabled -}}
   {{- $listeners = append $listeners .Values.listeners.external -}}
@@ -481,7 +472,7 @@ Returns the value listener.security.protocol.map based on the values of 'listene
 {{- end -}}
 
 {{/*
-Returns the containerPorts for listeneres.extraListeners
+Returns the containerPorts for listeners.extraListeners
 */}}
 {{- define "kafka.extraListeners.containerPorts" -}}
 {{- range $listener := .Values.listeners.extraListeners -}}
@@ -493,49 +484,52 @@ Returns the containerPorts for listeneres.extraListeners
 {{/*
 Returns the controller quorum voters based on the number of controller-eligible nodes
 */}}
-{{- define "kafka.kraft.controllerQuorumVoters" -}}
-{{- if .Values.kraft.controllerQuorumVoters -}}
-    {{- include "common.tplvalues.render" (dict "value" .Values.kraft.controllerQuorumVoters "context" $) -}}
+{{- define "kafka.controller.quorumVoters" -}}
+{{- if .Values.controller.quorumVoters -}}
+    {{- include "common.tplvalues.render" (dict "value" .Values.controller.quorumVoters "context" $) -}}
 {{- else -}}
-  {{- $controllerVoters := list -}}
-  {{- $fullname := include "common.names.fullname" . -}}
+  {{- $fullname := printf "%s-controller" (include "common.names.fullname" .) }}
+  {{- $serviceName := printf "%s-controller-headless" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   {{- $releaseNamespace := include "common.names.namespace" . -}}
+  {{- $clusterDomain := .Values.clusterDomain }}
+  {{- $port := int .Values.listeners.controller.containerPort }}
+  {{- $minId := int .Values.controller.minId -}}
+  {{- $controllerVoters := list -}}
   {{- range $i := until (int .Values.controller.replicaCount) -}}
-  {{- $nodeId := add (int $i) (int $.Values.controller.minId) -}}
-  {{- $nodeAddress := printf "%s-controller-%d.%s-controller-headless.%s.svc.%s:%d" $fullname (int $i) $fullname $releaseNamespace $.Values.clusterDomain (int $.Values.listeners.controller.containerPort) -}}
-  {{- $controllerVoters = append $controllerVoters (printf "%d@%s" $nodeId $nodeAddress ) -}}
+    {{- $nodeId := add $minId (int $i) -}}
+    {{- $nodeAddress := printf "%s-%d.%s.%s.svc.%s:%d" $fullname (int $i) $serviceName $releaseNamespace $clusterDomain $port -}}
+    {{- $controllerVoters = append $controllerVoters (printf "%d@%s" $nodeId $nodeAddress) -}}
   {{- end -}}
   {{- join "," $controllerVoters -}}
 {{- end -}}
 {{- end -}}
 
 {{/*
-Section of the server.properties configmap shared by both controller-eligible and broker nodes
+Section of the server.properties shared by both controller-eligible and broker nodes
 */}}
 {{- define "kafka.commonConfig" -}}
-{{- if or (include "kafka.saslEnabled" .) }}
-sasl.enabled.mechanisms={{ upper .Values.sasl.enabledMechanisms }}
-{{- end }}
-# Interbroker configuration
-inter.broker.listener.name={{ .Values.listeners.interbroker.name }}
-{{- if regexFind "SASL" (upper .Values.listeners.interbroker.protocol) }}
-sasl.mechanism.inter.broker.protocol={{ upper .Values.sasl.interBrokerMechanism }}
-{{- end }}
-{{- if (include "kafka.sslEnabled" .) }}
+inter.broker.listener.name: {{ .Values.listeners.interbroker.name }}
+controller.listener.names: {{ .Values.listeners.controller.name }}
+controller.quorum.voters: {{ include "kafka.controller.quorumVoters" . }}
+{{- if include "kafka.sslEnabled" . }}
 # TLS configuration
-ssl.keystore.type=JKS
-ssl.truststore.type=JKS
-ssl.keystore.location=/opt/bitnami/kafka/config/certs/kafka.keystore.jks
-ssl.truststore.location=/opt/bitnami/kafka/config/certs/kafka.truststore.jks
-#ssl.keystore.password=
-#ssl.truststore.password=
-#ssl.key.password=
-ssl.client.auth={{ .Values.tls.sslClientAuth }}
-ssl.endpoint.identification.algorithm={{ .Values.tls.endpointIdentificationAlgorithm }}
+ssl.keystore.type: JKS
+ssl.truststore.type: JKS
+ssl.keystore.location: /opt/bitnami/kafka/config/certs/kafka.keystore.jks
+ssl.truststore.location: /opt/bitnami/kafka/config/certs/kafka.truststore.jks
+ssl.client.auth: {{ .Values.tls.sslClientAuth }}
+ssl.endpoint.identification.algorithm: {{ .Values.tls.endpointIdentificationAlgorithm }}
 {{- end }}
 {{- if (include "kafka.saslEnabled" .) }}
 # Listeners SASL JAAS configuration
-{{- $listeners := list .Values.listeners.client .Values.listeners.interbroker }}
+sasl.enabled.mechanisms: {{ upper .Values.sasl.enabledMechanisms }}
+{{- if regexFind "SASL" (upper .Values.listeners.interbroker.protocol) }}
+sasl.mechanism.inter.broker.protocol: {{ upper .Values.sasl.interBrokerMechanism }}
+{{- end }}
+{{- if regexFind "SASL" (upper .Values.listeners.controller.protocol) }}
+sasl.mechanism.controller.protocol: {{ upper .Values.sasl.controllerMechanism }}
+{{- end }}
+{{- $listeners := list .Values.listeners.client .Values.listeners.interbroker .Values.listeners.controller }}
 {{- range $i := .Values.listeners.extraListeners }}
 {{- $listeners = append $listeners $i }}
 {{- end }}
@@ -543,81 +537,55 @@ ssl.endpoint.identification.algorithm={{ .Values.tls.endpointIdentificationAlgor
 {{- $listeners = append $listeners .Values.listeners.external }}
 {{- end }}
 {{- range $listener := $listeners }}
-{{- if and $listener.sslClientAuth (regexFind "SSL" (upper $listener.protocol)) }}
-listener.name.{{lower $listener.name}}.ssl.client.auth={{ $listener.sslClientAuth }}
+  {{- if and $listener.sslClientAuth (regexFind "SSL" (upper $listener.protocol)) }}
+listener.name.{{lower $listener.name}}.ssl.client.auth: {{ $listener.sslClientAuth }}
+  {{- end }}
+  {{- if regexFind "SASL" (upper $listener.protocol) }}
+    {{- range $mechanism := splitList "," $.Values.sasl.enabledMechanisms }}
+      {{- $securityModule := include "kafka.saslSecurityModule" (dict "mechanism" (upper $mechanism)) }}
+      {{- if and (eq (upper $mechanism) "OAUTHBEARER") (or (eq $listener.name $.Values.listeners.interbroker.name) (eq $listener.name $.Values.listeners.controller.name)) }}
+listener.name.{{lower $listener.name}}.oauthbearer.sasl.login.callback.handler.class: org.apache.kafka.common.security.oauthbearer.secured.OAuthBearerLoginCallbackHandler
+      {{- end }}
+      {{- $saslJaasConfig := list $securityModule }}
+      {{- if eq $listener.name $.Values.listeners.interbroker.name }}
+        {{- if (eq (upper $mechanism) "OAUTHBEARER") }}
+          {{- $saslJaasConfig = append $saslJaasConfig (printf "clientId=\"%s\"" $.Values.sasl.interbroker.clientId) }}
+          {{- $saslJaasConfig = append $saslJaasConfig (print "clientSecret=\"interbroker-client-secret-placeholder\"") }}
+        {{- else }}
+          {{- $saslJaasConfig = append $saslJaasConfig (printf "username=\"%s\"" $.Values.sasl.interbroker.user) }}
+          {{- $saslJaasConfig = append $saslJaasConfig (print "password=\"interbroker-password-placeholder\"") }}
+        {{- end }}
+      {{- else if eq $listener.name $.Values.listeners.controller.name }}
+        {{- if (eq (upper $mechanism) "OAUTHBEARER") }}
+          {{- $saslJaasConfig = append $saslJaasConfig (printf "clientId=\"%s\"" $.Values.sasl.controller.clientId) }}
+          {{- $saslJaasConfig = append $saslJaasConfig (print "clientSecret=\"controller-client-secret-placeholder\"") }}
+        {{- else }}
+          {{- $saslJaasConfig = append $saslJaasConfig (printf "username=\"%s\"" $.Values.sasl.controller.user) }}
+          {{- $saslJaasConfig = append $saslJaasConfig (print "password=\"controller-password-placeholder\"") }}
+        {{- end }}
+      {{- end }}
+      {{- if eq (upper $mechanism) "PLAIN" }}
+        {{- if eq $listener.name $.Values.listeners.interbroker.name }}
+          {{- $saslJaasConfig = append $saslJaasConfig (printf "user_%s=\"interbroker-password-placeholder\"" $.Values.sasl.interbroker.user) }}
+        {{- else if eq $listener.name $.Values.listeners.controller.name }}
+          {{- $saslJaasConfig = append $saslJaasConfig (printf "user_%s=\"controller-password-placeholder\"" $.Values.sasl.controller.user) }}
+        {{- end }}
+        {{- range $i, $user := $.Values.sasl.client.users }}
+          {{- $saslJaasConfig = append $saslJaasConfig (printf "user_%s=\"password-placeholder-%d\"" $user (int $i)) }}
+        {{- end }}
+      {{- end }}
+listener.name.{{lower $listener.name}}.{{lower $mechanism}}.sasl.jaas.config: {{ printf "%s;" (join " " $saslJaasConfig) }}
+      {{- if eq (upper $mechanism) "OAUTHBEARER" }}
+listener.name.{{lower $listener.name}}.oauthbearer.sasl.server.callback.handler.class: org.apache.kafka.common.security.oauthbearer.secured.OAuthBearerValidatorCallbackHandler
+      {{- end }}
+    {{- end }}
+  {{- end }}
 {{- end }}
-{{- if regexFind "SASL" (upper $listener.protocol) }}
-{{- range $mechanism := ( splitList "," $.Values.sasl.enabledMechanisms )}}
-  {{- $securityModule := include "kafka.saslSecurityModule" (dict "mechanism" (upper $mechanism)) }}
-  {{- $saslJaasConfig := list $securityModule }}
-  {{- if eq $listener.name $.Values.listeners.interbroker.name }}
-  {{- if (eq (upper $mechanism) "OAUTHBEARER") }}
-  {{- $saslJaasConfig = append $saslJaasConfig (printf "clientId=\"%s\"" $.Values.sasl.interbroker.clientId) }}
-  {{- $saslJaasConfig = append $saslJaasConfig (print "clientSecret=\"interbroker-client-secret-placeholder\"") }}
-listener.name.{{lower $listener.name}}.oauthbearer.sasl.login.callback.handler.class=org.apache.kafka.common.security.oauthbearer.secured.OAuthBearerLoginCallbackHandler
-  {{- else }}
-  {{- $saslJaasConfig = append $saslJaasConfig (printf "username=\"%s\"" $.Values.sasl.interbroker.user) }}
-  {{- $saslJaasConfig = append $saslJaasConfig (print "password=\"interbroker-password-placeholder\"") }}
-  {{- end }}
-  {{- end }}
-  {{- if eq (upper $mechanism) "PLAIN" }}
-  {{- if eq $listener.name $.Values.listeners.interbroker.name }}
-  {{- $saslJaasConfig = append $saslJaasConfig (printf "user_%s=\"interbroker-password-placeholder\"" $.Values.sasl.interbroker.user) }}
-  {{- end }}
-  {{- range $i, $user := $.Values.sasl.client.users }}
-  {{- $saslJaasConfig = append $saslJaasConfig (printf "user_%s=\"password-placeholder-%d\"" $user (int $i)) }}
-  {{- end }}
-  {{- end }}
-listener.name.{{lower $listener.name}}.{{lower $mechanism}}.sasl.jaas.config={{ join " " $saslJaasConfig }};
-  {{- if eq (upper $mechanism) "OAUTHBEARER" }}
-listener.name.{{lower $listener.name}}.oauthbearer.sasl.server.callback.handler.class=org.apache.kafka.common.security.oauthbearer.secured.OAuthBearerValidatorCallbackHandler
-  {{- end }}
-{{- end }}
-{{- end }}
-{{- end }}
-{{- if regexFind "OAUTHBEARER" $.Values.sasl.enabledMechanisms }}
-sasl.oauthbearer.token.endpoint.url={{ $.Values.sasl.oauthbearer.tokenEndpointUrl }}
-sasl.oauthbearer.jwks.endpoint.url={{ $.Values.sasl.oauthbearer.jwksEndpointUrl }}
-sasl.oauthbearer.expected.audience={{ $.Values.sasl.oauthbearer.expectedAudience }}
-sasl.oauthbearer.sub.claim.name={{ $.Values.sasl.oauthbearer.subClaimName }}
-{{- end }}
-# End of SASL JAAS configuration
-{{- end }}
-{{- end -}}
-
-{{/*
-Kraft section of the server.properties
-*/}}
-{{- define "kafka.kraftConfig" -}}
-#node.id=
-controller.listener.names={{ .Values.listeners.controller.name }}
-controller.quorum.voters={{ include "kafka.kraft.controllerQuorumVoters" . }}
-{{- $listener := $.Values.listeners.controller }}
-{{- if and $listener.sslClientAuth (regexFind "SSL" (upper $listener.protocol)) }}
-# Kraft Controller listener SSL settings
-listener.name.{{lower $listener.name}}.ssl.client.auth={{ $listener.sslClientAuth }}
-{{- end }}
-{{- if regexFind "SASL" (upper $listener.protocol) }}
-  {{- $mechanism := $.Values.sasl.controllerMechanism }}
-  {{- $securityModule := include "kafka.saslSecurityModule" (dict "mechanism" (upper $mechanism)) }}
-  {{- $saslJaasConfig := list $securityModule }}
-  {{- if (eq (upper $mechanism) "OAUTHBEARER") }}
-  {{- $saslJaasConfig = append $saslJaasConfig (printf "clientId=\"%s\"" $.Values.sasl.controller.clientId) }}
-  {{- $saslJaasConfig = append $saslJaasConfig (print "clientSecret=\"controller-client-secret-placeholder\"") }}
-  {{- else }}
-  {{- $saslJaasConfig = append $saslJaasConfig (printf "username=\"%s\"" $.Values.sasl.controller.user) }}
-  {{- $saslJaasConfig = append $saslJaasConfig (print "password=\"controller-password-placeholder\"") }}
-  {{- end }}
-  {{- if eq (upper $mechanism) "PLAIN" }}
-  {{- $saslJaasConfig = append $saslJaasConfig (printf "user_%s=\"controller-password-placeholder\"" $.Values.sasl.controller.user) }}
-  {{- end }}
-# Kraft Controller listener SASL settings
-sasl.mechanism.controller.protocol={{ upper $mechanism }}
-listener.name.{{lower $listener.name}}.sasl.enabled.mechanisms={{ upper $mechanism }}
-listener.name.{{lower $listener.name}}.{{lower $mechanism }}.sasl.jaas.config={{ join " " $saslJaasConfig }};
-{{- if regexFind "OAUTHBEARER" (upper $mechanism) }}
-listener.name.{{lower $listener.name}}.oauthbearer.sasl.server.callback.handler.class=org.apache.kafka.common.security.oauthbearer.secured.OAuthBearerValidatorCallbackHandler
-listener.name.{{lower $listener.name}}.oauthbearer.sasl.login.callback.handler.class=org.apache.kafka.common.security.oauthbearer.secured.OAuthBearerLoginCallbackHandler
+{{- if regexFind "OAUTHBEARER" .Values.sasl.enabledMechanisms }}
+sasl.oauthbearer.token.endpoint.url: {{ .Values.sasl.oauthbearer.tokenEndpointUrl }}
+sasl.oauthbearer.jwks.endpoint.url: {{ .Values.sasl.oauthbearer.jwksEndpointUrl }}
+sasl.oauthbearer.expected.audience: {{ .Values.sasl.oauthbearer.expectedAudience }}
+sasl.oauthbearer.sub.claim.name: {{ .Values.sasl.oauthbearer.subClaimName }}
 {{- end }}
 {{- end }}
 {{- end -}}
@@ -739,7 +707,7 @@ Init container definition for Kafka initialization
           key: inter-broker-client-secret
     {{- end }}
     {{- end }}
-    {{- if and .context.Values.kraft.enabled (regexFind "SASL" (upper .context.Values.listeners.controller.protocol)) }}
+    {{- if regexFind "SASL" (upper .context.Values.listeners.controller.protocol) }}
     {{- if (include "kafka.saslUserPasswordsEnabled" .context) }}
     - name: KAFKA_CONTROLLER_USER
       value: {{ .context.Values.sasl.controller.user | quote }}
@@ -871,7 +839,7 @@ Compile all warnings into a single message, and call fail.
 {{- $messages := append $messages (include "kafka.validateValues.saslMechanisms" .) -}}
 {{- $messages := append $messages (include "kafka.validateValues.tlsSecret" .) -}}
 {{- $messages := append $messages (include "kafka.validateValues.provisioning.tlsPasswords" .) -}}
-{{- $messages := append $messages (include "kafka.validateValues.kraftMissingControllers" .) -}}
+{{- $messages := append $messages (include "kafka.validateValues.missingController" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
@@ -884,10 +852,7 @@ Compile all warnings into a single message, and call fail.
 {{- define "kafka.validateValues.listener.protocols" -}}
 {{- $authProtocols := list "PLAINTEXT" "SASL_PLAINTEXT" "SASL_SSL" "SSL" -}}
 {{- if not .Values.listeners.securityProtocolMap -}}
-{{- $listeners := list .Values.listeners.client .Values.listeners.interbroker -}}
-{{- if .Values.kraft.enabled -}}
-{{- $listeners = append $listeners .Values.listeners.controller -}}
-{{- end -}}
+{{- $listeners := list .Values.listeners.client .Values.listeners.interbroker .Values.listeners.controller -}}
 {{- if and .Values.externalAccess.enabled -}}
 {{- $listeners = append $listeners .Values.listeners.external -}}
 {{- end -}}
@@ -1054,7 +1019,7 @@ kafka: sasl.enabledMechanisms
 kafka: sasl.enabledMechanisms
     sasl.interBrokerMechanism must be provided and it should be one of the specified mechanisms at sasl.enabledMechanisms
 {{- end -}}
-{{- if and .Values.kraft.enabled (not (contains .Values.sasl.controllerMechanism .Values.sasl.enabledMechanisms)) }}
+{{- if not (contains .Values.sasl.controllerMechanism .Values.sasl.enabledMechanisms) }}
 kafka: sasl.enabledMechanisms
     sasl.controllerMechanism must be provided and it should be one of the specified mechanisms at sasl.enabledMechanisms
 {{- end -}}
@@ -1084,17 +1049,10 @@ kafka: tls.keyPasswordSecretKey,tls.keystorePasswordSecretKey,tls.truststorePass
 {{- end -}}
 {{- end -}}
 
-{{/* Validate values of Kafka Kraft mode. At least 1 controller is configured or controller.quorum.voters is set  */}}
-{{- define "kafka.validateValues.kraftMissingControllers" -}}
-{{- if and .Values.kraft.enabled (le (int .Values.controller.replicaCount) 0) (not .Values.kraft.controllerQuorumVoters) }}
-kafka: Kraft mode - Missing controller-eligible nodes
-    Kraft mode has been enabled, but no controller-eligible nodes have been configured
-{{- end -}}
-{{- end -}}
-
-{{/* Render key, value as proprties format */}}
-{{- define "kafka.properties.render" -}}
-{{- range $key, $value := . }}
-{{ $key }}={{ include "common.tplvalues.render" (dict "value" $value "context" $) }}
+{{/* Validate values of Kafka - At least 1 controller is configured or controller.quorum.voters is set  */}}
+{{- define "kafka.validateValues.missingController" -}}
+{{- if and (le (int .Values.controller.replicaCount) 0) (not .Values.controller.quorumVoters) }}
+kafka: Missing controller-eligible nodes
+    No controller-eligible nodes have been configured.
 {{- end -}}
 {{- end -}}

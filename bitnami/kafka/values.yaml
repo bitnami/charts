@@ -5,12 +5,10 @@
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
 ## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
-##
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
 ## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
-## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ##
 global:
   imageRegistry: ""
@@ -20,7 +18,6 @@ global:
   ##
   imagePullSecrets: []
   defaultStorageClass: ""
-  storageClass: ""
   ## Security parameters
   ##
   security:
@@ -35,8 +32,8 @@ global:
       ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
       ##
       adaptSecurityContext: auto
+
 ## @section Common parameters
-##
 
 ## @param kubeVersion Override Kubernetes version
 ##
@@ -50,6 +47,9 @@ nameOverride: ""
 ## @param fullnameOverride String to fully override common.names.fullname
 ##
 fullnameOverride: ""
+## @param namespaceOverride String to fully override common.names.namespace
+##
+namespaceOverride: ""
 ## @param clusterDomain Default Kubernetes cluster domain
 ##
 clusterDomain: cluster.local
@@ -62,27 +62,24 @@ commonAnnotations: {}
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
+## Diagnostic mode
+## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+## @param diagnosticMode.command Command to override all containers in the chart release
+## @param diagnosticMode.args Args to override all containers in the chart release
+##
+diagnosticMode:
+  enabled: false
+  command:
+    - sleep
+  args:
+    - infinity
 ## @param serviceBindings.enabled Create secret for service binding (Experimental)
 ## Ref: https://servicebinding.io/service-provider/
 ##
 serviceBindings:
   enabled: false
-## Enable diagnostic mode in the statefulset
-##
-diagnosticMode:
-  ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
-  ##
-  enabled: false
-  ## @param diagnosticMode.command Command to override all containers in the statefulset
-  ##
-  command:
-    - sleep
-  ## @param diagnosticMode.args Args to override all containers in the statefulset
-  ##
-  args:
-    - infinity
-## @section Kafka parameters
-##
+
+## @section Kafka common parameters
 
 ## Bitnami Kafka image version
 ## ref: https://hub.docker.com/r/bitnami/kafka/tags/
@@ -114,31 +111,34 @@ image:
   ## Set to true if you would like to see extra information on logs
   ##
   debug: false
-## @param extraInit Additional content for the kafka init script, rendered as a template.
+
+## @param clusterId Kafka Kraft cluster ID (ignored if existingClusterIdSecret is set). A random cluster ID will be generated the 1st time Kraft is initialized if not set.
+## NOTE: Already initialized Kafka nodes will use cluster ID stored in their persisted storage.
+## If reusing existing PVCs, make sure the cluster ID is set matching the stored cluster ID, otherwise new nodes will fail to join the cluster.
+## In case the cluster ID stored in the secret does not match the value stored in /bitnami/kafka/data/meta.properties, remove the secret and upgrade the chart setting the correct value.
 ##
-extraInit: ""
-## @param config Configuration file for Kafka, rendered as a template. Auto-generated based on chart values when not specified.
-## @param existingConfigmap ConfigMap with Kafka Configuration
+clusterId: ""
+## @param existingClusterIdSecret Name of the secret containing the cluster ID for the Kafka KRaft cluster
+##
+existingClusterIdSecret: ""
+## @param config Specify content for Kafka configuration (auto-generated based on other parameters otherwise)
 ## NOTE: This will override the configuration based on values, please act carefully
-## If both are set, the existingConfigMap will be used.
+## Use simple key-value YAML format, then it's transformed to properties format by the chart. e.g:
+##    process.roles: broker
+## ... will be transformed to:
+##    process.roles=broker
 ##
-config: ""
+config: {}
+## @param overrideConfiguration Kafka common configuration override. Values defined here takes precedence over the ones defined at `config`
+##
+overrideConfiguration: {}
+## @param existingConfigmap Name of an existing ConfigMap with the Kafka configuration
+##
 existingConfigmap: ""
-## @param extraConfig Additional configuration to be appended at the end of the generated Kafka configuration file.
-##
-extraConfig: ""
-## @param extraConfigYaml Additional configuration in yaml format to be appended at the end of the generated Kafka configuration file.
-##
-## E.g.
-## extraConfigYaml:
-##   default.replication.factor: 3
-##
-extraConfigYaml: {}
-## @param secretConfig Additional configuration to be appended at the end of the generated Kafka configuration file.
-## This value will be stored in a secret.
+## @param secretConfig Additional configuration to be appended at the end of the generated Kafka configuration (store in a secret)
 ##
 secretConfig: ""
-## @param existingSecretConfig Secret with additonal configuration that will be appended to the end of the generated Kafka configuration file
+## @param existingSecretConfig Secret with additional configuration that will be appended to the end of the generated Kafka configuration
 ## The key for the configuration should be: server-secret.properties
 ## NOTE: This will override secretConfig value
 ##
@@ -153,6 +153,9 @@ log4j: ""
 ## NOTE: this will override `log4j`
 ##
 existingLog4jConfigMap: ""
+## @param extraInit Additional content for the kafka init script, rendered as a template.
+##
+extraInit: ""
 ## @param heapOpts Kafka Java Heap configuration
 ##
 heapOpts: -XX:InitialRAMPercentage=75 -XX:MaxRAMPercentage=75
@@ -446,6 +449,7 @@ dnsPolicy: ""
 ##       value: "2"
 ##     - name: edns0
 dnsConfig: {}
+
 ## @section Controller-eligible statefulset parameters
 ##
 controller:
@@ -455,32 +459,34 @@ controller:
   ## @param controller.controllerOnly If set to true, controller nodes will be deployed as dedicated controllers, instead of controller+broker processes.
   ##
   controllerOnly: false
+  ## @param controller.quorumVoters Override the Kafka controller quorum voters of the Kafka Kraft cluster. If not set, it will be automatically configured to use all controller-eligible nodes.
+  ##
+  quorumVoters: ""  
   ## @param controller.minId Minimal node.id values for controller-eligible nodes. Do not change after first initialization.
   ## Broker-only id increment their ID starting at this minimal value.
   ## We recommend setting this this value high enough, as IDs under this value will be used by controller-elegible nodes
   ##
   minId: 0
-  ## @param controller.config Configuration file for Kafka controller-eligible nodes, rendered as a template. Auto-generated based on chart values when not specified.
-  ## @param controller.existingConfigmap ConfigMap with Kafka Configuration for controller-eligible nodes.
+  ## @param controller.config Specify content for Kafka configuration for Kafka controller-eligible nodes (auto-generated based on other parameters otherwise)
   ## NOTE: This will override the configuration based on values, please act carefully
-  ## If both are set, the existingConfigMap will be used.
+  ## Use simple key-value YAML format, then it's transformed to properties format by the chart. e.g:
+  ##    process.roles: controller
+  ## ... will be transformed to:
+  ##    process.roles=controller
   ##
-  config: ""
+  config: {}
+  ## @param controller.overrideConfiguration Kafka configuration override for Kafka controller-eligible nodes. Values defined here takes precedence over the ones defined at `controller.config`
+  ##
+  overrideConfiguration: {}
+  ## @param controller.existingConfigmap Name of an existing ConfigMap with the Kafka configuration for Kafka controller-eligible nodes
+  ##
   existingConfigmap: ""
-  ## @param controller.extraConfig Additional configuration to be appended at the end of the generated Kafka controller-eligible nodes configuration file.
-  ##
-  extraConfig: ""
-  ## @param controller.extraConfigYaml Additional configuration in yaml format to be appended at the end of the generated Kafka controller-eligible nodes configuration file.
-  ## If keys of extraConfigYaml are duplicated here, the value from controller.extraConfigYaml is taken.
-  ##
-  extraConfigYaml: {}
-  ## @param controller.secretConfig Additional configuration to be appended at the end of the generated Kafka controller-eligible nodes configuration file.
-  ## This value will be stored in a secret.
+  ## @param controller.secretConfig Additional configuration to be appended at the end of the generated Kafka configuration for Kafka controller-eligible nodes (store in a secret)
   ##
   secretConfig: ""
-  ## @param controller.existingSecretConfig Secret with additonal configuration that will be appended to the end of the generated Kafka controller-eligible nodes configuration file
+  ## @param controller.existingSecretConfig Secret with additional configuration that will be appended to the end of the generated Kafka configuration for Kafka controller-eligible nodes
   ## The key for the configuration should be: server-secret.properties
-  ## NOTE: This will override controller.secretConfig value
+  ## NOTE: This will override secretConfig value
   ##
   existingSecretConfig: ""
   ## @param controller.heapOpts Kafka Java Heap size for controller-eligible nodes
@@ -913,27 +919,26 @@ broker:
   ##
   ##
   minId: 100
-  ## @param broker.config Configuration file for Kafka broker-only nodes, rendered as a template. Auto-generated based on chart values when not specified.
-  ## @param broker.existingConfigmap ConfigMap with Kafka Configuration for broker-only nodes.
+  ## @param broker.config Specify content for Kafka configuration for Kafka broker-only nodes (auto-generated based on other parameters otherwise)
   ## NOTE: This will override the configuration based on values, please act carefully
-  ## If both are set, the existingConfigMap will be used.
+  ## Use simple key-value YAML format, then it's transformed to properties format by the chart. e.g:
+  ##    process.roles: broker
+  ## ... will be transformed to:
+  ##    process.roles=broker
   ##
-  config: ""
+  config: {}
+  ## @param broker.overrideConfiguration Kafka configuration override for Kafka broker-only nodes. Values defined here takes precedence over the ones defined at `broker.config`
+  ##
+  overrideConfiguration: {}
+  ## @param broker.existingConfigmap Name of an existing ConfigMap with the Kafka configuration for Kafka broker-only nodes
+  ##
   existingConfigmap: ""
-  ## @param broker.extraConfig Additional configuration to be appended at the end of the generated Kafka broker-only nodes configuration file.
-  ##
-  extraConfig: ""
-  ## @param broker.extraConfigYaml Additional configuration in yaml format to be appended at the end of the generated Kafka broker-only nodes configuration file.
-  ## If keys of extraConfigYaml are duplicated here, the value from broker.extraConfigYaml is taken.
-  ##
-  extraConfigYaml: {}
-  ## @param broker.secretConfig Additional configuration to be appended at the end of the generated Kafka broker-only nodes configuration file.
-  ## This value will be stored in a secret.
+  ## @param broker.secretConfig Additional configuration to be appended at the end of the generated Kafka configuration for Kafka broker-only nodes (store in a secret)
   ##
   secretConfig: ""
-  ## @param broker.existingSecretConfig Secret with additonal configuration that will be appended to the end of the generated Kafka broker-only nodes configuration file
+  ## @param broker.existingSecretConfig Secret with additional configuration that will be appended to the end of the generated Kafka configuration for Kafka broker-only nodes
   ## The key for the configuration should be: server-secret.properties
-  ## NOTE: This will override broker.secretConfig value
+  ## NOTE: This will override secretConfig value
   ##
   existingSecretConfig: ""
   ## @param broker.heapOpts Kafka Java Heap size for broker-only nodes
@@ -1363,7 +1368,7 @@ service:
   ##
   type: ClusterIP
   ## @param service.ports.client Kafka svc port for client connections
-  ## @param service.ports.controller Kafka svc port for controller connections. It is used if "kraft.enabled: true"
+  ## @param service.ports.controller Kafka svc port for controller connections
   ## @param service.ports.interbroker Kafka svc port for inter-broker connections
   ## @param service.ports.external Kafka svc port for external connections
   ##
@@ -2380,21 +2385,3 @@ provisioning:
   waitForKafka: true
   ## @param provisioning.useHelmHooks Flag to indicate usage of helm hooks
   useHelmHooks: true
-
-## @section KRaft chart parameters
-
-kraft:
-  ## @param kraft.enabled Switch to enable or disable the KRaft mode for Kafka
-  ##
-  enabled: true
-  ## @param kraft.existingClusterIdSecret Name of the secret containing the cluster ID for the Kafka KRaft cluster. This is incompatible with the clusterId parameter. If both are set, the existingClusterIdSecret will be used
-  existingClusterIdSecret: ""
-  ## @param kraft.clusterId Kafka Kraft cluster ID. If not set, a random cluster ID will be generated the first time Kraft is initialized.
-  ## NOTE: Already initialized Kafka nodes will use cluster ID stored in their persisted storage.
-  ## If reusing existing PVCs, make sure the cluster ID is set matching the stored cluster ID, otherwise new nodes will fail to join the cluster.
-  ## In case the cluster ID stored in the secret does not match the value stored in /bitnami/kafka/data/meta.properties, remove the secret and upgrade the chart setting the correct value.
-  ##
-  clusterId: ""
-  ## @param kraft.controllerQuorumVoters Override the Kafka controller quorum voters of the Kafka Kraft cluster. If not set, it will be automatically configured to use all controller-elegible nodes.
-  ##
-  controllerQuorumVoters: ""

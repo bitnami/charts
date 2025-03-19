@@ -3,8 +3,6 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- $replicaCount := int .Values.controller.replicaCount }}
-{{- if and .Values.kraft.enabled (or (gt $replicaCount 0) .Values.controller.autoscaling.enabled) }}
 apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
@@ -165,8 +163,8 @@ spec:
             - name: KAFKA_KRAFT_CLUSTER_ID
               valueFrom:
                 secretKeyRef:
-                  name: {{ default (printf "%s-kraft-cluster-id" (include "common.names.fullname" .)) .Values.kraft.existingClusterIdSecret }}
-                  key: kraft-cluster-id
+                  name: {{ default (printf "%s-kraft" (include "common.names.fullname" .)) .Values.existingClusterIdSecret }}
+                  key: cluster-id
             {{- if and (include "kafka.saslEnabled" .) (or (regexFind "SCRAM" (upper .Values.sasl.enabledMechanisms)) (regexFind "SCRAM" (upper .Values.sasl.controllerMechanism)) (regexFind "SCRAM" (upper .Values.sasl.interBrokerMechanism))) }}
             - name: KAFKA_KRAFT_BOOTSTRAP_SCRAM_USERS
               value: "true"
@@ -497,4 +495,3 @@ spec:
         {{- end -}}
     {{- end }}
   {{- end }}
-{{- end }}

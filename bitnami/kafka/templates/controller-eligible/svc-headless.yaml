@@ -3,8 +3,6 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- $replicaCount := int .Values.controller.replicaCount }}
-{{- if and .Values.kraft.enabled (gt $replicaCount 0) }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -23,7 +21,7 @@ spec:
   clusterIP: None
   publishNotReadyAddresses: true
   ports:
-    {{- if or (not .Values.kraft.enabled) (not .Values.controller.controllerOnly) }}
+    {{- if not .Values.controller.controllerOnly }}
     - name: tcp-interbroker
       port: {{ .Values.service.ports.interbroker }}
       protocol: TCP
@@ -33,12 +31,10 @@ spec:
       protocol: TCP
       targetPort: client
     {{- end }}
-    {{- if .Values.kraft.enabled }}
     - name: tcp-controller
       protocol: TCP
       port: {{ .Values.service.ports.controller }}
       targetPort: controller
-    {{- end }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.controller.podLabels .Values.commonLabels ) "context" . ) }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: controller-eligible
@@ -50,4 +46,3 @@ spec:
   ipFamilies:
   {{- . | toYaml | nindent 2 }}
   {{- end }}
-{{- end }}

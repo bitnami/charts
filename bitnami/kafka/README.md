@@ -44,49 +44,20 @@ These commands deploy Kafka on the Kubernetes cluster in the default configurati
 
 ## Configuration and installation details
 
-### Resource requests and limits
-
-Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
-
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcesPreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
-
-### Prometheus metrics
-
-This chart can be integrated with Prometheus by setting `metrics.jmx.enabled` to `true`. This will deploy a sidecar container with [jmx_exporter](https://github.com/prometheus/jmx_exporter) in all pods and a `metrics` service, which can be configured under the `metrics.service` section. This `metrics` service will have the necessary annotations to be automatically scraped by Prometheus.
-
-#### Prometheus requirements
-
-It is necessary to have a working installation of Prometheus or Prometheus Operator for the integration to work. Install the [Bitnami Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/prometheus) or the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) to easily have a working Prometheus in your cluster.
-
-#### Integration with Prometheus Operator
-
-The chart can deploy `ServiceMonitor` objects for integration with Prometheus Operator installations. To do so, set the value `metrics.serviceMonitor.enabled=true`. Ensure that the Prometheus Operator `CustomResourceDefinitions` are installed in the cluster or it will fail with the following error:
-
-```text
-no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"
-```
-
-Install the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) for having the necessary CRDs and the Prometheus Operator.
-
-### [Rolling VS Immutable tags](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html)
-
-It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
-
-Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
 ### Listeners configuration
 
-This chart allows you to automatically configure Kafka with 3 listeners:
+This chart allows you to automatically configure Kafka with 4 listeners:
 
-- One for inter-broker communications.
-- A second one for communications with clients within the K8s cluster.
-- (optional) a third listener for communications with clients outside the K8s cluster. Check [this section](#accessing-kafka-brokers-from-outside-the-cluster) for more information.
+- One for controller communications.
+- A second one for inter-broker communications.
+- A third one for communications with clients within the K8s cluster.
+- (optional) a forth listener for communications with clients outside the K8s cluster. Check [this section](#accessing-kafka-brokers-from-outside-the-cluster) for more information.
 
 For more complex configurations, set the `listeners`, `advertisedListeners` and `listenerSecurityProtocolMap` parameters as needed.
 
 ### Enable security for Kafka
 
-You can configure different authentication protocols for each listener you configure in Kafka. For instance, you can use `sasl_tls` authentication for client communications, while using `tls` for inter-broker communications. This table shows the available protocols and the security they provide:
+You can configure different authentication protocols for each listener you configure in Kafka. For instance, you can use `sasl_tls` authentication for client communications, while using `tls` for controller and inter-broker communications. This table shows the available protocols and the security they provide:
 
 | Method    | Authentication               | Encryption via TLS |
 |-----------|------------------------------|--------------------|
@@ -96,7 +67,7 @@ You can configure different authentication protocols for each listener you confi
 | sasl      | Yes (via SASL)               | No                 |
 | sasl_tls  | Yes (via SASL)               | Yes                |
 
-Configure the authentication protocols for client and inter-broker communications by setting the *auth.clientProtocol* and *auth.interBrokerProtocol* parameters to the desired ones, respectively.
+Configure the authentication protocols for client, controller and inter-broker communications by setting the `listeners.client.protocol`, `listeners.controller.protocol` and `listeners.interbroker.protocol` parameters to the desired ones, respectively.
 
 If you enabled SASL authentication on any listener, you can set the SASL credentials using the parameters below:
 
@@ -104,11 +75,11 @@ If you enabled SASL authentication on any listener, you can set the SASL credent
 - `sasl.interbroker.user`/`sasl.interbroker.password`:  when enabling SASL authentication for inter-broker communications.
 - `sasl.controller.user`/`sasl.controller.password`:  when enabling SASL authentication for controller communications.
 
-In order to configure TLS authentication/encryption, you **can** create a secret per Kafka broker you have in the cluster containing the Java Key Stores (JKS) files: the truststore (`kafka.truststore.jks`) and the keystore (`kafka.keystore.jks`). Then, you need pass the secret names with the `tls.existingSecret` parameter when deploying the chart.
+In order to configure TLS authentication/encryption, you **can** create a secret per Kafka node you have in the cluster containing the Java Key Stores (JKS) files: the truststore (`kafka.truststore.jks`) and the keystore (`kafka.keystore.jks`). Then, you need pass the secret names with the `tls.existingSecret` parameter when deploying the chart.
 
-> **Note**: If the JKS files are password protected (recommended), you will need to provide the password to get access to the keystores. To do so, use the `tls.password` parameter to provide your password.
+> **Note**: If the JKS files are password protected (recommended), you will need to provide the password to get access to the keystores. To do so, use the `tls.keystorePassword` and `tls.truststorePassword` parameters to provide your passwords.
 
-For instance, to configure TLS authentication on a Kafka cluster with 2 Kafka brokers use the commands below to create the secrets:
+For instance, to configure TLS authentication on a Kafka cluster with 2 Kafka nodes use the commands below to create the secrets:
 
 ```console
 kubectl create secret generic kafka-jks-0 --from-file=kafka.truststore.jks=./kafka.truststore.jks --from-file=kafka.keystore.jks=./kafka-0.keystore.jks
@@ -117,47 +88,31 @@ kubectl create secret generic kafka-jks-1 --from-file=kafka.truststore.jks=./kaf
 
 > **Note**: the command above assumes you already created the truststore and keystores files. This [script](https://raw.githubusercontent.com/confluentinc/confluent-platform-security-tools/master/kafka-generate-ssl.sh) can help you with the JKS files generation.
 
-If, for some reason (like using Cert-Manager) you can not use the default JKS secret scheme, you can use the additional parameters:
+If, for some reason (like using CertManager) you can not use the default JKS secret scheme, you can use the additional parameters:
 
-- `tls.jksTruststoreSecret` to define additional secret, where the `kafka.truststore.jks` is being kept. The truststore password **must** be the same as in `tls.password`
-- `tls.jksTruststore` to overwrite the default value of the truststore key (`kafka.truststore.jks`).
+- `tls.jksTruststoreSecret` to define additional secret, where the `kafka.truststore.jks` is being kept. The truststore password **must** be the same as in `tls.truststorePassword`
+- `tls.jksTruststoreKey` to overwrite the default value of the truststore key (`kafka.truststore.jks`).
 
-> **Note**: If you are using cert-manager, particularly when an ACME issuer is used, the `ca.crt` field is not put in the `Secret` that cert-manager creates. To handle this, the `tls.pemChainIncluded` property can be set to `true` and the initContainer created by this Chart will attempt to extract the intermediate certs from the `tls.crt` field of the secret (which is a PEM chain)
-> **Note**: The truststore/keystore from above **must** be protected with the same password as in `tls.password`
+> **Note**: If you are using CertManager, particularly when an ACME issuer is used, the `ca.crt` field is not put in the `Secret` that CertManager creates. To handle this, the `tls.pemChainIncluded` property can be set to `true` and the initContainer created by this Chart will attempt to extract the intermediate certs from the `tls.crt` field of the secret (which is a PEM chain)
+> **Note**: The truststore/keystore from above **must** be protected with the same passwords set in the `tls.keystorePassword` and `tls.truststorePassword` parameters.
 
 You can deploy the chart with authentication using the following parameters:
 
 ```console
 replicaCount=2
-listeners.client.client.protocol=SASL
-listeners.client.interbroker.protocol=TLS
-tls.existingSecret=kafka-jks
-tls.password=jksPassword
-sasl.client.users[0]=brokerUser
-sasl.client.passwords[0]=brokerPassword
-
-```
-
-You can deploy the chart with AclAuthorizer using the following parameters:
-
-```console
-replicaCount=2
 listeners.client.protocol=SASL
-listeners.interbroker.protocol=SASL_TLS
-tls.existingSecret=kafka-jks-0
-tls.password=jksPassword
+listeners.interbroker.protocol=TLS
+tls.existingSecret=kafka-jks
+tls.keystorePassword=jksPassword
+tls.truststorePassword=jksPassword
 sasl.client.users[0]=brokerUser
 sasl.client.passwords[0]=brokerPassword
-authorizerClassName=kafka.security.authorizer.AclAuthorizer
-allowEveryoneIfNoAclFound=false
-superUsers=User:admin
-```
 
-If you are using Kafka ACLs, you might encounter in kafka-authorizer.log the following event: `[...] Principal = User:ANONYMOUS is Allowed Operation [...]`.
+```
 
 By setting the following parameter: `listeners.client.protocol=SSL` and `listener.client.sslClientAuth=required`, Kafka will require the clients to authenticate to Kafka brokers via certificate.
 
-As result, we will be able to see in kafka-authorizer.log the events specific Subject: `[...] Principal = User:CN=kafka,OU=...,O=...,L=...,C=..,ST=... is [...]`.
+As result, we will be able to see in `kafka-authorizer.log` the events specific Subject: `[...] Principal = User:CN=kafka,OU=...,O=...,L=...,C=..,ST=... is [...]`.
 
 ### Update credentials
 
@@ -286,13 +241,41 @@ externalAccess:
         external-dns.alpha.kubernetes.io/hostname: "{{ .targetPod }}.example.com"
 ```
 
+### Resource requests and limits
+
+Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` values (check parameters table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
+
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcesPreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+
+### Prometheus metrics
+
 ### Enable metrics
 
-The chart can optionally start the JMX exporter to expose JMX metrics. By default, it uses port `5556`. To enable it, set the `metrics.jmx.enabled` parameter to `true`.
+This chart can be integrated with Prometheus by setting `metrics.jmx.enabled` to `true`. This will deploy a sidecar container with [jmx_exporter](https://github.com/prometheus/jmx_exporter) in all pods and a `metrics` service, which can be configured under the `metrics.jmx.service` section. This service will have the necessary annotations to be automatically scraped by Prometheus.
+
+#### Prometheus requirements
+
+It is necessary to have a working installation of Prometheus or Prometheus Operator for the integration to work. Install the [Bitnami Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/prometheus) or the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) to easily have a working Prometheus in your cluster.
+
+#### Integration with Prometheus Operator
+
+The chart can deploy `ServiceMonitor` objects for integration with Prometheus Operator installations. To do so, set the value `metrics.serviceMonitor.enabled=true`. Ensure that the Prometheus Operator `CustomResourceDefinitions` are installed in the cluster or it will fail with the following error:
+
+```text
+no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"
+```
+
+Install the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) for having the necessary CRDs and the Prometheus Operator.
+
+### [Rolling VS Immutable tags](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
 ### Sidecars
 
-If you have a need for additional containers to run within the same pod as Kafka (e.g. an additional metrics or logging exporter), you can do so via the `sidecars` config parameter. Simply define your container according to the Kubernetes container spec.
+If you have a need for additional containers to run within the same pod as Kafka (e.g. an additional metrics or logging exporter), you can do so via the `sidecars` parameters. Simply define your container according to the Kubernetes container spec.
 
 ```yaml
 sidecars:
@@ -315,8 +298,6 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 There are cases where you may want to deploy extra objects, such as Kafka Connect. For covering this case, the chart allows adding the full specification of other objects using the `extraDeploy` parameter. The following example would create a deployment including a Kafka Connect deployment so you can connect Kafka with MongoDB&reg;:
 
 ```yaml
-## Extra objects to deploy (value evaluated as a template)
-##
 extraDeploy:
   - |
     apiVersion: apps/v1
@@ -390,22 +371,21 @@ RUN mkdir -p /opt/bitnami/kafka/plugins && \
 CMD /opt/bitnami/kafka/bin/connect-standalone.sh /opt/bitnami/kafka/config/connect-standalone.properties /opt/bitnami/kafka/config/mongo.properties
 ```
 
-### Backup and restore
-
-To back up and restore Helm chart deployments on Kubernetes, you need to back up the persistent volumes from the source deployment and attach them to a new deployment using [Velero](https://velero.io/), a Kubernetes backup/restore tool. Find the instructions for using Velero in [this guide](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-backup-restore-deployments-velero-index.html).
-
-## Persistence
+### Persistence
 
 The [Bitnami Kafka](https://github.com/bitnami/containers/tree/main/bitnami/kafka) image stores the Kafka data at the `/bitnami/kafka` path of the container. Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
 
-### Adjust permissions of persistent volume mountpoint
+#### Adjust permissions of persistent volume mountpoint
 
 As the image run as non-root by default, it is necessary to adjust the ownership of the persistent volume so that the container can write data into it.
 
-By default, the chart is configured to use Kubernetes Security Context to automatically change the ownership of the volume. However, this feature does not work in all Kubernetes distributions.
-As an alternative, this chart supports using an initContainer to change the ownership of the volume before mounting it in the final destination.
+By default, the chart is configured to use Kubernetes Security Context to automatically change the ownership of the volume. However, this feature does not work in all Kubernetes distributions. As an alternative, this chart supports using an initContainer to change the ownership of the volume before mounting it in the final destination.
 
 You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
+
+#### Backup and restore
+
+To back up and restore Helm chart deployments on Kubernetes, you need to back up the persistent volumes from the source deployment and attach them to a new deployment using [Velero](https://velero.io/), a Kubernetes backup/restore tool. Find the instructions for using Velero in [this guide](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-backup-restore-deployments-velero-index.html).
 
 ## Parameters
 
@@ -416,7 +396,6 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 | `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`    |
 | `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`    |
 | `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`    |
-| `global.storageClass`                                 | DEPRECATED: use global.defaultStorageClass instead                                                                                                                                                                                                                                                                                                                  | `""`    |
 | `global.security.allowInsecureImages`                 | Allows skipping image verification                                                                                                                                                                                                                                                                                                                                  | `false` |
 | `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto`  |
 
@@ -428,16 +407,17 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 | `apiVersions`             | Override Kubernetes API versions reported by .Capabilities                              | `[]`            |
 | `nameOverride`            | String to partially override common.names.fullname                                      | `""`            |
 | `fullnameOverride`        | String to fully override common.names.fullname                                          | `""`            |
+| `namespaceOverride`       | String to fully override common.names.namespace                                         | `""`            |
 | `clusterDomain`           | Default Kubernetes cluster domain                                                       | `cluster.local` |
 | `commonLabels`            | Labels to add to all deployed objects                                                   | `{}`            |
 | `commonAnnotations`       | Annotations to add to all deployed objects                                              | `{}`            |
 | `extraDeploy`             | Array of extra objects to deploy with the release                                       | `[]`            |
-| `serviceBindings.enabled` | Create secret for service binding (Experimental)                                        | `false`         |
 | `diagnosticMode.enabled`  | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
-| `diagnosticMode.command`  | Command to override all containers in the statefulset                                   | `["sleep"]`     |
-| `diagnosticMode.args`     | Args to override all containers in the statefulset                                      | `["infinity"]`  |
+| `diagnosticMode.command`  | Command to override all containers in the chart release                                 | `["sleep"]`     |
+| `diagnosticMode.args`     | Args to override all containers in the chart release                                    | `["infinity"]`  |
+| `serviceBindings.enabled` | Create secret for service binding (Experimental)                                        | `false`         |
 
-### Kafka parameters
+### Kafka common parameters
 
 | Name                                  | Description                                                                                                                                                                                                | Value                                                 |
 | ------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
@@ -447,15 +427,16 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 | `image.pullPolicy`                    | Kafka image pull policy                                                                                                                                                                                    | `IfNotPresent`                                        |
 | `image.pullSecrets`                   | Specify docker-registry secret names as an array                                                                                                                                                           | `[]`                                                  |
 | `image.debug`                         | Specify if debug values should be set                                                                                                                                                                      | `false`                                               |
-| `extraInit`                           | Additional content for the kafka init script, rendered as a template.                                                                                                                                      | `""`                                                  |
-| `config`                              | Configuration file for Kafka, rendered as a template. Auto-generated based on chart values when not specified.                                                                                             | `""`                                                  |
-| `existingConfigmap`                   | ConfigMap with Kafka Configuration                                                                                                                                                                         | `""`                                                  |
-| `extraConfig`                         | Additional configuration to be appended at the end of the generated Kafka configuration file.                                                                                                              | `""`                                                  |
-| `extraConfigYaml`                     | Additional configuration in yaml format to be appended at the end of the generated Kafka configuration file.                                                                                               | `{}`                                                  |
-| `secretConfig`                        | Additional configuration to be appended at the end of the generated Kafka configuration file.                                                                                                              | `""`                                                  |
-| `existingSecretConfig`                | Secret with additonal configuration that will be appended to the end of the generated Kafka configuration file                                                                                             | `""`                                                  |
+| `clusterId`                           | Kafka Kraft cluster ID (ignored if existingClusterIdSecret is set). A random cluster ID will be generated the 1st time Kraft is initialized if not set.                                                    | `""`                                                  |
+| `existingClusterIdSecret`             | Name of the secret containing the cluster ID for the Kafka KRaft cluster                                                                                                                                   | `""`                                                  |
+| `config`                              | Specify content for Kafka configuration (auto-generated based on other parameters otherwise)                                                                                                               | `{}`                                                  |
+| `overrideConfiguration`               | Kafka common configuration override. Values defined here takes precedence over the ones defined at `config`                                                                                                | `{}`                                                  |
+| `existingConfigmap`                   | Name of an existing ConfigMap with the Kafka configuration                                                                                                                                                 | `""`                                                  |
+| `secretConfig`                        | Additional configuration to be appended at the end of the generated Kafka configuration (store in a secret)                                                                                                | `""`                                                  |
+| `existingSecretConfig`                | Secret with additional configuration that will be appended to the end of the generated Kafka configuration                                                                                                 | `""`                                                  |
 | `log4j`                               | An optional log4j.properties file to overwrite the default of the Kafka brokers                                                                                                                            | `""`                                                  |
 | `existingLog4jConfigMap`              | The name of an existing ConfigMap containing a log4j.properties file                                                                                                                                       | `""`                                                  |
+| `extraInit`                           | Additional content for the kafka init script, rendered as a template.                                                                                                                                      | `""`                                                  |
 | `heapOpts`                            | Kafka Java Heap configuration                                                                                                                                                                              | `-XX:InitialRAMPercentage=75 -XX:MaxRAMPercentage=75` |
 | `brokerRackAssignment`                | Set Broker Assignment for multi tenant environment Allowed values: `aws-az`, `azure`                                                                                                                       | `""`                                                  |
 | `brokerRackAssignmentApiVersion`      | Set Broker Assignment API version when brokerRackAssignment set to : `azure`                                                                                                                               | `2023-11-15`                                          |
@@ -541,13 +522,13 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 | -------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
 | `controller.replicaCount`                                      | Number of Kafka controller-eligible nodes                                                                                                                                                                                               | `3`                   |
 | `controller.controllerOnly`                                    | If set to true, controller nodes will be deployed as dedicated controllers, instead of controller+broker processes.                                                                                                                     | `false`               |
+| `controller.quorumVoters`                                      | Override the Kafka controller quorum voters of the Kafka Kraft cluster. If not set, it will be automatically configured to use all controller-eligible nodes.                                                                           | `""`                  |
 | `controller.minId`                                             | Minimal node.id values for controller-eligible nodes. Do not change after first initialization.                                                                                                                                         | `0`                   |
-| `controller.config`                                            | Configuration file for Kafka controller-eligible nodes, rendered as a template. Auto-generated based on chart values when not specified.                                                                                                | `""`                  |
-| `controller.existingConfigmap`                                 | ConfigMap with Kafka Configuration for controller-eligible nodes.                                                                                                                                                                       | `""`                  |
-| `controller.extraConfig`                                       | Additional configuration to be appended at the end of the generated Kafka controller-eligible nodes configuration file.                                                                                                                 | `""`                  |
-| `controller.extraConfigYaml`                                   | Additional configuration in yaml format to be appended at the end of the generated Kafka controller-eligible nodes configuration file.                                                                                                  | `{}`                  |
-| `controller.secretConfig`                                      | Additional configuration to be appended at the end of the generated Kafka controller-eligible nodes configuration file.                                                                                                                 | `""`                  |
-| `controller.existingSecretConfig`                              | Secret with additonal configuration that will be appended to the end of the generated Kafka controller-eligible nodes configuration file                                                                                                | `""`                  |
+| `controller.config`                                            | Specify content for Kafka configuration for Kafka controller-eligible nodes (auto-generated based on other parameters otherwise)                                                                                                        | `{}`                  |
+| `controller.overrideConfiguration`                             | Kafka configuration override for Kafka controller-eligible nodes. Values defined here takes precedence over the ones defined at `controller.config`                                                                                     | `{}`                  |
+| `controller.existingConfigmap`                                 | Name of an existing ConfigMap with the Kafka configuration for Kafka controller-eligible nodes                                                                                                                                          | `""`                  |
+| `controller.secretConfig`                                      | Additional configuration to be appended at the end of the generated Kafka configuration for Kafka controller-eligible nodes (store in a secret)                                                                                         | `""`                  |
+| `controller.existingSecretConfig`                              | Secret with additional configuration that will be appended to the end of the generated Kafka configuration for Kafka controller-eligible nodes                                                                                          | `""`                  |
 | `controller.heapOpts`                                          | Kafka Java Heap size for controller-eligible nodes                                                                                                                                                                                      | `-Xmx1024m -Xms1024m` |
 | `controller.command`                                           | Override Kafka container command                                                                                                                                                                                                        | `[]`                  |
 | `controller.args`                                              | Override Kafka container arguments                                                                                                                                                                                                      | `[]`                  |
@@ -666,12 +647,11 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 | ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
 | `broker.replicaCount`                                      | Number of Kafka broker-only nodes                                                                                                                                                                                               | `0`                   |
 | `broker.minId`                                             | Minimal node.id values for broker-only nodes. Do not change after first initialization.                                                                                                                                         | `100`                 |
-| `broker.config`                                            | Configuration file for Kafka broker-only nodes, rendered as a template. Auto-generated based on chart values when not specified.                                                                                                | `""`                  |
-| `broker.existingConfigmap`                                 | ConfigMap with Kafka Configuration for broker-only nodes.                                                                                                                                                                       | `""`                  |
-| `broker.extraConfig`                                       | Additional configuration to be appended at the end of the generated Kafka broker-only nodes configuration file.                                                                                                                 | `""`                  |
-| `broker.extraConfigYaml`                                   | Additional configuration in yaml format to be appended at the end of the generated Kafka broker-only nodes configuration file.                                                                                                  | `{}`                  |
-| `broker.secretConfig`                                      | Additional configuration to be appended at the end of the generated Kafka broker-only nodes configuration file.                                                                                                                 | `""`                  |
-| `broker.existingSecretConfig`                              | Secret with additonal configuration that will be appended to the end of the generated Kafka broker-only nodes configuration file                                                                                                | `""`                  |
+| `broker.config`                                            | Specify content for Kafka configuration for Kafka broker-only nodes (auto-generated based on other parameters otherwise)                                                                                                        | `{}`                  |
+| `broker.overrideConfiguration`                             | Kafka configuration override for Kafka broker-only nodes. Values defined here takes precedence over the ones defined at `broker.config`                                                                                         | `{}`                  |
+| `broker.existingConfigmap`                                 | Name of an existing ConfigMap with the Kafka configuration for Kafka broker-only nodes                                                                                                                                          | `""`                  |
+| `broker.secretConfig`                                      | Additional configuration to be appended at the end of the generated Kafka configuration for Kafka broker-only nodes (store in a secret)                                                                                         | `""`                  |
+| `broker.existingSecretConfig`                              | Secret with additional configuration that will be appended to the end of the generated Kafka configuration for Kafka broker-only nodes                                                                                          | `""`                  |
 | `broker.heapOpts`                                          | Kafka Java Heap size for broker-only nodes                                                                                                                                                                                      | `-Xmx1024m -Xms1024m` |
 | `broker.command`                                           | Override Kafka container command                                                                                                                                                                                                | `[]`                  |
 | `broker.args`                                              | Override Kafka container arguments                                                                                                                                                                                              | `[]`                  |
@@ -789,7 +769,7 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 | -------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
 | `service.type`                                                                   | Kubernetes Service type                                                                                                                                                                                                                                                     | `ClusterIP`               |
 | `service.ports.client`                                                           | Kafka svc port for client connections                                                                                                                                                                                                                                       | `9092`                    |
-| `service.ports.controller`                                                       | Kafka svc port for controller connections. It is used if "kraft.enabled: true"                                                                                                                                                                                              | `9093`                    |
+| `service.ports.controller`                                                       | Kafka svc port for controller connections                                                                                                                                                                                                                                   | `9093`                    |
 | `service.ports.interbroker`                                                      | Kafka svc port for inter-broker connections                                                                                                                                                                                                                                 | `9094`                    |
 | `service.ports.external`                                                         | Kafka svc port for external connections                                                                                                                                                                                                                                     | `9095`                    |
 | `service.extraPorts`                                                             | Extra ports to expose in the Kafka service (normally used with the `sidecar` value)                                                                                                                                                                                         | `[]`                      |
@@ -1026,24 +1006,15 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 | `provisioning.waitForKafka`                                      | If true use an init container to wait until kafka is ready before starting provisioning                                                                                                                                                     | `true`                |
 | `provisioning.useHelmHooks`                                      | Flag to indicate usage of helm hooks                                                                                                                                                                                                        | `true`                |
 
-### KRaft chart parameters
-
-| Name                            | Description                                                                                                                                                                            | Value  |
-| ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| `kraft.enabled`                 | Switch to enable or disable the KRaft mode for Kafka                                                                                                                                   | `true` |
-| `kraft.existingClusterIdSecret` | Name of the secret containing the cluster ID for the Kafka KRaft cluster. This is incompatible with the clusterId parameter. If both are set, the existingClusterIdSecret will be used | `""`   |
-| `kraft.clusterId`               | Kafka Kraft cluster ID. If not set, a random cluster ID will be generated the first time Kraft is initialized.                                                                         | `""`   |
-| `kraft.controllerQuorumVoters`  | Override the Kafka controller quorum voters of the Kafka Kraft cluster. If not set, it will be automatically configured to use all controller-elegible nodes.                          | `""`   |
-
 ```console
 helm install my-release \
-  --set replicaCount=3 \
+  --set controller.replicaCount=3 \
   oci://REGISTRY_NAME/REPOSITORY_NAME/kafka
 ```
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
-The above command deploys Kafka with 3 brokers (replicas).
+The above command deploys Kafka with 3 Kafka controller-eligible nodes.
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
@@ -1059,6 +1030,14 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/kafka
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 32.0.0
+
+This major release bumps Kafka major version to `4.x` series. This version implies a significant milestone given now Kafka operates operate entirely without Apache ZooKeeper, running in KRaft mode by default. As a consequence, **ZooKeeper is no longer a chart dependency and every related parameter has been removed.**. Also, some KRaft-related parameters have been renamed or removed:
+
+- `kraft.enabled` has been removed. Kafka now operates in KRaft mode by default.
+- `kraft.controllerQuorumVoters` has been renamed to `controller.quorumVoters`.
+- `kraft.clusterId` and `kraft.existingClusterIdSecret` have been renamed to `clusterId` and `existingClusterIdSecret`, respectively.
 
 ### To 31.1.0
 

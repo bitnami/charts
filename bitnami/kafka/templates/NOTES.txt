@@ -164,11 +164,9 @@ To create a pod that you can use as a Kafka client run the following commands:
             --from-beginning
 
 {{- if .Values.externalAccess.enabled }}
-{{- if or (not .Values.kraft.enabled) (not .Values.controller.controllerOnly) .Values.externalAccess.controller.forceExpose }}
+{{- if or (not .Values.controller.controllerOnly) .Values.externalAccess.controller.forceExpose }}
 
-{{- if not .Values.kraft.enabled }}
-To connect to your Kafka nodes from outside the cluster, follow these instructions:
-{{- else if and .Values.controller.controllerOnly .Values.externalAccess.controller.forceExpose }}
+{{- if and .Values.controller.controllerOnly .Values.externalAccess.controller.forceExpose }}
 To connect to your Kafka controller-only nodes from outside the cluster, follow these instructions:
 {{- else }}
 To connect to your Kafka controller+broker nodes from outside the cluster, follow these instructions:

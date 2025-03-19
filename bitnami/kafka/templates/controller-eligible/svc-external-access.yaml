@@ -3,7 +3,7 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if and .Values.kraft.enabled .Values.externalAccess.enabled }}
+{{- if .Values.externalAccess.enabled }}
 {{- $fullname := include "common.names.fullname" . }}
 {{- if or .Values.externalAccess.controller.forceExpose (not .Values.controller.controllerOnly)}}
 {{- $replicaCount := .Values.controller.replicaCount | int }}
