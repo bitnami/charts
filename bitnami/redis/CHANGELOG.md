@@ -1,8 +1,12 @@
 # Changelog
 
-## 20.11.3 (2025-03-10)
+## 20.11.4 (2025-03-19)
 
-* [bitnami/redis] fix 32214 - REDIS_PASSWORD_FILE uses wrong filename from volume ([#32215](https://github.com/bitnami/charts/pull/32215))
+* Fix svcbind secret password ([#32515](https://github.com/bitnami/charts/pull/32515))
+
+## <small>20.11.3 (2025-03-10)</small>
+
+* [bitnami/redis] fix 32214 - REDIS_PASSWORD_FILE uses wrong filename from volume (#32215) ([5a31fa6](https://github.com/bitnami/charts/commit/5a31fa6eabad974edbc281782505e3bcb07efb98)), closes [#32215](https://github.com/bitnami/charts/issues/32215)
 
 ## <small>20.11.2 (2025-03-05)</small>
 
