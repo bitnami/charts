@@ -1,0 +1,287 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if not .Values.existingConfigMap }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "common.names.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: gitlab-runner
+    app.kubernetes.io/component: gitlab-runner
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+data:
+  # Taken from the upstream chart with miminal value adaptations
+  # https://gitlab.com/gitlab-org/charts/gitlab-runner/-/blob/main/templates/configmap.yaml?ref_type=heads
+  entrypoint: |
+    #!/bin/bash
+    set -e
+
+    export CONFIG_PATH_FOR_INIT="{{ ternary "/etc/gitlab-runner/" "/home/gitlab-runner/.gitlab-runner/" (eq 0 (.Values.containerSecurityContext.runAsUser | int64)) }}"
+    mkdir -p ${CONFIG_PATH_FOR_INIT}
+    cp /configmaps/config.toml ${CONFIG_PATH_FOR_INIT}
+
+    {{- if .Values.sessionServer.enabled }}
+    quit() {
+      kill -TERM "$child"
+    }
+
+    trap quit QUIT TERM
+
+    bash /configmaps/set-session-server-address &
+    child=$!
+    wait "$child"
+
+    bash /configmaps/set-session-server-port &
+    child=$!
+    wait "$child"
+    {{- end }}
+
+    # Set up environment variables for cache
+    if [[ -f /secrets/accesskey && -f /secrets/secretkey ]]; then
+      export CACHE_S3_ACCESS_KEY=$(cat /secrets/accesskey)
+      export CACHE_S3_SECRET_KEY=$(cat /secrets/secretkey)
+    fi
+
+    if [[ -f /secrets/gcs-applicaton-credentials-file ]]; then
+      export GOOGLE_APPLICATION_CREDENTIALS="/secrets/gcs-applicaton-credentials-file"
+    elif [[ -f /secrets/gcs-application-credentials-file ]]; then
+      export GOOGLE_APPLICATION_CREDENTIALS="/secrets/gcs-application-credentials-file"
+    else
+      if [[ -f /secrets/gcs-access-id && -f /secrets/gcs-private-key ]]; then
+        export CACHE_GCS_ACCESS_ID=$(cat /secrets/gcs-access-id)
+        # echo -e used to make private key multiline (in google json auth key private key is oneline with \n)
+        export CACHE_GCS_PRIVATE_KEY=$(echo -e $(cat /secrets/gcs-private-key))
+      fi
+    fi
+
+    if [[ -f /secrets/azure-account-name && -f /secrets/azure-account-key ]]; then
+      export CACHE_AZURE_ACCOUNT_NAME=$(cat /secrets/azure-account-name)
+      export CACHE_AZURE_ACCOUNT_KEY=$(cat /secrets/azure-account-key)
+    fi
+
+    if [[ -f /secrets/runner-registration-token ]]; then
+      export REGISTRATION_TOKEN=$(cat /secrets/runner-registration-token)
+    fi
+
+    if [[ -f /secrets/runner-token ]]; then
+      export CI_SERVER_TOKEN=$(cat /secrets/runner-token)
+    fi
+
+    # Register the runner
+    if ! sh /configmaps/register-the-runner; then
+      exit 1
+    fi
+
+    # Run pre-entrypoint-script
+    if ! bash /configmaps/pre-entrypoint-script; then
+      exit 1
+    fi
+
+    # Start the runner
+    exec /entrypoint run \
+    {{- if and .Values.runners.executor (ne "shell" ((.Values.runners.executor) | toString)) }}
+      --user=gitlab-runner \
+    {{- end }}
+      --working-directory=/home/gitlab-runner
+
+  config.toml: |
+    shutdown_timeout = {{ .Values.shutdownTimeout }}
+    concurrent = {{ .Values.concurrent }}
+    check_interval = {{ .Values.checkInterval }}
+    log_level = {{ default "info" .Values.logLevel | quote }}
+    {{- if .Values.logFormat }}
+    log_format = {{ .Values.logFormat | quote }}
+    {{- end }}
+    {{- if .Values.metrics.enabled }}
+    listen_address = ":{{ .Values.containerPorts.metrics }}"
+    {{- end }}
+    {{- if .Values.sentryDsn }}
+    sentry_dsn = "{{ .Values.sentryDsn }}"
+    {{- end }}
+    {{- if .Values.connectionMaxAge }}
+    connection_max_age = "{{ .Values.connectionMaxAge }}"
+    {{- end }}
+    {{- if .Values.sessionServer.enabled }}
+    [session_server]
+      session_timeout = {{ .Values.sessionServer.sessionTimeout }}
+      listen_address = "0.0.0.0:{{ .Values.containerPorts.sessionServer }}"
+      advertise_address = "SESSION_SERVER_ADDRESS:SESSION_SERVER_PORT"
+    {{- end }}
+
+  {{ if .Values.runners.config }}
+  config.template.toml: |
+    {{- include "common.tplvalues.render" (dict "value" .Values.runners.config "context" $) | nindent 4 }}
+  {{ end }}
+
+  register-the-runner: |
+    #!/bin/sh
+    signal_handler() {
+      if [ ! -d "/proc/$register_pid" ]; then
+        wait $register_pid
+      fi
+      exit
+    }
+    trap 'signal_handler' QUIT INT
+
+    MAX_REGISTER_ATTEMPTS=30
+
+    # Reset/unset the not needed flags when an authentication token
+    RUN_UNTAGGED="{{ ternary "--run-untagged=true" "" .Values.runners.runUntagged }}"
+    ACCESS_LEVEL="{{ ternary "--access-level=ref_protected" "" .Values.runners.protected }}"
+
+    if [ -n "$CI_SERVER_TOKEN" ] && [ "${CI_SERVER_TOKEN#glrt-}" != "$CI_SERVER_TOKEN" ]; then
+      RUN_UNTAGGED=""
+      ACCESS_LEVEL=""
+      unset REGISTER_LOCKED
+      unset RUNNER_TAG_LIST
+    fi
+
+    for i in $(seq 1 "${MAX_REGISTER_ATTEMPTS}"); do
+      echo "Registration attempt ${i} of ${MAX_REGISTER_ATTEMPTS}"
+      /entrypoint register \
+        {{- if .Values.runners.name }}
+        --name={{ .Values.runners.name | quote -}} \
+        {{- end }}
+        {{- if .Values.runners.maximumTimeout }}
+        --maximum-timeout={{ .Values.runners.maximumTimeout | quote -}} \
+        {{- end }}
+        ${RUN_UNTAGGED} \
+        ${ACCESS_LEVEL} \
+        {{- if .Values.runners.config }}
+        --template-config /configmaps/config.template.toml \
+        {{- else if .Values.runners.configPath }}
+        --template-config {{ .Values.runners.configPath }} \
+        {{- end }}
+        --non-interactive &
+
+      register_pid=$!
+      wait $register_pid
+      retval=$?
+
+      if [ ${retval} = 0 ]; then
+        break
+      elif [ ${i} = ${MAX_REGISTER_ATTEMPTS} ]; then
+        exit 1
+      fi
+
+      sleep 5
+    done
+
+  check-live: |
+    #!/bin/bash
+    set -eou pipefail
+
+    # default timeout is 3 seconds, can be overriden
+    VERIFY_TIMEOUT=${1:-${VERIFY_TIMEOUT:-3}}
+
+    if ! /usr/bin/pgrep -f ".*register-the-runner"  > /dev/null && ! /usr/bin/pgrep -f "gitlab.*runner"  > /dev/null ; then
+      exit 1
+    fi
+
+    status=0
+    # empty --url= helps `gitlab-runner verify` select all configured runners (otherwise filters for $CI_SERVER_URL)
+    verify_output=$(timeout "${VERIFY_TIMEOUT}" gitlab-runner verify --url= 2>&1) || status=$?
+
+    # timeout exit code is 143 with busybox, and 124 with coreutils
+    if (( status == 143 )) || (( status == 124 )) ; then
+      echo "'gitlab-runner verify' terminated by timeout, not a conclusive failure" >&2
+      exit 0
+    elif (( status > 0 )) ; then
+      exit ${status}
+    fi
+
+    grep -qE "is (alive|valid)" <<<"${verify_output}"
+
+  {{- if .Values.sessionServer.enabled }}
+  set-session-server-address: |
+    #!/bin/bash
+
+    if [[ -n "${SESSION_SERVER_ADDRESS}" ]]; then
+      sed -i -e "s/SESSION_SERVER_ADDRESS/$SESSION_SERVER_ADDRESS/g" ${CONFIG_PATH_FOR_INIT}/config.toml
+    else
+      APISERVER=https://${KUBERNETES_SERVICE_HOST:-kubernetes.default.svc}:${KUBERNETES_SERVICE_PORT:-443} \
+        && SERVICEACCOUNT=/var/run/secrets/kubernetes.io/serviceaccount \
+        && NAMESPACE=$(cat ${SERVICEACCOUNT}/namespace) \
+        && TOKEN=$(cat ${SERVICEACCOUNT}/token) \
+        && CACERT=${SERVICEACCOUNT}/ca.crt \
+        && header="Authorization: Bearer ${TOKEN}"
+
+      SERVICEURL=${APISERVER}/api/v1/namespaces/${NAMESPACE}/services/{{ include "gitlab-runner.session-server.fullname" . }}
+
+      has_address=false
+      while [ "${has_address}" = false ]; do
+        SERVICEIP=$(curl —-silent \
+          --cacert ${CACERT} \
+          --header "${header}" \
+          -X GET ${SERVICEURL} 2>/dev/null \
+          | grep '"ip":' | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}' | head -1)
+
+        # for aws, the hostname is available but not the external IP
+        SERVICEHOSTNAME=$(curl —-silent \
+          --cacert ${CACERT} \
+          --header "${header}" \
+          -X GET ${SERVICEURL} 2>/dev/null \
+          | grep '"hostname":' | cut -d ":" -f2 | xargs)
+
+        ADDRESS="${SERVICEHOSTNAME:-$SERVICEIP}"
+
+        if [ -z "${ADDRESS}" ]
+        then
+          echo "Service LoadBalancer External Address not yet available"
+          has_address=false
+          sleep 5
+        else
+          has_address=true
+          sed -i -e "s/SESSION_SERVER_ADDRESS/$ADDRESS/g" ${CONFIG_PATH_FOR_INIT}/config.toml
+        fi
+      done
+    fi
+
+  set-session-server-port: |
+    #!/bin/bash
+
+    {{- if and (eq .Values.sessionServer.service.type "NodePort") (not .Values.sessionServer.service.nodePorts.sessionServer) }}
+    APISERVER=https://${KUBERNETES_SERVICE_HOST:-kubernetes.default.svc}:${KUBERNETES_SERVICE_PORT:-443} \
+      && SERVICEACCOUNT=/var/run/secrets/kubernetes.io/serviceaccount \
+      && NAMESPACE=$(cat ${SERVICEACCOUNT}/namespace) \
+      && TOKEN=$(cat ${SERVICEACCOUNT}/token) \
+      && CACERT=${SERVICEACCOUNT}/ca.crt \
+      && header="Authorization: Bearer ${TOKEN}"
+
+    SERVICEURL=${APISERVER}/api/v1/namespaces/${NAMESPACE}/services/{{ include "gitlab-runner.session-server.fullname" . }}
+
+    has_port=false
+    while [ "${has_port}" = false ]; do
+      SERVICEPORT=$(curl —-silent \
+          --cacert ${CACERT} \
+          --header "${header}" \
+          -X GET ${SERVICEURL} 2>/dev/null \
+          | grep '"nodePort":' | cut -d ":" -f2 | xargs)
+      if [ -z "${SERVICEPORT}" ]; then
+        echo "Service nodePort not yet available"
+        sleep 5
+      else
+        has_port=true
+        sed -i -e "s/SESSION_SERVER_PORT/${SERVICEPORT}/g" ${CONFIG_PATH_FOR_INIT}/config.toml
+      fi
+    done
+
+    {{- else if .Values.sessionServer.service.nodePorts.sessionServer }}
+    sed -i -e "s/SESSION_SERVER_PORT/{{ .Values.sessionServer.service.nodePorts.sessionServer }}/g" ${CONFIG_PATH_FOR_INIT}/config.toml
+
+    {{- else }}
+    sed -i -e "s/SESSION_SERVER_PORT/{{ .Values.sessionServer.service.ports.sessionServer }}/g" ${CONFIG_PATH_FOR_INIT}/config.toml
+
+    {{- end }}
+
+  {{ end }}
+
+  pre-entrypoint-script: |
+    {{ .Values.preEntrypointScript | default "" | indent 4 }}
+{{- end }}
