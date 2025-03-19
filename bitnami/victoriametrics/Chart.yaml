@@ -16,7 +16,7 @@ annotations:
     - name: victoriametrics-vminsert
       image: docker.io/bitnami/victoriametrics-vminsert:1.113.0-debian-12-r0
     - name: victoriametrics-vmselect
-      image: docker.io/bitnami/victoriametrics-vmselect:1.113.0-debian-12-r0
+      image: docker.io/bitnami/victoriametrics-vmselect:1.113.0-debian-12-r1
     - name: victoriametrics-vmstorage
       image: docker.io/bitnami/victoriametrics-vmstorage:1.113.0-debian-12-r0
 apiVersion: v2
@@ -39,4 +39,4 @@ maintainers:
 name: victoriametrics
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/victoriametrics
-version: 0.1.1
+version: 0.1.2
