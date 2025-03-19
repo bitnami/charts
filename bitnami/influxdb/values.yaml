@@ -255,6 +255,8 @@ influxdb:
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
+   ## @param influxdb.priorityClassName InfluxDB&trade; statefulset/deployment revision history limit
+  revisionHistoryLimit: 10
   ## @param influxdb.updateStrategy.type InfluxDB&trade; statefulset/deployment strategy type
   ## Statefulset ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ## Deployment ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
