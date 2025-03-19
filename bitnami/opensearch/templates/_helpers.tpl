@@ -188,7 +188,7 @@ Create a default master service name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
 {{- define "opensearch.master.servicename" -}}
-{{- $name := coalesce .Values.master.service.headless.nameOverride .Values.master.servicenameOverride -}}
+{{- $name := coalesce .Values.master.service.headless.nameOverride .Values.master.servicenameOverride | default "" -}}
 {{- default (printf "%s-hl" (include "opensearch.master.fullname" .)) (tpl $name .) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
@@ -210,7 +210,7 @@ Create a default coordinating service name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
 {{- define "opensearch.coordinating.servicename" -}}
-{{- $name := coalesce .Values.coordinating.service.headless.nameOverride .Values.coordinating.servicenameOverride -}}
+{{- $name := coalesce .Values.coordinating.service.headless.nameOverride .Values.coordinating.servicenameOverride | default "" -}}
 {{- default (printf "%s-hl" (include "opensearch.coordinating.fullname" .)) (tpl $name .) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
@@ -232,7 +232,7 @@ Create a default data service name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
 {{- define "opensearch.data.servicename" -}}
-{{- $name := coalesce .Values.data.service.headless.nameOverride .Values.data.servicenameOverride -}}
+{{- $name := coalesce .Values.data.service.headless.nameOverride .Values.data.servicenameOverride | default "" -}}
 {{- default (printf "%s-hl" (include "opensearch.data.fullname" .)) (tpl $name .) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
@@ -254,7 +254,7 @@ Create a default ingest service name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
 {{- define "opensearch.ingest.servicename" -}}
-{{- $name := coalesce .Values.ingest.service.headless.nameOverride .Values.ingest.servicenameOverride -}}
+{{- $name := coalesce .Values.ingest.service.headless.nameOverride .Values.ingest.servicenameOverride | default "" -}}
 {{- default (printf "%s-hl" (include "opensearch.ingest.fullname" .)) (tpl $name .) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
@@ -767,7 +767,7 @@ Create a default Dashboards service name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
 {{- define "opensearch.dashboards.servicename" -}}
-{{- $name := coalesce .Values.dashboards.service.nameOverride .Values.dashboards.servicenameOverride -}}
+{{- $name := coalesce .Values.dashboards.service.nameOverride .Values.dashboards.servicenameOverride | default "" -}}
 {{- default (include "opensearch.dashboards.fullname" .) (tpl $name .) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
