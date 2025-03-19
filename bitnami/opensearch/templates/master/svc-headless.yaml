@@ -29,4 +29,7 @@ spec:
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.master.podLabels .Values.commonLabels ) "context" . ) }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: master
+  {{- if semverCompare ">=1.31-0" (include "common.capabilities.kubeVersion" .) }}
+  trafficDistribution: {{ .Values.master.service.headless.trafficDistribution }}
+  {{- end }}
 {{- end }}
