@@ -3085,7 +3085,7 @@ storegateway:
     ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
     ##
     ingressClassName: ""
-    ## @param query.ingress.labels Additional label for the Ingress resource. 
+    ## @param storegateway.ingress.labels Additional label for the Ingress resource. 
     ## Use this parameter to set the required labels for your needs
     ## e.g:
     ## labels:
@@ -3846,7 +3846,7 @@ ruler:
     ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
     ##
     ingressClassName: ""
-    ## @param query.ingress.labels Additional label for the Ingress resource. 
+    ## @param ruler.ingress.labels Additional label for the Ingress resource. 
     ## Use this parameter to set the required labels for your needs
     ## e.g:
     ## labels:
