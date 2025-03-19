@@ -84,7 +84,7 @@ This chart allows you to automatically configure Kafka with 3 listeners:
 
 For more complex configurations, set the `listeners`, `advertisedListeners` and `listenerSecurityProtocolMap` parameters as needed.
 
-### Enable security for Kafka and Zookeeper
+### Enable security for Kafka
 
 You can configure different authentication protocols for each listener you configure in Kafka. For instance, you can use `sasl_tls` authentication for client communications, while using `tls` for inter-broker communications. This table shows the available protocols and the security they provide:
 
@@ -100,9 +100,9 @@ Configure the authentication protocols for client and inter-broker communication
 
 If you enabled SASL authentication on any listener, you can set the SASL credentials using the parameters below:
 
-- `auth.sasl.jaas.clientUsers`/`auth.sasl.jaas.clientPasswords`: when enabling SASL authentication for communications with clients.
-- `auth.sasl.jaas.interBrokerUser`/`auth.sasl.jaas.interBrokerPassword`:  when enabling SASL authentication for inter-broker communications.
-- `auth.jaas.zookeeperUser`/`auth.jaas.zookeeperPassword`: In the case that the Zookeeper chart is deployed with SASL authentication enabled.
+- `sasl.client.users`/`sasl.client.passwords`: when enabling SASL authentication for communications with clients.
+- `sasl.interbroker.user`/`sasl.interbroker.password`:  when enabling SASL authentication for inter-broker communications.
+- `sasl.controller.user`/`sasl.controller.password`:  when enabling SASL authentication for controller communications.
 
 In order to configure TLS authentication/encryption, you **can** create a secret per Kafka broker you have in the cluster containing the Java Key Stores (JKS) files: the truststore (`kafka.truststore.jks`) and the keystore (`kafka.keystore.jks`). Then, you need pass the secret names with the `tls.existingSecret` parameter when deploying the chart.
 
@@ -135,13 +135,7 @@ tls.existingSecret=kafka-jks
 tls.password=jksPassword
 sasl.client.users[0]=brokerUser
 sasl.client.passwords[0]=brokerPassword
-sasl.zookeeper.user=zookeeperUser
-sasl.zookeeper.password=zookeeperPassword
-zookeeper.auth.enabled=true
-zookeeper.auth.serverUsers=zookeeperUser
-zookeeper.auth.serverPasswords=zookeeperPassword
-zookeeper.auth.clientUser=zookeeperUser
-zookeeper.auth.clientPassword=zookeeperPassword
+
 ```
 
 You can deploy the chart with AclAuthorizer using the following parameters:
@@ -154,13 +148,6 @@ tls.existingSecret=kafka-jks-0
 tls.password=jksPassword
 sasl.client.users[0]=brokerUser
 sasl.client.passwords[0]=brokerPassword
-sasl.zookeeper.user=zookeeperUser
-sasl.zookeeper.password=zookeeperPassword
-zookeeper.auth.enabled=true
-zookeeper.auth.serverUsers=zookeeperUser
-zookeeper.auth.serverPasswords=zookeeperPassword
-zookeeper.auth.clientUser=zookeeperUser
-zookeeper.auth.clientPassword=zookeeperPassword
 authorizerClassName=kafka.security.authorizer.AclAuthorizer
 allowEveryoneIfNoAclFound=false
 superUsers=User:admin
@@ -176,7 +163,7 @@ As result, we will be able to see in kafka-authorizer.log the events specific Su
 
 The Bitnami Kafka chart, when upgrading, reuses the secret previously rendered by the chart or the one specified in `sasl.existingSecret`. To update credentials, use one of the following:
 
-- Run `helm upgrade` specifying new credentials in the `sasl` section as explained in the [authentication section](#enable-security-for-kafka-and-zookeeper).
+- Run `helm upgrade` specifying new credentials in the `sasl` section as explained in the [authentication section](#enable-security-for-kafka).
 - Run `helm upgrade` specifying a new secret in `sasl.existingSecret`
 
 ### Accessing Kafka brokers from outside the cluster
@@ -301,22 +288,7 @@ externalAccess:
 
 ### Enable metrics
 
-The chart can optionally start two metrics exporters:
-
-- JMX exporter, to expose JMX metrics. By default, it uses port 5556.
-- Zookeeper exporter, to expose Zookeeper metrics. By default, it uses port 9141.
-
-To expose JMX metrics to Prometheus, use the parameter below:
-
-```text
-metrics.jmx.enabled: true
-```
-
-- To enable Zookeeper chart metrics, use the parameter below:
-
-```text
-zookeeper.metrics.enabled: true
-```
+The chart can optionally start the JMX exporter to expose JMX metrics. By default, it uses port `5556`. To enable it, set the `metrics.jmx.enabled` parameter to `true`.
 
 ### Sidecars
 
@@ -530,50 +502,38 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 | `sasl.controller.clientSecret`      | Client Secret for controller communications when SASL is enabled with mechanism OAUTHBEARER. If not set and SASL is enabled for the inter-broker listener, a random secret will be generated. | `""`                                |
 | `sasl.client.users`                 | Comma-separated list of usernames for client communications when SASL is enabled                                                                                                              | `["user1"]`                         |
 | `sasl.client.passwords`             | Comma-separated list of passwords for client communications when SASL is enabled, must match the number of client.users                                                                       | `""`                                |
-| `sasl.zookeeper.user`               | Username for zookeeper communications when SASL is enabled.                                                                                                                                   | `""`                                |
-| `sasl.zookeeper.password`           | Password for zookeeper communications when SASL is enabled.                                                                                                                                   | `""`                                |
-| `sasl.existingSecret`               | Name of the existing secret containing credentials for clientUsers, interBrokerUser, controllerUser and zookeeperUser                                                                         | `""`                                |
+| `sasl.existingSecret`               | Name of the existing secret containing credentials for client.users, interbroker.user and controller.user                                                                                     | `""`                                |
 
 ### Kafka TLS parameters
 
-| Name                                         | Description                                                                                                                             | Value                      |
-| -------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
-| `tls.type`                                   | Format to use for TLS certificates. Allowed types: `JKS` and `PEM`                                                                      | `JKS`                      |
-| `tls.pemChainIncluded`                       | Flag to denote that the Certificate Authority (CA) certificates are bundled with the endpoint cert.                                     | `false`                    |
-| `tls.existingSecret`                         | Name of the existing secret containing the TLS certificates for the Kafka nodes.                                                        | `""`                       |
-| `tls.autoGenerated`                          | Generate automatically self-signed TLS certificates for Kafka brokers. Currently only supported if `tls.type` is `PEM`                  | `false`                    |
-| `tls.customAltNames`                         | Optionally specify extra list of additional subject alternative names (SANs) for the automatically generated TLS certificates.          | `[]`                       |
-| `tls.passwordsSecret`                        | Name of the secret containing the password to access the JKS files or PEM key when they are password-protected. (`key`: `password`)     | `""`                       |
-| `tls.passwordsSecretKeystoreKey`             | The secret key from the tls.passwordsSecret containing the password for the Keystore.                                                   | `keystore-password`        |
-| `tls.passwordsSecretTruststoreKey`           | The secret key from the tls.passwordsSecret containing the password for the Truststore.                                                 | `truststore-password`      |
-| `tls.passwordsSecretPemPasswordKey`          | The secret key from the tls.passwordsSecret containing the password for the PEM key inside 'tls.passwordsSecret'.                       | `""`                       |
-| `tls.keystorePassword`                       | Password to access the JKS keystore when it is password-protected. Ignored when 'tls.passwordsSecret' is provided.                      | `""`                       |
-| `tls.truststorePassword`                     | Password to access the JKS truststore when it is password-protected. Ignored when 'tls.passwordsSecret' is provided.                    | `""`                       |
-| `tls.keyPassword`                            | Password to access the PEM key when it is password-protected.                                                                           | `""`                       |
-| `tls.jksKeystoreKey`                         | The secret key from the `tls.existingSecret` containing the keystore                                                                    | `""`                       |
-| `tls.jksTruststoreSecret`                    | Name of the existing secret containing your truststore if truststore not existing or different from the one in the `tls.existingSecret` | `""`                       |
-| `tls.jksTruststoreKey`                       | The secret key from the `tls.existingSecret` or `tls.jksTruststoreSecret` containing the truststore                                     | `""`                       |
-| `tls.endpointIdentificationAlgorithm`        | The endpoint identification algorithm to validate server hostname using server certificate                                              | `https`                    |
-| `tls.sslClientAuth`                          | Sets the default value for the ssl.client.auth Kafka setting.                                                                           | `required`                 |
-| `tls.zookeeper.enabled`                      | Enable TLS for Zookeeper client connections.                                                                                            | `false`                    |
-| `tls.zookeeper.verifyHostname`               | Hostname validation.                                                                                                                    | `true`                     |
-| `tls.zookeeper.existingSecret`               | Name of the existing secret containing the TLS certificates for ZooKeeper client communications.                                        | `""`                       |
-| `tls.zookeeper.existingSecretKeystoreKey`    | The secret key from the  tls.zookeeper.existingSecret containing the Keystore.                                                          | `zookeeper.keystore.jks`   |
-| `tls.zookeeper.existingSecretTruststoreKey`  | The secret key from the tls.zookeeper.existingSecret containing the Truststore.                                                         | `zookeeper.truststore.jks` |
-| `tls.zookeeper.passwordsSecret`              | Existing secret containing Keystore and Truststore passwords.                                                                           | `""`                       |
-| `tls.zookeeper.passwordsSecretKeystoreKey`   | The secret key from the tls.zookeeper.passwordsSecret containing the password for the Keystore.                                         | `keystore-password`        |
-| `tls.zookeeper.passwordsSecretTruststoreKey` | The secret key from the tls.zookeeper.passwordsSecret containing the password for the Truststore.                                       | `truststore-password`      |
-| `tls.zookeeper.keystorePassword`             | Password to access the JKS keystore when it is password-protected. Ignored when 'tls.passwordsSecret' is provided.                      | `""`                       |
-| `tls.zookeeper.truststorePassword`           | Password to access the JKS truststore when it is password-protected. Ignored when 'tls.passwordsSecret' is provided.                    | `""`                       |
-| `extraEnvVars`                               | Extra environment variables to add to Kafka pods                                                                                        | `[]`                       |
-| `extraEnvVarsCM`                             | ConfigMap with extra environment variables                                                                                              | `""`                       |
-| `extraEnvVarsSecret`                         | Secret with extra environment variables                                                                                                 | `""`                       |
-| `extraVolumes`                               | Optionally specify extra list of additional volumes for the Kafka pod(s)                                                                | `[]`                       |
-| `extraVolumeMounts`                          | Optionally specify extra list of additional volumeMounts for the Kafka container(s)                                                     | `[]`                       |
-| `sidecars`                                   | Add additional sidecar containers to the Kafka pod(s)                                                                                   | `[]`                       |
-| `initContainers`                             | Add additional Add init containers to the Kafka pod(s)                                                                                  | `[]`                       |
-| `dnsPolicy`                                  | Specifies the DNS policy for the zookeeper pods                                                                                         | `""`                       |
-| `dnsConfig`                                  | allows users more control on the DNS settings for a Pod. Required if `dnsPolicy` is set to `None`                                       | `{}`                       |
+| Name                                  | Description                                                                                                                             | Value                 |
+| ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
+| `tls.type`                            | Format to use for TLS certificates. Allowed types: `JKS` and `PEM`                                                                      | `JKS`                 |
+| `tls.pemChainIncluded`                | Flag to denote that the Certificate Authority (CA) certificates are bundled with the endpoint cert.                                     | `false`               |
+| `tls.existingSecret`                  | Name of the existing secret containing the TLS certificates for the Kafka nodes.                                                        | `""`                  |
+| `tls.autoGenerated`                   | Generate automatically self-signed TLS certificates for Kafka brokers. Currently only supported if `tls.type` is `PEM`                  | `false`               |
+| `tls.customAltNames`                  | Optionally specify extra list of additional subject alternative names (SANs) for the automatically generated TLS certificates.          | `[]`                  |
+| `tls.passwordsSecret`                 | Name of the secret containing the password to access the JKS files or PEM key when they are password-protected. (`key`: `password`)     | `""`                  |
+| `tls.passwordsSecretKeystoreKey`      | The secret key from the tls.passwordsSecret containing the password for the Keystore.                                                   | `keystore-password`   |
+| `tls.passwordsSecretTruststoreKey`    | The secret key from the tls.passwordsSecret containing the password for the Truststore.                                                 | `truststore-password` |
+| `tls.passwordsSecretPemPasswordKey`   | The secret key from the tls.passwordsSecret containing the password for the PEM key inside 'tls.passwordsSecret'.                       | `""`                  |
+| `tls.keystorePassword`                | Password to access the JKS keystore when it is password-protected. Ignored when 'tls.passwordsSecret' is provided.                      | `""`                  |
+| `tls.truststorePassword`              | Password to access the JKS truststore when it is password-protected. Ignored when 'tls.passwordsSecret' is provided.                    | `""`                  |
+| `tls.keyPassword`                     | Password to access the PEM key when it is password-protected.                                                                           | `""`                  |
+| `tls.jksKeystoreKey`                  | The secret key from the `tls.existingSecret` containing the keystore                                                                    | `""`                  |
+| `tls.jksTruststoreSecret`             | Name of the existing secret containing your truststore if truststore not existing or different from the one in the `tls.existingSecret` | `""`                  |
+| `tls.jksTruststoreKey`                | The secret key from the `tls.existingSecret` or `tls.jksTruststoreSecret` containing the truststore                                     | `""`                  |
+| `tls.endpointIdentificationAlgorithm` | The endpoint identification algorithm to validate server hostname using server certificate                                              | `https`               |
+| `tls.sslClientAuth`                   | Sets the default value for the ssl.client.auth Kafka setting.                                                                           | `required`            |
+| `extraEnvVars`                        | Extra environment variables to add to Kafka pods                                                                                        | `[]`                  |
+| `extraEnvVarsCM`                      | ConfigMap with extra environment variables                                                                                              | `""`                  |
+| `extraEnvVarsSecret`                  | Secret with extra environment variables                                                                                                 | `""`                  |
+| `extraVolumes`                        | Optionally specify extra list of additional volumes for the Kafka pod(s)                                                                | `[]`                  |
+| `extraVolumeMounts`                   | Optionally specify extra list of additional volumeMounts for the Kafka container(s)                                                     | `[]`                  |
+| `sidecars`                            | Add additional sidecar containers to the Kafka pod(s)                                                                                   | `[]`                  |
+| `initContainers`                      | Add additional Add init containers to the Kafka pod(s)                                                                                  | `[]`                  |
+| `dnsPolicy`                           | Specifies the DNS policy for the Kafka pods                                                                                             | `""`                  |
+| `dnsConfig`                           | allows users more control on the DNS settings for a Pod. Required if `dnsPolicy` is set to `None`                                       | `{}`                  |
 
 ### Controller-eligible statefulset parameters
 
@@ -582,7 +542,6 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 | `controller.replicaCount`                                      | Number of Kafka controller-eligible nodes                                                                                                                                                                                               | `3`                   |
 | `controller.controllerOnly`                                    | If set to true, controller nodes will be deployed as dedicated controllers, instead of controller+broker processes.                                                                                                                     | `false`               |
 | `controller.minId`                                             | Minimal node.id values for controller-eligible nodes. Do not change after first initialization.                                                                                                                                         | `0`                   |
-| `controller.zookeeperMigrationMode`                            | Set to true to deploy cluster controller quorum                                                                                                                                                                                         | `false`               |
 | `controller.config`                                            | Configuration file for Kafka controller-eligible nodes, rendered as a template. Auto-generated based on chart values when not specified.                                                                                                | `""`                  |
 | `controller.existingConfigmap`                                 | ConfigMap with Kafka Configuration for controller-eligible nodes.                                                                                                                                                                       | `""`                  |
 | `controller.extraConfig`                                       | Additional configuration to be appended at the end of the generated Kafka controller-eligible nodes configuration file.                                                                                                                 | `""`                  |
@@ -683,7 +642,7 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 | `controller.pdb.create`                              | Deploy a pdb object for the Kafka pod                                                                                                                                  | `true`                    |
 | `controller.pdb.minAvailable`                        | Minimum number/percentage of available Kafka replicas                                                                                                                  | `""`                      |
 | `controller.pdb.maxUnavailable`                      | Maximum number/percentage of unavailable Kafka replicas                                                                                                                | `""`                      |
-| `controller.persistence.enabled`                     | Enable Kafka data persistence using PVC, note that ZooKeeper persistence is unaffected                                                                                 | `true`                    |
+| `controller.persistence.enabled`                     | Enable Kafka data persistence using PVC                                                                                                                                | `true`                    |
 | `controller.persistence.existingClaim`               | A manually managed Persistent Volume and Claim                                                                                                                         | `""`                      |
 | `controller.persistence.storageClass`                | PVC Storage Class for Kafka data volume                                                                                                                                | `""`                      |
 | `controller.persistence.accessModes`                 | Persistent Volume Access Modes                                                                                                                                         | `["ReadWriteOnce"]`       |
@@ -692,7 +651,7 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 | `controller.persistence.labels`                      | Labels for the PVC                                                                                                                                                     | `{}`                      |
 | `controller.persistence.selector`                    | Selector to match an existing Persistent Volume for Kafka data PVC. If set, the PVC can't have a PV dynamically provisioned for it                                     | `{}`                      |
 | `controller.persistence.mountPath`                   | Mount path of the Kafka data volume                                                                                                                                    | `/bitnami/kafka`          |
-| `controller.logPersistence.enabled`                  | Enable Kafka logs persistence using PVC, note that ZooKeeper persistence is unaffected                                                                                 | `false`                   |
+| `controller.logPersistence.enabled`                  | Enable Kafka logs persistence using PVC                                                                                                                                | `false`                   |
 | `controller.logPersistence.existingClaim`            | A manually managed Persistent Volume and Claim                                                                                                                         | `""`                      |
 | `controller.logPersistence.storageClass`             | PVC Storage Class for Kafka logs volume                                                                                                                                | `""`                      |
 | `controller.logPersistence.accessModes`              | Persistent Volume Access Modes                                                                                                                                         | `["ReadWriteOnce"]`       |
@@ -707,7 +666,6 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 | ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
 | `broker.replicaCount`                                      | Number of Kafka broker-only nodes                                                                                                                                                                                               | `0`                   |
 | `broker.minId`                                             | Minimal node.id values for broker-only nodes. Do not change after first initialization.                                                                                                                                         | `100`                 |
-| `broker.zookeeperMigrationMode`                            | Set to true to deploy cluster controller quorum                                                                                                                                                                                 | `false`               |
 | `broker.config`                                            | Configuration file for Kafka broker-only nodes, rendered as a template. Auto-generated based on chart values when not specified.                                                                                                | `""`                  |
 | `broker.existingConfigmap`                                 | ConfigMap with Kafka Configuration for broker-only nodes.                                                                                                                                                                       | `""`                  |
 | `broker.extraConfig`                                       | Additional configuration to be appended at the end of the generated Kafka broker-only nodes configuration file.                                                                                                                 | `""`                  |
@@ -807,7 +765,7 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 | `broker.autoscaling.hpa.maxReplicas`             | Maximum number of Kafka Broker replicas                                                                                                                                | `""`                      |
 | `broker.autoscaling.hpa.targetCPU`               | Target CPU utilization percentage                                                                                                                                      | `""`                      |
 | `broker.autoscaling.hpa.targetMemory`            | Target Memory utilization percentage                                                                                                                                   | `""`                      |
-| `broker.persistence.enabled`                     | Enable Kafka data persistence using PVC, note that ZooKeeper persistence is unaffected                                                                                 | `true`                    |
+| `broker.persistence.enabled`                     | Enable Kafka data persistence using PVC                                                                                                                                | `true`                    |
 | `broker.persistence.existingClaim`               | A manually managed Persistent Volume and Claim                                                                                                                         | `""`                      |
 | `broker.persistence.storageClass`                | PVC Storage Class for Kafka data volume                                                                                                                                | `""`                      |
 | `broker.persistence.accessModes`                 | Persistent Volume Access Modes                                                                                                                                         | `["ReadWriteOnce"]`       |
@@ -816,7 +774,7 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 | `broker.persistence.labels`                      | Labels for the PVC                                                                                                                                                     | `{}`                      |
 | `broker.persistence.selector`                    | Selector to match an existing Persistent Volume for Kafka data PVC. If set, the PVC can't have a PV dynamically provisioned for it                                     | `{}`                      |
 | `broker.persistence.mountPath`                   | Mount path of the Kafka data volume                                                                                                                                    | `/bitnami/kafka`          |
-| `broker.logPersistence.enabled`                  | Enable Kafka logs persistence using PVC, note that ZooKeeper persistence is unaffected                                                                                 | `false`                   |
+| `broker.logPersistence.enabled`                  | Enable Kafka logs persistence using PVC                                                                                                                                | `false`                   |
 | `broker.logPersistence.existingClaim`            | A manually managed Persistent Volume and Claim                                                                                                                         | `""`                      |
 | `broker.logPersistence.storageClass`             | PVC Storage Class for Kafka logs volume                                                                                                                                | `""`                      |
 | `broker.logPersistence.accessModes`              | Persistent Volume Access Modes                                                                                                                                         | `["ReadWriteOnce"]`       |
@@ -1076,24 +1034,6 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 | `kraft.existingClusterIdSecret` | Name of the secret containing the cluster ID for the Kafka KRaft cluster. This is incompatible with the clusterId parameter. If both are set, the existingClusterIdSecret will be used | `""`   |
 | `kraft.clusterId`               | Kafka Kraft cluster ID. If not set, a random cluster ID will be generated the first time Kraft is initialized.                                                                         | `""`   |
 | `kraft.controllerQuorumVoters`  | Override the Kafka controller quorum voters of the Kafka Kraft cluster. If not set, it will be automatically configured to use all controller-elegible nodes.                          | `""`   |
-
-### ZooKeeper chart parameters
-
-| Name                                    | Description                                                                                                                                                             | Value               |
-| --------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
-| `zookeeperChrootPath`                   | Path which puts data under some path in the global ZooKeeper namespace                                                                                                  | `""`                |
-| `zookeeper.enabled`                     | Switch to enable or disable the ZooKeeper helm chart. Must be false if you use KRaft mode.                                                                              | `false`             |
-| `zookeeper.replicaCount`                | Number of ZooKeeper nodes                                                                                                                                               | `1`                 |
-| `zookeeper.auth.client.enabled`         | Enable ZooKeeper auth                                                                                                                                                   | `false`             |
-| `zookeeper.auth.client.clientUser`      | User that will use ZooKeeper client (zkCli.sh) to authenticate. Must exist in the serverUsers comma-separated list.                                                     | `""`                |
-| `zookeeper.auth.client.clientPassword`  | Password that will use ZooKeeper client (zkCli.sh) to authenticate. Must exist in the serverPasswords comma-separated list.                                             | `""`                |
-| `zookeeper.auth.client.serverUsers`     | Comma, semicolon or whitespace separated list of user to be created. Specify them as a string, for example: "user1,user2,admin"                                         | `""`                |
-| `zookeeper.auth.client.serverPasswords` | Comma, semicolon or whitespace separated list of passwords to assign to users when created. Specify them as a string, for example: "pass4user1, pass4user2, pass4admin" | `""`                |
-| `zookeeper.persistence.enabled`         | Enable persistence on ZooKeeper using PVC(s)                                                                                                                            | `true`              |
-| `zookeeper.persistence.storageClass`    | Persistent Volume storage class                                                                                                                                         | `""`                |
-| `zookeeper.persistence.accessModes`     | Persistent Volume access modes                                                                                                                                          | `["ReadWriteOnce"]` |
-| `zookeeper.persistence.size`            | Persistent Volume size                                                                                                                                                  | `8Gi`               |
-| `externalZookeeper.servers`             | List of external zookeeper servers to use. Typically used in combination with 'zookeeperChrootPath'. Must be empty if you use KRaft mode.                               | `[]`                |
 
 ```console
 helm install my-release \

@@ -236,7 +236,7 @@ sasl:
   ## @param sasl.controllerMechanism SASL mechanism for controller communications.
   ##
   controllerMechanism: PLAIN
-  ## Settings for oauthbearer mechanism
+  ## Settings for OAuthBearer mechanism
   ## @param sasl.oauthbearer.tokenEndpointUrl The URL for the OAuth/OIDC identity provider
   ## @param sasl.oauthbearer.jwksEndpointUrl The OAuth/OIDC provider URL from which the provider's JWKS (JSON Web Key Set) can be retrieved
   ## @param sasl.oauthbearer.expectedAudience The comma-delimited setting for the broker to use to verify that the JWT was issued for one of the expected audiences
@@ -277,18 +277,11 @@ sasl:
     users:
       - user1
     passwords: ""
-  ## Credentials for Zookeeper communications.
-  ## @param sasl.zookeeper.user Username for zookeeper communications when SASL is enabled.
-  ## @param sasl.zookeeper.password Password for zookeeper communications when SASL is enabled.
-  ##
-  zookeeper:
-    user: ""
-    password: ""
-  ## @param sasl.existingSecret Name of the existing secret containing credentials for clientUsers, interBrokerUser, controllerUser and zookeeperUser
+  ## @param sasl.existingSecret Name of the existing secret containing credentials for client.users, interbroker.user and controller.user
   ## Create this secret running the command below where SECRET_NAME is the name of the secret you want to create:
-  ##       kubectl create secret generic SECRET_NAME --from-literal=client-passwords=CLIENT_PASSWORD1,CLIENT_PASSWORD2 --from-literal=inter-broker-password=INTER_BROKER_PASSWORD --from-literal=inter-broker-client-secret=INTER_BROKER_CLIENT_SECRET --from-literal=controller-password=CONTROLLER_PASSWORD --from-literal=controller-client-secret=CONTROLLER_CLIENT_SECRET --from-literal=zookeeper-password=ZOOKEEPER_PASSWORD
-  ## The client secrets are only required when using oauthbearer as sasl mechanism.
-  ## Client, interbroker and controller passwords are only required if the sasl mechanism includes something other than oauthbearer.
+  ##       kubectl create secret generic SECRET_NAME --from-literal=client-passwords=CLIENT_PASSWORD1,CLIENT_PASSWORD2 --from-literal=inter-broker-password=INTER_BROKER_PASSWORD --from-literal=inter-broker-client-secret=INTER_BROKER_CLIENT_SECRET --from-literal=controller-password=CONTROLLER_PASSWORD --from-literal=controller-client-secret=CONTROLLER_CLIENT_SECRET
+  ## The client secrets are only required when using OAuthBearer as SASL mechanism.
+  ## Client, inter-broker and controller passwords are only required if the SASL mechanism includes something other than OAuthBearer.
   ##
   existingSecret: ""
 ## @section Kafka TLS parameters
@@ -380,43 +373,6 @@ tls:
   ## ref: https://docs.confluent.io/current/kafka/authentication_ssl.html#optional-settings
   ##
   sslClientAuth: "required"
-  ## Zookeeper TLS connection configuration for Kafka
-  ##
-  zookeeper:
-    ## @param tls.zookeeper.enabled Enable TLS for Zookeeper client connections.
-    ##
-    enabled: false
-    ## @param tls.zookeeper.verifyHostname Hostname validation.
-    ##
-    verifyHostname: true
-    ## @param tls.zookeeper.existingSecret Name of the existing secret containing the TLS certificates for ZooKeeper client communications.
-    ##
-    existingSecret: ""
-    ## @param tls.zookeeper.existingSecretKeystoreKey The secret key from the  tls.zookeeper.existingSecret containing the Keystore.
-    ##
-    existingSecretKeystoreKey: zookeeper.keystore.jks
-    ## @param tls.zookeeper.existingSecretTruststoreKey The secret key from the tls.zookeeper.existingSecret containing the Truststore.
-    ##
-    existingSecretTruststoreKey: zookeeper.truststore.jks
-    ## @param tls.zookeeper.passwordsSecret Existing secret containing Keystore and Truststore passwords.
-    ##
-    passwordsSecret: ""
-    ## @param tls.zookeeper.passwordsSecretKeystoreKey The secret key from the tls.zookeeper.passwordsSecret containing the password for the Keystore.
-    ## If no keystore password is included in the passwords secret, set this value to an empty string.
-    ##
-    passwordsSecretKeystoreKey: keystore-password
-    ## @param tls.zookeeper.passwordsSecretTruststoreKey The secret key from the tls.zookeeper.passwordsSecret containing the password for the Truststore.
-    ## If no truststore password is included in the passwords secret, set this value to an empty string.
-    ##
-    passwordsSecretTruststoreKey: truststore-password
-    ## @param tls.zookeeper.keystorePassword Password to access the JKS keystore when it is password-protected. Ignored when 'tls.passwordsSecret' is provided.
-    ## When using tls.type=PEM, the generated keystore will use this password or randomly generate one.
-    ##
-    keystorePassword: ""
-    ## @param tls.zookeeper.truststorePassword Password to access the JKS truststore when it is password-protected. Ignored when 'tls.passwordsSecret' is provided.
-    ## When using tls.type=PEM, the generated keystore will use this password or randomly generate one.
-    ##
-    truststorePassword: ""
 ## @param extraEnvVars Extra environment variables to add to Kafka pods
 ## ref: https://github.com/bitnami/containers/tree/main/bitnami/kafka#configuration
 ## e.g:
@@ -470,7 +426,7 @@ sidecars: []
 initContainers: []
 ## DNS-Pod services
 ## Ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/
-## @param dnsPolicy Specifies the DNS policy for the zookeeper pods
+## @param dnsPolicy Specifies the DNS policy for the Kafka pods
 ## DNS policies can be set on a per-Pod basis. Currently Kubernetes supports the following Pod-specific DNS policies.
 ## Available options: Default, ClusterFirst, ClusterFirstWithHostNet, None
 ## Ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-s-dns-policy
@@ -494,7 +450,6 @@ dnsConfig: {}
 ##
 controller:
   ## @param controller.replicaCount Number of Kafka controller-eligible nodes
-  ## Ignore this section if running in Zookeeper mode.
   ##
   replicaCount: 3
   ## @param controller.controllerOnly If set to true, controller nodes will be deployed as dedicated controllers, instead of controller+broker processes.
@@ -505,11 +460,6 @@ controller:
   ## We recommend setting this this value high enough, as IDs under this value will be used by controller-elegible nodes
   ##
   minId: 0
-  ## @param controller.zookeeperMigrationMode Set to true to deploy cluster controller quorum
-  ## This allows configuring both kraft and zookeeper modes simultaneously in order to perform the migration of the Kafka metadata.
-  ## Ref. https://docs.confluent.io/platform/current/installation/migrate-zk-kraft.html
-  ##
-  zookeeperMigrationMode: false
   ## @param controller.config Configuration file for Kafka controller-eligible nodes, rendered as a template. Auto-generated based on chart values when not specified.
   ## @param controller.existingConfigmap ConfigMap with Kafka Configuration for controller-eligible nodes.
   ## NOTE: This will override the configuration based on values, please act carefully
@@ -877,7 +827,7 @@ controller:
   ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ##
   persistence:
-    ## @param controller.persistence.enabled Enable Kafka data persistence using PVC, note that ZooKeeper persistence is unaffected
+    ## @param controller.persistence.enabled Enable Kafka data persistence using PVC
     ##
     enabled: true
     ## @param controller.persistence.existingClaim A manually managed Persistent Volume and Claim
@@ -917,7 +867,7 @@ controller:
   ## Log Persistence parameters
   ##
   logPersistence:
-    ## @param controller.logPersistence.enabled Enable Kafka logs persistence using PVC, note that ZooKeeper persistence is unaffected
+    ## @param controller.logPersistence.enabled Enable Kafka logs persistence using PVC
     ##
     enabled: false
     ## @param controller.logPersistence.existingClaim A manually managed Persistent Volume and Claim
@@ -963,11 +913,6 @@ broker:
   ##
   ##
   minId: 100
-  ## @param broker.zookeeperMigrationMode Set to true to deploy cluster controller quorum
-  ## This allows configuring both kraft and zookeeper modes simultaneously in order to perform the migration of the Kafka metadata.
-  ## Ref. https://docs.confluent.io/platform/current/installation/migrate-zk-kraft.html
-  ##
-  zookeeperMigrationMode: false
   ## @param broker.config Configuration file for Kafka broker-only nodes, rendered as a template. Auto-generated based on chart values when not specified.
   ## @param broker.existingConfigmap ConfigMap with Kafka Configuration for broker-only nodes.
   ## NOTE: This will override the configuration based on values, please act carefully
@@ -1334,7 +1279,7 @@ broker:
   ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ##
   persistence:
-    ## @param broker.persistence.enabled Enable Kafka data persistence using PVC, note that ZooKeeper persistence is unaffected
+    ## @param broker.persistence.enabled Enable Kafka data persistence using PVC
     ##
     enabled: true
     ## @param broker.persistence.existingClaim A manually managed Persistent Volume and Claim
@@ -1374,7 +1319,7 @@ broker:
   ## Log Persistence parameters
   ##
   logPersistence:
-    ## @param broker.logPersistence.enabled Enable Kafka logs persistence using PVC, note that ZooKeeper persistence is unaffected
+    ## @param broker.logPersistence.enabled Enable Kafka logs persistence using PVC
     ##
     enabled: false
     ## @param broker.logPersistence.existingClaim A manually managed Persistent Volume and Claim
@@ -1784,8 +1729,8 @@ networkPolicy:
   ##
   enabled: true
   ## @param networkPolicy.allowExternal Don't require client label for connections
-  ## When set to false, only pods with the correct client label will have network access to the port Redis&reg; is
-  ## listening on. When true, zookeeper accept connections from any source (with the correct destination port).
+  ## When set to false, only pods with the correct client label will have network access to the port Kafka is
+  ## listening on. When true, Kafka accept connections from any source (with the correct destination port).
   ##
   allowExternal: true
   ## @param networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
@@ -2435,11 +2380,9 @@ provisioning:
   waitForKafka: true
   ## @param provisioning.useHelmHooks Flag to indicate usage of helm hooks
   useHelmHooks: true
+
 ## @section KRaft chart parameters
 
-## KRaft configuration
-## Kafka mode without Zookeeper. Kafka nodes can work as controllers in this mode.
-##
 kraft:
   ## @param kraft.enabled Switch to enable or disable the KRaft mode for Kafka
   ##
@@ -2448,64 +2391,10 @@ kraft:
   existingClusterIdSecret: ""
   ## @param kraft.clusterId Kafka Kraft cluster ID. If not set, a random cluster ID will be generated the first time Kraft is initialized.
   ## NOTE: Already initialized Kafka nodes will use cluster ID stored in their persisted storage.
-  ## If reusing existing PVCs or migrating from Zookeeper mode, make sure the cluster ID is set matching the stored cluster ID, otherwise new nodes will fail to join the cluster.
+  ## If reusing existing PVCs, make sure the cluster ID is set matching the stored cluster ID, otherwise new nodes will fail to join the cluster.
   ## In case the cluster ID stored in the secret does not match the value stored in /bitnami/kafka/data/meta.properties, remove the secret and upgrade the chart setting the correct value.
   ##
   clusterId: ""
   ## @param kraft.controllerQuorumVoters Override the Kafka controller quorum voters of the Kafka Kraft cluster. If not set, it will be automatically configured to use all controller-elegible nodes.
   ##
   controllerQuorumVoters: ""
-## @section ZooKeeper chart parameters
-##
-## @param zookeeperChrootPath Path which puts data under some path in the global ZooKeeper namespace
-## ref: https://kafka.apache.org/documentation/#brokerconfigs_zookeeper.connect
-##
-zookeeperChrootPath: ""
-## ZooKeeper chart configuration
-## https://github.com/bitnami/charts/blob/main/bitnami/zookeeper/values.yaml
-##
-zookeeper:
-  ## @param zookeeper.enabled Switch to enable or disable the ZooKeeper helm chart. Must be false if you use KRaft mode.
-  ##
-  enabled: false
-  ## @param zookeeper.replicaCount Number of ZooKeeper nodes
-  ##
-  replicaCount: 1
-  ## ZooKeeper authentication
-  ##
-  auth:
-    client:
-      ## @param zookeeper.auth.client.enabled Enable ZooKeeper auth
-      ##
-      enabled: false
-      ## @param zookeeper.auth.client.clientUser User that will use ZooKeeper client (zkCli.sh) to authenticate. Must exist in the serverUsers comma-separated list.
-      ##
-      clientUser: ""
-      ## @param zookeeper.auth.client.clientPassword Password that will use ZooKeeper client (zkCli.sh) to authenticate. Must exist in the serverPasswords comma-separated list.
-      ##
-      clientPassword: ""
-      ## @param zookeeper.auth.client.serverUsers Comma, semicolon or whitespace separated list of user to be created. Specify them as a string, for example: "user1,user2,admin"
-      ##
-      serverUsers: ""
-      ## @param zookeeper.auth.client.serverPasswords Comma, semicolon or whitespace separated list of passwords to assign to users when created. Specify them as a string, for example: "pass4user1, pass4user2, pass4admin"
-      ##
-      serverPasswords: ""
-  ## ZooKeeper Persistence parameters
-  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
-  ## @param zookeeper.persistence.enabled Enable persistence on ZooKeeper using PVC(s)
-  ## @param zookeeper.persistence.storageClass Persistent Volume storage class
-  ## @param zookeeper.persistence.accessModes Persistent Volume access modes
-  ## @param zookeeper.persistence.size Persistent Volume size
-  ##
-  persistence:
-    enabled: true
-    storageClass: ""
-    accessModes:
-      - ReadWriteOnce
-    size: 8Gi
-## External Zookeeper Configuration
-##
-externalZookeeper:
-  ## @param externalZookeeper.servers List of external zookeeper servers to use. Typically used in combination with 'zookeeperChrootPath'. Must be empty if you use KRaft mode.
-  ##
-  servers: []

@@ -32,13 +32,6 @@ data:
     process.roles={{ ternary "controller" "controller,broker" .Values.controller.controllerOnly }}
     {{- include "kafka.kraftConfig" . | nindent 4 }}
     {{- end }}
-    {{- if or .Values.zookeeper.enabled .Values.externalZookeeper.servers }}
-    # Zookeeper configuration
-    zookeeper.metadata.migration.enable=true
-    inter.broker.protocol.version=3.4
-    inter.broker.protocol.version={{ default (regexFind "^[0-9].[0-9]+" .Chart.AppVersion) .Values.interBrokerProtocolVersion }}
-    {{- include "kafka.zookeeperConfig" . | nindent 4 }}
-    {{- end }}
     # Kafka data logs directory
     log.dir={{ printf "%s/data" .Values.controller.persistence.mountPath }}
     # Kafka application logs directory

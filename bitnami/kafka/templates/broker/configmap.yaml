@@ -26,19 +26,9 @@ data:
     listener.security.protocol.map={{ include "kafka.securityProtocolMap" . }}
     advertised.listeners={{ include "kafka.advertisedListeners" . }}
     {{- if .Values.kraft.enabled }}
-    {{- if not .Values.broker.zookeeperMigrationMode }}
     # KRaft node role
     process.roles=broker
-    {{- end -}}
     {{- include "kafka.kraftConfig" . | nindent 4 }}
-    {{- end }}
-    {{- if or .Values.zookeeper.enabled .Values.externalZookeeper.servers }}
-    # Zookeeper configuration
-    {{- include "kafka.zookeeperConfig" . | nindent 4 }}
-    {{- if .Values.broker.zookeeperMigrationMode }}
-    zookeeper.metadata.migration.enable=true
-    inter.broker.protocol.version={{ default (regexFind "^[0-9].[0-9]+" .Chart.AppVersion) .Values.interBrokerProtocolVersion }}
-    {{- end }}
     {{- end }}
     # Kafka data logs directory
     log.dir={{ printf "%s/data" .Values.broker.persistence.mountPath }}

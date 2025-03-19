@@ -261,28 +261,6 @@ data:
       true
     }
     {{- end }}
-    {{- if and .Values.tls.zookeeper.enabled .Values.tls.zookeeper.existingSecret }}
-    configure_zookeeper_tls() {
-      # Remove previously existing keystores
-      rm -f /certs/zookeeper.keystore.jks /certs/zookeeper.truststore.jks
-      ZOOKEEPER_TRUSTSTORE={{ printf "/zookeeper-certs/%s" .Values.tls.zookeeper.existingSecretTruststoreKey | quote }}
-      ZOOKEEPER_KEYSTORE={{ printf "/zookeeper-certs/%s" .Values.tls.zookeeper.existingSecretKeystoreKey | quote }}
-      if [[ -f "$ZOOKEEPER_KEYSTORE" ]]; then
-        cp "$ZOOKEEPER_KEYSTORE" "/certs/zookeeper.keystore.jks"
-      else
-        error "Zookeeper keystore file not found"
-      fi
-      if [[ -f "$ZOOKEEPER_TRUSTSTORE" ]]; then
-        cp "$ZOOKEEPER_TRUSTSTORE" "/certs/zookeeper.truststore.jks"
-      else
-        error "Zookeeper keystore file not found"
-      fi
-      [[ -n "${KAFKA_ZOOKEEPER_TLS_KEYSTORE_PASSWORD:-}" ]] && kafka_conf_set "$KAFKA_CONFIG_FILE" "zookeeper.ssl.keystore.password" "${KAFKA_ZOOKEEPER_TLS_KEYSTORE_PASSWORD}"
-      [[ -n "${KAFKA_ZOOKEEPER_TLS_TRUSTSTORE_PASSWORD:-}" ]] && kafka_conf_set "$KAFKA_CONFIG_FILE" "zookeeper.ssl.truststore.password" "${KAFKA_ZOOKEEPER_TLS_TRUSTSTORE_PASSWORD}"
-      # Avoid errors caused by previous checks
-      true
-    }
-    {{- end }}
 
     {{- if (include "kafka.saslEnabled" .) }}
     configure_kafka_sasl() {
@@ -310,9 +288,6 @@ data:
           replace_placeholder "password-placeholder-${i}\"" "${passwords[i]}\""
       done
       {{- end }}
-      {{- if .Values.sasl.zookeeper.user }}
-      replace_placeholder "zookeeper-password-placeholder" "$KAFKA_ZOOKEEPER_PASSWORD"
-      {{- end }}
     }
     {{- end }}
 
@@ -321,18 +296,6 @@ data:
     if [[ "${EXTERNAL_ACCESS_ENABLED:-false}" =~ ^(yes|true)$ ]]; then
       retry_while "test -f /shared/external-host.txt -o -f /shared/external-port.txt" || error "Timed out waiting for autodiscovery init-container"
     fi
-    {{- end }}
-
-    {{- if .Values.sasl.zookeeper.user }}
-    export KAFKA_CONFIG_FILE=/config/kafka_jaas.conf
-    cat << EOF > /config/kafka_jaas.conf
-    Client {
-      org.apache.kafka.common.security.plain.PlainLoginModule required
-      username="{{ .Values.sasl.zookeeper.user }}"
-      password="zookeeper-password-placeholder";
-    };
-    EOF
-    replace_placeholder "zookeeper-password-placeholder" "$KAFKA_ZOOKEEPER_PASSWORD"
     {{- end }}
 
     export KAFKA_CONFIG_FILE=/config/server.properties
@@ -346,11 +309,7 @@ data:
     if [[ -f "/bitnami/kafka/data/meta.properties" ]]; then
         if grep -q "broker.id" /bitnami/kafka/data/meta.properties; then
           ID="$(grep "broker.id" /bitnami/kafka/data/meta.properties | awk -F '=' '{print $2}')"
-          {{- if or (and .Values.kraft.enabled (not .Values.broker.zookeeperMigrationMode)) (and (not .Values.zookeeper.enabled) (not .Values.externalZookeeper.servers)) }}
           kafka_conf_set "$KAFKA_CONFIG_FILE" "node.id" "$ID"
-          {{- else }}
-          kafka_conf_set "$KAFKA_CONFIG_FILE" "broker.id" "$ID"
-          {{- end }}
         else
           ID="$(grep "node.id" /bitnami/kafka/data/meta.properties | awk -F '=' '{print $2}')"
           kafka_conf_set "$KAFKA_CONFIG_FILE" "node.id" "$ID"
@@ -359,9 +318,6 @@ data:
         ID=$((POD_ID + KAFKA_MIN_ID))
         {{- if .Values.kraft.enabled }}
         kafka_conf_set "$KAFKA_CONFIG_FILE" "node.id" "$ID"
-        {{- end }}
-        {{- if or .Values.zookeeper.enabled .Values.externalZookeeper.servers }}
-        kafka_conf_set "$KAFKA_CONFIG_FILE" "broker.id" "$ID"
         {{- end }}
     fi
     {{- if not .Values.listeners.advertisedListeners }}
@@ -375,9 +331,6 @@ data:
     {{- end }}
     {{- if (include "kafka.saslEnabled" .) }}
     configure_kafka_sasl
-    {{- end }}
-    {{- if and .Values.tls.zookeeper.enabled .Values.tls.zookeeper.existingSecret }}
-    configure_zookeeper_tls
     {{- end }}
     {{- if eq .Values.brokerRackAssignment "aws-az" }}
     # Broker rack awareness
