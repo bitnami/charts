@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.2.0 (2025-02-21)
+## 2.2.1 (2025-03-19)
 
-* [bitnami/valkey-cluster] Set `usePasswordFiles=true` by default ([#32122](https://github.com/bitnami/charts/pull/32122))
+* [bitnami/valkey-cluster] Add support for templating node and replica values ([#32520](https://github.com/bitnami/charts/pull/32520))
+
+## 2.2.0 (2025-02-24)
+
+* [bitnami/valkey-cluster] Set `usePasswordFiles=true` by default (#32122) ([c46b8f0](https://github.com/bitnami/charts/commit/c46b8f0029226245c04a3fed93225e82a9ab3e57)), closes [#32122](https://github.com/bitnami/charts/issues/32122)
 
 ## <small>2.1.3 (2025-02-20)</small>
 
