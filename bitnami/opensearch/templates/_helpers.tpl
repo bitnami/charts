@@ -160,7 +160,7 @@ Name for the OpenSearch service
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
 {{- define "opensearch.service.name" -}}
-    {{- printf "%s" ( include "common.names.fullname" . )  | trunc 63 | trimSuffix "-" -}}
+{{- include "common.names.fullname" . | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
@@ -188,11 +188,8 @@ Create a default master service name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
 {{- define "opensearch.master.servicename" -}}
-{{- if .Values.master.servicenameOverride -}}
-{{- .Values.master.servicenameOverride | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- printf "%s-hl" (include "opensearch.master.fullname" .) | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
+{{- $name := coalesce .Values.master.service.headless.nameOverride .Values.master.servicenameOverride -}}
+{{- default (printf "%s-hl" (include "opensearch.master.fullname" .)) (tpl $name .) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
@@ -213,11 +210,8 @@ Create a default coordinating service name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
 {{- define "opensearch.coordinating.servicename" -}}
-{{- if .Values.coordinating.servicenameOverride -}}
-{{- .Values.coordinating.servicenameOverride | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- printf "%s-hl" (include "opensearch.coordinating.fullname" .) | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
+{{- $name := coalesce .Values.coordinating.service.headless.nameOverride .Values.coordinating.servicenameOverride -}}
+{{- default (printf "%s-hl" (include "opensearch.coordinating.fullname" .)) (tpl $name .) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
@@ -238,11 +232,8 @@ Create a default data service name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
 {{- define "opensearch.data.servicename" -}}
-{{- if .Values.data.servicenameOverride -}}
-{{- .Values.data.servicenameOverride | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- printf "%s-hl" (include "opensearch.data.fullname" .) | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
+{{- $name := coalesce .Values.data.service.headless.nameOverride .Values.data.servicenameOverride -}}
+{{- default (printf "%s-hl" (include "opensearch.data.fullname" .)) (tpl $name .) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
@@ -263,11 +254,8 @@ Create a default ingest service name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
 {{- define "opensearch.ingest.servicename" -}}
-{{- if .Values.ingest.servicenameOverride -}}
-{{- .Values.ingest.servicenameOverride | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- printf "%s-hl" (include "opensearch.ingest.fullname" .) | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
+{{- $name := coalesce .Values.ingest.service.headless.nameOverride .Values.ingest.servicenameOverride -}}
+{{- default (printf "%s-hl" (include "opensearch.ingest.fullname" .)) (tpl $name .) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
@@ -353,14 +341,14 @@ Get the initialization scripts volume name.
 Get the initialization scripts ConfigMap name.
 */}}
 {{- define "opensearch.initScriptsCM" -}}
-{{- printf "%s" .Values.initScriptsCM -}}
+{{- print (tpl .Values.initScriptsCM .) -}}
 {{- end -}}
 
 {{/*
 Get the initialization scripts Secret name.
 */}}
 {{- define "opensearch.initScriptsSecret" -}}
-{{- printf "%s" .Values.initScriptsSecret -}}
+{{- print (tpl .Values.initScriptsSecret .) -}}
 {{- end -}}
 
 {{/*
@@ -413,7 +401,7 @@ Return the opensearch TLS credentials secret for typed nodes.
 {{- define "opensearch.node.tlsSecretName" -}}
 {{- $secretName := index .context.Values.security.tls .nodeRole "existingSecret" -}}
 {{- if $secretName -}}
-    {{- printf "%s" (tpl $secretName .context) -}}
+    {{- print (tpl $secretName .context) -}}
 {{- else -}}
     {{- printf "%s-crt" (include (printf "opensearch.%s.fullname" .nodeRole) .context) -}}
 {{- end -}}
@@ -457,7 +445,7 @@ Return the opensearch admin TLS credentials secret for all nodes.
 {{- define "opensearch.admin.tlsSecretName" -}}
 {{- $secretName := .context.Values.security.tls.admin.existingSecret -}}
 {{- if $secretName -}}
-    {{- printf "%s" (tpl $secretName .context) -}}
+    {{- print (tpl $secretName .context) -}}
 {{- else -}}
     {{- printf "%s-admin-crt" (include "common.names.fullname" .context) -}}
 {{- end -}}
@@ -522,9 +510,9 @@ Return the OpenSearch authentication credentials secret name
 */}}
 {{- define "opensearch.secretName" -}}
 {{- if .Values.security.existingSecret -}}
-    {{- printf "%s" (tpl .Values.security.existingSecret $) -}}
+    {{- print (tpl .Values.security.existingSecret $) -}}
 {{- else -}}
-    {{- printf "%s" (include "common.names.fullname" .) -}}
+    {{- print (include "common.names.fullname" .) -}}
 {{- end -}}
 {{- end -}}
 
@@ -542,7 +530,7 @@ Return the OpenSearch TLS password secret name
 */}}
 {{- define "opensearch.tlsPasswordsSecret" -}}
 {{- if .Values.security.tls.passwordsSecret -}}
-    {{- printf "%s" (tpl .Values.security.tls.passwordsSecret $) -}}
+    {{- print (tpl .Values.security.tls.passwordsSecret .) -}}
 {{- else -}}
     {{- printf "%s-tls-pass" (include "common.names.fullname" .) -}}
 {{- end -}}
@@ -552,34 +540,21 @@ Return the OpenSearch TLS password secret name
 Returns the name of the secret key containing the Keystore password
 */}}
 {{- define "opensearch.keystorePasswordKey" -}}
-{{- if .Values.security.tls.secretKeystoreKey -}}
-{{- printf "%s" .Values.security.tls.secretKeystoreKey -}}
-{{- else -}}
-{{- print "keystore-password"}}
+{{- default "keystore-password" (tpl .Values.security.tls.secretKeystoreKey .) -}}
 {{- end -}}
-{{- end -}}
-
 
 {{/*
 Returns the name of the secret key containing the Truststore password
 */}}
 {{- define "opensearch.truststorePasswordKey" -}}
-{{- if .Values.security.tls.secretTruststoreKey -}}
-{{- printf "%s" .Values.security.tls.secretTruststoreKey -}}
-{{- else -}}
-{{- print "truststore-password"}}
-{{- end -}}
+{{- default "truststore-password" (tpl .Values.security.tls.secretTruststoreKey .) -}}
 {{- end -}}
 
 {{/*
 Returns the name of the secret key containing the PEM key password
 */}}
 {{- define "opensearch.keyPasswordKey" -}}
-{{- if .Values.security.tls.secretKey -}}
-{{- printf "%s" .Values.security.tls.secretKey -}}
-{{- else -}}
-{{- print "key-password"}}
-{{- end -}}
+{{- default "key-password" (tpl .Values.security.tls.secretKey .) -}}
 {{- end -}}
 
 {{/*
@@ -792,11 +767,8 @@ Create a default Dashboards service name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
 {{- define "opensearch.dashboards.servicename" -}}
-{{- if .Values.dashboards.servicenameOverride -}}
-{{- .Values.dashboards.servicenameOverride | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- printf "%s" (include "opensearch.dashboards.fullname" .) | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
+{{- $name := coalesce .Values.dashboards.service.nameOverride .Values.dashboards.servicenameOverride -}}
+{{- default (include "opensearch.dashboards.fullname" .) (tpl $name .) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
@@ -813,7 +785,7 @@ Return the opensearch TLS credentials secret for Dashboards UI.
 {{- define "opensearch.dashboards.tlsSecretName" -}}
 {{- $secretName := .Values.dashboards.tls.existingSecret -}}
 {{- if $secretName -}}
-    {{- printf "%s" (tpl $secretName $) -}}
+    {{- print (tpl $secretName .) -}}
 {{- else -}}
     {{- printf "%s-crt" (include "opensearch.dashboards.fullname" .) -}}
 {{- end -}}
