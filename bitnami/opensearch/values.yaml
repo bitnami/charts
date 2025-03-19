@@ -544,6 +544,7 @@ master:
   ##
   fullnameOverride: ""
   ## @param master.servicenameOverride String to fully override opensearch.master.servicename
+  ## DEPRECATED: Use master.service.headless.nameOverride instead
   ##
   servicenameOverride: ""
   ## @param master.annotations [object] Annotations for the master statefulset
@@ -941,6 +942,18 @@ master:
       ## @param master.autoscaling.hpa.targetMemory Target Memory utilization percentage
       ##
       targetMemory: ""
+  ## Master-eligible service parameters
+  ##
+  service:
+    ## Headless service properties
+    ##
+    headless:
+      ## @param master.service.headless.annotations Annotations for the Master-eligible headless service.
+      ##
+      annotations: {}
+      ## @param master.service.headless.nameOverride String to fully override opensearch.master.servicename
+      ##
+      nameOverride: ""
   ## Metrics configuration for master-eligible node
   ##
   metrics:
@@ -1069,6 +1082,7 @@ data:
   ##
   fullnameOverride: ""
   ## @param data.servicenameOverride String to fully override opensearch.data.servicename
+  ## DEPRECATED: Use data.service.headless.nameOverride instead
   ##
   servicenameOverride: ""
   ## @param data.annotations [object] Annotations for the data statefulset
@@ -1462,6 +1476,18 @@ data:
       ## @param data.autoscaling.hpa.targetMemory Target Memory utilization percentage
       ##
       targetMemory: ""
+  ## Data service parameters
+  ##
+  service:
+    ## Headless service properties
+    ##
+    headless:
+      ## @param data.service.headless.annotations Annotations for the data headless service.
+      ##
+      annotations: {}
+      ## @param data.service.headless.nameOverride String to fully override opensearch.data.servicename
+      ##
+      nameOverride: ""
   ## Metrics configuration for data node
   ##
   metrics:
@@ -1591,6 +1617,7 @@ coordinating:
   ##
   fullnameOverride: ""
   ## @param coordinating.servicenameOverride String to fully override opensearch.coordinating.servicename
+  ## DEPRECATED: Use coordinating.service.headless.nameOverride instead
   ##
   servicenameOverride: ""
   ## @param coordinating.annotations [object] Annotations for the coordinating-only statefulset
@@ -1945,6 +1972,18 @@ coordinating:
       ## @param coordinating.autoscaling.hpa.targetMemory Target Memory utilization percentage
       ##
       targetMemory: ""
+  ## Coordinating-only service parameters
+  ##
+  service:
+    ## Headless service properties
+    ##
+    headless:
+      ## @param coordinating.service.headless.annotations Annotations for the coordinating-only headless service.
+      ##
+      annotations: {}
+      ## @param coordinating.service.headless.nameOverride String to fully override opensearch.coordinating.servicename
+      ##
+      nameOverride: ""
   ## Metrics configuration for coordinating node
   ##
   metrics:
@@ -2075,7 +2114,8 @@ ingest:
   ## @param ingest.fullnameOverride String to fully override opensearch.ingest.fullname
   ##
   fullnameOverride: ""
-  ## @param ingest.servicenameOverride String to fully override ingest.master.servicename
+  ## @param ingest.servicenameOverride String to fully override opensearch.ingest.servicename
+  ## DEPRECATED: Use ingest.service.headless.nameOverride instead
   ##
   servicenameOverride: ""
   ## @param ingest.annotations [object] Annotations for the ingest statefulset
@@ -2492,6 +2532,15 @@ ingest:
     ##     timeoutSeconds: 300
     ##
     sessionAffinityConfig: {}
+    ## Headless service properties
+    ##
+    headless:
+      ## @param ingest.service.headless.annotations Annotations for the ingest headless service.
+      ##
+      annotations: {}
+      ## @param ingest.service.headless.nameOverride String to fully override opensearch.ingest.servicename
+      ##
+      nameOverride: ""
   ## OpenSearch Ingest-only ingress parameters
   ## ref: http://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
@@ -2889,6 +2938,9 @@ dashboards:
     ##     timeoutSeconds: 300
     ##
     sessionAffinityConfig: {}
+    ## @param dashboards.service.nameOverride String to fully override opensearch.dashboards.servicename
+    ##
+    nameOverride: ""
   ## OpenSearch Dashboards ingress parameters
   ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
@@ -3020,6 +3072,7 @@ dashboards:
   ##
   fullnameOverride: ""
   ## @param dashboards.servicenameOverride String to fully override opensearch.dashboards.servicename
+  ## DEPRECATED: Use dashboards.service.nameOverride instead
   ##
   servicenameOverride: ""
   ## @param dashboards.updateStrategy.type Data-only nodes statefulset strategy type
