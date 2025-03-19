@@ -207,7 +207,7 @@ spec:
               value: {{ .Values.valkey.containerPorts.valkey | quote }}
             {{- end }}
             - name: VALKEY_CLUSTER_REPLICAS
-              value: {{ .Values.cluster.replicas | quote }}
+              value: {{ if eq (typeOf .Values.cluster.replicas) "float64" -}}{{ .Values.cluster.replicas | quote }}{{- else -}}{{ tpl .Values.cluster.replicas . | quote }}{{- end }}
             {{- if .Values.usePassword }}
             - name: REDISCLI_AUTH
               valueFrom:
