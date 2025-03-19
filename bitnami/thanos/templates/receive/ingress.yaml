@@ -9,7 +9,8 @@ kind: Ingress
 metadata:
   name: {{ include "thanos.receive.fullname" . }}
   namespace: {{ include "common.names.namespace" . }}
-  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.receive.ingress.labels .Values.commonLabels ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: receive
   {{- if or .Values.receive.ingress.annotations .Values.commonAnnotations }}
   {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.receive.ingress.annotations .Values.commonAnnotations ) "context" . ) }}
