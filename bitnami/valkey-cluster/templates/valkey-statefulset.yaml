@@ -153,7 +153,7 @@ spec:
               value: "no"
             {{- else }}
             - name: VALKEY_NODES
-              value: "{{ $count := .Values.cluster.nodes | int }}{{ range $i, $v := until $count }}{{ include "common.names.fullname" $ }}-{{ $i }}.{{ template "common.names.fullname" $ }}-headless {{ end }}"
+              value: '{{- $count := 0 -}}{{ if eq (typeOf .Values.cluster.replicas) "float64" -}}{{ $count = .Values.cluster.nodes | int }}{{- else -}}{{ $count = tpl .Values.cluster.nodes . | int }}{{- end -}}{{ range $i, $v := until $count }}{{ include "common.names.fullname" $ }}-{{ $i }}.{{ template "common.names.fullname" $ }}-headless {{ end }}'
             {{- end }}
             {{- if .Values.usePassword }}
             - name: REDISCLI_AUTH
