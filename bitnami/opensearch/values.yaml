@@ -954,6 +954,10 @@ master:
       ## @param master.service.headless.nameOverride String to fully override opensearch.master.servicename
       ##
       nameOverride: ""
+      ## @param master.service.headless.trafficDistribution String Traffic distribution for the master headless service
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#traffic-distribution
+      ##
+      trafficDistribution: "PreferClose"
   ## Metrics configuration for master-eligible node
   ##
   metrics:
@@ -1488,6 +1492,10 @@ data:
       ## @param data.service.headless.nameOverride String to fully override opensearch.data.servicename
       ##
       nameOverride: ""
+      ## @param data.service.headless.trafficDistribution String Traffic distribution for the data headless service
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#traffic-distribution
+      ##
+      trafficDistribution: "PreferClose"
   ## Metrics configuration for data node
   ##
   metrics:
@@ -1984,6 +1992,10 @@ coordinating:
       ## @param coordinating.service.headless.nameOverride String to fully override opensearch.coordinating.servicename
       ##
       nameOverride: ""
+      ## @param coordinating.service.headless.trafficDistribution String Traffic distribution for the coordinating headless service
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#traffic-distribution
+      ##
+      trafficDistribution: "PreferClose"
   ## Metrics configuration for coordinating node
   ##
   metrics:
@@ -2541,6 +2553,10 @@ ingest:
       ## @param ingest.service.headless.nameOverride String to fully override opensearch.ingest.servicename
       ##
       nameOverride: ""
+      ## @param ingest.service.headless.trafficDistribution String Traffic distribution for the ingest headless service
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#traffic-distribution
+      ##
+      trafficDistribution: "PreferClose"
   ## OpenSearch Ingest-only ingress parameters
   ## ref: http://kubernetes.io/docs/concepts/services-networking/ingress/
   ##

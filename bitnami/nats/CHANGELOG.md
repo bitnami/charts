@@ -1,8 +1,12 @@
 # Changelog
 
-## 9.0.6 (2025-03-07)
+## 9.0.7 (2025-03-19)
 
-* [bitnami/nats] allow to modify JetStream store directory ([#32359](https://github.com/bitnami/charts/pull/32359))
+* [bitnami/nats] Release 9.0.7 ([#32517](https://github.com/bitnami/charts/pull/32517))
+
+## <small>9.0.6 (2025-03-11)</small>
+
+* [bitnami/nats] allow to modify JetStream store directory (#32359) ([9d5238f](https://github.com/bitnami/charts/commit/9d5238f55b072d6d769a8b3023c9af9c75516fa8)), closes [#32359](https://github.com/bitnami/charts/issues/32359)
 
 ## <small>9.0.5 (2025-03-05)</small>
 

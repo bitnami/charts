@@ -163,7 +163,7 @@ Install the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/char
 
 After the installation, create Dashboards under a CRD of your Kubernetes cluster.
 
-For more details regarding what is possible with those CRDs please have a look at [Working with Dashboards](https://github.com/integr8ly/grafana-operator/blob/master/documentation/dashboards.md).
+For more details regarding what is possible with those CRDs please have a look at [Working with Dashboards](https://github.com/grafana/grafana-operator/blob/master/docs/docs/dashboards.md).
 
 ### Deploy extra Grafana resources or objects
 
