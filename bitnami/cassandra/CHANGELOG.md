@@ -1,6 +1,6 @@
 # Changelog
 
-## 12.3.0 (2025-03-19)
+## 12.3.0 (2025-03-20)
 
 * [bitnami/cassandra] Cassandra dynamic seed discovery ([#32464](https://github.com/bitnami/charts/pull/32464))
 
