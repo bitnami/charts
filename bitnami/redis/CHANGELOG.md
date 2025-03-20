@@ -1,6 +1,6 @@
 # Changelog
 
-## 20.11.4 (2025-03-19)
+## 20.11.4 (2025-03-20)
 
 * Fix svcbind secret password ([#32515](https://github.com/bitnami/charts/pull/32515))
 
