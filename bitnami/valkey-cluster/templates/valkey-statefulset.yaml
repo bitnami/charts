@@ -267,7 +267,7 @@ spec:
           {{- end }}
           {{- end }}
           {{- if .Values.valkey.resources }}
-          resources: {{- toYaml .Values.valkey.resources | nindent 12 }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.valkey.resources "context" $) | nindent 12 }}
           {{- else if ne .Values.valkey.resourcesPreset "none" }}
           resources: {{- include "common.resources.preset" (dict "type" .Values.valkey.resourcesPreset) | nindent 12 }}
           {{- end }}
@@ -492,7 +492,7 @@ spec:
         {{- end }}
         resources:
           requests:
-            storage: {{ .Values.persistence.size | quote }}
+            storage: {{ tpl .Values.persistence.size . | quote }}
         {{- include "common.storage.class" (dict "persistence" .Values.persistence "global" .Values.global) | nindent 8 }}
         {{- if or .Values.persistence.matchLabels .Values.persistence.matchExpressions }}
         selector:
