@@ -1,6 +1,6 @@
 # Changelog
 
-## 16.4.8 (2025-03-14)
+## 16.4.8 (2025-03-20)
 
 * [bitnami/mongodb] #27482 - fix replicaset config handling ([#32381](https://github.com/bitnami/charts/pull/32381))
 
