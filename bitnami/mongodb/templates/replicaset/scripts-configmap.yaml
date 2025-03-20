@@ -260,7 +260,7 @@ data:
         value=${desiredRsConf[$key]}
         if [[ $key =~ ^members\[[0-9]+\]\..+ ]]; then
           # Replica set member specific setting
-          if "$(mongosh "cfg=${currentRsConf}; cfg.${key}" 2>/dev/null)" != "${value}"; then
+          if "$(mongosh --eval "cfg=${currentRsConf}; cfg.${key}" 2>/dev/null)" != "${value}"; then
             desiredEqualsActual=false
             logger "rs conf: ${key} needs to be updated to desired value: ${value}"
             settingsToConfigure="${settingsToConfigure}cfg.${key} = ${value}; "
@@ -269,7 +269,7 @@ data:
           fi
         else
           # General rs setting
-          if "$(mongosh "cfg=${currentRsConf}; cfg.settings.${key}" 2>/dev/null)" != "${value}"; then
+          if "$(mongosh --eval "cfg=${currentRsConf}; cfg.settings.${key}" 2>/dev/null)" != "${value}"; then
             desiredEqualsActual=false
             logger "rs conf: ${key} needs to be updated to desired value: ${value}"
             settingsToConfigure="${settingsToConfigure}cfg.settings.${key} = ${value}; "
