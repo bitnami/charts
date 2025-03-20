@@ -1,8 +1,12 @@
 # Changelog
 
-## 16.5.3 (2025-03-19)
+## 16.5.4 (2025-03-20)
 
-* [bitnami/postgresql] Release 16.5.3 ([#32525](https://github.com/bitnami/charts/pull/32525))
+* [bitnami/postgresql] Release 16.5.4 ([#32527](https://github.com/bitnami/charts/pull/32527))
+
+## <small>16.5.3 (2025-03-19)</small>
+
+* [bitnami/postgresql] Release 16.5.3 (#32525) ([150c5aa](https://github.com/bitnami/charts/commit/150c5aa26dfe351cfbdeb17e480c1de935430a9b)), closes [#32525](https://github.com/bitnami/charts/issues/32525)
 
 ## <small>16.5.2 (2025-03-17)</small>
 
