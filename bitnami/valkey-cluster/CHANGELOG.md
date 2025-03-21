@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.2.1 (2025-03-20)
+## 2.2.1 (2025-03-21)
 
 * [bitnami/valkey-cluster] Add support for templating nodes, replicas, resources, and persistent storage values ([#32520](https://github.com/bitnami/charts/pull/32520))
 
