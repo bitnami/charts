@@ -31,7 +31,7 @@ process.roles: broker
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ printf "%s-broker-configuration" (include "common.names.fullname" .) }}
+  name: {{ printf "%s-configuration" (include "kafka.broker.fullname" .) }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: broker

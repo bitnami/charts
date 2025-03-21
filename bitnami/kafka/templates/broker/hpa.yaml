@@ -7,7 +7,7 @@ SPDX-License-Identifier: APACHE-2.0
 apiVersion: {{ include "common.capabilities.hpa.apiVersion" ( dict "context" $ ) }}
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ printf "%s-broker" (include "common.names.fullname" .) }}
+  name: {{ template "kafka.broker.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: broker
@@ -20,7 +20,7 @@ spec:
   scaleTargetRef:
     apiVersion: {{ template "common.capabilities.statefulset.apiVersion" . }}
     kind: StatefulSet
-    name: {{ printf "%s-broker" (include "common.names.fullname" .) }}
+    name: {{ template "kafka.broker.fullname" . }}
   minReplicas: {{ .Values.broker.autoscaling.hpa.minReplicas }}
   maxReplicas: {{ .Values.broker.autoscaling.hpa.maxReplicas }}
   metrics:

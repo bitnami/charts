@@ -181,7 +181,7 @@ To connect to your Kafka controller+broker nodes from outside the cluster, follo
 
         1. Obtain the pod name:
 
-        kubectl get pods --namespace {{ include "common.names.namespace" . }} -l "app.kubernetes.io/name={{ template "kafka.name" . }},app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=kafka"
+        kubectl get pods --namespace {{ include "common.names.namespace" . }} -l "app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=kafka"
 
         2. Obtain pod configuration:
 
@@ -190,16 +190,16 @@ To connect to your Kafka controller+broker nodes from outside the cluster, follo
     {{- end }}
     Kafka brokers port: You will have a different node port for each Kafka broker. You can get the list of configured node ports using the command below:
 
-        echo "$(kubectl get svc --namespace {{ include "common.names.namespace" . }} -l "app.kubernetes.io/name={{ template "kafka.name" . }},app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=kafka,pod" -o jsonpath='{.items[*].spec.ports[0].nodePort}' | tr ' ' '\n')"
+        echo "$(kubectl get svc --namespace {{ include "common.names.namespace" . }} -l "app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=kafka,pod" -o jsonpath='{.items[*].spec.ports[0].nodePort}' | tr ' ' '\n')"
 
 {{- else if eq "LoadBalancer" .Values.externalAccess.controller.service.type }}
     NOTE: It may take a few minutes for the LoadBalancer IPs to be available.
 
-        Watch the status with: 'kubectl get svc --namespace {{ include "common.names.namespace" . }} -l "app.kubernetes.io/name={{ template "kafka.name" . }},app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=kafka,pod" -w'
+        Watch the status with: 'kubectl get svc --namespace {{ include "common.names.namespace" . }} -l "app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=kafka,pod" -w'
 
     Kafka Brokers domain: You will have a different external IP for each Kafka broker. You can get the list of external IPs using the command below:
 
-        echo "$(kubectl get svc --namespace {{ include "common.names.namespace" . }} -l "app.kubernetes.io/name={{ template "kafka.name" . }},app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=kafka,pod" -o jsonpath='{.items[*].status.loadBalancer.ingress[0].ip}' | tr ' ' '\n')"
+        echo "$(kubectl get svc --namespace {{ include "common.names.namespace" . }} -l "app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=kafka,pod" -o jsonpath='{.items[*].status.loadBalancer.ingress[0].ip}' | tr ' ' '\n')"
 
     Kafka Brokers port: {{ .Values.externalAccess.controller.service.ports.external }}
 
@@ -224,7 +224,7 @@ To connect to your Kafka broker nodes from outside the cluster, follow these ins
 
         1. Obtain the pod name:
 
-        kubectl get pods --namespace {{ include "common.names.namespace" . }} -l "app.kubernetes.io/name={{ template "kafka.name" . }},app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=kafka"
+        kubectl get pods --namespace {{ include "common.names.namespace" . }} -l "app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=kafka"
 
         2. Obtain pod configuration:
 
@@ -233,16 +233,16 @@ To connect to your Kafka broker nodes from outside the cluster, follow these ins
     {{- end }}
     Kafka brokers port: You will have a different node port for each Kafka broker. You can get the list of configured node ports using the command below:
 
-        echo "$(kubectl get svc --namespace {{ include "common.names.namespace" . }} -l "app.kubernetes.io/name={{ template "kafka.name" . }},app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=kafka,pod" -o jsonpath='{.items[*].spec.ports[0].nodePort}' | tr ' ' '\n')"
+        echo "$(kubectl get svc --namespace {{ include "common.names.namespace" . }} -l "app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=kafka,pod" -o jsonpath='{.items[*].spec.ports[0].nodePort}' | tr ' ' '\n')"
 
 {{- else if eq "LoadBalancer" .Values.externalAccess.broker.service.type }}
     NOTE: It may take a few minutes for the LoadBalancer IPs to be available.
 
-        Watch the status with: 'kubectl get svc --namespace {{ include "common.names.namespace" . }} -l "app.kubernetes.io/name={{ template "kafka.name" . }},app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=kafka,pod" -w'
+        Watch the status with: 'kubectl get svc --namespace {{ include "common.names.namespace" . }} -l "app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=kafka,pod" -w'
 
     Kafka Brokers domain: You will have a different external IP for each Kafka broker. You can get the list of external IPs using the command below:
 
-        echo "$(kubectl get svc --namespace {{ include "common.names.namespace" . }} -l "app.kubernetes.io/name={{ template "kafka.name" . }},app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=kafka,pod" -o jsonpath='{.items[*].status.loadBalancer.ingress[0].ip}' | tr ' ' '\n')"
+        echo "$(kubectl get svc --namespace {{ include "common.names.namespace" . }} -l "app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=kafka,pod" -o jsonpath='{.items[*].status.loadBalancer.ingress[0].ip}' | tr ' ' '\n')"
 
     Kafka Brokers port: {{ .Values.externalAccess.broker.service.ports.external }}
 
@@ -329,8 +329,6 @@ ssl.endpoint.identification.algorithm=
 {{- end }}
 {{- end }}
 
-{{- include "kafka.checkRollingTags" . }}
+{{- include "common.warnings.resources" (dict "sections" (list "broker" "controller" "metrics.jmx" "provisioning" "defaultInitContainers.volumePermissions" "defaultInitContainers.prepareConfig" "defaultInitContainers.autoDiscovery") "context" $) }}
+{{- include "kafka.validateImages" . }}
 {{- include "kafka.validateValues" . }}
-{{- include "common.warnings.resources" (dict "sections" (list "broker" "controller" "externalAccess.autoDiscovery" "metrics.jmx" "provisioning" "volumePermissions") "context" $) }}
-{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.externalAccess.autoDiscovery.image .Values.volumePermissions.image .Values.metrics.jmx.image) "context" $) }}
-{{- include "common.errors.insecureImages" (dict "images" (list .Values.image .Values.externalAccess.autoDiscovery.image .Values.volumePermissions.image .Values.metrics.jmx.image) "context" $) }}

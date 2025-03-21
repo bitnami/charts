@@ -6,7 +6,7 @@ SPDX-License-Identifier: APACHE-2.0
 apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
-  name: {{ printf "%s-controller" (include "common.names.fullname" .) }}
+  name: {{ template "kafka.controller.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: controller-eligible
@@ -24,9 +24,9 @@ spec:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: controller-eligible
       app.kubernetes.io/part-of: kafka
-  serviceName: {{ printf "%s-controller-headless" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  serviceName: {{ printf "%s-headless" (include "kafka.controller.fullname" .) | trunc 63 | trimSuffix "-" }}
   updateStrategy: {{- include "common.tplvalues.render" (dict "value" .Values.controller.updateStrategy "context" $ ) | nindent 4 }}
-  {{- if and .Values.controller.minReadySeconds (semverCompare ">= 1.23-0" (include "common.capabilities.kubeVersion" .)) }}
+  {{- if .Values.controller.minReadySeconds }}
   minReadySeconds: {{ .Values.controller.minReadySeconds }}
   {{- end }}
   template:
@@ -99,39 +99,13 @@ spec:
       dnsConfig: {{- include "common.tplvalues.render" (dict "value" .Values.dnsConfig "context" $) | nindent 8 }}
       {{- end }}
       initContainers:
-        {{- if and .Values.volumePermissions.enabled .Values.controller.persistence.enabled }}
-        - name: volume-permissions
-          image: {{ include "kafka.volumePermissions.image" . }}
-          imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
-          command:
-            - /bin/bash
-          args:
-            - -ec
-            - |
-              mkdir -p "{{ .Values.controller.persistence.mountPath }}" "{{ .Values.controller.logPersistence.mountPath }}"
-              chown -R {{ .Values.controller.containerSecurityContext.runAsUser }}:{{ .Values.controller.podSecurityContext.fsGroup }} "{{ .Values.controller.persistence.mountPath }}" "{{ .Values.controller.logPersistence.mountPath }}"
-              find "{{ .Values.controller.persistence.mountPath }}" -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs -r chown -R {{ .Values.controller.containerSecurityContext.runAsUser }}:{{ .Values.controller.podSecurityContext.fsGroup }}
-              find "{{ .Values.controller.logPersistence.mountPath }}" -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs -r chown -R {{ .Values.controller.containerSecurityContext.runAsUser }}:{{ .Values.controller.podSecurityContext.fsGroup }}
-          {{- if eq ( toString ( .Values.volumePermissions.containerSecurityContext.runAsUser )) "auto" }}
-          securityContext: {{- omit .Values.volumePermissions.containerSecurityContext "runAsUser" | toYaml | nindent 12 }}
-          {{- else }}
-          securityContext: {{- .Values.volumePermissions.containerSecurityContext | toYaml | nindent 12 }}
-          {{- end }}
-          {{- if .Values.volumePermissions.resources }}
-          resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
-          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
-          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
-          {{- end }}
-          volumeMounts:
-            - name: data
-              mountPath: {{ .Values.controller.persistence.mountPath }}
-            - name: logs
-              mountPath: {{ .Values.controller.logPersistence.mountPath }}
+        {{- if and .Values.defaultInitContainers.volumePermissions.enabled .Values.controller.persistence.enabled }}
+        {{- include "kafka.defaultInitContainers.volumePermissions" (dict "context" . "role" "controller") | nindent 8 }}
         {{- end }}
-        {{- if and .Values.externalAccess.enabled .Values.externalAccess.autoDiscovery.enabled (or .Values.externalAccess.controller.forceExpose (not .Values.controller.controllerOnly))}}
-        {{- include "kafka.autoDiscoveryInitContainer" ( dict "role" "controller" "context" $) | nindent 8 }}
+        {{- if and .Values.externalAccess.enabled .Values.defaultInitContainers.autoDiscovery.enabled (or .Values.externalAccess.controller.forceExpose (not .Values.controller.controllerOnly)) }}
+        {{- include "kafka.defaultInitContainers.autoDiscovery" (dict "context" . "role" "controller") | nindent 8 }}
         {{- end }}
-        {{- include "kafka.prepareKafkaInitContainer" ( dict "role" "controller" "context" $) | nindent 8 }}
+        {{- include "kafka.defaultInitContainers.prepareConfig" (dict "context" . "role" "controller") | nindent 8 }}
         {{- if .Values.controller.initContainers }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.controller.initContainers "context" $ ) | nindent 8 }}
         {{- end }}
@@ -391,11 +365,7 @@ spec:
           emptyDir: {}
         - name: tmp
           emptyDir: {}
-        - name: scripts
-          configMap:
-            name: {{ include "common.names.fullname" . }}-scripts
-            defaultMode: 493
-        {{- if and .Values.externalAccess.enabled .Values.externalAccess.autoDiscovery.enabled }}
+        {{- if and .Values.externalAccess.enabled .Values.defaultInitContainers.autoDiscovery.enabled }}
         - name: kafka-autodiscovery-shared
           emptyDir: {}
         {{- end }}

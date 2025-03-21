@@ -33,7 +33,7 @@ process.roles: {{ ternary "controller" "controller,broker" .Values.controller.co
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ printf "%s-controller-configuration" (include "common.names.fullname" .) }}
+  name: {{ printf "%s-configuration" (include "kafka.controller.fullname" .) }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: controller-eligible

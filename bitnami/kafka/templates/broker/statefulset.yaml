@@ -8,7 +8,7 @@ SPDX-License-Identifier: APACHE-2.0
 apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
-  name: {{ printf "%s-broker" (include "common.names.fullname" .) }}
+  name: {{ template "kafka.broker.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: broker
@@ -26,9 +26,9 @@ spec:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: broker
       app.kubernetes.io/part-of: kafka
-  serviceName: {{ printf "%s-broker-headless" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  serviceName: {{ printf "%s-headless" (include "kafka.broker.fullname" .) | trunc 63 | trimSuffix "-" }}
   updateStrategy: {{- include "common.tplvalues.render" (dict "value" .Values.broker.updateStrategy "context" $ ) | nindent 4 }}
-  {{- if and .Values.broker.minReadySeconds (semverCompare ">= 1.23-0" (include "common.capabilities.kubeVersion" .)) }}
+  {{- if .Values.broker.minReadySeconds }}
   minReadySeconds: {{ .Values.broker.minReadySeconds }}
   {{- end }}
   template:
@@ -95,39 +95,13 @@ spec:
       serviceAccountName: {{ include "kafka.serviceAccountName" . }}
       enableServiceLinks: {{ .Values.broker.enableServiceLinks }}
       initContainers:
-        {{- if and .Values.volumePermissions.enabled .Values.broker.persistence.enabled }}
-        - name: volume-permissions
-          image: {{ include "kafka.volumePermissions.image" . }}
-          imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
-          command:
-            - /bin/bash
-          args:
-            - -ec
-            - |
-              mkdir -p "{{ .Values.broker.persistence.mountPath }}" "{{ .Values.broker.logPersistence.mountPath }}"
-              chown -R {{ .Values.broker.containerSecurityContext.runAsUser }}:{{ .Values.broker.podSecurityContext.fsGroup }} "{{ .Values.broker.persistence.mountPath }}" "{{ .Values.broker.logPersistence.mountPath }}"
-              find "{{ .Values.broker.persistence.mountPath }}" -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs -r chown -R {{ .Values.broker.containerSecurityContext.runAsUser }}:{{ .Values.broker.podSecurityContext.fsGroup }}
-              find "{{ .Values.broker.logPersistence.mountPath }}" -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs -r chown -R {{ .Values.broker.containerSecurityContext.runAsUser }}:{{ .Values.broker.podSecurityContext.fsGroup }}
-          {{- if eq ( toString ( .Values.volumePermissions.containerSecurityContext.runAsUser )) "auto" }}
-          securityContext: {{- omit .Values.volumePermissions.containerSecurityContext "runAsUser" | toYaml | nindent 12 }}
-          {{- else }}
-          securityContext: {{- .Values.volumePermissions.containerSecurityContext | toYaml | nindent 12 }}
-          {{- end }}
-          {{- if .Values.volumePermissions.resources }}
-          resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
-          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
-          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
-          {{- end }}
-          volumeMounts:
-            - name: data
-              mountPath: {{ .Values.broker.persistence.mountPath }}
-            - name: logs
-              mountPath: {{ .Values.broker.logPersistence.mountPath }}
+        {{- if and .Values.defaultInitContainers.volumePermissions.enabled .Values.broker.persistence.enabled }}
+        {{- include "kafka.defaultInitContainers.volumePermissions" (dict "context" . "role" "broker") | nindent 8 }}
         {{- end }}
-        {{- if and .Values.externalAccess.enabled .Values.externalAccess.autoDiscovery.enabled }}
-        {{- include "kafka.autoDiscoveryInitContainer" ( dict "role" "broker" "context" $) | nindent 8 }}
+        {{- if and .Values.externalAccess.enabled .Values.defaultInitContainers.autoDiscovery.enabled }}
+        {{- include "kafka.defaultInitContainers.autoDiscovery" (dict "context" . "role" "broker") | nindent 8 }}
         {{- end }}
-        {{- include "kafka.prepareKafkaInitContainer" ( dict "role" "broker" "context" $) | nindent 8 }}
+        {{- include "kafka.defaultInitContainers.prepareConfig" (dict "context" . "role" "broker") | nindent 8 }}
         {{- if .Values.broker.initContainers }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.broker.initContainers "context" $ ) | nindent 8 }}
         {{- end }}
@@ -383,11 +357,7 @@ spec:
           emptyDir: {}
         - name: tmp
           emptyDir: {}
-        - name: scripts
-          configMap:
-            name: {{ include "common.names.fullname" . }}-scripts
-            defaultMode: 493
-        {{- if and .Values.externalAccess.enabled .Values.externalAccess.autoDiscovery.enabled }}
+        {{- if and .Values.externalAccess.enabled .Values.defaultInitContainers.autoDiscovery.enabled }}
         - name: kafka-autodiscovery-shared
           emptyDir: {}
         {{- end }}
