@@ -487,11 +487,11 @@ Returns the containerPorts for listeners.extraListeners
 {{- end -}}
 
 {{/*
-Returns the controller quorum voters based on the number of controller-eligible nodes
+Returns the controller quorum bootstrap servers based on the number of controller-eligible nodes
 */}}
-{{- define "kafka.controller.quorumVoters" -}}
-{{- if .Values.controller.quorumVoters -}}
-    {{- include "common.tplvalues.render" (dict "value" .Values.controller.quorumVoters "context" $) -}}
+{{- define "kafka.controller.quorumBootstrapServers" -}}
+{{- if .Values.controller.quorumBootstrapServers -}}
+    {{- include "common.tplvalues.render" (dict "value" .Values.controller.quorumBootstrapServers "context" $) -}}
 {{- else -}}
   {{- $fullname := include "kafka.controller.fullname" . }}
   {{- $serviceName := printf "%s-headless" (include "kafka.controller.fullname" .) | trunc 63 | trimSuffix "-" }}
@@ -499,13 +499,13 @@ Returns the controller quorum voters based on the number of controller-eligible 
   {{- $clusterDomain := .Values.clusterDomain }}
   {{- $port := int .Values.listeners.controller.containerPort }}
   {{- $minId := int .Values.controller.minId -}}
-  {{- $controllerVoters := list -}}
+  {{- $bootstrapServers := list -}}
   {{- range $i := until (int .Values.controller.replicaCount) -}}
     {{- $nodeId := add $minId (int $i) -}}
     {{- $nodeAddress := printf "%s-%d.%s.%s.svc.%s:%d" $fullname (int $i) $serviceName $releaseNamespace $clusterDomain $port -}}
-    {{- $controllerVoters = append $controllerVoters (printf "%d@%s" $nodeId $nodeAddress) -}}
+    {{- $bootstrapServers = append $bootstrapServers (printf "%d@%s" $nodeId $nodeAddress) -}}
   {{- end -}}
-  {{- join "," $controllerVoters -}}
+  {{- join "," $bootstrapServers -}}
 {{- end -}}
 {{- end -}}
 
@@ -515,7 +515,7 @@ Section of the server.properties shared by both controller-eligible and broker n
 {{- define "kafka.commonConfig" -}}
 inter.broker.listener.name: {{ .Values.listeners.interbroker.name }}
 controller.listener.names: {{ .Values.listeners.controller.name }}
-controller.quorum.voters: {{ include "kafka.controller.quorumVoters" . }}
+controller.quorum.bootstrap.servers: {{ include "kafka.controller.quorumBootstrapServers" . }}
 {{- if include "kafka.sslEnabled" . }}
 # TLS configuration
 ssl.keystore.type: JKS
@@ -846,9 +846,9 @@ kafka: tls.keyPasswordSecretKey,tls.keystorePasswordSecretKey,tls.truststorePass
 {{- end -}}
 {{- end -}}
 
-{{/* Validate values of Kafka - At least 1 controller is configured or controller.quorum.voters is set  */}}
+{{/* Validate values of Kafka - At least 1 controller is configured or controller.quorum.bootstrap.servers is set  */}}
 {{- define "kafka.validateValues.missingController" -}}
-{{- if and (le (int .Values.controller.replicaCount) 0) (not .Values.controller.quorumVoters) }}
+{{- if and (le (int .Values.controller.replicaCount) 0) (not .Values.controller.quorumBootstrapServers) }}
 kafka: Missing controller-eligible nodes
     No controller-eligible nodes have been configured.
 {{- end -}}

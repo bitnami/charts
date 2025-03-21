@@ -571,7 +571,7 @@ To back up and restore Helm chart deployments on Kubernetes, you need to back up
 | -------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
 | `controller.replicaCount`                                      | Number of Kafka controller-eligible nodes                                                                                                                                                                                               | `3`                   |
 | `controller.controllerOnly`                                    | If set to true, controller nodes will be deployed as dedicated controllers, instead of controller+broker processes.                                                                                                                     | `false`               |
-| `controller.quorumVoters`                                      | Override the Kafka controller quorum voters of the Kafka Kraft cluster. If not set, it will be automatically configured to use all controller-eligible nodes.                                                                           | `""`                  |
+| `controller.quorumBootstrapServers`                            | Override the Kafka controller quorum bootstrap servers of the Kafka Kraft cluster. If not set, it will be automatically configured to use all controller-eligible nodes.                                                                | `""`                  |
 | `controller.minId`                                             | Minimal node.id values for controller-eligible nodes. Do not change after first initialization.                                                                                                                                         | `0`                   |
 | `controller.config`                                            | Specify content for Kafka configuration for Kafka controller-eligible nodes (auto-generated based on other parameters otherwise)                                                                                                        | `{}`                  |
 | `controller.overrideConfiguration`                             | Kafka configuration override for Kafka controller-eligible nodes. Values defined here takes precedence over the ones defined at `controller.config`                                                                                     | `{}`                  |
@@ -1055,6 +1055,7 @@ This major release bumps Kafka major version to `4.y.z` series. This version imp
 Other notable changes:
 
 - `log4j2` and `existingLog4jConfig` parameters have been renamed to `log4j2` and `existingLog4j2ConfigMap`, respectively.
+- `controller.quorumVoters` has been removed in favor of `controller.quorumBootstrapServers`.
 - `brokerRackAssignment` and `brokerRackAssignmentApiVersion` are deprecated in favor of `brokerRackAwareness.*` parameters.
 - `volumePermissions` parameters have been moved under `defaultInitContainers` parameter.
 - `externalAccess.autoDiscovery` parameters have been moved under `defaultInitContainers` parameter.
