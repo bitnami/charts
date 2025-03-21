@@ -434,8 +434,8 @@ To back up and restore Helm chart deployments on Kubernetes, you need to back up
 | `existingConfigmap`                   | Name of an existing ConfigMap with the Kafka configuration                                                                                                                                                 | `""`                                                  |
 | `secretConfig`                        | Additional configuration to be appended at the end of the generated Kafka configuration (store in a secret)                                                                                                | `""`                                                  |
 | `existingSecretConfig`                | Secret with additional configuration that will be appended to the end of the generated Kafka configuration                                                                                                 | `""`                                                  |
-| `log4j`                               | An optional log4j.properties file to overwrite the default of the Kafka brokers                                                                                                                            | `""`                                                  |
-| `existingLog4jConfigMap`              | The name of an existing ConfigMap containing a log4j.properties file                                                                                                                                       | `""`                                                  |
+| `log4j2`                              | Specify content for Kafka log4j2 configuration (default one is used otherwise)                                                                                                                             | `""`                                                  |
+| `existingLog4j2ConfigMap`             | The name of an existing ConfigMap containing the log4j2.yaml file                                                                                                                                          | `""`                                                  |
 | `heapOpts`                            | Kafka Java Heap configuration                                                                                                                                                                              | `-XX:InitialRAMPercentage=75 -XX:MaxRAMPercentage=75` |
 | `brokerRackAwareness.enabled`         | Enable Kafka Rack Awareness                                                                                                                                                                                | `false`                                               |
 | `brokerRackAwareness.cloudProvider`   | Cloud provider to use to set Broker Rack Awareness. Allowed values: `aws-az`, `azure`                                                                                                                      | `""`                                                  |
@@ -1054,6 +1054,7 @@ This major release bumps Kafka major version to `4.y.z` series. This version imp
 
 Other notable changes:
 
+- `log4j2` and `existingLog4jConfig` parameters have been renamed to `log4j2` and `existingLog4j2ConfigMap`, respectively.
 - `brokerRackAssignment` and `brokerRackAssignmentApiVersion` are deprecated in favor of `brokerRackAwareness.*` parameters.
 - `volumePermissions` parameters have been moved under `defaultInitContainers` parameter.
 - `externalAccess.autoDiscovery` parameters have been moved under `defaultInitContainers` parameter.

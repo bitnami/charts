@@ -376,13 +376,13 @@ Return true if a secret object with config exists for broker pods
 {{- end -}}
 
 {{/*
-Return the Kafka log4j ConfigMap name.
+Return the Kafka log4j2 ConfigMap name.
 */}}
-{{- define "kafka.log4j.configMapName" -}}
-{{- if .Values.existingLog4jConfigMap -}}
-    {{- print (tpl .Values.existingLog4jConfigMap .) -}}
+{{- define "kafka.log4j2.configMapName" -}}
+{{- if .Values.existingLog4j2ConfigMap -}}
+    {{- print (tpl .Values.existingLog4j2ConfigMap .) -}}
 {{- else -}}
-    {{- printf "%s-log4j-configuration" (include "common.names.fullname" .) -}}
+    {{- printf "%s-log4j2-configuration" (include "common.names.fullname" .) -}}
 {{- end -}}
 {{- end -}}
 

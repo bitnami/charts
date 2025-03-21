@@ -256,9 +256,9 @@ Returns an init-container that prepares the Kafka configuration files for main c
               error "Invalid type $KAFKA_TLS_TYPE"
           fi
           # Configure TLS password settings in Kafka configuration
-          [[ -n "${KAFKA_TLS_KEYSTORE_PASSWORD:-}" ]] && kafka_common_conf_set "$KAFKA_CONF_FILE" "ssl.keystore.password" "$KAFKA_TLS_KEYSTORE_PASSWORD"
-          [[ -n "${KAFKA_TLS_TRUSTSTORE_PASSWORD:-}" ]] && kafka_common_conf_set "$KAFKA_CONF_FILE" "ssl.truststore.password" "$KAFKA_TLS_TRUSTSTORE_PASSWORD"
-          [[ -n "${KAFKA_TLS_PEM_KEY_PASSWORD:-}" ]] && kafka_common_conf_set "$KAFKA_CONF_FILE" "ssl.key.password" "$KAFKA_TLS_PEM_KEY_PASSWORD"
+          [[ -n "${KAFKA_TLS_KEYSTORE_PASSWORD:-}" ]] && kafka_server_conf_set "ssl.keystore.password" "$KAFKA_TLS_KEYSTORE_PASSWORD"
+          [[ -n "${KAFKA_TLS_TRUSTSTORE_PASSWORD:-}" ]] && kafka_server_conf_set "ssl.truststore.password" "$KAFKA_TLS_TRUSTSTORE_PASSWORD"
+          [[ -n "${KAFKA_TLS_PEM_KEY_PASSWORD:-}" ]] && kafka_server_conf_set "ssl.key.password" "$KAFKA_TLS_PEM_KEY_PASSWORD"
           # Avoid errors caused by previous checks
           true
       }
@@ -304,7 +304,7 @@ Returns an init-container that prepares the Kafka configuration files for main c
           zone=$(curl -s -H Metadata:true --noproxy "*" "http://${metadata_api_ip}/metadata/instance/compute/zone?api-version={{ .context.Values.brokerRackAwareness.azureApiVersion }}&format=text")
           broker_rack="${location}-${zone}"
       {{- end }}
-          kafka_common_conf_set "$KAFKA_CONF_FILE" "broker.rack" "$broker_rack"
+          kafka_server_conf_set "broker.rack" "$broker_rack"
       }
       {{- end }}
       {{- if and $externalAccessEnabled .context.Values.defaultInitContainers.autoDiscovery.enabled }}
@@ -321,10 +321,10 @@ Returns an init-container that prepares the Kafka configuration files for main c
       # Configure node.id
       if [[ -f "/bitnami/kafka/data/meta.properties" ]]; then
           ID="$(grep "node.id" /bitnami/kafka/data/meta.properties | awk -F '=' '{print $2}')"
-          kafka_common_conf_set "$KAFKA_CONF_FILE" "node.id" "$ID"
+          kafka_server_conf_set "node.id" "$ID"
       else
           ID=$((POD_ID + KAFKA_MIN_ID))
-          kafka_common_conf_set "$KAFKA_CONF_FILE" "node.id" "$ID"
+          kafka_server_conf_set "node.id" "$ID"
       fi
       {{- if not .context.Values.listeners.advertisedListeners }}
       replace_in_file "$KAFKA_CONF_FILE" "advertised-address-placeholder" "${MY_POD_NAME}.${KAFKA_FULLNAME}-${POD_ROLE}-headless.${MY_POD_NAMESPACE}.svc.${CLUSTER_DOMAIN}"

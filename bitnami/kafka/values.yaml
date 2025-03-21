@@ -143,16 +143,13 @@ secretConfig: ""
 ## NOTE: This will override secretConfig value
 ##
 existingSecretConfig: ""
-## @param log4j An optional log4j.properties file to overwrite the default of the Kafka brokers
-## An optional log4j.properties file to overwrite the default of the Kafka brokers
-## ref: https://github.com/apache/kafka/blob/trunk/config/log4j.properties
+## @param log4j2 Specify content for Kafka log4j2 configuration (default one is used otherwise)
+## ref: https://github.com/apache/kafka/blob/trunk/config/log4j2.yaml
 ##
-log4j: ""
-## @param existingLog4jConfigMap The name of an existing ConfigMap containing a log4j.properties file
-## The name of an existing ConfigMap containing a log4j.properties file
-## NOTE: this will override `log4j`
+log4j2: ""
+## @param existingLog4j2ConfigMap The name of an existing ConfigMap containing the log4j2.yaml file
 ##
-existingLog4jConfigMap: ""
+existingLog4j2ConfigMap: ""
 ## @param heapOpts Kafka Java Heap configuration
 ##
 heapOpts: -XX:InitialRAMPercentage=75 -XX:MaxRAMPercentage=75

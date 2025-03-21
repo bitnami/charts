@@ -251,10 +251,10 @@ spec:
           resources: {{- include "common.resources.preset" (dict "type" .Values.provisioning.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
-            {{- if or .Values.log4j .Values.existingLog4jConfigMap }}
-            - name: log4j-config
-              mountPath: /opt/bitnami/kafka/config/log4j.properties
-              subPath: log4j.properties
+            {{- if or .Values.log4j2 .Values.existingLog4j2ConfigMap }}
+            - name: log4j2-config
+              mountPath: /opt/bitnami/kafka/config/log4j2.yaml
+              subPath: log4j2.yaml
             {{- end }}
             {{- if (regexFind "SSL" (upper .Values.listeners.client.protocol)) }}
             {{- if not (empty .Values.provisioning.auth.tls.certificatesSecret) }}
@@ -272,10 +272,10 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.provisioning.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
-        {{- if or .Values.log4j .Values.existingLog4jConfigMap }}
-        - name: log4j-config
+        {{- if or .Values.log4j2 .Values.existingLog4j2ConfigMap }}
+        - name: log4j2-config
           configMap:
-            name: {{ include "kafka.log4j.configMapName" . }}
+            name: {{ include "kafka.log4j2.configMapName" . }}
         {{- end }}
         {{- if (regexFind "SSL" (upper .Values.listeners.client.protocol)) }}
         {{- if not (empty .Values.provisioning.auth.tls.certificatesSecret) }}
