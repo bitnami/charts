@@ -85,7 +85,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/nats
-  tag: 2.10.26-debian-12-r1
+  tag: 2.11.0-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -177,10 +177,12 @@ cluster:
 ## ref: https://docs.nats.io/running-a-nats-service/configuration/resource_management
 ## @param jetstream.enabled Switch to enable/disable JetStream
 ## @param jetstream.maxMemory Max memory usage for JetStream
+## @param jetstream.storeDirectory Directory to store JetStream data
 ##
 jetstream:
   enabled: false
   maxMemory: 1G
+  storeDirectory: /data
 ## Logging parameters
 ## ref: https://github.com/nats-io/gnatsd#command-line-arguments
 ## @param debug.enabled Switch to enable/disable debug on logging
@@ -749,7 +751,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/nats-exporter
-    tag: 0.16.0-debian-12-r10
+    tag: 0.16.0-debian-12-r11
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

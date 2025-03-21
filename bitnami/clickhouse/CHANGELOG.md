@@ -1,8 +1,17 @@
 # Changelog
 
-## 8.0.5 (2025-02-28)
+## 8.0.7 (2025-03-20)
 
-* [bitnami/clickhouse] Release 8.0.5 ([#32213](https://github.com/bitnami/charts/pull/32213))
+* [bitnami/clickhouse] Release 8.0.7 ([#32539](https://github.com/bitnami/charts/pull/32539))
+
+## <small>8.0.6 (2025-03-13)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/clickhouse] Release 8.0.6 (#32441) ([b8f8bf3](https://github.com/bitnami/charts/commit/b8f8bf38a3569513f38674d8514cfe8002ea187c)), closes [#32441](https://github.com/bitnami/charts/issues/32441)
+
+## <small>8.0.5 (2025-02-28)</small>
+
+* [bitnami/clickhouse] Release 8.0.5 (#32213) ([de0ac14](https://github.com/bitnami/charts/commit/de0ac1461d486cd15f4a0a3eed8cf75ffcd55995)), closes [#32213](https://github.com/bitnami/charts/issues/32213)
 
 ## <small>8.0.4 (2025-02-25)</small>
 

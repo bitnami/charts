@@ -1,8 +1,12 @@
 # Changelog
 
-## 7.7.0 (2025-03-07)
+## 7.7.1 (2025-03-19)
 
-* [bitnami/memcached] Set `usePasswordFiles=true` by default ([#32362](https://github.com/bitnami/charts/pull/32362))
+* [bitnami/memcached] Release 7.7.1 ([#32526](https://github.com/bitnami/charts/pull/32526))
+
+## 7.7.0 (2025-03-12)
+
+* [bitnami/memcached] Enables the ability to specify podTargetLabels on ServiceMonitor for memcached ( ([bba58fd](https://github.com/bitnami/charts/commit/bba58fd79eb67be53adca12e9c3ba5068023f54c)), closes [#32387](https://github.com/bitnami/charts/issues/32387)
 
 ## <small>7.6.5 (2025-02-20)</small>
 

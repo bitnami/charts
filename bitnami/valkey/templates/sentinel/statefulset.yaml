@@ -186,9 +186,9 @@ spec:
             {{- if .Values.auth.enabled }}
             {{- if .Values.auth.usePasswordFiles }}
             - name: VALKEY_PASSWORD_FILE
-              value: {{ printf "/opt/bitnami/valkey/secrets/%s" (include "valkey.secretPasswordKey" .) }}
+              value: "/opt/bitnami/valkey/secrets/valkey-password"
             - name: VALKEY_PRIMARY_PASSWORD_FILE
-              value: {{ printf "/opt/bitnami/valkey/secrets/%s" (include "valkey.secretPasswordKey" .) }}
+              value: "/opt/bitnami/valkey/secrets/valkey-password"
             {{- else }}
             - name: VALKEY_PASSWORD
               valueFrom:
@@ -392,7 +392,7 @@ spec:
             {{- if .Values.auth.enabled }}
             {{- if .Values.auth.usePasswordFiles }}
             - name: VALKEY_PASSWORD_FILE
-              value: {{ printf "/opt/bitnami/valkey/secrets/%s" (include "valkey.secretPasswordKey" .) }}
+              value: "/opt/bitnami/valkey/secrets/valkey-password"
             {{- else }}
             - name: VALKEY_PASSWORD
               valueFrom:
@@ -564,7 +564,7 @@ spec:
               value: default
             {{- if .Values.auth.usePasswordFiles }}
             - name: REDIS_PASSWORD_FILE
-              value: {{ printf "/secrets/%s" (include "valkey.secretPasswordKey" .) }}
+              value: "/secrets/valkey-password"
             {{- else }}
             - name: REDIS_PASSWORD
               valueFrom:
@@ -776,7 +776,9 @@ spec:
         {{- end }}
         {{- include "common.storage.class" (dict "persistence" .Values.replica.persistence "global" .Values.global) | nindent 8 }}
     {{- if .Values.sentinel.persistence.enabled }}
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         name: sentinel-data
         {{- $claimLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.sentinel.persistence.labels .Values.commonLabels ) "context" . ) }}
         labels: {{- include "common.labels.matchLabels" ( dict "customLabels" $claimLabels "context" $ ) | nindent 10 }}

@@ -1,8 +1,29 @@
 # Changelog
 
-## 7.2.2 (2025-03-04)
+## 7.3.0 (2025-03-20)
 
-* [bitnami/argo-cd] Release 7.2.2 ([#32282](https://github.com/bitnami/charts/pull/32282))
+* [bitnami/argo-cd] Revert usePasswordFiles ([#32514](https://github.com/bitnami/charts/pull/32514))
+
+## <small>7.2.6 (2025-03-19)</small>
+
+* [bitnami/argo-cd] Release 7.2.6 (#32519) ([d87cdeb](https://github.com/bitnami/charts/commit/d87cdeb893d9d3648c633506688e5961a5c88a1c)), closes [#32519](https://github.com/bitnami/charts/issues/32519)
+
+## <small>7.2.5 (2025-03-18)</small>
+
+* [bitnami/argo-cd] Release 7.2.5 (#32500) ([fbd0309](https://github.com/bitnami/charts/commit/fbd03096412bb47cfcea68313db5b6bc4b26da42)), closes [#32500](https://github.com/bitnami/charts/issues/32500)
+
+## <small>7.2.4 (2025-03-18)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/argo-cd] Fix redis password not read when using passwordFiles (#32477) ([12ba544](https://github.com/bitnami/charts/commit/12ba544f66f96aaf966851129f1da684dd19363a)), closes [#32477](https://github.com/bitnami/charts/issues/32477)
+
+## <small>7.2.3 (2025-03-11)</small>
+
+* [bitnami/argo-cd] Release 7.2.3 (#32390) ([a2c149b](https://github.com/bitnami/charts/commit/a2c149b171e9dcb86ac2d67d06c08be894b4ca76)), closes [#32390](https://github.com/bitnami/charts/issues/32390)
+
+## <small>7.2.2 (2025-03-04)</small>
+
+* [bitnami/argo-cd] Release 7.2.2 (#32282) ([1ade191](https://github.com/bitnami/charts/commit/1ade1913a84d4c1547700e80fe11366bcbe943c2)), closes [#32282](https://github.com/bitnami/charts/issues/32282)
 
 ## <small>7.2.1 (2025-02-28)</small>
 
