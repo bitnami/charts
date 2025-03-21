@@ -1,6 +1,6 @@
 # Changelog
 
-## 19.0.3 (2025-03-20)
+## 19.0.3 (2025-03-21)
 
 * [bitnami/nginx] Add resources to git-clone-repository initcontainer ([#32530](https://github.com/bitnami/charts/pull/32530))
 
