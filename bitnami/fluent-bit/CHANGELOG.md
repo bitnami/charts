@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.5.5 (2025-03-04)
+## 2.5.6 (2025-03-17)
 
-* [bitnami/fluent-bit] Release 2.5.5 ([#32255](https://github.com/bitnami/charts/pull/32255))
+* [bitnami/fluent-bit] Release 2.5.6 ([#32489](https://github.com/bitnami/charts/pull/32489))
+
+## <small>2.5.5 (2025-03-04)</small>
+
+* [bitnami/fluent-bit] Release 2.5.5 (#32255) ([64c11bc](https://github.com/bitnami/charts/commit/64c11bc51e9a921a70bf06fed57c44013bc57db1)), closes [#32255](https://github.com/bitnami/charts/issues/32255)
 
 ## <small>2.5.4 (2025-03-03)</small>
 

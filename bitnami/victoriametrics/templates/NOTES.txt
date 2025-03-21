@@ -1,0 +1,168 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
+Did you know there are enterprise versions of the Bitnami catalog? For enhanced secure software supply chain features, unlimited pulls from Docker, LTS support, or application customization, see Bitnami Premium or Tanzu Application Catalog. See https://www.arrow.com/globalecs/na/vendors/bitnami for more information.
+
+** Please be patient while the chart is being deployed **
+
+The following controllers have been deployed:
+
+  - vmselect
+  - vminsert
+  - vmstorage
+  {{- if .Values.vmauth.enabled }}
+  - vmauth
+  {{- end }}
+  {{- if .Values.vmagent.enabled }}
+  - vmagent
+  {{- end }}
+  {{- if .Values.vmalert.enabled }}
+  - vmalert
+  {{- end }}
+
+Check the status of the pods by running this command:
+
+  kubectl get pods --namespace {{ include "common.names.namespace" . | quote }} -l app.kubernetes.io/instance={{ .Release.Name }}
+
+{{- if .Values.vmauth.enabled }}
+Your VictoriaMetrics site can be accessed through the following DNS name from within your cluster:
+
+    {{ include "victoriametrics.vmauth.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} (port {{ .Values.vmauth.service.ports.http }})
+
+To access your VictoriaMetrics site from outside the cluster follow the steps below:
+
+{{- if .Values.vmauth.ingress.enabled }}
+
+Get the VictoriaMetrics URL and associate VictoriaMetrics hostname to your cluster external IP:
+
+   export CLUSTER_IP=$(minikube ip) # On Minikube. Use: `kubectl cluster-info` on others K8s clusters
+   echo "VictoriaMetrics Select URL: http{{ if .Values.vmauth.ingress.tls }}s{{ end }}://{{ .Values.vmauth.ingress.hostname }}/select"
+   echo "VictoriaMetrics Insert URL: http{{ if .Values.vmauth.ingress.tls }}s{{ end }}://{{ .Values.vmauth.ingress.hostname }}/insert"
+   echo "$CLUSTER_IP  {{ .Values.vmauth.ingress.hostname }}" | sudo tee -a /etc/hosts
+
+{{- else }}
+{{- $port := .Values.vmauth.service.ports.http | toString }}
+
+Get the VictoriaMetrics URL by running these commands:
+
+{{- if contains "NodePort" .Values.vmauth.service.type }}
+
+   export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "victoriametrics.vmauth.fullname" . }})
+   export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+   echo "VictoriaMetrics Select URL: http://$NODE_IP:$NODE_PORT/select"
+   echo "VictoriaMetrics Insert URL: http://$NODE_IP:$NODE_PORT/insert"
+
+{{- else if contains "LoadBalancer" .Values.vmauth.service.type }}
+
+  NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ include "victoriametrics.vmauth.fullname" . }}'
+
+   export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "victoriametrics.vmauth.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
+   echo "VictoriaMetrics Select URL: http://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.vmauth.service.ports.http }}{{ end }}/select"
+   echo "VictoriaMetrics Insert URL: http://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.vmauth.service.ports.http }}{{ end }}/select"
+
+{{- else if contains "ClusterIP"  .Values.vmauth.service.type }}
+
+   kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "victoriametrics.vmauth.fullname" . }} {{ .Values.vmauth.service.ports.http }}:{{ .Values.vmauth.service.ports.http }} &
+   echo "VictoriaMetrics Select URL: http://127.0.0.1{{- if ne $port "80" }}:{{ .Values.vmauth.service.ports.http }}{{ end }}/select"
+   echo "VictoriaMetrics Insert URL: http://127.0.0.1{{- if ne $port "80" }}:{{ .Values.vmauth.service.ports.http }}{{ end }}/insert"
+
+{{- end }}
+{{- end }}
+{{- else }}
+
+Your VictoriaMetrics Select site can be accessed through the following DNS name from within your cluster:
+
+    {{ include "victoriametrics.vmselect.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} (port {{ .Values.vmselect.service.ports.http }})
+
+To access your VictoriaMetrics site from outside the cluster follow the steps below:
+
+{{- if .Values.vmselect.ingress.enabled }}
+
+Get the VictoriaMetrics URL and associate VictoriaMetrics hostname to your cluster external IP:
+
+   export CLUSTER_IP=$(minikube ip) # On Minikube. Use: `kubectl cluster-info` on others K8s clusters
+   echo "VictoriaMetrics Select URL: http{{ if .Values.vmselect.ingress.tls }}s{{ end }}://{{ .Values.vmselect.ingress.hostname }}/select"
+   echo "$CLUSTER_IP  {{ .Values.vmselect.ingress.hostname }}" | sudo tee -a /etc/hosts
+
+{{- else }}
+{{- $port := .Values.vmselect.service.ports.http | toString }}
+
+Get the VictoriaMetrics URL by running these commands:
+
+{{- if contains "NodePort" .Values.vmselect.service.type }}
+
+   export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "victoriametrics.vmselect.fullname" . }})
+   export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+   echo "VictoriaMetrics Select URL: http://$NODE_IP:$NODE_PORT/select"
+
+{{- else if contains "LoadBalancer" .Values.vmselect.service.type }}
+
+  NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ include "victoriametrics.vmselect.fullname" . }}'
+
+   export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "victoriametrics.vmselect.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
+   echo "VictoriaMetrics Select URL: http://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.vmselect.service.ports.http }}{{ end }}/select"
+
+{{- else if contains "ClusterIP"  .Values.vmselect.service.type }}
+
+   kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "victoriametrics.vmselect.fullname" . }} {{ .Values.vmselect.service.ports.http }}:{{ .Values.vmselect.service.ports.http }} &
+   echo "VictoriaMetrics Select URL: http://127.0.0.1{{- if ne $port "80" }}:{{ .Values.vmselect.service.ports.http }}{{ end }}/select"
+
+{{- end }}
+{{- end }}
+
+Your VictoriaMetrics Insert site can be accessed through the following DNS name from within your cluster:
+
+    {{ include "victoriametrics.vminsert.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} (port {{ .Values.vminsert.service.ports.http }})
+
+To access your VictoriaMetrics site from outside the cluster follow the steps below:
+
+{{- if .Values.vminsert.ingress.enabled }}
+
+Get the VictoriaMetrics URL and associate VictoriaMetrics hostname to your cluster external IP:
+
+   export CLUSTER_IP=$(minikube ip) # On Minikube. Use: `kubectl cluster-info` on others K8s clusters
+   echo "VictoriaMetrics Insert URL: http{{ if .Values.vminsert.ingress.tls }}s{{ end }}://{{ .Values.vminsert.ingress.hostname }}/insert"
+   echo "$CLUSTER_IP  {{ .Values.vminsert.ingress.hostname }}" | sudo tee -a /etc/hosts
+
+{{- else }}
+{{- $port := .Values.vminsert.service.ports.http | toString }}
+
+Get the VictoriaMetrics URL by running these commands:
+
+{{- if contains "NodePort" .Values.vminsert.service.type }}
+
+   export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "victoriametrics.vminsert.fullname" . }})
+   export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+   echo "VictoriaMetrics Insert URL: http://$NODE_IP:$NODE_PORT/insert"
+
+{{- else if contains "LoadBalancer" .Values.vminsert.service.type }}
+
+  NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ include "victoriametrics.vminsert.fullname" . }}'
+
+   export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "victoriametrics.vminsert.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
+   echo "VictoriaMetrics Insert URL: http://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.vminsert.service.ports.http }}{{ end }}/insert"
+
+{{- else if contains "ClusterIP"  .Values.vminsert.service.type }}
+
+   kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "victoriametrics.vminsert.fullname" . }} {{ .Values.vminsert.service.ports.http }}:{{ .Values.vminsert.service.ports.http }} &
+   echo "VictoriaMetrics Insert URL: http://127.0.0.1{{- if ne $port "80" }}:{{ .Values.vminsert.service.ports.http }}{{ end }}/insert"
+
+{{- end }}
+{{- end }}
+
+{{- end }}
+
+{{- include "common.warnings.rollingTag" .Values.vmselect.image }}
+{{- include "common.warnings.rollingTag" .Values.vminsert.image }}
+{{- include "common.warnings.rollingTag" .Values.vmstorage.image }}
+{{- include "common.warnings.rollingTag" .Values.vmauth.image }}
+{{- include "common.warnings.rollingTag" .Values.vmagent.image }}
+{{- include "common.warnings.rollingTag" .Values.vmalert.image }}
+{{- include "victoriametrics.validateValues" . }}
+{{- include "common.warnings.resources" (dict "sections" (list "vmselect" "vmstorage" "vminsert" "vmauth" "vmagent" "vmalert" "defaultInitContainers.volumePermissions") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.vmselect.image .Values.vminsert.image .Values.vmstorage.image .Values.vmauth.image .Values.vmagent.image .Values.vmalert.image .Values.defaultInitContainers.volumePermissions.image) "context" $) }}
+{{- include "common.errors.insecureImages" (dict "images" (list .Values.vmselect.image .Values.vminsert.image .Values.vmstorage.image .Values.vmauth.image .Values.vmagent.image .Values.vmalert.image .Values.defaultInitContainers.volumePermissions.image) "context" $) }}

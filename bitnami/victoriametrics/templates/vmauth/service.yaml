@@ -1,0 +1,59 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.vmauth.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "victoriametrics.vmauth.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" (dict "customLabels" .Values.commonLabels "context" $) | nindent 4 }}
+    app.kubernetes.io/part-of: victoriametrics
+    app.kubernetes.io/component: vmauth
+  {{- if or .Values.vmauth.service.annotations .Values.commonAnnotations .Values.vmauth.metrics.enabled .Values.vmauth.metrics.annotations }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.vmauth.service.annotations .Values.commonAnnotations .Values.vmauth.metrics.annotations) "context" .) }}
+  {{- if .Values.vmauth.metrics.enabled }}
+  {{- $defaultMetricsAnnotations := dict "prometheus.io/scrape" "true" "prometheus.io/port" .Values.vmauth.service.ports.http "prometheus.io/path" "/metrics" }}
+  {{- $annotations = include "common.tplvalues.merge" (dict "values" (list $annotations $defaultMetricsAnnotations) "context" .) }}
+  {{- end }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.vmauth.service.type }}
+  {{- if and .Values.vmauth.service.clusterIP (eq .Values.vmauth.service.type "ClusterIP") }}
+  clusterIP: {{ .Values.vmauth.service.clusterIP }}
+  {{- end }}
+  {{- if .Values.vmauth.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.vmauth.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.vmauth.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.vmauth.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if or (eq .Values.vmauth.service.type "LoadBalancer") (eq .Values.vmauth.service.type "NodePort") }}
+  externalTrafficPolicy: {{ .Values.vmauth.service.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{- if and (eq .Values.vmauth.service.type "LoadBalancer") (not (empty .Values.vmauth.service.loadBalancerSourceRanges)) }}
+  loadBalancerSourceRanges: {{ .Values.vmauth.service.loadBalancerSourceRanges }}
+  {{- end }}
+  {{- if and (eq .Values.vmauth.service.type "LoadBalancer") (not (empty .Values.vmauth.service.loadBalancerIP)) }}
+  loadBalancerIP: {{ .Values.vmauth.service.loadBalancerIP }}
+  {{- end }}
+  ports:
+    - name: http
+      port: {{ .Values.vmauth.service.ports.http }}
+      protocol: TCP
+      {{- if and (or (eq .Values.vmauth.service.type "NodePort") (eq .Values.vmauth.service.type "LoadBalancer")) (not (empty .Values.vmauth.service.nodePorts.http)) }}
+      nodePort: {{ .Values.vmauth.service.nodePorts.http }}
+      {{- else if eq .Values.vmauth.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+      targetPort: http
+    {{- if .Values.vmauth.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.vmauth.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.vmauth.podLabels .Values.commonLabels ) "context" . ) }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: vmauth
+{{- end }}

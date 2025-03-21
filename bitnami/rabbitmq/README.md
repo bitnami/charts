@@ -659,6 +659,7 @@ Because they expose different sets of data, a valid use case is to scrape metric
 | `service.headless.annotations`          | Annotations for the headless service.                                                                                            | `{}`                     |
 | `service.sessionAffinity`               | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                             | `None`                   |
 | `service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
+| `service.trafficDistribution`           | Traffic Distribution provides another                                                                                            | `PreferClose`            |
 | `ingress.enabled`                       | Enable ingress resource for Management console                                                                                   | `false`                  |
 | `ingress.path`                          | Path for the default host. You may need to set this to '/*' in order to use this with ALB ingress controllers.                   | `/`                      |
 | `ingress.pathType`                      | Ingress path type                                                                                                                | `ImplementationSpecific` |
