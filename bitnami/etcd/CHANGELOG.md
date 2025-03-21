@@ -1,8 +1,13 @@
 # Changelog
 
-## 11.1.5 (2025-03-12)
+## 11.1.6 (2025-03-21)
 
-* [bitnami/etcd] bugfix: skip TLS verification with self-signed certs ([#32417](https://github.com/bitnami/charts/pull/32417))
+* [bitnami/etcd] Release 11.1.6 ([#32555](https://github.com/bitnami/charts/pull/32555))
+
+## <small>11.1.5 (2025-03-12)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/etcd] bugfix: skip TLS verification with self-signed certs (#32417) ([2ca96b6](https://github.com/bitnami/charts/commit/2ca96b6a2b019eb838e352dd98142bf20d443990)), closes [#32417](https://github.com/bitnami/charts/issues/32417)
 
 ## <small>11.1.4 (2025-03-11)</small>
 
