@@ -1,12 +1,12 @@
 dependencies:
 - name: minio
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 15.0.3
+  version: 15.0.7
 - name: zookeeper
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 13.7.3
+  version: 13.7.4
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
   version: 2.30.0
-digest: sha256:43a84ea0b6cead70e46c6c0cc1e6d1c299d7f76a2495009a7bc33323a0cc2c7a
-generated: "2025-02-19T14:00:58.612286008Z"
+digest: sha256:46ca5063e5820c488e148bd09b84e97a062f29725493a3769834c064acfd2aa6
+generated: "2025-03-21T14:12:58.864130434Z"
