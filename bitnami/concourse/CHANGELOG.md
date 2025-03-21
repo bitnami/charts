@@ -1,8 +1,20 @@
 # Changelog
 
-## 5.1.15 (2025-02-27)
+## 5.1.18 (2025-03-17)
 
-* [bitnami/concourse] Release 5.1.15 ([#32197](https://github.com/bitnami/charts/pull/32197))
+* [bitnami/concourse] Release 5.1.18 ([#32491](https://github.com/bitnami/charts/pull/32491))
+
+## <small>5.1.17 (2025-03-04)</small>
+
+* [bitnami/concourse] Release 5.1.17 (#32283) ([b1ed30c](https://github.com/bitnami/charts/commit/b1ed30c4bf7d8bacfd27b5fd84646cc44077f594)), closes [#32283](https://github.com/bitnami/charts/issues/32283)
+
+## <small>5.1.16 (2025-03-04)</small>
+
+* [bitnami/concourse] Release 5.1.16 (#32269) ([224ca88](https://github.com/bitnami/charts/commit/224ca88e7e935d3eccb01137476936a2d9063f69)), closes [#32269](https://github.com/bitnami/charts/issues/32269)
+
+## <small>5.1.15 (2025-02-27)</small>
+
+* [bitnami/concourse] Release 5.1.15 (#32197) ([637796b](https://github.com/bitnami/charts/commit/637796b7e078f96b7375a721a7456e29a2d6b211)), closes [#32197](https://github.com/bitnami/charts/issues/32197)
 
 ## <small>5.1.14 (2025-02-19)</small>
 

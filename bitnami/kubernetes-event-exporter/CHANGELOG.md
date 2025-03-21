@@ -1,8 +1,20 @@
 # Changelog
 
-## 3.4.1 (2025-02-21)
+## 3.4.4 (2025-03-17)
 
-* [bitnami/kubernetes-event-exporter] Release 3.4.1 ([#32011](https://github.com/bitnami/charts/pull/32011))
+* [bitnami/kubernetes-event-exporter] ci: more flexible regexp on Ginkgo tests ([#32481](https://github.com/bitnami/charts/pull/32481))
+
+## <small>3.4.3 (2025-03-05)</small>
+
+* [bitnami/kubernetes-event-exporter] Release 3.4.3 (#32300) ([44db9c2](https://github.com/bitnami/charts/commit/44db9c27201acce8545c6e3547216c1301041333)), closes [#32300](https://github.com/bitnami/charts/issues/32300)
+
+## <small>3.4.2 (2025-03-04)</small>
+
+* [bitnami/kubernetes-event-exporter] Release 3.4.2 (#32262) ([dfc690e](https://github.com/bitnami/charts/commit/dfc690ea013d3847cba2e0a5f4ad5ac588d700d5)), closes [#32262](https://github.com/bitnami/charts/issues/32262)
+
+## <small>3.4.1 (2025-02-21)</small>
+
+* [bitnami/kubernetes-event-exporter] Release 3.4.1 (#32011) ([9fffa0c](https://github.com/bitnami/charts/commit/9fffa0c7f5e6ca6edad485fd6867bf6720615e1c)), closes [#32011](https://github.com/bitnami/charts/issues/32011)
 
 ## 3.4.0 (2025-02-20)
 

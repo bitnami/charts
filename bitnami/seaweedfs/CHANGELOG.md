@@ -1,8 +1,16 @@
 # Changelog
 
+## 4.8.2 (2025-03-07)
+
+* [bitnami/seaweedfs]: fix README for loglevel ([#31735](https://github.com/bitnami/charts/pull/31735))
+
+## <small>4.8.1 (2025-03-05)</small>
+
+* [bitnami/seaweedfs] Release 4.8.1 (#32317) ([f248247](https://github.com/bitnami/charts/commit/f248247c983ac0c353a3ddc214dba911883b11a2)), closes [#32317](https://github.com/bitnami/charts/issues/32317)
+
 ## 4.8.0 (2025-03-03)
 
-* [bitnami/seaweedfs] Add support for `s3.allowEmptyFolder` ([#32234](https://github.com/bitnami/charts/pull/32234))
+* [bitnami/seaweedfs] Add support for `s3.allowEmptyFolder` (#32234) ([ce208fa](https://github.com/bitnami/charts/commit/ce208faae53c07ca52f4f239604f37af7ae1786a)), closes [#32234](https://github.com/bitnami/charts/issues/32234)
 
 ## 4.7.0 (2025-02-24)
 

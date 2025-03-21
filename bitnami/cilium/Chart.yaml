@@ -2,23 +2,24 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
+  tanzuCategory: clusterUtility
   category: Infrastructure
   licenses: Apache-2.0
   images: |
     - name: cilium
-      image: docker.io/bitnami/cilium:1.17.1-debian-12-r3
+      image: docker.io/bitnami/cilium:1.17.2-debian-12-r0
     - name: cilium-operator
-      image: docker.io/bitnami/cilium-operator:1.17.1-debian-12-r3
+      image: docker.io/bitnami/cilium-operator:1.17.2-debian-12-r0
     - name: cilium-proxy
-      image: docker.io/bitnami/cilium-proxy:1.29.10-debian-12-r12
+      image: docker.io/bitnami/cilium-proxy:1.29.10-debian-12-r15
     - name: hubble-relay
-      image: docker.io/bitnami/hubble-relay:1.17.1-debian-12-r2
+      image: docker.io/bitnami/hubble-relay:1.17.2-debian-12-r0
     - name: hubble-ui
-      image: docker.io/bitnami/hubble-ui:0.13.2-debian-12-r2
+      image: docker.io/bitnami/hubble-ui:0.13.2-debian-12-r3
     - name: hubble-ui-backend
-      image: docker.io/bitnami/hubble-ui-backend:0.13.2-debian-12-r1
+      image: docker.io/bitnami/hubble-ui-backend:0.13.2-debian-12-r4
 apiVersion: v2
-appVersion: 1.17.1
+appVersion: 1.17.2
 dependencies:
 - condition: etcd.enabled
   name: etcd
@@ -52,4 +53,4 @@ sources:
 - https://github.com/bitnami/containers/tree/main/bitnami/hubble-relay
 - https://github.com/bitnami/containers/tree/main/bitnami/hubble-ui
 - https://github.com/bitnami/containers/tree/main/bitnami/hubble-ui-backend
-version: 2.1.1
+version: 2.1.3

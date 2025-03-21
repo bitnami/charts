@@ -1,8 +1,13 @@
 # Changelog
 
-## 25.1.4 (2025-02-21)
+## 25.1.5 (2025-03-17)
 
-* [bitnami/moodle] Release 25.1.4 ([#32103](https://github.com/bitnami/charts/pull/32103))
+* [bitnami/moodle] Release 25.1.5 ([#32473](https://github.com/bitnami/charts/pull/32473))
+
+## <small>25.1.4 (2025-02-21)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/moodle] Release 25.1.4 (#32103) ([f95a5d9](https://github.com/bitnami/charts/commit/f95a5d9c6bf68248e3e55aafc3e00a8df4de1a0a)), closes [#32103](https://github.com/bitnami/charts/issues/32103)
 
 ## <small>25.1.3 (2025-02-10)</small>
 

@@ -1,8 +1,16 @@
 # Changelog
 
-## 7.6.5 (2025-02-20)
+## 7.7.1 (2025-03-19)
 
-* [bitnami/memcached] Release 7.6.5 ([#32095](https://github.com/bitnami/charts/pull/32095))
+* [bitnami/memcached] Release 7.7.1 ([#32526](https://github.com/bitnami/charts/pull/32526))
+
+## 7.7.0 (2025-03-12)
+
+* [bitnami/memcached] Enables the ability to specify podTargetLabels on ServiceMonitor for memcached ( ([bba58fd](https://github.com/bitnami/charts/commit/bba58fd79eb67be53adca12e9c3ba5068023f54c)), closes [#32387](https://github.com/bitnami/charts/issues/32387)
+
+## <small>7.6.5 (2025-02-20)</small>
+
+* [bitnami/memcached] Release 7.6.5 (#32095) ([e720816](https://github.com/bitnami/charts/commit/e7208161c5d9284d15baf184dc846dd32ed0db8b)), closes [#32095](https://github.com/bitnami/charts/issues/32095)
 
 ## <small>7.6.4 (2025-02-19)</small>
 

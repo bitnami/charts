@@ -2,15 +2,16 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
+  tanzuCategory: application
   category: CMS
   licenses: Apache-2.0
   images: |
     - name: ghost
-      image: docker.io/bitnami/ghost:5.110.3-debian-12-r0
+      image: docker.io/bitnami/ghost:5.113.1-debian-12-r0
     - name: os-shell
-      image: docker.io/bitnami/os-shell:12-debian-12-r39
+      image: docker.io/bitnami/os-shell:12-debian-12-r40
 apiVersion: v2
-appVersion: 5.110.3
+appVersion: 5.113.1
 dependencies:
 - condition: mysql.enabled
   name: mysql
@@ -40,4 +41,4 @@ maintainers:
 name: ghost
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/ghost
-version: 22.1.18
+version: 22.2.2

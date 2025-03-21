@@ -87,7 +87,7 @@ spec:
         {{- if .Values.arbiter.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.arbiter.initContainers "context" $) | nindent 8 }}
         {{- end }}
-        {{- if and .Values.externalAccess.enabled ( or .Values.externalAccess.service.publicNames  .Values.externalAccess.service.domain ) }}
+        {{- if and .Values.externalAccess.enabled .Values.externalAccess.service.publicNames }}
         {{- include "mongodb.initContainers.dnsCheck" . | nindent 8 }}
         {{- end }}
         {{- if and .Values.tls.enabled .Values.arbiter.enabled }}
