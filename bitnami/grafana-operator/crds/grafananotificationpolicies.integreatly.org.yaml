@@ -1,5 +1,5 @@
 # Source: https://raw.githubusercontent.com/grafana/grafana-operator/v{version}/deploy/helm/grafana-operator/crds/grafana.integreatly.org_grafananotificationpolicies.yaml
-# Version: 5.16.0
+# Version: 5.17.0
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
@@ -185,13 +185,64 @@ spec:
                     type: string
                   receiver:
                     description: receiver
+                    minLength: 1
                     type: string
                   repeat_interval:
                     description: repeat interval
                     type: string
+                  routeSelector:
+                    description: |-
+                      selects GrafanaNotificationPolicyRoutes to merge in when specified
+                      mutually exclusive with Routes
+                    properties:
+                      matchExpressions:
+                        description: matchExpressions is a list of label selector
+                          requirements. The requirements are ANDed.
+                        items:
+                          description: |-
+                            A label selector requirement is a selector that contains values, a key, and an operator that
+                            relates the key and values.
+                          properties:
+                            key:
+                              description: key is the label key that the selector
+                                applies to.
+                              type: string
+                            operator:
+                              description: |-
+                                operator represents a key's relationship to a set of values.
+                                Valid operators are In, NotIn, Exists and DoesNotExist.
+                              type: string
+                            values:
+                              description: |-
+                                values is an array of string values. If the operator is In or NotIn,
+                                the values array must be non-empty. If the operator is Exists or DoesNotExist,
+                                the values array must be empty. This array is replaced during a strategic
+                                merge patch.
+                              items:
+                                type: string
+                              type: array
+                              x-kubernetes-list-type: atomic
+                          required:
+                          - key
+                          - operator
+                          type: object
+                        type: array
+                        x-kubernetes-list-type: atomic
+                      matchLabels:
+                        additionalProperties:
+                          type: string
+                        description: |-
+                          matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels
+                          map is equivalent to an element of matchExpressions, whose key field is "key", the
+                          operator is "In", and the values array contains only "value". The requirements are ANDed.
+                        type: object
+                    type: object
+                    x-kubernetes-map-type: atomic
                   routes:
-                    description: routes
+                    description: routes, mutually exclusive with RouteSelector
                     x-kubernetes-preserve-unknown-fields: true
+                required:
+                - receiver
                 type: object
             required:
             - instanceSelector
@@ -206,7 +257,8 @@ spec:
               rule: '!oldSelf.allowCrossNamespaceImport || (oldSelf.allowCrossNamespaceImport
                 && self.allowCrossNamespaceImport)'
           status:
-            description: The most recent observed state of a Grafana resource
+            description: GrafanaNotificationPolicyStatus defines the observed state
+              of GrafanaNotificationPolicy
             properties:
               conditions:
                 description: Results when synchonizing resource with Grafana instances
@@ -265,12 +317,18 @@ spec:
                   - type
                   type: object
                 type: array
+              discoveredRoutes:
+                items:
+                  type: string
+                type: array
               lastResync:
                 description: Last time the resource was synchronized with Grafana
                   instances
                 format: date-time
                 type: string
             type: object
+        required:
+        - spec
         type: object
     served: true
     storage: true

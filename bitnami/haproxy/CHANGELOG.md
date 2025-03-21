@@ -1,8 +1,17 @@
 # Changelog
 
-## 2.2.13 (2025-03-06)
+## 2.2.15 (2025-03-20)
 
-* [bitnami/haproxy] Release 2.2.13 ([#32341](https://github.com/bitnami/charts/pull/32341))
+* [bitnami/haproxy] Release 2.2.15 ([#32533](https://github.com/bitnami/charts/pull/32533))
+
+## <small>2.2.14 (2025-03-18)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/haproxy] Release 2.2.14 (#32501) ([8293073](https://github.com/bitnami/charts/commit/829307324ea68250cfe0649f5d537bfe2c2dfaa4)), closes [#32501](https://github.com/bitnami/charts/issues/32501)
+
+## <small>2.2.13 (2025-03-06)</small>
+
+* [bitnami/haproxy] Release 2.2.13 (#32341) ([efd9591](https://github.com/bitnami/charts/commit/efd9591294ebe652d936442aae9b6f5d7b4b580d)), closes [#32341](https://github.com/bitnami/charts/issues/32341)
 
 ## <small>2.2.12 (2025-03-05)</small>
 

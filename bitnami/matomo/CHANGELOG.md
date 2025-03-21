@@ -1,8 +1,13 @@
 # Changelog
 
-## 9.3.0 (2025-03-13)
+## 9.2.6 (2025-03-18)
 
-* [bitnami/matomo] Set `usePasswordFiles=true` by default ([#32363](https://github.com/bitnami/charts/pull/32363))
+* [bitnami/matomo] Release 9.2.6 ([#32503](https://github.com/bitnami/charts/pull/32503))
+
+## <small>9.2.5 (2025-03-14)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/matomo] Release 9.2.5 (#32452) ([07c6216](https://github.com/bitnami/charts/commit/07c6216527f19cdf7467a0676a111987d60d251f)), closes [#32452](https://github.com/bitnami/charts/issues/32452)
 
 ## <small>9.2.4 (2025-02-23)</small>
 

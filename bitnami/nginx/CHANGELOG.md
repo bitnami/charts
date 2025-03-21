@@ -1,8 +1,14 @@
 # Changelog
 
-## 19.0.1 (2025-03-04)
+## 19.0.2 (2025-03-12)
 
-* [bitnami/nginx] Release 19.0.1 ([#32261](https://github.com/bitnami/charts/pull/32261))
+* [bitnami/nginx] Release 19.0.2 ([#32416](https://github.com/bitnami/charts/pull/32416))
+
+## <small>19.0.1 (2025-03-04)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/nginx] Release 19.0.1 (#32261) ([5fe381a](https://github.com/bitnami/charts/commit/5fe381a12d5f85d2627f109e66718ccf63e4f773)), closes [#32261](https://github.com/bitnami/charts/issues/32261)
+* [bitnami/nginx] Update README.md (#31855) ([c7a9144](https://github.com/bitnami/charts/commit/c7a9144046d04863af4e0ed1d5b8584357d2ddb2)), closes [#31855](https://github.com/bitnami/charts/issues/31855)
 
 ## 19.0.0 (2025-02-10)
 

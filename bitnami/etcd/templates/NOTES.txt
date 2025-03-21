@@ -88,7 +88,7 @@ To connect to your etcd server from outside the cluster execute the following co
 {{- if .Values.auth.client.secureTransport }}
 {{- if .Values.auth.client.useAutoTLS }}
 
- * As TLS is enabled you should add the flag `--cert-file /bitnami/etcd/data/fixtures/client/cert.pem --key-file /bitnami/etcd/data/fixtures/client/key.pem` to the etcdctl commands.
+ * As TLS is enabled you should add the flag `--cert-file /bitnami/etcd/data/fixtures/client/cert.pem --key-file /bitnami/etcd/data/fixtures/client/key.pem --insecure-skip-tls-verify` to the etcdctl commands.
 
 {{- else }}
 

@@ -1,8 +1,25 @@
 # Changelog
 
-## 15.3.3 (2025-03-03)
+## 15.3.7 (2025-03-19)
 
-* [bitnami/postgresql-ha] Release 15.3.3 ([#32249](https://github.com/bitnami/charts/pull/32249))
+* [bitnami/postgresql-ha] Release 15.3.7 ([#32524](https://github.com/bitnami/charts/pull/32524))
+
+## <small>15.3.6 (2025-03-17)</small>
+
+* [bitnami/postgresql-ha] Release 15.3.6 (#32486) ([2d27651](https://github.com/bitnami/charts/commit/2d2765190e1aac040f934071a8de47b0a215cc71)), closes [#32486](https://github.com/bitnami/charts/issues/32486)
+
+## <small>15.3.5 (2025-03-17)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/postgresql-ha] Release 15.3.5 (#32485) ([3f01165](https://github.com/bitnami/charts/commit/3f01165d7488844ebec789d3b81d83ae04e8fd9a)), closes [#32485](https://github.com/bitnami/charts/issues/32485)
+
+## <small>15.3.4 (2025-03-11)</small>
+
+* [bitnami/postgresql-ha] Added missing LDAP configuation variables (#32378) ([303eb44](https://github.com/bitnami/charts/commit/303eb44f8b76fb41dfaab46b1548f64cfe4e2a65)), closes [#32378](https://github.com/bitnami/charts/issues/32378)
+
+## <small>15.3.3 (2025-03-03)</small>
+
+* [bitnami/postgresql-ha] Release 15.3.3 (#32249) ([d3b369d](https://github.com/bitnami/charts/commit/d3b369dc6839911d334a960887920d708067a57c)), closes [#32249](https://github.com/bitnami/charts/issues/32249)
 
 ## <small>15.3.2 (2025-03-03)</small>
 

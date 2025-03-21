@@ -1,8 +1,17 @@
 # Changelog
 
-## 2.5.3 (2025-03-04)
+## 2.5.5 (2025-03-14)
 
-* [bitnami/mlflow] Release 2.5.3 ([#32263](https://github.com/bitnami/charts/pull/32263))
+* [bitnami/mlflow] Release 2.5.5 ([#32462](https://github.com/bitnami/charts/pull/32462))
+
+## <small>2.5.4 (2025-03-13)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/mlflow] Release 2.5.4 (#32435) ([20e95a7](https://github.com/bitnami/charts/commit/20e95a7001ccb50abbd23d8a445b489857c5222a)), closes [#32435](https://github.com/bitnami/charts/issues/32435)
+
+## <small>2.5.3 (2025-03-04)</small>
+
+* [bitnami/mlflow] Release 2.5.3 (#32263) ([6c8cae9](https://github.com/bitnami/charts/commit/6c8cae96201e7c01c659b5c80d3ff7f881bf87e9)), closes [#32263](https://github.com/bitnami/charts/issues/32263)
 
 ## <small>2.5.2 (2025-02-26)</small>
 

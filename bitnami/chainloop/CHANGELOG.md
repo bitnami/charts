@@ -1,8 +1,29 @@
 # Changelog
 
-## 2.2.12 (2025-03-05)
+## 2.2.17 (2025-03-18)
 
-* [bitnami/chainloop] Release 2.2.12 ([#32325](https://github.com/bitnami/charts/pull/32325))
+* [bitnami/chainloop] Release 2.2.17 ([#32504](https://github.com/bitnami/charts/pull/32504))
+
+## <small>2.2.16 (2025-03-17)</small>
+
+* [bitnami/chainloop] Release 2.2.16 (#32488) ([c584047](https://github.com/bitnami/charts/commit/c584047d5e4e70c813d11db88d37b68badf253aa)), closes [#32488](https://github.com/bitnami/charts/issues/32488)
+
+## <small>2.2.15 (2025-03-14)</small>
+
+* [bitnami/chainloop] Release 2.2.15 (#32458) ([9c1dabd](https://github.com/bitnami/charts/commit/9c1dabd5b730dcff1e68fa0d690ede75f042fb0c)), closes [#32458](https://github.com/bitnami/charts/issues/32458)
+
+## <small>2.2.14 (2025-03-13)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/chainloop] Release 2.2.14 (#32440) ([ae90b4a](https://github.com/bitnami/charts/commit/ae90b4aa0ceab3397658f30e36790abbb59a5561)), closes [#32440](https://github.com/bitnami/charts/issues/32440)
+
+## <small>2.2.13 (2025-03-11)</small>
+
+* [bitnami/chainloop] Release 2.2.13 (#32405) ([2f5fc14](https://github.com/bitnami/charts/commit/2f5fc1470b01632bfa8dd70fdd0618ec5916cde2)), closes [#32405](https://github.com/bitnami/charts/issues/32405)
+
+## <small>2.2.12 (2025-03-05)</small>
+
+* [bitnami/chainloop] Release 2.2.12 (#32325) ([debdca4](https://github.com/bitnami/charts/commit/debdca4ca1815b9bfd1eaea26d929200f2259ac1)), closes [#32325](https://github.com/bitnami/charts/issues/32325)
 
 ## <small>2.2.11 (2025-03-04)</small>
 
