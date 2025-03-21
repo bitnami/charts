@@ -1,0 +1,175 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+{{- $kind := lower .Values.vmselect.kind }}
+{{- if eq $kind "statefulset" }}
+apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
+kind: StatefulSet
+{{- else }}
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+{{- end }}
+metadata:
+  name: {{ template "victoriametrics.vmselect.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" (dict "customLabels" .Values.commonLabels "context" $) | nindent 4 }}
+    app.kubernetes.io/part-of: victoriametrics
+    app.kubernetes.io/component: vmselect
+  {{- if or .Values.vmselect.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.vmselect.annotations .Values.commonAnnotations) "context" .) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if not .Values.vmselect.autoscaling.hpa.enabled }}
+  replicas: {{ .Values.vmselect.replicaCount }}
+  {{- end }}
+  {{- if eq $kind "statefulset" }}
+  serviceName: {{ printf "%s-headless" (include "victoriametrics.vmstorage.fullname" .)  | trunc 63 | trimSuffix "-" }}
+  podManagementPolicy: {{ .Values.vmselect.podManagementPolicy }}
+  {{- end }}
+  {{- if .Values.vmselect.updateStrategy }}
+  {{ ternary "strategy" "updateStrategy" (eq $kind "deployment")}}: {{- toYaml .Values.vmselect.updateStrategy | nindent 4 }}
+  {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" (dict "values" (list .Values.vmselect.podLabels .Values.commonLabels) "context" .) }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/component: vmselect
+  template:
+    metadata:
+      {{- if .Values.vmselect.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.vmselect.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/part-of: victoriametrics
+        app.kubernetes.io/component: vmselect
+    spec:
+      serviceAccountName: {{ template "victoriametrics.vmselect.serviceAccountName" . }}
+      {{- include "victoriametrics.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.vmselect.automountServiceAccountToken }}
+      {{- if .Values.vmselect.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.vmselect.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.vmselect.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.vmselect.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.vmselect.podAffinityPreset "component" "vmselect" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.vmselect.podAntiAffinityPreset "component" "vmselect" "customLabels" $podLabels "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.vmselect.nodeAffinityPreset.type "key" .Values.vmselect.nodeAffinityPreset.key "values" .Values.vmselect.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.vmselect.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.vmselect.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.vmselect.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.vmselect.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.vmselect.priorityClassName }}
+      priorityClassName: {{ .Values.vmselect.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.vmselect.schedulerName }}
+      schedulerName: {{ .Values.vmselect.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.vmselect.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.vmselect.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.vmselect.podSecurityContext.enabled }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.vmselect.podSecurityContext "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.vmselect.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.vmselect.terminationGracePeriodSeconds }}
+      {{- end }}
+      {{- if .Values.vmselect.initContainers }}
+      initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.vmselect.initContainers "context" $) | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: vmselect
+          image: {{ template "victoriametrics.vmselect.image" . }}
+          imagePullPolicy: {{ .Values.vmselect.image.pullPolicy }}
+          {{- if .Values.vmselect.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.vmselect.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.vmselect.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.vmselect.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.vmselect.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.vmselect.args "context" $) | nindent 12 }}
+          {{- else }}
+          args:
+            {{- if .Values.envflagEnable }}
+            - --envflag.enable
+            - --envflag.prefix={{ .Values.envflagPrefix }}
+            {{- end }}
+            - --loggerFormat={{ .Values.loggerFormat }}
+            - --cacheDataPath=/cache
+            - --httpListenAddr=:{{ .Values.vmselect.containerPorts.http }}
+            {{- range $e, $i := until (int .Values.vmstorage.replicaCount) }}
+            - --storageNode={{ include "victoriametrics.vmstorage.fullname" $ }}-{{ int $i }}.{{ printf "%s-headless" (include "victoriametrics.vmstorage.fullname" $) | trunc 63 | trimSuffix "-" }}:{{ $.Values.vmstorage.containerPorts.vmselect }}
+            {{- end }}
+            {{- if .Values.vmselect.extraArgs }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.vmselect.extraArgs "context" $) | nindent 12 }}
+            {{- end }}
+          {{- end }}
+          env:
+            {{- if .Values.vmselect.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.vmselect.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- if .Values.vmselect.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.vmselect.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.vmselect.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.vmselect.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- if .Values.vmselect.resources }}
+          resources: {{- toYaml .Values.vmselect.resources | nindent 12 }}
+          {{- else if ne .Values.vmselect.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.vmselect.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.vmselect.containerPorts.http }}
+          {{- if .Values.vmselect.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.vmselect.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.vmselect.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.vmselect.livenessProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: http
+          {{- end }}
+          {{- if .Values.vmselect.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.vmselect.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.vmselect.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.vmselect.readinessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /health
+              port: http
+          {{- end }}
+          {{- if .Values.vmselect.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.vmselect.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.vmselect.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.vmselect.startupProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /health
+              port: http
+          {{- end }}
+          {{- if .Values.vmselect.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.vmselect.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /cache
+              subPath: app-cache-dir
+          {{- if .Values.vmselect.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.vmselect.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+        {{- if .Values.vmselect.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.vmselect.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        - name: empty-dir
+          emptyDir: {}
+        {{- if .Values.vmselect.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.vmselect.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}

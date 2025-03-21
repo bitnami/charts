@@ -132,8 +132,8 @@ jobs:
           aws s3 cp s3://${{ secrets.AWS_S3_BUCKET }}/bitnami/${chart_name}-${chart_version}.tgz download/
 
           cd deprecated-index
-          git config user.name "Bitnami Containers"
-          git config user.email "bitnami-bot@vmware.com"
+          git config user.name "Bitnami Bot"
+          git config user.email "bitnami.bot@broadcom.com"
 
           attempts=0
           max_attempts=5
