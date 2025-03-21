@@ -1,8 +1,12 @@
 # Changelog
 
-## 12.3.1 (2025-03-06)
+## 12.3.2 (2025-03-21)
 
-* [bitnami/mysql] Fix network policy extraEgress bug ([#32328](https://github.com/bitnami/charts/pull/32328))
+* [bitnami/mysql] Release 12.3.2 ([#32558](https://github.com/bitnami/charts/pull/32558))
+
+## <small>12.3.1 (2025-03-06)</small>
+
+* [bitnami/mysql] Fix network policy extraEgress bug (#32328) ([bceae22](https://github.com/bitnami/charts/commit/bceae22f78d550f8b33589e2579843ac2fad3629)), closes [#32328](https://github.com/bitnami/charts/issues/32328)
 
 ## 12.3.0 (2025-02-24)
 
