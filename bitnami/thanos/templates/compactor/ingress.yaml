@@ -9,7 +9,8 @@ kind: Ingress
 metadata:
   name: {{ include "thanos.compactor.fullname" . }}
   namespace: {{ include "common.names.namespace" . }}
-  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.compactor.ingress.labels .Values.commonLabels ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: compactor
   {{- if or .Values.compactor.ingress.annotations .Values.commonAnnotations }}
   {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.compactor.ingress.annotations .Values.commonAnnotations ) "context" . ) }}
