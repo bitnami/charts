@@ -8,7 +8,7 @@ SPDX-License-Identifier: APACHE-2.0
 apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
-  name: {{ printf "%s-broker" (include "common.names.fullname" .) }}
+  name: {{ template "kafka.broker.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: broker
@@ -26,9 +26,9 @@ spec:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: broker
       app.kubernetes.io/part-of: kafka
-  serviceName: {{ printf "%s-broker-headless" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  serviceName: {{ printf "%s-headless" (include "kafka.broker.fullname" .) | trunc 63 | trimSuffix "-" }}
   updateStrategy: {{- include "common.tplvalues.render" (dict "value" .Values.broker.updateStrategy "context" $ ) | nindent 4 }}
-  {{- if and .Values.broker.minReadySeconds (semverCompare ">= 1.23-0" (include "common.capabilities.kubeVersion" .)) }}
+  {{- if .Values.broker.minReadySeconds }}
   minReadySeconds: {{ .Values.broker.minReadySeconds }}
   {{- end }}
   template:
@@ -37,16 +37,16 @@ spec:
         app.kubernetes.io/component: broker
         app.kubernetes.io/part-of: kafka
       annotations:
-        {{- if (include "kafka.broker.createConfigmap" .) }}
+        {{- if include "kafka.broker.createConfigmap" . }}
         checksum/configuration: {{ include (print $.Template.BasePath "/broker/configmap.yaml") . | sha256sum }}
         {{- end }}
-        {{- if (include "kafka.createSaslSecret" .) }}
+        {{- if include "kafka.createSaslSecret" . }}
         checksum/passwords-secret: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }}
         {{- end }}
-         {{- if (include "kafka.createTlsSecret" .) }}
+         {{- if include "kafka.createTlsSecret" . }}
         checksum/tls-secret: {{ include (print $.Template.BasePath "/tls-secret.yaml") . | sha256sum }}
         {{- end }}
-        {{- if (include "kafka.metrics.jmx.createConfigmap" .) }}
+        {{- if include "kafka.metrics.jmx.createConfigmap" . }}
         checksum/jmx-configuration: {{ include (print $.Template.BasePath "/metrics/jmx-configmap.yaml") . | sha256sum }}
         {{- end }}
         {{- if .Values.broker.podAnnotations }}
@@ -95,39 +95,13 @@ spec:
       serviceAccountName: {{ include "kafka.serviceAccountName" . }}
       enableServiceLinks: {{ .Values.broker.enableServiceLinks }}
       initContainers:
-        {{- if and .Values.volumePermissions.enabled .Values.broker.persistence.enabled }}
-        - name: volume-permissions
-          image: {{ include "kafka.volumePermissions.image" . }}
-          imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
-          command:
-            - /bin/bash
-          args:
-            - -ec
-            - |
-              mkdir -p "{{ .Values.broker.persistence.mountPath }}" "{{ .Values.broker.logPersistence.mountPath }}"
-              chown -R {{ .Values.broker.containerSecurityContext.runAsUser }}:{{ .Values.broker.podSecurityContext.fsGroup }} "{{ .Values.broker.persistence.mountPath }}" "{{ .Values.broker.logPersistence.mountPath }}"
-              find "{{ .Values.broker.persistence.mountPath }}" -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs -r chown -R {{ .Values.broker.containerSecurityContext.runAsUser }}:{{ .Values.broker.podSecurityContext.fsGroup }}
-              find "{{ .Values.broker.logPersistence.mountPath }}" -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs -r chown -R {{ .Values.broker.containerSecurityContext.runAsUser }}:{{ .Values.broker.podSecurityContext.fsGroup }}
-          {{- if eq ( toString ( .Values.volumePermissions.containerSecurityContext.runAsUser )) "auto" }}
-          securityContext: {{- omit .Values.volumePermissions.containerSecurityContext "runAsUser" | toYaml | nindent 12 }}
-          {{- else }}
-          securityContext: {{- .Values.volumePermissions.containerSecurityContext | toYaml | nindent 12 }}
-          {{- end }}
-          {{- if .Values.volumePermissions.resources }}
-          resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
-          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
-          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
-          {{- end }}
-          volumeMounts:
-            - name: data
-              mountPath: {{ .Values.broker.persistence.mountPath }}
-            - name: logs
-              mountPath: {{ .Values.broker.logPersistence.mountPath }}
+        {{- if and .Values.defaultInitContainers.volumePermissions.enabled .Values.broker.persistence.enabled }}
+        {{- include "kafka.defaultInitContainers.volumePermissions" (dict "context" . "role" "broker") | nindent 8 }}
         {{- end }}
-        {{- if and .Values.externalAccess.enabled .Values.externalAccess.autoDiscovery.enabled }}
-        {{- include "kafka.autoDiscoveryInitContainer" ( dict "role" "broker" "context" $) | nindent 8 }}
+        {{- if and .Values.externalAccess.enabled .Values.defaultInitContainers.autoDiscovery.enabled }}
+        {{- include "kafka.defaultInitContainers.autoDiscovery" (dict "context" . "role" "broker") | nindent 8 }}
         {{- end }}
-        {{- include "kafka.prepareKafkaInitContainer" ( dict "role" "broker" "context" $) | nindent 8 }}
+        {{- include "kafka.defaultInitContainers.prepareConfig" (dict "context" . "role" "broker") | nindent 8 }}
         {{- if .Values.broker.initContainers }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.broker.initContainers "context" $ ) | nindent 8 }}
         {{- end }}
@@ -156,25 +130,16 @@ spec:
               value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
             - name: KAFKA_HEAP_OPTS
               value: {{ coalesce .Values.broker.heapOpts .Values.heapOpts | quote }}
-            {{- if .Values.kraft.enabled }}
             - name: KAFKA_KRAFT_CLUSTER_ID
               valueFrom:
                 secretKeyRef:
-                  name: {{ default (printf "%s-kraft-cluster-id" (include "common.names.fullname" .)) .Values.kraft.existingClusterIdSecret }}
-                  key: kraft-cluster-id
-            {{- if .Values.broker.zookeeperMigrationMode }}
-            - name: KAFKA_SKIP_KRAFT_STORAGE_INIT
-              value: "true"
-            {{- end }}
-            {{- end }}
+                  name: {{ default (printf "%s-kraft" (include "common.names.fullname" .)) .Values.existingClusterIdSecret }}
+                  key: cluster-id
+            - name: KAFKA_CFG_PROCESS_ROLES
+              value: broker
             {{- if and (include "kafka.saslEnabled" .) (or (regexFind "SCRAM" (upper .Values.sasl.enabledMechanisms)) (regexFind "SCRAM" (upper .Values.sasl.controllerMechanism)) (regexFind "SCRAM" (upper .Values.sasl.interBrokerMechanism))) }}
-            {{- if or .Values.zookeeper.enabled .Values.externalZookeeper.servers }}
-            - name: KAFKA_ZOOKEEPER_BOOTSTRAP_SCRAM_USERS
-              value: "true"
-            {{- else }}
             - name: KAFKA_KRAFT_BOOTSTRAP_SCRAM_USERS
               value: "true"
-            {{- end }}
             {{- if and (include "kafka.client.saslEnabled" . ) .Values.sasl.client.users (include "kafka.saslUserPasswordsEnabled" .) }}
             - name: KAFKA_CLIENT_USERS
               value: {{ join "," .Values.sasl.client.users | quote }}
@@ -204,7 +169,7 @@ spec:
                   key: inter-broker-client-secret
             {{- end }}
             {{- end }}
-            {{- if and .Values.kraft.enabled (regexFind "SASL" (upper .Values.listeners.controller.protocol)) }}
+            {{- if regexFind "SASL" (upper .Values.listeners.controller.protocol) }}
             {{- if (include "kafka.saslUserPasswordsEnabled" .) }}
             - name: KAFKA_CONTROLLER_USER
               value: {{ .Values.sasl.controller.user | quote }}
@@ -311,19 +276,14 @@ spec:
             - name: kafka-config
               mountPath: /opt/bitnami/kafka/config/server.properties
               subPath: server.properties
-            {{- if .Values.sasl.zookeeper.user }}
-            - name: kafka-config
-              mountPath: /opt/bitnami/kafka/config/kafka_jaas.conf
-              subPath: kafka_jaas.conf
-            {{- end }}
             - name: tmp
               mountPath: /tmp
-            {{- if or .Values.log4j .Values.existingLog4jConfigMap }}
-            - name: log4j-config
-              mountPath: /opt/bitnami/kafka/config/log4j.properties
-              subPath: log4j.properties
+            {{- if or .Values.log4j2 .Values.existingLog4j2ConfigMap }}
+            - name: log4j2-config
+              mountPath: /opt/bitnami/kafka/config/log4j2.yaml
+              subPath: log4j2.yaml
             {{- end }}
-            {{- if or .Values.tls.zookeeper.enabled (include "kafka.sslEnabled" .) }}
+            {{- if include "kafka.sslEnabled" . }}
             - name: kafka-shared-certs
               mountPath: /opt/bitnami/kafka/config/certs
               readOnly: true
@@ -399,28 +359,24 @@ spec:
           emptyDir: {}
         - name: tmp
           emptyDir: {}
-        - name: scripts
-          configMap:
-            name: {{ include "common.names.fullname" . }}-scripts
-            defaultMode: 493
-        {{- if and .Values.externalAccess.enabled .Values.externalAccess.autoDiscovery.enabled }}
+        {{- if and .Values.externalAccess.enabled .Values.defaultInitContainers.autoDiscovery.enabled }}
         - name: kafka-autodiscovery-shared
           emptyDir: {}
         {{- end }}
-        {{- if or .Values.log4j .Values.existingLog4jConfigMap }}
-        - name: log4j-config
+        {{- if or .Values.log4j2 .Values.existingLog4j2ConfigMap }}
+        - name: log4j2-config
           configMap:
-            name: {{ include "kafka.log4j.configMapName" . }}
+            name: {{ include "kafka.log4j2.configMapName" . }}
         {{- end }}
         {{- if .Values.metrics.jmx.enabled }}
         - name: jmx-config
           configMap:
             name: {{ include "kafka.metrics.jmx.configmapName" . }}
         {{- end }}
-        {{- if or .Values.tls.zookeeper.enabled (include "kafka.sslEnabled" .) }}
+        {{- if include "kafka.sslEnabled" . }}
         - name: kafka-shared-certs
           emptyDir: {}
-        {{- if and (include "kafka.sslEnabled" .) (or .Values.tls.existingSecret .Values.tls.autoGenerated) }}
+        {{- if and (include "kafka.sslEnabled" .) (or .Values.tls.existingSecret .Values.tls.autoGenerated.enabled) }}
         - name: kafka-certs
           projected:
             defaultMode: 256
@@ -431,12 +387,6 @@ spec:
               - secret:
                   name: {{ .Values.tls.jksTruststoreSecret }}
               {{- end }}
-        {{- end }}
-        {{- if and .Values.tls.zookeeper.enabled .Values.tls.zookeeper.existingSecret }}
-        - name: kafka-zookeeper-cert
-          secret:
-            secretName: {{ .Values.tls.zookeeper.existingSecret }}
-            defaultMode: 256
         {{- end }}
         {{- end }}
         {{- if .Values.extraVolumes }}

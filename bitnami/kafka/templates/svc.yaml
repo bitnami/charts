@@ -64,7 +64,7 @@ spec:
     {{- end }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: kafka
-    {{- if and .Values.kraft.enabled .Values.controller.controllerOnly }}
+    {{- if .Values.controller.controllerOnly }}
     app.kubernetes.io/component: broker
     {{- end }}
   {{- with .Values.service.ipFamilyPolicy }}

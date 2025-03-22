@@ -3,12 +3,11 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- $replicaCount := int .Values.controller.replicaCount }}
-{{- if and .Values.kraft.enabled (gt $replicaCount 0) .Values.controller.autoscaling.hpa.enabled }}
+{{- if .Values.controller.autoscaling.hpa.enabled }}
 apiVersion: {{ include "common.capabilities.hpa.apiVersion" ( dict "context" $ ) }}
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ printf "%s-controller" (include "common.names.fullname" .) }}
+  name: {{ template "kafka.controller.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: controller
@@ -21,7 +20,7 @@ spec:
   scaleTargetRef:
     apiVersion: {{ template "common.capabilities.statefulset.apiVersion" . }}
     kind: StatefulSet
-    name: {{ printf "%s-controller" (include "common.names.fullname" .) }}
+    name: {{ template "kafka.controller.fullname" . }}
   minReplicas: {{ .Values.controller.autoscaling.hpa.minReplicas }}
   maxReplicas: {{ .Values.controller.autoscaling.hpa.maxReplicas }}
   metrics:
