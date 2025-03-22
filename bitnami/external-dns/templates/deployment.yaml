@@ -848,7 +848,8 @@ spec:
         {{- end }}
       volumes:
         - name: empty-dir
-          emptyDir: {}
+          emptyDir:
+            sizeLimit: {{ .Values.global.emptyDirSizeLimit }}
         {{- if and (eq .Values.provider "alibabacloud") (or (and .Values.alibabacloud.accessKeyId .Values.alibabacloud.accessKeySecret) .Values.alibabacloud.secretName) }}
         # Alibaba Cloud volume(s)
         - name: alibabacloud-config-file
