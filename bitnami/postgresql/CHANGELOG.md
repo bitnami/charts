@@ -1,8 +1,12 @@
 # Changelog
 
-## 16.5.5 (2025-03-20)
+## 16.6.0 (2025-03-21)
 
-* [bitnami/postgresql] allow custom service labels for primary and read ([#32368](https://github.com/bitnami/charts/pull/32368))
+* [bitnami/postgresql] Set `usePasswordFiles=true` by default ([#32115](https://github.com/bitnami/charts/pull/32115))
+
+## <small>16.5.5 (2025-03-20)</small>
+
+* [bitnami/postgresql] allow custom service labels for primary and read (#32368) ([6703679](https://github.com/bitnami/charts/commit/6703679964429f2b0fdf853a8ac812bf7dec5302)), closes [#32368](https://github.com/bitnami/charts/issues/32368)
 
 ## <small>16.5.4 (2025-03-20)</small>
 
