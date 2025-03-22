@@ -1,6 +1,6 @@
 # Changelog
 
-## 12.3.2 (2025-03-21)
+## 12.3.2 (2025-03-22)
 
 * [bitnami/mysql] Release 12.3.2 ([#32558](https://github.com/bitnami/charts/pull/32558))
 
