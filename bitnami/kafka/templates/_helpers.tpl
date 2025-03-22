@@ -507,12 +507,10 @@ Returns the controller quorum bootstrap servers based on the number of controlle
   {{- $releaseNamespace := include "common.names.namespace" . -}}
   {{- $clusterDomain := .Values.clusterDomain }}
   {{- $port := int .Values.listeners.controller.containerPort }}
-  {{- $minId := int .Values.controller.minId -}}
   {{- $bootstrapServers := list -}}
   {{- range $i := until (int .Values.controller.replicaCount) -}}
-    {{- $nodeId := add $minId (int $i) -}}
     {{- $nodeAddress := printf "%s-%d.%s.%s.svc.%s:%d" $fullname (int $i) $serviceName $releaseNamespace $clusterDomain $port -}}
-    {{- $bootstrapServers = append $bootstrapServers (printf "%d@%s" $nodeId $nodeAddress) -}}
+    {{- $bootstrapServers = append $bootstrapServers $nodeAddress -}}
   {{- end -}}
   {{- join "," $bootstrapServers -}}
 {{- end -}}

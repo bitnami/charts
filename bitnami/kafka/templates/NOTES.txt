@@ -52,8 +52,10 @@ Kafka can be accessed by consumers via port {{ $clientPort }} on the following D
 Each Kafka broker can be accessed by producers via port {{ $clientPort }} on the following DNS name(s) from within your cluster:
 
 {{- $brokerList := list }}
+{{- if not .Values.controller.controllerOnly }}
 {{- range $i := until (int .Values.controller.replicaCount) }}
 {{- $brokerList = append $brokerList (printf "%s-controller-%d.%s-controller-headless.%s.svc.%s:%d" $fullname $i $fullname $releaseNamespace $clusterDomain $clientPort) }}
+{{- end }}
 {{- end }}
 {{- range $i := until (int .Values.broker.replicaCount) }}
 {{- $brokerList = append $brokerList (printf "%s-broker-%d.%s-broker-headless.%s.svc.%s:%d" $fullname $i $fullname $releaseNamespace $clusterDomain $clientPort) }}

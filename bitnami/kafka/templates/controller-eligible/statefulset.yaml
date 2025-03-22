@@ -139,6 +139,8 @@ spec:
                 secretKeyRef:
                   name: {{ default (printf "%s-kraft" (include "common.names.fullname" .)) .Values.existingClusterIdSecret }}
                   key: cluster-id
+            - name: KAFKA_CFG_PROCESS_ROLES
+              value: {{ ternary "controller" "controller,broker" .Values.controller.controllerOnly | quote }}
             {{- if and (include "kafka.saslEnabled" .) (or (regexFind "SCRAM" (upper .Values.sasl.enabledMechanisms)) (regexFind "SCRAM" (upper .Values.sasl.controllerMechanism)) (regexFind "SCRAM" (upper .Values.sasl.interBrokerMechanism))) }}
             - name: KAFKA_KRAFT_BOOTSTRAP_SCRAM_USERS
               value: "true"

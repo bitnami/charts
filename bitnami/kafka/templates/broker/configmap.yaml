@@ -22,7 +22,7 @@ logs.dir: {{ .Values.broker.logPersistence.mountPath }}
 # KRaft node role
 process.roles: broker
 # Common Kafka Configuration
-{{- include "kafka.commonConfig" . }}
+{{ include "kafka.commonConfig" . }}
 {{- end -}}
 {{- end -}}
 

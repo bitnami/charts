@@ -24,7 +24,7 @@ logs.dir: {{ .Values.controller.logPersistence.mountPath }}
 # KRaft node role
 process.roles: {{ ternary "controller" "controller,broker" .Values.controller.controllerOnly }}
 # Common Kafka Configuration
-{{- include "kafka.commonConfig" . }}
+{{ include "kafka.commonConfig" . }}
 {{- end -}}
 {{- end -}}
 
