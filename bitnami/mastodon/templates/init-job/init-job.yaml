@@ -83,31 +83,52 @@ spec:
           env:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
+            {{- if .Values.usePasswordFiles }}
+            - name: MASTODON_DATABASE_PASSWORD_FILE
+              value: "/opt/bitnami/mastodon/secrets/db-password"
+            {{- else }}
             - name: MASTODON_DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "mastodon.database.secretName" . }}
                   key: {{ include "mastodon.database.passwordKey" . | quote }}
+            {{- end }}
             {{- if (include "mastodon.redis.auth.enabled" .) }}
             # The rake db:migrate job requires access to Redis
+            {{- if .Values.usePasswordFiles }}
+            - name: MASTODON_REDIS_PASSWORD_FILE
+              value: {{ printf "/opt/bitnami/mastodon/secrets/%s" (include "mastodon.redis.passwordKey" .) }}
+            {{- else }}
             - name: MASTODON_REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "mastodon.redis.secretName" . }}
                   key: {{ include "mastodon.redis.passwordKey" . | quote }}
             {{- end }}
+            {{- end }}
             {{- if (include "mastodon.elasticsearch.auth.enabled" .) }}
+            {{- if .Values.usePasswordFiles }}
+            - name: MASTODON_ELASTICSEARCH_PASSWORD_FILE
+              value: {{ printf "/opt/bitnami/mastodon/secrets/%s" (include "mastodon.elasticsearch.passwordKey" .) }}
+            {{- else }}
             - name: MASTODON_ELASTICSEARCH_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "mastodon.elasticsearch.secretName" . }}
                   key: {{ include "mastodon.elasticsearch.passwordKey" . | quote }}
             {{- end }}
+            {{- end }}
             {{- if and .Values.initJob.precompileAssets.enabled .Values.enableS3 }}
             - name: MASTODON_S3_HOSTNAME
               value: {{ include "mastodon.s3.host" . | quote }}
             - name: MASTODON_S3_PORT_NUMBER
               value: {{ include "mastodon.s3.port" . | quote }}
+            {{- if .Values.usePasswordFiles }}
+            - name: MASTODON_AWS_ACCESS_KEY_ID_FILE
+              value: {{ printf "/opt/bitnami/mastodon/secrets/%s" (include "mastodon.s3.accessKeyIDKey" .) }}
+            - name: MASTODON_AWS_SECRET_ACCESS_KEY_FILE
+              value: {{ printf "/opt/bitnami/mastodon/secrets/%s" (include "mastodon.s3.secretAccessKeyKey" .) }}
+            {{- else }}
             - name: MASTODON_AWS_ACCESS_KEY_ID
               valueFrom:
                 secretKeyRef:
@@ -118,6 +139,7 @@ spec:
                 secretKeyRef:
                   name: {{ include "mastodon.s3.secretName" . }}
                   key: {{ include "mastodon.s3.secretAccessKeyKey" . | quote }}
+            {{- end }}
             {{- end }}
           envFrom:
             - configMapRef:
@@ -130,6 +152,10 @@ spec:
               subPath: tmp-dir
             - name: scripts
               mountPath: /scripts
+            {{- if .Values.usePasswordFiles }}
+            - name: mastodon-secrets
+              mountPath: /opt/bitnami/mastodon/secrets
+            {{- end }}
         {{- end }}
       containers:
         # We separate the job in multiple containers to be able to run them in parallel. We put everything on the same job
@@ -150,25 +176,40 @@ spec:
           env:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
+            {{- if .Values.usePasswordFiles }}
+            - name: MASTODON_DATABASE_PASSWORD_FILE
+              value: "/opt/bitnami/mastodon/secrets/db-password"
+            {{- else }}
             - name: MASTODON_DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "mastodon.database.secretName" . }}
                   key: {{ include "mastodon.database.passwordKey" . | quote }}
+            {{- end }}
             {{- if (include "mastodon.redis.auth.enabled" .) }}
             # The rake db:migrate job requires access to Redis
+            {{- if .Values.usePasswordFiles }}
+            - name: MASTODON_REDIS_PASSWORD_FILE
+              value: {{ printf "/opt/bitnami/mastodon/secrets/%s" (include "mastodon.redis.passwordKey" .) }}
+            {{- else }}
             - name: MASTODON_REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "mastodon.redis.secretName" . }}
                   key: {{ include "mastodon.redis.passwordKey" . | quote }}
             {{- end }}
+            {{- end }}
             {{- if (include "mastodon.elasticsearch.auth.enabled" .) }}
+            {{- if .Values.usePasswordFiles }}
+            - name: MASTODON_ELASTICSEARCH_PASSWORD_FILE
+              value: {{ printf "/opt/bitnami/mastodon/secrets/%s" (include "mastodon.elasticsearch.passwordKey" .) }}
+            {{- else }}
             - name: MASTODON_ELASTICSEARCH_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "mastodon.elasticsearch.secretName" . }}
                   key: {{ include "mastodon.elasticsearch.passwordKey" . | quote }}
+            {{- end }}
             {{- end }}
             {{- if .Values.initJob.migrateAndCreateAdmin.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.initJob.migrateAndCreateAdmin.extraEnvVars "context" $) | nindent 12 }}
@@ -202,6 +243,10 @@ spec:
               subPath: tmp-dir
             - name: scripts
               mountPath: /scripts
+            {{- if .Values.usePasswordFiles }}
+            - name: mastodon-secrets
+              mountPath: /opt/bitnami/mastodon/secrets
+            {{- end }}
           {{- if .Values.initJob.migrateAndCreateAdmin.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.initJob.migrateAndCreateAdmin.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -231,6 +276,12 @@ spec:
               value: {{ include "mastodon.s3.host" . | quote }}
             - name: MASTODON_S3_PORT_NUMBER
               value: {{ include "mastodon.s3.port" . | quote }}
+            {{- if .Values.usePasswordFiles }}
+            - name: MASTODON_AWS_ACCESS_KEY_ID_FILE
+              value: {{ printf "/opt/bitnami/mastodon/secrets/%s" (include "mastodon.s3.accessKeyIDKey" .) }}
+            - name: MASTODON_AWS_SECRET_ACCESS_KEY_FILE
+              value: {{ printf "/opt/bitnami/mastodon/secrets/%s" (include "mastodon.s3.secretAccessKeyKey" .) }}
+            {{- else }}
             - name: MASTODON_AWS_ACCESS_KEY_ID
               valueFrom:
                 secretKeyRef:
@@ -241,6 +292,7 @@ spec:
                 secretKeyRef:
                   name: {{ include "mastodon.s3.secretName" . }}
                   key: {{ include "mastodon.s3.secretAccessKeyKey" . | quote }}
+            {{- end }}
             {{- end }}
             {{- if .Values.initJob.precompileAssets.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.initJob.precompileAssets.extraEnvVars "context" $) | nindent 12 }}
@@ -283,6 +335,10 @@ spec:
               subPath: cache-dir
             - name: scripts
               mountPath: /scripts
+            {{- if .Values.usePasswordFiles }}
+            - name: mastodon-secrets
+              mountPath: /opt/bitnami/mastodon/secrets
+            {{- end }}
           {{- if not .Values.enableS3 }}
             - name: data
               mountPath: {{ .Values.persistence.mountPath }}
@@ -299,6 +355,28 @@ spec:
       volumes:
         - name: empty-dir
           emptyDir: {}
+        {{- if .Values.usePasswordFiles }}
+        - name: mastodon-secrets
+          projected:
+            sources:
+              - secret:
+                  name: {{ include "mastodon.database.secretName" . }}
+                  items:
+                      - key: {{ include "mastodon.database.passwordKey" . }}
+                        path: db-password
+              {{- if (include "mastodon.redis.auth.enabled" .) }}
+              - secret:
+                  name: {{ include "mastodon.redis.secretName" . }}
+              {{- end }}
+              {{- if (include "mastodon.elasticsearch.auth.enabled" .) }}
+              - secret:
+                  name: {{ include "mastodon.elasticsearch.secretName" . }}
+              {{- end }}
+              {{- if .Values.enableS3 }}
+              - secret:
+                  name:  {{ include "mastodon.s3.secretName" . }}
+              {{- end }}
+        {{- end }}
         - name: scripts
           configMap:
             name: {{ printf "%s-init-scripts" (include "common.names.fullname" .) }}
