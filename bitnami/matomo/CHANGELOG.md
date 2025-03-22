@@ -1,8 +1,12 @@
 # Changelog
 
-## 9.2.6 (2025-03-18)
+## 9.2.7 (2025-03-21)
 
-* [bitnami/matomo] Release 9.2.6 ([#32503](https://github.com/bitnami/charts/pull/32503))
+* [bitnami/matomo] Fix typo in SMTP authentication value for CRAM-MD5 ([#32354](https://github.com/bitnami/charts/pull/32354))
+
+## <small>9.2.6 (2025-03-18)</small>
+
+* [bitnami/matomo] Release 9.2.6 (#32503) ([1d91b5e](https://github.com/bitnami/charts/commit/1d91b5ec19f2299c60784bc35827cb4c2e2e072e)), closes [#32503](https://github.com/bitnami/charts/issues/32503)
 
 ## <small>9.2.5 (2025-03-14)</small>
 
