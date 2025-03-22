@@ -1,6 +1,6 @@
 # Changelog
 
-## 8.8.0 (2025-03-22)
+## 8.9.0 (2025-03-22)
 
 * [external-dns] add configurable sizelimit for emptydir tmp mount ([#32487](https://github.com/bitnami/charts/pull/32487))
 
