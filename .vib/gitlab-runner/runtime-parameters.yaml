@@ -1,0 +1,28 @@
+# Gitlab Runner needs a running Gitlab instance to work. As we do
+# not have one, we need to overwrite the command and args with a sleep
+command:
+  - sleep
+args:
+  - infinity
+livenessProbe:
+  enabled: false
+readinessProbe:
+  enabled: false
+gitlabUrl: example.com
+runnerToken: ComplicatedToken
+serviceAccount:
+  create: true
+automountServiceAccountToken: true
+podSecurityContext:
+  enabled: true
+  fsGroup: 1002
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1002
+containerPorts:
+  metrics: 2231
+  sessionServer: 8372
+metrics:
+  enabled: true
+sessionServer:
+  enabled: true

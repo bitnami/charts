@@ -1,0 +1,55 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.sessionServer.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "gitlab-runner.session-server.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.sessionServer.service.labels .Values.commonLabels ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: gitlab-runner
+    app.kubernetes.io/component: gitlab-runner
+  {{- if or .Values.sessionServer.service.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.sessionServer.service.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.sessionServer.service.type }}
+  {{- if and .Values.sessionServer.service.clusterIP (eq .Values.sessionServer.service.type "ClusterIP") }}
+  clusterIP: {{ .Values.sessionServer.service.clusterIP }}
+  {{- end }}
+  {{- if .Values.sessionServer.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.sessionServer.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.sessionServer.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.sessionServer.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if or (eq .Values.sessionServer.service.type "LoadBalancer") (eq .Values.sessionServer.service.type "NodePort") }}
+  externalTrafficPolicy: {{ .Values.sessionServer.service.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{- if and (eq .Values.sessionServer.service.type "LoadBalancer") (not (empty .Values.sessionServer.service.loadBalancerSourceRanges)) }}
+  loadBalancerSourceRanges: {{ .Values.sessionServer.service.loadBalancerSourceRanges }}
+  {{- end }}
+  {{- if and (eq .Values.sessionServer.service.type "LoadBalancer") (not (empty .Values.sessionServer.service.loadBalancerIP)) }}
+  loadBalancerIP: {{ .Values.sessionServer.service.loadBalancerIP }}
+  {{- end }}
+  ports:
+    - name: http-session
+      port: {{ .Values.sessionServer.service.ports.sessionServer }}
+      protocol: TCP
+      targetPort: http-session
+      {{- if and (or (eq .Values.sessionServer.service.type "NodePort") (eq .Values.sessionServer.service.type "LoadBalancer")) (not (empty .Values.sessionServer.service.nodePorts.sessionServer)) }}
+      nodePort: {{ .Values.sessionServer.service.nodePorts.sessionServer }}
+      {{- else if eq .Values.sessionServer.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    {{- if .Values.sessionServer.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.sessionServer.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
+{{- end }}
