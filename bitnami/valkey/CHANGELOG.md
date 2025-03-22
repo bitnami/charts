@@ -1,8 +1,13 @@
 # Changelog
 
-## 2.4.6 (2025-03-10)
+## 2.4.7 (2025-03-22)
 
-* [bitnami/valkey] Fix issue when using custom password secret key ([#32375](https://github.com/bitnami/charts/pull/32375))
+* [bitnami/valkey] Release 2.4.7 ([#32563](https://github.com/bitnami/charts/pull/32563))
+
+## <small>2.4.6 (2025-03-12)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/valkey] Fix issue when using custom password secret key (#32375) ([28a30f1](https://github.com/bitnami/charts/commit/28a30f13f993f5e6e66772ffa324830fe35c71e3)), closes [#32375](https://github.com/bitnami/charts/issues/32375)
 
 ## <small>2.4.5 (2025-03-10)</small>
 
