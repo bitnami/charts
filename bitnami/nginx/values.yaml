@@ -103,6 +103,10 @@ image:
   ## Set to true if you would like to see extra information on logs
   ##
   debug: false
+## @param initContainersDisabled - boolean - optional
+## Disable all init containers regardless of other settings
+##
+initContainersDisabled: false
 ## @param automountServiceAccountToken Mount Service Account token in pod
 ##
 automountServiceAccountToken: false
