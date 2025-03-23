@@ -33,6 +33,10 @@ global:
       adaptSecurityContext: auto
 ## @section Common parameters
 
+## @param initContainersDisabled - boolean - optional
+## Disable all init containers regardless of other settings
+##
+initContainersDisabled: false
 ## @param nameOverride String to partially override nginx.fullname template (will maintain the release name)
 ##
 nameOverride: ""
