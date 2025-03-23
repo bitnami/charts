@@ -1,8 +1,12 @@
 # Changelog
 
-## 18.1.4 (2025-02-21)
+## 18.1.5 (2025-03-23)
 
-* [bitnami/phpmyadmin] Release 18.1.4 ([#32100](https://github.com/bitnami/charts/pull/32100))
+* [bitnami/phpmyadmin] Release 18.1.5 ([#32569](https://github.com/bitnami/charts/pull/32569))
+
+## <small>18.1.4 (2025-02-21)</small>
+
+* [bitnami/phpmyadmin] Release 18.1.4 (#32100) ([419e94c](https://github.com/bitnami/charts/commit/419e94c7256a513e62bb8f6eb1484483d11d4108)), closes [#32100](https://github.com/bitnami/charts/issues/32100)
 
 ## <small>18.1.3 (2025-02-20)</small>
 
