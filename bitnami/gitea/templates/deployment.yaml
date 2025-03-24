@@ -278,7 +278,7 @@ spec:
             - name: empty-dir
               mountPath: /tmp
               subPath: tmp-dir
-            {{- if and .Values.usePasswordFiles }}
+            {{- if .Values.usePasswordFiles }}
             - name: gitea-secrets
               mountPath: /opt/bitnami/gitea/secrets
             {{- end }}
@@ -291,7 +291,7 @@ spec:
       volumes:
         - name: empty-dir
           emptyDir: {}
-        {{- if and .Values.usePasswordFiles }}
+        {{- if .Values.usePasswordFiles }}
         - name: gitea-secrets
           projected:
             sources:
