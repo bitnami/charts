@@ -603,6 +603,110 @@ sasl.oauthbearer.sub.claim.name: {{ .Values.sasl.oauthbearer.subClaimName }}
 {{- end -}}
 
 {{/*
+Environment variables required to configure SASL
+*/}}
+{{- define "kafka.saslEnv" -}}
+{{- if and (include "kafka.client.saslEnabled" . ) (include "kafka.saslUserPasswordsEnabled" .) .Values.sasl.client.users }}
+- name: KAFKA_CLIENT_USERS
+  value: {{ join "," .Values.sasl.client.users | quote }}
+{{- if .Values.usePasswordFiles }}
+- name: KAFKA_CLIENT_PASSWORDS_FILE
+  value: /opt/bitnami/kafka/config/secrets/client-passwords
+{{- else }}
+- name: KAFKA_CLIENT_PASSWORDS
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "kafka.saslSecretName" . }}
+      key: client-passwords
+{{- end }}
+{{- end }}
+{{- if regexFind "SASL" (upper .Values.listeners.interbroker.protocol) }}
+{{- if include "kafka.saslUserPasswordsEnabled" . }}
+- name: KAFKA_INTER_BROKER_USER
+  value: {{ .Values.sasl.interbroker.user | quote }}
+{{- if .Values.usePasswordFiles }}
+- name: KAFKA_INTER_BROKER_PASSWORD_FILE
+  value: /opt/bitnami/kafka/config/secrets/inter-broker-password
+{{- else }}
+- name: KAFKA_INTER_BROKER_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "kafka.saslSecretName" . }}
+      key: inter-broker-password
+{{- end }}
+{{- end }}
+{{- if include "kafka.saslClientSecretsEnabled" . }}
+- name: KAFKA_INTER_BROKER_CLIENT_ID
+  value: {{ .Values.sasl.interbroker.clientId | quote }}
+{{- if .Values.usePasswordFiles }}
+- name: KAFKA_INTER_BROKER_CLIENT_SECRET_FILE
+  value: /opt/bitnami/kafka/config/secrets/inter-broker-client-secret
+{{- else }}
+- name: KAFKA_INTER_BROKER_CLIENT_SECRET
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "kafka.saslSecretName" . }}
+      key: inter-broker-client-secret
+{{- end }}
+{{- end }}
+{{- end }}
+{{- if regexFind "SASL" (upper .Values.listeners.controller.protocol) }}
+{{- if include "kafka.saslUserPasswordsEnabled" . }}
+- name: KAFKA_CONTROLLER_USER
+  value: {{ .Values.sasl.controller.user | quote }}
+{{- if .Values.usePasswordFiles }}
+- name: KAFKA_CONTROLLER_PASSWORD_FILE
+  value: /opt/bitnami/kafka/config/secrets/controller-password
+{{- else }}
+- name: KAFKA_CONTROLLER_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "kafka.saslSecretName" . }}
+      key: controller-password
+{{- end }}
+{{- end }}
+{{- if include "kafka.saslClientSecretsEnabled" . }}
+- name: KAFKA_CONTROLLER_CLIENT_ID
+  value: {{ .Values.sasl.controller.clientId | quote }}
+{{- if .Values.usePasswordFiles }}
+- name: KAFKA_CONTROLLER_CLIENT_SECRET_FILE
+  value: /opt/bitnami/kafka/config/secrets/controller-client-secret
+{{- else }}
+- name: KAFKA_CONTROLLER_CLIENT_SECRET
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "kafka.saslSecretName" . }}
+      key: controller-client-secret
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end -}}
+
+{{/*
+Environment variables shared by both controller-eligible and broker nodes
+*/}}
+{{- define "kafka.commonEnv" -}}
+- name: BITNAMI_DEBUG
+  value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
+- name: KAFKA_KRAFT_CLUSTER_ID
+  valueFrom:
+    secretKeyRef:
+      name: {{ default (printf "%s-kraft" (include "common.names.fullname" .)) .Values.existingKraftSecret }}
+      key: cluster-id
+{{- if and (include "kafka.saslEnabled" .) (or (regexFind "SCRAM" (upper .Values.sasl.enabledMechanisms)) (regexFind "SCRAM" (upper .Values.sasl.controllerMechanism)) (regexFind "SCRAM" (upper .Values.sasl.interBrokerMechanism))) }}
+- name: KAFKA_KRAFT_BOOTSTRAP_SCRAM_USERS
+  value: "true"
+{{ include "kafka.saslEnv" . }}
+{{- end }}
+{{- if .Values.provisioning.enabled }}
+{{- end }}
+{{- if .Values.metrics.jmx.enabled }}
+- name: JMX_PORT
+  value: {{ .Values.metrics.jmx.kafkaJmxPort | quote }}
+{{- end }}
+{{- end -}}
+
+{{/*
 Check if there are rolling tags in the images
 */}}
 {{- define "kafka.checkRollingTags" -}}

@@ -130,76 +130,13 @@ spec:
           args: {{- include "common.tplvalues.render" (dict "value" .Values.controller.args "context" $) | nindent 12 }}
           {{- end }}
           env:
-            - name: BITNAMI_DEBUG
-              value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
             - name: KAFKA_HEAP_OPTS
               value: {{ coalesce .Values.controller.heapOpts .Values.heapOpts | quote }}
-            - name: KAFKA_KRAFT_CLUSTER_ID
-              valueFrom:
-                secretKeyRef:
-                  name: {{ default (printf "%s-kraft" (include "common.names.fullname" .)) .Values.existingKraftSecret }}
-                  key: cluster-id
             - name: KAFKA_CFG_PROCESS_ROLES
               value: {{ ternary "controller" "controller,broker" .Values.controller.controllerOnly | quote }}
             - name: KAFKA_INITIAL_CONTROLLERS_FILE
               value: /shared/initial-controllers.txt
-            {{- if and (include "kafka.saslEnabled" .) (or (regexFind "SCRAM" (upper .Values.sasl.enabledMechanisms)) (regexFind "SCRAM" (upper .Values.sasl.controllerMechanism)) (regexFind "SCRAM" (upper .Values.sasl.interBrokerMechanism))) }}
-            - name: KAFKA_KRAFT_BOOTSTRAP_SCRAM_USERS
-              value: "true"
-            {{- if and (include "kafka.client.saslEnabled" . ) .Values.sasl.client.users (include "kafka.saslUserPasswordsEnabled" .) }}
-            - name: KAFKA_CLIENT_USERS
-              value: {{ join "," .Values.sasl.client.users | quote }}
-            - name: KAFKA_CLIENT_PASSWORDS
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "kafka.saslSecretName" . }}
-                  key: client-passwords
-            {{- end }}
-            {{- if regexFind "SASL" (upper .Values.listeners.interbroker.protocol) }}
-            {{- if (include "kafka.saslUserPasswordsEnabled" .) }}
-            - name: KAFKA_INTER_BROKER_USER
-              value: {{ .Values.sasl.interbroker.user | quote }}
-            - name: KAFKA_INTER_BROKER_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "kafka.saslSecretName" . }}
-                  key: inter-broker-password
-            {{- end }}
-            {{- if (include "kafka.saslClientSecretsEnabled" .) }}
-            - name: KAFKA_INTER_BROKER_CLIENT_ID
-              value: {{ .Values.sasl.interbroker.clientId | quote }}
-            - name: KAFKA_INTER_BROKER_CLIENT_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "kafka.saslSecretName" . }}
-                  key: inter-broker-client-secret
-            {{- end }}
-            {{- end }}
-            {{- if regexFind "SASL" (upper .Values.listeners.controller.protocol) }}
-            {{- if (include "kafka.saslUserPasswordsEnabled" .) }}
-            - name: KAFKA_CONTROLLER_USER
-              value: {{ .Values.sasl.controller.user | quote }}
-            - name: KAFKA_CONTROLLER_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "kafka.saslSecretName" . }}
-                  key: controller-password
-            {{- end }}
-            {{- if (include "kafka.saslClientSecretsEnabled" .) }}
-            - name: KAFKA_CONTROLLER_CLIENT_ID
-              value: {{ .Values.sasl.controller.clientId | quote }}
-            - name: KAFKA_CONTROLLER_CLIENT_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "kafka.saslSecretName" . }}
-                  key: controller-client-secret
-            {{- end }}
-            {{- end }}
-            {{- end }}
-            {{- if .Values.metrics.jmx.enabled }}
-            - name: JMX_PORT
-              value: {{ .Values.metrics.jmx.kafkaJmxPort | quote }}
-            {{- end }}
+            {{- include "kafka.commonEnv" . | nindent 12 }}
             {{- if .Values.controller.extraEnvVars }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.controller.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
@@ -300,6 +237,11 @@ spec:
               mountPath: /opt/bitnami/kafka/config/certs
               readOnly: true
             {{- end }}
+            {{- if and .Values.usePasswordFiles (include "kafka.saslEnabled" .) (or (regexFind "SCRAM" (upper .Values.sasl.enabledMechanisms)) (regexFind "SCRAM" (upper .Values.sasl.controllerMechanism)) (regexFind "SCRAM" (upper .Values.sasl.interBrokerMechanism))) }}
+            - name: kafka-sasl
+              mountPath: /opt/bitnami/kafka/config/secrets
+              readOnly: true
+            {{- end }}
             {{- if .Values.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
@@ -386,7 +328,7 @@ spec:
         {{- if include "kafka.sslEnabled" . }}
         - name: kafka-shared-certs
           emptyDir: {}
-        {{- if and (include "kafka.sslEnabled" .) (or .Values.tls.existingSecret .Values.tls.autoGenerated.enabled) }}
+        {{- if or .Values.tls.existingSecret .Values.tls.autoGenerated.enabled }}
         - name: kafka-certs
           projected:
             defaultMode: 256
@@ -398,6 +340,13 @@ spec:
                   name: {{ .Values.tls.jksTruststoreSecret }}
               {{- end }}
         {{- end }}
+        {{- end }}
+        {{- if and .Values.usePasswordFiles (include "kafka.saslEnabled" .) (or (regexFind "SCRAM" (upper .Values.sasl.enabledMechanisms)) (regexFind "SCRAM" (upper .Values.sasl.controllerMechanism)) (regexFind "SCRAM" (upper .Values.sasl.interBrokerMechanism))) }}
+        - name: kafka-sasl
+          projected:
+            sources:
+              - secret:
+                  name:  {{ include "kafka.saslSecretName" . }}
         {{- end }}
         {{- if .Values.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
