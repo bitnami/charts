@@ -603,15 +603,13 @@ sasl.oauthbearer.sub.claim.name: {{ .Values.sasl.oauthbearer.subClaimName }}
 {{- end -}}
 
 {{/*
-Warning and error messages based on chart images
+Check if there are rolling tags in the images
 */}}
-{{- define "kafka.validateImages" -}}
+{{- define "kafka.checkRollingTags" -}}
 {{- include "common.warnings.rollingTag" .Values.image }}
 {{- include "common.warnings.rollingTag" .Values.defaultInitContainers.volumePermissions.image }}
 {{- include "common.warnings.rollingTag" .Values.defaultInitContainers.autoDiscovery.image }}
 {{- include "common.warnings.rollingTag" .Values.metrics.jmx.image }}
-{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.defaultInitContainers.volumePermissions.image .Values.defaultInitContainers.autoDiscovery.image .Values.metrics.jmx.image) "context" $) }}
-{{- include "common.errors.insecureImages" (dict "images" (list .Values.image .Values.defaultInitContainers.volumePermissions.image .Values.defaultInitContainers.autoDiscovery.image .Values.metrics.jmx.image) "context" $) }}
 {{- end -}}
 
 {{/*
