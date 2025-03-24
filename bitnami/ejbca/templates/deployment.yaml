@@ -260,7 +260,7 @@ spec:
             - name: ejbca-data
               mountPath: /bitnami/wildfly
               subPath: wildfly
-            {{- if and .Values.usePasswordFiles }}
+            {{- if .Values.usePasswordFiles }}
             - name: ejbca-secrets
               mountPath: /opt/bitnami/ejbca/secrets
             {{- end }}
@@ -291,7 +291,7 @@ spec:
             - key: "keystore.jks"
               path: "keystore.jks"
         {{- end }}
-        {{- if and .Values.usePasswordFiles }}
+        {{- if .Values.usePasswordFiles }}
         - name: ejbca-secrets
           projected:
             sources:
