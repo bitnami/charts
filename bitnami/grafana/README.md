@@ -413,6 +413,7 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 | `clusterDomain`     | Default Kubernetes cluster domain                                                       | `cluster.local` |
 | `commonLabels`      | Labels to add to all deployed objects                                                   | `{}`            |
 | `commonAnnotations` | Annotations to add to all deployed objects                                              | `{}`            |
+| `usePasswordFiles`  | Mount credentials as files instead of using environment variables                       | `true`          |
 
 ### Grafana parameters
 

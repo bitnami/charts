@@ -73,8 +73,8 @@ jobs:
         run: |
           cd index
           # Configure git
-          git config user.name "Bitnami Containers"
-          git config user.email "bitnami-bot@vmware.com"
+          git config user.name "Bitnami Bot"
+          git config user.email "bitnami.bot@broadcom.com"
 
           read -r -a new_releases_arr <<< $NEW_RELEASES
           for release in "${new_releases_arr[@]}"; do

@@ -1,8 +1,12 @@
 # Changelog
 
+## 4.2.1 (2025-03-20)
+
+* [bitnami/apisix] Release 4.2.1 ([#32540](https://github.com/bitnami/charts/pull/32540))
+
 ## 4.2.0 (2025-02-24)
 
-* [bitnami/apisix] Add support for `usePasswordFiles` ([#32077](https://github.com/bitnami/charts/pull/32077))
+* [bitnami/apisix] Add support for `usePasswordFiles` (#32077) ([cb5df90](https://github.com/bitnami/charts/commit/cb5df905951bede532a1ef73a88a0a66c67e5044)), closes [#32077](https://github.com/bitnami/charts/issues/32077)
 
 ## 4.1.0 (2025-02-20)
 
