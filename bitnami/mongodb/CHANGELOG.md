@@ -1,8 +1,13 @@
 # Changelog
 
-## 16.4.8 (2025-03-21)
+## 16.4.9 (2025-03-24)
 
-* [bitnami/mongodb] Release 16.4.8 ([#32551](https://github.com/bitnami/charts/pull/32551))
+* [bitnami/mongodb] #27482 - fix replicaset config handling ([#32381](https://github.com/bitnami/charts/pull/32381))
+
+## <small>16.4.8 (2025-03-21)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/mongodb] Release 16.4.8 (#32551) ([07d0b66](https://github.com/bitnami/charts/commit/07d0b664ed13ac2388db93f4369597948f16ee25)), closes [#32551](https://github.com/bitnami/charts/issues/32551)
 
 ## <small>16.4.7 (2025-03-12)</small>
 
