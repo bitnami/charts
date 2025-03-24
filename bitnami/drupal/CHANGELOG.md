@@ -1,6 +1,6 @@
 # Changelog
 
-## 21.2.0 (2025-03-21)
+## 21.2.0 (2025-03-24)
 
 * [bitnami/drupal] Set `usePasswordFiles=true` by default ([#32342](https://github.com/bitnami/charts/pull/32342))
 
