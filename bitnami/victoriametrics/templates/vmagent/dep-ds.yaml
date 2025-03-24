@@ -1,0 +1,207 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.vmagent.enabled }}
+{{- $kind := lower .Values.vmagent.kind }}
+{{- if eq $kind "daemonset" }}
+apiVersion: {{ include "common.capabilities.daemonset.apiVersion" . }}
+kind: DaemonSet
+{{- else }}
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+{{- end }}
+metadata:
+  name: {{ template "victoriametrics.vmagent.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: victoriametrics
+    app.kubernetes.io/component: vmagent
+  {{- if or .Values.vmagent.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.vmagent.annotations .Values.commonAnnotations) "context" .) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if and (not .Values.vmagent.autoscaling.hpa.enabled) (eq $kind "deployment") }}
+  replicas: {{ .Values.vmagent.replicaCount }}
+  {{- end }}
+  {{- if .Values.vmagent.updateStrategy }}
+  {{ ternary "strategy" "updateStrategy" (eq $kind "deployment")}}: {{- toYaml .Values.vmagent.updateStrategy | nindent 4 }}
+  {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" (list .Values.vmagent.podLabels .Values.commonLabels) "context" . ) }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/component: vmagent
+  template:
+    metadata:
+      {{- if or .Values.vmagent.podAnnotations (not .Values.vmagent.existingScrapeConfigMap) }}
+      annotations:
+        {{- if .Values.vmagent.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.vmagent.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if not .Values.vmagent.existingScrapeConfigMap }}
+        checksum/scrape-config: {{ include (print $.Template.BasePath "/vmagent/configmap.yaml") $ | sha256sum }}
+        {{- end }}
+      {{- end }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/part-of: victoriametrics
+        app.kubernetes.io/component: vmagent
+    spec:
+      serviceAccountName: {{ template "victoriametrics.vmagent.serviceAccountName" . }}
+      {{- include "victoriametrics.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.vmagent.automountServiceAccountToken }}
+      {{- if .Values.vmagent.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.vmagent.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.vmagent.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.vmagent.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.vmagent.podAffinityPreset "component" "vmagent" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.vmagent.podAntiAffinityPreset "component" "vmagent" "customLabels" $podLabels "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.vmagent.nodeAffinityPreset.type "key" .Values.vmagent.nodeAffinityPreset.key "values" .Values.vmagent.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.vmagent.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.vmagent.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.vmagent.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.vmagent.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.vmagent.priorityClassName }}
+      priorityClassName: {{ .Values.vmagent.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.vmagent.schedulerName }}
+      schedulerName: {{ .Values.vmagent.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.vmagent.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.vmagent.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.vmagent.podSecurityContext.enabled }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.vmagent.podSecurityContext "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.vmagent.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.vmagent.terminationGracePeriodSeconds }}
+      {{- end }}
+      {{- if .Values.vmagent.initContainers }}
+      initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.vmagent.initContainers "context" $) | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: vmagent
+          image: {{ template "victoriametrics.vmagent.image" . }}
+          imagePullPolicy: {{ .Values.vmagent.image.pullPolicy }}
+          {{- if .Values.vmagent.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.vmagent.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.vmagent.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.vmagent.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.vmagent.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.vmagent.args "context" $) | nindent 12 }}
+          {{- else }}
+          args:
+            {{- if .Values.envflagEnable }}
+            - --envflag.enable
+            - --envflag.prefix={{ .Values.envflagPrefix }}
+            {{- end }}
+            - --loggerFormat={{ .Values.loggerFormat }}
+            - --httpListenAddr=:{{ .Values.vmagent.containerPorts.http }}
+            - --promscrape.config=/config/scrape/scrape.yml
+            - --remoteWrite.tmpDataPath=/tmpData
+            {{- $remoteHost := ternary (include "victoriametrics.vmauth.fullname" .) (include "victoriametrics.vminsert.fullname" .) .Values.vmauth.enabled }}
+            {{- $remotePort := ternary .Values.vmauth.service.ports.http .Values.vminsert.service.ports.http .Values.vmauth.enabled }}
+            - --remoteWrite.url=http://{{ $remoteHost }}:{{ $remotePort }}/insert/0/prometheus
+            {{- if .Values.vmagent.enableListeners.influxdb }}
+            - --influxListenAddr=:{{ .Values.vmagent.containerPorts.influxdb }}
+            {{- end }}
+            {{- if .Values.vmagent.enableListeners.graphite }}
+            - --graphiteListenAddr=:{{ .Values.vmagent.containerPorts.graphite }}
+            {{- end }}
+            {{- if .Values.vmagent.enableListeners.opentsdb }}
+            - --opentsdbListenAddr=:{{ .Values.vmagent.containerPorts.opentsdb }}
+            {{- end }}
+            {{- if .Values.vmagent.extraArgs }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.vmagent.extraArgs "context" $) | nindent 12 }}
+            {{- end }}
+          {{- end }}
+          env:
+            {{- if .Values.vmagent.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.vmagent.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- if .Values.vmagent.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.vmagent.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.vmagent.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.vmagent.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- if .Values.vmagent.resources }}
+          resources: {{- toYaml .Values.vmagent.resources | nindent 12 }}
+          {{- else if ne .Values.vmagent.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.vmagent.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.vmagent.containerPorts.http }}
+            {{- if .Values.vmagent.enableListeners.influxdb }}
+            - name: tcp-influxdb
+              containerPort: {{ .Values.vmagent.containerPorts.influxdb }}
+            {{- end }}
+            {{- if .Values.vmagent.enableListeners.graphite }}
+            - name: tcp-graphite
+              containerPort: {{ .Values.vmagent.containerPorts.graphite }}
+            {{- end }}
+            {{- if .Values.vmagent.enableListeners.opentsdb }}
+            - name: tcp-opentsdb
+              containerPort: {{ .Values.vmagent.containerPorts.opentsdb }}
+            {{- end }}
+          {{- if .Values.vmagent.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.vmagent.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.vmagent.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.vmagent.livenessProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: http
+          {{- end }}
+          {{- if .Values.vmagent.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.vmagent.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.vmagent.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.vmagent.readinessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /health
+              port: http
+          {{- end }}
+          {{- if .Values.vmagent.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.vmagent.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.vmagent.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.vmagent.startupProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /health
+              port: http
+          {{- end }}
+          {{- if .Values.vmagent.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.vmagent.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: scrape-configuration
+              mountPath: /config/scrape
+            - name: empty-dir
+              mountPath: /tmpData
+              subPath: app-tmpdata-dir
+          {{- if .Values.vmagent.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.vmagent.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+        {{- if .Values.vmagent.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.vmagent.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        - name: scrape-configuration
+          configMap:
+            name: {{ include "victoriametrics.vmagent.scrapeConfigMapName" . }}
+        - name: empty-dir
+          emptyDir: {}
+        {{- if .Values.vmagent.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.vmagent.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+{{- end }}

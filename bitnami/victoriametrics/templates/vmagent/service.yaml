@@ -1,0 +1,92 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.vmagent.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "victoriametrics.vmagent.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: victoriametrics
+    app.kubernetes.io/component: vmagent
+  {{- if or .Values.vmagent.service.annotations .Values.commonAnnotations .Values.vmagent.metrics.enabled .Values.vmagent.metrics.annotations }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.vmagent.service.annotations .Values.commonAnnotations .Values.vmagent.metrics.annotations) "context" .) }}
+  {{- if .Values.vmagent.metrics.enabled }}
+  {{- $defaultMetricsAnnotations := dict "prometheus.io/scrape" "true" "prometheus.io/port" .Values.vmagent.service.ports.http "prometheus.io/path" "/metrics" }}
+  {{- $annotations = include "common.tplvalues.merge" (dict "values" (list $annotations $defaultMetricsAnnotations) "context" .) }}
+  {{- end }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.vmagent.service.type }}
+  {{- if and .Values.vmagent.service.clusterIP (eq .Values.vmagent.service.type "ClusterIP") }}
+  clusterIP: {{ .Values.vmagent.service.clusterIP }}
+  {{- end }}
+  {{- if .Values.vmagent.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.vmagent.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.vmagent.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.vmagent.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if or (eq .Values.vmagent.service.type "LoadBalancer") (eq .Values.vmagent.service.type "NodePort") }}
+  externalTrafficPolicy: {{ .Values.vmagent.service.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{- if and (eq .Values.vmagent.service.type "LoadBalancer") (not (empty .Values.vmagent.service.loadBalancerSourceRanges)) }}
+  loadBalancerSourceRanges: {{ .Values.vmagent.service.loadBalancerSourceRanges }}
+  {{- end }}
+  {{- if and (eq .Values.vmagent.service.type "LoadBalancer") (not (empty .Values.vmagent.service.loadBalancerIP)) }}
+  loadBalancerIP: {{ .Values.vmagent.service.loadBalancerIP }}
+  {{- end }}
+  ports:
+    - name: http
+      port: {{ .Values.vmagent.service.ports.http }}
+      protocol: TCP
+      {{- if and (or (eq .Values.vmagent.service.type "NodePort") (eq .Values.vmagent.service.type "LoadBalancer")) (not (empty .Values.vmagent.service.nodePorts.http)) }}
+      nodePort: {{ .Values.vmagent.service.nodePorts.http }}
+      {{- else if eq .Values.vmagent.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+      targetPort: http
+    {{- if .Values.vmagent.enableListeners.graphite }}
+    - name: tcp-graphite
+      port: {{ .Values.vmagent.service.ports.graphite }}
+      protocol: TCP
+      {{- if and (or (eq .Values.vmagent.service.type "NodePort") (eq .Values.vmagent.service.type "LoadBalancer")) (not (empty .Values.vmagent.service.nodePorts.graphite)) }}
+      nodePort: {{ .Values.vmagent.service.nodePorts.graphite }}
+      {{- else if eq .Values.vmagent.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+      targetPort: tcp-graphite
+    {{- end }}
+    {{- if .Values.vmagent.enableListeners.opentsdb }}
+    - name: tcp-opentsdb
+      port: {{ .Values.vmagent.service.ports.opentsdb }}
+      protocol: TCP
+      {{- if and (or (eq .Values.vmagent.service.type "NodePort") (eq .Values.vmagent.service.type "LoadBalancer")) (not (empty .Values.vmagent.service.nodePorts.opentsdb)) }}
+      nodePort: {{ .Values.vmagent.service.nodePorts.opentsdb }}
+      {{- else if eq .Values.vmagent.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+      targetPort: tcp-opentsdb
+    {{- end }}
+    {{- if .Values.vmagent.enableListeners.influxdb }}
+    - name: tcp-influxdb
+      port: {{ .Values.vmagent.service.ports.influxdb }}
+      protocol: TCP
+      {{- if and (or (eq .Values.vmagent.service.type "NodePort") (eq .Values.vmagent.service.type "LoadBalancer")) (not (empty .Values.vmagent.service.nodePorts.influxdb)) }}
+      nodePort: {{ .Values.vmagent.service.nodePorts.influxdb }}
+      {{- else if eq .Values.vmagent.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+      targetPort: tcp-influxdb
+    {{- end }}
+    {{- if .Values.vmagent.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.vmagent.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.vmagent.podLabels .Values.commonLabels ) "context" . ) }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: vmagent
+{{- end }}

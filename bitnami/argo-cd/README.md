@@ -329,16 +329,15 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 
 ### Common parameters
 
-| Name                | Description                                                       | Value           |
-| ------------------- | ----------------------------------------------------------------- | --------------- |
-| `kubeVersion`       | Override Kubernetes version                                       | `""`            |
-| `nameOverride`      | String to partially override common.names.fullname                | `""`            |
-| `fullnameOverride`  | String to fully override common.names.fullname                    | `""`            |
-| `commonLabels`      | Labels to add to all deployed objects                             | `{}`            |
-| `commonAnnotations` | Annotations to add to all deployed objects                        | `{}`            |
-| `clusterDomain`     | Kubernetes cluster domain name                                    | `cluster.local` |
-| `extraDeploy`       | Array of extra objects to deploy with the release                 | `[]`            |
-| `usePasswordFiles`  | Mount credentials as files instead of using environment variables | `true`          |
+| Name                | Description                                        | Value           |
+| ------------------- | -------------------------------------------------- | --------------- |
+| `kubeVersion`       | Override Kubernetes version                        | `""`            |
+| `nameOverride`      | String to partially override common.names.fullname | `""`            |
+| `fullnameOverride`  | String to fully override common.names.fullname     | `""`            |
+| `commonLabels`      | Labels to add to all deployed objects              | `{}`            |
+| `commonAnnotations` | Annotations to add to all deployed objects         | `{}`            |
+| `clusterDomain`     | Kubernetes cluster domain name                     | `cluster.local` |
+| `extraDeploy`       | Array of extra objects to deploy with the release  | `[]`            |
 
 ### Argo CD image parameters
 

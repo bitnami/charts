@@ -1,8 +1,13 @@
 # Changelog
 
-## 11.5.1 (2025-03-13)
+## 11.6.0 (2025-03-13)
 
-* [bitnami/grafana] Release 11.5.1 ([#32437](https://github.com/bitnami/charts/pull/32437))
+* [bitnami/grafana] Set `usePasswordFiles=true` by default ([#32348](https://github.com/bitnami/charts/pull/32348))
+
+## <small>11.5.1 (2025-03-13)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/grafana] Release 11.5.1 (#32437) ([602e678](https://github.com/bitnami/charts/commit/602e678b446cac381a72500fafbcd4c640acfb1c)), closes [#32437](https://github.com/bitnami/charts/issues/32437)
 
 ## 11.5.0 (2025-03-12)
 

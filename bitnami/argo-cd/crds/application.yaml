@@ -1,5 +1,5 @@
 # Source: https://raw.githubusercontent.com/argoproj/argo-cd/v{version}/manifests/crds/application-crd.yaml
-# Version: 2.14.5
+# Version: 2.14.7
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
