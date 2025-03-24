@@ -1,8 +1,12 @@
 # Changelog
 
+## 7.3.1 (2025-03-24)
+
+* [bitnami/argo-cd] Release 7.3.1 ([#32585](https://github.com/bitnami/charts/pull/32585))
+
 ## 7.3.0 (2025-03-20)
 
-* [bitnami/argo-cd] Revert usePasswordFiles ([#32514](https://github.com/bitnami/charts/pull/32514))
+* [bitnami/argo-cd] Revert usePasswordFiles (#32514) ([016a597](https://github.com/bitnami/charts/commit/016a597e764b446d97c17b1afff359ea778ecbd1)), closes [#32514](https://github.com/bitnami/charts/issues/32514)
 
 ## <small>7.2.6 (2025-03-19)</small>
 
