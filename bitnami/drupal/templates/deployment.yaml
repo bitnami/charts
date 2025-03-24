@@ -352,7 +352,7 @@ spec:
               subPath: app-base-dir
             - name: drupal-data
               mountPath: /bitnami/drupal
-            {{- if and .Values.usePasswordFiles }}
+            {{- if .Values.usePasswordFiles }}
             - name: drupal-secrets
               mountPath: /opt/bitnami/drupal/secrets
             {{- end }}
@@ -391,7 +391,7 @@ spec:
       volumes:
         - name: empty-dir
           emptyDir: {}
-        {{- if and .Values.usePasswordFiles }}
+        {{- if .Values.usePasswordFiles }}
         - name: drupal-secrets
           projected:
             sources:
