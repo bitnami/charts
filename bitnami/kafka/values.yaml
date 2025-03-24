@@ -112,15 +112,15 @@ image:
   ##
   debug: false
 
-## @param clusterId Kafka Kraft cluster ID (ignored if existingClusterIdSecret is set). A random cluster ID will be generated the 1st time Kraft is initialized if not set.
+## @param clusterId Kafka Kraft cluster ID (ignored if existingKraftSecret is set). A random cluster ID will be generated the 1st time Kraft is initialized if not set.
 ## NOTE: Already initialized Kafka nodes will use cluster ID stored in their persisted storage.
 ## If reusing existing PVCs, make sure the cluster ID is set matching the stored cluster ID, otherwise new nodes will fail to join the cluster.
 ## In case the cluster ID stored in the secret does not match the value stored in /bitnami/kafka/data/meta.properties, remove the secret and upgrade the chart setting the correct value.
 ##
 clusterId: ""
-## @param existingClusterIdSecret Name of the secret containing the cluster ID for the Kafka KRaft cluster
+## @param existingKraftSecret Name of the secret containing the Kafka KRaft Cluster ID and one directory ID per controller replica
 ##
-existingClusterIdSecret: ""
+existingKraftSecret: ""
 ## @param config Specify content for Kafka configuration (auto-generated based on other parameters otherwise)
 ## NOTE: This will override the configuration based on values, please act carefully
 ## Use simple key-value YAML format, then it's transformed to properties format by the chart. e.g:
@@ -659,6 +659,7 @@ defaultInitContainers:
     ##     memory: 1024Mi
     ##
     resources: {}
+
 ## @section Controller-eligible statefulset parameters
 ##
 controller:

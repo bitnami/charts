@@ -1,15 +1,16 @@
 externalAccess:
   enabled: true
-  autoDiscovery:
-    enabled: true
-    containerSecurityContext:
-      enabled: true
-      runAsUser: 1002
   controller:
     service:
       ports:
         external: 80
       type: LoadBalancer
+defaultInitContainers:
+  autoDiscovery:
+    enabled: true
+    containerSecurityContext:
+      enabled: true
+      runAsUser: 1002
 rbac:
   create: true
 listeners:

@@ -126,7 +126,7 @@ Returns an init-container that auto-discovers the external access details
     - name: AUTODISCOVERY_SERVICE_TYPE
       value: {{ $externalAccess.service.type | quote }}
   volumeMounts:
-    - name: kafka-autodiscovery-shared
+    - name: init-shared
       mountPath: /shared
 {{- end -}}
 
@@ -313,12 +313,18 @@ Returns an init-container that prepares the Kafka configuration files for main c
       POD_ROLE="${MY_POD_NAME%-*}"; POD_ROLE="${POD_ROLE##*-}"
 
       # Configure node.id
-      if [[ -f "/bitnami/kafka/data/meta.properties" ]]; then
-          ID="$(grep "node.id" /bitnami/kafka/data/meta.properties | awk -F '=' '{print $2}')"
-          kafka_server_conf_set "node.id" "$ID"
-      else
-          ID=$((POD_ID + KAFKA_MIN_ID))
-          kafka_server_conf_set "node.id" "$ID"
+      ID=$((POD_ID + KAFKA_MIN_ID))
+      [[ -f "/bitnami/kafka/data/meta.properties" ]] && ID="$(grep "node.id" /bitnami/kafka/data/meta.properties | awk -F '=' '{print $2}')"
+      kafka_server_conf_set "node.id" "$ID"
+      # Configure initial controllers
+      if [[ "controller" =~ "$POD_ROLE" ]]; then
+          INITIAL_CONTROLLERS=()
+          for ((i = 0; i < {{ int .context.Values.controller.replicaCount }}; i++)); do
+              var="KAFKA_CONTROLLER_${i}_DIR_ID"; DIR_ID="${!var}"
+              [[ $i -eq $POD_ID ]] && [[ -f "/bitnami/kafka/data/meta.properties" ]] && DIR_ID="$(grep "directory.id" /bitnami/kafka/data/meta.properties | awk -F '=' '{print $2}')"
+              INITIAL_CONTROLLERS+=("${i}@${KAFKA_FULLNAME}-${POD_ROLE}-${i}.${KAFKA_CONTROLLER_SVC_NAME}.${MY_POD_NAMESPACE}.svc.${CLUSTER_DOMAIN}:${KAFKA_CONTROLLER_PORT}:${DIR_ID}")
+          done
+          echo "${INITIAL_CONTROLLERS[*]}" | awk -v OFS=',' '{$1=$1}1' > /shared/initial-controllers.txt
       fi
       {{- if not .context.Values.listeners.advertisedListeners }}
       replace_in_file "$KAFKA_CONF_FILE" "advertised-address-placeholder" "${MY_POD_NAME}.${KAFKA_FULLNAME}-${POD_ROLE}-headless.${MY_POD_NAMESPACE}.svc.${CLUSTER_DOMAIN}"
@@ -338,6 +344,7 @@ Returns an init-container that prepares the Kafka configuration files for main c
       if [[ -f /secret-config/server-secret.properties ]]; then
           cat /secret-config/server-secret.properties >> $KAFKA_CONF_FILE
       fi
+
       {{- include "common.tplvalues.render" ( dict "value" .context.Values.defaultInitContainers.prepareConfig.extraInit "context" .context ) | nindent 6 }}
   env:
     - name: BITNAMI_DEBUG
@@ -360,6 +367,18 @@ Returns an init-container that prepares the Kafka configuration files for main c
       value: /config/server.properties
     - name: KAFKA_MIN_ID
       value: {{ $roleValues.minId | quote }}
+    - name: KAFKA_CONTROLLER_SVC_NAME
+      value: {{ printf "%s-headless" (include "kafka.controller.fullname" .context) | trunc 63 | trimSuffix "-" }}
+    - name: KAFKA_CONTROLLER_PORT
+      value: {{ .context.Values.listeners.controller.containerPort | quote }}
+    {{- $kraftSecret := default (printf "%s-kraft" (include "common.names.fullname" .context)) .context.Values.existingKraftSecret }}
+    {{- range $i := until (int .context.Values.controller.replicaCount) }}
+    - name: KAFKA_CONTROLLER_{{ $i }}_DIR_ID
+      valueFrom:
+        secretKeyRef:
+          name: {{ $kraftSecret }}
+          key: controller-{{ $i }}-id
+    {{- end }}
     {{- if $externalAccessEnabled }}
     - name: EXTERNAL_ACCESS_LISTENER_NAME
       value: {{ upper .context.Values.listeners.external.name | quote }}
@@ -503,10 +522,8 @@ Returns an init-container that prepares the Kafka configuration files for main c
       mountPath: /secret-config
     - name: tmp
       mountPath: /tmp
-    {{- if and .context.Values.externalAccess.enabled .context.Values.defaultInitContainers.autoDiscovery.enabled }}
-    - name: kafka-autodiscovery-shared
+    - name: init-shared
       mountPath: /shared
-    {{- end }}
     {{- if include "kafka.sslEnabled" .context }}
     - name: kafka-shared-certs
       mountPath: /certs

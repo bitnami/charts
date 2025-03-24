@@ -1053,11 +1053,13 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ### To 32.0.0
 
-This major release bumps Kafka major version to `4.y.z` series. This version implies a significant milestone given now Kafka operates operate entirely without Apache ZooKeeper, running in KRaft mode by default. As a consequence, **ZooKeeper is no longer a chart dependency and every related parameter has been removed.**. Also, some KRaft-related parameters have been renamed or removed:
+This major release bumps Kafka major version to `4.y.z` series. This version implies a significant milestone given now Kafka operates operate entirely without Apache ZooKeeper, running in KRaft mode by default. As a consequence, **ZooKeeper is no longer a chart dependency and every related parameter has been removed.**. Upgrading from `31.y.z` chart version is not supported unless KRaft mode was already enabled.
+
+Also, some KRaft-related parameters have been renamed or removed:
 
 - `kraft.enabled` has been removed. Kafka now operates in KRaft mode by default.
 - `kraft.controllerQuorumVoters` has been renamed to `controller.quorumVoters`.
-- `kraft.clusterId` and `kraft.existingClusterIdSecret` have been renamed to `clusterId` and `existingClusterIdSecret`, respectively.
+- `kraft.clusterId` and `kraft.existingClusterIdSecret` have been renamed to `clusterId` and `existingKraftSecret`, respectively.
 
 Other notable changes:
 

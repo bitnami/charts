@@ -133,7 +133,7 @@ spec:
             - name: KAFKA_KRAFT_CLUSTER_ID
               valueFrom:
                 secretKeyRef:
-                  name: {{ default (printf "%s-kraft" (include "common.names.fullname" .)) .Values.existingClusterIdSecret }}
+                  name: {{ default (printf "%s-kraft" (include "common.names.fullname" .)) .Values.existingKraftSecret }}
                   key: cluster-id
             - name: KAFKA_CFG_PROCESS_ROLES
               value: broker
@@ -359,10 +359,8 @@ spec:
           emptyDir: {}
         - name: tmp
           emptyDir: {}
-        {{- if and .Values.externalAccess.enabled .Values.defaultInitContainers.autoDiscovery.enabled }}
-        - name: kafka-autodiscovery-shared
+        - name: init-shared
           emptyDir: {}
-        {{- end }}
         {{- if or .Values.log4j2 .Values.existingLog4j2ConfigMap }}
         - name: log4j2-config
           configMap:

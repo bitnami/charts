@@ -137,10 +137,12 @@ spec:
             - name: KAFKA_KRAFT_CLUSTER_ID
               valueFrom:
                 secretKeyRef:
-                  name: {{ default (printf "%s-kraft" (include "common.names.fullname" .)) .Values.existingClusterIdSecret }}
+                  name: {{ default (printf "%s-kraft" (include "common.names.fullname" .)) .Values.existingKraftSecret }}
                   key: cluster-id
             - name: KAFKA_CFG_PROCESS_ROLES
               value: {{ ternary "controller" "controller,broker" .Values.controller.controllerOnly | quote }}
+            - name: KAFKA_INITIAL_CONTROLLERS_FILE
+              value: /shared/initial-controllers.txt
             {{- if and (include "kafka.saslEnabled" .) (or (regexFind "SCRAM" (upper .Values.sasl.enabledMechanisms)) (regexFind "SCRAM" (upper .Values.sasl.controllerMechanism)) (regexFind "SCRAM" (upper .Values.sasl.interBrokerMechanism))) }}
             - name: KAFKA_KRAFT_BOOTSTRAP_SCRAM_USERS
               value: "true"
@@ -286,6 +288,8 @@ spec:
               subPath: server.properties
             - name: tmp
               mountPath: /tmp
+            - name: init-shared
+              mountPath: /shared
             {{- if or .Values.log4j2 .Values.existingLog4j2ConfigMap }}
             - name: log4j2-config
               mountPath: /opt/bitnami/kafka/config/log4j2.yaml
@@ -367,10 +371,8 @@ spec:
           emptyDir: {}
         - name: tmp
           emptyDir: {}
-        {{- if and .Values.externalAccess.enabled .Values.defaultInitContainers.autoDiscovery.enabled }}
-        - name: kafka-autodiscovery-shared
+        - name: init-shared
           emptyDir: {}
-        {{- end }}
         {{- if or .Values.log4j2 .Values.existingLog4j2ConfigMap }}
         - name: log4j2-config
           configMap:
