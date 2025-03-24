@@ -1,6 +1,6 @@
 # Changelog
 
-## 19.1.2 (2025-03-23)
+## 19.1.2 (2025-03-24)
 
 * [bitnami/nginx] feat(nginx-optional-initcontainers): Enable optional initcontainers ([#32577](https://github.com/bitnami/charts/pull/32577))
 
