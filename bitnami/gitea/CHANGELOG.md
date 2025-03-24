@@ -1,6 +1,6 @@
 # Changelog
 
-## 3.2.0 (2025-03-13)
+## 3.2.0 (2025-03-24)
 
 * [bitnami/gitea] Set `usePasswordFiles=true` by default ([#32347](https://github.com/bitnami/charts/pull/32347))
 
