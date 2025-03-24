@@ -199,7 +199,7 @@ For annotations, please see [this document](https://github.com/kubernetes/ingres
 | `image.pullPolicy`             | NGINX image pull policy                                                                               | `IfNotPresent`          |
 | `image.pullSecrets`            | Specify docker-registry secret names as an array                                                      | `[]`                    |
 | `image.debug`                  | Set to true if you would like to see extra information on logs                                        | `false`                 |
-| `initContainersDisabled`       | - boolean - optional                                                                                  | `false`                 |
+| `enableDefaultInitContainers`  | - boolean - optional                                                                                  | `false`                 |
 | `automountServiceAccountToken` | Mount Service Account token in pod                                                                    | `false`                 |
 | `hostAliases`                  | Deployment pod host aliases                                                                           | `[]`                    |
 | `command`                      | Override default container command (useful when using custom images)                                  | `[]`                    |
