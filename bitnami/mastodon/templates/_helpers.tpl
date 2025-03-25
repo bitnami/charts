@@ -680,7 +680,7 @@ Init container definition for waiting for Redis(TM) to be ready
     - name: empty-dir
       mountPath: /tmp
       subPath: tmp-dir
-    {{- if .Values.usePasswordFiles }}
+    {{- if and .Values.usePasswordFiles (include "mastodon.redis.auth.enabled" .) }}
     - name: mastodon-secrets
       mountPath: /opt/bitnami/mastodon/secrets
     {{- end }}
@@ -741,7 +741,7 @@ Init container definition for waiting for Elasticsearch to be ready
     - name: empty-dir
       mountPath: /tmp
       subPath: tmp-dir
-    {{- if .Values.usePasswordFiles }}
+    {{- if and .Values.usePasswordFiles (include "mastodon.elasticsearch.auth.enabled" .) }}
     - name: mastodon-secrets
       mountPath: /opt/bitnami/mastodon/secrets
     {{- end }}
