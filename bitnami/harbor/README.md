@@ -16,19 +16,17 @@ Looking to use Harbor in production? Try [VMware Tanzu Application Catalog](http
 
 ## Introduction
 
-This [Helm](https://github.com/kubernetes/helm) chart installs [Harbor](https://github.com/goharbor/harbor) in a Kubernetes cluster. Welcome to [contribute](https://github.com/bitnami/charts/blob/main/CONTRIBUTING.md) to Helm Chart for Harbor.
+This [Helm](https://github.com/kubernetes/helm) chart installs [Harbor](https://github.com/goharbor/harbor) in a Kubernetes cluster.
 
-This Helm chart has been developed based on [goharbor/harbor-helm](https://github.com/goharbor/harbor-helm) chart but including some features common to the Bitnami chart library.
+This Helm chart has been developed based on [goharbor/harbor-helm](https://github.com/goharbor/harbor-helm) chart but includes some features common to the Bitnami chart library.
 For example, the following changes have been introduced:
 
-- Possibility to pull all the required images from a private registry through the  Global Docker image parameters.
+- It is possible to pull all the required images from a private registry through the  Global Docker image parameters.
 - Redis&reg; and PostgreSQL are managed as chart dependencies.
 - Liveness and Readiness probes for all deployments are exposed to the values.yaml.
-- Uses new Helm chart labels formatting.
-- Uses Bitnami container images:
-  - non-root by default
-  - published for debian-10 and ol-7
-- This chart support the Harbor optional components.
+- Uses new Helm chart label formatting.
+- Uses Bitnami non-root container images by default.
+- This chart supports the Harbor optional components.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
