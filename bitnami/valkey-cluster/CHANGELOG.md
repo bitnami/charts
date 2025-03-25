@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.2.1 (2025-03-22)
+## 2.2.1 (2025-03-25)
 
 * [bitnami/valkey-cluster] Release 2.2.1 ([#32564](https://github.com/bitnami/charts/pull/32564))
 
