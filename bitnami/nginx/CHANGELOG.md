@@ -1,8 +1,8 @@
 # Changelog
 
-## 19.0.3 (2025-03-12)
+## 19.0.3 (2025-03-25)
 
-* tpl the ingress hostname ([#32421](https://github.com/bitnami/charts/pull/32421))
+* [bitnami/nginx] Ingress hostname dynamic tpl function ([#32421](https://github.com/bitnami/charts/pull/32421))
 
 ## <small>19.0.2 (2025-03-12)</small>
 
