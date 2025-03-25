@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.2.3 (2025-03-05)
+## 11.2.4 (2025-03-25)
 
-* [bitnami/milvus] Release 11.2.3 ([#32321](https://github.com/bitnami/charts/pull/32321))
+* [bitnami/milvus] Release 11.2.4 ([#32593](https://github.com/bitnami/charts/pull/32593))
+
+## <small>11.2.3 (2025-03-05)</small>
+
+* [bitnami/milvus] Release 11.2.3 (#32321) ([5310bf2](https://github.com/bitnami/charts/commit/5310bf26533e16a8ad32638f633ce9bda4806abc)), closes [#32321](https://github.com/bitnami/charts/issues/32321)
 
 ## <small>11.2.2 (2025-03-05)</small>
 
