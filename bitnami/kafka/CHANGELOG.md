@@ -1,8 +1,12 @@
 # Changelog
 
+## 32.0.0 (2025-03-25)
+
+* [bitnami/kafka] feat: Kafka 4.0.0 ([#32516](https://github.com/bitnami/charts/pull/32516))
+
 ## 31.5.0 (2025-03-06)
 
-* [bitnami/kafka] IpFamilies and IpFamilyPolicy configurables ([#31456](https://github.com/bitnami/charts/pull/31456))
+* [bitnami/kafka] IpFamilies and IpFamilyPolicy configurables (#31456) ([30daf36](https://github.com/bitnami/charts/commit/30daf368a955addaa59136ed6b18f8702124f72a)), closes [#31456](https://github.com/bitnami/charts/issues/31456) [#31389](https://github.com/bitnami/charts/issues/31389)
 
 ## <small>31.4.1 (2025-03-04)</small>
 
