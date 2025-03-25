@@ -1,8 +1,13 @@
 # Changelog
 
-## 6.4.5 (2025-03-04)
+## 6.4.6 (2025-03-25)
 
-* [bitnami/logstash] Release 6.4.5 ([#32268](https://github.com/bitnami/charts/pull/32268))
+* [bitnami/logstash] Release 6.4.6 ([#32600](https://github.com/bitnami/charts/pull/32600))
+
+## <small>6.4.5 (2025-03-04)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/logstash] Release 6.4.5 (#32268) ([633b036](https://github.com/bitnami/charts/commit/633b0368e43b4322af9011e4c894e4d90c2fa5c9)), closes [#32268](https://github.com/bitnami/charts/issues/32268)
 
 ## <small>6.4.4 (2025-02-11)</small>
 

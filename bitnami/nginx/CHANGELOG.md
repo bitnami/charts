@@ -1,8 +1,8 @@
 # Changelog
 
-## 19.0.3 (2025-03-25)
+## 19.0.3 (2025-03-21)
 
-* [bitnami/nginx] Ingress hostname dynamic tpl function ([#32421](https://github.com/bitnami/charts/pull/32421))
+* [bitnami/nginx] Add resources to git-clone-repository initcontainer ([#32530](https://github.com/bitnami/charts/pull/32530))
 
 ## <small>19.0.2 (2025-03-12)</small>
 

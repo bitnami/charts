@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.5.3 (2025-03-10)
+## 0.5.4 (2025-03-21)
 
-* [bitnami/keydb] Fix issue when using custom password secret key ([#32376](https://github.com/bitnami/charts/pull/32376))
+* [bitnami/keydb] Release 0.5.4 ([#32554](https://github.com/bitnami/charts/pull/32554))
+
+## <small>0.5.3 (2025-03-10)</small>
+
+* [bitnami/keydb] Fix issue when using custom password secret key (#32376) ([d1fe122](https://github.com/bitnami/charts/commit/d1fe1229d0d924747bb350904ffe012b94d96d31)), closes [#32376](https://github.com/bitnami/charts/issues/32376)
 
 ## <small>0.5.2 (2025-03-10)</small>
 

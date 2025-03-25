@@ -1,8 +1,21 @@
 # Changelog
 
-## 11.5.0 (2025-03-11)
+## 11.6.1 (2025-03-25)
 
-* [bitnami/grafana] Add `optional` option to the extraEnvVars ([#32401](https://github.com/bitnami/charts/pull/32401))
+* [bitnami/grafana] Release 11.6.1 ([#32597](https://github.com/bitnami/charts/pull/32597))
+
+## 11.6.0 (2025-03-14)
+
+* [bitnami/grafana] Set `usePasswordFiles=true` by default (#32348) ([fcc1fc1](https://github.com/bitnami/charts/commit/fcc1fc1bf9c7e97dd5d4c21ecbc13dd729a56292)), closes [#32348](https://github.com/bitnami/charts/issues/32348)
+
+## <small>11.5.1 (2025-03-13)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/grafana] Release 11.5.1 (#32437) ([602e678](https://github.com/bitnami/charts/commit/602e678b446cac381a72500fafbcd4c640acfb1c)), closes [#32437](https://github.com/bitnami/charts/issues/32437)
+
+## 11.5.0 (2025-03-12)
+
+* [bitnami/grafana] Add `optional` option to the extraEnvVars (#32401) ([7b1e396](https://github.com/bitnami/charts/commit/7b1e3966d5c2433e828e61133c0f3a5d156ed67a)), closes [#32401](https://github.com/bitnami/charts/issues/32401)
 
 ## <small>11.4.10 (2025-03-05)</small>
 
