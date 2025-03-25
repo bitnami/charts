@@ -1,8 +1,12 @@
 # Changelog
 
-## 19.5.8 (2025-03-04)
+## 19.5.9 (2025-03-25)
 
-* [bitnami/contour] Release 19.5.8 ([#32285](https://github.com/bitnami/charts/pull/32285))
+* [bitnami/contour] Release 19.5.9 ([#32605](https://github.com/bitnami/charts/pull/32605))
+
+## <small>19.5.8 (2025-03-05)</small>
+
+* [bitnami/contour] Release 19.5.8 (#32285) ([d397ec5](https://github.com/bitnami/charts/commit/d397ec574f2f2cb9b7f915e49275ee4eee1fa26a)), closes [#32285](https://github.com/bitnami/charts/issues/32285)
 
 ## <small>19.5.7 (2025-02-19)</small>
 
