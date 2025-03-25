@@ -1,8 +1,13 @@
 # Changelog
 
+## 32.0.1 (2025-03-25)
+
+* [bitnami/kafka] Release 32.0.1 ([#32592](https://github.com/bitnami/charts/pull/32592))
+
 ## 32.0.0 (2025-03-25)
 
-* [bitnami/kafka] feat: Kafka 4.0.0 ([#32516](https://github.com/bitnami/charts/pull/32516))
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/kafka] feat: Kafka 4.0.0 (#32516) ([8bea6f9](https://github.com/bitnami/charts/commit/8bea6f9e210b967f1c27270f75d307623afa1974)), closes [#32516](https://github.com/bitnami/charts/issues/32516)
 
 ## 31.5.0 (2025-03-06)
 
