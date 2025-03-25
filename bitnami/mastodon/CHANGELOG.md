@@ -1,6 +1,6 @@
 # Changelog
 
-## 9.3.0 (2025-03-18)
+## 9.3.0 (2025-03-25)
 
 * [bitnami/mastodon] Set `usePasswordFiles=true` by default ([#32367](https://github.com/bitnami/charts/pull/32367))
 
