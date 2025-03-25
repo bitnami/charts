@@ -16,7 +16,7 @@ metadata:
   {{- end }}
 spec:
   podManagementPolicy: {{ .Values.controller.podManagementPolicy }}
-  {{- if not .Values.controller.autoscaling.enabled }}
+  {{- if not .Values.controller.autoscaling.hpa.enabled }}
   replicas: {{ .Values.controller.replicaCount }}
   {{- end }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.controller.podLabels .Values.commonLabels ) "context" . ) }}

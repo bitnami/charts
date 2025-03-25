@@ -4,7 +4,7 @@ SPDX-License-Identifier: APACHE-2.0
 */}}
 
 {{- $replicaCount := int .Values.broker.replicaCount }}
-{{- if or (gt $replicaCount 0) .Values.broker.autoscaling.enabled }}
+{{- if or (gt $replicaCount 0) .Values.broker.autoscaling.hpa.enabled }}
 apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
@@ -18,7 +18,7 @@ metadata:
   {{- end }}
 spec:
   podManagementPolicy: {{ .Values.broker.podManagementPolicy }}
-  {{- if not .Values.broker.autoscaling.enabled }}
+  {{- if not .Values.broker.autoscaling.hpa.enabled }}
   replicas: {{ .Values.broker.replicaCount }}
   {{- end }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.broker.podLabels .Values.commonLabels ) "context" . ) }}

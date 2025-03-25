@@ -1012,6 +1012,9 @@ controller:
       ## @param controller.autoscaling.hpa.enabled Enable HPA for Kafka Controller
       ##
       enabled: false
+      ## @param controller.autoscaling.hpa.annotations Annotations for HPA resource
+      ##
+      annotations: {}
       ## @param controller.autoscaling.hpa.minReplicas Minimum number of Kafka Controller replicas
       ##
       minReplicas: ""
@@ -1465,6 +1468,9 @@ broker:
       ## @param broker.autoscaling.hpa.enabled Enable HPA for Kafka Broker
       ##
       enabled: false
+      ## @param broker.autoscaling.hpa.annotations Annotations for HPA resource
+      ##
+      annotations: {}
       ## @param broker.autoscaling.hpa.minReplicas Minimum number of Kafka Broker replicas
       ##
       minReplicas: ""
