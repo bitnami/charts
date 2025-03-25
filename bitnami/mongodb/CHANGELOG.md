@@ -1,5 +1,9 @@
 # Changelog
 
+## 16.4.10 (2025-03-25)
+
+* [bitnami/mongodb] Fix broken conditionals in replicaset config handling ([#32381](https://github.com/bitnami/charts/pull/32381))
+
 ## 16.4.9 (2025-03-24)
 
 * [bitnami/mongodb] #27482 - fix replicaset config handling ([#32381](https://github.com/bitnami/charts/pull/32381))
