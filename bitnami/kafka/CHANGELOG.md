@@ -1,6 +1,6 @@
 # Changelog
 
-## 32.0.0 (2025-03-24)
+## 32.0.0 (2025-03-25)
 
 * [bitnami/kafka] feat: Kafka 4.0.0 ([#32516](https://github.com/bitnami/charts/pull/32516))
 
