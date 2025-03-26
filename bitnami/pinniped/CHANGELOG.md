@@ -1,8 +1,17 @@
 # Changelog
 
-## 2.4.10 (2025-03-05)
+## 2.4.12 (2025-03-19)
 
-* [bitnami/pinniped] Release 2.4.10 ([#32312](https://github.com/bitnami/charts/pull/32312))
+* [bitnami/pinniped] Release 2.4.12 ([#32523](https://github.com/bitnami/charts/pull/32523))
+
+## <small>2.4.11 (2025-03-12)</small>
+
+* Fix pinniped default values type (#32395) ([754d7c2](https://github.com/bitnami/charts/commit/754d7c2495bdee3c456643a594077086ee835fbd)), closes [#32395](https://github.com/bitnami/charts/issues/32395)
+
+## <small>2.4.10 (2025-03-05)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/pinniped] Release 2.4.10 (#32312) ([9671b97](https://github.com/bitnami/charts/commit/9671b978f47d769cf8fc7a400331b014d40758c5)), closes [#32312](https://github.com/bitnami/charts/issues/32312)
 
 ## <small>2.4.9 (2025-02-07)</small>
 

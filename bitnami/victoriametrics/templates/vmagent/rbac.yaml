@@ -1,0 +1,68 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.vmagent.enabled .Values.vmagent.rbac.create }}
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
+kind: {{ ternary "Role" "ClusterRole" .Values.vmagent.namespaced }}
+metadata:
+  name: {{ include "victoriametrics.vmagent.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: victoriametrics
+    app.kubernetes.io/component: vmagent
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+rules:
+  - apiGroups:
+    - discovery.k8s.io
+    resources:
+    - endpointslices
+    verbs: ["get", "list", "watch"]
+  - apiGroups: [""]
+    resources:
+    - services
+    - endpoints
+    - pods
+    verbs: ["get", "list", "watch"]
+  - apiGroups:
+    - networking.k8s.io
+    resources:
+    - ingresses
+    verbs: ["get", "list", "watch"]
+  {{- if not .Values.vmagent.namespaced }}
+  - apiGroups: [""]
+    resources:
+    - nodes
+    - nodes/proxy
+    - nodes/metrics
+    verbs: ["get", "list", "watch"]
+  - nonResourceURLs: {{ include "common.tplvalues.render" ( dict "value" .Values.vmagent.allowedMetricsEndpoints "context" $ ) | nindent 6 }}
+    verbs: ["get"]
+  {{- end }}
+  {{- if .Values.vmagent.rbac.rules }}
+  {{- include "common.tplvalues.render" ( dict "value" .Values.vmagent.rbac.rules "context" $ ) | nindent 2 }}
+  {{- end }}
+---
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
+kind: {{ ternary "RoleBinding" "ClusterRoleBinding" .Values.vmagent.namespaced }}
+metadata:
+  name: {{ include "victoriametrics.vmagent.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: victoriametrics
+    app.kubernetes.io/component: vmagent
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "victoriametrics.vmagent.serviceAccountName" . }}
+    namespace: {{ include "common.names.namespace" . | quote }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: {{ ternary "Role" "ClusterRole" .Values.vmagent.namespaced }}
+  name: {{ include "victoriametrics.vmagent.fullname" . }}
+{{- end -}}

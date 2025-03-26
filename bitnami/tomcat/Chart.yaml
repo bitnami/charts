@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
+  tanzuCategory: application
   category: ApplicationServer
   licenses: Apache-2.0
   images: |
@@ -35,4 +36,4 @@ maintainers:
 name: tomcat
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/tomcat
-version: 11.5.6
+version: 11.6.0

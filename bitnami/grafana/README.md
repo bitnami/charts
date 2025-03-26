@@ -413,6 +413,7 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 | `clusterDomain`     | Default Kubernetes cluster domain                                                       | `cluster.local` |
 | `commonLabels`      | Labels to add to all deployed objects                                                   | `{}`            |
 | `commonAnnotations` | Annotations to add to all deployed objects                                              | `{}`            |
+| `usePasswordFiles`  | Mount credentials as files instead of using environment variables                       | `true`          |
 
 ### Grafana parameters
 
@@ -545,7 +546,9 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 | `grafana.extraVolumes`                                      | Additional volumes for the Grafana pod                                                                                                                                                                                            | `[]`             |
 | `grafana.extraVolumeMounts`                                 | Additional volume mounts for the Grafana container                                                                                                                                                                                | `[]`             |
 | `grafana.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars for Grafana nodes                                                                                                                                                            | `""`             |
+| `grafana.extraEnvVarsCMOptional`                            | Whether to still run the Grafana node if the ConfigMap does not exist                                                                                                                                                             | `false`          |
 | `grafana.extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars for Grafana nodes                                                                                                                                                               | `""`             |
+| `grafana.extraEnvVarsSecretOptional`                        | Whether to still run the Grafana node if the Secret does not exist                                                                                                                                                                | `false`          |
 | `grafana.extraEnvVars`                                      | Array containing extra env vars to configure Grafana                                                                                                                                                                              | `[]`             |
 | `grafana.extraConfigmaps`                                   | Array to mount extra ConfigMaps to configure Grafana                                                                                                                                                                              | `[]`             |
 | `grafana.command`                                           | Override default container command (useful when using custom images)                                                                                                                                                              | `[]`             |

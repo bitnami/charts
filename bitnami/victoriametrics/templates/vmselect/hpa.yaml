@@ -1,0 +1,55 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.vmselect.autoscaling.hpa.enabled }}
+apiVersion: {{ include "common.capabilities.hpa.apiVersion" (dict "context" $) }}
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "victoriametrics.vmselect.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: victoriametrics
+    app.kubernetes.io/component: vmselect
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  scaleTargetRef:
+    {{- if eq .Values.vmselect.kind "statefulset" }}
+    apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
+    kind: StatefulSet
+    {{- else }}
+    apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+    kind: Deployment
+    {{- end }}
+    name: {{ include "victoriametrics.vmselect.fullname" . }}
+  minReplicas: {{ .Values.vmselect.autoscaling.hpa.minReplicas }}
+  maxReplicas: {{ .Values.vmselect.autoscaling.hpa.maxReplicas }}
+  metrics:
+    {{- if .Values.vmselect.autoscaling.hpa.targetMemory }}
+    - type: Resource
+      resource:
+        name: memory
+        {{- if semverCompare "<1.23-0" (include "common.capabilities.kubeVersion" .) }}
+        targetAverageUtilization: {{ .Values.vmselect.autoscaling.hpa.targetMemory  }}
+        {{- else }}
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.vmselect.autoscaling.hpa.targetMemory }}
+        {{- end }}
+    {{- end }}
+    {{- if .Values.vmselect.autoscaling.hpa.targetCPU }}
+    - type: Resource
+      resource:
+        name: cpu
+        {{- if semverCompare "<1.23-0" (include "common.capabilities.kubeVersion" .) }}
+        targetAverageUtilization: {{ .Values.vmselect.autoscaling.hpa.targetCPU }}
+        {{- else }}
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.vmselect.autoscaling.hpa.targetCPU }}
+        {{- end }}
+    {{- end }}
+{{- end }}

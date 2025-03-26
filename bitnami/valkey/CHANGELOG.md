@@ -1,8 +1,17 @@
 # Changelog
 
-## 2.4.5 (2025-03-06)
+## 2.4.7 (2025-03-22)
 
-* [bitnami/valkey]: add apiVersion and kind to sentinel statefulset ([#32356](https://github.com/bitnami/charts/pull/32356))
+* [bitnami/valkey] Release 2.4.7 ([#32563](https://github.com/bitnami/charts/pull/32563))
+
+## <small>2.4.6 (2025-03-12)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/valkey] Fix issue when using custom password secret key (#32375) ([28a30f1](https://github.com/bitnami/charts/commit/28a30f13f993f5e6e66772ffa324830fe35c71e3)), closes [#32375](https://github.com/bitnami/charts/issues/32375)
+
+## <small>2.4.5 (2025-03-10)</small>
+
+* [bitnami/valkey]: add apiVersion and kind to sentinel statefulset (#32356) ([8c1620e](https://github.com/bitnami/charts/commit/8c1620e5cc40471808b0099a41d44fe7b1141f65)), closes [#32356](https://github.com/bitnami/charts/issues/32356)
 
 ## <small>2.4.4 (2025-03-05)</small>
 

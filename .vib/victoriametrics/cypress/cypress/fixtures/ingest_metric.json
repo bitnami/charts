@@ -1,0 +1,5 @@
+{
+  "ingestPromQL": "metric_name{foo=\"bar\"} 123",
+  "queryPromQL": "metric_name",
+  "expectedResult": "123"
+}

@@ -2,11 +2,12 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
+  tanzuCategory: application
   category: Infrastructure
   licenses: Apache-2.0
   images: |
     - name: flink
-      image: docker.io/bitnami/flink:1.20.1-debian-12-r4
+      image: docker.io/bitnami/flink:1.20.1-debian-12-r5
 apiVersion: v2
 appVersion: 1.20.1
 dependencies:
@@ -28,4 +29,4 @@ maintainers:
 name: flink
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/flink
-version: 1.4.4
+version: 1.4.5

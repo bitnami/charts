@@ -1,8 +1,12 @@
 # Changelog
 
+## 3.2.1 (2025-03-22)
+
+* [bitnami/scylladb] Release 3.2.1 ([#32562](https://github.com/bitnami/charts/pull/32562))
+
 ## 3.2.0 (2025-02-20)
 
-* [bitnami/scylladb] feat: use new helper for checking API versions ([#32062](https://github.com/bitnami/charts/pull/32062))
+* [bitnami/scylladb] feat: use new helper for checking API versions (#32062) ([b699d25](https://github.com/bitnami/charts/commit/b699d2574a2958e66cce049fc2a8363e4c36f28b)), closes [#32062](https://github.com/bitnami/charts/issues/32062)
 
 ## <small>3.1.9 (2025-02-20)</small>
 

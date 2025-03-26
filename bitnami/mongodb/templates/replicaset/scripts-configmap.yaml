@@ -254,28 +254,34 @@ data:
       # read rs.conf again and store it. settings format is '"<key>" : <value>,'
       currentRsConf=$(mongosh ${usernameAndPassword} --eval 'rs.conf()')
 
-      desiredEqualsactual=unknown
+      desiredEqualsActual=unknown
       settingsToConfigure=""
       for key in ${!desiredRsConf[@]}; do
         value=${desiredRsConf[$key]}
-        if ! $(echo "\"${currentRsConf}"\" | grep -q -e "${key}: ${value},"); then
-           if [[ $key =~ ^members\[[0-9]+\]\..+ ]]; then
-            memberIndex=$(echo $key | grep -o -E '[0-9]+')
-            nodeConfigKey=${key#*.}
-            settingsToConfigure="${settingsToConfigure}cfg.members[${memberIndex}].${nodeConfigKey} = ${value}; "
+        if [[ $key =~ ^members\[[0-9]+\]\..+ ]]; then
+          # Replica set member specific setting
+          if [[ "$(mongosh --eval "cfg=${currentRsConf}; cfg.${key}" 2>/dev/null)" != "${value}" ]]; then
+            desiredEqualsActual=false
+            logger "rs conf: ${key} needs to be updated to desired value: ${value}"
+            settingsToConfigure="${settingsToConfigure}cfg.${key} = ${value}; "
           else
-            # General rs settings
-            settingsToConfigure="${settingsToConfigure}cfg.settings.${key} = ${value}; "
+            logger "rs conf: ${key} is already at desired value: ${value}"
           fi
-           desiredEqualsactual=false
         else
-          logger "rs conf: ${key} is already at desired value: ${value}"
+          # General rs setting
+          if [[ "$(mongosh --eval "cfg=${currentRsConf}; cfg.settings.${key}" 2>/dev/null)" != "${value}" ]]; then
+            desiredEqualsActual=false
+            logger "rs conf: ${key} needs to be updated to desired value: ${value}"
+            settingsToConfigure="${settingsToConfigure}cfg.settings.${key} = ${value}; "
+          else
+            logger "rs conf: ${key} is already at desired value: ${value}"
+          fi
         fi
       done
 
-      if [[ "${desiredEqualsactual}" != "false" ]]; then
+      if [[ "${desiredEqualsActual}" != "false" ]]; then
         logger "replicaSetConfigurationSettings match the settings of the currently running rs"
-        desiredEqualsactual=true
+        desiredEqualsActual=true
         rs_conf_configured_ok=true
         logger "Current settings match desired settings (There have been ${rsConfWriteAttempts} attempts to write to mongoDB rs configuration)"
         exit
@@ -313,4 +319,3 @@ data:
     done
   {{- end }}
 {{- end }}
-  

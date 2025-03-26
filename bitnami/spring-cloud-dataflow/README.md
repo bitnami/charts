@@ -123,10 +123,11 @@ mariadb.enabled=false
 externalDatabase.scheme=mariadb
 externalDatabase.host=myexternalhost
 externalDatabase.port=3306
-externalDatabase.password=mypassword
-externalDatabase.dataflow.user=mydataflowuser
+externalDatabase.dataflow.username=mydataflowuser
+externalDatabase.dataflow.password=mydataflowpassword
 externalDatabase.dataflow.database=mydataflowdatabase
-externalDatabase.skipper.user=myskipperuser
+externalDatabase.skipper.username=myskipperuser
+externalDatabase.skipper.password=myskipperpassword
 externalDatabase.skipper.database=myskipperdatabase
 ```
 
@@ -136,11 +137,12 @@ To use an alternate database vendor (other than MariaDB) you can use the `extern
 
 ```console
 mariadb.enabled=false
-externalDatabase.password=mypassword
 externalDatabase.dataflow.url=jdbc:sqlserver://mssql-server:1433
-externalDatabase.dataflow.user=mydataflowuser
+externalDatabase.dataflow.username=mydataflowuser
+externalDatabase.dataflow.password=mydataflowpassword
 externalDatabase.skipper.url=jdbc:sqlserver://mssql-server:1433
-externalDatabase.skipper.user=myskipperuser
+externalDatabase.skipper.username=myskipperuser
+externalDatabase.skipper.password=myskipperpassword
 externalDatabase.hibernateDialect=org.hibernate.dialect.SQLServer2012Dialect
 ```
 
@@ -751,16 +753,16 @@ As an alternative, you can use the preset configurations for pod affinity, pod a
 
 ### Kafka chart parameters
 
-| Name                               | Description                                                                                                                                                                                                                      | Value                                |
-| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------ |
-| `kafka.enabled`                    | Enable/disable Kafka chart installation                                                                                                                                                                                          | `false`                              |
-| `kafka.controller.replicaCount`    | Number of Kafka controller+brokers nodes                                                                                                                                                                                         | `1`                                  |
-| `kafka.controller.resourcesPreset` | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if controller.resources is set (controller.resources is recommended for production). | `small`                              |
-| `kafka.controller.resources`       | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                | `{}`                                 |
-| `kafka.extraConfig`                | Kafka extra configuration to be appended to dynamic settings                                                                                                                                                                     | `offsets.topic.replication.factor=1` |
-| `externalKafka.enabled`            | Enable/disable external Kafka                                                                                                                                                                                                    | `false`                              |
-| `externalKafka.brokers`            | External Kafka brokers                                                                                                                                                                                                           | `localhost:9092`                     |
-| `externalKafka.zkNodes`            | External Zookeeper nodes                                                                                                                                                                                                         | `localhost:2181`                     |
+| Name                               | Description                                                                                                                                                                                                                      | Value            |
+| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
+| `kafka.enabled`                    | Enable/disable Kafka chart installation                                                                                                                                                                                          | `false`          |
+| `kafka.controller.replicaCount`    | Number of Kafka controller+brokers nodes                                                                                                                                                                                         | `1`              |
+| `kafka.controller.resourcesPreset` | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if controller.resources is set (controller.resources is recommended for production). | `small`          |
+| `kafka.controller.resources`       | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                | `{}`             |
+| `kafka.overrideConfiguration`      | Kafka common configuration override                                                                                                                                                                                              | `{}`             |
+| `externalKafka.enabled`            | Enable/disable external Kafka                                                                                                                                                                                                    | `false`          |
+| `externalKafka.brokers`            | External Kafka brokers                                                                                                                                                                                                           | `localhost:9092` |
+| `externalKafka.zkNodes`            | External Zookeeper nodes                                                                                                                                                                                                         | `localhost:2181` |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -786,6 +788,10 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/sprin
 Find more information about how to deal with common errors related to Bitnami Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 35.0.0
+
+This major updates the Kafka subchart to its newest major, 32.0.0. For more information on this subchart's major, please refer to [Kafka upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/kafka#to-3200).
 
 ### To 34.1.0
 

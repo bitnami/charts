@@ -2,41 +2,42 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
+  tanzuCategory: service
   category: WorkFlow
   licenses: Apache-2.0
   images: |
     - name: airflow
-      image: docker.io/bitnami/airflow:2.10.5-debian-12-r6
+      image: docker.io/bitnami/airflow:2.10.5-debian-12-r7
     - name: statsd-exporter
-      image: docker.io/bitnami/statsd-exporter:0.28.0-debian-12-r9
+      image: docker.io/bitnami/statsd-exporter:0.28.0-debian-12-r11
 apiVersion: v2
 appVersion: 2.10.5
 dependencies:
-  - condition: redis.enabled
-    name: redis
-    repository: oci://registry-1.docker.io/bitnamicharts
-    version: 20.x.x
-  - condition: postgresql.enabled
-    name: postgresql
-    repository: oci://registry-1.docker.io/bitnamicharts
-    version: 16.x.x
-  - name: common
-    repository: oci://registry-1.docker.io/bitnamicharts
-    tags:
-      - bitnami-common
-    version: 2.x.x
+- condition: redis.enabled
+  name: redis
+  repository: oci://registry-1.docker.io/bitnamicharts
+  version: 20.x.x
+- condition: postgresql.enabled
+  name: postgresql
+  repository: oci://registry-1.docker.io/bitnamicharts
+  version: 16.x.x
+- name: common
+  repository: oci://registry-1.docker.io/bitnamicharts
+  tags:
+  - bitnami-common
+  version: 2.x.x
 description: Apache Airflow is a tool to express and execute workflows as directed acyclic graphs (DAGs). It includes utilities to schedule tasks, monitor task progress and handle task dependencies.
 home: https://bitnami.com
 icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/airflow/img/airflow-stack-220x234.png
 keywords:
-  - apache
-  - airflow
-  - workflow
-  - dag
+- apache
+- airflow
+- workflow
+- dag
 maintainers:
-  - name: Broadcom, Inc. All Rights Reserved.
-    url: https://github.com/bitnami/charts
+- name: Broadcom, Inc. All Rights Reserved.
+  url: https://github.com/bitnami/charts
 name: airflow
 sources:
-  - https://github.com/bitnami/charts/tree/main/bitnami/airflow
-version: 22.7.0
+- https://github.com/bitnami/charts/tree/main/bitnami/airflow
+version: 22.7.2
