@@ -2186,9 +2186,15 @@ metrics:
 ## Kafka provisioning
 ##
 provisioning:
-  ## @param provisioning.enabled Enable kafka provisioning Job
+  ## @param provisioning.enabled Enable Kafka provisioning Job
   ##
   enabled: false
+  ## @param provisioning.waitForKafka Whether an init container should be created to wait until Kafka is ready before provisioning
+  ##
+  waitForKafka: true
+  ## @param provisioning.useHelmHooks Flag to indicate usage of helm hooks
+  ##
+  useHelmHooks: true
   ## @param provisioning.automountServiceAccountToken Mount Service Account token in pod
   ##
   automountServiceAccountToken: false
@@ -2446,8 +2452,3 @@ provisioning:
   ##         containerPort: 1234
   ##
   initContainers: []
-  ## @param provisioning.waitForKafka If true use an init container to wait until kafka is ready before starting provisioning
-  ##
-  waitForKafka: true
-  ## @param provisioning.useHelmHooks Flag to indicate usage of helm hooks
-  useHelmHooks: true

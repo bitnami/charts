@@ -1,8 +1,12 @@
 # Changelog
 
-## 32.0.2 (2025-03-26)
+## 32.0.3 (2025-03-26)
 
-* [bitnami/kafka] bugfix: conditions to create Kraft secret ([#32612](https://github.com/bitnami/charts/pull/32612))
+* [bitnami/kafka] bugfix: use kafka-broker-api-versions.sh to wait for Kafka on provisioning ([#32613](https://github.com/bitnami/charts/pull/32613))
+
+## <small>32.0.2 (2025-03-26)</small>
+
+* [bitnami/kafka] bugfix: conditions to create Kraft secret (#32612) ([2120902](https://github.com/bitnami/charts/commit/2120902bdf6ee15b80e93d425fc99d89b51091be)), closes [#32612](https://github.com/bitnami/charts/issues/32612)
 
 ## <small>32.0.1 (2025-03-25)</small>
 
