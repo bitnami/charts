@@ -1,8 +1,12 @@
 # Changelog
 
-## 32.0.1 (2025-03-25)
+## 32.0.2 (2025-03-26)
 
-* [bitnami/kafka] Release 32.0.1 ([#32592](https://github.com/bitnami/charts/pull/32592))
+* [bitnami/kafka] bugfix: conditions to create Kraft secret ([#32612](https://github.com/bitnami/charts/pull/32612))
+
+## <small>32.0.1 (2025-03-25)</small>
+
+* [bitnami/kafka] Release 32.0.1 (#32592) ([5f3eb03](https://github.com/bitnami/charts/commit/5f3eb0376ab9b7f04a95fe197568405c0d875b92)), closes [#32592](https://github.com/bitnami/charts/issues/32592)
 
 ## 32.0.0 (2025-03-25)
 
