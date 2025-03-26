@@ -427,14 +427,18 @@ Returns the Kafka listeners settings based on the listeners.* object
   {{- $listeners = append $listeners .context.Values.listeners.external -}}
   {{- end -}}
   {{- if .isController -}}
-  {{- if .context.Values.controller.controllerOnly -}}
-  {{- $listeners = list .context.Values.listeners.controller -}}
+    {{- if .context.Values.controller.controllerOnly -}}
+      {{- $listeners = list .context.Values.listeners.controller -}}
+    {{- else -}}
+      {{- $listeners = append $listeners .context.Values.listeners.controller -}}
+      {{- range $i := .context.Values.listeners.extraListeners -}}
+      {{- $listeners = append $listeners $i -}}
+      {{- end -}}
+    {{- end -}}
   {{- else -}}
-  {{- $listeners = append $listeners .context.Values.listeners.controller -}}
-  {{- end -}}
-  {{- end -}}
-  {{- range $i := .context.Values.listeners.extraListeners -}}
-  {{- $listeners = append $listeners $i -}}
+    {{- range $i := .context.Values.listeners.extraListeners -}}
+    {{- $listeners = append $listeners $i -}}
+    {{- end -}}
   {{- end -}}
   {{- $res := list -}}
   {{- range $listener := $listeners -}}
@@ -467,15 +471,26 @@ Returns the list of advertised listeners, although the advertised address will b
 Returns the value listener.security.protocol.map based on the values of 'listeners.*.protocol'
 */}}
 {{- define "kafka.securityProtocolMap" -}}
-{{- if .Values.listeners.securityProtocolMap -}}
-  {{- print .Values.listeners.securityProtocolMap -}}
+{{- if .context.Values.listeners.securityProtocolMap -}}
+  {{- print .context.Values.listeners.securityProtocolMap -}}
 {{- else -}}
-  {{- $listeners := list .Values.listeners.client .Values.listeners.interbroker .Values.listeners.controller -}}
-  {{- range $i := .Values.listeners.extraListeners -}}
-  {{- $listeners = append $listeners $i -}}
+  {{- $listeners := list .context.Values.listeners.client .context.Values.listeners.interbroker -}}
+  {{- if .isController -}}
+    {{- if .context.Values.controller.controllerOnly -}}
+      {{- $listeners = list .context.Values.listeners.controller -}}
+    {{- else -}}
+      {{- $listeners = append $listeners .context.Values.listeners.controller -}}
+      {{- range $i := .context.Values.listeners.extraListeners -}}
+      {{- $listeners = append $listeners $i -}}
+      {{- end -}}
+    {{- end -}}
+  {{- else -}}
+    {{- range $i := .context.Values.listeners.extraListeners -}}
+    {{- $listeners = append $listeners $i -}}
+    {{- end -}}
   {{- end -}}
-  {{- if and .Values.externalAccess.enabled -}}
-  {{- $listeners = append $listeners .Values.listeners.external -}}
+  {{- if and .context.Values.externalAccess.enabled -}}
+  {{- $listeners = append $listeners .context.Values.listeners.external -}}
   {{- end -}}
   {{- $res := list -}}
   {{- range $listener := $listeners -}}
