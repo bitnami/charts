@@ -1,8 +1,13 @@
 # Changelog
 
-## 22.7.1 (2025-03-22)
+## 22.7.2 (2025-03-25)
 
-* [bitnami/airflow] Release 22.7.1 ([#32559](https://github.com/bitnami/charts/pull/32559))
+* bitnami/airflow  Fix indentation error when providing setupDBJob.resources in values ([#32599](https://github.com/bitnami/charts/pull/32599))
+
+## <small>22.7.1 (2025-03-22)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/airflow] Release 22.7.1 (#32559) ([4d21c97](https://github.com/bitnami/charts/commit/4d21c9734d3348ee1fcd38d80958af501dbe51c5)), closes [#32559](https://github.com/bitnami/charts/issues/32559)
 
 ## 22.7.0 (2025-03-04)
 

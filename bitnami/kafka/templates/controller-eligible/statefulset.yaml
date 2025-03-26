@@ -3,12 +3,10 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- $replicaCount := int .Values.controller.replicaCount }}
-{{- if and .Values.kraft.enabled (or (gt $replicaCount 0) .Values.controller.autoscaling.enabled) }}
 apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
-  name: {{ printf "%s-controller" (include "common.names.fullname" .) }}
+  name: {{ template "kafka.controller.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: controller-eligible
@@ -18,7 +16,7 @@ metadata:
   {{- end }}
 spec:
   podManagementPolicy: {{ .Values.controller.podManagementPolicy }}
-  {{- if not .Values.controller.autoscaling.enabled }}
+  {{- if not .Values.controller.autoscaling.hpa.enabled }}
   replicas: {{ .Values.controller.replicaCount }}
   {{- end }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.controller.podLabels .Values.commonLabels ) "context" . ) }}
@@ -26,9 +24,9 @@ spec:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: controller-eligible
       app.kubernetes.io/part-of: kafka
-  serviceName: {{ printf "%s-controller-headless" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  serviceName: {{ printf "%s-headless" (include "kafka.controller.fullname" .) | trunc 63 | trimSuffix "-" }}
   updateStrategy: {{- include "common.tplvalues.render" (dict "value" .Values.controller.updateStrategy "context" $ ) | nindent 4 }}
-  {{- if and .Values.controller.minReadySeconds (semverCompare ">= 1.23-0" (include "common.capabilities.kubeVersion" .)) }}
+  {{- if .Values.controller.minReadySeconds }}
   minReadySeconds: {{ .Values.controller.minReadySeconds }}
   {{- end }}
   template:
@@ -37,16 +35,16 @@ spec:
         app.kubernetes.io/component: controller-eligible
         app.kubernetes.io/part-of: kafka
       annotations:
-        {{- if (include "kafka.controller.createConfigmap" .) }}
+        {{- if include "kafka.controller.createConfigmap" . }}
         checksum/configuration: {{ include (print $.Template.BasePath "/controller-eligible/configmap.yaml") . | sha256sum }}
         {{- end }}
-        {{- if (include "kafka.createSaslSecret" .) }}
+        {{- if include "kafka.createSaslSecret" . }}
         checksum/passwords-secret: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }}
         {{- end }}
-         {{- if (include "kafka.createTlsSecret" .) }}
+         {{- if include "kafka.createTlsSecret" . }}
         checksum/tls-secret: {{ include (print $.Template.BasePath "/tls-secret.yaml") . | sha256sum }}
         {{- end }}
-        {{- if (include "kafka.metrics.jmx.createConfigmap" .) }}
+        {{- if include "kafka.metrics.jmx.createConfigmap" . }}
         checksum/jmx-configuration: {{ include (print $.Template.BasePath "/metrics/jmx-configmap.yaml") . | sha256sum }}
         {{- end }}
         {{- if .Values.controller.podAnnotations }}
@@ -101,39 +99,13 @@ spec:
       dnsConfig: {{- include "common.tplvalues.render" (dict "value" .Values.dnsConfig "context" $) | nindent 8 }}
       {{- end }}
       initContainers:
-        {{- if and .Values.volumePermissions.enabled .Values.controller.persistence.enabled }}
-        - name: volume-permissions
-          image: {{ include "kafka.volumePermissions.image" . }}
-          imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
-          command:
-            - /bin/bash
-          args:
-            - -ec
-            - |
-              mkdir -p "{{ .Values.controller.persistence.mountPath }}" "{{ .Values.controller.logPersistence.mountPath }}"
-              chown -R {{ .Values.controller.containerSecurityContext.runAsUser }}:{{ .Values.controller.podSecurityContext.fsGroup }} "{{ .Values.controller.persistence.mountPath }}" "{{ .Values.controller.logPersistence.mountPath }}"
-              find "{{ .Values.controller.persistence.mountPath }}" -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs -r chown -R {{ .Values.controller.containerSecurityContext.runAsUser }}:{{ .Values.controller.podSecurityContext.fsGroup }}
-              find "{{ .Values.controller.logPersistence.mountPath }}" -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs -r chown -R {{ .Values.controller.containerSecurityContext.runAsUser }}:{{ .Values.controller.podSecurityContext.fsGroup }}
-          {{- if eq ( toString ( .Values.volumePermissions.containerSecurityContext.runAsUser )) "auto" }}
-          securityContext: {{- omit .Values.volumePermissions.containerSecurityContext "runAsUser" | toYaml | nindent 12 }}
-          {{- else }}
-          securityContext: {{- .Values.volumePermissions.containerSecurityContext | toYaml | nindent 12 }}
-          {{- end }}
-          {{- if .Values.volumePermissions.resources }}
-          resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
-          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
-          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
-          {{- end }}
-          volumeMounts:
-            - name: data
-              mountPath: {{ .Values.controller.persistence.mountPath }}
-            - name: logs
-              mountPath: {{ .Values.controller.logPersistence.mountPath }}
+        {{- if and .Values.defaultInitContainers.volumePermissions.enabled .Values.controller.persistence.enabled }}
+        {{- include "kafka.defaultInitContainers.volumePermissions" (dict "context" . "role" "controller") | nindent 8 }}
         {{- end }}
-        {{- if and .Values.externalAccess.enabled .Values.externalAccess.autoDiscovery.enabled (or .Values.externalAccess.controller.forceExpose (not .Values.controller.controllerOnly))}}
-        {{- include "kafka.autoDiscoveryInitContainer" ( dict "role" "controller" "context" $) | nindent 8 }}
+        {{- if and .Values.externalAccess.enabled .Values.defaultInitContainers.autoDiscovery.enabled (or .Values.externalAccess.controller.forceExpose (not .Values.controller.controllerOnly)) }}
+        {{- include "kafka.defaultInitContainers.autoDiscovery" (dict "context" . "role" "controller") | nindent 8 }}
         {{- end }}
-        {{- include "kafka.prepareKafkaInitContainer" ( dict "role" "controller" "context" $) | nindent 8 }}
+        {{- include "kafka.defaultInitContainers.prepareConfig" (dict "context" . "role" "controller") | nindent 8 }}
         {{- if .Values.controller.initContainers }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.controller.initContainers "context" $ ) | nindent 8 }}
         {{- end }}
@@ -158,72 +130,13 @@ spec:
           args: {{- include "common.tplvalues.render" (dict "value" .Values.controller.args "context" $) | nindent 12 }}
           {{- end }}
           env:
-            - name: BITNAMI_DEBUG
-              value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
             - name: KAFKA_HEAP_OPTS
               value: {{ coalesce .Values.controller.heapOpts .Values.heapOpts | quote }}
-            - name: KAFKA_KRAFT_CLUSTER_ID
-              valueFrom:
-                secretKeyRef:
-                  name: {{ default (printf "%s-kraft-cluster-id" (include "common.names.fullname" .)) .Values.kraft.existingClusterIdSecret }}
-                  key: kraft-cluster-id
-            {{- if and (include "kafka.saslEnabled" .) (or (regexFind "SCRAM" (upper .Values.sasl.enabledMechanisms)) (regexFind "SCRAM" (upper .Values.sasl.controllerMechanism)) (regexFind "SCRAM" (upper .Values.sasl.interBrokerMechanism))) }}
-            - name: KAFKA_KRAFT_BOOTSTRAP_SCRAM_USERS
-              value: "true"
-            {{- if and (include "kafka.client.saslEnabled" . ) .Values.sasl.client.users (include "kafka.saslUserPasswordsEnabled" .) }}
-            - name: KAFKA_CLIENT_USERS
-              value: {{ join "," .Values.sasl.client.users | quote }}
-            - name: KAFKA_CLIENT_PASSWORDS
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "kafka.saslSecretName" . }}
-                  key: client-passwords
-            {{- end }}
-            {{- if regexFind "SASL" (upper .Values.listeners.interbroker.protocol) }}
-            {{- if (include "kafka.saslUserPasswordsEnabled" .) }}
-            - name: KAFKA_INTER_BROKER_USER
-              value: {{ .Values.sasl.interbroker.user | quote }}
-            - name: KAFKA_INTER_BROKER_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "kafka.saslSecretName" . }}
-                  key: inter-broker-password
-            {{- end }}
-            {{- if (include "kafka.saslClientSecretsEnabled" .) }}
-            - name: KAFKA_INTER_BROKER_CLIENT_ID
-              value: {{ .Values.sasl.interbroker.clientId | quote }}
-            - name: KAFKA_INTER_BROKER_CLIENT_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "kafka.saslSecretName" . }}
-                  key: inter-broker-client-secret
-            {{- end }}
-            {{- end }}
-            {{- if regexFind "SASL" (upper .Values.listeners.controller.protocol) }}
-            {{- if (include "kafka.saslUserPasswordsEnabled" .) }}
-            - name: KAFKA_CONTROLLER_USER
-              value: {{ .Values.sasl.controller.user | quote }}
-            - name: KAFKA_CONTROLLER_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "kafka.saslSecretName" . }}
-                  key: controller-password
-            {{- end }}
-            {{- if (include "kafka.saslClientSecretsEnabled" .) }}
-            - name: KAFKA_CONTROLLER_CLIENT_ID
-              value: {{ .Values.sasl.controller.clientId | quote }}
-            - name: KAFKA_CONTROLLER_CLIENT_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "kafka.saslSecretName" . }}
-                  key: controller-client-secret
-            {{- end }}
-            {{- end }}
-            {{- end }}
-            {{- if .Values.metrics.jmx.enabled }}
-            - name: JMX_PORT
-              value: {{ .Values.metrics.jmx.kafkaJmxPort | quote }}
-            {{- end }}
+            - name: KAFKA_CFG_PROCESS_ROLES
+              value: {{ ternary "controller" "controller,broker" .Values.controller.controllerOnly | quote }}
+            - name: KAFKA_INITIAL_CONTROLLERS_FILE
+              value: /shared/initial-controllers.txt
+            {{- include "kafka.commonEnv" . | nindent 12 }}
             {{- if .Values.controller.extraEnvVars }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.controller.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
@@ -261,7 +174,7 @@ spec:
             - name: external
               containerPort: {{ .Values.listeners.external.containerPort }}
             {{- end }}
-            {{- if .Values.listeners.extraListeners }}
+            {{- if and .Values.listeners.extraListeners (not .Values.controller.controllerOnly) }}
             {{- include "kafka.extraListeners.containerPorts" . | nindent 12 }}
             {{- end }}
             {{- end }}
@@ -310,21 +223,23 @@ spec:
             - name: kafka-config
               mountPath: /opt/bitnami/kafka/config/server.properties
               subPath: server.properties
-            {{- if .Values.sasl.zookeeper.user }}
-            - name: kafka-config
-              mountPath: /opt/bitnami/kafka/config/kafka_jaas.conf
-              subPath: kafka_jaas.conf
-            {{- end }}
             - name: tmp
               mountPath: /tmp
-            {{- if or .Values.log4j .Values.existingLog4jConfigMap }}
-            - name: log4j-config
-              mountPath: /opt/bitnami/kafka/config/log4j.properties
-              subPath: log4j.properties
+            - name: init-shared
+              mountPath: /shared
+            {{- if or .Values.log4j2 .Values.existingLog4j2ConfigMap }}
+            - name: log4j2-config
+              mountPath: /opt/bitnami/kafka/config/log4j2.yaml
+              subPath: log4j2.yaml
             {{- end }}
-            {{- if or .Values.tls.zookeeper.enabled (include "kafka.sslEnabled" .) }}
+            {{- if include "kafka.sslEnabled" . }}
             - name: kafka-shared-certs
               mountPath: /opt/bitnami/kafka/config/certs
+              readOnly: true
+            {{- end }}
+            {{- if and .Values.usePasswordFiles (include "kafka.saslEnabled" .) (or (regexFind "SCRAM" (upper .Values.sasl.enabledMechanisms)) (regexFind "SCRAM" (upper .Values.sasl.controllerMechanism)) (regexFind "SCRAM" (upper .Values.sasl.interBrokerMechanism))) }}
+            - name: kafka-sasl
+              mountPath: /opt/bitnami/kafka/config/secrets
               readOnly: true
             {{- end }}
             {{- if .Values.extraVolumeMounts }}
@@ -398,28 +313,22 @@ spec:
           emptyDir: {}
         - name: tmp
           emptyDir: {}
-        - name: scripts
-          configMap:
-            name: {{ include "common.names.fullname" . }}-scripts
-            defaultMode: 493
-        {{- if and .Values.externalAccess.enabled .Values.externalAccess.autoDiscovery.enabled }}
-        - name: kafka-autodiscovery-shared
+        - name: init-shared
           emptyDir: {}
-        {{- end }}
-        {{- if or .Values.log4j .Values.existingLog4jConfigMap }}
-        - name: log4j-config
+        {{- if or .Values.log4j2 .Values.existingLog4j2ConfigMap }}
+        - name: log4j2-config
           configMap:
-            name: {{ include "kafka.log4j.configMapName" . }}
+            name: {{ include "kafka.log4j2.configMapName" . }}
         {{- end }}
         {{- if .Values.metrics.jmx.enabled }}
         - name: jmx-config
           configMap:
             name: {{ include "kafka.metrics.jmx.configmapName" . }}
         {{- end }}
-        {{- if or .Values.tls.zookeeper.enabled (include "kafka.sslEnabled" .) }}
+        {{- if include "kafka.sslEnabled" . }}
         - name: kafka-shared-certs
           emptyDir: {}
-        {{- if and (include "kafka.sslEnabled" .) (or .Values.tls.existingSecret .Values.tls.autoGenerated) }}
+        {{- if or .Values.tls.existingSecret .Values.tls.autoGenerated.enabled }}
         - name: kafka-certs
           projected:
             defaultMode: 256
@@ -431,12 +340,13 @@ spec:
                   name: {{ .Values.tls.jksTruststoreSecret }}
               {{- end }}
         {{- end }}
-        {{- if and .Values.tls.zookeeper.enabled .Values.tls.zookeeper.existingSecret }}
-        - name: kafka-zookeeper-cert
-          secret:
-            secretName: {{ .Values.tls.zookeeper.existingSecret }}
-            defaultMode: 256
         {{- end }}
+        {{- if and .Values.usePasswordFiles (include "kafka.saslEnabled" .) (or (regexFind "SCRAM" (upper .Values.sasl.enabledMechanisms)) (regexFind "SCRAM" (upper .Values.sasl.controllerMechanism)) (regexFind "SCRAM" (upper .Values.sasl.interBrokerMechanism))) }}
+        - name: kafka-sasl
+          projected:
+            sources:
+              - secret:
+                  name:  {{ include "kafka.saslSecretName" . }}
         {{- end }}
         {{- if .Values.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
@@ -461,6 +371,11 @@ spec:
             claimName: {{ printf "%s" (tpl .Values.controller.logPersistence.existingClaim .) }}
         {{- end }}
   {{- if or (and .Values.controller.persistence.enabled (not .Values.controller.persistence.existingClaim)) (and .Values.controller.logPersistence.enabled (not .Values.controller.logPersistence.existingClaim)) }}
+  {{- if .Values.controller.persistentVolumeClaimRetentionPolicy.enabled }}
+  persistentVolumeClaimRetentionPolicy:
+    whenDeleted: {{ .Values.controller.persistentVolumeClaimRetentionPolicy.whenDeleted }}
+    whenScaled: {{ .Values.controller.persistentVolumeClaimRetentionPolicy.whenScaled }}
+  {{- end }}
   volumeClaimTemplates:
     {{- if and .Values.controller.persistence.enabled (not .Values.controller.persistence.existingClaim) }}
     - apiVersion: v1
@@ -508,4 +423,3 @@ spec:
         {{- end -}}
     {{- end }}
   {{- end }}
-{{- end }}

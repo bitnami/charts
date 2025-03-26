@@ -1,8 +1,33 @@
 # Changelog
 
+## 32.1.1 (2025-03-26)
+
+* [bitnami/kafka] bugfix: upgrade issue due to secret lookup ([#32621](https://github.com/bitnami/charts/pull/32621))
+
+## 32.1.0 (2025-03-26)
+
+* [bitnami/kafka] bugfix: add missing persistentVolumeClaimRetentionPolicy and fix config & network po ([9d1b911](https://github.com/bitnami/charts/commit/9d1b911d005add455ed5db1b379e1df13c33ddd6)), closes [#32615](https://github.com/bitnami/charts/issues/32615)
+
+## <small>32.0.3 (2025-03-26)</small>
+
+* [bitnami/kafka] bugfix: use kafka-broker-api-versions.sh to wait for Kafka on provisioning (#32613) ([328166c](https://github.com/bitnami/charts/commit/328166c403f2d3b4a9a548561b25dc43efb7eebf)), closes [#32613](https://github.com/bitnami/charts/issues/32613)
+
+## <small>32.0.2 (2025-03-26)</small>
+
+* [bitnami/kafka] bugfix: conditions to create Kraft secret (#32612) ([2120902](https://github.com/bitnami/charts/commit/2120902bdf6ee15b80e93d425fc99d89b51091be)), closes [#32612](https://github.com/bitnami/charts/issues/32612)
+
+## <small>32.0.1 (2025-03-25)</small>
+
+* [bitnami/kafka] Release 32.0.1 (#32592) ([5f3eb03](https://github.com/bitnami/charts/commit/5f3eb0376ab9b7f04a95fe197568405c0d875b92)), closes [#32592](https://github.com/bitnami/charts/issues/32592)
+
+## 32.0.0 (2025-03-25)
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/kafka] feat: Kafka 4.0.0 (#32516) ([8bea6f9](https://github.com/bitnami/charts/commit/8bea6f9e210b967f1c27270f75d307623afa1974)), closes [#32516](https://github.com/bitnami/charts/issues/32516)
+
 ## 31.5.0 (2025-03-06)
 
-* [bitnami/kafka] IpFamilies and IpFamilyPolicy configurables ([#31456](https://github.com/bitnami/charts/pull/31456))
+* [bitnami/kafka] IpFamilies and IpFamilyPolicy configurables (#31456) ([30daf36](https://github.com/bitnami/charts/commit/30daf368a955addaa59136ed6b18f8702124f72a)), closes [#31456](https://github.com/bitnami/charts/issues/31456) [#31389](https://github.com/bitnami/charts/issues/31389)
 
 ## <small>31.4.1 (2025-03-04)</small>
 
