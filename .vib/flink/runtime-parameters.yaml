@@ -67,7 +67,7 @@ extraDeploy:
                     sleep 10
                     while true
                     do
-                    ./bin/flink run ./examples/batch/EnumTriangles.jar --jobmanager $host:$port -Drest.port={{ .Values.jobmanager.service.ports.http }}
+                    ./bin/flink run --jobmanager $host:$port -Drest.port={{ .Values.jobmanager.service.ports.http }} ./examples/streaming/WordCount.jar --input README.txt
                     echo "1" > /tmp/ready
                     # Adding a sleep to not overload the deployment
                     sleep 10
