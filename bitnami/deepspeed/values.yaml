@@ -246,7 +246,7 @@ client:
     enabled: true
     initialDelaySeconds: 5
     periodSeconds: 30
-    timeoutSeconds: 30
+    timeoutSeconds: 90
     failureThreshold: 5
     successThreshold: 1
   ## @param client.startupProbe.enabled Enable startupProbe on Client containers
