@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.6.2 (2025-03-26)
+## 0.6.3 (2025-03-26)
 
-* [bitnami/dremio] Release 0.6.2 ([#32624](https://github.com/bitnami/charts/pull/32624))
+* [bitnami/dremio] Release 0.6.3 ([#32625](https://github.com/bitnami/charts/pull/32625))
+
+## <small>0.6.2 (2025-03-26)</small>
+
+* [bitnami/dremio] Release 0.6.2 (#32624) ([b3cdcc0](https://github.com/bitnami/charts/commit/b3cdcc01e3e6afe770aed35c3e0b14485f0f61e3)), closes [#32624](https://github.com/bitnami/charts/issues/32624)
 
 ## <small>0.6.1 (2025-03-21)</small>
 
