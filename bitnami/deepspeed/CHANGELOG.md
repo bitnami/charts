@@ -1,8 +1,13 @@
 # Changelog
 
-## 2.3.4 (2025-03-06)
+## 2.3.5 (2025-03-26)
 
-* [bitnami/deepspeed] Release 2.3.4 ([#32355](https://github.com/bitnami/charts/pull/32355))
+* [bitnami/deepspeed] Release 2.3.5 ([#32622](https://github.com/bitnami/charts/pull/32622))
+
+## <small>2.3.4 (2025-03-06)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/deepspeed] Release 2.3.4 (#32355) ([3c51e10](https://github.com/bitnami/charts/commit/3c51e107a340466e6923d67be7fa03102ff3403d)), closes [#32355](https://github.com/bitnami/charts/issues/32355)
 
 ## <small>2.3.3 (2025-02-04)</small>
 
