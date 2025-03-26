@@ -1,8 +1,12 @@
 # Changelog
 
-## 32.0.3 (2025-03-26)
+## 32.1.0 (2025-03-26)
 
-* [bitnami/kafka] bugfix: use kafka-broker-api-versions.sh to wait for Kafka on provisioning ([#32613](https://github.com/bitnami/charts/pull/32613))
+* [bitnami/kafka] bugfix: add missing persistentVolumeClaimRetentionPolicy and fix config & network policies when adding extra listeners ([#32615](https://github.com/bitnami/charts/pull/32615))
+
+## <small>32.0.3 (2025-03-26)</small>
+
+* [bitnami/kafka] bugfix: use kafka-broker-api-versions.sh to wait for Kafka on provisioning (#32613) ([328166c](https://github.com/bitnami/charts/commit/328166c403f2d3b4a9a548561b25dc43efb7eebf)), closes [#32613](https://github.com/bitnami/charts/issues/32613)
 
 ## <small>32.0.2 (2025-03-26)</small>
 
