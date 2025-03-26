@@ -99,7 +99,7 @@ dremio:
   image:
     registry: docker.io
     repository: bitnami/dremio
-    tag: 25.2.0-debian-12-r11
+    tag: 25.2.0-debian-12-r12
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
