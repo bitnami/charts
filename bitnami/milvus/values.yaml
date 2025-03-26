@@ -175,7 +175,7 @@ milvus:
         {{- if .Values.kafka.enabled  }}
           {{- $brokerReplicas := $.Values.kafka.broker.replicaCount | int }}
           {{- $controllerReplicas := 0 }}
-          {{- if or (not .Values.kafka.kraft.enabled) (not .Values.kafka.controller.controllerOnly)}}
+          {{- if not .Values.kafka.controller.controllerOnly }}
           {{- $controllerReplicas = $.Values.kafka.controller.replicaCount | int }}
           {{- end }}
           {{- range $i, $_e := until $brokerReplicas }}
