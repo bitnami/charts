@@ -1825,15 +1825,15 @@ wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
 
 ### kafka sub-chart paramaters
 
-| Name                              | Description                                                                                   | Value                                |
-| --------------------------------- | --------------------------------------------------------------------------------------------- | ------------------------------------ |
-| `kafka.enabled`                   | Enable/disable Kafka chart installation                                                       | `true`                               |
-| `kafka.controller.replicaCount`   | Number of Kafka controller eligible (controller+broker) nodes                                 | `1`                                  |
-| `kafka.service.ports.client`      | Kafka svc port for client connections                                                         | `9092`                               |
-| `kafka.extraConfig`               | Additional configuration to be appended at the end of the generated Kafka configuration file. | `offsets.topic.replication.factor=1` |
-| `kafka.listeners.client.protocol` | Kafka authentication protocol for the client listener                                         | `SASL_PLAINTEXT`                     |
-| `kafka.sasl.enabledMechanisms`    | Kafka enabled SASL mechanisms                                                                 | `PLAIN`                              |
-| `kafka.sasl.client.users`         | Kafka client users                                                                            | `["user"]`                           |
+| Name                              | Description                                                   | Value            |
+| --------------------------------- | ------------------------------------------------------------- | ---------------- |
+| `kafka.enabled`                   | Enable/disable Kafka chart installation                       | `true`           |
+| `kafka.controller.replicaCount`   | Number of Kafka controller eligible (controller+broker) nodes | `1`              |
+| `kafka.service.ports.client`      | Kafka svc port for client connections                         | `9092`           |
+| `kafka.overrideConfiguration`     | Kafka common configuration override                           | `{}`             |
+| `kafka.listeners.client.protocol` | Kafka authentication protocol for the client listener         | `SASL_PLAINTEXT` |
+| `kafka.sasl.enabledMechanisms`    | Kafka enabled SASL mechanisms                                 | `PLAIN`          |
+| `kafka.sasl.client.users`         | Kafka client users                                            | `["user"]`       |
 
 See <https://github.com/bitnami/readme-generator-for-helm> to create the table.
 
