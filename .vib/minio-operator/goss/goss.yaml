@@ -11,7 +11,7 @@ http:
 command:
   # Check that the operator formed the cluster correctly
   check-cluster-formation:
-    exec: bash -ec '. /tmp/minio/config.env && HOME=/tmp mc alias set vibminio https://minio.test $MINIO_ROOT_USER $MINIO_ROOT_PASSWORD && HOME=/tmp mc admin info vibminio'
+    exec: bash -ec '. /tmp/minio/config.env && HOME=/tmp mc alias set vibminio https://minio.$NAMESPACE $MINIO_ROOT_USER $MINIO_ROOT_PASSWORD && HOME=/tmp mc admin info vibminio'
     exit-status: 0
     stdout:
       - /vib-minio-pool-0-0/

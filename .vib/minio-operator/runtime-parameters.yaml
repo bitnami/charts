@@ -12,6 +12,7 @@ extraDeploy:
       export MINIO_ROOT_PASSWORD="minio123"
       export MINIO_STORAGE_CLASS_STANDARD="EC:2"
       export MINIO_BROWSER="on"
+      export NAMESPACE={{ include "common.names.namespace" . | quote }}
   type: Opaque
 - |
   apiVersion: v1
