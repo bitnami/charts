@@ -1,8 +1,12 @@
 # Changelog
 
+## 32.1.1 (2025-03-26)
+
+* [bitnami/kafka] bugfix: upgrade issue due to secret lookup ([#32621](https://github.com/bitnami/charts/pull/32621))
+
 ## 32.1.0 (2025-03-26)
 
-* [bitnami/kafka] bugfix: add missing persistentVolumeClaimRetentionPolicy and fix config & network policies when adding extra listeners ([#32615](https://github.com/bitnami/charts/pull/32615))
+* [bitnami/kafka] bugfix: add missing persistentVolumeClaimRetentionPolicy and fix config & network po ([9d1b911](https://github.com/bitnami/charts/commit/9d1b911d005add455ed5db1b379e1df13c33ddd6)), closes [#32615](https://github.com/bitnami/charts/issues/32615)
 
 ## <small>32.0.3 (2025-03-26)</small>
 
