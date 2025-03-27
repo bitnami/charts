@@ -1,6 +1,6 @@
 module github.com/bitnami/charts/.vib/common-tests/ginkgo-utils
 
-go 1.20
+go 1.24
 
 require (
 	k8s.io/api v0.28.0
