@@ -32,9 +32,7 @@ spec:
         {{- if and .Values.s3.auth.enabled (not .Values.s3.auth.existingSecret) }}
         checksum/auth-secret: {{ include (print $.Template.BasePath "/s3/auth-secret.yaml") . | sha256sum }}
         {{- end }}
-        {{- if .Values.security.enabled }}
         checksum/security-config: {{ include (print $.Template.BasePath "/security-configmap.yaml") . | sha256sum }}
-        {{- end }}
         {{- if .Values.s3.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.s3.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
@@ -42,7 +40,7 @@ spec:
         app.kubernetes.io/component: s3
     spec:
       {{- include "seaweedfs.imagePullSecrets" . | nindent 6 }}
-      serviceAccountName: {{ template "seaweedfs.serviceAccountName" . }}    
+      serviceAccountName: {{ template "seaweedfs.serviceAccountName" . }}
       automountServiceAccountToken: {{ .Values.s3.automountServiceAccountToken }}
       {{- if .Values.s3.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.s3.hostAliases "context" $) | nindent 8 }}
@@ -77,7 +75,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.s3.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.s3.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.s3.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.s3.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.s3.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.s3.terminationGracePeriodSeconds }}
@@ -120,6 +118,7 @@ spec:
             - -metricsPort={{ .Values.s3.containerPorts.metrics }}
             {{- end }}
             - -filer={{ printf "%s:%d" (include "seaweedfs.filer.fullname" .) (int .Values.filer.service.ports.http) }}
+            - -allowEmptyFolder={{ .Values.s3.allowEmptyFolder }}
           {{- end }}
           env:
             - name: BITNAMI_DEBUG
@@ -162,8 +161,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.s3.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.s3.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.s3.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /status
+            tcpSocket:
               port: http
           {{- end }}
           {{- if .Values.s3.customReadinessProbe }}
@@ -191,17 +189,18 @@ spec:
               mountPath: /tmp
               subPath: tmp-dir
             {{- if .Values.s3.auth.enabled }}
-            - mountPath: /auth
-              readOnly: true
             {{- if .Values.s3.auth.existingSecret }}
+            - mountPath: {{ printf "/auth/%s" (default "config.json" .Values.s3.auth.existingSecretConfigKey) }}
+              readOnly: true
               name: auth
               subPath: {{ default "config.json" .Values.s3.auth.existingSecretConfigKey }}
             {{- else }}
+            - mountPath: /auth
+              readOnly: true
               name: empty-dir
               subPath: auth-dir
             {{- end }}
             {{- end }}
-            {{- if .Values.security.enabled }}
             - name: security-config
               mountPath: /etc/seaweedfs/security.toml
               subPath: security.toml
@@ -223,7 +222,6 @@ spec:
               readOnly: true
               mountPath: /certs/client
             {{- end }}
-            {{- end }}
           {{- if .Values.s3.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.s3.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -233,12 +231,16 @@ spec:
       volumes:
         - name: empty-dir
           emptyDir: {}
+        {{- if .Values.usePasswordFiles }}
+        - name: seaweed-secrets
+          secret:
+            secretName: {{ printf "%s-auth" (include "seaweedfs.s3.fullname" .) }}
+        {{- end }}
         {{- if and .Values.s3.auth.enabled .Values.s3.auth.existingSecret }}
         - name: auth
           secret:
             secretName: {{ print (tpl .Values.s3.auth.existingSecret .) }}
         {{- end }}
-        {{- if .Values.security.enabled }}
         - name: security-config
           configMap:
             name: {{ printf "%s-security" (include "common.names.fullname" .) }}
@@ -261,7 +263,6 @@ spec:
         - name: client-cert
           secret:
             secretName: {{ template "seaweedfs.security.mTLS.client.secretName" . }}
-        {{- end }}
         {{- end }}
         {{- if .Values.s3.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.s3.extraVolumes "context" $) | nindent 8 }}

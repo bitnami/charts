@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/etcd
 ```
 
-Looking to use Etcd in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Etcd in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -48,13 +48,42 @@ These commands deploy etcd on the Kubernetes cluster in the default configuratio
 
 Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
 
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcesPreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
+### [Rolling VS Immutable tags](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+### Prometheus metrics
+
+This chart can be integrated with Prometheus by setting `metrics.enabled` to true. This will expose the etcd native Prometheus port in the container and service (if `metrics.useSeparateEndpoint=true`). It will all have the necessary annotations to be automatically scraped by Prometheus.
+
+#### Prometheus requirements
+
+It is necessary to have a working installation of Prometheus or Prometheus Operator for the integration to work. Install the [Bitnami Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/prometheus) or the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) to easily have a working Prometheus in your cluster.
+
+#### Integration with Prometheus Operator
+
+The chart can deploy `PodMonitor` objects for integration with Prometheus Operator installations. To do so, set the value `*.metrics.podMonitor.enabled=true`. Ensure that the Prometheus Operator `CustomResourceDefinitions` are installed in the cluster or it will fail with the following error:
+
+```text
+no matches for kind "PodMonitor" in version "monitoring.coreos.com/v1"
+```
+
+Install the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) for having the necessary CRDs and the Prometheus Operator.
+
+### Update credentials
+
+Bitnami charts configure credentials at first boot. Any further change in the secrets or credentials require manual intervention. Follow these instructions:
+
+- Update the user password following [the upstream documentation](https://etcd.io/docs/latest/op-guide/authentication/)
+- Update the password secret with the new values (replace the SECRET_NAME and PASSWORD placeholders)
+
+```shell
+kubectl create secret generic SECRET_NAME --from-literal=etcd-root-password=PASSWORD --dry-run -o yaml | kubectl apply -f -
+```
 
 ### Cluster configuration
 
@@ -80,7 +109,6 @@ Here is an example of the environment configuration bootstrapping an etcd cluste
 | 2       | ETCD_NAME                        | etcd-2                                                                                                                                                                                                |
 | 2       | ETCD_INITIAL_ADVERTISE_PEER_URLS | <http://etcd-2.etcd-headless.default.svc.cluster.local:2380>                                                                                                                                            |
 |---------|----------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| *       | ETCD_INITIAL_CLUSTER_STATE       | new                                                                                                                                                                                                   |
 | *       | ETCD_INITIAL_CLUSTER_TOKEN       | etcd-cluster-k8s                                                                                                                                                                                      |
 | *       | ETCD_INITIAL_CLUSTER             | etcd-0=<http://etcd-0.etcd-headless.default.svc.cluster.local:2380>,etcd-1=<http://etcd-1.etcd-headless.default.svc.cluster.local:2380>,etcd-2=<http://etcd-2.etcd-headless.default.svc.cluster.local:2380> |
 
@@ -140,7 +168,7 @@ The etcd chart can be configured with Role-based access control and TLS encrypti
 In order to enable Role-Based Access Control for etcd, set the following parameters:
 
 ```text
-auth.rbac.enabled=true
+auth.rbac.create=true
 auth.rbac.rootPassword=ETCD_ROOT_PASSWORD
 ```
 
@@ -184,7 +212,7 @@ If the `startFromSnapshot.*` parameters are used at the same time as the `disast
 
 > NOTE: The disaster recovery feature requires volumes with ReadWriteMany access mode.
 
-### Backup and restore the etcd keyspace
+### Backup and restore
 
 Two different approaches are available to back up and restore this Helm Chart:
 
@@ -315,12 +343,14 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 
 ### Global parameters
 
-| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value  |
-| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
-| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
-| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`   |
-| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value   |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`    |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`    |
+| `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`    |
+| `global.storageClass`                                 | DEPRECATED: use global.defaultStorageClass instead                                                                                                                                                                                                                                                                                                                  | `""`    |
+| `global.security.allowInsecureImages`                 | Allows skipping image verification                                                                                                                                                                                                                                                                                                                                  | `false` |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto`  |
 
 ### Common parameters
 
@@ -333,6 +363,7 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 | `commonAnnotations`      | Annotations to add to all deployed objects                                                   | `{}`            |
 | `clusterDomain`          | Default Kubernetes cluster domain                                                            | `cluster.local` |
 | `extraDeploy`            | Array of extra objects to deploy with the release                                            | `[]`            |
+| `usePasswordFiles`       | Mount credentials as files instead of using environment variables                            | `true`          |
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)      | `false`         |
 | `diagnosticMode.command` | Command to override all containers in the deployment                                         | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                            | `["infinity"]`  |
@@ -374,11 +405,9 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 | `auth.peer.caFilename`                 | Name of the file containing the peer CA certificate                                                                  | `""`                   |
 | `autoCompactionMode`                   | Auto compaction mode, by default periodic. Valid values: "periodic", "revision".                                     | `""`                   |
 | `autoCompactionRetention`              | Auto compaction retention for mvcc key value store in hour, by default 0, means disabled                             | `""`                   |
-| `initialClusterState`                  | Initial cluster state. Allowed values: 'new' or 'existing'                                                           | `""`                   |
 | `initialClusterToken`                  | Initial cluster token. Can be used to protect etcd from cross-cluster-interaction, which might corrupt the clusters. | `etcd-cluster-k8s`     |
 | `logLevel`                             | Sets the log level for the etcd process. Allowed values: 'debug', 'info', 'warn', 'error', 'panic', 'fatal'          | `info`                 |
 | `maxProcs`                             | Limits the number of operating system threads that can execute user-level                                            | `""`                   |
-| `removeMemberOnContainerTermination`   | Use a PreStop hook to remove the etcd members from the etcd cluster on container termination                         | `true`                 |
 | `configuration`                        | etcd configuration. Specify content for etcd.conf.yml                                                                | `""`                   |
 | `existingConfigmap`                    | Existing ConfigMap with etcd configuration                                                                           | `""`                   |
 | `extraEnvVars`                         | Extra environment variables to be set on etcd container                                                              | `[]`                   |
@@ -480,6 +509,7 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 | `service.peerPortNameOverride`     | etcd peer port name override                                                                                                                                   | `""`        |
 | `service.metricsPortNameOverride`  | etcd metrics port name override. The metrics port is only exposed when metrics.useSeparateEndpoint is true.                                                    | `""`        |
 | `service.loadBalancerIP`           | loadBalancerIP for the etcd service (optional, cloud specific)                                                                                                 | `""`        |
+| `service.loadBalancerClass`        | loadBalancerClass for the etcd service (optional, cloud specific)                                                                                              | `""`        |
 | `service.loadBalancerSourceRanges` | Load Balancer source ranges                                                                                                                                    | `[]`        |
 | `service.externalIPs`              | External IPs                                                                                                                                                   | `[]`        |
 | `service.externalTrafficPolicy`    | %%MAIN_CONTAINER_NAME%% service external traffic policy                                                                                                        | `Cluster`   |
@@ -548,27 +578,43 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 
 ### Snapshotting parameters
 
-| Name                                            | Description                                                                                                                                                                                                                                                         | Value          |
-| ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------- |
-| `startFromSnapshot.enabled`                     | Initialize new cluster recovering an existing snapshot                                                                                                                                                                                                              | `false`        |
-| `startFromSnapshot.existingClaim`               | Existing PVC containing the etcd snapshot                                                                                                                                                                                                                           | `""`           |
-| `startFromSnapshot.snapshotFilename`            | Snapshot filename                                                                                                                                                                                                                                                   | `""`           |
-| `disasterRecovery.enabled`                      | Enable auto disaster recovery by periodically snapshotting the keyspace                                                                                                                                                                                             | `false`        |
-| `disasterRecovery.cronjob.schedule`             | Schedule in Cron format to save snapshots                                                                                                                                                                                                                           | `*/30 * * * *` |
-| `disasterRecovery.cronjob.historyLimit`         | Number of successful finished jobs to retain                                                                                                                                                                                                                        | `1`            |
-| `disasterRecovery.cronjob.snapshotHistoryLimit` | Number of etcd snapshots to retain, tagged by date                                                                                                                                                                                                                  | `1`            |
-| `disasterRecovery.cronjob.snapshotsDir`         | Directory to store snapshots                                                                                                                                                                                                                                        | `/snapshots`   |
-| `disasterRecovery.cronjob.podAnnotations`       | Pod annotations for cronjob pods                                                                                                                                                                                                                                    | `{}`           |
-| `disasterRecovery.cronjob.resourcesPreset`      | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if disasterRecovery.cronjob.resources is set (disasterRecovery.cronjob.resources is recommended for production). | `nano`         |
-| `disasterRecovery.cronjob.resources`            | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                                                   | `{}`           |
-| `disasterRecovery.cronjob.nodeSelector`         | Node labels for cronjob pods assignment                                                                                                                                                                                                                             | `{}`           |
-| `disasterRecovery.cronjob.tolerations`          | Tolerations for cronjob pods assignment                                                                                                                                                                                                                             | `[]`           |
-| `disasterRecovery.cronjob.podLabels`            | Labels that will be added to pods created by cronjob                                                                                                                                                                                                                | `{}`           |
-| `disasterRecovery.cronjob.serviceAccountName`   | Specifies the service account to use for disaster recovery cronjob                                                                                                                                                                                                  | `""`           |
-| `disasterRecovery.pvc.existingClaim`            | A manually managed Persistent Volume and Claim                                                                                                                                                                                                                      | `""`           |
-| `disasterRecovery.pvc.size`                     | PVC Storage Request                                                                                                                                                                                                                                                 | `2Gi`          |
-| `disasterRecovery.pvc.storageClassName`         | Storage Class for snapshots volume                                                                                                                                                                                                                                  | `nfs`          |
-| `disasterRecovery.pvc.subPath`                  | Path within the volume from which to mount                                                                                                                                                                                                                          | `""`           |
+| Name                                                                         | Description                                                                                                                                                                                                                                                         | Value            |
+| ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
+| `startFromSnapshot.enabled`                                                  | Initialize new cluster recovering an existing snapshot                                                                                                                                                                                                              | `false`          |
+| `startFromSnapshot.existingClaim`                                            | Existing PVC containing the etcd snapshot                                                                                                                                                                                                                           | `""`             |
+| `startFromSnapshot.snapshotFilename`                                         | Snapshot filename                                                                                                                                                                                                                                                   | `""`             |
+| `disasterRecovery.enabled`                                                   | Enable auto disaster recovery by periodically snapshotting the keyspace                                                                                                                                                                                             | `false`          |
+| `disasterRecovery.cronjob.schedule`                                          | Schedule in Cron format to save snapshots                                                                                                                                                                                                                           | `*/30 * * * *`   |
+| `disasterRecovery.cronjob.historyLimit`                                      | Number of successful finished jobs to retain                                                                                                                                                                                                                        | `1`              |
+| `disasterRecovery.cronjob.snapshotHistoryLimit`                              | Number of etcd snapshots to retain, tagged by date                                                                                                                                                                                                                  | `1`              |
+| `disasterRecovery.cronjob.snapshotsDir`                                      | Directory to store snapshots                                                                                                                                                                                                                                        | `/snapshots`     |
+| `disasterRecovery.cronjob.podAnnotations`                                    | Pod annotations for cronjob pods                                                                                                                                                                                                                                    | `{}`             |
+| `disasterRecovery.cronjob.podSecurityContext.enabled`                        | Enable security context for Snapshotter pods                                                                                                                                                                                                                        | `true`           |
+| `disasterRecovery.cronjob.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                                                                                                                  | `Always`         |
+| `disasterRecovery.cronjob.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                                                                                                                                                                      | `[]`             |
+| `disasterRecovery.cronjob.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                                                                                                                         | `[]`             |
+| `disasterRecovery.cronjob.podSecurityContext.fsGroup`                        | Group ID for the Snapshotter filesystem                                                                                                                                                                                                                             | `1001`           |
+| `disasterRecovery.cronjob.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                                                                                | `true`           |
+| `disasterRecovery.cronjob.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                                                                    | `{}`             |
+| `disasterRecovery.cronjob.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                                                                          | `1001`           |
+| `disasterRecovery.cronjob.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                                                                         | `1001`           |
+| `disasterRecovery.cronjob.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                                                                                       | `true`           |
+| `disasterRecovery.cronjob.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                                                                                         | `false`          |
+| `disasterRecovery.cronjob.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                                                             | `true`           |
+| `disasterRecovery.cronjob.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                                                                                                                                                           | `false`          |
+| `disasterRecovery.cronjob.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                                                                                                                                                                  | `["ALL"]`        |
+| `disasterRecovery.cronjob.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                                                                                                                    | `RuntimeDefault` |
+| `disasterRecovery.cronjob.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if disasterRecovery.cronjob.resources is set (disasterRecovery.cronjob.resources is recommended for production). | `nano`           |
+| `disasterRecovery.cronjob.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                                                   | `{}`             |
+| `disasterRecovery.cronjob.nodeSelector`                                      | Node labels for cronjob pods assignment                                                                                                                                                                                                                             | `{}`             |
+| `disasterRecovery.cronjob.tolerations`                                       | Tolerations for cronjob pods assignment                                                                                                                                                                                                                             | `[]`             |
+| `disasterRecovery.cronjob.podLabels`                                         | Labels that will be added to pods created by cronjob                                                                                                                                                                                                                | `{}`             |
+| `disasterRecovery.cronjob.serviceAccountName`                                | Specifies the service account to use for disaster recovery cronjob                                                                                                                                                                                                  | `""`             |
+| `disasterRecovery.cronjob.command`                                           | Override default snapshot container command (useful when you want to customize the snapshot logic)                                                                                                                                                                  | `[]`             |
+| `disasterRecovery.pvc.existingClaim`                                         | A manually managed Persistent Volume and Claim                                                                                                                                                                                                                      | `""`             |
+| `disasterRecovery.pvc.size`                                                  | PVC Storage Request                                                                                                                                                                                                                                                 | `2Gi`            |
+| `disasterRecovery.pvc.storageClassName`                                      | Storage Class for snapshots volume                                                                                                                                                                                                                                  | `nfs`            |
+| `disasterRecovery.pvc.subPath`                                               | Path within the volume from which to mount                                                                                                                                                                                                                          | `""`             |
 
 ### Service account parameters
 
@@ -579,6 +625,73 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 | `serviceAccount.automountServiceAccountToken` | Enable/disable auto mounting of service account token        | `false` |
 | `serviceAccount.annotations`                  | Additional annotations to be included on the service account | `{}`    |
 | `serviceAccount.labels`                       | Additional labels to be included on the service account      | `{}`    |
+
+### etcd "pre-upgrade" K8s Job parameters
+
+| Name                                                              | Description                                                                                                                                                                                                                                                     | Value            |
+| ----------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
+| `preUpgradeJob.enabled`                                           | Enable running a pre-upgrade job on Helm upgrades that removes obsolete members                                                                                                                                                                                 | `true`           |
+| `preUpgradeJob.annotations`                                       | Add annotations to the etcd "pre-upgrade" job                                                                                                                                                                                                                   | `{}`             |
+| `preUpgradeJob.podLabels`                                         | Additional pod labels for etcd "pre-upgrade" job                                                                                                                                                                                                                | `{}`             |
+| `preUpgradeJob.podAnnotations`                                    | Additional pod annotations for etcd "pre-upgrade" job                                                                                                                                                                                                           | `{}`             |
+| `preUpgradeJob.containerSecurityContext.enabled`                  | Enabled "pre-upgrade" job's containers' Security Context                                                                                                                                                                                                        | `true`           |
+| `preUpgradeJob.containerSecurityContext.seLinuxOptions`           | Set SELinux options in "pre-upgrade" job's containers                                                                                                                                                                                                           | `{}`             |
+| `preUpgradeJob.containerSecurityContext.runAsUser`                | Set runAsUser in "pre-upgrade" job's containers' Security Context                                                                                                                                                                                               | `1001`           |
+| `preUpgradeJob.containerSecurityContext.runAsGroup`               | Set runAsUser in "pre-upgrade" job's containers' Security Context                                                                                                                                                                                               | `1001`           |
+| `preUpgradeJob.containerSecurityContext.runAsNonRoot`             | Set runAsNonRoot in "pre-upgrade" job's containers' Security Context                                                                                                                                                                                            | `true`           |
+| `preUpgradeJob.containerSecurityContext.readOnlyRootFilesystem`   | Set readOnlyRootFilesystem in "pre-upgrade" job's containers' Security Context                                                                                                                                                                                  | `true`           |
+| `preUpgradeJob.containerSecurityContext.privileged`               | Set privileged in "pre-upgrade" job's containers' Security Context                                                                                                                                                                                              | `false`          |
+| `preUpgradeJob.containerSecurityContext.allowPrivilegeEscalation` | Set allowPrivilegeEscalation in "pre-upgrade" job's containers' Security Context                                                                                                                                                                                | `false`          |
+| `preUpgradeJob.containerSecurityContext.capabilities.add`         | List of capabilities to be added in "pre-upgrade" job's containers                                                                                                                                                                                              | `[]`             |
+| `preUpgradeJob.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped in "pre-upgrade" job's containers                                                                                                                                                                                            | `["ALL"]`        |
+| `preUpgradeJob.containerSecurityContext.seccompProfile.type`      | Set seccomp profile in "pre-upgrade" job's containers                                                                                                                                                                                                           | `RuntimeDefault` |
+| `preUpgradeJob.podSecurityContext.enabled`                        | Enabled "pre-upgrade" job's pods' Security Context                                                                                                                                                                                                              | `true`           |
+| `preUpgradeJob.podSecurityContext.fsGroupChangePolicy`            | Set fsGroupChangePolicy in "pre-upgrade" job's pods' Security Context                                                                                                                                                                                           | `Always`         |
+| `preUpgradeJob.podSecurityContext.sysctls`                        | List of sysctls to allow in "pre-upgrade" job's pods' Security Context                                                                                                                                                                                          | `[]`             |
+| `preUpgradeJob.podSecurityContext.supplementalGroups`             | List of supplemental groups to add to "pre-upgrade" job's pods' Security Context                                                                                                                                                                                | `[]`             |
+| `preUpgradeJob.podSecurityContext.fsGroup`                        | Set fsGroup in "pre-upgrade" job's pods' Security Context                                                                                                                                                                                                       | `1001`           |
+| `preUpgradeJob.resourcesPreset`                                   | Set etcd "pre-upgrade" job's container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if preUpgradeJob.resources is set (preUpgradeJob.resources is recommended for production). | `micro`          |
+| `preUpgradeJob.resources`                                         | Set etcd "pre-upgrade" job's container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                      | `{}`             |
+
+### Defragmentation parameters
+
+| Name                                                               | Description                                                                                                                                | Value            |
+| ------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------ | ---------------- |
+| `defrag.enabled`                                                   | Enable automatic defragmentation. This is most effective when paired with auto compaction: consider setting "autoCompactionRetention > 0". | `false`          |
+| `defrag.cronjob.startingDeadlineSeconds`                           | Number of seconds representing the deadline for starting the job if it misses scheduled time for any reason                                | `""`             |
+| `defrag.cronjob.schedule`                                          | Schedule in Cron format to defrag (daily at midnight by default)                                                                           | `0 0 * * *`      |
+| `defrag.cronjob.concurrencyPolicy`                                 | Set the cronjob parameter concurrencyPolicy                                                                                                | `Forbid`         |
+| `defrag.cronjob.suspend`                                           | Boolean that indicates if the controller must suspend subsequent executions (not applied to already started executions)                    | `false`          |
+| `defrag.cronjob.successfulJobsHistoryLimit`                        | Number of successful finished jobs to retain                                                                                               | `1`              |
+| `defrag.cronjob.failedJobsHistoryLimit`                            | Number of failed finished jobs to retain                                                                                                   | `1`              |
+| `defrag.cronjob.labels`                                            | Additional labels to be added to the Defrag cronjob                                                                                        | `{}`             |
+| `defrag.cronjob.annotations`                                       | Annotations to be added to the Defrag cronjob                                                                                              | `{}`             |
+| `defrag.cronjob.activeDeadlineSeconds`                             | Number of seconds relative to the startTime that the job may be continuously active before the system tries to terminate it                | `""`             |
+| `defrag.cronjob.restartPolicy`                                     | Set the cronjob parameter restartPolicy                                                                                                    | `OnFailure`      |
+| `defrag.cronjob.podLabels`                                         | Labels that will be added to pods created by Defrag cronjob                                                                                | `{}`             |
+| `defrag.cronjob.podAnnotations`                                    | Pod annotations for Defrag cronjob pods                                                                                                    | `{}`             |
+| `defrag.cronjob.podSecurityContext.enabled`                        | Enable security context for Defrag pods                                                                                                    | `true`           |
+| `defrag.cronjob.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                         | `Always`         |
+| `defrag.cronjob.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                                             | `[]`             |
+| `defrag.cronjob.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                | `[]`             |
+| `defrag.cronjob.podSecurityContext.fsGroup`                        | Group ID for the Defrag filesystem                                                                                                         | `1001`           |
+| `defrag.cronjob.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                       | `true`           |
+| `defrag.cronjob.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                           | `{}`             |
+| `defrag.cronjob.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                 | `1001`           |
+| `defrag.cronjob.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                | `1001`           |
+| `defrag.cronjob.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                              | `true`           |
+| `defrag.cronjob.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                | `false`          |
+| `defrag.cronjob.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                    | `true`           |
+| `defrag.cronjob.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                                  | `false`          |
+| `defrag.cronjob.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                                         | `["ALL"]`        |
+| `defrag.cronjob.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                           | `RuntimeDefault` |
+| `defrag.cronjob.nodeSelector`                                      | Node labels for pod assignment in Defrag cronjob                                                                                           | `{}`             |
+| `defrag.cronjob.tolerations`                                       | Tolerations for pod assignment in Defrag cronjob                                                                                           | `[]`             |
+| `defrag.cronjob.serviceAccountName`                                | Specifies the service account to use for Defrag cronjob                                                                                    | `""`             |
+| `defrag.cronjob.command`                                           | Override default container command for defragmentation (useful when using custom images)                                                   | `[]`             |
+| `defrag.cronjob.args`                                              | Override default container args (useful when using custom images)                                                                          | `[]`             |
+| `defrag.cronjob.resourcesPreset`                                   | Set container resources according to one common preset                                                                                     | `nano`           |
+| `defrag.cronjob.resources`                                         | Set container requests and limits for different resources like CPU or                                                                      | `{}`             |
 
 ### Other parameters
 
@@ -615,6 +728,18 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/etcd
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 11.0.0
+
+This version introduces the following breaking changes:
+
+- Remove `initialClusterState` which was unreliable at detecting cluster state. From now on, each node will contact other members to determine cluster state. If no members are available and the data dir is empty, then it bootstraps a new cluster.
+- Remove `removeMemberOnContainerTermination` which was unreliable at removing stale members during replica count updates. Instead, a pre-upgrade hook is added to check and remove stale members.
+- Remove support for manual scaling with `kubectl` or autoscaler. Upgrading of any kind including increasing replica count must be done with `helm upgrade` exclusively. CD automation tools that respect Helm hooks such as ArgoCD can also be used.
+
+### To 10.7.0
+
+This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
 
 ### To 10.0.0
 
@@ -734,7 +859,7 @@ kubectl delete statefulset etcd --cascade=false
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

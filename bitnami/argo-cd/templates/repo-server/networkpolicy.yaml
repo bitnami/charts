@@ -3,7 +3,7 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if .Values.applicationSet.networkPolicy.enabled }}
+{{- if .Values.repoServer.networkPolicy.enabled }}
 kind: NetworkPolicy
 apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
 metadata:
@@ -15,14 +15,14 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.applicationSet.podLabels .Values.commonLabels ) "context" . ) }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.repoServer.podLabels .Values.commonLabels ) "context" . ) }}
   podSelector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: repo-server
   policyTypes:
     - Ingress
     - Egress
-  {{- if .Values.applicationSet.networkPolicy.allowExternalEgress }}
+  {{- if .Values.repoServer.networkPolicy.allowExternalEgress }}
   egress:
     - {}
   {{- else }}
@@ -34,7 +34,7 @@ spec:
         - port: 53
           protocol: TCP
         # Allow access to kube-apicontroller
-        {{- range $port := .Values.applicationSet.networkPolicy.kubeAPIServerPorts }}
+        {{- range $port := .Values.repoServer.networkPolicy.kubeAPIServerPorts }}
         - port: {{ $port }}
         {{- end }}
     # Allow connection to Redis
@@ -46,7 +46,7 @@ spec:
         - podSelector:
             matchLabels:
               app.kubernetes.io/name: redis
-              app.kubernetes.io/instance: {{ .Release.Name }}              
+              app.kubernetes.io/instance: {{ .Release.Name }}
       {{- else if .Values.externalRedis.enabled }}
         - port: {{ .Values.externalRedis.port }}
       to:
@@ -54,39 +54,39 @@ spec:
             matchLabels:
               {{- toYaml .Values.externalRedis.selector | nindent 14 }}
       {{- end }}
-    {{- if .Values.applicationSet.networkPolicy.extraEgress }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.applicationSet.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
+    {{- if .Values.repoServer.networkPolicy.extraEgress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.repoServer.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
     {{- end }}
   {{- end }}
   ingress:
     - ports:
-        - port: {{ .Values.applicationSet.containerPorts.probe }}
+        - port: {{ .Values.repoServer.containerPorts.repoServer }}
         {{- if .Values.repoServer.metrics.enabled }}
-        - port: {{ .Values.applicationSet.containerPorts.metrics }}
+        - port: {{ .Values.repoServer.containerPorts.metrics }}
         {{- end }}
-      {{- if not .Values.applicationSet.networkPolicy.allowExternal }}
+      {{- if not .Values.repoServer.networkPolicy.allowExternal }}
       from:
         - podSelector:
             matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
         - podSelector:
             matchLabels:
-              {{ template "argocd.applicationSet" . }}-client: "true"
-        {{- if .Values.applicationSet.networkPolicy.ingressNSMatchLabels }}
+              {{ template "argocd.repo-server" . }}-client: "true"
+        {{- if .Values.repoServer.networkPolicy.ingressNSMatchLabels }}
         - namespaceSelector:
             matchLabels:
-              {{- range $key, $value := .Values.applicationSet.networkPolicy.ingressNSMatchLabels }}
+              {{- range $key, $value := .Values.repoServer.networkPolicy.ingressNSMatchLabels }}
               {{ $key | quote }}: {{ $value | quote }}
               {{- end }}
-          {{- if .Values.applicationSet.networkPolicy.ingressNSPodMatchLabels }}
+          {{- if .Values.repoServer.networkPolicy.ingressNSPodMatchLabels }}
           podSelector:
             matchLabels:
-              {{- range $key, $value := .Values.applicationSet.networkPolicy.ingressNSPodMatchLabels }}
+              {{- range $key, $value := .Values.repoServer.networkPolicy.ingressNSPodMatchLabels }}
               {{ $key | quote }}: {{ $value | quote }}
               {{- end }}
           {{- end }}
         {{- end }}
       {{- end }}
-    {{- if .Values.applicationSet.networkPolicy.extraIngress }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.applicationSet.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
+    {{- if .Values.repoServer.networkPolicy.extraIngress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.repoServer.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
     {{- end }}
 {{- end }}

@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/postgresql
 ```
 
-Looking to use PostgreSQL in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use PostgreSQL in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -50,9 +50,27 @@ The command deploys PostgreSQL on the Kubernetes cluster in the default configur
 
 Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
 
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcesPreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
+### Prometheus metrics
+
+This chart can be integrated with Prometheus by setting `metrics.enabled` to `true`. This will deploy a sidecar container with [postgres_exporter](https://github.com/prometheus-community/postgres_exporter) in all pods. It will also create `metrics` services that can be configured under the `metrics.service` section. These services will be have the necessary annotations to be automatically scraped by Prometheus.
+
+#### Prometheus requirements
+
+It is necessary to have a working installation of Prometheus or Prometheus Operator for the integration to work. Install the [Bitnami Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/prometheus) or the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) to easily have a working Prometheus in your cluster.
+
+#### Integration with Prometheus Operator
+
+The chart can deploy `ServiceMonitor` objects for integration with Prometheus Operator installations. To do so, set the value `metrics.serviceMonitor.enabled=true`. Ensure that the Prometheus Operator `CustomResourceDefinitions` are installed in the cluster or it will fail with the following error:
+
+```text
+no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"
+```
+
+Install the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) for having the necessary CRDs and the Prometheus Operator.
+
+### [Rolling VS Immutable tags](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -97,6 +115,55 @@ ldap.tls_reqcert="demand"
 Next, login to the PostgreSQL server using the `psql` client and add the PAM authenticated LDAP users.
 
 > Note: Parameters including commas must be escaped as shown in the above example.
+
+### Update credentials
+
+Bitnami charts, with its default settings, configure credentials at first boot. Any further change in the secrets or credentials can be done using one of the following methods:
+
+### Manual update of the passwords and secrets
+
+- Update the user password following [the upstream documentation](https://www.postgresql.org/docs/current/sql-alteruser.html)
+- Update the password secret with the new values (replace the SECRET_NAME, PASSWORD and POSTGRES_PASSWORD placeholders)
+
+```shell
+kubectl create secret generic SECRET_NAME --from-literal=password=PASSWORD --from-literal=postgres-password=POSTGRES_PASSWORD --dry-run -o yaml | kubectl apply -f -
+```
+
+### Automated update using a password update job
+
+The Bitnami PostgreSQL provides a password update job that will automatically change the PostgreSQL passwords when running helm upgrade. To enable the job set `passwordUpdateJob.enabled=true`. This job requires:
+
+- The new passwords: this is configured using either `auth.postgresPassword`, `auth.password` and `auth.replicationPassword` (if applicable) or setting `auth.existingSecret`.
+- The previous passwords: This value is taken automatically from already deployed secret object. If you are using `auth.existingSecret` or `helm template` instead of `helm upgrade`, then set either `passwordUpdate.job.previousPasswords.postgresPassword`, `passwordUpdate.job.previousPasswords.password`, `passwordUpdate.job.previousPasswords.replicationPassword` (when applicable), or setting `passwordUpdateJob,previousPasswords.existingSecret`.
+
+In the following example we update the password via values.yaml in a PostgreSQL installation with replication
+
+```yaml
+architecture: "replication"
+
+auth:
+  user: "user"
+  postgresPassword: "newPostgresPassword123"
+  password: "newUserPassword123"
+  replicationPassword: "newReplicationPassword123"
+
+passwordUpdateJob:
+  enabled: true
+```
+
+In this example we use two existing secrets (`new-password-secret` and `previous-password-secret`) to update the passwords:
+
+```yaml
+auth:
+  existingSecret: new-password-secret
+
+passwordUpdateJob:
+  enabled: true
+  previousPasswords:
+    existingSecret: previous-password-secret
+```
+
+You can add extra update commands using the `passwordUpdateJob.extraCommands` value.
 
 ### postgresql.conf / pg_hba.conf files as configMap
 
@@ -220,7 +287,7 @@ global.postgresql.auth.database=testdb
 
 This way, the credentials will be available in all of the subcharts.
 
-### Backup and restore PostgreSQL deployments
+### Backup and restore
 
 To back up and restore Bitnami PostgreSQL Helm chart deployments on Kubernetes, you need to back up the persistent volumes from the source deployment and attach them to a new deployment using [Velero](https://velero.io/), a Kubernetes backup/restore tool.
 
@@ -231,7 +298,7 @@ These are the steps you will usually follow to back up and restore your PostgreS
 - Use Velero to restore the backed-up PVs on the destination cluster.
 - Create a new deployment on the destination cluster with the same chart, deployment name, credentials and other parameters as the original. This new deployment will use the restored PVs and hence the original data.
 
-Refer to our detailed [tutorial on backing up and restoring PostgreSQL deployments on Kubernetes](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-migrate-data-tac-velero-index.html) for more information.
+Refer to our detailed [tutorial on backing up and restoring PostgreSQL deployments on Kubernetes](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-migrate-data-tac-velero-index.html) for more information.
 
 ### NetworkPolicy
 
@@ -275,21 +342,23 @@ If you already have data in it, you will fail to sync to standby nodes for all c
 
 ### Global parameters
 
-| Name                                                       | Description                                                                                                                                                                                                                                                                                                                                                         | Value  |
-| ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| `global.imageRegistry`                                     | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
-| `global.imagePullSecrets`                                  | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
-| `global.storageClass`                                      | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`   |
-| `global.postgresql.auth.postgresPassword`                  | Password for the "postgres" admin user (overrides `auth.postgresPassword`)                                                                                                                                                                                                                                                                                          | `""`   |
-| `global.postgresql.auth.username`                          | Name for a custom user to create (overrides `auth.username`)                                                                                                                                                                                                                                                                                                        | `""`   |
-| `global.postgresql.auth.password`                          | Password for the custom user to create (overrides `auth.password`)                                                                                                                                                                                                                                                                                                  | `""`   |
-| `global.postgresql.auth.database`                          | Name for a custom database to create (overrides `auth.database`)                                                                                                                                                                                                                                                                                                    | `""`   |
-| `global.postgresql.auth.existingSecret`                    | Name of existing secret to use for PostgreSQL credentials (overrides `auth.existingSecret`).                                                                                                                                                                                                                                                                        | `""`   |
-| `global.postgresql.auth.secretKeys.adminPasswordKey`       | Name of key in existing secret to use for PostgreSQL credentials (overrides `auth.secretKeys.adminPasswordKey`). Only used when `global.postgresql.auth.existingSecret` is set.                                                                                                                                                                                     | `""`   |
-| `global.postgresql.auth.secretKeys.userPasswordKey`        | Name of key in existing secret to use for PostgreSQL credentials (overrides `auth.secretKeys.userPasswordKey`). Only used when `global.postgresql.auth.existingSecret` is set.                                                                                                                                                                                      | `""`   |
-| `global.postgresql.auth.secretKeys.replicationPasswordKey` | Name of key in existing secret to use for PostgreSQL credentials (overrides `auth.secretKeys.replicationPasswordKey`). Only used when `global.postgresql.auth.existingSecret` is set.                                                                                                                                                                               | `""`   |
-| `global.postgresql.service.ports.postgresql`               | PostgreSQL service port (overrides `service.ports.postgresql`)                                                                                                                                                                                                                                                                                                      | `""`   |
-| `global.compatibility.openshift.adaptSecurityContext`      | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
+| Name                                                       | Description                                                                                                                                                                                                                                                                                                                                                         | Value   |
+| ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `global.imageRegistry`                                     | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`    |
+| `global.imagePullSecrets`                                  | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`    |
+| `global.defaultStorageClass`                               | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`    |
+| `global.storageClass`                                      | DEPRECATED: use global.defaultStorageClass instead                                                                                                                                                                                                                                                                                                                  | `""`    |
+| `global.security.allowInsecureImages`                      | Allows skipping image verification                                                                                                                                                                                                                                                                                                                                  | `false` |
+| `global.postgresql.auth.postgresPassword`                  | Password for the "postgres" admin user (overrides `auth.postgresPassword`)                                                                                                                                                                                                                                                                                          | `""`    |
+| `global.postgresql.auth.username`                          | Name for a custom user to create (overrides `auth.username`)                                                                                                                                                                                                                                                                                                        | `""`    |
+| `global.postgresql.auth.password`                          | Password for the custom user to create (overrides `auth.password`)                                                                                                                                                                                                                                                                                                  | `""`    |
+| `global.postgresql.auth.database`                          | Name for a custom database to create (overrides `auth.database`)                                                                                                                                                                                                                                                                                                    | `""`    |
+| `global.postgresql.auth.existingSecret`                    | Name of existing secret to use for PostgreSQL credentials (overrides `auth.existingSecret`).                                                                                                                                                                                                                                                                        | `""`    |
+| `global.postgresql.auth.secretKeys.adminPasswordKey`       | Name of key in existing secret to use for PostgreSQL credentials (overrides `auth.secretKeys.adminPasswordKey`). Only used when `global.postgresql.auth.existingSecret` is set.                                                                                                                                                                                     | `""`    |
+| `global.postgresql.auth.secretKeys.userPasswordKey`        | Name of key in existing secret to use for PostgreSQL credentials (overrides `auth.secretKeys.userPasswordKey`). Only used when `global.postgresql.auth.existingSecret` is set.                                                                                                                                                                                      | `""`    |
+| `global.postgresql.auth.secretKeys.replicationPasswordKey` | Name of key in existing secret to use for PostgreSQL credentials (overrides `auth.secretKeys.replicationPasswordKey`). Only used when `global.postgresql.auth.existingSecret` is set.                                                                                                                                                                               | `""`    |
+| `global.postgresql.service.ports.postgresql`               | PostgreSQL service port (overrides `service.ports.postgresql`)                                                                                                                                                                                                                                                                                                      | `""`    |
+| `global.compatibility.openshift.adaptSecurityContext`      | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto`  |
 
 ### Common parameters
 
@@ -298,10 +367,12 @@ If you already have data in it, you will fail to sync to standby nodes for all c
 | `kubeVersion`            | Override Kubernetes version                                                                  | `""`            |
 | `nameOverride`           | String to partially override common.names.fullname template (will maintain the release name) | `""`            |
 | `fullnameOverride`       | String to fully override common.names.fullname template                                      | `""`            |
+| `namespaceOverride`      | String to fully override common.names.namespace                                              | `""`            |
 | `clusterDomain`          | Kubernetes Cluster Domain                                                                    | `cluster.local` |
 | `extraDeploy`            | Array of extra objects to deploy with the release (evaluated as a template)                  | `[]`            |
 | `commonLabels`           | Add labels to all the deployed resources                                                     | `{}`            |
 | `commonAnnotations`      | Add annotations to all the deployed resources                                                | `{}`            |
+| `secretAnnotations`      | Add annotations to the secrets                                                               | `{}`            |
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)      | `false`         |
 | `diagnosticMode.command` | Command to override all containers in the statefulset                                        | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the statefulset                                           | `["infinity"]`  |
@@ -327,7 +398,7 @@ If you already have data in it, you will fail to sync to standby nodes for all c
 | `auth.secretKeys.adminPasswordKey`       | Name of key in existing secret to use for PostgreSQL credentials. Only used when `auth.existingSecret` is set.                                                                                                                                                                                                                                | `postgres-password`          |
 | `auth.secretKeys.userPasswordKey`        | Name of key in existing secret to use for PostgreSQL credentials. Only used when `auth.existingSecret` is set.                                                                                                                                                                                                                                | `password`                   |
 | `auth.secretKeys.replicationPasswordKey` | Name of key in existing secret to use for PostgreSQL credentials. Only used when `auth.existingSecret` is set.                                                                                                                                                                                                                                | `replication-password`       |
-| `auth.usePasswordFiles`                  | Mount credentials as a files instead of using an environment variable                                                                                                                                                                                                                                                                         | `false`                      |
+| `auth.usePasswordFiles`                  | Mount credentials as a files instead of using an environment variable                                                                                                                                                                                                                                                                         | `true`                       |
 | `architecture`                           | PostgreSQL architecture (`standalone` or `replication`)                                                                                                                                                                                                                                                                                       | `standalone`                 |
 | `replication.synchronousCommit`          | Set synchronous commit mode. Allowed values: `on`, `remote_apply`, `remote_write`, `local` and `off`                                                                                                                                                                                                                                          | `off`                        |
 | `replication.numSynchronousReplicas`     | Number of replicas that will have synchronous replication. Note: Cannot be greater than `readReplicas.replicaCount`.                                                                                                                                                                                                                          | `0`                          |
@@ -384,6 +455,9 @@ If you already have data in it, you will fail to sync to standby nodes for all c
 | `primary.initdb.scriptsSecret`                              | Secret with scripts to be run at first boot (in case it contains sensitive information)                                                                                                                                           | `""`                  |
 | `primary.initdb.user`                                       | Specify the PostgreSQL username to execute the initdb scripts                                                                                                                                                                     | `""`                  |
 | `primary.initdb.password`                                   | Specify the PostgreSQL password to execute the initdb scripts                                                                                                                                                                     | `""`                  |
+| `primary.preInitDb.scripts`                                 | Dictionary of pre-init scripts                                                                                                                                                                                                    | `{}`                  |
+| `primary.preInitDb.scriptsConfigMap`                        | ConfigMap with pre-init scripts to be run                                                                                                                                                                                         | `""`                  |
+| `primary.preInitDb.scriptsSecret`                           | Secret with pre-init scripts to be run                                                                                                                                                                                            | `""`                  |
 | `primary.standby.enabled`                                   | Whether to enable current cluster's primary as standby server of another cluster or not                                                                                                                                           | `false`               |
 | `primary.standby.primaryHost`                               | The Host of replication primary in the other cluster                                                                                                                                                                              | `""`                  |
 | `primary.standby.primaryPort`                               | The Port of replication primary in the other cluster                                                                                                                                                                              | `""`                  |
@@ -457,6 +531,9 @@ If you already have data in it, you will fail to sync to standby nodes for all c
 | `primary.extraVolumes`                                      | Optionally specify extra list of additional volumes for the PostgreSQL Primary pod(s)                                                                                                                                             | `[]`                  |
 | `primary.sidecars`                                          | Add additional sidecar containers to the PostgreSQL Primary pod(s)                                                                                                                                                                | `[]`                  |
 | `primary.initContainers`                                    | Add additional init containers to the PostgreSQL Primary pod(s)                                                                                                                                                                   | `[]`                  |
+| `primary.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                   | `true`                |
+| `primary.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                    | `""`                  |
+| `primary.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `primary.pdb.minAvailable` and `primary.pdb.maxUnavailable` are empty.                                                                    | `""`                  |
 | `primary.extraPodSpec`                                      | Optionally specify extra PodSpec for the PostgreSQL Primary pod(s)                                                                                                                                                                | `{}`                  |
 | `primary.networkPolicy.enabled`                             | Specifies whether a NetworkPolicy should be created                                                                                                                                                                               | `true`                |
 | `primary.networkPolicy.allowExternal`                       | Don't require server label for connections                                                                                                                                                                                        | `true`                |
@@ -469,7 +546,9 @@ If you already have data in it, you will fail to sync to standby nodes for all c
 | `primary.service.ports.postgresql`                          | PostgreSQL service port                                                                                                                                                                                                           | `5432`                |
 | `primary.service.nodePorts.postgresql`                      | Node port for PostgreSQL                                                                                                                                                                                                          | `""`                  |
 | `primary.service.clusterIP`                                 | Static clusterIP or None for headless services                                                                                                                                                                                    | `""`                  |
+| `primary.service.labels`                                    | Map of labels to add to the primary service                                                                                                                                                                                       | `{}`                  |
 | `primary.service.annotations`                               | Annotations for PostgreSQL primary service                                                                                                                                                                                        | `{}`                  |
+| `primary.service.loadBalancerClass`                         | Load balancer class if service type is `LoadBalancer`                                                                                                                                                                             | `""`                  |
 | `primary.service.loadBalancerIP`                            | Load balancer IP if service type is `LoadBalancer`                                                                                                                                                                                | `""`                  |
 | `primary.service.externalTrafficPolicy`                     | Enable client source IP preservation                                                                                                                                                                                              | `Cluster`             |
 | `primary.service.loadBalancerSourceRanges`                  | Addresses that are allowed when service is LoadBalancer                                                                                                                                                                           | `[]`                  |
@@ -570,6 +649,9 @@ If you already have data in it, you will fail to sync to standby nodes for all c
 | `readReplicas.extraVolumes`                                      | Optionally specify extra list of additional volumes for the PostgreSQL read only pod(s)                                                                                                                                                     | `[]`                  |
 | `readReplicas.sidecars`                                          | Add additional sidecar containers to the PostgreSQL read only pod(s)                                                                                                                                                                        | `[]`                  |
 | `readReplicas.initContainers`                                    | Add additional init containers to the PostgreSQL read only pod(s)                                                                                                                                                                           | `[]`                  |
+| `readReplicas.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                             | `true`                |
+| `readReplicas.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                              | `""`                  |
+| `readReplicas.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `readReplicas.pdb.minAvailable` and `readReplicas.pdb.maxUnavailable` are empty.                                                                    | `""`                  |
 | `readReplicas.extraPodSpec`                                      | Optionally specify extra PodSpec for the PostgreSQL read only pod(s)                                                                                                                                                                        | `{}`                  |
 | `readReplicas.networkPolicy.enabled`                             | Specifies whether a NetworkPolicy should be created                                                                                                                                                                                         | `true`                |
 | `readReplicas.networkPolicy.allowExternal`                       | Don't require server label for connections                                                                                                                                                                                                  | `true`                |
@@ -582,7 +664,9 @@ If you already have data in it, you will fail to sync to standby nodes for all c
 | `readReplicas.service.ports.postgresql`                          | PostgreSQL service port                                                                                                                                                                                                                     | `5432`                |
 | `readReplicas.service.nodePorts.postgresql`                      | Node port for PostgreSQL                                                                                                                                                                                                                    | `""`                  |
 | `readReplicas.service.clusterIP`                                 | Static clusterIP or None for headless services                                                                                                                                                                                              | `""`                  |
+| `readReplicas.service.labels`                                    | Map of labels to add to the read service                                                                                                                                                                                                    | `{}`                  |
 | `readReplicas.service.annotations`                               | Annotations for PostgreSQL read only service                                                                                                                                                                                                | `{}`                  |
+| `readReplicas.service.loadBalancerClass`                         | Load balancer class if service type is `LoadBalancer`                                                                                                                                                                                       | `""`                  |
 | `readReplicas.service.loadBalancerIP`                            | Load balancer IP if service type is `LoadBalancer`                                                                                                                                                                                          | `""`                  |
 | `readReplicas.service.externalTrafficPolicy`                     | Enable client source IP preservation                                                                                                                                                                                                        | `Cluster`             |
 | `readReplicas.service.loadBalancerSourceRanges`                  | Addresses that are allowed when service is LoadBalancer                                                                                                                                                                                     | `[]`                  |
@@ -653,6 +737,51 @@ If you already have data in it, you will fail to sync to standby nodes for all c
 | `backup.cronjob.storage.volumeClaimTemplates.selector`             | A label query over volumes to consider for binding (e.g. when using local volumes)                                                                                                                                                              | `{}`                                                                                                                                                                                 |
 | `backup.cronjob.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the backup container                                                                                                                                                               | `[]`                                                                                                                                                                                 |
 | `backup.cronjob.extraVolumes`                                      | Optionally specify extra list of additional volumes for the backup container                                                                                                                                                                    | `[]`                                                                                                                                                                                 |
+
+### Password update job
+
+| Name                                                                  | Description                                                                                                                                                                                                                                           | Value            |
+| --------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
+| `passwordUpdateJob.enabled`                                           | Enable password update job                                                                                                                                                                                                                            | `false`          |
+| `passwordUpdateJob.backoffLimit`                                      | set backoff limit of the job                                                                                                                                                                                                                          | `10`             |
+| `passwordUpdateJob.command`                                           | Override default container command on mysql Primary container(s) (useful when using custom images)                                                                                                                                                    | `[]`             |
+| `passwordUpdateJob.args`                                              | Override default container args on mysql Primary container(s) (useful when using custom images)                                                                                                                                                       | `[]`             |
+| `passwordUpdateJob.extraCommands`                                     | Extra commands to pass to the generation job                                                                                                                                                                                                          | `""`             |
+| `passwordUpdateJob.previousPasswords.postgresPassword`                | Previous postgres password (set if the password secret was already changed)                                                                                                                                                                           | `""`             |
+| `passwordUpdateJob.previousPasswords.password`                        | Previous password (set if the password secret was already changed)                                                                                                                                                                                    | `""`             |
+| `passwordUpdateJob.previousPasswords.replicationPassword`             | Previous replication password (set if the password secret was already changed)                                                                                                                                                                        | `""`             |
+| `passwordUpdateJob.previousPasswords.existingSecret`                  | Name of a secret containing the previous passwords (set if the password secret was already changed)                                                                                                                                                   | `""`             |
+| `passwordUpdateJob.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                                                                  | `true`           |
+| `passwordUpdateJob.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                                                      | `{}`             |
+| `passwordUpdateJob.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                                                            | `1001`           |
+| `passwordUpdateJob.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                                                           | `1001`           |
+| `passwordUpdateJob.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                                                                         | `true`           |
+| `passwordUpdateJob.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                                                                           | `false`          |
+| `passwordUpdateJob.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                                               | `true`           |
+| `passwordUpdateJob.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                                                                                                                                             | `false`          |
+| `passwordUpdateJob.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                                                                                                                                                    | `["ALL"]`        |
+| `passwordUpdateJob.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                                                                                                      | `RuntimeDefault` |
+| `passwordUpdateJob.podSecurityContext.enabled`                        | Enabled credential init job pods' Security Context                                                                                                                                                                                                    | `true`           |
+| `passwordUpdateJob.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                                                                                                    | `Always`         |
+| `passwordUpdateJob.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                                                                                                                                                        | `[]`             |
+| `passwordUpdateJob.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                                                                                                           | `[]`             |
+| `passwordUpdateJob.podSecurityContext.fsGroup`                        | Set credential init job pod's Security Context fsGroup                                                                                                                                                                                                | `1001`           |
+| `passwordUpdateJob.extraEnvVars`                                      | Array containing extra env vars to configure the credential init job                                                                                                                                                                                  | `[]`             |
+| `passwordUpdateJob.extraEnvVarsCM`                                    | ConfigMap containing extra env vars to configure the credential init job                                                                                                                                                                              | `""`             |
+| `passwordUpdateJob.extraEnvVarsSecret`                                | Secret containing extra env vars to configure the credential init job (in case of sensitive data)                                                                                                                                                     | `""`             |
+| `passwordUpdateJob.extraVolumes`                                      | Optionally specify extra list of additional volumes for the credential init job                                                                                                                                                                       | `[]`             |
+| `passwordUpdateJob.extraVolumeMounts`                                 | Array of extra volume mounts to be added to the jwt Container (evaluated as template). Normally used with `extraVolumes`.                                                                                                                             | `[]`             |
+| `passwordUpdateJob.initContainers`                                    | Add additional init containers for the mysql Primary pod(s)                                                                                                                                                                                           | `[]`             |
+| `passwordUpdateJob.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if passwordUpdateJob.resources is set (passwordUpdateJob.resources is recommended for production). | `micro`          |
+| `passwordUpdateJob.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                                     | `{}`             |
+| `passwordUpdateJob.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                                                                                                                                                   | `{}`             |
+| `passwordUpdateJob.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                                                                                                                                                  | `{}`             |
+| `passwordUpdateJob.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                                                                                                                                                    | `{}`             |
+| `passwordUpdateJob.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                                                                                                                                                    | `false`          |
+| `passwordUpdateJob.hostAliases`                                       | Add deployment host aliases                                                                                                                                                                                                                           | `[]`             |
+| `passwordUpdateJob.annotations`                                       | Add annotations to the job                                                                                                                                                                                                                            | `{}`             |
+| `passwordUpdateJob.podLabels`                                         | Additional pod labels                                                                                                                                                                                                                                 | `{}`             |
+| `passwordUpdateJob.podAnnotations`                                    | Additional pod annotations                                                                                                                                                                                                                            | `{}`             |
 
 ### Volume Permissions parameters
 
@@ -781,6 +910,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 16.3.0
+
+This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
+
 ### To 15.0.0
 
 This major bump changes the following security defaults:
@@ -898,7 +1031,7 @@ postgresql 08:10:14.72 INFO  ==> ** Starting PostgreSQL **
 
 #### Useful links
 
-- [Bitnami Tutorial](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-resolve-helm2-helm3-post-migration-issues-index.html)
+- [Bitnami Tutorial](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-resolve-helm2-helm3-post-migration-issues-index.html)
 - [Helm docs](https://helm.sh/docs/topics/v2_v3_migration)
 - [Helm Blog](https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3)
 
@@ -994,7 +1127,7 @@ postgresql 08:05:12.59 INFO  ==> Deploying PostgreSQL with persisted data...
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

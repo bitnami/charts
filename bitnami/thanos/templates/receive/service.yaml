@@ -11,7 +11,11 @@ metadata:
   namespace: {{ include "common.names.namespace" . }}
   {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.receive.service.labels .Values.commonLabels ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    {{- if eq .Values.receive.mode "dual-mode" }}
+    app.kubernetes.io/component: receive-distributor
+    {{ else }}
     app.kubernetes.io/component: receive
+    {{ end }}
     {{- include "thanos.servicemonitor.matchLabels" . | nindent 4 -}}
   {{- if or .Values.receive.service.annotations .Values.commonAnnotations }}
   {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.receive.service.annotations .Values.commonAnnotations ) "context" . ) }}
@@ -56,6 +60,15 @@ spec:
       name: remote
       {{- if and (or (eq .Values.receive.service.type "NodePort") (eq .Values.receive.service.type "LoadBalancer")) .Values.receive.service.nodePorts.remote }}
       nodePort: {{ .Values.receive.service.nodePorts.remote }}
+      {{- else if eq .Values.receive.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    - port: {{ .Values.receive.service.ports.capnproto }}
+      targetPort: capnproto
+      protocol: TCP
+      name: capnproto
+      {{- if and (or (eq .Values.receive.service.type "NodePort") (eq .Values.receive.service.type "LoadBalancer")) .Values.receive.service.nodePorts.capnproto }}
+      nodePort: {{ .Values.receive.service.nodePorts.capnproto }}
       {{- else if eq .Values.receive.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}

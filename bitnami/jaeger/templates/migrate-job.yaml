@@ -7,7 +7,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: {{ include "common.names.fullname" . }}-migrate
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: migration
   {{- if or .Values.migration.annotations .Values.commonAnnotations }}
@@ -39,6 +39,11 @@ spec:
               mountPath: "/cassandra-schema"
           {{- if .Values.migration.containerSecurityContext.enabled }}
           securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.migration.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.migration.initContainer.resources }}
+          resources: {{- toYaml .Values.migration.initContainer.resources | nindent 12 }}
+          {{- else if ne .Values.migration.initContainer.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.migration.initContainer.resourcesPreset) | nindent 12 }}
           {{- end }}
       containers:
         - name: jaeger-cassandra-migrator

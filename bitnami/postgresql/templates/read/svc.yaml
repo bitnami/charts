@@ -8,8 +8,12 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "postgresql.v1.readReplica.fullname" . }}
-  namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- $labels := .Values.commonLabels }}
+  {{- if .Values.readReplicas.service.labels }}
+  {{- $labels = include "common.tplvalues.merge" ( dict "values" ( list .Values.readReplicas.service.labels $labels ) "context" . ) }}
+  {{- end }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: read
   {{- if or .Values.commonAnnotations .Values.readReplicas.service.annotations }}
   {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.readReplicas.service.annotations .Values.commonAnnotations ) "context" . ) }}
@@ -22,6 +26,9 @@ spec:
   {{- end }}
   {{- if and (eq .Values.readReplicas.service.type "LoadBalancer") (not (empty .Values.readReplicas.service.loadBalancerSourceRanges)) }}
   loadBalancerSourceRanges: {{ .Values.readReplicas.service.loadBalancerSourceRanges }}
+  {{- end }}
+  {{- if and (eq .Values.readReplicas.service.type "LoadBalancer") (not (empty .Values.readReplicas.service.loadBalancerClass)) }}
+  loadBalancerClass: {{ .Values.readReplicas.service.loadBalancerClass }}
   {{- end }}
   {{- if and (eq .Values.readReplicas.service.type "LoadBalancer") (not (empty .Values.readReplicas.service.loadBalancerIP)) }}
   loadBalancerIP: {{ .Values.readReplicas.service.loadBalancerIP }}

@@ -68,15 +68,15 @@ func createPVC(ctx context.Context, c kubernetes.Interface, name, size string) e
 	return err
 }
 
-func createJob(ctx context.Context, c kubernetes.Interface, name, port, image, pvcName, kind string) error {
+func createJob(ctx context.Context, c kubernetes.Interface, name, port, image, pvcName, kind string, fsGroup, user *int64) error {
 	podSecurityContext := &v1.PodSecurityContext{
-		FSGroup:             &[]int64{1001}[0],
+		FSGroup:             fsGroup,
 		FSGroupChangePolicy: &[]v1.PodFSGroupChangePolicy{v1.FSGroupChangeAlways}[0],
 	}
 	containerSecurityContext := &v1.SecurityContext{
+		RunAsUser:                user,
 		Privileged:               &[]bool{false}[0],
 		AllowPrivilegeEscalation: &[]bool{false}[0],
-		RunAsUser:                &[]int64{1001}[0],
 		RunAsNonRoot:             &[]bool{true}[0],
 		Capabilities: &v1.Capabilities{
 			Drop: []v1.Capability{"ALL"},

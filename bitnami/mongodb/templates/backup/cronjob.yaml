@@ -28,6 +28,9 @@ metadata:
   {{- end }}
 spec:
   schedule: {{ quote .Values.backup.cronjob.schedule }}
+  {{- if .Values.backup.cronjob.timezone }}
+  timeZone: {{ .Values.backup.cronjob.timezone | quote }}
+  {{- end }}
   concurrencyPolicy: {{ .Values.backup.cronjob.concurrencyPolicy }}
   failedJobsHistoryLimit: {{ .Values.backup.cronjob.failedJobsHistoryLimit }}
   successfulJobsHistoryLimit: {{ .Values.backup.cronjob.successfulJobsHistoryLimit }}
@@ -103,11 +106,11 @@ spec:
                 {{- if .Values.externalAccess.service.loadBalancerIPs }}
                 - -i {{ join "," .Values.externalAccess.service.loadBalancerIPs }}
                 {{- end }}
-                {{- if .Values.tls.extraDnsNames }}
-                - -n {{ join "," .Values.tls.extraDnsNames }}
+                {{- if or .Values.tls.extraDnsNames .Values.externalAccess.service.publicNames }}
+                - -n {{ join "," ( concat .Values.tls.extraDnsNames .Values.externalAccess.service.publicNames ) }}
                 {{- end }}
               {{- if .Values.tls.resources }}
-              resources: {{- toYaml .Values.tls.resources | nindent 16 }}
+              resources: {{- include "common.tplvalues.render" (dict "value" .Values.tls.resources "context" $) | nindent 12 }}
               {{- else if ne .Values.tls.resourcesPreset "none" }}
               resources: {{- include "common.resources.preset" (dict "type" .Values.tls.resourcesPreset) | nindent 16 }}
               {{- end }}
@@ -144,6 +147,11 @@ spec:
               - -c
               - "mongodump {{- if .Values.auth.enabled }} --username=${MONGODB_ROOT_USER} --password=${MONGODB_ROOT_PASSWORD} --authenticationDatabase=admin {{- end }} --host=${MONGODB_SERVICE_NAME} --port=${MONGODB_PORT_NUMBER} ${MONGODB_CLIENT_EXTRA_FLAGS} {{- if (eq $.Values.architecture "replicaset") }}--oplog{{- end }} --gzip --archive=${MONGODUMP_DIR}/mongodump-$(date '+%Y-%m-%d-%H-%M').gz"
             {{- end }}
+            {{- if .Values.backup.cronjob.resources }}
+            resources: {{- include "common.tplvalues.render" (dict "value" .Values.backup.cronjob.resources "context" $) | nindent 14 }}
+            {{- else if ne .Values.backup.cronjob.resourcesPreset "none" }}
+            resources: {{- include "common.resources.preset" (dict "type" .Values.backup.cronjob.resourcesPreset) | nindent 14 }}
+            {{- end }}
             volumeMounts:
               - name: empty-dir
                 mountPath: /tmp
@@ -173,7 +181,7 @@ spec:
             - name: common-scripts
               configMap:
                 name: {{ printf "%s-common-scripts" (include "mongodb.fullname" .) }}
-                defaultMode: 0550
+                defaultMode: 0o550
             {{- if .Values.tls.enabled }}
             - name: certs
               emptyDir: {}
@@ -184,10 +192,10 @@ spec:
                 items:
                 - key: mongodb-ca-cert
                   path: mongodb-ca-cert
-                  mode: 0600
+                  mode: 0o600
                 - key: mongodb-ca-key
                   path: mongodb-ca-key
-                  mode: 0600
+                  mode: 0o600
             {{- else }}
             - name: mongodb-certs-0
               secret:

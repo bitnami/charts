@@ -1,0 +1,132 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- /*
+  Dremio supports different executor groups called "engines".
+  These are defined in executor.engines and all the executor-specific k8s objects are created per engine.
+  Each engine contains an "overrides" section which allows replacing the common executor configuration
+  set in executor.common. This logic is inspired in upstream Dremio chart.
+
+  https://docs.dremio.com/cloud/sonar/workloads/engines/
+ */}}
+{{- range $engine := .Values.executor.engines }}
+{{- $executorValues := mustMergeOverwrite $.Values.executor.common $engine.overrides }}
+{{- if $executorValues.networkPolicy.enabled }}
+---
+kind: NetworkPolicy
+apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" $ }}
+metadata:
+  name: {{ include "dremio.executor.fullname" (dict "context" $ "engine" $engine.name) }}
+  namespace: {{ include "common.names.namespace" $ | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $.Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: dremio
+    app.kubernetes.io/component: executor
+    {{- /* We need an extra label for the engine */}}
+    engine: {{ $engine.name }}
+  {{- if $.Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $.Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list $executorValues.podLabels $.Values.commonLabels ) "context" $ ) }}
+  podSelector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/part-of: dremio
+      app.kubernetes.io/component: executor
+      engine: {{ $engine.name }}
+  policyTypes:
+    - Ingress
+    - Egress
+  {{- if $executorValues.networkPolicy.allowExternalEgress }}
+  egress:
+    - {}
+  {{- else }}
+  egress:
+    # Allow dns resolution
+    - ports:
+        - port: 53
+          protocol: UDP
+        - port: 53
+          protocol: TCP
+    # Allow outbound connections to other cluster pods
+    - ports:
+        - port: {{ $.Values.dremio.containerPorts.web }}
+        - port: {{ $.Values.dremio.containerPorts.client }}
+        - port: {{ $.Values.dremio.containerPorts.flight }}
+        - port: {{ $.Values.dremio.containerPorts.fabric }}
+        - port: {{ $.Values.dremio.containerPorts.conduit }}
+      to:
+        - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $.Values.commonLabels "context" $ ) | nindent 14 }}
+              part-of: dremio
+    # Allow outbound connections to S3
+    - ports:
+        - port: {{ include "dremio.s3.port" $ }}
+      {{- if $.Values.minio.enabled }}
+        - port: {{ $.Values.minio.containerPorts.api }}
+      to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: minio
+              app.kubernetes.io/instance: {{ .Release.Name }}
+        {{- end }}
+    # Allow outbound connections to zookeeper
+    - ports:
+        - port: {{ include "dremio.zookeeper.port" $ }}
+      to:
+        {{- if $.Values.zookeeper.enabled }}
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: zookeeper
+              app.kubernetes.io/instance: {{ .Release.Name }}
+        {{- end }}
+    {{- if $executorValues.networkPolicy.extraEgress }}
+    {{- include "common.tplvalues.render" ( dict "value" $executorValues.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+  ingress:
+    - ports:
+        - port: {{ $.Values.dremio.containerPorts.conduit }}
+        - port: {{ $.Values.dremio.containerPorts.fabric }}
+        {{- if $.Values.metrics.enabled }}
+        - port: {{ $.Values.dremio.containerPorts.jmx }}
+        - port: {{ $.Values.metrics.containerPorts.metrics }}
+        {{- end }}
+        {{- range $executorValues.extraContainerPorts }}
+        - port: {{ . }}
+        {{- end }}
+      {{- if not $executorValues.networkPolicy.allowExternal }}
+      from:
+        - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 14 }}
+              app.kubernetes.io/part-of: dremio
+        {{- if $executorValues.networkPolicy.addExternalClientAccess }}
+        - podSelector:
+            matchLabels:
+              {{ template "dremio.executor.fullname" $ }}-client: "true"
+        {{- end }}
+        {{- if $executorValues.networkPolicy.ingressPodMatchLabels }}
+        - podSelector:
+            matchLabels: {{- include "common.tplvalues.render" (dict "value" $executorValues.networkPolicy.ingressPodMatchLabels "context" $ ) | nindent 14 }}
+        {{- end }}
+        {{- if $executorValues.networkPolicy.ingressNSMatchLabels }}
+        - namespaceSelector:
+            matchLabels:
+              {{- range $key, $value := $executorValues.networkPolicy.ingressNSMatchLabels }}
+              {{ $key | quote }}: {{ $value | quote }}
+              {{- end }}
+          {{- if $executorValues.networkPolicy.ingressNSPodMatchLabels }}
+          podSelector:
+            matchLabels:
+              {{- range $key, $value := $executorValues.networkPolicy.ingressNSPodMatchLabels }}
+              {{ $key | quote }}: {{ $value | quote }}
+              {{- end }}
+          {{- end }}
+        {{- end }}
+      {{- end }}
+    {{- if $executorValues.networkPolicy.extraIngress }}
+    {{- include "common.tplvalues.render" ( dict "value" $executorValues.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
+    {{- end }}
+{{- end }}
+{{- end }}

@@ -83,6 +83,7 @@ spec:
       {{- end }}
       initContainers:
         {{- include "apisix.waitForETCDInitContainer" . | nindent 8 }}
+        {{- include "apisix.renderConfInitContainer" (dict "component" "control-plane" "context" $) | nindent 8 }}
         {{- include "apisix.prepareApisixInitContainer" (dict "component" "control-plane" "context" $) | nindent 8 }}
         {{- if .Values.controlPlane.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.controlPlane.initContainers "context" $) | nindent 8 }}
@@ -147,8 +148,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.controlPlane.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.controlPlane.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.controlPlane.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /v1/healthcheck
+            tcpSocket:
               port: http-control
           {{- end }}
           {{- if .Values.controlPlane.customReadinessProbe }}
@@ -192,6 +192,17 @@ spec:
         - name: config
           configMap:
             name: {{ include "apisix.control-plane.defaultConfigmapName" . }}
+        {{- if .Values.usePasswordFiles }}
+        - name: apisix-secrets
+          projected:
+            sources:
+              - secret:
+                  name: {{ include "apisix.control-plane.secretName" . }}
+              {{- if (include "apisix.etcd.authEnabled" .) }}
+              - secret:
+                  name:  {{ include "apisix.etcd.secretName" . }}
+              {{- end }}
+        {{- end }}
         {{- if or .Values.controlPlane.extraConfig .Values.controlPlane.extraConfigExistingConfigMap }}
         - name: extra-config
           configMap:

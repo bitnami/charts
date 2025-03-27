@@ -2,6 +2,8 @@ CHART NAME: {{ .Chart.Name }}
 CHART VERSION: {{ .Chart.Version }}
 APP VERSION: {{ .Chart.AppVersion }}
 
+Did you know there are enterprise versions of the Bitnami catalog? For enhanced secure software supply chain features, unlimited pulls from Docker, LTS support, or application customization, see Bitnami Premium or Tanzu Application Catalog. See https://www.arrow.com/globalecs/na/vendors/bitnami for more information.
+
 ** Please be patient while the chart is being deployed **
 
 {{- if .Values.diagnosticMode.enabled }}
@@ -53,7 +55,7 @@ For Redis Sentinel:
 {{- end }}
 {{- end }}
 
-{{- if and .Values.auth.usePasswordFiles (not .Values.auth.usePasswordFileFromSecret) (or (empty .Values.master.initContainers) (empty .Values.replica.initContainers)) }}
+{{- if and .Values.auth.enabled .Values.auth.usePasswordFiles (not .Values.auth.usePasswordFileFromSecret) (or (empty .Values.master.initContainers) (empty .Values.replica.initContainers)) }}
 
 -------------------------------------------------------------------------------
  WARNING
@@ -210,3 +212,5 @@ YOU NEED TO PERFORM AN UPGRADE FOR THE SERVICES AND WORKLOAD TO BE CREATED
   {{- $resourceSections = append $resourceSections "master" -}}
 {{- end }}
 {{- include "common.warnings.resources" (dict "sections" $resourceSections "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.sentinel.image .Values.metrics.image .Values.volumePermissions.image .Values.kubectl.image .Values.sysctl.image) "context" $) }}
+{{- include "common.errors.insecureImages" (dict "images" (list .Values.image .Values.sentinel.image .Values.metrics.image .Values.volumePermissions.image .Values.kubectl.image .Values.sysctl.image) "context" $) }}

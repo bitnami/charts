@@ -15,8 +15,12 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
+  {{- if .Values.hub.pdb.minAvailable }}
   minAvailable: {{ .Values.hub.pdb.minAvailable }}
-  maxUnavailable: {{ .Values.hub.pdb.maxUnavailable }}
+  {{- end }}
+  {{- if or .Values.hub.pdb.maxUnavailable ( not .Values.hub.pdb.minAvailable ) }}
+  maxUnavailable: {{ .Values.hub.pdb.maxUnavailable | default 1 }}
+  {{- end }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.hub.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}

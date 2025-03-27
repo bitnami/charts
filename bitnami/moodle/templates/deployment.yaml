@@ -97,10 +97,6 @@ spec:
         - name: certificates
           image: {{ template "certificates.image" . }}
           imagePullPolicy: {{ default .Values.image.pullPolicy .Values.certificates.image.pullPolicy }}
-          imagePullSecrets:
-          {{- range (default .Values.image.pullSecrets .Values.certificates.image.pullSecrets) }}
-            - name: {{ . }}
-          {{- end }}
           command:
           {{- if .Values.certificates.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.certificates.command "context" $) | nindent 12 }}
@@ -260,8 +256,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.livenessProbe.enabled }}
           livenessProbe:
-            httpGet:
-              path: {{ .Values.livenessProbe.path }}
+            tcpSocket:
               port: http
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}

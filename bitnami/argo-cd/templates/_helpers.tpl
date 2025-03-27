@@ -257,6 +257,19 @@ Return the Redis&reg; port
 {{- end -}}
 
 {{/*
+Validate Application Controller config
+*/}}
+{{- define "argocd.validateValues.controller.config" -}}
+{{- if gt (int .Values.controller.replicaCount) 1 }}
+    {{- if and .Values.controller.dynamicClusterDistribution.enabled (not (eq .Values.controller.kind "Deployment")) }}
+Argo CD: When running in HA mode with dynamic cluster distribution enabled, the application controller must be installed as a Deployment.
+    {{- else if and (not .Values.controller.dynamicClusterDistribution.enabled) (not (eq .Values.controller.kind "StatefulSet")) }}
+Argo CD: When running in HA mode, the application controller must be installed as a StatefulSet.
+    {{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Validate Redis config
 */}}
 {{- define "argocd.validateValues.redis" -}}
@@ -276,7 +289,12 @@ Validate external Redis config
 */}}
 {{- define "argocd.validateValues.externalRedis" -}}
 {{- if not .Values.redis.enabled -}}
+    {{- if not .Values.externalRedis.port -}}
 Argo CD: If the redis dependency is disabled you need to add an external redis port
+    {{- end -}}
+    {{- if not .Values.externalRedis.host -}}
+Argo CD: If the redis dependency is disabled you need to add an external redis host
+    {{- end -}}
 {{- end -}}
 {{- end -}}
 
@@ -316,10 +334,15 @@ Compile all warnings into a single message.
 */}}
 {{- define "argocd.validateValues" -}}
 {{- $messages := list -}}
+{{- $messages := append $messages (include "argocd.validateValues.controller.config" .) -}}
 {{- $messages := append $messages (include "argocd.validateValues.dex.config" .) -}}
 {{- $messages := append $messages (include "argocd.validateValues.clusterCredentials" .) -}}
 {{- $messages := append $messages (include "argocd.validateValues.externalRedis" .) -}}
 {{- $messages := append $messages (include "argocd.validateValues.redis" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
+
+{{- if $message -}}
+{{-   printf "\nVALUES VALIDATION:\n%s" $message | fail -}}
+{{- end -}}
 {{- end -}}

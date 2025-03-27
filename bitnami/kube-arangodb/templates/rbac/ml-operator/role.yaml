@@ -1,0 +1,67 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{ if and .Values.rbac.create .Values.features.ml }}
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
+kind: Role
+metadata:
+  name: {{ printf "%s-ml" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: kube-arangodb
+    app.kubernetes.io/component: operator
+rules:
+  - apiGroups:
+      - "ml.arangodb.com"
+    resources:
+      - "arangomlextensions"
+      - "arangomlextensions/status"
+      - "arangomlbatchjobs"
+      - "arangomlbatchjobs/status"
+      - "arangomlcronjobs"
+      - "arangomlcronjobs/status"
+      - "arangomlstorages"
+      - "arangomlstorages/status"
+    verbs:
+      - "*"
+  - apiGroups:
+      - "scheduler.arangodb.com"
+    resources:
+      - "arangoprofiles"
+      - "arangoprofiles/status"
+    verbs:
+      - "*"
+  - apiGroups:
+      - "database.arangodb.com"
+    resources:
+      - "arangodeployments"
+    verbs:
+      - "get"
+      - "list"
+      - "watch"
+  - apiGroups:
+      - "rbac.authorization.k8s.io"
+    resources:
+      - "roles"
+      - "rolebindings"
+    verbs: ["*"]
+  - apiGroups:
+      - "batch"
+    resources:
+      - "cronjobs"
+      - "jobs"
+    verbs: ["*"]
+  - apiGroups: ["apps"]
+    resources:
+      - "statefulsets"
+    verbs: ["*"]
+  - apiGroups: [""]
+    resources:
+      - "pods"
+      - "secrets"
+      - "services"
+      - "serviceaccounts"
+    verbs: ["*"]
+{{- end }}

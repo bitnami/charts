@@ -138,8 +138,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ingressController.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.ingressController.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.ingressController.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /healthz
+            tcpSocket:
               port: http
           {{- end }}
           {{- if .Values.ingressController.customReadinessProbe }}
@@ -188,6 +187,19 @@ spec:
         - name: config
           configMap:
             name: {{ include "apisix.ingress-controller.defaultConfigmapName" . }}
+        {{- if and .Values.usePasswordFiles (or .Values.controlPlane.enabled (include "apisix.etcd.authEnabled" .)) }}
+        - name: apisix-secrets
+          projected:
+            sources:
+              {{- if (include "apisix.etcd.authEnabled" .) }}
+              - secret:
+                  name:  {{ include "apisix.etcd.secretName" . }}
+              {{- end }}
+              {{- if .Values.controlPlane.enabled }}
+              - secret:
+                  name: {{ include "apisix.control-plane.secretName" . }}
+              {{- end }}
+        {{- end }}
         {{- if or .Values.ingressController.extraConfig .Values.ingressController.extraConfigExistingConfigMap }}
         - name: extra-config
           configMap:

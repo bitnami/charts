@@ -8,14 +8,17 @@ command:
   solr-manage-collection:
     exec: |
       export {{ $auth }} && \
-      solr create_collection -p {{ .Vars.containerPorts.http }} -replicationFactor {{ $replicas }} -c {{ $collection }} && \
-      solr healthcheck -z solr-zookeeper:2181/solr -c {{ $collection }}
+      solr create_collection --solr-url http://127.0.0.1:{{ .Vars.containerPorts.http }} -replicationFactor {{ $replicas }} -c {{ $collection }}
+    # TODO: solr healthcheck is broken in version 9.7.0. In newer versions that contain the commit below it will be fixed. Uncomment and indent when it gets released
+    # https://github.com/apache/solr/commit/463e093d336ff129e7b4fbe736cc3a2bb4725d39
+    # solr healthcheck -z solr-zookeeper:2181/solr -c {{ $collection }}
     exit-status: 0
-    stdout:
-      - "healthy"
-    {{ range $e, $i := until $replicas }}
-      - /solr-{{ $i }}/
-    {{ end }}
+    # TODO: Uncomment when a new version gets released
+    # stdout:
+    #  - "healthy"
+    # {{ range $e, $i := until $replicas }}
+    #  - /solr-{{ $i }}/
+    # {{ end }}
     timeout: 30000
   {{- $uid := .Vars.containerSecurityContext.runAsUser }}
   {{- $gid := .Vars.podSecurityContext.fsGroup }}

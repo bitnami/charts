@@ -1,0 +1,50 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{/* Adding the helper in configmap.yaml for better readability */}}
+{{- define "zipkin.config.default" -}}
+{{/* Common configuration */}}
+QUERY_LOG_LEVEL: {{ .Values.logLevel | quote }}
+QUERY_PORT: {{ .Values.containerPorts.http | quote }}
+{{/* Version store configuration */}}
+{{- if eq .Values.storageType "mem" }}
+STORAGE_TYPE: "mem"
+{{- else if eq .Values.storageType "cassandra3" }}
+STORAGE_TYPE: "cassandra3"
+CASSANDRA_CONTACT_POINTS: {{ printf "%s:%d" ( include "zipkin.cassandra.host" . ) ( include "zipkin.cassandra.port" . | int ) }}
+CASSANDRA_USERNAME: {{ include "zipkin.cassandra.user" . | quote }}
+CASSANDRA_KEYSPACE: {{ include "zipkin.cassandra.keyspace" . | quote }}
+CASSANDRA_LOCAL_DC: {{ include "zipkin.cassandra.datacenter" . | quote }}
+{{- end }}
+{{/* TLS configuration */}}
+{{- if .Values.tls.enabled }}
+ARMERIA_SSL_KEY_STORE: "/bitnami/zipkin/certs/zipkin.jks"
+ARMERIA_SSL_KEY_STORE_TYPE: "JKS"
+ARMERIA_SSL_ENABLED: "true"
+ARMERIA_PORTS_0_PORT: {{ .Values.containerPorts.http | quote }}
+ARMERIA_PORTS_0_PROTOCOLS_0: "https"
+{{- end }}
+{{- end }}
+
+{{- if not .Values.existingConfigmap }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "common.names.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: zipkin
+    app.kubernetes.io/part-of: zipkin
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+data:
+{{- /* Convert the default configuration and extra overrides to environment variables */ -}}
+{{- $defaultConfiguration := include "zipkin.config.default" . | fromYaml -}}
+{{- $overrideConfiguration := include "common.tplvalues.render" (dict "value" .Values.configOverrides "context" $) | fromYaml -}}
+
+{{/* Merge both maps and render the list of env vars */}}
+{{- mergeOverwrite $defaultConfiguration $overrideConfiguration | toYaml | nindent 2 }}
+{{- end }}

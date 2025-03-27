@@ -69,15 +69,34 @@ spec:
       {{- if .Values.core.schedulerName }}
       schedulerName: {{ .Values.core.schedulerName }}
       {{- end }}
-      {{- if .Values.core.serviceAccountName }}
-      serviceAccountName: {{ .Values.core.serviceAccountName }}
-      {{- end }}
+      serviceAccountName: {{ include "harbor.core.serviceAccountName" . }}
       {{- if .Values.core.podSecurityContext.enabled }}
       securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.core.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
-      {{- if .Values.core.initContainers }}
-      initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.core.initContainers "context" $) | nindent 8 }}
-      {{- end }}
+      initContainers:
+        {{- if .Values.core.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.core.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+        - name: certificate-volume
+          image: {{ include "harbor.core.image" . }}
+          imagePullPolicy: {{ .Values.core.image.pullPolicy | quote }}
+          command:
+            - /bin/bash
+          args:
+            - -ec
+            - cp -r /etc/ssl/certs/* /certs
+          {{- if .Values.core.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.core.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.certificateVolume.resources }}
+          resources: {{- toYaml .Values.certificateVolume.resources | nindent 12 }}
+          {{- else if ne .Values.certificateVolume.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.certificateVolume.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /certs
+              subPath: etc-ssl-certs
       containers:
         - name: core
           image: {{ include "harbor.core.image" . }}
@@ -120,6 +139,13 @@ spec:
                   name: {{ include "harbor.jobservice" . }}
                   key: secret
                 {{- end }}
+            {{- if and (not .Values.postgresql.enabled) .Values.externalDatabase.existingSecret }}
+            - name: POSTGRESQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.externalDatabase.existingSecret }}
+                  key: {{ .Values.externalDatabase.existingSecretPasswordKey }}
+            {{- end }}
             {{- if or .Values.core.configOverwriteJson .Values.core.configOverwriteJsonSecret }}
             - name: CONFIG_OVERWRITE_JSON
               valueFrom:
@@ -178,9 +204,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.core.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.core.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.core.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /api/v2.0/ping
-              scheme: {{ ternary "https" "http" .Values.internalTLS.enabled | upper }}
+            tcpSocket:
               port: {{ ternary "https" "http" .Values.internalTLS.enabled }}
           {{- end }}
           {{- if .Values.core.customReadinessProbe }}
@@ -205,6 +229,9 @@ spec:
             - name: empty-dir
               mountPath: /tmp
               subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /etc/ssl/certs
+              subPath: etc-ssl-certs
             - name: config
               mountPath: /etc/core/app.conf
               subPath: app.conf
@@ -227,8 +254,6 @@ spec:
               mountPath: /etc/core/auth-ca/auth-ca.crt
               subPath: auth-ca.crt
             {{- end }}
-            - name: psc
-              mountPath: /etc/core/token
             {{- if .Values.internalTLS.caBundleSecret }}
             {{- include "harbor.caBundleVolumeMount" . | nindent 12 }}
             {{- end }}
@@ -296,8 +321,6 @@ spec:
               - key: ca.crt
                 path: auth-ca.crt
         {{- end }}
-        - name: psc
-          emptyDir: {}
       {{- if .Values.core.extraVolumes }}
       {{- include "common.tplvalues.render" (dict "value" .Values.core.extraVolumes "context" $) | nindent 8 }}
       {{- end }}

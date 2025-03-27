@@ -33,10 +33,13 @@ spec:
         {{- end }}
         checksum/config: {{ include (print $.Template.BasePath "/config-secret.yaml") . | sha256sum }}
         {{- if (include "rabbitmq.createTlsSecret" . ) }}
-        checksum/config: {{ include (print $.Template.BasePath "/tls-secrets.yaml") . | sha256sum }}
+        checksum/configTLS: {{ include (print $.Template.BasePath "/tls-secrets.yaml") . | sha256sum }}
         {{- end }}
         {{- if or (not .Values.auth.existingErlangSecret) (not .Values.auth.existingPasswordSecret) .Values.extraSecrets }}
         checksum/secret: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }}
+        {{- end }}
+        {{- if .Values.initScripts }}
+        checksum/initScripts: {{ include (print $.Template.BasePath "/init-configmap.yaml") . | sha256sum }}
         {{- end }}
         {{- if .Values.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
@@ -113,7 +116,7 @@ spec:
           securityContext: {{- .Values.volumePermissions.containerSecurityContext | toYaml | nindent 12 }}
           {{- end }}
           {{- if .Values.volumePermissions.resources }}
-          resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.volumePermissions.resources "context" $) | nindent 12 }}
           {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
           resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
@@ -131,7 +134,7 @@ spec:
           image: {{ template "rabbitmq.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.resources }}
-          resources: {{- toYaml .Values.resources | nindent 12 }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.resources "context" $) | nindent 12 }}
           {{- else if ne .Values.resourcesPreset "none" }}
           resources: {{- include "common.resources.preset" (dict "type" .Values.resourcesPreset) | nindent 12 }}
           {{- end }}
@@ -219,6 +222,8 @@ spec:
             - name: RABBITMQ_NODE_NAME
               value: "rabbit@$(MY_POD_NAME)"
             {{- end }}
+            - name: RABBITMQ_UPDATE_PASSWORD
+              value: {{ ternary "yes" "no" .Values.auth.updatePassword | quote }}
             - name: RABBITMQ_MNESIA_DIR
               value: "{{ .Values.persistence.mountPath }}/$(RABBITMQ_NODE_NAME)"
             - name: RABBITMQ_LDAP_ENABLE
@@ -288,17 +293,29 @@ spec:
           ports:
             - name: amqp
               containerPort: {{ .Values.containerPorts.amqp }}
+              {{- if .Values.hostPorts.amqp }}
+              hostPort: {{ .Values.hostPorts.amqp }}
+              {{- end }}
             - name: dist
               containerPort: {{ .Values.containerPorts.dist }}
             - name: stats
               containerPort: {{ .Values.containerPorts.manager }}
+              {{- if .Values.hostPorts.manager }}
+              hostPort: {{ .Values.hostPorts.manager }}
+              {{- end }}
             - name: epmd
               containerPort: {{ .Values.containerPorts.epmd }}
             - name: metrics
               containerPort: {{ .Values.containerPorts.metrics }}
+              {{- if .Values.hostPorts.metrics }}
+              hostPort: {{ .Values.hostPorts.metrics }}
+              {{- end }}
             {{- if .Values.auth.tls.enabled }}
             - name: amqp-tls
               containerPort: {{ .Values.containerPorts.amqpTls }}
+              {{- if .Values.hostPorts.amqpTls }}
+              hostPort: {{ .Values.hostPorts.amqpTls }}
+              {{- end }}
             {{- end }}
             {{- if .Values.extraContainerPorts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraContainerPorts "context" $) | nindent 12 }}
@@ -341,7 +358,7 @@ spec:
           {{- end }}
           {{- end }}
           {{- if .Values.resources }}
-          resources: {{- toYaml .Values.resources | nindent 12 }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.resources "context" $) | nindent 12 }}
           {{- else if ne .Values.resourcesPreset "none" }}
           resources: {{- include "common.resources.preset" (dict "type" .Values.resourcesPreset) | nindent 12 }}
           {{- end }}

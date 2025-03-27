@@ -68,12 +68,12 @@ spec:
       terminationGracePeriodSeconds: {{ .Values.streaming.terminationGracePeriodSeconds }}
       {{- end }}
       initContainers:
-        {{- if not .Values.diagnosticMode.enabled }}
+        {{- if and (not .Values.diagnosticMode.enabled) .Values.defaultInitContainers.waitForBackends.enabled }}
         {{- include "mastodon.waitForDBInitContainer" . | nindent 8 }}
         {{- include "mastodon.waitForWebInitContainer" . | nindent 8 }}
         {{- end }}
         {{- if .Values.streaming.initContainers }}
-          {{- include "common.tplvalues.render" (dict "value" .Values.streaming.initContainers "context" $) | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.streaming.initContainers "context" $) | nindent 8 }}
         {{- end }}
       containers:
         - name: mastodon
@@ -182,8 +182,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.streaming.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.streaming.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.streaming.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /api/v1/streaming/health
+            tcpSocket:
               port: http
           {{- end }}
           {{- if .Values.streaming.customReadinessProbe }}

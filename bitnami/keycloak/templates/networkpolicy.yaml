@@ -66,6 +66,9 @@ spec:
     - ports:
         {{- /* Constant in code: https://github.com/keycloak/keycloak/blob/ce8e925c1ad9bf7a3180d1496e181aeea0ab5f8a/operator/src/main/java/org/keycloak/operator/Constants.java#L60 */}}
         - port: 7800
+        {{- if and (.Values.metrics.enabled) (not (eq (.Values.containerPorts.http | int) (.Values.containerPorts.metrics | int) )) }}
+        - port: {{ .Values.containerPorts.metrics }} # metrics and health
+        {{- end }}
         - port: {{ .Values.containerPorts.http }}
         {{- if .Values.tls.enabled }}
         - port: {{ .Values.containerPorts.https }}

@@ -1,0 +1,139 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.externalDatabase.enabled .Values.externalDatabase.initDatabaseJob.enabled }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ printf "%s-init-db" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" (list .Values.commonLabels .Values.externalDatabase.initDatabaseJob.labels) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: init-db
+  {{- if or .Values.externalDatabase.initDatabaseJob.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.externalDatabase.initDatabaseJob.annotations .Values.commonAnnotations) "context" .) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  backoffLimit: {{ .Values.externalDatabase.initDatabaseJob.backoffLimit }}
+  template:
+    metadata:
+      labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/component: init-db
+    spec:
+      {{- include "seaweedfs.imagePullSecrets" . | nindent 6 }}
+      restartPolicy: OnFailure
+      {{- if .Values.externalDatabase.initDatabaseJob.podSecurityContext.enabled }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.externalDatabase.initDatabaseJob.podSecurityContext "context" $) | nindent 8 }}
+      {{- end }}
+      automountServiceAccountToken: {{ .Values.externalDatabase.initDatabaseJob.automountServiceAccountToken }}
+      serviceAccountName: {{ template "seaweedfs.serviceAccountName" . }}
+      {{- if .Values.externalDatabase.initDatabaseJob.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.externalDatabase.initDatabaseJob.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: init-db
+          image: {{ include "seaweedfs.initDatabaseJob.image" . }}
+          {{- if eq .Values.externalDatabase.store "mariadb" }}
+          imagePullPolicy: {{ .Values.mariadb.image.pullPolicy }}
+          {{- else if eq .Values.externalDatabase.store "postgresql" }}
+          imagePullPolicy: {{ .Values.postgresql.image.pullPolicy }}
+          {{- end }}
+          {{- if .Values.externalDatabase.initDatabaseJob.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.externalDatabase.initDatabaseJob.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          command:
+            - /bin/bash
+          args:
+            - -ec
+            - |
+              set -o errexit
+              set -o nounset
+              set -o pipefail
+
+              . /opt/bitnami/scripts/liblog.sh
+              [[ -f $DATABASE_PASSWORD_FILE ]] && export DATABASE_PASSWORD="$(< "${DATABASE_PASSWORD_FILE}")"
+            {{- if eq .Values.externalDatabase.store "mariadb" }}
+              . /opt/bitnami/scripts/libmariadb.sh
+              . /opt/bitnami/scripts/mariadb-env.sh
+              info "Waiting for host $DATABASE_HOST"
+              mariadb_is_ready() {
+                  if ! echo "select 1" | mysql_remote_execute "$DATABASE_HOST" "$DATABASE_PORT_NUMBER" "$DATABASE_NAME" "$DATABASE_USER" "$DATABASE_PASSWORD"; then
+                      return 1
+                  fi
+                  return 0
+              }
+              if ! retry_while "mariadb_is_ready"; then
+                  error "Database not ready"
+                  exit 1
+              fi
+              info "Database is ready"
+              mysql_remote_execute "$DATABASE_HOST" "$DATABASE_PORT_NUMBER" "$DATABASE_NAME" "$DATABASE_USER" "$DATABASE_PASSWORD" << EOF
+              CREATE TABLE IF NOT EXISTS filemeta (
+                `dirhash`   BIGINT NOT NULL       COMMENT 'first 64 bits of MD5 hash value of directory field',
+                `name`      VARCHAR(766) NOT NULL COMMENT 'directory or file name',
+                `directory` TEXT NOT NULL         COMMENT 'full path to parent directory',
+                `meta`      LONGBLOB,
+                PRIMARY KEY (`dirhash`, `name`)
+              ) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+              EOF
+            {{- else if eq .Values.externalDatabase.store "postgresql" }}
+              . /opt/bitnami/scripts/libpostgresql.sh
+              . /opt/bitnami/scripts/postgresql-env.sh
+
+              info "Waiting for host $DATABASE_HOST"
+              postgresql_is_ready() {
+                  if ! echo "SELECT 1" | postgresql_remote_execute "$DATABASE_HOST" "$DATABASE_PORT_NUMBER" "$DATABASE_NAME" "$DATABASE_USER" "$DATABASE_PASSWORD"; then
+                      return 1
+                  fi
+                  return 0
+              }
+              if ! retry_while "postgresql_is_ready"; then
+                  error "Database not ready"
+                  exit 1
+              fi
+              info "Database is ready"
+              postgresql_remote_execute "$DATABASE_HOST" "$DATABASE_PORT_NUMBER" "$DATABASE_NAME" "$DATABASE_USER" "$DATABASE_PASSWORD" << EOF
+              CREATE TABLE IF NOT EXISTS filemeta (
+                dirhash     BIGINT,
+                name        VARCHAR(65535),
+                directory   VARCHAR(65535),
+                meta        bytea,
+                PRIMARY KEY (dirhash, name)
+              );
+              EOF
+            {{- end }}
+          env:
+            - name: DATABASE_HOST
+              value: {{ include "seaweedfs.database.host" . | quote }}
+            - name: DATABASE_PORT_NUMBER
+              value: {{ include "seaweedfs.database.port" . | quote }}
+            - name: DATABASE_NAME
+              value: {{ include "seaweedfs.database.name" . | quote }}
+            - name: DATABASE_USER
+              value: {{ include "seaweedfs.database.user" . | quote }}
+            - name: DATABASE_PASSWORD_FILE
+              value: "/secrets/password"
+          {{- if .Values.externalDatabase.initDatabaseJob.resources }}
+          resources: {{- toYaml .Values.externalDatabase.initDatabaseJob.resources | nindent 12 }}
+          {{- else if ne .Values.externalDatabase.initDatabaseJob.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.externalDatabase.initDatabaseJob.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: db-credentials
+              mountPath: /secrets
+      volumes:
+        - name: empty-dir
+          emptyDir: {}
+        - name: db-credentials
+          secret:
+            secretName: {{ include "seaweedfs.database.secretName" . }}
+            items:
+            - key: {{ include "seaweedfs.database.keyName" . }}
+              path: password
+{{- end }}

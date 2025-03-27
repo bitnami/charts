@@ -9,7 +9,8 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
+## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ## @param global.redis.password Global Redis&reg; password (overrides `auth.password`)
 ##
 global:
@@ -19,7 +20,13 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  defaultStorageClass: ""
   storageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
   redis:
     password: ""
   ## Compatibility adaptations for Kubernetes platforms
@@ -52,6 +59,12 @@ commonLabels: {}
 ## @param commonAnnotations Annotations to add to all deployed objects
 ##
 commonAnnotations: {}
+## @param configmapChecksumAnnotations Enable checksum annotations used to trigger rolling updates when ConfigMap(s) change
+##
+configmapChecksumAnnotations: true
+## @param secretChecksumAnnotations Enable checksum annotations used to trigger rolling updates when Secret(s) change
+##
+secretChecksumAnnotations: true
 ## @param secretAnnotations Annotations to add to secret
 ##
 secretAnnotations: {}
@@ -84,6 +97,7 @@ diagnosticMode:
   ##
   args:
     - infinity
+
 ## @section Redis&reg; Image parameters
 ##
 
@@ -100,10 +114,9 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/redis
-  tag: 7.2.4-debian-12-r13
+  tag: 7.4.2-debian-12-r6
   digest: ""
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -132,7 +145,7 @@ auth:
   ## @param auth.enabled Enable password authentication
   ##
   enabled: true
-  ## @param auth.sentinel Enable password authentication on sentinels too
+  ## @param auth.sentinel Enable authentication on sentinels too
   ##
   sentinel: true
   ## @param auth.password Redis&reg; password
@@ -149,10 +162,31 @@ auth:
   existingSecretPasswordKey: ""
   ## @param auth.usePasswordFiles Mount credentials as files instead of using an environment variable
   ##
-  usePasswordFiles: false
+  usePasswordFiles: true
   ## @param auth.usePasswordFileFromSecret Mount password file from secret
   ##
   usePasswordFileFromSecret: true
+  ## Redis ACL restricts connections by limiting commands and key access with auth management.
+  ## ref: https://redis.io/docs/latest/operate/oss_and_stack/management/security/acl/
+  ##
+  acl:
+    ## @param auth.acl.enabled Enables the support of the Redis ACL system
+    ##
+    enabled: false
+    ## @param auth.acl.sentinel Enables the support of the Redis ACL system for Sentinel Nodes
+    ##
+    sentinel: false
+    ## @param auth.acl.users A list of the configured users in the Redis ACL system
+    ##
+    ## Example:
+    ## users:
+    ##   - username: "my-user"
+    ##     password: "mypassword"
+    ##     enabled: "on"
+    ##     commands: "+@all"
+    ##     keys: "~*"
+    ##     channels: "&*"
+    users: [ ]
 ## @param commonConfiguration [string] Common configuration to be added into the ConfigMap
 ## ref: https://redis.io/topics/config
 ##
@@ -170,6 +204,9 @@ master:
   ## @param master.count Number of Redis&reg; master instances to deploy (experimental, requires additional configuration)
   ##
   count: 1
+  ## @param master.revisionHistoryLimit The number of old history to retain to allow rollback
+  ## NOTE: Explicitly setting this field to 0, will result in cleaning up all the history, breaking ability to rollback
+  revisionHistoryLimit: 10
   ## @param master.configuration Configuration for Redis&reg; master nodes
   ## ref: https://redis.io/topics/config
   ##
@@ -618,6 +655,22 @@ master:
     ## @param master.serviceAccount.annotations Additional custom annotations for the ServiceAccount
     ##
     annotations: {}
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param master.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param master.pdb.minAvailable [object] Minimum number/percentage of pods that should remain scheduled
+  ## @param master.pdb.maxUnavailable [object] Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `master.pdb.minAvailable` and `master.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
+  ## @param master.extraPodSpec Optionally specify extra PodSpec for the Redis&reg; master pod(s)
+  ##
+  extraPodSpec: {}
+  ## @param master.annotations Additional custom annotations for Redis&reg; Master resource
+  ##
+  annotations: {}
 ## @section Redis&reg; replicas configuration parameters
 ##
 replica:
@@ -628,6 +681,9 @@ replica:
   ## @param replica.replicaCount Number of Redis&reg; replicas to deploy
   ##
   replicaCount: 3
+  ## @param replica.revisionHistoryLimit The number of old history to retain to allow rollback
+  ## NOTE: Explicitly setting this field to 0, will result in cleaning up all the history, breaking ability to rollback
+  revisionHistoryLimit: 10
   ## @param replica.configuration Configuration for Redis&reg; replicas nodes
   ## ref: https://redis.io/topics/config
   ##
@@ -1090,6 +1146,22 @@ replica:
     ## @param replica.serviceAccount.annotations Additional custom annotations for the ServiceAccount
     ##
     annotations: {}
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param replica.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param replica.pdb.minAvailable [object] Minimum number/percentage of pods that should remain scheduled
+  ## @param replica.pdb.maxUnavailable [object] Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `replica.pdb.minAvailable` and `replica.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
+  ## @param replica.extraPodSpec Optionally specify extra PodSpec for the Redis&reg; replicas pod(s)
+  ##
+  extraPodSpec: {}
+  ## @param replica.annotations Additional custom annotations for Redis&reg; replicas resource
+  ##
+  annotations: {}
 ## @section Redis&reg; Sentinel configuration parameters
 ##
 
@@ -1112,10 +1184,9 @@ sentinel:
   image:
     registry: docker.io
     repository: bitnami/redis-sentinel
-    tag: 7.2.4-debian-12-r10
+    tag: 7.4.2-debian-12-r6
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -1427,7 +1498,15 @@ sentinel:
       ## @param sentinel.service.headless.annotations Annotations for the headless service.
       ##
       annotations: {}
-
+      ## @param sentinel.service.headless.extraPorts Optionally specify extra ports to expose for the headless service.
+      ## Example:
+      ## extraPorts:
+      ##   - name: my-custom-port
+      ##     port: 12345
+      ##     protocol: TCP
+      ##     targetPort: 12345
+      ##
+      extraPorts: []
   ## Redis&reg; master service parameters
   ##
   masterService:
@@ -1492,6 +1571,47 @@ sentinel:
   ## @param sentinel.terminationGracePeriodSeconds Integer setting the termination grace period for the redis-node pods
   ##
   terminationGracePeriodSeconds: 30
+  ## @param sentinel.extraPodSpec Optionally specify extra PodSpec for the Redis&reg; Sentinel pod(s)
+  ##
+  extraPodSpec: {}
+  
+  externalAccess:
+    ## @param sentinel.externalAccess.enabled Enable external access to the Redis
+    ##
+    enabled: false
+    service:
+        ## @param sentinel.externalAccess.service.loadBalancerIPAnnotaion Name of annotation to specify fixed IP for service in.
+        ##
+      loadBalancerIPAnnotaion: ""
+        ## @param sentinel.externalAccess.service.type Type for the services used to expose every Pod
+        ## At this moment only LoadBalancer is supported
+        ##
+      type: LoadBalancer
+      ## @param sentinel.externalAccess.service.redisPort Port for the services used to expose redis-server
+        ##
+      redisPort: 6379
+    
+      ## @param sentinel.externalAccess.service.sentinelPort Port for the services used to expose redis-sentinel
+        ##   
+      sentinelPort: 26379 
+        ## @param sentinel.externalAccess.service.loadBalancerIP Array of load balancer IPs for each Redis&reg; node. Length must be the same as sentinel.replicaCount
+        ##
+      loadBalancerIP: []
+        ## @param sentinel.externalAccess.service.loadBalancerClass Load Balancer class if service type is `LoadBalancer` (optional, cloud specific)
+        ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+        ##
+      loadBalancerClass: ""
+        ## @param sentinel.externalAccess.service.loadBalancerSourceRanges Service Load Balancer sources
+        ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+        ## e.g:
+        ## loadBalancerSourceRanges:
+        ##   - 10.10.10.0/24
+        ##
+      loadBalancerSourceRanges: []
+        ## @param sentinel.externalAccess.service.annotations Annotations to add to the services used to expose every Pod of the Redis&reg; Cluster
+        ##
+      annotations: {}
+
 ## @section Other Parameters
 ##
 
@@ -1612,17 +1732,9 @@ serviceAccount:
   annotations: {}
 ## Redis&reg; Pod Disruption Budget configuration
 ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+## @param pdb DEPRECATED Please use `master.pdb` and `replica.pdb` values instead
 ##
-pdb:
-  ## @param pdb.create Specifies whether a PodDisruptionBudget should be created
-  ##
-  create: false
-  ## @param pdb.minAvailable Min number of pods that must still be available after the eviction
-  ##
-  minAvailable: 1
-  ## @param pdb.maxUnavailable Max number of pods that can be unavailable after the eviction
-  ##
-  maxUnavailable: ""
+pdb: {}
 ## TLS configuration
 ##
 tls:
@@ -1671,7 +1783,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/redis-exporter
-    tag: 1.59.0-debian-12-r1
+    tag: 1.69.0-debian-12-r1
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1908,7 +2020,7 @@ metrics:
     # add metricRelabelings with label like app=redis to main redis pod-monitor port
     # - interval: "30s"
     #   path: "/scrape"
-    #   port: "metrics"
+    #   port: "http-metrics"
     #   params:
     #     target: ["localhost:26379"]
     #   metricRelabelings:
@@ -2043,7 +2155,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r19
+    tag: 12-debian-12-r40
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -2083,6 +2195,14 @@ volumePermissions:
     seLinuxOptions: {}
     runAsUser: 0
 
+  ## @param volumePermissions.extraEnvVars Array with extra environment variables to add to volume permissions init container.
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+
 ## Kubectl InitContainer
 ## used by Sentinel to update the isMaster label on the Redis(TM) pods
 ##
@@ -2099,10 +2219,9 @@ kubectl:
   image:
     registry: docker.io
     repository: bitnami/kubectl
-    tag: 1.30.0-debian-12-r0
+    tag: 1.32.3-debian-12-r1
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -2169,7 +2288,7 @@ sysctl:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r19
+    tag: 12-debian-12-r40
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

@@ -1,0 +1,2269 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+## Default values for Chainloop Helm Chart
+
+## @section Global parameters
+## Global Docker image parameters
+## Please, note that this will override the image parameters, including dependencies, configured to use the global value
+## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+
+## @param global.imageRegistry Global Docker image registry
+## @param global.imagePullSecrets Global Docker registry secret names as an array
+##
+global:
+  imageRegistry: ""
+  ## E.g.
+  ## imagePullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  imagePullSecrets: []
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
+
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: auto
+
+## @param development Deploys Chainloop pre-configured FOR DEVELOPMENT ONLY. It includes a Vault instance in development mode and pre-configured authentication certificates and passphrases
+##
+development: true
+
+## @section Common parameters
+##
+## @param kubeVersion Override Kubernetes version
+##
+kubeVersion: ""
+## @param apiVersions Override Kubernetes API versions reported by .Capabilities
+##
+apiVersions: []
+## @param nameOverride String to partially override common.names.name
+##
+nameOverride: ""
+## @param fullnameOverride String to fully override common.names.fullname
+##
+fullnameOverride: ""
+## @param namespaceOverride String to fully override common.names.namespace
+##
+namespaceOverride: ""
+
+## @param commonAnnotations Annotations to add to all deployed objects
+##
+commonAnnotations: {}
+
+## @param commonLabels Labels to add to all deployed objects
+##
+commonLabels: {}
+
+## @param extraDeploy Array of extra objects to deploy with the release
+##
+extraDeploy: []
+
+## RBAC configuration
+##
+rbac:
+  ## @param rbac.create Specifies whether RBAC resources should be created
+  ##
+  create: false
+  ## @param rbac.rules Custom RBAC rules to set
+  ## e.g:
+  ## rules:
+  ##   - apiGroups:
+  ##       - ""
+  ##     resources:
+  ##       - pods
+  ##     verbs:
+  ##       - get
+  ##       - list
+  ##
+  rules: []
+
+## @section Secrets Backend
+##
+
+## Location where to store sensitive data. If development=true and no overrides are provided, the setup will connect to a development instance of Vault
+##
+secretsBackend:
+  ## @param secretsBackend.backend Secrets backend type ("vault", "awsSecretManager" or "gcpSecretManager", "azureKeyVault")
+  ##
+  backend: "vault" # "awsSecretManager | gcpSecretManager | azureKeyVault"
+  ## @param secretsBackend.secretPrefix Prefix that will be pre-pended to all secrets in the storage backend
+  ##
+  secretPrefix: "chainloop"
+
+  ## @param secretsBackend.vault.address Vault address
+  ## @param secretsBackend.vault.token Vault authentication token
+  ##
+  vault:
+    address: ""
+    token: ""
+
+  ## @param secretsBackend.awsSecretManager.accessKey AWS Access KEY ID
+  ## @param secretsBackend.awsSecretManager.secretKey AWS Secret Key
+  ## @param secretsBackend.awsSecretManager.region AWS Secrets Manager Region
+  ##
+  awsSecretManager:
+    accessKey: ""
+    secretKey: ""
+    region: ""
+
+  ## @param secretsBackend.gcpSecretManager.projectId GCP Project ID
+  ## @param secretsBackend.gcpSecretManager.serviceAccountKey GCP Auth Key
+  ##
+  gcpSecretManager:
+    projectId: ""
+    serviceAccountKey: ""
+
+  ## @param secretsBackend.azureKeyVault.tenantID Active Directory Tenant ID
+  ## @param secretsBackend.azureKeyVault.clientID Registered application / service principal client ID
+  ## @param secretsBackend.azureKeyVault.clientSecret Service principal client secret
+  ## @param secretsBackend.azureKeyVault.vaultURI Azure Key Vault URL
+  ##
+  azureKeyVault:
+    tenantID: ""
+    clientID: ""
+    clientSecret: ""
+    vaultURI: ""
+
+## @section Authentication
+##
+
+## ECDSA (ES512) key-pair used for Controlplane to; CAS Authentication
+## The controlplane will use the private key to generate a JWT at user request
+## The CAS will use the public key to verify the authenticity of that token
+## If development=true is set, a development key will be configured automatically
+## otherwise you'll need to provide new keys via .Values.casJWTPrivateKey and .Values.cas.casJWTPublicKey
+
+## @param casJWTPrivateKey ECDSA (ES512) private key used for Controlplane to CAS Authentication
+##
+## To generate one
+## openssl ecparam -name secp521r1 -genkey -noout -out private.ec.key
+## casJWTPrivateKey: |-
+##   -----BEGIN EC PRIVATE KEY-----
+##   -----END EC PRIVATE KEY-----
+##
+casJWTPrivateKey: ""
+
+## @param casJWTPublicKey ECDSA (ES512) public key
+##
+# openssl ec -in private.ec.key -pubout -out public.pem
+# casJWTPublicKey: |
+#   -----BEGIN PUBLIC KEY-----
+#   -----END PUBLIC KEY-----
+casJWTPublicKey: ""
+
+## @section Control Plane
+###################################
+##          CONTROL PLANE         #
+###################################
+controlplane:
+  ## @param controlplane.replicaCount Number of replicas
+  replicaCount: 2
+
+  ## Bitnami Chainloop Controlplane image
+  ## ref: https://hub.docker.com/r/bitnami/chainloop-control-plane/tags/
+  ## @param controlplane.image.registry [default: REGISTRY_NAME] image registry
+  ## @param controlplane.image.repository [default: REPOSITORY_NAME/chainloop-control-plane] image repository
+  ## @skip controlplane.image.tag image tag (immutable tags are recommended)
+  ## @param controlplane.image.digest image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param controlplane.image.pullPolicy image pull policy
+  ## @param controlplane.image.pullSecrets image pull secrets
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/chainloop-control-plane
+    tag: 0.185.0-debian-12-r0
+    digest: ""
+    ## Specify a imagePullPolicy
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: [ ]
+
+  ## @param controlplane.containerPorts.http controlplane HTTP container port
+  ## @param controlplane.containerPorts.grpc controlplane gRPC container port
+  ## @param controlplane.containerPorts.metrics controlplane prometheus metrics container port
+  ##
+  containerPorts:
+    http: 8000
+    grpc: 9000
+    metrics: 5000
+
+  ##
+  ## TLS configuration
+  ##
+  tls:
+    ## @param controlplane.tls.existingSecret Existing secret with TLS certificates. The secret must contains 2 keys: tls.crt and tls.key respectively containing the certificate and private key.
+    ## NOTE: When it's set it will disable secret creation.
+    ##
+    existingSecret: ""
+
+  ## Use an existing configmap instead of creating a configmap with the specified parameters
+  ## @param controlplane.existingConfigMap
+  ##
+  existingConfigMap: ""
+
+  ## @param controlplane.pluginsDir Directory where to look for plugins
+  pluginsDir: /plugins
+
+  ## @extra controlplane.referrerSharedIndex Configure the shared, public index API endpoint that can be used to discover metadata referrers
+  ## @param controlplane.referrerSharedIndex.enabled Enable index API endpoint
+  ## @param controlplane.referrerSharedIndex.allowedOrgs List of UUIDs of organizations that are allowed to publish to the shared index
+  referrerSharedIndex:
+    enabled: false
+    allowedOrgs: []
+
+  ## @param controlplane.onboarding List of organizations to automatically onboard when a user logs in
+  ##  e.g:
+  ## onboarding:
+  ##    - name: ""
+  ##      role: ""
+  onboarding: []
+
+  ## @param controlplane.prometheus_org_metrics List of organizations to expose metrics for using Prometheus
+  ##  e.g.:
+  ##  prometheus_org_metrics:
+  ##    - org_name: "read-only-demo"
+  prometheus_org_metrics: []
+
+  # Database migration
+  ## @param controlplane.migration.ssl Connect to the database using SSL (required fro AWS RDS, etc)
+  ## @skip controlplane.migration.image.tag
+  migration:
+    ## Bitnami Chainloop Controlplane migration image
+    ## ref: https://hub.docker.com/r/bitnami/chainloop-control-plane-migrations/tags/
+    ## @param controlplane.migration.image.registry [default: REGISTRY_NAME] image registry
+    ## @param controlplane.migration.image.repository [default: REPOSITORY_NAME/chainloop-control-plane-migrations] image repository
+    ## @skip controlplane.migration.image.tag image tag (immutable tags are recommended)
+    ## @param controlplane.migration.image.digest image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+    ## @param controlplane.migration.image.pullPolicy image pull policy
+    ## @param controlplane.migration.image.pullSecrets image pull secrets
+    ##
+    image:
+      registry: docker.io
+      repository: bitnami/chainloop-control-plane-migrations
+      tag: 0.185.0-debian-12-r0
+      digest: ""
+      ## Specify a imagePullPolicy
+      ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
+      ##
+      pullPolicy: IfNotPresent
+      ## Optionally specify an array of imagePullSecrets.
+      ## Secrets must be manually created in the namespace.
+      ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+      ## e.g:
+      ## pullSecrets:
+      ##   - myRegistryKeySecretName
+      ##
+      pullSecrets: [ ]
+    # Run the migration job forcing SSL, required in AWS RDS for PostgreSQL 15
+    ssl: false
+
+  ## ServiceAccount configuration for the Controlplane Migration
+  ##
+  ## @param controlplane.serviceAccount.create Specifies whether a ServiceAccount should be created
+  ## @param controlplane.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
+  ## @param controlplane.serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
+  ## @param controlplane.serviceAccount.automountServiceAccountToken Mount Service Account token in controlplane pods
+  serviceAccount:
+    create: true
+    annotations: {}
+    name: ""
+    automountServiceAccountToken: false
+
+  ## @section Control Plane Database
+
+  ## @extra controlplane.externalDatabase External PostgreSQL configuration. These values are only used when postgresql.enabled is set to false
+  ## @param controlplane.externalDatabase.host Database host
+  ## @param controlplane.externalDatabase.port Database port number
+  ## @param controlplane.externalDatabase.user Non-root username
+  ## @param controlplane.externalDatabase.database Database name
+  ## @param controlplane.externalDatabase.password Password for the non-root username
+  ##
+  externalDatabase:
+    host: ""
+    port: 5432
+    user: ""
+    database: ""
+    password: ""
+
+  ## @section Control Plane Authentication
+  auth:
+    ## @param controlplane.auth.passphrase Passphrase used to sign the Auth Tokens generated by the controlplane. Leave empty for auto-generation
+    ##
+    passphrase: ""
+
+    ## @param controlplane.auth.oidc.url Full authentication path, it should match the issuer URL of the Identity provider (IDp)
+    ## @param controlplane.auth.oidc.clientID OIDC IDp clientID
+    ## @param controlplane.auth.oidc.clientSecret OIDC IDp clientSecret
+    ## @param controlplane.auth.oidc.loginURLOverride Optional OIDC login URL override, useful to point to custom login pages
+    ## @param controlplane.auth.oidc.externalURL Optional External URL for the controlplane to the outside world
+    oidc:
+      url: ""
+      clientID: ""
+      clientSecret: ""
+      loginURLOverride: ""
+      externalURL: ""
+
+    ## @param controlplane.auth.allowList Content of the allow_list.yaml config file
+    ## @extra controlplane.auth.allowList.rules List of domains or emails to allow
+    ## @extra controlplane.auth.allowList.selectedRoutes List of selected routes to allow. If not set it applies to all routes
+    ## @extra controlplane.auth.allowList.customMessage Custom message to display when a user is not allowed
+    ## e.g.
+    ##    allowList:
+    ##      rules: []
+    ##      selectedRoutes: []
+    ##      customMessage: ""
+    allowList: {}
+
+  ## @section Control Plane Networking
+  service:
+    ## @param controlplane.service.type Service type
+    type: ClusterIP
+
+    ## @param controlplane.service.ports.http controlplane service HTTP port
+    ##
+    ports:
+      http: 80
+    ## Node ports to expose
+    ## @param controlplane.service.nodePorts.http Node port for HTTP
+    ## @param controlplane.service.nodePorts.https Node port for HTTPS
+    ## NOTE: choose port between <30000-32767>
+    ##
+    nodePorts:
+      http: ""
+      https: ""
+    ## @param controlplane.service.clusterIP controlplane service Cluster IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param controlplane.service.loadBalancerIP controlplane service Load Balancer IP
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerIP: ""
+    ## @param controlplane.service.loadBalancerSourceRanges controlplane service Load Balancer sources
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param controlplane.service.externalTrafficPolicy controlplane service external traffic policy
+    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param controlplane.service.annotations Additional custom annotations for controlplane service
+    ##
+    annotations: {}
+    ## @param controlplane.service.extraPorts Extra ports to expose in controlplane service (normally used with the `sidecars` value)
+    ##
+    extraPorts: []
+    ## @param controlplane.service.sessionAffinity Control where client requests go, to the same pod or round-robin
+    ## Values: ClientIP or None
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
+    ##
+    sessionAffinity: None
+    ## @param controlplane.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
+
+  serviceAPI:
+    ## @param controlplane.serviceAPI.type Service type
+    type: ClusterIP
+
+    ## @param controlplane.serviceAPI.ports.http controlplane service HTTP port
+    ## @param controlplane.serviceAPI.ports.https controlplane service HTTPS port
+    ##
+    ports:
+      http: 80
+      https: 443
+    ## Node ports to expose
+    ## @param controlplane.serviceAPI.nodePorts.http Node port for HTTP
+    ## @param controlplane.serviceAPI.nodePorts.https Node port for HTTPS
+    ## NOTE: choose port between <30000-32767>
+    ##
+    nodePorts:
+      http: ""
+      https: ""
+    ## @param controlplane.serviceAPI.clusterIP controlplane service Cluster IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param controlplane.serviceAPI.loadBalancerIP controlplane service Load Balancer IP
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerIP: ""
+    ## @param controlplane.serviceAPI.loadBalancerSourceRanges controlplane service Load Balancer sources
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param controlplane.serviceAPI.externalTrafficPolicy controlplane service external traffic policy
+    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @extra controlplane.serviceAPI.annotations Additional custom annotations for controlplane service
+    ##
+    annotations:
+      ## @skip controlplane.serviceAPI.annotations.traefik.ingress.kubernetes.io/service.serversscheme
+      traefik.ingress.kubernetes.io/service.serversscheme: h2c
+    ## @param controlplane.serviceAPI.extraPorts Extra ports to expose in controlplane service (normally used with the `sidecars` value)
+    ##
+    extraPorts: []
+    ## @param controlplane.serviceAPI.sessionAffinity Control where client requests go, to the same pod or round-robin
+    ## Values: ClientIP or None
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
+    ##
+    sessionAffinity: None
+    ## @param controlplane.serviceAPI.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
+
+  ## ref: http://kubernetes.io/docs/user-guide/ingress/
+  ingress:
+    ## @param controlplane.ingress.enabled Enable ingress record generation for controlplane
+    ##
+    enabled: false
+    ## @param controlplane.ingress.pathType Ingress path type
+    ##
+    pathType: ImplementationSpecific
+    ## @param controlplane.ingress.hostname Default host for the ingress record
+    ##
+    hostname: cp.dev.local
+    ## @param controlplane.ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+    ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+    ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+    ##
+    ingressClassName: ""
+    ## @param controlplane.ingress.path Default path for the ingress record
+    ## NOTE: You may need to set this to '/*' in order to use this with ALB ingress controllers
+    ##
+    path: /
+    ## @param controlplane.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
+    ## Use this parameter to set the required annotations for cert-manager, see
+    ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
+    ## e.g:
+    ## annotations:
+    ##   kubernetes.io/controlplane.ingress.class: nginx
+    ##   cert-manager.io/cluster-issuer: cluster-issuer-name
+    ##
+    annotations: {}
+    ## @param controlplane.ingress.tls Enable TLS configuration for the host defined at `controlplane.ingress.hostname` parameter
+    ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.controlplane.ingress.hostname }}`
+    ## You can:
+    ##   - Use the `controlplane.ingress.secrets` parameter to create this TLS secret
+    ##   - Rely on cert-manager to create it by setting the corresponding annotations
+    ##   - Rely on Helm to create self-signed certificates by setting `controlplane.ingress.selfSigned=true`
+    ##
+    tls: false
+    ## @param controlplane.ingress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
+    ##
+    selfSigned: false
+    ## @param controlplane.ingress.extraHosts An array with additional hostname(s) to be covered with the ingress record
+    ## e.g:
+    ## extraHosts:
+    ##   - name: cp.dev.local
+    ##     path: /
+    ##
+    extraHosts: []
+    ## @param controlplane.ingress.extraPaths An array with additional arbitrary paths that may need to be added to the ingress under the main host
+    ## e.g:
+    ## extraPaths:
+    ## - path: /*
+    ##   backend:
+    ##     serviceName: ssl-redirect
+    ##     servicePort: use-annotation
+    ##
+    extraPaths: []
+    ## @param controlplane.ingress.extraTls TLS configuration for additional hostname(s) to be covered with this ingress record
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+    ## e.g:
+    ## extraTls:
+    ## - hosts:
+    ##     - cp.dev.local
+    ##   secretName: cp.dev.local-tls
+    ##
+    extraTls: []
+    ## @param controlplane.ingress.secrets Custom TLS certificates as secrets
+    ## NOTE: 'key' and 'certificate' are expected in PEM format
+    ## NOTE: 'name' should line up with a 'secretName' set further up
+    ## If it is not set and you're using cert-manager, this is unneeded, as it will create a secret for you with valid certificates
+    ## If it is not set and you're NOT using cert-manager either, self-signed certificates will be created valid for 365 days
+    ## It is also possible to create and manage the certificates outside of this helm chart
+    ## Please see README.md for more information
+    ## e.g:
+    ## secrets:
+    ##   - name: cp.dev.local-tls
+    ##     key: |-
+    ##       -----BEGIN RSA PRIVATE KEY-----
+    ##       ...
+    ##       -----END RSA PRIVATE KEY-----
+    ##     certificate: |-
+    ##       -----BEGIN CERTIFICATE-----
+    ##       ...
+    ##       -----END CERTIFICATE-----
+    ##
+    secrets: []
+    ## @param controlplane.ingress.extraRules Additional rules to be covered with this ingress record
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+    ## e.g:
+    ## extraRules:
+    ## - host: example.local
+    ##     http:
+    ##       path: /
+    ##       backend:
+    ##         service:
+    ##           name: example-svc
+    ##           port:
+    ##             name: http
+    ##
+    extraRules: []
+
+  ## ref: http://kubernetes.io/docs/user-guide/ingress/
+  ingressAPI:
+    ## @param controlplane.ingressAPI.enabled Enable ingress record generation for controlplane
+    ##
+    enabled: false
+    ## @param controlplane.ingressAPI.pathType Ingress path type
+    ##
+    pathType: ImplementationSpecific
+    ## @param controlplane.ingressAPI.hostname Default host for the ingress record
+    ##
+    hostname: api.cp.dev.local
+    ## @param controlplane.ingressAPI.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+    ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+    ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+    ##
+    ingressClassName: ""
+    ## @param controlplane.ingressAPI.path Default path for the ingress record
+    ## NOTE: You may need to set this to '/*' in order to use this with ALB ingress controllers
+    ##
+    path: /
+    ## @extra controlplane.ingressAPI.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
+    ## Use this parameter to set the required annotations for cert-manager, see
+    ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
+    ## e.g:
+    ## annotations:
+    ##   kubernetes.io/controlplane.ingress.class: nginx
+    ##   cert-manager.io/cluster-issuer: cluster-issuer-name
+    ##
+    annotations:
+      ## @skip controlplane.ingressAPI.annotations.nginx.ingress.kubernetes.io/backend-protocol
+      ## Tell Nginx Ingress Controller to expect gRPC traffic
+      nginx.ingress.kubernetes.io/backend-protocol: "GRPC"
+
+    ## @param controlplane.ingressAPI.tls Enable TLS configuration for the host defined at `controlplane.ingress.hostname` parameter
+    ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.controlplane.ingress.hostname }}`
+    ## You can:
+    ##   - Use the `controlplane.ingress.secrets` parameter to create this TLS secret
+    ##   - Rely on cert-manager to create it by setting the corresponding annotations
+    ##   - Rely on Helm to create self-signed certificates by setting `controlplane.ingress.selfSigned=true`
+    ##
+    tls: false
+    ## @param controlplane.ingressAPI.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
+    ##
+    selfSigned: false
+    ## @param controlplane.ingressAPI.extraHosts An array with additional hostname(s) to be covered with the ingress record
+    ## e.g:
+    ## extraHosts:
+    ##   - name: cp.dev.local
+    ##     path: /
+    ##
+    extraHosts: []
+    ## @param controlplane.ingressAPI.extraPaths An array with additional arbitrary paths that may need to be added to the ingress under the main host
+    ## e.g:
+    ## extraPaths:
+    ## - path: /*
+    ##   backend:
+    ##     serviceName: ssl-redirect
+    ##     servicePort: use-annotation
+    ##
+    extraPaths: []
+    ## @param controlplane.ingressAPI.extraTls TLS configuration for additional hostname(s) to be covered with this ingress record
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+    ## e.g:
+    ## extraTls:
+    ## - hosts:
+    ##     - cp.dev.local
+    ##   secretName: cp.dev.local-tls
+    ##
+    extraTls: []
+    ## @param controlplane.ingressAPI.secrets Custom TLS certificates as secrets
+    ## NOTE: 'key' and 'certificate' are expected in PEM format
+    ## NOTE: 'name' should line up with a 'secretName' set further up
+    ## If it is not set and you're using cert-manager, this is unneeded, as it will create a secret for you with valid certificates
+    ## If it is not set and you're NOT using cert-manager either, self-signed certificates will be created valid for 365 days
+    ## It is also possible to create and manage the certificates outside of this helm chart
+    ## Please see README.md for more information
+    ## e.g:
+    ## secrets:
+    ##   - name: cp.dev.local-tls
+    ##     key: |-
+    ##       -----BEGIN RSA PRIVATE KEY-----
+    ##       ...
+    ##       -----END RSA PRIVATE KEY-----
+    ##     certificate: |-
+    ##       -----BEGIN CERTIFICATE-----
+    ##       ...
+    ##       -----END CERTIFICATE-----
+    ##
+    secrets: []
+    ## @param controlplane.ingressAPI.extraRules Additional rules to be covered with this ingress record
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+    ## e.g:
+    ## extraRules:
+    ## - host: example.local
+    ##     http:
+    ##       path: /
+    ##       backend:
+    ##         service:
+    ##           name: example-svc
+    ##           port:
+    ##             name: http
+    ##
+    extraRules: []
+
+  ## @section Controlplane Misc
+
+  ## Init container's resource requests and limits
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param controlplane.resourcesPreset Set init container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "micro"
+  ## @param controlplane.resources Set controlplane container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param controlplane.podSecurityContext.enabled Enable controlplane pods' Security Context
+  ## @param controlplane.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy for controlplane pods
+  ## @param controlplane.podSecurityContext.sysctls Set kernel settings using the sysctl interface for controlplane pods
+  ## @param controlplane.podSecurityContext.supplementalGroups Set filesystem extra groups for controlplane pods
+  ## @param controlplane.podSecurityContext.fsGroup Set fsGroup in controlplane pods' Security Context
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
+    fsGroup: 1001
+
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param controlplane.containerSecurityContext.enabled Enabled controlplane container' Security Context
+  ## @param controlplane.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in controlplane container
+  ## @param controlplane.containerSecurityContext.runAsUser Set runAsUser in controlplane container' Security Context
+  ## @param controlplane.containerSecurityContext.runAsGroup Set runAsGroup in controlplane container' Security Context
+  ## @param controlplane.containerSecurityContext.runAsNonRoot Set runAsNonRoot in controlplane container' Security Context
+  ## @param controlplane.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in controlplane container' Security Context
+  ## @param controlplane.containerSecurityContext.privileged Set privileged in controlplane container' Security Context
+  ## @param controlplane.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in controlplane container' Security Context
+  ## @param controlplane.containerSecurityContext.capabilities.drop List of capabilities to be dropped in controlplane container
+  ## @param controlplane.containerSecurityContext.seccompProfile.type Set seccomp profile in controlplane container
+  ##
+  containerSecurityContext:
+    enabled: true
+    seLinuxOptions: {}
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    readOnlyRootFilesystem: true
+    privileged: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
+
+  ## @param controlplane.sentry.enabled Enable sentry.io alerting
+  ## @param controlplane.sentry.dsn DSN endpoint
+  ## @param controlplane.sentry.environment Environment tag
+  sentry:
+    enabled: false
+    dsn: ""
+    environment: production
+
+  ## @section Keyless signing configuration
+
+  ## Configuration for keyless signing using one of the supported providers
+  ## @param controlplane.keylessSigning.enabled Activates or deactivates the feature
+  ## @param controlplane.keylessSigning.backend The backend to use. Currently only "fileCA" and "ejbcaCA" are supported
+  ## @param controlplane.keylessSigning.fileCA.cert The PEM-encoded certificate of the file based CA
+  ##       -----BEGIN CERTIFICATE-----
+  ##       ...
+  ##       -----END CERTIFICATE-----
+  ## @param controlplane.keylessSigning.fileCA.key The PEM-encoded private key of the file based CA
+  ##       -----BEGIN RSA PRIVATE KEY-----
+  ##       ...
+  ##       -----END RSA PRIVATE KEY-----
+  ## @param controlplane.keylessSigning.fileCA.keyPass The secret key pass
+  ## @param controlplane.keylessSigning.ejbcaCA.serverURL The url of the EJBCA service ("https://host/ejbca")
+  ## @param controlplane.keylessSigning.ejbcaCA.clientKey PEM-encoded the private key for EJBCA cert authentication
+  ## @param controlplane.keylessSigning.ejbcaCA.clientCert PEM-encoded certificate for EJBCA cert authentication
+  ## @param controlplane.keylessSigning.ejbcaCA.certProfileName Name of the certificate profile to use in EJBCA
+  ## @param controlplane.keylessSigning.ejbcaCA.endEntityProfileName Name of the Entity Profile to use in EJBCA
+  ## @param controlplane.keylessSigning.ejbcaCA.caName Name of the CA issuer to use in EJBCA
+  keylessSigning:
+    enabled: false
+    backend: fileCA
+    fileCA:
+      cert: ""
+      key: ""
+      keyPass: ""
+    ejbcaCA:
+      serverURL: ""
+      clientKey: ""
+      clientCert: ""
+      certProfileName: ""
+      endEntityProfileName: ""
+      caName: ""
+
+  ## Inject custom CA certificates to the controlplane container
+  ## @param controlplane.customCAs List of custom CA certificates content
+  customCAs: []
+
+  ## @param controlplane.automountServiceAccountToken Mount Service Account token in controlplane pods
+  ##
+  automountServiceAccountToken: false
+
+  ## @param controlplane.hostAliases controlplane pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+
+  ## @param controlplane.deploymentAnnotations Annotations for controlplane deployment
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  deploymentAnnotations: {}
+
+  ## @param controlplane.podLabels Extra labels for controlplane pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+
+  ## @param controlplane.podAffinityPreset Pod affinity preset. Ignored if `controlplane.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param controlplane.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `controlplane.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## Node controlplane.affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+
+  ## Node controlplane.affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param controlplane.nodeAffinityPreset.type Node affinity preset type. Ignored if `controlplane.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param controlplane.nodeAffinityPreset.key Node label key to match. Ignored if `controlplane.affinity` is set
+    ##
+    key: ""
+    ## @param controlplane.nodeAffinityPreset.values Node label values to match. Ignored if `controlplane.affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param controlplane.affinity Affinity for controlplane pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `controlplane.podAffinityPreset`, `controlplane.podAntiAffinityPreset`, and `controlplane.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param controlplane.nodeSelector Node labels for controlplane pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
+  ##
+  nodeSelector: {}
+  ## @param controlplane.tolerations Tolerations for controlplane pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+
+  ## @param controlplane.updateStrategy.type controlplane deployment strategy type
+  updateStrategy:
+    ## Can be set to RollingUpdate or Recreate
+    type: RollingUpdate
+  ## @param controlplane.priorityClassName controlplane pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param controlplane.topologySpreadConstraints Topology Spread Constraints for controlplane pod assignment spread across your cluster among failure-domains
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
+  ## @param controlplane.schedulerName Name of the k8s scheduler (other than default) for controlplane pods
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param controlplane.terminationGracePeriodSeconds Seconds controlplane pods need to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## @param controlplane.lifecycleHooks for controlplane containers to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param controlplane.extraEnvVars Array with extra environment variables to add to controlplane containers
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param controlplane.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for controlplane containers
+  ##
+  extraEnvVarsCM: ""
+  ## @param controlplane.extraEnvVarsSecret Name of existing Secret containing extra env vars for controlplane containers
+  ##
+  extraEnvVarsSecret: ""
+  ## @param controlplane.extraVolumes Optionally specify extra list of additional volumes for the controlplane pods
+  ##
+  extraVolumes: []
+  ## @param controlplane.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the controlplane containers
+  ##
+  extraVolumeMounts: []
+  ## @param controlplane.sidecars Add additional sidecar containers to the controlplane pods
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+
+  ## Controlplane Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param controlplane.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param controlplane.networkPolicy.allowExternal Don't require client label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## client label will have network access to the ports Web is listening
+    ## on. When true, Web will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param controlplane.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param controlplane.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: [ ]
+    ## @param controlplane.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: [ ]
+    ## @param controlplane.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param controlplane.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: { }
+    ingressNSPodMatchLabels: { }
+
+  ## @param controlplane.initContainers Add additional init containers to the controlplane pods
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
+  ## Autoscaling configuration
+  ## ref: https://kubernetes.io/docs/concepts/workloads/autoscaling/
+  ##
+  autoscaling:
+    ## @param controlplane.autoscaling.vpa.enabled Enable VPA for %%MAIN_CONTAINER_NAME%% pods
+    ## @param controlplane.autoscaling.vpa.annotations Annotations for VPA resource
+    ## @param controlplane.autoscaling.vpa.controlledResources VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory
+    ## @param controlplane.autoscaling.vpa.maxAllowed VPA Max allowed resources for the pod
+    ## @param controlplane.autoscaling.vpa.minAllowed VPA Min allowed resources for the pod
+    ##
+    vpa:
+      enabled: false
+      annotations: { }
+      controlledResources: [ ]
+      maxAllowed: { }
+      minAllowed: { }
+      ## @param controlplane.autoscaling.vpa.updatePolicy.updateMode Autoscaling update policy
+      ## Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod
+      ## Possible values are "Off", "Initial", "Recreate", and "Auto".
+      ##
+      updatePolicy:
+        updateMode: Auto
+
+    ## @param controlplane.autoscaling.hpa.enabled Enable HPA for controlplane pods
+    ## @param controlplane.autoscaling.hpa.minReplicas Minimum number of replicas
+    ## @param controlplane.autoscaling.hpa.maxReplicas Maximum number of replicas
+    ## @param controlplane.autoscaling.hpa.targetCPU Target CPU utilization percentage
+    ## @param controlplane.autoscaling.hpa.targetMemory Target Memory utilization percentage
+    ##
+    hpa:
+      enabled: false
+      minReplicas: ""
+      maxReplicas: ""
+      targetCPU: ""
+      targetMemory: ""
+
+  ## Pod disruption budget configuration
+  ## Ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+  ## @param controlplane.pdb.enabled Create Pod Disruption Budget for the controlplane component
+  ## @param controlplane.pdb.minAvailable Sets the min number of pods availables for the Pod Disruption Budget
+  ## @param controlplane.pdb.maxUnavailable Sets the max number of pods unavailable for the Pod Disruption Budget
+  ##
+  pdb:
+    enabled: false
+    minAvailable: ""
+    maxUnavailable: ""
+
+## @section Artifact Content Addressable (CAS) API
+##################################
+#         Artifacts CAS          #
+##################################
+cas:
+  ## @param cas.replicaCount Number of replicas
+  replicaCount: 2
+
+  ## Bitnami Chainloop Artifact CAS image
+  ## ref: https://hub.docker.com/r/bitnami/chainloop-artifact-cas/tags/
+  ## @param cas.image.registry [default: REGISTRY_NAME] image registry
+  ## @param cas.image.repository [default: REPOSITORY_NAME/chainloop-artifact-cas] image repository
+  ## @skip cas.image.tag image tag (immutable tags are recommended)
+  ## @param cas.image.digest image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param cas.image.pullPolicy image pull policy
+  ## @param cas.image.pullSecrets image pull secrets
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/chainloop-artifact-cas
+    tag: 0.185.0-debian-12-r0
+    digest: ""
+    ## Specify a imagePullPolicy
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: [ ]
+
+  ## @param cas.containerPorts.http controlplane HTTP container port
+  ## @param cas.containerPorts.grpc controlplane gRPC container port
+  ## @param cas.containerPorts.metrics controlplane prometheus metrics container port
+  ##
+  containerPorts:
+    http: 8000
+    grpc: 9000
+    metrics: 5000
+
+  ##
+  ## TLS configuration
+  ##
+  tls:
+    ## @param cas.tls.existingSecret Existing secret with TLS certificates. The secret must contains 2 keys: tls.crt and tls.key respectively containing the certificate and private key.
+    ## NOTE: When it's set it will disable secret creation.
+    ##
+    existingSecret: ""
+
+  ## Use an existing configmap instead of creating a configmap with the specified parameters
+  ## @param cas.existingConfigMap
+  ##
+  existingConfigMap: ""
+
+  ## ServiceAccount configuration for the Controlplane Artifact CAS
+  ##
+  ## @param cas.serviceAccount.create Specifies whether a ServiceAccount should be created
+  ## @param cas.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
+  ## @param cas.serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
+  ## @param cas.serviceAccount.automountServiceAccountToken Mount Service Account token in controlplane pods
+  serviceAccount:
+    create: true
+    annotations: {}
+    name: ""
+    automountServiceAccountToken: false
+
+  ## @section CAS Networking
+  service:
+    ## @param cas.service.type Service type
+    type: ClusterIP
+
+    ## @param cas.service.ports.http cas service HTTP port
+    ## @param cas.service.ports.https cas service HTTPS port
+    ##
+    ports:
+      http: 80
+      https: 443
+    ## Node ports to expose
+    ## @param cas.service.nodePorts.http Node port for HTTP
+    ## @param cas.service.nodePorts.https Node port for HTTPS
+    ## NOTE: choose port between <30000-32767>
+    ##
+    nodePorts:
+      http: ""
+      https: ""
+    ## @param cas.service.clusterIP cas service Cluster IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param cas.service.loadBalancerIP cas service Load Balancer IP
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerIP: ""
+    ## @param cas.service.loadBalancerSourceRanges cas service Load Balancer sources
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param cas.service.externalTrafficPolicy cas service external traffic policy
+    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param cas.service.annotations Additional custom annotations for cas service
+    ##
+    annotations: {}
+    ## @param cas.service.extraPorts Extra ports to expose in cas service (normally used with the `sidecars` value)
+    ##
+    extraPorts: []
+    ## @param cas.service.sessionAffinity Control where client requests go, to the same pod or round-robin
+    ## Values: ClientIP or None
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
+    ##
+    sessionAffinity: None
+    ## @param cas.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
+
+  serviceAPI:
+    ## @param cas.serviceAPI.type Service type
+    type: ClusterIP
+
+    ## @param cas.serviceAPI.ports.http cas service HTTP port
+    ## @param cas.serviceAPI.ports.https cas service HTTPS port
+    ##
+    ports:
+      http: 80
+      https: 443
+    ## Node ports to expose
+    ## @param cas.serviceAPI.nodePorts.http Node port for HTTP
+    ## @param cas.serviceAPI.nodePorts.https Node port for HTTPS
+    ## NOTE: choose port between <30000-32767>
+    ##
+    nodePorts:
+      http: ""
+      https: ""
+    ## @param cas.serviceAPI.clusterIP cas service Cluster IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param cas.serviceAPI.loadBalancerIP cas service Load Balancer IP
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerIP: ""
+    ## @param cas.serviceAPI.loadBalancerSourceRanges cas service Load Balancer sources
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param cas.serviceAPI.externalTrafficPolicy cas service external traffic policy
+    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @extra cas.serviceAPI.annotations Additional custom annotations for cas service
+    ##
+    annotations:
+      ## @skip cas.serviceAPI.annotations.traefik.ingress.kubernetes.io/service.serversscheme
+      traefik.ingress.kubernetes.io/service.serversscheme: h2c
+    ## @param cas.serviceAPI.extraPorts Extra ports to expose in cas service (normally used with the `sidecars` value)
+    ##
+    extraPorts: []
+    ## @param cas.serviceAPI.sessionAffinity Control where client requests go, to the same pod or round-robin
+    ## Values: ClientIP or None
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
+    ##
+    sessionAffinity: None
+    ## @param cas.serviceAPI.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
+
+
+  ## ref: http://kubernetes.io/docs/user-guide/ingress/
+  ingress:
+    ## @param cas.ingress.enabled Enable ingress record generation for controlplane
+    ##
+    enabled: false
+    ## @param cas.ingress.pathType Ingress path type
+    ##
+    pathType: ImplementationSpecific
+    ## @param cas.ingress.hostname Default host for the ingress record
+    ##
+    hostname: cas.dev.local
+    ## @param cas.ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+    ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+    ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+    ##
+    ingressClassName: ""
+    ## @param cas.ingress.path Default path for the ingress record
+    ## NOTE: You may need to set this to '/*' in order to use this with ALB ingress controllers
+    ##
+    path: /
+    ## @param cas.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
+    ## Use this parameter to set the required annotations for cert-manager, see
+    ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
+    ## e.g:
+    ## annotations:
+    ##   kubernetes.io/cas.ingress.class: nginx
+    ##   cert-manager.io/cluster-issuer: cluster-issuer-name
+    ##
+    annotations: {}
+    ## @param cas.ingress.tls Enable TLS configuration for the host defined at `controlplane.ingress.hostname` parameter
+    ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.controlplane.ingress.hostname }}`
+    ## You can:
+    ##   - Use the `controlplane.ingress.secrets` parameter to create this TLS secret
+    ##   - Rely on cert-manager to create it by setting the corresponding annotations
+    ##   - Rely on Helm to create self-signed certificates by setting `controlplane.ingress.selfSigned=true`
+    ##
+    tls: false
+    ## @param cas.ingress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
+    ##
+    selfSigned: false
+    ## @param cas.ingress.extraHosts An array with additional hostname(s) to be covered with the ingress record
+    ## e.g:
+    ## extraHosts:
+    ##   - name: cp.dev.local
+    ##     path: /
+    ##
+    extraHosts: []
+    ## @param cas.ingress.extraPaths An array with additional arbitrary paths that may need to be added to the ingress under the main host
+    ## e.g:
+    ## extraPaths:
+    ## - path: /*
+    ##   backend:
+    ##     serviceName: ssl-redirect
+    ##     servicePort: use-annotation
+    ##
+    extraPaths: []
+    ## @param cas.ingress.extraTls TLS configuration for additional hostname(s) to be covered with this ingress record
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+    ## e.g:
+    ## extraTls:
+    ## - hosts:
+    ##     - cp.dev.local
+    ##   secretName: cp.dev.local-tls
+    ##
+    extraTls: []
+    ## @param cas.ingress.secrets Custom TLS certificates as secrets
+    ## NOTE: 'key' and 'certificate' are expected in PEM format
+    ## NOTE: 'name' should line up with a 'secretName' set further up
+    ## If it is not set and you're using cert-manager, this is unneeded, as it will create a secret for you with valid certificates
+    ## If it is not set and you're NOT using cert-manager either, self-signed certificates will be created valid for 365 days
+    ## It is also possible to create and manage the certificates outside of this helm chart
+    ## Please see README.md for more information
+    ## e.g:
+    ## secrets:
+    ##   - name: cp.dev.local-tls
+    ##     key: |-
+    ##       -----BEGIN RSA PRIVATE KEY-----
+    ##       ...
+    ##       -----END RSA PRIVATE KEY-----
+    ##     certificate: |-
+    ##       -----BEGIN CERTIFICATE-----
+    ##       ...
+    ##       -----END CERTIFICATE-----
+    ##
+    secrets: []
+    ## @param cas.ingress.extraRules Additional rules to be covered with this ingress record
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+    ## e.g:
+    ## extraRules:
+    ## - host: example.local
+    ##     http:
+    ##       path: /
+    ##       backend:
+    ##         service:
+    ##           name: example-svc
+    ##           port:
+    ##             name: http
+    ##
+    extraRules: []
+
+  ## ref: http://kubernetes.io/docs/user-guide/ingress/
+  ingressAPI:
+    ## @param cas.ingressAPI.enabled Enable ingress record generation for controlplane
+    ##
+    enabled: false
+    ## @param cas.ingressAPI.pathType Ingress path type
+    ##
+    pathType: ImplementationSpecific
+    ## @param cas.ingressAPI.hostname Default host for the ingress record
+    ##
+    hostname: api.cas.dev.local
+    ## @param cas.ingressAPI.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+    ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+    ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+    ##
+    ingressClassName: ""
+    ## @param cas.ingressAPI.path Default path for the ingress record
+    ## NOTE: You may need to set this to '/*' in order to use this with ALB ingress controllers
+    ##
+    path: /
+    ## @extra cas.ingressAPI.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
+    ## Use this parameter to set the required annotations for cert-manager, see
+    ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
+    ## e.g:
+    ## annotations:
+    ##   kubernetes.io/controlplane.ingress.class: nginx
+    ##   cert-manager.io/cluster-issuer: cluster-issuer-name
+    ##
+    annotations:
+      # Nginx Ingress settings
+      ## @skip cas.ingressAPI.annotations.nginx.ingress.kubernetes.io/proxy-body-size
+      # Limit file uploads/downloads to 100MB. Alternatively you can disable this limitation by setting it to 0
+      # Even though we send data in chunks of 1MB, this size refers to all the data sent during the whole streaming session
+      nginx.ingress.kubernetes.io/proxy-body-size: "100m"
+      ## @skip cas.ingressAPI.annotations.nginx.ingress.kubernetes.io/backend-protocol
+      ## Tell Nginx Ingress Controller to expect gRPC traffic
+      nginx.ingress.kubernetes.io/backend-protocol: "GRPC"
+      ## @skip cas.ingressAPI.annotations.nginx.ingress.kubernetes.io/client-body-buffer-size
+      # Improve upload speed by adding client buffering used by http2 control-flows
+      # https://github.com/chainloop-dev/chainloop/issues/375
+      nginx.ingress.kubernetes.io/client-body-buffer-size: "3M"
+
+    ## @param cas.ingressAPI.tls Enable TLS configuration for the host defined at `controlplane.ingress.hostname` parameter
+    ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.controlplane.ingress.hostname }}`
+    ## You can:
+    ##   - Use the `controlplane.ingress.secrets` parameter to create this TLS secret
+    ##   - Rely on cert-manager to create it by setting the corresponding annotations
+    ##   - Rely on Helm to create self-signed certificates by setting `controlplane.ingress.selfSigned=true`
+    ##
+    tls: false
+    ## @param cas.ingressAPI.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
+    ##
+    selfSigned: false
+    ## @param cas.ingressAPI.extraHosts An array with additional hostname(s) to be covered with the ingress record
+    ## e.g:
+    ## extraHosts:
+    ##   - name: cp.dev.local
+    ##     path: /
+    ##
+    extraHosts: []
+    ## @param cas.ingressAPI.extraPaths An array with additional arbitrary paths that may need to be added to the ingress under the main host
+    ## e.g:
+    ## extraPaths:
+    ## - path: /*
+    ##   backend:
+    ##     serviceName: ssl-redirect
+    ##     servicePort: use-annotation
+    ##
+    extraPaths: []
+    ## @param cas.ingressAPI.extraTls TLS configuration for additional hostname(s) to be covered with this ingress record
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+    ## e.g:
+    ## extraTls:
+    ## - hosts:
+    ##     - cp.dev.local
+    ##   secretName: cp.dev.local-tls
+    ##
+    extraTls: []
+    ## @param cas.ingressAPI.secrets Custom TLS certificates as secrets
+    ## NOTE: 'key' and 'certificate' are expected in PEM format
+    ## NOTE: 'name' should line up with a 'secretName' set further up
+    ## If it is not set and you're using cert-manager, this is unneeded, as it will create a secret for you with valid certificates
+    ## If it is not set and you're NOT using cert-manager either, self-signed certificates will be created valid for 365 days
+    ## It is also possible to create and manage the certificates outside of this helm chart
+    ## Please see README.md for more information
+    ## e.g:
+    ## secrets:
+    ##   - name: cp.dev.local-tls
+    ##     key: |-
+    ##       -----BEGIN RSA PRIVATE KEY-----
+    ##       ...
+    ##       -----END RSA PRIVATE KEY-----
+    ##     certificate: |-
+    ##       -----BEGIN CERTIFICATE-----
+    ##       ...
+    ##       -----END CERTIFICATE-----
+    ##
+    secrets: []
+    ## @param cas.ingressAPI.extraRules Additional rules to be covered with this ingress record
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+    ## e.g:
+    ## extraRules:
+    ## - host: example.local
+    ##     http:
+    ##       path: /
+    ##       backend:
+    ##         service:
+    ##           name: example-svc
+    ##           port:
+    ##             name: http
+    ##
+    extraRules: []
+
+  ## @section CAS Misc
+  ## @param cas.sentry.enabled Enable sentry.io alerting
+  ## @param cas.sentry.dsn DSN endpoint
+  ## @param cas.sentry.environment Environment tag
+  sentry:
+    enabled: false
+    dsn: ""
+    environment: production
+
+  ## Inject custom CA certificates to the CAS container
+  ## @param cas.customCAs List of custom CA certificates content
+  customCAs: []
+
+  ## Init container's resource requests and limits
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param cas.resourcesPreset Set init container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "micro"
+  ## @param cas.resources Set cas container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param cas.podSecurityContext.enabled Enable cas pods' Security Context
+  ## @param cas.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy for cas pods
+  ## @param cas.podSecurityContext.sysctls Set kernel settings using the sysctl interface for cas pods
+  ## @param cas.podSecurityContext.supplementalGroups Set filesystem extra groups for cas pods
+  ## @param cas.podSecurityContext.fsGroup Set fsGroup in cas pods' Security Context
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
+    fsGroup: 1001
+
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param cas.containerSecurityContext.enabled Enabled cas container' Security Context
+  ## @param cas.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in cas container
+  ## @param cas.containerSecurityContext.runAsUser Set runAsUser in cas container' Security Context
+  ## @param cas.containerSecurityContext.runAsGroup Set runAsGroup in cas container' Security Context
+  ## @param cas.containerSecurityContext.runAsNonRoot Set runAsNonRoot in cas container' Security Context
+  ## @param cas.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in cas container' Security Context
+  ## @param cas.containerSecurityContext.privileged Set privileged in cas container' Security Context
+  ## @param cas.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in cas container' Security Context
+  ## @param cas.containerSecurityContext.capabilities.drop List of capabilities to be dropped in cas container
+  ## @param cas.containerSecurityContext.seccompProfile.type Set seccomp profile in cas container
+  ##
+  containerSecurityContext:
+    enabled: true
+    seLinuxOptions: {}
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    readOnlyRootFilesystem: true
+    privileged: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
+
+  ## @param cas.automountServiceAccountToken Mount Service Account token in cas pods
+  ##
+  automountServiceAccountToken: false
+
+  ## @param cas.hostAliases cas pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+
+  ## @param cas.deploymentAnnotations Annotations for cas deployment
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  deploymentAnnotations: {}
+
+  ## @param cas.podLabels Extra labels for cas pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+
+  ## @param cas.podAffinityPreset Pod affinity preset. Ignored if `cas.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param cas.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `cas.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## Node cas.affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+
+  ## Node cas.affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param cas.nodeAffinityPreset.type Node affinity preset type. Ignored if `cas.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param cas.nodeAffinityPreset.key Node label key to match. Ignored if `cas.affinity` is set
+    ##
+    key: ""
+    ## @param cas.nodeAffinityPreset.values Node label values to match. Ignored if `cas.affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param cas.affinity Affinity for cas pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `cas.podAffinityPreset`, `cas.podAntiAffinityPreset`, and `cas.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param cas.nodeSelector Node labels for cas pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
+  ##
+  nodeSelector: {}
+  ## @param cas.tolerations Tolerations for cas pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+
+  ## @param cas.updateStrategy.type cas deployment strategy type
+  updateStrategy:
+    ## Can be set to RollingUpdate or Recreate
+    type: RollingUpdate
+  ## @param cas.priorityClassName cas pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param cas.topologySpreadConstraints Topology Spread Constraints for cas pod assignment spread across your cluster among failure-domains
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
+  ## @param cas.schedulerName Name of the k8s scheduler (other than default) for cas pods
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param cas.terminationGracePeriodSeconds Seconds cas pods need to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## @param cas.lifecycleHooks for cas containers to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param cas.extraEnvVars Array with extra environment variables to add to cas containers
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param cas.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for cas containers
+  ##
+  extraEnvVarsCM: ""
+  ## @param cas.extraEnvVarsSecret Name of existing Secret containing extra env vars for cas containers
+  ##
+  extraEnvVarsSecret: ""
+  ## @param cas.extraVolumes Optionally specify extra list of additional volumes for the cas pods
+  ##
+  extraVolumes: []
+  ## @param cas.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the cas containers
+  ##
+  extraVolumeMounts: []
+  ## @param cas.sidecars Add additional sidecar containers to the cas pods
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+
+  ## Web Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param cas.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param cas.networkPolicy.allowExternal Don't require client label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## client label will have network access to the ports Web is listening
+    ## on. When true, Web will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param cas.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param cas.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: [ ]
+    ## @param cas.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: [ ]
+    ## @param cas.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param cas.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: { }
+    ingressNSPodMatchLabels: { }
+
+  ## @param cas.initContainers Add additional init containers to the cas pods
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
+  ## Autoscaling configuration
+  ## ref: https://kubernetes.io/docs/concepts/workloads/autoscaling/
+  ##
+  autoscaling:
+    ## @param cas.autoscaling.vpa.enabled Enable VPA for %%MAIN_CONTAINER_NAME%% pods
+    ## @param cas.autoscaling.vpa.annotations Annotations for VPA resource
+    ## @param cas.autoscaling.vpa.controlledResources VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory
+    ## @param cas.autoscaling.vpa.maxAllowed VPA Max allowed resources for the pod
+    ## @param cas.autoscaling.vpa.minAllowed VPA Min allowed resources for the pod
+    ##
+    vpa:
+      enabled: false
+      annotations: { }
+      controlledResources: [ ]
+      maxAllowed: { }
+      minAllowed: { }
+      ## @param cas.autoscaling.vpa.updatePolicy.updateMode Autoscaling update policy
+      ## Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod
+      ## Possible values are "Off", "Initial", "Recreate", and "Auto".
+      ##
+      updatePolicy:
+        updateMode: Auto
+
+    ## @param cas.autoscaling.hpa.enabled Enable HPA for cas pods
+    ## @param cas.autoscaling.hpa.minReplicas Minimum number of replicas
+    ## @param cas.autoscaling.hpa.maxReplicas Maximum number of replicas
+    ## @param cas.autoscaling.hpa.targetCPU Target CPU utilization percentage
+    ## @param cas.autoscaling.hpa.targetMemory Target Memory utilization percentage
+    ##
+    hpa:
+      enabled: false
+      minReplicas: ""
+      maxReplicas: ""
+      targetCPU: ""
+      targetMemory: ""
+
+  ## Pod disruption budget configuration
+  ## Ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+  ## @param cas.pdb.enabled Create Pod Disruption Budget for the cas component
+  ## @param cas.pdb.minAvailable Sets the min number of pods available for the Pod Disruption Budget
+  ## @param cas.pdb.maxUnavailable Sets the max number of pods unavailable for the Pod Disruption Budget
+  ##
+  pdb:
+    enabled: false
+    minAvailable: ""
+    maxUnavailable: ""
+
+
+## @section Dependencies
+# ##################################
+# #          Dependencies          #
+##################################
+
+## PostgreSQL chart configuration
+## ref: https://github.com/bitnami/charts/blob/main/bitnami/postgresql/values.yaml
+## @param postgresql.enabled Switch to enable or disable the PostgreSQL helm chart
+## @param postgresql.auth.enablePostgresUser Assign a password to the "postgres" admin user. Otherwise, remote access will be blocked for this user
+## @param postgresql.auth.username Name for a custom user to create
+## @param postgresql.auth.password Password for the custom user to create
+## @param postgresql.auth.database Name for a custom database to create
+## @param postgresql.auth.existingSecret Name of existing secret to use for PostgreSQL credentials
+postgresql:
+  enabled: true
+  auth:
+    enablePostgresUser: false
+    username: "chainloop"
+    password: "chainlooppwd"
+    database: "chainloop-cp"
+    existingSecret: ""
+
+# Vault server running in development mode --set development=true
+# IMPORTANT: This is not meant to run in production
+
+## Bitnami Hashicorp Vault chart configuration
+## ref: https://github.com/bitnami/charts/blob/main/bitnami/vault/values.yaml
+## @param vault.server.args Arguments to pass to the vault server. This is useful for setting the server in development mode
+## @param vault.server.config Configuration for the vault server. Small override of default Bitnami configuration
+## @param vault.server.extraEnvVars[0].name Root token for the vault server
+## @param vault.server.extraEnvVars[0].value The value of the root token. Default: notasecret
+## @param vault.server.extraEnvVars[1].name Address to listen on development mode
+## @param vault.server.extraEnvVars[1].value The address to listen on. Default: [::]:8200
+vault:
+  server:
+    args: [
+      "server",
+      "-dev"
+    ]
+    extraEnvVars:
+      - name: VAULT_DEV_ROOT_TOKEN_ID
+        value: "notasecret"
+      - name: VAULT_DEV_LISTEN_ADDRESS
+        value: "[::]:8200"
+    config: "storage \"inmem\" {}\ndisable_mlock = true\nui = true\nservice_registration \"kubernetes\" {}"
+
+# IMPORTANT: This is not meant to run in production
+# Dex server
+## Dex configuration running in development mode --set development=true
+##
+dex:
+  ## Bitnami Dex image
+  ## @skip dex.staticUsers[0].email
+  ## @skip dex.staticUsers[0].hash
+  ## @skip dex.staticUsers[1].email
+  ## @skip dex.staticUsers[1].hash
+  staticUsers:
+    - email: "john@chainloop.local"
+      # password: "password"
+      hash: "$2a$10$2b2cU8CPhOTaGrs1HRQuAueS7JTT5ZHsHSzYiFPm1leZck7Mc8T4W"
+    - email: "sarah@chainloop.local"
+      # password: "password"
+      hash: "$2a$10$2b2cU8CPhOTaGrs1HRQuAueS7JTT5ZHsHSzYiFPm1leZck7Mc8T4W"
+  ## @param dex.image.registry [default: REGISTRY_NAME] Dex image registry
+  ## @param dex.image.repository [default: REPOSITORY_NAME/dex] Dex image repository
+  ## @skip dex.image.tag Dex image tag (immutable tags are recommended)
+  ## @param dex.image.pullPolicy Dex image pull policy
+  ## @param dex.image.pullSecrets Dex image pull secrets
+  ## @param dex.image.debug Enable Dex image debug mode
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/dex
+    tag: 2.42.0-debian-12-r3
+    ## Specify a imagePullPolicy
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+    ## Enable debug mode
+    ##
+    debug: false
+  ## @param dex.replicaCount Number of Dex replicas to deploy
+  ##
+  replicaCount: 1
+  ## Configure extra options for Dex containers' liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param dex.startupProbe.enabled Enable startupProbe on Dex nodes
+  ## @param dex.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param dex.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param dex.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param dex.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param dex.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: true
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 3
+    successThreshold: 1
+  ## @param dex.livenessProbe.enabled Enable livenessProbe on Dex nodes
+  ## @param dex.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param dex.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param dex.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param dex.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param dex.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 3
+    successThreshold: 1
+  ## @param dex.readinessProbe.enabled Enable readinessProbe on Dex nodes
+  ## @param dex.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param dex.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param dex.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param dex.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param dex.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 3
+    successThreshold: 1
+  ## @param dex.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## @param dex.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param dex.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## Dex resource requests and limits
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param dex.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if dex.resources is set (dex.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "nano"
+  ## @param dex.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param dex.podSecurityContext.enabled Enabled Dex pods' Security Context
+  ## @param dex.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param dex.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param dex.podSecurityContext.supplementalGroups Set filesystem extra groups
+  ## @param dex.podSecurityContext.fsGroup Set Dex pod's Security Context fsGroup
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
+    fsGroup: 1001
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param dex.containerSecurityContext.enabled Enabled Dex containers' Security Context
+  ## @param dex.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param dex.containerSecurityContext.runAsUser Set Dex containers' Security Context runAsUser
+  ## @param dex.containerSecurityContext.runAsGroup Set Dex containers' Security Context runAsGroup
+  ## @param dex.containerSecurityContext.allowPrivilegeEscalation Set Dex containers' Security Context allowPrivilegeEscalation
+  ## @param dex.containerSecurityContext.readOnlyRootFilesystem Set Dex containers' server Security Context readOnlyRootFilesystem
+  ## @param dex.containerSecurityContext.runAsNonRoot Set Dex containers' Security Context runAsNonRoot
+  ## @param dex.containerSecurityContext.capabilities.drop Set Chainloop containers' Security Context capabilities to be dropped
+  ## @param dex.containerSecurityContext.privileged Set dex container's Security Context privileged
+  ## @param dex.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
+  ##
+  containerSecurityContext:
+    enabled: true
+    seLinuxOptions: {}
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    privileged: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
+  ## Dex service parameters
+  ##
+  service:
+    ## @param dex.service.type Dex service type
+    ##
+    type: ClusterIP
+    ## @param dex.service.ports.http Dex HTTP service port
+    ## @param dex.service.ports.grpc Dex grpc service port
+    ##
+    ports:
+      http: 5556
+      grpc: 5557
+    ## Node ports to expose
+    ## @param dex.service.nodePorts.http HTTP node port for the Dex service
+    ## @param dex.service.nodePorts.grpc gRPC node port for the Dex service
+    ## NOTE: choose port between <30000-32767>
+    ##
+    nodePorts:
+      http: ""
+      grpc: ""
+    ## @param dex.service.clusterIP Dex service Cluster IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param dex.service.loadBalancerIP Dex service Load Balancer IP
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerIP: ""
+    ## @param dex.service.loadBalancerSourceRanges Dex service Load Balancer sources
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param dex.service.externalTrafficPolicy Dex service external traffic policy
+    ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param dex.service.annotations Additional custom annotations for Dex service
+    ##
+    annotations: {}
+    ## @param dex.service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
+    ##
+    extraPorts: []
+    ## @param dex.service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+    ## If "ClientIP", consecutive client requests will be directed to the same Pod
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+    ##
+    sessionAffinity: None
+    ## @param dex.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    sessionAffinityConfig: {}
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param dex.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param dex.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param dex.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param dex.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
+    ##
+    kubeAPIServerPorts: [443, 6443, 8443]
+    ## @param dex.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param dex.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy (ignored if allowExternalEgress=true)
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param dex.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param dex.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
+  ## Dex container ports
+  ## @param dex.containerPorts.http Dex container HTTP port
+  ## @param dex.containerPorts.grpc Dex gRPC port
+  ## @param dex.containerPorts.metrics Dex metrics port
+  ##
+  containerPorts:
+    http: 5556
+    grpc: 5557
+    metrics: 5558
+  ## Metrics configuration for Dex
+  ##
+  metrics:
+    ## Enable metrics for Chainloop Dex
+    ## @param dex.metrics.enabled Enable metrics service for Dex
+    ##
+    enabled: false
+    service:
+      ## @param dex.metrics.service.type Dex service type
+      ##
+      type: ClusterIP
+      ## @param dex.metrics.service.ports.metrics Dex metrics service port
+      ##
+      ports:
+        metrics: 5558
+      ## Node ports to expose
+      ## @param dex.metrics.service.nodePorts.metrics Node port for the Dex service
+      ## NOTE: choose port between <30000-32767>
+      ##
+      nodePorts:
+        metrics: ""
+      ## @param dex.metrics.service.clusterIP Dex service metrics service Cluster IP
+      ## e.g.:
+      ## clusterIP: None
+      ##
+      clusterIP: ""
+      ## @param dex.metrics.service.loadBalancerIP Dex service Load Balancer IP
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+      ##
+      loadBalancerIP: ""
+      ## @param dex.metrics.service.loadBalancerSourceRanges Dex service Load Balancer sources
+      ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+      ## e.g:
+      ## loadBalancerSourceRanges:
+      ##   - 10.10.10.0/24
+      ##
+      loadBalancerSourceRanges: []
+      ## @param dex.metrics.service.externalTrafficPolicy Dex service external traffic policy
+      ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+      ##
+      externalTrafficPolicy: Cluster
+      ## @param dex.metrics.service.annotations Additional custom annotations for Dex service
+      ##
+      annotations: {}
+      ## @param dex.metrics.service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+      ## If "ClientIP", consecutive client requests will be directed to the same Pod
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+      ##
+      sessionAffinity: None
+      ## @param dex.metrics.service.sessionAffinityConfig Additional settings for the sessionAffinity
+      ## sessionAffinityConfig:
+      ##   clientIP:
+      ##     timeoutSeconds: 300
+      sessionAffinityConfig: {}
+    ## Dex metrics service monitor configuration
+    ##
+    serviceMonitor:
+      ## @param dex.metrics.serviceMonitor.enabled Create ServiceMonitor Resource for scraping metrics using PrometheusOperator
+      ##
+      enabled: false
+      ## @param dex.metrics.serviceMonitor.namespace Namespace which Prometheus is running in
+      ## e.g:
+      ## namespace: monitoring
+      ##
+      namespace: ""
+      ## @param dex.metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
+      ##
+      jobLabel: ""
+      ## @param dex.metrics.serviceMonitor.interval Interval at which metrics should be scraped
+      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+      ##
+      interval: 30s
+      ## @param dex.metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
+      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+      ##
+      scrapeTimeout: 10s
+      ## @param dex.metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping
+      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
+      ##
+      relabelings: []
+      ## @param dex.metrics.serviceMonitor.metricRelabelings MetricRelabelConfigs to apply to samples before ingestion
+      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
+      ##
+      metricRelabelings: []
+      ## @param dex.metrics.serviceMonitor.selector ServiceMonitor selector labels
+      ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
+      ##
+      ## selector:
+      ##   prometheus: my-prometheus
+      ##
+      selector: {}
+      ## @param dex.metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
+      ##
+      honorLabels: false
+  ## ServiceAccount configuration for the Dex
+  ##
+  serviceAccount:
+    ## @param dex.serviceAccount.create Specifies whether a ServiceAccount should be created for Dex
+    ##
+    create: true
+    ## @param dex.serviceAccount.name The name of the ServiceAccount to use.
+    ## If not set and create is true, a name is generated using the common.names.fullname template
+    ##
+    name: ""
+    ## @param dex.serviceAccount.automountServiceAccountToken Automount service account token for the Dex service account
+    ##
+    automountServiceAccountToken: false
+    ## @param dex.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
+    ##
+    annotations: {}
+  ## @param dex.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param dex.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param dex.extraArgs Add extra args to the default args for Dex
+  ##
+  extraArgs: []
+  ## @param dex.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
+  ## @param dex.hostAliases Dex pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param dex.podLabels Extra labels for Dex pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param dex.podAnnotations Annotations for Dex pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param dex.podAffinityPreset Pod affinity preset. Ignored if `dex.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param dex.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `dex.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## Node dex.affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param dex.nodeAffinityPreset.type Node affinity preset type. Ignored if `dex.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param dex.nodeAffinityPreset.key Node label key to match. Ignored if `dex.affinity` is set
+    ##
+    key: ""
+    ## @param dex.nodeAffinityPreset.values Node label values to match. Ignored if `dex.affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param dex.affinity Affinity for Dex pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `dex.podAffinityPreset`, `dex.podAntiAffinityPreset`, and `dex.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param dex.nodeSelector Node labels for Dex pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
+  ##
+  nodeSelector: {}
+  ## @param dex.tolerations Tolerations for Dex pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param dex.schedulerName Name of the k8s scheduler (other than default)
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param dex.shareProcessNamespace Enable shared process namespace in a pod.
+  ## If set to false (default), each container will run in separate namespace, dex will have PID=1.
+  ## If set to true, the /pause will run as init process and will reap any zombie PIDs,
+  ## for example, generated by a custom exec probe running longer than a probe timeoutSeconds.
+  ## Enable this only if customLivenessProbe or customReadinessProbe is used and zombie PIDs are accumulating.
+  ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/share-process-namespace/
+  ##
+  shareProcessNamespace: false
+  ## @param dex.topologySpreadConstraints Topology Spread Constraints for pod assignment
+  ## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+  ## The value is evaluated as a template
+  ##
+  topologySpreadConstraints: []
+  ## @param dex.updateStrategy.type Dex statefulset strategy type
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy:
+    ## StrategyType
+    ## Can be set to RollingUpdate or OnDelete
+    ##
+    type: RollingUpdate
+  ## @param dex.priorityClassName Dex pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param dex.runtimeClassName Name of the runtime class to be used by pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+  ##
+  runtimeClassName: ""
+  ## @param dex.lifecycleHooks for the Dex container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param dex.extraEnvVars Array with extra environment variables to add to Dex nodes
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param dex.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Dex nodes
+  ##
+  extraEnvVarsCM: ""
+  ## @param dex.extraEnvVarsSecret Name of existing Secret containing extra env vars for Dex nodes
+  ##
+  extraEnvVarsSecret: ""
+  ## @param dex.extraVolumes Optionally specify extra list of additional volumes for the Dex pod(s)
+  ##
+  extraVolumes: []
+  ## @param dex.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Dex container(s)
+  ##
+  extraVolumeMounts: []
+  ## @param dex.sidecars Add additional sidecar containers to the Dex pod(s)
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param dex.initContainers Add additional init containers to the Dex pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param dex.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param dex.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param dex.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `dex.pdb.minAvailable` and `dex.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""

@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/appsmith
 ```
 
-Looking to use Appsmith in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Appsmith in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -51,13 +51,24 @@ The command deploys Appsmith on the Kubernetes cluster in the default configurat
 
 Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
 
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcesPreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
+### [Rolling VS Immutable tags](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+### Update credentials
+
+Bitnami charts configure credentials at first boot. Any further change in the secrets or credentials require manual intervention. Follow these instructions:
+
+- Update the user password following [the upstream documentation](https://community.appsmith.com/content/guide/how-reset-appsmith-account-password-without-email)
+- Update the password secret with the new values (replace the SECRET_NAME, PASSWORD, ENCRYPTION_SALT and ENCRYPTION_PASSWORD placeholders)
+
+```shell
+kubectl create secret generic SECRET_NAME --from-literal=admin-password=PASSWORD --from-literal=encryption-salt=ENCRYPTION_SALT --from-literal=encryption-password=ENCRYPTION_PASSWORD --dry-run -o yaml | kubectl apply -f -
+```
 
 ### External database support
 
@@ -99,7 +110,7 @@ Adding the TLS parameter (where available) will cause the chart to generate HTTP
 
 [Learn more about Ingress controllers](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/).
 
-### TLS secrets
+### Securing traffic using TLS
 
 This chart facilitates the creation of TLS secrets for use with the Ingress controller (although this is not mandatory). There are several common use cases:
 
@@ -197,6 +208,10 @@ This chart allows you to set your custom affinity using the `affinity` parameter
 
 As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters inside the `client`, `backend` and `rts` sections.
 
+### Backup and restore
+
+To back up and restore Helm chart deployments on Kubernetes, you need to back up the persistent volumes from the source deployment and attach them to a new deployment using [Velero](https://velero.io/), a Kubernetes backup/restore tool. Find the instructions for using Velero in [this guide](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-backup-restore-deployments-velero-index.html).
+
 ## Persistence
 
 The [Bitnami appsmith](https://github.com/bitnami/containers/tree/main/bitnami/appsmith) image stores the appsmith data and configurations at the `/bitnami` path of the container. Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
@@ -205,12 +220,13 @@ The [Bitnami appsmith](https://github.com/bitnami/containers/tree/main/bitnami/a
 
 ### Global parameters
 
-| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value  |
-| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
-| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
-| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`   |
-| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value   |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`    |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`    |
+| `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`    |
+| `global.security.allowInsecureImages`                 | Allows skipping image verification                                                                                                                                                                                                                                                                                                                                  | `false` |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto`  |
 
 ### Common parameters
 
@@ -224,6 +240,7 @@ The [Bitnami appsmith](https://github.com/bitnami/containers/tree/main/bitnami/a
 | `commonAnnotations`      | Annotations to add to all deployed objects                                                                                                          | `{}`                       |
 | `clusterDomain`          | Kubernetes cluster domain name                                                                                                                      | `cluster.local`            |
 | `extraDeploy`            | Array of extra objects to deploy with the release                                                                                                   | `[]`                       |
+| `usePasswordFiles`       | Mount credentials as files instead of using environment variables                                                                                   | `true`                     |
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                                                             | `false`                    |
 | `diagnosticMode.command` | Command to override all containers in the deployment                                                                                                | `["sleep"]`                |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                                                                                   | `["infinity"]`             |
@@ -321,33 +338,36 @@ The [Bitnami appsmith](https://github.com/bitnami/containers/tree/main/bitnami/a
 
 ### Appsmith Client Traffic Exposure Parameters
 
-| Name                                      | Description                                                                                                                      | Value                    |
-| ----------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `client.service.type`                     | Appsmith client service type                                                                                                     | `LoadBalancer`           |
-| `client.service.ports.http`               | Appsmith client service HTTP port                                                                                                | `80`                     |
-| `client.service.nodePorts.http`           | Node port for HTTP                                                                                                               | `""`                     |
-| `client.service.clusterIP`                | Appsmith client service Cluster IP                                                                                               | `""`                     |
-| `client.service.loadBalancerIP`           | Appsmith client service Load Balancer IP                                                                                         | `""`                     |
-| `client.service.loadBalancerSourceRanges` | Appsmith client service Load Balancer sources                                                                                    | `[]`                     |
-| `client.service.externalTrafficPolicy`    | Appsmith client service external traffic policy                                                                                  | `Cluster`                |
-| `client.service.annotations`              | Additional custom annotations for Appsmith client service                                                                        | `{}`                     |
-| `client.service.extraPorts`               | Extra ports to expose in Appsmith client service (normally used with the `sidecars` value)                                       | `[]`                     |
-| `client.service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin                                                                 | `None`                   |
-| `client.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
-| `client.ingress.enabled`                  | Enable ingress record generation for Appsmith                                                                                    | `false`                  |
-| `client.ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
-| `client.ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
-| `client.ingress.hostname`                 | Default host for the ingress record                                                                                              | `appsmith.local`         |
-| `client.ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
-| `client.ingress.path`                     | Default path for the ingress record                                                                                              | `/`                      |
-| `client.ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
-| `client.ingress.tls`                      | Enable TLS configuration for the host defined at `client.ingress.hostname` parameter                                             | `false`                  |
-| `client.ingress.selfSigned`               | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
-| `client.ingress.extraHosts`               | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                     |
-| `client.ingress.extraPaths`               | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                     |
-| `client.ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
-| `client.ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
-| `client.ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
+| Name                                      | Description                                                                                                                                                  | Value                    |
+| ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------ |
+| `client.service.type`                     | Appsmith client service type                                                                                                                                 | `LoadBalancer`           |
+| `client.service.ports.http`               | Appsmith client service HTTP port                                                                                                                            | `80`                     |
+| `client.service.nodePorts.http`           | Node port for HTTP                                                                                                                                           | `""`                     |
+| `client.service.clusterIP`                | Appsmith client service Cluster IP                                                                                                                           | `""`                     |
+| `client.service.loadBalancerIP`           | Appsmith client service Load Balancer IP                                                                                                                     | `""`                     |
+| `client.service.loadBalancerSourceRanges` | Appsmith client service Load Balancer sources                                                                                                                | `[]`                     |
+| `client.service.externalTrafficPolicy`    | Appsmith client service external traffic policy                                                                                                              | `Cluster`                |
+| `client.service.annotations`              | Additional custom annotations for Appsmith client service                                                                                                    | `{}`                     |
+| `client.service.extraPorts`               | Extra ports to expose in Appsmith client service (normally used with the `sidecars` value)                                                                   | `[]`                     |
+| `client.service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin                                                                                             | `None`                   |
+| `client.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                                                  | `{}`                     |
+| `client.ingress.enabled`                  | Enable ingress record generation for Appsmith                                                                                                                | `false`                  |
+| `client.ingress.pathType`                 | Ingress path type                                                                                                                                            | `ImplementationSpecific` |
+| `client.ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                                                | `""`                     |
+| `client.ingress.hostname`                 | Default host for the ingress record                                                                                                                          | `appsmith.local`         |
+| `client.ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                                                | `""`                     |
+| `client.ingress.path`                     | Default path for the ingress record                                                                                                                          | `/`                      |
+| `client.ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.                             | `{}`                     |
+| `client.ingress.tls`                      | Enable TLS configuration for the host defined at `client.ingress.hostname` parameter                                                                         | `false`                  |
+| `client.ingress.selfSigned`               | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                                                 | `false`                  |
+| `client.ingress.extraHosts`               | An array with additional hostname(s) to be covered with the ingress record                                                                                   | `[]`                     |
+| `client.ingress.extraPaths`               | An array with additional arbitrary paths that may need to be added to the ingress under the main host                                                        | `[]`                     |
+| `client.ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                                                          | `[]`                     |
+| `client.ingress.secrets`                  | Custom TLS certificates as secrets                                                                                                                           | `[]`                     |
+| `client.ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                                                      | `[]`                     |
+| `client.pdb.create`                       | Enable/disable a Pod Disruption Budget creation                                                                                                              | `true`                   |
+| `client.pdb.minAvailable`                 | Minimum number/percentage of pods that should remain scheduled                                                                                               | `""`                     |
+| `client.pdb.maxUnavailable`               | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `client.pdb.minAvailable` and `client.pdb.maxUnavailable` are empty. | `""`                     |
 
 ### Appsmith Backend Parameters
 
@@ -511,19 +531,22 @@ The [Bitnami appsmith](https://github.com/bitnami/containers/tree/main/bitnami/a
 
 ### Backend Persistence Parameters
 
-| Name                                | Description                                                                                                        | Value               |
-| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------ | ------------------- |
-| `backend.persistence.enabled`       | Enable persistence using Persistent Volume Claims                                                                  | `true`              |
-| `backend.persistence.mountPath`     | Path to mount the volume at.                                                                                       | `/bitnami/appsmith` |
-| `backend.persistence.subPath`       | The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services            | `""`                |
-| `backend.persistence.gitDataPath`   | The subdirectory in `/mountPath` or `/mountPath/subPath` where git connected apps will store their local git data. | `""`                |
-| `backend.persistence.storageClass`  | Storage class of backing PVC                                                                                       | `""`                |
-| `backend.persistence.annotations`   | Persistent Volume Claim annotations                                                                                | `{}`                |
-| `backend.persistence.accessModes`   | Persistent Volume Access Modes                                                                                     | `["ReadWriteOnce"]` |
-| `backend.persistence.size`          | Size of data volume                                                                                                | `8Gi`               |
-| `backend.persistence.existingClaim` | The name of an existing PVC to use for persistence                                                                 | `""`                |
-| `backend.persistence.selector`      | Selector to match an existing Persistent Volume for Appsmith data PVC                                              | `{}`                |
-| `backend.persistence.dataSource`    | Custom PVC data source                                                                                             | `{}`                |
+| Name                                | Description                                                                                                                                                    | Value               |
+| ----------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
+| `backend.persistence.enabled`       | Enable persistence using Persistent Volume Claims                                                                                                              | `true`              |
+| `backend.persistence.mountPath`     | Path to mount the volume at.                                                                                                                                   | `/bitnami/appsmith` |
+| `backend.persistence.subPath`       | The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services                                                        | `""`                |
+| `backend.persistence.gitDataPath`   | The subdirectory in `/mountPath` or `/mountPath/subPath` where git connected apps will store their local git data.                                             | `""`                |
+| `backend.persistence.storageClass`  | Storage class of backing PVC                                                                                                                                   | `""`                |
+| `backend.persistence.annotations`   | Persistent Volume Claim annotations                                                                                                                            | `{}`                |
+| `backend.persistence.accessModes`   | Persistent Volume Access Modes                                                                                                                                 | `["ReadWriteOnce"]` |
+| `backend.persistence.size`          | Size of data volume                                                                                                                                            | `8Gi`               |
+| `backend.persistence.existingClaim` | The name of an existing PVC to use for persistence                                                                                                             | `""`                |
+| `backend.persistence.selector`      | Selector to match an existing Persistent Volume for Appsmith data PVC                                                                                          | `{}`                |
+| `backend.persistence.dataSource`    | Custom PVC data source                                                                                                                                         | `{}`                |
+| `backend.pdb.create`                | Enable/disable a Pod Disruption Budget creation                                                                                                                | `true`              |
+| `backend.pdb.minAvailable`          | Minimum number/percentage of pods that should remain scheduled                                                                                                 | `""`                |
+| `backend.pdb.maxUnavailable`        | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `backend.pdb.minAvailable` and `backend.pdb.maxUnavailable` are empty. | `""`                |
 
 ### Appsmith RTS Parameters
 
@@ -611,19 +634,22 @@ The [Bitnami appsmith](https://github.com/bitnami/containers/tree/main/bitnami/a
 
 ### Appsmith RTS Traffic Exposure Parameters
 
-| Name                                   | Description                                                                             | Value       |
-| -------------------------------------- | --------------------------------------------------------------------------------------- | ----------- |
-| `rts.service.type`                     | Appsmith rts service type                                                               | `ClusterIP` |
-| `rts.service.ports.http`               | Appsmith rts service HTTP port                                                          | `80`        |
-| `rts.service.nodePorts.http`           | Node port for HTTP                                                                      | `""`        |
-| `rts.service.clusterIP`                | Appsmith rts service Cluster IP                                                         | `""`        |
-| `rts.service.loadBalancerIP`           | Appsmith rts service Load Balancer IP                                                   | `""`        |
-| `rts.service.loadBalancerSourceRanges` | Appsmith rts service Load Balancer sources                                              | `[]`        |
-| `rts.service.externalTrafficPolicy`    | Appsmith rts service external traffic policy                                            | `Cluster`   |
-| `rts.service.annotations`              | Additional custom annotations for Appsmith rts service                                  | `{}`        |
-| `rts.service.extraPorts`               | Extra ports to expose in Appsmith rts service (normally used with the `sidecars` value) | `[]`        |
-| `rts.service.sessionAffinity`          | Control where rts requests go, to the same pod or round-robin                           | `None`      |
-| `rts.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                             | `{}`        |
+| Name                                   | Description                                                                                                                                            | Value       |
+| -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------- |
+| `rts.service.type`                     | Appsmith rts service type                                                                                                                              | `ClusterIP` |
+| `rts.service.ports.http`               | Appsmith rts service HTTP port                                                                                                                         | `80`        |
+| `rts.service.nodePorts.http`           | Node port for HTTP                                                                                                                                     | `""`        |
+| `rts.service.clusterIP`                | Appsmith rts service Cluster IP                                                                                                                        | `""`        |
+| `rts.service.loadBalancerIP`           | Appsmith rts service Load Balancer IP                                                                                                                  | `""`        |
+| `rts.service.loadBalancerSourceRanges` | Appsmith rts service Load Balancer sources                                                                                                             | `[]`        |
+| `rts.service.externalTrafficPolicy`    | Appsmith rts service external traffic policy                                                                                                           | `Cluster`   |
+| `rts.service.annotations`              | Additional custom annotations for Appsmith rts service                                                                                                 | `{}`        |
+| `rts.service.extraPorts`               | Extra ports to expose in Appsmith rts service (normally used with the `sidecars` value)                                                                | `[]`        |
+| `rts.service.sessionAffinity`          | Control where rts requests go, to the same pod or round-robin                                                                                          | `None`      |
+| `rts.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                                            | `{}`        |
+| `rts.pdb.create`                       | Enable/disable a Pod Disruption Budget creation                                                                                                        | `true`      |
+| `rts.pdb.minAvailable`                 | Minimum number/percentage of pods that should remain scheduled                                                                                         | `""`        |
+| `rts.pdb.maxUnavailable`               | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `rts.pdb.minAvailable` and `rts.pdb.maxUnavailable` are empty. | `""`        |
 
 ### Init Container Parameters
 
@@ -731,6 +757,18 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 5.1.0
+
+This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
+
+### To 5.0.0
+
+This major updates the MongoDB&reg; subchart to its newest major, [16.0.0](https://github.com/bitnami/charts/tree/main/bitnami/mongodb#to-1600). To upgrade to MongoDB `8.0` from a `7.0` deployment, the `7.0` deployment must have `featureCompatibilityVersion` set to `7.0`. Please refer to the [official documentation](https://www.mongodb.com/docs/manual/release-notes/8.0/#upgrade-procedures).
+
+### To 4.0.0
+
+This major updates the Redis&reg; subchart to its newest major, 20.0.0. [Here](https://github.com/bitnami/charts/tree/main/bitnami/redis#to-2000) you can find more information about the changes introduced in that version.
+
 ### To 3.0.0
 
 This major bump changes the following security defaults:
@@ -754,7 +792,7 @@ NOTE: Due to an error in our release process, Redis&reg;' chart versions higher 
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

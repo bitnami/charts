@@ -8,8 +8,9 @@ apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
 kind: PodDisruptionBudget
 metadata:
   name: {{ include "mariadb.secondary.fullname" . }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: mariadb
     app.kubernetes.io/component: secondary
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
@@ -18,8 +19,8 @@ spec:
   {{- if .Values.secondary.pdb.minAvailable }}
   minAvailable: {{ .Values.secondary.pdb.minAvailable }}
   {{- end }}
-  {{- if .Values.secondary.pdb.maxUnavailable }}
-  maxUnavailable: {{ .Values.secondary.pdb.maxUnavailable }}
+  {{- if or .Values.secondary.pdb.maxUnavailable (not .Values.secondary.pdb.minAvailable) }}
+  maxUnavailable: {{ .Values.secondary.pdb.maxUnavailable | default 1 }}
   {{- end }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.secondary.podLabels .Values.commonLabels ) "context" . ) }}
   selector:

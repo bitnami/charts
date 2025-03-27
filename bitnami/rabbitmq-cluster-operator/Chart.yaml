@@ -2,19 +2,20 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
+  tanzuCategory: service
   category: Infrastructure
   licenses: Apache-2.0
   images: |
     - name: rabbitmq
-      image: docker.io/bitnami/rabbitmq:3.13.2-debian-12-r1
+      image: docker.io/bitnami/rabbitmq:4.0.7-debian-12-r0
     - name: rabbitmq-cluster-operator
-      image: docker.io/bitnami/rabbitmq-cluster-operator:2.8.0-debian-12-r4
+      image: docker.io/bitnami/rabbitmq-cluster-operator:2.12.1-debian-12-r6
     - name: rmq-default-credential-updater
-      image: docker.io/bitnami/rmq-default-credential-updater:1.0.4-debian-12-r18
+      image: docker.io/bitnami/rmq-default-credential-updater:1.0.5-debian-12-r6
     - name: rmq-messaging-topology-operator
-      image: docker.io/bitnami/rmq-messaging-topology-operator:1.14.0-debian-12-r0
+      image: docker.io/bitnami/rmq-messaging-topology-operator:1.16.0-debian-12-r3
 apiVersion: v2
-appVersion: 2.8.0
+appVersion: 2.12.1
 dependencies:
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
@@ -23,7 +24,7 @@ dependencies:
   version: 2.x.x
 description: The RabbitMQ Cluster Kubernetes Operator automates provisioning, management, and operations of RabbitMQ clusters running on Kubernetes.
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/rabbitmq-cluster-operator/img/rabbitmq-cluster-operator-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/rabbitmq-cluster-operator/img/rabbitmq-cluster-operator-stack-220x234.png
 keywords:
 - rabbitmq
 - operator
@@ -37,4 +38,4 @@ maintainers:
 name: rabbitmq-cluster-operator
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/rabbitmq-cluster-operator
-version: 4.2.7
+version: 4.4.6

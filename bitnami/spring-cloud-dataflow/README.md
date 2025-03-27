@@ -12,7 +12,7 @@ Spring Cloud Data Flow is a microservices-based toolkit for building streaming a
 helm install my-release oci://registry-1.docker.io/bitnamicharts/spring-cloud-dataflow
 ```
 
-Looking to use Spring Cloud Data Flow in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Spring Cloud Data Flow in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -46,9 +46,31 @@ These commands deploy Spring Cloud Data Flow on the Kubernetes cluster with the 
 
 Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
 
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcesPreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
+### Backup and restore
+
+To back up and restore Helm chart deployments on Kubernetes, you need to back up the persistent volumes from the source deployment and attach them to a new deployment using [Velero](https://velero.io/), a Kubernetes backup/restore tool. Find the instructions for using Velero in [this guide](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-backup-restore-deployments-velero-index.html).
+
+### Prometheus metrics
+
+This chart can be integrated with Prometheus by setting `metrics.enabled` to `true`. This will deploy a Deployment with [prometheus-rsocket-proxy](https://github.com/micrometer-metrics/prometheus-rsocket-proxy) and a `metrics` service, which can be configured under the `metrics.service` section. This `metrics` service will have the necessary annotations to be automatically scraped by Prometheus.
+
+#### Prometheus requirements
+
+It is necessary to have a working installation of Prometheus or Prometheus Operator for the integration to work. Install the [Bitnami Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/prometheus) or the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) to easily have a working Prometheus in your cluster.
+
+#### Integration with Prometheus Operator
+
+The chart can deploy `ServiceMonitor` objects for integration with Prometheus Operator installations. To do so, set the value `metrics.serviceMonitor.enabled=true`. Ensure that the Prometheus Operator `CustomResourceDefinitions` are installed in the cluster or it will fail with the following error:
+
+```text
+no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"
+```
+
+Install the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) for having the necessary CRDs and the Prometheus Operator.
+
+### [Rolling VS Immutable tags](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -101,10 +123,11 @@ mariadb.enabled=false
 externalDatabase.scheme=mariadb
 externalDatabase.host=myexternalhost
 externalDatabase.port=3306
-externalDatabase.password=mypassword
-externalDatabase.dataflow.user=mydataflowuser
+externalDatabase.dataflow.username=mydataflowuser
+externalDatabase.dataflow.password=mydataflowpassword
 externalDatabase.dataflow.database=mydataflowdatabase
-externalDatabase.skipper.user=myskipperuser
+externalDatabase.skipper.username=myskipperuser
+externalDatabase.skipper.password=myskipperpassword
 externalDatabase.skipper.database=myskipperdatabase
 ```
 
@@ -114,11 +137,12 @@ To use an alternate database vendor (other than MariaDB) you can use the `extern
 
 ```console
 mariadb.enabled=false
-externalDatabase.password=mypassword
 externalDatabase.dataflow.url=jdbc:sqlserver://mssql-server:1433
-externalDatabase.dataflow.user=mydataflowuser
+externalDatabase.dataflow.username=mydataflowuser
+externalDatabase.dataflow.password=mydataflowpassword
 externalDatabase.skipper.url=jdbc:sqlserver://mssql-server:1433
-externalDatabase.skipper.user=myskipperuser
+externalDatabase.skipper.username=myskipperuser
+externalDatabase.skipper.password=myskipperpassword
 externalDatabase.hibernateDialect=org.hibernate.dialect.SQLServer2012Dialect
 ```
 
@@ -233,12 +257,13 @@ As an alternative, you can use the preset configurations for pod affinity, pod a
 
 ### Global parameters
 
-| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value  |
-| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
-| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
-| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`   |
-| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value   |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`    |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`    |
+| `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`    |
+| `global.security.allowInsecureImages`                 | Allows skipping image verification                                                                                                                                                                                                                                                                                                                                  | `false` |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto`  |
 
 ### Common parameters
 
@@ -272,7 +297,6 @@ As an alternative, you can use the preset configurations for pod affinity, pod a
 | `server.configuration.accountName`                         | The name of the account to configure for the Kubernetes platform                                                                                                                                                                | `default`                                                    |
 | `server.configuration.trustK8sCerts`                       | Trust K8s certificates when querying the Kubernetes API                                                                                                                                                                         | `false`                                                      |
 | `server.configuration.containerRegistries`                 | Container registries configuration                                                                                                                                                                                              | `{}`                                                         |
-| `server.configuration.grafanaInfo`                         | Endpoint to the grafana instance (Deprecated: use the metricsDashboard instead)                                                                                                                                                 | `""`                                                         |
 | `server.configuration.metricsDashboard`                    | Endpoint to the metricsDashboard instance                                                                                                                                                                                       | `""`                                                         |
 | `server.configuration.defaultSpringApplicationJSON`        | Injects default values for environment variable SPRING_APPLICATION_JSON                                                                                                                                                         | `true`                                                       |
 | `server.existingConfigmap`                                 | ConfigMap with Spring Cloud Dataflow Server Configuration                                                                                                                                                                       | `""`                                                         |
@@ -372,9 +396,9 @@ As an alternative, you can use the preset configurations for pod affinity, pod a
 | `server.ingress.extraRules`                                | Additional rules to be covered with this ingress record                                                                                                                                                                         | `[]`                                                         |
 | `server.initContainers`                                    | Add init containers to the Dataflow Server pods                                                                                                                                                                                 | `[]`                                                         |
 | `server.sidecars`                                          | Add sidecars to the Dataflow Server pods                                                                                                                                                                                        | `[]`                                                         |
-| `server.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                 | `false`                                                      |
-| `server.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                  | `1`                                                          |
-| `server.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable                                                                                                                                                                  | `""`                                                         |
+| `server.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                 | `true`                                                       |
+| `server.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                  | `""`                                                         |
+| `server.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `server.pdb.minAvailable` and `server.pdb.maxUnavailable` are empty.                                                                    | `""`                                                         |
 | `server.autoscaling.enabled`                               | Enable autoscaling for Dataflow server                                                                                                                                                                                          | `false`                                                      |
 | `server.autoscaling.minReplicas`                           | Minimum number of Dataflow server replicas                                                                                                                                                                                      | `""`                                                         |
 | `server.autoscaling.maxReplicas`                           | Maximum number of Dataflow server replicas                                                                                                                                                                                      | `""`                                                         |
@@ -487,9 +511,9 @@ As an alternative, you can use the preset configurations for pod affinity, pod a
 | `skipper.service.sessionAffinityConfig`                     | Additional settings for the sessionAffinity                                                                                                                                                                                       | `{}`                                   |
 | `skipper.initContainers`                                    | Add init containers to the Dataflow Skipper pods                                                                                                                                                                                  | `[]`                                   |
 | `skipper.sidecars`                                          | Add sidecars to the Skipper pods                                                                                                                                                                                                  | `[]`                                   |
-| `skipper.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                   | `false`                                |
-| `skipper.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                    | `1`                                    |
-| `skipper.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable                                                                                                                                                                    | `""`                                   |
+| `skipper.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                   | `true`                                 |
+| `skipper.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                    | `""`                                   |
+| `skipper.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `skipper.pdb.minAvailable` and `skipper.pdb.maxUnavailable` are empty.                                                                    | `""`                                   |
 | `skipper.autoscaling.enabled`                               | Enable autoscaling for Skipper server                                                                                                                                                                                             | `false`                                |
 | `skipper.autoscaling.minReplicas`                           | Minimum number of Skipper server replicas                                                                                                                                                                                         | `""`                                   |
 | `skipper.autoscaling.maxReplicas`                           | Maximum number of Skipper server replicas                                                                                                                                                                                         | `""`                                   |
@@ -522,6 +546,7 @@ As an alternative, you can use the preset configurations for pod affinity, pod a
 | `deployer.secretRefs`                         | Streaming applications secretRefs                                                                                                                                                                                                   | `[]`           |
 | `deployer.entryPointStyle`                    | An entry point style affects how application properties are passed to the container to be deployed. Allowed values: exec (default), shell, boot                                                                                     | `exec`         |
 | `deployer.imagePullPolicy`                    | An image pull policy defines when a Docker image should be pulled to the local registry. Allowed values: IfNotPresent (default), Always, Never                                                                                      | `IfNotPresent` |
+| `deployer.taskServiceAccountName`             | Custom service account for scheduled tasks                                                                                                                                                                                          | `""`           |
 
 ### RBAC parameters
 
@@ -640,9 +665,9 @@ As an alternative, you can use the preset configurations for pod affinity, pod a
 | `metrics.serviceMonitor.selector`                           | ServiceMonitor selector labels                                                                                                                                                                                                    | `{}`                                       |
 | `metrics.serviceMonitor.labels`                             | Extra labels for the ServiceMonitor                                                                                                                                                                                               | `{}`                                       |
 | `metrics.serviceMonitor.honorLabels`                        | honorLabels chooses the metric's labels on collisions with target labels                                                                                                                                                          | `false`                                    |
-| `metrics.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                   | `false`                                    |
-| `metrics.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                    | `1`                                        |
-| `metrics.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable                                                                                                                                                                    | `""`                                       |
+| `metrics.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                   | `true`                                     |
+| `metrics.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                    | `""`                                       |
+| `metrics.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `metrics.pdb.minAvailable` and `metrics.pdb.maxUnavailable` are empty.                                                                    | `""`                                       |
 | `metrics.autoscaling.enabled`                               | Enable autoscaling for Prometheus Rsocket Proxy                                                                                                                                                                                   | `false`                                    |
 | `metrics.autoscaling.minReplicas`                           | Minimum number of Prometheus Rsocket Proxy replicas                                                                                                                                                                               | `""`                                       |
 | `metrics.autoscaling.maxReplicas`                           | Maximum number of Prometheus Rsocket Proxy replicas                                                                                                                                                                               | `""`                                       |
@@ -687,7 +712,6 @@ As an alternative, you can use the preset configurations for pod affinity, pod a
 | `mariadb.auth.password`                               | Password for the new user                                                                                                                                                                                                  | `change-me`               |
 | `mariadb.auth.database`                               | Database name to create                                                                                                                                                                                                    | `dataflow`                |
 | `mariadb.auth.forcePassword`                          | Force users to specify required passwords in the database                                                                                                                                                                  | `false`                   |
-| `mariadb.auth.usePasswordFiles`                       | Mount credentials as a file instead of using an environment variable                                                                                                                                                       | `false`                   |
 | `mariadb.initdbScripts`                               | Specify dictionary of scripts to be run at first boot                                                                                                                                                                      | `{}`                      |
 | `mariadb.primary.resourcesPreset`                     | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if primary.resources is set (primary.resources is recommended for production). | `micro`                   |
 | `mariadb.primary.resources`                           | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                          | `{}`                      |
@@ -697,9 +721,6 @@ As an alternative, you can use the preset configurations for pod affinity, pod a
 | `externalDatabase.driver`                             | The fully qualified name of the JDBC Driver class                                                                                                                                                                          | `""`                      |
 | `externalDatabase.scheme`                             | The scheme is a vendor-specific or shared protocol string that follows the "jdbc:" of the URL                                                                                                                              | `""`                      |
 | `externalDatabase.hibernateDialect`                   | Hibernate Dialect used by Dataflow/Skipper servers                                                                                                                                                                         | `""`                      |
-| `externalDatabase.password`                           | External database password (DEPRECATED: use dataflow.password and skipper.password instead)                                                                                                                                | `""`                      |
-| `externalDatabase.existingPasswordSecret`             | Existing secret with database password (DEPRECATED: use dataflow.existingSecret and skipper.existingSecret instead)                                                                                                        | `""`                      |
-| `externalDatabase.existingPasswordKey`                | Key of the existing secret with database password (DEPRECATED: use dataflow.existingSecretPasswordKey and skipper.existingSecretPasswordKey instead)                                                                       | `""`                      |
 | `externalDatabase.dataflow.url`                       | JDBC URL for dataflow server. Overrides external scheme, host, port, password, and dataflow.database parameters.                                                                                                           | `""`                      |
 | `externalDatabase.dataflow.database`                  | Name of the existing database to be used by Dataflow server. Ignored if url is provided                                                                                                                                    | `dataflow`                |
 | `externalDatabase.dataflow.username`                  | Existing username in the external db to be used by Dataflow server                                                                                                                                                         | `dataflow`                |
@@ -727,22 +748,21 @@ As an alternative, you can use the preset configurations for pod affinity, pod a
 | `externalRabbitmq.username`                  | External RabbitMQ username                                                                                                                                                                                 | `guest`     |
 | `externalRabbitmq.password`                  | External RabbitMQ password. It will be saved in a kubernetes secret                                                                                                                                        | `guest`     |
 | `externalRabbitmq.vhost`                     | External RabbitMQ virtual host. It will be saved in a kubernetes secret                                                                                                                                    | `""`        |
-| `externalRabbitmq.existingPasswordSecret`    | Existing secret with RabbitMQ password (DEPRECATED: use externalRabbitmq.existingSecret instead)                                                                                                           | `""`        |
 | `externalRabbitmq.existingSecret`            | Name of the existing secret containing RabbitMQ credentials                                                                                                                                                | `""`        |
 | `externalRabbitmq.existingSecretPasswordKey` | Key of the above existing secret with RabbitMQ password, defaults to `password`                                                                                                                            | `""`        |
 
 ### Kafka chart parameters
 
-| Name                               | Description                                                                                                                                                                                                                      | Value                                |
-| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------ |
-| `kafka.enabled`                    | Enable/disable Kafka chart installation                                                                                                                                                                                          | `false`                              |
-| `kafka.controller.replicaCount`    | Number of Kafka controller+brokers nodes                                                                                                                                                                                         | `1`                                  |
-| `kafka.controller.resourcesPreset` | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if controller.resources is set (controller.resources is recommended for production). | `small`                              |
-| `kafka.controller.resources`       | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                | `{}`                                 |
-| `kafka.extraConfig`                | Kafka extra configuration to be appended to dynamic settings                                                                                                                                                                     | `offsets.topic.replication.factor=1` |
-| `externalKafka.enabled`            | Enable/disable external Kafka                                                                                                                                                                                                    | `false`                              |
-| `externalKafka.brokers`            | External Kafka brokers                                                                                                                                                                                                           | `localhost:9092`                     |
-| `externalKafka.zkNodes`            | External Zookeeper nodes                                                                                                                                                                                                         | `localhost:2181`                     |
+| Name                               | Description                                                                                                                                                                                                                      | Value            |
+| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
+| `kafka.enabled`                    | Enable/disable Kafka chart installation                                                                                                                                                                                          | `false`          |
+| `kafka.controller.replicaCount`    | Number of Kafka controller+brokers nodes                                                                                                                                                                                         | `1`              |
+| `kafka.controller.resourcesPreset` | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if controller.resources is set (controller.resources is recommended for production). | `small`          |
+| `kafka.controller.resources`       | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                | `{}`             |
+| `kafka.overrideConfiguration`      | Kafka common configuration override                                                                                                                                                                                              | `{}`             |
+| `externalKafka.enabled`            | Enable/disable external Kafka                                                                                                                                                                                                    | `false`          |
+| `externalKafka.brokers`            | External Kafka brokers                                                                                                                                                                                                           | `localhost:9092` |
+| `externalKafka.zkNodes`            | External Zookeeper nodes                                                                                                                                                                                                         | `localhost:2181` |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -769,7 +789,43 @@ Find more information about how to deal with common errors related to Bitnami He
 
 ## Upgrading
 
-If you enabled RabbitMQ chart to be used as the messaging solution for Skipper to manage streaming content, then it's necessary to set the `rabbitmq.auth.password` and `rabbitmq.auth.erlangCookie` parameters when upgrading for readiness/liveness probes to work properly. Inspect the RabbitMQ secret to obtain the password and the Erlang cookie, then you can upgrade your chart using the command below:
+### To 35.0.0
+
+This major updates the Kafka subchart to its newest major, 32.0.0. For more information on this subchart's major, please refer to [Kafka upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/kafka#to-3200).
+
+### To 34.1.0
+
+This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
+
+### To 34.0.0
+
+This major updates the Kafka subchart to its newest major, 31.0.0. For more information on this subchart's major, please refer to [Kafka upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/kafka#to-3100).
+
+### To 33.0.0
+
+This major bump updates the MariaDB subchart to version 20.0.0. This subchart updates the StatefulSet objects `serviceName` to use a headless service, as the current non-headless service attached to it was not providing DNS entries. This will cause an upgrade issue because it changes "immutable fields". To workaround it, delete the StatefulSet objects as follows (replace the RELEASE_NAME placeholder):
+
+```shell
+kubectl delete sts RELEASE_NAME-mariadb --cascade=false
+```
+
+Then execute `helm upgrade` as usual.
+
+### To 32.0.0
+
+This major updates the RabbitMQ subchart to its newest major, 15.0.0. For more information on this subchart's major, please refer to [RabbitMQ upgrade notes](https://www.rabbitmq.com/docs/4.0/upgrade).
+
+### To 31.0.0
+
+This major updates the Kafka subchart to its newest major, 30.0.0. For more information on this subchart's major, please refer to [Kafka upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/kafka#to-3000).
+
+### To 30.0.0
+
+This major release bumps the MariaDB version to 11.4. Follow the [upstream instructions](https://mariadb.com/kb/en/upgrading-from-mariadb-11-3-to-mariadb-11-4/) for upgrading from MariaDB 11.3 to 11.4. No major issues are expected during the upgrade.
+
+### To 29.0.0
+
+This major updates the Kafka subchart to its newest major, 29.0.0. For more information on this subchart's major, please refer to [Kafka upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/kafka#to-2900).
 
 ### To 28.0.0
 
@@ -923,7 +979,7 @@ This major updates the Kafka subchart to its newest major 13.0.0. For more infor
 
 #### Useful links
 
-- <https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-resolve-helm2-helm3-post-migration-issues-index.html>
+- <https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-resolve-helm2-helm3-post-migration-issues-index.html>
 - <https://helm.sh/docs/topics/v2_v3_migration/>
 - <https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/>
 
@@ -999,7 +1055,7 @@ mariadb 12:13:25.01 INFO  ==> Running mysql_upgrade
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

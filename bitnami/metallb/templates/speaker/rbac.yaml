@@ -23,7 +23,7 @@ rules:
       - "servicel2statuses/status"
     verbs:
       - "*"
-    apiGroups:
+  - apiGroups:
       - ''
     resources:
       - services
@@ -77,6 +77,7 @@ rules:
       - pods
     verbs:
       - list
+      - get
   - apiGroups:
       - ''
     resources:

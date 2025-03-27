@@ -19,6 +19,7 @@ metadata:
 spec:
   serviceName: {{ include "mongodb.arbiter.service.nameOverride" . }}
   podManagementPolicy: {{ .Values.arbiter.podManagementPolicy }}
+  replicas: 1
   {{- if .Values.arbiter.updateStrategy }}
   updateStrategy: {{- toYaml .Values.arbiter.updateStrategy | nindent 4 }}
   {{- end }}
@@ -30,10 +31,13 @@ spec:
     metadata:
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: arbiter
-      {{- if or (include "mongodb.arbiter.createConfigmap" .) .Values.arbiter.podAnnotations }}
+      {{- if or (include "mongodb.arbiter.createConfigmap" .) .Values.arbiter.podAnnotations .Values.passwordUpdateJob.enabled }}
       annotations:
         {{- if (include "mongodb.arbiter.createConfigmap" .) }}
         checksum/configuration: {{ include (print $.Template.BasePath "/arbiter/configmap.yaml") . | sha256sum }}
+        {{- end }}
+        {{- if .Values.passwordUpdateJob.enabled }}
+        charts.bitnami.com/password-last-update: {{ now | date "20060102150405" | quote }}
         {{- end }}
         {{- if .Values.arbiter.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.arbiter.podAnnotations "context" $) | nindent 8 }}
@@ -49,8 +53,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.arbiter.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.arbiter.podAffinityPreset "component" "arbiter" "customLabels" $podLabels "topologyKey" .Values.topologyKey "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.arbiter.podAntiAffinityPreset "component" "arbiter" "customLabels" $podLabels "topologyKey" .Values.topologyKey "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.arbiter.podAffinityPreset "component" "mongodb" "customLabels" $podLabels "topologyKey" .Values.topologyKey "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.arbiter.podAntiAffinityPreset "component" "mongodb" "customLabels" $podLabels "topologyKey" .Values.topologyKey "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.arbiter.nodeAffinityPreset.type "key" .Values.arbiter.nodeAffinityPreset.key "values" .Values.arbiter.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.arbiter.nodeSelector }}
@@ -82,6 +86,9 @@ spec:
       initContainers:
         {{- if .Values.arbiter.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.arbiter.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if and .Values.externalAccess.enabled .Values.externalAccess.service.publicNames }}
+        {{- include "mongodb.initContainers.dnsCheck" . | nindent 8 }}
         {{- end }}
         {{- if and .Values.tls.enabled .Values.arbiter.enabled }}
         - name: generate-tls-certs
@@ -151,16 +158,14 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
-            - name: K8S_SERVICE_NAME
-              value: "{{ include "mongodb.arbiter.service.nameOverride" . }}"
             - name: MONGODB_REPLICA_SET_MODE
               value: "arbiter"
             - name: MONGODB_INITIAL_PRIMARY_HOST
-              value: {{ printf "%s-0.%s.$(MY_POD_NAMESPACE).svc.%s" (include "mongodb.fullname" .) (include "mongodb.service.nameOverride" .) .Values.clusterDomain }}
+              value: {{ include "mongodb.initialPrimaryHost" . | quote }}
             - name: MONGODB_REPLICA_SET_NAME
               value: {{ .Values.replicaSetName | quote }}
             - name: MONGODB_ADVERTISED_HOSTNAME
-              value: "$(MY_POD_NAME).$(K8S_SERVICE_NAME).$(MY_POD_NAMESPACE).svc.{{ .Values.clusterDomain }}"
+              value: "$(MY_POD_NAME).{{ include "mongodb.arbiter.service.nameOverride" . }}.$(MY_POD_NAMESPACE).svc.{{ .Values.clusterDomain }}"
             - name: MONGODB_PORT_NUMBER
               value: {{ .Values.arbiter.containerPorts.mongodb | quote }}
             - name: MONGODB_ENABLE_IPV6
@@ -218,8 +223,10 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.arbiter.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.arbiter.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.arbiter.livenessProbe "enabled") "context" $) | nindent 12 }}
-            tcpSocket:
-              port: mongodb
+            exec:
+              command:
+                - pgrep
+                - mongod
           {{- end }}
           {{- if .Values.arbiter.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.arbiter.customReadinessProbe "context" $) | nindent 12 }}
@@ -232,12 +239,13 @@ spec:
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.arbiter.customStartupProbe "context" $) | nindent 12 }}
           {{- else if .Values.arbiter.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.arbiter.startupProbe "enabled") "context" $) | nindent 12 }}
-            tcpSocket:
-              port: mongodb
+            exec:
+              command:
+                - /bitnami/scripts/startup-probe.sh
           {{- end }}
           {{- end }}
           {{- if .Values.arbiter.resources }}
-          resources: {{- toYaml .Values.arbiter.resources | nindent 12 }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.arbiter.resources "context" $) | nindent 12 }}
           {{- else if ne .Values.arbiter.resourcesPreset "none" }}
           resources: {{- include "common.resources.preset" (dict "type" .Values.arbiter.resourcesPreset) | nindent 12 }}
           {{- end }}
@@ -279,7 +287,7 @@ spec:
         - name: common-scripts
           configMap:
             name: {{ printf "%s-common-scripts" (include "mongodb.fullname" .) }}
-            defaultMode: 0555
+            defaultMode: 0o555
         {{- if or .Values.arbiter.configuration .Values.arbiter.existingConfigmap }}
         - name: config
           configMap:
@@ -295,10 +303,10 @@ spec:
             items:
             - key: mongodb-ca-cert
               path: mongodb-ca-cert
-              mode: 0600
+              mode: 0o600
             - key: mongodb-ca-key
               path: mongodb-ca-key
-              mode: 0600
+              mode: 0o600
         {{- else }}
         - name: mongodb-certs-0
           secret:

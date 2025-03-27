@@ -34,9 +34,10 @@ spec:
         {{- if and .Values.filer.config (empty .Values.filer.existingConfigmap) }}
         checksum/config: {{ include (print $.Template.BasePath "/filer/configmap.yaml") . | sha256sum }}
         {{- end }}
-        {{- if .Values.security.enabled }}
-        checksum/security-config: {{ include (print $.Template.BasePath "/security-configmap.yaml") . | sha256sum }}
+        {{- if and .Values.filer.notificationConfig (empty .Values.filer.existingNotificationConfigmap) }}
+        checksum/notification-config: {{ include (print $.Template.BasePath "/filer/notification-configmap.yaml") . | sha256sum }}
         {{- end }}
+        checksum/security-config: {{ include (print $.Template.BasePath "/security-configmap.yaml") . | sha256sum }}
         {{- if .Values.filer.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.filer.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
@@ -44,7 +45,7 @@ spec:
         app.kubernetes.io/component: filer
     spec:
       {{- include "seaweedfs.imagePullSecrets" . | nindent 6 }}
-      serviceAccountName: {{ template "seaweedfs.serviceAccountName" . }}    
+      serviceAccountName: {{ template "seaweedfs.serviceAccountName" . }}
       automountServiceAccountToken: {{ .Values.filer.automountServiceAccountToken }}
       {{- if .Values.filer.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.filer.hostAliases "context" $) | nindent 8 }}
@@ -79,7 +80,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.filer.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.filer.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.filer.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.filer.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.filer.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.filer.terminationGracePeriodSeconds }}
@@ -107,11 +108,13 @@ spec:
           args: {{- include "common.tplvalues.render" (dict "value" .Values.filer.args "context" $) | nindent 12 }}
           {{- else }}
           args:
+            {{- if .Values.filer.logPersistence.enabled }}
+            - -logdir={{ .Values.filer.logPersistence.mountPath }}
+            {{- else }}
             - -logtostderr=true
-            - -v={{ .Values.filer.logLevel }}
-            {{- if or .Values.security.enabled .Values.filer.config .Values.filer.existingConfigmap }}
-            - -config_dir=/etc/seaweedfs
             {{- end }}
+            - -v={{ .Values.filer.logLevel }}
+            - -config_dir=/etc/seaweedfs
             - filer
             - -ip.bind={{ .Values.filer.bindAddress }}
             - -ip=$(POD_NAME).{{ printf "%s-headless" (include "seaweedfs.filer.fullname" .) }}.$(NAMESPACE).svc.{{ .Values.clusterDomain }}
@@ -135,6 +138,7 @@ spec:
                   fieldPath: metadata.namespace
             - name: WEED_CLUSTER_DEFAULT
               value: {{ .Values.clusterDefault | quote }}
+            {{- if or .Values.mariadb.enabled (and .Values.externalDatabase.enabled (eq .Values.externalDatabase.store "mariadb") ) }}
             - name: WEED_MYSQL_ENABLED
               value: "true"
             - name: WEED_MYSQL_HOSTNAME
@@ -149,15 +153,35 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ include "seaweedfs.database.secretName" . }}
-                  key: mariadb-password
+                  key: {{ include "seaweedfs.database.keyName" . }}
             - name: WEED_MYSQL_CONNECTION_MAX_IDLE
               value: "5"
             - name: WEED_MYSQL_CONNECTION_MAX_OPEN
-              value: "75" 
+              value: "75"
             - name: WEED_MYSQL_CONNECTION_MAX_LIFETIME_SECONDS
               value: "600"
             - name: WEED_MYSQL_INTERPOLATEPARAMS
               value: "true"
+            {{- end }}
+            {{- if or .Values.postgresql.enabled (and .Values.externalDatabase.enabled (eq .Values.externalDatabase.store "postgresql") ) }}
+            - name: WEED_POSTGRES_ENABLED
+              value: "true"
+            - name: WEED_POSTGRES_HOSTNAME
+              value: {{ include "seaweedfs.database.host" . | quote }}
+            - name: WEED_POSTGRES_PORT
+              value: {{ include "seaweedfs.database.port" . | quote }}
+            - name: WEED_POSTGRES_DATABASE
+              value: {{ include "seaweedfs.database.name" . | quote }}
+            - name: WEED_POSTGRES_USERNAME
+              value: {{ include "seaweedfs.database.user" . | quote }}
+            - name: WEED_POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "seaweedfs.database.secretName" . }}
+                  key: {{ include "seaweedfs.database.keyName" . }}
+            - name: WEED_POSTGRES_SSLMODE
+              value: "disable"
+            {{- end }}
             {{- if .Values.filer.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.filer.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
@@ -194,8 +218,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.filer.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.filer.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.filer.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /
+            tcpSocket:
               port: http
           {{- end }}
           {{- if .Values.filer.customReadinessProbe }}
@@ -219,6 +242,13 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.filer.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            {{- if .Values.filer.logPersistence.enabled }}
+            - name: logs
+              mountPath: {{ .Values.filer.logPersistence.mountPath }}
+              {{- if .Values.filer.logPersistence.subPath }}
+              subPath: {{ .Values.filer.logPersistence.subPath }}
+              {{- end }}
+            {{- end }}
             - name: empty-dir
               mountPath: /tmp
               subPath: tmp-dir
@@ -228,7 +258,12 @@ spec:
               subPath: filer.toml
               readOnly: true
             {{- end }}
-            {{- if .Values.security.enabled }}
+            {{- if or .Values.filer.notificationConfig .Values.filer.existingNotificationConfigmap }}
+            - name: notification-config
+              mountPath: /etc/seaweedfs/notification.toml
+              subPath: notification.toml
+              readOnly: true
+            {{- end }}
             - name: security-config
               mountPath: /etc/seaweedfs/security.toml
               subPath: security.toml
@@ -250,7 +285,6 @@ spec:
               readOnly: true
               mountPath: /certs/client
             {{- end }}
-            {{- end }}
           {{- if .Values.filer.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.filer.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -260,12 +294,22 @@ spec:
       volumes:
         - name: empty-dir
           emptyDir: {}
+        - name: db-credentials
+          secret:
+            secretName: {{ include "seaweedfs.database.secretName" . }}
+            items:
+            - key: {{ include "seaweedfs.database.keyName" . }}
+              path: password
         {{- if or .Values.filer.config .Values.filer.existingConfigmap }}
         - name: config
           configMap:
             name: {{ template "seaweedfs.filer.configmapName" . }}
         {{- end }}
-        {{- if .Values.security.enabled }}
+        {{- if or .Values.filer.notificationConfig .Values.filer.existingNotificationConfigmap }}
+        - name: notification-config
+          configMap:
+            name: {{ template "seaweedfs.filer.notificationConfigmapName" . }}
+        {{- end }}
         - name: security-config
           configMap:
             name: {{ printf "%s-security" (include "common.names.fullname" .) }}
@@ -289,8 +333,45 @@ spec:
           secret:
             secretName: {{ template "seaweedfs.security.mTLS.client.secretName" . }}
         {{- end }}
-        {{- end }}
         {{- if .Values.filer.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.filer.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
+  {{- if and .Values.filer.logPersistence.enabled .Values.filer.logPersistence.existingClaim }}
+        - name: logs
+          persistentVolumeClaim:
+            claimName: {{ tpl .Values.filer.logPersistence.existingClaim . }}
+  {{- else if .Values.filer.logPersistence.enabled }}
+  {{- if .Values.filer.persistentVolumeClaimRetentionPolicy.enabled }}
+  persistentVolumeClaimRetentionPolicy:
+    whenDeleted: {{ .Values.filer.persistentVolumeClaimRetentionPolicy.whenDeleted }}
+    whenScaled: {{ .Values.filer.persistentVolumeClaimRetentionPolicy.whenScaled }}
+  {{- end }}
+  volumeClaimTemplates:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        name: logs
+        {{- if or .Values.filer.logPersistence.annotations .Values.commonAnnotations }}
+        {{- $claimAnnotations := include "common.tplvalues.merge" (dict "values" .Values.filer.logPersistence.annotations .Values.commonAnnotations "context" .) | fromYaml }}
+        annotations: {{- include "common.tplvalues.render" ( dict "value" $claimAnnotations "context" $ ) | nindent 10 }}
+        {{- end }}
+        {{- if .Values.commonLabels }}
+        labels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 10 }}
+        {{- end }}
+      spec:
+        {{- if .Values.filer.logPersistence.dataSource }}
+        dataSource: {{- include "common.tplvalues.render" (dict "value" .Values.filer.logPersistence.dataSource "context" $) | nindent 10 }}
+        {{- end }}
+        accessModes:
+        {{- range .Values.filer.logPersistence.accessModes }}
+          - {{ . | quote }}
+        {{- end }}
+        resources:
+          requests:
+            storage: {{ .Values.filer.logPersistence.size | quote }}
+        {{- if .Values.filer.logPersistence.selector }}
+        selector: {{- include "common.tplvalues.render" (dict "value" .Values.filer.logPersistence.selector "context" $) | nindent 10 }}
+        {{- end }}
+        {{- include "common.storage.class" (dict "persistence" .Values.filer.logPersistence "global" .Values.global) | nindent 8 }}
+  {{- end }}
 {{- end }}

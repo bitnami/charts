@@ -8,7 +8,8 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
+## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ## @param global.postgresql.username PostgreSQL username (overrides `postgresql.username`)
 ## @param global.postgresql.password PostgreSQL password (overrides `postgresql.password`)
 ## @param global.postgresql.database PostgreSQL database (overrides `postgresql.database`)
@@ -29,7 +30,13 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  defaultStorageClass: ""
   storageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
   postgresql:
     username: ""
     password: ""
@@ -111,9 +118,8 @@ postgresql:
   image:
     registry: docker.io
     repository: bitnami/postgresql-repmgr
-    tag: 16.2.0-debian-12-r16
+    tag: 17.4.0-debian-12-r10
     digest: ""
-    ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -263,7 +269,7 @@ postgresql:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsGroup: 1001
     runAsNonRoot: true
@@ -328,7 +334,7 @@ postgresql:
   ##     memory: 1024Mi
   ##
   resources: {}
-  ## The pod management policy of the statefulset. 
+  ## The pod management policy of the statefulset.
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
   ## @param postgresql.podManagementPolicy sets the pod management policy
   podManagementPolicy: Parallel
@@ -447,11 +453,11 @@ postgresql:
   ## Pod disruption budget configuration
   ## @param postgresql.pdb.create Specifies whether to create a Pod disruption budget for PostgreSQL with Repmgr
   ## @param postgresql.pdb.minAvailable Minimum number / percentage of pods that should remain scheduled
-  ## @param postgresql.pdb.maxUnavailable Maximum number / percentage of pods that may be made unavailable
+  ## @param postgresql.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `postgresql.pdb.minAvailable` and `postgresql.pdb.maxUnavailable` are empty.
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
   ## PostgreSQL configuration parameters
   ## @param postgresql.username PostgreSQL username
@@ -468,9 +474,9 @@ postgresql:
   ## ref: https://github.com/bitnami/containers/tree/main/bitnami/postgresql#creating-a-database-user-on-first-run (see note!)
   ##
   postgresPassword: ""
-  ## @param postgresql.usePasswordFile Set to `true` to mount PostgreSQL secret as a file instead of passing environment variable
+  ## @param postgresql.usePasswordFiles Set to `true` to mount PostgreSQL secret as a file instead of passing environment variable
   ##
-  usePasswordFile: ""
+  usePasswordFiles: true
   ## @param postgresql.repmgrUsePassfile Set to `true` to configure repmgrl to use `passfile` instead of `password` vars*:*:*:username:password" and use it to configure Repmgr instead of using password (Requires Postgresql 10+, otherwise ignored)
   ## ref: https://repmgr.org/docs/current/configuration-password-management.html
   ##      https://www.postgresql.org/docs/current/libpq-pgpass.html
@@ -624,7 +630,7 @@ postgresql:
   ## NOTE: This will override postgresql.repmgrConfiguration, postgresql.configuration and postgresql.pgHbaConfiguration
   ##
   configurationCM: ""
-  ## @param postgresql.extendedConf Extended PostgreSQL configuration (appended to main or default configuration). Implies `volumePermissions.enabled`.
+  ## @param postgresql.extendedConf Extended PostgreSQL configuration (requires `volumePermissions.enabled` to be `true`)
   ## Similar to postgresql.configuration, but _appended_ to the main configuration
   ## ref: https://github.com/bitnami/containers/tree/main/bitnami/postgresql-repmgr#allow-settings-to-be-loaded-from-files-other-than-the-default-postgresqlconf
   ## Example:
@@ -634,8 +640,8 @@ postgresql:
   ##   ...
   ##
   extendedConf: ""
-  ## @param postgresql.extendedConfCM ConfigMap with PostgreSQL extended configuration
-  ## NOTE: This will override postgresql.extendedConf and implies `volumePermissions.enabled`
+  ## @param postgresql.extendedConfCM ConfigMap with PostgreSQL extended configuration (requires `volumePermissions.enabled` to be `true`)
+  ## NOTE: This will override postgresql.extendedConf
   ##
   extendedConfCM: ""
   ## @param postgresql.initdbScripts Dictionary of initdb scripts
@@ -829,7 +835,7 @@ witness:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsGroup: 1001
     runAsNonRoot: true
@@ -954,11 +960,11 @@ witness:
   ## Pod disruption budget configuration
   ## @param witness.pdb.create Specifies whether to create a Pod disruption budget for PostgreSQL witness with Repmgr
   ## @param witness.pdb.minAvailable Minimum number / percentage of pods that should remain scheduled
-  ## @param witness.pdb.maxUnavailable Maximum number / percentage of pods that may be made unavailable
+  ## @param witness.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `witness.pdb.minAvailable` and `witness.pdb.maxUnavailable` are empty.
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
   ## @param witness.upgradeRepmgrExtension Upgrade repmgr extension in the database
   ##
@@ -1077,7 +1083,7 @@ witness:
   ## NOTE: This will override witness.repmgrConfiguration, witness.configuration and witness.pgHbaConfiguration
   ##
   configurationCM: ""
-  ## @param witness.extendedConf Extended PostgreSQL configuration (appended to main or default configuration). Implies `volumePermissions.enabled`.
+  ## @param witness.extendedConf Extended PostgreSQL configuration (requires `volumePermissions.enabled` to be `true`)
   ## Similar to witness.configuration, but _appended_ to the main configuration
   ## ref: https://github.com/bitnami/containers/tree/main/bitnami/postgresql-repmgr#allow-settings-to-be-loaded-from-files-other-than-the-default-postgresqlconf
   ## Example:
@@ -1087,8 +1093,8 @@ witness:
   ##   ...
   ##
   extendedConf: ""
-  ## @param witness.extendedConfCM ConfigMap with PostgreSQL extended configuration
-  ## NOTE: This will override witness.extendedConf and implies `volumePermissions.enabled`
+  ## @param witness.extendedConfCM ConfigMap with PostgreSQL extended configuration (requires `volumePermissions.enabled` to be `true`)
+  ## NOTE: This will override witness.extendedConf
   ##
   extendedConfCM: ""
   ## @param witness.initdbScripts Dictionary of initdb scripts
@@ -1128,9 +1134,8 @@ pgpool:
   image:
     registry: docker.io
     repository: bitnami/pgpool
-    tag: 4.5.1-debian-12-r3
+    tag: 4.6.0-debian-12-r2
     digest: ""
-    ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -1324,7 +1329,7 @@ pgpool:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsGroup: 1001
     runAsNonRoot: true
@@ -1462,11 +1467,11 @@ pgpool:
   ## Pod disruption budget configuration
   ## @param pgpool.pdb.create Specifies whether a Pod disruption budget should be created for Pgpool pods
   ## @param pgpool.pdb.minAvailable Minimum number / percentage of pods that should remain scheduled
-  ## @param pgpool.pdb.maxUnavailable Maximum number / percentage of pods that may be made unavailable
+  ## @param pgpool.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `pgpool.pdb.minAvailable` and `pgpool.pdb.maxUnavailable` are empty.
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
   ## @param pgpool.updateStrategy Strategy used to replace old Pods by new ones
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
@@ -1485,9 +1490,9 @@ pgpool:
   ##
   adminUsername: admin
   adminPassword: ""
-  ## @param pgpool.usePasswordFile Set to `true` to mount pgpool secret as a file instead of passing environment variable
+  ## @param pgpool.usePasswordFiles Set to `true` to mount pgpool secret as a file instead of passing environment variable
   ##
-  usePasswordFile: ""
+  usePasswordFiles: true
   ## Authentication method for pgpool container (PGPOOL_AUTHENTICATION_METHOD)
   ## @param pgpool.authenticationMethod Pgpool authentication method. Use 'md5' for PSQL < 14.
   ##
@@ -1627,6 +1632,8 @@ pgpool:
 ## @param ldap.bindpw LDAP bind password
 ## @param ldap.bslookup LDAP base lookup
 ## @param ldap.scope LDAP search scope
+## @param ldap.searchfilter LDAP search filter
+## @param ldap.searchmap LDAP search map
 ## @param ldap.tlsReqcert LDAP TLS check on server certificates
 ## @param ldap.nssInitgroupsIgnoreusers LDAP ignored users
 ##
@@ -1639,6 +1646,8 @@ ldap:
   bindpw: ""
   bslookup: ""
   scope: ""
+  searchfilter: ""
+  searchmap: ""
   tlsReqcert: ""
   nssInitgroupsIgnoreusers: root,nslcd
 ## @section Other Parameters
@@ -1666,7 +1675,7 @@ rbac:
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
 ##
 serviceAccount:
-  ## @param serviceAccount.create Enable creation of ServiceAccount for Airflow pods
+  ## @param serviceAccount.create Specifies whether a ServiceAccount should be created
   ##
   create: true
   ## @param serviceAccount.name The name of the ServiceAccount to use.
@@ -1707,9 +1716,8 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/postgres-exporter
-    tag: 0.15.0-debian-12-r17
+    tag: 0.17.1-debian-12-r2
     digest: ""
-    ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -1735,7 +1743,7 @@ metrics:
   ##
   podSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsGroup: 1001
     runAsNonRoot: true
@@ -1958,9 +1966,8 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r19
+    tag: 12-debian-12-r40
     digest: ""
-    ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -1983,7 +1990,7 @@ volumePermissions:
   ##
   podSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 0
     runAsGroup: 0
     runAsNonRoot: false
@@ -2185,7 +2192,7 @@ backup:
     ## @param backup.cronjob.containerSecurityContext.capabilities.drop Set backup container's Security Context capabilities to drop
     containerSecurityContext:
       enabled: true
-      seLinuxOptions: null
+      seLinuxOptions: {}
       runAsUser: 1001
       runAsGroup: 1001
       runAsNonRoot: true
@@ -2209,6 +2216,44 @@ backup:
     ## ref: https://kubernetes.io/docs/user-guide/node-selection/
     ##
     nodeSelector: {}
+    ## @param backup.cronjob.tolerations Tolerations for PostgreSQL backup CronJob pod assignment
+    ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+    ##
+    tolerations: []
+    ## backup cronjob container resource requests and limits
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+    ## @param backup.cronjob.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if backup.cronjob.resources is set (backup.cronjob.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+    ##
+    resourcesPreset: "nano"
+    ## @param backup.cronjob.resources Set container requests and limits for different resources like CPU or memory
+    ## Example:
+    resources: {}
+    ## resources:
+    ##   requests:
+    ##     cpu: 1
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 2
+    ##     memory: 1024Mi
+    ## @param backup.cronjob.extraEnvVars Array containing extra environment variables
+    ## For example:
+    ##  - name: BEARER_AUTH
+    ##    value: true
+    ##
+    extraEnvVars: []
+    ## @param backup.cronjob.extraEnvVarsCM ConfigMap with extra environment variables
+    ##
+    extraEnvVarsCM: ""
+    ## @param backup.cronjob.extraEnvVarsSecret Secret with extra environment variables
+    ##
+    extraEnvVarsSecret: ""
+    ## @param backup.cronjob.extraVolumes Extra volumes to add to the backup container
+    ##
+    extraVolumes: []
+    ## @param backup.cronjob.extraVolumeMounts Extra volume mounts to add to the backup container. Normally used with `extraVolumes`
+    ##
+    extraVolumeMounts: []
     storage:
       ## @param backup.cronjob.storage.existingClaim Provide an existing `PersistentVolumeClaim` (only when `architecture=standalone`)
       ## If defined, PVC must be created manually before volume will be bound

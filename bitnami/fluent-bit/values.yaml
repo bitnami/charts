@@ -9,7 +9,8 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
+## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ##
 global:
   imageRegistry: ""
@@ -18,7 +19,13 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  defaultStorageClass: ""
   storageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
   ## Compatibility adaptations for Kubernetes platforms
   ##
   compatibility:
@@ -31,6 +38,9 @@ global:
 ## @section Common parameters
 ##
 
+## @param apiVersions Override Kubernetes API versions reported by .Capabilities
+##
+apiVersions: []
 ## @param nameOverride String to partially override common.names.fullname
 ##
 nameOverride: ""
@@ -76,10 +86,9 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/fluent-bit
-  tag: 3.0.3-debian-12-r0
+  tag: 3.2.10-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -747,7 +756,7 @@ ingress:
 ## @param pdb.maxUnavailable Maximum unavailable Fluent Bit replicas (expressed in percentage)
 ##
 pdb:
-  create: false
+  create: true
   minAvailable: ""
   maxUnavailable: "50%"
 ## Prometheus metrics

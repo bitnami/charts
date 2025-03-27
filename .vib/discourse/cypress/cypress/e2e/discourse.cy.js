@@ -12,11 +12,10 @@ it('allows to sign up', () => {
   cy.fixture('users').then((user) => {
     cy.get('#new-account-email').type(`${random}.${user.newUser.email}`);
     cy.get('#new-account-username').type(`${random}.${user.newUser.username}`);
-    cy.get('#new-account-name').type(`${user.newUser.name} ${random}`);
     cy.get('#new-account-password').type(`${random}.${user.newUser.password}`);
   });
   cy.contains('Checking username').should('not.exist');
-  cy.contains('button', 'Create your account').click();
+  cy.get('.btn-large').contains('button', 'Sign Up').click();
   cy.contains('button', 'Resend Activation Email');
 });
 

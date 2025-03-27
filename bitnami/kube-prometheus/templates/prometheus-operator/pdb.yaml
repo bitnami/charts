@@ -1,0 +1,25 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.operator.enabled .Values.operator.pdb.create }}
+apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
+kind: PodDisruptionBudget
+metadata:
+  name: {{ template "kube-prometheus.operator.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "kube-prometheus.operator.labels" . | nindent 4 }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  selector:
+    matchLabels: {{- include "kube-prometheus.operator.matchLabels" . | nindent 6 }}
+  {{- if .Values.operator.pdb.minAvailable }}
+  minAvailable: {{ .Values.operator.pdb.minAvailable }}
+  {{- end }}
+  {{- if or .Values.operator.pdb.maxUnavailable ( not .Values.operator.pdb.minAvailable ) }}
+  maxUnavailable: {{ .Values.operator.pdb.maxUnavailable | default 1 }}
+  {{- end }}
+{{- end }}

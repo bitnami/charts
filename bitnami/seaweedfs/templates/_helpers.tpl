@@ -25,6 +25,13 @@ Return the proper SeaweedFS Filer Server fullname
 {{- end -}}
 
 {{/*
+Return the proper SeaweedFS IAM Server fullname
+*/}}
+{{- define "seaweedfs.iam.fullname" -}}
+{{- printf "%s-iam" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
 Return the proper SeaweedFS Amazon S3 API fullname
 */}}
 {{- define "seaweedfs.s3.fullname" -}}
@@ -46,6 +53,13 @@ Return the proper SeaweedFS MariaDB database fullname
 {{- end -}}
 
 {{/*
+Return the proper SeaweedFS PostgreSQL database fullname
+*/}}
+{{- define "seaweedfs.postgresql.fullname" -}}
+{{- include "common.names.dependency.fullname" (dict "chartName" "postgresql" "chartValues" .Values.postgresql "context" $) -}}
+{{- end -}}
+
+{{/*
 Return the proper SeaweedFS image name
 */}}
 {{- define "seaweedfs.image" -}}
@@ -60,10 +74,32 @@ Return the proper image name (for the init container volume-permissions image)
 {{- end -}}
 
 {{/*
+Return the proper init external database job image name
+*/}}
+{{- define "seaweedfs.initDatabaseJob.image" -}}
+{{- if or .Values.mariadb.enabled (and .Values.externalDatabase.enabled (eq .Values.externalDatabase.store "mariadb") ) }}
+    {{- include "common.images.image" (dict "imageRoot" .Values.mariadb.image "global" .Values.global) -}}
+  {{- else if or .Values.postgresql.enabled (and .Values.externalDatabase.enabled (eq .Values.externalDatabase.store "postgresql") ) }}
+    {{- include "common.images.image" (dict "imageRoot" .Values.postgresql.image "global" .Values.global) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Returns whether wait for external database is enabled
+*/}}
+{{- define "seaweedfs.waitForDatabase.enabled" -}}
+{{- if or .Values.mariadb.enabled .Values.postgresql.enabled (and .Values.externalDatabase.enabled (eq .Values.externalDatabase.waitForDatabaseEnabled true) ) }}
+    {{- print "true" -}}
+  {{- else }}
+    {{- print "false" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "seaweedfs.imagePullSecrets" -}}
-{{- include "common.images.renderPullSecrets" (dict "images" (list .Values.image .Values.volumePermissions.image) "context" $) -}}
+{{- include "common.images.renderPullSecrets" (dict "images" (list .Values.image .Values.volumePermissions.image .Values.mariadb.image .Values.postgresql.image) "context" $) -}}
 {{- end -}}
 
 {{/*
@@ -107,6 +143,17 @@ Return the Filer Server configuration configmap.
     {{- print (tpl .Values.filer.existingConfigmap .) -}}
 {{- else -}}
     {{- print (include "seaweedfs.filer.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the Filer Server notification configuration configmap.
+*/}}
+{{- define "seaweedfs.filer.notificationConfigmapName" -}}
+{{- if .Values.filer.existingNotificationConfigmap -}}
+    {{- print (tpl .Values.filer.existingNotificationConfigmap .) -}}
+{{- else -}}
+    {{- printf "%s-notification" (include "seaweedfs.filer.fullname" .) -}}
 {{- end -}}
 {{- end -}}
 
@@ -223,10 +270,16 @@ Return the database hostname
 */}}
 {{- define "seaweedfs.database.host" -}}
 {{- if .Values.mariadb.enabled }}
-    {{- if eq .Values.mariadb.architecture "replication" }}
+    {{- if eq .Values.mariadb.architecture "replication" -}}
         {{- printf "%s-primary" (include "seaweedfs.mariadb.fullname" .) | trunc 63 | trimSuffix "-" -}}
     {{- else -}}
         {{- print (include "seaweedfs.mariadb.fullname" .) -}}
+    {{- end -}}
+{{- else if .Values.postgresql.enabled -}}
+    {{- if eq .Values.postgresql.architecture "replication" -}}
+        {{- printf "%s-primary" (include "seaweedfs.postgresql.fullname" .) | trunc 63 | trimSuffix "-" -}}
+    {{- else -}}
+        {{- print (include "seaweedfs.postgresql.fullname" .) -}}
     {{- end -}}
 {{- else -}}
     {{- print .Values.externalDatabase.host -}}
@@ -239,6 +292,8 @@ Return the database port
 {{- define "seaweedfs.database.port" -}}
 {{- if .Values.mariadb.enabled }}
     {{- print "3306" -}}
+{{- else if .Values.postgresql.enabled -}}
+    {{- print "5432" -}}
 {{- else -}}
     {{- printf "%d" (.Values.externalDatabase.port | int ) -}}
 {{- end -}}
@@ -250,6 +305,8 @@ Return the database name
 {{- define "seaweedfs.database.name" -}}
 {{- if .Values.mariadb.enabled }}
     {{- print .Values.mariadb.auth.database -}}
+{{- else if .Values.postgresql.enabled -}}
+    {{- coalesce (((.Values.global.postgresql).auth).database) .Values.postgresql.auth.database -}}
 {{- else -}}
     {{- print .Values.externalDatabase.database -}}
 {{- end -}}
@@ -261,6 +318,8 @@ Return the database user
 {{- define "seaweedfs.database.user" -}}
 {{- if .Values.mariadb.enabled }}
     {{- print .Values.mariadb.auth.username -}}
+{{- else if .Values.postgresql.enabled -}}
+    {{- coalesce (((.Values.global.postgresql).auth).username) .Values.postgresql.auth.username -}}
 {{- else -}}
     {{- print .Values.externalDatabase.user -}}
 {{- end -}}
@@ -276,6 +335,13 @@ Return the database secret name
     {{- else -}}
         {{- print (include "seaweedfs.mariadb.fullname" .) -}}
     {{- end -}}
+{{- else if .Values.postgresql.enabled -}}
+    {{- $existingSecret := coalesce (((.Values.global.postgresql).auth).existingSecret) .Values.postgresql.auth.existingSecret -}}
+    {{- if $existingSecret -}}
+        {{- print (tpl $existingSecret .) -}}
+    {{- else -}}
+        {{- print (include "seaweedfs.postgresql.fullname" .) -}}
+    {{- end -}}
 {{- else if .Values.externalDatabase.existingSecret -}}
     {{- print (tpl .Values.externalDatabase.existingSecret .) -}}
 {{- else -}}
@@ -284,12 +350,32 @@ Return the database secret name
 {{- end -}}
 
 {{/*
+Return the database secret key name
+*/}}
+{{- define "seaweedfs.database.keyName" -}}
+{{- if .Values.mariadb.enabled }}
+    {{- print "mariadb-password" -}}
+{{- else if .Values.postgresql.enabled -}}
+    {{- print .Values.postgresql.auth.secretKeys.userPasswordKey -}}
+{{- else if .Values.externalDatabase.existingSecret -}}
+    {{- printf "%s-password" .Values.externalDatabase.store -}}
+{{- else -}}
+    {{- print "password" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Returns an init-container that waits for the database to be ready
 */}}
 {{- define "seaweedfs.filer.waitForDBInitContainer" -}}
+{{ if eq "true" ( include "seaweedfs.waitForDatabase.enabled" . ) }}
 - name: wait-for-db
-  image: {{ include "common.images.image" (dict "imageRoot" .Values.mariadb.image "global" .Values.global) }}
+  image: {{ include "seaweedfs.initDatabaseJob.image" . }}
+  {{- if or .Values.mariadb.enabled (and .Values.externalDatabase.enabled (eq .Values.externalDatabase.store "mariadb") ) }}
   imagePullPolicy: {{ .Values.mariadb.image.pullPolicy }}
+  {{- else if or .Values.postgresql.enabled (and .Values.externalDatabase.enabled (eq .Values.externalDatabase.store "postgresql") ) }}
+  imagePullPolicy: {{ .Values.postgresql.image.pullPolicy }}
+  {{- end }}
   {{- if .Values.filer.containerSecurityContext.enabled }}
   securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.filer.containerSecurityContext "context" $) | nindent 4 }}
   {{- end }}
@@ -298,21 +384,20 @@ Returns an init-container that waits for the database to be ready
   args:
     - -ec
     - |
-      #!/bin/bash
-
       set -o errexit
       set -o nounset
       set -o pipefail
 
       . /opt/bitnami/scripts/liblog.sh
-      . /opt/bitnami/scripts/libvalidations.sh
+      [[ -f $DATABASE_PASSWORD_FILE ]] && export DATABASE_PASSWORD="$(< "${DATABASE_PASSWORD_FILE}")"
+  {{- if or .Values.mariadb.enabled (and .Values.externalDatabase.enabled (eq .Values.externalDatabase.store "mariadb") ) }}
       . /opt/bitnami/scripts/libmariadb.sh
       . /opt/bitnami/scripts/mariadb-env.sh
 
       info "Waiting for host $DATABASE_HOST"
       mariadb_is_ready() {
           if ! echo "select 1" | mysql_remote_execute "$DATABASE_HOST" "$DATABASE_PORT_NUMBER" "$DATABASE_NAME" "$DATABASE_USER" "$DATABASE_PASSWORD"; then
-             return 1
+              return 1
           fi
           return 0
       }
@@ -320,10 +405,24 @@ Returns an init-container that waits for the database to be ready
           error "Database not ready"
           exit 1
       fi
+  {{- else if or .Values.postgresql.enabled (and .Values.externalDatabase.enabled (eq .Values.externalDatabase.store "postgresql") ) }}
+      . /opt/bitnami/scripts/libpostgresql.sh
+      . /opt/bitnami/scripts/postgresql-env.sh
+
+      info "Waiting for host $DATABASE_HOST"
+      postgresql_is_ready() {
+          if ! echo "SELECT 1" | postgresql_remote_execute "$DATABASE_HOST" "$DATABASE_PORT_NUMBER" "$DATABASE_NAME" "$DATABASE_USER" "$DATABASE_PASSWORD"; then
+              return 1
+          fi
+          return 0
+      }
+      if ! retry_while "postgresql_is_ready"; then
+          error "Database not ready"
+          exit 1
+      fi
+  {{- end }}
       info "Database is ready"
   env:
-    - name: BITNAMI_DEBUG
-      value: {{ ternary "true" "false" (or .Values.mariadb.image.debug .Values.diagnosticMode.enabled) | quote }}
     - name: DATABASE_HOST
       value: {{ include "seaweedfs.database.host" . | quote }}
     - name: DATABASE_PORT_NUMBER
@@ -332,15 +431,15 @@ Returns an init-container that waits for the database to be ready
       value: {{ include "seaweedfs.database.name" . | quote }}
     - name: DATABASE_USER
       value: {{ include "seaweedfs.database.user" . | quote }}
-    - name: DATABASE_PASSWORD
-      valueFrom:
-        secretKeyRef:
-          name: {{ include "seaweedfs.database.secretName" . }}
-          key: mariadb-password
+    - name: DATABASE_PASSWORD_FILE
+      value: "/secrets/password"
   volumeMounts:
     - name: empty-dir
       mountPath: /tmp
       subPath: tmp-dir
+    - name: db-credentials
+      mountPath: /secrets
+{{- end -}}
 {{- end -}}
 
 {{/*
@@ -358,7 +457,12 @@ Returns an init-container that generates auth configuration for the Amazon S3 AP
   args:
     - -ec
     - |
-      #!/bin/bash
+      {{- if .Values.usePasswordFiles }}
+      export ADMIN_ACCESS_KEY_ID="$(< $ADMIN_ACCESS_KEY_ID_FILE)"
+      export ADMIN_SECRET_ACCESS_KEY="$(< $ADMIN_SECRET_ACCESS_KEY_FILE)"
+      export READ_ACCESS_KEY_ID="$(< $READ_ACCESS_KEY_ID_FILE)"
+      export READ_SECRET_ACCESS_KEY="$(< $READ_SECRET_ACCESS_KEY_FILE)"
+      {{- end }}
 
       cat > "/auth/config.json" <<EOF
       {
@@ -395,6 +499,16 @@ Returns an init-container that generates auth configuration for the Amazon S3 AP
       }
       EOF
   env:
+    {{- if .Values.usePasswordFiles }}
+    - name: ADMIN_ACCESS_KEY_ID_FILE
+      value: "/opt/bitnami/seaweed/secrets/admin_access_key_id"
+    - name: ADMIN_SECRET_ACCESS_KEY_FILE
+      value: "/opt/bitnami/seaweed/secrets/admin_secret_access_key"
+    - name: READ_ACCESS_KEY_ID_FILE
+      value: "/opt/bitnami/seaweed/secrets/read_access_key_id"
+    - name: READ_SECRET_ACCESS_KEY_FILE
+      value: "/opt/bitnami/seaweed/secrets/read_secret_access_key"
+    {{- else }}
     - name: ADMIN_ACCESS_KEY_ID
       valueFrom:
         secretKeyRef:
@@ -415,10 +529,15 @@ Returns an init-container that generates auth configuration for the Amazon S3 AP
         secretKeyRef:
           name: {{ printf "%s-auth" (include "seaweedfs.s3.fullname" .) }}
           key: read_secret_access_key
+    {{- end }}
   volumeMounts:
     - name: empty-dir
       mountPath: /auth
       subPath: auth-dir
+    {{- if .Values.usePasswordFiles }}
+    - name: seaweed-secrets
+      mountPath: /opt/bitnami/seaweed/secrets
+    {{- end}}
 {{- end -}}
 
 {{/*
@@ -440,6 +559,7 @@ Compile all warnings into a single message.
 {{- $messages := list -}}
 {{- $messages := append $messages (include "seaweedfs.validateValues.security.mTLS" .) -}}
 {{- $messages := append $messages (include "seaweedfs.validateValues.master.replicaCount" .) -}}
+{{- $messages := append $messages (include "seaweedfs.validateValues.filer.replicaCount" .) -}}
 {{- $messages := append $messages (include "seaweedfs.validateValues.volume.replicaCount" .) -}}
 {{- $messages := append $messages (include "seaweedfs.validateValues.volume.dataVolumes" .) -}}
 {{- $messages := append $messages (include "seaweedfs.validateValues.filer.database" .) -}}
@@ -484,12 +604,27 @@ Validate values of SeaweedFS - number of Master server replicas
 */}}
 {{- define "seaweedfs.validateValues.master.replicaCount" -}}
 {{- $masterReplicaCount := int .Values.master.replicaCount }}
-{{- if and .Values.master.persistence.enabled .Values.master.persistence.existingClaim (gt $masterReplicaCount 1) -}}
+{{- if and (or (and .Values.master.persistence.enabled .Values.master.persistence.existingClaim) (and .Values.master.logPersistence.enabled .Values.master.logPersistence.existingClaim)) (gt $masterReplicaCount 1) -}}
 master.replicaCount
     A single existing PVC cannot be shared between multiple Master Server replicas.
     Please set a valid number of replicas (--set master.replicaCount=1), disable persistence
-    (--set master.persistence.enabled=false) or rely on dynamic provisioning via Persitent
-    Volume Claims (--set master.persistence.existingClaim="").
+    (--set master.persistence.enabled=false,master.logPersistence.enabled=false) or
+    rely on dynamic provisioning via Persistent Volume Claims
+    (--set master.persistence.existingClaim="",master.logPersistence.existingClaim="").
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate values of SeaweedFS - number of Filer server replicas
+*/}}
+{{- define "seaweedfs.validateValues.filer.replicaCount" -}}
+{{- $filerReplicaCount := int .Values.filer.replicaCount }}
+{{- if and .Values.filer.enabled .Values.filer.logPersistence.enabled .Values.filer.logPersistence.existingClaim (gt $filerReplicaCount 1) -}}
+filer.replicaCount
+    A single existing PVC cannot be shared between multiple Filer Server replicas.
+    Please set a valid number of replicas (--set filer.replicaCount=1), disable persistence
+    (--set filer.logPersistence.enabled=false) or rely on dynamic provisioning via
+    Persistent Volume Claims (--set filer.logPersistence.existingClaim="").
 {{- end -}}
 {{- end -}}
 
@@ -506,6 +641,13 @@ volume.replicaCount
     (--set volume.dataVolumes[].persistence.enabled=false) or rely on dynamic provisioning via Persitent
     Volume Claims (--set volume.dataVolumes[].persistence.existingClaim="").
 {{- end -}}
+{{- end -}}
+{{- if and .Values.volume.logPersistence.enabled .Values.volume.logPersistence.existingClaim (gt $volumeReplicaCount 1) -}}
+volume.replicaCount
+    A single existing PVC cannot be shared between multiple Volume Server replicas.
+    Please set a valid number of replicas (--set volume.replicaCount=1), disable persistence
+    (--set volume.logPersistence.enabled=false) or rely on dynamic provisioning via Persistent Volume Claims
+    (--set volume.logPersistence.existingClaim="").
 {{- end -}}
 {{- end -}}
 
@@ -537,11 +679,29 @@ volume.dataVolumes[]
 Validate values of SeaweedFS - Filer server database
 */}}
 {{- define "seaweedfs.validateValues.filer.database" -}}
-{{- if and (not .Values.filer.enabled) .Values.mariadb.enabled -}}
+{{- if not .Values.filer.enabled -}}
+  {{- if .Values.mariadb.enabled -}}
 mariadb.enabled
     The Filer Server is disabled, but the MariaDB dependency is enabled.
     Please enable the Filer Server (--set filer.enabled=true) or
     disable the MariaDB dependency (--set mariadb.enabled=false).
+  {{- end -}}
+  {{- if .Values.postgresql.enabled -}}
+postgresql.enabled
+    The Filer Server is disabled, but the PostgreSQL dependency is enabled.
+    Please enable the Filer Server (--set filer.enabled=true) or
+    disable the PostgreSQL dependency (--set postgresql.enabled=false).
+  {{- end -}}
+{{- else -}}
+  {{- if and .Values.mariadb.enabled .Values.postgresql.enabled -}}
+mariadb.enabled, postgresql.enabled
+    Both MariaDB and PostgreSQL dependencies are enabled. Only one database dependency can be enabled.
+    Please disable one of them (--set mariadb.enabled=false) or (--set postgresql.enabled=false).
+  {{- else if and (not .Values.mariadb.enabled) (not .Values.postgresql.enabled) (not .Values.externalDatabase.enabled) -}}
+mariadb.enabled, postgresql.enabled, externalDatabase.enabled
+    No database for Filer Server. Please provide a database dependency (--set mariadb.enabled=true),
+    (--set postgresql.enabled=true) or (--set externalDatabase.enabled=true).
+  {{- end -}}
 {{- end -}}
 {{- end -}}
 

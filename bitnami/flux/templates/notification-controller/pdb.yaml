@@ -3,7 +3,7 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if .Values.notificationController.pdb.create }}
+{{- if and .Values.notificationController.enabled .Values.notificationController.pdb.create }}
 apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
 kind: PodDisruptionBudget
 metadata:
@@ -21,8 +21,8 @@ spec:
   {{- if .Values.notificationController.pdb.minAvailable }}
   minAvailable: {{ .Values.notificationController.pdb.minAvailable }}
   {{- end }}
-  {{- if .Values.notificationController.pdb.maxUnavailable }}
-  maxUnavailable: {{ .Values.notificationController.pdb.maxUnavailable }}
+  {{- if or .Values.notificationController.pdb.maxUnavailable ( not .Values.notificationController.pdb.minAvailable ) }}
+  maxUnavailable: {{ .Values.notificationController.pdb.maxUnavailable | default 1 }}
   {{- end }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.notificationController.podLabels .Values.commonLabels ) "context" . ) }}
   selector:

@@ -1,12 +1,12 @@
 # Source: https://raw.githubusercontent.com/metallb/metallb/v{version}/charts/metallb/charts/crds/templates/crds.yaml
-# Version: 0.14.5
+# Version: 0.14.9
 # Conditional: .Values.installCRDs
 {{- if .Values.installCRDs }}
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.14.0
+    controller-gen.kubebuilder.io/version: v0.16.3
   name: bfdprofiles.metallb.io
 spec:
   group: metallb.io
@@ -127,7 +127,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.14.0
+    controller-gen.kubebuilder.io/version: v0.16.3
   name: bgpadvertisements.metallb.io
 spec:
   group: metallb.io
@@ -233,11 +233,13 @@ spec:
                               items:
                                 type: string
                               type: array
+                              x-kubernetes-list-type: atomic
                           required:
                             - key
                             - operator
                           type: object
                         type: array
+                        x-kubernetes-list-type: atomic
                       matchLabels:
                         additionalProperties:
                           type: string
@@ -292,11 +294,13 @@ spec:
                               items:
                                 type: string
                               type: array
+                              x-kubernetes-list-type: atomic
                           required:
                             - key
                             - operator
                           type: object
                         type: array
+                        x-kubernetes-list-type: atomic
                       matchLabels:
                         additionalProperties:
                           type: string
@@ -329,7 +333,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.14.0
+    controller-gen.kubebuilder.io/version: v0.16.3
   name: bgppeers.metallb.io
 spec:
   conversion:
@@ -365,6 +369,8 @@ spec:
         - jsonPath: .spec.ebgpMultiHop
           name: Multi Hops
           type: string
+      deprecated: true
+      deprecationWarning: v1beta1 is deprecated, please use v1beta2
       name: v1beta1
       schema:
         openAPIV3Schema:
@@ -526,9 +532,30 @@ spec:
                   default: false
                   description: To set if we want to disable MP BGP that will separate IPv4 and IPv6 route exchanges into distinct BGP sessions.
                   type: boolean
+                dynamicASN:
+                  description: |-
+                    DynamicASN detects the AS number to use for the remote end of the session
+                    without explicitly setting it via the ASN field. Limited to:
+                    internal - if the neighbor's ASN is different than MyASN connection is denied.
+                    external - if the neighbor's ASN is the same as MyASN the connection is denied.
+                    ASN and DynamicASN are mutually exclusive and one of them must be specified.
+                  enum:
+                    - internal
+                    - external
+                  type: string
                 ebgpMultiHop:
                   description: To set if the BGPPeer is multi-hops away. Needed for FRR mode only.
                   type: boolean
+                enableGracefulRestart:
+                  description: |-
+                    EnableGracefulRestart allows BGP peer to continue to forward data packets
+                    along known routes while the routing protocol information is being
+                    restored. This field is immutable because it requires restart of the BGP
+                    session. Supported for FRR mode only.
+                  type: boolean
+                  x-kubernetes-validations:
+                    - message: EnableGracefulRestart cannot be changed after creation
+                      rule: self == oldSelf
                 holdTime:
                   description: Requested BGP hold time, per RFC4271.
                   type: string
@@ -575,11 +602,13 @@ spec:
                               items:
                                 type: string
                               type: array
+                              x-kubernetes-list-type: atomic
                           required:
                             - key
                             - operator
                           type: object
                         type: array
+                        x-kubernetes-list-type: atomic
                       matchLabels:
                         additionalProperties:
                           type: string
@@ -610,7 +639,9 @@ spec:
                   type: object
                   x-kubernetes-map-type: atomic
                 peerASN:
-                  description: AS number to expect from the remote end of the session.
+                  description: |-
+                    AS number to expect from the remote end of the session.
+                    ASN and DynamicASN are mutually exclusive and one of them must be specified.
                   format: int32
                   maximum: 4294967295
                   minimum: 0
@@ -637,7 +668,6 @@ spec:
                   type: string
               required:
                 - myASN
-                - peerASN
                 - peerAddress
               type: object
             status:
@@ -653,7 +683,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.14.0
+    controller-gen.kubebuilder.io/version: v0.16.3
   name: communities.metallb.io
 spec:
   group: metallb.io
@@ -718,7 +748,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.14.0
+    controller-gen.kubebuilder.io/version: v0.16.3
   name: ipaddresspools.metallb.io
 spec:
   group: metallb.io
@@ -831,11 +861,13 @@ spec:
                                   items:
                                     type: string
                                   type: array
+                                  x-kubernetes-list-type: atomic
                               required:
                                 - key
                                 - operator
                               type: object
                             type: array
+                            x-kubernetes-list-type: atomic
                           matchLabels:
                             additionalProperties:
                               type: string
@@ -889,11 +921,13 @@ spec:
                                   items:
                                     type: string
                                   type: array
+                                  x-kubernetes-list-type: atomic
                               required:
                                 - key
                                 - operator
                               type: object
                             type: array
+                            x-kubernetes-list-type: atomic
                           matchLabels:
                             additionalProperties:
                               type: string
@@ -924,7 +958,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.14.0
+    controller-gen.kubebuilder.io/version: v0.16.3
   name: l2advertisements.metallb.io
 spec:
   group: metallb.io
@@ -1017,11 +1051,13 @@ spec:
                               items:
                                 type: string
                               type: array
+                              x-kubernetes-list-type: atomic
                           required:
                             - key
                             - operator
                           type: object
                         type: array
+                        x-kubernetes-list-type: atomic
                       matchLabels:
                         additionalProperties:
                           type: string
@@ -1070,11 +1106,13 @@ spec:
                               items:
                                 type: string
                               type: array
+                              x-kubernetes-list-type: atomic
                           required:
                             - key
                             - operator
                           type: object
                         type: array
+                        x-kubernetes-list-type: atomic
                       matchLabels:
                         additionalProperties:
                           type: string
@@ -1100,7 +1138,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.14.0
+    controller-gen.kubebuilder.io/version: v0.16.3
   name: servicel2statuses.metallb.io
 spec:
   group: metallb.io
@@ -1114,6 +1152,12 @@ spec:
     - additionalPrinterColumns:
         - jsonPath: .status.node
           name: Allocated Node
+          type: string
+        - jsonPath: .status.serviceName
+          name: Service Name
+          type: string
+        - jsonPath: .status.serviceNamespace
+          name: Service Namespace
           type: string
       name: v1beta1
       schema:
@@ -1156,6 +1200,21 @@ spec:
                 node:
                   description: Node indicates the node that receives the directed traffic
                   type: string
+                  x-kubernetes-validations:
+                    - message: Value is immutable
+                      rule: self == oldSelf
+                serviceName:
+                  description: ServiceName indicates the service this status represents
+                  type: string
+                  x-kubernetes-validations:
+                    - message: Value is immutable
+                      rule: self == oldSelf
+                serviceNamespace:
+                  description: ServiceNamespace indicates the namespace of the service
+                  type: string
+                  x-kubernetes-validations:
+                    - message: Value is immutable
+                      rule: self == oldSelf
               type: object
           type: object
       served: true

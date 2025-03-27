@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/tomcat
 ```
 
-Looking to use Apache Tomcat in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Apache Tomcat in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -51,9 +51,38 @@ These commands deploy Tomcat on the Kubernetes cluster in the default configurat
 
 Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
 
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcesPreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling vs Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
+### Update credentials
+
+Bitnami charts configure credentials at first boot. Any further change in the secrets or credentials require manual intervention. Follow these instructions:
+
+- Update the user password following [the upstream documentation](https://tomcat.apache.org/)
+- Update the password secret with the new values (replace the SECRET_NAME, USER and PASSWORD placeholders)
+
+```shell
+kubectl create secret generic SECRET_NAME --from-literal=tomcat-username=USER --from-literal=tomcat-password=PASSWORD --dry-run -o yaml | kubectl apply -f -
+```
+
+### Prometheus metrics
+
+This chart can be integrated with Prometheus by setting `metrics.enabled` to `true`. This will deploy a sidecar container with [jmx_exporter](https://github.com/prometheus/jmx_exporter) in all pods. It will have the necessary annotations to be automatically scraped by Prometheus.
+
+#### Prometheus requirements
+
+It is necessary to have a working installation of Prometheus or Prometheus Operator for the integration to work. Install the [Bitnami Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/prometheus) or the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) to easily have a working Prometheus in your cluster.
+
+#### Integration with Prometheus Operator
+
+The chart can deploy `PodMonitor` objects for integration with Prometheus Operator installations. To do so, set the value `metrics.podMonitor.enabled=true`. Ensure that the Prometheus Operator `CustomResourceDefinitions` are installed in the cluster or it will fail with the following error:
+
+```text
+no matches for kind "PodMonitor" in version "monitoring.coreos.com/v1"
+```
+
+Install the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) for having the necessary CRDs and the Prometheus Operator.
+
+### [Rolling vs Immutable tags](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -121,6 +150,10 @@ This chart allows you to set custom Pod affinity using the `affinity` parameter.
 
 As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
+### Backup and restore
+
+To back up and restore Helm chart deployments on Kubernetes, you need to back up the persistent volumes from the source deployment and attach them to a new deployment using [Velero](https://velero.io/), a Kubernetes backup/restore tool. Find the instructions for using Velero in [this guide](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-backup-restore-deployments-velero-index.html).
+
 ## Persistence
 
 The [Bitnami Tomcat](https://github.com/bitnami/containers/tree/main/bitnami/tomcat) image stores the Tomcat data and configurations at the `/bitnami/tomcat` path of the container.
@@ -146,7 +179,9 @@ You can enable this init container by setting `volumePermissions.enabled` to `tr
 | ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
 | `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`       |
 | `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`       |
-| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`       |
+| `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`       |
+| `global.storageClass`                                 | DEPRECATED: use global.defaultStorageClass instead                                                                                                                                                                                                                                                                                                                  | `""`       |
+| `global.security.allowInsecureImages`                 | Allows skipping image verification                                                                                                                                                                                                                                                                                                                                  | `false`    |
 | `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `disabled` |
 
 ### Common parameters
@@ -163,26 +198,28 @@ You can enable this init container by setting `volumePermissions.enabled` to `tr
 
 ### Tomcat parameters
 
-| Name                           | Description                                                                                                                                                     | Value                    |
-| ------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `image.registry`               | Tomcat image registry                                                                                                                                           | `REGISTRY_NAME`          |
-| `image.repository`             | Tomcat image repository                                                                                                                                         | `REPOSITORY_NAME/tomcat` |
-| `image.digest`                 | Tomcat image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                          | `""`                     |
-| `image.pullPolicy`             | Tomcat image pull policy                                                                                                                                        | `IfNotPresent`           |
-| `image.pullSecrets`            | Specify docker-registry secret names as an array                                                                                                                | `[]`                     |
-| `image.debug`                  | Specify if debug logs should be enabled                                                                                                                         | `false`                  |
-| `automountServiceAccountToken` | Mount Service Account token in pod                                                                                                                              | `false`                  |
-| `hostAliases`                  | Deployment pod host aliases                                                                                                                                     | `[]`                     |
-| `tomcatUsername`               | Tomcat admin user                                                                                                                                               | `user`                   |
-| `tomcatPassword`               | Tomcat admin password                                                                                                                                           | `""`                     |
-| `existingSecret`               | Use existing secret for password details (`tomcatPassword` will be ignored and picked up from this secret). The secret has to contain the key `tomcat-password` | `""`                     |
-| `tomcatAllowRemoteManagement`  | Enable remote access to management interface                                                                                                                    | `0`                      |
-| `catalinaOpts`                 | Java runtime option used by tomcat JVM                                                                                                                          | `""`                     |
-| `command`                      | Override default container command (useful when using custom images)                                                                                            | `[]`                     |
-| `args`                         | Override default container args (useful when using custom images)                                                                                               | `[]`                     |
-| `extraEnvVars`                 | Extra environment variables to be set on Tomcat container                                                                                                       | `[]`                     |
-| `extraEnvVarsCM`               | Name of existing ConfigMap containing extra environment variables                                                                                               | `""`                     |
-| `extraEnvVarsSecret`           | Name of existing Secret containing extra environment variables                                                                                                  | `""`                     |
+| Name                           | Description                                                                                                                                                                          | Value                    |
+| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------ |
+| `image.registry`               | Tomcat image registry                                                                                                                                                                | `REGISTRY_NAME`          |
+| `image.repository`             | Tomcat image repository                                                                                                                                                              | `REPOSITORY_NAME/tomcat` |
+| `image.digest`                 | Tomcat image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                               | `""`                     |
+| `image.pullPolicy`             | Tomcat image pull policy                                                                                                                                                             | `IfNotPresent`           |
+| `image.pullSecrets`            | Specify docker-registry secret names as an array                                                                                                                                     | `[]`                     |
+| `image.debug`                  | Specify if debug logs should be enabled                                                                                                                                              | `false`                  |
+| `automountServiceAccountToken` | Mount Service Account token in pod                                                                                                                                                   | `false`                  |
+| `hostAliases`                  | Deployment pod host aliases                                                                                                                                                          | `[]`                     |
+| `tomcatUsername`               | Tomcat admin user                                                                                                                                                                    | `user`                   |
+| `tomcatPassword`               | Tomcat admin password                                                                                                                                                                | `""`                     |
+| `existingSecret`               | Use existing secret for credentials details (`tomcatUsername` and `tomcatPassword` will be ignored and picked up from this secret)                                                   | `""`                     |
+| `secretKeys.adminUsernameKey`  | Name of key in existing secret to use instead of default `tomcat-username` key to provide Tomcat admin username (overrides `tomcatUsername`). Only used when `existingSecret` is set | `""`                     |
+| `secretKeys.adminPasswordKey`  | Name of key in existing secret to use instead of default `tomcat-password` key to provide Tomcat admin password (overrides `tomcatPassword`). Only used when `existingSecret` is set | `""`                     |
+| `tomcatAllowRemoteManagement`  | Enable remote access to management interface                                                                                                                                         | `0`                      |
+| `catalinaOpts`                 | Java runtime option used by tomcat JVM                                                                                                                                               | `""`                     |
+| `command`                      | Override default container command (useful when using custom images)                                                                                                                 | `[]`                     |
+| `args`                         | Override default container args (useful when using custom images)                                                                                                                    | `[]`                     |
+| `extraEnvVars`                 | Extra environment variables to be set on Tomcat container                                                                                                                            | `[]`                     |
+| `extraEnvVarsCM`               | Name of existing ConfigMap containing extra environment variables                                                                                                                    | `""`                     |
+| `extraEnvVarsSecret`           | Name of existing Secret containing extra environment variables                                                                                                                       | `""`                     |
 
 ### Tomcat deployment parameters
 
@@ -250,6 +287,9 @@ You can enable this init container by setting `volumePermissions.enabled` to `tr
 | `extraVolumeClaimTemplates`                         | Optionally specify extra list of additional volume claim templates for Tomcat pods in StatefulSet                                                                                                                 | `[]`                |
 | `extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for Tomcat container(s)                                                                                                                                  | `[]`                |
 | `initContainers`                                    | Add init containers to the Tomcat pods.                                                                                                                                                                           | `[]`                |
+| `pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                   | `true`              |
+| `pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                    | `""`                |
+| `pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `pdb.minAvailable` and `pdb.maxUnavailable` are empty.                                                                    | `""`                |
 | `sidecars`                                          | Add sidecars to the Tomcat pods.                                                                                                                                                                                  | `[]`                |
 | `persistence.enabled`                               | Enable persistence                                                                                                                                                                                                | `true`              |
 | `persistence.storageClass`                          | PVC Storage Class for Tomcat volume                                                                                                                                                                               | `""`                |
@@ -384,6 +424,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 11.4.0
+
+This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
+
 ### To 11.0.0
 
 This major bump changes the following security defaults:
@@ -460,7 +504,7 @@ kubectl patch deployment tomcat --type=json -p='[{"op": "remove", "path": "/spec
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

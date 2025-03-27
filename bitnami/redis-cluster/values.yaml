@@ -9,7 +9,8 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
+## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ## @param global.redis.password Redis&reg; password (overrides `password`)
 ##
 global:
@@ -19,7 +20,13 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  defaultStorageClass: ""
   storageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
   redis:
     password: ""
   ## Compatibility adaptations for Kubernetes platforms
@@ -40,6 +47,9 @@ nameOverride: ""
 ## @param fullnameOverride String to fully override common.names.fullname template
 ##
 fullnameOverride: ""
+## @param namespaceOverride String to fully override common.names.namespace template
+##
+namespaceOverride: ""
 ## @param clusterDomain Kubernetes Cluster Domain
 ##
 clusterDomain: cluster.local
@@ -79,10 +89,9 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/redis-cluster
-  tag: 7.2.4-debian-12-r12
+  tag: 7.4.2-debian-12-r6
   digest: ""
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -201,16 +210,25 @@ podSecurityContext:
   ##     value: "10000"
   ##
   sysctls: []
-## @param podDisruptionBudget Limits the number of pods of the replicated application that are down simultaneously from voluntary disruptions
+## @param podDisruptionBudget DEPRECATED please use pdb instead
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/disruptions
 ##
 podDisruptionBudget: {}
-## @param minAvailable Min number of pods that must still be available after the eviction
+## Pod Disruption Budget configuration
+## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
 ##
-minAvailable: ""
-## @param maxUnavailable Max number of pods that can be unavailable after the eviction
-##
-maxUnavailable: ""
+pdb:
+  ## @param pdb.create Created a PodDisruptionBudget
+  ##
+  create: true
+  ## @param pdb.minAvailable Min number of pods that must still be available after the eviction.
+  ## You can specify an integer or a percentage by setting the value to a string representation of a percentage (eg. "50%"). It will be disabled if set to 0
+  ##
+  minAvailable: ""
+  ## @param pdb.maxUnavailable Max number of pods that can be unavailable after the eviction.
+  ## You can specify an integer or a percentage by setting the value to a string representation of a percentage (eg. "50%"). It will be disabled if set to 0
+  ##
+  maxUnavailable: ""
 ## Containers Security Context
 ## @param containerSecurityContext.enabled Enabled containers' Security Context
 ## @param containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
@@ -225,7 +243,7 @@ maxUnavailable: ""
 ##
 containerSecurityContext:
   enabled: true
-  seLinuxOptions: null
+  seLinuxOptions: {}
   runAsUser: 1001
   runAsGroup: 1001
   runAsNonRoot: true
@@ -322,6 +340,10 @@ service:
   ## If service.type is LoadBalancer, request a specific static IP address if supported by the cloud provider, otherwise leave blank
   ##
   loadBalancerIP: ""
+  ## @param service.loadBalancerClass Load Balancer class if service type is `LoadBalancer` (optional, cloud specific)
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+  ##
+  loadBalancerClass: ""
   ## @param service.loadBalancerSourceRanges Service Load Balancer sources
   ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
   ## e.g:
@@ -377,6 +399,9 @@ persistence:
   ## @param persistence.annotations Persistent Volume Claim annotations
   ##
   annotations: {}
+  ## @param persistence.labels Persistent Volume Claim labels
+  ##
+  labels: {}
   ## @param persistence.accessModes Persistent Volume Access Modes
   ##
   accessModes:
@@ -417,7 +442,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r18
+    tag: 12-debian-12-r40
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -436,7 +461,7 @@ volumePermissions:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 0
     privileged: false
   ## Container resource requests and limits
@@ -456,6 +481,11 @@ volumePermissions:
   ##     memory: 1024Mi
   ##
   resources: {}
+## @param serviceBindings.enabled Create secret for service binding (Experimental)
+## Ref: https://servicebinding.io/service-provider/
+##
+serviceBindings:
+  enabled: false
 ## PodSecurityPolicy configuration
 ## ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/
 ## @param podSecurityPolicy.create Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later
@@ -596,6 +626,13 @@ redis:
   ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/share-process-namespace/
   ##
   shareProcessNamespace: false
+  ## @param redis.terminationGracePeriodSeconds Set custom gracefull termination period for redis container.
+  ## If not set the kubernetes default will be applied.
+  ## Customize it based on your workload. Huge redis with high load may wants more than default time to dump
+  ## their data before complete termination.
+  ## Ref: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/#hook-handler-execution
+  ##
+  terminationGracePeriodSeconds: 30
   ## Configure extra options for Redis&reg; liveness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
   ## @param redis.livenessProbe.enabled Enable livenessProbe
@@ -861,6 +898,10 @@ cluster:
       ## @param cluster.externalAccess.service.loadBalancerIP Array of load balancer IPs for each Redis&reg; node. Length must be the same as cluster.nodes
       ##
       loadBalancerIP: []
+      ## @param cluster.externalAccess.service.loadBalancerClass Load Balancer class if service type is `LoadBalancer` (optional, cloud specific)
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+      ##
+      loadBalancerClass: ""
       ## @param cluster.externalAccess.service.loadBalancerSourceRanges Service Load Balancer sources
       ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
       ## e.g:
@@ -906,7 +947,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/redis-exporter
-    tag: 1.58.0-debian-12-r7
+    tag: 1.69.0-debian-12-r1
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -953,7 +994,7 @@ metrics:
   ##
   podAnnotations:
     prometheus.io/scrape: "true"
-    prometheus.io/port: "{{ .Values.metrics.containerPorts.http }}"
+    prometheus.io/port: "9121"
   ## @param metrics.podLabels Additional labels for Metrics exporter pod
   ##
   podLabels: {}
@@ -971,7 +1012,7 @@ metrics:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsGroup: 1001
     runAsNonRoot: true
@@ -1073,21 +1114,26 @@ metrics:
   priorityClassName: ""
   ## @param metrics.service.type Kubernetes Service type (redis metrics)
   ## @param metrics.service.loadBalancerIP Use serviceLoadBalancerIP to request a specific static IP, otherwise leave blank
+  ## @param metrics.service.loadBalancerClass Load Balancer class if service type is `LoadBalancer` (optional, cloud specific)
   ## @param metrics.service.annotations Annotations for the services to monitor.
   ## @param metrics.service.labels Additional labels for the metrics service
   ##
   service:
     type: ClusterIP
-    ## @param metrics.service.ports.http Metrics HTTP service port
-    ##
     ports:
+      ## @param metrics.service.ports.http Metrics HTTP service port
+      ##
       http: 9121
+      ## @param metrics.service.ports.appProtocol Metrics service appProtocol
+      ##
+      appProtocol: ""
     ## @param metrics.service.clusterIP Service Cluster IP
     ## e.g.:
     ## clusterIP: None
     ##
     clusterIP: ""
     loadBalancerIP: ""
+    loadBalancerClass: ""
     annotations: {}
     labels: {}
 ## @section Sysctl Image parameters
@@ -1112,7 +1158,7 @@ sysctlImage:
   ##
   registry: docker.io
   repository: bitnami/os-shell
-  tag: 12-debian-12-r18
+  tag: 12-debian-12-r40
   digest: ""
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -1134,7 +1180,7 @@ sysctlImage:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 0
     privileged: true
   ## Container resource requests and limits

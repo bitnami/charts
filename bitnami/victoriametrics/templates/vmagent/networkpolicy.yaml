@@ -1,0 +1,96 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.vmagent.enabled .Values.vmagent.networkPolicy.enabled }}
+kind: NetworkPolicy
+apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
+metadata:
+  name: {{ template "victoriametrics.vmagent.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: victoriametrics
+    app.kubernetes.io/component: vmagent
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  policyTypes:
+    - Ingress
+    - Egress
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.vmagent.podLabels .Values.commonLabels ) "context" . ) }}
+  podSelector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/part-of: victoriametrics
+      app.kubernetes.io/component: vmagent
+  {{- if .Values.vmagent.networkPolicy.allowExternalEgress }}
+  egress:
+    - {}
+  {{- else }}
+  egress:
+    # Allow dns resolution
+    - ports:
+        - port: 53
+          protocol: UDP
+        - port: 53
+          protocol: TCP
+    {{- if .Values.vmauth.enabled }}
+    # Allow outbound connections to victoriametrics insert controller
+    - ports:
+        - port: {{ .Values.vmauth.containerPorts.http }}
+      to:
+        - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
+              app.kubernetes.io/part-of: victoriametrics
+              app.kubernetes.io/component: vmauth
+    {{- else }}
+    # Allow outbound connections to victoriametrics insert controller
+    - ports:
+        - port: {{ .Values.vminsert.containerPorts.http }}
+      to:
+        - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
+              app.kubernetes.io/part-of: victoriametrics
+              app.kubernetes.io/component: vminsert
+    {{- end }}
+    {{- if .Values.vmagent.networkPolicy.extraEgress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.vmagent.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+  ingress:
+    # Allow inbound connections
+    - ports:
+        - port: {{ .Values.vmagent.containerPorts.http }}
+          {{- if .Values.vmagent.enableListeners.graphite }}
+        - port: {{ .Values.vmagent.containerPorts.graphite }}
+          {{- end }}
+          {{- if .Values.vmagent.enableListeners.influxdb }}
+        - port: {{ .Values.vmagent.containerPorts.influxdb }}
+          {{- end }}
+          {{- if .Values.vmagent.enableListeners.opentsdb }}
+        - port: {{ .Values.vmagent.containerPorts.opentsdb }}
+          {{- end }}
+     {{- if not .Values.vmagent.networkPolicy.allowExternal }}
+      from:
+        - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
+        {{- if .Values.vmagent.networkPolicy.ingressNSMatchLabels }}
+        - namespaceSelector:
+            matchLabels:
+              {{- range $key, $value := .Values.vmagent.networkPolicy.ingressNSMatchLabels }}
+              {{ $key | quote }}: {{ $value | quote }}
+              {{- end }}
+          {{- if .Values.vmagent.networkPolicy.ingressNSPodMatchLabels }}
+          podSelector:
+            matchLabels:
+              {{- range $key, $value := .Values.vmagent.networkPolicy.ingressNSPodMatchLabels }}
+              {{ $key | quote }}: {{ $value | quote }}
+              {{- end }}
+          {{- end }}
+        {{- end }}
+      {{- end }}
+    {{- if .Values.vmagent.networkPolicy.extraIngress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.vmagent.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
+    {{- end }}
+{{- end }}

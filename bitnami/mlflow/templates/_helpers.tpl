@@ -28,7 +28,7 @@ Return the proper image name (for the init container wait-permissions image)
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "mlflow.v0.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.waitContainer.image .Values.volumePermissions.image) "global" .Values.global) -}}
+{{- include "common.images.renderPullSecrets" (dict "images" (list .Values.image .Values.waitContainer.image .Values.volumePermissions.image) "context" $) -}}
 {{- end -}}
 
 {{/*
@@ -64,14 +64,21 @@ Return the MLflow Tracking Secret Name
 Return the MLflow Tracking Secret key for the password
 */}}
 {{- define "mlflow.v0.tracking.passwordKey" -}}
-{{- coalesce .Values.tracking.auth.existingSecretPasswordKey "admin-password" -}}
+{{- default "admin-password" .Values.tracking.auth.existingSecretPasswordKey -}}
 {{- end -}}
 
 {{/*
 Return the MLflow Tracking Secret key for the user
 */}}
 {{- define "mlflow.v0.tracking.userKey" -}}
-{{- coalesce .Values.tracking.auth.existingSecretUserKey "admin-user" -}}
+{{- default "admin-user" .Values.tracking.auth.existingSecretUserKey -}}
+{{- end -}}
+
+{{/*
+Return the MLflow Tracking Secret key for the Flask Server secret key
+*/}}
+{{- define "mlflow.v0.tracking.flaskServerSecretKey" -}}
+{{- default .Values.tracking.auth.existingSecretFlaskServerSecretKey "flask-server-secret-key" -}}
 {{- end -}}
 
 {{/*
@@ -393,6 +400,17 @@ Return the PostgreSQL Hostname
 {{- end -}}
 
 {{/*
+Return the Database Dialect(+Driver)
+*/}}
+{{- define "mlflow.v0.database.dialectDriver" -}}
+{{- if .Values.postgresql.enabled -}}
+    {{- print "postgresql" -}}
+{{- else -}}
+    {{- print .Values.externalDatabase.dialectDriver -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the PostgreSQL Hostname
 */}}
 {{- define "mlflow.v0.database.host" -}}
@@ -492,14 +510,14 @@ Retrieve key of the PostgreSQL secret
 Retrieve the URI of the database
 */}}
 {{- define "mlflow.v0.database.uri" -}}
-{{- printf "postgresql://%s:$(MLFLOW_DATABASE_PASSWORD)@%s:%v/%s" (include "mlflow.v0.database.user" .) (include "mlflow.v0.database.host" .) (include "mlflow.v0.database.port" .) (include "mlflow.v0.database.name" .) -}}
+{{- printf "%s://%s:$(MLFLOW_DATABASE_PASSWORD)@%s:%v/%s" (include "mlflow.v0.database.dialectDriver" .) (include "mlflow.v0.database.user" .) (include "mlflow.v0.database.host" .) (include "mlflow.v0.database.port" .) (include "mlflow.v0.database.name" .) -}}
 {{- end -}}
 
 {{/*
 Retrieve the URI of the auth database
 */}}
 {{- define "mlflow.v0.database-auth.uri" -}}
-{{- printf "postgresql://%s:$(MLFLOW_DATABASE_PASSWORD)@%s:%v/%s" (include "mlflow.v0.database.user" .) (include "mlflow.v0.database.host" .) (include "mlflow.v0.database.port" .) (include "mlflow.v0.database-auth.name" .) -}}
+{{- printf "%s://%s:$(MLFLOW_DATABASE_PASSWORD)@%s:%v/%s" (include "mlflow.v0.database.dialectDriver" .) (include "mlflow.v0.database.user" .) (include "mlflow.v0.database.host" .) (include "mlflow.v0.database.port" .) (include "mlflow.v0.database-auth.name" .) -}}
 {{- end -}}
 
 {{/*
@@ -533,12 +551,18 @@ Return the volume-permissions init container
       mountPath: /tmp
 {{- end -}}
 
+
+{{/*
+Deal with external artifact storage
+*/}}
+
 {{/*
 Return MinIO(TM) fullname
 */}}
 {{- define "mlflow.v0.minio.fullname" -}}
 {{- include "common.names.dependency.fullname" (dict "chartName" "minio" "chartValues" .Values.minio "context" $) -}}
 {{- end -}}
+
 
 {{/*
 Return whether S3 is enabled
@@ -637,6 +661,24 @@ Return the S3 secret access key inside the secret
     {{- end -}}
 {{- end -}}
 
+{{/*
+Return whether GCS is enabled
+*/}}
+{{- define "mlflow.v0.gcs.enabled" -}}
+    {{- if and (not .Values.minio.enabled) (not .Values.externalS3.host) (not .Values.externalAzureBlob.storageAccount) .Values.externalGCS.bucket -}}
+        {{- true }}
+    {{- end -}}
+{{- end -}}
+
+
+{{/*
+Return whether Azure Blob is enabled
+*/}}
+{{- define "mlflow.v0.azureBlob.enabled" -}}
+    {{- if and (not .Values.minio.enabled) (not .Values.externalS3.host) (not .Values.externalGCS.bucket) .Values.externalAzureBlob.storageAccount -}}
+        {{- true }}
+    {{- end -}}
+{{- end -}}
 
 {{/*
 Return the proper git image name

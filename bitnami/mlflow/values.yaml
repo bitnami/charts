@@ -9,7 +9,8 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
+## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ##
 global:
   imageRegistry: ""
@@ -18,7 +19,13 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  defaultStorageClass: ""
   storageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
   ## Compatibility adaptations for Kubernetes platforms
   ##
   compatibility:
@@ -34,6 +41,9 @@ global:
 ## @param kubeVersion Override Kubernetes version
 ##
 kubeVersion: ""
+## @param apiVersions Override Kubernetes API versions reported by .Capabilities
+##
+apiVersions: []
 ## @param nameOverride String to partially override common.names.name
 ##
 nameOverride: ""
@@ -85,10 +95,9 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mlflow
-  tag: 2.12.2-debian-12-r0
+  tag: 2.21.2-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -115,7 +124,7 @@ image:
 gitImage:
   registry: docker.io
   repository: bitnami/git
-  tag: 2.45.0-debian-12-r1
+  tag: 2.49.0-debian-12-r1
   digest: ""
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -135,6 +144,9 @@ tracking:
   ## @param tracking.replicaCount Number of mlflow replicas to deploy
   ##
   replicaCount: 1
+  ## @param tracking.host mlflow tracking listening host. Set to "[::]" to use ipv6. 
+  ## 
+  host: "0.0.0.0"
   ## @param tracking.containerPorts.http mlflow HTTP container port
   ##
   containerPorts:
@@ -197,7 +209,7 @@ tracking:
   ## @param tracking.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if tracking.resources is set (tracking.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "small"
+  resourcesPreset: "medium"
   ## @param tracking.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -231,7 +243,7 @@ tracking:
   ## @param tracking.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param tracking.containerSecurityContext.privileged Set containers' Security Context privileged
   ## @param tracking.containerSecurityContext.runAsNonRoot Set containers' Security Context runAsNonRoot
-  ## @param tracking.containerSecurityContext.readOnlyRootFilesystem Set containers' Security Context runAsNonRoot
+  ## @param tracking.containerSecurityContext.readOnlyRootFilesystem Set containers' Security Context readOnlyRootFilesystem
   ## @param tracking.containerSecurityContext.allowPrivilegeEscalation Set container's privilege escalation
   ## @param tracking.containerSecurityContext.capabilities.drop Set container's Security Context runAsNonRoot
   ## @param tracking.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
@@ -253,18 +265,22 @@ tracking:
   ## @param tracking.auth.enabled Enable basic authentication
   ## @param tracking.auth.username Admin username
   ## @param tracking.auth.password Admin password
+  ## @param tracking.auth.flaskServerSecretKey Flask server secret key (required for enabling CSRF protection)
   ## @param tracking.auth.existingSecret Name of a secret containing the admin password
   ## @param tracking.auth.existingSecretUserKey Key inside the secret containing the admin password
   ## @param tracking.auth.existingSecretPasswordKey Key inside the secret containing the admin password
+  ## @param tracking.auth.existingSecretFlaskServerSecretKey Key inside the secret containing the flask server secret key
   ## @param tracking.auth.extraOverrides Add extra settings to the basic_auth.ini file
   ## @param tracking.auth.overridesConfigMap Name of a ConfigMap containing overrides to the basic_auth.ini file
   auth:
     enabled: true
     username: user
     password: ""
+    flaskServerSecretKey: ""
     existingSecret: ""
     existingSecretUserKey: ""
     existingSecretPasswordKey: ""
+    existingSecretFlaskServerSecretKey: ""
     extraOverrides: {}
     overridesConfigMap: ""
   ## TLS configuration
@@ -332,8 +348,8 @@ tracking:
   ## @param tracking.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
   ##
   pdb:
-    create: false
-    minAvailable: "1"
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
   ## Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
@@ -857,50 +873,6 @@ run:
   ## @param run.terminationGracePeriodSeconds Run termination grace period (in seconds)
   ##
   terminationGracePeriodSeconds: ""
-  ## Configure extra options for Run containers' liveness, readiness and startup probes
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
-  ## @param run.livenessProbe.enabled Enable livenessProbe on Run nodes
-  ## @param run.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
-  ## @param run.livenessProbe.periodSeconds Period seconds for livenessProbe
-  ## @param run.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
-  ## @param run.livenessProbe.failureThreshold Failure threshold for livenessProbe
-  ## @param run.livenessProbe.successThreshold Success threshold for livenessProbe
-  ##
-  livenessProbe:
-    enabled: true
-    initialDelaySeconds: 5
-    periodSeconds: 30
-    timeoutSeconds: 20
-    failureThreshold: 5
-    successThreshold: 1
-  ## @param run.readinessProbe.enabled Enable readinessProbe on Run nodes
-  ## @param run.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
-  ## @param run.readinessProbe.periodSeconds Period seconds for readinessProbe
-  ## @param run.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
-  ## @param run.readinessProbe.failureThreshold Failure threshold for readinessProbe
-  ## @param run.readinessProbe.successThreshold Success threshold for readinessProbe
-  ##
-  readinessProbe:
-    enabled: true
-    initialDelaySeconds: 5
-    periodSeconds: 30
-    timeoutSeconds: 20
-    failureThreshold: 5
-    successThreshold: 1
-  ## @param run.startupProbe.enabled Enable startupProbe on Run containers
-  ## @param run.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
-  ## @param run.startupProbe.periodSeconds Period seconds for startupProbe
-  ## @param run.startupProbe.timeoutSeconds Timeout seconds for startupProbe
-  ## @param run.startupProbe.failureThreshold Failure threshold for startupProbe
-  ## @param run.startupProbe.successThreshold Success threshold for startupProbe
-  ##
-  startupProbe:
-    enabled: false
-    initialDelaySeconds: 5
-    periodSeconds: 30
-    timeoutSeconds: 5
-    failureThreshold: 5
-    successThreshold: 1
   ## @param run.customLivenessProbe Custom livenessProbe that overrides the default one
   ##
   customLivenessProbe: {}
@@ -1252,7 +1224,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r20
+    tag: 12-debian-12-r40
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1301,7 +1273,7 @@ waitContainer:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r20
+    tag: 12-debian-12-r40
     digest: ""
     ## @param waitContainer.image.pullPolicy Init container wait-container image pull policy
     ##
@@ -1374,6 +1346,7 @@ postgresql:
           PGPASSWORD=$POSTGRES_POSTGRES_PASSWORD psql -U postgres <<< "ALTER DATABASE {{ include "mlflow.v0.database-auth.name" . }} OWNER TO {{ .Values.auth.username }}"
 ## @section External PostgreSQL configuration
 ## All of these values are only used when postgresql.enabled is set to false
+## @param externalDatabase.dialectDriver Database Dialect(+Driver)
 ## @param externalDatabase.host Database host
 ## @param externalDatabase.port Database port number
 ## @param externalDatabase.user Non-root username
@@ -1384,6 +1357,7 @@ postgresql:
 ## @param externalDatabase.existingSecretPasswordKey Name of an existing secret key containing the database credentials
 ##
 externalDatabase:
+  dialectDriver: "postgresql"
   host: ""
   port: 5432
   user: postgres
@@ -1435,9 +1409,10 @@ minio:
     loadBalancerIP: ""
     ports:
       api: 80
+
 ## @section External S3 parameters
 ## All of these values are only used when minio.enabled is set to false
-## @param externalS3.host External S3 host
+## @param externalS3.host External S3 host. When using AWS S3, include appropriate [regional code](https://docs.aws.amazon.com/general/latest/gr/s3.html#s3_region), e.g. "eu-central-1.amazonaws.com
 ## @param externalS3.port External S3 port number
 ## @param externalS3.useCredentialsInSecret Whether to use a secret to store the S3 credentials
 ## @param externalS3.accessKeyID External S3 access key ID
@@ -1460,4 +1435,53 @@ externalS3:
   existingSecretKeySecretKey: "root-password"
   protocol: "https"
   bucket: "mlflow"
+  serveArtifacts: true
+
+## @section External Google Cloud Storage parameters
+## All of these values are only used when minio.enabled is set to false and externalS3 is not configured (host is empty)
+## @param externalGCS.bucket GCS bucket name. Activate gcs artifact storage if set
+## @param externalGCS.googleCloudProject Google Cloud Project to use (optional, needed when using "default application credentials")
+## @param externalGCS.useCredentialsInSecret Whether to read the GCS application credentials from a secret
+## @param externalGCS.existingSecret Name of an existing secret key containing the application credentials file (required when useCredentialsInSecret is true)
+## @param externalGCS.existingSecretKey Key in the existing secret containing the application credentials (required when useCredentialsInSecret is true)
+## @param externalGCS.serveArtifacts Whether artifact serving is enabled
+##
+externalGCS:
+  bucket: ""
+  googleCloudProject: ""
+  useCredentialsInSecret: false
+  existingSecret: ""
+  existingSecretKey: ""
+  serveArtifacts: true
+
+## @section External Azure Blob Storage parameters
+## All of these values are only used when minio.enabled is set to false and externalS3 is not configured (host is empty)
+## and externalGCS is not configured (bucket is empty).
+## @param externalAzureBlob.storageAccount Azure Blob Storage account name. Activate azure artifact storage if set,
+## @param externalAzureBlob.accessKey Azure Blob Storage access key. Optional if connectionString is set
+## @param externalAzureBlob.connectionString Azure Blob Storage connection string. Optional if accessKey is set.
+## @param externalAzureBlob.containerName Azure Blob Storage container name
+## @param externalAzureBlob.clientId Azure Blob Storage client ID
+## @param externalAzureBlob.tenantId Azure Blob Storage tenant ID
+## @param externalAzureBlob.clientSecret Azure Blob Storage client secret
+## @param externalAzureBlob.useCredentialsInSecret Whether to read the Azure Blob Storage credentials from a secret
+## @param externalAzureBlob.existingSecret Name of an existing secret key containing the Azure Blob Storage credentials (required when useCredentialsInSecret is true)
+## @param externalAzureBlob.existingAccessKeyKey Key in the existing secret containing the Azure Blob Storage access key (required when useCredentialsInSecret is true)
+## @param externalAzureBlob.existingConnectionStringKey Key in the existing secret containing the Azure Blob Storage connection string (required when useCredentialsInSecret is true)
+## @param externalAzureBlob.clientSecretKey Key in the existing secret containing the Azure Blob Storage client secret (required when useCredentialsInSecret is true)
+## @param externalAzureBlob.serveArtifacts Whether artifact serving is enabled
+##
+externalAzureBlob:
+  storageAccount: ""
+  accessKey: ""
+  connectionString: ""
+  containerName: "mlflow"
+  clientId: ""
+  tenantId: ""
+  clientSecret: ""
+  useCredentialsInSecret: false
+  existingSecret: ""
+  existingAccessKeyKey: ""
+  existingConnectionStringKey: ""
+  clientSecretKey: ""
   serveArtifacts: true

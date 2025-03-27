@@ -1,0 +1,306 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.hubble.relay.enabled .Values.hubble.ui.enabled }}
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: {{ template "cilium.hubble.ui.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.hubble.ui.frontend.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: cilium
+    app.kubernetes.io/component: hubble-ui
+  {{- if or .Values.hubble.ui.deploymentAnnotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.hubble.ui.deploymentAnnotations .Values.commonAnnotations) "context" .) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if not .Values.hubble.ui.autoscaling.hpa.enabled }}
+  replicas: {{ .Values.hubble.ui.replicaCount }}
+  {{- end }}
+  {{- if .Values.hubble.ui.updateStrategy }}
+  strategy: {{- toYaml .Values.hubble.ui.updateStrategy | nindent 4 }}
+  {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" (dict "values" (list .Values.hubble.ui.podLabels .Values.commonLabels $versionLabel) "context" .) }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/part-of: cilium
+      app.kubernetes.io/component: hubble-ui
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/hubble-ui/configmap.yaml") . | sha256sum }}
+        {{- if .Values.hubble.ui.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.hubble.ui.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/part-of: cilium
+        app.kubernetes.io/component: hubble-ui
+    spec:
+      {{- include "cilium.imagePullSecrets" . | nindent 6 }}
+      serviceAccountName: {{ template "cilium.hubble.ui.serviceAccountName" . }}
+      automountServiceAccountToken: {{ .Values.hubble.ui.automountServiceAccountToken }}
+      {{- if .Values.hubble.ui.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hubble.ui.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.hubble.ui.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.hubble.ui.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        {{- if not (empty .Values.hubble.ui.podAffinityPreset) }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.hubble.ui.podAffinityPreset "component" "ui" "customLabels" $podLabels "context" $) | nindent 10 }}
+        {{- end }}
+        {{- if not (empty .Values.hubble.ui.podAntiAffinityPreset) }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.hubble.ui.podAntiAffinityPreset "component" "ui" "customLabels" $podLabels "context" $) | nindent 10 }}
+        {{- end }}
+        {{- if not (empty .Values.hubble.ui.nodeAffinityPreset.type) }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.hubble.ui.nodeAffinityPreset.type "key" .Values.hubble.ui.nodeAffinityPreset.key "values" .Values.hubble.ui.nodeAffinityPreset.values) | nindent 10 }}
+        {{- end }}
+      {{- end }}
+      {{- if .Values.hubble.ui.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.hubble.ui.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.hubble.ui.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.hubble.ui.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.hubble.ui.priorityClassName }}
+      priorityClassName: {{ .Values.hubble.ui.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.hubble.ui.schedulerName }}
+      schedulerName: {{ .Values.hubble.ui.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.hubble.ui.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.hubble.ui.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.hubble.ui.podSecurityContext.enabled }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.hubble.ui.podSecurityContext "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.hubble.ui.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.hubble.ui.terminationGracePeriodSeconds }}
+      {{- end }}
+      initContainers:
+        {{- include "cilium.hubble.ui.waitForHubbleRelay" . | nindent 8 }}
+        {{- include "cilium.hubble.ui.preserveLogLinks" . | nindent 8 }}
+      {{- if .Values.hubble.ui.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.hubble.ui.initContainers "context" $) | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: backend
+          image: {{ template "cilium.hubble.ui.backend.image" . }}
+          imagePullPolicy: {{ .Values.hubble.ui.backend.image.pullPolicy }}
+          {{- if .Values.hubble.ui.backend.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.hubble.ui.backend.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.hubble.ui.backend.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.hubble.ui.backend.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.hubble.ui.backend.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.hubble.ui.backend.args "context" $) | nindent 12 }}
+          {{- end }}
+          env:
+            - name: EVENTS_SERVER_PORT
+              value: {{ .Values.hubble.ui.backend.containerPorts.http | quote }}
+            - name: FLOWS_API_ADDR
+              value: {{ printf "%s:%d" (include "cilium.hubble.relay.fullname" .) (int .Values.hubble.relay.service.ports.grpc) | quote }}
+            - name: TLS_TO_RELAY_ENABLED
+              value: {{ ternary "true" "false" .Values.hubble.tls.enabled | quote }}
+            {{- if .Values.hubble.tls.enabled }}
+            - name: TLS_RELAY_SERVER_NAME
+              value: ui.hubble-relay.cilium.io
+            - name: TLS_RELAY_CA_CERT_FILES
+              value: /certs/client/ca.crt
+            - name: TLS_RELAY_CLIENT_CERT_FILE
+              value: /certs/client/tls.crt
+            - name: TLS_RELAY_CLIENT_KEY_FILE
+              value: /certs/client/tls.key
+            {{- end }}
+            {{- if .Values.hubble.ui.backend.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.hubble.ui.backend.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if or .Values.hubble.ui.backend.extraEnvVarsCM .Values.hubble.ui.backend.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.hubble.ui.backend.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.hubble.ui.backend.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.hubble.ui.backend.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.hubble.ui.backend.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- end }}
+          {{- if .Values.hubble.ui.backend.resources }}
+          resources: {{- toYaml .Values.hubble.ui.backend.resources | nindent 12 }}
+          {{- else if ne .Values.hubble.ui.backend.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.hubble.ui.backend.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          ports:
+            - name: backend
+              containerPort: {{ .Values.hubble.ui.backend.containerPorts.http }}
+            {{- if .Values.hubble.ui.backend.extraContainerPorts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.hubble.ui.backend.extraContainerPorts "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.hubble.ui.backend.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.hubble.ui.backend.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.hubble.ui.backend.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.hubble.ui.backend.livenessProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: {{ .Values.hubble.ui.backend.containerPorts.http }}
+          {{- end }}
+          # TODO: use a different probe for readiness once https://github.com/cilium/hubble-ui/issues/853 is solved
+          {{- if .Values.hubble.ui.backend.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.hubble.ui.backend.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.hubble.ui.backend.readinessProbe.enabled }}
+            tcpSocket:
+              port: {{ .Values.hubble.ui.backend.containerPorts.http }}
+          {{- end }}
+          {{- if .Values.hubble.ui.backend.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.hubble.ui.backend.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.hubble.ui.backend.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.hubble.ui.backend.startupProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: {{ .Values.hubble.ui.backend.containerPorts.http }}
+          {{- end }}
+          {{- end }}
+          {{- if .Values.hubble.ui.backend.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.hubble.ui.backend.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            {{- if .Values.hubble.tls.enabled  }}
+            - name: client-cert
+              readOnly: true
+              mountPath: /certs/client
+            {{- end }}
+          {{- if .Values.hubble.ui.backend.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.hubble.ui.backend.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+        - name: frontend
+          image: {{ template "cilium.hubble.ui.frontend.image" . }}
+          imagePullPolicy: {{ .Values.hubble.ui.frontend.image.pullPolicy }}
+          {{- if .Values.hubble.ui.frontend.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.hubble.ui.frontend.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.hubble.ui.frontend.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.hubble.ui.frontend.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.hubble.ui.frontend.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.hubble.ui.frontend.args "context" $) | nindent 12 }}
+          {{- end }}
+          env:
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" (or .Values.hubble.ui.frontend.image.debug .Values.diagnosticMode.enabled) | quote }}
+            {{- if .Values.hubble.ui.frontend.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.hubble.ui.frontend.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if or .Values.hubble.ui.frontend.extraEnvVarsCM .Values.hubble.ui.frontend.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.hubble.ui.frontend.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.hubble.ui.frontend.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.hubble.ui.frontend.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.hubble.ui.frontend.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- end }}
+          {{- if .Values.hubble.ui.frontend.resources }}
+          resources: {{- toYaml .Values.hubble.ui.frontend.resources | nindent 12 }}
+          {{- else if ne .Values.hubble.ui.frontend.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.hubble.ui.frontend.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          ports:
+            - name: frontend
+              containerPort: {{ .Values.hubble.ui.frontend.containerPorts.http }}
+            {{- if .Values.hubble.ui.frontend.extraContainerPorts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.hubble.ui.frontend.extraContainerPorts "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.hubble.ui.frontend.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.hubble.ui.frontend.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.hubble.ui.frontend.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.hubble.ui.frontend.livenessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /healthz
+              port: {{ .Values.hubble.ui.frontend.containerPorts.http }}
+          {{- end }}
+          {{- if .Values.hubble.ui.frontend.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.hubble.ui.frontend.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.hubble.ui.frontend.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.hubble.ui.frontend.readinessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /
+              port: {{ .Values.hubble.ui.frontend.containerPorts.http }}
+          {{- end }}
+          {{- if .Values.hubble.ui.frontend.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.hubble.ui.frontend.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.hubble.ui.frontend.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.hubble.ui.frontend.startupProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: {{ .Values.hubble.ui.frontend.containerPorts.http }}
+          {{- end }}
+          {{- end }}
+          {{- if .Values.hubble.ui.frontend.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.hubble.ui.frontend.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/nginx/conf
+              subPath: nginx-conf-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/nginx/tmp
+              subPath: nginx-tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/nginx/logs
+              subPath: nginx-logs-dir
+            - name: server-block
+              mountPath: /opt/bitnami/nginx/conf/server_blocks
+              readOnly: true
+          {{- if .Values.hubble.ui.frontend.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.hubble.ui.frontend.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+        {{- if .Values.hubble.ui.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.hubble.ui.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        - name: empty-dir
+          emptyDir: {}
+        - name: server-block
+          configMap:
+            name: {{ template "cilium.hubble.ui.frontend.configmapName" . }}
+            items:
+              - key: server-block.conf
+                path: server-block.conf
+        {{- if .Values.hubble.tls.enabled  }}
+        - name: client-cert
+          secret:
+            secretName: {{ template "cilium.hubble.tls.relayClient.secretName" . }}
+            items:
+              - key: ca.crt
+                path: ca.crt
+              - key: tls.crt
+                path: tls.crt
+              - key: tls.key
+                path: tls.key
+        {{- end }}
+        {{- if .Values.hubble.ui.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.hubble.ui.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+{{- end }}

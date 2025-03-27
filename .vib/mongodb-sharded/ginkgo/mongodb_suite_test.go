@@ -36,12 +36,14 @@ func init() {
 	timeout = time.Duration(timeoutSeconds) * time.Second
 }
 
-func TestMariaDB(t *testing.T) {
+func TestMongoDBSharded(t *testing.T) {
 	RegisterFailHandler(Fail)
 	RunSpecs(t, "MongoDB Sharded Persistence Test Suite")
 }
 
 func createJob(ctx context.Context, c kubernetes.Interface, name, port, image, stmt string) error {
+	// Default job TTL in seconds
+	ttl := int32(10)
 	securityContext := &v1.SecurityContext{
 		Privileged:               &[]bool{false}[0],
 		AllowPrivilegeEscalation: &[]bool{false}[0],
@@ -61,6 +63,7 @@ func createJob(ctx context.Context, c kubernetes.Interface, name, port, image, s
 			Kind: "Job",
 		},
 		Spec: batchv1.JobSpec{
+			TTLSecondsAfterFinished: &ttl,
 			Template: v1.PodTemplateSpec{
 				Spec: v1.PodSpec{
 					RestartPolicy: "Never",

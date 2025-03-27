@@ -1,0 +1,230 @@
+masterCoordinator:
+  podSecurityContext:
+    fsGroup: 1002
+  containerSecurityContext:
+    runAsUser: 1002
+  persistence:
+    enabled: true
+    mountPath: /bitnami/dremio/data
+  # Add specific overrides to dremio.conf
+  dremioConf:
+    configOverrides:
+      services:
+        coordinator:
+          web:
+            tokens:
+              cache:
+                size: 120
+    secretConfigOverrides:
+      services:
+        conduit:
+          ssl:
+            trustStorePassword: "test"
+  # Add extra files to the configmap
+    extraFiles:
+      vib.conf: |
+        IT WORKS
+    extraSecretFiles:
+      vib_secret.conf: |
+        IT SECRETLY WORKS
+dremio:
+  containerPorts:
+    web: 9048
+    client: 31011
+    flight: 32011
+    fabric: 45678
+    conduit: 45679
+    jmx: 50001
+    liveness: 44350
+  # Add common overrides to dremio.conf
+  dremioConf:
+    configOverrides:
+      services:
+        fabric:
+          memory:
+            reservation: 150M
+    secretConfigOverrides:
+      services:
+        coordinator:
+          web:
+            ssl:
+              trustStorePassword: "password123"
+  # Add extra configuration to core-site.xml
+  coreSite:
+    appendConfiguration: |
+      <property>
+        <name>fs.s3a.endpoint.region</name>
+        <value>us-east-1</value>
+      </property>
+  auth:
+    enabled: true
+    username: vib_user
+    password: "ComplicatedPassword!1234"
+    firstName: VIBFIRST
+    lastName: VIBNAME
+    email: vib_email@example.com
+service:
+  type: LoadBalancer
+  ports:
+    web: 80
+    client: 41010
+    flight: 42010
+metrics:
+  enabled: true
+  service:
+    ports:
+      metrics: 41881
+  containerPorts:
+    metrics: 41884
+# We deploy a PostgreSQL instance so we can use it in Dremio as a data source. We create a database
+# that we can verify in the Cypress test
+extraDeploy:
+  - |
+    apiVersion: v1
+    kind: Secret
+    metadata:
+      name: postgresql
+      labels:
+        app.kubernetes.io/instance: postgresql
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: postgresql
+        app.kubernetes.io/version: 16.3.0
+        helm.sh/chart: postgresql-15.5.6
+    type: Opaque
+    stringData:
+      postgres-password: "password123"
+  - |
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: postgresql
+      labels:
+        app.kubernetes.io/instance: postgresql
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: postgresql
+        app.kubernetes.io/version: 16.3.0
+        helm.sh/chart: postgresql-15.5.6
+        app.kubernetes.io/component: primary
+    spec:
+      type: ClusterIP
+      sessionAffinity: None
+      ports:
+        - name: tcp-postgresql
+          port: 5432
+          targetPort: tcp-postgresql
+          nodePort: null
+      selector:
+        app.kubernetes.io/instance: postgresql
+        app.kubernetes.io/name: postgresql
+        app.kubernetes.io/component: primary
+  - |
+    apiVersion: apps/v1
+    kind: StatefulSet
+    metadata:
+      name: postgresql
+      labels:
+        app.kubernetes.io/instance: postgresql
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: postgresql
+        app.kubernetes.io/version: 16.3.0
+        helm.sh/chart: postgresql-15.5.6
+        app.kubernetes.io/component: primary
+    spec:
+      replicas: 1
+      updateStrategy:
+        rollingUpdate: {}
+        type: RollingUpdate
+      selector:
+        matchLabels:
+          app.kubernetes.io/instance: postgresql
+          app.kubernetes.io/name: postgresql
+          app.kubernetes.io/component: primary
+      template:
+        metadata:
+          name: postgresql
+          labels:
+            app.kubernetes.io/instance: postgresql
+            app.kubernetes.io/managed-by: Helm
+            app.kubernetes.io/name: postgresql
+            app.kubernetes.io/version: 16.3.0
+            helm.sh/chart: postgresql-15.5.6
+            app.kubernetes.io/component: primary
+        spec:
+          # Using the same security context as the master-coordinator to avoid issues with Openshift
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.masterCoordinator.podSecurityContext "context" $) | nindent 8 }}
+          containers:
+            - name: postgresql
+              image: docker.io/bitnami/postgresql:16.3.0-debian-12-r14
+              imagePullPolicy: "IfNotPresent"
+              # Using the same security context as the master-coordinator to avoid issues with Openshift
+              securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.masterCoordinator.containerSecurityContext "context" $) | nindent 12 }}
+              env:
+                - name: POSTGRES_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: postgresql
+                      key: postgres-password
+              ports:
+                - name: tcp-postgresql
+                  containerPort: 5432
+              volumeMounts:
+                - name: empty-dir
+                  mountPath: /tmp
+                  subPath: tmp-dir
+                - name: empty-dir
+                  mountPath: /opt/bitnami/postgresql/conf
+                  subPath: app-conf-dir
+                - name: empty-dir
+                  mountPath: /opt/bitnami/postgresql/tmp
+                  subPath: app-tmp-dir
+                - name: custom-init-scripts
+                  mountPath: /docker-entrypoint-initdb.d/
+                - name: dshm
+                  mountPath: /dev/shm
+                - name: data
+                  mountPath: /bitnami/postgresql
+          volumes:
+            - name: empty-dir
+              emptyDir: {}
+            - name: custom-init-scripts
+              configMap:
+                name: postgresql-init-scripts
+            - name: dshm
+              emptyDir:
+                medium: Memory
+      volumeClaimTemplates:
+        - apiVersion: v1
+          kind: PersistentVolumeClaim
+          metadata:
+            name: data
+          spec:
+            accessModes:
+              - "ReadWriteOnce"
+            resources:
+              requests:
+                storage: "8Gi"
+  - |
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: postgresql-init-scripts
+      labels:
+        app.kubernetes.io/instance: postgresql
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: postgresql
+        app.kubernetes.io/version: 16.3.0
+        helm.sh/chart: postgresql-15.5.6
+    data:
+      add_data.sql: |
+        CREATE DATABASE vib_test;
+        \c vib_test;
+        CREATE TABLE cars (
+          brand VARCHAR(255),
+          model VARCHAR(255),
+          year INT
+        );
+        INSERT INTO cars (brand, model, year)
+        VALUES
+          ('Toyota', 'Camry', 2020),
+          ('Honda', 'Civic', 2019),
+          ('Ford', 'Mustang', 2018);

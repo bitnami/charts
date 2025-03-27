@@ -1,0 +1,64 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- /*
+  Dremio supports different executor groups called "engines".
+  These are defined in executor.engines and all the executor-specific k8s objects are created per engine.
+  Each engine contains an "overrides" section which allows replacing the common executor configuration
+  set in executor.common. This logic is inspired in upstream Dremio chart.
+
+  https://docs.dremio.com/cloud/sonar/workloads/engines/
+ */}}
+{{- range $engine := .Values.executor.engines }}
+{{- $executorValues := mustMergeOverwrite $.Values.executor.common $engine.overrides }}
+{{- if $executorValues.autoscaling.hpa.enabled }}
+---
+apiVersion: {{ include "common.capabilities.hpa.apiVersion" (dict "context" $) }}
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "dremio.executor.fullname" (dict "context" $ "engine" $engine.name) }}
+  namespace: {{ include "common.names.namespace" $ | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $.Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: dremio
+    app.kubernetes.io/component: executor
+    {{- /* We need an extra label for the engine */}}
+    engine: {{ $engine.name }}
+  {{- if $.Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $.Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  scaleTargetRef:
+    apiVersion: {{ include "common.capabilities.statefulset.apiVersion" $ }}
+    kind: StatefulSet
+    name: {{ include "dremio.executor.fullname" (dict "context" $ "engine" $engine.name) }}
+  minReplicas: {{ $executorValues.autoscaling.hpa.minReplicas }}
+  maxReplicas: {{ $executorValues.autoscaling.hpa.maxReplicas }}
+  metrics:
+    {{- if $executorValues.autoscaling.hpa.targetMemory }}
+    - type: Resource
+      resource:
+        name: memory
+        {{- if semverCompare "<1.23-0" (include "common.capabilities.kubeVersion" $) }}
+        targetAverageUtilization: {{ $executorValues.autoscaling.hpa.targetMemory  }}
+        {{- else }}
+        target:
+          type: Utilization
+          averageUtilization: {{ $executorValues.autoscaling.hpa.targetMemory }}
+        {{- end }}
+    {{- end }}
+    {{- if $executorValues.autoscaling.hpa.targetCPU }}
+    - type: Resource
+      resource:
+        name: cpu
+        {{- if semverCompare "<1.23-0" (include "common.capabilities.kubeVersion" $) }}
+        targetAverageUtilization: {{ $executorValues.autoscaling.hpa.targetCPU }}
+        {{- else }}
+        target:
+          type: Utilization
+          averageUtilization: {{ $executorValues.autoscaling.hpa.targetCPU }}
+        {{- end }}
+    {{- end }}
+{{- end }}
+{{- end }}

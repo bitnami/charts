@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/apisix
 ```
 
-Looking to use Apache APISIX in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Apache APISIX in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -45,13 +45,38 @@ The command deploys apisix on the Kubernetes cluster in the default configuratio
 
 Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
 
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcesPreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
+### Prometheus metrics
+
+This chart can be integrated with Prometheus by setting `*.metrics.enabled` (under the `dataPlane`, `controlPlane` and `ingressController` sections) to true. This will expose the Apisix native Prometheus port in both the containers and services. The services will also have the necessary annotations to be automatically scraped by Prometheus.
+
+#### Prometheus requirements
+
+It is necessary to have a working installation of Prometheus or Prometheus Operator for the integration to work. Install the [Bitnami Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/prometheus) or the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) to easily have a working Prometheus in your cluster.
+
+#### Integration with Prometheus Operator
+
+The chart can deploy `ServiceMonitor` objects for integration with Prometheus Operator installations. To do so, set the value `*.metrics.serviceMonitor.enabled=true` (under the `dataPlane`, `controlPlane` and `ingressController` sections). Ensure that the Prometheus Operator `CustomResourceDefinitions` are installed in the cluster or it will fail with the following error:
+
+```text
+no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"
+```
+
+Install the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) for having the necessary CRDs and the Prometheus Operator.
+
+### [Rolling VS Immutable tags](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+### Update credentials
+
+The Bitnami APISIX chart, when upgrading, reuses the secret previously rendered by the chart or the one specified in `auth.existingSecret`. To update credentials, use one of the following:
+
+- Run `helm upgrade` specifying a new password in `dashboard.password`
+- Run `helm upgrade` specifying a new secret in `dashboard.existingSecret`
 
 ### Deployment modes
 
@@ -91,6 +116,8 @@ ingressController:
   enabled: false
 etcd:
   enabled: false
+dashboard:
+  enabled: false
 dataPlane:
   extraConfig:
     deployment:
@@ -102,7 +129,7 @@ dataPlane:
         name: apisix-routes
   extraVolumeMounts:
     - name: routes
-      mountPath: /opt/bitnami/apisix/conf/apisix.yaml
+      mountPath: /usr/local/apisix/conf/apisix.yaml
       subPath: apisix.yaml
 extraDeploy:
   - apiVersion: v1
@@ -118,6 +145,7 @@ extraDeploy:
                 nodes:
                     "127.0.0.1:1980": 1
                 type: roundrobin
+        #END
 ```
 
 ### Ingress
@@ -134,7 +162,7 @@ Adding the TLS parameter (where available) will cause the chart to generate HTTP
 
 [Learn more about Ingress controllers](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/).
 
-### TLS secrets
+### Securing traffic using TLS
 
 This chart facilitates the creation of TLS secrets for use with the Ingress controller (although this is not mandatory). There are several common use cases:
 
@@ -172,9 +200,13 @@ wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
 - If your cluster has a [cert-manager](https://github.com/jetstack/cert-manager) add-on to automate the management and issuance of TLS certificates, add to `*.ingress.annotations` the [corresponding ones](https://cert-manager.io/docs/usage/ingress/#supported-annotations) for cert-manager.
 - If using self-signed certificates created by Helm, set both `*.ingress.tls` and `*.ingress.selfSigned` to `true`.
 
+### Backup and restore
+
+To back up and restore Helm chart deployments on Kubernetes, you need to back up the persistent volumes from the source deployment and attach them to a new deployment using [Velero](https://velero.io/), a Kubernetes backup/restore tool. Find the instructions for using Velero in [this guide](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-backup-restore-deployments-velero-index.html).
+
 ### External etcd support
 
-You may want to have Mastodon connect to an external etcd rather than installing one inside your cluster. Typical reasons for this are to use a managed database service, or to share a common database server for all your applications. To achieve this, the chart allows you to specify credentials for an external database with the [`externalEtcd` parameter](#parameters). You should also disable the etcd installation with the `etcd.enabled` option. Here is an example:
+You may want to have APISIX connect to an external etcd rather than installing one inside your cluster. Typical reasons for this are to use a managed database service, or to share a common database server for all your applications. To achieve this, the chart allows you to specify credentials for an external database with the [`externalEtcd` parameter](#parameters). You should also disable the etcd installation with the `etcd.enabled` option. Here is an example:
 
 ```yaml
 etcd:
@@ -247,18 +279,21 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 
 ### Global parameters
 
-| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value  |
-| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
-| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
-| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`   |
-| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value   |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`    |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`    |
+| `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`    |
+| `global.storageClass`                                 | DEPRECATED: use global.defaultStorageClass instead                                                                                                                                                                                                                                                                                                                  | `""`    |
+| `global.security.allowInsecureImages`                 | Allows skipping image verification                                                                                                                                                                                                                                                                                                                                  | `false` |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto`  |
 
 ### Common parameters
 
 | Name                     | Description                                                                                                                                       | Value                    |
 | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
 | `kubeVersion`            | Override Kubernetes version                                                                                                                       | `""`                     |
+| `apiVersions`            | Override Kubernetes API versions reported by .Capabilities                                                                                        | `[]`                     |
 | `nameOverride`           | String to partially override common.names.name                                                                                                    | `""`                     |
 | `fullnameOverride`       | String to fully override common.names.fullname                                                                                                    | `""`                     |
 | `namespaceOverride`      | String to fully override common.names.namespace                                                                                                   | `""`                     |
@@ -266,6 +301,7 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `commonAnnotations`      | Annotations to add to all deployed objects                                                                                                        | `{}`                     |
 | `clusterDomain`          | Kubernetes cluster domain name                                                                                                                    | `cluster.local`          |
 | `extraDeploy`            | Array of extra objects to deploy with the release                                                                                                 | `[]`                     |
+| `usePasswordFiles`       | Mount credentials as files instead of using environment variables                                                                                 | `true`                   |
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                                                           | `false`                  |
 | `diagnosticMode.command` | Command to override all containers in the deployment                                                                                              | `["sleep"]`              |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                                                                                 | `["infinity"]`           |
@@ -347,8 +383,8 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `dataPlane.podAnnotations`                                    | Annotations for APISIX pods                                                                                                                                                                                                           | `{}`             |
 | `dataPlane.podAffinityPreset`                                 | Pod affinity preset. Ignored if `apisix.affinity` is set. Allowed values: `soft` or `hard`                                                                                                                                            | `""`             |
 | `dataPlane.podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `apisix.affinity` is set. Allowed values: `soft` or `hard`                                                                                                                                       | `soft`           |
-| `dataPlane.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                       | `false`          |
-| `dataPlane.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                        | `1`              |
+| `dataPlane.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                       | `true`           |
+| `dataPlane.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                        | `""`             |
 | `dataPlane.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable                                                                                                                                                                        | `""`             |
 | `dataPlane.nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `apisix.affinity` is set. Allowed values: `soft` or `hard`                                                                                                                                      | `""`             |
 | `dataPlane.nodeAffinityPreset.key`                            | Node label key to match. Ignored if `apisix.affinity` is set                                                                                                                                                                          | `""`             |
@@ -384,6 +420,7 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `dataPlane.service.clusterIP`                     | APISIX service Cluster IP                                                                                                        | `""`                      |
 | `dataPlane.service.loadBalancerIP`                | APISIX service Load Balancer IP                                                                                                  | `""`                      |
 | `dataPlane.service.loadBalancerSourceRanges`      | APISIX service Load Balancer sources                                                                                             | `[]`                      |
+| `dataPlane.service.externalIPs`                   | APISIX service External IPs                                                                                                      | `[]`                      |
 | `dataPlane.service.externalTrafficPolicy`         | APISIX service external traffic policy                                                                                           | `Cluster`                 |
 | `dataPlane.service.annotations`                   | Additional custom annotations for APISIX service                                                                                 | `{}`                      |
 | `dataPlane.service.extraPorts`                    | Extra ports to expose in APISIX service (normally used with the `sidecars` value)                                                | `[]`                      |
@@ -533,8 +570,8 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `controlPlane.podAnnotations`                                    | Annotations for APISIX pods                                                                                                                                                                                                                 | `{}`             |
 | `controlPlane.podAffinityPreset`                                 | Pod affinity preset. Ignored if `apisix.affinity` is set. Allowed values: `soft` or `hard`                                                                                                                                                  | `""`             |
 | `controlPlane.podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `apisix.affinity` is set. Allowed values: `soft` or `hard`                                                                                                                                             | `soft`           |
-| `controlPlane.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                             | `false`          |
-| `controlPlane.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                              | `1`              |
+| `controlPlane.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                             | `true`           |
+| `controlPlane.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                              | `""`             |
 | `controlPlane.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable                                                                                                                                                                              | `""`             |
 | `controlPlane.nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `apisix.affinity` is set. Allowed values: `soft` or `hard`                                                                                                                                            | `""`             |
 | `controlPlane.nodeAffinityPreset.key`                            | Node label key to match. Ignored if `apisix.affinity` is set                                                                                                                                                                                | `""`             |
@@ -570,6 +607,7 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `controlPlane.service.clusterIP`                     | APISIX service Cluster IP                                                                                                        | `""`                         |
 | `controlPlane.service.loadBalancerIP`                | APISIX service Load Balancer IP                                                                                                  | `""`                         |
 | `controlPlane.service.loadBalancerSourceRanges`      | APISIX service Load Balancer sources                                                                                             | `[]`                         |
+| `controlPlane.service.externalIPs`                   | APISIX service External IPs                                                                                                      | `[]`                         |
 | `controlPlane.service.externalTrafficPolicy`         | APISIX service external traffic policy                                                                                           | `Cluster`                    |
 | `controlPlane.service.annotations`                   | Additional custom annotations for APISIX service                                                                                 | `{}`                         |
 | `controlPlane.service.extraPorts`                    | Extra ports to expose in APISIX service (normally used with the `sidecars` value)                                                | `[]`                         |
@@ -685,8 +723,8 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `dashboard.nodeSelector`                                      | Node labels for APISIX Dashboard pods assignment                                                                                                                                                                                      | `{}`                               |
 | `dashboard.tolerations`                                       | Tolerations for APISIX Dashboard pods assignment                                                                                                                                                                                      | `[]`                               |
 | `dashboard.updateStrategy.type`                               | APISIX Dashboard statefulset strategy type                                                                                                                                                                                            | `RollingUpdate`                    |
-| `dashboard.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                       | `false`                            |
-| `dashboard.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                        | `1`                                |
+| `dashboard.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                       | `true`                             |
+| `dashboard.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                        | `""`                               |
 | `dashboard.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable                                                                                                                                                                        | `""`                               |
 | `dashboard.priorityClassName`                                 | APISIX Dashboard pods' priorityClassName                                                                                                                                                                                              | `""`                               |
 | `dashboard.topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template                                                                                                              | `[]`                               |
@@ -755,6 +793,7 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `dashboard.service.clusterIP`                     | APISIX Dashboard service Cluster IP                                                                                              | `""`                     |
 | `dashboard.service.loadBalancerIP`                | APISIX Dashboard service Load Balancer IP                                                                                        | `""`                     |
 | `dashboard.service.loadBalancerSourceRanges`      | APISIX Dashboard service Load Balancer sources                                                                                   | `[]`                     |
+| `dashboard.service.externalIPs`                   | APISIX Dashboard service External IPs                                                                                            | `[]`                     |
 | `dashboard.service.externalTrafficPolicy`         | APISIX Dashboard service external traffic policy                                                                                 | `Cluster`                |
 | `dashboard.service.annotations`                   | Additional custom annotations for APISIX Dashboard service                                                                       | `{}`                     |
 | `dashboard.service.extraPorts`                    | Extra ports to expose in APISIX Dashboard service (normally used with the `sidecars` value)                                      | `[]`                     |
@@ -867,8 +906,8 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `ingressController.podAnnotations`                                    | Annotations for APISIX Ingress Controller pods                                                                                                                                                                                                        | `{}`                                        |
 | `ingressController.podAffinityPreset`                                 | Pod affinity preset. Ignored if `injector.affinity` is set. Allowed values: `soft` or `hard`                                                                                                                                                          | `""`                                        |
 | `ingressController.podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `injector.affinity` is set. Allowed values: `soft` or `hard`                                                                                                                                                     | `soft`                                      |
-| `ingressController.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                                       | `false`                                     |
-| `ingressController.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                                        | `1`                                         |
+| `ingressController.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                                       | `true`                                      |
+| `ingressController.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                                        | `""`                                        |
 | `ingressController.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable                                                                                                                                                                                        | `""`                                        |
 | `ingressController.nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `injector.affinity` is set. Allowed values: `soft` or `hard`                                                                                                                                                    | `""`                                        |
 | `ingressController.nodeAffinityPreset.key`                            | Node label key to match. Ignored if `injector.affinity` is set                                                                                                                                                                                        | `""`                                        |
@@ -889,6 +928,9 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `ingressController.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the APISIX Ingress Controller container(s)                                                                                                                                               | `[]`                                        |
 | `ingressController.sidecars`                                          | Add additional sidecar containers to the APISIX Ingress Controller pod(s)                                                                                                                                                                             | `[]`                                        |
 | `ingressController.initContainers`                                    | Add additional init containers to the APISIX Ingress Controller pod(s)                                                                                                                                                                                | `[]`                                        |
+| `ingressController.ingressClass.create`                               | Specifies whether a IngressClass should be created                                                                                                                                                                                                    | `true`                                      |
+| `ingressController.ingressClass.name`                                 | IngressClass that will be be used to implement the APISIX Ingress                                                                                                                                                                                     | `apisix`                                    |
+| `ingressController.ingressClass.annotations`                          | Additional annotations for the APISIX IngressClass                                                                                                                                                                                                    | `{}`                                        |
 | `ingressController.defaultConfig`                                     | APISIX Dashboard configuration (evaluated as a template)                                                                                                                                                                                              | `""`                                        |
 | `ingressController.extraConfig`                                       | Extra configuration parameters for APISIX Ingress Controller                                                                                                                                                                                          | `{}`                                        |
 | `ingressController.existingConfigMap`                                 | name of a ConfigMap with existing configuration for the Dashboard                                                                                                                                                                                     | `""`                                        |
@@ -915,6 +957,7 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `ingressController.service.clusterIP`                     | APISIX Ingress Controller service Cluster IP                                                                                     | `""`                              |
 | `ingressController.service.loadBalancerIP`                | APISIX Ingress Controller service Load Balancer IP                                                                               | `""`                              |
 | `ingressController.service.loadBalancerSourceRanges`      | APISIX Ingress Controller service Load Balancer sources                                                                          | `[]`                              |
+| `ingressController.service.externalIPs`                   | APISIX Ingress Controller service External IPs                                                                                   | `[]`                              |
 | `ingressController.service.externalTrafficPolicy`         | APISIX Ingress Controller service external traffic policy                                                                        | `Cluster`                         |
 | `ingressController.service.annotations`                   | Additional custom annotations for APISIX Ingress Controller service                                                              | `{}`                              |
 | `ingressController.service.extraPorts`                    | Extra ports to expose in APISIX Ingress Controller service (normally used with the `sidecars` value)                             | `[]`                              |
@@ -1056,6 +1099,14 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 4.0.0
+
+This major updates the `etcd` subchart to it newest major, 11.0.0. For more information on this subchart's major, please refer to [etcd upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/etcd#to-1100).
+
+### To 3.7.0
+
+This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
+
 ### To 3.0.0
 
 This major bump changes the following security defaults:
@@ -1071,7 +1122,7 @@ This major updates the `etcd` subchart to it newest major, 9.0.0. For more infor
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

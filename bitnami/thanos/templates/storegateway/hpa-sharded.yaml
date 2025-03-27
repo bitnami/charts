@@ -6,11 +6,15 @@ SPDX-License-Identifier: APACHE-2.0
 {{- if and .Values.storegateway.enabled .Values.storegateway.autoscaling.enabled .Values.storegateway.sharded.enabled }}
 
 {{- $shards := int 0 }}
+{{- $hashShards := int 1 }}
+{{- $timeShards := int 1 }}
 {{- if .Values.storegateway.sharded.hashPartitioning.shards }}
-  {{- $shards = int .Values.storegateway.sharded.hashPartitioning.shards }}
-{{- else }}
-  {{- $shards = len .Values.storegateway.sharded.timePartitioning }}
+  {{- $hashShards = int .Values.storegateway.sharded.hashPartitioning.shards }}
 {{- end }}
+{{- if not (empty .Values.storegateway.sharded.timePartitioning) }}
+  {{- $timeShards = len .Values.storegateway.sharded.timePartitioning }}
+{{- end }}
+{{- $shards = mul $hashShards $timeShards | int }}
 
 {{- range $index, $_ := until $shards }}
 apiVersion: {{ include "common.capabilities.hpa.apiVersion" ( dict "context" $ ) }}

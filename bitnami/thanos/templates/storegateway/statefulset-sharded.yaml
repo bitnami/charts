@@ -7,16 +7,22 @@ SPDX-License-Identifier: APACHE-2.0
 
 {{- $shards := int 0 }}
 {{- $hashPartitioning := false }}
+{{- $hashShards := int 1 }}
 {{- $timePartitioning := false }}
+{{- $timeShards := int 1 }}
 {{- if .Values.storegateway.sharded.hashPartitioning.shards }}
-  {{- $shards = int .Values.storegateway.sharded.hashPartitioning.shards }}
+  {{- $hashShards = int .Values.storegateway.sharded.hashPartitioning.shards }}
   {{- $hashPartitioning = true }}
-{{- else }}
-  {{- $shards = len .Values.storegateway.sharded.timePartitioning }}
+{{- end }}
+{{- if not (empty .Values.storegateway.sharded.timePartitioning) }}
+  {{- $timeShards = len .Values.storegateway.sharded.timePartitioning }}
   {{- $timePartitioning = true }}
 {{- end }}
+{{- $shards = mul $hashShards $timeShards }}
 
-{{- range $index, $_ := until $shards }}
+{{- range $hashIndex, $_ := until $hashShards }}
+{{- range $timeIndex, $_ := until $timeShards }}
+{{- $index := add (mul $hashIndex $timeShards) $timeIndex }}
 apiVersion: {{ include "common.capabilities.statefulset.apiVersion" $ }}
 kind: StatefulSet
 metadata:
@@ -49,8 +55,11 @@ spec:
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: storegateway
         shard: {{ $index | quote }}
-      {{- if or $.Values.storegateway.podAnnotations (include "thanos.storegateway.createConfigmap" $) (include "thanos.createObjstoreSecret" $) }}
+      {{- if or $.Values.commonAnnotations $.Values.storegateway.podAnnotations (include "thanos.storegateway.createConfigmap" $) (include "thanos.createObjstoreSecret" $) }}
       annotations:
+        {{- if $.Values.commonAnnotations }}
+        {{- include "common.tplvalues.render" ( dict "value" $.Values.commonAnnotations "context" $ ) | nindent 8 }}
+        {{- end }}
         {{- if (include "thanos.createObjstoreSecret" $) }}
         checksum/objstore-configuration: {{ include "thanos.objstoreConfig" $ | sha256sum }}
         {{- end }}
@@ -168,18 +177,21 @@ spec:
                 - action: hashmod
                   source_labels: ["__block_id"]
                   target_label: shard
-                  modulus: {{ $shards }}
+                  modulus: {{ $hashShards }}
                 - action: keep
                   source_labels: ["shard"]
-                  regex: {{ $index }}
+                  regex: {{ $hashIndex }}
+            {{- if $.Values.storegateway.sharded.hashPartitioning.extraRelabelingConfigs }}
+            {{- $.Values.storegateway.sharded.hashPartitioning.extraRelabelingConfigs | toYaml | nindent 16 }}
+            {{- end }}
             {{- end }}
             {{- if $timePartitioning }}
-            {{- $partion := (slice $.Values.storegateway.sharded.timePartitioning  $index) | first }}
-            {{- if $partion.max }}
-            - --max-time={{ $partion.max }}
+            {{- $partition := (slice $.Values.storegateway.sharded.timePartitioning $timeIndex) | first }}
+            {{- if $partition.max }}
+            - --max-time={{ $partition.max }}
             {{- end }}
-            {{- if $partion.min }}
-            - --min-time={{ $partion.min }}
+            {{- if $partition.min }}
+            - --min-time={{ $partition.min }}
             {{- end }}
             {{- end }}
             {{- if $.Values.storegateway.extraFlags }}
@@ -253,9 +265,9 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" $.Values.storegateway.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           {{- if $timePartitioning }}
-          {{- $partion := (slice $.Values.storegateway.sharded.timePartitioning  $index) | first }}
-          {{- if $partion.resources }}
-          resources: {{- toYaml $partion.resources | nindent 12 }}
+          {{- $partition := (slice $.Values.storegateway.sharded.timePartitioning $timeIndex) | first }}
+          {{- if $partition.resources }}
+          resources: {{- toYaml $partition.resources | nindent 12 }}
           {{- else if $.Values.storegateway.resources }}
           resources: {{- toYaml $.Values.storegateway.resources | nindent 12 }}
           {{- else if ne $.Values.storegateway.resourcesPreset "none" }}
@@ -281,7 +293,7 @@ spec:
             {{- end }}
             - name: data
               mountPath: /data
-            {{- if or $.Values.storegateway.config $.Values.storegateway.existingConfigmap }}
+            {{- if or (include "thanos.storegateway.createConfigmap" $) $.Values.storegateway.existingConfigmap }}
             - name: cache-config
               mountPath: /conf/cache
             {{- end }}
@@ -312,7 +324,7 @@ spec:
         {{- if $.Values.storegateway.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" $.Values.storegateway.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
-        {{- if or $.Values.storegateway.config $.Values.storegateway.existingConfigmap }}
+        {{- if or (include "thanos.storegateway.createConfigmap" $) $.Values.storegateway.existingConfigmap }}
         - name: cache-config
           configMap:
             name: {{ include "thanos.storegateway.configmapName" $ }}
@@ -330,8 +342,17 @@ spec:
         - name: data
           emptyDir: {}
   {{- else if and $.Values.storegateway.persistence.enabled (not $.Values.storegateway.persistence.existingClaim) }}
+  {{- if semverCompare ">=1.23-0" (include "common.capabilities.kubeVersion" $) -}}
+  {{- if $.Values.storegateway.persistentVolumeClaimRetentionPolicy.enabled }}
+  persistentVolumeClaimRetentionPolicy:
+    whenDeleted: {{ $.Values.storegateway.persistentVolumeClaimRetentionPolicy.whenDeleted }}
+    whenScaled: {{ $.Values.storegateway.persistentVolumeClaimRetentionPolicy.whenScaled }}
+  {{- end }}
+  {{- end }}
   volumeClaimTemplates:
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         name: data
         {{- if $.Values.storegateway.persistence.labels }}
         labels: {{- include "common.tplvalues.render" ( dict "value" $.Values.storegateway.persistence.labels "context" $) | nindent 10 }}
@@ -350,5 +371,6 @@ spec:
         {{- include "common.storage.class" (dict "persistence" $.Values.storegateway.persistence "global" $.Values.global) | nindent 8 }}
   {{- end }}
 ---
+{{- end }}
 {{- end }}
 {{- end }}

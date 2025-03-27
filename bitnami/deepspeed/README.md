@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/deepspeed
 ```
 
-Looking to use DeepSpeed in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use DeepSpeed in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -60,9 +60,9 @@ The command removes all the Kubernetes components associated with the chart and 
 
 Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
 
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcesPreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
+### [Rolling VS Immutable tags](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -158,6 +158,10 @@ initContainers:
 
 Learn more about [sidecar containers](https://kubernetes.io/docs/concepts/workloads/pods/) and [init containers](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/).
 
+### Backup and restore
+
+To back up and restore Helm chart deployments on Kubernetes, you need to back up the persistent volumes from the source deployment and attach them to a new deployment using [Velero](https://velero.io/), a Kubernetes backup/restore tool. Find the instructions for using Velero in [this guide](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-backup-restore-deployments-velero-index.html).
+
 ## Persistence
 
 The [Bitnami DeepSpeed](https://github.com/bitnami/containers/tree/main/bitnami/deepspeed) image can persist data. If enabled, the persisted path is `/bitnami/deepspeed/data` by default.
@@ -177,12 +181,14 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 
 ### Global parameters
 
-| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value  |
-| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
-| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
-| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`   |
-| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value   |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`    |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`    |
+| `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`    |
+| `global.storageClass`                                 | DEPRECATED: use global.defaultStorageClass instead                                                                                                                                                                                                                                                                                                                  | `""`    |
+| `global.security.allowInsecureImages`                 | Allows skipping image verification                                                                                                                                                                                                                                                                                                                                  | `false` |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto`  |
 
 ### Common parameters
 
@@ -250,7 +256,7 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 | `client.readinessProbe.enabled`                            | Enable readinessProbe on Client nodes                                                                                                                                                                                           | `true`           |
 | `client.readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                                                                                                                                        | `5`              |
 | `client.readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                                                                                                                                               | `30`             |
-| `client.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                                                                                                                                              | `30`             |
+| `client.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                                                                                                                                              | `90`             |
 | `client.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                                                                                                                                            | `5`              |
 | `client.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                                                                                                                                            | `1`              |
 | `client.startupProbe.enabled`                              | Enable startupProbe on Client containers                                                                                                                                                                                        | `false`          |
@@ -262,7 +268,7 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 | `client.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                                                                                                                             | `{}`             |
 | `client.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                                                                                                                            | `{}`             |
 | `client.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                                                                                                                              | `{}`             |
-| `client.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if client.resources is set (client.resources is recommended for production). | `small`          |
+| `client.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if client.resources is set (client.resources is recommended for production). | `medium`         |
 | `client.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                               | `{}`             |
 | `client.podSecurityContext.enabled`                        | Enabled Client pods' Security Context                                                                                                                                                                                           | `true`           |
 | `client.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                                                                              | `Always`         |
@@ -315,18 +321,21 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 
 ### Deepspeed Client persistence paramaters
 
-| Name                               | Description                                                             | Value                     |
-| ---------------------------------- | ----------------------------------------------------------------------- | ------------------------- |
-| `client.persistence.enabled`       | Use a PVC to persist data                                               | `false`                   |
-| `client.persistence.storageClass`  | discourse & sidekiq data Persistent Volume Storage Class                | `""`                      |
-| `client.persistence.existingClaim` | Use a existing PVC which must be created manually before bound          | `""`                      |
-| `client.persistence.mountPath`     | Path to mount the volume at                                             | `/bitnami/deepspeed/data` |
-| `client.persistence.accessModes`   | Persistent Volume Access Mode                                           | `["ReadWriteOnce"]`       |
-| `client.persistence.dataSource`    | Custom PVC data source                                                  | `{}`                      |
-| `client.persistence.selector`      | Selector to match an existing Persistent Volume for the client data PVC | `{}`                      |
-| `client.persistence.size`          | Size of data volume                                                     | `8Gi`                     |
-| `client.persistence.labels`        | Persistent Volume labels                                                | `{}`                      |
-| `client.persistence.annotations`   | Persistent Volume annotations                                           | `{}`                      |
+| Name                               | Description                                                                                                                                                  | Value                     |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------- |
+| `client.persistence.enabled`       | Use a PVC to persist data                                                                                                                                    | `false`                   |
+| `client.persistence.storageClass`  | discourse & sidekiq data Persistent Volume Storage Class                                                                                                     | `""`                      |
+| `client.persistence.existingClaim` | Use a existing PVC which must be created manually before bound                                                                                               | `""`                      |
+| `client.persistence.mountPath`     | Path to mount the volume at                                                                                                                                  | `/bitnami/deepspeed/data` |
+| `client.persistence.accessModes`   | Persistent Volume Access Mode                                                                                                                                | `["ReadWriteOnce"]`       |
+| `client.persistence.dataSource`    | Custom PVC data source                                                                                                                                       | `{}`                      |
+| `client.persistence.selector`      | Selector to match an existing Persistent Volume for the client data PVC                                                                                      | `{}`                      |
+| `client.persistence.size`          | Size of data volume                                                                                                                                          | `8Gi`                     |
+| `client.persistence.labels`        | Persistent Volume labels                                                                                                                                     | `{}`                      |
+| `client.persistence.annotations`   | Persistent Volume annotations                                                                                                                                | `{}`                      |
+| `client.pdb.create`                | Enable/disable a Pod Disruption Budget creation                                                                                                              | `true`                    |
+| `client.pdb.minAvailable`          | Minimum number/percentage of pods that should remain scheduled                                                                                               | `""`                      |
+| `client.pdb.maxUnavailable`        | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `client.pdb.minAvailable` and `client.pdb.maxUnavailable` are empty. | `""`                      |
 
 ### Worker Deployment Parameters
 
@@ -363,7 +372,7 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 | `worker.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                                                                                                                             | `{}`             |
 | `worker.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                                                                                                                            | `{}`             |
 | `worker.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                                                                                                                              | `{}`             |
-| `worker.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if worker.resources is set (worker.resources is recommended for production). | `small`          |
+| `worker.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if worker.resources is set (worker.resources is recommended for production). | `medium`         |
 | `worker.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                               | `{}`             |
 | `worker.podSecurityContext.enabled`                        | Enabled Worker pods' Security Context                                                                                                                                                                                           | `true`           |
 | `worker.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                                                                              | `Always`         |
@@ -454,6 +463,9 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 | `worker.persistence.size`             | Size of data volume                                                                                                                                                                                                                                   | `8Gi`                      |
 | `worker.persistence.labels`           | Persistent Volume labels                                                                                                                                                                                                                              | `{}`                       |
 | `worker.persistence.annotations`      | Persistent Volume annotations                                                                                                                                                                                                                         | `{}`                       |
+| `worker.pdb.create`                   | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                                       | `true`                     |
+| `worker.pdb.minAvailable`             | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                                        | `""`                       |
+| `worker.pdb.maxUnavailable`           | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `worker.pdb.minAvailable` and `worker.pdb.maxUnavailable` are empty.                                                                                          | `""`                       |
 | `gitImage.registry`                   | Git image registry                                                                                                                                                                                                                                    | `REGISTRY_NAME`            |
 | `gitImage.repository`                 | Git image repository                                                                                                                                                                                                                                  | `REPOSITORY_NAME/git`      |
 | `gitImage.digest`                     | Git image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                                                                   | `""`                       |
@@ -495,6 +507,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 2.3.0
+
+This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
+
 ### To 2.0.0
 
 This major bump changes the following security defaults:
@@ -506,7 +522,7 @@ This could potentially break any customization or init scripts used in your depl
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

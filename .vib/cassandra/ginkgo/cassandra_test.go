@@ -10,6 +10,7 @@ import (
 	. "github.com/onsi/gomega"
 	appsv1 "k8s.io/api/apps/v1"
 	batchv1 "k8s.io/api/batch/v1"
+	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 )
@@ -35,6 +36,7 @@ var _ = Describe("Cassandra", Ordered, func() {
 			By("checking all the replicas are available")
 			getAvailableReplicas := func(ss *appsv1.StatefulSet) int32 { return ss.Status.AvailableReplicas }
 			getSucceededJobs := func(j *batchv1.Job) int32 { return j.Status.Succeeded }
+			getRestartedAtAnnotation := func(pod *v1.Pod) string { return pod.Annotations["kubectl.kubernetes.io/restartedAt"] }
 			getOpts := metav1.GetOptions{}
 
 			ss, err := c.AppsV1().StatefulSets(namespace).Get(ctx, stsName, getOpts)
@@ -71,18 +73,19 @@ var _ = Describe("Cassandra", Ordered, func() {
 				return c.BatchV1().Jobs(namespace).Get(ctx, createDBJobName, getOpts)
 			}, timeout, PollingInterval).Should(WithTransform(getSucceededJobs, Equal(int32(1))))
 
-			By("scaling down to 0 replicas")
-
-			ss, err = utils.StsScale(ctx, c, ss, 0)
+			By("deleting the job once it has succeeded")
+			err = c.BatchV1().Jobs(namespace).Delete(ctx, createDBJobName, metav1.DeleteOptions{})
 			Expect(err).NotTo(HaveOccurred())
 
-			Eventually(func() (*appsv1.StatefulSet, error) {
-				return c.AppsV1().StatefulSets(namespace).Get(ctx, stsName, getOpts)
-			}, timeout, PollingInterval).Should(WithTransform(getAvailableReplicas, BeZero()))
-
-			By("scaling up to the original replicas")
-			ss, err = utils.StsScale(ctx, c, ss, origReplicas)
+			By("rollout restart the statefulset")
+			_, err = utils.StsRolloutRestart(ctx, c, ss)
 			Expect(err).NotTo(HaveOccurred())
+
+			for i := int(origReplicas) - 1; i >= 0; i-- {
+				Eventually(func() (*v1.Pod, error) {
+					return c.CoreV1().Pods(namespace).Get(ctx, fmt.Sprintf("%s-%d", stsName, i), getOpts)
+				}, timeout, PollingInterval).Should(WithTransform(getRestartedAtAnnotation, Not(BeEmpty())))
+			}
 
 			Eventually(func() (*appsv1.StatefulSet, error) {
 				return c.AppsV1().StatefulSets(namespace).Get(ctx, stsName, getOpts)
@@ -97,6 +100,10 @@ var _ = Describe("Cassandra", Ordered, func() {
 			Eventually(func() (*batchv1.Job, error) {
 				return c.BatchV1().Jobs(namespace).Get(ctx, deleteDBJobName, getOpts)
 			}, timeout, PollingInterval).Should(WithTransform(getSucceededJobs, Equal(int32(1))))
+
+			By("deleting the job once it has succeeded")
+			err = c.BatchV1().Jobs(namespace).Delete(ctx, deleteDBJobName, metav1.DeleteOptions{})
+			Expect(err).NotTo(HaveOccurred())
 		})
 	})
 

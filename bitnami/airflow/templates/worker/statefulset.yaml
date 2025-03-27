@@ -7,11 +7,9 @@ SPDX-License-Identifier: APACHE-2.0
 apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
-  name: {{ printf "%s-worker" (include "common.names.fullname" .) }}
-  namespace: {{ .Release.Namespace | quote }}
-  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.web.image "chart" .Chart ) ) }}
-  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
-  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+  name: {{ template "airflow.worker.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: worker
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
@@ -20,12 +18,14 @@ spec:
   {{- if .Values.worker.podManagementPolicy }}
   podManagementPolicy: {{ .Values.worker.podManagementPolicy | quote }}
   {{- end }}
+  {{- if not (coalesce .Values.worker.autoscaling.hpa.enabled .Values.worker.autoscaling.enabled) }}
   replicas: {{ .Values.worker.replicaCount }}
-  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.worker.podLabels .Values.commonLabels $versionLabel ) "context" . ) }}
+  {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.worker.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: worker
-  serviceName: {{ printf "%s-worker-hl" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  serviceName: {{ printf "%s-hl" (include "airflow.worker.fullname" .) | trunc 63 | trimSuffix "-" }}
   {{- if .Values.worker.updateStrategy }}
   updateStrategy: {{- toYaml .Values.worker.updateStrategy | nindent 4 }}
   {{- end }}
@@ -33,6 +33,7 @@ spec:
     metadata:
       annotations:
         checksum/configmap: {{ include (print $.Template.BasePath "/config/configmap.yaml") . | sha256sum }}
+        checksum/webserver-configmap: {{ include (print $.Template.BasePath "/web/configmap.yaml") . | sha256sum }}
         {{- if .Values.worker.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.worker.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
@@ -75,40 +76,15 @@ spec:
       securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.worker.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       initContainers:
-        - name: create-default-config
-          image: {{ include "airflow.workerImage" . }}
-          imagePullPolicy: {{ .Values.worker.image.pullPolicy | quote }}
-          {{- if .Values.worker.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.worker.containerSecurityContext "enabled" | toYaml | nindent 12 }}
-          {{- end }}
-          command:
-            - /bin/bash
-          args:
-            - -ec
-            - |
-              #!/bin/bash
-
-              cp "$(find /opt/bitnami/airflow -name default_airflow.cfg)" /default-conf/airflow.cfg
-              cp "$(find /opt/bitnami/airflow -name default_webserver_config.py)" /default-conf/webserver_config.py
-              # HACK: When testing the connection it creates an empty airflow.db file at the
-              # application root
-              touch /default-conf/airflow.db
-          {{- if .Values.worker.resources }}
-          resources: {{- toYaml .Values.worker.resources | nindent 12 }}
-          {{- else if ne .Values.worker.resourcesPreset "none" }}
-          resources: {{- include "common.resources.preset" (dict "type" .Values.worker.resourcesPreset) | nindent 12 }}
-          {{- end }}
-          volumeMounts:
-            - name: empty-dir
-              mountPath: /tmp
-              subPath: tmp-dir
-            - name: empty-dir
-              mountPath: /default-conf
-              subPath: app-default-conf-dir
-        {{- include "airflow.git.containers.clone" (dict "securityContext" .Values.worker.containerSecurityContext "context" $) | trim | nindent 8 }}
-        {{- if .Values.dags.existingConfigmap }}
-        {{- include "airflow.loadDAGsInitContainer" (dict "component" "worker" "context" . ) | trim | nindent 8 }}
+        {{- include "airflow.defaultInitContainers.prepareConfig" . | nindent 8 }}
+        {{- include "airflow.defaultInitContainers.prepareWebConfig" . | nindent 8 }}
+        {{- if .Values.dags.enabled }}
+        {{- include "airflow.defaultInitContainers.loadDAGs" . | nindent 8 }}
         {{- end }}
+        {{- if .Values.plugins.enabled }}
+        {{- include "airflow.defaultInitContainers.loadPlugins" . | nindent 8 }}
+        {{- end }}
+        {{- include "airflow.defaultInitContainers.waitForDBMigrations" . | nindent 8 }}
         {{- if .Values.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | trim | nindent 8 }}
         {{- end }}
@@ -116,10 +92,9 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.worker.initContainers "context" $) | trim | nindent 8 }}
         {{- end }}
       containers:
-        {{- include "airflow.git.containers.sync" (dict "securityContext" .Values.worker.containerSecurityContext "context" $) | trim | nindent 8 }}
         - name: airflow-worker
-          image: {{ include "airflow.workerImage" . }}
-          imagePullPolicy: {{ .Values.worker.image.pullPolicy | quote }}
+          image: {{ include "airflow.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.worker.containerSecurityContext.enabled }}
           securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.worker.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
@@ -135,14 +110,16 @@ spec:
           {{- end }}
           env:
             {{- include "airflow.configure.airflow.common"  . | nindent 12 }}
-            {{- include "airflow.configure.database" . | nindent 12 }}
-            {{- include "airflow.configure.redis" . | nindent 12 }}
+            - name: AIRFLOW_COMPONENT_TYPE
+              value: "worker"
             - name: AIRFLOW_EXECUTOR
               value: {{ include "airflow.worker.executor" . }}
-            - name: AIRFLOW_WEBSERVER_HOST
-              value: {{ include "common.names.fullname" . }}
-            - name: AIRFLOW_WEBSERVER_PORT_NUMBER
-              value: {{ .Values.service.ports.http | quote }}
+            {{- if or (eq .Values.executor "CeleryExecutor") (eq .Values.executor "CeleryKubernetesExecutor") }}
+            - name: REDIS_HOST
+              value: {{ include "airflow.redis.host" . | quote }}
+            - name: REDIS_PORT_NUMBER
+              value: {{ include "airflow.redis.port" . | quote }}
+            {{- end }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
@@ -195,8 +172,13 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.worker.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.worker.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.worker.livenessProbe "enabled") "context" $) | nindent 12 }}
-            tcpSocket:
-              port: worker
+            exec:
+              command:
+                - sh
+                - -c
+                - |
+                  . /opt/bitnami/airflow/venv/bin/activate && \
+                  CONNECTION_CHECK_MAX_COUNT=0 python -m celery --app airflow.providers.celery.executors.celery_executor.app inspect ping -d celery@$(hostname)
           {{- end }}
           {{- if .Values.worker.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.worker.customReadinessProbe "context" $) | nindent 12 }}
@@ -216,48 +198,56 @@ spec:
           {{- end }}
           volumeMounts:
             - name: empty-dir
-              mountPath: /opt/bitnami/airflow/nss-wrapper
-              subPath: app-nss-wrapper-dir
-            - name: empty-dir
               mountPath: /tmp
               subPath: tmp-dir
             - name: empty-dir
-              mountPath: /opt/bitnami/airflow/airflow.db
-              subPath: app-default-conf-dir/airflow.db
+              mountPath: /opt/bitnami/airflow/nss-wrapper
+              subPath: app-nss-wrapper-dir
             - name: empty-dir
               mountPath: /opt/bitnami/airflow/logs
               subPath: app-logs-dir
             - name: empty-dir
               mountPath: /opt/bitnami/airflow/tmp
               subPath: app-tmp-dir
-            {{- if .Files.Glob "files/dags/*.py" }}
-            - name: local-dag-files
-              mountPath: /opt/bitnami/airflow/dags/local
-            {{- end }}
-            {{- if .Values.dags.existingConfigmap }}
             - name: empty-dir
-              mountPath: /opt/bitnami/airflow/dags/external
-              subPath: app-external-dag-dir
-            {{- end }}
-            {{- if or .Values.configuration .Values.existingConfigmap }}
-            - name: custom-configuration-file
-              mountPath: /opt/bitnami/airflow/airflow.cfg
-              subPath: airflow.cfg
-            {{- else }}
+              mountPath: /opt/bitnami/airflow/airflow.db
+              subPath: app-base-dir/airflow.db
             - name: empty-dir
               mountPath: /opt/bitnami/airflow/airflow.cfg
-              subPath: app-default-conf-dir/airflow.cfg
-            {{- end }}
+              subPath: app-base-dir/airflow.cfg
+            - name: empty-dir
+              mountPath: /opt/bitnami/airflow/config/airflow_local_settings.py
+              subPath: app-conf-dir/airflow_local_settings.py
             - name: empty-dir
               mountPath: /opt/bitnami/airflow/webserver_config.py
-              subPath: app-default-conf-dir/webserver_config.py
-            {{- include "airflow.git.maincontainer.volumeMounts" . | trim | nindent 12 }}
+              subPath: app-base-dir/webserver_config.py
+            {{- if  .Values.usePasswordFiles }}
+            - name: airflow-secrets
+              mountPath: /opt/bitnami/airflow/secrets
+            {{- end }}
+            {{- if .Values.dags.enabled }}
+            {{- include "airflow.dags.volumeMounts" . | nindent 12 }}
+            {{- end }}
+            {{- if .Values.plugins.enabled }}
+            {{- include "airflow.plugins.volumeMounts" . | nindent 12 }}
+            {{- end }}
+            {{- if .Values.web.tls.enabled }}
+            - name: tls-certificates
+              mountPath: /opt/bitnami/airflow/certs
+              readOnly: true
+            {{- end }}
             {{- if .Values.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
             {{- if .Values.worker.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.worker.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
+        {{- if .Values.dags.enabled }}
+        {{- include "airflow.defaultSidecars.syncDAGs" . | nindent 8 }}
+        {{- end }}
+        {{- if .Values.plugins.enabled }}
+        {{- include "airflow.defaultSidecars.syncPlugins" . | nindent 8 }}
+        {{- end }}
         {{- if .Values.sidecars }}
         {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | trim | nindent 8 }}
         {{- end }}
@@ -267,15 +257,41 @@ spec:
       volumes:
         - name: empty-dir
           emptyDir: {}
-        {{- if .Values.dags.existingConfigmap }}
-        - name: load-external-dag-files
-          configMap:
-            name: {{ tpl .Values.dags.existingConfigmap $ }}
-        {{- end }}
-        {{- if or .Values.configuration .Values.existingConfigmap }}
-        - name: custom-configuration-file
+        - name: configuration
           configMap:
             name: {{ include "airflow.configMapName"  . }}
+            optional: true
+        - name: webserver-configuration
+          configMap:
+            name: {{ include "airflow.web.configMapName" . }}
+        {{- if .Values.web.tls.enabled }}
+        - name: tls-certificates
+          secret:
+            secretName: {{ template "airflow.web.tls.secretName" . }}
+            defaultMode: 256
+        {{- end }}
+        {{- if .Values.usePasswordFiles }}
+        - name: airflow-secrets
+          projected:
+            sources:
+              - secret:
+                  name:  {{ include "airflow.secretName" . }}
+              - secret:
+                  name: {{ include "airflow.database.secretName" . }}
+              {{- if .Values.ldap.enabled }}
+              - secret:
+                  name: {{ include "airflow.ldap.secretName" . }}
+              {{- end }}
+              {{- if or (eq .Values.executor "CeleryExecutor") (eq .Values.executor "CeleryKubernetesExecutor") }}
+              - secret:
+                  name: {{ include "airflow.redis.secretName" . }}
+              {{- end }}
+        {{- end }}
+        {{- if .Values.dags.enabled }}
+        {{- include "airflow.dags.volumes" . | nindent 8 }}
+        {{- end }}
+        {{- if .Values.plugins.enabled }}
+        {{- include "airflow.plugins.volumes" . | nindent 8 }}
         {{- end }}
         {{- if .Values.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}

@@ -1,0 +1,129 @@
+name: '[Index] Sync index.yaml with OCI releases'
+on:
+  schedule:
+    - cron: "*/30 * * * *"
+# Remove all permissions by default.
+permissions: {}
+jobs:
+  find-new-releases:
+    runs-on: ubuntu-latest
+    name: Find new releases
+    outputs:
+      new-releases: ${{ steps.get-new-releases.outputs.new-releases }}
+    permissions:
+      contents: read
+    if: ${{ github.repository_owner == 'bitnami' }}
+    steps:
+      - id: checkout-repo
+        name: Checkout repo
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: index
+          path: index
+      - uses: oras-project/setup-oras@5c0b487ce3fe0ce3ab0d034e63669e426e294e4d
+      - id: get-oci-index
+        name: Get OCI index
+        run: |
+          oras pull registry-1.docker.io/bitnamicharts/charts-index:latest
+          cat charts-index.json | yq -P | yq eval '. | .entries[] |= .versions' > ./oci_index.yaml
+      - id: get-charts-index
+        name: Get Charts index
+        run: |
+          cp index/bitnami/index.yaml ./charts_index.yaml
+      - id: merge
+        name: Generate merged index
+        run: |
+          yq eval-all '. as $item ireduce ({}; . *+ $item )' charts_index.yaml oci_index.yaml > duplicates_index.yaml
+          yq eval '.entries[] |= unique_by(.name + .version)' duplicates_index.yaml > merged_index.yaml
+      - id: get-new-releases
+        name: Find new versions
+        run: |
+          yq eval '.entries[][] | .name + ":" + .version' charts_index.yaml |sort| uniq > charts_index_releases
+          yq eval '.entries[][] | .name + ":" + .version' merged_index.yaml | sort| uniq > merged_index_releases
+          new_releases="$(comm -13 charts_index_releases merged_index_releases | tr "\n" " " | sed 's/ $//')"
+          if [ -n "${new_releases}" ]; then
+              echo "Found new releases: ${new_releases}"
+          else
+              echo "No new releases detected"
+          fi
+          echo "new-releases=$new_releases" >> $GITHUB_OUTPUT
+  update-index:
+    runs-on: ubuntu-latest
+    needs:
+      - find-new-releases
+    name: Update index
+    if: ${{ needs.find-new-releases.outputs.new-releases != '' }}
+    steps:
+      - name: Install helm
+        run: |
+          HELM_TARBALL="helm-v3.8.1-linux-amd64.tar.gz"
+          curl -SsLfO "https://get.helm.sh/${HELM_TARBALL}" && sudo tar xf "$HELM_TARBALL" --strip-components 1 -C /usr/local/bin
+          # Install file plugin
+          helm plugin add https://github.com/zoobab/helm_file_repo
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: 'index'
+          path: index
+          # The token is persisted in the local git config and enables scripts to run authenticated git commands.
+          token: ${{ secrets.BITNAMI_BOT_TOKEN }}
+      - id: update-index
+        name: Pull charts and update index
+        env:
+          NEW_RELEASES: ${{ needs.find-new-releases.outputs.new-releases }}
+        run: |
+          cd index
+          # Configure git
+          git config user.name "Bitnami Bot"
+          git config user.email "bitnami.bot@broadcom.com"
+
+          read -r -a new_releases_arr <<< $NEW_RELEASES
+          for release in "${new_releases_arr[@]}"; do
+            read -r -a release_arr <<< "$(tr ':' ' ' <<< "$release")"
+            chart_name="${release_arr[0]}"
+            chart_version="${release_arr[1]}"
+
+            ## Update index
+            # Download published asset
+            mkdir ../download
+            helm pull "oci://registry-1.docker.io/bitnamicharts/${chart_name}" --version "${chart_version}" --destination ../download
+            # Rebuild index
+            helm repo index --url oci://registry-1.docker.io/bitnamicharts --merge bitnami/index.yaml ../download
+            # Replace .tgz in URL with OCI tag
+            sed -i "s|oci://registry-1.docker.io/bitnamicharts/$chart_name-$chart_version.tgz|oci://registry-1.docker.io/bitnamicharts/$chart_name:$chart_version|" ../download/index.yaml
+
+            # Check index integrity
+            if [[ $(stat -c%s bitnami/index.yaml) -gt $(stat -c%s ../download/index.yaml) ]]; then
+              echo "New index.yaml file is shorter than the current one"
+              exit 1
+            fi
+            # Check repo can be loaded
+            if ! helm repo add cache file://../download/ ; then
+              echo "New index.yaml file can't be used as a file"
+              exit 1
+            else
+              # Remove the repo
+              helm repo remove cache
+            fi
+            cp ../download/index.yaml bitnami/index.yaml
+
+            # Remove chart files
+            rm -rf ../download
+          done
+
+          # Avoid overriding index branch when remote commit does not match our checkout commit
+          current_commit_id=$(git rev-parse index)
+
+          # Push changes
+          git add bitnami/index.yaml && git commit --signoff --amend --no-edit
+          git push origin index --force-with-lease=index:${current_commit_id}
+  notify:
+    name: Send notification
+    needs:
+      - update-index
+    if: ${{ always() && (needs.update-index.result == 'failure') }}
+    uses: bitnami/support/.github/workflows/gchat-notification.yml@main
+    with:
+      workflow: ${{ github.workflow }}
+      job-url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+    secrets:
+      webhook-url: ${{ secrets.GCHAT_CONTENT_ALERTS_WEBHOOK_URL }}

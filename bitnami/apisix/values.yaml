@@ -9,7 +9,8 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
+## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ##
 global:
   imageRegistry: ""
@@ -18,7 +19,13 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  defaultStorageClass: ""
   storageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
   ## Compatibility adaptations for Kubernetes platforms
   ##
   compatibility:
@@ -34,6 +41,9 @@ global:
 ## @param kubeVersion Override Kubernetes version
 ##
 kubeVersion: ""
+## @param apiVersions Override Kubernetes API versions reported by .Capabilities
+##
+apiVersions: []
 ## @param nameOverride String to partially override common.names.name
 ##
 nameOverride: ""
@@ -55,6 +65,9 @@ clusterDomain: cluster.local
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
+## @param usePasswordFiles Mount credentials as files instead of using environment variables
+##
+usePasswordFiles: true
 ## Enable diagnostic mode in the deployment
 ##
 diagnosticMode:
@@ -82,10 +95,9 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/apisix
-  tag: 3.9.1-debian-12-r0
+  tag: 3.11.0-debian-12-r10
   digest: ""
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -294,6 +306,7 @@ dataPlane:
           prefix: /apisix
           timeout: 30
         {{- end }}
+      {{- if or .Values.etcd.enabled .Values.externalEtcd.servers }}
       etcd:
         host:
           {{- if .Values.etcd.enabled  }}
@@ -314,6 +327,7 @@ dataPlane:
         user: "{{ print "{{APISIX_ETCD_USER}}" }}"
         password: "{{ print "{{APISIX_ETCD_PASSWORD}}" }}"
         {{- end }}
+      {{- end }}
       {{- if .Values.dataPlane.tls.enabled }}
       certs:
         {{- if .Values.dataPlane.tls.enabled }}
@@ -401,8 +415,8 @@ dataPlane:
   ## @param dataPlane.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
   ## Node apisix.affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
@@ -540,6 +554,14 @@ dataPlane:
     ##   - 10.10.10.0/24
     ##
     loadBalancerSourceRanges: []
+    ## @param dataPlane.service.externalIPs APISIX service External IPs
+    ## https://kubernetes.io/docs/concepts/services-networking/service/#external-ips
+    ## e.g.
+    ## externalIPs:
+    ##   - 10.10.10.1
+    ##   - 201.22.30.1
+    ##
+    externalIPs: []
     ## @param dataPlane.service.externalTrafficPolicy APISIX service external traffic policy
     ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-web-source-ip
     ##
@@ -1183,8 +1205,8 @@ controlPlane:
   ## @param controlPlane.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
   ## Node apisix.affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
@@ -1322,6 +1344,14 @@ controlPlane:
     ##   - 10.10.10.0/24
     ##
     loadBalancerSourceRanges: []
+    ## @param controlPlane.service.externalIPs APISIX service External IPs
+    ## https://kubernetes.io/docs/concepts/services-networking/service/#external-ips
+    ## e.g.
+    ## externalIPs:
+    ##   - 10.10.10.1
+    ##   - 201.22.30.1
+    ##
+    externalIPs: []
     ## @param controlPlane.service.externalTrafficPolicy APISIX service external traffic policy
     ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-web-source-ip
     ##
@@ -1665,10 +1695,9 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/apisix-dashboard
-    tag: 3.0.1-debian-12-r28
+    tag: 3.0.1-debian-12-r64
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -1818,6 +1847,8 @@ dashboard:
       - tencent-cloud-cls
       - ai
       - cas-auth
+      - multi-auth
+
   ## @param dashboard.extraConfig extra configuration settings for APISIX Dashboard
   ##
   extraConfig: {}
@@ -1923,8 +1954,8 @@ dashboard:
   ## @param dashboard.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
   ## @param dashboard.priorityClassName APISIX Dashboard pods' priorityClassName
   ##
@@ -2142,6 +2173,14 @@ dashboard:
     ##   - 10.10.10.0/24
     ##
     loadBalancerSourceRanges: []
+    ## @param dashboard.service.externalIPs APISIX Dashboard service External IPs
+    ## https://kubernetes.io/docs/concepts/services-networking/service/#external-ips
+    ## e.g.
+    ## externalIPs:
+    ##   - 10.10.10.1
+    ##   - 201.22.30.1
+    ##
+    externalIPs: []
     ## @param dashboard.service.externalTrafficPolicy APISIX Dashboard service external traffic policy
     ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-web-source-ip
     ##
@@ -2402,10 +2441,9 @@ ingressController:
   image:
     registry: docker.io
     repository: bitnami/apisix-ingress-controller
-    tag: 1.8.1-debian-12-r1
+    tag: 1.8.4-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -2575,8 +2613,8 @@ ingressController:
   ## @param ingressController.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
   ## Node injector.affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
@@ -2674,6 +2712,14 @@ ingressController:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
+  ## @param ingressController.ingressClass.create Specifies whether a IngressClass should be created
+  ## @param ingressController.ingressClass.name IngressClass that will be be used to implement the APISIX Ingress
+  ## @param ingressController.ingressClass.annotations Additional annotations for the APISIX IngressClass
+  ##
+  ingressClass:
+    create: true
+    name: "apisix"
+    annotations: {}
   ## @param ingressController.defaultConfig [string] APISIX Dashboard configuration (evaluated as a template)
   ##
   defaultConfig: |
@@ -2693,7 +2739,7 @@ ingressController:
       kubeconfig: ""
       resync_interval: "6h"
       election_id: "{{ include "apisix.ingress-controller.fullname" . }}-leader"
-      ingress_class: "apisix"
+      ingress_class: {{ .Values.ingressController.ingressClass.name | quote }}
       ingress_version: "networking/v1"
       watch_endpointslices: false
       apisix_route_version: "apisix.apache.org/v2"
@@ -2778,6 +2824,14 @@ ingressController:
     ##   - 10.10.10.0/24
     ##
     loadBalancerSourceRanges: []
+    ## @param ingressController.service.externalIPs APISIX Ingress Controller service External IPs
+    ## https://kubernetes.io/docs/concepts/services-networking/service/#external-ips
+    ## e.g.
+    ## externalIPs:
+    ##   - 10.10.10.1
+    ##   - 201.22.30.1
+    ##
+    externalIPs: []
     ## @param ingressController.service.externalTrafficPolicy APISIX Ingress Controller service external traffic policy
     ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-web-source-ip
     ##
@@ -3106,7 +3160,7 @@ waitContainer:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r19
+    tag: 12-debian-12-r40
     digest: ""
     ## @param waitContainer.image.pullPolicy Init container wait-container image pull policy
     ##

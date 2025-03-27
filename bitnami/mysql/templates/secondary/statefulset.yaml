@@ -10,6 +10,7 @@ metadata:
   name: {{ include "mysql.secondary.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: mysql
     app.kubernetes.io/component: secondary
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
@@ -20,8 +21,9 @@ spec:
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.secondary.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/part-of: mysql
       app.kubernetes.io/component: secondary
-  serviceName: {{ include "mysql.secondary.fullname" . }}
+  serviceName: {{ printf "%s-headless" (include "mysql.secondary.fullname" .) | trunc 63 | trimSuffix "-" }}
   {{- if .Values.secondary.updateStrategy }}
   updateStrategy: {{- toYaml .Values.secondary.updateStrategy | nindent 4 }}
   {{- end }}
@@ -31,10 +33,14 @@ spec:
         {{- if (include "mysql.secondary.createConfigmap" .) }}
         checksum/configuration: {{ include (print $.Template.BasePath "/secondary/configmap.yaml") . | sha256sum }}
         {{- end }}
+        {{- if .Values.passwordUpdateJob.enabled }}
+        charts.bitnami.com/password-last-update: {{ now | date "20060102150405" | quote }}
+        {{- end }}
         {{- if .Values.secondary.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.secondary.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/part-of: mysql
         app.kubernetes.io/component: secondary
     spec:
       {{- if .Values.secondary.extraPodSpec }}
@@ -171,6 +177,12 @@ spec:
               value: {{ .Values.secondary.containerPorts.mysql | quote}}
             - name: MYSQL_REPLICATION_USER
               value: {{ .Values.auth.replicationUser | quote }}
+            - name: MYSQL_ENABLE_SSL
+              value: {{ ternary "yes" "no" .Values.tls.enabled | quote }}
+            {{- if and .Values.tls.enabled (include "mysql.tlsCACert" .) }}
+            - name: MYSQL_CLIENT_CA_FILE
+              value: {{ include "mysql.tlsCACert" . | quote }}
+            {{- end }}
             {{- if .Values.auth.usePasswordFiles }}
             - name: MYSQL_MASTER_ROOT_PASSWORD_FILE
               value: {{ default "/opt/bitnami/mysql/secrets/mysql-root-password" .Values.auth.customPasswordFiles.root }}
@@ -243,7 +255,7 @@ spec:
                   if [[ -f "${MYSQL_MASTER_ROOT_PASSWORD_FILE:-}" ]]; then
                       password_aux=$(cat "$MYSQL_MASTER_ROOT_PASSWORD_FILE")
                   fi
-                  mysqladmin status -uroot -p"${password_aux}"
+                  mysqladmin ping -uroot -p"${password_aux}" | grep "mysqld is alive"
           {{- end }}
           {{- if .Values.secondary.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.secondary.customStartupProbe "context" $) | nindent 12 }}
@@ -258,7 +270,7 @@ spec:
                   if [[ -f "${MYSQL_MASTER_ROOT_PASSWORD_FILE:-}" ]]; then
                       password_aux=$(cat "$MYSQL_MASTER_ROOT_PASSWORD_FILE")
                   fi
-                  mysqladmin status -uroot -p"${password_aux}"
+                  mysqladmin ping -uroot -p"${password_aux}" | grep "mysqld is alive"
           {{- end }}
           {{- end }}
           {{- if .Values.secondary.resources }}
@@ -272,6 +284,10 @@ spec:
               {{- if .Values.secondary.persistence.subPath }}
               subPath: {{ .Values.secondary.persistence.subPath }}
               {{- end }}
+            {{- if .Values.tls.enabled }}
+            - name: cert
+              mountPath: /opt/bitnami/mysql/certs
+            {{- end }}
             {{- if or .Values.initdbScriptsConfigMap .Values.initdbScripts }}
             - name: custom-init-scripts
               mountPath: /docker-entrypoint-initdb.d
@@ -395,6 +411,12 @@ spec:
                 path: mysql-root-password
               - key: mysql-replication-password
                 path: mysql-replication-password
+        {{- end }}
+        {{- if .Values.tls.enabled }}
+        - name: cert
+          secret:
+            secretName: {{ include "mysql.tlsSecretName" . }}
+            defaultMode: 256
         {{- end }}
         - name: empty-dir
           emptyDir: {}

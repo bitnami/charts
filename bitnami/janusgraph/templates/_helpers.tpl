@@ -144,10 +144,10 @@ Return the wait-for-storage init container
     - name: JANUSGRAPH_CFG_STORAGE_USERNAME
       value: {{ include "janusgraph.storage.username" . | quote }}
     {{- if .Values.storageBackend.usePasswordFiles }}
-    - name: JANUSGRAPH_CFG_STORAGE_PASSWORD_FILE
+    - name: JANUSGRAPH_STORAGE_PASSWORD_FILE
       value: {{ printf "/opt/bitnami/janusgraph/secrets/%s" (include "janusgraph.storage.password.secretKey" .) }}
     {{- else }}
-    - name: JANUSGRAPH_CFG_STORAGE_PASSWORD
+    - name: JANUSGRAPH_STORAGE_PASSWORD
       valueFrom:
         secretKeyRef:
           name: {{ include "janusgraph.storage.password.secretName" . }}
@@ -221,7 +221,7 @@ Returns the hostname of the configured storage backend
 */}}
 {{- define "janusgraph.storage.hostname" -}}
 {{- if .Values.storageBackend.cassandra.enabled -}}
-{{- include "common.names.dependency.fullname" (dict "chartName" "cassandra" "chartValues" .Values.storageBackend.cassandra "context" $) -}}
+{{- include "common.names.dependency.fullname" (dict "chartName" "cassandra" "chartValues" .Values.cassandra "context" $) -}}
 {{- else if .Values.storageBackend.external.hostname -}}
 {{- print .Values.storageBackend.external.hostname -}}
 {{- end -}}
@@ -254,7 +254,7 @@ Create the storage password secret name
 */}}
 {{- define "janusgraph.storage.password.secretName" -}}
 {{- if .Values.storageBackend.cassandra.enabled -}}
-{{- printf "%s-cassandra" (include "common.names.fullname" .) -}}
+{{- include "common.names.dependency.fullname" (dict "chartName" "cassandra" "chartValues" .Values.cassandra "context" $) -}}
 {{- else if .Values.storageBackend.external.existingSecret -}}
 {{- print (tpl .Values.storageBackend.external.existingSecret .) -}}
 {{- end -}}

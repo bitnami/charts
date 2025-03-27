@@ -247,7 +247,11 @@ spec:
               {{- $zookeeperFullname := include "common.names.fullname" . }}
               {{- $zookeeperHeadlessServiceName := printf "%s-%s" $zookeeperFullname "headless" | trunc 63  }}
               {{- $clusterDomain := .Values.clusterDomain }}
+              {{- if .Values.zooServers }}
+              value: {{ include "common.tplvalues.render" (dict "value" .Values.zooServers "context" $) | quote }}
+              {{- else }}
               value: {{ range $i, $e := until $replicaCount }}{{ $zookeeperFullname }}-{{ $e }}.{{ $zookeeperHeadlessServiceName }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ $followerPort }}:{{ $electionPort }}::{{ add $e $minServerId }} {{ end }}
+              {{- end }}
             - name: ZOO_ENABLE_AUTH
               value: {{ ternary "yes" "no" .Values.auth.client.enabled | quote }}
             {{- if .Values.auth.client.enabled }}
@@ -519,7 +523,9 @@ spec:
   {{- if and .Values.persistence.enabled (not (and .Values.persistence.existingClaim .Values.persistence.dataLogDir.existingClaim) ) }}
   volumeClaimTemplates:
     {{- if not .Values.persistence.existingClaim }}
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         name: data
         {{- if .Values.persistence.annotations }}
         annotations: {{- include "common.tplvalues.render" (dict "value" .Values.persistence.annotations "context" $) | nindent 10 }}
@@ -541,7 +547,9 @@ spec:
         {{- end }}
     {{- end }}
     {{- if and (not .Values.persistence.dataLogDir.existingClaim) .Values.dataLogDir }}
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         name: data-log
         {{- if .Values.persistence.annotations }}
         annotations: {{- include "common.tplvalues.render" (dict "value" .Values.persistence.annotations "context" $) | nindent 10 }}

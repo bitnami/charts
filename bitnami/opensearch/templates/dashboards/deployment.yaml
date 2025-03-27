@@ -71,7 +71,7 @@ spec:
       initContainers:
         {{- include "opensearch.dashboards.copy-default-plugins.initContainer" . | nindent 8 }} 
         {{- if .Values.dashboards.initContainers }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.dashboards.initContainers "context" $) | nindent 8 }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.dashboards.initContainers "context" $) | nindent 8 }}
         {{- end }}
       containers:
         - name: {{ include "opensearch.dashboards.fullname" . }}
@@ -133,8 +133,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.dashboards.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.dashboards.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.dashboards.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: "/"
+            tcpSocket:
               port: {{ .Values.dashboards.containerPorts.http }}
           {{- end }}
           {{- if .Values.dashboards.customReadinessProbe }}

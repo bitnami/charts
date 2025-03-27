@@ -162,14 +162,14 @@ spec:
             {{- if .Values.kubeResources.storageclasses }}
             - --resources=storageclasses
             {{- end }}
-            {{- if .Values.kubeResources.verticalpodautoscalers }}
-            - --resources=verticalpodautoscalers
-            {{- end }}
             {{- if .Values.kubeResources.validatingwebhookconfigurations }}
             - --resources=validatingwebhookconfigurations
             {{- end }}
             {{- if .Values.kubeResources.volumeattachments }}
             - --resources=volumeattachments
+            {{- end }}
+            {{- if .Values.customResourceState.enabled }}
+            - --custom-resource-state-config-file=/etc/customresourcestate/configuration.yaml
             {{- end }}
             {{- if .Values.namespaces }}
             - --namespaces={{- include "common.tplvalues.render" ( dict "value" .Values.namespaces "context" $ ) }}
@@ -216,8 +216,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /healthz
+            tcpSocket:
               port: http
           {{- end }}
           {{- if .Values.customReadinessProbe }}
@@ -240,6 +239,11 @@ spec:
             - name: empty-dir
               mountPath: /tmp
               subPath: tmp-dir
+            {{- if .Values.customResourceState.enabled }}
+            - name: customresourcestate-configuration
+              mountPath: /etc/customresourcestate
+              readOnly: true
+            {{- end }}
             {{- if .Values.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
@@ -249,6 +253,11 @@ spec:
       volumes:
         - name: empty-dir
           emptyDir: {}
+        {{- if .Values.customResourceState.enabled}}
+        - name: customresourcestate-configuration
+          configMap:
+            name: {{ printf "%s-customresourcestate-configuration" (include "common.names.fullname" .) }}
+        {{- end }}
         {{- if .Values.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
         {{- end }}

@@ -2,6 +2,8 @@ CHART NAME: {{ .Chart.Name }}
 CHART VERSION: {{ .Chart.Version }}
 APP VERSION: {{ .Chart.AppVersion }}
 
+Did you know there are enterprise versions of the Bitnami catalog? For enhanced secure software supply chain features, unlimited pulls from Docker, LTS support, or application customization, see Bitnami Premium or Tanzu Application Catalog. See https://www.arrow.com/globalecs/na/vendors/bitnami for more information.
+
 {{- if .Values.diagnosticMode.enabled }}
 The chart has been deployed in diagnostic mode. All probes have been disabled and the command has been overwritten with:
 
@@ -76,6 +78,7 @@ To get the password for "{{ $user }}" run:
     export MONGODB_PASSWORD=$(kubectl get secret --namespace {{ include "mongodb.namespace" $ }} {{ include "mongodb.secretName" $ }} -o jsonpath="{.data.mongodb-passwords}" | base64 -d | awk -F',' '{print ${{ add 1 $index }}}')
 
 {{- end }}
+{{- end }}
 
 To connect to your database, create a MongoDB&reg; client container:
 
@@ -148,7 +151,6 @@ To connect to your database from outside the cluster execute the following comma
 
 {{- end }}
 {{- end }}
-{{- end }}
 
 {{- if .Values.metrics.enabled }}
 
@@ -168,3 +170,5 @@ Then, open the obtained URL in a browser.
 {{- include "common.warnings.rollingTag" .Values.tls.image }}
 {{- include "mongodb.validateValues" . }}
 {{- include "common.warnings.resources" (dict "sections" (list "arbiter" "externalAccess.autoDiscovery" "hidden" "metrics" "" "tls" "volumePermissions") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.tls.image .Values.externalAccess.autoDiscovery.image .Values.externalAccess.dnsCheck.image .Values.volumePermissions.image .Values.metrics.image) "context" $) }}
+{{- include "common.errors.insecureImages" (dict "images" (list .Values.image .Values.tls.image .Values.externalAccess.autoDiscovery.image .Values.externalAccess.dnsCheck.image .Values.volumePermissions.image .Values.metrics.image) "context" $) }}

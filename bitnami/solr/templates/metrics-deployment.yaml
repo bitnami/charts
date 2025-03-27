@@ -16,6 +16,7 @@ metadata:
   {{- end }}
 spec:
   replicas: 1
+  revisionHistoryLimit: {{ .Values.metrics.revisionHistoryLimit }}
   {{- if .Values.metrics.updateStrategy }}
   strategy: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.updateStrategy "context" $) | nindent 4 }}
   {{- end }}
@@ -162,8 +163,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.metrics.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metrics.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: "/metrics"
+            tcpSocket:
               port: {{ .Values.metrics.containerPorts.http }}
           {{- end }}
           {{- if .Values.metrics.customReadinessProbe }}

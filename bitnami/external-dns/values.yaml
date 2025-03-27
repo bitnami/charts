@@ -17,6 +17,11 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
   ## Compatibility adaptations for Kubernetes platforms
   ##
   compatibility:
@@ -29,12 +34,15 @@ global:
 ## @section Common parameters
 ##
 
-## @param nameOverride String to partially override external-dns.fullname template (will maintain the release name)
+## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
 ##
 nameOverride: ""
-## @param fullnameOverride String to fully override external-dns.fullname template
+## @param fullnameOverride String to fully override common.names.fullname template
 ##
 fullnameOverride: ""
+## @param namespaceOverride String to fully override common.names.namespace
+##
+namespaceOverride: ""
 ## @param clusterDomain Kubernetes Cluster Domain
 ##
 clusterDomain: cluster.local
@@ -51,13 +59,7 @@ extraDeploy: []
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
 ##
 kubeVersion: ""
-## @param watchReleaseNamespace Watch only namepsace used for the release
-##
-watchReleaseNamespace: false
-## @param useDaemonset Use ExternalDNS in Daemonset mode
-## If set to false, Deployment will be used.
-##
-useDaemonset: false
+
 ## @section external-dns parameters
 ##
 
@@ -73,10 +75,9 @@ useDaemonset: false
 image:
   registry: docker.io
   repository: bitnami/external-dns
-  tag: 0.14.1-debian-12-r7
+  tag: 0.16.1-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -125,7 +126,7 @@ provider: aws
 initContainers: []
 ## DNS-Pod services
 ## Ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/
-## @param dnsPolicy Specifies the DNS policy for the external-dns deployment or daemonset
+## @param dnsPolicy Specifies the DNS policy for the external-dns deployment
 ## DNS policies can be set on a per-Pod basis. Currently Kubernetes supports the following Pod-specific DNS policies.
 ## Available options: Default, ClusterFirst, ClusterFirstWithHostNet, None
 ## Ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-s-dns-policy
@@ -153,6 +154,9 @@ sidecars: []
 ## @param namespace Limit sources of endpoints to a specific namespace (default: all namespaces)
 ##
 namespace: ""
+## @param watchReleaseNamespace Watch only namespace used for the release
+##
+watchReleaseNamespace: false
 ## @param fqdnTemplates Templated strings that are used to generate DNS names from sources that don't define a hostname themselves
 ##
 fqdnTemplates: []
@@ -554,6 +558,9 @@ infoblox:
   ## @param infoblox.maxResults When using the Infoblox provider, specify the Infoblox Max Results (optional)
   ##
   maxResults: ""
+  ## @param infoblox.createPtr When using the Infoblox provider, specify the Infoblox create PTR flag (optional)
+  ##
+  createPtr: false
 ## Linode configuration to be set via arguments/env. variables
 ##
 linode:
@@ -586,9 +593,21 @@ pihole:
   ## @param pihole.tlsSkipVerify When using the Pi-hole provider, specify wheter to skip verification of any TLS certificates served by the Pi-hole web server
   ##
   tlsSkipVerify: ""
+  ## @param pihole.password When using the Pi-hole provider, specify a password to use
+  ##
+  password: ""
   ## @param pihole.secretName Use an existing secret with key "pihole_password" defined.
   ##
   secretName: ""
+## Compatibility adaptations for Traefik
+##
+traefik:
+  ## @param traefik.disableNew Disable listeners on Resources under traefik.io
+  ##
+  disableNew: false
+  ## @param traefik.disableLegacy Disable listeners on Resources under traefik.containo.us
+  ##
+  disableLegacy: false
 ## oci configuration to be set via arguments/env. variables
 ##
 oci:
@@ -654,6 +673,10 @@ scaleway:
   ## @param scaleway.scwSecretKey When using the Scaleway provider, specify an existing secret key. (required when provider=scaleway)
   ##
   scwSecretKey: ""
+  ## @param scaleway.secretName Use an existing secret with keys "scaleway_access_key" and "scaleway_secret_key" defined (optional).
+  ## This ignores scaleway.scwAccessKey and scaleway.scwSecretKey
+  ##
+  secretName: ""
 ## RFC 2136 configuration to be set via arguments/env. variables
 ##
 rfc2136:
@@ -663,9 +686,13 @@ rfc2136:
   ## @param rfc2136.port When using the rfc2136 provider, specify the RFC2136 port (optional)
   ##
   port: 53
-  ## @param rfc2136.zone When using the rfc2136 provider, specify the zone (required when provider=rfc2136)
+  ## @param rfc2136.zone DEPRECATED: use rfc2136.zones instead.
+  ## Currently, the contents of rfc2136.zone and rfc2136.zones will be merged and deduplicated, in a future release this value will be removed in favor of `rfc2136.zones`.
   ##
   zone: ""
+  ## @param rfc2136.zones When using the rfc2136 provider, specify the zones (required when provider=rfc2136 and `rfc2136.zone` is not provided.)
+  ##
+  zones: []
   ## @param rfc2136.tsigSecret When using the rfc2136 provider, specify the tsig secret to enable security. (do not specify if `rfc2136.secretName` is provided.) (optional)
   ##
   tsigSecret: ""
@@ -786,7 +813,7 @@ logFormat: text
 ##
 policy: upsert-only
 ## @param registry Registry method to use (options: txt, aws-sd, dynamodb, noop)
-## ref: https://github.com/kubernetes-sigs/external-dns/blob/master/docs/proposal/registry.md
+## ref: https://github.com/kubernetes-sigs/external-dns/blob/master/docs/registry/registry.md
 ##
 registry: "txt"
 ## @param txtPrefix When using the TXT registry, a prefix for ownership records that avoids collision with CNAME entries (optional)<CNAME record> (Mutual exclusive with txt-suffix)
@@ -819,12 +846,12 @@ forceTxtOwnerId: false
 ## ref: https://github.com/kubernetes-sigs/external-dns/blob/master/docs/registry/txt.md#encryption
 ##
 txtEncrypt:
-  ## @param txtEncrypt.enabled Enable TXT record encrypencryption
+  ## @param txtEncrypt.enabled Enable TXT record encryption
   ##
   enabled: false
   ## @param txtEncrypt.aesKey 32-byte AES-256-GCM encryption key.
   ## ref: https://github.com/kubernetes-sigs/external-dns/blob/master/docs/registry/txt.md#generating-the-txt-encryption-key
-  ## Note: If txtEncrypt.enabled is enabled and txtEncrypt.aesKey is not set a default key will be generated.
+  ## Note: If txtEncrypt.enabled is enabled and txtEncrypt.aesKey is not set, a default key will be generated.
   ##
   aesKey: ""
   ## @param txtEncrypt.secretName Use an existing secret with key "txt_aes_encryption_key" defined.
@@ -834,6 +861,10 @@ txtEncrypt:
 ## @param extraArgs Extra arguments to be passed to external-dns
 ##
 extraArgs: {}
+##extraArgs:
+##  rfc2136-zone:
+##    - extra-zone1.com
+##    - extra-zone2.com
 ## @param extraEnvVars An array to add extra env vars
 ##
 extraEnvVars: []
@@ -855,9 +886,6 @@ schedulerName: ""
 ## The value is evaluated as a template
 ##
 topologySpreadConstraints: []
-## @param replicaCount Desired number of ExternalDNS replicas
-##
-replicaCount: 1
 ## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ##
@@ -1050,7 +1078,7 @@ serviceAccount:
   ## @param serviceAccount.create Determine whether a Service Account should be created or it should reuse a exiting one.
   ##
   create: true
-  ## @param serviceAccount.name ServiceAccount to use. A name is generated using the external-dns.fullname template if it is not set
+  ## @param serviceAccount.name ServiceAccount to use. A name is generated using the common.names.fullname template if it is not set
   ##
   name: ""
   ## @param serviceAccount.annotations Additional Service Account annotations
@@ -1205,11 +1233,14 @@ extraVolumes: []
 ## @param extraVolumeMounts A list of volume mounts to be added to the pod
 ##
 extraVolumeMounts: []
-## @param podDisruptionBudget Configure PodDisruptionBudget
-## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+## @param pdb.create Enable/disable a Pod Disruption Budget creation
+## @param pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+## @param pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `pdb.minAvailable` and `pdb.maxUnavailable` are empty.
 ##
-
-podDisruptionBudget: {}
+pdb:
+  create: true
+  minAvailable: ""
+  maxUnavailable: ""
 ## Prometheus Exporter / Metrics
 ##
 metrics:
@@ -1253,11 +1284,17 @@ metrics:
     ## @param metrics.serviceMonitor.honorLabels Specify honorLabels parameter to add the scrape endpoint
     ##
     honorLabels: false
-    ## DEPRECATED metrics.serviceMonitor.additionalLabels will be removed in a future release - Please use metrics.serviceMonitor.labels instead
     ## @param metrics.serviceMonitor.labels Used to pass Labels that are required by the installed Prometheus Operator
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
     ##
     labels: {}
+    ## @param metrics.serviceMonitor.targetLabels Labels from the Kubernetes service to be transferred to the created metrics
+    targetLabels: []
+    ## @param metrics.serviceMonitor.podTargetLabels Labels from the Kubernetes pod to be transferred to the created metrics
+    podTargetLabels: []
+    ## @param metrics.serviceMonitor.annotations Additional custom annotations for the ServiceMonitor
+    ##
+    annotations: {}
     ## @param metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
     ##
     jobLabel: ""

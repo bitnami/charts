@@ -21,8 +21,8 @@ spec:
   {{- if .Values.ingressController.pdb.minAvailable }}
   minAvailable: {{ .Values.ingressController.pdb.minAvailable }}
   {{- end }}
-  {{- if .Values.ingressController.pdb.maxUnavailable }}
-  maxUnavailable: {{ .Values.ingressController.pdb.maxUnavailable }}
+  {{- if or .Values.ingressController.pdb.maxUnavailable ( not .Values.ingressController.pdb.minAvailable ) }}
+  maxUnavailable: {{ .Values.ingressController.pdb.maxUnavailable | default 1 }}
   {{- end }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.ingressController.podLabels .Values.commonLabels ) "context" . ) }}
   selector:

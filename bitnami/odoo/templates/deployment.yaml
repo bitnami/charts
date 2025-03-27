@@ -88,6 +88,9 @@ spec:
           volumeMounts:
             - name: odoo-data
               mountPath: /bitnami/odoo
+              {{- if .Values.persistence.subPath }} 
+              subPath: {{ .Values.persistence.subPath }} 
+              {{- end }}
         {{- end }}
         {{- if .Values.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
@@ -216,8 +219,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.livenessProbe "enabled" "path") "context" $) | nindent 12 }}
-            httpGet:
-              path: {{ .Values.livenessProbe.path }}
+            tcpSocket:
               port: http
           {{- end }}
           {{- if .Values.customReadinessProbe }}
@@ -245,6 +247,9 @@ spec:
           volumeMounts:
             - name: odoo-data
               mountPath: /bitnami/odoo
+              {{- if .Values.persistence.subPath }} 
+              subPath: {{ .Values.persistence.subPath }} 
+              {{- end }}
             {{- if .Values.customPostInitScripts }}
             - mountPath: /docker-entrypoint-init.d
               name: custom-postinit

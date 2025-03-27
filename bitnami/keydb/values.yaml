@@ -1,0 +1,1529 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+## @section Global parameters
+## Global Docker image parameters
+## Please, note that this will override the image parameters, including dependencies, configured to use the global value
+## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+##
+
+## @param global.imageRegistry Global Docker image registry
+## @param global.imagePullSecrets Global Docker registry secret names as an array
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
+## @param global.keydb.password Global KeyDB password (overrides `auth.password`)
+##
+global:
+  imageRegistry: ""
+  ## e.g:
+  ## imagePullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  imagePullSecrets: []
+  defaultStorageClass: ""
+  keydb:
+    password: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: auto
+
+## @section Common parameters
+##
+
+## @param kubeVersion Override Kubernetes version
+##
+kubeVersion: ""
+## @param apiVersions Override Kubernetes API versions reported by .Capabilities
+##
+apiVersions: []
+## @param nameOverride String to partially override common.names.name
+##
+nameOverride: ""
+## @param fullnameOverride String to fully override common.names.fullname
+##
+fullnameOverride: ""
+## @param namespaceOverride String to fully override common.names.namespace
+##
+namespaceOverride: ""
+## @param commonLabels Labels to add to all deployed objects
+##
+commonLabels: {}
+## @param commonAnnotations Annotations to add to all deployed objects
+##
+commonAnnotations: {}
+## @param clusterDomain Kubernetes cluster domain name
+##
+clusterDomain: cluster.local
+## @param extraDeploy Array of extra objects to deploy with the release
+##
+extraDeploy: []
+## Diagnostic mode
+## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+## @param diagnosticMode.command Command to override all containers in the chart release
+## @param diagnosticMode.args Args to override all containers in the chart release
+##
+diagnosticMode:
+  enabled: false
+  command:
+    - sleep
+  args:
+    - infinity
+
+## @section KeyDB Image parameters
+## ref: https://hub.docker.com/r/bitnami/keydb/tags/
+## @param image.registry [default: REGISTRY_NAME] KeyDB image registry
+## @param image.repository [default: REPOSITORY_NAME/keydb] KeyDB image repository
+## @skip image.tag KeyDB image tag (immutable tags are recommended)
+## @param image.digest KeyDB image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
+## @param image.pullPolicy KeyDB image pull policy
+## @param image.pullSecrets KeyDB image pull secrets
+## @param image.debug Enable KeyDB image debug mode
+##
+image:
+  registry: docker.io
+  repository: bitnami/keydb
+  tag: 6.3.4-debian-12-r14
+  digest: ""
+  ## Specify a imagePullPolicy
+  ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
+  ##
+  pullPolicy: IfNotPresent
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## e.g:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  pullSecrets: []
+  debug: false
+
+## @section KeyDB common configuration parameters
+## https://github.com/bitnami/containers/tree/main/bitnami/keydb#configuration
+##
+
+## @param architecture KeyDB architecture. Allowed values: `standalone` or `replication`
+## ref: https://docs.keydb.dev/docs/replication
+## ref: https://docs.keydb.dev/docs/active-rep
+## ref: https://docs.keydb.dev/docs/multi-master
+##
+architecture: replication
+## KeyDB Authentication parameters
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/keydb#setting-the-server-password-on-first-run
+##
+auth:
+  ## @param auth.enabled Enable password authentication
+  ##
+  enabled: true
+  ## @param auth.password KeyDB password
+  ## Defaults to a random 10-character alphanumeric string if not set
+  ##
+  password: ""
+  ## @param auth.existingSecret The name of an existing secret with KeyDB credentials
+  ## NOTE: When it's set, the previous `auth.password` parameter is ignored
+  ##
+  existingSecret: ""
+  ## @param auth.existingSecretPasswordKey Password key to be retrieved from existing secret
+  ## NOTE: ignored unless `auth.existingSecret` parameter is set
+  ##
+  existingSecretPasswordKey: ""
+  ## @param auth.usePasswordFiles Mount credentials as files instead of using an environment variable
+  ##
+  usePasswordFiles: true
+## TLS configuration
+##
+tls:
+  ## @param tls.enabled Enable TLS communications
+  ##
+  enabled: false
+  ## @param tls.autoGenerated.enabled Enable automatic generation of certificates for TLS
+  ## @param tls.autoGenerated.engine Mechanism to generate the certificates (allowed values: helm, cert-manager)
+  autoGenerated:
+    enabled: true
+    engine: helm
+    ## @param tls.autoGenerated.certManager.existingIssuer The name of an existing Issuer to use for generating the certificates (only for `cert-manager` engine)
+    ## @param tls.autoGenerated.certManager.existingIssuerKind Existing Issuer kind, defaults to Issuer (only for `cert-manager` engine)
+    ## @param tls.autoGenerated.certManager.keyAlgorithm Key algorithm for the certificates (only for `cert-manager` engine)
+    ## @param tls.autoGenerated.certManager.keySize Key size for the certificates (only for `cert-manager` engine)
+    ## @param tls.autoGenerated.certManager.duration Duration for the certificates (only for `cert-manager` engine)
+    ## @param tls.autoGenerated.certManager.renewBefore Renewal period for the certificates (only for `cert-manager` engine)
+    certManager:
+      existingIssuer: ""
+      existingIssuerKind: ""
+      keySize: 2048
+      keyAlgorithm: RSA
+      duration: 2160h
+      renewBefore: 360h
+  ## @param tls.ca CA certificate for TLS. Ignored if `tls.existingCASecret` is set
+  ## @param tls.existingCASecret The name of an existing Secret containing the CA certificate for TLS
+  ## @param tls.master.cert TLS certificate for KeyDB master nodes. Ignored if `tls.master.existingSecret` is set
+  ## @param tls.master.key TLS key for KeyDB master nodes. Ignored if `tls.master.existingSecret` is set
+  ## @param tls.master.existingSecret The name of an existing Secret containing the KeyDB master nodes certificates for TLS
+  ## @param tls.replica.cert TLS certificate for KeyDB replica nodes. Ignored if `tls.replica.existingSecret` is set
+  ## @param tls.replica.key TLS key for KeyDB replica nodes. Ignored if `tls.replica.existingSecret` is set
+  ## @param tls.replica.existingSecret The name of an existing Secret containing the KeyDB replica nodes certificates for TLS
+  ##
+  ca: ""
+  existingCASecret: ""
+  master:
+    cert: ""
+    key: ""
+    existingSecret: ""
+  replica:
+    cert: ""
+    key: ""
+    existingSecret: ""
+## @param commonConfiguration [string] Common configuration to be added to both master and replica nodes
+## ref: https://docs.keydb.dev/docs/config-file
+##
+commonConfiguration: ""
+
+## @section KeyDB Master Configuration Parameters
+##
+master:
+  ## @param master.replicaCount Number of KeyDB master replicas to deploy
+  ##
+  replicaCount: 1
+  ## @param master.containerPorts.keydb Container port to open on KeyDB master nodes
+  ##
+  containerPorts:
+    keydb: 6379
+  ## @param master.extraContainerPorts Optionally specify extra list of additional ports for KeyDB master containers
+  ## e.g:
+  ## extraContainerPorts:
+  ##   - name: myservice
+  ##     containerPort: 9090
+  ##
+  extraContainerPorts: []
+  ## Configure extra options for KeyDB master containers' liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param master.livenessProbe.enabled Enable livenessProbe on KeyDB master containers
+  ## @param master.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param master.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param master.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param master.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param master.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 20
+    periodSeconds: 5
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  ## @param master.readinessProbe.enabled Enable readinessProbe on KeyDB master containers
+  ## @param master.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param master.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param master.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param master.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param master.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 20
+    periodSeconds: 5
+    timeoutSeconds: 1
+    successThreshold: 1
+    failureThreshold: 5
+  ## @param master.startupProbe.enabled Enable startupProbe on KeyDB master containers
+  ## @param master.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param master.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param master.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param master.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param master.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 20
+    periodSeconds: 5
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  ## @param master.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param master.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param master.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## KeyDB master resource requests and limits
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param master.resourcesPreset Set KeyDB master container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "nano"
+  ## @param master.resources Set KeyDB master container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param master.podSecurityContext.enabled Enable KeyDB master pods' Security Context
+  ## @param master.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy for KeyDB master pods
+  ## @param master.podSecurityContext.sysctls Set kernel settings using the sysctl interface for KeyDB master pods
+  ## @param master.podSecurityContext.supplementalGroups Set filesystem extra groups for KeyDB master pods
+  ## @param master.podSecurityContext.fsGroup Set fsGroup in KeyDB master pods' Security Context
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
+    fsGroup: 1001
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param master.containerSecurityContext.enabled Enabled KeyDB master container' Security Context
+  ## @param master.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in KeyDB master container
+  ## @param master.containerSecurityContext.runAsUser Set runAsUser in KeyDB master container' Security Context
+  ## @param master.containerSecurityContext.runAsGroup Set runAsGroup in KeyDB master container' Security Context
+  ## @param master.containerSecurityContext.runAsNonRoot Set runAsNonRoot in KeyDB master container' Security Context
+  ## @param master.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in KeyDB master container' Security Context
+  ## @param master.containerSecurityContext.privileged Set privileged in KeyDB master container' Security Context
+  ## @param master.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in KeyDB master container' Security Context
+  ## @param master.containerSecurityContext.capabilities.drop List of capabilities to be dropped in KeyDB master container
+  ## @param master.containerSecurityContext.seccompProfile.type Set seccomp profile in KeyDB master container
+  ##
+  containerSecurityContext:
+    enabled: true
+    seLinuxOptions: {}
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    readOnlyRootFilesystem: true
+    privileged: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
+  ## @param master.configuration Exclusive configuration for KeyDB master nodes (appended to common one)
+  ## ref: https://docs.keydb.dev/docs/config-file
+  ##
+  configuration: ""
+  ## @param master.existingConfigmap The name of an existing ConfigMap with your custom configuration for KeyDB master
+  ##
+  existingConfigmap: ""
+  ## @param master.disableCommands Array with KeyDB commands to disable on master nodes
+  ## Commands will be completely disabled by renaming each to an empty string.
+  ## ref: https://docs.keydb.dev/docs/commands
+  ##
+  disableCommands:
+    - FLUSHDB
+    - FLUSHALL
+  ## @param master.command Override default KeyDB master container command (useful when using custom images)
+  ##
+  command: []
+  ## @param master.args Override default KeyDB master container args (useful when using custom images)
+  ##
+  args: []
+  ## @param master.automountServiceAccountToken Mount Service Account token in KeyDB master pods
+  ##
+  automountServiceAccountToken: false
+  ## @param master.hostAliases KeyDB master pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param master.statefulsetAnnotations Annotations for KeyDB master statefulset
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  statefulsetAnnotations: {}
+  ## @param master.podLabels Extra labels for KeyDB master pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param master.podAnnotations Annotations for KeyDB master pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param master.podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param master.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## Node affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param master.nodeAffinityPreset.type Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param master.nodeAffinityPreset.key Node label key to match. Ignored if `affinity` is set
+    ##
+    key: ""
+    ## @param master.nodeAffinityPreset.values Node label values to match. Ignored if `affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param master.affinity Affinity for KeyDB master pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `podAffinityPreset`, `podAntiAffinityPreset`, and `nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param master.nodeSelector Node labels for KeyDB master pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
+  ##
+  nodeSelector: {}
+  ## @param master.tolerations Tolerations for KeyDB master pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param master.updateStrategy.type KeyDB master strategy type
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy:
+    ## Can be set to RollingUpdate or OnDelete
+    ##
+    type: RollingUpdate
+  ## @param master.priorityClassName KeyDB master pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param master.topologySpreadConstraints Topology Spread Constraints for KeyDB master pod assignment spread across your cluster among failure-domains
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
+  ## @param master.schedulerName Name of the k8s scheduler (other than default) for KeyDB master pods
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param master.terminationGracePeriodSeconds Seconds KeyDB master pods need to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## @param master.lifecycleHooks for KeyDB master containers to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param master.extraEnvVars Array with extra environment variables to add to KeyDB master containers
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param master.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for KeyDB master containers
+  ##
+  extraEnvVarsCM: ""
+  ## @param master.extraEnvVarsSecret Name of existing Secret containing extra env vars for KeyDB master containers
+  ##
+  extraEnvVarsSecret: ""
+  ## @param master.extraVolumes Optionally specify extra list of additional volumes for the KeyDB master pods
+  ##
+  extraVolumes: []
+  ## @param master.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the KeyDB master containers
+  ##
+  extraVolumeMounts: []
+  ## @param master.sidecars Add additional sidecar containers to the KeyDB master pods
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param master.initContainers Add additional init containers to the KeyDB master pods
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param master.pdb.create Enable/disable a Pod Disruption Budget creation for KeyDB master pods
+  ## @param master.pdb.minAvailable Minimum number/percentage of KeyDB master pods that should remain scheduled
+  ## @param master.pdb.maxUnavailable Maximum number/percentage of KeyDB master pods that may be made unavailable. Defaults to `1` if both `pdb.minAvailable` and `pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
+  ## Autoscaling configuration
+  ## ref: https://kubernetes.io/docs/concepts/workloads/autoscaling/
+  ##
+  autoscaling:
+    ## @param master.autoscaling.vpa.enabled Enable VPA for KeyDB master pods
+    ## @param master.autoscaling.vpa.annotations Annotations for VPA resource
+    ## @param master.autoscaling.vpa.controlledResources VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory
+    ## @param master.autoscaling.vpa.maxAllowed VPA Max allowed resources for the pod
+    ## @param master.autoscaling.vpa.minAllowed VPA Min allowed resources for the pod
+    ##
+    vpa:
+      enabled: false
+      annotations: {}
+      controlledResources: []
+      maxAllowed: {}
+      minAllowed: {}
+      ## @param master.autoscaling.vpa.updatePolicy.updateMode Autoscaling update policy
+      ## Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod
+      ## Possible values are "Off", "Initial", "Recreate", and "Auto".
+      ##
+      updatePolicy:
+        updateMode: Auto
+  ## @section KeyDB Master Persistence Parameters
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes
+  ##
+  persistence:
+    ## @param master.persistence.enabled Enable persistence using Persistent Volume Claims
+    ##
+    enabled: true
+    ## @param master.persistence.mountPath Path to mount the data volume at on KeyDB master containers
+    ##
+    mountPath: /bitnami/keydb/data
+    ## @param master.persistence.subPath The subdirectory of the volume to mount on KeyDB master containers
+    ##
+    subPath: ""
+    ## @param master.persistence.medium Provide a medium for `emptyDir` volumes
+    ##
+    medium: ""
+    ## @param master.persistence.sizeLimit Set this to enable a size limit for `emptyDir` volumes
+    ##
+    sizeLimit: ""
+    ## @param master.persistence.storageClass Storage class of backing PVC
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
+    storageClass: ""
+    ## @param master.persistence.annotations Additional Persistent Volume Claim annotations
+    ##
+    annotations: {}
+    ## @param master.persistence.accessModes Persistent Volume Access Modes
+    ##
+    accessModes:
+      - ReadWriteOnce
+    ## @param master.persistence.size Size of data volume
+    ##
+    size: 8Gi
+    ## @param master.persistence.selector Selector to match an existing Persistent Volume for WordPress data PVC
+    ## If set, the PVC can't have a PV dynamically provisioned for it
+    ## E.g.
+    ## selector:
+    ##   matchLabels:
+    ##     app: my-app
+    ##
+    selector: {}
+    ## @param master.persistence.dataSource Custom PVC data source
+    ##
+    dataSource: {}
+    ## @param master.persistence.existingClaim The name of an existing PVC to use for persistence (only if master.replicaCount=1)
+    ##
+    existingClaim: ""
+  ## persistentVolumeClaimRetentionPolicy
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#persistentvolumeclaim-retention
+  ## @param master.persistentVolumeClaimRetentionPolicy.enabled Controls if and how PVCs are deleted during the lifecycle of a StatefulSet
+  ## @param master.persistentVolumeClaimRetentionPolicy.whenScaled Volume retention behavior when the replica count of the StatefulSet is reduced
+  ## @param master.persistentVolumeClaimRetentionPolicy.whenDeleted Volume retention behavior that applies when the StatefulSet is deleted
+  ##
+  persistentVolumeClaimRetentionPolicy:
+    enabled: false
+    whenScaled: Retain
+    whenDeleted: Retain
+  ## @section KeyDB Master Traffic Exposure Parameters
+  ## KeyDB Master service parameters
+  ##
+  service:
+    ## @param master.service.type KeyDB master service type
+    ##
+    type: ClusterIP
+    ## @param master.service.ports.keydb KeyDB master service port
+    ##
+    ports:
+      keydb: 6379
+    ## Node ports to expose
+    ## @param master.service.nodePorts.keydb Node port for KeyDB master
+    ## NOTE: choose port between <30000-32767>
+    ##
+    nodePorts:
+      keydb: ""
+    ## @param master.service.clusterIP KeyDB master service Cluster IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param master.service.loadBalancerIP KeyDB master service Load Balancer IP
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerIP: ""
+    ## @param master.service.loadBalancerSourceRanges KeyDB master service Load Balancer sources
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param master.service.externalTrafficPolicy KeyDB master service external traffic policy
+    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param master.service.annotations Additional custom annotations for KeyDB master service
+    ##
+    annotations: {}
+    ## @param master.service.extraPorts Extra ports to expose in KeyDB master service (normally used with the `sidecars` value)
+    ##
+    extraPorts: []
+    ## @param master.service.sessionAffinity Control where client requests go, to the same pod or round-robin
+    ## Values: ClientIP or None
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
+    ##
+    sessionAffinity: None
+    ## @param master.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
+    ## Headless service properties
+    ##
+    headless:
+      ## @param master.service.headless.annotations Annotations for the headless service.
+      ##
+      annotations: {}
+  ## KeyDB Master Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param master.networkPolicy.enabled Specifies whether a NetworkPolicy should be created for KeyDB master
+    ##
+    enabled: true
+    ## @param master.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param master.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param master.networkPolicy.addExternalClientAccess Allow access from pods with client label set to "true". Ignored if `networkPolicy.allowExternal` is true.
+    ##
+    addExternalClientAccess: true
+    ## @param master.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param master.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy (ignored if allowExternalEgress=true)
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param master.networkPolicy.ingressPodMatchLabels [object] Labels to match to allow traffic from other pods. Ignored if `networkPolicy.allowExternal` is true.
+    ## e.g:
+    ## ingressPodMatchLabels:
+    ##   my-client: "true"
+    #
+    ingressPodMatchLabels: {}
+    ## @param master.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces. Ignored if `networkPolicy.allowExternal` is true.
+    ## @param master.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces. Ignored if `networkPolicy.allowExternal` is true.
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
+
+## @section KeyDB Replicas Configuration Parameters
+##
+replica:
+  ## @param replica.replicaCount Number of KeyDB replicas to deploy
+  ##
+  replicaCount: 1
+  ## @param replica.containerPorts.keydb Container port to open on KeyDB replicas nodes
+  ##
+  containerPorts:
+    keydb: 6379
+  ## @param replica.extraContainerPorts Optionally specify extra list of additional ports for KeyDB replicas containers
+  ## e.g:
+  ## extraContainerPorts:
+  ##   - name: myservice
+  ##     containerPort: 9090
+  ##
+  extraContainerPorts: []
+  ## Configure extra options for KeyDB replicas containers' liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param replica.livenessProbe.enabled Enable livenessProbe on KeyDB replicas containers
+  ## @param replica.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param replica.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param replica.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param replica.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param replica.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 20
+    periodSeconds: 5
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  ## @param replica.readinessProbe.enabled Enable readinessProbe on KeyDB replicas containers
+  ## @param replica.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param replica.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param replica.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param replica.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param replica.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 20
+    periodSeconds: 5
+    timeoutSeconds: 1
+    successThreshold: 1
+    failureThreshold: 5
+  ## @param replica.startupProbe.enabled Enable startupProbe on KeyDB replicas containers
+  ## @param replica.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param replica.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param replica.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param replica.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param replica.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 20
+    periodSeconds: 5
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  ## @param replica.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param replica.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param replica.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## KeyDB replicas resource requests and limits
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param replica.resourcesPreset Set KeyDB replicas container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "nano"
+  ## @param replica.resources Set KeyDB replicas container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param replica.podSecurityContext.enabled Enable KeyDB replicas pods' Security Context
+  ## @param replica.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy for KeyDB replicas pods
+  ## @param replica.podSecurityContext.sysctls Set kernel settings using the sysctl interface for KeyDB replicas pods
+  ## @param replica.podSecurityContext.supplementalGroups Set filesystem extra groups for KeyDB replicas pods
+  ## @param replica.podSecurityContext.fsGroup Set fsGroup in KeyDB replicas pods' Security Context
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
+    fsGroup: 1001
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param replica.containerSecurityContext.enabled Enabled KeyDB replicas container' Security Context
+  ## @param replica.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in KeyDB replicas container
+  ## @param replica.containerSecurityContext.runAsUser Set runAsUser in KeyDB replicas container' Security Context
+  ## @param replica.containerSecurityContext.runAsGroup Set runAsGroup in KeyDB replicas container' Security Context
+  ## @param replica.containerSecurityContext.runAsNonRoot Set runAsNonRoot in KeyDB replicas container' Security Context
+  ## @param replica.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in KeyDB replicas container' Security Context
+  ## @param replica.containerSecurityContext.privileged Set privileged in KeyDB replicas container' Security Context
+  ## @param replica.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in KeyDB replicas container' Security Context
+  ## @param replica.containerSecurityContext.capabilities.drop List of capabilities to be dropped in KeyDB replicas container
+  ## @param replica.containerSecurityContext.seccompProfile.type Set seccomp profile in KeyDB replicas container
+  ##
+  containerSecurityContext:
+    enabled: true
+    seLinuxOptions: {}
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    readOnlyRootFilesystem: true
+    privileged: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
+  ## @param replica.activeReplica Configure replica as an active replica
+  ##
+  activeReplica: false
+  ## @param replica.configuration Exclusive configuration for KeyDB replicas nodes (appended to common one)
+  ## ref: https://docs.keydb.dev/docs/config-file
+  ##
+  configuration: ""
+  ## @param replica.existingConfigmap The name of an existing ConfigMap with your custom configuration for KeyDB replicas
+  ##
+  existingConfigmap: ""
+  ## @param replica.disableCommands Array with KeyDB commands to disable on master nodes
+  ## Commands will be completely disabled by renaming each to an empty string.
+  ## ref: https://docs.keydb.dev/docs/commands
+  ##
+  disableCommands:
+    - FLUSHDB
+    - FLUSHALL
+  ## @param replica.command Override default KeyDB replicas container command (useful when using custom images)
+  ##
+  command: []
+  ## @param replica.args Override default KeyDB replicas container args (useful when using custom images)
+  ##
+  args: []
+  ## @param replica.automountServiceAccountToken Mount Service Account token in KeyDB replicas pods
+  ##
+  automountServiceAccountToken: false
+  ## @param replica.hostAliases KeyDB replicas pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param replica.statefulsetAnnotations Annotations for KeyDB replicas statefulset
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  statefulsetAnnotations: {}
+  ## @param replica.podLabels Extra labels for KeyDB replicas pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param replica.podAnnotations Annotations for KeyDB replicas pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param replica.podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param replica.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## Node affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param replica.nodeAffinityPreset.type Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param replica.nodeAffinityPreset.key Node label key to match. Ignored if `affinity` is set
+    ##
+    key: ""
+    ## @param replica.nodeAffinityPreset.values Node label values to match. Ignored if `affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param replica.affinity Affinity for KeyDB replicas pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `podAffinityPreset`, `podAntiAffinityPreset`, and `nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param replica.nodeSelector Node labels for KeyDB replicas pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
+  ##
+  nodeSelector: {}
+  ## @param replica.tolerations Tolerations for KeyDB replicas pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param replica.updateStrategy.type KeyDB replicas strategy type
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy:
+    ## Can be set to RollingUpdate or OnDelete
+    ##
+    type: RollingUpdate
+  ## @param replica.priorityClassName KeyDB replicas pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param replica.topologySpreadConstraints Topology Spread Constraints for KeyDB replicas pod assignment spread across your cluster among failure-domains
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
+  ## @param replica.schedulerName Name of the k8s scheduler (other than default) for KeyDB replicas pods
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param replica.terminationGracePeriodSeconds Seconds KeyDB replicas pods need to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## @param replica.lifecycleHooks for KeyDB replicas containers to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param replica.extraEnvVars Array with extra environment variables to add to KeyDB replicas containers
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param replica.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for KeyDB replicas containers
+  ##
+  extraEnvVarsCM: ""
+  ## @param replica.extraEnvVarsSecret Name of existing Secret containing extra env vars for KeyDB replicas containers
+  ##
+  extraEnvVarsSecret: ""
+  ## @param replica.extraVolumes Optionally specify extra list of additional volumes for the KeyDB replicas pods
+  ##
+  extraVolumes: []
+  ## @param replica.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the KeyDB replicas containers
+  ##
+  extraVolumeMounts: []
+  ## @param replica.sidecars Add additional sidecar containers to the KeyDB replicas pods
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param replica.initContainers Add additional init containers to the KeyDB replicas pods
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param replica.pdb.create Enable/disable a Pod Disruption Budget creation for KeyDB replicas pods
+  ## @param replica.pdb.minAvailable Minimum number/percentage of KeyDB replicas pods that should remain scheduled
+  ## @param replica.pdb.maxUnavailable Maximum number/percentage of KeyDB replicas pods that may be made unavailable. Defaults to `1` if both `pdb.minAvailable` and `pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
+  ## Autoscaling configuration
+  ## ref: https://kubernetes.io/docs/concepts/workloads/autoscaling/
+  ##
+  autoscaling:
+    ## @param replica.autoscaling.vpa.enabled Enable VPA for KeyDB replicas pods
+    ## @param replica.autoscaling.vpa.annotations Annotations for VPA resource
+    ## @param replica.autoscaling.vpa.controlledResources VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory
+    ## @param replica.autoscaling.vpa.maxAllowed VPA Max allowed resources for the pod
+    ## @param replica.autoscaling.vpa.minAllowed VPA Min allowed resources for the pod
+    ##
+    vpa:
+      enabled: false
+      annotations: {}
+      controlledResources: []
+      maxAllowed: {}
+      minAllowed: {}
+      ## @param replica.autoscaling.vpa.updatePolicy.updateMode Autoscaling update policy
+      ## Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod
+      ## Possible values are "Off", "Initial", "Recreate", and "Auto".
+      ##
+      updatePolicy:
+        updateMode: Auto
+    ## @param replica.autoscaling.hpa.enabled Enable HPA for KeyDB Replicas pods
+    ## @param replica.autoscaling.hpa.minReplicas Minimum number of replicas
+    ## @param replica.autoscaling.hpa.maxReplicas Maximum number of replicas
+    ## @param replica.autoscaling.hpa.targetCPU Target CPU utilization percentage
+    ## @param replica.autoscaling.hpa.targetMemory Target Memory utilization percentage
+    ##
+    hpa:
+      enabled: false
+      minReplicas: ""
+      maxReplicas: ""
+      targetCPU: ""
+      targetMemory: ""
+  ## @section KeyDB Replicas Persistence Parameters
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes
+  ##
+  persistence:
+    ## @param replica.persistence.enabled Enable persistence using Persistent Volume Claims
+    ##
+    enabled: true
+    ## @param replica.persistence.mountPath Path to mount the data volume at on KeyDB replicas containers
+    ##
+    mountPath: /bitnami/keydb/data
+    ## @param replica.persistence.subPath The subdirectory of the volume to mount on KeyDB replicas containers
+    ##
+    subPath: ""
+    ## @param replica.persistence.medium Provide a medium for `emptyDir` volumes
+    ##
+    medium: ""
+    ## @param replica.persistence.sizeLimit Set this to enable a size limit for `emptyDir` volumes
+    ##
+    sizeLimit: ""
+    ## @param replica.persistence.storageClass Storage class of backing PVC
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
+    storageClass: ""
+    ## @param replica.persistence.annotations Additional Persistent Volume Claim annotations
+    ##
+    annotations: {}
+    ## @param replica.persistence.accessModes Persistent Volume Access Modes
+    ##
+    accessModes:
+      - ReadWriteOnce
+    ## @param replica.persistence.size Size of data volume
+    ##
+    size: 8Gi
+    ## @param replica.persistence.selector Selector to match an existing Persistent Volume for WordPress data PVC
+    ## If set, the PVC can't have a PV dynamically provisioned for it
+    ## E.g.
+    ## selector:
+    ##   matchLabels:
+    ##     app: my-app
+    ##
+    selector: {}
+    ## @param replica.persistence.dataSource Custom PVC data source
+    ##
+    dataSource: {}
+    ## @param replica.persistence.existingClaim The name of an existing PVC to use for persistence (only if replica.replicaCount=1)
+    ##
+    existingClaim: ""
+  ## persistentVolumeClaimRetentionPolicy
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#persistentvolumeclaim-retention
+  ## @param replica.persistentVolumeClaimRetentionPolicy.enabled Controls if and how PVCs are deleted during the lifecycle of a StatefulSet
+  ## @param replica.persistentVolumeClaimRetentionPolicy.whenScaled Volume retention behavior when the replica count of the StatefulSet is reduced
+  ## @param replica.persistentVolumeClaimRetentionPolicy.whenDeleted Volume retention behavior that applies when the StatefulSet is deleted
+  ##
+  persistentVolumeClaimRetentionPolicy:
+    enabled: false
+    whenScaled: Retain
+    whenDeleted: Retain
+  ## @section KeyDB Replicas Traffic Exposure Parameters
+  ## KeyDB Replicas service parameters
+  ##
+  service:
+    ## @param replica.service.type KeyDB replicas service type
+    ##
+    type: ClusterIP
+    ## @param replica.service.ports.keydb KeyDB replicas service port
+    ##
+    ports:
+      keydb: 6379
+    ## Node ports to expose
+    ## @param replica.service.nodePorts.keydb Node port for KeyDB replicas
+    ## NOTE: choose port between <30000-32767>
+    ##
+    nodePorts:
+      keydb: ""
+    ## @param replica.service.clusterIP KeyDB replicas service Cluster IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param replica.service.loadBalancerIP KeyDB replicas service Load Balancer IP
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerIP: ""
+    ## @param replica.service.loadBalancerSourceRanges KeyDB replicas service Load Balancer sources
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param replica.service.externalTrafficPolicy KeyDB replicas service external traffic policy
+    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param replica.service.annotations Additional custom annotations for KeyDB replicas service
+    ##
+    annotations: {}
+    ## @param replica.service.extraPorts Extra ports to expose in KeyDB replicas service (normally used with the `sidecars` value)
+    ##
+    extraPorts: []
+    ## @param replica.service.sessionAffinity Control where client requests go, to the same pod or round-robin
+    ## Values: ClientIP or None
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
+    ##
+    sessionAffinity: None
+    ## @param replica.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
+    ## Headless service properties
+    ##
+    headless:
+      ## @param replica.service.headless.annotations Annotations for the headless service.
+      ##
+      annotations: {}
+  ## KeyDB Replicas Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param replica.networkPolicy.enabled Specifies whether a NetworkPolicy should be created for KeyDB replicas
+    ##
+    enabled: true
+    ## @param replica.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param replica.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param replica.networkPolicy.addExternalClientAccess Allow access from pods with client label set to "true". Ignored if `networkPolicy.allowExternal` is true.
+    ##
+    addExternalClientAccess: true
+    ## @param replica.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param replica.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy (ignored if allowExternalEgress=true)
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param replica.networkPolicy.ingressPodMatchLabels [object] Labels to match to allow traffic from other pods. Ignored if `networkPolicy.allowExternal` is true.
+    ## e.g:
+    ## ingressPodMatchLabels:
+    ##   my-client: "true"
+    #
+    ingressPodMatchLabels: {}
+    ## @param replica.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces. Ignored if `networkPolicy.allowExternal` is true.
+    ## @param replica.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces. Ignored if `networkPolicy.allowExternal` is true.
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
+
+## @section Metrics Parameters
+##
+metrics:
+  ## @param metrics.enabled Start a sidecar Prometheus exporter to expose KeyDB metrics
+  ##
+  enabled: false
+  ## Bitnami Redis Exporter image
+  ## ref: https://hub.docker.com/r/bitnami/redis-exporter/tags/
+  ## @param metrics.image.registry [default: REGISTRY_NAME] Redis Exporter image registry
+  ## @param metrics.image.repository [default: REPOSITORY_NAME/redis-exporter] Redis Exporter image repository
+  ## @skip metrics.image.tag Redis Exporter image tag (immutable tags are recommended)
+  ## @param metrics.image.digest Redis Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param metrics.image.pullPolicy Redis Exporter image pull policy
+  ## @param metrics.image.pullSecrets Redis Exporter image pull secrets
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/redis-exporter
+    tag: 1.69.0-debian-12-r1
+    digest: ""
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+  ## @param metrics.containerPorts.http Metrics HTTP container port
+  ##
+  containerPorts:
+    http: 9121
+  ## Configure extra options for KeyDB containers' liveness, readiness & startup probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
+  ## @param metrics.startupProbe.enabled Enable startupProbe on KeyDB replicas nodes
+  ## @param metrics.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param metrics.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param metrics.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param metrics.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param metrics.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  ## @param metrics.livenessProbe.enabled Enable livenessProbe on KeyDB replicas nodes
+  ## @param metrics.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param metrics.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param metrics.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param metrics.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param metrics.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  ## @param metrics.readinessProbe.enabled Enable readinessProbe on KeyDB replicas nodes
+  ## @param metrics.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param metrics.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param metrics.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param metrics.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param metrics.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 1
+    successThreshold: 1
+    failureThreshold: 3
+  ## @param metrics.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## @param metrics.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param metrics.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param metrics.command Override default metrics container init command (useful when using custom images)
+  ##
+  command: []
+  ## @param metrics.keydbHost A way to specify an alternative KeyDB hostname
+  ## Useful for certificate CN/SAN matching
+  ##
+  keydbHost: "localhost"
+  ## @param metrics.extraArgs Extra arguments for KeyDB metrics exporter, for example:
+  ## e.g.:
+  ## extraArgs:
+  ##   check-keys: myKey,myOtherKey
+  ##
+  extraArgs: {}
+  ## @param metrics.extraEnvVars Array with extra environment variables to add to KeyDB metrics exporter
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param metrics.containerSecurityContext.enabled Enabled KeyDB metrics exporter containers' Security Context
+  ## @param metrics.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param metrics.containerSecurityContext.runAsUser Set KeyDB metrics exporter containers' Security Context runAsUser
+  ## @param metrics.containerSecurityContext.runAsGroup Set KeyDB metrics exporter containers' Security Context runAsGroup
+  ## @param metrics.containerSecurityContext.runAsNonRoot Set KeyDB metrics exporter containers' Security Context runAsNonRoot
+  ## @param metrics.containerSecurityContext.allowPrivilegeEscalation Set KeyDB metrics exporter containers' Security Context allowPrivilegeEscalation
+  ## @param metrics.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context read-only root filesystem
+  ## @param metrics.containerSecurityContext.seccompProfile.type Set KeyDB metrics exporter containers' Security Context seccompProfile
+  ## @param metrics.containerSecurityContext.capabilities.drop Set KeyDB metrics exporter containers' Security Context capabilities to drop
+  ##
+  containerSecurityContext:
+    enabled: true
+    seLinuxOptions: {}
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
+    seccompProfile:
+      type: RuntimeDefault
+    capabilities:
+      drop: ["ALL"]
+  ## @param metrics.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the KeyDB metrics sidecar
+  ##
+  extraVolumeMounts: []
+  ## KeyDB metrics exporter resource requests and limits
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param metrics.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if metrics.resources is set (metrics.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "nano"
+  ## @param metrics.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
+  ## @param metrics.podLabels Extra labels for KeyDB metrics exporter pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param metrics.podAnnotations [object] Annotations for KeyDB metrics exporter pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "{{ .Values.metrics.containerPorts.http }}"
+  ## KeyDB metrics exporter service properties
+  ##
+  service:
+    ## @param metrics.service.port Metrics service port
+    ##
+    port: 9121
+    ## @param metrics.service.annotations Annotations for the metrics service
+    ##
+    annotations: {}
+  ## Prometheus Operator ServiceMonitor configuration
+  ##
+  serviceMonitor:
+    ## @param metrics.serviceMonitor.enabled if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)
+    ##
+    enabled: false
+    ## @param metrics.serviceMonitor.namespace Namespace in which Prometheus is running
+    ##
+    namespace: ""
+    ## @param metrics.serviceMonitor.annotations Additional custom annotations for the ServiceMonitor
+    ##
+    annotations: {}
+    ## @param metrics.serviceMonitor.labels Extra labels for the ServiceMonitor
+    ##
+    labels: {}
+    ## @param metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in Prometheus
+    ##
+    jobLabel: ""
+    ## @param metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
+    ##
+    honorLabels: false
+    ## @param metrics.serviceMonitor.interval Interval at which metrics should be scraped.
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    ## e.g:
+    ## interval: 10s
+    ##
+    interval: ""
+    ## @param metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    ## e.g:
+    ## scrapeTimeout: 10s
+    ##
+    scrapeTimeout: ""
+    ## @param metrics.serviceMonitor.metricRelabelings Specify additional relabeling of metrics
+    ##
+    metricRelabelings: []
+    ## @param metrics.serviceMonitor.relabelings Specify general relabeling
+    ##
+    relabelings: []
+    ## @param metrics.serviceMonitor.selector Prometheus instance selector labels
+    ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
+    ## selector:
+    ##   prometheus: my-prometheus
+    ##
+    selector: {}
+  ## Custom PrometheusRule to be defined
+  ## ref: https://github.com/coreos/prometheus-operator#customresourcedefinitions
+  ##
+  prometheusRule:
+    ## @param metrics.prometheusRule.enabled Create a custom prometheusRule Resource for scraping metrics using PrometheusOperator
+    ##
+    enabled: false
+    ## @param metrics.prometheusRule.namespace The namespace in which the prometheusRule will be created
+    ##
+    namespace: ""
+    ## @param metrics.prometheusRule.annotations Additional custom annotations for the prometheusRule
+    ##
+    annotations: {}
+    ## @param metrics.prometheusRule.labels Extra labels for the prometheusRule
+    ##
+    labels: {}
+    ## @param metrics.prometheusRule.rules Custom Prometheus rules
+    ## e.g:
+    ## rules:
+    ##   - alert: KeyDBDown
+    ##     expr: redis_up{service="{{ include "common.names.fullname" . }}-metrics"} == 0
+    ##     for: 2m
+    ##     labels:
+    ##       severity: error
+    ##     annotations:
+    ##       summary: KeyDB instance {{ "{{ $labels.instance }}" }} down
+    ##       description: KeyDB instance {{ "{{ $labels.instance }}" }} is down
+    ##    - alert: KeyDBMemoryHigh
+    ##      expr: >
+    ##        redis_memory_used_bytes{service="{{ include "common.names.fullname" . }}-metrics"} * 100
+    ##        /
+    ##        redis_memory_max_bytes{service="{{ include "common.names.fullname" . }}-metrics"}
+    ##        > 90
+    ##      for: 2m
+    ##      labels:
+    ##        severity: error
+    ##      annotations:
+    ##        summary: KeyDB instance {{ "{{ $labels.instance }}" }} is using too much memory
+    ##        description: |
+    ##          KeyDB instance {{ "{{ $labels.instance }}" }} is using {{ "{{ $value }}" }}% of its available memory.
+    ##    - alert: KeyDBKeyEviction
+    ##      expr: |
+    ##        increase(redis_evicted_keys_total{service="{{ include "common.names.fullname" . }}-metrics"}[5m]) > 0
+    ##      for: 1s
+    ##      labels:
+    ##        severity: error
+    ##      annotations:
+    ##        summary: KeyDB instance {{ "{{ $labels.instance }}" }} has evicted keys
+    ##        description: |
+    ##          KeyDB instance {{ "{{ $labels.instance }}" }} has evicted {{ "{{ $value }}" }} keys in the last 5 minutes.
+    ##
+    rules: []
+
+## @section Other Parameters
+
+## ServiceAccount configuration
+##
+serviceAccount:
+  ## @param serviceAccount.create Specifies whether a ServiceAccount should be created for KeyDB replicas pods
+  ##
+  create: true
+  ## @param serviceAccount.name The name of the ServiceAccount to use
+  ## If not set and create is true, a name is generated using the common.names.fullname template
+  ##
+  name: ""
+  ## @param serviceAccount.annotations Additional Service Account annotations (evaluated as a template)
+  ##
+  annotations: {}
+  ## @param serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+  ##
+  automountServiceAccountToken: true
+
+## @section Init Container Parameters
+##
+
+## 'volumePermissions' init container parameters
+## Changes the owner and group of the persistent volume mount point to runAsUser:fsGroup values
+##   based on the *podSecurityContext/*containerSecurityContext parameters
+##
+volumePermissions:
+  ## @param volumePermissions.enabled Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`
+  ##
+  enabled: false
+  ## OS Shell + Utility image
+  ## ref: https://hub.docker.com/r/bitnami/os-shell/tags/
+  ## @param volumePermissions.image.registry [default: REGISTRY_NAME] OS Shell + Utility image registry
+  ## @param volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] OS Shell + Utility image repository
+  ## @skip volumePermissions.image.tag OS Shell + Utility image tag (immutable tags are recommended)
+  ## @param volumePermissions.image.pullPolicy OS Shell + Utility image pull policy
+  ## @param volumePermissions.image.pullSecrets OS Shell + Utility image pull secrets
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/os-shell
+    tag: 12-debian-12-r40
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+  ## Init container's resource requests and limits
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param volumePermissions.resourcesPreset Set init container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "nano"
+  ## @param volumePermissions.resources Set init container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
+  ## Init container Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param volumePermissions.containerSecurityContext.enabled Enabled init container' Security Context
+  ## @param volumePermissions.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in init container
+  ## @param volumePermissions.containerSecurityContext.runAsUser Set init container's Security Context runAsUser
+  ## NOTE: when runAsUser is set to special value "auto", init container will try to chown the
+  ##   data folder to auto-determined user&group, using commands: `id -u`:`id -G | cut -d" " -f2`
+  ##   "auto" is especially useful for OpenShift which has scc with dynamic user ids (and 0 is not allowed)
+  ##
+  containerSecurityContext:
+    enabled: true
+    seLinuxOptions: {}
+    runAsUser: 0

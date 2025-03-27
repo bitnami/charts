@@ -1,0 +1,32 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.masterCoordinator.pdb.create }}
+apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "dremio.master-coordinator.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: dremio
+    app.kubernetes.io/component: master-coordinator
+    {{- /* We need an extra label that applies to both master and non-master coordinators. Taken from upstream dremio chart */}}
+    app: dremio-coordinator
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if .Values.masterCoordinator.pdb.minAvailable }}
+  minAvailable: {{ .Values.masterCoordinator.pdb.minAvailable }}
+  {{- end  }}
+  {{- if or .Values.masterCoordinator.pdb.maxUnavailable ( not .Values.masterCoordinator.pdb.minAvailable ) }}
+  maxUnavailable: {{ .Values.masterCoordinator.pdb.maxUnavailable | default 1 }}
+  {{- end  }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.masterCoordinator.podLabels .Values.commonLabels ) "context" . ) }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/part-of: dremio
+      app.kubernetes.io/component: master-coordinator
+{{- end }}

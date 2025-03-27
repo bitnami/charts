@@ -1,0 +1,136 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if (include "dremio.bootstrap-user-job.create" .) }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ printf "%s-bootstrap-user" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" (list .Values.commonLabels .Values.bootstrapUserJob.labels) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: dremio
+    app.kubernetes.io/component: bootstrap-user
+  {{- if or .Values.bootstrapUserJob.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.coordinator.statefulsetAnnotations .Values.commonAnnotations) "context" .) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  backoffLimit: {{ .Values.bootstrapUserJob.backoffLimit }}
+  template:
+    metadata:
+      {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.bootstrapUserJob.podLabels .Values.commonLabels ) "context" . ) }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/part-of: dremio
+        app.kubernetes.io/component: bootstrap-user
+      {{- if .Values.bootstrapUserJob.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.bootstrapUserJob.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+    spec:
+      {{- include "dremio.imagePullSecrets" . | nindent 6 }}
+      restartPolicy: OnFailure
+      {{- if .Values.bootstrapUserJob.podSecurityContext.enabled }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.bootstrapUserJob.podSecurityContext "context" $) | nindent 8 }}
+      {{- end }}
+      automountServiceAccountToken: {{ .Values.bootstrapUserJob.automountServiceAccountToken }}
+      {{- if .Values.bootstrapUserJob.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.bootstrapUserJob.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      initContainers:
+        {{- if .Values.defaultInitContainers.wait.enabled }}
+        {{- include "dremio.init-containers.wait-for-master-coordinator" . | nindent 8 }}
+        {{- end }}
+      containers:
+        - name: bootstrap-user
+          image: {{ include "dremio.init-containers.default-image" . }}
+          imagePullPolicy: {{ .Values.defaultInitContainers.defaultImage.pullPolicy }}
+          command:
+            - /bin/bash
+            - -ec
+          args:
+            - |
+              set -e
+              {{- if .Values.usePasswordFiles }}
+              # We need to load all the secret env vars to the system
+              for file in $(find /bitnami/dremio/secrets -type f); do
+                  env_var_name="$(basename $file)"
+                  echo "Exporting $env_var_name"
+                  export $env_var_name="$(< $file)"
+              done
+              {{- end }}
+              escaped_password="${DREMIO_PASSWORD//\"/\\\"}"
+              url="{{ ternary "https" "http" .Values.dremio.tls.enabled }}://{{ include "dremio.master-coordinator.fullname" . }}-0.{{ printf "%s-headless" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}:{{ .Values.dremio.containerPorts.web }}/apiv2/bootstrap/firstuser"
+              echo "Bootstapping user {{ .Values.dremio.auth.username }} in endpoint $url"
+              curl -k "$url" -X PUT \
+                    -H 'Authorization: _dremionull' -H 'Content-Type: application/json' \
+                  --data-binary "{\"userName\":\"{{ .Values.dremio.auth.username }}\",\"firstName\":\"{{ .Values.dremio.auth.firstName }}\",\"lastName\":\"{{ .Values.dremio.auth.lastName }}\",\"email\":\"{{ .Values.dremio.auth.email }}\",\"createdAt\":$(date +%s),\"password\":\"${escaped_password}\"}"
+              echo "" # To generate a newline in the log because of the curl command
+              {{- if .Values.bootstrapUserJob.extraCommands }}
+              echo "Executing extra commands"
+              {{- include "common.tplvalues.render" (dict "value" .Values.bootstrapUserJob.extraCommands "context" $) | nindent 14 }}
+              {{- end }}
+              echo "Initialization finished"
+          env:
+            {{- if not .Values.usePasswordFiles }}
+            - name: DREMIO_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "dremio.auth.secretName" . }}
+                  key: {{ include "dremio.auth.passwordKey" . }}
+            {{- end }}
+          {{- if .Values.bootstrapUserJob.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.bootstrapUserJob.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.bootstrapUserJob.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.bootstrapUserJob.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.bootstrapUserJob.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.bootstrapUserJob.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.bootstrapUserJob.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.bootstrapUserJob.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if or .Values.bootstrapUserJob.extraEnvVarsCM .Values.bootstrapUserJob.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.bootstrapUserJob.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ .Values.bootstrapUserJob.extraEnvVarsCM }}
+            {{- end }}
+            {{- if .Values.bootstrapUserJob.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ .Values.bootstrapUserJob.extraEnvVarsSecret }}
+            {{- end }}
+          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            {{- if .Values.usePasswordFiles }}
+            - name: password
+              mountPath: /bitnami/dremio/secrets/password
+            {{- end }}
+          {{- if .Values.bootstrapUserJob.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.bootstrapUserJob.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.bootstrapUserJob.resources }}
+          resources: {{- toYaml .Values.bootstrapUserJob.resources | nindent 12 }}
+          {{- else if ne .Values.bootstrapUserJob.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.bootstrapUserJob.resourcesPreset) | nindent 12 }}
+          {{- end }}
+      volumes:
+        - name: empty-dir
+          emptyDir: {}
+        {{- if .Values.usePasswordFiles }}
+        - name: password
+          secret:
+            secretName: {{ include "dremio.auth.secretName" . }}
+            items:
+              - key: {{ include "dremio.auth.passwordKey" . }}
+                path: DREMIO_PASSWORD
+        {{- end }}
+      {{- if .Values.bootstrapUserJob.extraVolumes }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.bootstrapUserJob.extraVolumes "context" $) | nindent 8 }}
+      {{- end }}
+{{- end }}

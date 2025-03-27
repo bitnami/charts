@@ -19,9 +19,6 @@ http:
   http://127.0.0.1:{{ .Vars.dataPlane.containerPorts.control }}/v1/healthcheck:
     status: 200
   https://apisix-control-plane:{{ .Vars.controlPlane.service.ports.adminAPI }}/apisix/admin/routes:
-    status: 401
-    allow-insecure: true
-  https://apisix-control-plane:{{ .Vars.controlPlane.service.ports.adminAPI }}/apisix/admin/routes:
     status: 200
     request-headers:
       - "X-API-KEY: {{ .Vars.controlPlane.apiTokenAdmin }}"

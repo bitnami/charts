@@ -2,6 +2,8 @@ CHART NAME: {{ .Chart.Name }}
 CHART VERSION: {{ .Chart.Version }}
 APP VERSION: {{ .Chart.AppVersion }}
 
+Did you know there are enterprise versions of the Bitnami catalog? For enhanced secure software supply chain features, unlimited pulls from Docker, LTS support, or application customization, see Bitnami Premium or Tanzu Application Catalog. See https://www.arrow.com/globalecs/na/vendors/bitnami for more information.
+
 {{- if .Values.diagnosticMode.enabled }}
 The chart has been deployed in diagnostic mode. All probes have been disabled and the command has been overwritten with:
 
@@ -50,8 +52,10 @@ Kafka can be accessed by consumers via port {{ $clientPort }} on the following D
 Each Kafka broker can be accessed by producers via port {{ $clientPort }} on the following DNS name(s) from within your cluster:
 
 {{- $brokerList := list }}
+{{- if not .Values.controller.controllerOnly }}
 {{- range $i := until (int .Values.controller.replicaCount) }}
 {{- $brokerList = append $brokerList (printf "%s-controller-%d.%s-controller-headless.%s.svc.%s:%d" $fullname $i $fullname $releaseNamespace $clusterDomain $clientPort) }}
+{{- end }}
 {{- end }}
 {{- range $i := until (int .Values.broker.replicaCount) }}
 {{- $brokerList = append $brokerList (printf "%s-broker-%d.%s-broker-headless.%s.svc.%s:%d" $fullname $i $fullname $releaseNamespace $clusterDomain $clientPort) }}
@@ -149,7 +153,7 @@ To create a pod that you can use as a Kafka client run the following commands:
             {{- if or $clientSaslEnabled $clientSslEnabled }}
             --producer.config /tmp/client.properties \
             {{- end }}
-            --broker-list {{ join "," $brokerList }} \
+            --bootstrap-server {{ $fullname }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ .Values.service.ports.client }} \
             --topic test
 
     CONSUMER:
@@ -162,11 +166,9 @@ To create a pod that you can use as a Kafka client run the following commands:
             --from-beginning
 
 {{- if .Values.externalAccess.enabled }}
-{{- if or (not .Values.kraft.enabled) (not .Values.controller.controllerOnly) .Values.externalAccess.controller.forceExpose }}
+{{- if or (not .Values.controller.controllerOnly) .Values.externalAccess.controller.forceExpose }}
 
-{{- if not .Values.kraft.enabled }}
-To connect to your Kafka nodes from outside the cluster, follow these instructions:
-{{- else if and .Values.controller.controllerOnly .Values.externalAccess.controller.forceExpose }}
+{{- if and .Values.controller.controllerOnly .Values.externalAccess.controller.forceExpose }}
 To connect to your Kafka controller-only nodes from outside the cluster, follow these instructions:
 {{- else }}
 To connect to your Kafka controller+broker nodes from outside the cluster, follow these instructions:
@@ -181,7 +183,7 @@ To connect to your Kafka controller+broker nodes from outside the cluster, follo
 
         1. Obtain the pod name:
 
-        kubectl get pods --namespace {{ include "common.names.namespace" . }} -l "app.kubernetes.io/name={{ template "kafka.name" . }},app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=kafka"
+        kubectl get pods --namespace {{ include "common.names.namespace" . }} -l "app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=kafka"
 
         2. Obtain pod configuration:
 
@@ -190,16 +192,16 @@ To connect to your Kafka controller+broker nodes from outside the cluster, follo
     {{- end }}
     Kafka brokers port: You will have a different node port for each Kafka broker. You can get the list of configured node ports using the command below:
 
-        echo "$(kubectl get svc --namespace {{ include "common.names.namespace" . }} -l "app.kubernetes.io/name={{ template "kafka.name" . }},app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=kafka,pod" -o jsonpath='{.items[*].spec.ports[0].nodePort}' | tr ' ' '\n')"
+        echo "$(kubectl get svc --namespace {{ include "common.names.namespace" . }} -l "app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=kafka,pod" -o jsonpath='{.items[*].spec.ports[0].nodePort}' | tr ' ' '\n')"
 
 {{- else if eq "LoadBalancer" .Values.externalAccess.controller.service.type }}
     NOTE: It may take a few minutes for the LoadBalancer IPs to be available.
 
-        Watch the status with: 'kubectl get svc --namespace {{ include "common.names.namespace" . }} -l "app.kubernetes.io/name={{ template "kafka.name" . }},app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=kafka,pod" -w'
+        Watch the status with: 'kubectl get svc --namespace {{ include "common.names.namespace" . }} -l "app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=kafka,pod" -w'
 
     Kafka Brokers domain: You will have a different external IP for each Kafka broker. You can get the list of external IPs using the command below:
 
-        echo "$(kubectl get svc --namespace {{ include "common.names.namespace" . }} -l "app.kubernetes.io/name={{ template "kafka.name" . }},app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=kafka,pod" -o jsonpath='{.items[*].status.loadBalancer.ingress[0].ip}' | tr ' ' '\n')"
+        echo "$(kubectl get svc --namespace {{ include "common.names.namespace" . }} -l "app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=kafka,pod" -o jsonpath='{.items[*].status.loadBalancer.ingress[0].ip}' | tr ' ' '\n')"
 
     Kafka Brokers port: {{ .Values.externalAccess.controller.service.ports.external }}
 
@@ -224,7 +226,7 @@ To connect to your Kafka broker nodes from outside the cluster, follow these ins
 
         1. Obtain the pod name:
 
-        kubectl get pods --namespace {{ include "common.names.namespace" . }} -l "app.kubernetes.io/name={{ template "kafka.name" . }},app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=kafka"
+        kubectl get pods --namespace {{ include "common.names.namespace" . }} -l "app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=kafka"
 
         2. Obtain pod configuration:
 
@@ -233,16 +235,16 @@ To connect to your Kafka broker nodes from outside the cluster, follow these ins
     {{- end }}
     Kafka brokers port: You will have a different node port for each Kafka broker. You can get the list of configured node ports using the command below:
 
-        echo "$(kubectl get svc --namespace {{ include "common.names.namespace" . }} -l "app.kubernetes.io/name={{ template "kafka.name" . }},app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=kafka,pod" -o jsonpath='{.items[*].spec.ports[0].nodePort}' | tr ' ' '\n')"
+        echo "$(kubectl get svc --namespace {{ include "common.names.namespace" . }} -l "app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=kafka,pod" -o jsonpath='{.items[*].spec.ports[0].nodePort}' | tr ' ' '\n')"
 
 {{- else if eq "LoadBalancer" .Values.externalAccess.broker.service.type }}
     NOTE: It may take a few minutes for the LoadBalancer IPs to be available.
 
-        Watch the status with: 'kubectl get svc --namespace {{ include "common.names.namespace" . }} -l "app.kubernetes.io/name={{ template "kafka.name" . }},app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=kafka,pod" -w'
+        Watch the status with: 'kubectl get svc --namespace {{ include "common.names.namespace" . }} -l "app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=kafka,pod" -w'
 
     Kafka Brokers domain: You will have a different external IP for each Kafka broker. You can get the list of external IPs using the command below:
 
-        echo "$(kubectl get svc --namespace {{ include "common.names.namespace" . }} -l "app.kubernetes.io/name={{ template "kafka.name" . }},app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=kafka,pod" -o jsonpath='{.items[*].status.loadBalancer.ingress[0].ip}' | tr ' ' '\n')"
+        echo "$(kubectl get svc --namespace {{ include "common.names.namespace" . }} -l "app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=kafka,pod" -o jsonpath='{.items[*].status.loadBalancer.ingress[0].ip}' | tr ' ' '\n')"
 
     Kafka Brokers port: {{ .Values.externalAccess.broker.service.ports.external }}
 
@@ -329,6 +331,8 @@ ssl.endpoint.identification.algorithm=
 {{- end }}
 {{- end }}
 
+{{- include "common.warnings.resources" (dict "sections" (list "broker" "controller" "metrics.jmx" "provisioning" "defaultInitContainers.volumePermissions" "defaultInitContainers.prepareConfig" "defaultInitContainers.autoDiscovery") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.defaultInitContainers.volumePermissions.image .Values.defaultInitContainers.autoDiscovery.image .Values.metrics.jmx.image) "context" $) }}
+{{- include "common.errors.insecureImages" (dict "images" (list .Values.image .Values.defaultInitContainers.volumePermissions.image .Values.defaultInitContainers.autoDiscovery.image .Values.metrics.jmx.image) "context" $) }}
 {{- include "kafka.checkRollingTags" . }}
 {{- include "kafka.validateValues" . }}
-{{- include "common.warnings.resources" (dict "sections" (list "broker" "controller" "externalAccess.autoDiscovery" "metrics.jmx" "metrics.kafka" "provisioning" "volumePermissions") "context" $) }}

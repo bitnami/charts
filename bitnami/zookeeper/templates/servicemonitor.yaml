@@ -28,7 +28,7 @@ spec:
       {{- end }}
       app.kubernetes.io/component: metrics
   endpoints:
-    - port: tcp-metrics
+    - port: http-metrics
       path: "/metrics"
       {{- if .Values.metrics.serviceMonitor.interval }}
       interval: {{ .Values.metrics.serviceMonitor.interval }}
@@ -44,6 +44,12 @@ spec:
       {{- end }}
       {{- if .Values.metrics.serviceMonitor.honorLabels }}
       honorLabels: {{ .Values.metrics.serviceMonitor.honorLabels }}
+      {{- end }}
+      {{- if .Values.metrics.serviceMonitor.scheme }}
+      scheme: {{ .Values.metrics.serviceMonitor.scheme }}
+      {{- end }}
+      {{- if .Values.metrics.serviceMonitor.tlsConfig }}
+      tlsConfig: {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.serviceMonitor.tlsConfig "context" $ ) | nindent 8 }}
       {{- end }}
   namespaceSelector:
     matchNames:

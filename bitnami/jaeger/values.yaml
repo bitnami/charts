@@ -4,12 +4,12 @@
 ## @section Global parameters
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
-## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+## Current available global Docker image parameters: imageRegistry, imagePullSecrets, defaultStorageClass and compatibility.
 ##
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
 ##
 global:
   imageRegistry: ""
@@ -18,7 +18,12 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass: ""
+  defaultStorageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
   ## Compatibility adaptations for Kubernetes platforms
   ##
   compatibility:
@@ -76,10 +81,9 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/jaeger
-  tag: 1.57.0-debian-12-r3
+  tag: 2.4.0-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -472,6 +476,16 @@ query:
   ## @param query.initContainers Add additional init containers to the jaeger pods
   ##
   initContainers: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param query.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param query.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param query.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `query.pdb.minAvailable` and `query.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
   ## @param query.sidecars Add additional sidecar containers to the jaeger pods
   ##
   sidecars: []
@@ -596,7 +610,7 @@ collector:
     ## @param collector.containerPorts.zipkin can accept Zipkin spans in Thrift, JSON and Proto (disabled by default)
     ##
     zipkin: 9411
-    ## @param collector.containerPorts.grpc used by jaeger-agent to send spans in model.proto format
+    ## @param collector.containerPorts.grpc used by jaeger-collector to send spans in model.proto format
     ##
     grpc: 14250
     ## @param collector.containerPorts.binary can accept spans directly from clients in jaeger.thrift format over binary thrift protocol
@@ -626,7 +640,7 @@ collector:
       ## @param collector.service.ports.zipkin can accept Zipkin spans in Thrift, JSON and Proto (disabled by default)
       ##
       zipkin: 9411
-      ## @param collector.service.ports.grpc used by jaeger-agent to send spans in model.proto format
+      ## @param collector.service.ports.grpc used by jaeger-collector to send spans in model.proto format
       ##
       grpc: 14250
       ## @param collector.service.ports.binary can accept spans directly from clients in jaeger.thrift format over binary thrift protocol
@@ -650,7 +664,7 @@ collector:
       ## @param collector.service.nodePorts.zipkin can accept Zipkin spans in Thrift, JSON and Proto (disabled by default)
       ##
       zipkin: ""
-      ## @param collector.service.nodePorts.grpc used by jaeger-agent to send spans in model.proto format
+      ## @param collector.service.nodePorts.grpc used by jaeger-collector to send spans in model.proto format
       ##
       grpc: ""
       ## @param collector.service.nodePorts.binary can accept spans directly from clients in jaeger.thrift format over binary thrift protocol
@@ -895,412 +909,17 @@ collector:
   ## @param collector.initContainers Add additional init containers to the jaeger pods
   ##
   initContainers: []
-  ## @param collector.sidecars Add additional sidecar containers to the jaeger pods
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param collector.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param collector.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param collector.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `collector.pdb.minAvailable` and `collector.pdb.maxUnavailable` are empty.
   ##
-  sidecars: []
-## @section agent deployment parameters
-##
-agent:
-  ## @param agent.command Command for running the container (set to default if not set). Use array form
-  ##
-  command: []
-  ## @param agent.args Args for running the container (set to default if not set). Use array form
-  ##
-  args: []
-  ## @param agent.automountServiceAccountToken Mount Service Account token in pod
-  ##
-  automountServiceAccountToken: false
-  ## @param agent.hostAliases Set pod host aliases
-  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
-  ##
-  hostAliases: []
-  ## @param agent.lifecycleHooks [object] Override default etcd container hooks
-  ##
-  lifecycleHooks: {}
-  ## @param agent.extraEnvVars Extra environment variables to be set on jaeger container
-  ## For example:
-  ##  - name: FOO
-  ##    value: BAR
-  ##
-  extraEnvVars: []
-  ## @param agent.extraEnvVarsCM Name of existing ConfigMap containing extra env vars
-  ##
-  extraEnvVarsCM: ""
-  ## @param agent.extraEnvVarsSecret Name of existing Secret containing extra env vars
-  ##
-  extraEnvVarsSecret: ""
-  ## @param agent.replicaCount Number of Jaeger replicas
-  ##
-  replicaCount: 1
-  ## Configure extra options for container's liveness, readiness and startup probes
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
-  ## @param agent.livenessProbe.enabled Enable livenessProbe on agent nodes
-  ## @param agent.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
-  ## @param agent.livenessProbe.periodSeconds Period seconds for livenessProbe
-  ## @param agent.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
-  ## @param agent.livenessProbe.failureThreshold Failure threshold for livenessProbe
-  ## @param agent.livenessProbe.successThreshold Success threshold for livenessProbe
-  ##
-  livenessProbe:
-    enabled: true
-    failureThreshold: 3
-    initialDelaySeconds: 10
-    periodSeconds: 10
-    successThreshold: 1
-    timeoutSeconds: 1
-  ## @param agent.startupProbe.enabled Enable startupProbe on agent containers
-  ## @param agent.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
-  ## @param agent.startupProbe.periodSeconds Period seconds for startupProbe
-  ## @param agent.startupProbe.timeoutSeconds Timeout seconds for startupProbe
-  ## @param agent.startupProbe.failureThreshold Failure threshold for startupProbe
-  ## @param agent.startupProbe.successThreshold Success threshold for startupProbe
-  ##
-  startupProbe:
-    enabled: false
-    initialDelaySeconds: 10
-    periodSeconds: 10
-    timeoutSeconds: 1
-    failureThreshold: 15
-    successThreshold: 1
-  ## @param agent.readinessProbe.enabled Enable readinessProbe
-  ## @param agent.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
-  ## @param agent.readinessProbe.periodSeconds Period seconds for readinessProbe
-  ## @param agent.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
-  ## @param agent.readinessProbe.failureThreshold Failure threshold for readinessProbe
-  ## @param agent.readinessProbe.successThreshold Success threshold for readinessProbe
-  ##
-  readinessProbe:
-    enabled: true
-    initialDelaySeconds: 10
-    periodSeconds: 10
-    timeoutSeconds: 1
-    failureThreshold: 15
-    successThreshold: 1
-  ## @param agent.customLivenessProbe Custom livenessProbe that overrides the default one
-  ##
-  customLivenessProbe: {}
-  ## @param agent.customStartupProbe [object] Override default startup probe
-  ##
-  customStartupProbe: {}
-  ## @param agent.customReadinessProbe [object] Override default readiness probe
-  ##
-  customReadinessProbe: {}
-  ## Jaeger pods' resource requests and limits
-  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## Minimum memory for development is 4GB and 2 CPU cores
-  ## Minimum memory for production is 8GB and 4 CPU cores
-  ## ref: http://docs.datastax.com/en/archived/jaeger/2.0/jaeger/architecture/architecturePlanningHardware_c.html
-  ##
-  ## We usually recommend not to specify default resources and to leave this as a conscious
-  ## choice for the user. This also increases chances charts run on environments with little
-  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
-  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param agent.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if agent.resources is set (agent.resources is recommended for production).
-  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
-  ##
-  resourcesPreset: "small"
-  ## @param agent.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
-  ## Example:
-  ## resources:
-  ##   requests:
-  ##     cpu: 2
-  ##     memory: 512Mi
-  ##   limits:
-  ##     cpu: 3
-  ##     memory: 1024Mi
-  ##
-  resources: {}
-  ## @param agent.extraVolumeMounts Optionally specify extra list of additional volumeMounts for jaeger container
-  ##
-  extraVolumeMounts: []
-  ## Container ports to expose
-  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
-  containerPorts:
-    ## @param agent.containerPorts.compact accept jaeger.thrift in compact Thrift protocol used by most current Jaeger clients
-    ##
-    compact: 6831
-    ## @param agent.containerPorts.binary accept jaeger.thrift in binary Thrift protocol used by Node.js Jaeger client
-    ##
-    binary: 6832
-    ## @param agent.containerPorts.config Serve configs, sampling strategies
-    ##
-    config: 5778
-    ## @param agent.containerPorts.zipkin Accept zipkin.thrift in compact Thrift protocol (deprecated; only used by very old Jaeger clients, circa 2016)
-    ##
-    zipkin: 5775
-    ## @param agent.containerPorts.admin Admin port: health check at / and metrics at /metrics
-    ##
-    admin: 14271
-  ## Jaeger agent.service parameters
-  ##
-  service:
-    ## @param agent.service.type Jaeger service type
-    ##
-    type: ClusterIP
-    ## Ports to expose
-    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
-    ports:
-      ## @param agent.service.ports.compact accept jaeger.thrift in compact Thrift protocol used by most current Jaeger clients
-      ##
-      compact: 6831
-      ## @param agent.service.ports.binary accept jaeger.thrift in binary Thrift protocol used by Node.js Jaeger client
-      ##
-      binary: 6832
-      ## @param agent.service.ports.config Serve configs, sampling strategies
-      ##
-      config: 5778
-      ## @param agent.service.ports.zipkin Accept zipkin.thrift in compact Thrift protocol (deprecated; only used by very old Jaeger clients, circa 2016)
-      ##
-      zipkin: 5775
-      ## @param agent.service.ports.admin Admin port: health check at / and metrics at /metrics
-      ##
-      admin: 14271
-    ## Node ports to expose
-    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
-    nodePorts:
-      ## @param agent.service.nodePorts.compact accept jaeger.thrift in compact Thrift protocol used by most current Jaeger clients
-      ##
-      compact: ""
-      ## @param agent.service.nodePorts.binary accept jaeger.thrift in binary Thrift protocol used by Node.js Jaeger client
-      ##
-      binary: ""
-      ## @param agent.service.nodePorts.config Serve configs, sampling strategies
-      ##
-      config: ""
-      ## @param agent.service.nodePorts.zipkin Accept zipkin.thrift in compact Thrift protocol (deprecated; only used by very old Jaeger clients, circa 2016)
-      ##
-      zipkin: ""
-      ## @param agent.service.nodePorts.admin Admin port: health check at / and metrics at /metrics
-      ##
-      admin: ""
-    ## @param agent.service.extraPorts Extra ports to expose in the service (normally used with the `sidecar` value)
-    ##
-    extraPorts: []
-    ## @param agent.service.loadBalancerIP LoadBalancerIP if service type is `LoadBalancer`
-    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
-    ##
-    loadBalancerIP: ""
-    ## @param agent.service.loadBalancerSourceRanges Service Load Balancer sources
-    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
-    ## e.g:
-    ## loadBalancerSourceRanges:
-    ##   - 10.10.10.0/24
-    ##
-    loadBalancerSourceRanges: []
-    ## @param agent.service.clusterIP Service Cluster IP
-    ## e.g.:
-    ## clusterIP: None
-    ##
-    clusterIP: ""
-    ## @param agent.service.externalTrafficPolicy Service external traffic policy
-    ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
-    ##
-    externalTrafficPolicy: Cluster
-    ## @param agent.service.annotations Provide any additional annotations which may be required.
-    ## This can be used to set the LoadBalancer service type to internal only.
-    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
-    ##
-    annotations: {}
-    ## @param agent.service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
-    ## If "ClientIP", consecutive client requests will be directed to the same Pod
-    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
-    ##
-    sessionAffinity: None
-    ## @param agent.service.sessionAffinityConfig Additional settings for the sessionAffinity
-    ## sessionAffinityConfig:
-    ##   clientIP:
-    ##     timeoutSeconds: 300
-    ##
-    sessionAffinityConfig: {}
-    ## @param agent.service.metrics.annotations [object] Annotations for Prometheus metrics
-    metrics:
-      annotations:
-        prometheus.io/scrape: "true"
-        prometheus.io/port: "{{ .Values.agent.service.ports.admin }}"
-        prometheus.io/path: "/metrics"
-  ## Network Policies
-  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
-  ##
-  networkPolicy:
-    ## @param agent.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
-    ##
-    enabled: true
-    ## @param agent.networkPolicy.allowExternal Don't require server label for connections
-    ## The Policy model to apply. When set to false, only pods with the correct
-    ## server label will have network access to the ports server is listening
-    ## on. When true, server will accept connections from any source
-    ## (with the correct destination port).
-    ##
-    allowExternal: true
-    ## @param agent.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
-    ##
-    allowExternalEgress: true
-    ## @param agent.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
-    ## e.g:
-    ## extraIngress:
-    ##   - ports:
-    ##       - port: 1234
-    ##     from:
-    ##       - podSelector:
-    ##           - matchLabels:
-    ##               - role: frontend
-    ##       - podSelector:
-    ##           - matchExpressions:
-    ##               - key: role
-    ##                 operator: In
-    ##                 values:
-    ##                   - frontend
-    extraIngress: []
-    ## @param agent.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
-    ## e.g:
-    ## extraEgress:
-    ##   - ports:
-    ##       - port: 1234
-    ##     to:
-    ##       - podSelector:
-    ##           - matchLabels:
-    ##               - role: frontend
-    ##       - podSelector:
-    ##           - matchExpressions:
-    ##               - key: role
-    ##                 operator: In
-    ##                 values:
-    ##                   - frontend
-    ##
-    extraEgress: []
-    ## @param agent.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
-    ## @param agent.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
-    ##
-    ingressNSMatchLabels: {}
-    ingressNSPodMatchLabels: {}
-  ## Jaeger agent serviceAccount parameters
-  ##
-  serviceAccount:
-    ## @param agent.serviceAccount.create Enables ServiceAccount
-    ##
+  pdb:
     create: true
-    ## @param agent.serviceAccount.name ServiceAccount name
-    ##
-    name: ""
-    ## @param agent.serviceAccount.annotations Annotations to add to all deployed objects
-    ##
-    annotations: {}
-    ## @param agent.serviceAccount.automountServiceAccountToken Automount API credentials for a service account.
-    ##
-    automountServiceAccountToken: false
-  ## Pod security context
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param agent.podSecurityContext.enabled Enabled Jaeger pods' Security Context
-  ## @param agent.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
-  ## @param agent.podSecurityContext.sysctls Set kernel settings using the sysctl interface
-  ## @param agent.podSecurityContext.supplementalGroups Set filesystem extra groups
-  ## @param agent.podSecurityContext.fsGroup Set Jaeger pod's Security Context fsGroup
-  ##
-  podSecurityContext:
-    enabled: true
-    fsGroupChangePolicy: Always
-    sysctls: []
-    supplementalGroups: []
-    fsGroup: 1001
-  ## Configure Container Security Context (only main container)
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param agent.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param agent.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
-  ## @param agent.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
-  ## @param agent.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
-  ## @param agent.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
-  ## @param agent.containerSecurityContext.privileged Set container's Security Context privileged
-  ## @param agent.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
-  ## @param agent.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
-  ## @param agent.containerSecurityContext.capabilities.drop List of capabilities to be dropped
-  ## @param agent.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
-  ##
-  containerSecurityContext:
-    enabled: true
-    seLinuxOptions: null
-    runAsUser: 1001
-    runAsGroup: 1001
-    runAsNonRoot: true
-    privileged: false
-    readOnlyRootFilesystem: true
-    allowPrivilegeEscalation: false
-    capabilities:
-      drop: ["ALL"]
-    seccompProfile:
-      type: "RuntimeDefault"
-  ## @param agent.podAnnotations Additional pod annotations
-  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-  ##
-  podAnnotations: {}
-  ## @param agent.podLabels Additional pod labels
-  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
-  ##
-  podLabels: {}
-  ## @param agent.podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ##
-  podAffinityPreset: ""
-  ## @param agent.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
-  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ##
-  podAntiAffinityPreset: soft
-  ## Node affinity preset
-  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-  ##
-  nodeAffinityPreset:
-    ## @param agent.nodeAffinityPreset.type Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
-    ##
-    type: ""
-    ## @param agent.nodeAffinityPreset.key Node label key to match. Ignored if `affinity` is set
-    ##
-    key: ""
-    ## @param agent.nodeAffinityPreset.values Node label values to match. Ignored if `affinity` is set
-    ## E.g.
-    ## values:
-    ##   - e2e-az1
-    ##   - e2e-az2
-    ##
-    values: []
-  ## @param agent.priorityClassName Server priorityClassName
-  ## Ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
-  ##
-  priorityClassName: ""
-  ## @param agent.affinity Affinity for pod assignment
-  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  ## NOTE: podAffinityPreset, podAntiAffinityPreset, and nodeAffinityPreset will be ignored when it's set
-  ##
-  affinity: {}
-  ## @param agent.nodeSelector Node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
-  ##
-  nodeSelector: {}
-  ## @param agent.tolerations Tolerations for pod assignment
-  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-  ##
-  tolerations: []
-  ## @param agent.topologySpreadConstraints Topology Spread Constraints for pod assignment
-  ## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
-  ## The value is evaluated as a template
-  ##
-  topologySpreadConstraints: []
-  ## @param agent.schedulerName Alternative scheduler
-  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
-  ##
-  schedulerName: ""
-  ## @param agent.updateStrategy.type Jaeger agent deployment strategy type
-  ## @param agent.updateStrategy.rollingUpdate Jaeger agent deployment rolling update configuration parameters
-  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
-  ##
-  updateStrategy:
-    type: RollingUpdate
-    rollingUpdate: {}
-  ## @param agent.extraVolumes Optionally specify extra list of additional volumes for jaeger container
-  ##
-  extraVolumes: []
-  ## @param agent.initContainers Add additional init containers to the jaeger pods
-  ##
-  initContainers: []
-  ## @param agent.sidecars Add additional sidecar containers to the jaeger pods
+    minAvailable: ""
+    maxUnavailable: ""
+  ## @param collector.sidecars Add additional sidecar containers to the jaeger pods
   ##
   sidecars: []
 migration:
@@ -1394,6 +1013,29 @@ migration:
   ##     memory: 1024Mi
   ##
   resources: {}
+  initContainer:
+    ## Migration job init container resource requests and limits
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+    ##
+    ## We usually recommend not to specify default resources and to leave this as a conscious
+    ## choice for the user. This also increases chances charts run on environments with little
+    ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+    ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ## @param migration.initContainer.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if migration.resources is set (migration.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+    ##
+    resourcesPreset: "nano"
+    ## @param migration.initContainer.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## Example:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    resources: {}
   ## Network Policies
   ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
   ##
@@ -1464,10 +1106,9 @@ migration:
 cqlshImage:
   registry: docker.io
   repository: bitnami/cassandra
-  tag: 4.0.12-debian-12-r15
+  tag: 5.0.3-debian-12-r6
   digest: ""
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -1479,6 +1120,28 @@ cqlshImage:
   ##   - myRegistryKeySecretName
   ##
   pullSecrets: []
+  ## cqlshImage container resource requests and limits
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ##
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## @param cqlshImage.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "nano"
+  ## @param cqlshImage.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Enable debug mode
   ##
   debug: false
@@ -1525,10 +1188,12 @@ cassandra:
   ## Database credentials
   ## @param cassandra.dbUser.user Cassandra admin user
   ## @param cassandra.dbUser.password Password for `dbUser.user`. Randomly generated if empty
+  ## @param cassandra.dbUser.existingSecret Name of an existing secret containing the user password.
   ##
   dbUser:
     user: bn_jaeger
     password: ""
+    existingSecret: ""
   ## Cassandra service port
   ## @param cassandra.service.ports.cql Cassandra cql port
   service:

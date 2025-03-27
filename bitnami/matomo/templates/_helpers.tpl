@@ -152,11 +152,12 @@ Return the matomo pods needed initContainers
   image: {{ include "matomo.volumePermissions.image" . }}
   imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
   command:
-    - sh
-    - -c
+    - /bin/bash
+  args:
+    - -ec
     - |
-      mkdir -p "/bitnami/matomo"
-      chown -R "{{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}" "/bitnami/matomo"
+      mkdir -p /bitnami/matomo
+      find /bitnami/matomo -mindepth 0 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs -r chown -R {{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}
   securityContext:
     runAsUser: 0
   {{- if .Values.volumePermissions.resources }}
@@ -172,10 +173,6 @@ Return the matomo pods needed initContainers
 - name: certificates
   image: {{ template "certificates.image" . }}
   imagePullPolicy: {{ default .Values.image.pullPolicy .Values.certificates.image.pullPolicy }}
-  imagePullSecrets:
-  {{- range (default .Values.image.pullSecrets .Values.certificates.image.pullSecrets) }}
-    - name: {{ . }}
-  {{- end }}
   securityContext:
     runAsUser: 0
   {{- if .Values.certificates.command }}
@@ -190,7 +187,7 @@ Return the matomo pods needed initContainers
     - sh
     - -c
     - install_packages ca-certificates openssl
-    && openssl req -new -x509 -days 3650 -nodes -sha256
+      && openssl req -new -x509 -days 3650 -nodes -sha256
       -subj "/CN=$(hostname)" -addext "subjectAltName = DNS:$(hostname)"
       -out  /etc/ssl/certs/ssl-cert-snakeoil.pem
       -keyout /etc/ssl/private/ssl-cert-snakeoil.key -extensions v3_req
@@ -220,6 +217,7 @@ Return the matomo pods needed initContainers
       readOnly: true
 {{- end }}
 {{- end }}
+
 {{/*
 Return if cronjob X is enabled. Takes into account the deprecated value 'cronjobs.enabled'.
 Use: include "matomo.cronjobs.enabled" (dict "context" $ "cronjob" "archive" )

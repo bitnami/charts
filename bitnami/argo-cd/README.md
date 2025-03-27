@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/argo-cd
 ```
 
-Looking to use Argo CD in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Argo CD in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -49,13 +49,35 @@ The command deploys argo-cd on the Kubernetes cluster in the default configurati
 
 Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
 
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcesPreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
+### [Rolling VS Immutable tags](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+### Prometheus metrics
+
+This chart can be integrated with Prometheus by setting `*.metrics.enabled` (under the `repoServer`, `controller`, `applicationSet`, `server`, `notification` and `dex` sections) to `true`. This will expose the Argo CD native Prometheus ports, as well as create a special metrics service, which can be configured under the `metrics.service` section. This `metrics` service will have the necessary annotations to be automatically scraped by Prometheus.
+
+#### Prometheus requirements
+
+It is necessary to have a working installation of Prometheus or Prometheus Operator for the integration to work. Install the [Bitnami Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/prometheus) or the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) to easily have a working Prometheus in your cluster.
+
+#### Integration with Prometheus Operator
+
+The chart can deploy `ServiceMonitor` objects for integration with Prometheus Operator installations. To do so, set the value `*.metrics.serviceMonitor.enabled=true` (under the `repoServer`, `controller`, `applicationSet`, `server`, `notifications` and `dex` sections). Ensure that the Prometheus Operator `CustomResourceDefinitions` are installed in the cluster or it will fail with the following error:
+
+```text
+no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"
+```
+
+Install the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) for having the necessary CRDs and the Prometheus Operator.
+
+### Backup and restore
+
+To back up and restore Helm chart deployments on Kubernetes, you need to back up the persistent volumes from the source deployment and attach them to a new deployment using [Velero](https://velero.io/), a Kubernetes backup/restore tool. Find the instructions for using Velero in [this guide](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-backup-restore-deployments-velero-index.html).
 
 ### Ingress
 
@@ -71,7 +93,7 @@ Adding the TLS parameter (where available) will cause the chart to generate HTTP
 
 [Learn more about Ingress controllers](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/).
 
-### TLS secrets
+### Securing traffic using TLS
 
 This chart facilitates the creation of TLS secrets for use with the Ingress controller (although this is not mandatory). Apart from the Ingress TLS certificates, Argo CD repo server will auto-generate a secret named `argocd-repo-server-tls`. This secret contains the TLS configuration for the Argo CD components. The secret will be created only if it does not exist, so if you want to add custom TLS configuration you can create a secret with that name before installing the chart. There are several common use cases for the TLS secrets generation:
 
@@ -174,6 +196,65 @@ extraDeploy:
         (...)
 ```
 
+### Allowing multi namespace tendancy
+
+In case you would like to allow applications / application sets in multiple namespaces, you can use the following to configure Argo-CD.
+
+Upstream docs:
+
+- [Reconfigure Argo CD to allow certain namespaces for apps](https://argo-cd.readthedocs.io/en/stable/operator-manual/app-any-namespace/#reconfigure-argo-cd-to-allow-certain-namespaces)
+- [Reconfigure Argo CD to allow certain namespaces for appset](https://argo-cd.readthedocs.io/en/stable/operator-manual/applicationset/Appset-Any-Namespace/#change-workload-startup-parameters)
+
+```yaml
+controller:
+  # Default is true
+  clusterAdminAccess: true
+  extraArgs:
+  # Refer to documentation to allow specific namespaces:
+  # https://argo-cd.readthedocs.io/en/stable/operator-manual/app-any-namespace/#change-workload-startup-parameters
+  - --application-namespaces=*
+  # Refer to documentation if you are enabling notifications
+  # https://argo-cd.readthedocs.io/en/stable/operator-manual/notifications/#namespace-based-configuration
+  - --self-service-notification-enabled
+
+server:
+  # Default is true
+  clusterAdminAccess: true
+  # Refer to recommended documentation for config:
+  # https://argo-cd.readthedocs.io/en/stable/operator-manual/app-any-namespace/#switch-resource-tracking-method
+  config:
+    application.resourceTrackingMethod: annotation
+
+repoServer:
+  # Default is false
+  clusterAdminAccess: true
+
+notifications:
+  # Enable if you would like notifications to be used, default false
+  enabled: true
+  # Default is false
+  clusterAdminAccess: true
+
+applicationSet:
+  # Enable if you would like applicationSets to be used, default false
+  enabled: true
+  # Default is false
+  clusterAdminAccess: true
+
+  # Refer to documentation for SCM providers:
+  # https://argo-cd.readthedocs.io/en/stable/operator-manual/applicationset/Appset-Any-Namespace/#scm-providers-secrets-consideration
+  extraEnv:
+  - name: ARGOCD_APPLICATIONSET_CONTROLLER_ENABLE_SCM_PROVIDERS
+    value: true
+  - name: ARGOCD_APPLICATIONSET_CONTROLLER_ALLOWED_SCM_PROVIDERS
+    value: https://git.mydomain.com/,https://gitlab.mydomain.com/
+
+  # Refer to documentation to allow specific namespaces:
+  # https://argo-cd.readthedocs.io/en/stable/operator-manual/applicationset/Appset-Any-Namespace/#change-workload-startup-parameters
+  extraArgs:
+  - --applicationset-namespaces=*
+```
+
 ### Additional environment variables
 
 In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property.
@@ -237,12 +318,14 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 
 ### Global parameters
 
-| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value  |
-| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
-| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
-| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`   |
-| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value   |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`    |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`    |
+| `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`    |
+| `global.storageClass`                                 | DEPRECATED: use global.defaultStorageClass instead                                                                                                                                                                                                                                                                                                                  | `""`    |
+| `global.security.allowInsecureImages`                 | Allows skipping image verification                                                                                                                                                                                                                                                                                                                                  | `false` |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto`  |
 
 ### Common parameters
 
@@ -271,6 +354,7 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 
 | Name                                                           | Description                                                                                                                                                                                                                             | Value            |
 | -------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
+| `controller.kind`                                              | Kind to deploy ArgoCD application controller in.                                                                                                                                                                                        | `Deployment`     |
 | `controller.replicaCount`                                      | Number of Argo CD replicas to deploy                                                                                                                                                                                                    | `1`              |
 | `controller.startupProbe.enabled`                              | Enable startupProbe on Argo CD nodes                                                                                                                                                                                                    | `false`          |
 | `controller.startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                                                                                                                                                                  | `10`             |
@@ -370,6 +454,8 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `controller.defaultArgs.selfHealTimeout`                       | Default self heal timeout for Argo CD controller                                                                                                                                                                                        | `5`              |
 | `controller.args`                                              | Override default container args (useful when using custom images). Overrides the defaultArgs.                                                                                                                                           | `[]`             |
 | `controller.extraArgs`                                         | Add extra arguments to the default arguments for the Argo CD controller                                                                                                                                                                 | `[]`             |
+| `controller.dynamicClusterDistribution.enabled`                | Whether dynamic cluster distribution is enabled.                                                                                                                                                                                        | `false`          |
+| `controller.dynamicClusterDistribution.heartbeatDuration`      | Time to update the cluster sharding (defaults to 10 seconds).                                                                                                                                                                           | `""`             |
 | `controller.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                                                                                                                                      | `true`           |
 | `controller.hostAliases`                                       | Argo CD pods host aliases                                                                                                                                                                                                               | `[]`             |
 | `controller.podLabels`                                         | Extra labels for Argo CD pods                                                                                                                                                                                                           | `{}`             |
@@ -389,6 +475,7 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `controller.priorityClassName`                                 | Argo CD pods' priorityClassName                                                                                                                                                                                                         | `""`             |
 | `controller.runtimeClassName`                                  | Name of the runtime class to be used by pod(s)                                                                                                                                                                                          | `""`             |
 | `controller.lifecycleHooks`                                    | for the Argo CD container(s) to automate configuration before or after startup                                                                                                                                                          | `{}`             |
+| `controller.podManagementPolicy`                               | podManagementPolicy to manage scaling operation of pods (only in StatefulSet mode)                                                                                                                                                      | `""`             |
 | `controller.extraEnvVars`                                      | Array with extra environment variables to add to Argo CD nodes                                                                                                                                                                          | `[]`             |
 | `controller.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars for Argo CD nodes                                                                                                                                                                  | `""`             |
 | `controller.extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars for Argo CD nodes                                                                                                                                                                     | `""`             |
@@ -396,6 +483,9 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `controller.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Argo CD container(s)                                                                                                                                                   | `[]`             |
 | `controller.sidecars`                                          | Add additional sidecar containers to the Argo CD pod(s)                                                                                                                                                                                 | `[]`             |
 | `controller.initContainers`                                    | Add additional init containers to the Argo CD pod(s)                                                                                                                                                                                    | `[]`             |
+| `controller.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                         | `true`           |
+| `controller.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                          | `""`             |
+| `controller.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `controller.pdb.minAvailable` and `controller.pdb.maxUnavailable` are empty.                                                                    | `""`             |
 
 ### Argo CD ApplicationSet controller parameters
 
@@ -457,6 +547,8 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `applicationSet.serviceAccount.name`                               | The name of the ServiceAccount to use.                                                                                                                                                                                                          | `""`             |
 | `applicationSet.serviceAccount.automountServiceAccountToken`       | Automount service account token for the applicationSet controller service account                                                                                                                                                               | `false`          |
 | `applicationSet.serviceAccount.annotations`                        | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                                                                                                                                                      | `{}`             |
+| `applicationSet.clusterAdminAccess`                                | Enable K8s cluster admin access for the application controller                                                                                                                                                                                  | `false`          |
+| `applicationSet.clusterRoleRules`                                  | Use custom rules for Argo CD applicationSet controller's cluster role                                                                                                                                                                           | `[]`             |
 | `applicationSet.podAffinityPreset`                                 | Pod affinity preset. Ignored if `applicationSet.affinity` is set. Allowed values: `soft` or `hard`                                                                                                                                              | `""`             |
 | `applicationSet.podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `applicationSet.affinity` is set. Allowed values: `soft` or `hard`                                                                                                                                         | `soft`           |
 | `applicationSet.nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `applicationSet.affinity` is set. Allowed values: `soft` or `hard`                                                                                                                                        | `""`             |
@@ -516,6 +608,9 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `applicationSet.webhook.ingress.extraPaths`                        | Extra paths for the Argo CD applicationSet ingress                                                                                                                                                                                              | `[]`             |
 | `applicationSet.webhook.ingress.extraTls`                          | Extra TLS configuration for the Argo CD applicationSet ingress                                                                                                                                                                                  | `[]`             |
 | `applicationSet.webhook.ingress.tls`                               | Ingress TLS configuration                                                                                                                                                                                                                       | `[]`             |
+| `applicationSet.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                                 | `true`           |
+| `applicationSet.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                                  | `""`             |
+| `applicationSet.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `controller.pdb.minAvailable` and `controller.pdb.maxUnavailable` are empty.                                                                            | `""`             |
 
 ### Argo CD notifications controller parameters
 
@@ -561,6 +656,8 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `notifications.serviceAccount.name`                                          | The name of the ServiceAccount to use.                                                                                                                                                                                                                              | `""`             |
 | `notifications.serviceAccount.automountServiceAccountToken`                  | Automount service account token for the notifications controller service account                                                                                                                                                                                    | `false`          |
 | `notifications.serviceAccount.annotations`                                   | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                                                                                                                                                                          | `{}`             |
+| `notifications.clusterAdminAccess`                                           | Enable K8s cluster admin access for the notifications controller                                                                                                                                                                                                    | `false`          |
+| `notifications.clusterRoleRules`                                             | Use custom rules for notifications controller's cluster role                                                                                                                                                                                                        | `[]`             |
 | `notifications.podAffinityPreset`                                            | Pod affinity preset. Ignored if `notifications.affinity` is set. Allowed values: `soft` or `hard`                                                                                                                                                                   | `""`             |
 | `notifications.podAntiAffinityPreset`                                        | Pod anti-affinity preset. Ignored if `notifications.affinity` is set. Allowed values: `soft` or `hard`                                                                                                                                                              | `soft`           |
 | `notifications.nodeAffinityPreset.type`                                      | Node affinity preset type. Ignored if `notifications.affinity` is set. Allowed values: `soft` or `hard`                                                                                                                                                             | `""`             |
@@ -708,6 +805,9 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `notifications.bots.slack.extraEnvVars`                                      | Array with extra environment variables to add to Argo CD Slack bot nodes                                                                                                                                                                                            | `[]`             |
 | `notifications.bots.slack.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars for Argo CD Slack bot nodes                                                                                                                                                                                    | `""`             |
 | `notifications.bots.slack.extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars for Argo CD Slack bot nodes                                                                                                                                                                                       | `""`             |
+| `notifications.pdb.create`                                                   | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                                                     | `true`           |
+| `notifications.pdb.minAvailable`                                             | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                                                      | `""`             |
+| `notifications.pdb.maxUnavailable`                                           | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `notifications.pdb.minAvailable` and `notifications.pdb.maxUnavailable` are empty.                                                                                          | `""`             |
 
 ### Argo CD server Parameters
 
@@ -868,6 +968,11 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `server.serviceAccount.name`                               | The name of the ServiceAccount to use.                                                                                                                                                                                          | `""`                     |
 | `server.serviceAccount.automountServiceAccountToken`       | Automount service account token for the server service account                                                                                                                                                                  | `false`                  |
 | `server.serviceAccount.annotations`                        | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                                                                                                                                      | `{}`                     |
+| `server.clusterAdminAccess`                                | Enable K8s cluster admin access for the server                                                                                                                                                                                  | `true`                   |
+| `server.clusterRoleRules`                                  | Use custom rules for server's cluster role                                                                                                                                                                                      | `[]`                     |
+| `server.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                 | `true`                   |
+| `server.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                  | `""`                     |
+| `server.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `server.pdb.minAvailable` and `server.pdb.maxUnavailable` are empty.                                                                    | `""`                     |
 
 ### Argo CD repo server Parameters
 
@@ -964,6 +1069,8 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `repoServer.serviceAccount.name`                               | The name of the ServiceAccount for repo server to use.                                                                                                                                                                                  | `""`             |
 | `repoServer.serviceAccount.automountServiceAccountToken`       | Automount service account token for the repo server service account                                                                                                                                                                     | `false`          |
 | `repoServer.serviceAccount.annotations`                        | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                                                                                                                                              | `{}`             |
+| `repoServer.clusterAdminAccess`                                | Enable K8s cluster admin access for the repo server                                                                                                                                                                                     | `false`          |
+| `repoServer.clusterRoleRules`                                  | Use custom rules for repo server's cluster role                                                                                                                                                                                         | `[]`             |
 | `repoServer.command`                                           | Override default container command (useful when using custom images)                                                                                                                                                                    | `[]`             |
 | `repoServer.args`                                              | Override default container args (useful when using custom images)                                                                                                                                                                       | `[]`             |
 | `repoServer.extraArgs`                                         | Add extra args to the default repo server args                                                                                                                                                                                          | `[]`             |
@@ -993,6 +1100,9 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `repoServer.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Argo CD repo server container(s)                                                                                                                                       | `[]`             |
 | `repoServer.sidecars`                                          | Add additional sidecar containers to the Argo CD repo server pod(s)                                                                                                                                                                     | `[]`             |
 | `repoServer.initContainers`                                    | Add additional init containers to the Argo CD repo server pod(s)                                                                                                                                                                        | `[]`             |
+| `repoServer.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                         | `true`           |
+| `repoServer.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                          | `""`             |
+| `repoServer.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `repoServer.pdb.minAvailable` and `repoServer.pdb.maxUnavailable` are empty.                                                                    | `""`             |
 
 ### Dex Parameters
 
@@ -1121,6 +1231,9 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `dex.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Dex container(s)                                                                                                                                         | `[]`                  |
 | `dex.sidecars`                                          | Add additional sidecar containers to the Dex pod(s)                                                                                                                                                                       | `[]`                  |
 | `dex.initContainers`                                    | Add additional init containers to the Dex pod(s)                                                                                                                                                                          | `[]`                  |
+| `dex.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                           | `true`                |
+| `dex.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                            | `""`                  |
+| `dex.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `dex.pdb.minAvailable` and `dex.pdb.maxUnavailable` are empty.                                                                    | `""`                  |
 
 ### Shared config for Argo CD components
 
@@ -1233,6 +1346,14 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 7.1.0
+
+This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
+
+### To 7.0.0
+
+This major updates the Redis&reg; subchart to its newest major, 20.0.0. [Here](https://github.com/bitnami/charts/tree/main/bitnami/redis#to-2000) you can find more information about the changes introduced in that version.
+
 ### To 6.0.0
 
 This major bump changes the following security defaults:
@@ -1301,7 +1422,7 @@ See [PR#7113](https://github.com/bitnami/charts/pull/7113) for more info about t
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

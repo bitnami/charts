@@ -18,6 +18,7 @@ spec:
   serviceAccountName: {{ template "kube-prometheus.alertmanager.serviceAccountName" . }}
   {{- if .Values.alertmanager.image }}
   image: {{ template "kube-prometheus.alertmanager.image" . }}
+  imagePullPolicy: {{ .Values.alertmanager.image.pullPolicy }}
   {{- end }}
   listenLocal: {{ .Values.alertmanager.listenLocal }}
   {{- if index .Values.alertmanager "externalUrl" }}
@@ -118,7 +119,7 @@ spec:
     {{- if .Values.alertmanager.volumeMounts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.volumeMounts "context" $) | nindent 4 }}
     {{- end }}
-{{- include "kube-prometheus.imagePullSecrets" . | indent 2 }}
+{{- include "kube-prometheus.imagePullSecrets" . | nindent 2 }}
   {{- if or .Values.alertmanager.containers .Values.alertmanager.containerSecurityContext.enabled .Values.operator.prometheusConfigReloader.containerSecurityContext.enabled }}
   containers:
     {{- if or .Values.alertmanager.containerSecurityContext.enabled .Values.alertmanager.livenessProbe.enabled .Values.alertmanager.readinessProbe.enabled }}

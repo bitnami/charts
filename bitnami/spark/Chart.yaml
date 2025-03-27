@@ -2,13 +2,14 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
+  tanzuCategory: service
   category: Infrastructure
   licenses: Apache-2.0
   images: |
     - name: spark
-      image: docker.io/bitnami/spark:3.5.1-debian-12-r2
+      image: docker.io/bitnami/spark:3.5.5-debian-12-r0
 apiVersion: v2
-appVersion: 3.5.1
+appVersion: 3.5.5
 dependencies:
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
@@ -17,7 +18,7 @@ dependencies:
   version: 2.x.x
 description: Apache Spark is a high-performance engine for large-scale computing tasks, such as data processing, machine learning and real-time data streaming. It includes APIs for Java, Python, Scala and R.
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/spark/img/spark-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/spark/img/spark-stack-220x234.png
 keywords:
 - apache
 - spark
@@ -27,4 +28,4 @@ maintainers:
 name: spark
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/spark
-version: 9.0.1
+version: 9.3.5

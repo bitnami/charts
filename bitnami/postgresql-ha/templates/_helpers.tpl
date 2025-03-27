@@ -304,6 +304,22 @@ Return the database to use for repmgr
 {{- end -}}
 
 {{/*
+Return true if the PostgreSQL credential secret has a separate entry for the postgres user
+*/}}
+{{- define "postgresql-ha.postgresqlSeparatePostgresPassword" -}}
+{{- if (include "postgresql-ha.postgresqlCreateSecret" .) -}}
+    {{- if and (include "postgresql-ha.postgresqlPostgresPassword" .) (not (eq (include "postgresql-ha.postgresqlUsername" .) "postgres")) -}}
+        {{- true -}}
+    {{- end -}}
+{{- else -}}
+    {{- $pgSecret := index (lookup "v1" "Secret" (include "common.names.namespace" .) (include "postgresql-ha.postgresqlSecretName" .)) "data" -}}
+    {{- if and $pgSecret (index $pgSecret "postgres-password") -}}
+        {{- true -}}
+    {{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return true if a secret object should be created for PostgreSQL
 */}}
 {{- define "postgresql-ha.postgresqlCreateSecret" -}}
@@ -587,12 +603,21 @@ postgresql-ha: Upgrade repmgr extension
 {{- end -}}
 {{- end -}}
 
-{{/* Set PGPASSWORD as environment variable depends on configuration */}}
+{{/* Set PostgreSQL PGPASSWORD as environment variable depends on configuration */}}
 {{- define "postgresql-ha.pgpassword" -}}
-{{- if .Values.postgresql.usePasswordFile -}}
+{{- if .Values.postgresql.usePasswordFiles -}}
 PGPASSWORD=$(< $POSTGRES_PASSWORD_FILE)
 {{- else -}}
 PGPASSWORD=$POSTGRES_PASSWORD
+{{- end -}}
+{{- end -}}
+
+{{/* Set Pgpool PGPASSWORD as environment variable depends on configuration */}}
+{{- define "postgresql-ha.pgpoolPostgresPassword" -}}
+{{- if .Values.postgresql.usePasswordFiles -}}
+PGPASSWORD=$(< $PGPOOL_POSTGRES_PASSWORD_FILE)
+{{- else -}}
+PGPASSWORD=$PGPOOL_POSTGRES_PASSWORD
 {{- end -}}
 {{- end -}}
 
@@ -717,4 +742,20 @@ Return the path to the cert key file.
 */}}
 {{- define "postgresql-ha.postgresql.tlsCertKey" -}}
 {{- required "Certificate Key filename is required when TLS in enabled" .Values.postgresql.tls.certKeyFilename | printf "/opt/bitnami/postgresql/certs/%s" -}}
+{{- end -}}
+
+{{/*
+Get the readiness probe command
+*/}}
+{{- define "postgresql-ha.readinessProbeCommand" -}}
+{{- $block := index .context.Values .component }}
+{{- if eq .component "postgresql" -}}
+- |
+  exec pg_isready -U "postgres" {{- if $block.tls.enabled }} -d "sslcert={{ include "postgresql-ha.postgresql.tlsCert" .context }} sslkey={{ include "postgresql-ha.postgresql.tlsCertKey" .context }}"{{- end }} -h 127.0.0.1 -p {{ $block.containerPorts.postgresql }}
+{{- if contains "bitnami/" $block.image.repository }}
+  [ -f /opt/bitnami/postgresql/tmp/.initialized ] || [ -f /bitnami/postgresql/.initialized ]
+{{- end }}
+{{- else -}}
+- exec pg_isready -U "postgres" -h 127.0.0.1 -p {{ $block.containerPorts.postgresql }}
+{{- end }}
 {{- end -}}

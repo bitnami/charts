@@ -146,6 +146,9 @@ spec:
             successThreshold: {{ .Values.envoy.shutdownManager.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.envoy.shutdownManager.readinessProbe.failureThreshold }}
           {{- end }}
+          {{- if .Values.envoy.shutdownManager.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.shutdownManager.lifecycleHooks "context" $) | nindent 12 }}
+          {{- else }}
           lifecycle:
             preStop:
               exec:
@@ -153,6 +156,7 @@ spec:
                   - contour
                   - envoy
                   - shutdown
+          {{- end }}
           name: shutdown-manager
           {{- if .Values.envoy.shutdownManager.resources }}
           resources: {{- toYaml .Values.envoy.shutdownManager.resources | nindent 12 }}
@@ -265,8 +269,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.envoy.livenessProbe.enabled }}
           livenessProbe:
-            httpGet:
-              path: /ready
+            tcpSocket:
               port: {{ .Values.envoy.containerPorts.metrics }}
             initialDelaySeconds: {{ .Values.envoy.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.envoy.livenessProbe.periodSeconds }}
@@ -304,6 +307,9 @@ spec:
             {{- if .Values.envoy.extraVolumeMounts }}
               {{- include "common.tplvalues.render" ( dict "value" .Values.envoy.extraVolumeMounts "context" $ ) | nindent 12 }}
             {{- end }}
+          {{- if .Values.envoy.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.lifecycleHooks "context" $) | nindent 12 }}
+          {{- else }}
           lifecycle:
             preStop:
               {{- if .Values.envoy.shutdownManager.enabled }}
@@ -318,6 +324,7 @@ spec:
                   - '-c'
                   - sleep {{ .Values.envoy.terminationGracePeriodSeconds }}; kill 1
               {{- end }}
+          {{- end }}
         {{- if .Values.envoy.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.envoy.sidecars "context" $ ) | nindent 8 }}
         {{- end }}

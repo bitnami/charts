@@ -14,7 +14,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 data:
-  {{- if or .Values.initJob.migrateDB .Values.initJob.createAdmin .Values.initJob.migrateElasticsearch }}
+  {{- if or .Values.initJob.migrateAndCreateAdmin.migrateDB .Values.initJob.migrateAndCreateAdmin.createAdmin .Values.initJob.migrateAndCreateAdmin.migrateElasticsearch }}
   # All these operations require access to PostgreSQL (including Elasticsearch migration) and Redis. In order to avoid
   # potential race conditions we include them in the same script.
   migrate-and-create-admin.sh: |-
@@ -33,25 +33,50 @@ data:
     # Load Mastodon environment variables
     . /opt/bitnami/scripts/mastodon-env.sh
 
-    {{- if .Values.initJob.migrateDB }}
+    {{- if .Values.initJob.migrateAndCreateAdmin.migrateDB }}
     info "Migrating database"
     psql_connection_string="postgresql://${MASTODON_DATABASE_USERNAME}:${MASTODON_DATABASE_PASSWORD}@${MASTODON_DATABASE_HOST}:${MASTODON_DATABASE_PORT_NUMBER}/${MASTODON_DATABASE_NAME}"
     mastodon_wait_for_postgresql_connection "$psql_connection_string"
     mastodon_rake_execute db:migrate
     {{- end }}
 
-    {{- if .Values.initJob.migrateElasticsearch }}
+    {{- if .Values.initJob.migrateAndCreateAdmin.migrateElasticsearch }}
     elasticsearch_connection_string="http://${MASTODON_ELASTICSEARCH_HOST}:${MASTODON_ELASTICSEARCH_PORT_NUMBER}"
     mastodon_wait_for_elasticsearch_connection "$elasticsearch_connection_string"
     info "Migrating Elasticsearch"
     mastodon_rake_execute chewy:upgrade
     {{- end }}
 
-    {{- if .Values.initJob.createAdmin }}
+    {{- if .Values.initJob.migrateAndCreateAdmin.createAdmin }}
     mastodon_ensure_admin_user_exists
     {{- end }}
   {{- end }}
+  wait-for-backend.sh: |-
+    #!/bin/bash
 
+    set -o errexit
+    set -o nounset
+    set -o pipefail
+
+    # Load libraries
+    . /opt/bitnami/scripts/libmastodon.sh
+
+    # Load Mastodon environment variables
+    . /opt/bitnami/scripts/mastodon-env.sh
+
+    {{- if .Values.initJob.migrateAndCreateAdmin.migrateDB }}
+    psql_connection_string="postgresql://${MASTODON_DATABASE_USERNAME}:${MASTODON_DATABASE_PASSWORD}@${MASTODON_DATABASE_HOST}:${MASTODON_DATABASE_PORT_NUMBER}/${MASTODON_DATABASE_NAME}"
+    mastodon_wait_for_postgresql_connection "$psql_connection_string"
+    {{- end }}
+
+    {{- if .Values.initJob.migrateAndCreateAdmin.migrateElasticsearch }}
+    elasticsearch_connection_string="http://${MASTODON_ELASTICSEARCH_HOST}:${MASTODON_ELASTICSEARCH_PORT_NUMBER}"
+    mastodon_wait_for_elasticsearch_connection "$elasticsearch_connection_string"
+    {{- end }}
+
+    {{- if and .Values.initJob.precompileAssets .Values.enableS3 }}
+    mastodon_wait_for_s3_connection "$MASTODON_S3_HOSTNAME" "$MASTODON_S3_PORT_NUMBER"
+    {{- end }}
   {{- if .Values.initJob.precompileAssets }}
   precompile-assets.sh: |-
     #!/bin/bash

@@ -13,8 +13,11 @@ metadata:
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.compactor.podLabels .Values.commonLabels ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: compactor
-  {{- if or .Values.compactor.podAnnotations (include "thanos.createObjstoreSecret" .) }}
+  {{- if or .Values.commonAnnotations .Values.compactor.podAnnotations (include "thanos.createObjstoreSecret" .) }}
   annotations:
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
     {{- if (include "thanos.createObjstoreSecret" .) }}
     checksum/objstore-configuration: {{ include "thanos.objstoreConfig" . | sha256sum }}
     {{- end }}
@@ -109,11 +112,12 @@ spec:
         - --log.level={{ .Values.compactor.logLevel }}
         - --log.format={{ .Values.compactor.logFormat }}
         - --http-address=0.0.0.0:{{ .Values.compactor.containerPorts.http }}
-        - --data-dir=/data
+        - --data-dir={{ .Values.compactor.dataDir }}
         - --retention.resolution-raw={{ .Values.compactor.retentionResolutionRaw }}
         - --retention.resolution-5m={{ .Values.compactor.retentionResolution5m }}
         - --retention.resolution-1h={{ .Values.compactor.retentionResolution1h }}
         - --consistency-delay={{ .Values.compactor.consistencyDelay }}
+        - --compact.concurrency={{ .Values.compactor.concurrency }}
         - --objstore.config-file=/conf/objstore.yml
         {{- if (include "thanos.httpConfigEnabled" .) }}
         - --http.config=/conf/http/http-config.yml

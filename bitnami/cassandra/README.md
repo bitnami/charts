@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/cassandra
 ```
 
-Looking to use Apache Cassandra in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Apache Cassandra in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -48,13 +48,42 @@ These commands deploy one node with Apache Cassandra on the Kubernetes cluster i
 
 Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
 
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcesPreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling vs Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
+### Update credentials
+
+Bitnami charts configure credentials at first boot. Any further change in the secrets or credentials require manual intervention. Follow these instructions:
+
+- Update the user password following [the upstream documentation](https://docs.datastax.com/en/cql-oss/3.x/cql/cql_reference/cqlAlterUser.html)
+- Update the password secret with the new values (replace the SECRET_NAME and PASSWORD placeholders)
+
+```shell
+kubectl create secret generic SECRET_NAME --from-literal=cassandra-password=PASSWORD --dry-run -o yaml | kubectl apply -f -
+```
+
+### [Rolling vs Immutable tags](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+### Prometheus metrics
+
+This chart can be integrated with Prometheus by setting `metrics.enabled` to `true`. This will deploy a sidecar container with [cassandra_exporter](https://github.com/criteo/cassandra_exporter) in all pods and will expose it via the Cassandra service. This service will have the necessary annotations to be automatically scraped by Prometheus.
+
+#### Prometheus requirements
+
+It is necessary to have a working installation of Prometheus or Prometheus Operator for the integration to work. Install the [Bitnami Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/prometheus) or the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) to easily have a working Prometheus in your cluster.
+
+#### Integration with Prometheus Operator
+
+The chart can deploy `ServiceMonitor` objects for integration with Prometheus Operator installations. To do so, set the value `metrics.serviceMonitor.enabled=true`. Ensure that the Prometheus Operator `CustomResourceDefinitions` are installed in the cluster or it will fail with the following error:
+
+```text
+no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"
+```
+
+Install the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) for having the necessary CRDs and the Prometheus Operator.
 
 ### Enable TLS
 
@@ -79,7 +108,7 @@ kubectl create secret generic my-exisiting-stores --from-file=./keystore --from-
 kubectl create secret generic my-stores-password --from-literal=keystore-password=KEYSTORE_PASSWORD --from-literal=truststore-password=TRUSTSTORE_PASSWORD
 ```
 
-Keystore and Truststore files can be dinamycally created from the certificates files. In this case a secret with the tls.crt, tls.key and ca.crt in pem format is required. The following example shows how the secret can be created and assumes that all certificate files are in the working directory:
+Keystore and Truststore files can be dynamically created from the certificates files. In this case a secret with the tls.crt, tls.key and ca.crt in pem format is required. The following example shows how the secret can be created and assumes that all certificate files are in the working directory:
 
 ```console
 kubectl create secret tls my-certs --cert ./tls.crt --key ./tls.key
@@ -112,7 +141,7 @@ existingConfiguration=cassandra-configuration
 
 ### Backup and restore
 
-Refer to our detailed tutorial on [backing up and restoring Bitnami Apache Cassandra deployments on Kubernetes](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-backup-restore-data-cassandra-kubernetes-index.html).
+Refer to our detailed tutorial on [backing up and restoring Bitnami Apache Cassandra deployments on Kubernetes](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-backup-restore-data-cassandra-kubernetes-index.html).
 
 ### Set pod affinity
 
@@ -140,12 +169,13 @@ As the image run as non-root by default, it is necessary to adjust the ownership
 
 ### Global parameters
 
-| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value  |
-| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
-| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
-| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`   |
-| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value   |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`    |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`    |
+| `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`    |
+| `global.security.allowInsecureImages`                 | Allows skipping image verification                                                                                                                                                                                                                                                                                                                                  | `false` |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto`  |
 
 ### Common parameters
 
@@ -158,45 +188,46 @@ As the image run as non-root by default, it is necessary to adjust the ownership
 | `commonAnnotations`      | Annotations to add to all deployed objects                                              | `{}`            |
 | `clusterDomain`          | Kubernetes cluster domain name                                                          | `cluster.local` |
 | `extraDeploy`            | Array of extra objects to deploy with the release                                       | `[]`            |
+| `usePasswordFiles`       | Mount credentials as files instead of using environment variables                       | `true`          |
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
 | `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]`  |
 
 ### Cassandra parameters
 
-| Name                          | Description                                                                                                            | Value                       |
-| ----------------------------- | ---------------------------------------------------------------------------------------------------------------------- | --------------------------- |
-| `image.registry`              | Cassandra image registry                                                                                               | `REGISTRY_NAME`             |
-| `image.repository`            | Cassandra image repository                                                                                             | `REPOSITORY_NAME/cassandra` |
-| `image.digest`                | Cassandra image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag              | `""`                        |
-| `image.pullPolicy`            | image pull policy                                                                                                      | `IfNotPresent`              |
-| `image.pullSecrets`           | Cassandra image pull secrets                                                                                           | `[]`                        |
-| `image.debug`                 | Enable image debug mode                                                                                                | `false`                     |
-| `dbUser.user`                 | Cassandra admin user                                                                                                   | `cassandra`                 |
-| `dbUser.forcePassword`        | Force the user to provide a non                                                                                        | `false`                     |
-| `dbUser.password`             | Password for `dbUser.user`. Randomly generated if empty                                                                | `""`                        |
-| `dbUser.existingSecret`       | Use an existing secret object for `dbUser.user` password (will ignore `dbUser.password`)                               | `""`                        |
-| `initDBConfigMap`             | ConfigMap with cql scripts. Useful for creating a keyspace and pre-populating data                                     | `""`                        |
-| `initDBSecret`                | Secret with cql script (with sensitive data). Useful for creating a keyspace and pre-populating data                   | `""`                        |
-| `existingConfiguration`       | ConfigMap with custom cassandra configuration files. This overrides any other Cassandra configuration set in the chart | `""`                        |
-| `cluster.name`                | Cassandra cluster name                                                                                                 | `cassandra`                 |
-| `cluster.seedCount`           | Number of seed nodes                                                                                                   | `1`                         |
-| `cluster.numTokens`           | Number of tokens for each node                                                                                         | `256`                       |
-| `cluster.datacenter`          | Datacenter name                                                                                                        | `dc1`                       |
-| `cluster.rack`                | Rack name                                                                                                              | `rack1`                     |
-| `cluster.endpointSnitch`      | Endpoint Snitch                                                                                                        | `SimpleSnitch`              |
-| `cluster.internodeEncryption` | DEPRECATED: use tls.internode and tls.client instead. Encryption values.                                               | `none`                      |
-| `cluster.clientEncryption`    | Client Encryption                                                                                                      | `false`                     |
-| `cluster.extraSeeds`          | For an external/second cassandra ring.                                                                                 | `[]`                        |
-| `cluster.enableUDF`           | Enable User defined functions                                                                                          | `false`                     |
-| `jvm.extraOpts`               | Set the value for Java Virtual Machine extra options                                                                   | `""`                        |
-| `jvm.maxHeapSize`             | Set Java Virtual Machine maximum heap size (MAX_HEAP_SIZE). Calculated automatically if `nil`                          | `""`                        |
-| `jvm.newHeapSize`             | Set Java Virtual Machine new heap size (HEAP_NEWSIZE). Calculated automatically if `nil`                               | `""`                        |
-| `command`                     | Command for running the container (set to default if not set). Use array form                                          | `[]`                        |
-| `args`                        | Args for running the container (set to default if not set). Use array form                                             | `[]`                        |
-| `extraEnvVars`                | Extra environment variables to be set on cassandra container                                                           | `[]`                        |
-| `extraEnvVarsCM`              | Name of existing ConfigMap containing extra env vars                                                                   | `""`                        |
-| `extraEnvVarsSecret`          | Name of existing Secret containing extra env vars                                                                      | `""`                        |
+| Name                       | Description                                                                                                            | Value                       |
+| -------------------------- | ---------------------------------------------------------------------------------------------------------------------- | --------------------------- |
+| `image.registry`           | Cassandra image registry                                                                                               | `REGISTRY_NAME`             |
+| `image.repository`         | Cassandra image repository                                                                                             | `REPOSITORY_NAME/cassandra` |
+| `image.digest`             | Cassandra image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag              | `""`                        |
+| `image.pullPolicy`         | image pull policy                                                                                                      | `IfNotPresent`              |
+| `image.pullSecrets`        | Cassandra image pull secrets                                                                                           | `[]`                        |
+| `image.debug`              | Enable image debug mode                                                                                                | `false`                     |
+| `dbUser.user`              | Cassandra admin user                                                                                                   | `cassandra`                 |
+| `dbUser.forcePassword`     | Force the user to provide a non                                                                                        | `false`                     |
+| `dbUser.password`          | Password for `dbUser.user`. Randomly generated if empty                                                                | `""`                        |
+| `dbUser.existingSecret`    | Use an existing secret object for `dbUser.user` password (will ignore `dbUser.password`)                               | `""`                        |
+| `initDB`                   | Object with cql scripts. Useful for creating a keyspace and pre-populating data                                        | `{}`                        |
+| `initDBConfigMap`          | ConfigMap with cql scripts. Useful for creating a keyspace and pre-populating data                                     | `""`                        |
+| `initDBSecret`             | Secret with cql script (with sensitive data). Useful for creating a keyspace and pre-populating data                   | `""`                        |
+| `existingConfiguration`    | ConfigMap with custom cassandra configuration files. This overrides any other Cassandra configuration set in the chart | `""`                        |
+| `cluster.name`             | Cassandra cluster name                                                                                                 | `cassandra`                 |
+| `cluster.seedCount`        | Number of seed nodes                                                                                                   | `1`                         |
+| `cluster.numTokens`        | Number of tokens for each node                                                                                         | `256`                       |
+| `cluster.datacenter`       | Datacenter name                                                                                                        | `dc1`                       |
+| `cluster.rack`             | Rack name                                                                                                              | `rack1`                     |
+| `cluster.endpointSnitch`   | Endpoint Snitch                                                                                                        | `SimpleSnitch`              |
+| `cluster.clientEncryption` | Client Encryption                                                                                                      | `false`                     |
+| `cluster.extraSeeds`       | For an external/second cassandra ring.                                                                                 | `[]`                        |
+| `cluster.enableUDF`        | Enable User defined functions                                                                                          | `false`                     |
+| `jvm.extraOpts`            | Set the value for Java Virtual Machine extra options                                                                   | `""`                        |
+| `jvm.maxHeapSize`          | Set Java Virtual Machine maximum heap size (MAX_HEAP_SIZE). Calculated automatically if `nil`                          | `""`                        |
+| `jvm.newHeapSize`          | Set Java Virtual Machine new heap size (HEAP_NEWSIZE). Calculated automatically if `nil`                               | `""`                        |
+| `command`                  | Command for running the container (set to default if not set). Use array form                                          | `[]`                        |
+| `args`                     | Args for running the container (set to default if not set). Use array form                                             | `[]`                        |
+| `extraEnvVars`             | Extra environment variables to be set on cassandra container                                                           | `[]`                        |
+| `extraEnvVarsCM`           | Name of existing ConfigMap containing extra env vars                                                                   | `""`                        |
+| `extraEnvVarsSecret`       | Name of existing Secret containing extra env vars                                                                      | `""`                        |
 
 ### Statefulset parameters
 
@@ -264,8 +295,8 @@ As the image run as non-root by default, it is necessary to adjust the ownership
 | `extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for cassandra container                                                                                                                                  | `[]`             |
 | `initContainers`                                    | Add additional init containers to the cassandra pods                                                                                                                                                              | `[]`             |
 | `sidecars`                                          | Add additional sidecar containers to the cassandra pods                                                                                                                                                           | `[]`             |
-| `pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                   | `false`          |
-| `pdb.minAvailable`                                  | Mininimum number of pods that must still be available after the eviction                                                                                                                                          | `1`              |
+| `pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                   | `true`           |
+| `pdb.minAvailable`                                  | Mininimum number of pods that must still be available after the eviction                                                                                                                                          | `""`             |
 | `pdb.maxUnavailable`                                | Max number of pods that can be unavailable after the eviction                                                                                                                                                     | `""`             |
 | `hostNetwork`                                       | Enable HOST Network                                                                                                                                                                                               | `false`          |
 | `containerPorts.intra`                              | Intra Port on the Host and Container                                                                                                                                                                              | `7000`           |
@@ -430,6 +461,14 @@ helm upgrade my-release oci://REGISTRY_NAME/REPOSITORY_NAME/cassandra --set dbUs
 
 | Note: you need to substitute the placeholder *[PASSWORD]* with the value obtained in the installation notes.
 
+### To 12.1.0
+
+This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
+
+### To 12.0.0
+
+Cassandra's version was bumped to `5.0`, [the latest GA version](https://cassandra.apache.org/_/blog/Apache-Cassandra-5.0-Announcement.html). Users can upgrade from version 4 to 5.0 through an online upgrade, minimizing downtime for applications. Nevertheless, a backup creation prior to undergoing the upgrade process is recommended. Please, refer to the [official guide](https://cassandra.apache.org/doc/latest/operating/backups.html#snapshots) for further information.
+
 ### To 10.0.0
 
 This major bump changes the following security defaults:
@@ -510,7 +549,7 @@ This release make it possible to specify custom initialization scripts in both c
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

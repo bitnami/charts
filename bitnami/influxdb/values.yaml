@@ -8,7 +8,8 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global storage class for dynamic provisioning
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
+## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ##
 global:
   imageRegistry: ""
@@ -17,7 +18,13 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  defaultStorageClass: ""
   storageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
   ## Compatibility adaptations for Kubernetes platforms
   ##
   compatibility:
@@ -79,9 +86,8 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/influxdb
-  tag: 2.7.6-debian-12-r6
+  tag: 2.7.11-debian-12-r11
   digest: ""
-  ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -104,7 +110,7 @@ auth:
   enabled: true
   ## @param auth.usePasswordFiles Whether to use files to provide secrets instead of env vars.
   ##
-  usePasswordFiles: false
+  usePasswordFiles: true
   ## InfluxDB&trade; admin credentials
   ##
   admin:
@@ -443,6 +449,16 @@ influxdb:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param influxdb.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param influxdb.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param influxdb.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `influxdb.pdb.minAvailable` and `influxdb.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
   ## Service parameters
   ##
   service:
@@ -885,9 +901,8 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r20
+    tag: 12-debian-12-r39
     digest: ""
-    ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -924,6 +939,40 @@ backup:
   ## @param backup.retentionDays Retention time in days for backups (older backups are deleted)
   ##
   retentionDays: 10
+
+  ## Persistence parameters
+  ##
+  persistence:
+    ## @param backup.persistence.ownConfig Prefer independent own persistence parameters to configure the backup volume
+    ## When set to `false` (for backwards compatibility), the rest of the persistence parameters below will be ignored.
+    ## This parameter will be set to `true` and removed in a future release.
+    ##
+    ownConfig: false
+    ## @param backup.persistence.enabled Enable data persistence for backup volume
+    ##
+    enabled: true
+    ## @param backup.persistence.existingClaim Use a existing PVC which must be created manually before bound
+    ## If defined, PVC must be created manually before volume will be bound
+    ## The value is evaluated as a template
+    ##
+    existingClaim: ""
+    ## @param backup.persistence.storageClass Specify the `storageClass` used to provision the volume
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ## set, choosing the default provisioner.
+    ##
+    storageClass: ""
+    ## @param backup.persistence.accessModes Access mode of data volume
+    ##
+    accessModes:
+      - ReadWriteOnce
+    ## @param backup.persistence.size Size of data volume
+    ##
+    size: 8Gi
+    ## @param backup.persistence.annotations Persistent Volume Claim annotations
+    ##
+    annotations: {}
   ## Cronjob configuration
   ## This cronjob is used to create InfluxDB&trade; backups
   ##
@@ -935,6 +984,24 @@ backup:
     ## @param backup.cronjob.historyLimit Number of successful finished jobs to retain
     ##
     historyLimit: 1
+    ##
+    ## Option to include ca-bundle
+    ##
+    caBundle:
+      ## @param backup.cronjob.caBundle.enabled Boolean flag to enable/disable the inclusion of a CA bundle for backup CronJob.
+      ## If enabled a configmap should be created with key as ca-bundle.crt and value to be the actual CA Bundle
+      ##
+      enabled: false
+      ## @param backup.cronjob.caBundle.existingConfigMap Name of the existing ConfigMap that contains the CA bundle for SSL Communication.
+      ##
+      existingConfigMap: ""
+      ## @param backup.cronjob.caBundle.mountPath The path inside the CronJob container where the CA bundle will be mounted.
+      ##
+      mountPath: "/opt/ca-certificates/ca-bundle.crt"
+      ## @param backup.cronjob.caBundle.subPath The filename within the mountPath directory where the CA bundle will be available.
+      ##
+      subPath: "ca-bundle.crt"
+    ##
     ## @param backup.cronjob.podAnnotations Pod annotations
     ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
     ##
@@ -1060,9 +1127,8 @@ backup:
       image:
         registry: docker.io
         repository: bitnami/google-cloud-sdk
-        tag: 0.475.0-debian-12-r0
+        tag: 0.513.0-debian-12-r0
         digest: ""
-        ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
         ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
         ##
         pullPolicy: IfNotPresent
@@ -1114,9 +1180,8 @@ backup:
       image:
         registry: docker.io
         repository: bitnami/azure-cli
-        tag: 2.60.0-debian-12-r1
+        tag: 2.70.0-debian-12-r0
         digest: ""
-        ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
         ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
         ##
         pullPolicy: IfNotPresent
@@ -1151,6 +1216,7 @@ backup:
       ## @param backup.uploadProviders.aws.existingSecret Name of existing secret object
       ## @param backup.uploadProviders.aws.bucketName aws s3 bucket name
       ## @param backup.uploadProviders.aws.endpoint aws s3 endpoint, no value default public endpoint aws s3 endpoint
+      ## @param backup.uploadProviders.aws.usePasswordFiles Mount aws s3 credentials as files instead of using environment variables
       enabled: false
       accessKeyID: ""
       secretAccessKey: ""
@@ -1158,6 +1224,7 @@ backup:
       existingSecret: ""
       bucketName: "s3://bucket/influxdb"
       endpoint: ""
+      usePasswordFiles: true
       ## Bitnami AWS CLI image
       ## ref: https://hub.docker.com/r/bitnami/aws-cli/tags
       ## @param backup.uploadProviders.aws.image.registry [default: REGISTRY_NAME] AWS CLI image registry
@@ -1170,9 +1237,8 @@ backup:
       image:
         registry: docker.io
         repository: bitnami/aws-cli
-        tag: 2.15.40-debian-12-r2
+        tag: 2.24.10-debian-12-r0
         digest: ""
-        ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
         ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
         ##
         pullPolicy: IfNotPresent

@@ -9,9 +9,7 @@ kind: Deployment
 metadata:
   name: {{ template "grafana-loki.query-scheduler.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
-  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.loki.image "chart" .Chart ) ) }}  
-  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
-  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: grafana-loki
     app.kubernetes.io/component: query-scheduler
   {{- if .Values.commonAnnotations }}
@@ -23,7 +21,7 @@ spec:
   {{- if .Values.queryScheduler.updateStrategy }}
   strategy: {{- toYaml .Values.queryScheduler.updateStrategy | nindent 4 }}
   {{- end }}
-  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.queryScheduler.podLabels .Values.commonLabels $versionLabel ) "context" . ) }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.queryScheduler.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/part-of: grafana-loki
@@ -73,6 +71,7 @@ spec:
       {{- if .Values.queryScheduler.podSecurityContext.enabled }}
       securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.queryScheduler.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
+      enableServiceLinks: {{ .Values.queryScheduler.enableServiceLinks }}
       initContainers:
         {{- if .Values.queryScheduler.initContainers }}
           {{- include "common.tplvalues.render" (dict "value" .Values.queryScheduler.initContainers "context" $) | nindent 8 }}
@@ -120,7 +119,7 @@ spec:
             - containerPort: {{ .Values.loki.containerPorts.grpc }}
               name: grpc
           {{- if .Values.queryScheduler.resources }}
-          resources: {{- toYaml .Values.queryScheduler.resources | nindent 12 }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.queryScheduler.resources "context" $) | nindent 12 }}
           {{- else if ne .Values.queryScheduler.resourcesPreset "none" }}
           resources: {{- include "common.resources.preset" (dict "type" .Values.queryScheduler.resourcesPreset) | nindent 12 }}
           {{- end }}
@@ -129,8 +128,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.queryScheduler.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.queryScheduler.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.queryScheduler.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /ready
+            tcpSocket:
               port: http
           {{- end }}
           {{- if .Values.queryScheduler.customReadinessProbe }}

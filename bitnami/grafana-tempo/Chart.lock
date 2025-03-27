@@ -1,9 +1,9 @@
 dependencies:
 - name: memcached
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 7.0.4
+  version: 7.7.1
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 2.19.2
-digest: sha256:fbd3394ef0637d099a5def6f6f2e891d12d54bc4580e7f1f224c4ba7c23185e7
-generated: "2024-05-07T22:36:55.8258898Z"
+  version: 2.30.0
+digest: sha256:f51b4262029df626f7c699899edcd32f33b6531b45cbf54fba5d5b9b0ef59a07
+generated: "2025-03-25T20:07:26.132813428Z"

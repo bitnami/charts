@@ -4,12 +4,12 @@
 ## @section Global parameters
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
-## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+## Current available global Docker image parameters: imageRegistry, imagePullSecrets, defaultStorageClass and compatibility
 ##
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
 ##
 global:
   imageRegistry: ""
@@ -18,7 +18,13 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass: ""
+  defaultStorageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    ##
+    allowInsecureImages: false
   ## Compatibility adaptations for Kubernetes platforms
   ##
   compatibility:
@@ -34,6 +40,9 @@ global:
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
 ##
 kubeVersion: ""
+## @param apiVersions Override Kubernetes API versions reported by .Capabilities
+##
+apiVersions: []
 ## @param nameOverride String to partially override common.names.fullname template with a string (will prepend the release name)
 ##
 nameOverride: ""
@@ -52,6 +61,9 @@ clusterDomain: cluster.local
 ## @param extraDeploy Array of extra objects to deploy with the release (evaluated as a template).
 ##
 extraDeploy: []
+## @param usePasswordFiles Mount credentials as files instead of using environment variables
+##
+usePasswordFiles: true
 ## Enable diagnostic mode in the daemonset/deployment
 ##
 diagnosticMode:
@@ -82,10 +94,9 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/kong
-  tag: 3.6.1-debian-12-r22
+  tag: 3.9.0-debian-12-r20
   digest: ""
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -283,7 +294,7 @@ autoscaling:
 ## @param pdb.maxUnavailable Maximum unavailable Kong replicas (expressed in percentage)
 ##
 pdb:
-  create: false
+  create: true
   minAvailable: ""
   maxUnavailable: "50%"
 ## @section Kong Container Parameters
@@ -663,10 +674,9 @@ ingressController:
   image:
     registry: docker.io
     repository: bitnami/kong-ingress-controller
-    tag: 3.1.4-debian-12-r3
+    tag: 3.4.3-debian-12-r2
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -890,30 +900,16 @@ migration:
 ## @param postgresql.auth.password Password for the custom user to create
 ## @param postgresql.auth.database Name for a custom database to create
 ## @param postgresql.auth.existingSecret Name of existing secret to use for PostgreSQL credentials
-## @param postgresql.auth.usePasswordFiles Mount credentials as a files instead of using an environment variable
 ## @param postgresql.architecture PostgreSQL architecture (`standalone` or `replication`)
 ##
 postgresql:
   enabled: true
-  ## Override PostgreSQL default image as 14.x is not supported
-  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/postgresql
-  ## @param postgresql.image.registry [default: REGISTRY_NAME] PostgreSQL image registry
-  ## @param postgresql.image.repository [default: REPOSITORY_NAME/postgresql] PostgreSQL image repository
-  ## @skip postgresql.image.tag PostgreSQL image tag (immutable tags are recommended)
-  ## @param postgresql.image.digest PostgreSQL image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
-  ##
-  image:
-    registry: docker.io
-    repository: bitnami/postgresql
-    tag: 14.11.0-debian-12-r18
-    digest: ""
   auth:
     username: kong
     password: ""
     database: kong
     postgresPassword: ""
     existingSecret: ""
-    usePasswordFiles: false
   architecture: standalone
   primary:
     ## PostgreSQL Primary resource requests and limits
@@ -960,7 +956,6 @@ postgresql:
 ## @param cassandra.dbUser.user Cassandra admin user
 ## @param cassandra.dbUser.password Password for `cassandra.dbUser.user`. Randomly generated if empty
 ## @param cassandra.dbUser.existingSecret Name of existing secret to use for Cassandra credentials
-## @param cassandra.usePasswordFile Mount credentials as a files instead of using an environment variable
 ## @param cassandra.replicaCount Number of Cassandra replicas
 ##
 cassandra:
@@ -969,7 +964,6 @@ cassandra:
     user: kong
     password: ""
     existingSecret: ""
-  usePasswordFile: false
   replicaCount: 1
   ## External Cassandra configuration
   ## All of these values are only used when cassandra.enabled is set to false

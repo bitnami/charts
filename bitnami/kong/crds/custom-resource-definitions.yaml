@@ -1,12 +1,13 @@
 # Source: https://github.com/kong/kubernetes-ingress-controller/config/crd?ref=v{version}
-# Version: 3.1.4
+# Version: 3.4.3
 # VersionOf: kong-ingress-controller
 # UseKustomize: true
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.14.0
+    kubernetes-configuration.konghq.com/channels: ingress-controller
+    kubernetes-configuration.konghq.com/version: v1.2.0-rc.1
   name: ingressclassparameterses.configuration.konghq.com
 spec:
   group: configuration.konghq.com
@@ -63,7 +64,8 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.14.0
+    kubernetes-configuration.konghq.com/channels: ingress-controller
+    kubernetes-configuration.konghq.com/version: v1.2.0-rc.1
   name: kongclusterplugins.configuration.konghq.com
 spec:
   group: configuration.konghq.com
@@ -287,22 +289,12 @@ spec:
                 description: |-
                   Conditions describe the current conditions of the KongClusterPluginStatus.
 
-
                   Known condition types are:
-
 
                   * "Programmed"
                 items:
-                  description: "Condition contains details for one aspect of the current
-                    state of this API Resource.\n---\nThis struct is intended for
-                    direct use as an array at the field path .status.conditions.  For
-                    example,\n\n\n\ttype FooStatus struct{\n\t    // Represents the
-                    observations of a foo's current state.\n\t    // Known .status.conditions.type
-                    are: \"Available\", \"Progressing\", and \"Degraded\"\n\t    //
-                    +patchMergeKey=type\n\t    // +patchStrategy=merge\n\t    // +listType=map\n\t
-                    \   // +listMapKey=type\n\t    Conditions []metav1.Condition `json:\"conditions,omitempty\"
-                    patchStrategy:\"merge\" patchMergeKey:\"type\" protobuf:\"bytes,1,rep,name=conditions\"`\n\n\n\t
-                    \   // other fields\n\t}"
+                  description: Condition contains details for one aspect of the current
+                    state of this API Resource.
                   properties:
                     lastTransitionTime:
                       description: |-
@@ -343,12 +335,7 @@ spec:
                       - Unknown
                       type: string
                     type:
-                      description: |-
-                        type of condition in CamelCase or in foo.example.com/CamelCase.
-                        ---
-                        Many .condition.type values are consistent across resources like Available, but because arbitrary conditions can be
-                        useful (see .node.status.conditions), the ability to deconflict is important.
-                        The regex it matches is (dns1123SubdomainFmt/)?(qualifiedNameFmt)
+                      description: type of condition in CamelCase or in foo.example.com/CamelCase.
                       maxLength: 316
                       pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
                       type: string
@@ -384,7 +371,8 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.14.0
+    kubernetes-configuration.konghq.com/channels: ingress-controller,gateway-operator
+    kubernetes-configuration.konghq.com/version: v1.2.0-rc.1
   name: kongconsumergroups.configuration.konghq.com
 spec:
   group: configuration.konghq.com
@@ -429,36 +417,110 @@ spec:
             type: string
           metadata:
             type: object
+          spec:
+            description: KongConsumerGroupSpec defines the desired state of KongConsumerGroup.
+            properties:
+              controlPlaneRef:
+                description: ControlPlaneRef is a reference to a ControlPlane this
+                  ConsumerGroup is associated with.
+                properties:
+                  konnectID:
+                    description: |-
+                      KonnectID is the schema for the KonnectID type.
+                      This field is required when the Type is konnectID.
+                    type: string
+                  konnectNamespacedRef:
+                    description: |-
+                      KonnectNamespacedRef is a reference to a Konnect Control Plane entity inside the cluster.
+                      It contains the name of the Konnect Control Plane.
+                      This field is required when the Type is konnectNamespacedRef.
+                    properties:
+                      name:
+                        description: Name is the name of the Konnect Control Plane.
+                        type: string
+                      namespace:
+                        description: |-
+                          Namespace is the namespace where the Konnect Control Plane is in.
+                          Currently only cluster scoped resources (KongVault) are allowed to set `konnectNamespacedRef.namespace`.
+                        type: string
+                    required:
+                    - name
+                    type: object
+                  type:
+                    default: kic
+                    description: |-
+                      Type indicates the type of the control plane being referenced. Allowed values:
+                      - konnectID
+                      - konnectNamespacedRef
+                      - kic
+
+                      The default is kic, which implies that the Control Plane is KIC.
+                    enum:
+                    - konnectID
+                    - konnectNamespacedRef
+                    - kic
+                    type: string
+                type: object
+                x-kubernetes-validations:
+                - message: when type is konnectNamespacedRef, konnectNamespacedRef
+                    must be set
+                  rule: '(has(self.type) && self.type == ''konnectNamespacedRef'')
+                    ? has(self.konnectNamespacedRef) : true'
+                - message: when type is konnectNamespacedRef, konnectID must not be
+                    set
+                  rule: '(has(self.type) && self.type == ''konnectNamespacedRef'')
+                    ? !has(self.konnectID) : true'
+                - message: when type is konnectID, konnectID must be set
+                  rule: '(has(self.type) && self.type == ''konnectID'') ? has(self.konnectID)
+                    : true'
+                - message: when type is konnectID, konnectNamespacedRef must not be
+                    set
+                  rule: '(has(self.type) && self.type == ''konnectID'') ? !has(self.konnectNamespacedRef)
+                    : true'
+                - message: when type is kic, konnectID must not be set
+                  rule: '(has(self.type) && self.type == ''kic'') ? !has(self.konnectID)
+                    : true'
+                - message: when type is kic, konnectNamespacedRef must not be set
+                  rule: '(has(self.type) && self.type == ''kic'') ? !has(self.konnectNamespacedRef)
+                    : true'
+                - message: when type is unset, konnectID must not be set
+                  rule: '!has(self.type) ? !has(self.konnectID) : true'
+                - message: when type is unset, konnectNamespacedRef must not be set
+                  rule: '!has(self.type) ? !has(self.konnectNamespacedRef) : true'
+              name:
+                description: Name is the name of the ConsumerGroup in Kong.
+                type: string
+              tags:
+                description: Tags is an optional set of tags applied to the ConsumerGroup.
+                items:
+                  type: string
+                maxItems: 20
+                type: array
+                x-kubernetes-validations:
+                - message: tags entries must not be longer than 128 characters
+                  rule: self.all(tag, size(tag) >= 1 && size(tag) <= 128)
+            type: object
           status:
+            default:
+              conditions:
+              - lastTransitionTime: "1970-01-01T00:00:00Z"
+                message: Waiting for controller
+                reason: Pending
+                status: Unknown
+                type: Programmed
             description: Status represents the current status of the KongConsumerGroup
               resource.
             properties:
               conditions:
-                default:
-                - lastTransitionTime: "1970-01-01T00:00:00Z"
-                  message: Waiting for controller
-                  reason: Pending
-                  status: Unknown
-                  type: Programmed
                 description: |-
                   Conditions describe the current conditions of the KongConsumerGroup.
 
-
                   Known condition types are:
-
 
                   * "Programmed"
                 items:
-                  description: "Condition contains details for one aspect of the current
-                    state of this API Resource.\n---\nThis struct is intended for
-                    direct use as an array at the field path .status.conditions.  For
-                    example,\n\n\n\ttype FooStatus struct{\n\t    // Represents the
-                    observations of a foo's current state.\n\t    // Known .status.conditions.type
-                    are: \"Available\", \"Progressing\", and \"Degraded\"\n\t    //
-                    +patchMergeKey=type\n\t    // +patchStrategy=merge\n\t    // +listType=map\n\t
-                    \   // +listMapKey=type\n\t    Conditions []metav1.Condition `json:\"conditions,omitempty\"
-                    patchStrategy:\"merge\" patchMergeKey:\"type\" protobuf:\"bytes,1,rep,name=conditions\"`\n\n\n\t
-                    \   // other fields\n\t}"
+                  description: Condition contains details for one aspect of the current
+                    state of this API Resource.
                   properties:
                     lastTransitionTime:
                       description: |-
@@ -499,12 +561,7 @@ spec:
                       - Unknown
                       type: string
                     type:
-                      description: |-
-                        type of condition in CamelCase or in foo.example.com/CamelCase.
-                        ---
-                        Many .condition.type values are consistent across resources like Available, but because arbitrary conditions can be
-                        useful (see .node.status.conditions), the ability to deconflict is important.
-                        The regex it matches is (dns1123SubdomainFmt/)?(qualifiedNameFmt)
+                      description: type of condition in CamelCase or in foo.example.com/CamelCase.
                       maxLength: 316
                       pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
                       type: string
@@ -520,8 +577,39 @@ spec:
                 x-kubernetes-list-map-keys:
                 - type
                 x-kubernetes-list-type: map
+              konnect:
+                description: Konnect contains the Konnect entity status.
+                properties:
+                  controlPlaneID:
+                    description: ControlPlaneID is the Konnect ID of the ControlPlane
+                      this Route is associated with.
+                    type: string
+                  id:
+                    description: |-
+                      ID is the unique identifier of the Konnect entity as assigned by Konnect API.
+                      If it's unset (empty string), it means the Konnect entity hasn't been created yet.
+                    type: string
+                  organizationID:
+                    description: OrgID is ID of Konnect Org that this entity has been
+                      created in.
+                    type: string
+                  serverURL:
+                    description: ServerURL is the URL of the Konnect server in which
+                      the entity exists.
+                    type: string
+                type: object
             type: object
         type: object
+        x-kubernetes-validations:
+        - message: controlPlaneRef is required once set
+          rule: (!has(oldSelf.spec) || !has(oldSelf.spec.controlPlaneRef)) || has(self.spec.controlPlaneRef)
+        - message: spec.controlPlaneRef cannot specify namespace for namespaced resource
+          rule: '(!has(self.spec) || !has(self.spec.controlPlaneRef) || !has(self.spec.controlPlaneRef.konnectNamespacedRef))
+            ? true : !has(self.spec.controlPlaneRef.konnectNamespacedRef.__namespace__)'
+        - message: spec.controlPlaneRef is immutable when an entity is already Programmed
+          rule: '(!has(oldSelf.spec) || !has(oldSelf.spec.controlPlaneRef)) ? true
+            : (!has(self.status) || !self.status.conditions.exists(c, c.type == ''Programmed''
+            && c.status == ''True'')) ? true : oldSelf.spec.controlPlaneRef == self.spec.controlPlaneRef'
     served: true
     storage: true
     subresources:
@@ -531,7 +619,8 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.14.0
+    kubernetes-configuration.konghq.com/channels: ingress-controller,gateway-operator
+    kubernetes-configuration.konghq.com/version: v1.2.0-rc.1
   name: kongconsumers.configuration.konghq.com
 spec:
   group: configuration.konghq.com
@@ -577,6 +666,7 @@ spec:
             items:
               type: string
             type: array
+            x-kubernetes-list-type: set
           credentials:
             description: |-
               Credentials are references to secrets containing a credential to be
@@ -584,6 +674,7 @@ spec:
             items:
               type: string
             type: array
+            x-kubernetes-list-type: set
           custom_id:
             description: |-
               CustomID is a Kong cluster-unique existing ID for the consumer - useful for mapping
@@ -599,36 +690,107 @@ spec:
             type: string
           metadata:
             type: object
+          spec:
+            description: KongConsumerSpec defines the specification of the KongConsumer.
+            properties:
+              controlPlaneRef:
+                description: ControlPlaneRef is a reference to a ControlPlane this
+                  Consumer is associated with.
+                properties:
+                  konnectID:
+                    description: |-
+                      KonnectID is the schema for the KonnectID type.
+                      This field is required when the Type is konnectID.
+                    type: string
+                  konnectNamespacedRef:
+                    description: |-
+                      KonnectNamespacedRef is a reference to a Konnect Control Plane entity inside the cluster.
+                      It contains the name of the Konnect Control Plane.
+                      This field is required when the Type is konnectNamespacedRef.
+                    properties:
+                      name:
+                        description: Name is the name of the Konnect Control Plane.
+                        type: string
+                      namespace:
+                        description: |-
+                          Namespace is the namespace where the Konnect Control Plane is in.
+                          Currently only cluster scoped resources (KongVault) are allowed to set `konnectNamespacedRef.namespace`.
+                        type: string
+                    required:
+                    - name
+                    type: object
+                  type:
+                    default: kic
+                    description: |-
+                      Type indicates the type of the control plane being referenced. Allowed values:
+                      - konnectID
+                      - konnectNamespacedRef
+                      - kic
+
+                      The default is kic, which implies that the Control Plane is KIC.
+                    enum:
+                    - konnectID
+                    - konnectNamespacedRef
+                    - kic
+                    type: string
+                type: object
+                x-kubernetes-validations:
+                - message: when type is konnectNamespacedRef, konnectNamespacedRef
+                    must be set
+                  rule: '(has(self.type) && self.type == ''konnectNamespacedRef'')
+                    ? has(self.konnectNamespacedRef) : true'
+                - message: when type is konnectNamespacedRef, konnectID must not be
+                    set
+                  rule: '(has(self.type) && self.type == ''konnectNamespacedRef'')
+                    ? !has(self.konnectID) : true'
+                - message: when type is konnectID, konnectID must be set
+                  rule: '(has(self.type) && self.type == ''konnectID'') ? has(self.konnectID)
+                    : true'
+                - message: when type is konnectID, konnectNamespacedRef must not be
+                    set
+                  rule: '(has(self.type) && self.type == ''konnectID'') ? !has(self.konnectNamespacedRef)
+                    : true'
+                - message: when type is kic, konnectID must not be set
+                  rule: '(has(self.type) && self.type == ''kic'') ? !has(self.konnectID)
+                    : true'
+                - message: when type is kic, konnectNamespacedRef must not be set
+                  rule: '(has(self.type) && self.type == ''kic'') ? !has(self.konnectNamespacedRef)
+                    : true'
+                - message: when type is unset, konnectID must not be set
+                  rule: '!has(self.type) ? !has(self.konnectID) : true'
+                - message: when type is unset, konnectNamespacedRef must not be set
+                  rule: '!has(self.type) ? !has(self.konnectNamespacedRef) : true'
+              tags:
+                description: Tags is an optional set of tags applied to the consumer.
+                items:
+                  type: string
+                maxItems: 20
+                type: array
+                x-kubernetes-validations:
+                - message: tags entries must not be longer than 128 characters
+                  rule: self.all(tag, size(tag) >= 1 && size(tag) <= 128)
+            type: object
           status:
+            default:
+              conditions:
+              - lastTransitionTime: "1970-01-01T00:00:00Z"
+                message: Waiting for controller
+                reason: Pending
+                status: Unknown
+                type: Programmed
             description: Status represents the current status of the KongConsumer
               resource.
             properties:
               conditions:
-                default:
-                - lastTransitionTime: "1970-01-01T00:00:00Z"
-                  message: Waiting for controller
-                  reason: Pending
-                  status: Unknown
-                  type: Programmed
                 description: |-
                   Conditions describe the current conditions of the KongConsumer.
 
-
                   Known condition types are:
-
 
                   * "Programmed"
                 items:
-                  description: "Condition contains details for one aspect of the current
-                    state of this API Resource.\n---\nThis struct is intended for
-                    direct use as an array at the field path .status.conditions.  For
-                    example,\n\n\n\ttype FooStatus struct{\n\t    // Represents the
-                    observations of a foo's current state.\n\t    // Known .status.conditions.type
-                    are: \"Available\", \"Progressing\", and \"Degraded\"\n\t    //
-                    +patchMergeKey=type\n\t    // +patchStrategy=merge\n\t    // +listType=map\n\t
-                    \   // +listMapKey=type\n\t    Conditions []metav1.Condition `json:\"conditions,omitempty\"
-                    patchStrategy:\"merge\" patchMergeKey:\"type\" protobuf:\"bytes,1,rep,name=conditions\"`\n\n\n\t
-                    \   // other fields\n\t}"
+                  description: Condition contains details for one aspect of the current
+                    state of this API Resource.
                   properties:
                     lastTransitionTime:
                       description: |-
@@ -669,12 +831,7 @@ spec:
                       - Unknown
                       type: string
                     type:
-                      description: |-
-                        type of condition in CamelCase or in foo.example.com/CamelCase.
-                        ---
-                        Many .condition.type values are consistent across resources like Available, but because arbitrary conditions can be
-                        useful (see .node.status.conditions), the ability to deconflict is important.
-                        The regex it matches is (dns1123SubdomainFmt/)?(qualifiedNameFmt)
+                      description: type of condition in CamelCase or in foo.example.com/CamelCase.
                       maxLength: 316
                       pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
                       type: string
@@ -690,6 +847,27 @@ spec:
                 x-kubernetes-list-map-keys:
                 - type
                 x-kubernetes-list-type: map
+              konnect:
+                description: Konnect contains the Konnect entity status.
+                properties:
+                  controlPlaneID:
+                    description: ControlPlaneID is the Konnect ID of the ControlPlane
+                      this Route is associated with.
+                    type: string
+                  id:
+                    description: |-
+                      ID is the unique identifier of the Konnect entity as assigned by Konnect API.
+                      If it's unset (empty string), it means the Konnect entity hasn't been created yet.
+                    type: string
+                  organizationID:
+                    description: OrgID is ID of Konnect Org that this entity has been
+                      created in.
+                    type: string
+                  serverURL:
+                    description: ServerURL is the URL of the Konnect server in which
+                      the entity exists.
+                    type: string
+                type: object
             type: object
           username:
             description: Username is a Kong cluster-unique username of the consumer.
@@ -698,6 +876,15 @@ spec:
         x-kubernetes-validations:
         - message: Need to provide either username or custom_id
           rule: has(self.username) || has(self.custom_id)
+        - message: controlPlaneRef is required once set
+          rule: (!has(oldSelf.spec) || !has(oldSelf.spec.controlPlaneRef)) || has(self.spec.controlPlaneRef)
+        - message: spec.controlPlaneRef cannot specify namespace for namespaced resource
+          rule: '(!has(self.spec) || !has(self.spec.controlPlaneRef) || !has(self.spec.controlPlaneRef.konnectNamespacedRef))
+            ? true : !has(self.spec.controlPlaneRef.konnectNamespacedRef.__namespace__)'
+        - message: spec.controlPlaneRef is immutable when an entity is already Programmed
+          rule: '(!has(self.spec) || !has(self.spec.controlPlaneRef)) ? true : (!has(self.status)
+            || !self.status.conditions.exists(c, c.type == ''Programmed'' && c.status
+            == ''True'')) ? true : oldSelf.spec.controlPlaneRef == self.spec.controlPlaneRef'
     served: true
     storage: true
     subresources:
@@ -707,7 +894,199 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.14.0
+    kubernetes-configuration.konghq.com/channels: ingress-controller
+    kubernetes-configuration.konghq.com/version: v1.2.0-rc.1
+  name: kongcustomentities.configuration.konghq.com
+spec:
+  group: configuration.konghq.com
+  names:
+    categories:
+    - kong-ingress-controller
+    kind: KongCustomEntity
+    listKind: KongCustomEntityList
+    plural: kongcustomentities
+    shortNames:
+    - kce
+    singular: kongcustomentity
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns:
+    - description: type of the Kong entity
+      jsonPath: .spec.type
+      name: Entity Type
+      type: string
+    - description: Age
+      jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    - jsonPath: .status.conditions[?(@.type=="Programmed")].status
+      name: Programmed
+      type: string
+    name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: KongCustomEntity defines a "custom" Kong entity that KIC cannot
+          support the entity type directly.
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: KongCustomEntitySpec defines the specification of the KongCustomEntity.
+            properties:
+              controllerName:
+                description: ControllerName specifies the controller that should reconcile
+                  it, like ingress class.
+                type: string
+              fields:
+                description: Fields defines the fields of the Kong entity itself.
+                x-kubernetes-preserve-unknown-fields: true
+              parentRef:
+                description: |-
+                  ParentRef references the kubernetes resource it attached to when its scope is "attached".
+                  Currently only KongPlugin/KongClusterPlugin allowed. This will make the custom entity to be attached
+                  to the entity(service/route/consumer) where the plugin is attached.
+                properties:
+                  group:
+                    description: Group defines the API group of the referred object.
+                    type: string
+                  kind:
+                    description: Kind defines the kind of the referred object.
+                    enum:
+                    - KongPlugin
+                    - KongClusterPlugin
+                    type: string
+                  name:
+                    description: Name defines the name of the referred object.
+                    type: string
+                  namespace:
+                    description: Empty namespace means the same namespace of the owning
+                      object.
+                    type: string
+                required:
+                - name
+                type: object
+              type:
+                description: EntityType is the type of the Kong entity. The type is
+                  used in generating declarative configuration.
+                type: string
+            required:
+            - controllerName
+            - fields
+            - type
+            type: object
+            x-kubernetes-validations:
+            - message: The type field cannot be one of the known Kong entity types
+              rule: '!(self.type in [''services'',''routes'',''upstreams'',''targets'',''plugins'',''consumers'',''consumer_groups''])'
+          status:
+            description: Status stores the reconciling status of the resource.
+            properties:
+              conditions:
+                default:
+                - lastTransitionTime: "1970-01-01T00:00:00Z"
+                  message: Waiting for controller
+                  reason: Pending
+                  status: Unknown
+                  type: Programmed
+                description: |-
+                  Conditions describe the current conditions of the KongCustomEntityStatus.
+
+                  Known condition types are:
+
+                  * "Programmed"
+                items:
+                  description: Condition contains details for one aspect of the current
+                    state of this API Resource.
+                  properties:
+                    lastTransitionTime:
+                      description: |-
+                        lastTransitionTime is the last time the condition transitioned from one status to another.
+                        This should be when the underlying condition changed.  If that is not known, then using the time when the API field changed is acceptable.
+                      format: date-time
+                      type: string
+                    message:
+                      description: |-
+                        message is a human readable message indicating details about the transition.
+                        This may be an empty string.
+                      maxLength: 32768
+                      type: string
+                    observedGeneration:
+                      description: |-
+                        observedGeneration represents the .metadata.generation that the condition was set based upon.
+                        For instance, if .metadata.generation is currently 12, but the .status.conditions[x].observedGeneration is 9, the condition is out of date
+                        with respect to the current state of the instance.
+                      format: int64
+                      minimum: 0
+                      type: integer
+                    reason:
+                      description: |-
+                        reason contains a programmatic identifier indicating the reason for the condition's last transition.
+                        Producers of specific condition types may define expected values and meanings for this field,
+                        and whether the values are considered a guaranteed API.
+                        The value should be a CamelCase string.
+                        This field may not be empty.
+                      maxLength: 1024
+                      minLength: 1
+                      pattern: ^[A-Za-z]([A-Za-z0-9_,:]*[A-Za-z0-9_])?$
+                      type: string
+                    status:
+                      description: status of the condition, one of True, False, Unknown.
+                      enum:
+                      - "True"
+                      - "False"
+                      - Unknown
+                      type: string
+                    type:
+                      description: type of condition in CamelCase or in foo.example.com/CamelCase.
+                      maxLength: 316
+                      pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
+                      type: string
+                  required:
+                  - lastTransitionTime
+                  - message
+                  - reason
+                  - status
+                  - type
+                  type: object
+                maxItems: 8
+                type: array
+                x-kubernetes-list-map-keys:
+                - type
+                x-kubernetes-list-type: map
+            required:
+            - conditions
+            type: object
+        required:
+        - spec
+        type: object
+        x-kubernetes-validations:
+        - message: The spec.type field is immutable
+          rule: self.spec.type == oldSelf.spec.type
+    served: true
+    storage: true
+    subresources:
+      status: {}
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    kubernetes-configuration.konghq.com/channels: ingress-controller
+    kubernetes-configuration.konghq.com/version: v1.2.0-rc.1
   name: kongingresses.configuration.konghq.com
 spec:
   group: configuration.konghq.com
@@ -1098,7 +1477,8 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.14.0
+    kubernetes-configuration.konghq.com/channels: ingress-controller,gateway-operator
+    kubernetes-configuration.konghq.com/version: v1.2.0-rc.1
   name: konglicenses.configuration.konghq.com
 spec:
   group: configuration.konghq.com
@@ -1175,18 +1555,8 @@ spec:
                       description: Conditions describe the current conditions of the
                         KongLicense on the controller.
                       items:
-                        description: "Condition contains details for one aspect of
-                          the current state of this API Resource.\n---\nThis struct
-                          is intended for direct use as an array at the field path
-                          .status.conditions.  For example,\n\n\n\ttype FooStatus
-                          struct{\n\t    // Represents the observations of a foo's
-                          current state.\n\t    // Known .status.conditions.type are:
-                          \"Available\", \"Progressing\", and \"Degraded\"\n\t    //
-                          +patchMergeKey=type\n\t    // +patchStrategy=merge\n\t    //
-                          +listType=map\n\t    // +listMapKey=type\n\t    Conditions
-                          []metav1.Condition `json:\"conditions,omitempty\" patchStrategy:\"merge\"
-                          patchMergeKey:\"type\" protobuf:\"bytes,1,rep,name=conditions\"`\n\n\n\t
-                          \   // other fields\n\t}"
+                        description: Condition contains details for one aspect of
+                          the current state of this API Resource.
                         properties:
                           lastTransitionTime:
                             description: |-
@@ -1228,12 +1598,7 @@ spec:
                             - Unknown
                             type: string
                           type:
-                            description: |-
-                              type of condition in CamelCase or in foo.example.com/CamelCase.
-                              ---
-                              Many .condition.type values are consistent across resources like Available, but because arbitrary conditions can be
-                              useful (see .node.status.conditions), the ability to deconflict is important.
-                              The regex it matches is (dns1123SubdomainFmt/)?(qualifiedNameFmt)
+                            description: type of condition in CamelCase or in foo.example.com/CamelCase.
                             maxLength: 316
                             pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
                             type: string
@@ -1311,7 +1676,8 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.14.0
+    kubernetes-configuration.konghq.com/channels: ingress-controller,gateway-operator
+    kubernetes-configuration.konghq.com/version: v1.2.0-rc.1
   name: kongplugins.configuration.konghq.com
 spec:
   group: configuration.konghq.com
@@ -1529,22 +1895,12 @@ spec:
                 description: |-
                   Conditions describe the current conditions of the KongPluginStatus.
 
-
                   Known condition types are:
-
 
                   * "Programmed"
                 items:
-                  description: "Condition contains details for one aspect of the current
-                    state of this API Resource.\n---\nThis struct is intended for
-                    direct use as an array at the field path .status.conditions.  For
-                    example,\n\n\n\ttype FooStatus struct{\n\t    // Represents the
-                    observations of a foo's current state.\n\t    // Known .status.conditions.type
-                    are: \"Available\", \"Progressing\", and \"Degraded\"\n\t    //
-                    +patchMergeKey=type\n\t    // +patchStrategy=merge\n\t    // +listType=map\n\t
-                    \   // +listMapKey=type\n\t    Conditions []metav1.Condition `json:\"conditions,omitempty\"
-                    patchStrategy:\"merge\" patchMergeKey:\"type\" protobuf:\"bytes,1,rep,name=conditions\"`\n\n\n\t
-                    \   // other fields\n\t}"
+                  description: Condition contains details for one aspect of the current
+                    state of this API Resource.
                   properties:
                     lastTransitionTime:
                       description: |-
@@ -1585,12 +1941,7 @@ spec:
                       - Unknown
                       type: string
                     type:
-                      description: |-
-                        type of condition in CamelCase or in foo.example.com/CamelCase.
-                        ---
-                        Many .condition.type values are consistent across resources like Available, but because arbitrary conditions can be
-                        useful (see .node.status.conditions), the ability to deconflict is important.
-                        The regex it matches is (dns1123SubdomainFmt/)?(qualifiedNameFmt)
+                      description: type of condition in CamelCase or in foo.example.com/CamelCase.
                       maxLength: 316
                       pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
                       type: string
@@ -1626,7 +1977,8 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.14.0
+    kubernetes-configuration.konghq.com/channels: ingress-controller
+    kubernetes-configuration.konghq.com/version: v1.2.0-rc.1
   labels:
     gateway.networking.k8s.io/policy: direct
   name: kongupstreampolicies.configuration.konghq.com
@@ -1650,22 +2002,17 @@ spec:
           KongUpstreamPolicy allows configuring algorithm that should be used for load balancing traffic between Kong
           Upstream's Targets. It also allows configuring health checks for Kong Upstream's Targets.
 
-
           Its configuration is similar to Kong Upstream object (https://docs.konghq.com/gateway/latest/admin-api/#upstream-object),
           and it is applied to Kong Upstream objects created by the controller.
-
 
           It can be attached to Services. To attach it to a Service, it has to be annotated with
           `konghq.com/upstream-policy: <name>`, where `<name>` is the name of the KongUpstreamPolicy
           object in the same namespace as the Service.
 
-
           When attached to a Service, it will affect all Kong Upstreams created for the Service.
-
 
           When attached to a Service used in a Gateway API *Route rule with multiple BackendRefs, all of its Services MUST
           be configured with the same KongUpstreamPolicy. Otherwise, the controller will *ignore* the KongUpstreamPolicy.
-
 
           Note: KongUpstreamPolicy doesn't implement Gateway API's GEP-713 strictly.
           In particular, it doesn't use the TargetRef for attaching to Services and Gateway API *Routes - annotations are
@@ -1979,26 +2326,21 @@ spec:
                   the controller first sees the policy and SHOULD update the entry as
                   appropriate when the relevant ancestor is modified.
 
-
                   Note that choosing the relevant ancestor is left to the Policy designers;
                   an important part of Policy design is designing the right object level at
                   which to namespace this status.
-
 
                   Note also that implementations MUST ONLY populate ancestor status for
                   the Ancestor resources they are responsible for. Implementations MUST
                   use the ControllerName field to uniquely identify the entries in this list
                   that they are responsible for.
 
-
                   Note that to achieve this, the list of PolicyAncestorStatus structs
                   MUST be treated as a map with a composite key, made up of the AncestorRef
                   and ControllerName fields combined.
 
-
                   A maximum of 16 ancestors will be represented in this list. An empty list
                   means the Policy is not relevant for any ancestors.
-
 
                   If this slice is full, implementations MUST NOT add further entries.
                   Instead they MUST consider the policy unimplementable and signal that
@@ -2011,7 +2353,6 @@ spec:
                     PolicyAncestorStatus describes the status of a route with respect to an
                     associated Ancestor.
 
-
                     Ancestors refer to objects that are either the Target of a policy or above it
                     in terms of object hierarchy. For example, if a policy targets a Service, the
                     Policy's Ancestors are, in order, the Service, the HTTPRoute, the Gateway, and
@@ -2020,27 +2361,22 @@ spec:
                     SHOULD use Gateway as the PolicyAncestorStatus object unless the designers
                     have a _very_ good reason otherwise.
 
-
                     In the context of policy attachment, the Ancestor is used to distinguish which
                     resource results in a distinct application of this policy. For example, if a policy
                     targets a Service, it may have a distinct result per attached Gateway.
-
 
                     Policies targeting the same resource may have different effects depending on the
                     ancestors of those resources. For example, different Gateways targeting the same
                     Service may have different capabilities, especially if they have different underlying
                     implementations.
 
-
                     For example, in BackendTLSPolicy, the Policy attaches to a Service that is
                     used as a backend in a HTTPRoute that is itself attached to a Gateway.
                     In this case, the relevant object for status is the Gateway, and that is the
                     ancestor object referred to in this status.
 
-
                     Note that a parent is also an ancestor, so for objects where the parent is the
                     relevant object for status, this struct SHOULD still be used.
-
 
                     This struct is intended to be used in a slice that's effectively a map,
                     with a composite key made up of the AncestorRef and the ControllerName.
@@ -2058,7 +2394,6 @@ spec:
                             To set the core API group (such as for a "Service" kind referent),
                             Group must be explicitly set to "" (empty string).
 
-
                             Support: Core
                           maxLength: 253
                           pattern: ^$|^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
@@ -2068,13 +2403,10 @@ spec:
                           description: |-
                             Kind is kind of the referent.
 
-
                             There are two kinds of parent resources with "Core" support:
 
-
                             * Gateway (Gateway conformance profile)
-                            * Service (Mesh conformance profile, experimental, ClusterIP Services only)
-
+                            * Service (Mesh conformance profile, ClusterIP Services only)
 
                             Support for other resources is Implementation-Specific.
                           maxLength: 63
@@ -2085,7 +2417,6 @@ spec:
                           description: |-
                             Name is the name of the referent.
 
-
                             Support: Core
                           maxLength: 253
                           minLength: 1
@@ -2095,19 +2426,16 @@ spec:
                             Namespace is the namespace of the referent. When unspecified, this refers
                             to the local namespace of the Route.
 
-
                             Note that there are specific rules for ParentRefs which cross namespace
                             boundaries. Cross-namespace references are only valid if they are explicitly
                             allowed by something in the namespace they are referring to. For example:
                             Gateway has the AllowedRoutes field, and ReferenceGrant provides a
                             generic way to enable any other kind of cross-namespace reference.
 
-
                             <gateway:experimental:description>
                             ParentRefs from a Route to a Service in the same namespace are "producer"
                             routes, which apply default routing rules to inbound connections from
                             any namespace to the Service.
-
 
                             ParentRefs from a Route to a Service in a different namespace are
                             "consumer" routes, and these routing rules are only applied to outbound
@@ -2115,7 +2443,6 @@ spec:
                             the intended destination of the connections are a Service targeted as a
                             ParentRef of the Route.
                             </gateway:experimental:description>
-
 
                             Support: Core
                           maxLength: 63
@@ -2127,7 +2454,6 @@ spec:
                             Port is the network port this Route targets. It can be interpreted
                             differently based on the type of parent resource.
 
-
                             When the parent resource is a Gateway, this targets all listeners
                             listening on the specified port that also support this kind of Route(and
                             select this Route). It's not recommended to set `Port` unless the
@@ -2136,18 +2462,15 @@ spec:
                             and SectionName are specified, the name and port of the selected listener
                             must match both specified values.
 
-
                             <gateway:experimental:description>
                             When the parent resource is a Service, this targets a specific port in the
                             Service spec. When both Port (experimental) and SectionName are specified,
                             the name and port of the selected port must match both specified values.
                             </gateway:experimental:description>
 
-
                             Implementations MAY choose to support other parent resources.
                             Implementations supporting other types of parent resources MUST clearly
                             document how/if Port is interpreted.
-
 
                             For the purpose of status, an attachment is considered successful as
                             long as the parent resource accepts it partially. For example, Gateway
@@ -2157,11 +2480,7 @@ spec:
                             attached. If no Gateway listeners accept attachment from this Route,
                             the Route MUST be considered detached from the Gateway.
 
-
                             Support: Extended
-
-
-                            <gateway:experimental>
                           format: int32
                           maximum: 65535
                           minimum: 1
@@ -2171,21 +2490,16 @@ spec:
                             SectionName is the name of a section within the target resource. In the
                             following resources, SectionName is interpreted as the following:
 
-
-                            * Gateway: Listener Name. When both Port (experimental) and SectionName
+                            * Gateway: Listener name. When both Port (experimental) and SectionName
                             are specified, the name and port of the selected listener must match
                             both specified values.
-                            * Service: Port Name. When both Port (experimental) and SectionName
+                            * Service: Port name. When both Port (experimental) and SectionName
                             are specified, the name and port of the selected listener must match
-                            both specified values. Note that attaching Routes to Services as Parents
-                            is part of experimental Mesh support and is not supported for any other
-                            purpose.
-
+                            both specified values.
 
                             Implementations MAY choose to support attaching Routes to other resources.
                             If that is the case, they MUST clearly document how SectionName is
                             interpreted.
-
 
                             When unspecified (empty string), this will reference the entire resource.
                             For the purpose of status, an attachment is considered successful if at
@@ -2195,7 +2509,6 @@ spec:
                             the referencing Route, the Route MUST be considered successfully
                             attached. If no Gateway listeners accept attachment from this Route, the
                             Route MUST be considered detached from the Gateway.
-
 
                             Support: Core
                           maxLength: 253
@@ -2209,18 +2522,8 @@ spec:
                       description: Conditions describes the status of the Policy with
                         respect to the given Ancestor.
                       items:
-                        description: "Condition contains details for one aspect of
-                          the current state of this API Resource.\n---\nThis struct
-                          is intended for direct use as an array at the field path
-                          .status.conditions.  For example,\n\n\n\ttype FooStatus
-                          struct{\n\t    // Represents the observations of a foo's
-                          current state.\n\t    // Known .status.conditions.type are:
-                          \"Available\", \"Progressing\", and \"Degraded\"\n\t    //
-                          +patchMergeKey=type\n\t    // +patchStrategy=merge\n\t    //
-                          +listType=map\n\t    // +listMapKey=type\n\t    Conditions
-                          []metav1.Condition `json:\"conditions,omitempty\" patchStrategy:\"merge\"
-                          patchMergeKey:\"type\" protobuf:\"bytes,1,rep,name=conditions\"`\n\n\n\t
-                          \   // other fields\n\t}"
+                        description: Condition contains details for one aspect of
+                          the current state of this API Resource.
                         properties:
                           lastTransitionTime:
                             description: |-
@@ -2262,12 +2565,7 @@ spec:
                             - Unknown
                             type: string
                           type:
-                            description: |-
-                              type of condition in CamelCase or in foo.example.com/CamelCase.
-                              ---
-                              Many .condition.type values are consistent across resources like Available, but because arbitrary conditions can be
-                              useful (see .node.status.conditions), the ability to deconflict is important.
-                              The regex it matches is (dns1123SubdomainFmt/)?(qualifiedNameFmt)
+                            description: type of condition in CamelCase or in foo.example.com/CamelCase.
                             maxLength: 316
                             pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
                             type: string
@@ -2290,14 +2588,11 @@ spec:
                         controller that wrote this status. This corresponds with the
                         controllerName field on GatewayClass.
 
-
                         Example: "example.net/gateway-controller".
-
 
                         The format of this field is DOMAIN "/" PATH, where DOMAIN and PATH are
                         valid Kubernetes names
                         (https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names).
-
 
                         Controllers MUST populate this field when writing status. Controllers should ensure that
                         entries to status populated with their ControllerName are cleaned up when they are no
@@ -2369,7 +2664,8 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.14.0
+    kubernetes-configuration.konghq.com/channels: ingress-controller,gateway-operator
+    kubernetes-configuration.konghq.com/version: v1.2.0-rc.1
   name: kongvaults.configuration.konghq.com
 spec:
   group: configuration.konghq.com
@@ -2444,6 +2740,73 @@ spec:
                 description: Config is the configuration of the vault. Varies for
                   different backends.
                 x-kubernetes-preserve-unknown-fields: true
+              controlPlaneRef:
+                description: ControlPlaneRef is a reference to a Konnect ControlPlane
+                  this KongVault is associated with.
+                properties:
+                  konnectID:
+                    description: |-
+                      KonnectID is the schema for the KonnectID type.
+                      This field is required when the Type is konnectID.
+                    type: string
+                  konnectNamespacedRef:
+                    description: |-
+                      KonnectNamespacedRef is a reference to a Konnect Control Plane entity inside the cluster.
+                      It contains the name of the Konnect Control Plane.
+                      This field is required when the Type is konnectNamespacedRef.
+                    properties:
+                      name:
+                        description: Name is the name of the Konnect Control Plane.
+                        type: string
+                      namespace:
+                        description: |-
+                          Namespace is the namespace where the Konnect Control Plane is in.
+                          Currently only cluster scoped resources (KongVault) are allowed to set `konnectNamespacedRef.namespace`.
+                        type: string
+                    required:
+                    - name
+                    type: object
+                  type:
+                    default: kic
+                    description: |-
+                      Type indicates the type of the control plane being referenced. Allowed values:
+                      - konnectID
+                      - konnectNamespacedRef
+                      - kic
+
+                      The default is kic, which implies that the Control Plane is KIC.
+                    enum:
+                    - konnectID
+                    - konnectNamespacedRef
+                    - kic
+                    type: string
+                type: object
+                x-kubernetes-validations:
+                - message: when type is konnectNamespacedRef, konnectNamespacedRef
+                    must be set
+                  rule: '(has(self.type) && self.type == ''konnectNamespacedRef'')
+                    ? has(self.konnectNamespacedRef) : true'
+                - message: when type is konnectNamespacedRef, konnectID must not be
+                    set
+                  rule: '(has(self.type) && self.type == ''konnectNamespacedRef'')
+                    ? !has(self.konnectID) : true'
+                - message: when type is konnectID, konnectID must be set
+                  rule: '(has(self.type) && self.type == ''konnectID'') ? has(self.konnectID)
+                    : true'
+                - message: when type is konnectID, konnectNamespacedRef must not be
+                    set
+                  rule: '(has(self.type) && self.type == ''konnectID'') ? !has(self.konnectNamespacedRef)
+                    : true'
+                - message: when type is kic, konnectID must not be set
+                  rule: '(has(self.type) && self.type == ''kic'') ? !has(self.konnectID)
+                    : true'
+                - message: when type is kic, konnectNamespacedRef must not be set
+                  rule: '(has(self.type) && self.type == ''kic'') ? !has(self.konnectNamespacedRef)
+                    : true'
+                - message: when type is unset, konnectID must not be set
+                  rule: '!has(self.type) ? !has(self.konnectID) : true'
+                - message: when type is unset, konnectNamespacedRef must not be set
+                  rule: '!has(self.type) ? !has(self.konnectNamespacedRef) : true'
               description:
                 description: Description is the additional information about the vault.
                 type: string
@@ -2453,6 +2816,16 @@ spec:
                   It is immutable after created.
                 minLength: 1
                 type: string
+              tags:
+                description: Tags are the tags associated to the vault for grouping
+                  and filtering.
+                items:
+                  type: string
+                maxItems: 20
+                type: array
+                x-kubernetes-validations:
+                - message: tags entries must not be longer than 128 characters
+                  rule: self.all(tag, size(tag) >= 1 && size(tag) <= 128)
             required:
             - backend
             - prefix
@@ -2471,22 +2844,12 @@ spec:
                 description: |-
                   Conditions describe the current conditions of the KongVaultStatus.
 
-
                   Known condition types are:
-
 
                   * "Programmed"
                 items:
-                  description: "Condition contains details for one aspect of the current
-                    state of this API Resource.\n---\nThis struct is intended for
-                    direct use as an array at the field path .status.conditions.  For
-                    example,\n\n\n\ttype FooStatus struct{\n\t    // Represents the
-                    observations of a foo's current state.\n\t    // Known .status.conditions.type
-                    are: \"Available\", \"Progressing\", and \"Degraded\"\n\t    //
-                    +patchMergeKey=type\n\t    // +patchStrategy=merge\n\t    // +listType=map\n\t
-                    \   // +listMapKey=type\n\t    Conditions []metav1.Condition `json:\"conditions,omitempty\"
-                    patchStrategy:\"merge\" patchMergeKey:\"type\" protobuf:\"bytes,1,rep,name=conditions\"`\n\n\n\t
-                    \   // other fields\n\t}"
+                  description: Condition contains details for one aspect of the current
+                    state of this API Resource.
                   properties:
                     lastTransitionTime:
                       description: |-
@@ -2527,12 +2890,7 @@ spec:
                       - Unknown
                       type: string
                     type:
-                      description: |-
-                        type of condition in CamelCase or in foo.example.com/CamelCase.
-                        ---
-                        Many .condition.type values are consistent across resources like Available, but because arbitrary conditions can be
-                        useful (see .node.status.conditions), the ability to deconflict is important.
-                        The regex it matches is (dns1123SubdomainFmt/)?(qualifiedNameFmt)
+                      description: type of condition in CamelCase or in foo.example.com/CamelCase.
                       maxLength: 316
                       pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
                       type: string
@@ -2548,6 +2906,27 @@ spec:
                 x-kubernetes-list-map-keys:
                 - type
                 x-kubernetes-list-type: map
+              konnect:
+                description: Konnect contains the Konnect entity status.
+                properties:
+                  controlPlaneID:
+                    description: ControlPlaneID is the Konnect ID of the ControlPlane
+                      this Route is associated with.
+                    type: string
+                  id:
+                    description: |-
+                      ID is the unique identifier of the Konnect entity as assigned by Konnect API.
+                      If it's unset (empty string), it means the Konnect entity hasn't been created yet.
+                    type: string
+                  organizationID:
+                    description: OrgID is ID of Konnect Org that this entity has been
+                      created in.
+                    type: string
+                  serverURL:
+                    description: ServerURL is the URL of the Konnect server in which
+                      the entity exists.
+                    type: string
+                type: object
             required:
             - conditions
             type: object
@@ -2557,6 +2936,12 @@ spec:
         x-kubernetes-validations:
         - message: The spec.prefix field is immutable
           rule: self.spec.prefix == oldSelf.spec.prefix
+        - message: controlPlaneRef is required once set
+          rule: '!has(oldSelf.spec.controlPlaneRef) || has(self.spec.controlPlaneRef)'
+        - message: spec.controlPlaneRef is immutable when an entity is already Programmed
+          rule: '(!has(self.status) || !self.status.conditions.exists(c, c.type ==
+            ''Programmed'' && c.status == ''True'') || !has(self.spec.controlPlaneRef))
+            ? true : oldSelf.spec.controlPlaneRef == self.spec.controlPlaneRef'
     served: true
     storage: true
     subresources:
@@ -2566,7 +2951,8 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.14.0
+    kubernetes-configuration.konghq.com/channels: ingress-controller
+    kubernetes-configuration.konghq.com/version: v1.2.0-rc.1
   name: tcpingresses.configuration.konghq.com
 spec:
   group: configuration.konghq.com
@@ -2729,6 +3115,8 @@ spec:
                             Ports is a list of records of service ports
                             If used, every port defined in the service should have an entry in it
                           items:
+                            description: PortStatus represents the error condition
+                              of a service port
                             properties:
                               error:
                                 description: |-
@@ -2738,8 +3126,6 @@ spec:
                                     CamelCase names
                                   - cloud provider specific error values must have names that comply with the
                                     format foo.example.com/CamelCase.
-                                  ---
-                                  The regex it matches is (dns1123SubdomainFmt/)?(qualifiedNameFmt)
                                 maxLength: 316
                                 pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
                                 type: string
@@ -2749,12 +3135,12 @@ spec:
                                 format: int32
                                 type: integer
                               protocol:
-                                default: TCP
                                 description: |-
                                   Protocol is the protocol of the service port of which status is recorded here
                                   The supported values are: "TCP", "UDP", "SCTP"
                                 type: string
                             required:
+                            - error
                             - port
                             - protocol
                             type: object
@@ -2762,6 +3148,7 @@ spec:
                           x-kubernetes-list-type: atomic
                       type: object
                     type: array
+                    x-kubernetes-list-type: atomic
                 type: object
             type: object
         type: object
@@ -2774,7 +3161,8 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.14.0
+    kubernetes-configuration.konghq.com/channels: ingress-controller
+    kubernetes-configuration.konghq.com/version: v1.2.0-rc.1
   name: udpingresses.configuration.konghq.com
 spec:
   group: configuration.konghq.com
@@ -2901,6 +3289,8 @@ spec:
                             Ports is a list of records of service ports
                             If used, every port defined in the service should have an entry in it
                           items:
+                            description: PortStatus represents the error condition
+                              of a service port
                             properties:
                               error:
                                 description: |-
@@ -2910,8 +3300,6 @@ spec:
                                     CamelCase names
                                   - cloud provider specific error values must have names that comply with the
                                     format foo.example.com/CamelCase.
-                                  ---
-                                  The regex it matches is (dns1123SubdomainFmt/)?(qualifiedNameFmt)
                                 maxLength: 316
                                 pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
                                 type: string
@@ -2921,12 +3309,12 @@ spec:
                                 format: int32
                                 type: integer
                               protocol:
-                                default: TCP
                                 description: |-
                                   Protocol is the protocol of the service port of which status is recorded here
                                   The supported values are: "TCP", "UDP", "SCTP"
                                 type: string
                             required:
+                            - error
                             - port
                             - protocol
                             type: object
@@ -2934,6 +3322,7 @@ spec:
                           x-kubernetes-list-type: atomic
                       type: object
                     type: array
+                    x-kubernetes-list-type: atomic
                 type: object
             type: object
         type: object

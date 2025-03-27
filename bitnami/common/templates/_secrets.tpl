@@ -67,7 +67,7 @@ Params:
 Generate secret password or retrieve one if already created.
 
 Usage:
-{{ include "common.secrets.passwords.manage" (dict "secret" "secret-name" "key" "keyName" "providedValues" (list "path.to.password1" "path.to.password2") "length" 10 "strong" false "chartName" "chartName" "context" $) }}
+{{ include "common.secrets.passwords.manage" (dict "secret" "secret-name" "key" "keyName" "providedValues" (list "path.to.password1" "path.to.password2") "length" 10 "strong" false "chartName" "chartName" "honorProvidedValues" false "context" $) }}
 
 Params:
   - secret - String - Required - Name of the 'Secret' resource where the password is stored.
@@ -80,12 +80,15 @@ Params:
   - failOnNew - Boolean - Optional - Default to true. If set to false, skip errors adding new keys to existing secrets.
   - skipB64enc - Boolean - Optional - Default to false. If set to true, no the secret will not be base64 encrypted.
   - skipQuote - Boolean - Optional - Default to false. If set to true, no quotes will be added around the secret.
+  - honorProvidedValues - Boolean - Optional - Default to false. If set to true, the values in providedValues have higher priority than an existing secret
 The order in which this function returns a secret password:
-  1. Already existing 'Secret' resource
-     (If a 'Secret' resource is found under the name provided to the 'secret' parameter to this function and that 'Secret' resource contains a key with the name passed as the 'key' parameter to this function then the value of this existing secret password will be returned)
-  2. Password provided via the values.yaml
+  1. Password provided via the values.yaml if honorProvidedValues = true
      (If one of the keys passed to the 'providedValues' parameter to this function is a valid path to a key in the values.yaml and has a value, the value of the first key with a value will be returned)
-  3. Randomly generated secret password
+  2. Already existing 'Secret' resource
+     (If a 'Secret' resource is found under the name provided to the 'secret' parameter to this function and that 'Secret' resource contains a key with the name passed as the 'key' parameter to this function then the value of this existing secret password will be returned)
+  3. Password provided via the values.yaml if honorProvidedValues = false
+     (If one of the keys passed to the 'providedValues' parameter to this function is a valid path to a key in the values.yaml and has a value, the value of the first key with a value will be returned)
+  4. Randomly generated secret password
      (A new random secret password with the length specified in the 'length' parameter will be generated and returned)
 
 */}}
@@ -103,30 +106,37 @@ The order in which this function returns a secret password:
     {{- $password = index $secretData .key | b64dec }}
   {{- else if not (eq .failOnNew false) }}
     {{- printf "\nPASSWORDS ERROR: The secret \"%s\" does not contain the key \"%s\"\n" .secret .key | fail -}}
-  {{- else if $providedPasswordValue }}
-    {{- $password = $providedPasswordValue | toString }}
   {{- end -}}
-{{- else if $providedPasswordValue }}
+{{- end }}
+
+{{- if and $providedPasswordValue .honorProvidedValues }}
   {{- $password = $providedPasswordValue | toString }}
-{{- else }}
+{{- end }}
 
-  {{- if .context.Values.enabled }}
-    {{- $subchart = $chartName }}
-  {{- end -}}
-
-  {{- $requiredPassword := dict "valueKey" $providedPasswordKey "secret" .secret "field" .key "subchart" $subchart "context" $.context -}}
-  {{- $requiredPasswordError := include "common.validations.values.single.empty" $requiredPassword -}}
-  {{- $passwordValidationErrors := list $requiredPasswordError -}}
-  {{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordValidationErrors "context" $.context) -}}
-
-  {{- if .strong }}
-    {{- $subStr := list (lower (randAlpha 1)) (randNumeric 1) (upper (randAlpha 1)) | join "_" }}
-    {{- $password = randAscii $passwordLength }}
-    {{- $password = regexReplaceAllLiteral "\\W" $password "@" | substr 5 $passwordLength }}
-    {{- $password = printf "%s%s" $subStr $password | toString | shuffle }}
+{{- if not $password }}
+  {{- if $providedPasswordValue }}
+    {{- $password = $providedPasswordValue | toString }}
   {{- else }}
-    {{- $password = randAlphaNum $passwordLength }}
-  {{- end }}
+    {{- if .context.Values.enabled }}
+      {{- $subchart = $chartName }}
+    {{- end -}}
+
+    {{- if not (eq .failOnNew false) }}
+      {{- $requiredPassword := dict "valueKey" $providedPasswordKey "secret" .secret "field" .key "subchart" $subchart "context" $.context -}}
+      {{- $requiredPasswordError := include "common.validations.values.single.empty" $requiredPassword -}}
+      {{- $passwordValidationErrors := list $requiredPasswordError -}}
+      {{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordValidationErrors "context" $.context) -}}
+    {{- end }}
+
+    {{- if .strong }}
+      {{- $subStr := list (lower (randAlpha 1)) (randNumeric 1) (upper (randAlpha 1)) | join "_" }}
+      {{- $password = randAscii $passwordLength }}
+      {{- $password = regexReplaceAllLiteral "\\W" $password "@" | substr 5 $passwordLength }}
+      {{- $password = printf "%s%s" $subStr $password | toString | shuffle }}
+    {{- else }}
+      {{- $password = randAlphaNum $passwordLength }}
+    {{- end }}
+  {{- end -}}
 {{- end -}}
 {{- if not .skipB64enc }}
 {{- $password = $password | b64enc }}

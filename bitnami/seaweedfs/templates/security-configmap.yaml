@@ -3,7 +3,6 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if .Values.security.enabled }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -17,7 +16,7 @@ data:
   security.toml: |-
     # Security configuration
     # Shared between master, volume and filer servers
-
+  {{- if .Values.security.enabled }}
     # comma separated origins allowed to make requests to the filer and s3 gateway. 
     # enter in this format: https://domain.com, or http://localhost:port
     [cors.allowed_origins]
@@ -86,4 +85,9 @@ data:
     cert = "/certs/client/tls.crt"
     key  = "/certs/client/tls.key"
     {{- end }}
-{{- end }}
+  {{- else }}
+    # comma separated origins allowed to make requests to the filer and s3 gateway. 
+    # enter in this format: https://domain.com, or http://localhost:port
+    [cors.allowed_origins]
+    values = "*"
+  {{- end }}

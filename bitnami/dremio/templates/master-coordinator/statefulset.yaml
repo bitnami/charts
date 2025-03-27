@@ -1,0 +1,371 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
+kind: StatefulSet
+metadata:
+  name: {{ include "dremio.master-coordinator.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: dremio
+    app.kubernetes.io/component: master-coordinator
+    {{- /* We need an extra label that applies to both master and non-master coordinators. Taken from upstream dremio chart */}}
+    app: dremio-coordinator
+  {{- if or .Values.masterCoordinator.statefulsetAnnotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.masterCoordinator.statefulsetAnnotations .Values.commonAnnotations) "context" .) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if not .Values.masterCoordinator.autoscaling.hpa.enabled }}
+  replicas: {{ .Values.masterCoordinator.replicaCount }}
+  {{- end }}
+  podManagementPolicy: {{ .Values.masterCoordinator.podManagementPolicy | quote }}
+  {{- $podLabels := include "common.tplvalues.merge" (dict "values" (list .Values.masterCoordinator.podLabels .Values.commonLabels) "context" .) }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/part-of: dremio
+      app.kubernetes.io/component: master-coordinator
+      app: dremio-coordinator
+  serviceName: {{ printf "%s-headless" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  {{- if .Values.masterCoordinator.updateStrategy }}
+  updateStrategy: {{- toYaml .Values.masterCoordinator.updateStrategy | nindent 4 }}
+  {{- end }}
+  template:
+    metadata:
+      annotations:
+        checksum/dremio-conf-cm: {{ include (print $.Template.BasePath "/master-coordinator/configmap-dremio-conf.yaml") . | sha256sum }}
+        checksum/dremio-conf-secret: {{ include (print $.Template.BasePath "/master-coordinator/secret-dremio-conf.yaml") . | sha256sum }}
+        checksum/core-site-secret: {{ include (print $.Template.BasePath "/secret-core-site.yaml") . | sha256sum }}
+      {{- if .Values.masterCoordinator.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.masterCoordinator.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+      labels: {{- include "common.labels.standard" (dict "customLabels" $podLabels "context" $) | nindent 8 }}
+        app.kubernetes.io/part-of: dremio
+        app.kubernetes.io/component: master-coordinator
+        app: dremio-coordinator
+    spec:
+      {{- include "dremio.imagePullSecrets" . | nindent 6 }}
+      serviceAccountName: {{ template "dremio.master-coordinator.serviceAccountName" . }}
+      automountServiceAccountToken: {{ .Values.masterCoordinator.automountServiceAccountToken }}
+      {{- if .Values.masterCoordinator.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.masterCoordinator.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.masterCoordinator.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.masterCoordinator.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.masterCoordinator.podAffinityPreset "component" "master-coordinator" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.masterCoordinator.podAntiAffinityPreset "component" "master-coordinator" "customLabels" $podLabels "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.masterCoordinator.nodeAffinityPreset.type "key" .Values.masterCoordinator.nodeAffinityPreset.key "values" .Values.masterCoordinator.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.masterCoordinator.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.masterCoordinator.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.masterCoordinator.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.masterCoordinator.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.masterCoordinator.priorityClassName }}
+      priorityClassName: {{ .Values.masterCoordinator.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.masterCoordinator.schedulerName }}
+      schedulerName: {{ .Values.masterCoordinator.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.masterCoordinator.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.masterCoordinator.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.masterCoordinator.podSecurityContext.enabled }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.masterCoordinator.podSecurityContext "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.masterCoordinator.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.masterCoordinator.terminationGracePeriodSeconds }}
+      {{- end }}
+      initContainers:
+        {{- /* As most Bitnami charts have volumePermissions in the root, we add a volumePermissions.enabled check to maintain a similar UX */}}
+        {{- if and (or .Values.defaultInitContainers.volumePermissions.enabled ((.Values.volumePermissions).enabled)) .Values.masterCoordinator.persistence.enabled }}
+        {{- include "dremio.init-containers.volume-permissions" (dict "context" . "componentValues" .Values.masterCoordinator) | nindent 8}}
+        {{- end }}
+        {{- if .Values.defaultInitContainers.copyDefaultConf.enabled }}
+        {{- include "dremio.init-containers.copy-default-conf" . | nindent 8 }}
+        {{- end }}
+        {{- if .Values.defaultInitContainers.wait.enabled }}
+        {{- include "dremio.init-containers.wait-for-s3" . | nindent 8 }}
+        {{- include "dremio.init-containers.wait-for-zookeeper" . | nindent 8 }}
+        {{- end }}
+        {{- if .Values.defaultInitContainers.generateConf.enabled }}
+        {{- include "dremio.init-containers.generate-conf" (dict "context" . "mountDremioConfSecret" (include "dremio.master-coordinator.dremio-conf.useSecret" .)) | nindent 8 }}
+        {{- end }}
+        {{- if and .Values.dremio.tls.enabled .Values.defaultInitContainers.initCerts.enabled }}
+        {{- include "dremio.init-containers.init-certs" . | nindent 8 }}
+        {{- end }}
+        {{- if .Values.defaultInitContainers.upgradeKeystore.enabled }}
+        {{- include "dremio.init-containers.upgrade-keystore" . | nindent 8 }}
+        {{- end }}
+        {{- if .Values.masterCoordinator.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.masterCoordinator.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+      containers:
+        - name: dremio
+          image: {{ template "dremio.image" . }}
+          imagePullPolicy: {{ .Values.dremio.image.pullPolicy }}
+          {{- if .Values.masterCoordinator.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.masterCoordinator.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.masterCoordinator.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.masterCoordinator.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.masterCoordinator.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.masterCoordinator.args "context" $) | nindent 12 }}
+          {{- end }}
+          env:
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" (or .Values.dremio.image.debug .Values.diagnosticMode.enabled) | quote }}
+            - name: DREMIO_JAVA_SERVER_EXTRA_OPTS
+              value: |
+                {{- if and (eq .Values.dremio.distStorageType "minio") (or (and .Values.minio.enabled (((.Values.minio).tls).enabled) (((.Values.minio).tls).autoGenerated)) .Values.externalS3.disableCertChecking) }}
+                -Dcom.amazonaws.sdk.disableCertChecking=true
+                {{- end }}
+                {{- if .Values.metrics.enabled }}
+                -Dcom.sun.management.jmxremote.port={{ .Values.dremio.containerPorts.jmx }}
+                -Dcom.sun.management.jmxremote.authenticate=false
+                -Dcom.sun.management.jmxremote.ssl=false
+                {{- end }}
+                {{- if .Values.masterCoordinator.extraJavaOpts }}
+                {{- include "common.tplvalues.render" (dict "value" .Values.masterCoordinator.extraJavaOpts "context" $) | nindent 16 }}
+                {{- end }}
+            - name: DREMIO_MAX_MEMORY_SIZE_MB
+              valueFrom:
+                resourceFieldRef:
+                  containerName: dremio
+                  resource: limits.memory
+                  divisor: 1Mi
+            {{- if .Values.masterCoordinator.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.masterCoordinator.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- if .Values.masterCoordinator.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.masterCoordinator.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.masterCoordinator.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.masterCoordinator.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- if .Values.masterCoordinator.resources }}
+          resources: {{- toYaml .Values.masterCoordinator.resources | nindent 12 }}
+          {{- else if ne .Values.masterCoordinator.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.masterCoordinator.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          ports:
+            - containerPort: {{ .Values.dremio.containerPorts.web }}
+              name: web
+            - containerPort: {{ .Values.dremio.containerPorts.liveness }}
+              name: liveness
+            {{- if (le (int .Values.coordinator.replicaCount) 0) }}
+            - containerPort: {{ .Values.dremio.containerPorts.client }}
+              name: client
+            - containerPort: {{ .Values.dremio.containerPorts.flight }}
+              name: flight
+            {{- end }}
+            - containerPort: {{ .Values.dremio.containerPorts.fabric }}
+              name: server-fabric
+            - containerPort: {{ .Values.dremio.containerPorts.conduit }}
+              name: server-conduit
+            {{- if .Values.metrics.enabled }}
+            - containerPort: {{ .Values.dremio.containerPorts.jmx }}
+              name: jmx
+            {{- end }}
+            {{- if .Values.masterCoordinator.extraContainerPorts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.masterCoordinator.extraContainerPorts "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.masterCoordinator.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.masterCoordinator.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.masterCoordinator.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.masterCoordinator.livenessProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: liveness
+          {{- end }}
+          {{- if .Values.masterCoordinator.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.masterCoordinator.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.masterCoordinator.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.masterCoordinator.readinessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /
+              port: web
+              scheme: {{ ternary "HTTPS" "HTTP" .Values.dremio.tls.enabled }}
+          {{- end }}
+          {{- if .Values.masterCoordinator.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.masterCoordinator.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.masterCoordinator.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.masterCoordinator.startupProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: liveness
+          {{- end }}
+          {{- end }}
+          {{- if .Values.masterCoordinator.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.masterCoordinator.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: data
+              mountPath: {{ .Values.masterCoordinator.persistence.mountPath }}
+              {{- if .Values.masterCoordinator.persistence.subPath }}
+              subPath: {{ .Values.masterCoordinator.persistence.subPath }}
+              {{- end }}
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/dremio/tmp
+              subPath: app-tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/dremio/run
+              subPath: app-run-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/dremio/log
+              subPath: app-log-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/dremio/conf
+              subPath: app-conf-dir
+            {{- if .Values.metrics.enabled }}
+            - name: metrics-configuration
+              mountPath: /opt/bitnami/dremio/conf/dremio-telemetry.yaml
+              subPath: dremio-telemetry.yaml
+            {{- end }}
+            {{- if .Values.dremio.tls.enabled }}
+            - name: empty-dir
+              mountPath: /opt/bitnami/dremio/certs
+              subPath: app-processed-certs-dir
+            {{- end }}
+          {{- if .Values.masterCoordinator.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.masterCoordinator.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+        {{- if .Values.metrics.enabled }}
+        - name: metrics
+          image: {{ include "dremio.metrics.image" . }}
+          imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
+          {{- if .Values.metrics.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.metrics.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else }}
+          command:
+            - java
+          args:
+            - -XX:MaxRAMPercentage=100
+            - -XshowSettings:vm
+            - -jar
+            - jmx_prometheus_standalone.jar
+            - {{ .Values.metrics.containerPorts.metrics | quote }}
+            - /etc/jmx-dremio/jmx-prometheus.yml
+          {{- end }}
+          ports:
+            - name: metrics
+              containerPort: {{ .Values.metrics.containerPorts.metrics }}
+          {{- if .Values.metrics.resources }}
+          resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
+          {{- else if ne .Values.metrics.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.metrics.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.metrics.livenessProbe.enabled }}
+          livenessProbe: {{- omit .Values.metrics.livenessProbe "enabled" | toYaml | nindent 12 }}
+            tcpSocket:
+              port: metrics
+          {{- end }}
+          {{- if .Values.metrics.readinessProbe.enabled }}
+          readinessProbe: {{- omit .Values.metrics.readinessProbe "enabled" | toYaml | nindent 12 }}
+            httpGet:
+              path: /
+              port: metrics
+          {{- end }}
+          {{- if .Values.metrics.startupProbe.enabled }}
+          startupProbe: {{- omit .Values.metrics.startupProbe "enabled" | toYaml | nindent 12 }}
+            httpGet:
+              path: /
+              port: metrics
+          {{- end }}
+          {{- end }}
+          volumeMounts:
+            - name: metrics-configuration
+              mountPath: /etc/jmx-dremio/jmx-prometheus.yml
+              subPath: jmx-prometheus.yml
+        {{- end }}
+        {{- if .Values.masterCoordinator.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.masterCoordinator.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        - name: empty-dir
+          emptyDir: {}
+        - name: input-dremio-conf-cm
+          configMap:
+            name: {{ include "dremio.master-coordinator.dremio-conf.configmapName" . }}
+        {{- if .Values.usePasswordFiles }}
+        {{- if or .Values.dremio.tls.passwordSecret .Values.dremio.tls.password .Values.dremio.tls.autoGenerated.enabled .Values.dremio.tls.usePemCerts }}
+        - name: keystore-password
+          secret:
+            secretName: {{ include "dremio.tls.passwordSecretName" . }}
+            items:
+              - key: keystore-password
+                path: DREMIO_KEYSTORE_PASSWORD
+        {{- end }}
+        {{- if or (eq .Values.dremio.distStorageType "minio") (eq .Values.dremio.distStorageType "aws") }}
+        - name: s3-credentials
+          secret:
+            secretName: {{ include "dremio.s3.secretName" . }}
+            items:
+              - key: {{ include "dremio.s3.accessKeyIDKey" . }}
+                path: DREMIO_AWS_ACCESS_KEY_ID
+              - key: {{ include "dremio.s3.secretAccessKeyKey" . }}
+                path: DREMIO_AWS_SECRET_ACCESS_KEY
+        {{- end }}
+        {{- end }}
+        {{- if (include "dremio.master-coordinator.dremio-conf.useSecret" .) }}
+        - name: input-dremio-conf-secret
+          secret:
+            secretName: {{ include "dremio.master-coordinator.dremio-conf.secretName" . }}
+        {{- end }}
+        - name: input-core-site
+          secret:
+            secretName: {{ include "dremio.core-site.secretName" . }}
+        {{- if .Values.metrics.enabled }}
+        - name: metrics-configuration
+          configMap:
+            name: {{ include "dremio.metrics.configmapName" . }}
+        {{- end }}
+        {{- if .Values.dremio.tls.enabled }}
+        - name: input-tls-certs
+          secret:
+            secretName: {{ include "dremio.tls.secretName" . }}
+            items:
+              {{- if .Values.dremio.tls.usePemCerts }}
+              - key: {{ .Values.dremio.tls.certFilename }}
+                path: tls.crt
+              - key: {{ .Values.dremio.tls.certKeyFilename }}
+                path: tls.key
+              {{- else }}
+              - key: {{ .Values.dremio.tls.keystoreFilename }}
+                path: dremio.jks
+              {{- end }}
+        {{- end }}
+        {{- /*
+          All Dremio master-coordinator instances need to share the same PVC:
+          https://docs.dremio.com/current/get-started/cluster-deployments/architecture/high-availability/
+        */}}
+        - name: data
+        {{- if .Values.masterCoordinator.persistence.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ default (include "dremio.master-coordinator.fullname" .) .Values.masterCoordinator.persistence.existingClaim }}
+        {{- else }}
+          emptyDir: {}
+        {{- end }}
+        {{- if .Values.masterCoordinator.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.masterCoordinator.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}

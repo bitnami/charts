@@ -1,0 +1,53 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "chainloop.controlplane.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "chainloop.controlplane.labels" . | nindent 4 }}
+  {{- if or .Values.controlplane.service.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.controlplane.service.annotations .Values.commonAnnotations) "context" .) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.controlplane.service.type }}
+  {{- if and .Values.controlplane.service.clusterIP (eq .Values.controlplane.service.type "ClusterIP") }}
+  clusterIP: {{ .Values.controlplane.service.clusterIP }}
+  {{- end }}
+  {{- if .Values.controlplane.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.controlplane.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.controlplane.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.controlplane.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if or (eq .Values.controlplane.service.type "LoadBalancer") (eq .Values.controlplane.service.type "NodePort") }}
+  externalTrafficPolicy: {{ .Values.controlplane.service.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{- if and (eq .Values.controlplane.service.type "LoadBalancer") (not (empty .Values.controlplane.service.loadBalancerSourceRanges)) }}
+  loadBalancerSourceRanges: {{ .Values.controlplane.service.loadBalancerSourceRanges }}
+  {{- end }}
+  {{- if and (eq .Values.controlplane.service.type "LoadBalancer") (not (empty .Values.controlplane.service.loadBalancerIP)) }}
+  loadBalancerIP: {{ .Values.controlplane.service.loadBalancerIP }}
+  {{- end }}
+  ports:
+    - name: http
+      {{- $port := coalesce .Values.controlplane.service.port .Values.controlplane.service.ports.http }}
+      port: {{ $port }}
+      {{- if not (eq $port .Values.controlplane.containerPorts.http) }}
+      targetPort: {{ .Values.controlplane.containerPorts.http }}
+      {{- end }}
+      protocol: TCP
+      {{- if and (or (eq .Values.controlplane.service.type "NodePort") (eq .Values.controlplane.service.type "LoadBalancer")) (not (empty .Values.controlplane.service.nodePorts.http)) }}
+      nodePort: {{ .Values.controlplane.service.nodePorts.http }}
+      {{- else if eq .Values.controlplane.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    {{- if .Values.controlplane.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.controlplane.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" (dict "values" (list .Values.controlplane.podLabels .Values.commonLabels) "context" .) | fromYaml }}
+  selector: {{ include "chainloop.controlplane.selectorLabels" . | nindent 4 }}

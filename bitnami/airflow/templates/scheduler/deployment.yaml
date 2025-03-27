@@ -7,21 +7,21 @@ SPDX-License-Identifier: APACHE-2.0
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: {{ printf "%s-scheduler" (include "common.names.fullname" .) }}
-  namespace: {{ .Release.Namespace | quote }}
-  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.scheduler.image "chart" .Chart ) ) }}
-  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
-  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+  name: {{ template "airflow.scheduler.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: scheduler
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | trim | nindent 4 }}
   {{- end }}
 spec:
-  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.scheduler.podLabels .Values.commonLabels $versionLabel ) "context" . ) }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.scheduler.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: scheduler
+  {{- if not .Values.scheduler.autoscaling.hpa.enabled }}
   replicas: {{ .Values.scheduler.replicaCount }}
+  {{- end }}
   {{- if .Values.scheduler.updateStrategy }}
   strategy: {{- toYaml .Values.scheduler.updateStrategy | nindent 4 }}
   {{- end }}
@@ -71,39 +71,14 @@ spec:
       securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.scheduler.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       initContainers:
-        - name: create-default-config
-          image: {{ include "airflow.schedulerImage" . }}
-          imagePullPolicy: {{ .Values.scheduler.image.pullPolicy | quote }}
-          {{- if .Values.scheduler.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.scheduler.containerSecurityContext "enabled" | toYaml | nindent 12 }}
-          {{- end }}
-          command:
-            - /bin/bash
-          args:
-            - -ec
-            - |
-              #!/bin/bash
-
-              cp "$(find /opt/bitnami/airflow -name default_airflow.cfg)" /default-conf/airflow.cfg
-              # HACK: When testing the connection it creates an empty airflow.db file at the
-              # application root
-              touch /default-conf/airflow.db
-          {{- if .Values.scheduler.resources }}
-          resources: {{- toYaml .Values.scheduler.resources | nindent 12 }}
-          {{- else if ne .Values.scheduler.resourcesPreset "none" }}
-          resources: {{- include "common.resources.preset" (dict "type" .Values.scheduler.resourcesPreset) | nindent 12 }}
-          {{- end }}
-          volumeMounts:
-            - name: empty-dir
-              mountPath: /tmp
-              subPath: tmp-dir
-            - name: empty-dir
-              mountPath: /default-conf
-              subPath: app-default-conf-dir
-        {{- include "airflow.git.containers.clone" (dict "securityContext" .Values.scheduler.containerSecurityContext "context" $) | trim | nindent 8 }}
-        {{- if .Values.dags.existingConfigmap }}
-        {{- include "airflow.loadDAGsInitContainer" (dict "component" "scheduler" "context" . ) | trim | nindent 8 }}
+        {{- include "airflow.defaultInitContainers.prepareConfig" . | nindent 8 }}
+        {{- if and .Values.dags.enabled (not .Values.dagProcessor.enabled) }}
+        {{- include "airflow.defaultInitContainers.loadDAGs" . | nindent 8 }}
         {{- end }}
+        {{- if .Values.plugins.enabled }}
+        {{- include "airflow.defaultInitContainers.loadPlugins" . | nindent 8 }}
+        {{- end }}
+        {{- include "airflow.defaultInitContainers.waitForDBMigrations" . | nindent 8 }}
         {{- if .Values.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | trim | nindent 8 }}
         {{- end }}
@@ -111,10 +86,9 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.scheduler.initContainers "context" $) | trim | nindent 8 }}
         {{- end }}
       containers:
-        {{- include "airflow.git.containers.sync" (dict "securityContext" .Values.scheduler.containerSecurityContext "context" $) | trim | nindent 8 }}
         - name: airflow-scheduler
-          image: {{ include "airflow.schedulerImage" . | quote }}
-          imagePullPolicy: {{ .Values.scheduler.image.pullPolicy | quote }}
+          image: {{ include "airflow.image" . | quote }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.scheduler.containerSecurityContext.enabled }}
           securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.scheduler.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
@@ -130,15 +104,16 @@ spec:
           {{- end }}
           env:
             {{- include "airflow.configure.airflow.common" . | nindent 12 }}
-            {{- include "airflow.configure.database" . | nindent 12 }}
-            {{- include "airflow.configure.redis" . | nindent 12 }}
-            {{- include "airflow.configure.airflow.kubernetesExecutor" . | nindent 12 }}
+            - name: AIRFLOW_COMPONENT_TYPE
+              value: "scheduler"
             - name: AIRFLOW_EXECUTOR
               value: {{ .Values.executor }}
-            - name: AIRFLOW_WEBSERVER_HOST
-              value: {{ include "common.names.fullname" . }}
-            - name: AIRFLOW_WEBSERVER_PORT_NUMBER
-              value: {{ .Values.service.ports.http | quote }}
+            {{- if or (eq .Values.executor "CeleryExecutor") (eq .Values.executor "CeleryKubernetesExecutor") }}
+            - name: REDIS_HOST
+              value: {{ include "airflow.redis.host" . | quote }}
+            - name: REDIS_PORT_NUMBER
+              value: {{ include "airflow.redis.port" . | quote }}
+            {{- end }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
@@ -180,27 +155,40 @@ spec:
           {{- if .Values.scheduler.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.scheduler.customLivenessProbe "context" $) | trim | nindent 12 }}
           {{- else if .Values.scheduler.livenessProbe.enabled }}
+          {{- $livenessTimeout := sub (int .Values.scheduler.livenessProbe.timeoutSeconds) 1 }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.scheduler.livenessProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command:
                 - /bin/bash
                 - -ec
                 - |
-                  airflow jobs check --job-type SchedulerJob --local {{- if not .Values.diagnosticMode.enabled }} 2>/dev/null {{- end }}
+                  export CONNECTION_CHECK_MAX_COUNT=0
+                  timeout {{ $livenessTimeout }} airflow jobs check --job-type SchedulerJob --local {{- if not .Values.diagnosticMode.enabled }} 2>/dev/null {{- end }}
           {{- end }}
           {{- if .Values.scheduler.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.scheduler.customReadinessProbe "context" $) | trim | nindent 12 }}
           {{- else if .Values.scheduler.readinessProbe.enabled }}
+          {{- $readinessTimeout := sub (int .Values.scheduler.readinessProbe.timeoutSeconds) 1 }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.scheduler.readinessProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command:
                 - /bin/bash
                 - -ec
                 - |
-                  airflow jobs check --job-type SchedulerJob --local {{- if not .Values.diagnosticMode.enabled }} 2>/dev/null {{- end }}
+                  timeout {{ $readinessTimeout }} airflow jobs check --job-type SchedulerJob --local {{- if not .Values.diagnosticMode.enabled }} 2>/dev/null {{- end }}
           {{- end }}
           {{- if .Values.scheduler.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.scheduler.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.scheduler.startupProbe.enabled }}
+          {{- $startupTimeout := sub (int .Values.scheduler.startupProbe.timeoutSeconds) 1 }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.scheduler.startupProbe "enabled") "context" $) | nindent 12 }}
+            exec:
+              command:
+                - /bin/bash
+                - -ec
+                - |
+                  export CONNECTION_CHECK_MAX_COUNT=0
+                  timeout {{ $startupTimeout }} airflow jobs check --job-type SchedulerJob --local {{- if not .Values.diagnosticMode.enabled }} 2>/dev/null {{- end }}
           {{- end }}
           {{- end }}
           {{- if .Values.scheduler.lifecycleHooks }}
@@ -213,6 +201,9 @@ spec:
           {{- end }}
           volumeMounts:
             - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
               mountPath: /opt/bitnami/airflow/nss-wrapper
               subPath: app-nss-wrapper-dir
             - name: empty-dir
@@ -223,32 +214,27 @@ spec:
               subPath: app-tmp-dir
             - name: empty-dir
               mountPath: /opt/bitnami/airflow/airflow.db
-              subPath: app-default-conf-dir/airflow.db
-            - name: empty-dir
-              mountPath: /tmp
-              subPath: tmp-dir
-            {{- if .Files.Glob "files/dags/*.py" }}
-            - name: local-dag-files
-              mountPath: /opt/bitnami/airflow/dags/local
-            {{- end }}
-            {{- if .Values.dags.existingConfigmap }}
-            - name: empty-dir
-              mountPath: /opt/bitnami/airflow/dags/external
-              subPath: app-external-dag-dir
-            {{- end }}
-            {{- if or .Values.configuration .Values.existingConfigmap }}
-            - name: custom-configuration-file
-              mountPath: /opt/bitnami/airflow/airflow.cfg
-              subPath: airflow.cfg
-            {{- else }}
+              subPath: app-base-dir/airflow.db
             - name: empty-dir
               mountPath: /opt/bitnami/airflow/airflow.cfg
-              subPath: app-default-conf-dir/airflow.cfg
+              subPath: app-base-dir/airflow.cfg
+            - name: empty-dir
+              mountPath: /opt/bitnami/airflow/config/airflow_local_settings.py
+              subPath: app-conf-dir/airflow_local_settings.py
+            {{- if  .Values.usePasswordFiles }}
+            - name: airflow-secrets
+              mountPath: /opt/bitnami/airflow/secrets
             {{- end }}
             {{- if $kube }}
-            - name: custom-configuration-file
-              mountPath: /opt/bitnami/airflow/pod_template.yaml
+            - name: pod-template
+              mountPath: /opt/bitnami/airflow/config/pod_template.yaml
               subPath: pod_template.yaml
+            {{- end }}
+            {{- if and .Values.dags.enabled (not .Values.dagProcessor.enabled) }}
+            {{- include "airflow.dags.volumeMounts" . | nindent 12 }}
+            {{- end }}
+            {{- if .Values.plugins.enabled }}
+            {{- include "airflow.plugins.volumeMounts" . | nindent 12 }}
             {{- end }}
             {{- if .Values.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
@@ -256,7 +242,12 @@ spec:
             {{- if .Values.scheduler.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.scheduler.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
-            {{- include "airflow.git.maincontainer.volumeMounts" . | trim | nindent 12 }}
+        {{- if and .Values.dags.enabled (not .Values.dagProcessor.enabled) }}
+        {{- include "airflow.defaultSidecars.syncDAGs" . | nindent 8 }}
+        {{- end }}
+        {{- if .Values.plugins.enabled }}
+        {{- include "airflow.defaultSidecars.syncPlugins" . | nindent 8 }}
+        {{- end }}
         {{- if .Values.sidecars }}
         {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | trim | nindent 8 }}
         {{- end }}
@@ -266,15 +257,33 @@ spec:
       volumes:
         - name: empty-dir
           emptyDir: {}
-        {{- if .Values.dags.existingConfigmap }}
-        - name: load-external-dag-files
-          configMap:
-            name: {{ tpl .Values.dags.existingConfigmap $ }}
-        {{- end }}
-        {{- if or .Values.configuration .Values.existingConfigmap $kube }}
-        - name: custom-configuration-file
+        - name: configuration
           configMap:
             name: {{ include "airflow.configMapName"  . }}
+            optional: true
+        {{- if .Values.usePasswordFiles }}
+        - name: airflow-secrets
+          projected:
+            sources:
+              - secret:
+                  name:  {{ include "airflow.secretName" . }}
+              - secret:
+                  name: {{ include "airflow.database.secretName" . }}
+              {{- if or (eq .Values.executor "CeleryExecutor") (eq .Values.executor "CeleryKubernetesExecutor") }}
+              - secret:
+                  name: {{ include "airflow.redis.secretName" . }}
+              {{- end }}
+        {{- end }}
+        {{- if $kube }}
+        - name: pod-template
+          configMap:
+            name: {{ printf "%s-pod-template" (include "common.names.fullname" .) }}
+        {{- end }}
+        {{- if and .Values.dags.enabled (not .Values.dagProcessor.enabled) }}
+        {{- include "airflow.dags.volumes" . | nindent 8 }}
+        {{- end }}
+        {{- if .Values.plugins.enabled }}
+        {{- include "airflow.plugins.volumes" . | nindent 8 }}
         {{- end }}
         {{- if .Values.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}

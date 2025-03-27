@@ -71,6 +71,17 @@ Return the InfluxDB&trade; credentials secret.
 {{- end -}}
 
 {{/*
+Return the InfluxDB&trade; backup S3 secret.
+*/}}
+{{- define "influxdb.backup.secretName" -}}
+{{- if .Values.backup.uploadProviders.aws.existingSecret -}}
+    {{- printf "%s" (tpl .Values.backup.uploadProviders.aws.existingSecret $) -}}
+{{- else -}}
+    {{- printf "%s-backup-aws" (include "common.names.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the InfluxDB&trade; configuration configmap.
 */}}
 {{- define "influxdb.configmapName" -}}
@@ -89,6 +100,17 @@ Return the InfluxDB&trade; PVC name.
     {{- printf "%s" (tpl .Values.persistence.existingClaim $) -}}
 {{- else -}}
     {{- printf "%s" (include "common.names.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the InfluxDB&trade; backup PVC name.
+*/}}
+{{- define "influxdb.backup.claimName" -}}
+{{- if and .Values.backup.persistence.ownConfig .Values.backup.persistence.existingClaim }}
+    {{- printf "%s" (tpl .Values.backup.persistence.existingClaim $) -}}
+{{- else -}}
+    {{- printf "%s-backups" (include "common.names.fullname" .) -}}
 {{- end -}}
 {{- end -}}
 

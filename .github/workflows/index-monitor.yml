@@ -1,0 +1,123 @@
+name: '[Index] Monitor remote index.yaml'
+
+on:
+  schedule:
+    # Every 10 minutes
+    - cron: '*/10 * * * *'
+
+# Remove all permissions by default
+permissions: {}
+
+jobs:
+  integrity-check:
+    name: Compare the index.yaml checksums remote and locally
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      result: ${{ steps.integrity-check.outputs.result }}
+    if: ${{ github.repository_owner == 'bitnami' }}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: 'index'
+      - name: Check index integrity
+        id: integrity-check
+        run: |
+          status="fail"
+          attempts=0
+          # We want to check for consistent failures
+          # To do so, we will look for 3 consecutive failures with a 30 seconds wait
+          # A single success is enough to pass
+          while [[ "${status}" != "ok" && $attempts -lt 3 ]]; do
+            # Check the index.yaml integrity
+            REMOTE_MD5=($(curl -Ls https://charts.bitnami.com/bitnami/index.yaml | md5sum))
+            REPOSITORY_MD5=($(md5sum bitnami/index.yaml))
+            # Compare the index.yaml checksums remote and locally
+            if [[ "${REPOSITORY_MD5[0]}" == "${REMOTE_MD5[0]}" ]]; then
+              status='ok'
+            else
+              attempts=$((attempts+1))
+              echo "Integrity check failed. Remote checksum '${REMOTE_MD5[0]}' does not match expected '${REPOSITORY_MD5[0]}'";
+              # Refresh the 'index' branch in case it was updated
+              git fetch origin index
+              git reset --hard origin/index
+              # Wait 30 seconds
+              sleep 30
+            fi
+          done
+          echo "result=${status}" >> $GITHUB_OUTPUT
+      - name: Show messages
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
+        with:
+          script: |
+            if ("${{ steps.integrity-check.outputs.result }}" != "ok" ) {
+              core.setFailed("Integrity check failed");
+            } else {
+              core.info("Integrity check succeeded")
+            }
+  validation-check:
+    name: Validate the helm repository can be added and updated
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      result: ${{ steps.validation-check.outputs.result }}
+    if: ${{ github.repository_owner == 'bitnami' }}
+    steps:
+      - name: Install helm
+        run: |
+          HELM_TARBALL="helm-v3.8.1-linux-amd64.tar.gz"
+          curl -SsLfO "https://get.helm.sh/${HELM_TARBALL}" && sudo tar xf "$HELM_TARBALL" --strip-components 1 -C /usr/local/bin
+      - name: Validate helm repository
+        id: validation-check
+        run: |
+          repo="https://charts.bitnami.com/bitnami"
+          status="fail"
+          attempts=0
+          # We want to check for consistent failures
+          # To do so, we will look for 3 consecutive failures with a 30 seconds wait
+          # A single success is enough to pass
+          while [[ "${status}" != "ok" && $attempts -lt 3 ]]; do
+            # Validates the helm repository can be added and updated
+            if helm repo add bitnami "${repo}" && helm repo update bitnami; then
+              status="ok"
+            else
+              attempts=$((attempts+1))
+              echo "Failed to pull charts from helm repository '${repo}'"
+              # If present, remove repository to allow retries
+              if helm repo list | grep -q bitnami; then
+                helm repo remove bitnami
+              fi
+              # Wait 30 seconds
+              sleep 30
+            fi
+          done
+          echo "result=${status}" >> $GITHUB_OUTPUT
+      - name: Show messages
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
+        with:
+          script: |
+            if ("${{ steps.validation-check.outputs.result }}" != "ok" ) {
+              core.setFailed("Validation check failed");
+            } else {
+              core.info("Validation check succeeded")
+            }
+  upload:
+    name: Re-upload index.yaml
+    needs: [validation-check, integrity-check]
+    if: ${{ always() && github.repository_owner == 'bitnami' && (needs.validation-check.outputs.result != 'ok' || needs.integrity-check.outputs.result != 'ok') }}
+    uses: bitnami/charts/.github/workflows/sync-chart-cloudflare-index.yml@index
+    secrets: inherit
+    permissions:
+      contents: read
+  notify:
+    name: Send notification
+    needs: [validation-check, integrity-check]
+    if: ${{ always() && github.repository_owner == 'bitnami' && (needs.validation-check.outputs.result != 'ok' || needs.integrity-check.outputs.result != 'ok') }}
+    uses: bitnami/support/.github/workflows/gchat-notification.yml@main
+    with:
+      workflow: ${{ github.workflow }}
+      job-url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+    secrets:
+      webhook-url: ${{ secrets.GCHAT_WEBHOOK_URL }}

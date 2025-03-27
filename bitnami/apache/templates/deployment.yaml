@@ -16,7 +16,10 @@ spec:
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+  # Have replicas Only if autoscaling is disabled
+  {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
+  {{- end }}
   revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
   {{- if .Values.updateStrategy }}
   strategy: {{- toYaml .Values.updateStrategy | nindent 4 }}
@@ -71,7 +74,7 @@ spec:
           image: {{ include "apache.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.resources }}
           resources: {{- toYaml .Values.resources | nindent 12 }}
@@ -112,12 +115,18 @@ spec:
           {{- else if ne .Values.cloneHtdocsFromGit.resourcesPreset "none" }}
           resources: {{- include "common.resources.preset" (dict "type" .Values.cloneHtdocsFromGit.resourcesPreset) | nindent 12 }}
           {{- end }}
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
           volumeMounts:
             - name: htdocs
               mountPath: /app
             - name: empty-dir
               mountPath: /tmp
               subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /etc/ssh
+              subPath: etc-ssh-dir
           {{- if .Values.cloneHtdocsFromGit.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.cloneHtdocsFromGit.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -146,7 +155,7 @@ spec:
           resources: {{- include "common.resources.preset" (dict "type" .Values.cloneHtdocsFromGit.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if .Values.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: htdocs
@@ -154,6 +163,9 @@ spec:
             - name: empty-dir
               mountPath: /tmp
               subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /etc/ssh
+              subPath: etc-ssh-dir
           {{- if .Values.cloneHtdocsFromGit.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.cloneHtdocsFromGit.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -214,8 +226,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.livenessProbe.enabled }}
           livenessProbe:
-            httpGet:
-              path: {{ .Values.livenessProbe.path }}
+            tcpSocket:
               port: {{ .Values.livenessProbe.port }}
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
@@ -256,7 +267,7 @@ spec:
               subPath: app-tmp-dir
             {{- if (include "apache.useHtdocs" .) }}
             - name: htdocs
-              mountPath: /app
+              mountPath: /opt/bitnami/apache/htdocs
             {{- end }}
             {{- if or (.Files.Glob "files/vhosts/*.conf") (.Values.vhostsConfigMap) }}
             - name: vhosts
@@ -299,7 +310,7 @@ spec:
           resources: {{- include "common.resources.preset" (dict "type" .Values.metrics.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if .Values.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: empty-dir

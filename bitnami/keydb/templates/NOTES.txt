@@ -1,0 +1,166 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
+Did you know there are enterprise versions of the Bitnami catalog? For enhanced secure software supply chain features, unlimited pulls from Docker, LTS support, or application customization, see Bitnami Premium or Tanzu Application Catalog. See https://www.arrow.com/globalecs/na/vendors/bitnami for more information.
+
+** Please be patient while the chart is being deployed **
+
+{{- if .Values.diagnosticMode.enabled }}
+The chart has been deployed in diagnostic mode. All probes have been disabled and the command has been overwritten with:
+
+  command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 4 }}
+  args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 4 }}
+
+Get the list of pods by executing:
+
+  kubectl get pods --namespace {{ include "common.names.namespace" . | quote }} -l app.kubernetes.io/instance={{ .Release.Name }}
+
+Access the pod you want to debug by executing
+
+  kubectl exec --namespace {{ include "common.names.namespace" . | quote }} -ti <NAME OF THE POD> -- bash
+
+In order to replicate the container startup scripts execute this command:
+
+    keydb-server /opt/bitnami/keydb/etc/keydb.conf
+
+{{- else }}
+
+{{- if contains .Values.master.service.type "LoadBalancer" }}
+{{- if not .Values.auth.enabled }}
+{{- if or (not .Values.master.networkPolicy.enabled) (and .Values.master.networkPolicy.enabled .Values.master.networkPolicy.allowExternal) }}
+
+-------------------------------------------------------------------------------
+ WARNING
+
+    By specifying "master.service.type=LoadBalancer" and "auth.enabled=false" you have
+    most likely exposed the KeyDB service externally without any authentication
+    mechanism.
+
+    For security reasons, we strongly suggest that you switch to "ClusterIP" or
+    "NodePort". As alternative, you can also switch to "auth.enabled=true"
+    providing a valid password on "password" parameter.
+
+-------------------------------------------------------------------------------
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- if eq .Values.architecture "replication" }}
+
+KeyDB can be accessed on the following DNS names from within your cluster:
+
+    {{ printf "%s.%s.svc.%s" (include "keydb.master.fullname" .) (include "common.names.namespace" . ) .Values.clusterDomain }} (port {{ .Values.master.service.ports.keydb }})
+    {{ printf "%s.%s.svc.%s" (include "keydb.replica.fullname" .) (include "common.names.namespace" . ) .Values.clusterDomain }} (port {{ .Values.replica.service.ports.keydb }}){{ if not .Values.replica.activeReplica }} only for read operations{{ end }}
+
+{{- else }}
+
+KeyDB can be accessed via port {{ .Values.master.service.ports.keydb }} on the following DNS name from within your cluster:
+
+    {{ include "keydb.master.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}
+
+{{- end }}
+
+{{ if .Values.auth.enabled }}
+
+To get your password run:
+
+    export KEYDB_PASSWORD=$(kubectl get secret --namespace {{ include "common.names.namespace" . }} {{ include "keydb.secretName" . }} -o jsonpath="{.data.{{ include "keydb.secretPasswordKey" . }}}" | base64 -d)
+
+{{- end }}
+
+To connect to your KeyDB server:
+
+1. Run a KeyDB pod that you can use as a client:
+
+    kubectl run --namespace {{ include "common.names.namespace" . }} keydb-client --restart='Never' {{ if .Values.auth.enabled }} --env KEYDB_PASSWORD=$KEYDB_PASSWORD {{ end }} --image {{ template "keydb.image" . }} --command -- sleep infinity
+
+{{- if .Values.tls.enabled }}
+
+  Copy your TLS certificates to the client pod:
+
+    kubectl cp --namespace {{ include "common.names.namespace" . }} /path/to/client.cert keydb-client:/tmp/client.cert
+    kubectl cp --namespace {{ include "common.names.namespace" . }} /path/to/client.key keydb-client:/tmp/client.key
+    kubectl cp --namespace {{ include "common.names.namespace" . }} /path/to/CA.cert keydb-client:/tmp/CA.cert
+
+{{- end }}
+
+  Use the following command to attach to the client pod:
+
+    kubectl exec --tty -i keydb-client \
+    {{- if and .Values.master.networkPolicy.enabled (not .Values.master.networkPolicy.allowExternal) }}--labels="{{ template "common.names.fullname" . }}-client=true" \{{- end }}
+    --namespace {{ include "common.names.namespace" . }} -- bash
+
+2. Connect using the KeyDB CLI:
+
+{{- if eq .Values.architecture "replication" }}
+    {{ if .Values.auth.enabled }}REDISCLI_AUTH="$KEYDB_PASSWORD" {{ end }}keydb-cli -h {{ include "keydb.master.fullname" . }} -p {{ .Values.master.service.ports.keydb }}{{ if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
+    {{ if .Values.auth.enabled }}REDISCLI_AUTH="$KEYDB_PASSWORD" {{ end }}keydb-cli -h {{ include "keydb.replica.fullname" . }} -p {{ .Values.replica.service.ports.keydb }}{{ if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
+{{- else }}
+    {{ if .Values.auth.enabled }}REDISCLI_AUTH="$KEYDB_PASSWORD" {{ end }}keydb-cli -h {{ include "keydb.master.fullname" . }} -p {{ .Values.master.service.ports.keydb }}{{ if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
+{{- end }}
+
+{{- if and .Values.master.networkPolicy.enabled (not .Values.master.networkPolicy.allowExternal) }}
+
+Note: Since NetworkPolicy is enabled, only pods with label {{ template "common.names.fullname" . }}-client=true" will be able to connect to KeyDB.
+
+{{- else }}
+
+To connect to your Master nodes from outside the cluster execute the following commands:
+
+{{- if contains "NodePort" .Values.master.service.type }}
+
+    export NODE_IP=$(kubectl get nodes --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.items[0].status.addresses[0].address}")
+    export NODE_PORT=$(kubectl get --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "keydb.master.fullname" . }})
+    {{ if .Values.auth.enabled }}REDISCLI_AUTH="$KEYDB_PASSWORD" {{ end }}keydb-cli -h $NODE_IP -p $NODE_PORT {{- if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
+
+{{- else if contains "LoadBalancer" .Values.master.service.type }}
+
+  NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+        Watch the status with: 'kubectl get svc --namespace {{ include "common.names.namespace" . }} -w {{ include "keydb.master.fullname" . }}'
+
+    export SERVICE_IP=$(kubectl get svc --namespace {{ include "common.names.namespace" . }} {{ include "keydb.master.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
+    {{ if .Values.auth.enabled }}REDISCLI_AUTH="$KEYDB_PASSWORD" {{ end }}keydb-cli -h $SERVICE_IP -p {{ .Values.master.service.ports.keydb }} {{- if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
+
+{{- else if contains "ClusterIP" .Values.master.service.type }}
+
+    kubectl port-forward --namespace {{ include "common.names.namespace" . }} svc/{{ include "keydb.master.fullname" . }} {{ .Values.master.service.ports.keydb }}:{{ .Values.master.service.ports.keydb }} &
+    {{ if .Values.auth.enabled }}REDISCLI_AUTH="$KEYDB_PASSWORD" {{ end }}keydb-cli -h 127.0.0.1 -p {{ .Values.master.service.ports.keydb }} {{- if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
+
+{{- end }}
+
+{{- if eq .Values.architecture "replication" }}
+
+To connect to your Replica nodes from outside the cluster execute the following commands:
+
+{{- if contains "NodePort" .Values.replica.service.type }}
+
+    export NODE_IP=$(kubectl get nodes --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.items[0].status.addresses[0].address}")
+    export NODE_PORT=$(kubectl get --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "keydb.replica.fullname" . }})
+    {{ if .Values.auth.enabled }}REDISCLI_AUTH="$KEYDB_PASSWORD" {{ end }}keydb-cli -h $NODE_IP -p $NODE_PORT {{- if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
+
+{{- else if contains "LoadBalancer" .Values.replica.service.type }}
+
+  NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+        Watch the status with: 'kubectl get svc --namespace {{ include "common.names.namespace" . }} -w {{ include "keydb.replica.fullname" . }}'
+
+    export SERVICE_IP=$(kubectl get svc --namespace {{ include "common.names.namespace" . }} {{ include "keydb.replica.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
+    {{ if .Values.auth.enabled }}REDISCLI_AUTH="$KEYDB_PASSWORD" {{ end }}keydb-cli -h $SERVICE_IP -p {{ .Values.replica.service.ports.keydb }} {{- if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
+
+{{- else if contains "ClusterIP" .Values.replica.service.type }}
+
+    kubectl port-forward --namespace {{ include "common.names.namespace" . }} svc/{{ include "keydb.replica.fullname" . }} {{ .Values.replica.service.ports.keydb }}:{{ .Values.replica.service.ports.keydb }} &
+    {{ if .Values.auth.enabled }}REDISCLI_AUTH="$KEYDB_PASSWORD" {{ end }}keydb-cli -h 127.0.0.1 -p {{ .Values.replica.service.ports.keydb }} {{- if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
+
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- include "common.warnings.rollingTag" .Values.image }}
+{{- include "common.warnings.rollingTag" .Values.metrics.image }}
+{{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
+{{- include "keydb.validateValues" . }}
+{{- include "common.warnings.resources" (dict "sections" (list "master" "replica" "metrics" "volumePermissions") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image  .Values.metrics.image .Values.volumePermissions.image) "context" $) }}
+{{- include "common.errors.insecureImages" (dict "images" (list .Values.image  .Values.metrics.image .Values.volumePermissions.image) "context" $) }}

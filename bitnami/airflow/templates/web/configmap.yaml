@@ -1,0 +1,59 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if not .Values.web.existingConfigmap }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "airflow.web.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: web
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
+  {{- end }}
+data:
+  webserver_config.py: |-
+  {{- if .Values.web.configuration }}
+    {{ include "common.tplvalues.render" (dict "value" .Values.web.configuration "context" .) | nindent 4 }}
+  {{- else }}
+    """Configuration for the Airflow webserver"""
+
+    from __future__ import annotations
+
+    import os
+
+  {{- if .Values.ldap.enabled }}
+    from airflow.www.fab_security.manager import AUTH_LDAP
+
+    AUTH_TYPE = AUTH_LDAP
+    AUTH_LDAP_SERVER = {{ .Values.ldap.uri | squote }}
+    AUTH_LDAP_SEARCH = {{ .Values.ldap.basedn | squote }}
+    AUTH_LDAP_UID_FIELD = {{ .Values.ldap.searchAttribute | squote }}
+    AUTH_LDAP_BIND_USER = {{ .Values.ldap.binddn | squote }}
+    AUTH_USER_REGISTRATION = {{ .Values.ldap.userRegistration | squote }}
+    AUTH_USER_REGISTRATION_ROLE = {{ .Values.ldap.userRegistrationRole | squote }}
+    AUTH_ROLES_MAPPING = {{ .Values.ldap.rolesMapping }}
+    AUTH_ROLES_SYNC_AT_LOGIN = {{ .Values.ldap.rolesSyncAtLogin }}
+  {{- if .Values.ldap.tls.enabled }}
+    AUTH_LDAP_ALLOW_SELF_SIGNED = {{ ternary "True" "False" .Values.ldap.tls.allowSelfSigned }}
+    AUTH_LDAP_TLS_CACERTFILE = {{ printf "%s/%s" .Values.ldap.tls.certificatesMountPath .Values.ldap.tls.CAFilename | squote }}
+  {{- end }}
+  {{- else }}
+    from airflow.www.fab_security.manager import AUTH_DB
+
+    AUTH_TYPE = AUTH_DB
+  {{- end }}
+
+    basedir = os.path.abspath(os.path.dirname(__file__))
+
+    # Flask-WTF flag for CSRF
+    WTF_CSRF_ENABLED = True
+    WTF_CSRF_TIME_LIMIT = None
+  {{- if .Values.web.extraConfiguration }}
+    {{ include "common.tplvalues.render" (dict "value" .Values.web.extraConfiguration "context" .) | nindent 4 }}
+  {{- end }}
+  {{- end }}
+{{- end }}

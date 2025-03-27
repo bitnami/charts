@@ -9,7 +9,8 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
+## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ##
 global:
   imageRegistry: ""
@@ -18,7 +19,13 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  defaultStorageClass: ""
   storageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
   ## Compatibility adaptations for Kubernetes platforms
   ##
   compatibility:
@@ -52,6 +59,9 @@ clusterDomain: cluster.local
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
+## @param deploymentAnnotations Annotations to add to the deployment
+##
+deploymentAnnotations: {}
 ## Enable diagnostic mode in the deployment
 ##
 diagnosticMode:
@@ -304,10 +314,9 @@ terminationGracePeriodSeconds: ""
 image:
   registry: docker.io
   repository: bitnami/haproxy
-  tag: 2.9.7-debian-12-r3
+  tag: 3.1.6-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -439,8 +448,8 @@ containerSecurityContext:
 ## @param pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
 ##
 pdb:
-  create: false
-  minAvailable: 1
+  create: true
+  minAvailable: ""
   maxUnavailable: ""
 ## HAProxy Autoscaling configuration
 ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
@@ -623,3 +632,8 @@ serviceAccount:
   name: ""
   automountServiceAccountToken: false
   annotations: {}
+
+## @param enableServiceLinks If set to false, disable Kubernetes service links in the pod spec
+## Ref: https://kubernetes.io/docs/tutorials/services/connect-applications-service/#accessing-the-service
+##
+enableServiceLinks: true

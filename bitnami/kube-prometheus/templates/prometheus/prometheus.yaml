@@ -51,6 +51,7 @@ spec:
     {{- end }}
   {{- if .Values.prometheus.image }}
   image: {{ template "kube-prometheus.prometheus.image" . }}
+  imagePullPolicy: {{ .Values.prometheus.image.pullPolicy }}
   {{- end }}
   {{- if .Values.prometheus.additionalArgs }}
   additionalArgs: {{- toYaml .Values.prometheus.additionalArgs | nindent 4 }}
@@ -101,6 +102,9 @@ spec:
   {{- if .Values.prometheus.enforcedSampleLimit }}
   enforcedSampleLimit: {{ .Values.prometheus.enforcedSampleLimit }}
   {{- end }}
+  {{- if .Values.prometheus.keepDroppedTargets }}
+  keepDroppedTargets: {{ .Values.prometheus.keepDroppedTargets }}
+  {{- end }}
   {{- if .Values.prometheus.resources }}
   resources: {{- toYaml .Values.prometheus.resources | nindent 4 }}
   {{- else if ne .Values.prometheus.resourcesPreset "none" }}
@@ -143,6 +147,9 @@ spec:
   scrapeConfigNamespaceSelector: {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.scrapeConfigNamespaceSelector "context" $) | nindent 4 }}
   {{- else }}
   scrapeConfigNamespaceSelector: {}
+  {{- end }}
+  {{- if .Values.prometheus.scrapeClasses }}
+  scrapeClasses: {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.scrapeClasses "context" $) | nindent 4 }}
   {{- end }}
   enableRemoteWriteReceiver: {{ .Values.prometheus.enableRemoteWriteReceiver }}
   {{- if .Values.prometheus.remoteRead }}
@@ -233,7 +240,7 @@ spec:
     {{- if .Values.prometheus.volumeMounts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.volumeMounts "context" $) | nindent 4 }}
     {{- end }}
-  {{- if or .Values.prometheus.additionalScrapeConfigs.enabled .Values.prometheus.additionalScrapeConfigsExternal.enabled }}
+  {{- if .Values.prometheus.additionalScrapeConfigs.enabled }}
   additionalScrapeConfigs:
     {{- if and .Values.prometheus.additionalScrapeConfigs.enabled (eq .Values.prometheus.additionalScrapeConfigs.type "external") }}
     name: {{ .Values.prometheus.additionalScrapeConfigs.external.name }}
@@ -241,9 +248,6 @@ spec:
     {{- else if and .Values.prometheus.additionalScrapeConfigs.enabled (eq .Values.prometheus.additionalScrapeConfigs.type "internal") }}
     name: additional-scrape-jobs-{{ template "kube-prometheus.prometheus.fullname" . }}
     key: scrape-jobs.yaml
-    {{- else if and (not .Values.prometheus.additionalScrapeConfigs.enabled) .Values.prometheus.additionalScrapeConfigsExternal.enabled }}
-    name: {{ .Values.prometheus.additionalScrapeConfigsExternal.name }}
-    key: {{ .Values.prometheus.additionalScrapeConfigsExternal.key }}
     {{- end }}
   {{- end }}
   {{- if .Values.prometheus.additionalAlertRelabelConfigsExternal.enabled }}
@@ -256,7 +260,7 @@ spec:
     name: {{ .Values.prometheus.additionalAlertManagerExternal.name }}
     key: {{ .Values.prometheus.additionalAlertManagerExternal.key }}
   {{- end -}}
-{{- include "kube-prometheus.imagePullSecrets" . | indent 2 }}
+{{- include "kube-prometheus.imagePullSecrets" . | nindent 2 }}
   {{- if or .Values.prometheus.containers .Values.prometheus.thanos.create .Values.prometheus.containerSecurityContext.enabled .Values.prometheus.containerSecurityContext.enabled .Values.operator.prometheusConfigReloader.containerSecurityContext.enabled }}
   {{- if .Values.prometheus.initContainers }}
   initContainers:
@@ -279,14 +283,28 @@ spec:
         {{- if .Values.prometheus.thanos.extraArgs }}
         {{ toYaml .Values.prometheus.thanos.extraArgs | indent 8  | trim }}
         {{- end }}
-      {{- if .Values.prometheus.thanos.objectStorageConfig.secretName }}
       env:
+        {{- if .Values.prometheus.thanos.objectStorageConfig.secretName }}
         - name: OBJSTORE_CONFIG
           valueFrom:
             secretKeyRef:
               name: {{ .Values.prometheus.thanos.objectStorageConfig.secretName }}
               key: {{ .Values.prometheus.thanos.objectStorageConfig.secretKey | default "thanos.yaml" }}
-      {{- end }}
+        {{- end }}
+        {{- if .Values.prometheus.thanos.extraEnvVars }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.thanos.extraEnvVars "context" $) | nindent 8 }}
+        {{- end }}
+      {{- if or .Values.prometheus.thanos.extraEnvVarsCM .Values.prometheus.thanos.extraEnvVarsSecret }}
+      envFrom:
+        {{- if .Values.prometheus.thanos.extraEnvVarsCM }}
+        - configMapRef:
+            name: {{ include "common.tplvalues.render" (dict "value" .Values.prometheus.thanos.extraEnvVarsCM "context" $) }}
+        {{- end }}
+        {{- if .Values.prometheus.thanos.extraEnvVarsSecret }}
+        - secretRef:
+            name: {{ include "common.tplvalues.render" (dict "value" .Values.prometheus.thanos.extraEnvVarsSecret "context" $) }}
+        {{- end }}
+      {{- end}}
       {{- if .Values.prometheus.thanos.resources }}
       resources: {{- toYaml .Values.prometheus.thanos.resources | nindent 8 }}
       {{- else if ne .Values.prometheus.thanos.resourcesPreset "none" }}

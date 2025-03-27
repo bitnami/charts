@@ -19,7 +19,6 @@ spec:
   {{- if .Values.applicationSet.updateStrategy }}
   strategy: {{- toYaml .Values.applicationSet.updateStrategy | nindent 4 }}
   {{- end }}
-  selector:
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.applicationSet.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
@@ -119,8 +118,11 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.applicationSet.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.applicationSet.livenessProbe.enabled }}
           livenessProbe:
-            tcpSocket:
-              port: probe
+            exec:
+              command:
+                - pgrep
+                - -f
+                - argocd-applicationset-controller
             initialDelaySeconds: {{ .Values.applicationSet.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.applicationSet.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.applicationSet.livenessProbe.timeoutSeconds }}

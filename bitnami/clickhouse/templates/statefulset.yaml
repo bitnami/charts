@@ -291,8 +291,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" $.Values.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if $.Values.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit $.Values.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /ping
+            tcpSocket:
               port: http
           {{- end }}
           {{- if $.Values.customReadinessProbe }}
@@ -429,8 +428,10 @@ spec:
         {{- end }}
   {{- if or $.Values.extraVolumeClaimTemplates (and $.Values.persistence.enabled (not $.Values.persistence.existingClaim)) }}
   volumeClaimTemplates:
-    {{- if and $.Values.persistence.enabled (not $.Values.persistence.existingClaim) }}
-    - metadata:
+    {{- if and $.Values.persistence.enabled (not $.Values.persistence.existingClaim) }}    
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         name: data
         {{- if or $.Values.persistence.annotations $.Values.commonAnnotations }}
         {{- $claimAnnotations := include "common.tplvalues.merge" ( dict "values" ( list $.Values.persistence.annotations $.Values.commonLabels ) "context" $ ) }}

@@ -1,11 +1,11 @@
 # Source: https://raw.githubusercontent.com/vmware-tanzu/pinniped/v{version}/deploy/supervisor/config.supervisor.pinniped.dev_oidcclients.yaml
-# Version: 0.30.0
+# Version: 0.38.0
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.14.0
+    controller-gen.kubebuilder.io/version: v0.17.2
   name: oidcclients.config.supervisor.pinniped.dev
 spec:
   group: config.supervisor.pinniped.dev
@@ -61,7 +61,6 @@ spec:
                   allowedGrantTypes is a list of the allowed grant_type param values that should be accepted during OIDC flows with this
                   client.
 
-
                   Must only contain the following values:
                   - authorization_code: allows the client to perform the authorization code grant flow, i.e. allows the webapp to
                     authenticate users. This grant must always be listed.
@@ -94,7 +93,6 @@ spec:
               allowedScopes:
                 description: |-
                   allowedScopes is a list of the allowed scopes param values that should be accepted during OIDC flows with this client.
-
 
                   Must only contain the following values:
                   - openid: The client is allowed to request ID tokens. ID tokens only include the required claims by default (iss, sub, aud, exp, iat).
@@ -154,16 +152,8 @@ spec:
                 description: conditions represent the observations of an OIDCClient's
                   current state.
                 items:
-                  description: "Condition contains details for one aspect of the current
-                    state of this API Resource.\n---\nThis struct is intended for
-                    direct use as an array at the field path .status.conditions.  For
-                    example,\n\n\n\ttype FooStatus struct{\n\t    // Represents the
-                    observations of a foo's current state.\n\t    // Known .status.conditions.type
-                    are: \"Available\", \"Progressing\", and \"Degraded\"\n\t    //
-                    +patchMergeKey=type\n\t    // +patchStrategy=merge\n\t    // +listType=map\n\t
-                    \   // +listMapKey=type\n\t    Conditions []metav1.Condition `json:\"conditions,omitempty\"
-                    patchStrategy:\"merge\" patchMergeKey:\"type\" protobuf:\"bytes,1,rep,name=conditions\"`\n\n\n\t
-                    \   // other fields\n\t}"
+                  description: Condition contains details for one aspect of the current
+                    state of this API Resource.
                   properties:
                     lastTransitionTime:
                       description: |-
@@ -204,12 +194,7 @@ spec:
                       - Unknown
                       type: string
                     type:
-                      description: |-
-                        type of condition in CamelCase or in foo.example.com/CamelCase.
-                        ---
-                        Many .condition.type values are consistent across resources like Available, but because arbitrary conditions can be
-                        useful (see .node.status.conditions), the ability to deconflict is important.
-                        The regex it matches is (dns1123SubdomainFmt/)?(qualifiedNameFmt)
+                      description: type of condition in CamelCase or in foo.example.com/CamelCase.
                       maxLength: 316
                       pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
                       type: string

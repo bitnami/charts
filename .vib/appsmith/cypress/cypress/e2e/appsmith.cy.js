@@ -13,16 +13,14 @@ it('allows to create a new app from template', () => {
   cy.fixture('app').then((app) => {
     // Create new app
     cy.contains('Create new').click();
-    cy.get('div[data-testid="t--workspace-action-create-app"]').click();
+    cy.get('div[data-testid="t--workspace-action-create-app-from-template"]').click();
+    // Create an application from the Product Catalog CRUD template
+    cy.contains('[data-testid="template-card"]', 'Product Catalog CRUD').click()
+    cy.contains('Use template').click();
     // Rename application
     cy.get('.t--application-name').click();
     cy.contains('Rename').click();
     cy.get('.t--application-name').type(`${app.appName}-${random}{enter}`);
-    // Go to the templates page
-    cy.contains('Start from a template').click();
-    // Create an application from the Product Catalog CRUD template
-    cy.contains('[data-testid="template-card"]', 'Product Catalog CRUD').click()
-    cy.contains('Add selected page');
     // Check if the application exists in the applications page
     cy.visit('/applications');
     cy.contains(`${app.appName}-${random}`);

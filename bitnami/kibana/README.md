@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/kibana --set elasticsearch.hosts[0]=<Hostname of your ES instance> --set elasticsearch.port=<port of your ES instance>
 ```
 
-Looking to use Kibana in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Kibana in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -51,13 +51,44 @@ This chart requires an Elasticsearch instance to work. You can use an already ex
 
 Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
 
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcesPreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling vs Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
+### [Rolling vs Immutable tags](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+### Update credentials
+
+Bitnami charts configure credentials at first boot. Any further change in the secrets or credentials require manual intervention. Follow these instructions:
+
+- Update the user password in Elasticsearch following [the upstream documentation](https://www.elastic.co/guide/en/elasticsearch/reference/current/reset-password.html)
+- Update the password secret with the new values (replace the SECRET_NAME and PASSWORD)
+
+```shell
+kubectl create secret generic SECRET_NAME --from-literal=kibana-password=PASSWORD --dry-run -o yaml | kubectl apply -f -
+```
+
+### Prometheus metrics
+
+This chart can be integrated with Prometheus by setting `metrics.enabled` to `true`. This will expose Kibana native Prometheus endpoint in the service. It will have the necessary annotations to be automatically scraped by Prometheus.
+
+> **IMPORTANT**: For Prometheus metrics to work, make sure that the [kibana-prometheus-exporter](https://github.com/pjhampton/kibana-prometheus-exporter) plugin is installed. Check the [Install plugins](#install-plugins) section for instructions on how to install extra plugins.
+
+#### Prometheus requirements
+
+It is necessary to have a working installation of Prometheus or Prometheus Operator for the integration to work. Install the [Bitnami Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/prometheus) or the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) to easily have a working Prometheus in your cluster.
+
+#### Integration with Prometheus Operator
+
+The chart can deploy `ServiceMonitor` objects for integration with Prometheus Operator installations. To do so, set the value `metrics.serviceMonitor.enabled=true`. Ensure that the Prometheus Operator `CustomResourceDefinitions` are installed in the cluster or it will fail with the following error:
+
+```text
+no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"
+```
+
+Install the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) for having the necessary CRDs and the Prometheus Operator.
 
 ### Change Kibana version
 
@@ -86,6 +117,13 @@ extraConfiguration:
   "server.maxPayloadBytes": 1048576
   "server.pingTimeout": 1500
 ```
+
+### Securing traffic using TLS
+
+Kibana can be configured with TLS by setting `tls.enabled=true`. The chart allows two configuration options:
+
+- Provide your own secret using the `tls.existingSecret` value.
+- Have the chart auto-generate the certificates using `tls.autoGenerated=true`.
 
 ### Add extra environment variables
 
@@ -198,6 +236,10 @@ This chart allows you to set custom Pod affinity using the `affinity` parameter.
 
 As an alternative, you can use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
+### Backup and restore
+
+To back up and restore Helm chart deployments on Kubernetes, you need to back up the persistent volumes from the source deployment and attach them to a new deployment using [Velero](https://velero.io/), a Kubernetes backup/restore tool. Find the instructions for using Velero in [this guide](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-backup-restore-deployments-velero-index.html).
+
 ## Persistence
 
 The [Bitnami Kibana](https://github.com/bitnami/containers/tree/main/bitnami/kibana) image can persist data. If enabled, the persisted path is `/bitnami/kibana` by default.
@@ -221,12 +263,14 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 
 ### Global parameters
 
-| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value  |
-| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
-| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
-| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`   |
-| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value   |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`    |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`    |
+| `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`    |
+| `global.storageClass`                                 | DEPRECATED: use global.defaultStorageClass instead                                                                                                                                                                                                                                                                                                                  | `""`    |
+| `global.security.allowInsecureImages`                 | Allows skipping image verification                                                                                                                                                                                                                                                                                                                                  | `false` |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto`  |
 
 ### Common parameters
 
@@ -337,14 +381,14 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 | `ingress.enabled`                                   | Enable ingress controller resource                                                                                                                                                                                                                    | `false`                    |
 | `ingress.pathType`                                  | Ingress Path type                                                                                                                                                                                                                                     | `ImplementationSpecific`   |
 | `ingress.apiVersion`                                | Override API Version (automatically detected if not set)                                                                                                                                                                                              | `""`                       |
-| `ingress.hostname`                                  | Default host for the ingress resource. If specified as "*" no host rule is configured                                                                                                                                                                 | `kibana.local`             |
+| `ingress.hostname`                                  | Default host for the ingress resource. Evaluated as a template. If specified as "*" no host rule is configured                                                                                                                                        | `kibana.local`             |
 | `ingress.path`                                      | The Path to Kibana. You may need to set this to '/*' in order to use this with ALB ingress controllers.                                                                                                                                               | `/`                        |
 | `ingress.annotations`                               | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.                                                                                                                      | `{}`                       |
 | `ingress.tls`                                       | Enable TLS configuration for the hostname defined at ingress.hostname parameter                                                                                                                                                                       | `false`                    |
 | `ingress.selfSigned`                                | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                                                                                                                                          | `false`                    |
-| `ingress.extraHosts`                                | The list of additional hostnames to be covered with this ingress record.                                                                                                                                                                              | `[]`                       |
-| `ingress.extraPaths`                                | Additional arbitrary path/backend objects                                                                                                                                                                                                             | `[]`                       |
-| `ingress.extraTls`                                  | The tls configuration for additional hostnames to be covered with this ingress record.                                                                                                                                                                | `[]`                       |
+| `ingress.extraHosts`                                | The list of additional hostnames to be covered with this ingress record. Evaluated as a template.                                                                                                                                                     | `[]`                       |
+| `ingress.extraPaths`                                | Additional arbitrary path/backend objects. Evaluated as a template.                                                                                                                                                                                   | `[]`                       |
+| `ingress.extraTls`                                  | The tls configuration for additional hostnames to be covered with this ingress record. Evaluated as a template.                                                                                                                                       | `[]`                       |
 | `ingress.secrets`                                   | If you're providing your own certificates, please use this to add the certificates as secrets                                                                                                                                                         | `[]`                       |
 | `ingress.ingressClassName`                          | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                                                                                                                                         | `""`                       |
 | `ingress.extraRules`                                | The list of additional rules to be added to this ingress record. Evaluated as a template                                                                                                                                                              | `[]`                       |
@@ -382,6 +426,9 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 | `podLabels`                                         | Extra labels to add to Pod                                                                                                                                                                                                                            | `{}`                       |
 | `sidecars`                                          | Attach additional containers to the pod                                                                                                                                                                                                               | `[]`                       |
 | `initContainers`                                    | Add additional init containers to the pod                                                                                                                                                                                                             | `[]`                       |
+| `pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                                       | `true`                     |
+| `pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                                        | `""`                       |
+| `pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `pdb.minAvailable` and `pdb.maxUnavailable` are empty.                                                                                                        | `""`                       |
 | `configuration`                                     | Kibana configuration                                                                                                                                                                                                                                  | `{}`                       |
 | `metrics.enabled`                                   | Start a side-car prometheus exporter                                                                                                                                                                                                                  | `false`                    |
 | `metrics.service.annotations`                       | Prometheus annotations for the Kibana service                                                                                                                                                                                                         | `{}`                       |
@@ -453,6 +500,10 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/kiban
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 11.4.0
+
+This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
 
 ### To 11.0.0
 
@@ -534,7 +585,7 @@ You can disable the initContainer using the `elasticsearch.sysctlImage.enabled=f
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

@@ -182,7 +182,7 @@ spec:
               {{- if .Values.agent.enableDeepProbe }}
               path: /health?deep=1
               {{- else }}
-              path: /ping
+              path: /health
               {{- end }}
               port: {{ .Values.agent.containerPort }}
             initialDelaySeconds: {{ .Values.agent.livenessProbe.initialDelaySeconds }}
@@ -196,11 +196,7 @@ spec:
           {{- else if .Values.agent.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
-              {{- if .Values.agent.enableDeepProbe }}
-              path: /health?deep=1
-              {{- else }}
               path: /ping
-              {{- end }}
               port: {{ .Values.agent.containerPort }}
             initialDelaySeconds: {{ .Values.agent.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.agent.readinessProbe.periodSeconds }}

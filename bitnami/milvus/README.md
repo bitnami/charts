@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/milvus
 ```
 
-Looking to use Milvus in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Milvus in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -50,9 +50,27 @@ The command deploys milvus on the Kubernetes cluster in the default configuratio
 
 Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
 
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcesPreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
+### Prometheus metrics
+
+This chart can be integrated with Prometheus by setting `*.metrics.enabled` (under the `dataCoord`, `dataNode`, `indexCoord`, `indexNode`, `proxy`, `queryCoord`, `queryNode` and `rootCoord` sections) to true. This will expose the Milvus native Prometheus port in both the containers and services. The services will also have the necessary annotations to be automatically scraped by Prometheus.
+
+#### Prometheus requirements
+
+It is necessary to have a working installation of Prometheus or Prometheus Operator for the integration to work. Install the [Bitnami Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/prometheus) or the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) to easily have a working Prometheus in your cluster.
+
+#### Integration with Prometheus Operator
+
+The chart can deploy `ServiceMonitor` objects for integration with Prometheus Operator installations. To do so, set the value `*.metrics.serviceMonitor.enabled=true` (under the `dataCoord`, `dataNode`, `indexCoord`, `indexNode`, `proxy`, `queryCoord`, `queryNode` and `rootCoord` sections). Ensure that the Prometheus Operator `CustomResourceDefinitions` are installed in the cluster or it will fail with the following error:
+
+```text
+no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"
+```
+
+Install the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) for having the necessary CRDs and the Prometheus Operator.
+
+### [Rolling VS Immutable tags](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -61,6 +79,10 @@ Bitnami will release a new chart updating its containers if a new version of the
 ### Milvus configuration
 
 The Milvus configuration file `milvus.yaml` is shared across the different components: `rootCoord`, `dataCoord`, `indexCoord`, `dataNode` and `indexNode`. This is set in the `milvus.defaultConfig` value. This configuration can be extended with extra settings using the `milvus.extraConfig` value. For specific component configuration edit the `extraConfig` section inside each of the previously mentioned components. Check the official [Milvis documentation](https://milvus.io/docs) for the list of possible configurations.
+
+### Backup and restore
+
+To back up and restore Helm chart deployments on Kubernetes, you need to back up the persistent volumes from the source deployment and attach them to a new deployment using [Velero](https://velero.io/), a Kubernetes backup/restore tool. Find the instructions for using Velero in [this guide](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-backup-restore-deployments-velero-index.html).
 
 ### Additional environment variables
 
@@ -140,6 +162,17 @@ initContainers:
 
 Learn more about [sidecar containers](https://kubernetes.io/docs/concepts/workloads/pods/) and [init containers](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/).
 
+### Update credentials
+
+Bitnami charts configure credentials at first boot. Any further change in the secrets or credentials require manual intervention. Follow these instructions:
+
+- Update the user password following [the upstream documentation](https://milvus.io/docs/authenticate.md#Update-user-password)
+- Update the password secret with the new values (replace the SECRET_NAME, PASSWORD and ROOT_PASSWORD placeholders)
+
+```shell
+kubectl create secret generic SECRET_NAME --from-literal=password=PASSWORD --from-literal=root-password=ROOT_PASSWORD --dry-run -o yaml | kubectl apply -f -
+```
+
 ### Pod affinity
 
 This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
@@ -172,12 +205,12 @@ externalEtcd:
 
 ### External S3 support
 
-You may want to have mastodon connect to an external storage streaming rather than installing MiniIO(TM) inside your cluster. To achieve this, the chart allows you to specify credentials for an external storage streaming with the [`externalS3` parameter](#parameters). You should also disable the MinIO(TM) installation with the `minio.enabled` option. Here is an example:
+You may want to have Milvus connect to an external storage streaming rather than installing MiniIO(TM) inside your cluster. To achieve this, the chart allows you to specify credentials for an external storage streaming with the [`externalS3` parameter](#parameters). You should also disable the MinIO(TM) installation with the `minio.enabled` option. Here is an example:
 
 ```console
 minio.enabled=false
 externalS3.host=myexternalhost
-exterernalS3.accessKeyID=accesskey
+externalS3.accessKeyID=accesskey
 externalS3.accessKeySecret=secret
 ```
 
@@ -195,7 +228,7 @@ Adding the TLS parameter (where available) will cause the chart to generate HTTP
 
 [Learn more about Ingress controllers](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/).
 
-### TLS secrets
+### Securing traffic using TLS
 
 This chart facilitates the creation of TLS secrets for use with the Ingress controller (although this is not mandatory). There are several common use cases:
 
@@ -237,18 +270,20 @@ wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
 
 ### Global parameters
 
-| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value  |
-| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
-| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
-| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`   |
-| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value   |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`    |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`    |
+| `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`    |
+| `global.security.allowInsecureImages`                 | Allows skipping image verification                                                                                                                                                                                                                                                                                                                                  | `false` |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto`  |
 
 ### Common parameters
 
 | Name                     | Description                                                                               | Value           |
 | ------------------------ | ----------------------------------------------------------------------------------------- | --------------- |
 | `kubeVersion`            | Override Kubernetes version                                                               | `""`            |
+| `apiVersions`            | Override Kubernetes API versions reported by .Capabilities                                | `[]`            |
 | `nameOverride`           | String to partially override common.names.fullname                                        | `""`            |
 | `fullnameOverride`       | String to fully override common.names.fullname                                            | `""`            |
 | `commonLabels`           | Labels to add to all deployed objects                                                     | `{}`            |
@@ -437,9 +472,9 @@ wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
 | `dataCoord.serviceAccount.name`                               | The name of the ServiceAccount to use                                                                                                                                                                                                 | `""`             |
 | `dataCoord.serviceAccount.automountServiceAccountToken`       | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                                                                                                                                | `false`          |
 | `dataCoord.serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                                                                                                                                                                  | `{}`             |
-| `dataCoord.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                       | `false`          |
-| `dataCoord.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                        | `1`              |
-| `dataCoord.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable                                                                                                                                                                        | `""`             |
+| `dataCoord.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                       | `true`           |
+| `dataCoord.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                        | `{}`             |
+| `dataCoord.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `dataCoord.pdb.minAvailable` and `dataCoord.pdb.maxUnavailable` are empty.                                                                    | `{}`             |
 
 ### Data Coordinator Autoscaling configuration
 
@@ -584,9 +619,9 @@ wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
 | `rootCoord.serviceAccount.name`                               | The name of the ServiceAccount to use                                                                                                                                                                                                 | `""`             |
 | `rootCoord.serviceAccount.automountServiceAccountToken`       | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                                                                                                                                | `false`          |
 | `rootCoord.serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                                                                                                                                                                  | `{}`             |
-| `rootCoord.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                       | `false`          |
-| `rootCoord.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                        | `1`              |
-| `rootCoord.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable                                                                                                                                                                        | `""`             |
+| `rootCoord.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                       | `true`           |
+| `rootCoord.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                        | `{}`             |
+| `rootCoord.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `rootCoord.pdb.minAvailable` and `rootCoord.pdb.maxUnavailable` are empty.                                                                    | `{}`             |
 
 ### Root Coordinator Autoscaling configuration
 
@@ -731,9 +766,9 @@ wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
 | `queryCoord.serviceAccount.name`                               | The name of the ServiceAccount to use                                                                                                                                                                                                   | `""`             |
 | `queryCoord.serviceAccount.automountServiceAccountToken`       | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                                                                                                                                  | `false`          |
 | `queryCoord.serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                                                                                                                                                                    | `{}`             |
-| `queryCoord.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                         | `false`          |
-| `queryCoord.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                          | `1`              |
-| `queryCoord.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable                                                                                                                                                                          | `""`             |
+| `queryCoord.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                         | `true`           |
+| `queryCoord.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                          | `{}`             |
+| `queryCoord.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `queryCoord.pdb.minAvailable` and `queryCoord.pdb.maxUnavailable` are empty.                                                                    | `{}`             |
 
 ### Query Coordinator Autoscaling configuration
 
@@ -878,9 +913,9 @@ wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
 | `indexCoord.serviceAccount.name`                               | The name of the ServiceAccount to use                                                                                                                                                                                                   | `""`             |
 | `indexCoord.serviceAccount.automountServiceAccountToken`       | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                                                                                                                                  | `false`          |
 | `indexCoord.serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                                                                                                                                                                    | `{}`             |
-| `indexCoord.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                         | `false`          |
-| `indexCoord.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                          | `1`              |
-| `indexCoord.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable                                                                                                                                                                          | `""`             |
+| `indexCoord.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                         | `true`           |
+| `indexCoord.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                          | `{}`             |
+| `indexCoord.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable.Defaults to `1` if both `queryCoord.pdb.minAvailable` and `queryCoord.pdb.maxUnavailable` are empty.                                                                     | `{}`             |
 
 ### Index Coordinator Autoscaling configuration
 
@@ -1025,9 +1060,9 @@ wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
 | `dataNode.serviceAccount.name`                               | The name of the ServiceAccount to use                                                                                                                                                                                               | `""`             |
 | `dataNode.serviceAccount.automountServiceAccountToken`       | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                                                                                                                              | `false`          |
 | `dataNode.serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                                                                                                                                                                | `{}`             |
-| `dataNode.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                     | `false`          |
-| `dataNode.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                      | `1`              |
-| `dataNode.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable                                                                                                                                                                      | `""`             |
+| `dataNode.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                     | `true`           |
+| `dataNode.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                      | `{}`             |
+| `dataNode.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `dataNode.pdb.minAvailable` and `dataNode.pdb.maxUnavailable` are empty.                                                                    | `{}`             |
 
 ### Data Node Autoscaling configuration
 
@@ -1172,9 +1207,9 @@ wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
 | `queryNode.serviceAccount.name`                               | The name of the ServiceAccount to use                                                                                                                                                                                                 | `""`             |
 | `queryNode.serviceAccount.automountServiceAccountToken`       | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                                                                                                                                | `false`          |
 | `queryNode.serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                                                                                                                                                                  | `{}`             |
-| `queryNode.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                       | `false`          |
-| `queryNode.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                        | `1`              |
-| `queryNode.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable                                                                                                                                                                        | `""`             |
+| `queryNode.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                       | `true`           |
+| `queryNode.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                        | `{}`             |
+| `queryNode.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `queryNode.pdb.minAvailable` and `queryNode.pdb.maxUnavailable` are empty.                                                                    | `{}`             |
 
 ### Query Node Autoscaling configuration
 
@@ -1319,9 +1354,9 @@ wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
 | `indexNode.serviceAccount.name`                               | The name of the ServiceAccount to use                                                                                                                                                                                                 | `""`             |
 | `indexNode.serviceAccount.automountServiceAccountToken`       | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                                                                                                                                | `false`          |
 | `indexNode.serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                                                                                                                                                                  | `{}`             |
-| `indexNode.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                       | `false`          |
-| `indexNode.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                        | `1`              |
-| `indexNode.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable                                                                                                                                                                        | `""`             |
+| `indexNode.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                       | `true`           |
+| `indexNode.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                        | `{}`             |
+| `indexNode.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `indexNode.pdb.minAvailable` and `indexNode.pdb.maxUnavailable` are empty.                                                                    | `{}`             |
 
 ### Index Node Autoscaling configuration
 
@@ -1478,9 +1513,9 @@ wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
 | `proxy.serviceAccount.name`                               | The name of the ServiceAccount to use                                                                                                                                                                                         | `""`             |
 | `proxy.serviceAccount.automountServiceAccountToken`       | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                                                                                                                        | `false`          |
 | `proxy.serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                                                                                                                                                          | `{}`             |
-| `proxy.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                               | `false`          |
-| `proxy.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                | `1`              |
-| `proxy.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable                                                                                                                                                                | `""`             |
+| `proxy.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                               | `true`           |
+| `proxy.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                | `{}`             |
+| `proxy.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `proxy.pdb.minAvailable` and `proxy.pdb.maxUnavailable` are empty.                                                                    | `{}`             |
 
 ### Proxy Autoscaling configuration
 
@@ -1626,9 +1661,9 @@ wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
 | `attu.serviceAccount.name`                               | The name of the ServiceAccount to use                                                                                                                                                                                       | `""`                   |
 | `attu.serviceAccount.automountServiceAccountToken`       | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                                                                                                                      | `false`                |
 | `attu.serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                                                                                                                                                        | `{}`                   |
-| `attu.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                             | `false`                |
-| `attu.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                              | `1`                    |
-| `attu.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable                                                                                                                                                              | `""`                   |
+| `attu.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                             | `true`                 |
+| `attu.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                              | `{}`                   |
+| `attu.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `attu.pdb.minAvailable` and `attu.pdb.maxUnavailable` are empty.                                                                    | `{}`                   |
 
 ### Attu Autoscaling configuration
 
@@ -1725,20 +1760,22 @@ wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
 
 ### External S3 parameters
 
-| Name                                      | Description                                                        | Value           |
-| ----------------------------------------- | ------------------------------------------------------------------ | --------------- |
-| `externalS3.host`                         | External S3 host                                                   | `""`            |
-| `externalS3.port`                         | External S3 port number                                            | `443`           |
-| `externalS3.accessKeyID`                  | External S3 access key ID                                          | `""`            |
-| `externalS3.accessKeySecret`              | External S3 access key secret                                      | `""`            |
-| `externalS3.existingSecret`               | Name of an existing secret resource containing the S3 credentials  | `""`            |
-| `externalS3.existingSecretAccessKeyIDKey` | Name of an existing secret key containing the S3 access key ID     | `root-user`     |
-| `externalS3.existingSecretKeySecretKey`   | Name of an existing secret key containing the S3 access key secret | `root-password` |
-| `externalS3.protocol`                     | External S3 protocol                                               | `https`         |
-| `externalS3.bucket`                       | External S3 bucket                                                 | `milvus`        |
-| `externalS3.rootPath`                     | External S3 root path                                              | `file`          |
-| `externalS3.iamEndpoint`                  | External S3 IAM endpoint                                           | `""`            |
-| `externalS3.cloudProvider`                | External S3 cloud provider                                         | `""`            |
+| Name                                      | Description                                                                                       | Value           |
+| ----------------------------------------- | ------------------------------------------------------------------------------------------------- | --------------- |
+| `externalS3.host`                         | External S3 host                                                                                  | `""`            |
+| `externalS3.port`                         | External S3 port number                                                                           | `443`           |
+| `externalS3.accessKeyID`                  | External S3 access key ID                                                                         | `""`            |
+| `externalS3.accessKeySecret`              | External S3 access key secret                                                                     | `""`            |
+| `externalS3.existingSecret`               | Name of an existing secret resource containing the S3 credentials                                 | `""`            |
+| `externalS3.existingSecretAccessKeyIDKey` | Name of an existing secret key containing the S3 access key ID                                    | `root-user`     |
+| `externalS3.existingSecretKeySecretKey`   | Name of an existing secret key containing the S3 access key secret                                | `root-password` |
+| `externalS3.bucket`                       | External S3 bucket                                                                                | `milvus`        |
+| `externalS3.rootPath`                     | External S3 root path                                                                             | `file`          |
+| `externalS3.iamEndpoint`                  | External S3 IAM endpoint                                                                          | `""`            |
+| `externalS3.cloudProvider`                | External S3 cloud provider                                                                        | `""`            |
+| `externalS3.tls.enabled`                  | Enable TLS for externalS3 client connections.                                                     | `false`         |
+| `externalS3.tls.existingSecret`           | Name of the existing secret containing the TLS certificates for externalS3 client communications. | `""`            |
+| `externalS3.tls.caCert`                   | The secret key from the existingSecret if 'caCert' key different from the default (ca.crt)        | `ca.crt`        |
 
 ### External Kafka parameters
 
@@ -1752,6 +1789,12 @@ wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
 | `externalKafka.sasl.existingSecret`            | Name of the existing secret containing a password for SASL authentication (under the key named "client-passwords") | `""`                  |
 | `externalKafka.sasl.existingSecretPasswordKey` | Name of the secret key containing the Kafka client user password                                                   | `kafka-root-password` |
 | `externalKafka.sasl.enabledMechanisms`         | Kafka enabled SASL mechanisms                                                                                      | `PLAIN`               |
+| `externalKafka.tls.enabled`                    | Enable TLS for kafka client connections.                                                                           | `false`               |
+| `externalKafka.tls.existingSecret`             | Name of the existing secret containing the TLS certificates for external kafka client communications.              | `""`                  |
+| `externalKafka.tls.cert`                       | The secret key from the existingSecret if 'cert' key different from the default (tls.crt)                          | `tls.crt`             |
+| `externalKafka.tls.key`                        | The secret key from the existingSecret if 'key' key different from the default (tls.key)                           | `tls.key`             |
+| `externalKafka.tls.caCert`                     | The secret key from the existingSecret if 'caCert' key different from the default (ca.crt)                         | `ca.crt`              |
+| `externalKafka.tls.keyPassword`                | Password to access the password-protected PEM key if necessary.                                                    | `""`                  |
 
 ### etcd sub-chart parameters
 
@@ -1782,15 +1825,15 @@ wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
 
 ### kafka sub-chart paramaters
 
-| Name                              | Description                                                                                   | Value                                |
-| --------------------------------- | --------------------------------------------------------------------------------------------- | ------------------------------------ |
-| `kafka.enabled`                   | Enable/disable Kafka chart installation                                                       | `true`                               |
-| `kafka.controller.replicaCount`   | Number of Kafka controller eligible (controller+broker) nodes                                 | `1`                                  |
-| `kafka.service.ports.client`      | Kafka svc port for client connections                                                         | `9092`                               |
-| `kafka.extraConfig`               | Additional configuration to be appended at the end of the generated Kafka configuration file. | `offsets.topic.replication.factor=1` |
-| `kafka.listeners.client.protocol` | Kafka authentication protocol for the client listener                                         | `SASL_PLAINTEXT`                     |
-| `kafka.sasl.enabledMechanisms`    | Kafka enabled SASL mechanisms                                                                 | `PLAIN`                              |
-| `kafka.sasl.client.users`         | Kafka client users                                                                            | `["user"]`                           |
+| Name                              | Description                                                   | Value            |
+| --------------------------------- | ------------------------------------------------------------- | ---------------- |
+| `kafka.enabled`                   | Enable/disable Kafka chart installation                       | `true`           |
+| `kafka.controller.replicaCount`   | Number of Kafka controller eligible (controller+broker) nodes | `1`              |
+| `kafka.service.ports.client`      | Kafka svc port for client connections                         | `9092`           |
+| `kafka.overrideConfiguration`     | Kafka common configuration override                           | `{}`             |
+| `kafka.listeners.client.protocol` | Kafka authentication protocol for the client listener         | `SASL_PLAINTEXT` |
+| `kafka.sasl.enabledMechanisms`    | Kafka enabled SASL mechanisms                                 | `PLAIN`          |
+| `kafka.sasl.client.users`         | Kafka client users                                            | `["user"]`       |
 
 See <https://github.com/bitnami/readme-generator-for-helm> to create the table.
 
@@ -1822,6 +1865,30 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/milvu
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 12.0.0
+
+This major updates the Kafka subchart to its newest major, 32.0.0. For more information on this subchart's major, please refer to [Kafka upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/kafka#to-3200).
+
+### To 11.0.0
+
+This major updates the `etcd` subchart to it newest major, 11.0.0. For more information on this subchart's major, please refer to [etcd upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/etcd#to-1100).
+
+### To 10.1.0
+
+This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
+
+### To 10.0.0
+
+This major updates the Kafka subchart to its newest major, 31.0.0. For more information on this subchart's major, please refer to [Kafka upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/kafka#to-3100).
+
+### To 9.0.0
+
+This major updates the Kafka subchart to its newest major, 30.0.0. For more information on this subchart's major, please refer to [Kafka upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/kafka#to-3000).
+
+### To 8.0.0
+
+This major updates the Kafka subchart to its newest major, 29.0.0. For more information on this subchart's major, please refer to [Kafka upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/kafka#to-2900).
 
 ### To 7.0.0
 
@@ -1864,7 +1931,7 @@ This major updates the Kafka subchart to its newest major, 23.0.0. For more info
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

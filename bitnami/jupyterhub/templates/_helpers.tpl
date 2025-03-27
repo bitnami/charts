@@ -222,14 +222,7 @@ Return  the proper Storage Class (adapted to the Jupyterhub configuration format
 {{ include "jupyterhub.storage.class" ( dict "persistence" .Values.path.to.the.persistence "global" $) }}
 */}}
 {{- define "jupyterhub.storage.class" -}}
-
-{{- $storageClass := .persistence.storageClass -}}
-{{- if .global -}}
-    {{- if .global.storageClass -}}
-        {{- $storageClass = .global.storageClass -}}
-    {{- end -}}
-{{- end -}}
-
+{{- $storageClass := (.global).storageClass | default .persistence.storageClass | default (.global).defaultStorageClass | default "" -}}
 {{- if $storageClass -}}
   {{- if (eq "-" $storageClass) -}}
       {{- printf "storageClass: \"\"" -}}

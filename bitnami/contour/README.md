@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/contour
 ```
 
-Looking to use Contour in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Contour in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -50,15 +50,37 @@ These commands deploy contour on the Kubernetes cluster in the default configura
 
 Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
 
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcesPreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
+### Prometheus metrics
+
+This chart can be integrated with Prometheus by setting `metrics.enabled` to true. This will expose the Contour and Envoy (if `envoy.service.exposeMetrics=true`) native Prometheus ports in the containers. Additionally, it will deploy several `metrics` services. These `metrics` services will have the necessary annotations to be automatically scraped by Prometheus.
+
+#### Prometheus requirements
+
+It is necessary to have a working installation of Prometheus or Prometheus Operator for the integration to work. Install the [Bitnami Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/prometheus) or the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) to easily have a working Prometheus in your cluster.
+
+#### Integration with Prometheus Operator
+
+The chart can deploy `ServiceMonitor` objects for integration with Prometheus Operator installations. To do so, set the value `metrics.serviceMonitor.enabled=true`. Ensure that the Prometheus Operator `CustomResourceDefinitions` are installed in the cluster or it will fail with the following error:
+
+```text
+no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"
+```
+
+Install the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) for having the necessary CRDs and the Prometheus Operator.
+
+### [Rolling VS Immutable tags](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
 To configure [Contour](https://projectcontour.io) please look into the configuration section [Contour Configuration](https://projectcontour.io/docs/main/configuration/).
+
+### Backup and restore
+
+To back up and restore Helm chart deployments on Kubernetes, you need to back up the persistent volumes from the source deployment and attach them to a new deployment using [Velero](https://velero.io/), a Kubernetes backup/restore tool. Find the instructions for using Velero in [this guide](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-backup-restore-deployments-velero-index.html).
 
 ### Example Quickstart Contour Confiuration
 
@@ -164,12 +186,14 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 
 ### Global parameters
 
-| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value  |
-| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
-| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
-| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`   |
-| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value   |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`    |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`    |
+| `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`    |
+| `global.storageClass`                                 | DEPRECATED: use global.defaultStorageClass instead                                                                                                                                                                                                                                                                                                                  | `""`    |
+| `global.security.allowInsecureImages`                 | Allows skipping image verification                                                                                                                                                                                                                                                                                                                                  | `false` |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto`  |
 
 ### Common parameters
 
@@ -216,7 +240,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 | `contour.resources`                                           | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                 | `{}`                      |
 | `contour.manageCRDs`                                          | Manage the creation, upgrade and deletion of Contour CRDs.                                                                                                                                                                        | `true`                    |
 | `contour.envoyServiceNamespace`                               | Namespace of the envoy service to inspect for Ingress status details.                                                                                                                                                             | `""`                      |
-| `contour.envoyServiceName`                                    | Name of the envoy service to inspect for Ingress status details.                                                                                                                                                                  | `""`                      |
+| `contour.envoyServiceName`                                    | DEPRECATED: use envoy.service.name                                                                                                                                                                                                | `""`                      |
 | `contour.leaderElectionResourceName`                          | Name of the contour (Lease) leader election will lease.                                                                                                                                                                           | `""`                      |
 | `contour.ingressStatusAddress`                                | Address to set in Ingress object status. It is exclusive with `envoyServiceName` and `envoyServiceNamespace`.                                                                                                                     | `""`                      |
 | `contour.podAffinityPreset`                                   | Contour Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                                                       | `""`                      |
@@ -324,6 +348,9 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 | `contour.rootNamespaces`                                      | Restrict Contour to searching these namespaces for root ingress routes.                                                                                                                                                           | `""`                      |
 | `contour.overloadManager.enabled`                             | Enable Overload Manager                                                                                                                                                                                                           | `false`                   |
 | `contour.overloadManager.maxHeapBytes`                        | Overload Manager's maximum heap size in bytes                                                                                                                                                                                     | `2147483648`              |
+| `contour.pdb.create`                                          | Enable Pod Disruption Budget configuration                                                                                                                                                                                        | `true`                    |
+| `contour.pdb.minAvailable`                                    | Minimum number/percentage of Default backend pods that should remain scheduled                                                                                                                                                    | `""`                      |
+| `contour.pdb.maxUnavailable`                                  | Maximum number/percentage of Default backend pods that should remain scheduled                                                                                                                                                    | `""`                      |
 
 ### Envoy parameters
 
@@ -350,6 +377,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 | `envoy.shutdownManager.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if envoy.shutdownManager.resources is set (envoy.shutdownManager.resources is recommended for production). | `nano`                  |
 | `envoy.shutdownManager.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                                             | `{}`                    |
 | `envoy.shutdownManager.containerPorts.http`                               | Specify Port for shutdown container                                                                                                                                                                                                                           | `8090`                  |
+| `envoy.shutdownManager.lifecycleHooks`                                    | lifecycleHooks for the container to automate configuration before or after startup.                                                                                                                                                                           | `{}`                    |
 | `envoy.shutdownManager.containerSecurityContext.enabled`                  | Enabled envoy shutdownManager containers' Security Context                                                                                                                                                                                                    | `true`                  |
 | `envoy.shutdownManager.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                                                              | `{}`                    |
 | `envoy.shutdownManager.containerSecurityContext.runAsUser`                | Set envoy shutdownManager containers' Security Context runAsUser                                                                                                                                                                                              | `1001`                  |
@@ -481,9 +509,11 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 | `envoy.service.ports.metrics`                                             | Sets service metrics port                                                                                                                                                                                                                                     | `8002`                  |
 | `envoy.service.nodePorts.http`                                            | HTTP Port. If `envoy.service.type` is NodePort and this is non-empty                                                                                                                                                                                          | `""`                    |
 | `envoy.service.nodePorts.https`                                           | HTTPS Port. If `envoy.service.type` is NodePort and this is non-empty                                                                                                                                                                                         | `""`                    |
+| `envoy.service.nodePorts.metrics`                                         | Metrics Port. If `envoy.service.type` is NodePort and this is non-empty                                                                                                                                                                                       | `""`                    |
 | `envoy.service.extraPorts`                                                | Extra ports to expose (normally used with the `sidecar` value)                                                                                                                                                                                                | `[]`                    |
 | `envoy.service.sessionAffinity`                                           | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                                                                                                                                                          | `None`                  |
 | `envoy.service.sessionAffinityConfig`                                     | Additional settings for the sessionAffinity                                                                                                                                                                                                                   | `{}`                    |
+| `envoy.service.exposeMetrics`                                             | Setting to expose the metrics port in the service                                                                                                                                                                                                             | `false`                 |
 | `envoy.networkPolicy.enabled`                                             | Specifies whether a NetworkPolicy should be created                                                                                                                                                                                                           | `true`                  |
 | `envoy.networkPolicy.allowExternal`                                       | Don't require server label for connections                                                                                                                                                                                                                    | `true`                  |
 | `envoy.networkPolicy.allowExternalEgress`                                 | Allow the pod to access any range of port and all destinations.                                                                                                                                                                                               | `true`                  |
@@ -511,6 +541,15 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 | `envoy.extraEnvVars`                                                      | Array containing extra env vars to be added to all Envoy containers                                                                                                                                                                                           | `[]`                    |
 | `envoy.extraEnvVarsCM`                                                    | ConfigMap containing extra env vars to be added to all Envoy containers                                                                                                                                                                                       | `""`                    |
 | `envoy.extraEnvVarsSecret`                                                | Secret containing extra env vars to be added to all Envoy containers                                                                                                                                                                                          | `""`                    |
+| `envoy.pdb.create`                                                        | Enable Pod Disruption Budget configuration                                                                                                                                                                                                                    | `true`                  |
+| `envoy.pdb.minAvailable`                                                  | Minimum number/percentage of Default backend pods that should remain scheduled                                                                                                                                                                                | `""`                    |
+| `envoy.pdb.maxUnavailable`                                                | Maximum number/percentage of Default backend pods that should remain scheduled                                                                                                                                                                                | `""`                    |
+
+### Gateway API parameters
+
+| Name                    | Description                                                    | Value   |
+| ----------------------- | -------------------------------------------------------------- | ------- |
+| `gatewayAPI.manageCRDs` | Manage the creation, upgrade and deletion of Gateway API CRDs. | `false` |
 
 ### Default backend parameters
 
@@ -601,8 +640,8 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 | `defaultBackend.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy                                                                                                                                                                                                    | `[]`                     |
 | `defaultBackend.networkPolicy.ingressNSMatchLabels`                | Labels to match to allow traffic from other namespaces                                                                                                                                                                                          | `{}`                     |
 | `defaultBackend.networkPolicy.ingressNSPodMatchLabels`             | Pod labels to match to allow traffic from other namespaces                                                                                                                                                                                      | `{}`                     |
-| `defaultBackend.pdb.create`                                        | Enable Pod Disruption Budget configuration                                                                                                                                                                                                      | `false`                  |
-| `defaultBackend.pdb.minAvailable`                                  | Minimum number/percentage of Default backend pods that should remain scheduled                                                                                                                                                                  | `1`                      |
+| `defaultBackend.pdb.create`                                        | Enable Pod Disruption Budget configuration                                                                                                                                                                                                      | `true`                   |
+| `defaultBackend.pdb.minAvailable`                                  | Minimum number/percentage of Default backend pods that should remain scheduled                                                                                                                                                                  | `""`                     |
 | `defaultBackend.pdb.maxUnavailable`                                | Maximum number/percentage of Default backend pods that should remain scheduled                                                                                                                                                                  | `""`                     |
 | `ingress.enabled`                                                  | Ingress configuration enabled                                                                                                                                                                                                                   | `false`                  |
 | `ingress.apiVersion`                                               | Force Ingress API version (automatically detected if not set)                                                                                                                                                                                   | `""`                     |
@@ -642,11 +681,12 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 
 ### Other parameters
 
-| Name                | Description                                                                                                          | Value  |
-| ------------------- | -------------------------------------------------------------------------------------------------------------------- | ------ |
-| `rbac.create`       | Create the RBAC roles for API accessibility                                                                          | `true` |
-| `rbac.rules`        | Custom RBAC rules to set                                                                                             | `[]`   |
-| `tlsExistingSecret` | Name of the existingSecret to be use in both contour and envoy. If it is not nil `contour.certgen` will be disabled. | `""`   |
+| Name                | Description                                                                                                          | Value   |
+| ------------------- | -------------------------------------------------------------------------------------------------------------------- | ------- |
+| `rbac.create`       | Create the RBAC roles for API accessibility                                                                          | `true`  |
+| `rbac.rules`        | Custom RBAC rules to set                                                                                             | `[]`    |
+| `tlsExistingSecret` | Name of the existingSecret to be use in both contour and envoy. If it is not nil `contour.certgen` will be disabled. | `""`    |
+| `useCertManager`    | Use Cert-manager instead of Contour certgen to issue certificates for TLS connection between Contour and Envoy.      | `false` |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -665,6 +705,10 @@ The above command sets the `envoy.readinessProbe.successThreshold` to `5`.
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 19.4.0
+
+This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
 
 Please carefully read through the guide "Upgrading Contour" at <https://projectcontour.io/resources/upgrading/>.
 
@@ -785,7 +829,7 @@ kubectl apply -f backup.yaml
 
 #### Useful links
 
-- <https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-resolve-helm2-helm3-post-migration-issues-index.html>
+- <https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-resolve-helm2-helm3-post-migration-issues-index.html>
 - <https://helm.sh/docs/topics/v2_v3_migration/>
 - <https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/>
 
@@ -805,7 +849,7 @@ This version also introduces `bitnami/common`, a [library chart](https://helm.sh
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

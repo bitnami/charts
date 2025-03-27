@@ -9,7 +9,6 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
 global:
   imageRegistry: ""
@@ -18,7 +17,11 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
   ## Compatibility adaptations for Kubernetes platforms
   ##
   compatibility:
@@ -86,6 +89,19 @@ rbac:
   ## @param rbac.pspEnabled Whether to create a PodSecurityPolicy and bound it with RBAC. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later
   ##
   pspEnabled: true
+  ## @param rbac.rules Custom RBAC rules to set
+  ## e.g:
+  ## rules:
+  ##   - apiGroups:
+  ##       - ""
+  ##     resources:
+  ##       - pods
+  ##     verbs:
+  ##       - get
+  ##       - list
+  ##
+  rules: []
+
 ## Service account for kube-state-metrics to use.
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
 ## @param serviceAccount.create Specifies whether a ServiceAccount should be created
@@ -110,10 +126,9 @@ serviceAccount:
 image:
   registry: docker.io
   repository: bitnami/kube-state-metrics
-  tag: 2.12.0-debian-12-r5
+  tag: 2.15.0-debian-12-r6
   digest: ""
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -179,6 +194,16 @@ sidecars: []
 ##    command: ['sh', '-c', 'echo "hello world"']
 ##
 initContainers: []
+## Pod Disruption Budget configuration
+## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+## @param pdb.create Enable/disable a Pod Disruption Budget creation
+## @param pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+## @param pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `pdb.minAvailable` and `pdb.maxUnavailable` are empty.
+##
+pdb:
+  create: true
+  minAvailable: ""
+  maxUnavailable: ""
 ## @param namespaces Comma-separated list of namespaces to be enabled. Defaults to all namespaces. Evaluated as a template.
 ##
 namespaces: ""
@@ -209,7 +234,6 @@ namespaces: ""
 ## @param kubeResources.services Enable the `services` resource
 ## @param kubeResources.statefulsets Enable the `statefulsets` resource
 ## @param kubeResources.storageclasses Enable the `storageclasses` resource
-## @param kubeResources.verticalpodautoscalers Enable the `verticalpodautoscalers` resource
 ## @param kubeResources.validatingwebhookconfigurations Enable the `validatingwebhookconfigurations` resource
 ## @param kubeResources.volumeattachments Enable the `volumeattachments` resource
 ##
@@ -240,9 +264,16 @@ kubeResources:
   services: true
   statefulsets: true
   storageclasses: true
-  verticalpodautoscalers: false
   validatingwebhookconfigurations: false
   volumeattachments: true
+## Configure custom resource state metrics
+## ref: https://github.com/kubernetes/kube-state-metrics/blob/main/docs/metrics/extend/customresourcestate-metrics.md
+## @param customResourceState.enabled Enabled custom resource state metrics
+## @param customResourceState.configuration Configuration of the CustomResourceStateMetrics to be added. Evaluated as a template.
+customResourceState:
+  enabled: false
+  configuration: {}
+##
 ## Configure Pods Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param podSecurityContext.enabled Enabled kube-state-metrics pods' Security Context

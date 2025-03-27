@@ -3,7 +3,6 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-
 {{- if and .Values.server.enabled .Values.server.pdb.enabled -}}
 apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
 kind: PodDisruptionBudget
@@ -21,12 +20,11 @@ metadata:
 spec:
   {{- if .Values.server.pdb.minAvailable }}
   minAvailable: {{ .Values.server.pdb.minAvailable }}
-  {{- else if .Values.server.pdb.maxUnavailable }}
-  maxUnavailable: {{ .Values.server.pdb.maxUnavailable }}
-  {{- else }}
-  minAvailable: 0
   {{- end }}
-  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.server.podLabels .Values.commonLabels ) "context" . ) }}
+  {{-  if or .Values.server.pdb.maxUnavailable ( not .Values.server.pdb.minAvailable ) }}
+  maxUnavailable: {{ .Values.server.pdb.maxUnavailable | default 1 }}
+  {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.server.podLabels .Values.commonLabels $versionLabel ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: server

@@ -1,0 +1,2593 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+## @section Global parameters
+## Global Docker image parameters
+## Please, note that this will override the image parameters, including dependencies, configured to use the global value
+## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+##
+
+## @param global.imageRegistry Global Docker image registry
+## @param global.imagePullSecrets Global Docker registry secret names as an array
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
+## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
+##
+global:
+  imageRegistry: ""
+  ## e.g:
+  ## imagePullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  imagePullSecrets: []
+  defaultStorageClass: ""
+  storageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: auto
+
+## @section Common parameters
+##
+
+## @param kubeVersion Override Kubernetes version
+##
+kubeVersion: ""
+## @param apiVersions Override Kubernetes API versions reported by .Capabilities
+##
+apiVersions: []
+## @param nameOverride String to partially override common.names.name
+##
+nameOverride: ""
+## @param fullnameOverride String to fully override common.names.fullname
+##
+fullnameOverride: ""
+## @param namespaceOverride String to fully override common.names.namespace
+##
+namespaceOverride: ""
+## @param commonLabels Labels to add to all deployed objects
+##
+commonLabels: {}
+## @param commonAnnotations Annotations to add to all deployed objects
+##
+commonAnnotations: {}
+## @param clusterDomain Kubernetes cluster domain name
+##
+clusterDomain: cluster.local
+## @param extraDeploy Array of extra objects to deploy with the release
+##
+extraDeploy: []
+## Diagnostic mode
+## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+## @param diagnosticMode.command Command to override all containers in the chart release
+## @param diagnosticMode.args Args to override all containers in the chart release
+##
+diagnosticMode:
+  enabled: false
+  command:
+    - sleep
+  args:
+    - infinity
+
+## @param usePasswordFiles Mount secrets as files
+##
+usePasswordFiles: true
+
+## @section Dremio common configuration settings
+##
+##
+dremio:
+  ## Bitnami Dremio image
+  ## ref: https://hub.docker.com/r/bitnami/dremio/tags/
+  ## @param dremio.image.registry [default: REGISTRY_NAME] Dremio image registry
+  ## @param dremio.image.repository [default: REPOSITORY_NAME/dremio] Dremio image repository
+  ## @skip dremio.image.tag Dremio image tag (immutable tags are recommended)
+  ## @param dremio.image.digest Dremio image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
+  ## @param dremio.image.pullPolicy Dremio image pull policy
+  ## @param dremio.image.pullSecrets Dremio image pull secrets
+  ## @param dremio.image.debug Enable Dremio image debug mode
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/dremio
+    tag: 25.2.0-debian-12-r13
+    digest: ""
+    ## Specify a imagePullPolicy
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+    debug: false
+  ## Auth parameters
+  ## @param dremio.auth.enabled Automatically bootstrap a Dremio user
+  ## @param dremio.auth.username Dremio bootstrap username
+  ## @param dremio.auth.password Dremio bootstrap password
+  ## @param dremio.auth.firstName Dremio bootstrap first name
+  ## @param dremio.auth.lastName Dremio bootstrap last name
+  ## @param dremio.auth.email Dremio bootstrap email
+  ## @param dremio.auth.existingSecret Name of a secret containing the password of the bootstrap user
+  ## @param dremio.auth.existingSecretKey Key inside the secret containing the password of the bootstrap user (requires setting existingSecret)
+  auth:
+    enabled: true
+    username: user
+    password: ""
+    firstName: User
+    lastName: User
+    email: user@example.com
+    existingSecret: ""
+    existingSecretKey: ""
+  ## TLS/SSL parameters
+  ## NOTE: Dremio OSS only supports TLS in the web frontend
+  ## @param dremio.tls.enabled Enable TLS in the web frontend
+  ## @param dremio.tls.usePemCerts Use certificates in .pem format
+  ## @param dremio.tls.existingSecret Name of a secret containing the certificate files
+  ## @param dremio.tls.certFilename Filename inside the secret of the .crt file (when usePemCerts=true)
+  ## @param dremio.tls.certKeyFilename Filename inside the secret of the .key file (when usePemCerts=true)
+  ## @param dremio.tls.keystoreFilename Filename inside the secret of the .jks file (when usePemCerts=false)
+  ## @param dremio.tls.password Password of the Java keystore
+  ## @param dremio.tls.passwordSecret Name of a secret containing the password of the Java keystore
+  ##
+  tls:
+    enabled: false
+    usePemCerts: true
+    existingSecret: ""
+    certFilename: tls.crt
+    certKeyFilename: tls.key
+    keystoreFilename: dremio.jks
+    password: ""
+    passwordSecret: ""
+    ## @param dremio.tls.autoGenerated.enabled Enable automatic generation of certificates for TLS
+    ## @param dremio.tls.autoGenerated.engine Mechanism to generate the certificates (allowed values: helm, cert-manager)
+    autoGenerated:
+      enabled: true
+      engine: helm
+      ## @param dremio.tls.autoGenerated.certManager.existingIssuer The name of an existing Issuer to use for generating the certificates (only for `cert-manager` engine)
+      ## @param dremio.tls.autoGenerated.certManager.existingIssuerKind Existing Issuer kind, defaults to Issuer (only for `cert-manager` engine)
+      ## @param dremio.tls.autoGenerated.certManager.keyAlgorithm Key algorithm for the certificates (only for `cert-manager` engine)
+      ## @param dremio.tls.autoGenerated.certManager.keySize Key size for the certificates (only for `cert-manager` engine)
+      ## @param dremio.tls.autoGenerated.certManager.duration Duration for the certificates (only for `cert-manager` engine)
+      ## @param dremio.tls.autoGenerated.certManager.renewBefore Renewal period for the certificates (only for `cert-manager` engine)
+      certManager:
+        existingIssuer: ""
+        existingIssuerKind: ""
+        keySize: 2048
+        keyAlgorithm: RSA
+        duration: 2160h
+        renewBefore: 360h
+  ## @param dremio.distStorageType Dremio distributed storage type. Allowed values: "minio", "aws" and "others" ("minio" and "aws" natively supported, the rest of the types requires adding extra configuration parameters in the "dremio.dremioConf" and "dremio.coreSite" sections)
+  ##
+  distStorageType: "minio"
+  ## @param dremio.dremioConf.configOverrides Add configuration overrides in dremio.conf applied to all components (using YAML format)
+  ## @param dremio.dremioConf.secretConfigOverrides Add sensitive configuration overrides in dremio.conf applied to all components (using YAML format)
+  ## @param dremio.dremioConf.extraFiles Add extra configuration files
+  ## @param dremio.dremioConf.extraSecretFiles Add extra sensitive configuration files
+  ##
+  dremioConf:
+    configOverrides: {}
+    secretConfigOverrides: {}
+    extraFiles: {}
+    extraSecretFiles: {}
+  ## @param dremio.coreSite.appendConfiguration Add extra configuration in the core-site.xml file (in XML format)
+  ## @param dremio.coreSite.existingSecret Name of a secret containing the core-site.xml file
+  ##
+  coreSite:
+    appendConfiguration: ""
+    existingSecret: ""
+  ## Dremio container ports (shared amongst all the components)
+  ## @param dremio.containerPorts.web Dremio Web container port
+  ## @param dremio.containerPorts.client Dremio client container port
+  ## @param dremio.containerPorts.flight Dremio flight container port
+  ## @param dremio.containerPorts.fabric Dremio fabric container port
+  ## @param dremio.containerPorts.conduit Dremio conduit container port
+  ## @param dremio.containerPorts.jmx Dremio JMX container port
+  ## @param dremio.containerPorts.liveness Dremio liveness container port
+  ##
+  containerPorts:
+    web: 9047
+    client: 31010
+    flight: 32010
+    fabric: 45678
+    conduit: 45679
+    jmx: 50000
+    liveness: 44349
+
+## @section Dremio Master Coordinator Parameters
+##
+##
+masterCoordinator:
+  ## @param masterCoordinator.replicaCount Number of Dremio Master Coordinator replicas to deploy
+  ##
+  replicaCount: 1
+  ## @param masterCoordinator.extraContainerPorts Optionally specify extra list of additional ports for Dremio Master Coordinator containers
+  ## e.g:
+  ## extraContainerPorts:
+  ##   - name: myservice
+  ##     containerPort: 9090
+  ##
+  extraContainerPorts: []
+  ## @param masterCoordinator.extraJavaOpts Add extra Java opts
+  ##
+  extraJavaOpts: ""
+  ## Configure extra options for Dremio Master Coordinator containers' liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param masterCoordinator.livenessProbe.enabled Enable livenessProbe on Dremio Master Coordinator containers
+  ## @param masterCoordinator.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param masterCoordinator.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param masterCoordinator.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param masterCoordinator.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param masterCoordinator.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 20
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  ## @param masterCoordinator.readinessProbe.enabled Enable readinessProbe on Dremio Master Coordinator containers
+  ## @param masterCoordinator.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param masterCoordinator.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param masterCoordinator.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param masterCoordinator.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param masterCoordinator.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  ## @param masterCoordinator.startupProbe.enabled Enable startupProbe on Dremio Master Coordinator containers
+  ## @param masterCoordinator.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param masterCoordinator.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param masterCoordinator.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param masterCoordinator.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param masterCoordinator.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  ## @param masterCoordinator.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param masterCoordinator.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param masterCoordinator.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## Dremio Master Coordinator resource requests and limits
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param masterCoordinator.resourcesPreset Set Dremio Master Coordinator container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if masterCoordinator.resources is set (masterCoordinator.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "xlarge"
+  ## @param masterCoordinator.resources Set Dremio Master Coordinator container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param masterCoordinator.podSecurityContext.enabled Enable Dremio Master Coordinator pods' Security Context
+  ## @param masterCoordinator.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy for Dremio Master Coordinator pods
+  ## @param masterCoordinator.podSecurityContext.sysctls Set kernel settings using the sysctl interface for Dremio Master Coordinator pods
+  ## @param masterCoordinator.podSecurityContext.supplementalGroups Set filesystem extra groups for Dremio Master Coordinator pods
+  ## @param masterCoordinator.podSecurityContext.fsGroup Set fsGroup in Dremio Master Coordinator pods' Security Context
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
+    fsGroup: 1001
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param masterCoordinator.containerSecurityContext.enabled Enabled Dremio Master Coordinator container' Security Context
+  ## @param masterCoordinator.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in Dremio Master Coordinator container
+  ## @param masterCoordinator.containerSecurityContext.runAsUser Set runAsUser in Dremio Master Coordinator container' Security Context
+  ## @param masterCoordinator.containerSecurityContext.runAsGroup Set runAsGroup in Dremio Master Coordinator container' Security Context
+  ## @param masterCoordinator.containerSecurityContext.runAsNonRoot Set runAsNonRoot in Dremio Master Coordinator container' Security Context
+  ## @param masterCoordinator.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in Dremio Master Coordinator container' Security Context
+  ## @param masterCoordinator.containerSecurityContext.privileged Set privileged in Dremio Master Coordinator container' Security Context
+  ## @param masterCoordinator.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in Dremio Master Coordinator container' Security Context
+  ## @param masterCoordinator.containerSecurityContext.capabilities.drop List of capabilities to be dropped in Dremio Master Coordinator container
+  ## @param masterCoordinator.containerSecurityContext.seccompProfile.type Set seccomp profile in Dremio Master Coordinator container
+  ##
+  containerSecurityContext:
+    enabled: true
+    seLinuxOptions: {}
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    readOnlyRootFilesystem: true
+    privileged: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
+
+  ## @param masterCoordinator.command Override default Dremio Master Coordinator container command (useful when using custom images)
+  ##
+  command: []
+  ## @param masterCoordinator.args Override default Dremio Master Coordinator container args (useful when using custom images)
+  ##
+  args: []
+  ## @param masterCoordinator.automountServiceAccountToken Mount Service Account token in Dremio Master Coordinator pods
+  ##
+  automountServiceAccountToken: false
+  ## @param masterCoordinator.hostAliases Dremio Master Coordinator pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param masterCoordinator.statefulsetAnnotations Annotations for Dremio Master Coordinator statefulset
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  statefulsetAnnotations: {}
+  ## @param masterCoordinator.podLabels Extra labels for Dremio Master Coordinator pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param masterCoordinator.podAnnotations Annotations for Dremio Master Coordinator pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param masterCoordinator.podAffinityPreset Pod affinity preset. Ignored if `masterCoordinator.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param masterCoordinator.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `masterCoordinator.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## @param masterCoordinator.dremioConf.configOverrides Add configuration overrides in dremio.conf applied to all master-coordinator nodes (using YAML format)
+  ## @param masterCoordinator.dremioConf.secretConfigOverrides Add sensitive configuration overrides in dremio.conf applied to master-coordinator nodes (using YAML format)
+  ## @param masterCoordinator.dremioConf.extraFiles Add extra files to the ConfigMap
+  ## @param masterCoordinator.dremioConf.extraSecretFiles Add extra files to the Secret
+  ## @param masterCoordinator.dremioConf.existingConfigmap Name of a configmap containing a dremio.conf configuration file for the master-coordinator nodes (without sensitive information)
+  ## @param masterCoordinator.dremioConf.existingSecret Name of a secret containing a dremio.conf configuration file for the master-coordinator nodes (with sensitive information)
+  dremioConf:
+    configOverrides: {}
+    secretConfigOverrides: {}
+    extraFiles: {}
+    extraSecretFiles: {}
+    existingConfigmap: ""
+    existingSecret: ""
+  ## Node masterCoordinator.affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param masterCoordinator.nodeAffinityPreset.type Node affinity preset type. Ignored if `masterCoordinator.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param masterCoordinator.nodeAffinityPreset.key Node label key to match. Ignored if `masterCoordinator.affinity` is set
+    ##
+    key: ""
+    ## @param masterCoordinator.nodeAffinityPreset.values Node label values to match. Ignored if `masterCoordinator.affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param masterCoordinator.affinity Affinity for Dremio Master Coordinator pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `masterCoordinator.podAffinityPreset`, `masterCoordinator.podAntiAffinityPreset`, and `masterCoordinator.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param masterCoordinator.nodeSelector Node labels for Dremio Master Coordinator pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
+  ##
+  nodeSelector: {}
+  ## @param masterCoordinator.tolerations Tolerations for Dremio Master Coordinator pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param masterCoordinator.updateStrategy.type Dremio Master Coordinator statefulset strategy type
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy:
+    ## Can be set to RollingUpdate or OnDelete
+    ##
+    type: RollingUpdate
+  ## @param masterCoordinator.podManagementPolicy Pod management policy for Dremio Master Coordinator statefulset
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
+  ##
+  podManagementPolicy: OrderedReady
+  ## @param masterCoordinator.priorityClassName Dremio Master Coordinator pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param masterCoordinator.topologySpreadConstraints Topology Spread Constraints for Dremio Master Coordinator pod assignment spread across your cluster among failure-domains
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
+  ## @param masterCoordinator.schedulerName Name of the k8s scheduler (other than default) for Dremio Master Coordinator pods
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param masterCoordinator.terminationGracePeriodSeconds Seconds Dremio Master Coordinator pods need to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## @param masterCoordinator.lifecycleHooks for Dremio Master Coordinator containers to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param masterCoordinator.extraEnvVars Array with extra environment variables to add to Dremio Master Coordinator containers
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param masterCoordinator.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Dremio Master Coordinator containers
+  ##
+  extraEnvVarsCM: ""
+  ## @param masterCoordinator.extraEnvVarsSecret Name of existing Secret containing extra env vars for Dremio Master Coordinator containers
+  ##
+  extraEnvVarsSecret: ""
+  ## @param masterCoordinator.extraVolumes Optionally specify extra list of additional volumes for the Dremio Master Coordinator pods
+  ##
+  extraVolumes: []
+  ## @param masterCoordinator.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Dremio Master Coordinator containers
+  ##
+  extraVolumeMounts: []
+  ## @param masterCoordinator.sidecars Add additional sidecar containers to the Dremio Master Coordinator pods
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param masterCoordinator.initContainers Add additional init containers to the Dremio Master Coordinator pods
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param masterCoordinator.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param masterCoordinator.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param masterCoordinator.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `masterCoordinator.pdb.minAvailable` and `masterCoordinator.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
+  ## Autoscaling configuration
+  ## ref: https://kubernetes.io/docs/concepts/workloads/autoscaling/
+  ##
+  autoscaling:
+    ## @param masterCoordinator.autoscaling.vpa.enabled Enable VPA for Dremio Master Coordinator pods
+    ## @param masterCoordinator.autoscaling.vpa.annotations Annotations for VPA resource
+    ## @param masterCoordinator.autoscaling.vpa.controlledResources VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory
+    ## @param masterCoordinator.autoscaling.vpa.maxAllowed VPA Max allowed resources for the pod
+    ## @param masterCoordinator.autoscaling.vpa.minAllowed VPA Min allowed resources for the pod
+    ##
+    vpa:
+      enabled: false
+      annotations: {}
+      controlledResources: []
+      maxAllowed: {}
+      minAllowed: {}
+      ## @param masterCoordinator.autoscaling.vpa.updatePolicy.updateMode Autoscaling update policy
+      ## Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod
+      ## Possible values are "Off", "Initial", "Recreate", and "Auto".
+      ##
+      updatePolicy:
+        updateMode: Auto
+    ## @param masterCoordinator.autoscaling.hpa.enabled Enable HPA for Dremio Master Coordinator pods
+    ## @param masterCoordinator.autoscaling.hpa.minReplicas Minimum number of replicas
+    ## @param masterCoordinator.autoscaling.hpa.maxReplicas Maximum number of replicas
+    ## @param masterCoordinator.autoscaling.hpa.targetCPU Target CPU utilization percentage
+    ## @param masterCoordinator.autoscaling.hpa.targetMemory Target Memory utilization percentage
+    ##
+    hpa:
+      enabled: false
+      minReplicas: ""
+      maxReplicas: ""
+      targetCPU: ""
+      targetMemory: ""
+
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param masterCoordinator.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param masterCoordinator.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param masterCoordinator.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param masterCoordinator.networkPolicy.addExternalClientAccess Allow access from pods with client label set to "true". Ignored if `networkPolicy.allowExternal` is true.
+    ##
+    addExternalClientAccess: true
+    ## @param masterCoordinator.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param masterCoordinator.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy (ignored if allowExternalEgress=true)
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param masterCoordinator.networkPolicy.ingressPodMatchLabels [object] Labels to match to allow traffic from other pods. Ignored if `networkPolicy.allowExternal` is true.
+    ## e.g:
+    ## ingressPodMatchLabels:
+    ##   my-client: "true"
+    #
+    ingressPodMatchLabels: {}
+    ## @param masterCoordinator.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces. Ignored if `networkPolicy.allowExternal` is true.
+    ## @param masterCoordinator.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces. Ignored if `networkPolicy.allowExternal` is true.
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
+  ## Enable persistence using Persistent Volume Claims
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
+  ##
+  persistence:
+    ## @param masterCoordinator.persistence.enabled Enable persistence using Persistent Volume Claims
+    ##
+    enabled: true
+    ## @param masterCoordinator.persistence.mountPath Path to mount the volume at.
+    ##
+    mountPath: /bitnami/dremio/data
+    ## @param masterCoordinator.persistence.subPath The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services
+    ##
+    subPath: ""
+    ## @param masterCoordinator.persistence.storageClass Storage class of backing PVC
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
+    storageClass: ""
+    ## @param masterCoordinator.persistence.annotations Persistent Volume Claim annotations
+    ##
+    annotations: {}
+    ## @param masterCoordinator.persistence.accessModes Persistent Volume Access Modes
+    ##
+    accessModes:
+      - ReadWriteOnce
+    ## @param masterCoordinator.persistence.size Size of data volume
+    ##
+    size: 8Gi
+    ## @param masterCoordinator.persistence.existingClaim The name of an existing PVC to use for persistence
+    ##
+    existingClaim: ""
+    ## @param masterCoordinator.persistence.selector Selector to match an existing Persistent Volume for WordPress data PVC
+    ## If set, the PVC can't have a PV dynamically provisioned for it
+    ## E.g.
+    ## selector:
+    ##   matchLabels:
+    ##     app: my-app
+    ##
+    selector: {}
+    ## @param masterCoordinator.persistence.dataSource Custom PVC data source
+    ##
+    dataSource: {}
+  ## ServiceAccount configuration
+  ##
+  serviceAccount:
+    ## @param masterCoordinator.serviceAccount.create Specifies whether a ServiceAccount should be created
+    ##
+    create: true
+    ## @param masterCoordinator.serviceAccount.name The name of the ServiceAccount to use.
+    ## If not set and create is true, a name is generated using the common.names.fullname template
+    ##
+    name: ""
+    ## @param masterCoordinator.serviceAccount.annotations Additional Service Account annotations (evaluated as a template)
+    ##
+    annotations: {}
+    ## @param masterCoordinator.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+    ##
+    automountServiceAccountToken: false
+
+## @section Dremio Coordinator Parameters
+##
+##
+coordinator:
+  ## @param coordinator.replicaCount Number of Dremio Coordinator replicas to deploy
+  ##
+  replicaCount: 1
+  ## @param coordinator.extraContainerPorts Optionally specify extra list of additional ports for Dremio Coordinator containers
+  ## e.g:
+  ## extraContainerPorts:
+  ##   - name: myservice
+  ##     containerPort: 9090
+  ##
+  extraContainerPorts: []
+  ## @param coordinator.extraJavaOpts Add extra Java opts
+  ##
+  extraJavaOpts: ""
+  ## Configure extra options for Dremio Coordinator containers' liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param coordinator.livenessProbe.enabled Enable livenessProbe on Dremio Coordinator containers
+  ## @param coordinator.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param coordinator.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param coordinator.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param coordinator.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param coordinator.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 20
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  ## @param coordinator.readinessProbe.enabled Enable readinessProbe on Dremio Coordinator containers
+  ## @param coordinator.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param coordinator.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param coordinator.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param coordinator.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param coordinator.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  ## @param coordinator.startupProbe.enabled Enable startupProbe on Dremio Coordinator containers
+  ## @param coordinator.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param coordinator.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param coordinator.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param coordinator.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param coordinator.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  ## @param coordinator.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param coordinator.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param coordinator.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## Dremio Coordinator resource requests and limits
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param coordinator.resourcesPreset Set Dremio Coordinator container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if coordinator.resources is set (coordinator.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "xlarge"
+  ## @param coordinator.resources Set Dremio Coordinator container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param coordinator.podSecurityContext.enabled Enable Dremio Coordinator pods' Security Context
+  ## @param coordinator.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy for Dremio Coordinator pods
+  ## @param coordinator.podSecurityContext.sysctls Set kernel settings using the sysctl interface for Dremio Coordinator pods
+  ## @param coordinator.podSecurityContext.supplementalGroups Set filesystem extra groups for Dremio Coordinator pods
+  ## @param coordinator.podSecurityContext.fsGroup Set fsGroup in Dremio Coordinator pods' Security Context
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
+    fsGroup: 1001
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param coordinator.containerSecurityContext.enabled Enabled Dremio Coordinator container' Security Context
+  ## @param coordinator.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in Dremio Coordinator container
+  ## @param coordinator.containerSecurityContext.runAsUser Set runAsUser in Dremio Coordinator container' Security Context
+  ## @param coordinator.containerSecurityContext.runAsGroup Set runAsGroup in Dremio Coordinator container' Security Context
+  ## @param coordinator.containerSecurityContext.runAsNonRoot Set runAsNonRoot in Dremio Coordinator container' Security Context
+  ## @param coordinator.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in Dremio Coordinator container' Security Context
+  ## @param coordinator.containerSecurityContext.privileged Set privileged in Dremio Coordinator container' Security Context
+  ## @param coordinator.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in Dremio Coordinator container' Security Context
+  ## @param coordinator.containerSecurityContext.capabilities.drop List of capabilities to be dropped in Dremio Coordinator container
+  ## @param coordinator.containerSecurityContext.seccompProfile.type Set seccomp profile in Dremio Coordinator container
+  ##
+  containerSecurityContext:
+    enabled: true
+    seLinuxOptions: {}
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    readOnlyRootFilesystem: true
+    privileged: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
+
+  ## @param coordinator.command Override default Dremio Coordinator container command (useful when using custom images)
+  ##
+  command: []
+  ## @param coordinator.args Override default Dremio Coordinator container args (useful when using custom images)
+  ##
+  args: []
+  ## @param coordinator.automountServiceAccountToken Mount Service Account token in Dremio Coordinator pods
+  ##
+  automountServiceAccountToken: false
+  ## @param coordinator.hostAliases Dremio Coordinator pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param coordinator.statefulsetAnnotations Annotations for Dremio Coordinator statefulset
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  statefulsetAnnotations: {}
+  ## @param coordinator.podLabels Extra labels for Dremio Coordinator pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param coordinator.podAnnotations Annotations for Dremio Coordinator pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param coordinator.podAffinityPreset Pod affinity preset. Ignored if `coordinator.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param coordinator.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `coordinator.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## @param coordinator.dremioConf.configOverrides Add configuration overrides in dremio.conf applied to all coordinator nodes (using YAML format)
+  ## @param coordinator.dremioConf.secretConfigOverrides Add sensitive configuration overrides in dremio.conf applied to coordinator nodes (using YAML format)
+  ## @param coordinator.dremioConf.extraFiles Add extra files to the ConfigMap
+  ## @param coordinator.dremioConf.extraSecretFiles Add extra files to the Secret
+  ## @param coordinator.dremioConf.existingConfigmap Name of a configmap containing a dremio.conf configuration file for the coordinator nodes (without sensitive information)
+  ## @param coordinator.dremioConf.existingSecret Name of a secret containing a dremio.conf configuration file for the coordinator nodes (with sensitive information)
+  dremioConf:
+    configOverrides: {}
+    secretConfigOverrides: {}
+    extraFiles: {}
+    extraSecretFiles: {}
+    existingConfigmap: ""
+    existingSecret: ""
+  ## Node coordinator.affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param coordinator.nodeAffinityPreset.type Node affinity preset type. Ignored if `coordinator.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param coordinator.nodeAffinityPreset.key Node label key to match. Ignored if `coordinator.affinity` is set
+    ##
+    key: ""
+    ## @param coordinator.nodeAffinityPreset.values Node label values to match. Ignored if `coordinator.affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param coordinator.affinity Affinity for Dremio Coordinator pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `coordinator.podAffinityPreset`, `coordinator.podAntiAffinityPreset`, and `coordinator.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param coordinator.nodeSelector Node labels for Dremio Coordinator pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
+  ##
+  nodeSelector: {}
+  ## @param coordinator.tolerations Tolerations for Dremio Coordinator pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param coordinator.updateStrategy.type Dremio Coordinator statefulset strategy type
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy:
+    ## Can be set to RollingUpdate or OnDelete
+    ##
+    type: RollingUpdate
+  ## @param coordinator.podManagementPolicy Pod management policy for Dremio Coordinator statefulset
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
+  ##
+  podManagementPolicy: OrderedReady
+  ## @param coordinator.priorityClassName Dremio Coordinator pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param coordinator.topologySpreadConstraints Topology Spread Constraints for Dremio Coordinator pod assignment spread across your cluster among failure-domains
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
+  ## @param coordinator.schedulerName Name of the k8s scheduler (other than default) for Dremio Coordinator pods
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param coordinator.terminationGracePeriodSeconds Seconds Dremio Coordinator pods need to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## @param coordinator.lifecycleHooks for Dremio Coordinator containers to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param coordinator.extraEnvVars Array with extra environment variables to add to Dremio Coordinator containers
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param coordinator.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Dremio Coordinator containers
+  ##
+  extraEnvVarsCM: ""
+  ## @param coordinator.extraEnvVarsSecret Name of existing Secret containing extra env vars for Dremio Coordinator containers
+  ##
+  extraEnvVarsSecret: ""
+  ## @param coordinator.extraVolumes Optionally specify extra list of additional volumes for the Dremio Coordinator pods
+  ##
+  extraVolumes: []
+  ## @param coordinator.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Dremio Coordinator containers
+  ##
+  extraVolumeMounts: []
+  ## @param coordinator.sidecars Add additional sidecar containers to the Dremio Coordinator pods
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param coordinator.initContainers Add additional init containers to the Dremio Coordinator pods
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param coordinator.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param coordinator.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param coordinator.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `coordinator.pdb.minAvailable` and `coordinator.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
+  ## Autoscaling configuration
+  ## ref: https://kubernetes.io/docs/concepts/workloads/autoscaling/
+  ##
+  autoscaling:
+    ## @param coordinator.autoscaling.vpa.enabled Enable VPA for Dremio Coordinator pods
+    ## @param coordinator.autoscaling.vpa.annotations Annotations for VPA resource
+    ## @param coordinator.autoscaling.vpa.controlledResources VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory
+    ## @param coordinator.autoscaling.vpa.maxAllowed VPA Max allowed resources for the pod
+    ## @param coordinator.autoscaling.vpa.minAllowed VPA Min allowed resources for the pod
+    ##
+    vpa:
+      enabled: false
+      annotations: {}
+      controlledResources: []
+      maxAllowed: {}
+      minAllowed: {}
+      ## @param coordinator.autoscaling.vpa.updatePolicy.updateMode Autoscaling update policy
+      ## Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod
+      ## Possible values are "Off", "Initial", "Recreate", and "Auto".
+      ##
+      updatePolicy:
+        updateMode: Auto
+    ## @param coordinator.autoscaling.hpa.enabled Enable HPA for Dremio Coordinator pods
+    ## @param coordinator.autoscaling.hpa.minReplicas Minimum number of replicas
+    ## @param coordinator.autoscaling.hpa.maxReplicas Maximum number of replicas
+    ## @param coordinator.autoscaling.hpa.targetCPU Target CPU utilization percentage
+    ## @param coordinator.autoscaling.hpa.targetMemory Target Memory utilization percentage
+    ##
+    hpa:
+      enabled: false
+      minReplicas: ""
+      maxReplicas: ""
+      targetCPU: ""
+      targetMemory: ""
+
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param coordinator.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param coordinator.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param coordinator.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param coordinator.networkPolicy.addExternalClientAccess Allow access from pods with client label set to "true". Ignored if `networkPolicy.allowExternal` is true.
+    ##
+    addExternalClientAccess: true
+    ## @param coordinator.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param coordinator.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy (ignored if allowExternalEgress=true)
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param coordinator.networkPolicy.ingressPodMatchLabels [object] Labels to match to allow traffic from other pods. Ignored if `networkPolicy.allowExternal` is true.
+    ## e.g:
+    ## ingressPodMatchLabels:
+    ##   my-client: "true"
+    #
+    ingressPodMatchLabels: {}
+    ## @param coordinator.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces. Ignored if `networkPolicy.allowExternal` is true.
+    ## @param coordinator.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces. Ignored if `networkPolicy.allowExternal` is true.
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
+  ## Enable persistence using Persistent Volume Claims
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
+  ##
+  persistence:
+    ## @param coordinator.persistence.enabled Enable persistence using Persistent Volume Claims
+    ##
+    enabled: true
+    ## @param coordinator.persistence.mountPath Path to mount the volume at.
+    ##
+    mountPath: /bitnami/dremio/data
+    ## @param coordinator.persistence.subPath The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services
+    ##
+    subPath: ""
+    ## @param coordinator.persistence.storageClass Storage class of backing PVC
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
+    storageClass: ""
+    ## @param coordinator.persistence.annotations Persistent Volume Claim annotations
+    ##
+    annotations: {}
+    ## @param coordinator.persistence.accessModes Persistent Volume Access Modes
+    ##
+    accessModes:
+      - ReadWriteOnce
+    ## @param coordinator.persistence.size Size of data volume
+    ##
+    size: 8Gi
+    ## @param coordinator.persistence.existingClaim The name of an existing PVC to use for persistence
+    ##
+    existingClaim: ""
+    ## @param coordinator.persistence.selector Selector to match an existing Persistent Volume for WordPress data PVC
+    ## If set, the PVC can't have a PV dynamically provisioned for it
+    ## E.g.
+    ## selector:
+    ##   matchLabels:
+    ##     app: my-app
+    ##
+    selector: {}
+    ## @param coordinator.persistence.dataSource Custom PVC data source
+    ##
+    dataSource: {}
+  ## ServiceAccount configuration
+  ##
+  serviceAccount:
+    ## @param coordinator.serviceAccount.create Specifies whether a ServiceAccount should be created
+    ##
+    create: true
+    ## @param coordinator.serviceAccount.name The name of the ServiceAccount to use.
+    ## If not set and create is true, a name is generated using the common.names.fullname template
+    ##
+    name: ""
+    ## @param coordinator.serviceAccount.annotations Additional Service Account annotations (evaluated as a template)
+    ##
+    annotations: {}
+    ## @param coordinator.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+    ##
+    automountServiceAccountToken: false
+
+executor:
+  ## @section Dremio Executor common Parameters
+  ##
+  ##
+  common:
+    ## @param executor.common.replicaCount Number of Dremio Executor replicas to deploy
+    ##
+    replicaCount: 1
+    ## @param executor.common.extraContainerPorts Optionally specify extra list of additional ports for Dremio Executor containers
+    ## e.g:
+    ## extraContainerPorts:
+    ##   - name: myservice
+    ##     containerPort: 9090
+    ##
+    extraContainerPorts: []
+    ## @param executor.common.extraJavaOpts Add extra Java opts
+    ##
+    extraJavaOpts: ""
+    ## Configure extra options for Dremio Executor containers' liveness and readiness probes
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+    ## @param executor.common.livenessProbe.enabled Enable livenessProbe on Dremio Executor containers
+    ## @param executor.common.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+    ## @param executor.common.livenessProbe.periodSeconds Period seconds for livenessProbe
+    ## @param executor.common.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+    ## @param executor.common.livenessProbe.failureThreshold Failure threshold for livenessProbe
+    ## @param executor.common.livenessProbe.successThreshold Success threshold for livenessProbe
+    ##
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 20
+      periodSeconds: 10
+      timeoutSeconds: 5
+      successThreshold: 1
+      failureThreshold: 5
+    ## @param executor.common.readinessProbe.enabled Enable readinessProbe on Dremio Executor containers
+    ## @param executor.common.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+    ## @param executor.common.readinessProbe.periodSeconds Period seconds for readinessProbe
+    ## @param executor.common.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+    ## @param executor.common.readinessProbe.failureThreshold Failure threshold for readinessProbe
+    ## @param executor.common.readinessProbe.successThreshold Success threshold for readinessProbe
+    ##
+    readinessProbe:
+      enabled: true
+      initialDelaySeconds: 10
+      periodSeconds: 10
+      timeoutSeconds: 5
+      successThreshold: 1
+      failureThreshold: 5
+    ## @param executor.common.startupProbe.enabled Enable startupProbe on Dremio Executor containers
+    ## @param executor.common.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+    ## @param executor.common.startupProbe.periodSeconds Period seconds for startupProbe
+    ## @param executor.common.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+    ## @param executor.common.startupProbe.failureThreshold Failure threshold for startupProbe
+    ## @param executor.common.startupProbe.successThreshold Success threshold for startupProbe
+    ##
+    startupProbe:
+      enabled: false
+      initialDelaySeconds: 10
+      periodSeconds: 10
+      timeoutSeconds: 5
+      successThreshold: 1
+      failureThreshold: 5
+    ## @param executor.common.customLivenessProbe Custom livenessProbe that overrides the default one
+    ##
+    customLivenessProbe: {}
+    ## @param executor.common.customReadinessProbe Custom readinessProbe that overrides the default one
+    ##
+    customReadinessProbe: {}
+    ## @param executor.common.customStartupProbe Custom startupProbe that overrides the default one
+    ##
+    customStartupProbe: {}
+    ## Dremio Executor resource requests and limits
+    ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+    ## @param executor.common.resourcesPreset Set Dremio Executor container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if coordinator.resources is set (coordinator.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+    ##
+    resourcesPreset: "xlarge"
+    ## @param executor.common.resources Set Dremio Executor container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## Example:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    resources: {}
+    ## Configure Pods Security Context
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+    ## @param executor.common.podSecurityContext.enabled Enable Dremio Executor pods' Security Context
+    ## @param executor.common.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy for Dremio Executor pods
+    ## @param executor.common.podSecurityContext.sysctls Set kernel settings using the sysctl interface for Dremio Executor pods
+    ## @param executor.common.podSecurityContext.supplementalGroups Set filesystem extra groups for Dremio Executor pods
+    ## @param executor.common.podSecurityContext.fsGroup Set fsGroup in Dremio Executor pods' Security Context
+    ##
+    podSecurityContext:
+      enabled: true
+      fsGroupChangePolicy: Always
+      sysctls: []
+      supplementalGroups: []
+      fsGroup: 1001
+    ## Configure Container Security Context
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+    ## @param executor.common.containerSecurityContext.enabled Enabled Dremio Executor container' Security Context
+    ## @param executor.common.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in Dremio Executor container
+    ## @param executor.common.containerSecurityContext.runAsUser Set runAsUser in Dremio Executor container' Security Context
+    ## @param executor.common.containerSecurityContext.runAsGroup Set runAsGroup in Dremio Executor container' Security Context
+    ## @param executor.common.containerSecurityContext.runAsNonRoot Set runAsNonRoot in Dremio Executor container' Security Context
+    ## @param executor.common.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in Dremio Executor container' Security Context
+    ## @param executor.common.containerSecurityContext.privileged Set privileged in Dremio Executor container' Security Context
+    ## @param executor.common.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in Dremio Executor container' Security Context
+    ## @param executor.common.containerSecurityContext.capabilities.drop List of capabilities to be dropped in Dremio Executor container
+    ## @param executor.common.containerSecurityContext.seccompProfile.type Set seccomp profile in Dremio Executor container
+    ##
+    containerSecurityContext:
+      enabled: true
+      seLinuxOptions: {}
+      runAsUser: 1001
+      runAsGroup: 1001
+      runAsNonRoot: true
+      readOnlyRootFilesystem: true
+      privileged: false
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop: ["ALL"]
+      seccompProfile:
+        type: "RuntimeDefault"
+
+    ## @param executor.common.command Override default Dremio Executor container command (useful when using custom images)
+    ##
+    command: []
+    ## @param executor.common.args Override default Dremio Executor container args (useful when using custom images)
+    ##
+    args: []
+    ## @param executor.common.automountServiceAccountToken Mount Service Account token in Dremio Executor pods
+    ##
+    automountServiceAccountToken: false
+    ## @param executor.common.hostAliases Dremio Executor pods host aliases
+    ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+    ##
+    hostAliases: []
+    ## @param executor.common.statefulsetAnnotations Annotations for Dremio Executor statefulset
+    ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+    ##
+    statefulsetAnnotations: {}
+    ## @param executor.common.podLabels Extra labels for Dremio Executor pods
+    ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+    ##
+    podLabels: {}
+    ## @param executor.common.podAnnotations Annotations for Dremio Executor pods
+    ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+    ##
+    podAnnotations: {}
+    ## @param executor.common.podAffinityPreset Pod affinity preset. Ignored if `coordinator.affinity` is set. Allowed values: `soft` or `hard`
+    ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+    ##
+    podAffinityPreset: ""
+    ## @param executor.common.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `coordinator.affinity` is set. Allowed values: `soft` or `hard`
+    ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+    ##
+    podAntiAffinityPreset: soft
+    ## @param executor.common.dremioConf.configOverrides Add configuration overrides in dremio.conf applied to all executor nodes (using YAML format)
+    ## @param executor.common.dremioConf.secretConfigOverrides Add sensitive configuration overrides in dremio.conf applied to executor nodes (using YAML format)
+    ## @param executor.common.dremioConf.extraFiles Add extra files to the ConfigMap
+    ## @param executor.common.dremioConf.extraSecretFiles Add extra files to the Secret
+    ## @param executor.common.dremioConf.existingConfigmap Name of a configmap containing a dremio.conf configuration file for the executor nodes (without sensitive information)
+    ## @param executor.common.dremioConf.existingSecret Name of a secret containing a dremio.conf configuration file for the executor nodes (with sensitive information)
+    dremioConf:
+      configOverrides: {}
+      secretConfigOverrides: {}
+      extraFiles: {}
+      extraSecretFiles: {}
+      existingConfigmap: ""
+      existingSecret: ""
+    ## Node coordinator.affinity preset
+    ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+    ##
+    nodeAffinityPreset:
+      ## @param executor.common.nodeAffinityPreset.type Node affinity preset type. Ignored if `coordinator.affinity` is set. Allowed values: `soft` or `hard`
+      ##
+      type: ""
+      ## @param executor.common.nodeAffinityPreset.key Node label key to match. Ignored if `coordinator.affinity` is set
+      ##
+      key: ""
+      ## @param executor.common.nodeAffinityPreset.values Node label values to match. Ignored if `coordinator.affinity` is set
+      ## E.g.
+      ## values:
+      ##   - e2e-az1
+      ##   - e2e-az2
+      ##
+      values: []
+    ## @param executor.common.affinity Affinity for Dremio Executor pods assignment
+    ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+    ## NOTE: `coordinator.podAffinityPreset`, `coordinator.podAntiAffinityPreset`, and `coordinator.nodeAffinityPreset` will be ignored when it's set
+    ##
+    affinity: {}
+    ## @param executor.common.nodeSelector Node labels for Dremio Executor pods assignment
+    ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
+    ##
+    nodeSelector: {}
+    ## @param executor.common.tolerations Tolerations for Dremio Executor pods assignment
+    ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+    ##
+    tolerations: []
+    ## @param executor.common.updateStrategy.type Dremio Executor statefulset strategy type
+    ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+    ##
+    updateStrategy:
+      ## Can be set to RollingUpdate or OnDelete
+      ##
+      type: RollingUpdate
+    ## @param executor.common.podManagementPolicy Pod management policy for Dremio Executor statefulset
+    ## Ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
+    ##
+    podManagementPolicy: OrderedReady
+    ## @param executor.common.priorityClassName Dremio Executor pods' priorityClassName
+    ##
+    priorityClassName: ""
+    ## @param executor.common.topologySpreadConstraints Topology Spread Constraints for Dremio Executor pod assignment spread across your cluster among failure-domains
+    ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+    ##
+    topologySpreadConstraints: []
+    ## @param executor.common.schedulerName Name of the k8s scheduler (other than default) for Dremio Executor pods
+    ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+    ##
+    schedulerName: ""
+    ## @param executor.common.terminationGracePeriodSeconds Seconds Dremio Executor pods need to terminate gracefully
+    ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+    ##
+    terminationGracePeriodSeconds: ""
+    ## @param executor.common.lifecycleHooks for Dremio Executor containers to automate configuration before or after startup
+    ##
+    lifecycleHooks: {}
+    ## @param executor.common.extraEnvVars Array with extra environment variables to add to Dremio Executor containers
+    ## e.g:
+    ## extraEnvVars:
+    ##   - name: FOO
+    ##     value: "bar"
+    ##
+    extraEnvVars: []
+    ## @param executor.common.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Dremio Executor containers
+    ##
+    extraEnvVarsCM: ""
+    ## @param executor.common.extraEnvVarsSecret Name of existing Secret containing extra env vars for Dremio Executor containers
+    ##
+    extraEnvVarsSecret: ""
+    ## @param executor.common.extraVolumes Optionally specify extra list of additional volumes for the Dremio Executor pods
+    ##
+    extraVolumes: []
+    ## @param executor.common.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Dremio Executor containers
+    ##
+    extraVolumeMounts: []
+    ## @param executor.common.sidecars Add additional sidecar containers to the Dremio Executor pods
+    ## e.g:
+    ## sidecars:
+    ##   - name: your-image-name
+    ##     image: your-image
+    ##     imagePullPolicy: Always
+    ##     ports:
+    ##       - name: portname
+    ##         containerPort: 1234
+    ##
+    sidecars: []
+    ## @param executor.common.initContainers Add additional init containers to the Dremio Executor pods
+    ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+    ## e.g:
+    ## initContainers:
+    ##  - name: your-image-name
+    ##    image: your-image
+    ##    imagePullPolicy: Always
+    ##    command: ['sh', '-c', 'echo "hello world"']
+    ##
+    initContainers: []
+    ## Pod Disruption Budget configuration
+    ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+    ## @param executor.common.pdb.create Enable/disable a Pod Disruption Budget creation
+    ## @param executor.common.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+    ## @param executor.common.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `coordinator.pdb.minAvailable` and `coordinator.pdb.maxUnavailable` are empty.
+    ##
+    pdb:
+      create: true
+      minAvailable: ""
+      maxUnavailable: ""
+    ## Autoscaling configuration
+    ## ref: https://kubernetes.io/docs/concepts/workloads/autoscaling/
+    ##
+    autoscaling:
+      ## @param executor.common.autoscaling.vpa.enabled Enable VPA for Dremio Executor pods
+      ## @param executor.common.autoscaling.vpa.annotations Annotations for VPA resource
+      ## @param executor.common.autoscaling.vpa.controlledResources VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory
+      ## @param executor.common.autoscaling.vpa.maxAllowed VPA Max allowed resources for the pod
+      ## @param executor.common.autoscaling.vpa.minAllowed VPA Min allowed resources for the pod
+      ##
+      vpa:
+        enabled: false
+        annotations: {}
+        controlledResources: []
+        maxAllowed: {}
+        minAllowed: {}
+        ## @param executor.common.autoscaling.vpa.updatePolicy.updateMode Autoscaling update policy
+        ## Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod
+        ## Possible values are "Off", "Initial", "Recreate", and "Auto".
+        ##
+        updatePolicy:
+          updateMode: Auto
+      ## @param executor.common.autoscaling.hpa.enabled Enable HPA for Dremio Executor pods
+      ## @param executor.common.autoscaling.hpa.minReplicas Minimum number of replicas
+      ## @param executor.common.autoscaling.hpa.maxReplicas Maximum number of replicas
+      ## @param executor.common.autoscaling.hpa.targetCPU Target CPU utilization percentage
+      ## @param executor.common.autoscaling.hpa.targetMemory Target Memory utilization percentage
+      ##
+      hpa:
+        enabled: false
+        minReplicas: ""
+        maxReplicas: ""
+        targetCPU: ""
+        targetMemory: ""
+
+    ## Network Policies
+    ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+    ##
+    networkPolicy:
+      ## @param executor.common.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+      ##
+      enabled: true
+      ## @param executor.common.networkPolicy.allowExternal Don't require server label for connections
+      ## The Policy model to apply. When set to false, only pods with the correct
+      ## server label will have network access to the ports server is listening
+      ## on. When true, server will accept connections from any source
+      ## (with the correct destination port).
+      ##
+      allowExternal: true
+      ## @param executor.common.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+      ##
+      allowExternalEgress: true
+      ## @param executor.common.networkPolicy.addExternalClientAccess Allow access from pods with client label set to "true". Ignored if `networkPolicy.allowExternal` is true.
+      ##
+      addExternalClientAccess: true
+      ## @param executor.common.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+      ## e.g:
+      ## extraIngress:
+      ##   - ports:
+      ##       - port: 1234
+      ##     from:
+      ##       - podSelector:
+      ##           - matchLabels:
+      ##               - role: frontend
+      ##       - podSelector:
+      ##           - matchExpressions:
+      ##               - key: role
+      ##                 operator: In
+      ##                 values:
+      ##                   - frontend
+      extraIngress: []
+      ## @param executor.common.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy (ignored if allowExternalEgress=true)
+      ## e.g:
+      ## extraEgress:
+      ##   - ports:
+      ##       - port: 1234
+      ##     to:
+      ##       - podSelector:
+      ##           - matchLabels:
+      ##               - role: frontend
+      ##       - podSelector:
+      ##           - matchExpressions:
+      ##               - key: role
+      ##                 operator: In
+      ##                 values:
+      ##                   - frontend
+      ##
+      extraEgress: []
+      ## @param executor.common.networkPolicy.ingressPodMatchLabels [object] Labels to match to allow traffic from other pods. Ignored if `networkPolicy.allowExternal` is true.
+      ## e.g:
+      ## ingressPodMatchLabels:
+      ##   my-client: "true"
+      #
+      ingressPodMatchLabels: {}
+      ## @param executor.common.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces. Ignored if `networkPolicy.allowExternal` is true.
+      ## @param executor.common.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces. Ignored if `networkPolicy.allowExternal` is true.
+      ##
+      ingressNSMatchLabels: {}
+      ingressNSPodMatchLabels: {}
+    ## @section Persistence Parameters
+    ##
+
+    ## Enable persistence using Persistent Volume Claims
+    ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
+    ##
+    persistence:
+      ## @param executor.common.persistence.enabled Enable persistence using Persistent Volume Claims
+      ##
+      enabled: true
+      ## @param executor.common.persistence.mountPath Path to mount the volume at.
+      ##
+      mountPath: /bitnami/dremio/data
+      ## @param executor.common.persistence.subPath The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services
+      ##
+      subPath: ""
+      ## @param executor.common.persistence.storageClass Storage class of backing PVC
+      ## If defined, storageClassName: <storageClass>
+      ## If set to "-", storageClassName: "", which disables dynamic provisioning
+      ## If undefined (the default) or set to null, no storageClassName spec is
+      ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+      ##   GKE, AWS & OpenStack)
+      ##
+      storageClass: ""
+      ## @param executor.common.persistence.annotations Persistent Volume Claim annotations
+      ##
+      annotations: {}
+      ## @param executor.common.persistence.accessModes Persistent Volume Access Modes
+      ##
+      accessModes:
+        - ReadWriteOnce
+      ## @param executor.common.persistence.size Size of data volume
+      ##
+      size: 8Gi
+      ## @param executor.common.persistence.existingClaim The name of an existing PVC to use for persistence
+      ##
+      existingClaim: ""
+      ## @param executor.common.persistence.selector Selector to match an existing Persistent Volume for WordPress data PVC
+      ## If set, the PVC can't have a PV dynamically provisioned for it
+      ## E.g.
+      ## selector:
+      ##   matchLabels:
+      ##     app: my-app
+      ##
+      selector: {}
+      ## @param executor.common.persistence.dataSource Custom PVC data source
+      ##
+      dataSource: {}
+    ## ServiceAccount configuration
+    ##
+    serviceAccount:
+      ## @param executor.common.serviceAccount.create Specifies whether a ServiceAccount should be created
+      ##
+      create: true
+      ## @param executor.common.serviceAccount.name The name of the ServiceAccount to use.
+      ## If not set and create is true, a name is generated using the common.names.fullname template
+      ##
+      name: ""
+      ## @param executor.common.serviceAccount.annotations Additional Service Account annotations (evaluated as a template)
+      ##
+      annotations: {}
+      ## @param executor.common.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+      ##
+      automountServiceAccountToken: false
+  ## @section Dremio Executor Engine Parameters
+  ## Engine configuration
+  ##
+  ## @param executor.engines[0].name Name of the engine
+  ## @param executor.engines[0].overrides Override configuration set in the "executor.common" section
+  engines:
+    - name: default
+      overrides: {}
+
+## @section Traffic Exposure Parameters
+##
+
+## Dremio service parameters
+##
+service:
+  ## @param service.type Dremio service type
+  ##
+  type: LoadBalancer
+  ## @param service.ports.web Dremio service web port
+  ## @param service.ports.client Dremio service client port
+  ## @param service.ports.flight Dremio service flight port
+  ##
+  ports:
+    web: 9047
+    client: 31010
+    flight: 32010
+  ## Node ports to expose
+  ## @param service.nodePorts.web Node port for web
+  ## @param service.nodePorts.client Node port for client
+  ## @param service.nodePorts.flight Node port for flight
+  ## NOTE: choose port between <30000-32767>
+  ##
+  nodePorts:
+    web: ""
+    client: ""
+    flight: ""
+  ## @param service.clusterIP Dremio service Cluster IP
+  ## e.g.:
+  ## clusterIP: None
+  ##
+  clusterIP: ""
+  ## @param service.loadBalancerIP Dremio service Load Balancer IP
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+  ##
+  loadBalancerIP: ""
+  ## @param service.loadBalancerSourceRanges Dremio service Load Balancer sources
+  ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+  ## e.g:
+  ## loadBalancerSourceRanges:
+  ##   - 10.10.10.0/24
+  ##
+  loadBalancerSourceRanges: []
+  ## @param service.externalTrafficPolicy Dremio service external traffic policy
+  ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+  ##
+  externalTrafficPolicy: Cluster
+  ## @param service.annotations Additional custom annotations for Dremio service
+  ##
+  annotations: {}
+  ## @param service.extraPorts Extra ports to expose in Dremio service (normally used with the `sidecars` value)
+  ##
+  extraPorts: []
+  ## @param service.sessionAffinity Control where client requests go, to the same pod or round-robin
+  ## Values: ClientIP or None
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
+  ##
+  sessionAffinity: None
+  ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
+  ## sessionAffinityConfig:
+  ##   clientIP:
+  ##     timeoutSeconds: 300
+  ##
+  sessionAffinityConfig: {}
+  ##
+  ## @param service.headless.annotations Add annotations to the headless service
+  ##
+  headless:
+    annotations: {}
+## Dremio ingress parameters
+## ref: http://kubernetes.io/docs/concepts/services-networking/ingress/
+##
+ingress:
+  ## @param ingress.enabled Enable ingress record generation for Dremio
+  ##
+  enabled: false
+  ## @param ingress.pathType Ingress path type
+  ##
+  pathType: ImplementationSpecific
+  ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
+  ##
+  apiVersion: ""
+  ## @param ingress.hostname Default host for the ingress record
+  ##
+  hostname: dremio.local
+  ## @param ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+  ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+  ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+  ##
+  ingressClassName: ""
+  ## @param ingress.path Default path for the ingress record
+  ## NOTE: You may need to set this to '/*' in order to use this with ALB ingress controllers
+  ##
+  path: /
+  ## @param ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
+  ## Use this parameter to set the required annotations for cert-manager, see
+  ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
+  ## e.g:
+  ## annotations:
+  ##   kubernetes.io/ingress.class: nginx
+  ##   cert-manager.io/cluster-issuer: cluster-issuer-name
+  ##
+  annotations: {}
+  ## @param ingress.tls Enable TLS configuration for the host defined at `ingress.hostname` parameter
+  ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.ingress.hostname }}`
+  ## You can:
+  ##   - Use the `ingress.secrets` parameter to create this TLS secret
+  ##   - Rely on cert-manager to create it by setting the corresponding annotations
+  ##   - Rely on Helm to create self-signed certificates by setting `ingress.selfSigned=true`
+  ##
+  tls: false
+  ## @param ingress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
+  ##
+  selfSigned: false
+  ## @param ingress.extraHosts An array with additional hostname(s) to be covered with the ingress record
+  ## e.g:
+  ## extraHosts:
+  ##   - name: dremio.local
+  ##     path: /
+  ##
+  extraHosts: []
+  ## @param ingress.extraPaths An array with additional arbitrary paths that may need to be added to the ingress under the main host
+  ## e.g:
+  ## extraPaths:
+  ## - path: /*
+  ##   backend:
+  ##     serviceName: ssl-redirect
+  ##     servicePort: use-annotation
+  ##
+  extraPaths: []
+  ## @param ingress.extraTls TLS configuration for additional hostname(s) to be covered with this ingress record
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+  ## e.g:
+  ## extraTls:
+  ## - hosts:
+  ##     - dremio.local
+  ##   secretName: dremio.local-tls
+  ##
+  extraTls: []
+  ## @param ingress.secrets Custom TLS certificates as secrets
+  ## NOTE: 'key' and 'certificate' are expected in PEM format
+  ## NOTE: 'name' should line up with a 'secretName' set further up
+  ## If it is not set and you're using cert-manager, this is unneeded, as it will create a secret for you with valid certificates
+  ## If it is not set and you're NOT using cert-manager either, self-signed certificates will be created valid for 365 days
+  ## It is also possible to create and manage the certificates outside of this helm chart
+  ## Please see README.md for more information
+  ## e.g:
+  ## secrets:
+  ##   - name: dremio.local-tls
+  ##     key: |-
+  ##       -----BEGIN RSA PRIVATE KEY-----
+  ##       ...
+  ##       -----END RSA PRIVATE KEY-----
+  ##     certificate: |-
+  ##       -----BEGIN CERTIFICATE-----
+  ##       ...
+  ##       -----END CERTIFICATE-----
+  ##
+  secrets: []
+  ## @param ingress.extraRules Additional rules to be covered with this ingress record
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+  ## e.g:
+  ## extraRules:
+  ## - host: example.local
+  ##     http:
+  ##       path: /
+  ##       backend:
+  ##         service:
+  ##           name: example-svc
+  ##           port:
+  ##             name: http
+  ##
+  extraRules: []
+
+## @section Dremio bootstrap user job
+##
+bootstrapUserJob:
+  ## @param bootstrapUserJob.enabled Enable the bootstrap user job
+  ##
+  enabled: true
+  ## @param bootstrapUserJob.forceRun Force the run of the credential job
+  ##
+  forceRun: false
+  ## @param bootstrapUserJob.labels Add labels to the init job definition
+  ##
+  labels: {}
+  ## @param bootstrapUserJob.backoffLimit set backoff limit of the job
+  ##
+  backoffLimit: 10
+  ## @param bootstrapUserJob.extraVolumes Optionally specify extra list of additional volumes for the credential init job
+  ##
+  extraVolumes: []
+  ## @param bootstrapUserJob.extraCommands Extra commands to pass to the generation job
+  ##
+  extraCommands: ""
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param bootstrapUserJob.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param bootstrapUserJob.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param bootstrapUserJob.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param bootstrapUserJob.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+  ## @param bootstrapUserJob.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param bootstrapUserJob.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param bootstrapUserJob.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param bootstrapUserJob.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param bootstrapUserJob.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param bootstrapUserJob.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
+  ##
+  containerSecurityContext:
+    enabled: true
+    seLinuxOptions: {}
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param bootstrapUserJob.podSecurityContext.enabled Enabled credential init job pods' Security Context
+  ## @param bootstrapUserJob.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param bootstrapUserJob.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param bootstrapUserJob.podSecurityContext.supplementalGroups Set filesystem extra groups
+  ## @param bootstrapUserJob.podSecurityContext.fsGroup Set credential init job pod's Security Context fsGroup
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
+    fsGroup: 1001
+  ## @param bootstrapUserJob.extraEnvVars Array containing extra env vars to configure the credential init job
+  ## For example:
+  ## extraEnvVars:
+  ##  - name: GF_DEFAULT_INSTANCE_NAME
+  ##    value: my-instance
+  ##
+  extraEnvVars: []
+  ## @param bootstrapUserJob.extraEnvVarsCM ConfigMap containing extra env vars to configure the credential init job
+  ##
+  extraEnvVarsCM: ""
+  ## @param bootstrapUserJob.extraEnvVarsSecret Secret containing extra env vars to configure the credential init job (in case of sensitive data)
+  ##
+  extraEnvVarsSecret: ""
+  ## @param bootstrapUserJob.extraVolumeMounts Array of extra volume mounts to be added to the jwt Container (evaluated as template). Normally used with `extraVolumes`.
+  ##
+  extraVolumeMounts: []
+  ## Container resource requests and limits
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param bootstrapUserJob.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if bootstrapUserJob.resources is set (bootstrapUserJob.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "micro"
+  ## @param bootstrapUserJob.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
+  ## Configure extra options for Data Coordinator containers' liveness, readiness and startup probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
+  ## @param bootstrapUserJob.livenessProbe.enabled Enable livenessProbe on init job
+  ## @param bootstrapUserJob.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param bootstrapUserJob.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param bootstrapUserJob.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param bootstrapUserJob.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param bootstrapUserJob.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 5
+    successThreshold: 1
+  ## @param bootstrapUserJob.readinessProbe.enabled Enable readinessProbe on init job
+  ## @param bootstrapUserJob.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param bootstrapUserJob.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param bootstrapUserJob.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param bootstrapUserJob.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param bootstrapUserJob.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 5
+    successThreshold: 1
+  ## @param bootstrapUserJob.startupProbe.enabled Enable startupProbe on Data Coordinator containers
+  ## @param bootstrapUserJob.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param bootstrapUserJob.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param bootstrapUserJob.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param bootstrapUserJob.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param bootstrapUserJob.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 5
+    successThreshold: 1
+  ## @param bootstrapUserJob.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param bootstrapUserJob.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param bootstrapUserJob.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## @param bootstrapUserJob.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
+  ## @param bootstrapUserJob.hostAliases Add deployment host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param bootstrapUserJob.annotations [object] Add annotations to the job
+  ##
+  annotations:
+    helm.sh/hook: post-install
+    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+    # This should be executed after the minio provisioning job
+    helm.sh/hook-weight: "10"
+  ## @param bootstrapUserJob.podLabels Additional pod labels
+  ## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param bootstrapUserJob.podAnnotations Additional pod annotations
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## Network Policy configuration
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param bootstrapUserJob.networkPolicy.enabled Enable creation of NetworkPolicy resources
+    ##
+    enabled: true
+    ## @param bootstrapUserJob.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param bootstrapUserJob.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraIngress: []
+    ## @param bootstrapUserJob.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param bootstrapUserJob.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param bootstrapUserJob.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
+
+## @section Default Init Container Parameters
+##
+defaultInitContainers:
+  ## OS Shell + Utility image
+  ## ref: https://hub.docker.com/r/bitnami/os-shell/tags/
+  ## @param defaultInitContainers.defaultImage.registry [default: REGISTRY_NAME] OS Shell + Utility image registry
+  ## @param defaultInitContainers.defaultImage.repository [default: REPOSITORY_NAME/os-shell] OS Shell + Utility image repository
+  ## @skip defaultInitContainers.defaultImage.tag OS Shell + Utility image tag (immutable tags are recommended)
+  ## @param defaultInitContainers.defaultImage.pullPolicy OS Shell + Utility image pull policy
+  ## @param defaultInitContainers.defaultImage.pullSecrets OS Shell + Utility image pull secrets
+  ##
+  defaultImage:
+    registry: docker.io
+    repository: bitnami/os-shell
+    tag: 12-debian-12-r40
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+  ## Init container that waits for backends to be ready
+  ##
+  wait:
+    ## @param defaultInitContainers.wait.enabled Enable init container that waits for backends to be ready
+    ##
+    enabled: true
+    ## Init container's resource requests and limits
+    ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+    ## @param defaultInitContainers.wait.resourcesPreset Set init container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+    ##
+    resourcesPreset: "nano"
+    ## @param defaultInitContainers.wait.resources Set init container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## Example:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    resources: {}
+    ## Init container Container Security Context
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+    ## @param defaultInitContainers.wait.containerSecurityContext.enabled Enabled Init container' Security Context
+    ## @param defaultInitContainers.wait.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in Init container
+    ## @param defaultInitContainers.wait.containerSecurityContext.runAsUser Set runAsUser in Init container' Security Context
+    ## @param defaultInitContainers.wait.containerSecurityContext.runAsGroup Set runAsGroup in Init container' Security Context
+    ## @param defaultInitContainers.wait.containerSecurityContext.runAsNonRoot Set runAsNonRoot in Init container' Security Context
+    ## @param defaultInitContainers.wait.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in Init container' Security Context
+    ## @param defaultInitContainers.wait.containerSecurityContext.privileged Set privileged in Init container' Security Context
+    ## @param defaultInitContainers.wait.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in Init container' Security Context
+    ## @param defaultInitContainers.wait.containerSecurityContext.capabilities.drop List of capabilities to be dropped in Init container
+    ## @param defaultInitContainers.wait.containerSecurityContext.seccompProfile.type Set seccomp profile in Init container
+    ##
+    containerSecurityContext:
+      enabled: true
+      seLinuxOptions: {}
+      runAsUser: 1001
+      runAsGroup: 1001
+      runAsNonRoot: true
+      readOnlyRootFilesystem: true
+      privileged: false
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop: ["ALL"]
+      seccompProfile:
+        type: "RuntimeDefault"
+  ## Init container that generates and merges the dremio.conf and core-site.xml configuration files
+  ##
+  generateConf:
+    ## @param defaultInitContainers.generateConf.enabled Enable init container that merges and renders the dremio.conf and core-site.xml configuration files
+    ##
+    enabled: true
+    ## Init container's resource requests and limits
+    ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+    ## @param defaultInitContainers.generateConf.resourcesPreset Set init container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+    ##
+    resourcesPreset: "nano"
+    ## @param defaultInitContainers.generateConf.resources Set init container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## Example:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    resources: {}
+    ## Init container Container Security Context
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+    ## @param defaultInitContainers.generateConf.containerSecurityContext.enabled Enabled Init container' Security Context
+    ## @param defaultInitContainers.generateConf.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in Init container
+    ## @param defaultInitContainers.generateConf.containerSecurityContext.runAsUser Set runAsUser in Init container' Security Context
+    ## @param defaultInitContainers.generateConf.containerSecurityContext.runAsGroup Set runAsGroup in Init container' Security Context
+    ## @param defaultInitContainers.generateConf.containerSecurityContext.runAsNonRoot Set runAsNonRoot in Init container' Security Context
+    ## @param defaultInitContainers.generateConf.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in Init container' Security Context
+    ## @param defaultInitContainers.generateConf.containerSecurityContext.privileged Set privileged in Init container' Security Context
+    ## @param defaultInitContainers.generateConf.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in Init container' Security Context
+    ## @param defaultInitContainers.generateConf.containerSecurityContext.capabilities.drop List of capabilities to be dropped in Init container
+    ## @param defaultInitContainers.generateConf.containerSecurityContext.seccompProfile.type Set seccomp profile in Init container
+    ##
+    containerSecurityContext:
+      enabled: true
+      seLinuxOptions: {}
+      runAsUser: 1001
+      runAsGroup: 1001
+      runAsNonRoot: true
+      readOnlyRootFilesystem: true
+      privileged: false
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop: ["ALL"]
+      seccompProfile:
+        type: "RuntimeDefault"
+    ## @param defaultInitContainers.generateConf.extraEnvVars Array with extra environment variables to add to Dremio containers
+    ## e.g:
+    ## extraEnvVars:
+    ##   - name: FOO
+    ##     value: "bar"
+    ##
+    extraEnvVars: []
+    ## @param defaultInitContainers.generateConf.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Dremio containers
+    ##
+    extraEnvVarsCM: ""
+    ## @param defaultInitContainers.generateConf.extraEnvVarsSecret Name of existing Secret containing extra env vars for Dremio containers
+    ##
+    extraEnvVarsSecret: ""
+    ## @param defaultInitContainers.generateConf.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Dremio containers
+    ##
+    extraVolumeMounts: []
+  ## Init container that initializes the Java keystore with the TLS certificates (requires dremio.tls.enabled=true)
+  ##
+  initCerts:
+    ## @param defaultInitContainers.initCerts.enabled Enable init container that initializes the Java keystore with the TLS certificates (requires dremio.tls.enabled=true)
+    ##
+    enabled: true
+    ## Init container's resource requests and limits
+    ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+    ## @param defaultInitContainers.initCerts.resourcesPreset Set init container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+    ##
+    resourcesPreset: "nano"
+    ## @param defaultInitContainers.initCerts.resources Set init container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## Example:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    resources: {}
+    ## Init container Container Security Context
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+    ## @param defaultInitContainers.initCerts.containerSecurityContext.enabled Enabled Init container' Security Context
+    ## @param defaultInitContainers.initCerts.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in Init container
+    ## @param defaultInitContainers.initCerts.containerSecurityContext.runAsUser Set runAsUser in Init container' Security Context
+    ## @param defaultInitContainers.initCerts.containerSecurityContext.runAsGroup Set runAsGroup in Init container' Security Context
+    ## @param defaultInitContainers.initCerts.containerSecurityContext.runAsNonRoot Set runAsNonRoot in Init container' Security Context
+    ## @param defaultInitContainers.initCerts.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in Init container' Security Context
+    ## @param defaultInitContainers.initCerts.containerSecurityContext.privileged Set privileged in Init container' Security Context
+    ## @param defaultInitContainers.initCerts.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in Init container' Security Context
+    ## @param defaultInitContainers.initCerts.containerSecurityContext.capabilities.drop List of capabilities to be dropped in Init container
+    ## @param defaultInitContainers.initCerts.containerSecurityContext.seccompProfile.type Set seccomp profile in Init container
+    ##
+    containerSecurityContext:
+      enabled: true
+      seLinuxOptions: {}
+      runAsUser: 1001
+      runAsGroup: 1001
+      runAsNonRoot: true
+      readOnlyRootFilesystem: true
+      privileged: false
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop: ["ALL"]
+      seccompProfile:
+        type: "RuntimeDefault"
+  ## Init container that copies the default Dremio configuration to an empty-dir volume
+  ##
+  copyDefaultConf:
+    ## @param defaultInitContainers.copyDefaultConf.enabled Enable init container that copies the default dremio configuration to an empty-dir volume
+    ##
+    enabled: true
+    ## Init container's resource requests and limits
+    ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+    ## @param defaultInitContainers.copyDefaultConf.resourcesPreset Set init container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+    ##
+    resourcesPreset: "nano"
+    ## @param defaultInitContainers.copyDefaultConf.resources Set init container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## Example:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    resources: {}
+    ## Init container Container Security Context
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+    ## @param defaultInitContainers.copyDefaultConf.containerSecurityContext.enabled Enabled Init container' Security Context
+    ## @param defaultInitContainers.copyDefaultConf.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in Init container
+    ## @param defaultInitContainers.copyDefaultConf.containerSecurityContext.runAsUser Set runAsUser in Init container' Security Context
+    ## @param defaultInitContainers.copyDefaultConf.containerSecurityContext.runAsGroup Set runAsGroup in Init container' Security Context
+    ## @param defaultInitContainers.copyDefaultConf.containerSecurityContext.runAsNonRoot Set runAsNonRoot in Init container' Security Context
+    ## @param defaultInitContainers.copyDefaultConf.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in Init container' Security Context
+    ## @param defaultInitContainers.copyDefaultConf.containerSecurityContext.privileged Set privileged in Init container' Security Context
+    ## @param defaultInitContainers.copyDefaultConf.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in Init container' Security Context
+    ## @param defaultInitContainers.copyDefaultConf.containerSecurityContext.capabilities.drop List of capabilities to be dropped in Init container
+    ## @param defaultInitContainers.copyDefaultConf.containerSecurityContext.seccompProfile.type Set seccomp profile in Init container
+    ##
+    containerSecurityContext:
+      enabled: true
+      seLinuxOptions: {}
+      runAsUser: 1001
+      runAsGroup: 1001
+      runAsNonRoot: true
+      readOnlyRootFilesystem: true
+      privileged: false
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop: ["ALL"]
+      seccompProfile:
+        type: "RuntimeDefault"
+  ## Init container that upgrades the metadata KV store
+  ##
+  upgradeKeystore:
+    ## @param defaultInitContainers.upgradeKeystore.enabled Enable init container that upgrades the metadata KV store
+    ##
+    enabled: true
+    ## Init container's resource requests and limits
+    ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+    ## @param defaultInitContainers.upgradeKeystore.resourcesPreset Set init container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+    ##
+    resourcesPreset: "large"
+    ## @param defaultInitContainers.upgradeKeystore.resources Set init container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## Example:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    resources: {}
+    ## Init container Container Security Context
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+    ## @param defaultInitContainers.upgradeKeystore.containerSecurityContext.enabled Enabled Init container' Security Context
+    ## @param defaultInitContainers.upgradeKeystore.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in Init container
+    ## @param defaultInitContainers.upgradeKeystore.containerSecurityContext.runAsUser Set runAsUser in Init container' Security Context
+    ## @param defaultInitContainers.upgradeKeystore.containerSecurityContext.runAsGroup Set runAsGroup in Init container' Security Context
+    ## @param defaultInitContainers.upgradeKeystore.containerSecurityContext.runAsNonRoot Set runAsNonRoot in Init container' Security Context
+    ## @param defaultInitContainers.upgradeKeystore.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in Init container' Security Context
+    ## @param defaultInitContainers.upgradeKeystore.containerSecurityContext.privileged Set privileged in Init container' Security Context
+    ## @param defaultInitContainers.upgradeKeystore.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in Init container' Security Context
+    ## @param defaultInitContainers.upgradeKeystore.containerSecurityContext.capabilities.drop List of capabilities to be dropped in Init container
+    ## @param defaultInitContainers.upgradeKeystore.containerSecurityContext.seccompProfile.type Set seccomp profile in Init container
+    ##
+    containerSecurityContext:
+      enabled: true
+      seLinuxOptions: {}
+      runAsUser: 1001
+      runAsGroup: 1001
+      runAsNonRoot: true
+      readOnlyRootFilesystem: true
+      privileged: false
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop: ["ALL"]
+      seccompProfile:
+        type: "RuntimeDefault"
+  ## Init container that changes the owner and group of the persistent volume mount point to runAsUser:fsGroup values based on the *podSecurityContext/*containerSecurityContext parameters
+  ##
+  volumePermissions:
+    ## @param defaultInitContainers.volumePermissions.enabled Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`
+    ##
+    enabled: false
+    ## Init container's resource requests and limits
+    ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+    ## @param defaultInitContainers.volumePermissions.resourcesPreset Set init container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+    ##
+    resourcesPreset: "nano"
+    ## @param defaultInitContainers.volumePermissions.resources Set init container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## Example:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    resources: {}
+    ## Init container Container Security Context
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+    ## @param defaultInitContainers.volumePermissions.containerSecurityContext.enabled Enabled init container' Security Context
+    ## @param defaultInitContainers.volumePermissions.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in init container
+    ## @param defaultInitContainers.volumePermissions.containerSecurityContext.runAsUser Set init container's Security Context runAsUser
+    ## NOTE: when runAsUser is set to special value "auto", init container will try to chown the
+    ##   data folder to auto-determined user&group, using commands: `id -u`:`id -G | cut -d" " -f2`
+    ##   "auto" is especially useful for OpenShift which has scc with dynamic user ids (and 0 is not allowed)
+    ##
+    containerSecurityContext:
+      enabled: true
+      seLinuxOptions: {}
+      runAsUser: 0
+
+## @section MinIO&reg; chart parameters
+## @extra minio For full list of MinIO&reg; values configurations please refere [here](https://github.com/bitnami/charts/tree/main/bitnami/minio)
+##
+minio:
+  ## @param minio.enabled Enable/disable MinIO&reg; chart installation
+  ## to be used as an objstore for Dremio
+  ##
+  enabled: true
+  ## @param minio.containerPorts.api MinIO&reg; container port to open for MinIO&reg; API
+  ##
+  containerPorts:
+    api: 9000
+  ## MinIO&reg; authentication parameters
+  ##
+  auth:
+    ## @param minio.auth.rootUser MinIO&reg; root username
+    ##
+    rootUser: admin
+    ## @param minio.auth.rootPassword Password for MinIO&reg; root user
+    ##
+    rootPassword: ""
+    ## @param minio.auth.existingSecret Name of an existing secret containing the MinIO&reg; credentials
+    ##
+    existingSecret: ""
+  ## @param minio.defaultBuckets Comma, semi-colon or space separated list of MinIO&reg; buckets to create
+  ##
+  defaultBuckets: "dremio"
+  ## @param minio.provisioning.enabled Enable/disable MinIO&reg; provisioning job
+  ## @param minio.provisioning.extraCommands Extra commands to run on MinIO&reg; provisioning job
+  ##
+  provisioning:
+    enabled: true
+    # We need to allow downloads in order for the UI to work
+    extraCommands: ["mc anonymous set download provisioning/dremio"]
+  ## @param minio.tls.enabled Enable/disable MinIO&reg; TLS support
+  ## @param minio.tls.autoGenerated Autogenerate TLS certificates
+  ##
+  tls:
+    enabled: true
+    autoGenerated: true
+  ## @param minio.service.type MinIO&reg; service type
+  ## @param minio.service.loadBalancerIP MinIO&reg; service LoadBalancer IP
+  ## @param minio.service.ports.api MinIO&reg; service port
+  ##
+  service:
+    type: ClusterIP
+    loadBalancerIP: ""
+    ports:
+      api: 9000
+
+## @section Prometheus metrics parameters
+##
+metrics:
+  ## @param metrics.enabled Enable the export of Prometheus metrics
+  ##
+  enabled: false
+  ## Bitnami JMX exporter image
+  ## ref: https://hub.docker.com/r/bitnami/jmx-exporter/tags/
+  ## @param metrics.image.registry [default: REGISTRY_NAME] JMX exporter image registry
+  ## @param metrics.image.repository [default: REPOSITORY_NAME/jmx-exporter] JMX exporter image repository
+  ## @skip metrics.image.tag JMX exporter image tag (immutable tags are recommended)
+  ## @param metrics.image.digest JMX exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param metrics.image.pullPolicy JMX exporter image pull policy
+  ## @param metrics.image.pullSecrets Specify docker-registry secret names as an array
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/jmx-exporter
+    tag: 1.2.0-debian-12-r1
+    digest: ""
+    ## Specify a imagePullPolicy
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+  ## @param metrics.extraArgs Add extra arguments to the default container args section
+  ##
+  extraArgs: []
+  ## Prometheus JMX exporter containers' Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param metrics.containerSecurityContext.enabled Enable Prometheus JMX exporter containers' Security Context
+  ## @param metrics.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param metrics.containerSecurityContext.runAsUser Set Prometheus JMX exporter containers' Security Context runAsUser
+  ## @param metrics.containerSecurityContext.runAsGroup Group ID for the Prometheus JMX exporter container
+  ## @param metrics.containerSecurityContext.runAsNonRoot Set Prometheus JMX exporter containers' Security Context runAsNonRoot
+  ## @param metrics.containerSecurityContext.privileged Set Prometheus JMX exporter container's Security Context privileged
+  ## @param metrics.containerSecurityContext.allowPrivilegeEscalation Set Prometheus JMX exporter containers' Security Context allowPrivilegeEscalation
+  ## @param metrics.containerSecurityContext.readOnlyRootFilesystem Set Prometheus JMX exporter containers' Security Context readOnlyRootFilesystem
+  ## @param metrics.containerSecurityContext.capabilities.drop Set Prometheus JMX exporter containers' Security Context capabilities to be dropped
+  ## @param metrics.containerSecurityContext.seccompProfile.type Set Prometheus JMX exporter container's Security Context seccomp profile
+  ## e.g:
+  ##   containerSecurityContext:
+  ##     enabled: true
+  ##     capabilities:
+  ##       drop: ["NET_RAW"]
+  ##     readOnlyRootFilesystem: true
+  ##
+  containerSecurityContext:
+    enabled: true
+    privileged: false
+    runAsNonRoot: true
+    seLinuxOptions: {}
+    runAsUser: 1001
+    runAsGroup: 1001
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
+  ## @param metrics.containerPorts.metrics Prometheus JMX exporter metrics container port
+  ##
+  containerPorts:
+    metrics: 5556
+  ## Prometheus JMX exporter resource requests and limits
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param metrics.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if metrics.resources is set (metrics.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "micro"
+  ## @param metrics.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
+  ## Configure extra options for liveness probe
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param metrics.livenessProbe.enabled Enable livenessProbe
+  ## @param metrics.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param metrics.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param metrics.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param metrics.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param metrics.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    timeoutSeconds: 30
+    successThreshold: 1
+    failureThreshold: 3
+  ## Configure extra options for readiness probe
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param metrics.readinessProbe.enabled Enable readinessProbe
+  ## @param metrics.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param metrics.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param metrics.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param metrics.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param metrics.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 30
+    successThreshold: 1
+    failureThreshold: 3
+  ## Configure extra options for startup probe
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-startup-probes/#configure-probes
+  ## @param metrics.startupProbe.enabled Enable startupProbe
+  ## @param metrics.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param metrics.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param metrics.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param metrics.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param metrics.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: true
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 30
+    successThreshold: 1
+    failureThreshold: 3
+  ## Prometheus JMX exporter service configuration
+  ##
+  service:
+    ## @param metrics.service.ports.metrics Prometheus JMX exporter metrics service port
+    ##
+    ports:
+      metrics: 5556
+    ## @param metrics.service.clusterIP Static clusterIP or None for headless services
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#choosing-your-own-ip-address
+    ##
+    clusterIP: ""
+    ## @param metrics.service.sessionAffinity Control where client requests go, to the same pod or round-robin
+    ## Values: ClientIP or None
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
+    ##
+    sessionAffinity: None
+    ## @param metrics.service.annotations [object] Annotations for the Prometheus JMX exporter service
+    ##
+    annotations: {}
+  ## @param metrics.configOverrides [string] Configuration file for JMX exporter
+  ## Specify content for jmx-prometheus.yml. Evaluated as a template
+  ##
+  configOverrides: {}
+  ## @param metrics.existingConfigmap Name of existing ConfigMap with JMX exporter configuration
+  ## NOTE: This will override metrics.config
+  ##
+  existingConfigmap: ""
+  ## Prometheus Operator ServiceMonitor configuration
+  ##
+  serviceMonitor:
+    ## @param metrics.serviceMonitor.enabled if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)
+    ##
+    enabled: false
+    ## @param metrics.serviceMonitor.namespace Namespace in which Prometheus is running
+    ##
+    namespace: ""
+    ## @param metrics.serviceMonitor.annotations Additional custom annotations for the ServiceMonitor
+    ##
+    annotations: {}
+    ## @param metrics.serviceMonitor.labels Extra labels for the ServiceMonitor
+    ##
+    labels: {}
+    ## @param metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in Prometheus
+    ##
+    jobLabel: ""
+    ## @param metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
+    ##
+    honorLabels: false
+    ## @param metrics.serviceMonitor.interval Interval at which metrics should be scraped.
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    ## e.g:
+    ## interval: 10s
+    ##
+    interval: ""
+    ## @param metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    ## e.g:
+    ## scrapeTimeout: 10s
+    ##
+    scrapeTimeout: ""
+    ## @param metrics.serviceMonitor.metricRelabelings Specify additional relabeling of metrics
+    ##
+    metricRelabelings: []
+    ## @param metrics.serviceMonitor.relabelings Specify general relabeling
+    ##
+    relabelings: []
+    ## @param metrics.serviceMonitor.selector Prometheus instance selector labels
+    ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
+    ## selector:
+    ##   prometheus: my-prometheus
+    ##
+    selector: {}
+
+## @section External S3 parameters
+## All of these values are only used when redis.enabled is set to false
+## @param externalS3.host External S3 host
+## @param externalS3.port External S3 port number
+## @param externalS3.accessKeyID External S3 access key ID
+## @param externalS3.accessKeySecret External S3 access key secret
+## @param externalS3.existingSecret Name of an existing secret resource containing the S3 credentials
+## @param externalS3.existingSecretAccessKeyIDKey Name of an existing secret key containing the S3 access key ID
+## @param externalS3.existingSecretKeySecretKey Name of an existing secret key containing the S3 access key secret
+## @param externalS3.protocol External S3 protocol
+## @param externalS3.bucket External S3 bucket
+## @param externalS3.path External S3 path inside the bucket
+## @param externalS3.region External S3 region
+## @param externalS3.authentication External S3 authentication type
+## @param externalS3.disableCertChecking Disable certificate checking on external S3 (necessary if it uses )
+##
+externalS3:
+  host: ""
+  port: 443
+  accessKeyID: ""
+  accessKeySecret: ""
+  existingSecret: ""
+  existingSecretAccessKeyIDKey: "root-user"
+  existingSecretKeySecretKey: "root-password"
+  bucket: "dremio"
+  path: ""
+  region: "us-east-1"
+  authentication: "accesskey"
+  protocol: "https"
+  disableCertChecking: false
+
+## @section External Zookeeper paramaters
+##
+externalZookeeper:
+  ## @param externalZookeeper.servers List of external zookeeper servers to use
+  ## @param externalZookeeper.port Port of the Zookeeper servers
+  ##
+  servers: []
+  port: 2888
+## @section Zookeeper subchart parameters
+##
+## @param zookeeper.enabled Deploy Zookeeper subchart
+## @param zookeeper.replicaCount Number of Zookeeper instances
+## @param zookeeper.containerPorts.client Zookeeper container port
+##
+zookeeper:
+  enabled: true
+  replicaCount: 1
+  containerPorts:
+    client: 2181
+  ## ZooKeeper resource requests and limits
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param zookeeper.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "micro"
+  ## @param zookeeper.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}

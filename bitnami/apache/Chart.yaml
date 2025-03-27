@@ -2,17 +2,18 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
+  tanzuCategory: service
   category: Infrastructure
   licenses: Apache-2.0
   images: |
     - name: apache
-      image: docker.io/bitnami/apache:2.4.59-debian-12-r1
+      image: docker.io/bitnami/apache:2.4.63-debian-12-r6
     - name: apache-exporter
-      image: docker.io/bitnami/apache-exporter:1.0.7-debian-12-r3
+      image: docker.io/bitnami/apache-exporter:1.0.9-debian-12-r16
     - name: git
-      image: docker.io/bitnami/git:2.44.0-debian-12-r2
+      image: docker.io/bitnami/git:2.48.1-debian-12-r8
 apiVersion: v2
-appVersion: 2.4.59
+appVersion: 2.4.63
 dependencies:
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
@@ -21,7 +22,7 @@ dependencies:
   version: 2.x.x
 description: Apache HTTP Server is an open-source HTTP server. The goal of this project is to provide a secure, efficient and extensible server that provides HTTP services in sync with the current HTTP standards.
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/apache/img/apache-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/apache/img/apache-stack-220x234.png
 keywords:
 - apache
 - http
@@ -35,4 +36,4 @@ maintainers:
 name: apache
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/apache
-version: 11.0.2
+version: 11.3.4

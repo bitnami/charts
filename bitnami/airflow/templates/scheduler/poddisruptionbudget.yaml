@@ -7,18 +7,16 @@ SPDX-License-Identifier: APACHE-2.0
 kind: PodDisruptionBudget
 apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
 metadata:
-  name: {{ printf "%s-scheduler" (include "common.names.fullname" .) }}
-  namespace: {{ .Release.Namespace | quote }}
-  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.scheduler.image "chart" .Chart ) ) }}
-  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
-  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+  name: {{ template "airflow.scheduler.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: scheduler
 spec:
   {{- if .Values.scheduler.pdb.minAvailable }}
   minAvailable: {{ .Values.scheduler.pdb.minAvailable }}
   {{- end }}
-  {{- if .Values.scheduler.pdb.maxUnavailable }}
-  maxUnavailable: {{ .Values.scheduler.pdb.maxUnavailable }}
+  {{- if or .Values.scheduler.pdb.maxUnavailable ( not .Values.scheduler.pdb.minAvailable ) }}
+  maxUnavailable: {{ .Values.scheduler.pdb.maxUnavailable | default 1 }}
   {{- end }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.scheduler.podLabels .Values.commonLabels ) "context" . ) }}
   selector:

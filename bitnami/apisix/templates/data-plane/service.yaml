@@ -37,10 +37,13 @@ spec:
   externalTrafficPolicy: {{ .Values.dataPlane.service.externalTrafficPolicy | quote }}
   {{- end }}
   {{- if and (eq .Values.dataPlane.service.type "LoadBalancer") (not (empty .Values.dataPlane.service.loadBalancerSourceRanges)) }}
-  loadBalancerSourceRanges: {{ .Values.dataPlane.service.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges: {{ toYaml .Values.dataPlane.service.loadBalancerSourceRanges | nindent 4 }}
   {{- end }}
   {{- if and (eq .Values.dataPlane.service.type "LoadBalancer") (not (empty .Values.dataPlane.service.loadBalancerIP)) }}
   loadBalancerIP: {{ .Values.dataPlane.service.loadBalancerIP }}
+  {{- end }}
+  {{- if .Values.dataPlane.service.externalIPs }}
+  externalIPs: {{- include "common.tplvalues.render" (dict "value" .Values.dataPlane.service.externalIPs "context" $) | nindent 4 }}
   {{- end }}
   ports:
     - name: http

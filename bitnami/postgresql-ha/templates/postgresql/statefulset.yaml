@@ -74,9 +74,7 @@ spec:
       {{- if .Values.postgresql.podSecurityContext.enabled }}
       securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.postgresql.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
-      {{- if .Values.serviceAccount.create }}
       serviceAccountName: {{ include "postgresql-ha.serviceAccountName" . }}
-      {{- end }}
       hostNetwork: {{ .Values.postgresql.hostNetwork }}
       hostIPC: {{ .Values.postgresql.hostIPC }}
       {{- if or .Values.postgresql.tls.enabled .Values.postgresql.initContainers .Values.postgresql.extraInitContainers (and .Values.volumePermissions.enabled (or (or (not (empty .Values.postgresql.extendedConf)) (not (empty .Values.postgresql.extendedConfCM))) .Values.persistence.enabled)) }}
@@ -97,9 +95,9 @@ spec:
               {{- end }}
               chmod 600 {{ template "postgresql-ha.postgresql.tlsCertKey" . }}
           {{- if eq ( toString ( .Values.volumePermissions.podSecurityContext.runAsUser )) "auto" }}
-          securityContext: {{- omit .Values.volumePermissions.podSecurityContext "runAsUser" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" (omit .Values.volumePermissions.podSecurityContext "runAsUser") "context" $) | nindent 12 }}
           {{- else }}
-          securityContext: {{- .Values.volumePermissions.podSecurityContext | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.volumePermissions.podSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
@@ -189,8 +187,8 @@ spec:
               value: {{ .Values.persistence.mountPath | quote }}
             - name: PGDATA
               value: {{ printf "%s/%s" .Values.persistence.mountPath "data" | quote }}
-            {{- if and (or (not (include "postgresql-ha.postgresqlCreateSecret" .)) (include "postgresql-ha.postgresqlPasswordProvided" .)) (not (eq (include "postgresql-ha.postgresqlUsername" .) "postgres")) }}
-            {{- if .Values.postgresql.usePasswordFile }}
+            {{- if and (not (eq (include "postgresql-ha.postgresqlUsername" .) "postgres")) (or (not (include "postgresql-ha.postgresqlCreateSecret" .)) (include "postgresql-ha.postgresqlPasswordProvided" .)) }}
+            {{- if .Values.postgresql.usePasswordFiles }}
             - name: POSTGRES_POSTGRES_PASSWORD_FILE
               value: "/opt/bitnami/postgresql/secrets/postgres-password"
             {{- else }}
@@ -203,7 +201,7 @@ spec:
             {{- end }}
             - name: POSTGRES_USER
               value: {{ (include "postgresql-ha.postgresqlUsername" .) | quote }}
-            {{- if .Values.postgresql.usePasswordFile }}
+            {{- if .Values.postgresql.usePasswordFiles }}
             - name: POSTGRES_PASSWORD_FILE
               value: "/opt/bitnami/postgresql/secrets/password"
             {{- else }}
@@ -336,7 +334,7 @@ spec:
               value: {{ .Values.postgresql.repmgrReconnectInterval | quote }}
             - name: REPMGR_USERNAME
               value: {{ (include "postgresql-ha.postgresqlRepmgrUsername" .) | quote }}
-            {{- if .Values.postgresql.usePasswordFile }}
+            {{- if .Values.postgresql.usePasswordFiles }}
             - name: REPMGR_PASSWORD_FILE
               value: "/opt/bitnami/postgresql/secrets/repmgr-password"
             {{- else }}
@@ -403,7 +401,7 @@ spec:
               command:
                 - bash
                 - -ec
-                - '{{ include "postgresql-ha.pgpassword" . }} psql -w -U {{ include "postgresql-ha.postgresqlUsername" . | quote }} -d {{ (include "postgresql-ha.postgresqlDatabase" .) | quote }} -h 127.0.0.1 -p {{ .Values.postgresql.containerPorts.postgresql }} -c "SELECT 1"'
+                - 'ps waux | grep "data standby clone" | grep -v grep || {{ include "postgresql-ha.pgpassword" . }} psql -w -U {{ include "postgresql-ha.postgresqlUsername" . | quote }} -d {{ (include "postgresql-ha.postgresqlDatabase" .) | quote }} -h 127.0.0.1 -p {{ .Values.postgresql.containerPorts.postgresql }} -c "SELECT 1"'
           {{- end }}
           {{- if .Values.postgresql.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.postgresql.customReadinessProbe "context" $) | nindent 12 }}
@@ -418,7 +416,7 @@ spec:
               command:
                 - bash
                 - -ec
-                - '{{ include "postgresql-ha.pgpassword" . }} psql -w -U {{ include "postgresql-ha.postgresqlUsername" . | quote }} -d {{ (include "postgresql-ha.postgresqlDatabase" .) | quote }} -h 127.0.0.1 -p {{ .Values.postgresql.containerPorts.postgresql }} -c "SELECT 1"'
+                {{- include "postgresql-ha.readinessProbeCommand" (dict "component" "postgresql" "context" $) | nindent 16 }}
             {{- end }}
           {{- end }}
           {{- if .Values.postgresql.customStartupProbe }}
@@ -472,7 +470,7 @@ spec:
             - name: custom-init-scripts-secret
               mountPath: /docker-entrypoint-initdb.d/secret
             {{- end }}
-            {{- if .Values.postgresql.usePasswordFile }}
+            {{- if .Values.postgresql.usePasswordFiles }}
             - name: password
               mountPath: /opt/bitnami/postgresql/secrets/
             {{- end }}
@@ -503,7 +501,7 @@ spec:
               value: :{{ .Values.metrics.containerPorts.http }}
             - name: DATA_SOURCE_URI
               value: {{ printf "127.0.0.1:%d/%s?sslmode=disable" (.Values.postgresql.containerPorts.postgresql | int64) (include "postgresql-ha.postgresqlDatabase" .) | quote }}
-            {{- if .Values.postgresql.usePasswordFile }}
+            {{- if .Values.postgresql.usePasswordFiles }}
             - name: DATA_SOURCE_PASS_FILE
               value: "/opt/bitnami/postgresql/secrets/password"
             {{- else }}
@@ -536,8 +534,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.metrics.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metrics.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /
+            tcpSocket:
               port: metrics
           {{- end }}
           {{- if .Values.metrics.customReadinessProbe }}
@@ -566,8 +563,8 @@ spec:
             - name: empty-dir
               mountPath: /tmp
               subPath: tmp-dir
-          {{- if or .Values.postgresql.usePasswordFile .Values.metrics.customMetrics }}
-            {{- if .Values.postgresql.usePasswordFile }}
+          {{- if or .Values.postgresql.usePasswordFiles .Values.metrics.customMetrics }}
+            {{- if .Values.postgresql.usePasswordFiles }}
             - name: password
               mountPath: /opt/bitnami/postgresql/secrets/
             {{- end }}
@@ -621,7 +618,7 @@ spec:
           secret:
             secretName: {{ template "postgresql-ha.postgresqlInitdbScriptsSecret" . }}
         {{- end }}
-        {{- if .Values.postgresql.usePasswordFile }}
+        {{- if .Values.postgresql.usePasswordFiles }}
         - name: password
           secret:
             secretName: {{ include "postgresql-ha.postgresqlSecretName" . }}
@@ -668,6 +665,9 @@ spec:
         accessModes:
         {{- range .Values.persistence.accessModes }}
           - {{ . | quote }}
+        {{- end }}
+        {{- if .Values.persistence.storageClass }}
+        storageClassName: {{ .Values.persistence.storageClass }}
         {{- end }}
         resources:
           requests:

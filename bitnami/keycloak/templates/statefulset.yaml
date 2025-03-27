@@ -22,6 +22,9 @@ spec:
   serviceName: {{ printf "%s-headless" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   updateStrategy:
     {{- include "common.tplvalues.render" (dict "value" .Values.updateStrategy "context" $ ) | nindent 4 }}
+  {{- if .Values.minReadySeconds }}
+  minReadySeconds: {{ .Values.minReadySeconds }}
+  {{- end }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
@@ -41,6 +44,7 @@ spec:
         {{- end }}
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: keycloak
+        app.kubernetes.io/app-version: {{ .Chart.AppVersion }}
     spec:
       serviceAccountName: {{ template "keycloak.serviceAccountName" . }}
       {{- include "keycloak.imagePullSecrets" . | nindent 6 }}
@@ -89,7 +93,7 @@ spec:
       {{- if or .Values.enableDefaultInitContainers .Values.initContainers }}
       initContainers:
         {{- if .Values.enableDefaultInitContainers }}
-        - name: init-quarkus-directory
+        - name: prepare-write-dirs
           image: {{ template "keycloak.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command:
@@ -97,8 +101,15 @@ spec:
           args:
             - -ec
             - |
-              #!/bin/bash
-              cp -r /opt/bitnami/keycloak/lib/quarkus/* /quarkus
+              . /opt/bitnami/scripts/liblog.sh
+
+              info "Copying writable dirs to empty dir"
+              # In order to not break the application functionality we need to make some
+              # directories writable, so we need to copy it to an empty dir volume
+              cp -r --preserve=mode /opt/bitnami/keycloak/lib/quarkus /emptydir/app-quarkus-dir
+              cp -r --preserve=mode /opt/bitnami/keycloak/data /emptydir/app-data-dir
+              cp -r --preserve=mode /opt/bitnami/keycloak/providers /emptydir/app-providers-dir
+              info "Copy operation completed"
           {{- if .Values.containerSecurityContext.enabled }}
           securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
@@ -108,12 +119,8 @@ spec:
           resources: {{- include "common.resources.preset" (dict "type" .Values.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - name: empty-dir
-              mountPath: /tmp
-              subPath: tmp-dir
-            - name: empty-dir
-              mountPath: /quarkus
-              subPath: app-quarkus-dir
+           - name: empty-dir
+             mountPath: /emptydir
         {{- end }}
         {{- if .Values.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
@@ -147,7 +154,7 @@ spec:
                   fieldPath: metadata.namespace
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" .Values.image.debug | quote }}
-            - name: KEYCLOAK_ADMIN_PASSWORD
+            - name: KC_BOOTSTRAP_ADMIN_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "keycloak.secretName" . }}
@@ -212,13 +219,9 @@ spec:
             - name: KEYCLOAK_EXTRA_ARGS
               value: {{ .Values.extraStartupArgs | quote }}
             {{- end }}
-            {{- if .Values.adminIngress.enabled }}
-            - name: KC_HOSTNAME_ADMIN_URL
-              value: "http{{ if .Values.adminIngress.tls }}s{{ end }}://{{ include "common.tplvalues.render" (dict "value" .Values.adminIngress.hostname "context" $) }}"
-            {{- end }}
-            {{- if and .Values.adminIngress.enabled (not .Values.ingress.enabled) }}
-            - name: KC_HOSTNAME_URL
-              value: "http{{ if .Values.adminIngress.tls }}s{{ end }}://{{ include "common.tplvalues.render" (dict "value" .Values.adminIngress.hostname "context" $) }}"
+            {{- if .Values.adminRealm }}
+            - name: KC_SPI_ADMIN_REALM
+              value: "{{ .Values.adminRealm }}"
             {{- end }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
@@ -248,6 +251,11 @@ spec:
               containerPort: {{ .Values.containerPorts.https }}
               protocol: TCP
             {{- end }}
+            {{- if and (.Values.metrics.enabled) (not (eq (.Values.containerPorts.http | int) (.Values.containerPorts.metrics | int) )) }}
+            - name: metrics
+              containerPort: {{ .Values.containerPorts.metrics }}
+              protocol: TCP
+            {{- end}}
             {{- /* Constant in code: https://github.com/keycloak/keycloak/blob/ce8e925c1ad9bf7a3180d1496e181aeea0ab5f8a/operator/src/main/java/org/keycloak/operator/Constants.java#L60 */}}
             - name: discovery
               containerPort: 7800
@@ -267,8 +275,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.livenessProbe.enabled }}
           livenessProbe: {{- omit .Values.livenessProbe "enabled" | toYaml | nindent 12 }}
-            httpGet:
-              path: {{ .Values.httpRelativePath }}
+            tcpSocket:
               port: http
           {{- end }}
           {{- if .Values.customReadinessProbe }}
@@ -276,7 +283,7 @@ spec:
           {{- else if .Values.readinessProbe.enabled }}
           readinessProbe: {{- omit .Values.readinessProbe "enabled" | toYaml | nindent 12 }}
             httpGet:
-              path: {{ .Values.httpRelativePath }}realms/master
+              path: {{ .Values.httpRelativePath }}realms/{{ .Values.adminRealm | default "master" }}
               port: http
           {{- end }}
           {{- end }}
@@ -284,6 +291,9 @@ spec:
             - name: empty-dir
               mountPath: /tmp
               subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /bitnami/keycloak
+              subPath: app-volume-dir
             - name: empty-dir
               mountPath: /opt/bitnami/keycloak/conf
               subPath: app-conf-dir
@@ -293,6 +303,9 @@ spec:
             - name: empty-dir
               mountPath: /opt/bitnami/keycloak/data
               subPath: app-data-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/keycloak/providers
+              subPath: app-providers-dir
             {{- if or .Values.configuration .Values.existingConfigmap }}
             - name: keycloak-config
               mountPath: /bitnami/keycloak/conf/keycloak.conf
@@ -301,6 +314,11 @@ spec:
             {{- if .Values.tls.enabled }}
             - name: certificates
               mountPath: /opt/bitnami/keycloak/certs
+              readOnly: true
+            {{- end }}
+            {{- if .Values.customCaExistingSecret }}
+            - name: custom-ca
+              mountPath: /opt/bitnami/keycloak/custom-ca
               readOnly: true
             {{- end }}
             {{- if .Values.spi.existingSecret }}
@@ -330,6 +348,12 @@ spec:
         - name: certificates
           secret:
             secretName: {{ include "keycloak.tlsSecretName" . }}
+            defaultMode: 420
+        {{- end }}
+        {{- if .Values.customCaExistingSecret }}
+        - name: custom-ca
+          secret:
+            secretName: {{ .Values.customCaExistingSecret }}
             defaultMode: 420
         {{- end }}
         {{- if .Values.spi.existingSecret }}

@@ -32,8 +32,11 @@ spec:
     metadata:
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: ruler
-      {{- if or .Values.ruler.podAnnotations (include "thanos.ruler.createConfigmap" .) (include "thanos.createObjstoreSecret" .) }}
+      {{- if or .Values.commonAnnotations .Values.ruler.podAnnotations (include "thanos.ruler.createConfigmap" .) (include "thanos.createObjstoreSecret" .) }}
       annotations:
+        {{- if .Values.commonAnnotations }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
+        {{- end }}
         {{- if (include "thanos.createObjstoreSecret" .) }}
         checksum/objstore-configuration: {{ include "thanos.objstoreConfig" . | sha256sum }}
         {{- end }}
@@ -127,7 +130,11 @@ spec:
             - --log.format={{ .Values.ruler.logFormat }}
             - --grpc-address=0.0.0.0:{{ .Values.ruler.containerPorts.grpc }}
             - --http-address=0.0.0.0:{{ .Values.ruler.containerPorts.http }}
+            {{- if .Values.ruler.dataPath }}
+            - --data-dir={{ .Values.ruler.dataPath }}
+            {{- else }}
             - --data-dir=/data
+            {{- end }}
             - --eval-interval={{ .Values.ruler.evalInterval }}
             {{- if (include "thanos.httpConfigEnabled" .) }}
             - --http.config=/conf/http/http-config.yml
@@ -146,7 +153,7 @@ spec:
             - --label=ruler_cluster="{{ .Values.ruler.clusterName }}"
             - --alert.label-drop={{ .Values.ruler.replicaLabel }}
             - --objstore.config-file=/conf/objstore/objstore.yml
-            - --rule-file=/conf/rules/*.yml
+            - --rule-file={{ .Values.ruler.ruleFile }}
             {{- range .Values.ruler.queries }}
             - --query={{ . }}
             {{- end }}
@@ -288,8 +295,17 @@ spec:
         - name: data
           emptyDir: {}
   {{- else if and .Values.ruler.persistence.enabled (not .Values.ruler.persistence.existingClaim) }}
+  {{- if semverCompare ">=1.23-0" (include "common.capabilities.kubeVersion" .) -}}
+  {{- if .Values.ruler.persistentVolumeClaimRetentionPolicy.enabled }}
+  persistentVolumeClaimRetentionPolicy:
+    whenDeleted: {{ .Values.ruler.persistentVolumeClaimRetentionPolicy.whenDeleted }}
+    whenScaled: {{ .Values.ruler.persistentVolumeClaimRetentionPolicy.whenScaled }}
+  {{- end }}
+  {{- end }}
   volumeClaimTemplates:
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         name: data
         {{- if .Values.ruler.persistence.annotations }}
         annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.ruler.persistence.annotations "context" $) | nindent 10 }}

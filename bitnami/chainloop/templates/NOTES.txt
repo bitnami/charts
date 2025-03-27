@@ -1,0 +1,73 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
+Did you know there are enterprise versions of the Bitnami catalog? For enhanced secure software supply chain features, unlimited pulls from Docker, LTS support, or application customization, see Bitnami Premium or Tanzu Application Catalog. See https://www.arrow.com/globalecs/na/vendors/bitnami for more information.
+
+** Please be patient while the chart is being deployed **
+
+{{- if .Values.development }}
+
+###########################################################################
+  DEVELOPMENT MODE
+###########################################################################
+
+██████╗ ███████╗██╗    ██╗ █████╗ ██████╗ ███████╗
+██╔══██╗██╔════╝██║    ██║██╔══██╗██╔══██╗██╔════╝
+██████╔╝█████╗  ██║ █╗ ██║███████║██████╔╝█████╗
+██╔══██╗██╔══╝  ██║███╗██║██╔══██║██╔══██╗██╔══╝
+██████╔╝███████╗╚███╔███╔╝██║  ██║██║  ██║███████╗
+╚═════╝ ╚══════╝ ╚══╝╚══╝ ╚═╝  ╚═╝╚═╝  ╚══════╝
+
+Instance running in development mode!
+
+Development mode, by default
+
+- Runs an insecure, unsealed, non-persistent instance of Vault
+- Is configured with development authentication keys
+
+###########################################################################
+Pre-configured static users
+###########################################################################
+
+Development configuration comes with two pre-setup users:
+- username: sarah@chainloop.local
+- password: password
+
+- username: john@chainloop.local
+- password: password
+
+DO NOT USE IT FOR PRODUCTION PURPOSES
+
+In order to use this chart in production, provide the value `--set development=false` and configure an OICD and Secrets Manager.
+
+More information can be found in the chart README.
+
+{{- end }}
+
+###########################################################################
+  CONFIGURE CLI
+###########################################################################
+
+Configure the CLI to point to this instance, for example
+
+  chainloop --insecure config save \
+    --control-plane {{ include "chainloop.controlplane.grpc_url" . }} \
+    --artifact-cas {{ include "chainloop.cas.grpc_url" . }}
+
+Refer to this link for more information
+https://docs.chainloop.dev/getting-started/installation#configure-cli-optional
+
+###########################################################################
+  USEFUL LINKS
+###########################################################################
+
+- GitHub repository: https://github.com/chainloop-dev/chainloop
+- Documentation: https://docs.chainloop.dev
+
+
+{{- include "common.warnings.rollingTag" .Values.controlplane.image }}
+{{- include "common.warnings.rollingTag" .Values.cas.image }}
+{{- include "common.warnings.rollingTag" .Values.controlplane.migration.image }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.controlplane.image .Values.cas.image .Values.controlplane.migration.image .Values.dex.image) "context" $) }}
+{{- include "common.errors.insecureImages" (dict "images" (list .Values.controlplane.image .Values.cas.image .Values.controlplane.migration.image .Values.dex.image) "context" $) }}

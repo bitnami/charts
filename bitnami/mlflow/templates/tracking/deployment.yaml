@@ -43,7 +43,7 @@ spec:
         app.kubernetes.io/component: tracking
     spec:
       serviceAccountName: {{ include "mlflow.v0.tracking.serviceAccountName" . }}
-      {{- include "mlflow.v0.imagePullSecrets" . | indent 6 }}
+      {{- include "mlflow.v0.imagePullSecrets" . | nindent 6 }}
       automountServiceAccountToken: {{ .Values.tracking.automountServiceAccountToken }}
       {{- if .Values.tracking.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.tracking.hostAliases "context" $) | nindent 8 }}
@@ -141,16 +141,26 @@ spec:
             {{- end }}
             {{- if (include "mlflow.v0.s3.enabled" .) }}
             - --artifacts-destination=s3://{{ include "mlflow.v0.s3.bucket" . }}
+            {{- else if (include "mlflow.v0.gcs.enabled" .) }}
+            - --artifacts-destination=gs://{{ .Values.externalGCS.bucket }}
+            {{- else if (include "mlflow.v0.azureBlob.enabled" .) }}
+            - --artifacts-destination=wasbs://{{ .Values.externalAzureBlob.containerName }}@{{ .Values.externalAzureBlob.storageAccount }}.blob.core.windows.net
             {{- else }}
             - --artifacts-destination={{ .Values.tracking.persistence.mountPath }}/mlartifacts
             {{- end }}
             {{- if and (not (include "mlflow.v0.s3.serveArtifacts" .)) (include "mlflow.v0.s3.enabled" .) }}
             - --default-artifact-root=s3://{{ include "mlflow.v0.s3.bucket" . }}
             - --no-serve-artifacts
+            {{- else if and (not .Values.externalGCS.serveArtifacts) (include "mlflow.v0.gcs.enabled" .) }}
+            - --default-artifact-root=gs://{{ .Values.externalGCS.bucket }}
+            - --no-serve-artifacts
+            {{- else if and (not .Values.externalAzureBlob.serveArtifacts) (include "mlflow.v0.azureBlob.enabled" .) }}
+            - --default-artifact-root=wasbs://{{ .Values.externalAzureBlob.containerName }}@{{ .Values.externalAzureBlob.storageAccount }}.blob.core.windows.net
+            - --no-serve-artifacts
             {{ else }}
             - --serve-artifacts
             {{- end }}
-            - --host=0.0.0.0
+            - --host={{ .Values.tracking.host }}
             - --port={{ .Values.tracking.containerPorts.http }}
             {{- if .Values.tracking.metrics.enabled }}
             - --expose-prometheus={{ .Values.tracking.persistence.mountPath }}/metrics
@@ -165,6 +175,14 @@ spec:
           env:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
+            {{- if .Values.tracking.auth.enabled }}
+            - name: MLFLOW_FLASK_SERVER_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "mlflow.v0.tracking.secretName" . }}
+                  key: {{ include "mlflow.v0.tracking.flaskServerSecretKey" . | quote }}
+            {{- end }}
+
             {{- if (include "mlflow.v0.database.enabled" .) }}
             - name: MLFLOW_DATABASE_PASSWORD
               valueFrom:
@@ -186,10 +204,69 @@ spec:
                   key: {{ include "mlflow.v0.s3.secretAccessKeyKey" . | quote }}
             {{- end }}
             {{- end }}
-            {{- if .Values.minio.enabled }}
+            {{- if (include "mlflow.v0.s3.enabled" .) }}
             - name: MLFLOW_S3_ENDPOINT_URL
               value: {{ printf "%s://%s:%v" (include "mlflow.v0.s3.protocol" .) (include "mlflow.v0.s3.host" .) (include "mlflow.v0.s3.port" .) | quote }}
             {{- end }}
+            {{- if (include "mlflow.v0.gcs.enabled" .) }}
+            {{- if .Values.externalGCS.useCredentialsInSecret }}
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: /bitnami/gcs/key.json
+            {{- end }}
+            {{- end }}
+
+            {{- if (include "mlflow.v0.azureBlob.enabled" .) }}
+            {{- if .Values.externalAzureBlob.useCredentialsInSecret }}
+            {{- if .Values.externalAzureBlob.existingConnectionStringKey }}
+            - name: AZURE_STORAGE_CONNECTION_STRING
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.externalAzureBlob.existingSecret }}
+                  key: {{ .Values.externalAzureBlob.existingConnectionStringKey }}
+            {{- end }}
+            {{- if .Values.externalAzureBlob.existingAccessKeyKey }}
+            - name: AZURE_STORAGE_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.externalAzureBlob.existingSecret }}
+                  key: {{ .Values.externalAzureBlob.existingAccessKeyKey }}
+            {{- end }}
+            {{- if .Values.externalAzureBlob.clientSecretKey }}
+            - name: AZURE_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.externalAzureBlob.existingSecret }}
+                  key: {{ .Values.externalAzureBlob.clientSecretKey }}
+            {{- end }}
+            {{- else }}
+            {{- if .Values.externalAzureBlob.connectionString }}
+            - name: AZURE_STORAGE_CONNECTION_STRING
+              value: {{ .Values.externalAzureBlob.connectionString }}
+            {{- end }}
+            {{- if .Values.externalAzureBlob.accessKey }}
+            - name: AZURE_STORAGE_ACCESS_KEY
+              value: {{ .Values.externalAzureBlob.accessKey }}
+            {{- end }}
+            {{- if .Values.externalAzureBlob.clientId }}
+            - name: AZURE_CLIENT_ID
+              value: {{ .Values.externalAzureBlob.clientId }}
+            {{- end }}
+            {{- if .Values.externalAzureBlob.tenantId }}
+            - name: AZURE_TENANT_ID
+              value: {{ .Values.externalAzureBlob.tenantId }}
+            {{- end }}
+            {{- if .Values.externalAzureBlob.clientSecret }}
+            - name: AZURE_CLIENT_SECRET
+              value: {{ .Values.externalAzureBlob.clientSecret }}
+            {{- end }}
+            {{- end }}
+            {{- end }}
+
+            {{- if .Values.externalGCS.googleCloudProject }}
+            - name: GOOGLE_CLOUD_PROJECT
+              value: {{ .Values.externalGCS.googleCloudProject }}
+            {{- end }}
+
             {{- if .Values.tracking.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.tracking.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
@@ -215,14 +292,11 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.tracking.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.tracking.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.tracking.livenessProbe "enabled") "context" $) | nindent 12 }}
-            {{- if .Values.tracking.auth.enabled }}
-            tcpSocket:
-              port: {{ include "mlflow.v0.tracking.portName" . }}
-            {{- else }}
-            httpGet:
-              path: /
-              port: {{ include "mlflow.v0.tracking.portName" . }}
-            {{- end }}
+            exec:
+              command:
+                - pgrep
+                - -f
+                - mlflow.server
           {{- end }}
           {{- if .Values.tracking.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.tracking.customReadinessProbe "context" $) | nindent 12 }}
@@ -276,6 +350,11 @@ spec:
               {{- if .Values.tracking.persistence.subPath }}
               subPath: {{ .Values.tracking.persistence.subPath }}
               {{- end }}
+            {{- if and (include "mlflow.v0.gcs.enabled" .) .Values.externalGCS.useCredentialsInSecret }}
+            - name: gcs-key
+              mountPath: /bitnami/gcs/key.json
+              subPath: key.json
+            {{- end }}
           {{- if .Values.tracking.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.tracking.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -312,5 +391,13 @@ spec:
           {{- end }}
         {{- if .Values.tracking.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.tracking.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if and (include "mlflow.v0.gcs.enabled" .) .Values.externalGCS.useCredentialsInSecret }}
+        - name: gcs-key
+          secret:
+            secretName: {{ .Values.externalGCS.existingSecret }}
+            items:
+              - key: {{ .Values.externalGCS.existingSecretKey }}
+                path: key.json
         {{- end }}
 {{- end }}

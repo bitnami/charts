@@ -32,7 +32,7 @@ func init() {
 	flag.StringVar(&username, "username", "", "database user")
 	flag.StringVar(&password, "password", "", "database password for username")
 	flag.IntVar(&shards, "shards", 2, "number of shards")
-	flag.IntVar(&timeoutSeconds, "timeout", 180, "timeout in seconds")
+	flag.IntVar(&timeoutSeconds, "timeout", 300, "timeout in seconds")
 	timeout = time.Duration(timeoutSeconds) * time.Second
 }
 

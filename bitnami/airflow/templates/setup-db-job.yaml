@@ -1,0 +1,163 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.setupDBJob.enabled }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ printf "%s-setup-db" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- $defaultAnnotations := dict "helm.sh/hook" "post-install,post-upgrade" "helm.sh/hook-delete-policy" "before-hook-creation,hook-succeeded" }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.setupDBJob.annotations .Values.commonAnnotations $defaultAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+spec:
+  backoffLimit: {{ .Values.setupDBJob.backoffLimit }}
+  template:
+    metadata:
+      {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.setupDBJob.podLabels .Values.commonLabels ) "context" . ) }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+      {{- if .Values.setupDBJob.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.setupDBJob.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+    spec:
+     {{- include "airflow.imagePullSecrets" . | nindent 6 }}
+      restartPolicy: OnFailure
+      {{- if .Values.setupDBJob.podSecurityContext.enabled }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.setupDBJob.podSecurityContext "context" $) | nindent 8 }}
+      {{- end }}
+      automountServiceAccountToken: {{ .Values.setupDBJob.automountServiceAccountToken }}
+      serviceAccountName: {{ include "airflow.serviceAccountName" . }}
+      {{- if .Values.setupDBJob.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.setupDBJob.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      initContainers:
+        {{- include "airflow.defaultInitContainers.prepareConfig" . | nindent 8 }}
+        {{- if .Values.setupDBJob.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.setupDBJob.initContainers "context" $) | trim | nindent 8 }}
+        {{- end }}
+      containers:
+        - name: setup-db
+          image: {{ include "airflow.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.setupDBJob.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.setupDBJob.containerSecurityContext "context" .) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.setupDBJob.resources }}
+          resources: {{- toYaml .Values.setupDBJob.resources | nindent 12 }}
+          {{- else if ne .Values.setupDBJob.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.setupDBJob.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.setupDBJob.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.setupDBJob.command "context" $) | nindent 12 }}
+          {{- else }}
+          command:
+            - /bin/bash
+          {{- end }}
+          {{- if .Values.setupDBJob.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.setupDBJob.args "context" $) | nindent 12 }}
+          {{- else }}
+          args:
+            - -ec
+            - |
+              . /opt/bitnami/scripts/airflow-env.sh
+              . /opt/bitnami/scripts/libairflow.sh
+
+              info "Trying to connect to the database server"
+              airflow_wait_for_db_connection
+
+              if ! airflow_execute db check-migrations; then
+                  info "Populating database"
+                  airflow_execute db init
+
+                  airflow_create_admin_user
+              else
+                  info "Upgrading database schema"
+                  airflow_execute db upgrade
+                  true
+              fi
+          {{- end }}
+          env:
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
+            - name: AIRFLOW_USERNAME
+              value: {{ .Values.auth.username }}
+            {{- if .Values.usePasswordFiles }}
+            - name: AIRFLOW_PASSWORD_FILE
+              value: "/opt/bitnami/airflow/secrets/airflow-password"
+            {{- else }}
+            - name: AIRFLOW_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "airflow.secretName" . }}
+                  key: airflow-password
+            {{- end}}
+            {{- if .Values.setupDBJob.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.setupDBJob.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if or .Values.setupDBJob.extraEnvVarsCM .Values.setupDBJob.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.setupDBJob.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ .Values.setupDBJob.extraEnvVarsCM }}
+            {{- end }}
+            {{- if .Values.setupDBJob.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ .Values.setupDBJob.extraEnvVarsSecret }}
+            {{- end }}
+          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/airflow/logs
+              subPath: app-logs-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/airflow/airflow.db
+              subPath: app-base-dir/airflow.db
+            - name: empty-dir
+              mountPath: /opt/bitnami/airflow/airflow.cfg
+              subPath: app-base-dir/airflow.cfg
+            - name: empty-dir
+              mountPath: /opt/bitnami/airflow/config/airflow_local_settings.py
+              subPath: app-conf-dir/airflow_local_settings.py
+            {{- if  .Values.usePasswordFiles }}
+            - name: airflow-secrets
+              mountPath: /opt/bitnami/airflow/secrets
+            {{- end }}
+            {{- if .Values.setupDBJob.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.setupDBJob.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
+            {{- if .Values.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
+      volumes:
+        - name: empty-dir
+          emptyDir: {}
+        - name: configuration
+          configMap:
+            name: {{ include "airflow.configMapName"  . }}
+            optional: true
+        {{- if .Values.usePasswordFiles }}
+        - name: airflow-secrets
+          projected:
+            sources:
+              - secret:
+                  name:  {{ include "airflow.secretName" . }}
+              - secret:
+                  name: {{ include "airflow.database.secretName" . }}
+              {{- if or (eq .Values.executor "CeleryExecutor") (eq .Values.executor "CeleryKubernetesExecutor") }}
+              - secret:
+                  name: {{ include "airflow.redis.secretName" . }}
+              {{- end }}
+        {{- end }}
+        {{- if .Values.setupDBJob.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.setupDBJob.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+{{- end }}

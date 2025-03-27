@@ -67,15 +67,34 @@ spec:
       {{- if .Values.exporter.schedulerName }}
       schedulerName: {{ .Values.exporter.schedulerName }}
       {{- end }}
-      {{- if .Values.exporter.serviceAccountName }}
-      serviceAccountName: {{ .Values.exporter.serviceAccountName }}
-      {{- end }}
+      serviceAccountName: {{ include "harbor.exporter.serviceAccountName" .}}
       {{- if .Values.exporter.podSecurityContext.enabled }}
       securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.exporter.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
-      {{- if .Values.exporter.initContainers }}
-      initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.exporter.initContainers "context" $) | nindent 8 }}
-      {{- end }}
+      initContainers:
+        {{- if .Values.exporter.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.exporter.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+        - name: certificate-volume
+          image: {{ include "harbor.exporter.image" . }}
+          imagePullPolicy: {{ .Values.exporter.image.pullPolicy | quote }}
+          command:
+            - /bin/bash
+          args:
+            - -ec
+            - cp -r /etc/ssl/certs/* /certs
+          {{- if .Values.exporter.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.exporter.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.certificateVolume.resources }}
+          resources: {{- toYaml .Values.certificateVolume.resources | nindent 12 }}
+          {{- else if ne .Values.certificateVolume.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.certificateVolume.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /certs
+              subPath: etc-ssl-certs
       containers:
         - name: exporter
           image: {{ include "harbor.exporter.image" . }}
@@ -98,18 +117,26 @@ spec:
               value: {{ ternary "true" "false" .Values.exporter.image.debug | quote }}
             - name: HARBOR_DATABASE_PASSWORD
               valueFrom:
+                {{- if and .Values.externalDatabase.existingSecret (not .Values.postgresql.enabled) }}
                 secretKeyRef:
-                  {{- if .Values.exporter.existingEnvVarsSecret }}
-                  name: {{ .Values.exporter.existingEnvVarsSecret }}
-                  {{- else }}
-                  name: {{ printf "%s-envvars" (include "harbor.core" .) }}
-                  {{- end }}
+                  name: {{ .Values.externalDatabase.existingSecret }}
+                  key: {{ .Values.externalDatabase.existingSecretPasswordKey }}
+                {{- else }}
+                {{- if .Values.core.existingEnvVarsSecret }}
+                secretKeyRef:
+                  name: {{ .Values.core.existingEnvVarsSecret }}
                   key: POSTGRESQL_PASSWORD
+                {{- else }}
+                secretKeyRef:
+                  name: {{ printf "%s-envvars" (include "harbor.core" .) }}
+                  key: POSTGRESQL_PASSWORD
+                {{- end }}
+                {{- end }}
             - name: HARBOR_ADMIN_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  {{- if .Values.exporter.existingEnvVarsSecret }}
-                  name: {{ .Values.exporter.existingEnvVarsSecret }}
+                  {{- if .Values.core.existingEnvVarsSecret }}
+                  name: {{ .Values.core.existingEnvVarsSecret }}
                   {{- else }}
                   name: {{ printf "%s-envvars" (include "harbor.core" .) }}
                   {{- end }}
@@ -144,10 +171,8 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.exporter.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.exporter.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.exporter.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: {{ .Values.metrics.path | quote }}
+            tcpSocket:
               port: metrics
-              scheme: HTTP
           {{- end }}
           {{- if .Values.exporter.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.exporter.customReadinessProbe "context" $) | nindent 12 }}
@@ -171,6 +196,9 @@ spec:
             - name: empty-dir
               mountPath: /tmp
               subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /etc/ssl/certs
+              subPath: etc-ssl-certs
             {{- if .Values.internalTLS.enabled }}
             - name: internal-tls-certs
               mountPath: /etc/harbor/ssl/exporter

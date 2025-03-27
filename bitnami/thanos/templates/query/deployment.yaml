@@ -30,8 +30,11 @@ spec:
     metadata:
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: query
-      {{- if or .Values.query.podAnnotations (include "thanos.query.createSDConfigmap" .) }}
+      {{- if or .Values.commonAnnotations .Values.query.podAnnotations (include "thanos.query.createSDConfigmap" .) }}
       annotations:
+        {{- if .Values.commonAnnotations }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
+        {{- end }}
         {{- if (include "thanos.query.createSDConfigmap" .) }}
         checksum/query-sd-configuration: {{ include "thanos.querySDConfigMap" . | sha256sum }}
         {{- end }}
@@ -121,11 +124,15 @@ spec:
             {{- end }}
             {{- if and .Values.storegateway.enabled .Values.storegateway.sharded.enabled }}
             {{- $shards := int 0 }}
+            {{- $hashShards := int 1 }}
+            {{- $timeShards := int 1 }}
             {{- if .Values.storegateway.sharded.hashPartitioning.shards }}
-            {{- $shards = int .Values.storegateway.sharded.hashPartitioning.shards }}
-            {{- else }}
-            {{- $shards = len .Values.storegateway.sharded.timePartitioning }}
+            {{- $hashShards = int .Values.storegateway.sharded.hashPartitioning.shards }}
             {{- end }}
+            {{- if not (empty .Values.storegateway.sharded.timePartitioning) }}
+            {{- $timeShards = len .Values.storegateway.sharded.timePartitioning }}
+            {{- end }}
+            {{- $shards = mul $hashShards $timeShards | int }}
             {{- range $index, $_ := until $shards }}
             {{- if $.Values.storegateway.useEndpointGroup }}
             - --endpoint-group={{ include "common.names.fullname" $ }}-storegateway-{{ toString $index }}.{{ $.Release.Namespace }}.svc.{{ $.Values.clusterDomain }}:{{ $.Values.storegateway.service.ports.grpc }}

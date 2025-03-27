@@ -33,9 +33,7 @@ spec:
         {{- if and .Values.volume.config (empty .Values.volume.existingConfigmap) }}
         checksum/config: {{ include (print $.Template.BasePath "/volume/configmap.yaml") . | sha256sum }}
         {{- end }}
-        {{- if .Values.security.enabled }}
         checksum/security-config: {{ include (print $.Template.BasePath "/security-configmap.yaml") . | sha256sum }}
-        {{- end }}
         {{- if .Values.volume.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.volume.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
@@ -78,7 +76,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.volume.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.volume.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.volume.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.volume.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.volume.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.volume.terminationGracePeriodSeconds }}
@@ -137,17 +135,26 @@ spec:
           args: {{- include "common.tplvalues.render" (dict "value" .Values.volume.args "context" $) | nindent 12 }}
           {{- else }}
           args:
+            {{- if .Values.volume.logPersistence.enabled }}
+            - -logdir={{ .Values.volume.logPersistence.mountPath }}
+            {{- else }}
             - -logtostderr=true
-            - -v={{ .Values.volume.logLevel }}
-            {{- if or .Values.security.enabled .Values.volume.config .Values.volume.existingConfigmap }}
-            - -config_dir=/etc/seaweedfs
             {{- end }}
+            - -v={{ .Values.volume.logLevel }}
+            - -config_dir=/etc/seaweedfs
             - volume
             {{- $dataDirs := list }}
+            {{- $maxVolumes := list }}
             {{- range .Values.volume.dataVolumes }}
             {{- $dataDirs = append $dataDirs .mountPath }}
+            {{- if eq (.maxVolumes | toString) "0" }}
+            {{- $maxVolumes = append $maxVolumes 0 }}
+            {{- else }}
+            {{- $maxVolumes = append $maxVolumes (default 8 .maxVolumes) }}
+            {{- end }}
             {{- end }}
             - -dir={{ join "," $dataDirs }}
+            - -max={{ join "," $maxVolumes }}
             - -ip.bind={{ .Values.volume.bindAddress }}
             - -ip=$(POD_NAME).{{ printf "%s-headless" (include "seaweedfs.volume.fullname" .) }}.$(NAMESPACE).svc.{{ .Values.clusterDomain }}
             - -port={{ .Values.volume.containerPorts.http }}
@@ -208,8 +215,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.volume.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.volume.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.volume.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /status
+            tcpSocket:
               port: http
           {{- end }}
           {{- if .Values.volume.customReadinessProbe }}
@@ -217,7 +223,7 @@ spec:
           {{- else if .Values.volume.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.volume.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
-              path: /status
+              path: /healthz
               port: http
           {{- end }}
           {{- if .Values.volume.customStartupProbe }}
@@ -240,6 +246,13 @@ spec:
               subPath: {{ .subPath }}
               {{- end }}
             {{- end }}
+            {{- if .Values.volume.logPersistence.enabled }}
+            - name: logs
+              mountPath: {{ .Values.volume.logPersistence.mountPath }}
+              {{- if .Values.volume.logPersistence.subPath }}
+              subPath: {{ .Values.volume.logPersistence.subPath }}
+              {{- end }}
+            {{- end }}
             - name: empty-dir
               mountPath: /tmp
               subPath: tmp-dir
@@ -249,7 +262,6 @@ spec:
               subPath: volume.toml
               readOnly: true
             {{- end }}
-            {{- if .Values.security.enabled }}
             - name: security-config
               mountPath: /etc/seaweedfs/security.toml
               subPath: security.toml
@@ -273,7 +285,6 @@ spec:
               readOnly: true
               mountPath: /certs/client
             {{- end }}
-            {{- end }}
           {{- if .Values.volume.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.volume.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -288,7 +299,6 @@ spec:
           configMap:
             name: {{ template "seaweedfs.volume.configmapName" . }}
         {{- end }}
-        {{- if .Values.security.enabled }}
         - name: security-config
           configMap:
             name: {{ printf "%s-security" (include "common.names.fullname" .) }}
@@ -314,7 +324,6 @@ spec:
           secret:
             secretName: {{ template "seaweedfs.security.mTLS.client.secretName" . }}
         {{- end }}
-        {{- end }}
         {{- if .Values.volume.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.volume.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
@@ -328,10 +337,22 @@ spec:
             claimName: {{ .persistence.existingClaim }}
         {{- end }}
         {{- end }}
+        {{- if and .Values.volume.logPersistence.enabled .Values.volume.logPersistence.existingClaim }}
+        - name: logs
+          persistentVolumeClaim:
+            claimName: {{ tpl .Values.volume.logPersistence.existingClaim . }}
+        {{- end }}
+  {{- if .Values.volume.persistentVolumeClaimRetentionPolicy.enabled }}
+  persistentVolumeClaimRetentionPolicy:
+    whenDeleted: {{ .Values.volume.persistentVolumeClaimRetentionPolicy.whenDeleted }}
+    whenScaled: {{ .Values.volume.persistentVolumeClaimRetentionPolicy.whenScaled }}
+  {{- end }}
   volumeClaimTemplates:
-  {{- range .Values.volume.dataVolumes }}
-  {{- if and .persistence.enabled (not .persistence.existingClaim) }}
-    - metadata:
+    {{- range .Values.volume.dataVolumes }}
+    {{- if and .persistence.enabled (not .persistence.existingClaim) }}
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         name: {{ .name }}
         {{- if or .persistence.annotations $.Values.commonAnnotations }}
         {{- $claimAnnotations := include "common.tplvalues.merge" (dict "values" .persistence.annotations $.Values.commonAnnotations "context" $) | fromYaml }}
@@ -355,5 +376,33 @@ spec:
         selector: {{- include "common.tplvalues.render" (dict "value" .persistence.selector "context" $) | nindent 10 }}
         {{- end }}
         {{- include "common.storage.class" (dict "persistence" .persistence "global" $.Values.global) | nindent 8 }}
-  {{- end }}
-  {{- end }}
+    {{- end }}
+    {{- end }}
+    {{- if and .Values.volume.logPersistence.enabled (not .Values.volume.logPersistence.existingClaim) }}
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        name: logs
+        {{- if or .Values.volume.logPersistence.annotations .Values.commonAnnotations }}
+        {{- $claimAnnotations := include "common.tplvalues.merge" (dict "values" .Values.volume.logPersistence.annotations .Values.commonAnnotations "context" .) | fromYaml }}
+        annotations: {{- include "common.tplvalues.render" ( dict "value" $claimAnnotations "context" $ ) | nindent 10 }}
+        {{- end }}
+        {{- if .Values.commonLabels }}
+        labels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 10 }}
+        {{- end }}
+      spec:
+        {{- if .Values.volume.logPersistence.dataSource }}
+        dataSource: {{- include "common.tplvalues.render" (dict "value" .Values.volume.logPersistence.dataSource "context" $) | nindent 10 }}
+        {{- end }}
+        accessModes:
+        {{- range .Values.volume.logPersistence.accessModes }}
+          - {{ . | quote }}
+        {{- end }}
+        resources:
+          requests:
+            storage: {{ .Values.volume.logPersistence.size | quote }}
+        {{- if .Values.volume.logPersistence.selector }}
+        selector: {{- include "common.tplvalues.render" (dict "value" .Values.volume.logPersistence.selector "context" $) | nindent 10 }}
+        {{- end }}
+        {{- include "common.storage.class" (dict "persistence" .Values.volume.logPersistence "global" .Values.global) | nindent 8 }}
+    {{- end }}

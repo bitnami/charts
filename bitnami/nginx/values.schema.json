@@ -49,6 +49,12 @@
       "title": "Custom server block",
       "description": "Custom server block to be added to NGINX configuration"
     },
+    "streamServerBlock": {
+      "type": "string",
+      "form": true,
+      "title": "Custom stream server block",
+      "description": "Custom stream server block to be added to NGINX configuration"
+    },
     "containerSecurityContext": {
       "type": "object",
       "form": true,

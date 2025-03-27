@@ -2,6 +2,8 @@ CHART NAME: {{ .Chart.Name }}
 CHART VERSION: {{ .Chart.Version }}
 APP VERSION: {{ .Chart.AppVersion }}
 
+Did you know there are enterprise versions of the Bitnami catalog? For enhanced secure software supply chain features, unlimited pulls from Docker, LTS support, or application customization, see Bitnami Premium or Tanzu Application Catalog. See https://www.arrow.com/globalecs/na/vendors/bitnami for more information.
+
 ** Please be patient while the chart is being deployed **
 
 Watch the RabbitMQ Cluster Operator and RabbitMQ Messaging Topology Operator Deployment status using the command:
@@ -49,3 +51,5 @@ RabbitMQ Messaging Topology Operator won't be able to access resources in other 
 {{ include "common.warnings.rollingTag" .Values.credentialUpdaterImage }}
 {{ include "common.warnings.rollingTag" .Values.rabbitmqImage }}
 {{- include "common.warnings.resources" (dict "sections" (list "clusterOperator" "msgTopologyOperator") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.rabbitmqImage .Values.credentialUpdaterImage .Values.clusterOperator.image .Values.msgTopologyOperator.image) "context" $) }}
+{{- include "common.errors.insecureImages" (dict "images" (list .Values.rabbitmqImage .Values.credentialUpdaterImage .Values.clusterOperator.image .Values.msgTopologyOperator.image) "context" $) }}

@@ -13,14 +13,15 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 Set the http prefix if the externalURl doesn't have it
 */}}
 {{- define "harbor.externalUrl" -}}
-{{- if hasPrefix "http" .Values.externalURL -}}
-    {{- print .Values.externalURL -}}
+{{- $templatedExternalUrl := tpl .Values.externalURL . -}}
+{{- if hasPrefix "http" $templatedExternalUrl -}}
+    {{- print $templatedExternalUrl -}}
 {{- else if and (eq .Values.exposureType "proxy") .Values.nginx.tls.enabled -}}
-    {{- printf "https://%s" .Values.externalURL -}}
+    {{- printf "https://%s" $templatedExternalUrl -}}
 {{- else if and (eq .Values.exposureType "ingress") .Values.ingress.core.tls -}}
-    {{- printf "https://%s" .Values.externalURL -}}
+    {{- printf "https://%s" $templatedExternalUrl -}}
 {{- else -}}
-    {{- printf "http://%s" .Values.externalURL -}}
+    {{- printf "http://%s" $templatedExternalUrl -}}
 {{- end -}}
 {{- end -}}
 
@@ -129,22 +130,20 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 
 {{- define "harbor.database.rawPassword" -}}
 {{- if .Values.postgresql.enabled }}
-    {{- if .Values.global.postgresql }}
-        {{- if .Values.global.postgresql.auth }}
-            {{- coalesce .Values.global.postgresql.auth.postgresPassword .Values.postgresql.auth.postgresPassword -}}
-        {{- else -}}
-            {{- .Values.postgresql.auth.postgresPassword -}}
-        {{- end -}}
+  {{- if .Values.global.postgresql }}
+    {{- if .Values.global.postgresql.auth }}
+      {{- coalesce .Values.global.postgresql.auth.postgresPassword .Values.postgresql.auth.postgresPassword -}}
     {{- else -}}
-        {{- .Values.postgresql.auth.postgresPassword -}}
+      {{- .Values.postgresql.auth.postgresPassword -}}
     {{- end -}}
+  {{- else -}}
+    {{- .Values.postgresql.auth.postgresPassword -}}
+  {{- end -}}
 {{- else -}}
+  {{- if not .Values.externalDatabase.existingSecret -}}
     {{- .Values.externalDatabase.password -}}
+  {{- end -}}
 {{- end -}}
-{{- end -}}
-
-{{- define "harbor.database.encryptedPassword" -}}
-  {{- include "harbor.database.rawPassword" . | b64enc | quote -}}
 {{- end -}}
 
 {{- define "harbor.database.coreDatabase" -}}
@@ -430,10 +429,10 @@ harbor: PostgreSQL password
     Please set a password (--set postgresql.auth.postgresPassword="xxxx")
   {{- end -}}
 {{- else -}}
-  {{- if not .Values.externalDatabase.password -}}
+    {{- if and (not .Values.externalDatabase.password) (not .Values.externalDatabase.existingSecret) -}}
 harbor: External PostgreSQL password
     An external database password is required!.
-    Please set a password (--set externalDatabase.password="xxxx")
+    Please set a password (--set externalDatabase.password="xxxx") or using an existing secret
   {{- end -}}
 {{- end -}}
 {{- end -}}
@@ -467,4 +466,81 @@ TRACE_OTEL_COMPRESSION: {{ .Values.tracing.otel.compression | quote }}
 TRACE_OTEL_TIMEOUT: {{ .Values.tracing.otel.timeout | quote }}
 TRACE_OTEL_INSECURE: {{ .Values.tracing.otel.insecure | quote }}
 {{- end }}
+{{- end -}}
+
+{{/*
+Create the name of the service account to use for the Harbor Core
+*/}}
+{{- define "harbor.core.serviceAccountName" -}}
+{{- if .Values.core.serviceAccount.create -}}
+    {{ default (include "harbor.core" .) .Values.core.serviceAccount.name | trunc 63 | trimSuffix "-" }}
+{{- else -}}
+    {{ default "default" .Values.core.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the name of the service account to use for the Harbor Registry
+*/}}
+{{- define "harbor.registry.serviceAccountName" -}}
+{{- if .Values.registry.serviceAccount.create -}}
+    {{ default (include "harbor.registry" .) .Values.registry.serviceAccount.name | trunc 63 | trimSuffix "-" }}
+{{- else -}}
+    {{ default "default" .Values.registry.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the name of the service account to use for the Harbor Portal
+*/}}
+{{- define "harbor.portal.serviceAccountName" -}}
+{{- if .Values.portal.serviceAccount.create -}}
+    {{ default (include "harbor.portal" .) .Values.portal.serviceAccount.name | trunc 63 | trimSuffix "-" }}
+{{- else -}}
+    {{ default "default" .Values.portal.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the name of the service account to use for the Harbor Jobservice
+*/}}
+{{- define "harbor.jobservice.serviceAccountName" -}}
+{{- if .Values.jobservice.serviceAccount.create -}}
+    {{ default (include "harbor.jobservice" .) .Values.jobservice.serviceAccount.name | trunc 63 | trimSuffix "-" }}
+{{- else -}}
+    {{ default "default" .Values.jobservice.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the name of the service account to use for the Harbor Exporter
+*/}}
+{{- define "harbor.exporter.serviceAccountName" -}}
+{{- if .Values.exporter.serviceAccount.create -}}
+    {{ default (include "harbor.exporter" .) .Values.exporter.serviceAccount.name | trunc 63 | trimSuffix "-" }}
+{{- else -}}
+    {{ default "default" .Values.exporter.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the name of the service account to use for the Trivy
+*/}}
+{{- define "harbor.trivy.serviceAccountName" -}}
+{{- if .Values.trivy.serviceAccount.create -}}
+    {{ default (include "harbor.trivy" .) .Values.trivy.serviceAccount.name | trunc 63 | trimSuffix "-" }}
+{{- else -}}
+    {{ default "default" .Values.trivy.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the name of the service account to use for the Harbor Nginx
+*/}}
+{{- define "harbor.nginx.serviceAccountName" -}}
+{{- if .Values.nginx.serviceAccount.create -}}
+    {{ default (include "harbor.nginx" .) .Values.nginx.serviceAccount.name | trunc 63 | trimSuffix "-" }}
+{{- else -}}
+    {{ default "default" .Values.nginx.serviceAccount.name }}
+{{- end -}}
 {{- end -}}

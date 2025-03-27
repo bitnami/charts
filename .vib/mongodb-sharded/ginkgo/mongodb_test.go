@@ -10,6 +10,7 @@ import (
 	. "github.com/onsi/gomega"
 	appsv1 "k8s.io/api/apps/v1"
 	batchv1 "k8s.io/api/batch/v1"
+	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 )
@@ -37,6 +38,9 @@ var _ = Describe("MongoDB Sharded", Ordered, func() {
 			getSucceededJobs := func(j *batchv1.Job) int32 { return j.Status.Succeeded }
 
 			getOpts := metav1.GetOptions{}
+			restartKey := "kubectl.kubernetes.io/restartedAt"
+			restartAnnotation := map[string]string{restartKey: time.Now().Format(time.RFC3339)}
+			getRestartedAtAnnotation := func(pod *v1.Pod) string { return pod.Annotations[restartKey] }
 
 			for i := 0; i < shards; i++ {
 				By(fmt.Sprintf("checking all the shard %d replicas are available", i))
@@ -85,24 +89,19 @@ var _ = Describe("MongoDB Sharded", Ordered, func() {
 			}, timeout, PollingInterval).Should(WithTransform(getSucceededJobs, Equal(int32(1))))
 
 			for i := 0; i < shards; i++ {
-				By(fmt.Sprintf("Scaling shard %d down to 0 replicas", i))
+				By(fmt.Sprintf("Running rollout restart of shard %d", i))
 				shardName := fmt.Sprintf("%s-shard%d-data", releaseName, i)
 				ss, err := c.AppsV1().StatefulSets(namespace).Get(ctx, shardName, getOpts)
 				shardOrigReplicas := *ss.Spec.Replicas
-				ss, err = utils.StsScale(ctx, c, ss, 0)
+				// Annotate pods to force a rollout restart
+				ss, err = utils.StsAnnotateTemplate(ctx, c, ss, restartAnnotation)
 				Expect(err).NotTo(HaveOccurred())
-				Expect(ss.Status.Replicas).NotTo(BeZero())
-				Eventually(func() (*appsv1.StatefulSet, error) {
-					return c.AppsV1().StatefulSets(namespace).Get(ctx, shardName, getOpts)
-				}, timeout, PollingInterval).Should(WithTransform(getAvailableReplicas, BeZero()))
-
-				By(fmt.Sprintf("Scaling shard %d to the original replicas", i))
-				ss, err = utils.StsScale(ctx, c, ss, shardOrigReplicas)
-				Expect(err).NotTo(HaveOccurred())
-
-				Eventually(func() (*appsv1.StatefulSet, error) {
-					return c.AppsV1().StatefulSets(namespace).Get(ctx, shardName, getOpts)
-				}, timeout, PollingInterval).Should(WithTransform(getAvailableReplicas, Equal(shardOrigReplicas)))
+				// Wait for the new annotation in the existing pods
+				for i := int(shardOrigReplicas) - 1; i >= 0; i-- {
+					Eventually(func() (*v1.Pod, error) {
+						return c.CoreV1().Pods(namespace).Get(ctx, fmt.Sprintf("%s-%d", shardName, i), getOpts)
+					}, timeout, PollingInterval).Should(WithTransform(getRestartedAtAnnotation, Equal(restartAnnotation[restartKey])))
+				}
 			}
 
 			By("creating a job to drop the test database")

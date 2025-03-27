@@ -156,11 +156,16 @@ spec:
               value: {{ include "ghost.databaseName" . | quote }}
             - name: GHOST_DATABASE_USER
               value: {{ include "ghost.databaseUser" . | quote }}
+            {{- if .Values.usePasswordFiles }}
+            - name: GHOST_DATABASE_PASSWORD_FILE
+              value: "/opt/bitnami/ghost/secrets/mysql-password"
+            {{- else }}
             - name: GHOST_DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "ghost.databaseSecretName" . }}
                   key: mysql-password
+            {{- end -}}
             {{- if (and (not .Values.mysql.enabled) .Values.externalDatabase.ssl) }}
             - name: GHOST_DATABASE_ENABLE_SSL
               value: {{ .Values.externalDatabase.ssl | quote }}
@@ -175,11 +180,16 @@ spec:
               value: {{ ternary .Values.containerPorts.https .Values.containerPorts.http .Values.ghostEnableHttps | quote }}
             - name: GHOST_USERNAME
               value: {{ .Values.ghostUsername | quote }}
+            {{- if .Values.usePasswordFiles }}
+            - name: GHOST_PASSWORD_FILE
+              value: {{ printf "/opt/bitnami/ghost/secrets/%s" (include "common.secrets.key" (dict "existingSecret" .Values.existingSecret "key" "ghost-password")) }}
+            {{- else }}
             - name: GHOST_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "common.secrets.name" (dict "existingSecret" .Values.existingSecret "context" $) }}
                   key: {{ include "common.secrets.key" (dict "existingSecret" .Values.existingSecret "key" "ghost-password") }}
+            {{- end }}
             - name: GHOST_EMAIL
               value: {{ .Values.ghostEmail | quote }}
             - name: GHOST_BLOG_TITLE
@@ -205,11 +215,16 @@ spec:
               value: {{ .Values.smtpUser | quote }}
             {{- end }}
             {{- if .Values.smtpPassword }}
+            {{- if .Values.usePasswordFiles }}
+            - name: GHOST_SMTP_PASSWORD_FILE
+              value: {{ printf "/opt/bitnami/ghost/secrets/%s" (include "common.secrets.key" (dict "existingSecret" .Values.existingSecret "key" "smtp-password")) }}
+            {{- else }}
             - name: GHOST_SMTP_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "common.secrets.name" (dict "existingSecret" .Values.existingSecret "context" $) }}
                   key: {{ include "common.secrets.key" (dict "existingSecret" .Values.existingSecret "key" "smtp-password") }}
+            {{- end }}
             {{- end }}
             {{- if .Values.smtpService }}
             - name: GHOST_SMTP_SERVICE
@@ -267,15 +282,8 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.livenessProbe.enabled }}
           livenessProbe:
-            httpGet:
-              path: /
-              port: {{ ternary "https" "http" .Values.ghostEnableHttps | quote }}
-              scheme: HTTP
-              {{- if .Values.ghostEnableHttps }}
-              httpHeaders:
-                - name: x-forwarded-proto
-                  value: https
-              {{- end }}
+            tcpSocket:
+              port: {{ ternary .Values.containerPorts.https .Values.containerPorts.http .Values.ghostEnableHttps }}
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
@@ -319,6 +327,10 @@ spec:
               subPath: tmp-dir
             - name: ghost-data
               mountPath: /bitnami/ghost
+            {{- if and .Values.usePasswordFiles }}
+            - name: ghost-secrets
+              mountPath: /opt/bitnami/ghost/secrets
+            {{- end }}
             {{- if .Values.persistence.subPath }}
               subPath: {{ .Values.persistence.subPath }}
             {{- end }}
@@ -331,6 +343,19 @@ spec:
       volumes:
         - name: empty-dir
           emptyDir: {}
+        {{- if and .Values.usePasswordFiles }}
+        - name: ghost-secrets
+          projected:
+            sources:
+              - secret:
+                  name: {{ include "ghost.databaseSecretName" . }}
+              - secret:
+                  name: {{ include "common.secrets.name" (dict "existingSecret" .Values.existingSecret "context" $) }}
+              {{- if .Values.smtpPassword }}
+              - secret:
+                  name: {{ include "common.secrets.name" (dict "existingSecret" .Values.existingSecret "context" $) }}
+              {{- end }}
+        {{- end }}
         - name: ghost-data
         {{- if .Values.persistence.enabled }}
           persistentVolumeClaim:

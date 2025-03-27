@@ -4,47 +4,6 @@ SPDX-License-Identifier: APACHE-2.0
 */}}
 
 {{/* vim: set filetype=mustache: */}}
-{{/*
-Expand the name of the chart.
-*/}}
-{{- define "external-dns.name" -}}
-{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-
-{{/*
-Create a default fully qualified app name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-If release name contains chart name it will be used as a full name.
-*/}}
-{{- define "external-dns.fullname" -}}
-{{- if .Values.fullnameOverride -}}
-{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- $name := default .Chart.Name .Values.nameOverride -}}
-{{- if contains $name .Release.Name -}}
-{{- .Release.Name | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Create chart name and version as used by the chart label.
-*/}}
-{{- define "external-dns.chart" -}}
-{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-
-{{/* podAnnotations */}}
-{{- define "external-dns.podAnnotations" -}}
-{{- if .Values.podAnnotations }}
-{{ toYaml .Values.podAnnotations }}
-{{- end }}
-{{- if .Values.metrics.podAnnotations }}
-{{ toYaml .Values.metrics.podAnnotations }}
-{{- end }}
-{{- end -}}
 
 {{/*
 Return the proper External DNS image name
@@ -57,29 +16,7 @@ Return the proper External DNS image name
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "external-dns.imagePullSecrets" -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else logic.
-Also, we can not use a single if because lazy evaluation is not an option
-*/}}
-{{- if .Values.global }}
-{{- if .Values.global.imagePullSecrets }}
-imagePullSecrets:
-{{- range .Values.global.imagePullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- else if .Values.image.pullSecrets }}
-imagePullSecrets:
-{{- range .Values.image.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- end -}}
-{{- else if .Values.image.pullSecrets }}
-imagePullSecrets:
-{{- range .Values.image.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- end -}}
+{{- include "common.images.pullSecrets" (dict "images" (list .Values.image) "global" .Values.global) -}}
 {{- end -}}
 
 {{/*
@@ -112,7 +49,7 @@ Return true if a secret object should be created
     {{- true -}}
 {{- else if and (eq .Values.provider "linode") .Values.linode.apiToken (not .Values.linode.secretName) -}}
     {{- true -}}
-{{- else if and (eq .Values.provider "oci") .Values.oci.privateKeyFingerprint (not .Values.oci.secretName) -}}
+{{- else if and (eq .Values.provider "oci") (or .Values.oci.privateKeyFingerprint .Values.oci.useWorkloadIdentity) (not .Values.oci.secretName) -}}
     {{- true -}}
 {{- else if and (eq .Values.provider "rfc2136") (or .Values.rfc2136.tsigSecret (and .Values.rfc2136.kerberosUsername .Values.rfc2136.kerberosPassword)) (not .Values.rfc2136.secretName) -}}
     {{- true -}}
@@ -122,7 +59,7 @@ Return true if a secret object should be created
     {{- true -}}
 {{- else if and (eq .Values.provider "ovh") .Values.ovh.consumerKey (not .Values.ovh.secretName) -}}
     {{- true -}}
-{{- else if and (eq .Values.provider "scaleway") .Values.scaleway.scwAccessKey -}}
+{{- else if and (eq .Values.provider "scaleway") .Values.scaleway.scwAccessKey (not .Values.scaleway.secretName) -}}
     {{- true -}}
 {{- else if and (eq .Values.provider "vinyldns") (or .Values.vinyldns.secretKey .Values.vinyldns.accessKey) -}}
     {{- true -}}
@@ -130,7 +67,7 @@ Return true if a secret object should be created
     {{- true -}}
 {{- else if and (eq .Values.provider "civo") .Values.civo.apiToken (not .Values.civo.secretName) -}}
     {{- true -}}
-{{- else if and (eq .Values.provider "pihole") .Values.pihole.secretName (not .Values.pihole.secretName) -}}
+{{- else if and (eq .Values.provider "pihole") .Values.pihole.password (not .Values.pihole.secretName) -}}
     {{- true -}}
 {{- else if and .Values.txtEncrypt.enabled (not .Values.txtEncrypt.secretName) -}}
     {{- true -}}
@@ -189,8 +126,10 @@ Return the name of the Secret used to store the passwords
 {{- .Values.civo.secretName }}
 {{- else if and (eq .Values.provider "pihole") .Values.pihole.secretName }}
 {{- .Values.pihole.secretName }}
+{{- else if and (eq .Values.provider "scaleway") .Values.scaleway.secretName }}
+{{- .Values.scaleway.secretName }}
 {{- else -}}
-{{- template "external-dns.fullname" . }}
+{{- template "common.names.fullname" . }}
 {{- end -}}
 {{- end -}}
 
@@ -471,7 +410,7 @@ external-dns: pdns.apiKey
 {{- define "external-dns.checkRollingTags" -}}
 {{- if and (contains "bitnami/" .Values.image.repository) (not (.Values.image.tag | toString | regexFind "-r\\d+$|sha256:")) }}
 WARNING: Rolling tag detected ({{ .Values.image.repository }}:{{ .Values.image.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
-+info https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html
++info https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html
 {{- end }}
 {{- end -}}
 
@@ -807,7 +746,7 @@ Validate values of External DNS:
 - must provide the Scaleway access key when provider is "scaleway"
 */}}
 {{- define "external-dns.validateValues.scaleway.scwAccessKey" -}}
-{{- if and (eq .Values.provider "scaleway") (not .Values.scaleway.scwAccessKey) -}}
+{{- if and (eq .Values.provider "scaleway") (not .Values.scaleway.scwAccessKey) (not .Values.scaleway.secretName) -}}
 external-dns: scaleway.scwAccessKey
     You must provide the Scaleway access key when provider="scaleway".
     Please set the scwAccessKey parameter (--set scaleway.scwAccessKey="xxxx")
@@ -819,7 +758,7 @@ Validate values of External DNS:
 - must provide the scaleway secret key when provider is "scaleway"
 */}}
 {{- define "external-dns.validateValues.scaleway.scwSecretKey" -}}
-{{- if and (eq .Values.provider "scaleway") (not .Values.scaleway.scwSecretKey) -}}
+{{- if and (eq .Values.provider "scaleway") (not .Values.scaleway.scwSecretKey) (not .Values.scaleway.secretName) -}}
 external-dns: scaleway.scwSecretKey
     You must provide the scaleway secret key when provider="scaleway".
     Please set the scwSecretKey parameter (--set scaleway.scwSecretKey="xxxx")
@@ -831,20 +770,20 @@ Return the ExternalDNS service account name
 */}}
 {{- define "external-dns.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create -}}
-    {{ default (include "external-dns.fullname" .) .Values.serviceAccount.name }}
+    {{ default (include "common.names.fullname" .) .Values.serviceAccount.name }}
 {{- else -}}
     {{ default "default" .Values.serviceAccount.name }}
 {{- end -}}
 {{- end -}}
 
 {{/*
-Return the ExternalDNS namespace to be used
+Return the namespace to be monitored by ExternalDNS
 */}}
 {{- define "external-dns.namespace" -}}
 {{- if and .Values.rbac.create (not .Values.rbac.clusterRole) -}}
-    {{ default .Release.Namespace .Values.namespace }}
+    {{ default (include "common.names.namespace" .) .Values.namespace }}
 {{- else if .Values.watchReleaseNamespace -}}
-    {{ .Release.namespace }}
+    {{ include "common.names.namespace" . }}
 {{- else -}}
     {{ .Values.namespace }}
 {{- end -}}
@@ -855,7 +794,7 @@ Return the secret containing external-dns TLS certificates
 */}}
 {{- define "external-dns.tlsSecretName" -}}
 {{- if .Values.coredns.etcdTLS.autoGenerated -}}
-    {{- printf "%s-crt" (include "external-dns.fullname" .) | trunc 63 | trimSuffix "-" -}}
+    {{- printf "%s-crt" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
 {{- $secretName := .Values.coredns.etcdTLS.secretName -}}
 {{- printf "%s" (tpl $secretName $) | trunc 63 | trimSuffix "-" -}}
@@ -911,6 +850,6 @@ Returns the name of the default secret if the AES key is set via `.Values.txtEnc
 {{- if and .Values.txtEncrypt.enabled .Values.txtEncrypt.secretName }}
     {{- printf "%s" .Values.txtEncrypt.secretName -}}
 {{- else if and .Values.txtEncrypt.enabled (not .Values.txtEncrypt.secretName) -}}
-    {{ template "external-dns.secretName" . }}
+    {{ template "common.names.fullname" . }}
 {{- end -}}
 {{- end -}}

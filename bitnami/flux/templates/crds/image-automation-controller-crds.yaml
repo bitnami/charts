@@ -1,5 +1,5 @@
 # Source: https://github.com/fluxcd/image-automation-controller/releases/download/v{version}/image-automation-controller.crds.yaml
-# Version: 0.38.0
+# Version: 0.40.0
 # VersionOf: fluxcd-image-automation-controller
 # Conditional: .Values.imageAutomationController.installCRDs
 {{- if .Values.imageAutomationController.installCRDs }}
@@ -7,7 +7,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.15.0
+    controller-gen.kubebuilder.io/version: v0.16.1
   name: imageupdateautomations.image.toolkit.fluxcd.io
 spec:
   group: image.toolkit.fluxcd.io
@@ -75,14 +75,12 @@ spec:
                             description: |-
                               Commit SHA to check out, takes precedence over all reference fields.
 
-
                               This can be combined with Branch to shallow clone the branch, in which
                               the commit is expected to exist.
                             type: string
                           name:
                             description: |-
                               Name of the reference to check out; takes precedence over Branch, Tag and SemVer.
-
 
                               It must be a valid Git reference: https://git-scm.com/docs/git-check-ref-format#_description
                               Examples: "refs/heads/main", "refs/tags/v0.1.0", "refs/pull/420/head", "refs/merge-requests/1/head"
@@ -139,6 +137,8 @@ spec:
                             required:
                             - name
                             type: object
+                        required:
+                        - secretRef
                         type: object
                     required:
                     - author
@@ -246,16 +246,8 @@ spec:
             properties:
               conditions:
                 items:
-                  description: "Condition contains details for one aspect of the current
-                    state of this API Resource.\n---\nThis struct is intended for
-                    direct use as an array at the field path .status.conditions.  For
-                    example,\n\n\n\ttype FooStatus struct{\n\t    // Represents the
-                    observations of a foo's current state.\n\t    // Known .status.conditions.type
-                    are: \"Available\", \"Progressing\", and \"Degraded\"\n\t    //
-                    +patchMergeKey=type\n\t    // +patchStrategy=merge\n\t    // +listType=map\n\t
-                    \   // +listMapKey=type\n\t    Conditions []metav1.Condition `json:\"conditions,omitempty\"
-                    patchStrategy:\"merge\" patchMergeKey:\"type\" protobuf:\"bytes,1,rep,name=conditions\"`\n\n\n\t
-                    \   // other fields\n\t}"
+                  description: Condition contains details for one aspect of the current
+                    state of this API Resource.
                   properties:
                     lastTransitionTime:
                       description: |-
@@ -296,12 +288,7 @@ spec:
                       - Unknown
                       type: string
                     type:
-                      description: |-
-                        type of condition in CamelCase or in foo.example.com/CamelCase.
-                        ---
-                        Many .condition.type values are consistent across resources like Available, but because arbitrary conditions can be
-                        useful (see .node.status.conditions), the ability to deconflict is important.
-                        The regex it matches is (dns1123SubdomainFmt/)?(qualifiedNameFmt)
+                      description: type of condition in CamelCase or in foo.example.com/CamelCase.
                       maxLength: 316
                       pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
                       type: string
@@ -399,14 +386,12 @@ spec:
                             description: |-
                               Commit SHA to check out, takes precedence over all reference fields.
 
-
                               This can be combined with Branch to shallow clone the branch, in which
                               the commit is expected to exist.
                             type: string
                           name:
                             description: |-
                               Name of the reference to check out; takes precedence over Branch, Tag and SemVer.
-
 
                               It must be a valid Git reference: https://git-scm.com/docs/git-check-ref-format#_description
                               Examples: "refs/heads/main", "refs/tags/v0.1.0", "refs/pull/420/head", "refs/merge-requests/1/head"
@@ -446,6 +431,13 @@ spec:
                           MessageTemplate provides a template for the commit message,
                           into which will be interpolated the details of the change made.
                         type: string
+                      messageTemplateValues:
+                        additionalProperties:
+                          type: string
+                        description: |-
+                          MessageTemplateValues provides additional values to be available to the
+                          templating rendering.
+                        type: object
                       signingKey:
                         description: SigningKey provides the option to sign commits
                           with a GPG key
@@ -463,6 +455,8 @@ spec:
                             required:
                             - name
                             type: object
+                        required:
+                        - secretRef
                         type: object
                     required:
                     - author
@@ -618,16 +612,8 @@ spec:
             properties:
               conditions:
                 items:
-                  description: "Condition contains details for one aspect of the current
-                    state of this API Resource.\n---\nThis struct is intended for
-                    direct use as an array at the field path .status.conditions.  For
-                    example,\n\n\n\ttype FooStatus struct{\n\t    // Represents the
-                    observations of a foo's current state.\n\t    // Known .status.conditions.type
-                    are: \"Available\", \"Progressing\", and \"Degraded\"\n\t    //
-                    +patchMergeKey=type\n\t    // +patchStrategy=merge\n\t    // +listType=map\n\t
-                    \   // +listMapKey=type\n\t    Conditions []metav1.Condition `json:\"conditions,omitempty\"
-                    patchStrategy:\"merge\" patchMergeKey:\"type\" protobuf:\"bytes,1,rep,name=conditions\"`\n\n\n\t
-                    \   // other fields\n\t}"
+                  description: Condition contains details for one aspect of the current
+                    state of this API Resource.
                   properties:
                     lastTransitionTime:
                       description: |-
@@ -668,12 +654,7 @@ spec:
                       - Unknown
                       type: string
                     type:
-                      description: |-
-                        type of condition in CamelCase or in foo.example.com/CamelCase.
-                        ---
-                        Many .condition.type values are consistent across resources like Available, but because arbitrary conditions can be
-                        useful (see .node.status.conditions), the ability to deconflict is important.
-                        The regex it matches is (dns1123SubdomainFmt/)?(qualifiedNameFmt)
+                      description: type of condition in CamelCase or in foo.example.com/CamelCase.
                       maxLength: 316
                       pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
                       type: string

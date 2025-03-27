@@ -7,7 +7,7 @@ SPDX-License-Identifier: APACHE-2.0
 kind: NetworkPolicy
 apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
 metadata:
-  name: {{ printf "%s-web" (include "common.names.fullname" .) }}
+  name: {{ template "airflow.web.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: web
@@ -37,6 +37,9 @@ spec:
     - ports:
         - port: {{ .Values.web.containerPorts.http }}
         - port: {{ .Values.service.ports.http }}
+        {{- if .Values.metrics.enabled }}
+        - port: {{ .Values.metrics.service.ports.ingest }}
+        {{- end }}
       to:
         - podSelector:
             matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}

@@ -148,6 +148,11 @@ spec:
               info "Copying default PHP config"
               cp -r --preserve=mode /opt/bitnami/php/etc /emptydir/php-conf-dir
 
+              info "Copying php var directory"
+              if ! is_dir_empty /opt/bitnami/php/var; then
+                cp -r /opt/bitnami/php/var /emptydir/php-var-dir
+              fi
+
               info "Copy operation completed"
           volumeMounts:
             - name: empty-dir
@@ -265,6 +270,14 @@ spec:
             - name: SMTP_PROTOCOL
               value: {{ .Values.smtpProtocol | quote }}
             {{- end }}
+            {{- if .Values.smtpFromEmail }}
+            - name: WORDPRESS_SMTP_FROM_EMAIL
+              value: {{ .Values.smtpFromEmail | quote }}
+            {{- end }}
+            {{- if .Values.smtpFromName }}
+            - name: WORDPRESS_SMTP_FROM_NAME
+              value: {{ .Values.smtpFromName | quote }}
+            {{- end }}
             - name: APACHE_HTTP_PORT_NUMBER
               value: {{ .Values.containerPorts.http | quote }}
             - name: APACHE_HTTPS_PORT_NUMBER
@@ -323,7 +336,7 @@ spec:
               subPath: apache-logs-dir
             - name: empty-dir
               mountPath: /opt/bitnami/apache/var/run
-              subPath: apcahe-tmp-dir
+              subPath: apache-tmp-dir
             - name: empty-dir
               mountPath: /opt/bitnami/php/etc
               subPath: php-conf-dir

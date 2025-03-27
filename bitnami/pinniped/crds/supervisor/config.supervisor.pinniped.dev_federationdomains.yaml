@@ -1,11 +1,11 @@
 # Source: https://raw.githubusercontent.com/vmware-tanzu/pinniped/v{version}/deploy/supervisor/config.supervisor.pinniped.dev_federationdomains.yaml
-# Version: 0.30.0
+# Version: 0.38.0
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.14.0
+    controller-gen.kubebuilder.io/version: v0.17.2
   name: federationdomains.config.supervisor.pinniped.dev
 spec:
   group: config.supervisor.pinniped.dev
@@ -57,7 +57,6 @@ spec:
                 description: |-
                   IdentityProviders is the list of identity providers available for use by this FederationDomain.
 
-
                   An identity provider CR (e.g. OIDCIdentityProvider or LDAPIdentityProvider) describes how to connect to a server,
                   how to talk in a specific protocol for authentication, and how to use the schema of that server/protocol to
                   extract a normalized user identity. Normalized user identities include a username and a list of group names.
@@ -69,7 +68,6 @@ spec:
                   rejection policies. Even though a user was able to authenticate with the identity provider, a policy can disallow
                   the authentication to the Kubernetes clusters that belong to this FederationDomain. For example, a policy could
                   disallow the authentication unless the user belongs to a specific group in the identity provider.
-
 
                   For backwards compatibility with versions of Pinniped which predate support for multiple identity providers,
                   an empty IdentityProviders list will cause the FederationDomain to use all available identity providers which
@@ -145,8 +143,9 @@ spec:
                                   Type is "string", and is otherwise ignored.
                                 type: string
                               type:
-                                description: Type determines the type of the constant,
-                                  and indicates which other field should be non-empty.
+                                description: |-
+                                  Type determines the type of the constant, and indicates which other field should be non-empty.
+                                  Allowed values are "string" or "stringList".
                                 enum:
                                 - string
                                 - stringList
@@ -224,13 +223,11 @@ spec:
                             https://github.com/google/cel-spec/blob/master/doc/langdef.md plus the CEL string extensions defined in
                             https://github.com/google/cel-go/tree/master/ext#strings.
 
-
                             The username and groups extracted from the identity provider, and the constants defined in this CR, are
                             available as variables in all expressions. The username is provided via a variable called `username` and
                             the list of group names is provided via a variable called `groups` (which may be an empty list).
                             Each user-provided constants is provided via a variable named `strConst.varName` for string constants
                             and `strListConst.varName` for string list constants.
-
 
                             The only allowed types for expressions are currently policy/v1, username/v1, and groups/v1.
                             Each policy/v1 must return a boolean, and when it returns false, no more expressions from the list are evaluated
@@ -243,7 +240,6 @@ spec:
                             groups list.
                             Transformations of type groups/v1 do not return usernames, and therefore cannot change the usernames.
                             After each expression, the new (potentially changed) username or groups get passed to the following expression.
-
 
                             Any compilation or static type-checking failure of any expression will cause an error status on the FederationDomain.
                             During an authentication attempt, any unexpected runtime evaluation errors (e.g. division by zero) cause the
@@ -264,8 +260,9 @@ spec:
                                   an authentication attempt. When empty, a default message will be used.
                                 type: string
                               type:
-                                description: Type determines the type of the expression.
-                                  It must be one of the supported types.
+                                description: |-
+                                  Type determines the type of the expression. It must be one of the supported types.
+                                  Allowed values are "policy/v1", "username/v1", or "groups/v1".
                                 enum:
                                 - policy/v1
                                 - username/v1
@@ -290,11 +287,13 @@ spec:
                   https://example.com/foo, then your authorization endpoint will look like
                   https://example.com/foo/some/path/to/auth/endpoint).
 
-
                   See
                   https://openid.net/specs/openid-connect-discovery-1_0.html#rfc.section.3 for more information.
                 minLength: 1
                 type: string
+                x-kubernetes-validations:
+                - message: issuer must be an HTTPS URL
+                  rule: isURL(self) && url(self).getScheme() == 'https'
               tls:
                 description: TLS specifies a secret which will contain Transport Layer
                   Security (TLS) configuration for the FederationDomain.
@@ -306,20 +305,16 @@ spec:
                       named here must contain keys named `tls.crt` and `tls.key` that contain the certificate and private key to use
                       for TLS.
 
-
                       Server Name Indication (SNI) is an extension to the Transport Layer Security (TLS) supported by all major browsers.
-
 
                       SecretName is required if you would like to use different TLS certificates for issuers of different hostnames.
                       SNI requests do not include port numbers, so all issuers with the same DNS hostname must use the same
                       SecretName value even if they have different port numbers.
 
-
                       SecretName is not required when you would like to use only the HTTP endpoints (e.g. when the HTTP listener is
                       configured to listen on loopback interfaces or UNIX domain sockets for traffic from a service mesh sidecar).
                       It is also not required when you would like all requests to this OIDC Provider's HTTPS endpoints to
                       use the default TLS certificate, which is configured elsewhere.
-
 
                       When your Issuer URL's host is an IP address, then this field is ignored. SNI does not work for IP addresses.
                     type: string
@@ -334,16 +329,8 @@ spec:
                 description: Conditions represent the observations of an FederationDomain's
                   current state.
                 items:
-                  description: "Condition contains details for one aspect of the current
-                    state of this API Resource.\n---\nThis struct is intended for
-                    direct use as an array at the field path .status.conditions.  For
-                    example,\n\n\n\ttype FooStatus struct{\n\t    // Represents the
-                    observations of a foo's current state.\n\t    // Known .status.conditions.type
-                    are: \"Available\", \"Progressing\", and \"Degraded\"\n\t    //
-                    +patchMergeKey=type\n\t    // +patchStrategy=merge\n\t    // +listType=map\n\t
-                    \   // +listMapKey=type\n\t    Conditions []metav1.Condition `json:\"conditions,omitempty\"
-                    patchStrategy:\"merge\" patchMergeKey:\"type\" protobuf:\"bytes,1,rep,name=conditions\"`\n\n\n\t
-                    \   // other fields\n\t}"
+                  description: Condition contains details for one aspect of the current
+                    state of this API Resource.
                   properties:
                     lastTransitionTime:
                       description: |-
@@ -384,12 +371,7 @@ spec:
                       - Unknown
                       type: string
                     type:
-                      description: |-
-                        type of condition in CamelCase or in foo.example.com/CamelCase.
-                        ---
-                        Many .condition.type values are consistent across resources like Available, but because arbitrary conditions can be
-                        useful (see .node.status.conditions), the ability to deconflict is important.
-                        The regex it matches is (dns1123SubdomainFmt/)?(qualifiedNameFmt)
+                      description: type of condition in CamelCase or in foo.example.com/CamelCase.
                       maxLength: 316
                       pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
                       type: string
@@ -423,10 +405,13 @@ spec:
                       exist.
                     properties:
                       name:
+                        default: ""
                         description: |-
                           Name of the referent.
+                          This field is effectively required, but due to backwards compatibility is
+                          allowed to be empty. Instances of this type with an empty value here are
+                          almost certainly wrong.
                           More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
-                          TODO: Add other useful fields. apiVersion, kind, uid?
                         type: string
                     type: object
                     x-kubernetes-map-type: atomic
@@ -436,10 +421,13 @@ spec:
                       encrypting state parameters is stored.
                     properties:
                       name:
+                        default: ""
                         description: |-
                           Name of the referent.
+                          This field is effectively required, but due to backwards compatibility is
+                          allowed to be empty. Instances of this type with an empty value here are
+                          almost certainly wrong.
                           More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
-                          TODO: Add other useful fields. apiVersion, kind, uid?
                         type: string
                     type: object
                     x-kubernetes-map-type: atomic
@@ -449,10 +437,13 @@ spec:
                       signing state parameters is stored.
                     properties:
                       name:
+                        default: ""
                         description: |-
                           Name of the referent.
+                          This field is effectively required, but due to backwards compatibility is
+                          allowed to be empty. Instances of this type with an empty value here are
+                          almost certainly wrong.
                           More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
-                          TODO: Add other useful fields. apiVersion, kind, uid?
                         type: string
                     type: object
                     x-kubernetes-map-type: atomic
@@ -462,10 +453,13 @@ spec:
                       signing tokens is stored.
                     properties:
                       name:
+                        default: ""
                         description: |-
                           Name of the referent.
+                          This field is effectively required, but due to backwards compatibility is
+                          allowed to be empty. Instances of this type with an empty value here are
+                          almost certainly wrong.
                           More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
-                          TODO: Add other useful fields. apiVersion, kind, uid?
                         type: string
                     type: object
                     x-kubernetes-map-type: atomic

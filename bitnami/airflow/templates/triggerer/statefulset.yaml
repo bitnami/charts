@@ -1,0 +1,324 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.triggerer.enabled }}
+apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
+kind: StatefulSet
+metadata:
+  name: {{ template "airflow.triggerer.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: triggerer
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | trim | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if not .Values.triggerer.autoscaling.hpa.enabled }}
+  replicas: {{ .Values.triggerer.replicaCount }}
+  {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.triggerer.podLabels .Values.commonLabels ) "context" . ) }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/component: triggerer
+  {{- if .Values.triggerer.podManagementPolicy }}
+  podManagementPolicy: {{ .Values.triggerer.podManagementPolicy | quote }}
+  {{- end }}
+  serviceName: {{ template "airflow.triggerer.fullname" . }}
+  {{- if .Values.triggerer.updateStrategy }}
+  updateStrategy: {{- toYaml .Values.triggerer.updateStrategy | nindent 4 }}
+  {{- end }}
+  template:
+    metadata:
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/component: triggerer
+      annotations:
+        checksum/configmap: {{ include (print $.Template.BasePath "/config/configmap.yaml") . | sha256sum }}
+        {{- if .Values.triggerer.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.triggerer.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- include "airflow.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.triggerer.automountServiceAccountToken }}
+      {{- if .Values.triggerer.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.triggerer.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.triggerer.affinity }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.triggerer.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.triggerer.podAffinityPreset "component" "triggerer" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.triggerer.podAntiAffinityPreset "component" "triggerer" "customLabels" $podLabels "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.triggerer.nodeAffinityPreset.type "key" .Values.triggerer.nodeAffinityPreset.key "values" .Values.triggerer.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.triggerer.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.triggerer.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.triggerer.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.triggerer.terminationGracePeriodSeconds }}
+      {{- end }}
+      {{- if .Values.triggerer.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.triggerer.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.triggerer.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.triggerer.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.triggerer.priorityClassName }}
+      priorityClassName: {{ .Values.triggerer.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.triggerer.schedulerName }}
+      schedulerName: {{ .Values.triggerer.schedulerName }}
+      {{- end }}
+      serviceAccountName: {{ include "airflow.serviceAccountName" . }}
+      {{- if .Values.triggerer.podSecurityContext.enabled }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.triggerer.podSecurityContext "context" $) | nindent 8 }}
+      {{- end }}
+      initContainers:
+        {{- include "airflow.defaultInitContainers.prepareConfig" . | nindent 8 }}
+        {{- if .Values.dags.enabled }}
+        {{- include "airflow.defaultInitContainers.loadDAGs" . | nindent 8 }}
+        {{- end }}
+        {{- if .Values.plugins.enabled }}
+        {{- include "airflow.defaultInitContainers.loadPlugins" . | nindent 8 }}
+        {{- end }}
+        {{- include "airflow.defaultInitContainers.waitForDBMigrations" . | nindent 8 }}
+        {{- if .Values.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | trim | nindent 8 }}
+        {{- end }}
+        {{- if .Values.triggerer.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.triggerer.initContainers "context" $) | trim | nindent 8 }}
+        {{- end }}
+      containers:
+        - name: airflow-triggerer
+          image: {{ include "airflow.image" . | quote }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.triggerer.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.triggerer.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.triggerer.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.triggerer.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.triggerer.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.triggerer.args "context" $) | nindent 12 }}
+          {{- end }}
+          env:
+            {{- include "airflow.configure.airflow.common" . | nindent 12 }}
+            - name: AIRFLOW_COMPONENT_TYPE
+              value: "triggerer"
+            - name: AIRFLOW_EXECUTOR
+              value: {{ .Values.executor }}
+            {{- if or (eq .Values.executor "CeleryExecutor") (eq .Values.executor "CeleryKubernetesExecutor") }}
+            - name: REDIS_HOST
+              value: {{ include "airflow.redis.host" . | quote }}
+            - name: REDIS_PORT_NUMBER
+              value: {{ include "airflow.redis.port" . | quote }}
+            {{- end }}
+            {{- if .Values.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+            {{- if .Values.triggerer.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.triggerer.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if or .Values.triggerer.extraEnvVarsCM .Values.triggerer.extraEnvVarsSecret .Values.extraEnvVarsCM .Values.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ .Values.extraEnvVarsCM }}
+            {{- end }}
+            {{- if .Values.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ .Values.extraEnvVarsSecret }}
+            {{- end }}
+            {{- if .Values.triggerer.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ .Values.triggerer.extraEnvVarsCM }}
+            {{- end }}
+            {{- if .Values.triggerer.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ .Values.triggerer.extraEnvVarsSecret }}
+            {{- end }}
+          {{- end }}
+          ports:
+            - name: logs
+              containerPort: {{ .Values.triggerer.containerPorts.logs }}
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.triggerer.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.triggerer.customLivenessProbe "context" $) | trim | nindent 12 }}
+          {{- else if .Values.triggerer.livenessProbe.enabled }}
+          {{- $livenessTimeout := sub (int .Values.triggerer.livenessProbe.timeoutSeconds) 1 }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.triggerer.livenessProbe "enabled") "context" $) | nindent 12 }}
+            exec:
+              command:
+                - /bin/bash
+                - -ec
+                - |
+                  export CONNECTION_CHECK_MAX_COUNT=0
+                  timeout {{ $livenessTimeout }} airflow jobs check --job-type TriggererJob --local {{- if not .Values.diagnosticMode.enabled }} 2>/dev/null {{- end }}
+          {{- end }}
+          {{- if .Values.triggerer.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.triggerer.customReadinessProbe "context" $) | trim | nindent 12 }}
+          {{- else if .Values.triggerer.readinessProbe.enabled }}
+          {{- $readinessTimeout := sub (int .Values.triggerer.readinessProbe.timeoutSeconds) 1 }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.triggerer.readinessProbe "enabled") "context" $) | nindent 12 }}
+            exec:
+              command:
+                - /bin/bash
+                - -ec
+                - |
+                  timeout {{ $readinessTimeout }} airflow jobs check --job-type TriggererJob --local {{- if not .Values.diagnosticMode.enabled }} 2>/dev/null {{- end }}
+          {{- end }}
+          {{- if .Values.triggerer.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.triggerer.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.triggerer.startupProbe.enabled }}
+          {{- $startupTimeout := sub (int .Values.triggerer.startupProbe.timeoutSeconds) 1 }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.triggerer.startupProbe "enabled") "context" $) | nindent 12 }}
+            exec:
+              command:
+                - /bin/bash
+                - -ec
+                - |
+                  export CONNECTION_CHECK_MAX_COUNT=0
+                  timeout {{ $startupTimeout }} airflow jobs check --job-type TriggererJob --local {{- if not .Values.diagnosticMode.enabled }} 2>/dev/null {{- end }}
+          {{- end }}
+          {{- end }}
+          {{- if .Values.triggerer.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.triggerer.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.triggerer.resources }}
+          resources: {{- toYaml .Values.triggerer.resources | nindent 12 }}
+          {{- else if ne .Values.triggerer.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.triggerer.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/airflow/nss-wrapper
+              subPath: app-nss-wrapper-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/airflow/tmp
+              subPath: app-tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/airflow/airflow.db
+              subPath: app-base-dir/airflow.db
+            - name: empty-dir
+              mountPath: /opt/bitnami/airflow/airflow.cfg
+              subPath: app-base-dir/airflow.cfg
+            - name: empty-dir
+              mountPath: /opt/bitnami/airflow/config/airflow_local_settings.py
+              subPath: app-conf-dir/airflow_local_settings.py
+            {{- if  .Values.usePasswordFiles }}
+            - name: airflow-secrets
+              mountPath: /opt/bitnami/airflow/secrets
+            {{- end }}
+            {{- if .Values.triggerer.persistence.enabled }}
+            - name: logs
+              mountPath: /opt/bitnami/airflow/logs
+            {{- else }}
+            - name: empty-dir
+              mountPath: /opt/bitnami/airflow/logs
+              subPath: app-logs-dir
+            {{- end }}
+            {{- if .Values.dags.enabled }}
+            {{- include "airflow.dags.volumeMounts" . | nindent 12 }}
+            {{- end }}
+            {{- if .Values.plugins.enabled }}
+            {{- include "airflow.plugins.volumeMounts" . | nindent 12 }}
+            {{- end }}
+            {{- if .Values.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
+            {{- if .Values.triggerer.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.triggerer.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
+        {{- if .Values.dags.enabled }}
+        {{- include "airflow.defaultSidecars.syncDAGs" . | nindent 8 }}
+        {{- end }}
+        {{- if .Values.plugins.enabled }}
+        {{- include "airflow.defaultSidecars.syncPlugins" . | nindent 8 }}
+        {{- end }}
+        {{- if .Values.sidecars }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | trim | nindent 8 }}
+        {{- end }}
+        {{- if .Values.triggerer.sidecars }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.triggerer.sidecars "context" $) | trim | nindent 8 }}
+        {{- end }}
+      volumes:
+        - name: empty-dir
+          emptyDir: {}
+        - name: configuration
+          configMap:
+            name: {{ include "airflow.configMapName"  . }}
+            optional: true
+        {{- if .Values.usePasswordFiles }}
+        - name: airflow-secrets
+          projected:
+            sources:
+              - secret:
+                  name:  {{ include "airflow.secretName" . }}
+              - secret:
+                  name: {{ include "airflow.database.secretName" . }}
+              {{- if or (eq .Values.executor "CeleryExecutor") (eq .Values.executor "CeleryKubernetesExecutor") }}
+              - secret:
+                  name: {{ include "airflow.redis.secretName" . }}
+              {{- end }}
+        {{- end }}
+        {{- if .Values.dags.enabled }}
+        {{- include "airflow.dags.volumes" . | nindent 8 }}
+        {{- end }}
+        {{- if .Values.plugins.enabled }}
+        {{- include "airflow.plugins.volumes" . | nindent 8 }}
+        {{- end }}
+        {{- if .Values.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.triggerer.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.triggerer.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+  {{- if or (not .Values.triggerer.persistence.enabled) (not (empty .Values.triggerer.persistence.existingClaim)) }}
+        - name: logs
+        {{- if not (empty .Values.triggerer.persistence.existingClaim) }}
+          persistentVolumeClaim:
+            claimName: {{ tpl .Values.triggerer.persistence.existingClaim . }}
+        {{- else }}
+          emptyDir: {}
+        {{- end }}
+  {{- else }}
+  {{- if .Values.triggerer.persistentVolumeClaimRetentionPolicy.enabled }}
+  persistentVolumeClaimRetentionPolicy:
+    whenDeleted: {{ .Values.triggerer.persistentVolumeClaimRetentionPolicy.whenDeleted }}
+    whenScaled: {{ .Values.triggerer.persistentVolumeClaimRetentionPolicy.whenScaled }}
+  {{- end }}
+  volumeClaimTemplates:
+    - metadata:
+        name: logs
+        {{- if or .Values.triggerer.persistence.annotations .Values.commonAnnotations }}
+        {{- $claimAnnotations := include "common.tplvalues.merge" (dict "values" .Values.triggerer.persistence.annotations .Values.commonAnnotations "context" .) | fromYaml }}
+        annotations: {{- include "common.tplvalues.render" ( dict "value" $claimAnnotations "context" $ ) | nindent 10 }}
+        {{- end }}
+        {{- if .Values.commonLabels }}
+        labels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 10 }}
+        {{- end }}
+      spec:
+        accessModes:
+        {{- range .Values.triggerer.persistence.accessModes }}
+          - {{ . | quote }}
+        {{- end }}
+        resources:
+          requests:
+            storage: {{ .Values.triggerer.persistence.size | quote }}
+        {{- if .Values.triggerer.persistence.selector }}
+        selector: {{- include "common.tplvalues.render" (dict "value" .Values.triggerer.persistence.selector "context" $) | nindent 10 }}
+        {{- end }}
+        {{- if .Values.triggerer.persistence.dataSource }}
+        dataSource: {{- include "common.tplvalues.render" (dict "value" .Values.triggerer.persistence.dataSource "context" $) | nindent 10 }}
+        {{- end }}
+        {{- include "common.storage.class" (dict "persistence" .Values.triggerer.persistence "global" .Values.global) | nindent 8 }}
+  {{- end }}
+{{- end }}

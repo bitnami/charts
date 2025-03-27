@@ -80,6 +80,9 @@ spec:
         metadata:
           labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 12 }}
             app.kubernetes.io/component: grafana
+          {{- if .Values.grafana.podAnnotations }}
+          annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.grafana.podAnnotations "context" $ ) | nindent 12 }}
+          {{- end }}
         spec:
           {{- include "common.images.pullSecrets" (dict "images" (list .Values.grafana.image) "global" .Values.global) | nindent 10 }}
           {{- if .Values.grafana.affinity }}
@@ -101,6 +104,9 @@ spec:
           {{- end }}
           {{- if .Values.grafana.tolerations }}
           tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.tolerations "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.grafana.topologySpreadConstraints }}
+          topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.topologySpreadConstraints "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.grafana.nodeSelector }}
           nodeSelector: {{ toYaml .Values.grafana.nodeSelector | nindent 12 }}
@@ -129,6 +135,10 @@ spec:
             - name: grafana
               image: {{ include "common.images.image" (dict "imageRoot" .Values.grafana.image "global" .Values.global) }}
               imagePullPolicy: {{ .Values.grafana.image.pullPolicy }}
+              {{- if .Values.grafana.extraEnvVars }}
+              env: 
+                {{- include "common.tplvalues.render" (dict "value" .Values.grafana.extraEnvVars "context" $) | nindent 16 }}
+              {{- end }}
               {{- if .Values.grafana.envFrom }}
               envFrom: {{- toYaml .Values.grafana.envFrom | nindent 16 }}
               {{- end }}
@@ -147,10 +157,8 @@ spec:
                 timeoutSeconds: {{ .Values.grafana.livenessProbe.timeoutSeconds }}
                 successThreshold: {{ .Values.grafana.livenessProbe.successThreshold }}
                 failureThreshold: {{ .Values.grafana.livenessProbe.failureThreshold }}
-                httpGet:
-                  path: /api/health
+                tcpSocket:
                   port: 3000
-                  scheme: HTTP
               {{- end }}
               {{- if .Values.grafana.readinessProbe.enabled }}
               readinessProbe:

@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/grafana-loki
 ```
 
-Looking to use Grafana Loki in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Grafana Loki in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -50,9 +50,9 @@ The command deploys grafana-loki on the Kubernetes cluster in the default config
 
 Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
 
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcesPreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
+### [Rolling VS Immutable tags](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -61,6 +61,24 @@ Bitnami will release a new chart updating its containers if a new version of the
 ### Loki configuration
 
 The loki configuration file `loki.yaml` is shared across the different components: `distributor`, `compactor`, `ingester`, `querier` and `queryFrontend`. This is set in the `loki.configuration` value. Check the official [Loki Grafana documentation](https://grafana.com/docs/loki/latest/configuration/) for the list of possible configurations.
+
+### Prometheus metrics
+
+This chart can be integrated with Prometheus by setting `metrics.enabled` to true. This will expose the Grafana Loki native Prometheus port in both the containers and services. The services will also have the necessary annotations to be automatically scraped by Prometheus.
+
+#### Prometheus requirements
+
+It is necessary to have a working installation of Prometheus or Prometheus Operator for the integration to work. Install the [Bitnami Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/prometheus) or the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) to easily have a working Prometheus in your cluster.
+
+#### Integration with Prometheus Operator
+
+The chart can deploy `ServiceMonitor` objects for integration with Prometheus Operator installations. To do so, set the value `metrics.serviceMonitor.enabled=true`. Ensure that the Prometheus Operator `CustomResourceDefinitions` are installed in the cluster or it will fail with the following error:
+
+```text
+no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"
+```
+
+Install the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) for having the necessary CRDs and the Prometheus Operator.
 
 ### Additional environment variables
 
@@ -156,6 +174,10 @@ externalMemcached.host=myexternalhost
 externalMemcached.port=11211
 ```
 
+### Backup and restore
+
+To back up and restore Helm chart deployments on Kubernetes, you need to back up the persistent volumes from the source deployment and attach them to a new deployment using [Velero](https://velero.io/), a Kubernetes backup/restore tool. Find the instructions for using Velero in [this guide](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-backup-restore-deployments-velero-index.html).
+
 ## Persistence
 
 ### Limitation
@@ -170,12 +192,14 @@ The [Bitnami grafana-loki](https://github.com/bitnami/containers/tree/main/bitna
 
 ### Global parameters
 
-| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value  |
-| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
-| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
-| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`   |
-| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value   |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`    |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`    |
+| `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`    |
+| `global.storageClass`                                 | DEPRECATED: use global.defaultStorageClass instead                                                                                                                                                                                                                                                                                                                  | `""`    |
+| `global.security.allowInsecureImages`                 | Allows skipping image verification                                                                                                                                                                                                                                                                                                                                  | `false` |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto`  |
 
 ### Common parameters
 
@@ -283,6 +307,9 @@ The [Bitnami grafana-loki](https://github.com/bitnami/containers/tree/main/bitna
 | `compactor.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Compactor container(s)                                                                                                                                               | `[]`                |
 | `compactor.sidecars`                                          | Add additional sidecar containers to the Compactor pod(s)                                                                                                                                                                             | `[]`                |
 | `compactor.initContainers`                                    | Add additional init containers to the Compactor pod(s)                                                                                                                                                                                | `[]`                |
+| `compactor.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                       | `true`              |
+| `compactor.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                        | `""`                |
+| `compactor.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `compactor.pdb.minAvailable` and `compactor.pdb.maxUnavailable` are empty.                                                                    | `""`                |
 | `compactor.persistence.enabled`                               | Enable persistence in Compactor instances                                                                                                                                                                                             | `true`              |
 | `compactor.persistence.existingClaim`                         | Name of an existing PVC to use                                                                                                                                                                                                        | `""`                |
 | `compactor.persistence.storageClass`                          | PVC Storage Class for Memcached data volume                                                                                                                                                                                           | `""`                |
@@ -291,30 +318,33 @@ The [Bitnami grafana-loki](https://github.com/bitnami/containers/tree/main/bitna
 | `compactor.persistence.annotations`                           | Additional PVC annotations                                                                                                                                                                                                            | `{}`                |
 | `compactor.persistence.selector`                              | Selector to match an existing Persistent Volume for Compactor's data PVC                                                                                                                                                              | `{}`                |
 | `compactor.persistence.dataSource`                            | PVC data source                                                                                                                                                                                                                       | `{}`                |
+| `compactor.enableServiceLinks`                                | Whether information about services should be injected into pod's environment variable                                                                                                                                                 | `true`              |
 
 ### Compactor Traffic Exposure Parameters
 
-| Name                                              | Description                                                      | Value       |
-| ------------------------------------------------- | ---------------------------------------------------------------- | ----------- |
-| `compactor.service.type`                          | Compactor service type                                           | `ClusterIP` |
-| `compactor.service.ports.http`                    | Compactor HTTP service port                                      | `3100`      |
-| `compactor.service.ports.grpc`                    | Compactor gRPC service port                                      | `9095`      |
-| `compactor.service.nodePorts.http`                | Node port for HTTP                                               | `""`        |
-| `compactor.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                      | `{}`        |
-| `compactor.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin | `None`      |
-| `compactor.service.clusterIP`                     | Compactor service Cluster IP                                     | `""`        |
-| `compactor.service.loadBalancerIP`                | Compactor service Load Balancer IP                               | `""`        |
-| `compactor.service.loadBalancerSourceRanges`      | Compactor service Load Balancer sources                          | `[]`        |
-| `compactor.service.externalTrafficPolicy`         | Compactor service external traffic policy                        | `Cluster`   |
-| `compactor.service.annotations`                   | Additional custom annotations for Compactor service              | `{}`        |
-| `compactor.service.extraPorts`                    | Extra ports to expose in the Compactor service                   | `[]`        |
-| `compactor.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created              | `true`      |
-| `compactor.networkPolicy.allowExternal`           | Don't require server label for connections                       | `true`      |
-| `compactor.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.  | `true`      |
-| `compactor.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
-| `compactor.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
-| `compactor.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces           | `{}`        |
-| `compactor.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces       | `{}`        |
+| Name                                              | Description                                                                                                             | Value       |
+| ------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ----------- |
+| `compactor.service.type`                          | Compactor service type                                                                                                  | `ClusterIP` |
+| `compactor.service.ports.http`                    | Compactor HTTP service port                                                                                             | `3100`      |
+| `compactor.service.ports.grpc`                    | Compactor gRPC service port                                                                                             | `9095`      |
+| `compactor.service.nodePorts.http`                | Node port for HTTP                                                                                                      | `""`        |
+| `compactor.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                             | `{}`        |
+| `compactor.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin                                                        | `None`      |
+| `compactor.service.clusterIP`                     | Compactor service Cluster IP                                                                                            | `""`        |
+| `compactor.service.loadBalancerIP`                | Compactor service Load Balancer IP                                                                                      | `""`        |
+| `compactor.service.loadBalancerSourceRanges`      | Compactor service Load Balancer sources                                                                                 | `[]`        |
+| `compactor.service.externalTrafficPolicy`         | Compactor service external traffic policy                                                                               | `Cluster`   |
+| `compactor.service.annotations`                   | Additional custom annotations for Compactor service                                                                     | `{}`        |
+| `compactor.service.extraPorts`                    | Extra ports to expose in the Compactor service                                                                          | `[]`        |
+| `compactor.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                                                     | `true`      |
+| `compactor.networkPolicy.allowExternal`           | Don't require server label for connections                                                                              | `true`      |
+| `compactor.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                                         | `true`      |
+| `compactor.networkPolicy.addExternalClientAccess` | Allow access from pods with client label set to "true". Ignored if `compactor.networkPolicy.allowExternal` is true.     | `true`      |
+| `compactor.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                                                                            | `[]`        |
+| `compactor.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                                            | `[]`        |
+| `compactor.networkPolicy.ingressPodMatchLabels`   | Labels to match to allow traffic from other pods. Ignored if `compactor.networkPolicy.allowExternal` is true.           | `{}`        |
+| `compactor.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces. Ignored if `compactor.networkPolicy.allowExternal` is true.     | `{}`        |
+| `compactor.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces. Ignored if `compactor.networkPolicy.allowExternal` is true. | `{}`        |
 
 ### Gateway Deployment Parameters
 
@@ -399,7 +429,11 @@ The [Bitnami grafana-loki](https://github.com/bitnami/containers/tree/main/bitna
 | `gateway.extraVolumes`                                      | Optionally specify extra list of additional volumes for the Gateway pod(s)                                                                                                                                                        | `[]`                    |
 | `gateway.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Gateway container(s)                                                                                                                                             | `[]`                    |
 | `gateway.sidecars`                                          | Add additional sidecar containers to the Gateway pod(s)                                                                                                                                                                           | `[]`                    |
+| `gateway.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                   | `true`                  |
+| `gateway.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                    | `""`                    |
+| `gateway.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `gateway.pdb.minAvailable` and `gateway.pdb.maxUnavailable` are empty.                                                                    | `""`                    |
 | `gateway.initContainers`                                    | Add additional init containers to the Gateway pod(s)                                                                                                                                                                              | `[]`                    |
+| `gateway.enableServiceLinks`                                | Whether information about services should be injected into pod's environment variable                                                                                                                                             | `true`                  |
 
 ### Gateway Traffic Exposure Parameters
 
@@ -419,10 +453,12 @@ The [Bitnami grafana-loki](https://github.com/bitnami/containers/tree/main/bitna
 | `gateway.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                                                              | `true`                   |
 | `gateway.networkPolicy.allowExternal`           | Don't require server label for connections                                                                                       | `true`                   |
 | `gateway.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                                                  | `true`                   |
+| `gateway.networkPolicy.addExternalClientAccess` | Allow access from pods with client label set to "true". Ignored if `gateway.networkPolicy.allowExternal` is true.                | `true`                   |
 | `gateway.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                                                                                     | `[]`                     |
 | `gateway.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                                                     | `[]`                     |
-| `gateway.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                                                           | `{}`                     |
-| `gateway.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                                                                       | `{}`                     |
+| `gateway.networkPolicy.ingressPodMatchLabels`   | Labels to match to allow traffic from other pods. Ignored if `gateway.networkPolicy.allowExternal` is true.                      | `{}`                     |
+| `gateway.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces. Ignored if `gateway.networkPolicy.allowExternal` is true.                | `{}`                     |
+| `gateway.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces. Ignored if `gateway.networkPolicy.allowExternal` is true.            | `{}`                     |
 | `gateway.ingress.enabled`                       | Enable ingress record generation for Loki Gateway                                                                                | `false`                  |
 | `gateway.ingress.pathType`                      | Ingress path type                                                                                                                | `ImplementationSpecific` |
 | `gateway.ingress.apiVersion`                    | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
@@ -510,6 +546,10 @@ The [Bitnami grafana-loki](https://github.com/bitnami/containers/tree/main/bitna
 | `indexGateway.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the index-gateway container(s)                                                                                                                                                 | `[]`             |
 | `indexGateway.sidecars`                                          | Add additional sidecar containers to the index-gateway pod(s)                                                                                                                                                                               | `[]`             |
 | `indexGateway.initContainers`                                    | Add additional init containers to the index-gateway pod(s)                                                                                                                                                                                  | `[]`             |
+| `indexGateway.enableServiceLinks`                                | Whether information about services should be injected into pod's environment variable                                                                                                                                                       | `true`           |
+| `indexGateway.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                             | `true`           |
+| `indexGateway.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                              | `""`             |
+| `indexGateway.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `indexGateway.pdb.minAvailable` and `indexGateway.pdb.maxUnavailable` are empty.                                                                    | `""`             |
 
 ### index-gateway Persistence Parameters
 
@@ -525,28 +565,30 @@ The [Bitnami grafana-loki](https://github.com/bitnami/containers/tree/main/bitna
 
 ### index-gateway Traffic Exposure Parameters
 
-| Name                                                 | Description                                                      | Value       |
-| ---------------------------------------------------- | ---------------------------------------------------------------- | ----------- |
-| `indexGateway.service.type`                          | index-gateway service type                                       | `ClusterIP` |
-| `indexGateway.service.ports.http`                    | index-gateway HTTP service port                                  | `3100`      |
-| `indexGateway.service.ports.grpc`                    | index-gateway GRPC service port                                  | `9095`      |
-| `indexGateway.service.nodePorts.http`                | Node port for HTTP                                               | `""`        |
-| `indexGateway.service.nodePorts.grpc`                | Node port for GRPC                                               | `""`        |
-| `indexGateway.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                      | `{}`        |
-| `indexGateway.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin | `None`      |
-| `indexGateway.service.clusterIP`                     | index-gateway service Cluster IP                                 | `""`        |
-| `indexGateway.service.loadBalancerIP`                | index-gateway service Load Balancer IP                           | `""`        |
-| `indexGateway.service.loadBalancerSourceRanges`      | index-gateway service Load Balancer sources                      | `[]`        |
-| `indexGateway.service.externalTrafficPolicy`         | index-gateway service external traffic policy                    | `Cluster`   |
-| `indexGateway.service.annotations`                   | Additional custom annotations for index-gateway service          | `{}`        |
-| `indexGateway.service.extraPorts`                    | Extra ports to expose in the index-gateway service               | `[]`        |
-| `indexGateway.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created              | `true`      |
-| `indexGateway.networkPolicy.allowExternal`           | Don't require server label for connections                       | `true`      |
-| `indexGateway.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.  | `true`      |
-| `indexGateway.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
-| `indexGateway.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
-| `indexGateway.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces           | `{}`        |
-| `indexGateway.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces       | `{}`        |
+| Name                                                 | Description                                                                                                                | Value       |
+| ---------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| `indexGateway.service.type`                          | index-gateway service type                                                                                                 | `ClusterIP` |
+| `indexGateway.service.ports.http`                    | index-gateway HTTP service port                                                                                            | `3100`      |
+| `indexGateway.service.ports.grpc`                    | index-gateway GRPC service port                                                                                            | `9095`      |
+| `indexGateway.service.nodePorts.http`                | Node port for HTTP                                                                                                         | `""`        |
+| `indexGateway.service.nodePorts.grpc`                | Node port for GRPC                                                                                                         | `""`        |
+| `indexGateway.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                                | `{}`        |
+| `indexGateway.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin                                                           | `None`      |
+| `indexGateway.service.clusterIP`                     | index-gateway service Cluster IP                                                                                           | `""`        |
+| `indexGateway.service.loadBalancerIP`                | index-gateway service Load Balancer IP                                                                                     | `""`        |
+| `indexGateway.service.loadBalancerSourceRanges`      | index-gateway service Load Balancer sources                                                                                | `[]`        |
+| `indexGateway.service.externalTrafficPolicy`         | index-gateway service external traffic policy                                                                              | `Cluster`   |
+| `indexGateway.service.annotations`                   | Additional custom annotations for index-gateway service                                                                    | `{}`        |
+| `indexGateway.service.extraPorts`                    | Extra ports to expose in the index-gateway service                                                                         | `[]`        |
+| `indexGateway.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                                                        | `true`      |
+| `indexGateway.networkPolicy.allowExternal`           | Don't require server label for connections                                                                                 | `true`      |
+| `indexGateway.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                                            | `true`      |
+| `indexGateway.networkPolicy.addExternalClientAccess` | Allow access from pods with client label set to "true". Ignored if `indexGateway.networkPolicy.allowExternal` is true.     | `true`      |
+| `indexGateway.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                                                                               | `[]`        |
+| `indexGateway.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                                               | `[]`        |
+| `indexGateway.networkPolicy.ingressPodMatchLabels`   | Labels to match to allow traffic from other pods. Ignored if `indexGateway.networkPolicy.allowExternal` is true.           | `{}`        |
+| `indexGateway.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces. Ignored if `indexGateway.networkPolicy.allowExternal` is true.     | `{}`        |
+| `indexGateway.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces. Ignored if `indexGateway.networkPolicy.allowExternal` is true. | `{}`        |
 
 ### Distributor Deployment Parameters
 
@@ -619,31 +661,37 @@ The [Bitnami grafana-loki](https://github.com/bitnami/containers/tree/main/bitna
 | `distributor.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Distributor container(s)                                                                                                                                                 | `[]`             |
 | `distributor.sidecars`                                          | Add additional sidecar containers to the Distributor pod(s)                                                                                                                                                                               | `[]`             |
 | `distributor.initContainers`                                    | Add additional init containers to the Distributor pod(s)                                                                                                                                                                                  | `[]`             |
+| `distributor.enableServiceLinks`                                | Whether information about services should be injected into pod's environment variable                                                                                                                                                     | `true`           |
+| `distributor.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                           | `true`           |
+| `distributor.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                            | `""`             |
+| `distributor.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `distributor.pdb.minAvailable` and `distributor.pdb.maxUnavailable` are empty.                                                                    | `""`             |
 
 ### Distributor Traffic Exposure Parameters
 
-| Name                                                | Description                                                      | Value       |
-| --------------------------------------------------- | ---------------------------------------------------------------- | ----------- |
-| `distributor.service.type`                          | Distributor service type                                         | `ClusterIP` |
-| `distributor.service.ports.http`                    | Distributor HTTP service port                                    | `3100`      |
-| `distributor.service.ports.grpc`                    | Distributor GRPC service port                                    | `9095`      |
-| `distributor.service.nodePorts.http`                | Node port for HTTP                                               | `""`        |
-| `distributor.service.nodePorts.grpc`                | Node port for GRPC                                               | `""`        |
-| `distributor.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                      | `{}`        |
-| `distributor.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin | `None`      |
-| `distributor.service.clusterIP`                     | Distributor service Cluster IP                                   | `""`        |
-| `distributor.service.loadBalancerIP`                | Distributor service Load Balancer IP                             | `""`        |
-| `distributor.service.loadBalancerSourceRanges`      | Distributor service Load Balancer sources                        | `[]`        |
-| `distributor.service.externalTrafficPolicy`         | Distributor service external traffic policy                      | `Cluster`   |
-| `distributor.service.annotations`                   | Additional custom annotations for Distributor service            | `{}`        |
-| `distributor.service.extraPorts`                    | Extra ports to expose in the Distributor service                 | `[]`        |
-| `distributor.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created              | `true`      |
-| `distributor.networkPolicy.allowExternal`           | Don't require server label for connections                       | `true`      |
-| `distributor.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.  | `true`      |
-| `distributor.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
-| `distributor.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
-| `distributor.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces           | `{}`        |
-| `distributor.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces       | `{}`        |
+| Name                                                | Description                                                                                                               | Value       |
+| --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| `distributor.service.type`                          | Distributor service type                                                                                                  | `ClusterIP` |
+| `distributor.service.ports.http`                    | Distributor HTTP service port                                                                                             | `3100`      |
+| `distributor.service.ports.grpc`                    | Distributor GRPC service port                                                                                             | `9095`      |
+| `distributor.service.nodePorts.http`                | Node port for HTTP                                                                                                        | `""`        |
+| `distributor.service.nodePorts.grpc`                | Node port for GRPC                                                                                                        | `""`        |
+| `distributor.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                               | `{}`        |
+| `distributor.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin                                                          | `None`      |
+| `distributor.service.clusterIP`                     | Distributor service Cluster IP                                                                                            | `""`        |
+| `distributor.service.loadBalancerIP`                | Distributor service Load Balancer IP                                                                                      | `""`        |
+| `distributor.service.loadBalancerSourceRanges`      | Distributor service Load Balancer sources                                                                                 | `[]`        |
+| `distributor.service.externalTrafficPolicy`         | Distributor service external traffic policy                                                                               | `Cluster`   |
+| `distributor.service.annotations`                   | Additional custom annotations for Distributor service                                                                     | `{}`        |
+| `distributor.service.extraPorts`                    | Extra ports to expose in the Distributor service                                                                          | `[]`        |
+| `distributor.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                                                       | `true`      |
+| `distributor.networkPolicy.allowExternal`           | Don't require server label for connections                                                                                | `true`      |
+| `distributor.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                                           | `true`      |
+| `distributor.networkPolicy.addExternalClientAccess` | Allow access from pods with client label set to "true". Ignored if `distributor.networkPolicy.allowExternal` is true.     | `true`      |
+| `distributor.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                                                                              | `[]`        |
+| `distributor.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                                              | `[]`        |
+| `distributor.networkPolicy.ingressPodMatchLabels`   | Labels to match to allow traffic from other pods. Ignored if `distributor.networkPolicy.allowExternal` is true.           | `{}`        |
+| `distributor.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces. Ignored if `distributor.networkPolicy.allowExternal` is true.     | `{}`        |
+| `distributor.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces. Ignored if `distributor.networkPolicy.allowExternal` is true. | `{}`        |
 
 ### Ingester Deployment Parameters
 
@@ -717,6 +765,10 @@ The [Bitnami grafana-loki](https://github.com/bitnami/containers/tree/main/bitna
 | `ingester.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the ingester container(s)                                                                                                                                              | `[]`             |
 | `ingester.sidecars`                                          | Add additional sidecar containers to the Ingester pod(s)                                                                                                                                                                            | `[]`             |
 | `ingester.initContainers`                                    | Add additional init containers to the Ingester pod(s)                                                                                                                                                                               | `[]`             |
+| `ingester.enableServiceLinks`                                | Whether information about services should be injected into pod's environment variable                                                                                                                                               | `true`           |
+| `ingester.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                     | `true`           |
+| `ingester.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                      | `""`             |
+| `ingester.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `ingester.pdb.minAvailable` and `ingester.pdb.maxUnavailable` are empty.                                                                    | `""`             |
 
 ### Ingester Persistence Parameters
 
@@ -732,28 +784,30 @@ The [Bitnami grafana-loki](https://github.com/bitnami/containers/tree/main/bitna
 
 ### Ingester Traffic Exposure Parameters
 
-| Name                                             | Description                                                      | Value       |
-| ------------------------------------------------ | ---------------------------------------------------------------- | ----------- |
-| `ingester.service.type`                          | Ingester service type                                            | `ClusterIP` |
-| `ingester.service.ports.http`                    | Ingester HTTP service port                                       | `3100`      |
-| `ingester.service.ports.grpc`                    | Ingester GRPC service port                                       | `9095`      |
-| `ingester.service.nodePorts.http`                | Node port for HTTP                                               | `""`        |
-| `ingester.service.nodePorts.grpc`                | Node port for GRPC                                               | `""`        |
-| `ingester.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                      | `{}`        |
-| `ingester.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin | `None`      |
-| `ingester.service.clusterIP`                     | Ingester service Cluster IP                                      | `""`        |
-| `ingester.service.loadBalancerIP`                | Ingester service Load Balancer IP                                | `""`        |
-| `ingester.service.loadBalancerSourceRanges`      | Ingester service Load Balancer sources                           | `[]`        |
-| `ingester.service.externalTrafficPolicy`         | Ingester service external traffic policy                         | `Cluster`   |
-| `ingester.service.annotations`                   | Additional custom annotations for Ingester service               | `{}`        |
-| `ingester.service.extraPorts`                    | Extra ports to expose in the Ingester service                    | `[]`        |
-| `ingester.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created              | `true`      |
-| `ingester.networkPolicy.allowExternal`           | Don't require server label for connections                       | `true`      |
-| `ingester.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.  | `true`      |
-| `ingester.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
-| `ingester.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
-| `ingester.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces           | `{}`        |
-| `ingester.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces       | `{}`        |
+| Name                                             | Description                                                                                                            | Value       |
+| ------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------- | ----------- |
+| `ingester.service.type`                          | Ingester service type                                                                                                  | `ClusterIP` |
+| `ingester.service.ports.http`                    | Ingester HTTP service port                                                                                             | `3100`      |
+| `ingester.service.ports.grpc`                    | Ingester GRPC service port                                                                                             | `9095`      |
+| `ingester.service.nodePorts.http`                | Node port for HTTP                                                                                                     | `""`        |
+| `ingester.service.nodePorts.grpc`                | Node port for GRPC                                                                                                     | `""`        |
+| `ingester.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                            | `{}`        |
+| `ingester.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin                                                       | `None`      |
+| `ingester.service.clusterIP`                     | Ingester service Cluster IP                                                                                            | `""`        |
+| `ingester.service.loadBalancerIP`                | Ingester service Load Balancer IP                                                                                      | `""`        |
+| `ingester.service.loadBalancerSourceRanges`      | Ingester service Load Balancer sources                                                                                 | `[]`        |
+| `ingester.service.externalTrafficPolicy`         | Ingester service external traffic policy                                                                               | `Cluster`   |
+| `ingester.service.annotations`                   | Additional custom annotations for Ingester service                                                                     | `{}`        |
+| `ingester.service.extraPorts`                    | Extra ports to expose in the Ingester service                                                                          | `[]`        |
+| `ingester.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                                                    | `true`      |
+| `ingester.networkPolicy.allowExternal`           | Don't require server label for connections                                                                             | `true`      |
+| `ingester.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                                        | `true`      |
+| `ingester.networkPolicy.addExternalClientAccess` | Allow access from pods with client label set to "true". Ignored if `ingester.networkPolicy.allowExternal` is true.     | `true`      |
+| `ingester.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                                                                           | `[]`        |
+| `ingester.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                                           | `[]`        |
+| `ingester.networkPolicy.ingressPodMatchLabels`   | Labels to match to allow traffic from other pods. Ignored if `ingester.networkPolicy.allowExternal` is true.           | `{}`        |
+| `ingester.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces. Ignored if `ingester.networkPolicy.allowExternal` is true.     | `{}`        |
+| `ingester.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces. Ignored if `ingester.networkPolicy.allowExternal` is true. | `{}`        |
 
 ### Querier Deployment Parameters
 
@@ -827,6 +881,10 @@ The [Bitnami grafana-loki](https://github.com/bitnami/containers/tree/main/bitna
 | `querier.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the querier container(s)                                                                                                                                             | `[]`             |
 | `querier.sidecars`                                          | Add additional sidecar containers to the Querier pod(s)                                                                                                                                                                           | `[]`             |
 | `querier.initContainers`                                    | Add additional init containers to the Querier pod(s)                                                                                                                                                                              | `[]`             |
+| `querier.enableServiceLinks`                                | Whether information about services should be injected into pod's environment variable                                                                                                                                             | `true`           |
+| `querier.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                   | `true`           |
+| `querier.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                    | `""`             |
+| `querier.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `querier.pdb.minAvailable` and `querier.pdb.maxUnavailable` are empty.                                                                    | `""`             |
 
 ### Querier Persistence Parameters
 
@@ -842,28 +900,30 @@ The [Bitnami grafana-loki](https://github.com/bitnami/containers/tree/main/bitna
 
 ### Querier Traffic Exposure Parameters
 
-| Name                                            | Description                                                      | Value       |
-| ----------------------------------------------- | ---------------------------------------------------------------- | ----------- |
-| `querier.service.type`                          | Querier service type                                             | `ClusterIP` |
-| `querier.service.ports.http`                    | Querier HTTP service port                                        | `3100`      |
-| `querier.service.ports.grpc`                    | Querier GRPC service port                                        | `9095`      |
-| `querier.service.nodePorts.http`                | Node port for HTTP                                               | `""`        |
-| `querier.service.nodePorts.grpc`                | Node port for GRPC                                               | `""`        |
-| `querier.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                      | `{}`        |
-| `querier.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin | `None`      |
-| `querier.service.clusterIP`                     | Querier service Cluster IP                                       | `""`        |
-| `querier.service.loadBalancerIP`                | Querier service Load Balancer IP                                 | `""`        |
-| `querier.service.loadBalancerSourceRanges`      | Querier service Load Balancer sources                            | `[]`        |
-| `querier.service.externalTrafficPolicy`         | Querier service external traffic policy                          | `Cluster`   |
-| `querier.service.annotations`                   | Additional custom annotations for Querier service                | `{}`        |
-| `querier.service.extraPorts`                    | Extra ports to expose in the Querier service                     | `[]`        |
-| `querier.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created              | `true`      |
-| `querier.networkPolicy.allowExternal`           | Don't require server label for connections                       | `true`      |
-| `querier.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.  | `true`      |
-| `querier.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
-| `querier.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
-| `querier.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces           | `{}`        |
-| `querier.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces       | `{}`        |
+| Name                                            | Description                                                                                                           | Value       |
+| ----------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ----------- |
+| `querier.service.type`                          | Querier service type                                                                                                  | `ClusterIP` |
+| `querier.service.ports.http`                    | Querier HTTP service port                                                                                             | `3100`      |
+| `querier.service.ports.grpc`                    | Querier GRPC service port                                                                                             | `9095`      |
+| `querier.service.nodePorts.http`                | Node port for HTTP                                                                                                    | `""`        |
+| `querier.service.nodePorts.grpc`                | Node port for GRPC                                                                                                    | `""`        |
+| `querier.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                           | `{}`        |
+| `querier.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin                                                      | `None`      |
+| `querier.service.clusterIP`                     | Querier service Cluster IP                                                                                            | `""`        |
+| `querier.service.loadBalancerIP`                | Querier service Load Balancer IP                                                                                      | `""`        |
+| `querier.service.loadBalancerSourceRanges`      | Querier service Load Balancer sources                                                                                 | `[]`        |
+| `querier.service.externalTrafficPolicy`         | Querier service external traffic policy                                                                               | `Cluster`   |
+| `querier.service.annotations`                   | Additional custom annotations for Querier service                                                                     | `{}`        |
+| `querier.service.extraPorts`                    | Extra ports to expose in the Querier service                                                                          | `[]`        |
+| `querier.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                                                   | `true`      |
+| `querier.networkPolicy.allowExternal`           | Don't require server label for connections                                                                            | `true`      |
+| `querier.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                                       | `true`      |
+| `querier.networkPolicy.addExternalClientAccess` | Allow access from pods with client label set to "true". Ignored if `querier.networkPolicy.allowExternal` is true.     | `true`      |
+| `querier.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                                                                          | `[]`        |
+| `querier.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                                          | `[]`        |
+| `querier.networkPolicy.ingressPodMatchLabels`   | Labels to match to allow traffic from other pods. Ignored if `querier.networkPolicy.allowExternal` is true.           | `{}`        |
+| `querier.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces. Ignored if `querier.networkPolicy.allowExternal` is true.     | `{}`        |
+| `querier.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces. Ignored if `querier.networkPolicy.allowExternal` is true. | `{}`        |
 
 ### Query Frontend Deployment Parameters
 
@@ -936,32 +996,38 @@ The [Bitnami grafana-loki](https://github.com/bitnami/containers/tree/main/bitna
 | `queryFrontend.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the queryFrontend container(s)                                                                                                                                                   | `[]`             |
 | `queryFrontend.sidecars`                                          | Add additional sidecar containers to the queryFrontend pod(s)                                                                                                                                                                                 | `[]`             |
 | `queryFrontend.initContainers`                                    | Add additional init containers to the queryFrontend pod(s)                                                                                                                                                                                    | `[]`             |
+| `queryFrontend.enableServiceLinks`                                | Whether information about services should be injected into pod's environment variable                                                                                                                                                         | `true`           |
+| `queryFrontend.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                               | `true`           |
+| `queryFrontend.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                                | `""`             |
+| `queryFrontend.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `queryFrontend.pdb.minAvailable` and `queryFrontend.pdb.maxUnavailable` are empty.                                                                    | `""`             |
 
 ### Query Frontend Traffic Exposure Parameters
 
-| Name                                                  | Description                                                      | Value       |
-| ----------------------------------------------------- | ---------------------------------------------------------------- | ----------- |
-| `queryFrontend.service.type`                          | queryFrontend service type                                       | `ClusterIP` |
-| `queryFrontend.service.ports.http`                    | queryFrontend HTTP service port                                  | `3100`      |
-| `queryFrontend.service.ports.grpc`                    | queryFrontend GRPC service port                                  | `9095`      |
-| `queryFrontend.service.nodePorts.http`                | Node port for HTTP                                               | `""`        |
-| `queryFrontend.service.nodePorts.grpc`                | Node port for GRPC                                               | `""`        |
-| `queryFrontend.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                      | `{}`        |
-| `queryFrontend.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin | `None`      |
-| `queryFrontend.service.clusterIP`                     | queryFrontend service Cluster IP                                 | `""`        |
-| `queryFrontend.service.loadBalancerIP`                | queryFrontend service Load Balancer IP                           | `""`        |
-| `queryFrontend.service.loadBalancerSourceRanges`      | queryFrontend service Load Balancer sources                      | `[]`        |
-| `queryFrontend.service.externalTrafficPolicy`         | queryFrontend service external traffic policy                    | `Cluster`   |
-| `queryFrontend.service.annotations`                   | Additional custom annotations for queryFrontend service          | `{}`        |
-| `queryFrontend.service.extraPorts`                    | Extra ports to expose in the queryFrontend service               | `[]`        |
-| `queryFrontend.service.headless.annotations`          | Annotations for the headless service.                            | `{}`        |
-| `queryFrontend.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created              | `true`      |
-| `queryFrontend.networkPolicy.allowExternal`           | Don't require server label for connections                       | `true`      |
-| `queryFrontend.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.  | `true`      |
-| `queryFrontend.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
-| `queryFrontend.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
-| `queryFrontend.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces           | `{}`        |
-| `queryFrontend.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces       | `{}`        |
+| Name                                                  | Description                                                                                                                 | Value       |
+| ----------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| `queryFrontend.service.type`                          | queryFrontend service type                                                                                                  | `ClusterIP` |
+| `queryFrontend.service.ports.http`                    | queryFrontend HTTP service port                                                                                             | `3100`      |
+| `queryFrontend.service.ports.grpc`                    | queryFrontend GRPC service port                                                                                             | `9095`      |
+| `queryFrontend.service.nodePorts.http`                | Node port for HTTP                                                                                                          | `""`        |
+| `queryFrontend.service.nodePorts.grpc`                | Node port for GRPC                                                                                                          | `""`        |
+| `queryFrontend.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                                 | `{}`        |
+| `queryFrontend.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin                                                            | `None`      |
+| `queryFrontend.service.clusterIP`                     | queryFrontend service Cluster IP                                                                                            | `""`        |
+| `queryFrontend.service.loadBalancerIP`                | queryFrontend service Load Balancer IP                                                                                      | `""`        |
+| `queryFrontend.service.loadBalancerSourceRanges`      | queryFrontend service Load Balancer sources                                                                                 | `[]`        |
+| `queryFrontend.service.externalTrafficPolicy`         | queryFrontend service external traffic policy                                                                               | `Cluster`   |
+| `queryFrontend.service.annotations`                   | Additional custom annotations for queryFrontend service                                                                     | `{}`        |
+| `queryFrontend.service.extraPorts`                    | Extra ports to expose in the queryFrontend service                                                                          | `[]`        |
+| `queryFrontend.service.headless.annotations`          | Annotations for the headless service.                                                                                       | `{}`        |
+| `queryFrontend.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                                                         | `true`      |
+| `queryFrontend.networkPolicy.allowExternal`           | Don't require server label for connections                                                                                  | `true`      |
+| `queryFrontend.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                                             | `true`      |
+| `queryFrontend.networkPolicy.addExternalClientAccess` | Allow access from pods with client label set to "true". Ignored if `queryFrontend.networkPolicy.allowExternal` is true.     | `true`      |
+| `queryFrontend.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                                                                                | `[]`        |
+| `queryFrontend.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                                                | `[]`        |
+| `queryFrontend.networkPolicy.ingressPodMatchLabels`   | Labels to match to allow traffic from other pods. Ignored if `queryFrontend.networkPolicy.allowExternal` is true.           | `{}`        |
+| `queryFrontend.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces. Ignored if `queryFrontend.networkPolicy.allowExternal` is true.     | `{}`        |
+| `queryFrontend.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces. Ignored if `queryFrontend.networkPolicy.allowExternal` is true. | `{}`        |
 
 ### Query Scheduler Deployment Parameters
 
@@ -1035,31 +1101,37 @@ The [Bitnami grafana-loki](https://github.com/bitnami/containers/tree/main/bitna
 | `queryScheduler.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the queryScheduler container(s)                                                                                                                                                    | `[]`             |
 | `queryScheduler.sidecars`                                          | Add additional sidecar containers to the queryScheduler pod(s)                                                                                                                                                                                  | `[]`             |
 | `queryScheduler.initContainers`                                    | Add additional init containers to the queryScheduler pod(s)                                                                                                                                                                                     | `[]`             |
+| `queryScheduler.enableServiceLinks`                                | Whether information about services should be injected into pod's environment variable                                                                                                                                                           | `true`           |
+| `queryScheduler.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                                 | `true`           |
+| `queryScheduler.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                                  | `""`             |
+| `queryScheduler.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `queryScheduler.pdb.minAvailable` and `queryScheduler.pdb.maxUnavailable` are empty.                                                                    | `""`             |
 
 ### Query Scheduler Traffic Exposure Parameters
 
-| Name                                                   | Description                                                      | Value       |
-| ------------------------------------------------------ | ---------------------------------------------------------------- | ----------- |
-| `queryScheduler.service.type`                          | queryScheduler service type                                      | `ClusterIP` |
-| `queryScheduler.service.ports.http`                    | queryScheduler HTTP service port                                 | `3100`      |
-| `queryScheduler.service.ports.grpc`                    | queryScheduler GRPC service port                                 | `9095`      |
-| `queryScheduler.service.nodePorts.http`                | Node port for HTTP                                               | `""`        |
-| `queryScheduler.service.nodePorts.grpc`                | Node port for GRPC                                               | `""`        |
-| `queryScheduler.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                      | `{}`        |
-| `queryScheduler.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin | `None`      |
-| `queryScheduler.service.clusterIP`                     | queryScheduler service Cluster IP                                | `""`        |
-| `queryScheduler.service.loadBalancerIP`                | queryScheduler service Load Balancer IP                          | `""`        |
-| `queryScheduler.service.loadBalancerSourceRanges`      | queryScheduler service Load Balancer sources                     | `[]`        |
-| `queryScheduler.service.externalTrafficPolicy`         | queryScheduler service external traffic policy                   | `Cluster`   |
-| `queryScheduler.service.annotations`                   | Additional custom annotations for queryScheduler service         | `{}`        |
-| `queryScheduler.service.extraPorts`                    | Extra ports to expose in the queryScheduler service              | `[]`        |
-| `queryScheduler.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created              | `true`      |
-| `queryScheduler.networkPolicy.allowExternal`           | Don't require server label for connections                       | `true`      |
-| `queryScheduler.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.  | `true`      |
-| `queryScheduler.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
-| `queryScheduler.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
-| `queryScheduler.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces           | `{}`        |
-| `queryScheduler.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces       | `{}`        |
+| Name                                                   | Description                                                                                                                  | Value       |
+| ------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| `queryScheduler.service.type`                          | queryScheduler service type                                                                                                  | `ClusterIP` |
+| `queryScheduler.service.ports.http`                    | queryScheduler HTTP service port                                                                                             | `3100`      |
+| `queryScheduler.service.ports.grpc`                    | queryScheduler GRPC service port                                                                                             | `9095`      |
+| `queryScheduler.service.nodePorts.http`                | Node port for HTTP                                                                                                           | `""`        |
+| `queryScheduler.service.nodePorts.grpc`                | Node port for GRPC                                                                                                           | `""`        |
+| `queryScheduler.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                                  | `{}`        |
+| `queryScheduler.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin                                                             | `None`      |
+| `queryScheduler.service.clusterIP`                     | queryScheduler service Cluster IP                                                                                            | `""`        |
+| `queryScheduler.service.loadBalancerIP`                | queryScheduler service Load Balancer IP                                                                                      | `""`        |
+| `queryScheduler.service.loadBalancerSourceRanges`      | queryScheduler service Load Balancer sources                                                                                 | `[]`        |
+| `queryScheduler.service.externalTrafficPolicy`         | queryScheduler service external traffic policy                                                                               | `Cluster`   |
+| `queryScheduler.service.annotations`                   | Additional custom annotations for queryScheduler service                                                                     | `{}`        |
+| `queryScheduler.service.extraPorts`                    | Extra ports to expose in the queryScheduler service                                                                          | `[]`        |
+| `queryScheduler.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                                                          | `true`      |
+| `queryScheduler.networkPolicy.allowExternal`           | Don't require server label for connections                                                                                   | `true`      |
+| `queryScheduler.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                                              | `true`      |
+| `queryScheduler.networkPolicy.addExternalClientAccess` | Allow access from pods with client label set to "true". Ignored if `queryScheduler.networkPolicy.allowExternal` is true.     | `true`      |
+| `queryScheduler.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                                                                                 | `[]`        |
+| `queryScheduler.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                                                 | `[]`        |
+| `queryScheduler.networkPolicy.ingressPodMatchLabels`   | Labels to match to allow traffic from other pods. Ignored if `queryScheduler.networkPolicy.allowExternal` is true.           | `{}`        |
+| `queryScheduler.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces. Ignored if `queryScheduler.networkPolicy.allowExternal` is true.     | `{}`        |
+| `queryScheduler.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces. Ignored if `queryScheduler.networkPolicy.allowExternal` is true. | `{}`        |
 
 ### Ruler Deployment Parameters
 
@@ -1134,6 +1206,10 @@ The [Bitnami grafana-loki](https://github.com/bitnami/containers/tree/main/bitna
 | `ruler.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the ruler container(s)                                                                                                                                           | `[]`             |
 | `ruler.sidecars`                                          | Add additional sidecar containers to the Ruler pod(s)                                                                                                                                                                         | `[]`             |
 | `ruler.initContainers`                                    | Add additional init containers to the Ruler pod(s)                                                                                                                                                                            | `[]`             |
+| `ruler.enableServiceLinks`                                | Whether information about services should be injected into pod's environment variable                                                                                                                                         | `true`           |
+| `ruler.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                               | `true`           |
+| `ruler.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                | `""`             |
+| `ruler.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `ruler.pdb.minAvailable` and `ruler.pdb.maxUnavailable` are empty.                                                                    | `""`             |
 
 ### Ruler Persistence Parameters
 
@@ -1149,28 +1225,30 @@ The [Bitnami grafana-loki](https://github.com/bitnami/containers/tree/main/bitna
 
 ### Ruler Traffic Exposure Parameters
 
-| Name                                          | Description                                                      | Value       |
-| --------------------------------------------- | ---------------------------------------------------------------- | ----------- |
-| `ruler.service.type`                          | Ruler service type                                               | `ClusterIP` |
-| `ruler.service.ports.http`                    | Ruler HTTP service port                                          | `3100`      |
-| `ruler.service.ports.grpc`                    | Ruler GRPC service port                                          | `9095`      |
-| `ruler.service.nodePorts.http`                | Node port for HTTP                                               | `""`        |
-| `ruler.service.nodePorts.grpc`                | Node port for GRPC                                               | `""`        |
-| `ruler.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                      | `{}`        |
-| `ruler.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin | `None`      |
-| `ruler.service.clusterIP`                     | Ruler service Cluster IP                                         | `""`        |
-| `ruler.service.loadBalancerIP`                | Ruler service Load Balancer IP                                   | `""`        |
-| `ruler.service.loadBalancerSourceRanges`      | Ruler service Load Balancer sources                              | `[]`        |
-| `ruler.service.externalTrafficPolicy`         | Ruler service external traffic policy                            | `Cluster`   |
-| `ruler.service.annotations`                   | Additional custom annotations for Ruler service                  | `{}`        |
-| `ruler.service.extraPorts`                    | Extra ports to expose in the Ruler service                       | `[]`        |
-| `ruler.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created              | `true`      |
-| `ruler.networkPolicy.allowExternal`           | Don't require server label for connections                       | `true`      |
-| `ruler.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.  | `true`      |
-| `ruler.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
-| `ruler.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
-| `ruler.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces           | `{}`        |
-| `ruler.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces       | `{}`        |
+| Name                                          | Description                                                                                                         | Value       |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ----------- |
+| `ruler.service.type`                          | Ruler service type                                                                                                  | `ClusterIP` |
+| `ruler.service.ports.http`                    | Ruler HTTP service port                                                                                             | `3100`      |
+| `ruler.service.ports.grpc`                    | Ruler GRPC service port                                                                                             | `9095`      |
+| `ruler.service.nodePorts.http`                | Node port for HTTP                                                                                                  | `""`        |
+| `ruler.service.nodePorts.grpc`                | Node port for GRPC                                                                                                  | `""`        |
+| `ruler.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                         | `{}`        |
+| `ruler.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin                                                    | `None`      |
+| `ruler.service.clusterIP`                     | Ruler service Cluster IP                                                                                            | `""`        |
+| `ruler.service.loadBalancerIP`                | Ruler service Load Balancer IP                                                                                      | `""`        |
+| `ruler.service.loadBalancerSourceRanges`      | Ruler service Load Balancer sources                                                                                 | `[]`        |
+| `ruler.service.externalTrafficPolicy`         | Ruler service external traffic policy                                                                               | `Cluster`   |
+| `ruler.service.annotations`                   | Additional custom annotations for Ruler service                                                                     | `{}`        |
+| `ruler.service.extraPorts`                    | Extra ports to expose in the Ruler service                                                                          | `[]`        |
+| `ruler.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                                                 | `true`      |
+| `ruler.networkPolicy.allowExternal`           | Don't require server label for connections                                                                          | `true`      |
+| `ruler.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                                     | `true`      |
+| `ruler.networkPolicy.addExternalClientAccess` | Allow access from pods with client label set to "true". Ignored if `ruler.networkPolicy.allowExternal` is true.     | `true`      |
+| `ruler.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                                                                        | `[]`        |
+| `ruler.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                                        | `[]`        |
+| `ruler.networkPolicy.ingressPodMatchLabels`   | Labels to match to allow traffic from other pods. Ignored if `ruler.networkPolicy.allowExternal` is true.           | `{}`        |
+| `ruler.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces. Ignored if `ruler.networkPolicy.allowExternal` is true.     | `{}`        |
+| `ruler.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces. Ignored if `ruler.networkPolicy.allowExternal` is true. | `{}`        |
 
 ### table-manager Deployment Parameters
 
@@ -1244,31 +1322,37 @@ The [Bitnami grafana-loki](https://github.com/bitnami/containers/tree/main/bitna
 | `tableManager.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the table-manager container(s)                                                                                                                                                 | `[]`             |
 | `tableManager.sidecars`                                          | Add additional sidecar containers to the table-manager pod(s)                                                                                                                                                                               | `[]`             |
 | `tableManager.initContainers`                                    | Add additional init containers to the table-manager pod(s)                                                                                                                                                                                  | `[]`             |
+| `tableManager.enableServiceLinks`                                | Whether information about services should be injected into pod's environment variable                                                                                                                                                       | `true`           |
+| `tableManager.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                             | `true`           |
+| `tableManager.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                              | `""`             |
+| `tableManager.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `tableManager.pdb.minAvailable` and `tableManager.pdb.maxUnavailable` are empty.                                                                    | `""`             |
 
 ### table-manager Traffic Exposure Parameters
 
-| Name                                                 | Description                                                      | Value       |
-| ---------------------------------------------------- | ---------------------------------------------------------------- | ----------- |
-| `tableManager.service.type`                          | table-manager service type                                       | `ClusterIP` |
-| `tableManager.service.ports.http`                    | table-manager HTTP service port                                  | `3100`      |
-| `tableManager.service.ports.grpc`                    | table-manager GRPC service port                                  | `9095`      |
-| `tableManager.service.nodePorts.http`                | Node port for HTTP                                               | `""`        |
-| `tableManager.service.nodePorts.grpc`                | Node port for GRPC                                               | `""`        |
-| `tableManager.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                      | `{}`        |
-| `tableManager.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin | `None`      |
-| `tableManager.service.clusterIP`                     | table-manager service Cluster IP                                 | `""`        |
-| `tableManager.service.loadBalancerIP`                | table-manager service Load Balancer IP                           | `""`        |
-| `tableManager.service.loadBalancerSourceRanges`      | table-manager service Load Balancer sources                      | `[]`        |
-| `tableManager.service.externalTrafficPolicy`         | table-manager service external traffic policy                    | `Cluster`   |
-| `tableManager.service.annotations`                   | Additional custom annotations for table-manager service          | `{}`        |
-| `tableManager.service.extraPorts`                    | Extra ports to expose in the table-manager service               | `[]`        |
-| `tableManager.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created              | `true`      |
-| `tableManager.networkPolicy.allowExternal`           | Don't require server label for connections                       | `true`      |
-| `tableManager.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.  | `true`      |
-| `tableManager.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
-| `tableManager.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
-| `tableManager.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces           | `{}`        |
-| `tableManager.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces       | `{}`        |
+| Name                                                 | Description                                                                                                                | Value       |
+| ---------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| `tableManager.service.type`                          | table-manager service type                                                                                                 | `ClusterIP` |
+| `tableManager.service.ports.http`                    | table-manager HTTP service port                                                                                            | `3100`      |
+| `tableManager.service.ports.grpc`                    | table-manager GRPC service port                                                                                            | `9095`      |
+| `tableManager.service.nodePorts.http`                | Node port for HTTP                                                                                                         | `""`        |
+| `tableManager.service.nodePorts.grpc`                | Node port for GRPC                                                                                                         | `""`        |
+| `tableManager.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                                | `{}`        |
+| `tableManager.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin                                                           | `None`      |
+| `tableManager.service.clusterIP`                     | table-manager service Cluster IP                                                                                           | `""`        |
+| `tableManager.service.loadBalancerIP`                | table-manager service Load Balancer IP                                                                                     | `""`        |
+| `tableManager.service.loadBalancerSourceRanges`      | table-manager service Load Balancer sources                                                                                | `[]`        |
+| `tableManager.service.externalTrafficPolicy`         | table-manager service external traffic policy                                                                              | `Cluster`   |
+| `tableManager.service.annotations`                   | Additional custom annotations for table-manager service                                                                    | `{}`        |
+| `tableManager.service.extraPorts`                    | Extra ports to expose in the table-manager service                                                                         | `[]`        |
+| `tableManager.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                                                        | `true`      |
+| `tableManager.networkPolicy.allowExternal`           | Don't require server label for connections                                                                                 | `true`      |
+| `tableManager.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                                            | `true`      |
+| `tableManager.networkPolicy.addExternalClientAccess` | Allow access from pods with client label set to "true". Ignored if `tableManager.networkPolicy.allowExternal` is true.     | `true`      |
+| `tableManager.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                                                                               | `[]`        |
+| `tableManager.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                                               | `[]`        |
+| `tableManager.networkPolicy.ingressPodMatchLabels`   | Labels to match to allow traffic from other pods. Ignored if `tableManager.networkPolicy.allowExternal` is true.           | `{}`        |
+| `tableManager.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces. Ignored if `tableManager.networkPolicy.allowExternal` is true.     | `{}`        |
+| `tableManager.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces. Ignored if `tableManager.networkPolicy.allowExternal` is true. | `{}`        |
 
 ### Promtail Deployment Parameters
 
@@ -1348,39 +1432,42 @@ The [Bitnami grafana-loki](https://github.com/bitnami/containers/tree/main/bitna
 | `promtail.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the promtail container(s)                                                                                                                                              | `[]`                       |
 | `promtail.sidecars`                                          | Add additional sidecar containers to the Promtail pod(s)                                                                                                                                                                            | `[]`                       |
 | `promtail.initContainers`                                    | Add additional init containers to the Promtail pod(s)                                                                                                                                                                               | `[]`                       |
+| `promtail.enableServiceLinks`                                | Whether information about services should be injected into pod's environment variable                                                                                                                                               | `true`                     |
 | `promtail.configuration`                                     | Promtail configuration                                                                                                                                                                                                              | `""`                       |
 | `promtail.existingSecret`                                    | Name of a Secret that contains the Promtail configuration                                                                                                                                                                           | `""`                       |
 | `promtail.logLevel`                                          | Promtail logging level                                                                                                                                                                                                              | `info`                     |
 
 ### Promtail Traffic Exposure Parameters
 
-| Name                                                   | Description                                                                                        | Value       |
-| ------------------------------------------------------ | -------------------------------------------------------------------------------------------------- | ----------- |
-| `promtail.service.type`                                | Promtail service type                                                                              | `ClusterIP` |
-| `promtail.service.ports.http`                          | Promtail HTTP service port                                                                         | `3100`      |
-| `promtail.service.ports.grpc`                          | Promtail gRPC service port                                                                         | `9095`      |
-| `promtail.service.nodePorts.http`                      | Node port for HTTP                                                                                 | `""`        |
-| `promtail.service.sessionAffinityConfig`               | Additional settings for the sessionAffinity                                                        | `{}`        |
-| `promtail.service.sessionAffinity`                     | Control where client requests go, to the same pod or round-robin                                   | `None`      |
-| `promtail.service.clusterIP`                           | Promtail service Cluster IP                                                                        | `""`        |
-| `promtail.service.loadBalancerIP`                      | Promtail service Load Balancer IP                                                                  | `""`        |
-| `promtail.service.loadBalancerSourceRanges`            | Promtail service Load Balancer sources                                                             | `[]`        |
-| `promtail.service.externalTrafficPolicy`               | Promtail service external traffic policy                                                           | `Cluster`   |
-| `promtail.service.annotations`                         | Additional custom annotations for Promtail service                                                 | `{}`        |
-| `promtail.service.extraPorts`                          | Extra ports to expose in the Promtail service                                                      | `[]`        |
-| `promtail.networkPolicy.enabled`                       | Specifies whether a NetworkPolicy should be created                                                | `true`      |
-| `promtail.networkPolicy.allowExternal`                 | Don't require server label for connections                                                         | `true`      |
-| `promtail.networkPolicy.allowExternalEgress`           | Allow the pod to access any range of port and all destinations.                                    | `true`      |
-| `promtail.networkPolicy.kubeAPIServerPorts`            | List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security) | `[]`        |
-| `promtail.networkPolicy.extraIngress`                  | Add extra ingress rules to the NetworkPolicy                                                       | `[]`        |
-| `promtail.networkPolicy.extraEgress`                   | Add extra ingress rules to the NetworkPolicy                                                       | `[]`        |
-| `promtail.networkPolicy.ingressNSMatchLabels`          | Labels to match to allow traffic from other namespaces                                             | `{}`        |
-| `promtail.networkPolicy.ingressNSPodMatchLabels`       | Pod labels to match to allow traffic from other namespaces                                         | `{}`        |
-| `promtail.rbac.create`                                 | Create RBAC rules                                                                                  | `true`      |
-| `promtail.serviceAccount.create`                       | Enable creation of ServiceAccount for Promtail pods                                                | `true`      |
-| `promtail.serviceAccount.name`                         | The name of the ServiceAccount to use                                                              | `""`        |
-| `promtail.serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the promtail.serviceAccount.created                    | `false`     |
-| `promtail.serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                                               | `{}`        |
+| Name                                                   | Description                                                                                                            | Value       |
+| ------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------- | ----------- |
+| `promtail.service.type`                                | Promtail service type                                                                                                  | `ClusterIP` |
+| `promtail.service.ports.http`                          | Promtail HTTP service port                                                                                             | `3100`      |
+| `promtail.service.ports.grpc`                          | Promtail gRPC service port                                                                                             | `9095`      |
+| `promtail.service.nodePorts.http`                      | Node port for HTTP                                                                                                     | `""`        |
+| `promtail.service.sessionAffinityConfig`               | Additional settings for the sessionAffinity                                                                            | `{}`        |
+| `promtail.service.sessionAffinity`                     | Control where client requests go, to the same pod or round-robin                                                       | `None`      |
+| `promtail.service.clusterIP`                           | Promtail service Cluster IP                                                                                            | `""`        |
+| `promtail.service.loadBalancerIP`                      | Promtail service Load Balancer IP                                                                                      | `""`        |
+| `promtail.service.loadBalancerSourceRanges`            | Promtail service Load Balancer sources                                                                                 | `[]`        |
+| `promtail.service.externalTrafficPolicy`               | Promtail service external traffic policy                                                                               | `Cluster`   |
+| `promtail.service.annotations`                         | Additional custom annotations for Promtail service                                                                     | `{}`        |
+| `promtail.service.extraPorts`                          | Extra ports to expose in the Promtail service                                                                          | `[]`        |
+| `promtail.networkPolicy.enabled`                       | Specifies whether a NetworkPolicy should be created                                                                    | `true`      |
+| `promtail.networkPolicy.allowExternal`                 | Don't require server label for connections                                                                             | `true`      |
+| `promtail.networkPolicy.allowExternalEgress`           | Allow the pod to access any range of port and all destinations.                                                        | `true`      |
+| `promtail.networkPolicy.addExternalClientAccess`       | Allow access from pods with client label set to "true". Ignored if `promtail.networkPolicy.allowExternal` is true.     | `true`      |
+| `promtail.networkPolicy.kubeAPIServerPorts`            | List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)                     | `[]`        |
+| `promtail.networkPolicy.extraIngress`                  | Add extra ingress rules to the NetworkPolicy                                                                           | `[]`        |
+| `promtail.networkPolicy.extraEgress`                   | Add extra ingress rules to the NetworkPolicy                                                                           | `[]`        |
+| `promtail.networkPolicy.ingressPodMatchLabels`         | Labels to match to allow traffic from other pods. Ignored if `promtail.networkPolicy.allowExternal` is true.           | `{}`        |
+| `promtail.networkPolicy.ingressNSMatchLabels`          | Labels to match to allow traffic from other namespaces. Ignored if `promtail.networkPolicy.allowExternal` is true.     | `{}`        |
+| `promtail.networkPolicy.ingressNSPodMatchLabels`       | Pod labels to match to allow traffic from other namespaces. Ignored if `promtail.networkPolicy.allowExternal` is true. | `{}`        |
+| `promtail.rbac.create`                                 | Create RBAC rules                                                                                                      | `true`      |
+| `promtail.serviceAccount.create`                       | Enable creation of ServiceAccount for Promtail pods                                                                    | `true`      |
+| `promtail.serviceAccount.name`                         | The name of the ServiceAccount to use                                                                                  | `""`        |
+| `promtail.serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the promtail.serviceAccount.created                                        | `false`     |
+| `promtail.serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                                                                   | `{}`        |
 
 ### Init Container Parameters
 
@@ -1432,17 +1519,14 @@ The [Bitnami grafana-loki](https://github.com/bitnami/containers/tree/main/bitna
 
 ### Memcached Sub-chart Parameters (Chunks)
 
-| Name                                      | Description                                                                                                                                                                                                | Value                       |
-| ----------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
-| `memcachedchunks.enabled`                 | Deploy memcached sub-chart                                                                                                                                                                                 | `true`                      |
-| `memcachedchunks.image.registry`          | Memcached image registry                                                                                                                                                                                   | `REGISTRY_NAME`             |
-| `memcachedchunks.image.repository`        | Memcached image repository                                                                                                                                                                                 | `REPOSITORY_NAME/memcached` |
-| `memcachedchunks.image.digest`            | Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                  | `""`                        |
-| `memcachedchunks.nameOverride`            | override the subchart name                                                                                                                                                                                 | `""`                        |
-| `memcachedchunks.architecture`            | Memcached architecture                                                                                                                                                                                     | `high-availability`         |
-| `memcachedchunks.service.ports.memcached` | Memcached service port                                                                                                                                                                                     | `11211`                     |
-| `memcachedchunks.resourcesPreset`         | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production). | `nano`                      |
-| `memcachedchunks.resources`               | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                          | `{}`                        |
+| Name                                      | Description                                                                                                                                                                                                | Value               |
+| ----------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
+| `memcachedchunks.enabled`                 | Deploy memcached sub-chart                                                                                                                                                                                 | `true`              |
+| `memcachedchunks.nameOverride`            | override the subchart name                                                                                                                                                                                 | `""`                |
+| `memcachedchunks.architecture`            | Memcached architecture                                                                                                                                                                                     | `high-availability` |
+| `memcachedchunks.service.ports.memcached` | Memcached service port                                                                                                                                                                                     | `11211`             |
+| `memcachedchunks.resourcesPreset`         | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production). | `nano`              |
+| `memcachedchunks.resources`               | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                          | `{}`                |
 
 ### External Memcached (Frontend) Parameters
 
@@ -1453,17 +1537,14 @@ The [Bitnami grafana-loki](https://github.com/bitnami/containers/tree/main/bitna
 
 ### Memcached Sub-chart Parameters (Frontend)
 
-| Name                                        | Description                                                                                                                                                                                                | Value                       |
-| ------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
-| `memcachedfrontend.enabled`                 | Deploy memcached sub-chart                                                                                                                                                                                 | `true`                      |
-| `memcachedfrontend.image.registry`          | Memcached image registry                                                                                                                                                                                   | `REGISTRY_NAME`             |
-| `memcachedfrontend.image.repository`        | Memcached image repository                                                                                                                                                                                 | `REPOSITORY_NAME/memcached` |
-| `memcachedfrontend.image.digest`            | Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                  | `""`                        |
-| `memcachedfrontend.architecture`            | Memcached architecture                                                                                                                                                                                     | `high-availability`         |
-| `memcachedfrontend.nameOverride`            | override the subchart name                                                                                                                                                                                 | `""`                        |
-| `memcachedfrontend.service.ports.memcached` | Memcached service port                                                                                                                                                                                     | `11211`                     |
-| `memcachedfrontend.resourcesPreset`         | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production). | `nano`                      |
-| `memcachedfrontend.resources`               | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                          | `{}`                        |
+| Name                                        | Description                                                                                                                                                                                                | Value               |
+| ------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
+| `memcachedfrontend.enabled`                 | Deploy memcached sub-chart                                                                                                                                                                                 | `true`              |
+| `memcachedfrontend.architecture`            | Memcached architecture                                                                                                                                                                                     | `high-availability` |
+| `memcachedfrontend.nameOverride`            | override the subchart name                                                                                                                                                                                 | `""`                |
+| `memcachedfrontend.service.ports.memcached` | Memcached service port                                                                                                                                                                                     | `11211`             |
+| `memcachedfrontend.resourcesPreset`         | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production). | `nano`              |
+| `memcachedfrontend.resources`               | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                          | `{}`                |
 
 ### External Memcached (Index-Queries) Parameters
 
@@ -1474,17 +1555,14 @@ The [Bitnami grafana-loki](https://github.com/bitnami/containers/tree/main/bitna
 
 ### Memcached Sub-chart Parameters (Index-Queries)
 
-| Name                                            | Description                                                                                                                                                                                                | Value                       |
-| ----------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
-| `memcachedindexqueries.enabled`                 | Deploy memcached sub-chart                                                                                                                                                                                 | `false`                     |
-| `memcachedindexqueries.image.registry`          | Memcached image registry                                                                                                                                                                                   | `REGISTRY_NAME`             |
-| `memcachedindexqueries.image.repository`        | Memcached image repository                                                                                                                                                                                 | `REPOSITORY_NAME/memcached` |
-| `memcachedindexqueries.image.digest`            | Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                  | `""`                        |
-| `memcachedindexqueries.architecture`            | Memcached architecture                                                                                                                                                                                     | `high-availability`         |
-| `memcachedindexqueries.nameOverride`            | override the subchart name                                                                                                                                                                                 | `""`                        |
-| `memcachedindexqueries.service.ports.memcached` | Memcached service port                                                                                                                                                                                     | `11211`                     |
-| `memcachedindexqueries.resourcesPreset`         | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production). | `nano`                      |
-| `memcachedindexqueries.resources`               | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                          | `{}`                        |
+| Name                                            | Description                                                                                                                                                                                                | Value               |
+| ----------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
+| `memcachedindexqueries.enabled`                 | Deploy memcached sub-chart                                                                                                                                                                                 | `false`             |
+| `memcachedindexqueries.architecture`            | Memcached architecture                                                                                                                                                                                     | `high-availability` |
+| `memcachedindexqueries.nameOverride`            | override the subchart name                                                                                                                                                                                 | `""`                |
+| `memcachedindexqueries.service.ports.memcached` | Memcached service port                                                                                                                                                                                     | `11211`             |
+| `memcachedindexqueries.resourcesPreset`         | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production). | `nano`              |
+| `memcachedindexqueries.resources`               | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                          | `{}`                |
 
 ### External Memcached (IndexWrites) Parameters
 
@@ -1495,17 +1573,14 @@ The [Bitnami grafana-loki](https://github.com/bitnami/containers/tree/main/bitna
 
 ### Memcached Sub-chart Parameters (Index-Writes)
 
-| Name                                           | Description                                                                                                                                                                                                | Value                       |
-| ---------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
-| `memcachedindexwrites.enabled`                 | Deploy memcached sub-chart                                                                                                                                                                                 | `false`                     |
-| `memcachedindexwrites.image.registry`          | Memcached image registry                                                                                                                                                                                   | `REGISTRY_NAME`             |
-| `memcachedindexwrites.image.repository`        | Memcached image repository                                                                                                                                                                                 | `REPOSITORY_NAME/memcached` |
-| `memcachedindexwrites.image.digest`            | Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                  | `""`                        |
-| `memcachedindexwrites.architecture`            | Memcached architecture                                                                                                                                                                                     | `high-availability`         |
-| `memcachedindexwrites.nameOverride`            | override the subchart name                                                                                                                                                                                 | `""`                        |
-| `memcachedindexwrites.service.ports.memcached` | Memcached service port                                                                                                                                                                                     | `11211`                     |
-| `memcachedindexwrites.resourcesPreset`         | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production). | `nano`                      |
-| `memcachedindexwrites.resources`               | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                          | `{}`                        |
+| Name                                           | Description                                                                                                                                                                                                | Value               |
+| ---------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
+| `memcachedindexwrites.enabled`                 | Deploy memcached sub-chart                                                                                                                                                                                 | `false`             |
+| `memcachedindexwrites.architecture`            | Memcached architecture                                                                                                                                                                                     | `high-availability` |
+| `memcachedindexwrites.nameOverride`            | override the subchart name                                                                                                                                                                                 | `""`                |
+| `memcachedindexwrites.service.ports.memcached` | Memcached service port                                                                                                                                                                                     | `11211`             |
+| `memcachedindexwrites.resourcesPreset`         | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production). | `nano`              |
+| `memcachedindexwrites.resources`               | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                          | `{}`                |
 
 See <https://github.com/bitnami/readme-generator-for-helm> to create the table.
 
@@ -1538,6 +1613,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 4.7.0
+
+This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
+
 ### To 4.0.0
 
 This major bumps the Grafana Loki version to its newest major, 3.x.x. This version includes a new storage schema, among other features like structured metadata support. These changes could potentially break your deployments. Please refer to the official [release notes](https://grafana.com/docs/loki/latest/release-notes/v3-0/) and documentation website for further details.
@@ -1566,7 +1645,7 @@ Additionally updates the Memcached subchart to its newest major `6.x.x`, which c
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

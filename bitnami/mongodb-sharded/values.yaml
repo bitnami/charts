@@ -9,7 +9,8 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global storage class for dynamic provisioning
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
+## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ##
 global:
   imageRegistry: ""
@@ -18,7 +19,13 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  defaultStorageClass: ""
   storageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
   ## Compatibility adaptations for Kubernetes platforms
   ##
   compatibility:
@@ -85,10 +92,9 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mongodb-sharded
-  tag: 7.0.9-debian-12-r0
+  tag: 8.0.6-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -124,9 +130,9 @@ auth:
   ## NOTE: When it's set the previous parameters are ignored.
   ##
   existingSecret: ""
-  ## @param auth.usePasswordFile Mount credentials as files instead of using environment variables
+  ## @param auth.usePasswordFiles Mount credentials as files instead of using environment variables
   ##
-  usePasswordFile: false
+  usePasswordFiles: true
 ## @param shards Number of shards to be created
 ## ref: https://docs.mongodb.com/manual/core/sharded-cluster-shards/
 ##
@@ -253,7 +259,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r19
+    tag: 12-debian-12-r40
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -558,7 +564,7 @@ configsvr:
   pdb:
     ## @param configsvr.pdb.create Enable pod disruption budget
     ##
-    create: false
+    create: true
     ## @param configsvr.pdb.minAvailable Minimum number of available config pods allowed (`0` to disable)
     ##
     minAvailable: 0
@@ -599,8 +605,19 @@ configsvr:
     ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
     ##
     annotations: {}
-    ## @param configsvr.persistence.resourcePolicy Setting it to "keep" to avoid removing PVCs during a helm delete operation. Leaving it empty will delete PVCs after the chart deleted
-    resourcePolicy: ""
+  ## Persistent Volume Claim Retention Policy
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#persistentvolumeclaim-retention
+  ##
+  persistentVolumeClaimRetentionPolicy:
+    ## @param configsvr.persistentVolumeClaimRetentionPolicy.enabled Enable Persistent volume retention policy for Config Server StatefulSet
+    ##
+    enabled: false
+    ## @param configsvr.persistentVolumeClaimRetentionPolicy.whenScaled Volume retention behavior when the replica count of the StatefulSet is reduced
+    ##
+    whenScaled: Retain
+    ## @param configsvr.persistentVolumeClaimRetentionPolicy.whenDeleted Volume retention behavior that applies when the StatefulSet is deleted
+    ##
+    whenDeleted: Retain
   ## K8s Service Account.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
   ##
@@ -965,7 +982,7 @@ mongos:
   pdb:
     ## @param mongos.pdb.create Enable pod disruption budget
     ##
-    create: false
+    create: true
     ## @param mongos.pdb.minAvailable Minimum number of available mongo pods allowed (`0` to disable)
     ##
     minAvailable: 0
@@ -1274,7 +1291,7 @@ shardsvr:
     pdb:
       ## @param shardsvr.dataNode.pdb.create Enable pod disruption budget
       ##
-      create: false
+      create: true
       ## @param shardsvr.dataNode.pdb.minAvailable Minimum number of available data pods allowed (`0` to disable)
       ##
       minAvailable: 0
@@ -1446,8 +1463,20 @@ shardsvr:
     ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
     ##
     annotations: {}
-    ## @param shardsvr.persistence.resourcePolicy Setting it to "keep" to avoid removing PVCs during a helm delete operation. Leaving it empty will delete PVCs after the chart deleted
-    resourcePolicy: ""
+  ## Persistent Volume Claim Retention Policy
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#persistentvolumeclaim-retention
+  ##
+  persistentVolumeClaimRetentionPolicy:
+    ## @param shardsvr.persistentVolumeClaimRetentionPolicy.enabled Enable Persistent volume retention policy for Shard replicas StatefulSet
+    ##
+    enabled: false
+    ## @param shardsvr.persistentVolumeClaimRetentionPolicy.whenScaled Volume retention behavior when the replica count of the StatefulSet is reduced
+    ##
+    whenScaled: Retain
+    ## @param shardsvr.persistentVolumeClaimRetentionPolicy.whenDeleted Volume retention behavior that applies when the StatefulSet is deleted
+    ##
+    whenDeleted: Retain
+
   ## @section Shard configuration: Arbiter parameters
   ##
 
@@ -1751,7 +1780,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mongodb-exporter
-    tag: 0.40.0-debian-12-r16
+    tag: 0.43.1-debian-12-r11
     digest: ""
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.

@@ -7,8 +7,12 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "postgresql.v1.primary.fullname" . }}
-  namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- $labels := .Values.commonLabels }}
+  {{- if .Values.primary.service.labels }}
+  {{- $labels = include "common.tplvalues.merge" ( dict "values" ( list .Values.primary.service.labels $labels ) "context" . ) }}
+  {{- end }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: primary
   {{- if or .Values.commonAnnotations .Values.primary.service.annotations }}
   {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.primary.service.annotations .Values.commonAnnotations ) "context" . ) }}
@@ -21,6 +25,9 @@ spec:
   {{- end }}
   {{- if and (eq .Values.primary.service.type "LoadBalancer") (not (empty .Values.primary.service.loadBalancerSourceRanges)) }}
   loadBalancerSourceRanges: {{ .Values.primary.service.loadBalancerSourceRanges | toJson}}
+  {{- end }}
+  {{- if and (eq .Values.primary.service.type "LoadBalancer") (not (empty .Values.primary.service.loadBalancerClass)) }}
+  loadBalancerClass: {{ .Values.primary.service.loadBalancerClass }}
   {{- end }}
   {{- if and (eq .Values.primary.service.type "LoadBalancer") (not (empty .Values.primary.service.loadBalancerIP)) }}
   loadBalancerIP: {{ .Values.primary.service.loadBalancerIP }}

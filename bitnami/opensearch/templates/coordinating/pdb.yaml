@@ -18,8 +18,8 @@ spec:
   {{- if .Values.coordinating.pdb.minAvailable }}
   minAvailable: {{ .Values.coordinating.pdb.minAvailable }}
   {{- end }}
-  {{- if .Values.coordinating.pdb.maxUnavailable }}
-  maxUnavailable: {{ .Values.coordinating.pdb.maxUnavailable }}
+  {{- if or .Values.coordinating.pdb.maxUnavailable (not .Values.coordinating.pdb.minAvailable) }}
+  maxUnavailable: {{ .Values.coordinating.pdb.maxUnavailable | default 1 }}
   {{- end }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.coordinating.podLabels .Values.commonLabels ) "context" . ) }}
   selector:

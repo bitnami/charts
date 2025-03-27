@@ -1,0 +1,31 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and ( include "opensearch.master.enabled" . ) .Values.master.metrics.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ printf "%s-metrics" (include "opensearch.master.fullname" .) | trunc 63 | trimSuffix "-" }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: opensearch
+    app.kubernetes.io/component: master
+  {{- $defaultAnnotations := dict "prometheus.io/scrape" "true" "prometheus.io/port" (.Values.master.metrics.service.port | quote) "prometheus.io/path" "/_prometheus/metrics" }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list $defaultAnnotations .Values.master.metrics.service.annotations .Values.commonAnnotations) "context" .) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+spec:
+  type: ClusterIP
+  {{- if .Values.master.metrics.service.clusterIP }}
+  clusterIP: {{ .Values.master.metrics.service.clusterIP }}
+  {{- end }}
+  ports:
+    - name:  http-metrics
+      targetPort: rest-api
+      port: {{ .Values.master.metrics.service.ports.metrics }}
+      protocol: TCP
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.master.podLabels .Values.commonLabels ) "context" . ) }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: master
+{{- end }}

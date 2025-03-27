@@ -36,6 +36,9 @@ spec:
         {{- if and .Values.serverBlock (not .Values.existingServerBlockConfigmap) }}
         checksum/server-block-configuration: {{ include (print $.Template.BasePath "/server-block-configmap.yaml") . | sha256sum }}
         {{- end }}
+        {{- if and .Values.streamServerBlock (not .Values.existingServerBlockConfigmap) }}
+        checksum/stream-server-block-configuration: {{ include (print $.Template.BasePath "/stream-server-block-configmap.yaml") . | sha256sum }}
+        {{- end }}
     spec:
       {{- include "nginx.imagePullSecrets" . | nindent 6 }}
       shareProcessNamespace: {{ .Values.sidecarSingleProcessNamespace }}
@@ -53,6 +56,12 @@ spec:
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       hostNetwork: {{ .Values.hostNetwork }}
+      {{- if .Values.dnsPolicy  }}
+      dnsPolicy: {{ .Values.dnsPolicy }}
+      {{- end }}
+      {{- if .Values.dnsConfig }}
+      dnsConfig: {{- include "common.tplvalues.render" (dict "value" .Values.dnsConfig "context" $) | nindent 8 }}
+      {{- end }}
       hostIPC: {{ .Values.hostIPC }}
       {{- if .Values.priorityClassName }}
       priorityClassName: {{ .Values.priorityClassName | quote }}
@@ -75,7 +84,9 @@ spec:
       {{- if .Values.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
       {{- end }}
+      {{- if or .Values.containerSecurityContext.readOnlyRootFilesystem .Values.cloneStaticSiteFromGit.enabled .Values.initContainers }}
       initContainers:
+      {{- if .Values.containerSecurityContext.readOnlyRootFilesystem }}
         - name: preserve-logs-symlinks
           image: {{ include "nginx.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
@@ -101,6 +112,7 @@ spec:
           volumeMounts:
             - name: empty-dir
               mountPath: /emptydir
+      {{- end }}        
       {{- if or .Values.cloneStaticSiteFromGit.enabled .Values.initContainers }}
         {{- if .Values.cloneStaticSiteFromGit.enabled }}
         - name: git-clone-repository
@@ -122,6 +134,11 @@ spec:
           {{- end }}
           {{- if .Values.cloneStaticSiteFromGit.gitClone.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.cloneStaticSiteFromGit.gitClone.args "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.cloneStaticSiteFromGit.gitSync.resources }}
+          resources: {{- toYaml .Values.cloneStaticSiteFromGit.gitSync.resources | nindent 12 }}
+          {{- else if ne .Values.cloneStaticSiteFromGit.gitSync.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.cloneStaticSiteFromGit.gitSync.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: empty-dir
@@ -150,6 +167,7 @@ spec:
         {{- if .Values.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
         {{- end }}
+      {{- end }}
       {{- end }}
       containers:
         {{- if .Values.cloneStaticSiteFromGit.enabled }}
@@ -234,6 +252,10 @@ spec:
             - name: NGINX_HTTPS_PORT_NUMBER
               value: {{ .Values.containerPorts.https | quote }}
             {{- end }}
+            {{- if or .Values.streamServerBlock .Values.existingStreamServerBlockConfigmap }}
+            - name: NGINX_ENABLE_STREAM
+              value: "true"
+            {{- end }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
@@ -269,8 +291,9 @@ spec:
           {{- if .Values.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
           {{- else if .Values.readinessProbe.enabled }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.readinessProbe "enabled") "context" $) | nindent 12 }}
-            tcpSocket:
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.readinessProbe "enabled" "path") "context" $) | nindent 12 }}
+            httpGet:
+              path: {{ .Values.readinessProbe.path }}
               port: {{ ternary "https" "http" (and (empty .Values.containerPorts.http) (not (empty .Values.containerPorts.https))) }}
           {{- end }}
           {{- if .Values.customStartupProbe }}
@@ -302,6 +325,10 @@ spec:
             {{- if or .Values.serverBlock .Values.existingServerBlockConfigmap }}
             - name: nginx-server-block
               mountPath: /opt/bitnami/nginx/conf/server_blocks
+            {{- end }}
+            {{- if or .Values.streamServerBlock .Values.existingStreamServerBlockConfigmap }}
+            - name: nginx-stream-server-block
+              mountPath: /opt/bitnami/nginx/conf/stream_server_blocks
             {{- end }}
             {{- if (include "nginx.useStaticSite" .) }}
             - name: staticsite
@@ -380,6 +407,11 @@ spec:
         - name: nginx-server-block
           configMap:
             name: {{ include "nginx.serverBlockConfigmapName" . }}
+        {{- end }}
+        {{- if or .Values.streamServerBlock .Values.existingStreamServerBlockConfigmap }}
+        - name: nginx-stream-server-block
+          configMap:
+            name: {{ include "nginx.streamServerBlockConfigmapName" . }}
         {{- end }}
         {{- if (include "nginx.useStaticSite" .) }}
         - name: staticsite

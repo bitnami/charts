@@ -1,0 +1,172 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.operator.rbac.create }}
+apiVersion: rbac.authorization.k8s.io/v1
+{{- if .Values.operator.namespaceScope }}
+kind: Role
+{{- else }}
+kind: ClusterRole
+{{- end }}
+metadata:
+  name: {{ include "common.names.fullname.namespace" . }}
+  {{- if .Values.operator.namespaceScope }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- end }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - configmaps
+      - persistentvolumeclaims
+      - secrets
+      - serviceaccounts
+      - services
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - ""
+    resources:
+      - events
+    verbs:
+      - create
+      - get
+      - list
+      - patch
+      - watch
+  - apiGroups:
+      - apps
+    resources:
+      - deployments
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - coordination.k8s.io
+    resources:
+      - leases
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - grafana.integreatly.org
+    resources:
+      - grafanaalertrulegroups
+      - grafanacontactpoints
+      - grafanadashboards
+      - grafanadatasources
+      - grafanafolders
+      - grafananotificationpolicies
+      - grafananotificationtemplates
+      - grafanas
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - grafana.integreatly.org
+    resources:
+      - grafanaalertrulegroups/finalizers
+      - grafanacontactpoints/finalizers
+      - grafanadashboards/finalizers
+      - grafanadatasources/finalizers
+      - grafanafolders/finalizers
+      - grafananotificationpolicies/finalizers
+      - grafananotificationtemplates/finalizers
+      - grafanas/finalizers
+    verbs:
+      - update
+  - apiGroups:
+      - grafana.integreatly.org
+    resources:
+      - grafanaalertrulegroups/status
+      - grafanacontactpoints/status
+      - grafanadashboards/status
+      - grafanadatasources/status
+      - grafanafolders/status
+      - grafananotificationpolicies/status
+      - grafananotificationtemplates/status
+      - grafanas/status
+    verbs:
+      - get
+      - patch
+      - update
+  - apiGroups:
+      - networking.k8s.io
+    resources:
+      - ingresses
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - route.openshift.io
+    resources:
+      - routes
+      - routes/custom-host
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - update
+      - watch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+{{- if .Values.operator.namespaceScope }}
+kind: RoleBinding
+{{- else }}
+kind: ClusterRoleBinding
+{{- end }}
+metadata:
+  name: {{ include "common.names.fullname.namespace" . }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.operator.namespaceScope }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- end }}
+subjects:
+  - kind: ServiceAccount
+    name:  {{ include "grafana-operator.serviceAccountName" . }}
+    namespace: {{ include "common.names.namespace" . | quote }}
+roleRef:
+  {{- if .Values.operator.namespaceScope }}
+  kind: Role
+  {{- else }}
+  kind: ClusterRole
+  {{- end }}
+  name: {{ include "common.names.fullname.namespace" . }}
+  apiGroup: rbac.authorization.k8s.io
+{{- end }}

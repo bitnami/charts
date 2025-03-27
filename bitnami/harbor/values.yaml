@@ -9,7 +9,8 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
+## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ##
 global:
   imageRegistry: ""
@@ -18,7 +19,13 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  defaultStorageClass: ""
   storageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
   ## Compatibility adaptations for Kubernetes platforms
   ##
   compatibility:
@@ -521,6 +528,171 @@ persistence:
       chunksize: ""
       rootdirectory: ""
       secretkey: ""
+
+## @section Migration job parameters
+##
+migration:
+  ## @param migration.enabled Enable migration job
+  ##
+  enabled: false
+  ## @param migration.podLabels Additional pod labels
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param migration.podAnnotations Additional pod annotations
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param migration.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
+  ## @param migration.hostAliases Migration job host aliases
+  ##
+  hostAliases: []
+  ## @param migration.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param migration.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param migration.annotations [object] Provide any additional annotations which may be required.
+  ## This can be used to set the LoadBalancer service type to internal only.
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+  ##
+  annotations:
+    helm.sh/hook: pre-upgrade
+    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+  ## Pod security context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param migration.podSecurityContext.enabled Enabled Jaeger pods' Security Context
+  ## @param migration.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param migration.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param migration.podSecurityContext.supplementalGroups Set filesystem extra groups
+  ## @param migration.podSecurityContext.fsGroup Set Jaeger pod's Security Context fsGroup
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
+    fsGroup: 1001
+  ## @param migration.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param migration.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param migration.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param migration.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+  ## @param migration.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param migration.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param migration.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param migration.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param migration.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param migration.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
+  containerSecurityContext:
+    enabled: true
+    seLinuxOptions: {}
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
+  ## @param migration.extraEnvVars Extra environment variables to be set on jaeger migration container
+  ## For example:
+  ##  - name: FOO
+  ##    value: BAR
+  ##
+  extraEnvVars: []
+  ## @param migration.extraEnvVarsCM Name of existing ConfigMap containing extra env vars
+  ##
+  extraEnvVarsCM: ""
+  ## @param migration.extraEnvVarsSecret Name of existing Secret containing extra env vars
+  ##
+  extraEnvVarsSecret: ""
+  ## @param migration.extraVolumeMounts Optionally specify extra list of additional volumeMounts for jaeger container
+  ##
+  extraVolumeMounts: []
+  ## Jaeger pods' resource requests and limits
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## Minimum memory for development is 4GB and 2 CPU cores
+  ## Minimum memory for production is 8GB and 4 CPU cores
+  ## ref: http://docs.datastax.com/en/archived/jaeger/2.0/jaeger/architecture/architecturePlanningHardware_c.html
+  ##
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## @param migration.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if migration.resources is set (migration.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "small"
+  ## @param migration.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param migration.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param migration.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param migration.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param migration.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param migration.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+  ## @param migration.extraVolumes Optionally specify extra list of additional volumes for jaeger container
+  ##
+  extraVolumes: []
+
 ## @section Tracing parameters
 ##
 
@@ -583,6 +755,26 @@ tracing:
 ##
 
 ## Init containers parameters:
+## certificateVolume: Copy /etc/ssl/certs to a volume so that they can be updated when a read-only volume is in use.
+##
+certificateVolume:
+  ## Init container resource requests and limits
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param certificateVolume.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if certificateVolume.resources is set (certificateVolume.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "nano"
+  ## @param certificateVolume.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
 ## volumePermissions: Change the owner and group of the persistent volume(s) mountpoint(s) to 'runAsUser:fsGroup' on each node
 ##
 volumePermissions:
@@ -599,7 +791,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r19
+    tag: 12-debian-12-r40
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -654,10 +846,9 @@ nginx:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.25.5-debian-12-r1
+    tag: 1.27.4-debian-12-r7
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -838,12 +1029,25 @@ nginx:
   ## @param nginx.lifecycleHooks LifecycleHook for the NGINX container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
-  ## @param nginx.serviceAccountName Set the service account name for the NGINX pods
-  ## 
-  serviceAccountName: ""
   ## @param nginx.automountServiceAccountToken Mount Service Account token in pod
   ##
   automountServiceAccountToken: false
+  ## Harbor Nginx ServiceAccount configuration
+  ##
+  serviceAccount:
+    ## @param nginx.serviceAccount.create Specifies whether a ServiceAccount should be created
+    ##
+    create: false
+    ## @param nginx.serviceAccount.name The name of the ServiceAccount to use.
+    ## If not set and create is true, a name is generated using the common.names.fullname template
+    ##
+    name: ""
+    ## @param nginx.serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
+    ##
+    automountServiceAccountToken: false
+    ## @param nginx.serviceAccount.annotations Additional custom annotations for the ServiceAccount
+    ##
+    annotations: {}
   ## @param nginx.hostAliases NGINX pods host aliases
   ##
   hostAliases: []
@@ -930,6 +1134,16 @@ nginx:
   ##         containerPort: 1234
   ##
   initContainers: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param nginx.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param nginx.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param nginx.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `nginx.pdb.minAvailable` and `nginx.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
   ## @param nginx.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the NGINX pods
   ##
   extraVolumeMounts: []
@@ -1007,10 +1221,9 @@ portal:
   image:
     registry: docker.io
     repository: bitnami/harbor-portal
-    tag: 2.10.2-debian-12-r1
+    tag: 2.12.2-debian-12-r5
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -1262,18 +1475,41 @@ portal:
   ##         containerPort: 1234
   ##
   initContainers: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param portal.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param portal.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param portal.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `portal.pdb.minAvailable` and `portal.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
   ## @param portal.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Harbor Portal pods
   ##
   extraVolumeMounts: []
   ## @param portal.extraVolumes Optionally specify extra list of additional volumes for the Harbor Portal pods
   ##
   extraVolumes: []
-  ## @param portal.serviceAccountName Set the service account name for the Harbor Portal pods
-  ## 
-  serviceAccountName: ""
-  ## @param portal.automountServiceAccountToken Automount service account token
+  ## @param portal.automountServiceAccountToken Mount Service Account token in pod
   ##
   automountServiceAccountToken: false
+  ## Harbor Portal ServiceAccount configuration
+  ##
+  serviceAccount:
+    ## @param portal.serviceAccount.create Specifies whether a ServiceAccount should be created
+    ##
+    create: false
+    ## @param portal.serviceAccount.name The name of the ServiceAccount to use.
+    ## If not set and create is true, a name is generated using the common.names.fullname template
+    ##
+    name: ""
+    ## @param portal.serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
+    ##
+    automountServiceAccountToken: false
+    ## @param portal.serviceAccount.annotations Additional custom annotations for the ServiceAccount
+    ##
+    annotations: {}
   ## Harbor Portal service configuration
   ##
   service:
@@ -1354,10 +1590,9 @@ core:
   image:
     registry: docker.io
     repository: bitnami/harbor-core
-    tag: 2.10.2-debian-12-r1
+    tag: 2.12.2-debian-12-r9
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -1403,13 +1638,15 @@ core:
   existingSecret: ""
   ## @param core.existingEnvVarsSecret Existing secret for core envvars
   ## The secret must contain the keys:
-  ## `CSRF_KEY` (required),
-  ## `HARBOR_ADMIN_PASSWORD` (required),
-  ## `POSTGRESQL_PASSWORD` (required),
-  ## `REGISTRY_CREDENTIAL_USERNAME` (required),
-  ## `REGISTRY_CREDENTIAL_PASSWORD` (required),
-  ## `_REDIS_URL_CORE` (optional),
-  ## `_REDIS_URL_REG` (optional),
+  ## `CSRF_KEY` (optional - alternatively auto-generated),
+  ## `HARBOR_ADMIN_PASSWORD` (optional - alternatively auto-generated),
+  ## `POSTGRESQL_PASSWORD` (optional - alternatively uses weak upstream default. Read below if you set it. You must also set postgresql.auth.existingSecret to the same value as core.existingEnvVarsSecret for this to work!),
+  ## `postgres-password` (required if POSTGRESQL_PASSWORD is set & must be the same as POSTGRESQL_PASSWORD.)
+  ## `HARBOR_DATABASE_PASSWORD` (required if POSTGRESQL_PASSWORD is set & must be the same as POSTGRESQL_PASSWORD.)
+  ## `REGISTRY_CREDENTIAL_USERNAME` (optional - alternatively weak defaults),
+  ## `REGISTRY_CREDENTIAL_PASSWORD` (optional - alternatively weak defaults),
+  ## `_REDIS_URL_CORE` (required - if using the internal Redis - set to base64 of "redis://harbor-redis-master:6379/0")
+  ## `_REDIS_URL_REG` (required - if using the internal Redis - set to base64 of "redis://harbor-redis-master:6379/2")
   ##
   ## If you do not know how to start, let the chart generate a full secret for you before defining an existingEnvVarsSecret
   ## Notes:
@@ -1667,18 +1904,41 @@ core:
   ##         containerPort: 1234
   ##
   initContainers: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param core.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param core.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param core.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `core.pdb.minAvailable` and `core.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
   ## @param core.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Harbor Core pods
   ##
   extraVolumeMounts: []
   ## @param core.extraVolumes Optionally specify extra list of additional volumes for the Harbor Core pods
   ##
   extraVolumes: []
-  ## @param core.serviceAccountName Set the service account name for the Harbor Core pods
-  ## 
-  serviceAccountName: ""
-  ## @param core.automountServiceAccountToken Automount service account token
+  ## @param core.automountServiceAccountToken Mount Service Account token in pod
   ##
   automountServiceAccountToken: false
+  ## Harbor Core ServiceAccount configuration
+  ##
+  serviceAccount:
+    ## @param core.serviceAccount.create Specifies whether a ServiceAccount should be created
+    ##
+    create: false
+    ## @param core.serviceAccount.name The name of the ServiceAccount to use.
+    ## If not set and create is true, a name is generated using the common.names.fullname template
+    ##
+    name: ""
+    ## @param core.serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
+    ##
+    automountServiceAccountToken: false
+    ## @param core.serviceAccount.annotations Additional custom annotations for the ServiceAccount
+    ##
+    annotations: {}
   ## Harbor Core service configuration
   ##
   service:
@@ -1761,10 +2021,9 @@ jobservice:
   image:
     registry: docker.io
     repository: bitnami/harbor-jobservice
-    tag: 2.10.2-debian-12-r1
+    tag: 2.12.2-debian-12-r9
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -1798,6 +2057,13 @@ jobservice:
   ## `secret` (required),
   ##
   existingSecret: ""
+  ## @param jobservice.existingEnvVarsSecret Existing secret for jobservice envvars
+  ## The secret must contain the keys:
+  ## `REGISTRY_CREDENTIAL_PASSWORD` (optional),
+  ## `JOB_SERVICE_POOL_REDIS_URL` (required - if using the internal Redis - set to base64 of "redis://harbor-redis-master:6379/1"),
+  ##
+  ## If you do not know how to start, let the chart generate a full secret for you before defining an existingEnvVarsSecret
+  existingEnvVarsSecret: ""
   ## Use TLS in the container
   ##
   tls:
@@ -2037,18 +2303,41 @@ jobservice:
   ##         containerPort: 1234
   ##
   initContainers: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param jobservice.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param jobservice.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param jobservice.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `jobservice.pdb.minAvailable` and `jobservice.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
   ## @param jobservice.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Harbor Jobservice pods
   ##
   extraVolumeMounts: []
   ## @param jobservice.extraVolumes Optionally specify extra list of additional volumes for the Harbor Jobservice pods
   ##
   extraVolumes: []
-  ## @param jobservice.serviceAccountName Set the service account name for the Harbor Jobservice pods
-  ## 
-  serviceAccountName: ""
-  ## @param jobservice.automountServiceAccountToken Automount service account token
+  ## @param jobservice.automountServiceAccountToken Mount Service Account token in pod
   ##
   automountServiceAccountToken: false
+  ## Harbor Jobservice ServiceAccount configuration
+  ##
+  serviceAccount:
+    ## @param jobservice.serviceAccount.create Specifies whether a ServiceAccount should be created
+    ##
+    create: false
+    ## @param jobservice.serviceAccount.name The name of the ServiceAccount to use.
+    ## If not set and create is true, a name is generated using the common.names.fullname template
+    ##
+    name: ""
+    ## @param jobservice.serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
+    ##
+    automountServiceAccountToken: false
+    ## @param jobservice.serviceAccount.annotations Additional custom annotations for the ServiceAccount
+    ##
+    annotations: {}
   ## Harbor Jobservice service configuration
   ##
   service:
@@ -2130,8 +2419,8 @@ registry:
   secret: ""
   ## @param registry.existingSecret Existing secret for registry
   ## The secret must contain the keys:
-  ## `REGISTRY_HTPASSWD` (required),
-  ## `REGISTRY_HTTP_SECRET` (required),
+  ## `REGISTRY_HTPASSWD` (required - replaces insecure defaults),
+  ## `REGISTRY_HTTP_SECRET` (optional - generated on the fly if not secified),
   ## `REGISTRY_REDIS_PASSWORD` (optional),
   ##
   existingSecret: ""
@@ -2288,15 +2577,38 @@ registry:
   ##         containerPort: 1234
   ##
   initContainers: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param registry.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param registry.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param registry.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `registry.pdb.minAvailable` and `registry.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
   ## @param registry.extraVolumes Optionally specify extra list of additional volumes for the Harbor Registry pods
   ##
   extraVolumes: []
-  ## @param registry.serviceAccountName Set the service account name for the Registry pods
-  ## 
-  serviceAccountName: ""
-  ## @param registry.automountServiceAccountToken Automount service account token
+  ## @param registry.automountServiceAccountToken Mount Service Account token in pod
   ##
   automountServiceAccountToken: false
+  ## Harbor Registry ServiceAccount configuration
+  ##
+  serviceAccount:
+    ## @param registry.serviceAccount.create Specifies whether a ServiceAccount should be created
+    ##
+    create: true
+    ## @param registry.serviceAccount.name The name of the ServiceAccount to use.
+    ## If not set and create is true, a name is generated using the common.names.fullname template
+    ##
+    name: ""
+    ## @param registry.serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
+    ##
+    automountServiceAccountToken: false
+    ## @param registry.serviceAccount.annotations Additional custom annotations for the ServiceAccount
+    ##
+    annotations: {}
   ## Network Policies
   ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
   ##
@@ -2368,10 +2680,9 @@ registry:
     image:
       registry: docker.io
       repository: bitnami/harbor-registry
-      tag: 2.10.2-debian-12-r1
+      tag: 2.12.2-debian-12-r9
       digest: ""
       ## Specify a imagePullPolicy
-      ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
       ##
       pullPolicy: IfNotPresent
@@ -2540,10 +2851,9 @@ registry:
     image:
       registry: docker.io
       repository: bitnami/harbor-registryctl
-      tag: 2.10.2-debian-12-r1
+      tag: 2.12.2-debian-12-r9
       digest: ""
       ## Specify a imagePullPolicy
-      ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
       ##
       pullPolicy: IfNotPresent
@@ -2706,10 +3016,9 @@ trivy:
   image:
     registry: docker.io
     repository: bitnami/harbor-adapter-trivy
-    tag: 2.10.2-debian-12-r1
+    tag: 2.12.2-debian-12-r8
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -2742,6 +3051,14 @@ trivy:
   ## @param trivy.insecure The flag to skip verifying registry certificate
   ##
   insecure: false
+  ## @param trivy.existingEnvVarsSecret Existing secret for trivy
+  ## The secret must contain the keys:
+  ## `SCANNER_TRIVY_GITHUB_TOKEN` (optional)
+  ## `SCANNER_REDIS_URL` (required - if using the internal Redis - set to base64 of "redis://harbor-redis-master:6379/5")
+  ## `SCANNER_STORE_REDIS_URL` (required - if using the internal Redis - set to base64 of "redis://harbor-redis-master:6379/5")
+  ## `SCANNER_JOB_QUEUE_REDIS_URL` (required - if using the internal Redis - set to base64 of "redis://harbor-redis-master:6379/5")
+  ##
+  existingEnvVarsSecret: ""
   ## @param trivy.gitHubToken The GitHub access token to download Trivy DB
   ##
   ## Trivy DB contains vulnerability information from NVD, Red Hat, and many other upstream vulnerability databases.
@@ -2762,9 +3079,20 @@ trivy:
   ## @param trivy.skipUpdate The flag to disable Trivy DB downloads from GitHub
   ## You might want to set the value of this flag to `true` in test or CI/CD environments to avoid GitHub rate limiting issues.
   ## If the value is set to `true` you have to manually download the `trivy.db` file and mount it in the
-  ## `/home/scanner/.cache/trivy/db/trivy.db` path.
+  ## `/bitnami/harbor-adapter-trivy/.cache/trivy/db/trivy.db` path.
+  ## ref: https://trivy.dev/dev/docs/configuration/db/
   ##
   skipUpdate: false
+  ## @param trivy.skipJavaDbUpdate The flag to disable Trivy JAVA DB downloads.
+  ## You might want to set the value of this flag to `true` in test or CI/CD environments to avoid GitHub rate limiting issues.
+  ## If the value is set to `true` you have to manually download the `trivy-java.db` file and mount it in the
+  ## `/bitnami/harbor-adapter-trivy/.cache/trivy/java-db/trivy-java.db` path.
+  ##
+  skipJavaDbUpdate: false
+  ## @param trivy.dbRepository OCI repositor(ies) to retrieve the trivy vulnerability database from
+  dbRepository: ""
+  ## @param trivy.javaDbRepository OCI repositor(ies) to retrieve the Java trivy vulnerability database from
+  javaDbRepository: ""
   ## @param trivy.cacheDir Directory to store the cache
   ##
   cacheDir: "/bitnami/harbor-adapter-trivy/.cache"
@@ -3005,18 +3333,41 @@ trivy:
   ##         containerPort: 1234
   ##
   initContainers: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param trivy.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param trivy.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param trivy.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `trivy.pdb.minAvailable` and `trivy.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
   ## @param trivy.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Trivy pods
   ##
   extraVolumeMounts: []
   ## @param trivy.extraVolumes Optionally specify extra list of additional volumes for the Trivy pods
   ##
   extraVolumes: []
-  ## @param trivy.serviceAccountName Set the service account name for the Trivy pods
-  ## 
-  serviceAccountName: ""
-  ## @param trivy.automountServiceAccountToken Automount service account token
+  ## @param trivy.automountServiceAccountToken Mount Service Account token in pod
   ##
   automountServiceAccountToken: false
+  ## Trivy ServiceAccount configuration
+  ##
+  serviceAccount:
+    ## @param trivy.serviceAccount.create Specifies whether a ServiceAccount should be created
+    ##
+    create: false
+    ## @param trivy.serviceAccount.name The name of the ServiceAccount to use.
+    ## If not set and create is true, a name is generated using the common.names.fullname template
+    ##
+    name: ""
+    ## @param trivy.serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
+    ##
+    automountServiceAccountToken: false
+    ## @param trivy.serviceAccount.annotations Additional custom annotations for the ServiceAccount
+    ##
+    annotations: {}
   ## Trivy service configuration
   ##
   service:
@@ -3097,10 +3448,9 @@ exporter:
   image:
     registry: docker.io
     repository: bitnami/harbor-exporter
-    tag: 2.10.2-debian-12-r1
+    tag: 2.12.2-debian-12-r9
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -3313,10 +3663,6 @@ exporter:
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
   schedulerName: ""
-  ## @param exporter.serviceAccountName Name of the serviceAccountName for Harbor Exporter pods
-  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
-  ##
-  serviceAccountName: ""
   ## @param exporter.nodeSelector Harbor Exporter Node labels for pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
@@ -3332,6 +3678,16 @@ exporter:
   ## @param exporter.initContainers Add additional init containers to the pod (evaluated as a template)
   ##
   initContainers: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param exporter.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param exporter.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param exporter.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `exporter.pdb.minAvailable` and `exporter.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
   ## @param exporter.extraVolumeMounts
   ##
   extraVolumeMounts: []
@@ -3341,9 +3697,25 @@ exporter:
   ## @param exporter.sidecars Attach additional containers to the pod (evaluated as a template)
   ##
   sidecars: []
-  ## @param exporter.automountServiceAccountToken Automount service account token
+  ## @param exporter.automountServiceAccountToken Mount Service Account token in pod
   ##
   automountServiceAccountToken: false
+  ## Harbor Exporter ServiceAccount configuration
+  ##
+  serviceAccount:
+    ## @param exporter.serviceAccount.create Specifies whether a ServiceAccount should be created
+    ##
+    create: false
+    ## @param exporter.serviceAccount.name The name of the ServiceAccount to use.
+    ## If not set and create is true, a name is generated using the common.names.fullname template
+    ##
+    name: ""
+    ## @param exporter.serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
+    ##
+    automountServiceAccountToken: false
+    ## @param exporter.serviceAccount.annotations Additional custom annotations for the ServiceAccount
+    ##
+    annotations: {}
   ## Exporter service configuration
   ##
   service:
@@ -3431,7 +3803,7 @@ postgresql:
   image:
     registry: docker.io
     repository: bitnami/postgresql
-    tag: 13.14.0-debian-12-r16
+    tag: 14.17.0-debian-12-r8
     digest: ""
   auth:
     enablePostgresUser: true
@@ -3472,6 +3844,8 @@ postgresql:
 ## @param externalDatabase.password Password for the non-root username for Harbor
 ## @param externalDatabase.sslmode External database ssl mode
 ## @param externalDatabase.coreDatabase External database name for core
+## @param externalDatabase.existingSecret The name of an existing secret with database credentials
+## @param externalDatabase.existingSecretPasswordKey Password key on the existing secret
 ##
 externalDatabase:
   host: localhost
@@ -3480,6 +3854,9 @@ externalDatabase:
   password: ""
   sslmode: disable
   coreDatabase: ""
+  existingSecret: ""
+  existingSecretPasswordKey: "db-password"
+
 ## @section Redis&reg; parameters
 ##
 

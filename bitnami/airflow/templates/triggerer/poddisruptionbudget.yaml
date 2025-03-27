@@ -1,0 +1,25 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.triggerer.enabled .Values.triggerer.pdb.create }}
+kind: PodDisruptionBudget
+apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
+metadata:
+  name: {{ template "airflow.triggerer.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: triggerer
+spec:
+  {{- if .Values.triggerer.pdb.minAvailable }}
+  minAvailable: {{ .Values.triggerer.pdb.minAvailable }}
+  {{- end }}
+  {{- if or .Values.triggerer.pdb.maxUnavailable ( not .Values.triggerer.pdb.minAvailable ) }}
+  maxUnavailable: {{ .Values.triggerer.pdb.maxUnavailable | default 1 }}
+  {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.triggerer.podLabels .Values.commonLabels ) "context" . ) }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/component: triggerer
+{{- end }}

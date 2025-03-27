@@ -6,13 +6,33 @@ master:
   containerSecurityContext:
     enabled: true
     runAsUser: 1002
+  metrics:
+    enabled: true
+    service:
+      ports:
+        metrics: 83
 coordinating:
   replicaCount: 1
+  metrics:
+    enabled: true
+    service:
+      ports:
+        metrics: 84
 data:
   replicaCount: 2
+  metrics:
+    enabled: true
+    service:
+      ports:
+        metrics: 85
 ingest:
   enabled: true
   replicaCount: 1
+  metrics:
+    enabled: true
+    service:
+      ports:
+        metrics: 86
 service:
   type: LoadBalancer
   ports:

@@ -136,8 +136,7 @@ spec:
             timeoutSeconds: {{ .Values.metrics.livenessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.metrics.livenessProbe.successThreshold }}
             failureThreshold: {{ .Values.metrics.livenessProbe.failureThreshold }}
-            httpGet:
-              path: /metrics
+            tcpSocket:
               port: metrics
           {{- end }}
           {{- if .Values.metrics.customReadinessProbe }}

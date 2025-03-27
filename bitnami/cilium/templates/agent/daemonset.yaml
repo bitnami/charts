@@ -1,0 +1,506 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+apiVersion: {{ include "common.capabilities.daemonset.apiVersion" . }}
+kind: DaemonSet
+metadata:
+  name: {{ template "cilium.agent.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: cilium
+    app.kubernetes.io/component: agent
+  {{- if or .Values.agent.daemonsetAnnotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.agent.daemonsetAnnotations .Values.commonAnnotations) "context" .) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if .Values.agent.updateStrategy }}
+  updateStrategy: {{- toYaml .Values.agent.updateStrategy | nindent 4 }}
+  {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" (dict "values" (list .Values.agent.podLabels .Values.commonLabels) "context" .) }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/part-of: cilium
+      app.kubernetes.io/component: agent
+  template:
+    metadata:
+      annotations:
+        {{- if semverCompare "<1.30-0" (include "common.capabilities.kubeVersion" .) }}
+        container.apparmor.security.beta.kubernetes.io/cilium-agent: "unconfined"
+        container.apparmor.security.beta.kubernetes.io/clean-state: "unconfined"
+        {{- if .Values.agent.cgroup2.autoMount }}
+        container.apparmor.security.beta.kubernetes.io/host-mount-cgroup2: "unconfined"
+        {{- end }}
+        {{- if not .Values.envoy.useDaemonSet }}
+        container.apparmor.security.beta.kubernetes.io/cilium-envoy: "unconfined"
+        {{- end }}
+        {{- end }}
+        {{- if not .Values.existingConfigmap }}
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        {{- end }}
+        {{- if .Values.agent.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.agent.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/part-of: cilium
+        app.kubernetes.io/component: agent
+    spec:
+      {{- include "cilium.imagePullSecrets" . | nindent 6 }}
+      serviceAccountName: {{ template "cilium.agent.serviceAccountName" . }}
+      automountServiceAccountToken: {{ .Values.agent.automountServiceAccountToken }}
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      restartPolicy: Always
+      {{- if .Values.agent.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.agent.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.agent.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.agent.affinity "context" $) | nindent 8 }}
+      {{- else if not (empty .Values.agent.nodeAffinityPreset.type) }}
+      affinity:
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.agent.nodeAffinityPreset.type "key" .Values.agent.nodeAffinityPreset.key "values" .Values.agent.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.agent.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.agent.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.agent.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.agent.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.agent.priorityClassName }}
+      priorityClassName: {{ .Values.agent.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.agent.podSecurityContext.enabled }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.agent.podSecurityContext "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.agent.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.agent.terminationGracePeriodSeconds }}
+      {{- end }}
+      initContainers:
+        {{- include "cilium.agent.defaultInitContainers.prepareWriteDirs" . | nindent 8}}
+        {{- include "cilium.agent.defaultInitContainers.buildConfig" . | nindent 8 }}
+        {{- if .Values.agent.cgroup2.autoMount }}
+          {{- include "cilium.agent.defaultInitContainers.mountCgroup2" . | nindent 8 }}
+        {{- end }}
+        {{- if .Values.agent.bpf.autoMount }}
+          {{- include "cilium.agent.defaultInitContainers.mountBpf" . | nindent 8 }}
+        {{- end }}
+        {{- include "cilium.agent.defaultInitContainers.cleanState" . | nindent 8 }}
+        {{- if .Values.agent.waitForKubeProxy }}
+          {{- include "cilium.agent.defaultInitContainers.waitForKubeProxy" . | nindent 8 }}
+        {{- end }}
+        {{- if .Values.agent.cniPlugin.install }}
+          {{- include "cilium.agent.defaultInitContainers.installCniPlugin" . | nindent 8 }}
+        {{- end }}
+        {{- if .Values.agent.initContainers }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.agent.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+      containers:
+        - name: cilium-agent
+          image: {{ include "cilium.agent.image" . }}
+          imagePullPolicy: {{ .Values.agent.image.pullPolicy }}
+          {{- if .Values.agent.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.agent.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          command:
+          {{- if .Values.diagnosticMode.enabled }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.agent.command }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.agent.command "context" $) | nindent 12 }}
+          {{- else }}
+            - cilium-agent
+          {{- end }}
+          args:
+          {{- if .Values.diagnosticMode.enabled }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.agent.args }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.agent.args "context" $) | nindent 12 }}
+          {{- else }}
+            - --config-dir=/opt/bitnami/cilium/conf
+          {{- end }}
+          env:
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" (or .Values.agent.image.debug .Values.diagnosticMode.enabled) | quote }}
+            - name: K8S_NODE_NAME
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: spec.nodeName
+            - name: CILIUM_K8S_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.namespace
+            - name: GOMEMLIMIT
+              valueFrom:
+                resourceFieldRef:
+                  resource: limits.memory
+                  divisor: '1'
+            # Required for uninstalling the CNI plugin in lifecycle preStop hook
+            - name: HOST_CNI_BIN_DIR
+              value: {{ template "cilium.agent.hostCNIBinDir" . }}
+            - name: HOST_CNI_CONF_DIR
+              value: {{ template "cilium.agent.hostCNINetDir" . }}
+            {{- if .Values.agent.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.agent.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if or .Values.agent.extraEnvVarsCM .Values.agent.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.agent.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.agent.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.agent.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.agent.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- end }}
+          {{- if .Values.agent.resources }}
+          resources: {{- toYaml .Values.agent.resources | nindent 12 }}
+          {{- else if ne .Values.agent.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.agent.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          ports:
+            - name: health
+              containerPort: {{ .Values.agent.containerPorts.health }}
+            {{- if .Values.agent.enablePprof }}
+            - name: pprof
+              containerPort: {{ .Values.agent.containerPorts.pprof }}
+            {{- end }}
+            - name: hubble-peer
+              containerPort: {{ .Values.agent.containerPorts.hubblePeer }}
+            {{- if .Values.agent.metrics.enabled }}
+            - name: metrics
+              containerPort: {{ .Values.agent.containerPorts.metrics }}
+            {{- end }}
+            {{- if .Values.hubble.peers.metrics.enabled }}
+            - name: hubble-metrics
+              containerPort: {{ .Values.agent.containerPorts.hubbleMetrics }}
+            {{- end }}
+            {{- if .Values.agent.extraContainerPorts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.agent.extraContainerPorts "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.agent.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.agent.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.agent.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.agent.livenessProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              host: localhost
+              port: health
+          {{- end }}
+          {{- if .Values.agent.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.agent.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.agent.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.agent.readinessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              host: localhost
+              path: /healthz
+              port: health
+              scheme: HTTP
+              httpHeaders:
+                - name: "brief"
+                  value: "true"
+          {{- end }}
+          {{- if .Values.agent.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.agent.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.agent.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.agent.startupProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              host: localhost
+              port: health
+          {{- end }}
+          {{- end }}
+          lifecycle:
+          {{- if .Values.agent.lifecycleHooks }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.agent.lifecycleHooks "context" $) | nindent 12 }}
+          {{- else }}
+            {{- if .Values.agent.enableENI }}
+            postStart:
+              exec:
+                command:
+                  - /bin/bash
+                  - -ec
+                  - |
+                      if [[ "$(iptables-save | grep -E -c 'AWS-SNAT-CHAIN|AWS-CONNMARK-CHAIN')" != "0" ]]; then
+                          echo 'Deleting iptables rules created by the AWS CNI VPC plugin'
+                          iptables-save | grep -E -v 'AWS-SNAT-CHAIN|AWS-CONNMARK-CHAIN' | iptables-restore
+                      fi
+                      echo 'Done!'
+            {{- end }}
+            {{- if .Values.agent.cniPlugin.uninstall }}
+            preStop:
+              exec:
+                command:
+                  - /opt/bitnami/scripts/cilium/uninstall-cni-plugin.sh
+                  - /host
+            {{- end }}
+          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /etc/alternatives
+              subPath: alternatives-dir
+            - name: empty-dir
+              mountPath: /var/lib/dpkg/alternatives
+              subPath: alternatives-admin-dir
+            - name: empty-dir
+              mountPath: /var/lib/alternatives
+              subPath: alternatives-admin-dir
+            - name: empty-dir
+              mountPath: /var/log
+              subPath: var-log-dir
+            - name: empty-dir
+              mountPath: /.config
+              subPath: gops-config-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/cilium/conf
+              subPath: config-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/cilium/var/lib/bpf
+              subPath: bpf-lib-dir
+            {{- if or .Values.etcd.enabled .Values.externalKvstore.enabled }}
+            - name: etcd-config
+              mountPath: /opt/bitnami/cilium/var/lib/etcd
+              readOnly: true
+            {{- end }}
+            - name: cilium-run
+              mountPath: /opt/bitnami/cilium/var/run
+            - name: envoy-sockets
+              mountPath: /opt/bitnami/cilium/var/run/envoy/sockets
+            - name: host-cni-bin
+              mountPath: {{ printf "/host%s" (include "cilium.agent.hostCNIBinDir" .) }}
+            - name: host-cni-conf
+              mountPath: {{ printf "/host%s" (include "cilium.agent.hostCNINetDir" .) }}
+            {{- if .Values.agent.bpf.autoMount }}
+            - name: bpf-maps
+              mountPath: {{ .Values.agent.bpf.hostRoot }}
+              mountPropagation: HostToContainer
+            {{- end }}
+            - name: host-lib-modules
+              mountPath: /lib/modules
+              readOnly: true
+            - name: host-proc-sys-net
+              mountPath: /host/proc/sys/net
+            - name: host-proc-sys-kernel
+              mountPath: /host/proc/sys/kernel
+            - name: host-xtables-lock
+              mountPath: /run/xtables.lock
+            {{- if .Values.hubble.tls.enabled  }}
+            - name: hubble-peers-cert
+              readOnly: true
+              mountPath: /certs/hubble
+            {{- end }}
+            {{- if .Values.agent.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.agent.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
+       {{- if not .Values.envoy.useDaemonSet }}
+        - name: cilium-envoy
+          image: {{ include "cilium.envoy.image" . }}
+          imagePullPolicy: {{ .Values.envoy.image.pullPolicy }}
+          {{- if .Values.envoy.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.envoy.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          command:
+          {{- if .Values.diagnosticMode.enabled }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.envoy.command }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.envoy.command "context" $) | nindent 12 }}
+          {{- else }}
+            - cilium-envoy-starter
+          {{- end }}
+          args:
+          {{- if .Values.diagnosticMode.enabled }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.envoy.args }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.envoy.args "context" $) | nindent 12 }}
+          {{- else }}
+            - -c
+            - /config/envoy.json
+            - --log-level
+            - {{ .Values.envoy.logLevel }}
+            {{- if .Values.envoy.extraArgs }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.envoy.extraArgs "context" $) | nindent 12 }}
+            {{- end }}
+          {{- end }}
+          env:
+            - name: ENVOY_POD_NAME
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.name
+            - name: CILIUM_K8S_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.namespace
+            {{- if .Values.envoy.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.envoy.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if or .Values.envoy.extraEnvVarsCM .Values.envoy.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.envoy.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.envoy.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.envoy.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.envoy.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- end }}
+          {{- if .Values.envoy.resources }}
+          resources: {{- toYaml .Values.envoy.resources | nindent 12 }}
+          {{- else if ne .Values.envoy.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.envoy.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          ports:
+            - name: envoy-health
+              containerPort: {{ .Values.envoy.containerPorts.health }}
+            {{- if .Values.envoy.metrics.enabled }}
+            - name: envoy-metrics
+              containerPort: {{ .Values.envoy.containerPorts.metrics }}
+            {{- end }}
+            {{- if .Values.envoy.extraContainerPorts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.envoy.extraContainerPorts "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.envoy.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.envoy.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.envoy.livenessProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              host: "127.0.0.1"
+              port: envoy-health
+          {{- end }}
+          {{- if .Values.envoy.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.envoy.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.envoy.readinessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              host: "127.0.0.1"
+              path: /healthz
+              port: envoy-health
+          {{- end }}
+          {{- if .Values.envoy.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.envoy.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.envoy.startupProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              host: "127.0.0.1"
+              port: envoy-health
+          {{- end }}
+          {{- end }}
+          {{- if .Values.envoy.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: envoy-tmp-dir
+            - name: envoy-config
+              mountPath: /config
+              readOnly: true
+            - name: envoy-sockets
+              mountPath: /sockets
+            {{- if .Values.agent.bpf.autoMount }}
+            - name: bpf-maps
+              mountPath: {{ .Values.agent.bpf.hostRoot }}
+              mountPropagation: HostToContainer
+            {{- end }}
+            {{- if .Values.envoy.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.envoy.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
+        {{- end }}
+        ## TODO: add support for "cilium-monitor" sidecar
+        {{- if .Values.agent.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.agent.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        - name: empty-dir
+          emptyDir: {}
+        {{- if or .Values.etcd.enabled .Values.externalKvstore.enabled }}
+        - name: etcd-config
+          configMap:
+            name: {{ template "cilium.configmapName" . }}
+            defaultMode: 0400
+            items:
+              - key: etcd-config
+                path: etcd.config
+        {{- end }}
+        - name: cilium-run
+          hostPath:
+            path: /var/run/cilium
+            type: DirectoryOrCreate
+        - name: envoy-sockets
+          hostPath:
+            path: /var/run/cilium/envoy/sockets
+            type: DirectoryOrCreate
+        {{- if .Values.agent.bpf.autoMount }}
+        # To mount bpf fs on the host
+        - name: bpf-maps
+          hostPath:
+            path: {{ .Values.agent.bpf.hostRoot }}
+            type: DirectoryOrCreate
+        {{- end }}
+        # To install cilium CNI plugin in the host
+        - name: host-cni-bin
+          hostPath:
+            path: {{ template "cilium.agent.hostCNIBinDir" . }}
+            type: DirectoryOrCreate
+        # To install cilium CNI plugin configuration in the host
+        - name: host-cni-conf
+          hostPath:
+            path: {{ template "cilium.agent.hostCNINetDir" . }}
+            type: DirectoryOrCreate
+        # To mount cgroup2 filesystem on the host
+        {{- if .Values.agent.cgroup2.autoMount }}
+        - name: host-proc
+          hostPath:
+            path: /proc
+            type: Directory
+        {{- end }}
+        - name: host-cgroup-root
+          hostPath:
+            path: {{ .Values.agent.cgroup2.hostRoot }}
+            type: DirectoryOrCreate
+        # To load host kernel modules
+        - name: host-lib-modules
+          hostPath:
+            path: /lib/modules
+        - name: host-proc-sys-net
+          hostPath:
+            path: /proc/sys/net
+            type: Directory
+        - name: host-proc-sys-kernel
+          hostPath:
+            path: /proc/sys/kernel
+            type: Directory
+        # To access iptables concurrently with other processes (e.g. kube-proxy)
+        - name: host-xtables-lock
+          hostPath:
+            path: /run/xtables.lock
+            type: FileOrCreate
+        {{- if .Values.hubble.tls.enabled  }}
+        - name: hubble-peers-cert
+          secret:
+            secretName: {{ template "cilium.hubble.tls.peers.secretName" . }}
+            items:
+              - key: ca.crt
+                path: ca.crt
+              - key: tls.crt
+                path: tls.crt
+              - key: tls.key
+                path: tls.key
+        {{- end }}
+        {{- if not .Values.envoy.useDaemonSet }}
+        - name: envoy-config
+          configMap:
+            name: {{ template "cilium.envoy.configmapName" . }}
+        {{- end }}
+        {{- if .Values.agent.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.agent.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+       

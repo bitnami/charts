@@ -1,0 +1,55 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if (empty .Values.controlplane.existingConfigMap) }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "chainloop.controlplane.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "chainloop.controlplane.labels" . | nindent 4 }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+data:
+  {{- if .Values.controlplane.auth.allowList }}
+  allow_list.yaml: |
+    auth:
+      allow_list:
+        {{- toYaml .Values.controlplane.auth.allowList | nindent 8 }}
+  {{- end }}
+  config.yaml: |
+    server:
+      http:
+        addr: "0.0.0.0:{{ .Values.controlplane.containerPorts.http }}"
+        timeout: 10s
+        external_url: {{ include "chainloop.controlplane.external_url" . }}
+      http_metrics:
+        addr: "0.0.0.0:{{ .Values.controlplane.containerPorts.metrics }}"
+      grpc:
+        addr: "0.0.0.0:{{ .Values.controlplane.containerPorts.grpc }}"
+        timeout: 10s
+        {{- if .Values.controlplane.tls.existingSecret  }}
+        tls_config:
+          certificate: /data/server-certs/tls.crt
+          private_key: /data/server-certs/tls.key
+        {{- end }}
+    cas_server:
+      grpc:
+        addr: {{ printf "%s-api:%.0f" (include "chainloop.cas.fullname" .) (coalesce .Values.cas.serviceAPI.port .Values.cas.serviceAPI.ports.http) }}
+      insecure: {{ empty .Values.cas.tls.existingSecret }}
+      download_url: {{ include "chainloop.cas.external_url" . }}/download
+    plugins_dir: {{ .Values.controlplane.pluginsDir }}
+    referrer_shared_index:
+      {{- toYaml .Values.controlplane.referrerSharedIndex | nindent 6 }}
+    {{ if .Values.controlplane.onboarding }}
+    onboarding:
+      {{- toYaml .Values.controlplane.onboarding | nindent 6 }}
+    {{- end }}
+    {{ if .Values.controlplane.prometheus_org_metrics }}
+    prometheus_integration:
+      {{- toYaml .Values.controlplane.prometheus_org_metrics | nindent 6 }}
+    {{- end }}
+{{- end }}

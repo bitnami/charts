@@ -128,8 +128,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.attu.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.attu.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.attu.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /
+            tcpSocket:
               port: http
           {{- end }}
           {{- if .Values.attu.customReadinessProbe }}
@@ -162,7 +161,7 @@ spec:
               mountPath: /.yarn
               subPath: yarn-dir
             - name: empty-dir
-              mountPath: /.cache/yarn
+              mountPath: /.cache
               subPath: yarn-cache-dir
           {{- if .Values.attu.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.attu.extraVolumeMounts "context" $) | nindent 12 }}

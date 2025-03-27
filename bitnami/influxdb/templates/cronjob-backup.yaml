@@ -40,6 +40,21 @@ spec:
               configMap:
                 name: {{ include "common.names.fullname" . }}-backup
                 defaultMode: 0755
+            {{- if .Values.auth.usePasswordFiles }}
+            - name: influxdb-credentials
+              secret:
+                secretName: {{ include "influxdb.secretName" . }}
+            {{- end }}
+            {{- if .Values.auth.usePasswordFiles }}
+            - name: backup-credentials
+              secret:
+                secretName: {{ include "influxdb.backup.secretName" . }}
+            {{- end }}
+            {{- if .Values.backup.cronjob.caBundle.enabled }}
+            - name: ca-bundle
+              configMap:
+                name: {{ .Values.backup.cronjob.caBundle.existingConfigMap }}
+            {{- end }}
             {{- if .Values.backup.uploadProviders.google.enabled }}
             - name: google-cloud-key
               secret:
@@ -50,9 +65,9 @@ spec:
             {{- end }}
             {{- end }}
             - name: {{ include "common.names.fullname" . }}-backups
-            {{- if .Values.persistence.enabled }}
+            {{- if ternary .Values.backup.persistence.enabled .Values.persistence.enabled .Values.backup.persistence.ownConfig }}
               persistentVolumeClaim:
-                claimName: {{ include "common.names.fullname" . }}-backups
+                claimName: {{ include "influxdb.backup.claimName" . }}
             {{- else }}
               emptyDir: {}
             {{- end }}
@@ -74,6 +89,12 @@ spec:
             - name: influxdb-backup
               image: {{ include "influxdb.image" . | quote }}
               env:
+                {{- if .Values.auth.usePasswordFiles }}
+                - name: INFLUXDB_ADMIN_USER_PASSWORD_FILE
+                  value: "/opt/bitnami/influxdb/secrets/admin-user-password"
+                - name: INFLUXDB_ADMIN_USER_TOKEN_FILE
+                  value: "/opt/bitnami/influxdb/secrets/admin-user-token"
+                {{- else }}
                 - name: INFLUXDB_ADMIN_USER_PASSWORD
                   valueFrom:
                     secretKeyRef:
@@ -84,6 +105,7 @@ spec:
                     secretKeyRef:
                       name: {{ include "influxdb.secretName" . }}
                       key: admin-user-token
+                {{- end }}
               command:
                 - "/tmp/backup.sh"
               {{- if .Values.backup.cronjob.resources }}
@@ -100,6 +122,10 @@ spec:
                 - name: backup-scripts
                   mountPath: /tmp/backup.sh
                   subPath: backup.sh
+                {{- if  .Values.auth.usePasswordFiles }}
+                - name: influxdb-credentials
+                  mountPath: /opt/bitnami/influxdb/secrets/
+                {{- end }}
               {{- if .Values.backup.cronjob.containerSecurityContext.enabled }}
               securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.backup.cronjob.containerSecurityContext "context" $) | nindent 16 }}
               {{- end }}
@@ -147,6 +173,11 @@ spec:
                   subPath: upload-google.sh
                 - name: google-cloud-key
                   mountPath: /var/secrets/google/
+                {{- if .Values.backup.cronjob.caBundle.enabled }}
+                - name: ca-bundle
+                  mountPath: {{ .Values.backup.cronjob.caBundle.mountPath }}
+                  subPath: {{ .Values.backup.cronjob.caBundle.subPath }}
+                {{- end }}
               {{- if .Values.backup.cronjob.containerSecurityContext.enabled }}
               securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.backup.cronjob.containerSecurityContext "context" $) | nindent 16 }}
               {{- end }}
@@ -185,6 +216,11 @@ spec:
                 - name: backup-scripts
                   mountPath: /tmp/upload-azure.sh
                   subPath: upload-azure.sh
+                {{- if .Values.backup.cronjob.caBundle.enabled }}
+                - name: ca-bundle
+                  mountPath: {{ .Values.backup.cronjob.caBundle.mountPath }}
+                  subPath: {{ .Values.backup.cronjob.caBundle.subPath }}
+                {{- end }}
               {{- if .Values.backup.cronjob.containerSecurityContext.enabled }}
               securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.backup.cronjob.containerSecurityContext "context" $) | nindent 16 }}
               {{- end }}
@@ -197,7 +233,14 @@ spec:
               args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 16 }}
               {{- else }}
               command:
-              - "/tmp/upload-aws.sh"
+                - |
+                  {{- if .Values.backup.uploadProviders.aws.usePasswordFiles }}
+                  export AWS_ACCESS_KEY_ID="$(< $AWS_ACCESS_KEY_ID_FILE)"
+                  export AWS_SECRET_ACCESS_KEY="$(< $AWS_SECRET_ACCESS_KEY_FILE)"
+                  export AWS_DEFAULT_REGION="$(< $AWS_DEFAULT_REGION_FILE)"
+                  export AWS_ENDPOINT_URL_S3="$(< $AWS_ENDPOINT_URL_S3_FILE)"
+                  {{- end }}
+                  "/tmp/upload-aws.sh"
               {{- end }}
               {{- if .Values.backup.uploadProviders.aws.resources }}
               resources: {{- toYaml .Values.backup.uploadProviders.aws.resources | nindent 16 }}
@@ -205,42 +248,41 @@ spec:
               resources: {{- include "common.resources.preset" (dict "type" .Values.backup.uploadProviders.aws.resourcesPreset) | nindent 16 }}
               {{- end }}
               env:
+                {{- if .Values.backup.uploadProviders.aws.usePasswordFiles }}
+                - name: AWS_ACCESS_KEY_ID_FILE
+                  value: "/secrets/accessKeyID"
+                - name: AWS_SECRET_ACCESS_KEY_FILE
+                  value: "/secrets/secretAccessKey"
+                - name: AWS_DEFAULT_REGION_FILE
+                  value: "/secrets/region"
+                - name: AWS_ENDPOINT_URL_S3_FILE
+                  value: "/secrets/endpoint"
+                {{- else }}
                 - name: AWS_ACCESS_KEY_ID
                   valueFrom:
                     secretKeyRef:
-                      {{- if .Values.backup.uploadProviders.aws.existingSecret }}
-                      name: {{ .Values.backup.uploadProviders.aws.existingSecret | quote }}
-                      {{- else }}
-                      name: {{ include "common.names.fullname" . }}-backup-aws
-                      {{- end }}
+                      name: {{ include "infuxdb.backup.secretName" .}}
                       key: accessKeyID
                 - name: AWS_SECRET_ACCESS_KEY
                   valueFrom:
                     secretKeyRef:
-                      {{- if .Values.backup.uploadProviders.aws.existingSecret }}
-                      name: {{ .Values.backup.uploadProviders.aws.existingSecret | quote }}
-                      {{- else }}
-                      name: {{ include "common.names.fullname" . }}-backup-aws
-                      {{- end }}
+                      name: {{ include "infuxdb.backup.secretName" .}}
                       key: secretAccessKey
                 - name: AWS_DEFAULT_REGION
                   valueFrom:
                     secretKeyRef:
-                      {{- if .Values.backup.uploadProviders.aws.existingSecret }}
-                      name: {{ .Values.backup.uploadProviders.aws.existingSecret | quote }}
-                      {{- else }}
-                      name: {{ include "common.names.fullname" . }}-backup-aws
-                      {{- end }}
+                      name: {{ include "infuxdb.backup.secretName" .}}
                       key: region
                 - name: AWS_ENDPOINT_URL_S3
                   valueFrom:
                     secretKeyRef:
-                      {{- if .Values.backup.uploadProviders.aws.existingSecret }}
-                      name: {{ .Values.backup.uploadProviders.aws.existingSecret | quote }}
-                      {{- else }}
-                      name: {{ include "common.names.fullname" . }}-backup-aws
-                      {{- end }}
+                      name: {{ include "infuxdb.backup.secretName" .}}
                       key: endpoint
+                {{- end }}
+                {{- if .Values.backup.cronjob.caBundle.enabled }}
+                - name: AWS_CA_BUNDLE
+                  value: {{ .Values.backup.cronjob.caBundle.mountPath }}
+                {{- end }}
               volumeMounts:
                 - name: empty-dir
                   mountPath: /tmp
@@ -253,6 +295,15 @@ spec:
                 - name: backup-scripts
                   mountPath: /tmp/upload-aws.sh
                   subPath: upload-aws.sh
+                {{- if .Values.backup.uploadProviders.aws.usePasswordFiles }}
+                - name: backup-credentials
+                  mountPath: /secrets
+                {{- end }}
+                {{- if .Values.backup.cronjob.caBundle.enabled }}
+                - name: ca-bundle
+                  mountPath: {{ .Values.backup.cronjob.caBundle.mountPath }}
+                  subPath: {{ .Values.backup.cronjob.caBundle.subPath }}
+                {{- end }}
               {{- if .Values.backup.cronjob.containerSecurityContext.enabled }}
               securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.backup.cronjob.containerSecurityContext "context" $) | nindent 16 }}
               {{- end }}

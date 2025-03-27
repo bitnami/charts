@@ -69,6 +69,7 @@ spec:
       {{- if .Values.gateway.podSecurityContext.enabled }}
       securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.gateway.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
+      enableServiceLinks: {{ .Values.gateway.enableServiceLinks }}
       {{- if .Values.gateway.initContainers }}
       initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.gateway.initContainers "context" $) | nindent 8 }}
       {{- end }}
@@ -133,8 +134,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.gateway.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.gateway.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.gateway.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /
+            tcpSocket:
               port: http
           {{- end }}
           {{- if .Values.gateway.customReadinessProbe }}
@@ -147,7 +147,7 @@ spec:
           {{- end }}
           {{- end }}
           {{- if .Values.gateway.resources }}
-          resources: {{- toYaml .Values.gateway.resources | nindent 12 }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.gateway.resources "context" $) | nindent 12 }}
           {{- else if ne .Values.gateway.resourcesPreset "none" }}
           resources: {{- include "common.resources.preset" (dict "type" .Values.gateway.resourcesPreset) | nindent 12 }}
           {{- end }}

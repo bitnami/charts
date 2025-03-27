@@ -9,7 +9,8 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets [array] Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
+## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ##
 global:
   imageRegistry: ""
@@ -18,7 +19,13 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  defaultStorageClass: ""
   storageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
   ## Compatibility adaptations for Kubernetes platforms
   ##
   compatibility:
@@ -101,10 +108,9 @@ contour:
   image:
     registry: docker.io
     repository: bitnami/contour
-    tag: 1.28.4-debian-12-r0
+    tag: 1.30.2-debian-12-r9
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -192,7 +198,8 @@ contour:
   ## @param contour.envoyServiceNamespace Namespace of the envoy service to inspect for Ingress status details.
   ##
   envoyServiceNamespace: ""
-  ## @param contour.envoyServiceName Name of the envoy service to inspect for Ingress status details.
+  ## Name of the envoy service to inspect for Ingress status details.
+  ## @param contour.envoyServiceName DEPRECATED: use envoy.service.name
   ##
   envoyServiceName: ""
   ## @param contour.leaderElectionResourceName Name of the contour (Lease) leader election will lease.
@@ -631,6 +638,18 @@ contour:
   overloadManager:
     enabled: false
     maxHeapBytes: "2147483648"
+  ## PodDisruptionBudget for default backend
+  ## Contour Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+  ## @param contour.pdb.create Enable Pod Disruption Budget configuration
+  ## @param contour.pdb.minAvailable Minimum number/percentage of Default backend pods that should remain scheduled
+  ## @param contour.pdb.maxUnavailable Maximum number/percentage of Default backend pods that should remain scheduled
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
+
 ## @section Envoy parameters
 ##
 envoy:
@@ -649,10 +668,9 @@ envoy:
   image:
     registry: docker.io
     repository: bitnami/envoy
-    tag: 1.29.4-debian-12-r4
+    tag: 1.31.5-debian-12-r5
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -721,8 +739,10 @@ envoy:
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ## @param envoy.shutdownManager.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## @param envoy.shutdownManager.containerPorts.http Specify Port for shutdown container
+  ## @param envoy.shutdownManager.lifecycleHooks lifecycleHooks for the container to automate configuration before or after startup.
   ##
   shutdownManager:
+    lifecycleHooks: {}
     extraArgs: []
     enabled: true
     resourcesPreset: "nano"
@@ -1137,10 +1157,12 @@ envoy:
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
     ## @param envoy.service.nodePorts.http HTTP Port. If `envoy.service.type` is NodePort and this is non-empty
     ## @param envoy.service.nodePorts.https HTTPS Port. If `envoy.service.type` is NodePort and this is non-empty
+    ## @param envoy.service.nodePorts.metrics Metrics Port. If `envoy.service.type` is NodePort and this is non-empty
     ##
     nodePorts:
       http: ""
       https: ""
+      metrics: ""
     ## @param envoy.service.extraPorts [array] Extra ports to expose (normally used with the `sidecar` value)
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#multi-port-services
     ##
@@ -1156,6 +1178,8 @@ envoy:
     ##     timeoutSeconds: 300
     ##
     sessionAffinityConfig: {}
+    ## @param envoy.service.exposeMetrics Setting to expose the metrics port in the service
+    exposeMetrics: false
   ## Network Policies
   ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
   ##
@@ -1285,6 +1309,26 @@ envoy:
   ## @param envoy.extraEnvVarsSecret Secret containing extra env vars to be added to all Envoy containers
   ##
   extraEnvVarsSecret: ""
+  ## PodDisruptionBudget for default backend
+  ## Envoy Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+  ## @param envoy.pdb.create Enable Pod Disruption Budget configuration
+  ## @param envoy.pdb.minAvailable Minimum number/percentage of Default backend pods that should remain scheduled
+  ## @param envoy.pdb.maxUnavailable Maximum number/percentage of Default backend pods that should remain scheduled
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
+
+## @section Gateway API parameters
+##
+
+gatewayAPI:
+  ## @param gatewayAPI.manageCRDs Manage the creation, upgrade and deletion of Gateway API CRDs.
+  ##
+  manageCRDs: false
+
 ## @section Default backend parameters
 ##
 
@@ -1306,10 +1350,9 @@ defaultBackend:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.25.5-debian-12-r2
+    tag: 1.27.4-debian-12-r5
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -1640,8 +1683,8 @@ defaultBackend:
   ## @param defaultBackend.pdb.maxUnavailable Maximum number/percentage of Default backend pods that should remain scheduled
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
 ## Ingress parameters
 ##
@@ -1815,3 +1858,5 @@ rbac:
 ## @param tlsExistingSecret Name of the existingSecret to be use in both contour and envoy. If it is not nil `contour.certgen` will be disabled.
 ##
 tlsExistingSecret: ""
+## @param useCertManager Use Cert-manager instead of Contour certgen to issue certificates for TLS connection between Contour and Envoy.
+useCertManager: false

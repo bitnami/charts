@@ -39,9 +39,11 @@ spec:
     - ports:
         {{- range .Values.containerPorts }}
         - port: {{ .containerPort }}
+          protocol: {{ default "TCP" .protocol }}
         {{- end }}
         {{- range .Values.service.ports }}
         - port: {{ .port }}
+          protocol: {{ default "TCP" .protocol }}
         {{- end }}
       to:
         - podSelector:
@@ -54,6 +56,14 @@ spec:
     - ports:
         {{- range .Values.containerPorts }}
         - port: {{ .containerPort }}
+          protocol: {{ default "TCP" .protocol }}
+        {{- end }}
+        {{- range .Values.extraContainerPorts }}
+        - port: {{ . }}
+          protocol: {{ default "TCP" .protocol }}
+        {{- end }}
+        {{- if .Values.enableMonitoringAPI }}
+        - port: {{ .Values.monitoringAPIPort }}
         {{- end }}
       {{- if not .Values.networkPolicy.allowExternal }}
       from:

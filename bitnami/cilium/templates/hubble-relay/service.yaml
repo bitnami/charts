@@ -1,0 +1,69 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.hubble.relay.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "cilium.hubble.relay.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: cilium
+    app.kubernetes.io/component: hubble-relay
+  {{- $defaultAnnotations := dict }}
+  {{- if .Values.hubble.relay.metrics.enabled }}
+  {{- $defaultAnnotations = dict "prometheus.io/scrape" "true" "prometheus.io/port" (.Values.hubble.relay.service.ports.metrics | quote) }}
+  {{- end }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list $defaultAnnotations .Values.hubble.relay.service.annotations .Values.commonAnnotations) "context" .) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+spec:
+  type: {{ .Values.hubble.relay.service.type }}
+  {{- if and .Values.hubble.relay.service.clusterIP (eq .Values.hubble.relay.service.type "ClusterIP") }}
+  clusterIP: {{ .Values.hubble.relay.service.clusterIP }}
+  {{- end }}
+  {{- if .Values.hubble.relay.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.hubble.relay.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.hubble.relay.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.hubble.relay.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if or (eq .Values.hubble.relay.service.type "LoadBalancer") (eq .Values.hubble.relay.service.type "NodePort") }}
+  externalTrafficPolicy: {{ .Values.hubble.relay.service.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{- if and (eq .Values.hubble.relay.service.type "LoadBalancer") (not (empty .Values.hubble.relay.service.loadBalancerSourceRanges)) }}
+  loadBalancerSourceRanges: {{ .Values.hubble.relay.service.loadBalancerSourceRanges }}
+  {{- end }}
+  {{- if and (eq .Values.hubble.relay.service.type "LoadBalancer") (not (empty .Values.hubble.relay.service.loadBalancerIP)) }}
+  loadBalancerIP: {{ .Values.hubble.relay.service.loadBalancerIP }}
+  {{- end }}
+  ports:
+    - name: grpc
+      port: {{ .Values.hubble.relay.service.ports.grpc }}
+      targetPort: grpc
+      protocol: TCP
+      {{- if and (or (eq .Values.hubble.relay.service.type "NodePort") (eq .Values.hubble.relay.service.type "LoadBalancer")) (not (empty .Values.hubble.relay.service.nodePorts.grpc)) }}
+      nodePort: {{ .Values.hubble.relay.service.nodePorts.grpc }}
+      {{- else if eq .Values.hubble.relay.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    {{- if .Values.hubble.relay.metrics.enabled }}
+    - name: tcp-metrics
+      port: {{ .Values.hubble.relay.service.ports.metrics }}
+      targetPort: metrics
+      protocol: TCP
+      {{- if and (or (eq .Values.hubble.relay.service.type "NodePort") (eq .Values.hubble.relay.service.type "LoadBalancer")) (not (empty .Values.hubble.relay.service.nodePorts.metrics)) }}
+      nodePort: {{ .Values.hubble.relay.service.nodePorts.metrics }}
+      {{- else if eq .Values.hubble.relay.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    {{- end }}
+    {{- if .Values.hubble.relay.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.hubble.relay.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" (dict "values" (list .Values.hubble.relay.podLabels .Values.commonLabels) "context" .) | fromYaml }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: cilium
+    app.kubernetes.io/component: hubble-relay
+{{- end }}

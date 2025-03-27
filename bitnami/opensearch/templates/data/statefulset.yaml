@@ -83,7 +83,6 @@ spec:
       {{- if .Values.data.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.data.terminationGracePeriodSeconds }}
       {{- end }}
-      {{- if or .Values.data.initContainers .Values.sysctlImage.enabled (and .Values.volumePermissions.enabled .Values.data.persistence.enabled) }}
       initContainers:
         {{- if .Values.sysctlImage.enabled }}
           {{- include "opensearch.sysctl.initContainer" .  | nindent 8}}
@@ -107,20 +106,16 @@ spec:
           resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - name: empty-dir
-              mountPath: /tmp
-              subPath: tmp-dir
             - name: data
               mountPath: /bitnami/opensearch/data
         {{- end }}
         {{- include "opensearch.copy-default-plugins.initContainer" (dict "component" "data" "context" $) | nindent 8 }} 
         {{- if .Values.data.initContainers }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.data.initContainers "context" $) | nindent 8 }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.data.initContainers "context" $) | nindent 8 }}
         {{- end }}
         {{- if .Values.initContainers }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
         {{- end }}
-      {{- end }}
       containers:
         - name: opensearch
           image: {{ include "opensearch.image" . }}
@@ -289,6 +284,15 @@ spec:
             - name: custom-init-scripts-secret
               mountPath: /docker-entrypoint-initdb.d/init-scripts-secret
             {{- end }}
+            {{- if .Values.snapshots.enabled }}
+            - mountPath: {{ include "opensearch.snapshots.mountPath" . }}
+              {{- if .Values.snapshots.persistence.enabled }}
+              name: snapshots
+              {{- else }}
+              name: empty-dir
+              subPath: app-snapshots-dir
+              {{- end }}
+            {{- end }}
             {{- if .Values.data.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.data.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
@@ -337,6 +341,11 @@ spec:
             secretName: {{ template "opensearch.initScriptsSecret" . }}
             defaultMode: 0755
         {{- end }}
+        {{- if and .Values.snapshots.enabled .Values.snapshots.persistence.enabled }}
+        - name: snapshots
+          persistentVolumeClaim:
+            claimName: {{ include "opensearch.snapshots.fullname" . }}
+        {{- end }}
         {{- if .Values.data.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.data.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
@@ -352,11 +361,13 @@ spec:
             claimName: {{ .Values.data.persistence.existingClaim }}
   {{- else }}
   volumeClaimTemplates:
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         name: "data"
         {{- if or .Values.data.persistence.annotations .Values.commonAnnotations }}
         {{- $claimAnnotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.data.persistence.annotations .Values.commonAnnotations ) "context" . ) }}
-        annotations: {{- include "common.tplvalues.render" ( dict "value" $claimAnnotations "context" $) | nindent 4 }}
+        annotations: {{- include "common.tplvalues.render" ( dict "value" $claimAnnotations "context" $) | nindent 10 }}
         {{- end }}
         {{- if .Values.commonLabels }}
         labels: {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 10 }}

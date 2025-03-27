@@ -8,7 +8,8 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
+## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ##
 global:
   imageRegistry: ""
@@ -17,7 +18,13 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  defaultStorageClass: ""
   storageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
   ## Compatibility adaptations for Kubernetes platforms
   ##
   compatibility:
@@ -68,10 +75,9 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/minio
-  tag: 2024.5.10-debian-12-r0
+  tag: 2025.3.12-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -96,7 +102,7 @@ image:
 clientImage:
   registry: docker.io
   repository: bitnami/minio-client
-  tag: 2024.5.9-debian-12-r0
+  tag: 2025.3.12-debian-12-r0
   digest: ""
 ## @param mode MinIO&reg; server mode (`standalone` or `distributed`)
 ## ref: https://docs.minio.io/docs/distributed-minio-quickstart-guide
@@ -123,9 +129,12 @@ auth:
   ## @param auth.forcePassword Force users to specify required passwords
   ##
   forcePassword: false
-  ## @param auth.useCredentialsFiles Mount credentials as a files instead of using an environment variable
+  ## @param auth.usePasswordFiles Mount credentials as a files instead of using an environment variable
   ##
-  useCredentialsFiles: false
+  usePasswordFiles: true
+  ## @param auth.useSecret Uses a secret to mount the credential files.
+  ##
+  useSecret: true
   ## @param auth.forceNewKeys Force root credentials (user and password) to be reconfigured every time they change in the secrets
   ##
   forceNewKeys: false
@@ -231,6 +240,9 @@ provisioning:
   ## @param provisioning.enabled Enable MinIO&reg; provisioning Job
   ##
   enabled: false
+  ## @param provisioning.sleepTime Sleep time before checking Minio availability
+  ##
+  sleepTime: 5
   ## @param provisioning.schedulerName Name of the k8s scheduler (other than default) for MinIO&reg; provisioning
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
@@ -1084,6 +1096,12 @@ persistence:
   ## @param persistence.existingClaim Name of an existing PVC to use (only in `standalone` mode)
   ##
   existingClaim: ""
+  ## @param persistence.selector Configure custom selector for existing Persistent Volume. (only in `distributed` mode)
+  ## selector:
+  ##   matchLabels:
+  ##     volume:
+  ##
+  selector: {}
 ## @section Volume Permissions parameters
 
 ## Init containers parameters:
@@ -1103,7 +1121,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r20
+    tag: 12-debian-12-r39
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1170,10 +1188,10 @@ serviceAccount:
 pdb:
   ## @param pdb.create Enable/disable a Pod Disruption Budget creation
   ##
-  create: false
+  create: true
   ## @param pdb.minAvailable Minimum number/percentage of pods that must still be available after the eviction
   ##
-  minAvailable: 1
+  minAvailable: ""
   ## @param pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable after the eviction
   ##
   maxUnavailable: ""
@@ -1183,6 +1201,9 @@ metrics:
   ## To allow public access without authentication for prometheus metrics set environment as follows.
   ##
   prometheusAuthType: public
+  ## @param metrics.enabled Enable the export of Prometheus metrics
+  ##
+  enabled: false
   ## Prometheus Operator ServiceMonitor configuration
   ##
   serviceMonitor:

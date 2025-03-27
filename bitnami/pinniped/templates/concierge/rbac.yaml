@@ -3,7 +3,7 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if .Values.concierge.rbac.create }}
+{{- if and .Values.concierge.enabled .Values.concierge.rbac.create }}
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -38,6 +38,8 @@ rules:
     resources:
       - validatingwebhookconfigurations
       - mutatingwebhookconfigurations
+      - validatingadmissionpolicies
+      - validatingadmissionpolicybindings
     verbs:
       - get
       - list
@@ -91,6 +93,16 @@ rules:
       - get
       - list
       - watch
+  - apiGroups:
+      - authentication.concierge.pinniped.dev
+    resources:
+      - jwtauthenticators/status
+      - webhookauthenticators/status
+    verbs:
+      - get
+      - list
+      - watch
+      - update
 ---
 kind: ClusterRoleBinding
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}

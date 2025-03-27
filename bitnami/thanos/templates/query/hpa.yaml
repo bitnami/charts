@@ -46,4 +46,13 @@ spec:
           averageUtilization: {{ .Values.query.autoscaling.targetCPU }}
         {{- end }}
     {{- end }}
+    {{- range $targetPodMetric := .Values.query.autoscaling.targetPodMetrics }}
+    - type: Pods
+      pods:
+        metric:
+          name: {{ $targetPodMetric.name }}
+        target:
+          type: AverageValue
+          averageValue: {{ $targetPodMetric.averageValue }}
+    {{- end }}
 {{- end }}

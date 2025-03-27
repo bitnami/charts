@@ -68,10 +68,11 @@ spec:
       terminationGracePeriodSeconds: {{ .Values.web.terminationGracePeriodSeconds }}
       {{- end }}
       initContainers:
+        {{- if .Values.defaultInitContainers.prepareDirs.enabled }}
         - name: prepare-tmp-dir
           image: {{ template "mastodon.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          {{- if .Values.web.containerSecurityContext.enabled }}
+          {{- if .Values.defaultInitContainers.prepareDirs.containerSecurityContext.enabled }}
           securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.web.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           command:
@@ -82,20 +83,21 @@ spec:
               #!/bin/bash
               # HACK: Mastodon does not allow having a /tmp directory world-writable, so we need to create a /tmp dir
               # with more restricted permissions
-              mkdir /tmp/tmp-dir
-          {{- if .Values.web.resources }}
-          resources: {{- toYaml .Values.web.resources | nindent 12 }}
-          {{- else if ne .Values.web.resourcesPreset "none" }}
-          resources: {{- include "common.resources.preset" (dict "type" .Values.web.resourcesPreset) | nindent 12 }}
+              mkdir -p /tmp/tmp-dir
+          {{- if .Values.defaultInitContainers.prepareDirs.resources }}
+          resources: {{- toYaml .Values.defaultInitContainers.prepareDirs.resources | nindent 12 }}
+          {{- else if ne .Values.defaultInitContainers.prepareDirs.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.defaultInitContainers.prepareDirs.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: empty-dir
               mountPath: /tmp
+        {{- end }}
         {{- if not .Values.diagnosticMode.enabled }}
-        {{- if and (not .Values.enableS3) .Values.volumePermissions.enabled .Values.web.containerSecurityContext.enabled }}
+        {{- if and (not .Values.enableS3) .Values.defaultInitContainers.volumePermissions.enabled .Values.web.containerSecurityContext.enabled }}
         - name: volume-permissions
           image: {{ include "mastodon.volumePermissions.image" . }}
-          imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
+          imagePullPolicy: {{ .Values.defaultInitContainers.volumePermissions.image.pullPolicy | quote }}
           command:
             - sh
             - -c
@@ -104,16 +106,17 @@ spec:
               find {{ .Values.persistence.mountPath }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs --no-run-if-empty chown -R {{ .Values.web.containerSecurityContext.runAsUser }}:{{ .Values.web.podSecurityContext.fsGroup }}
           securityContext:
             runAsUser: 0
-          {{- if .Values.volumePermissions.resources }}
-          resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
-          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
-          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
+          {{- if .Values.defaultInitContainers.volumePermissions.resources }}
+          resources: {{- toYaml .Values.defaultInitContainers.volumePermissions.resources | nindent 12 }}
+          {{- else if ne .Values.defaultInitContainers.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.defaultInitContainers.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: data
               mountPath: {{ .Values.persistence.mountPath }}
               subPath: {{ .Values.persistence.subPath }}
         {{- end }}
+        {{- if .Values.defaultInitContainers.waitForBackends.enabled }}
         {{- include "mastodon.waitForDBInitContainer" . | nindent 8 }}
         {{- include "mastodon.waitForRedisInitContainer" . | nindent 8 }}
         {{- if .Values.enableSearches }}
@@ -121,6 +124,7 @@ spec:
         {{- end }}
         {{- if .Values.enableS3 }}
         {{- include "mastodon.waitForS3InitContainer" . | nindent 8 }}
+        {{- end }}
         {{- end }}
         {{- end }}
         {{- if .Values.web.initContainers }}
@@ -238,8 +242,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.web.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.web.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.web.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /health
+            tcpSocket:
               port: http
           {{- end }}
           {{- if .Values.web.customReadinessProbe }}

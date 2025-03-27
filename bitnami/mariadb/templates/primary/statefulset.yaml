@@ -7,8 +7,9 @@ apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
   name: {{ include "mariadb.primary.fullname" . }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: mariadb
     app.kubernetes.io/component: primary
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
@@ -19,8 +20,9 @@ spec:
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.primary.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/part-of: mariadb
       app.kubernetes.io/component: primary
-  serviceName: {{ include "mariadb.primary.fullname" . }}
+  serviceName: {{ printf "%s-headless" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   {{- if .Values.primary.updateStrategy }}
   updateStrategy: {{- toYaml .Values.primary.updateStrategy | nindent 4 }}
   {{- end }}
@@ -30,10 +32,14 @@ spec:
         {{- if (include "mariadb.primary.createConfigmap" .) }}
         checksum/configuration: {{ include (print $.Template.BasePath "/primary/configmap.yaml") . | sha256sum }}
         {{- end }}
+        {{- if .Values.passwordUpdateJob.enabled }}
+        charts.bitnami.com/password-last-update: {{ now | date "20060102150405" | quote }}
+        {{- end }}
         {{- if .Values.primary.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.primary.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/part-of: mariadb
         app.kubernetes.io/component: primary
     spec:
       {{- include "mariadb.imagePullSecrets" . | nindent 6 }}
@@ -183,6 +189,12 @@ spec:
             {{- end }}
             - name: MARIADB_DATABASE
               value: {{ .Values.auth.database | quote }}
+            - name: MARIADB_ENABLE_SSL
+              value: {{ ternary "yes" "no" .Values.tls.enabled | quote }}
+            {{- if and .Values.tls.enabled (include "mariadb.tlsCACert" .) }}
+            - name: MYSQL_CLIENT_CA_FILE
+              value: {{ include "mariadb.tlsCACert" . | quote }}
+            {{- end }}
             {{- if eq .Values.architecture "replication" }}
             - name: MARIADB_REPLICATION_MODE
               value: "master"
@@ -240,7 +252,7 @@ spec:
                   if [[ -f "${MARIADB_ROOT_PASSWORD_FILE:-}" ]]; then
                       password_aux=$(cat "$MARIADB_ROOT_PASSWORD_FILE")
                   fi
-                  mysqladmin status -uroot -p"${password_aux}"
+                  mariadb-admin ping -uroot -p"${password_aux}"
           {{- end }}
           {{- if .Values.primary.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.primary.customLivenessProbe "context" $) | nindent 12 }}
@@ -255,7 +267,7 @@ spec:
                   if [[ -f "${MARIADB_ROOT_PASSWORD_FILE:-}" ]]; then
                       password_aux=$(cat "$MARIADB_ROOT_PASSWORD_FILE")
                   fi
-                  mysqladmin status -uroot -p"${password_aux}"
+                  mariadb-admin status -uroot -p"${password_aux}"
           {{- end }}
           {{- if .Values.primary.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.primary.customReadinessProbe "context" $) | nindent 12 }}
@@ -270,7 +282,7 @@ spec:
                   if [[ -f "${MARIADB_ROOT_PASSWORD_FILE:-}" ]]; then
                       password_aux=$(cat "$MARIADB_ROOT_PASSWORD_FILE")
                   fi
-                  mysqladmin status -uroot -p"${password_aux}"
+                  mariadb-admin ping -uroot -p"${password_aux}"
           {{- end }}
           {{- end }}
           {{- if .Values.primary.resources }}
@@ -296,6 +308,14 @@ spec:
             {{- if and .Values.auth.usePasswordFiles (not .Values.auth.customPasswordFiles) }}
             - name: mariadb-credentials
               mountPath: /opt/bitnami/mariadb/secrets/
+            {{- end }}
+            {{- if .Values.tls.enabled }}
+            - name: cert
+              mountPath: /opt/bitnami/mariadb/certs
+            {{- end }}
+            {{- if .Values.tde.enabled }}
+            - name: tde
+              mountPath: /opt/bitnami/mariadb/tde
             {{- end }}
             - name: empty-dir
               mountPath: /tmp
@@ -401,12 +421,38 @@ spec:
             items:
               - key: mariadb-root-password
                 path: mariadb-root-password
+              {{- if .Values.auth.username }}
               - key: mariadb-password
                 path: mariadb-password
+              {{- end -}}
               {{- if eq .Values.architecture "replication" }}
               - key: mariadb-replication-password
                 path: mariadb-replication-password
               {{- end }}
+        {{- end }}
+        {{- if .Values.tls.enabled }}
+        - name: cert
+          secret:
+            secretName: {{ include "mariadb.tlsSecretName" . }}
+            defaultMode: 256
+        {{- end }}
+        {{- if and .Values.tde.enabled ( not .Values.tde.secretsStoreProvider.enabled ) }}
+        - name: tde
+          secret:
+            secretName: {{ .Values.tde.existingSecret }}
+            items:
+              - key: {{ .Values.tde.randomKeyFilename }}
+                path: {{ .Values.tde.randomKeyFilename }}
+              - key: {{ .Values.tde.encryptedKeyFilename }}
+                path: {{ .Values.tde.encryptedKeyFilename }}
+            defaultMode: 256
+        {{- else if and .Values.tde.enabled ( .Values.tde.secretsStoreProvider.enabled ) }}
+        - name: tde
+          csi:
+            driver: 'secrets-store.csi.k8s.io'
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: {{ include "mariadb.tde.secretProviderClassName" . }}
         {{- end }}
         {{- if .Values.primary.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.primary.extraVolumes "context" $) | nindent 8 }}

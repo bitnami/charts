@@ -2,38 +2,39 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
+  tanzuCategory: clusterUtility
   category: DeveloperTools
   licenses: Apache-2.0
   images: |
     - name: kubectl
-      image: docker.io/bitnami/kubectl:1.30.0-debian-12-r0
+      image: docker.io/bitnami/kubectl:1.32.2-debian-12-r3
     - name: mariadb
-      image: docker.io/bitnami/mariadb:10.11.7-debian-12-r12
+      image: docker.io/bitnami/mariadb:10.11.11-debian-12-r7
     - name: prometheus-rsocket-proxy
-      image: docker.io/bitnami/prometheus-rsocket-proxy:1.5.3-debian-12-r13
+      image: docker.io/bitnami/prometheus-rsocket-proxy:1.5.3-debian-12-r39
     - name: spring-cloud-dataflow
-      image: docker.io/bitnami/spring-cloud-dataflow:2.11.2-debian-12-r16
+      image: docker.io/bitnami/spring-cloud-dataflow:2.11.5-debian-12-r9
     - name: spring-cloud-dataflow-composed-task-runner
-      image: docker.io/bitnami/spring-cloud-dataflow-composed-task-runner:2.11.2-debian-12-r13
+      image: docker.io/bitnami/spring-cloud-dataflow-composed-task-runner:2.11.5-debian-12-r9
     - name: spring-cloud-skipper
-      image: docker.io/bitnami/spring-cloud-skipper:2.11.2-debian-12-r12
+      image: docker.io/bitnami/spring-cloud-skipper:2.11.5-debian-12-r10
 apiVersion: v2
-appVersion: 2.11.2
+appVersion: 2.11.5
 dependencies:
 - condition: rabbitmq.enabled
   name: rabbitmq
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 14.x.x
+  version: 15.x.x
 - condition: mariadb.enabled
   name: mariadb
   repository: oci://registry-1.docker.io/bitnamicharts
   tags:
   - dataflow-database
-  version: 18.x.x
+  version: 20.x.x
 - condition: kafka.enabled
   name: kafka
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 28.x.x
+  version: 32.x.x
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
   tags:
@@ -41,7 +42,7 @@ dependencies:
   version: 2.x.x
 description: Spring Cloud Data Flow is a microservices-based toolkit for building streaming and batch data processing pipelines in Cloud Foundry and Kubernetes.
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/spring-cloud-dataflow/img/spring-cloud-dataflow-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/spring-cloud-dataflow/img/spring-cloud-dataflow-stack-220x234.png
 keywords:
 - spring-cloud
 - dataflow
@@ -53,4 +54,4 @@ maintainers:
 name: spring-cloud-dataflow
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/spring-cloud-dataflow
-version: 28.0.2
+version: 35.0.0

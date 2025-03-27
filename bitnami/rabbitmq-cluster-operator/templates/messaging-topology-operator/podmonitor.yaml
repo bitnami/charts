@@ -29,7 +29,7 @@ spec:
       {{- if .Values.msgTopologyOperator.metrics.podMonitor.selector }}
       {{- include "common.tplvalues.render" ( dict "value" .Values.msgTopologyOperator.metrics.podMonitor.selector "context" $ ) | nindent 6 }}
       {{- end }}
-      app.kubernetes.io/component: rabbitmq-operator
+      app.kubernetes.io/component: messaging-topology-operator
   namespaceSelector:
     matchNames:
       - {{ include "common.names.namespace" . | quote }}

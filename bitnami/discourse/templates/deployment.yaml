@@ -91,30 +91,18 @@ spec:
             - name: discourse-data
               mountPath: /bitnami/discourse
         {{- end }}
-      containers:
-        - name: discourse
+        {{- if .Values.discourse.plugins }}
+        - name: install-plugins
           image: {{ include "discourse.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.discourse.containerSecurityContext.enabled }}
           securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.discourse.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.diagnosticMode.enabled }}
-          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
-          {{- else if .Values.discourse.command }}
-          command: {{- include "common.tplvalues.render" (dict "value" .Values.discourse.command "context" $) | nindent 12 }}
-          {{- else }}
           command:
             - /bin/bash
-          {{- end }}
-          {{- if .Values.diagnosticMode.enabled }}
-          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
-          {{- else if .Values.discourse.args }}
-          args: {{- include "common.tplvalues.render" (dict "value" .Values.discourse.args "context" $) | nindent 12 }}
-          {{- else }}
           args:
             - -c
             - |
-              {{- if .Values.discourse.plugins }}
               pushd "/opt/bitnami/discourse" >/dev/null || exit 1
               {{- range $plugin := .Values.discourse.plugins }}
               RAILS_ENV=production bundle exec rake plugin:install repo={{ $plugin }}
@@ -126,7 +114,45 @@ spec:
               RAILS_ENV=production LOAD_PLUGINS=0 bundle exec rake plugin:pull_compatible_all
               {{- end }}
               popd >/dev/null || exit 1
-              {{- end }}
+              cp -nr --preserve=mode /opt/bitnami/discourse/plugins/* /plugins
+          {{- if .Values.discourse.extraEnvVars }}
+          env:
+            {{- include "common.tplvalues.render" (dict "value" .Values.discourse.extraEnvVars "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.discourse.resources }}
+          resources: {{- toYaml .Values.discourse.resources | nindent 12 }}
+          {{- else if ne .Values.discourse.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.discourse.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /plugins
+              subPath: app-plugins-dir
+        {{- end }}
+      containers:
+        - name: discourse
+          image: {{ include "discourse.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.discourse.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.discourse.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.discourse.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.discourse.command "context" $) | nindent 12 }}
+          {{- else if and .Values.discourse.plugins .Values.discourse.persistPlugins }}
+          command:
+            - /bin/bash
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.discourse.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.discourse.args "context" $) | nindent 12 }}
+          {{- else if and .Values.discourse.plugins .Values.discourse.persistPlugins }}
+          args:
+            - -ec
+            - |
+              cp -nr --preserve=mode /plugins/* /opt/bitnami/discourse/plugins
               /opt/bitnami/scripts/discourse/entrypoint.sh /opt/bitnami/scripts/discourse/run.sh
           {{- end }}
           env:
@@ -202,8 +228,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.discourse.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.discourse.livenessProbe.enabled }}
           livenessProbe:
-            httpGet:
-              path: /srv/status
+            tcpSocket:
               port: http
             initialDelaySeconds: {{ .Values.discourse.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.discourse.livenessProbe.periodSeconds }}
@@ -244,6 +269,11 @@ spec:
             - name: discourse-data
               mountPath: /bitnami/discourse
               subPath: discourse
+            {{- if .Values.discourse.plugins }}
+            - name: empty-dir
+              subPath: app-plugins-dir
+              mountPath: {{ ternary "/plugins" "/opt/bitnami/discourse/plugins" .Values.discourse.persistPlugins }}
+            {{- end }}
             {{- if .Values.discourse.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.discourse.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
@@ -289,6 +319,10 @@ spec:
                 secretKeyRef:
                   name: {{ include "smtp.secretName" . }}
                   key: smtp-password
+            {{- end }}
+            {{- if not .Values.discourse.persistPlugins }}
+            - name: DISCOURSE_DATA_TO_PERSIST
+              value: "public/backups public/uploads"
             {{- end }}
             {{- if .Values.sidekiq.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.sidekiq.extraEnvVars "context" $) | nindent 12 }}
@@ -349,6 +383,11 @@ spec:
             - name: discourse-data
               mountPath: /bitnami/discourse
               subPath: discourse
+            {{- if and .Values.discourse.plugins (not .Values.discourse.persistPlugins) }}
+            - name: empty-dir
+              mountPath: /opt/bitnami/discourse/plugins
+              subPath: app-plugins-dir
+            {{- end }}
             {{- if .Values.sidekiq.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.sidekiq.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
@@ -356,6 +395,10 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        {{- if .Values.discourse.plugins }}
+        - name: empty-dir
+          emptyDir: {}
+        {{- end }}
         - name: discourse-data
           {{- if .Values.persistence.enabled }}
           persistentVolumeClaim:

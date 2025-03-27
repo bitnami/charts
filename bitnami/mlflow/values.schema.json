@@ -1955,6 +1955,12 @@
         "externalDatabase": {
             "type": "object",
             "properties": {
+                "dialectDriver": {
+                    "type": "string",
+                    "description": "Database dialect(+driver)",
+                    "default": "postgresql",
+                    "pattern": "^(mysql|mssql|sqlite|postgresql)(\\+\\w+)?$"
+                },
                 "host": {
                     "type": "string",
                     "description": "Database host",

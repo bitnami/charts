@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/mysql
 ```
 
-Looking to use MySQL in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use MySQL in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -48,9 +48,27 @@ These commands deploy MySQL on the Kubernetes cluster in the default configurati
 
 Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
 
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcesPreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
+### Prometheus metrics
+
+This chart can be integrated with Prometheus by setting `metrics.enabled` to `true`. This will deploy a sidecar container with [mysqld_exporter](https://github.com/prometheus/mysqld_exporter) in all pods and will expose it via the MariaDB service. This service will have the necessary annotations to be automatically scraped by Prometheus.
+
+#### Prometheus requirements
+
+It is necessary to have a working installation of Prometheus or Prometheus Operator for the integration to work. Install the [Bitnami Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/prometheus) or the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) to easily have a working Prometheus in your cluster.
+
+#### Integration with Prometheus Operator
+
+The chart can deploy `ServiceMonitor` objects for integration with Prometheus Operator installations. To do so, set the value `metrics.serviceMonitor.enabled=true`. Ensure that the Prometheus Operator `CustomResourceDefinitions` are installed in the cluster or it will fail with the following error:
+
+```text
+no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"
+```
+
+Install the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) for having the necessary CRDs and the Prometheus Operator.
+
+### [Rolling VS Immutable tags](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -73,12 +91,16 @@ When using a `.sh` script, you may wish to perform a "one-time" action like crea
 ```yaml
 initdbScripts:
   my_init_script.sh: |
-    #!/bin/sh
-    if [[ $(hostname) == *master* ]]; then
-      echo "Master node"
-      mysql -P 3306 -uroot -prandompassword -e "create database new_database";
+    #!/bin/bash
+    if [[ $(hostname) == *primary* ]]; then
+      echo "Primary node"
+      password_aux="${MYSQL_ROOT_PASSWORD:-}"
+      if [[ -f "${MYSQL_ROOT_PASSWORD_FILE:-}" ]]; then
+          password_aux=$(cat "$MYSQL_ROOT_PASSWORD_FILE")
+      fi
+      mysql -P 3306 -uroot -p"$password_aux" -e "create database new_database";
     else
-      echo "No master node"
+      echo "Secondary node"
     fi
 ```
 
@@ -108,6 +130,70 @@ initContainers:
         containerPort: 1234
 ```
 
+### Securing traffic using TLS
+
+This chart supports encrypting communications using TLS. To enable this feature, set the `tls.enabled`.
+
+It is necessary to create a secret containing the TLS certificates and pass it to the chart via the `tls.existingSecret` parameter. Every secret should contain a `tls.crt` and `tls.key` keys including the certificate and key files respectively and, optionally, a `ca.crt` key including the CA certificate. For example: create the secret with the certificates files:
+
+```console
+kubectl create secret generic tls-secret --from-file=./tls.crt --from-file=./tls.key --from-file=./ca.crt
+```
+
+You can manually create the required TLS certificates or relying on the chart auto-generation capabilities. The chart supports two different ways to auto-generate the required certificates:
+
+- Using Helm capabilities. Enable this feature by setting `tls.autoGenerated.enabled` to `true` and `tls.autoGenerated.engine` to `helm`.
+- Relying on CertManager (please note it's required to have CertManager installed in your K8s cluster). Enable this feature by setting `tls.autoGenerated.enabled` to `true` and `tls.autoGenerated.engine` to `cert-manager`. Please note it's supported to use an existing Issuer/ClusterIssuer for issuing the TLS certificates by setting the `tls.autoGenerated.certManager.existingIssuer` and `tls.autoGenerated.certManager.existingIssuerKind` parameters.
+
+### Update credentials
+
+Bitnami charts, with its default settings, configure credentials at first boot. Any further change in the secrets or credentials can be done using one of the following methods:
+
+#### Manual update of the passwords and secrets
+
+- Update the user password following [the upstream documentation](https://dev.mysql.com/doc/refman/8.4/en/set-password.html)
+- Update the password secret with the new values (replace the SECRET_NAME, PASSWORD and ROOT_PASSWORD placeholders)
+
+```shell
+kubectl create secret generic SECRET_NAME --from-literal=password=PASSWORD --from-literal=root-password=ROOT_PASSWORD --dry-run -o yaml | kubectl apply -f -
+```
+
+#### Automated update using a password update job
+
+The Bitnami MySQL provides a password update job that will automatically change the MySQL passwords when running helm upgrade. To enable the job set `passwordUpdateJob.enabled=true`. This job requires:
+
+- The new passwords: this is configured using either `auth.rootPassword`, `auth.password` and `auth.replicationPassword` (if applicable) or setting `auth.existingSecret`.
+- The previous passwords: This value is taken automatically from already deployed secret object. If you are using `auth.existingSecret` or `helm template` instead of `helm upgrade`, then set either `passwordUpdate.job.previousPasswords.rootPassword`, `passwordUpdate.job.previousPasswords.password`, `passwordUpdate.job.previousPasswords.replicationPassword` (when applicable), setting `auth.existingSecret`.
+
+In the following example we update the password via values.yaml in a mysql installation with replication
+
+```yaml
+architecture: "replication"
+
+auth:
+  user: "user"
+  rootPassword: "newRootPassword123"
+  password: "newUserPassword123"
+  replicationPassword: "newReplicationPassword123"
+
+passwordUpdateJob:
+  enabled: true
+```
+
+In this example we use two existing secrets (`new-password-secret` and `previous-password-secret`) to update the passwords:
+
+```yaml
+auth:
+  existingSecret: new-password-secret
+
+passwordUpdateJob:
+  enabled: true
+  previousPasswords:
+    existingSecret: previous-password-secret
+```
+
+You can add extra update commands using the `passwordUpdateJob.extraCommands` value.
+
 ### Network Policy config
 
 To enable network policy for MySQL, install [a networking plugin that implements the Kubernetes NetworkPolicy spec](https://kubernetes.io/docs/tasks/administer-cluster/declare-network-policy#before-you-begin), and set `networkPolicy.enabled` to `true`.
@@ -129,6 +215,10 @@ This chart allows you to set your custom affinity using the `XXX.affinity` param
 
 As an alternative, you can use the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
 
+### Backup and restore
+
+To back up and restore Helm chart deployments on Kubernetes, you need to back up the persistent volumes from the source deployment and attach them to a new deployment using [Velero](https://velero.io/), a Kubernetes backup/restore tool. Find the instructions for using Velero in [this guide](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-backup-restore-deployments-velero-index.html).
+
 ## Persistence
 
 The [Bitnami MySQL](https://github.com/bitnami/containers/tree/main/bitnami/mysql) image stores the MySQL data and configurations at the `/bitnami/mysql` path of the container.
@@ -141,12 +231,14 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 
 ### Global parameters
 
-| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value  |
-| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
-| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
-| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`   |
-| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value   |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`    |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`    |
+| `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`    |
+| `global.storageClass`                                 | DEPRECATED: use global.defaultStorageClass instead                                                                                                                                                                                                                                                                                                                  | `""`    |
+| `global.security.allowInsecureImages`                 | Allows skipping image verification                                                                                                                                                                                                                                                                                                                                  | `false` |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto`  |
 
 ### Common parameters
 
@@ -167,30 +259,51 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 
 ### MySQL common parameters
 
-| Name                               | Description                                                                                                                                                                         | Value                   |
-| ---------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
-| `image.registry`                   | MySQL image registry                                                                                                                                                                | `REGISTRY_NAME`         |
-| `image.repository`                 | MySQL image repository                                                                                                                                                              | `REPOSITORY_NAME/mysql` |
-| `image.digest`                     | MySQL image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                               | `""`                    |
-| `image.pullPolicy`                 | MySQL image pull policy                                                                                                                                                             | `IfNotPresent`          |
-| `image.pullSecrets`                | Specify docker-registry secret names as an array                                                                                                                                    | `[]`                    |
-| `image.debug`                      | Specify if debug logs should be enabled                                                                                                                                             | `false`                 |
-| `architecture`                     | MySQL architecture (`standalone` or `replication`)                                                                                                                                  | `standalone`            |
-| `auth.rootPassword`                | Password for the `root` user. Ignored if existing secret is provided                                                                                                                | `""`                    |
-| `auth.createDatabase`              | Whether to create the .Values.auth.database or not                                                                                                                                  | `true`                  |
-| `auth.database`                    | Name for a custom database to create                                                                                                                                                | `my_database`           |
-| `auth.username`                    | Name for a custom user to create                                                                                                                                                    | `""`                    |
-| `auth.password`                    | Password for the new user. Ignored if existing secret is provided                                                                                                                   | `""`                    |
-| `auth.replicationUser`             | MySQL replication user                                                                                                                                                              | `replicator`            |
-| `auth.replicationPassword`         | MySQL replication user password. Ignored if existing secret is provided                                                                                                             | `""`                    |
-| `auth.existingSecret`              | Use existing secret for password details. The secret has to contain the keys `mysql-root-password`, `mysql-replication-password` and `mysql-password`                               | `""`                    |
-| `auth.usePasswordFiles`            | Mount credentials as files instead of using an environment variable                                                                                                                 | `false`                 |
-| `auth.customPasswordFiles`         | Use custom password files when `auth.usePasswordFiles` is set to `true`. Define path for keys `root` and `user`, also define `replicator` if `architecture` is set to `replication` | `{}`                    |
-| `auth.defaultAuthenticationPlugin` | Sets the default authentication plugin, by default it will use `mysql_native_password`                                                                                              | `""`                    |
-| `initdbScripts`                    | Dictionary of initdb scripts                                                                                                                                                        | `{}`                    |
-| `initdbScriptsConfigMap`           | ConfigMap with the initdb scripts (Note: Overrides `initdbScripts`)                                                                                                                 | `""`                    |
-| `startdbScripts`                   | Dictionary of startdb scripts                                                                                                                                                       | `{}`                    |
-| `startdbScriptsConfigMap`          | ConfigMap with the startdb scripts (Note: Overrides `startdbScripts`)                                                                                                               | `""`                    |
+| Name                        | Description                                                                                                                                                                         | Value                   |
+| --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
+| `image.registry`            | MySQL image registry                                                                                                                                                                | `REGISTRY_NAME`         |
+| `image.repository`          | MySQL image repository                                                                                                                                                              | `REPOSITORY_NAME/mysql` |
+| `image.digest`              | MySQL image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                               | `""`                    |
+| `image.pullPolicy`          | MySQL image pull policy                                                                                                                                                             | `IfNotPresent`          |
+| `image.pullSecrets`         | Specify docker-registry secret names as an array                                                                                                                                    | `[]`                    |
+| `image.debug`               | Specify if debug logs should be enabled                                                                                                                                             | `false`                 |
+| `architecture`              | MySQL architecture (`standalone` or `replication`)                                                                                                                                  | `standalone`            |
+| `auth.rootPassword`         | Password for the `root` user. Ignored if existing secret is provided                                                                                                                | `""`                    |
+| `auth.createDatabase`       | Whether to create the .Values.auth.database or not                                                                                                                                  | `true`                  |
+| `auth.database`             | Name for a custom database to create                                                                                                                                                | `my_database`           |
+| `auth.username`             | Name for a custom user to create                                                                                                                                                    | `""`                    |
+| `auth.password`             | Password for the new user. Ignored if existing secret is provided                                                                                                                   | `""`                    |
+| `auth.replicationUser`      | MySQL replication user                                                                                                                                                              | `replicator`            |
+| `auth.replicationPassword`  | MySQL replication user password. Ignored if existing secret is provided                                                                                                             | `""`                    |
+| `auth.existingSecret`       | Use existing secret for password details. The secret has to contain the keys `mysql-root-password`, `mysql-replication-password` and `mysql-password`                               | `""`                    |
+| `auth.usePasswordFiles`     | Mount credentials as files instead of using an environment variable                                                                                                                 | `true`                  |
+| `auth.customPasswordFiles`  | Use custom password files when `auth.usePasswordFiles` is set to `true`. Define path for keys `root` and `user`, also define `replicator` if `architecture` is set to `replication` | `{}`                    |
+| `auth.authenticationPolicy` | Sets the authentication policy, by default it will use `* ,,`                                                                                                                       | `""`                    |
+| `initdbScripts`             | Dictionary of initdb scripts                                                                                                                                                        | `{}`                    |
+| `initdbScriptsConfigMap`    | ConfigMap with the initdb scripts (Note: Overrides `initdbScripts`)                                                                                                                 | `""`                    |
+| `startdbScripts`            | Dictionary of startdb scripts                                                                                                                                                       | `{}`                    |
+| `startdbScriptsConfigMap`   | ConfigMap with the startdb scripts (Note: Overrides `startdbScripts`)                                                                                                               | `""`                    |
+
+### TLS/SSL parameters
+
+| Name                                               | Description                                                                                            | Value     |
+| -------------------------------------------------- | ------------------------------------------------------------------------------------------------------ | --------- |
+| `tls.enabled`                                      | Enable TLS in MySQL                                                                                    | `false`   |
+| `tls.existingSecret`                               | Existing secret that contains TLS certificates                                                         | `""`      |
+| `tls.certFilename`                                 | The secret key from the existingSecret if 'cert' key different from the default (tls.crt)              | `tls.crt` |
+| `tls.certKeyFilename`                              | The secret key from the existingSecret if 'key' key different from the default (tls.key)               | `tls.key` |
+| `tls.certCAFilename`                               | The secret key from the existingSecret if 'ca' key different from the default (tls.crt)                | `""`      |
+| `tls.ca`                                           | CA certificate for TLS. Ignored if `tls.existingSecret` is set                                         | `""`      |
+| `tls.cert`                                         | TLS certificate for MySQL. Ignored if `tls.existingSecret` is set                                      | `""`      |
+| `tls.key`                                          | TLS key for MySQL. Ignored if `tls.existingSecret` is set                                              | `""`      |
+| `tls.autoGenerated.enabled`                        | Enable automatic generation of certificates for TLS                                                    | `true`    |
+| `tls.autoGenerated.engine`                         | Mechanism to generate the certificates (allowed values: helm, cert-manager)                            | `helm`    |
+| `tls.autoGenerated.certManager.existingIssuer`     | The name of an existing Issuer to use for generating the certificates (only for `cert-manager` engine) | `""`      |
+| `tls.autoGenerated.certManager.existingIssuerKind` | Existing Issuer kind, defaults to Issuer (only for `cert-manager` engine)                              | `""`      |
+| `tls.autoGenerated.certManager.keyAlgorithm`       | Key algorithm for the certificates (only for `cert-manager` engine)                                    | `RSA`     |
+| `tls.autoGenerated.certManager.keySize`            | Key size for the certificates (only for `cert-manager` engine)                                         | `2048`    |
+| `tls.autoGenerated.certManager.duration`           | Duration for the certificates (only for `cert-manager` engine)                                         | `2160h`   |
+| `tls.autoGenerated.certManager.renewBefore`        | Renewal period for the certificates (only for `cert-manager` engine)                                   | `360h`    |
 
 ### MySQL Primary parameters
 
@@ -295,9 +408,9 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 | `primary.service.sessionAffinity`                           | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                                                                                                                              | `None`              |
 | `primary.service.sessionAffinityConfig`                     | Additional settings for the sessionAffinity                                                                                                                                                                                       | `{}`                |
 | `primary.service.headless.annotations`                      | Additional custom annotations for headless MySQL primary service.                                                                                                                                                                 | `{}`                |
-| `primary.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation for MySQL primary pods                                                                                                                                                            | `false`             |
-| `primary.pdb.minAvailable`                                  | Minimum number/percentage of MySQL primary pods that should remain scheduled                                                                                                                                                      | `1`                 |
-| `primary.pdb.maxUnavailable`                                | Maximum number/percentage of MySQL primary pods that may be made unavailable                                                                                                                                                      | `""`                |
+| `primary.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation for MySQL primary pods                                                                                                                                                            | `true`              |
+| `primary.pdb.minAvailable`                                  | Minimum number/percentage of MySQL primary pods that should remain scheduled                                                                                                                                                      | `""`                |
+| `primary.pdb.maxUnavailable`                                | Maximum number/percentage of MySQL primary pods that may be made unavailable. Defaults to `1` if both `primary.pdb.minAvailable` and `primary.pdb.maxUnavailable` are empty.                                                      | `""`                |
 | `primary.podLabels`                                         | MySQL Primary pod label. If labels are same as commonLabels , this will take precedence                                                                                                                                           | `{}`                |
 
 ### MySQL Secondary parameters
@@ -404,9 +517,9 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 | `secondary.service.sessionAffinity`                           | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                                                                                                                                  | `None`              |
 | `secondary.service.sessionAffinityConfig`                     | Additional settings for the sessionAffinity                                                                                                                                                                                           | `{}`                |
 | `secondary.service.headless.annotations`                      | Additional custom annotations for headless MySQL secondary service.                                                                                                                                                                   | `{}`                |
-| `secondary.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation for MySQL secondary pods                                                                                                                                                              | `false`             |
-| `secondary.pdb.minAvailable`                                  | Minimum number/percentage of MySQL secondary pods that should remain scheduled                                                                                                                                                        | `1`                 |
-| `secondary.pdb.maxUnavailable`                                | Maximum number/percentage of MySQL secondary pods that may be made unavailable                                                                                                                                                        | `""`                |
+| `secondary.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation for MySQL secondary pods                                                                                                                                                              | `true`              |
+| `secondary.pdb.minAvailable`                                  | Minimum number/percentage of MySQL secondary pods that should remain scheduled                                                                                                                                                        | `""`                |
+| `secondary.pdb.maxUnavailable`                                | Maximum number/percentage of MySQL secondary pods that may be made unavailable. Defaults to `1` if both `secondary.pdb.minAvailable` and `secondary.pdb.maxUnavailable` are empty.                                                    | `""`                |
 | `secondary.podLabels`                                         | Additional pod labels for MySQL secondary pods                                                                                                                                                                                        | `{}`                |
 
 ### RBAC parameters
@@ -431,6 +544,51 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 | `networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                    | `[]`   |
 | `networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces          | `{}`   |
 | `networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces      | `{}`   |
+
+### Password update job
+
+| Name                                                                  | Description                                                                                                                                                                                                                                           | Value            |
+| --------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
+| `passwordUpdateJob.enabled`                                           | Enable password update job                                                                                                                                                                                                                            | `false`          |
+| `passwordUpdateJob.backoffLimit`                                      | set backoff limit of the job                                                                                                                                                                                                                          | `10`             |
+| `passwordUpdateJob.command`                                           | Override default container command on mysql Primary container(s) (useful when using custom images)                                                                                                                                                    | `[]`             |
+| `passwordUpdateJob.args`                                              | Override default container args on mysql Primary container(s) (useful when using custom images)                                                                                                                                                       | `[]`             |
+| `passwordUpdateJob.extraCommands`                                     | Extra commands to pass to the generation job                                                                                                                                                                                                          | `""`             |
+| `passwordUpdateJob.previousPasswords.rootPassword`                    | Previous root password (set if the password secret was already changed)                                                                                                                                                                               | `""`             |
+| `passwordUpdateJob.previousPasswords.password`                        | Previous password (set if the password secret was already changed)                                                                                                                                                                                    | `""`             |
+| `passwordUpdateJob.previousPasswords.replicationPassword`             | Previous replication password (set if the password secret was already changed)                                                                                                                                                                        | `""`             |
+| `passwordUpdateJob.previousPasswords.existingSecret`                  | Name of a secret containing the previous passwords (set if the password secret was already changed)                                                                                                                                                   | `""`             |
+| `passwordUpdateJob.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                                                                  | `true`           |
+| `passwordUpdateJob.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                                                      | `{}`             |
+| `passwordUpdateJob.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                                                            | `1001`           |
+| `passwordUpdateJob.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                                                           | `1001`           |
+| `passwordUpdateJob.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                                                                         | `true`           |
+| `passwordUpdateJob.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                                                                           | `false`          |
+| `passwordUpdateJob.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                                               | `true`           |
+| `passwordUpdateJob.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                                                                                                                                             | `false`          |
+| `passwordUpdateJob.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                                                                                                                                                    | `["ALL"]`        |
+| `passwordUpdateJob.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                                                                                                      | `RuntimeDefault` |
+| `passwordUpdateJob.podSecurityContext.enabled`                        | Enabled credential init job pods' Security Context                                                                                                                                                                                                    | `true`           |
+| `passwordUpdateJob.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                                                                                                    | `Always`         |
+| `passwordUpdateJob.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                                                                                                                                                        | `[]`             |
+| `passwordUpdateJob.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                                                                                                           | `[]`             |
+| `passwordUpdateJob.podSecurityContext.fsGroup`                        | Set credential init job pod's Security Context fsGroup                                                                                                                                                                                                | `1001`           |
+| `passwordUpdateJob.extraEnvVars`                                      | Array containing extra env vars to configure the credential init job                                                                                                                                                                                  | `[]`             |
+| `passwordUpdateJob.extraEnvVarsCM`                                    | ConfigMap containing extra env vars to configure the credential init job                                                                                                                                                                              | `""`             |
+| `passwordUpdateJob.extraEnvVarsSecret`                                | Secret containing extra env vars to configure the credential init job (in case of sensitive data)                                                                                                                                                     | `""`             |
+| `passwordUpdateJob.extraVolumes`                                      | Optionally specify extra list of additional volumes for the credential init job                                                                                                                                                                       | `[]`             |
+| `passwordUpdateJob.extraVolumeMounts`                                 | Array of extra volume mounts to be added to the jwt Container (evaluated as template). Normally used with `extraVolumes`.                                                                                                                             | `[]`             |
+| `passwordUpdateJob.initContainers`                                    | Add additional init containers for the mysql Primary pod(s)                                                                                                                                                                                           | `[]`             |
+| `passwordUpdateJob.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if passwordUpdateJob.resources is set (passwordUpdateJob.resources is recommended for production). | `micro`          |
+| `passwordUpdateJob.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                                     | `{}`             |
+| `passwordUpdateJob.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                                                                                                                                                   | `{}`             |
+| `passwordUpdateJob.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                                                                                                                                                  | `{}`             |
+| `passwordUpdateJob.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                                                                                                                                                    | `{}`             |
+| `passwordUpdateJob.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                                                                                                                                                    | `false`          |
+| `passwordUpdateJob.hostAliases`                                       | Add deployment host aliases                                                                                                                                                                                                                           | `[]`             |
+| `passwordUpdateJob.annotations`                                       | Add annotations to the job                                                                                                                                                                                                                            | `{}`             |
+| `passwordUpdateJob.podLabels`                                         | Additional pod labels                                                                                                                                                                                                                                 | `{}`             |
+| `passwordUpdateJob.podAnnotations`                                    | Additional pod annotations                                                                                                                                                                                                                            | `{}`             |
 
 ### Volume Permissions parameters
 
@@ -532,6 +690,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 12.2.0
+
+This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
+
 It's necessary to set the `auth.rootPassword` parameter when upgrading for readiness/liveness probes to work properly. When you install this chart for the first time, some notes will be displayed providing the credentials you must use under the 'Administrator credentials' section. Please note down the password and run the command below to upgrade your chart:
 
 ```console
@@ -541,6 +703,28 @@ helm upgrade my-release oci://REGISTRY_NAME/REPOSITORY_NAME/mysql --set auth.roo
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 | Note: you need to substitute the placeholder _[ROOT_PASSWORD]_ with the value obtained in the installation notes.
+
+### To 12.0.0
+
+This major bump updates the StatefulSet objects `serviceName` to use a headless service, as the current non-headless service attached to it was not providing DNS entries. This will cause an upgrade issue because it changes "immutable fields". To workaround it, delete the StatefulSet objects as follows (replace the RELEASE_NAME placeholder):
+
+```shell
+
+# If architecture = "standalone"
+kubectl delete sts RELEASE_NAME --cascade=false
+
+# If architecture = "replication"
+kubectl delete sts RELEASE_NAME-primary --cascade=false
+kubectl delete sts RELEASE_NAME-secondary --cascade=false
+```
+
+Then execute `helm upgrade` as usual.
+
+Additionally, this new major provides a new, optional, password update job for automating this second-day operation in the chart. See the [Update credential](#automated-update-using-a-password-update-job) for detailed instructions.
+
+### To 11.0.0
+
+This major bump uses mysql `8.4` image, that includes several [removal of deprecated](https://dev.mysql.com/doc/relnotes/mysql/8.4/en/news-8-4-0.html#mysqld-8-4-0-deprecation-removal) configuration settings, for example the parameter `auth.defaultAuthenticationPlugin` has been removed in favor of `auth.authenticationPolicy`. This could potentially break your deployment and you would need to adjust the config settings accordingly.
 
 ### To 10.0.0
 
@@ -614,7 +798,7 @@ kubectl delete statefulset mysql-slave --cascade=false
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

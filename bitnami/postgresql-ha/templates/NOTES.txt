@@ -2,6 +2,8 @@ CHART NAME: {{ .Chart.Name }}
 CHART VERSION: {{ .Chart.Version }}
 APP VERSION: {{ .Chart.AppVersion }}
 
+Did you know there are enterprise versions of the Bitnami catalog? For enhanced secure software supply chain features, unlimited pulls from Docker, LTS support, or application customization, see Bitnami Premium or Tanzu Application Catalog. See https://www.arrow.com/globalecs/na/vendors/bitnami for more information.
+
 {{- $clusterDomain:= .Values.clusterDomain }}
 ** Please be patient while the chart is being deployed **
 
@@ -57,7 +59,7 @@ Note: Since NetworkPolicy is enabled, only pods with label "{{ include "postgres
 
 {{- if and (.Values.pgpool.networkPolicy.enabled) (not .Values.pgpool.networkPolicy.allowExternal) }}
 
-Note: Since NetworkPolicy is enabled, only pods with label "{{ include "postgresql-ha.pgppol" . }}-client=true" can access postgresql will be able to connect PgPool.
+Note: Since NetworkPolicy is enabled, only pods with label "{{ include "postgresql-ha.pgpool" . }}-client=true" can access postgresql will be able to connect PgPool.
 
 {{- end }}
 
@@ -106,3 +108,5 @@ To connect to your database from outside the cluster execute the following comma
 
 {{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordValidationErrors "context" $) -}}
 {{- include "common.warnings.resources" (dict "sections" (list "metrics" "pgpool" "postgresql" "volumePermissions" "witness") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.postgresql.image .Values.pgpool.image .Values.metrics.image .Values.volumePermissions.image) "context" $) }}
+{{- include "common.errors.insecureImages" (dict "images" (list .Values.postgresql.image .Values.pgpool.image .Values.metrics.image .Values.volumePermissions.image) "context" $) }}

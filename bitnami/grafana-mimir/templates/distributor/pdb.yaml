@@ -3,8 +3,7 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- $replicaCount := int .Values.distributor.replicaCount }}
-{{- if and .Values.distributor.pdb.create (gt $replicaCount 1) }}
+{{- if .Values.distributor.pdb.create }}
 apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
 kind: PodDisruptionBudget
 metadata:
@@ -20,8 +19,8 @@ spec:
   {{- if .Values.distributor.pdb.minAvailable }}
   minAvailable: {{ .Values.distributor.pdb.minAvailable }}
   {{- end  }}
-  {{- if .Values.distributor.pdb.maxUnavailable }}
-  maxUnavailable: {{ .Values.distributor.pdb.maxUnavailable }}
+  {{- if or .Values.distributor.pdb.maxUnavailable ( not .Values.distributor.pdb.minAvailable ) }}
+  maxUnavailable: {{ .Values.distributor.pdb.maxUnavailable | default 1 }}
   {{- end  }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.distributor.podLabels .Values.commonLabels ) "context" . ) }}
   selector:

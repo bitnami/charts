@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/external-dns
 ```
 
-Looking to use ExternalDNS in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use ExternalDNS in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -47,13 +47,35 @@ The command deploys ExternalDNS on the Kubernetes cluster in the default configu
 
 Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
 
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcesPreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
+### [Rolling VS Immutable tags](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+### Prometheus metrics
+
+This chart can be integrated with Prometheus by setting `metrics.enabled` to `true`. This will expose external-dns native Prometheus endpoint in the service. It will have the necessary annotations to be automatically scraped by Prometheus.
+
+#### Prometheus requirements
+
+It is necessary to have a working installation of Prometheus or Prometheus Operator for the integration to work. Install the [Bitnami Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/prometheus) or the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) to easily have a working Prometheus in your cluster.
+
+#### Integration with Prometheus Operator
+
+The chart can deploy `ServiceMonitor` objects for integration with Prometheus Operator installations. To do so, set the value `metrics.serviceMonitor.enabled=true`. Ensure that the Prometheus Operator `CustomResourceDefinitions` are installed in the cluster or it will fail with the following error:
+
+```text
+no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"
+```
+
+Install the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) for having the necessary CRDs and the Prometheus Operator.
+
+### Backup and restore
+
+To back up and restore Helm chart deployments on Kubernetes, you need to back up the persistent volumes from the source deployment and attach them to a new deployment using [Velero](https://velero.io/), a Kubernetes backup/restore tool. Find the instructions for using Velero in [this guide](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-backup-restore-deployments-velero-index.html).
 
 ### Setting Pod's affinity
 
@@ -99,25 +121,25 @@ helm install my-release \
 
 ### Global parameters
 
-| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value  |
-| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
-| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
-| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value   |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`    |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`    |
+| `global.security.allowInsecureImages`                 | Allows skipping image verification                                                                                                                                                                                                                                                                                                                                  | `false` |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto`  |
 
 ### Common parameters
 
-| Name                    | Description                                                                                  | Value           |
-| ----------------------- | -------------------------------------------------------------------------------------------- | --------------- |
-| `nameOverride`          | String to partially override external-dns.fullname template (will maintain the release name) | `""`            |
-| `fullnameOverride`      | String to fully override external-dns.fullname template                                      | `""`            |
-| `clusterDomain`         | Kubernetes Cluster Domain                                                                    | `cluster.local` |
-| `commonLabels`          | Labels to add to all deployed objects                                                        | `{}`            |
-| `commonAnnotations`     | Annotations to add to all deployed objects                                                   | `{}`            |
-| `extraDeploy`           | Array of extra objects to deploy with the release (evaluated as a template).                 | `[]`            |
-| `kubeVersion`           | Force target Kubernetes version (using Helm capabilities if not set)                         | `""`            |
-| `watchReleaseNamespace` | Watch only namepsace used for the release                                                    | `false`         |
-| `useDaemonset`          | Use ExternalDNS in Daemonset mode                                                            | `false`         |
+| Name                | Description                                                                                  | Value           |
+| ------------------- | -------------------------------------------------------------------------------------------- | --------------- |
+| `nameOverride`      | String to partially override common.names.fullname template (will maintain the release name) | `""`            |
+| `fullnameOverride`  | String to fully override common.names.fullname template                                      | `""`            |
+| `namespaceOverride` | String to fully override common.names.namespace                                              | `""`            |
+| `clusterDomain`     | Kubernetes Cluster Domain                                                                    | `cluster.local` |
+| `commonLabels`      | Labels to add to all deployed objects                                                        | `{}`            |
+| `commonAnnotations` | Annotations to add to all deployed objects                                                   | `{}`            |
+| `extraDeploy`       | Array of extra objects to deploy with the release (evaluated as a template).                 | `[]`            |
+| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)                         | `""`            |
 
 ### external-dns parameters
 
@@ -137,10 +159,11 @@ helm install my-release \
 | `sources`                                           | K8s resources type to be observed for new DNS entries by ExternalDNS                                                                                                                                              | `[]`                           |
 | `provider`                                          | DNS provider where the DNS records will be created.                                                                                                                                                               | `aws`                          |
 | `initContainers`                                    | Attach additional init containers to the pod (evaluated as a template)                                                                                                                                            | `[]`                           |
-| `dnsPolicy`                                         | Specifies the DNS policy for the external-dns deployment or daemonset                                                                                                                                             | `""`                           |
+| `dnsPolicy`                                         | Specifies the DNS policy for the external-dns deployment                                                                                                                                                          | `""`                           |
 | `dnsConfig`                                         | allows users more control on the DNS settings for a Pod. Required if `dnsPolicy` is set to `None`                                                                                                                 | `{}`                           |
 | `sidecars`                                          | Attach additional containers to the pod (evaluated as a template)                                                                                                                                                 | `[]`                           |
 | `namespace`                                         | Limit sources of endpoints to a specific namespace (default: all namespaces)                                                                                                                                      | `""`                           |
+| `watchReleaseNamespace`                             | Watch only namespace used for the release                                                                                                                                                                         | `false`                        |
 | `fqdnTemplates`                                     | Templated strings that are used to generate DNS names from sources that don't define a hostname themselves                                                                                                        | `[]`                           |
 | `containerPorts.http`                               | HTTP Container port                                                                                                                                                                                               | `7979`                         |
 | `combineFQDNAnnotation`                             | Combine FQDN template and annotations instead of overwriting                                                                                                                                                      | `false`                        |
@@ -248,6 +271,7 @@ helm install my-release \
 | `infoblox.wapiConnectionPoolSize`                   | When using the Infoblox provider, specify the Infoblox WAPI request connection pool size (optional)                                                                                                               | `""`                           |
 | `infoblox.wapiHttpTimeout`                          | When using the Infoblox provider, specify the Infoblox WAPI request timeout in seconds (optional)                                                                                                                 | `""`                           |
 | `infoblox.maxResults`                               | When using the Infoblox provider, specify the Infoblox Max Results (optional)                                                                                                                                     | `""`                           |
+| `infoblox.createPtr`                                | When using the Infoblox provider, specify the Infoblox create PTR flag (optional)                                                                                                                                 | `false`                        |
 | `linode.apiToken`                                   | When using the Linode provider, `LINODE_TOKEN` to set (optional)                                                                                                                                                  | `""`                           |
 | `linode.secretName`                                 | Use an existing secret with key "linode_api_token" defined.                                                                                                                                                       | `""`                           |
 | `ns1.minTTL`                                        | When using the ns1 provider, specify minimal TTL, as an integer, for records                                                                                                                                      | `10`                           |
@@ -255,7 +279,10 @@ helm install my-release \
 | `ns1.secretName`                                    | Use an existing secret with key "ns1-api-key" defined.                                                                                                                                                            | `""`                           |
 | `pihole.server`                                     | When using the Pi-hole provider, specify The address of the Pi-hole web server                                                                                                                                    | `""`                           |
 | `pihole.tlsSkipVerify`                              | When using the Pi-hole provider, specify wheter to skip verification of any TLS certificates served by the Pi-hole web server                                                                                     | `""`                           |
+| `pihole.password`                                   | When using the Pi-hole provider, specify a password to use                                                                                                                                                        | `""`                           |
 | `pihole.secretName`                                 | Use an existing secret with key "pihole_password" defined.                                                                                                                                                        | `""`                           |
+| `traefik.disableNew`                                | Disable listeners on Resources under traefik.io                                                                                                                                                                   | `false`                        |
+| `traefik.disableLegacy`                             | Disable listeners on Resources under traefik.containo.us                                                                                                                                                          | `false`                        |
 | `oci.region`                                        | When using the OCI provider, specify the region, where your zone is located in.                                                                                                                                   | `""`                           |
 | `oci.tenancyOCID`                                   | When using the OCI provider, specify your Tenancy OCID                                                                                                                                                            | `""`                           |
 | `oci.userOCID`                                      | When using the OCI provider, specify your User OCID                                                                                                                                                               | `""`                           |
@@ -272,9 +299,11 @@ helm install my-release \
 | `ovh.secretName`                                    | When using the OVH provider, it's the name of the secret containing `ovh_consumer_key`, `ovh_application_key` and `ovh_application_secret`. Disables usage of other `ovh`.                                        | `""`                           |
 | `scaleway.scwAccessKey`                             | When using the Scaleway provider, specify an existing access key. (required when provider=scaleway)                                                                                                               | `""`                           |
 | `scaleway.scwSecretKey`                             | When using the Scaleway provider, specify an existing secret key. (required when provider=scaleway)                                                                                                               | `""`                           |
+| `scaleway.secretName`                               | Use an existing secret with keys "scaleway_access_key" and "scaleway_secret_key" defined (optional).                                                                                                              | `""`                           |
 | `rfc2136.host`                                      | When using the rfc2136 provider, specify the RFC2136 host (required when provider=rfc2136)                                                                                                                        | `""`                           |
 | `rfc2136.port`                                      | When using the rfc2136 provider, specify the RFC2136 port (optional)                                                                                                                                              | `53`                           |
-| `rfc2136.zone`                                      | When using the rfc2136 provider, specify the zone (required when provider=rfc2136)                                                                                                                                | `""`                           |
+| `rfc2136.zone`                                      | DEPRECATED: use rfc2136.zones instead.                                                                                                                                                                            | `""`                           |
+| `rfc2136.zones`                                     | When using the rfc2136 provider, specify the zones (required when provider=rfc2136 and `rfc2136.zone` is not provided.)                                                                                           | `[]`                           |
 | `rfc2136.tsigSecret`                                | When using the rfc2136 provider, specify the tsig secret to enable security. (do not specify if `rfc2136.secretName` is provided.) (optional)                                                                     | `""`                           |
 | `rfc2136.secretName`                                | When using the rfc2136 provider, specify the existing secret which contains your tsig secret in the key "rfc2136_tsig_secret". Disables the usage of `rfc2136.tsigSecret` (optional)                              | `""`                           |
 | `rfc2136.tsigSecretAlg`                             | When using the rfc2136 provider, specify the tsig secret to enable security (optional)                                                                                                                            | `hmac-sha256`                  |
@@ -316,7 +345,7 @@ helm install my-release \
 | `txtSuffix`                                         | When using the TXT registry, a suffix for ownership records that avoids collision with CNAME entries (optional)<CNAME record>.suffix (Mutual exclusive with txt-prefix)                                           | `""`                           |
 | `txtOwnerId`                                        | A name that identifies this instance of ExternalDNS. Currently used by registry types: txt & aws-sd (optional)                                                                                                    | `""`                           |
 | `forceTxtOwnerId`                                   | (backward compatibility) When using the non-TXT registry, it will pass the value defined by `txtOwnerId` down to the application (optional)                                                                       | `false`                        |
-| `txtEncrypt.enabled`                                | Enable TXT record encrypencryption                                                                                                                                                                                | `false`                        |
+| `txtEncrypt.enabled`                                | Enable TXT record encryption                                                                                                                                                                                      | `false`                        |
 | `txtEncrypt.aesKey`                                 | 32-byte AES-256-GCM encryption key.                                                                                                                                                                               | `""`                           |
 | `txtEncrypt.secretName`                             | Use an existing secret with key "txt_aes_encryption_key" defined.                                                                                                                                                 | `""`                           |
 | `extraArgs`                                         | Extra arguments to be passed to external-dns                                                                                                                                                                      | `{}`                           |
@@ -326,7 +355,6 @@ helm install my-release \
 | `lifecycleHooks`                                    | Override default etcd container hooks                                                                                                                                                                             | `{}`                           |
 | `schedulerName`                                     | Alternative scheduler                                                                                                                                                                                             | `""`                           |
 | `topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment                                                                                                                                                                    | `[]`                           |
-| `replicaCount`                                      | Desired number of ExternalDNS replicas                                                                                                                                                                            | `1`                            |
 | `podAffinityPreset`                                 | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                                               | `""`                           |
 | `podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                                          | `soft`                         |
 | `nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                                         | `""`                           |
@@ -366,7 +394,7 @@ helm install my-release \
 | `networkPolicy.ingressNSMatchLabels`                | Labels to match to allow traffic from other namespaces                                                                                                                                                            | `{}`                           |
 | `networkPolicy.ingressNSPodMatchLabels`             | Pod labels to match to allow traffic from other namespaces                                                                                                                                                        | `{}`                           |
 | `serviceAccount.create`                             | Determine whether a Service Account should be created or it should reuse a exiting one.                                                                                                                           | `true`                         |
-| `serviceAccount.name`                               | ServiceAccount to use. A name is generated using the external-dns.fullname template if it is not set                                                                                                              | `""`                           |
+| `serviceAccount.name`                               | ServiceAccount to use. A name is generated using the common.names.fullname template if it is not set                                                                                                              | `""`                           |
 | `serviceAccount.annotations`                        | Additional Service Account annotations                                                                                                                                                                            | `{}`                           |
 | `serviceAccount.automountServiceAccountToken`       | Automount API credentials for a service account.                                                                                                                                                                  | `false`                        |
 | `serviceAccount.labels`                             | Additional labels to be included on the service account                                                                                                                                                           | `{}`                           |
@@ -414,7 +442,9 @@ helm install my-release \
 | `customStartupProbe`                                | Override default startup probe                                                                                                                                                                                    | `{}`                           |
 | `extraVolumes`                                      | A list of volumes to be added to the pod                                                                                                                                                                          | `[]`                           |
 | `extraVolumeMounts`                                 | A list of volume mounts to be added to the pod                                                                                                                                                                    | `[]`                           |
-| `podDisruptionBudget`                               | Configure PodDisruptionBudget                                                                                                                                                                                     | `{}`                           |
+| `pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                   | `true`                         |
+| `pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                    | `""`                           |
+| `pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `pdb.minAvailable` and `pdb.maxUnavailable` are empty.                                                                    | `""`                           |
 | `metrics.enabled`                                   | Enable prometheus to access external-dns metrics endpoint                                                                                                                                                         | `false`                        |
 | `metrics.podAnnotations`                            | Annotations for enabling prometheus to access the metrics endpoint                                                                                                                                                | `{}`                           |
 | `metrics.serviceMonitor.enabled`                    | Create ServiceMonitor object                                                                                                                                                                                      | `false`                        |
@@ -426,6 +456,9 @@ helm install my-release \
 | `metrics.serviceMonitor.relabelings`                | Prometheus relabeling rules                                                                                                                                                                                       | `[]`                           |
 | `metrics.serviceMonitor.honorLabels`                | Specify honorLabels parameter to add the scrape endpoint                                                                                                                                                          | `false`                        |
 | `metrics.serviceMonitor.labels`                     | Used to pass Labels that are required by the installed Prometheus Operator                                                                                                                                        | `{}`                           |
+| `metrics.serviceMonitor.targetLabels`               | Labels from the Kubernetes service to be transferred to the created metrics                                                                                                                                       | `[]`                           |
+| `metrics.serviceMonitor.podTargetLabels`            | Labels from the Kubernetes pod to be transferred to the created metrics                                                                                                                                           | `[]`                           |
+| `metrics.serviceMonitor.annotations`                | Additional custom annotations for the ServiceMonitor                                                                                                                                                              | `{}`                           |
 | `metrics.serviceMonitor.jobLabel`                   | The name of the label on the target service to use as the job name in prometheus.                                                                                                                                 | `""`                           |
 | `metrics.googlePodMonitor.enabled`                  | Create Google Managed Prometheus PodMonitoring object                                                                                                                                                             | `false`                        |
 | `metrics.googlePodMonitor.namespace`                | Namespace in which PodMonitoring created                                                                                                                                                                          | `""`                           |
@@ -455,6 +488,10 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/exter
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 8.7.0
+
+This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
 
 ### To 7.0.0
 
@@ -506,7 +543,7 @@ This version also introduces `bitnami/common`, a [library chart](https://helm.sh
 
 #### Useful links
 
-- <https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-resolve-helm2-helm3-post-migration-issues-index.html>
+- <https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-resolve-helm2-helm3-post-migration-issues-index.html>
 - <https://helm.sh/docs/topics/v2_v3_migration/>
 - <https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/>
 
@@ -542,7 +579,7 @@ Other mayor changes included in this major version are:
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

@@ -46,7 +46,7 @@ spec:
       {{- end }}
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
     spec:
-      {{- include "schema-registry.imagePullSecrets" . | indent 6 }}
+      {{- include "schema-registry.imagePullSecrets" . | nindent 6 }}
       serviceAccountName: {{ include "schema-registry.serviceAccountName" . }}
       automountServiceAccountToken: {{ .Values.automountServiceAccountToken }}
       {{- if .Values.hostAliases }}
@@ -156,7 +156,7 @@ spec:
               {{- if .Values.kafka.enabled }}
               {{- $brokers := list }}
               {{- $kafkaBrokerReplicaCount := int .Values.kafka.broker.replicaCount }}
-              {{- $kafkaControllerReplicaCount := ternary 0 (int .Values.kafka.controller.replicaCount) (or (not .Values.kafka.kraft.enabled) (.Values.kafka.controller.controllerOnly)) }}
+              {{- $kafkaControllerReplicaCount := ternary 0 (int .Values.kafka.controller.replicaCount) (.Values.kafka.controller.controllerOnly) }}
               {{- range $e, $i := until $kafkaBrokerReplicaCount }}
               {{- $brokers = append $brokers (printf "%s://%s-broker-%d.%s-broker-headless.%s.svc.%s:%d" $kafkaProtocol $kafkaFullname $i $kafkaFullname $releaseNamespace $clusterDomain $kafkaPort) }}
               {{- end }}
@@ -224,15 +224,17 @@ spec:
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
           {{- else if .Values.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.readinessProbe "enabled") "context" $) | nindent 12 }}
-            tcpSocket:
+            httpGet:
               port: http
+              path: /
           {{- end }}
           {{- if .Values.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customStartupProbe "context" $) | nindent 12 }}
           {{- else if .Values.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.startupProbe "enabled") "context" $) | nindent 12 }}
-            tcpSocket:
+            httpGet:
               port: http
+              path: /
           {{- end }}
           {{- end }}
           {{- if .Values.resources }}

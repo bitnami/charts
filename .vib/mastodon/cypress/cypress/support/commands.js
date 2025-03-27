@@ -30,6 +30,6 @@ Cypress.Commands.add(
     cy.get('#user_password').type(`${password}{enter}`);
     // We click on Home to skip a welcome page
     cy.contains('a', 'Home').click();
-    cy.contains('Edit profile');
+    cy.contains('Administration');
   }
 );

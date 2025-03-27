@@ -19,7 +19,7 @@ spec:
   {{- if .Values.prometheus.pdb.minAvailable }}
   minAvailable: {{ .Values.prometheus.pdb.minAvailable }}
   {{- end }}
-  {{- if .Values.prometheus.pdb.maxUnavailable }}
-  maxUnavailable: {{ .Values.prometheus.pdb.maxUnavailable }}
+  {{- if or .Values.prometheus.pdb.maxUnavailable ( not .Values.prometheus.pdb.minAvailable ) }}
+  maxUnavailable: {{ .Values.prometheus.pdb.maxUnavailable | default 1 }}
   {{- end }}
 {{- end }}

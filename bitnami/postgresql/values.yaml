@@ -14,9 +14,16 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  ## @param global.storageClass Global StorageClass for Persistent Volume(s)
+  ## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
+## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
   ##
+  defaultStorageClass: ""
   storageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
   postgresql:
     ## @param global.postgresql.auth.postgresPassword Password for the "postgres" admin user (overrides `auth.postgresPassword`)
     ## @param global.postgresql.auth.username Name for a custom user to create (overrides `auth.username`)
@@ -63,6 +70,9 @@ nameOverride: ""
 ## @param fullnameOverride String to fully override common.names.fullname template
 ##
 fullnameOverride: ""
+## @param namespaceOverride String to fully override common.names.namespace
+##
+namespaceOverride: ""
 ## @param clusterDomain Kubernetes Cluster Domain
 ##
 clusterDomain: cluster.local
@@ -75,6 +85,9 @@ commonLabels: {}
 ## @param commonAnnotations Add annotations to all the deployed resources
 ##
 commonAnnotations: {}
+## @param secretAnnotations Add annotations to the secrets
+##
+secretAnnotations: {}
 ## Enable diagnostic mode in the statefulset
 ##
 diagnosticMode:
@@ -105,10 +118,9 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/postgresql
-  tag: 16.2.0-debian-12-r18
+  tag: 17.4.0-debian-12-r11
   digest: ""
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -163,7 +175,7 @@ auth:
     replicationPasswordKey: replication-password
   ## @param auth.usePasswordFiles Mount credentials as a files instead of using an environment variable
   ##
-  usePasswordFiles: false
+  usePasswordFiles: true
 ## @param architecture PostgreSQL architecture (`standalone` or `replication`)
 ##
 architecture: standalone
@@ -206,7 +218,6 @@ audit:
   logTimezone: ""
 ## LDAP configuration
 ## @param ldap.enabled Enable LDAP support
-## DEPRECATED ldap.url It will removed in a future, please use 'ldap.uri' instead
 ## @param ldap.server IP address or name of the LDAP server.
 ## @param ldap.port Port number on the LDAP server to connect to
 ## @param ldap.prefix String to prepend to the user name when forming the DN to bind
@@ -357,6 +368,23 @@ primary:
     ## @param primary.initdb.password Specify the PostgreSQL password to execute the initdb scripts
     ##
     password: ""
+  ## Pre-init configuration
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/postgresql/#on-container-start
+  preInitDb:
+    ## @param primary.preInitDb.scripts Dictionary of pre-init scripts
+    ## Specify dictionary of shell scripts to be run before db boot
+    ## e.g:
+    ## scripts:
+    ##   my_pre_init_script.sh: |
+    ##      #!/bin/sh
+    ##      echo "Do something."
+    scripts: {}
+    ## @param primary.preInitDb.scriptsConfigMap ConfigMap with pre-init scripts to be run
+    ## NOTE: This will override `primary.preInitDb.scripts`
+    scriptsConfigMap: ""
+    ## @param primary.preInitDb.scriptsSecret Secret with pre-init scripts to be run
+    ## NOTE: This can work along `primary.preInitDb.scripts` or `primary.preInitDb.scriptsConfigMap`
+    scriptsSecret: ""
   ## Configure current cluster's primary server to be the standby server in other cluster.
   ## This will allow cross cluster replication and provide cross cluster high availability.
   ## You will need to configure pgHbaConfiguration if you want to enable this feature with local cluster replication enabled.
@@ -613,6 +641,16 @@ primary:
   ##     command: ['do', 'something']
   ##
   initContainers: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param primary.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param primary.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param primary.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `primary.pdb.minAvailable` and `primary.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
   ## @param primary.extraPodSpec Optionally specify extra PodSpec for the PostgreSQL Primary pod(s)
   ##
   extraPodSpec: {}
@@ -693,9 +731,16 @@ primary:
     ## clusterIP: None
     ##
     clusterIP: ""
+    ## @param primary.service.labels Map of labels to add to the primary service
+    ##
+    labels: {}
     ## @param primary.service.annotations Annotations for PostgreSQL primary service
     ##
     annotations: {}
+    ## @param primary.service.loadBalancerClass Load balancer class if service type is `LoadBalancer`
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#load-balancer-class
+    ##
+    loadBalancerClass: ""
     ## @param primary.service.loadBalancerIP Load balancer IP if service type is `LoadBalancer`
     ## Set the LoadBalancer service type to internal only
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
@@ -1053,6 +1098,16 @@ readReplicas:
   ##     command: ['do', 'something']
   ##
   initContainers: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param readReplicas.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param readReplicas.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param readReplicas.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `readReplicas.pdb.minAvailable` and `readReplicas.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
   ## @param readReplicas.extraPodSpec Optionally specify extra PodSpec for the PostgreSQL read only pod(s)
   ##
   extraPodSpec: {}
@@ -1133,9 +1188,16 @@ readReplicas:
     ## clusterIP: None
     ##
     clusterIP: ""
+    ## @param readReplicas.service.labels Map of labels to add to the read service
+    ##
+    labels: {}
     ## @param readReplicas.service.annotations Annotations for PostgreSQL read only service
     ##
     annotations: {}
+    ## @param readReplicas.service.loadBalancerClass Load balancer class if service type is `LoadBalancer`
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#load-balancer-class
+    ##
+    loadBalancerClass: ""
     ## @param readReplicas.service.loadBalancerIP Load balancer IP if service type is `LoadBalancer`
     ## Set the LoadBalancer service type to internal only
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
@@ -1331,7 +1393,7 @@ backup:
       ##
       enabled: true
     storage:
-      ## @param backup.cronjob.storage.enabled Enable using a `PersistentVolumeClaim` as backup data volume 
+      ## @param backup.cronjob.storage.enabled Enable using a `PersistentVolumeClaim` as backup data volume
       ##
       enabled: true
       ## @param backup.cronjob.storage.existingClaim Provide an existing `PersistentVolumeClaim` (only when `architecture=standalone`)
@@ -1379,6 +1441,141 @@ backup:
     ## @param backup.cronjob.extraVolumes Optionally specify extra list of additional volumes for the backup container
     ##
     extraVolumes: []
+
+## @section Password update job
+##
+passwordUpdateJob:
+  ## @param passwordUpdateJob.enabled Enable password update job
+  ##
+  enabled: false
+  ## @param passwordUpdateJob.backoffLimit set backoff limit of the job
+  ##
+  backoffLimit: 10
+  ## @param passwordUpdateJob.command Override default container command on mysql Primary container(s) (useful when using custom images)
+  ##
+  command: []
+  ## @param passwordUpdateJob.args Override default container args on mysql Primary container(s) (useful when using custom images)
+  ##
+  args: []
+  ## @param passwordUpdateJob.extraCommands Extra commands to pass to the generation job
+  ##
+  extraCommands: ""
+  ## @param passwordUpdateJob.previousPasswords.postgresPassword Previous postgres password (set if the password secret was already changed)
+  ## @param passwordUpdateJob.previousPasswords.password Previous password (set if the password secret was already changed)
+  ## @param passwordUpdateJob.previousPasswords.replicationPassword Previous replication password (set if the password secret was already changed)
+  ## @param passwordUpdateJob.previousPasswords.existingSecret Name of a secret containing the previous passwords (set if the password secret was already changed)
+  previousPasswords:
+    postgresPassword: ""
+    password: ""
+    replicationPassword: ""
+    existingSecret: ""
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param passwordUpdateJob.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param passwordUpdateJob.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param passwordUpdateJob.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param passwordUpdateJob.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+  ## @param passwordUpdateJob.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param passwordUpdateJob.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param passwordUpdateJob.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param passwordUpdateJob.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param passwordUpdateJob.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param passwordUpdateJob.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
+  ##
+  containerSecurityContext:
+    enabled: true
+    seLinuxOptions: {}
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param passwordUpdateJob.podSecurityContext.enabled Enabled credential init job pods' Security Context
+  ## @param passwordUpdateJob.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param passwordUpdateJob.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param passwordUpdateJob.podSecurityContext.supplementalGroups Set filesystem extra groups
+  ## @param passwordUpdateJob.podSecurityContext.fsGroup Set credential init job pod's Security Context fsGroup
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
+    fsGroup: 1001
+  ## @param passwordUpdateJob.extraEnvVars Array containing extra env vars to configure the credential init job
+  ## For example:
+  ## extraEnvVars:
+  ##  - name: GF_DEFAULT_INSTANCE_NAME
+  ##    value: my-instance
+  ##
+  extraEnvVars: []
+  ## @param passwordUpdateJob.extraEnvVarsCM ConfigMap containing extra env vars to configure the credential init job
+  ##
+  extraEnvVarsCM: ""
+  ## @param passwordUpdateJob.extraEnvVarsSecret Secret containing extra env vars to configure the credential init job (in case of sensitive data)
+  ##
+  extraEnvVarsSecret: ""
+  ## @param passwordUpdateJob.extraVolumes Optionally specify extra list of additional volumes for the credential init job
+  ##
+  extraVolumes: []
+  ## @param passwordUpdateJob.extraVolumeMounts Array of extra volume mounts to be added to the jwt Container (evaluated as template). Normally used with `extraVolumes`.
+  ##
+  extraVolumeMounts: []
+  ## @param passwordUpdateJob.initContainers Add additional init containers for the mysql Primary pod(s)
+  ##
+  initContainers: []
+  ## Container resource requests and limits
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param passwordUpdateJob.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if passwordUpdateJob.resources is set (passwordUpdateJob.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "micro"
+  ## @param passwordUpdateJob.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
+  ## @param passwordUpdateJob.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param passwordUpdateJob.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param passwordUpdateJob.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## @param passwordUpdateJob.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
+  ## @param passwordUpdateJob.hostAliases Add deployment host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param passwordUpdateJob.annotations [object] Add annotations to the job
+  ##
+  annotations: {}
+  ## @param passwordUpdateJob.podLabels Additional pod labels
+  ## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param passwordUpdateJob.podAnnotations Additional pod annotations
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+
 ## @section Volume Permissions parameters
 ##
 
@@ -1399,7 +1596,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r19
+    tag: 12-debian-12-r40
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1508,7 +1705,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/postgres-exporter
-    tag: 0.15.0-debian-12-r17
+    tag: 0.17.1-debian-12-r2
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

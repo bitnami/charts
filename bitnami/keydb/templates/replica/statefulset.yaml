@@ -1,0 +1,459 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if eq .Values.architecture "replication" }}
+apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
+kind: StatefulSet
+metadata:
+  name: {{ template "keydb.replica.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: keydb
+    app.kubernetes.io/component: replica
+  {{- if or .Values.replica.statefulsetAnnotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.replica.statefulsetAnnotations .Values.commonAnnotations) "context" .) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if not .Values.replica.autoscaling.hpa.enabled }}
+  replicas: {{ .Values.replica.replicaCount }}
+  {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" (dict "values" (list .Values.replica.podLabels .Values.commonLabels) "context" .) }}
+  {{- if and .Values.metrics.enabled .Values.metrics.podLabels }}
+  {{- $podLabels = include "common.tplvalues.merge" (dict "values" (list .Values.metrics.podLabels $podLabels) "context" .) }}
+  {{- end }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/part-of: keydb
+      app.kubernetes.io/component: replica
+  serviceName: {{ printf "%s-hl" (include "keydb.replica.fullname" .) }}
+  {{- if .Values.replica.updateStrategy }}
+  updateStrategy: {{- toYaml .Values.replica.updateStrategy | nindent 4 }}
+  {{- end }}
+  template:
+    metadata:
+      annotations:
+        {{- if empty .Values.replica.existingConfigmap }}
+        checksum/configmap: {{ include (print $.Template.BasePath "/replica/configmap.yaml") . | sha256sum }}
+        {{- end }}
+        checksum/health: {{ pick ( include (print $.Template.BasePath "/health-configmap.yaml") . | fromYaml ) "data" | toYaml | sha256sum }}
+        {{- if or .Values.replica.podAnnotations (and .Values.metrics.enabled .Values.metrics.podAnnotations) }}
+        {{- $podAnnotations := include "common.tplvalues.merge" (dict "values" (list .Values.replica.podAnnotations .Values.metrics.podAnnotations) "context" .) }}
+        {{- include "common.tplvalues.render" (dict "value" $podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/part-of: keydb
+        app.kubernetes.io/component: replica
+    spec:
+      {{- include "keydb.imagePullSecrets" . | nindent 6 }}
+      serviceAccountName: {{ template "keydb.serviceAccountName" . }}
+      automountServiceAccountToken: {{ .Values.replica.automountServiceAccountToken }}
+      {{- if .Values.replica.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.replica.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.replica.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.replica.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        {{- if not (empty .Values.replica.podAffinityPreset) }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.replica.podAffinityPreset "component" "replica" "customLabels" $podLabels "context" $) | nindent 10 }}
+        {{- end }}
+        {{- if not (empty .Values.replica.podAntiAffinityPreset) }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.replica.podAntiAffinityPreset "component" "replica" "customLabels" $podLabels "context" $) | nindent 10 }}
+        {{- end }}
+        {{- if not (empty .Values.replica.nodeAffinityPreset.type) }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.replica.nodeAffinityPreset.type "key" .Values.replica.nodeAffinityPreset.key "values" .Values.replica.nodeAffinityPreset.values) | nindent 10 }}
+        {{- end }}
+      {{- end }}
+      {{- if .Values.replica.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.replica.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.replica.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.replica.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.replica.priorityClassName }}
+      priorityClassName: {{ .Values.replica.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.replica.schedulerName }}
+      schedulerName: {{ .Values.replica.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.replica.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.replica.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.replica.podSecurityContext.enabled }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.replica.podSecurityContext "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.replica.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.replica.terminationGracePeriodSeconds }}
+      {{- end }}
+      initContainers:
+        {{- if and .Values.volumePermissions.enabled .Values.replica.persistence.enabled }}
+        - name: volume-permissions
+          image: {{ include "keydb.volumePermissions.image" . }}
+          imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
+          command:
+            - /bin/bash
+            - -ec
+            - |
+              find {{ .Values.replica.persistence.mountPath }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs -r chown -R {{ printf "%d:%d" (int .Values.replica.containerSecurityContext.runAsUser) (int .Values.replica.podSecurityContext.fsGroup) }}
+          {{- if .Values.volumePermissions.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.volumePermissions.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.volumePermissions.resources }}
+          resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: data
+              mountPath: {{ .Values.replica.persistence.mountPath }}
+              {{- if .Values.replica.persistence.subPath }}
+              subPath: {{ .Values.replica.persistence.subPath }}
+              {{- end }}
+        {{- end }}
+        {{- if .Values.replica.initContainers }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.replica.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+      containers:
+        - name: keydb
+          image: {{ template "keydb.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.replica.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.replica.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.replica.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.replica.command "context" $) | nindent 12 }}
+          {{- else }}
+          command:
+            - /bin/bash
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.replica.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.replica.args "context" $) | nindent 12 }}
+          {{- else }}
+          args:
+            - -ec
+            - |
+              . /opt/bitnami/scripts/keydb-env.sh
+
+              args=("/opt/bitnami/keydb/etc/keydb.conf")
+            {{- if .Values.auth.enabled }}
+              args+=("--requirepass" "$KEYDB_PASSWORD")
+              args+=("--masterauth" "$KEYDB_MASTER_PASSWORD")
+            {{- end }}
+
+            {{- $masterReplicaCount := int .Values.master.replicaCount }}
+            {{- $masterFullname := include "keydb.master.fullname" . }}
+            {{- $masterHlSvcName := printf "%s-hl" (include "keydb.master.fullname" .) }}
+            {{- $replicaHlSvcName := printf "%s-hl" (include "keydb.replica.fullname" .) }}
+            {{- $releaseNamespace := include "common.names.namespace" . }}
+            {{- $clusterDomain := .Values.clusterDomain }}
+            {{- $masterPort := int .Values.master.containerPorts.keydb }}
+            {{- range $i := until $masterReplicaCount }}
+              args+=("--replicaof" "{{ printf "%s-%d.%s.%s.svc.%s" $masterFullname $i $masterHlSvcName $releaseNamespace $clusterDomain }}" {{ $masterPort }})
+            {{- end }}
+              args+=("--replica-announce-ip" "${HOSTNAME}.{{ printf "%s.%s.svc.%s" $replicaHlSvcName $releaseNamespace $clusterDomain }}")
+
+              exec keydb-server "${args[@]}"
+          {{- end }}
+          env:
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
+            - name: KEYDB_PORT_NUMBER
+              value: {{ .Values.replica.containerPorts.keydb | quote }}
+            {{- if .Values.auth.enabled }}
+            {{- if .Values.auth.usePasswordFiles }}
+            - name: KEYDB_PASSWORD_FILE
+              value: "/opt/bitnami/keydb/secrets/keydb-password"
+            - name: KEYDB_MASTER_PASSWORD_FILE
+              value: "/opt/bitnami/keydb/secrets/keydb-password"
+            {{- else }}
+            - name: KEYDB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "keydb.secretName" . }}
+                  key: {{ template "keydb.secretPasswordKey" . }}
+            - name: KEYDB_MASTER_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "keydb.secretName" . }}
+                  key: {{ template "keydb.secretPasswordKey" . }}
+            {{- end }}
+            {{- end }}
+            {{- if .Values.replica.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.replica.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if or .Values.replica.extraEnvVarsCM .Values.replica.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.replica.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.replica.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.replica.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.replica.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- end }}
+          {{- if .Values.replica.resources }}
+          resources: {{- toYaml .Values.replica.resources | nindent 12 }}
+          {{- else if ne .Values.replica.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.replica.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          ports:
+            - name: keydb
+              containerPort: {{ .Values.replica.containerPorts.keydb }}
+            {{- if .Values.replica.extraContainerPorts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.replica.extraContainerPorts "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.replica.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.replica.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.replica.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.replica.livenessProbe "enabled") "context" $) | nindent 12 }}
+            exec:
+              command:
+                - sh
+                - -c
+                - /opt/bitnami/scripts/health/ping_liveness_local_and_master.sh {{ .Values.replica.livenessProbe.timeoutSeconds }}
+          {{- end }}
+          {{- if .Values.replica.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.replica.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.replica.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.replica.readinessProbe "enabled") "context" $) | nindent 12 }}
+            exec:
+              command:
+                - sh
+                - -c
+                - /opt/bitnami/scripts/health/ping_readiness_local_and_master.sh {{ .Values.replica.readinessProbe.timeoutSeconds }}
+          {{- end }}
+          {{- if .Values.replica.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.replica.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.replica.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.replica.startupProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: keydb
+          {{- end }}
+          {{- end }}
+          {{- if .Values.replica.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.replica.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: data
+              mountPath: {{ .Values.replica.persistence.mountPath }}
+              {{- if .Values.replica.persistence.subPath }}
+              subPath: {{ .Values.replica.persistence.subPath }}
+              {{- end }}
+            - name: health-scripts
+              mountPath: /opt/bitnami/scripts/health
+              readOnly: true
+            {{- if and .Values.auth.enabled .Values.auth.usePasswordFiles }}
+            - name: keydb-password
+              mountPath: /opt/bitnami/keydb/secrets
+              readOnly: true
+            {{- end }}
+            {{- if .Values.tls.enabled }}
+            - name: keydb-certificates
+              mountPath: /opt/bitnami/keydb/certs
+              readOnly: true
+            {{- end }}
+            - name: config
+              mountPath: /opt/bitnami/keydb/etc
+              readOnly: true
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+          {{- if .Values.replica.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.replica.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+        {{- if .Values.metrics.enabled }}
+        - name: metrics
+          image: {{ include "keydb.metrics.image" . }}
+          imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
+          {{- if .Values.metrics.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.metrics.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.metrics.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.command "context" $) | nindent 12 }}
+          {{- else }}
+          command:
+            - /bin/bash
+            - -c
+            - |
+              {{- if and .Values.auth.enabled .Values.auth.usePasswordFiles }}
+              export REDIS_PASSWORD="$(< $REDIS_PASSWORD_FILE)"
+              {{- end }}
+              redis_exporter{{- range $key, $value := .Values.metrics.extraArgs }} --{{ $key }}={{ $value }}{{- end }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- end }}
+          env:
+            - name: REDIS_ALIAS
+              value: {{ template "common.names.fullname" . }}
+            - name: REDIS_EXPORTER_WEB_LISTEN_ADDRESS
+              value: {{ printf ":%v" .Values.metrics.containerPorts.http }}
+            {{- if .Values.auth.enabled }}
+            - name: REDIS_USER
+              value: default
+            {{- if .Values.auth.usePasswordFiles }}
+            - name: REDIS_PASSWORD_FILE
+              value: "/secrets/keydb-password"
+            {{- else }}
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "keydb.secretName" . }}
+                  key: {{ template "keydb.secretPasswordKey" . }}
+            {{- end }}
+            {{- end }}
+            - name: REDIS_ADDR
+              value: redis://{{ .Values.metrics.keydbHost }}:{{ .Values.master.containerPorts.keydb }}
+            {{- if .Values.tls.enabled }}
+            - name: REDIS_EXPORTER_TLS_CLIENT_KEY_FILE
+              value: "/certs/tls.key"
+            - name: REDIS_EXPORTER_TLS_CLIENT_CERT_FILE
+              value: "/certs/tls.crt"
+            - name: REDIS_EXPORTER_TLS_CA_CERT_FILE
+              value: "/certs/ca.crt"
+            {{- end }}
+            {{- if .Values.metrics.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.metrics.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          ports:
+            - name: metrics
+              containerPort: {{ .Values.metrics.containerPorts.http }}
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.metrics.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.metrics.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metrics.startupProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: metrics
+          {{- end }}
+          {{- if .Values.metrics.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.metrics.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metrics.livenessProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: metrics
+          {{- end }}
+          {{- if .Values.metrics.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.metrics.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metrics.readinessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /
+              port: metrics
+          {{- end }}
+          {{- end }}
+          {{- if .Values.metrics.resources }}
+          resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
+          {{- else if ne .Values.metrics.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.metrics.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: app-tmp-dir
+            {{- if and .Values.auth.enabled .Values.auth.usePasswordFiles }}
+            - name: keydb-password
+              mountPath: /secrets
+              readOnly: true
+            {{- end }}
+            {{- if .Values.tls.enabled }}
+            - name: keydb-certificates
+              mountPath: /certs
+              readOnly: true
+            {{- end }}
+            {{- if .Values.metrics.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.extraVolumeMounts "context" $ ) | nindent 12 }}
+            {{- end }}
+        {{- end }}
+        {{- if .Values.replica.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.replica.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        - name: empty-dir
+          emptyDir: {}
+        - name: health-scripts
+          configMap:
+            name: {{ printf "%s-health" (include "common.names.fullname" .) }}
+            defaultMode: 0755
+        - name: config
+          configMap:
+            name: {{ template "keydb.replica.configmapName" . }}
+        {{- if and .Values.auth.enabled .Values.auth.usePasswordFiles }}
+        - name: keydb-password
+          secret:
+            secretName: {{ template "keydb.secretName" . }}
+            items:
+              - key: {{ template "keydb.secretPasswordKey" . }}
+                path: keydb-password
+        {{- end }}
+        {{- if .Values.tls.enabled }}
+        - name: keydb-certificates
+          secret:
+            secretName: {{ template "keydb.tls.replica.secretName" . }}
+            defaultMode: 256
+        {{- end }}
+        {{- if .Values.replica.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.replica.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+  {{- if or (not .Values.replica.persistence.enabled) (not (empty .Values.replica.persistence.existingClaim)) }}
+        - name: data
+        {{- if not (empty .Values.replica.persistence.existingClaim) }}
+          persistentVolumeClaim:
+            claimName: {{ tpl .Values.replica.persistence.existingClaim . }}
+        {{- else }}
+          {{- if or .Values.replica.persistence.medium .Values.replica.persistence.sizeLimit }}
+          emptyDir:
+            {{- if .Values.replica.persistence.medium }}
+            medium: {{ .Values.replica.persistence.medium | quote }}
+            {{- end }}
+            {{- if .Values.replica.persistence.sizeLimit }}
+            sizeLimit: {{ .Values.replica.persistence.sizeLimit | quote }}
+            {{- end }}
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
+        {{- end }}
+  {{- else }}
+  {{- if .Values.replica.persistentVolumeClaimRetentionPolicy.enabled }}
+  persistentVolumeClaimRetentionPolicy:
+    whenDeleted: {{ .Values.replica.persistentVolumeClaimRetentionPolicy.whenDeleted }}
+    whenScaled: {{ .Values.replica.persistentVolumeClaimRetentionPolicy.whenScaled }}
+  {{- end }}
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+        {{- if or .Values.replica.persistence.annotations .Values.commonAnnotations }}
+        {{- $claimAnnotations := include "common.tplvalues.merge" (dict "values" .Values.replica.persistence.annotations .Values.commonAnnotations "context" .) | fromYaml }}
+        annotations: {{- include "common.tplvalues.render" ( dict "value" $claimAnnotations "context" $ ) | nindent 10 }}
+        {{- end }}
+        {{- if .Values.commonLabels }}
+        labels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 10 }}
+        {{- end }}
+      spec:
+        accessModes:
+        {{- range .Values.replica.persistence.accessModes }}
+          - {{ . | quote }}
+        {{- end }}
+        resources:
+          requests:
+            storage: {{ .Values.replica.persistence.size | quote }}
+        {{- if .Values.replica.persistence.selector }}
+        selector: {{- include "common.tplvalues.render" (dict "value" .Values.replica.persistence.selector "context" $) | nindent 10 }}
+        {{- end }}
+        {{- if .Values.replica.persistence.dataSource }}
+        dataSource: {{- include "common.tplvalues.render" (dict "value" .Values.replica.persistence.dataSource "context" $) | nindent 10 }}
+        {{- end }}
+        {{- include "common.storage.class" (dict "persistence" .Values.replica.persistence "global" .Values.global) | nindent 8 }}
+  {{- end }}
+{{- end }}

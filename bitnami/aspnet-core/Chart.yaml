@@ -2,17 +2,18 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
+  tanzuCategory: application
   category: DeveloperTools
   licenses: Apache-2.0
   images: |
     - name: aspnet-core
-      image: docker.io/bitnami/aspnet-core:8.0.4-debian-12-r0
+      image: docker.io/bitnami/aspnet-core:8.0.14-debian-12-r0
     - name: dotnet-sdk
-      image: docker.io/bitnami/dotnet-sdk:8.0.204-debian-12-r0
+      image: docker.io/bitnami/dotnet-sdk:8.0.406-debian-12-r3
     - name: git
-      image: docker.io/bitnami/git:2.44.0-debian-12-r2
+      image: docker.io/bitnami/git:2.48.1-debian-12-r9
 apiVersion: v2
-appVersion: 8.0.4
+appVersion: 8.0.14
 dependencies:
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
@@ -21,7 +22,7 @@ dependencies:
   version: 2.x.x
 description: ASP.NET Core is an open-source framework for web application development created by Microsoft. It runs on both the full .NET Framework, on Windows, and the cross-platform .NET Core.
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/aspnet-core/img/aspnet-core-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/aspnet-core/img/aspnet-core-stack-220x234.png
 keywords:
 - asp.net
 - dotnet
@@ -31,4 +32,4 @@ maintainers:
 name: aspnet-core
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/aspnet-core
-version: 6.0.2
+version: 6.3.5

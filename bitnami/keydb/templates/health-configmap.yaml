@@ -1,0 +1,156 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ printf "%s-health" (include "common.names.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: keydb
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+data:
+  ping_readiness_local.sh: |-
+    #!/bin/bash
+
+    . /opt/bitnami/scripts/keydb-env.sh
+    . /opt/bitnami/scripts/liblog.sh
+    
+    response=$(
+        timeout -s 15 $1 \
+        keydb-cli \
+            -h localhost \
+        {{- if .Values.auth.enabled }}
+            -a "$KEYDB_PASSWORD" \
+        {{- end }}
+        {{- if .Values.tls.enabled }}
+            --tls \
+            --cacert /opt/bitnami/keydb/certs/ca.crt \
+            --cert /opt/bitnami/keydb/certs/tls.crt \
+            --key /opt/bitnami/keydb/certs/tls.key \
+        {{- end }}
+            -p $KEYDB_PORT_NUMBER \
+            ping
+    )
+    if [[ "$?" -eq "124" ]]; then
+        error "Timed out"
+        exit 1
+    fi
+    if [[ "$response" != "PONG" ]]; then
+        error "$response"
+        exit 1
+    fi
+  ping_liveness_local.sh: |-
+    #!/bin/bash
+
+    . /opt/bitnami/scripts/keydb-env.sh
+    . /opt/bitnami/scripts/liblog.sh
+
+    response=$(
+        timeout -s 15 $1 \
+        keydb-cli \
+            -h localhost \
+        {{- if .Values.auth.enabled }}
+            -a "$KEYDB_PASSWORD" \
+        {{- end }}
+        {{- if .Values.tls.enabled }}
+            --tls \
+            --cacert /opt/bitnami/keydb/certs/ca.crt \
+            --cert /opt/bitnami/keydb/certs/tls.crt \
+            --key /opt/bitnami/keydb/certs/tls.key \
+        {{- end }}
+            -p $KEYDB_PORT_NUMBER \
+            ping
+    )
+    if [[ "$?" -eq "124" ]]; then
+        error "Timed out"
+        exit 1
+    fi
+    responseFirstWord="$(echo "$response" | head -n1 | awk '{print $1;}')"
+    if [[ "$response" != "PONG" ]] && [[ "$responseFirstWord" != "LOADING" ]] && [[ "$responseFirstWord" != "MASTERDOWN" ]]; then
+        error "$response"
+        exit 1
+    fi
+{{- if eq .Values.architecture "replication" }}
+  ping_readiness_master.sh: |-
+    #!/bin/bash
+
+    . /opt/bitnami/scripts/keydb-env.sh
+    . /opt/bitnami/scripts/liblog.sh
+
+    response=$(
+        timeout -s 15 $1 \
+        keydb-cli \
+            -h {{ include "keydb.master.fullname" . }} \
+            -p {{ .Values.master.service.ports.keydb }} \
+        {{- if .Values.auth.enabled }}
+            -a "$KEYDB_MASTER_PASSWORD" \
+        {{- end }}
+        {{- if .Values.tls.enabled }}
+            --tls \
+            --cacert /opt/bitnami/keydb/certs/ca.crt \
+            --cert /opt/bitnami/keydb/certs/tls.crt \
+            --key /opt/bitnami/keydb/certs/tls.key \
+        {{- end }}
+            ping
+    )
+    if [[ "$?" -eq "124" ]]; then
+        error "Timed out"
+        exit 1
+    fi
+    if [[ "$response" != "PONG" ]]; then
+        error "$response"
+        exit 1
+    fi
+  ping_liveness_master.sh: |-
+    #!/bin/bash
+
+    . /opt/bitnami/scripts/keydb-env.sh
+    . /opt/bitnami/scripts/liblog.sh
+
+    response=$(
+        timeout -s 15 $1 \
+        keydb-cli \
+            -h {{ include "keydb.master.fullname" . }} \
+            -p {{ .Values.master.service.ports.keydb }} \
+        {{- if .Values.auth.enabled }}
+            -a "$KEYDB_MASTER_PASSWORD" \
+        {{- end }}
+        {{- if .Values.tls.enabled }}
+            --tls \
+            --cacert /opt/bitnami/keydb/certs/ca.crt \
+            --cert /opt/bitnami/keydb/certs/tls.crt \
+            --key /opt/bitnami/keydb/certs/tls.key \
+        {{- end }}
+            ping
+    )
+    if [[ "$?" -eq "124" ]]; then
+        error "Timed out"
+        exit 1
+    fi
+    responseFirstWord="$(echo "$response" | head -n1 | awk '{print $1;}')"
+    if [[ "$response" != "PONG" ]] && [[ "$responseFirstWord" != "LOADING" ]]; then
+        error "$response"
+        exit 1
+    fi
+  ping_readiness_local_and_master.sh: |-
+    #!/bin/bash
+    
+    script_dir="$(dirname "$0")"
+    exit_status=0
+    "$script_dir/ping_readiness_local.sh" $1 || exit_status=$?
+    "$script_dir/ping_readiness_master.sh" $1 || exit_status=$?
+    exit $exit_status
+  ping_liveness_local_and_master.sh: |-
+    #!/bin/bash
+    
+    script_dir="$(dirname "$0")"
+    exit_status=0
+    "$script_dir/ping_liveness_local.sh" $1 || exit_status=$?
+    "$script_dir/ping_liveness_master.sh" $1 || exit_status=$?
+    exit $exit_status
+{{- end }}

@@ -10,6 +10,7 @@ metadata:
   name: {{ template "common.names.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: mysql
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -31,55 +32,60 @@ spec:
         - port: 53
           protocol: TCP
     # Allow connection to other cluster pods
+    {{- $containerEgressPorts := list .Values.primary.containerPorts.mysql .Values.secondary.containerPorts.mysql }}
+    {{- if .Values.primary.enableMySQLX }}
+    {{- $containerEgressPorts = append $containerEgressPorts .Values.primary.containerPorts.mysqlx }}
+    {{- end }}
+    {{- if .Values.secondary.enableMySQLX }}
+    {{- $containerEgressPorts = append $containerEgressPorts .Values.secondary.containerPorts.mysqlx }}
+    {{- end }}
     - ports:
-        - port: {{ .Values.primary.containerPorts.mysql }}
-        - port: {{ .Values.secondary.containerPorts.mysql }}
-      {{- if .Values.primary.enableMySQLX }}
-        - port: {{ .Values.primary.containerPorts.mysqlx }}
-      {{- end }}
-      {{- if .Values.secondary.enableMySQLX }}
-        - port: {{ .Values.secondary.containerPorts.mysql }}
-      {{- end }}
+        {{- range $value := (compact $containerEgressPorts | uniq ) }}
+        - port: {{ $value }}
+        {{- end }}
       to:
         - podSelector:
             matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
     {{- if .Values.networkPolicy.extraEgress }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.rts.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
     {{- end }}
   {{- end }}
   ingress:
+    # Allow connection from other cluster pods
+    {{- $containerIngressPorts := list .Values.primary.containerPorts.mysql .Values.secondary.containerPorts.mysql }}
+    {{- if .Values.primary.enableMySQLX }}
+    {{- $containerIngressPorts = append $containerIngressPorts .Values.primary.containerPorts.mysqlx }}
+    {{- end }}
+    {{- if .Values.secondary.enableMySQLX }}
+    {{- $containerIngressPorts = append $containerIngressPorts .Values.secondary.containerPorts.mysqlx }}
+    {{- end }}
+    {{- if .Values.metrics.enabled }}
+    {{- $containerIngressPorts = append $containerIngressPorts .Values.metrics.containerPorts.http }}
+    {{- end }}
+    {{- if .Values.primary.extraPorts }}
+    {{- range $value := .Values.primary.extraPorts }}
+    {{- $containerIngressPorts = append $containerIngressPorts $value.containerPort }}
+    {{- end }}
+    {{- end }}
+    {{- if .Values.primary.service.extraPorts }}
+    {{- range $value := .Values.primary.service.extraPorts }}
+    {{- $containerIngressPorts = append $containerIngressPorts $value.port }}
+    {{- end }}
+    {{- end }}
+    {{- if .Values.secondary.extraPorts }}
+    {{- range $value := .Values.secondary.extraPorts }}
+    {{- $containerIngressPorts = append $containerIngressPorts $value.containerPort }}
+    {{- end }}
+    {{- end }}
+    {{- if .Values.secondary.service.extraPorts }}
+    {{- range $value := .Values.secondary.service.extraPorts }}
+    {{- $containerIngressPorts = append $containerIngressPorts $value.port }}
+    {{- end }}
+    {{- end }}
     - ports:
-        - port: {{ .Values.primary.containerPorts.mysql }}
-        - port: {{ .Values.secondary.containerPorts.mysql }}
-      {{- if .Values.primary.enableMySQLX }}
-        - port: {{ .Values.primary.containerPorts.mysqlx }}
-      {{- end }}
-      {{- if .Values.secondary.enableMySQLX }}
-        - port: {{ .Values.secondary.containerPorts.mysql }}
-      {{- end }}
-      {{- if .Values.metrics.enabled }}
-        - port: {{ .Values.metrics.containerPorts.http }}
-      {{- end }}
-      {{- if .Values.primary.extraPorts }}
-        {{- range $value := .Values.primary.extraPorts }}
-        - port: {{ $value.containerPort }}
+        {{- range $value := (compact $containerIngressPorts | uniq ) }}
+        - port: {{ $value }}
         {{- end }}
-      {{- end }}
-      {{- if .Values.primary.service.extraPorts }}
-        {{- range $value := .Values.primary.service.extraPorts }}
-        - port: {{ $value.port }}
-        {{- end }}
-      {{- end }}
-      {{- if .Values.secondary.extraPorts }}
-        {{- range $value := .Values.secondary.extraPorts }}
-        - port: {{ $value.containerPort }}
-        {{- end }}
-      {{- end }}
-      {{- if .Values.secondary.service.extraPorts }}
-        {{- range $value := .Values.secondary.service.extraPorts }}
-        - port: {{ $value.port }}
-        {{- end }}
-      {{- end }}
       {{- if not .Values.networkPolicy.allowExternal }}
       from:
         - podSelector:

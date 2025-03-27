@@ -9,7 +9,8 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
+## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ##
 global:
   imageRegistry: ""
@@ -18,7 +19,13 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  defaultStorageClass: ""
   storageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
   ## Compatibility adaptations for Kubernetes platforms
   ##
   compatibility:
@@ -307,10 +314,9 @@ ingress:
 image:
   registry: docker.io
   repository: bitnami/oauth2-proxy
-  tag: 7.6.0-debian-12-r10
+  tag: 7.8.2-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -351,6 +357,7 @@ configuration:
   ## Alternatively, use an existing secret (see secret-google.yaml for required fields)
   ##
   ## @param configuration.google.enabled Enable Google service account
+  ## @param configuration.google.useApplicationDefaultCredentials Use the application-default credentials (i.e. Workload Identity on GKE) instead of providing a service account JSON
   ## @param configuration.google.adminEmail Google admin email
   ## @param configuration.google.groups Restrict logins to members of these google groups
   ## @param configuration.google.serviceAccountJson Google Service account JSON
@@ -358,6 +365,7 @@ configuration:
   ##
   google:
     enabled: false
+    useApplicationDefaultCredentials: false
     adminEmail: ""
     groups: []
     serviceAccountJson: ""
@@ -510,11 +518,11 @@ resources: {}
 ##   maxUnavailable: 1
 ## @param pdb.create Enable a Pod Disruption Budget creation
 ## @param pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
-## @param pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+## @param pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `pdb.minAvailable` and `pdb.maxUnavailable` are empty.
 ##
 pdb:
-  create: false
-  minAvailable: 1
+  create: true
+  minAvailable: ""
   maxUnavailable: ""
 ## Configure Pods Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
@@ -724,6 +732,9 @@ externalRedis:
   ## @param externalRedis.port External Redis&reg; server port
   ##
   port: 6379
+  ## @param externalRedis.databaseIndex External Redis&reg; database index
+  ##
+  databaseIndex: 0
   ## @param externalRedis.existingSecret The name of an existing secret with Redis&reg; credentials
   ## NOTE: Must contain key `redis-password`
   ## NOTE: When it's set, the `externalRedis.password` parameter is ignored

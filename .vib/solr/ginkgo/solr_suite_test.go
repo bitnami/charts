@@ -31,7 +31,7 @@ func init() {
 	flag.StringVar(&namespace, "namespace", "", "namespace where the application is running")
 	flag.StringVar(&username, "username", "", "database user")
 	flag.StringVar(&password, "password", "", "database password for username")
-	flag.IntVar(&timeoutSeconds, "timeout", 120, "timeout in seconds")
+	flag.IntVar(&timeoutSeconds, "timeout", 300, "timeout in seconds")
 	timeout = time.Duration(timeoutSeconds) * time.Second
 }
 
@@ -41,6 +41,8 @@ func TestSolr(t *testing.T) {
 }
 
 func createJob(ctx context.Context, c kubernetes.Interface, name string, port string, image string, args ...string) error {
+	// Default job TTL in seconds
+	ttl := int32(10)
 	securityContext := &v1.SecurityContext{
 		Privileged:               &[]bool{false}[0],
 		AllowPrivilegeEscalation: &[]bool{false}[0],
@@ -54,7 +56,8 @@ func createJob(ctx context.Context, c kubernetes.Interface, name string, port st
 	}
 	command := []string{"solr"}
 	command = append(command, args[:]...)
-	command = append(command, "-p", port)
+	command = append(command, "--solr-url", fmt.Sprintf("http://%s:%s", stsName, port))
+
 	job := &batchv1.Job{
 		ObjectMeta: metav1.ObjectMeta{
 			Name: name,
@@ -63,6 +66,7 @@ func createJob(ctx context.Context, c kubernetes.Interface, name string, port st
 			Kind: "Job",
 		},
 		Spec: batchv1.JobSpec{
+			TTLSecondsAfterFinished: &ttl,
 			Template: v1.PodTemplateSpec{
 				Spec: v1.PodSpec{
 					RestartPolicy: "Never",
@@ -72,10 +76,6 @@ func createJob(ctx context.Context, c kubernetes.Interface, name string, port st
 							Image:   image,
 							Command: command,
 							Env: []v1.EnvVar{
-								{
-									Name:  "SOLR_HOST",
-									Value: stsName,
-								},
 								{
 									Name:  "SOLR_AUTHENTICATION_OPTS",
 									Value: fmt.Sprintf("-Dbasicauth=%s:%s", username, password),

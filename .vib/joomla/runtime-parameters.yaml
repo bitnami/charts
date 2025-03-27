@@ -1,9 +1,0 @@
-joomlaUsername: user
-joomlaPassword: ComplicatedPassword123!4
-service:
-  type: LoadBalancer
-  ports:
-    http: 80
-mariadb:
-  auth:
-    database: bitnami_joomla

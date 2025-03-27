@@ -16,6 +16,11 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
   ## Compatibility adaptations for Kubernetes platforms
   ##
   compatibility:
@@ -65,10 +70,9 @@ clusterDomain: cluster.local
 image:
   registry: docker.io
   repository: bitnami/nginx-ingress-controller
-  tag: 1.10.1-debian-12-r3
+  tag: 1.12.1-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -196,6 +200,10 @@ tcp: {}
 ##   53: "kube-system/kube-dns:53"
 ##
 udp: {}
+## @param svcPortNamesPrefix Prefix for TCP and UDP ports names in ingress controller service
+## Some cloud providers, like Yandex Cloud may have a requirements for a port name regex to support cloud load balancer integration
+##
+svcPortNamesPrefix: ""
 ## @param command Override default container command (useful when using custom images)
 ##
 command: []
@@ -284,7 +292,7 @@ podSecurityContext:
 containerSecurityContext:
   enabled: true
   allowPrivilegeEscalation: false
-  seLinuxOptions: null
+  seLinuxOptions: {}
   runAsUser: 1001
   runAsGroup: 1001
   readOnlyRootFilesystem: true
@@ -529,10 +537,9 @@ defaultBackend:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.25.5-debian-12-r2
+    tag: 1.27.4-debian-12-r7
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -593,7 +600,7 @@ defaultBackend:
   containerSecurityContext:
     enabled: true
     allowPrivilegeEscalation: false
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsGroup: 1001
     readOnlyRootFilesystem: true
@@ -868,11 +875,11 @@ defaultBackend:
   pdb:
     ## @param defaultBackend.pdb.create Enable/disable a Pod Disruption Budget creation for Default backend
     ##
-    create: false
+    create: true
     ## @param defaultBackend.pdb.minAvailable Minimum number/percentage of Default backend pods that should remain scheduled
     ##
-    minAvailable: 1
-    ## @param defaultBackend.pdb.maxUnavailable Maximum number/percentage of Default backend pods that may be made unavailable
+    minAvailable: ""
+    ## @param defaultBackend.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `defaultBackend.pdb.minAvailable` and `defaultBackend.pdb.maxUnavailable` are empty.
     ##
     maxUnavailable: ""
 ## @section Traffic exposure parameters
@@ -926,6 +933,10 @@ service:
   ## ref: https://kubernetes.io/docs/concepts/services-networking/dual-stack/#services
   ##
   ipFamilies: []
+  ## @param service.loadBalancerClass Load balancer class if service type is `LoadBalancer`
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#load-balancer-class
+  ##
+  loadBalancerClass: ""
   ## @param service.loadBalancerIP Kubernetes LoadBalancerIP to request for Controller (optional, cloud specific)
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
   ##
@@ -1060,11 +1071,11 @@ rbac:
 pdb:
   ## @param pdb.create Enable/disable a Pod Disruption Budget creation for Controller
   ##
-  create: false
+  create: true
   ## @param pdb.minAvailable Minimum number/percentage of Controller pods that should remain scheduled
   ##
-  minAvailable: 1
-  ## @param pdb.maxUnavailable Maximum number/percentage of Controller pods that may be made unavailable
+  minAvailable: ""
+  ## @param pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `pdb.minAvailable` and `pdb.maxUnavailable` are empty.
   ##
   maxUnavailable: ""
 ## Controller Autoscaling configuration

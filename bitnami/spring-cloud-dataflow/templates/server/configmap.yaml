@@ -85,6 +85,9 @@ data:
                     {{- if .Values.deployer.entryPointStyle }}
                     entryPointStyle: {{ .Values.deployer.entryPointStyle }}
                     {{- end }}
+                    {{- if .Values.deployer.taskServiceAccountName }}
+                    taskServiceAccountName: {{ .Values.deployer.taskServiceAccountName }}
+                    {{- end }}
           {{- end }}
           {{- if .Values.server.configuration.containerRegistries }}
           container:
@@ -93,9 +96,6 @@ data:
           {{- if .Values.server.configuration.metricsDashboard }}
           metrics.dashboard:
             url: {{ .Values.server.configuration.metricsDashboard }}
-          {{- else if .Values.server.configuration.grafanaInfo }}
-          metrics.dashboard:
-            url: {{ .Values.server.configuration.grafanaInfo }}
           {{- end }}
           {{- if .Values.server.security.authorization }}
           security:
@@ -113,8 +113,8 @@ data:
         url: '{{ include "scdf.database.dataflow.url" . }}'
         driverClassName: {{ include "scdf.database.driver" . }}
         username: {{ include "scdf.database.server.user" . }}
-        {{- $secretName := coalesce .Values.externalDatabase.dataflow.existingSecret .Values.externalDatabase.existingPasswordSecret -}}
-        {{- $secretPasswordKey := coalesce .Values.externalDatabase.dataflow.existingSecretPasswordKey .Values.externalDatabase.existingPasswordKey -}}
+        {{- $secretName := .Values.externalDatabase.dataflow.existingSecret -}}
+        {{- $secretPasswordKey := .Values.externalDatabase.dataflow.existingSecretPasswordKey -}}
         {{- if .Values.mariadb.enabled }}
         password: ${mariadb-password}
         {{- else if and $secretName $secretPasswordKey }}

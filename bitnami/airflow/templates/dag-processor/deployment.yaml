@@ -1,0 +1,272 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.dagProcessor.enabled }}
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: {{ template "airflow.dagProcessor.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: dag-processor
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | trim | nindent 4 }}
+  {{- end }}
+spec:
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.dagProcessor.podLabels .Values.commonLabels ) "context" . ) }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/component: dag-processor
+  {{- if not .Values.dagProcessor.autoscaling.hpa.enabled }}
+  replicas: {{ .Values.dagProcessor.replicaCount }}
+  {{- end }}
+  {{- if .Values.dagProcessor.updateStrategy }}
+  strategy: {{- toYaml .Values.dagProcessor.updateStrategy | nindent 4 }}
+  {{- end }}
+  template:
+    metadata:
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/component: dag-processor
+      annotations:
+        checksum/configmap: {{ include (print $.Template.BasePath "/config/configmap.yaml") . | sha256sum }}
+        {{- if .Values.dagProcessor.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.dagProcessor.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- include "airflow.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.dagProcessor.automountServiceAccountToken }}
+      {{- if .Values.dagProcessor.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.dagProcessor.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.dagProcessor.affinity }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.dagProcessor.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.dagProcessor.podAffinityPreset "component" "dag-processor" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.dagProcessor.podAntiAffinityPreset "component" "dag-processor" "customLabels" $podLabels "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.dagProcessor.nodeAffinityPreset.type "key" .Values.dagProcessor.nodeAffinityPreset.key "values" .Values.dagProcessor.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.dagProcessor.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.dagProcessor.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.dagProcessor.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.dagProcessor.terminationGracePeriodSeconds }}
+      {{- end }}
+      {{- if .Values.dagProcessor.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.dagProcessor.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.dagProcessor.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.dagProcessor.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.dagProcessor.priorityClassName }}
+      priorityClassName: {{ .Values.dagProcessor.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.dagProcessor.schedulerName }}
+      schedulerName: {{ .Values.dagProcessor.schedulerName }}
+      {{- end }}
+      serviceAccountName: {{ include "airflow.serviceAccountName" . }}
+      {{- if .Values.dagProcessor.podSecurityContext.enabled }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.dagProcessor.podSecurityContext "context" $) | nindent 8 }}
+      {{- end }}
+      initContainers:
+        {{- include "airflow.defaultInitContainers.prepareConfig" . | nindent 8 }}
+        {{- if .Values.dags.enabled }}
+        {{- include "airflow.defaultInitContainers.loadDAGs" . | nindent 8 }}
+        {{- end }}
+        {{- if .Values.plugins.enabled }}
+        {{- include "airflow.defaultInitContainers.loadPlugins" . | nindent 8 }}
+        {{- end }}
+        {{- include "airflow.defaultInitContainers.waitForDBMigrations" . | nindent 8 }}
+        {{- if .Values.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | trim | nindent 8 }}
+        {{- end }}
+        {{- if .Values.dagProcessor.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.dagProcessor.initContainers "context" $) | trim | nindent 8 }}
+        {{- end }}
+      containers:
+        - name: airflow-dag-processor
+          image: {{ include "airflow.image" . | quote }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.dagProcessor.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.dagProcessor.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.dagProcessor.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.dagProcessor.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.dagProcessor.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.dagProcessor.args "context" $) | nindent 12 }}
+          {{- end }}
+          env:
+            {{- include "airflow.configure.airflow.common" . | nindent 12 }}
+            - name: AIRFLOW_COMPONENT_TYPE
+              value: "dag-processor"
+            - name: AIRFLOW_EXECUTOR
+              value: {{ .Values.executor }}
+            {{- if or (eq .Values.executor "CeleryExecutor") (eq .Values.executor "CeleryKubernetesExecutor") }}
+            - name: REDIS_HOST
+              value: {{ include "airflow.redis.host" . | quote }}
+            - name: REDIS_PORT_NUMBER
+              value: {{ include "airflow.redis.port" . | quote }}
+            {{- end }}
+            {{- if .Values.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+            {{- if .Values.dagProcessor.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.dagProcessor.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if or .Values.dagProcessor.extraEnvVarsCM .Values.dagProcessor.extraEnvVarsSecret .Values.extraEnvVarsCM .Values.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ .Values.extraEnvVarsCM }}
+            {{- end }}
+            {{- if .Values.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ .Values.extraEnvVarsSecret }}
+            {{- end }}
+            {{- if .Values.dagProcessor.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ .Values.dagProcessor.extraEnvVarsCM }}
+            {{- end }}
+            {{- if .Values.dagProcessor.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ .Values.dagProcessor.extraEnvVarsSecret }}
+            {{- end }}
+          {{- end }}
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.dagProcessor.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.dagProcessor.customLivenessProbe "context" $) | trim | nindent 12 }}
+          {{- else if .Values.dagProcessor.livenessProbe.enabled }}
+          {{- $livenessTimeout := sub (int .Values.dagProcessor.livenessProbe.timeoutSeconds) 1 }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.dagProcessor.livenessProbe "enabled") "context" $) | nindent 12 }}
+            exec:
+              command:
+                - /bin/bash
+                - -ec
+                - |
+                  export CONNECTION_CHECK_MAX_COUNT=0
+                  timeout {{ $livenessTimeout }} airflow jobs check --job-type DagProcessorJob --local {{- if not .Values.diagnosticMode.enabled }} 2>/dev/null {{- end }}
+          {{- end }}
+          {{- if .Values.dagProcessor.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.dagProcessor.customReadinessProbe "context" $) | trim | nindent 12 }}
+          {{- else if .Values.dagProcessor.readinessProbe.enabled }}
+          {{- $readinessTimeout := sub (int .Values.dagProcessor.readinessProbe.timeoutSeconds) 1 }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.dagProcessor.readinessProbe "enabled") "context" $) | nindent 12 }}
+            exec:
+              command:
+                - /bin/bash
+                - -ec
+                - |
+                  timeout {{ $readinessTimeout }} airflow jobs check --job-type DagProcessorJob --local {{- if not .Values.diagnosticMode.enabled }} 2>/dev/null {{- end }}
+          {{- end }}
+          {{- if .Values.dagProcessor.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.dagProcessor.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.dagProcessor.startupProbe.enabled }}
+          {{- $startupTimeout := sub (int .Values.dagProcessor.startupProbe.timeoutSeconds) 1 }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.dagProcessor.startupProbe "enabled") "context" $) | nindent 12 }}
+            exec:
+              command:
+                - /bin/bash
+                - -ec
+                - |
+                  export CONNECTION_CHECK_MAX_COUNT=0
+                  timeout {{ $startupTimeout }} airflow jobs check --job-type DagProcessorJob --local {{- if not .Values.diagnosticMode.enabled }} 2>/dev/null {{- end }}
+          {{- end }}
+          {{- end }}
+          {{- if .Values.dagProcessor.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.dagProcessor.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.dagProcessor.resources }}
+          resources: {{- toYaml .Values.dagProcessor.resources | nindent 12 }}
+          {{- else if ne .Values.dagProcessor.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.dagProcessor.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/airflow/nss-wrapper
+              subPath: app-nss-wrapper-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/airflow/logs
+              subPath: app-logs-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/airflow/tmp
+              subPath: app-tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/airflow/airflow.db
+              subPath: app-base-dir/airflow.db
+            - name: empty-dir
+              mountPath: /opt/bitnami/airflow/airflow.cfg
+              subPath: app-base-dir/airflow.cfg
+            - name: empty-dir
+              mountPath: /opt/bitnami/airflow/config/airflow_local_settings.py
+              subPath: app-conf-dir/airflow_local_settings.py
+            {{- if  .Values.usePasswordFiles }}
+            - name: airflow-secrets
+              mountPath: /opt/bitnami/airflow/secrets
+            {{- end }}
+            {{- if .Values.dags.enabled }}
+            {{- include "airflow.dags.volumeMounts" . | nindent 12 }}
+            {{- end }}
+            {{- if .Values.plugins.enabled }}
+            {{- include "airflow.plugins.volumeMounts" . | nindent 12 }}
+            {{- end }}
+            {{- if .Values.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
+            {{- if .Values.dagProcessor.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.dagProcessor.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
+        {{- if .Values.dags.enabled }}
+        {{- include "airflow.defaultSidecars.syncDAGs" . | nindent 8 }}
+        {{- end }}
+        {{- if .Values.plugins.enabled }}
+        {{- include "airflow.defaultSidecars.syncPlugins" . | nindent 8 }}
+        {{- end }}
+        {{- if .Values.sidecars }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | trim | nindent 8 }}
+        {{- end }}
+        {{- if .Values.dagProcessor.sidecars }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.dagProcessor.sidecars "context" $) | trim | nindent 8 }}
+        {{- end }}
+      volumes:
+        - name: empty-dir
+          emptyDir: {}
+        - name: configuration
+          configMap:
+            name: {{ include "airflow.configMapName"  . }}
+            optional: true
+        {{- if .Values.usePasswordFiles }}
+        - name: airflow-secrets
+          projected:
+            sources:
+              - secret:
+                  name:  {{ include "airflow.secretName" . }}
+              - secret:
+                  name: {{ include "airflow.database.secretName" . }}
+              {{- if or (eq .Values.executor "CeleryExecutor") (eq .Values.executor "CeleryKubernetesExecutor") }}
+              - secret:
+                  name: {{ include "airflow.redis.secretName" . }}
+              {{- end }}
+        {{- end }}
+        {{- if .Values.dags.enabled }}
+        {{- include "airflow.dags.volumes" . | nindent 8 }}
+        {{- end }}
+        {{- if .Values.plugins.enabled }}
+        {{- include "airflow.plugins.volumes" . | nindent 8 }}
+        {{- end }}
+        {{- if .Values.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.dagProcessor.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.dagProcessor.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+{{- end }}

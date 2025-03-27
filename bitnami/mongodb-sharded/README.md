@@ -14,7 +14,7 @@ Disclaimer: The respective trademarks mentioned in the offering are owned by the
 helm install my-release oci://registry-1.docker.io/bitnamicharts/mongodb-sharded
 ```
 
-Looking to use MongoDBreg; Sharded in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use MongoDBreg; Sharded in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -53,9 +53,38 @@ The command deploys MongoDB&reg; on the Kubernetes cluster in the default config
 
 Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
 
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcesPreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
+### Update credentials
+
+Bitnami charts configure credentials at first boot. Any further change in the secrets or credentials require manual intervention. Follow these instructions:
+
+- Update the user password following [the upstream documentation](https://www.mongodb.com/docs/manual/reference/method/db.changeUserPassword/)
+- Update the password secret with the new values (replace the SECRET_NAME, ROOT_PASSWORD and REPLICA_SET_KEY placeholders)
+
+```shell
+kubectl create secret generic SECRET_NAME --from-literal=mongodb-root-password=ROOT_PASSWORD --from-literal=mongodb-replica-set-key=REPLICA_SET_KEY --dry-run -o yaml | kubectl apply -f -
+```
+
+### Prometheus metrics
+
+This chart can be integrated with Prometheus by setting `metrics.enabled` to `true`. This will deploy a sidecar container with [mongodb_exporter](https://github.com/percona/mongodb_exporter) in all pods. The pods will have the necessary annotations to be automatically scraped by Prometheus.
+
+#### Prometheus requirements
+
+It is necessary to have a working installation of Prometheus or Prometheus Operator for the integration to work. Install the [Bitnami Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/prometheus) or the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) to easily have a working Prometheus in your cluster.
+
+#### Integration with Prometheus Operator
+
+The chart can deploy `PodMonitor` objects for integration with Prometheus Operator installations. To do so, set the value `metrics.podMonitor.enabled=true`. Ensure that the Prometheus Operator `CustomResourceDefinitions` are installed in the cluster or it will fail with the following error:
+
+```text
+no matches for kind "PodMonitor" in version "monitoring.coreos.com/v1"
+```
+
+Install the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) for having the necessary CRDs and the Prometheus Operator.
+
+### [Rolling VS Immutable tags](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -126,6 +155,10 @@ This chart allows you to set your custom affinity using the `XXX.affinity` param
 
 As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
 
+### Backup and restore
+
+To back up and restore Helm chart deployments on Kubernetes, you need to back up the persistent volumes from the source deployment and attach them to a new deployment using [Velero](https://velero.io/), a Kubernetes backup/restore tool. Find the instructions for using Velero in [this guide](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-backup-restore-deployments-velero-index.html).
+
 ## Persistence
 
 The [Bitnami MongoDB&reg;](https://github.com/bitnami/containers/tree/main/bitnami/mongodb-sharded) image stores the MongoDB&reg; data and configurations at the `/bitnami/mongodb` path of the container.
@@ -149,12 +182,14 @@ The Bitnami Kibana chart supports mounting extra volumes (either PVCs, secrets o
 
 ### Global parameters
 
-| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value  |
-| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
-| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
-| `global.storageClass`                                 | Global storage class for dynamic provisioning                                                                                                                                                                                                                                                                                                                       | `""`   |
-| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value   |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`    |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`    |
+| `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`    |
+| `global.storageClass`                                 | DEPRECATED: use global.defaultStorageClass instead                                                                                                                                                                                                                                                                                                                  | `""`    |
+| `global.security.allowInsecureImages`                 | Allows skipping image verification                                                                                                                                                                                                                                                                                                                                  | `false` |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto`  |
 
 ### Common parameters
 
@@ -187,7 +222,7 @@ The Bitnami Kibana chart supports mounting extra volumes (either PVCs, secrets o
 | `auth.rootPassword`                                  | MongoDB(&reg;) root password                                                                                                                                                                                                                          | `""`                              |
 | `auth.replicaSetKey`                                 | Key used for authentication in the replicaset                                                                                                                                                                                                         | `""`                              |
 | `auth.existingSecret`                                | Existing secret with MongoDB(&reg;) credentials (keys: `mongodb-password`, `mongodb-root-password`, `mongodb-replica-set-key`)                                                                                                                        | `""`                              |
-| `auth.usePasswordFile`                               | Mount credentials as files instead of using environment variables                                                                                                                                                                                     | `false`                           |
+| `auth.usePasswordFiles`                              | Mount credentials as files instead of using environment variables                                                                                                                                                                                     | `true`                            |
 | `shards`                                             | Number of shards to be created                                                                                                                                                                                                                        | `2`                               |
 | `common.mongodbEnableNumactl`                        | Enable launch MongoDB instance prefixed with "numactl --interleave=all"                                                                                                                                                                               | `false`                           |
 | `common.useHostnames`                                | Enable DNS hostnames in the replica set config                                                                                                                                                                                                        | `true`                            |
@@ -277,7 +312,7 @@ The Bitnami Kibana chart supports mounting extra volumes (either PVCs, secrets o
 | `configsvr.extraVolumes`                                      | Array to add extra volumes. Requires setting `extraVolumeMounts`                                                                                                                                                                      | `[]`                                                   |
 | `configsvr.extraVolumeMounts`                                 | Array to add extra mounts (normally used with extraVolumes). Normally used with `extraVolumes`                                                                                                                                        | `[]`                                                   |
 | `configsvr.schedulerName`                                     | Use an alternate scheduler, e.g. "stork".                                                                                                                                                                                             | `""`                                                   |
-| `configsvr.pdb.create`                                        | Enable pod disruption budget                                                                                                                                                                                                          | `false`                                                |
+| `configsvr.pdb.create`                                        | Enable pod disruption budget                                                                                                                                                                                                          | `true`                                                 |
 | `configsvr.pdb.minAvailable`                                  | Minimum number of available config pods allowed (`0` to disable)                                                                                                                                                                      | `0`                                                    |
 | `configsvr.pdb.maxUnavailable`                                | Maximum number of unavailable config pods allowed (`0` to disable)                                                                                                                                                                    | `1`                                                    |
 | `configsvr.persistence.enabled`                               | Use a PVC to persist data                                                                                                                                                                                                             | `true`                                                 |
@@ -287,7 +322,9 @@ The Bitnami Kibana chart supports mounting extra volumes (either PVCs, secrets o
 | `configsvr.persistence.accessModes`                           | Use volume as ReadOnly or ReadWrite                                                                                                                                                                                                   | `["ReadWriteOnce"]`                                    |
 | `configsvr.persistence.size`                                  | PersistentVolumeClaim size                                                                                                                                                                                                            | `8Gi`                                                  |
 | `configsvr.persistence.annotations`                           | Persistent Volume annotations                                                                                                                                                                                                         | `{}`                                                   |
-| `configsvr.persistence.resourcePolicy`                        | Setting it to "keep" to avoid removing PVCs during a helm delete operation. Leaving it empty will delete PVCs after the chart deleted                                                                                                 | `""`                                                   |
+| `configsvr.persistentVolumeClaimRetentionPolicy.enabled`      | Enable Persistent volume retention policy for Config Server StatefulSet                                                                                                                                                               | `false`                                                |
+| `configsvr.persistentVolumeClaimRetentionPolicy.whenScaled`   | Volume retention behavior when the replica count of the StatefulSet is reduced                                                                                                                                                        | `Retain`                                               |
+| `configsvr.persistentVolumeClaimRetentionPolicy.whenDeleted`  | Volume retention behavior that applies when the StatefulSet is deleted                                                                                                                                                                | `Retain`                                               |
 | `configsvr.serviceAccount.create`                             | Specifies whether a ServiceAccount should be created for Config Server                                                                                                                                                                | `true`                                                 |
 | `configsvr.serviceAccount.name`                               | Name of a Service Account to be used by Config Server                                                                                                                                                                                 | `""`                                                   |
 | `configsvr.serviceAccount.annotations`                        | Additional Service Account annotations (evaluated as a template)                                                                                                                                                                      | `{}`                                                   |
@@ -385,7 +422,7 @@ The Bitnami Kibana chart supports mounting extra volumes (either PVCs, secrets o
 | `mongos.servicePerReplica.extraPorts`                      | Extra ports to expose (normally used with the `sidecar` value)                                                                                                                                                                  | `[]`             |
 | `mongos.servicePerReplica.sessionAffinity`                 | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                                                                                                                            | `None`           |
 | `mongos.servicePerReplica.sessionAffinityConfig`           | Additional settings for the sessionAffinity                                                                                                                                                                                     | `{}`             |
-| `mongos.pdb.create`                                        | Enable pod disruption budget                                                                                                                                                                                                    | `false`          |
+| `mongos.pdb.create`                                        | Enable pod disruption budget                                                                                                                                                                                                    | `true`           |
 | `mongos.pdb.minAvailable`                                  | Minimum number of available mongo pods allowed (`0` to disable)                                                                                                                                                                 | `0`              |
 | `mongos.pdb.maxUnavailable`                                | Maximum number of unavailable mongo pods allowed (`0` to disable)                                                                                                                                                               | `1`              |
 | `mongos.serviceAccount.create`                             | Whether to create a Service Account for mongos automatically                                                                                                                                                                    | `true`           |
@@ -467,7 +504,7 @@ The Bitnami Kibana chart supports mounting extra volumes (either PVCs, secrets o
 | `shardsvr.dataNode.extraVolumes`                                      | Array to add extra volumes. Requires setting `extraVolumeMounts`                                                                                                                                                                                      | `[]`                                                   |
 | `shardsvr.dataNode.extraVolumeMounts`                                 | Array to add extra mounts. Normally used with `extraVolumes`                                                                                                                                                                                          | `[]`                                                   |
 | `shardsvr.dataNode.schedulerName`                                     | Use an alternate scheduler, e.g. "stork".                                                                                                                                                                                                             | `""`                                                   |
-| `shardsvr.dataNode.pdb.create`                                        | Enable pod disruption budget                                                                                                                                                                                                                          | `false`                                                |
+| `shardsvr.dataNode.pdb.create`                                        | Enable pod disruption budget                                                                                                                                                                                                                          | `true`                                                 |
 | `shardsvr.dataNode.pdb.minAvailable`                                  | Minimum number of available data pods allowed (`0` to disable)                                                                                                                                                                                        | `0`                                                    |
 | `shardsvr.dataNode.pdb.maxUnavailable`                                | Maximum number of unavailable data pods allowed (`0` to disable)                                                                                                                                                                                      | `1`                                                    |
 | `shardsvr.dataNode.serviceAccount.create`                             | Specifies whether a ServiceAccount should be created for shardsvr                                                                                                                                                                                     | `true`                                                 |
@@ -517,16 +554,18 @@ The Bitnami Kibana chart supports mounting extra volumes (either PVCs, secrets o
 
 ### Shard configuration: Persistence parameters
 
-| Name                                  | Description                                                                                                                           | Value               |
-| ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
-| `shardsvr.persistence.enabled`        | Use a PVC to persist data                                                                                                             | `true`              |
-| `shardsvr.persistence.mountPath`      | The path the volume will be mounted at, useful when using different MongoDB&reg; images.                                              | `/bitnami/mongodb`  |
-| `shardsvr.persistence.subPath`        | Subdirectory of the volume to mount at (evaluated as a template)                                                                      | `""`                |
-| `shardsvr.persistence.storageClass`   | Storage class of backing PVC                                                                                                          | `""`                |
-| `shardsvr.persistence.accessModes`    | Use volume as ReadOnly or ReadWrite                                                                                                   | `["ReadWriteOnce"]` |
-| `shardsvr.persistence.size`           | PersistentVolumeClaim size                                                                                                            | `8Gi`               |
-| `shardsvr.persistence.annotations`    | Additional volume annotations                                                                                                         | `{}`                |
-| `shardsvr.persistence.resourcePolicy` | Setting it to "keep" to avoid removing PVCs during a helm delete operation. Leaving it empty will delete PVCs after the chart deleted | `""`                |
+| Name                                                        | Description                                                                              | Value               |
+| ----------------------------------------------------------- | ---------------------------------------------------------------------------------------- | ------------------- |
+| `shardsvr.persistence.enabled`                              | Use a PVC to persist data                                                                | `true`              |
+| `shardsvr.persistence.mountPath`                            | The path the volume will be mounted at, useful when using different MongoDB&reg; images. | `/bitnami/mongodb`  |
+| `shardsvr.persistence.subPath`                              | Subdirectory of the volume to mount at (evaluated as a template)                         | `""`                |
+| `shardsvr.persistence.storageClass`                         | Storage class of backing PVC                                                             | `""`                |
+| `shardsvr.persistence.accessModes`                          | Use volume as ReadOnly or ReadWrite                                                      | `["ReadWriteOnce"]` |
+| `shardsvr.persistence.size`                                 | PersistentVolumeClaim size                                                               | `8Gi`               |
+| `shardsvr.persistence.annotations`                          | Additional volume annotations                                                            | `{}`                |
+| `shardsvr.persistentVolumeClaimRetentionPolicy.enabled`     | Enable Persistent volume retention policy for Shard replicas StatefulSet                 | `false`             |
+| `shardsvr.persistentVolumeClaimRetentionPolicy.whenScaled`  | Volume retention behavior when the replica count of the StatefulSet is reduced           | `Retain`            |
+| `shardsvr.persistentVolumeClaimRetentionPolicy.whenDeleted` | Volume retention behavior that applies when the StatefulSet is deleted                   | `Retain`            |
 
 ### Shard configuration: Arbiter parameters
 
@@ -687,6 +726,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 9.1.0
+
+This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
+
 If authentication is enabled, it's necessary to set the `auth.rootPassword` and `auth.replicaSetKey` when upgrading for readiness/liveness probes to work properly. When you install this chart for the first time, some notes will be displayed providing the credentials you must use. Please note down the password, and run the command below to upgrade your chart:
 
 ```console
@@ -695,6 +738,10 @@ helm upgrade my-release oci://REGISTRY_NAME/REPOSITORY_NAME/mongodb-sharded --se
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > Note: you need to substitute the placeholders [PASSWORD] and [auth.replicaSetKey] with the values obtained in the installation notes.
+
+### To 9.0.0
+
+To upgrade to MongoDB `8.0` from a `7.0` deployment, the `7.0` deployment must have `featureCompatibilityVersion` set to `7.0`. Please refer to the [official documentation](https://www.mongodb.com/docs/manual/release-notes/8.0/#upgrade-procedures).
 
 ### To 8.0.0
 
@@ -760,7 +807,7 @@ This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs
 
 #### Useful links
 
-- <https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-resolve-helm2-helm3-post-migration-issues-index.html>
+- <https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-resolve-helm2-helm3-post-migration-issues-index.html>
 - <https://helm.sh/docs/topics/v2_v3_migration/>
 - <https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/>
 
@@ -772,7 +819,7 @@ MongoDB&reg; container images were updated to `4.4.x` and it can affect compatib
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

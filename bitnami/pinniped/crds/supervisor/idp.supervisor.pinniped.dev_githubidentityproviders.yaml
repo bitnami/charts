@@ -1,0 +1,340 @@
+# Source: https://raw.githubusercontent.com/vmware-tanzu/pinniped/v{version}/deploy/supervisor/idp.supervisor.pinniped.dev_githubidentityproviders.yaml
+# Version: 0.38.0
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.17.2
+  name: githubidentityproviders.idp.supervisor.pinniped.dev
+spec:
+  group: idp.supervisor.pinniped.dev
+  names:
+    categories:
+    - pinniped
+    - pinniped-idp
+    - pinniped-idps
+    kind: GitHubIdentityProvider
+    listKind: GitHubIdentityProviderList
+    plural: githubidentityproviders
+    singular: githubidentityprovider
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns:
+    - jsonPath: .spec.githubAPI.host
+      name: Host
+      type: string
+    - jsonPath: .status.phase
+      name: Status
+      type: string
+    - jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: |-
+          GitHubIdentityProvider describes the configuration of an upstream GitHub identity provider.
+          This upstream provider can be configured with either a GitHub App or a GitHub OAuth2 App.
+
+          Right now, only web-based logins are supported, for both the pinniped-cli client and clients configured
+          as OIDCClients.
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: Spec for configuring the identity provider.
+            properties:
+              allowAuthentication:
+                description: AllowAuthentication allows customization of who can authenticate
+                  using this IDP and how.
+                properties:
+                  organizations:
+                    description: Organizations allows customization of which organizations
+                      can authenticate using this IDP.
+                    properties:
+                      allowed:
+                        description: |-
+                          Allowed, when specified, indicates that only users with membership in at least one of the listed
+                          GitHub organizations may log in. In addition, the group membership presented to Kubernetes will only include
+                          teams within the listed GitHub organizations. Additional login rules or group filtering can optionally be
+                          provided as policy expression on any Pinniped Supervisor FederationDomain that includes this IDP.
+
+                          The configured GitHub App or GitHub OAuth App must be allowed to see membership in the listed organizations,
+                          otherwise Pinniped will not be aware that the user belongs to the listed organization or any teams
+                          within that organization.
+
+                          If no organizations are listed, you must set organizations: AllGitHubUsers.
+                        items:
+                          type: string
+                        maxItems: 64
+                        type: array
+                        x-kubernetes-list-type: set
+                      policy:
+                        default: OnlyUsersFromAllowedOrganizations
+                        description: |-
+                          Allowed values are "OnlyUsersFromAllowedOrganizations" or "AllGitHubUsers".
+                          Defaults to "OnlyUsersFromAllowedOrganizations".
+
+                          Must be set to "AllGitHubUsers" if the allowed field is empty.
+
+                          This field only exists to ensure that Pinniped administrators are aware that an empty list of
+                          allowedOrganizations means all GitHub users are allowed to log in.
+                        enum:
+                        - OnlyUsersFromAllowedOrganizations
+                        - AllGitHubUsers
+                        type: string
+                    type: object
+                    x-kubernetes-validations:
+                    - message: spec.allowAuthentication.organizations.policy must
+                        be 'OnlyUsersFromAllowedOrganizations' when spec.allowAuthentication.organizations.allowed
+                        has organizations listed
+                      rule: '!(has(self.allowed) && size(self.allowed) > 0 && self.policy
+                        == ''AllGitHubUsers'')'
+                    - message: spec.allowAuthentication.organizations.policy must
+                        be 'AllGitHubUsers' when spec.allowAuthentication.organizations.allowed
+                        is empty
+                      rule: '!((!has(self.allowed) || size(self.allowed) == 0) &&
+                        self.policy == ''OnlyUsersFromAllowedOrganizations'')'
+                required:
+                - organizations
+                type: object
+              claims:
+                default: {}
+                description: Claims allows customization of the username and groups
+                  claims.
+                properties:
+                  groups:
+                    default: slug
+                    description: |-
+                      Groups configures which property of the GitHub team record shall determine the group names in Kubernetes.
+
+                      Can be either "name" or "slug". Defaults to "slug".
+
+                      GitHub team names can contain upper and lower case characters, whitespace, and punctuation (e.g. "Kube admins!").
+
+                      GitHub team slugs are lower case alphanumeric characters and may contain dashes and underscores (e.g. "kube-admins").
+
+                      Group names as presented to Kubernetes will always be prefixed by the GitHub organization name followed by a
+                      forward slash (e.g. "my-org/my-team"). GitHub organization login names can only contain alphanumeric characters
+                      or single hyphens, so the first forward slash `/` will be the separator between the organization login name and
+                      the team name or slug.
+
+                      If desired, an admin could configure identity transformation expressions on the Pinniped Supervisor's
+                      FederationDomain to further customize how these group names are presented to Kubernetes.
+
+                      See the response schema for
+                      [List teams for the authenticated user](https://docs.github.com/en/rest/teams/teams?apiVersion=2022-11-28#list-teams-for-the-authenticated-user).
+                    enum:
+                    - name
+                    - slug
+                    type: string
+                  username:
+                    default: login:id
+                    description: |-
+                      Username configures which property of the GitHub user record shall determine the username in Kubernetes.
+
+                      Can be either "id", "login", or "login:id". Defaults to "login:id".
+
+                      GitHub's user login attributes can only contain alphanumeric characters and non-repeating hyphens,
+                      and may not start or end with hyphens. GitHub users are allowed to change their login name,
+                      although it is inconvenient. If a GitHub user changed their login name from "foo" to "bar",
+                      then a second user might change their name from "baz" to "foo" in order to take the old
+                      username of the first user. For this reason, it is not as safe to make authorization decisions
+                      based only on the user's login attribute.
+
+                      If desired, an admin could configure identity transformation expressions on the Pinniped Supervisor's
+                      FederationDomain to further customize how these usernames are presented to Kubernetes.
+
+                      Defaults to "login:id", which is the user login attribute, followed by a colon, followed by the unique and
+                      unchanging integer ID number attribute. This blends human-readable login names with the unchanging ID value
+                      from GitHub. Colons are not allowed in GitHub login attributes or ID numbers, so this is a reasonable
+                      choice to concatenate the two values.
+
+                      See the response schema for
+                      [Get the authenticated user](https://docs.github.com/en/rest/users/users?apiVersion=2022-11-28#get-the-authenticated-user).
+                    enum:
+                    - id
+                    - login
+                    - login:id
+                    type: string
+                type: object
+              client:
+                description: Client identifies the secret with credentials for a GitHub
+                  App or GitHub OAuth2 App (a GitHub client).
+                properties:
+                  secretName:
+                    description: |-
+                      SecretName contains the name of a namespace-local Secret object that provides the clientID and
+                      clientSecret for an GitHub App or GitHub OAuth2 client.
+
+                      This secret must be of type "secrets.pinniped.dev/github-client" with keys "clientID" and "clientSecret".
+                    minLength: 1
+                    type: string
+                required:
+                - secretName
+                type: object
+              githubAPI:
+                default: {}
+                description: GitHubAPI allows configuration for GitHub Enterprise
+                  Server
+                properties:
+                  host:
+                    default: github.com
+                    description: |-
+                      Host is required only for GitHub Enterprise Server.
+                      Defaults to using GitHub's public API ("github.com").
+                      For convenience, specifying "github.com" is equivalent to specifying "api.github.com".
+                      Do not specify a protocol or scheme since "https://" will always be used.
+                      Port is optional. Do not specify a path, query, fragment, or userinfo.
+                      Only specify domain name or IP address, subdomains (optional), and port (optional).
+                      IPv4 and IPv6 are supported. If using an IPv6 address with a port, you must enclose the IPv6 address
+                      in square brackets. Example: "[::1]:443".
+                    minLength: 1
+                    type: string
+                  tls:
+                    description: |-
+                      TLS configuration for GitHub Enterprise Server.
+                      Note that this field should not be needed when using GitHub's public API ("github.com").
+                      However, if you choose to specify this field when using GitHub's public API, you must
+                      specify a CA bundle that will verify connections to "api.github.com".
+                    properties:
+                      certificateAuthorityData:
+                        description: X.509 Certificate Authority (base64-encoded PEM
+                          bundle). If omitted, a default set of system roots will
+                          be trusted.
+                        type: string
+                      certificateAuthorityDataSource:
+                        description: |-
+                          Reference to a CA bundle in a secret or a configmap.
+                          Any changes to the CA bundle in the secret or configmap will be dynamically reloaded.
+                        properties:
+                          key:
+                            description: |-
+                              Key is the key name within the secret or configmap from which to read the CA bundle.
+                              The value found at this key in the secret or configmap must not be empty, and must be a valid PEM-encoded
+                              certificate bundle.
+                            minLength: 1
+                            type: string
+                          kind:
+                            description: |-
+                              Kind configures whether the CA bundle is being sourced from a Kubernetes secret or a configmap.
+                              Allowed values are "Secret" or "ConfigMap".
+                              "ConfigMap" uses a Kubernetes configmap to source CA Bundles.
+                              "Secret" uses Kubernetes secrets of type kubernetes.io/tls or Opaque to source CA Bundles.
+                            enum:
+                            - Secret
+                            - ConfigMap
+                            type: string
+                          name:
+                            description: |-
+                              Name is the resource name of the secret or configmap from which to read the CA bundle.
+                              The referenced secret or configmap must be created in the same namespace where Pinniped Supervisor is installed.
+                            minLength: 1
+                            type: string
+                        required:
+                        - key
+                        - kind
+                        - name
+                        type: object
+                    type: object
+                type: object
+            required:
+            - allowAuthentication
+            - client
+            type: object
+          status:
+            description: Status of the identity provider.
+            properties:
+              conditions:
+                description: Conditions represents the observations of an identity
+                  provider's current state.
+                items:
+                  description: Condition contains details for one aspect of the current
+                    state of this API Resource.
+                  properties:
+                    lastTransitionTime:
+                      description: |-
+                        lastTransitionTime is the last time the condition transitioned from one status to another.
+                        This should be when the underlying condition changed.  If that is not known, then using the time when the API field changed is acceptable.
+                      format: date-time
+                      type: string
+                    message:
+                      description: |-
+                        message is a human readable message indicating details about the transition.
+                        This may be an empty string.
+                      maxLength: 32768
+                      type: string
+                    observedGeneration:
+                      description: |-
+                        observedGeneration represents the .metadata.generation that the condition was set based upon.
+                        For instance, if .metadata.generation is currently 12, but the .status.conditions[x].observedGeneration is 9, the condition is out of date
+                        with respect to the current state of the instance.
+                      format: int64
+                      minimum: 0
+                      type: integer
+                    reason:
+                      description: |-
+                        reason contains a programmatic identifier indicating the reason for the condition's last transition.
+                        Producers of specific condition types may define expected values and meanings for this field,
+                        and whether the values are considered a guaranteed API.
+                        The value should be a CamelCase string.
+                        This field may not be empty.
+                      maxLength: 1024
+                      minLength: 1
+                      pattern: ^[A-Za-z]([A-Za-z0-9_,:]*[A-Za-z0-9_])?$
+                      type: string
+                    status:
+                      description: status of the condition, one of True, False, Unknown.
+                      enum:
+                      - "True"
+                      - "False"
+                      - Unknown
+                      type: string
+                    type:
+                      description: type of condition in CamelCase or in foo.example.com/CamelCase.
+                      maxLength: 316
+                      pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
+                      type: string
+                  required:
+                  - lastTransitionTime
+                  - message
+                  - reason
+                  - status
+                  - type
+                  type: object
+                type: array
+                x-kubernetes-list-map-keys:
+                - type
+                x-kubernetes-list-type: map
+              phase:
+                default: Pending
+                description: Phase summarizes the overall status of the GitHubIdentityProvider.
+                enum:
+                - Pending
+                - Ready
+                - Error
+                type: string
+            type: object
+        required:
+        - spec
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}

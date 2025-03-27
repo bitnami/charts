@@ -66,6 +66,7 @@ spec:
       {{- if .Values.ingester.podSecurityContext.enabled }}
       securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.ingester.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
+      enableServiceLinks: {{ .Values.ingester.enableServiceLinks }}
       initContainers:
         {{- if .Values.ingester.initContainers }}
           {{- include "common.tplvalues.render" (dict "value" .Values.ingester.initContainers "context" $) | nindent 8 }}
@@ -89,7 +90,7 @@ spec:
           securityContext: {{- .Values.volumePermissions.containerSecurityContext | toYaml | nindent 12 }}
           {{- end }}
           {{- if .Values.volumePermissions.resources }}
-          resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.volumePermissions.resources "context" $) | nindent 12 }}
           {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
           resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
@@ -142,7 +143,7 @@ spec:
             - containerPort: {{ .Values.tempo.containerPorts.grpc }}
               name: grpc
           {{- if .Values.ingester.resources }}
-          resources: {{- toYaml .Values.ingester.resources | nindent 12 }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.ingester.resources "context" $) | nindent 12 }}
           {{- else if ne .Values.ingester.resourcesPreset "none" }}
           resources: {{- include "common.resources.preset" (dict "type" .Values.ingester.resourcesPreset) | nindent 12 }}
           {{- end }}
@@ -158,7 +159,8 @@ spec:
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ingester.customReadinessProbe "context" $) | nindent 12 }}
           {{- else if .Values.ingester.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.ingester.readinessProbe "enabled") "context" $) | nindent 12 }}
-            tcpSocket:
+            httpGet:
+              path: /ready
               port: http
           {{- end }}
           {{- if .Values.ingester.customStartupProbe }}

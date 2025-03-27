@@ -2,6 +2,8 @@ CHART NAME: {{ .Chart.Name }}
 CHART VERSION: {{ .Chart.Version }}
 APP VERSION: {{ .Chart.AppVersion }}
 
+Did you know there are enterprise versions of the Bitnami catalog? For enhanced secure software supply chain features, unlimited pulls from Docker, LTS support, or application customization, see Bitnami Premium or Tanzu Application Catalog. See https://www.arrow.com/globalecs/na/vendors/bitnami for more information.
+
 {{- $cassandraPasswordKey := ( include "common.secrets.key" (dict "existingSecret" .Values.dbUser.existingSecret "key" "cassandra-password") ) -}}
 {{- $cassandraSecretName := ( include "common.secrets.name" (dict "existingSecret" .Values.dbUser.existingSecret "context" $) ) -}}
 
@@ -90,4 +92,5 @@ To connect to your database from outside the cluster execute the following comma
 {{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
 {{- include "cassandra.validateValues" . }}
 {{- include "common.warnings.resources" (dict "sections" (list "metrics" "" "tls" "volumePermissions") "context" $) }}
-{{- include "cassandra.warnings.jvm" . }}
+{{- include "cassandra.warnings.jvm" . }}{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.volumePermissions.image .Values.metrics.image) "context" $) }}
+{{- include "common.errors.insecureImages" (dict "images" (list .Values.image .Values.volumePermissions.image .Values.metrics.image) "context" $) }}

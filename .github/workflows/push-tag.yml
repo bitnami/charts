@@ -1,0 +1,100 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+name: '[CI/CD] Push tag'
+on: # rebuild any PRs and main branch changes
+  push:
+    branches:
+      - main
+    paths:
+      - 'bitnami/**'
+      - '!**.md'
+# Remove all permissions by default.
+permissions: {}
+jobs:
+  get-chart:
+    runs-on: ubuntu-latest
+    name: 'Get modified charts'
+    permissions:
+      contents: read
+    outputs:
+      chart: ${{ steps.get-chart.outputs.chart }}
+      result: ${{ steps.get-chart.outputs.result }}
+    if: ${{ github.repository_owner == 'bitnami' }}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          path: charts
+          fetch-depth: 2 # to be able to obtain files changed in the latest commit
+      - id: get-chart
+        name: 'Get modified charts'
+        run: |
+          cd charts
+          files_changed="$(git show --pretty="" --name-only)"
+          # Adding || true to avoid "Process exited with code 1" errors
+          charts_dirs_changed="$(echo "$files_changed" | xargs dirname | grep -o "bitnami/[^/]*" | sort | uniq || true)"
+          # Using grep -c as a better alternative to wc -l when dealing with empty strings."
+          num_charts_changed="$(echo "$charts_dirs_changed" | grep -c "bitnami" || true)"
+          num_version_bumps="$(echo "$files_changed" | grep  "bitnami/[^/]*/Chart.yaml" | xargs git show | grep -c "+version" || true)"
+
+          if [[ "$num_charts_changed" -ne "$num_version_bumps" ]]; then
+            # Changes done in charts but version not bumped -> ERROR
+            charts_changed_str="$(echo ${charts_dirs_changed[@]})"
+            echo "error=Detected changes in charts without version bump in Chart.yaml. Charts changed: ${num_charts_changed} ${charts_changed_str}. Version bumps detected: ${num_version_bumps}" >> $GITHUB_OUTPUT
+            echo "result=fail" >> $GITHUB_OUTPUT
+          elif [[ "$num_charts_changed" -eq "1" ]]; then
+            # Changes done in only one chart -> OK
+            chart_name=$(echo "$charts_dirs_changed" | sed "s|bitnami/||g")
+            echo "chart=${chart_name}" >> $GITHUB_OUTPUT
+            echo "result=ok" >> $GITHUB_OUTPUT
+          else
+            # Changes done in more than chart -> FAIL
+            charts_changed_str="$(echo ${charts_dirs_changed[@]})"
+            echo "error=Changes detected in more than one chart directory: ${charts_changed_str}. The publish process will be stopped. Please create different commits for each chart." >> $GITHUB_OUTPUT
+            echo "result=fail" >> $GITHUB_OUTPUT
+          fi
+      - id: show-error
+        name: 'Show error'
+        if: ${{ steps.get-chart.outputs.result == 'fail' }}
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
+        with:
+          script: |
+              core.setFailed('${{ steps.get-chart.outputs.error }}')
+  push-tag:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    needs:
+      - get-chart
+    name: Push tag
+    if: ${{ needs.get-chart.outputs.result == 'ok' }}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          path: charts
+          fetch-depth: 2 # to be able to obtain files changed in the latest commit
+      - id: push-tag
+        name: 'Push tag'
+        env:
+          CHART: ${{ needs.get-chart.outputs.chart }}
+        run: |
+          cd charts
+          # Get chart version and list of tags
+          chart_version="$(yq e '.version' bitnami/${CHART}/Chart.yaml)"
+          git fetch --tags
+          # If the tag does not exist, create and push it (this allows re-executing the job)
+          if ! git tag | grep ${CHART}/${chart_version}; then
+            git tag ${CHART}/${chart_version}
+            git push --tags
+          fi
+  notify:
+    name: Send notification
+    needs:
+      - push-tag
+    if: ${{ always() && (needs.push-tag.result == 'failure') }}
+    uses: bitnami/support/.github/workflows/gchat-notification.yml@main
+    with:
+      workflow: ${{ github.workflow }}
+      job-url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+    secrets:
+      webhook-url: ${{ secrets.GCHAT_CONTENT_ALERTS_WEBHOOK_URL }}

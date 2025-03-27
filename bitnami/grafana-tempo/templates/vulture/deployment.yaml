@@ -67,6 +67,7 @@ spec:
       {{- if .Values.vulture.podSecurityContext.enabled }}
       securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.vulture.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
+      enableServiceLinks: {{ .Values.vulture.enableServiceLinks }}
       initContainers:
         {{- if .Values.vulture.initContainers }}
           {{- include "common.tplvalues.render" (dict "value" .Values.vulture.initContainers "context" $) | nindent 8 }}
@@ -109,7 +110,7 @@ spec:
             - containerPort: {{ .Values.vulture.containerPorts.http }}
               name: http
           {{- if .Values.vulture.resources }}
-          resources: {{- toYaml .Values.vulture.resources | nindent 12 }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.vulture.resources "context" $) | nindent 12 }}
           {{- else if ne .Values.vulture.resourcesPreset "none" }}
           resources: {{- include "common.resources.preset" (dict "type" .Values.vulture.resourcesPreset) | nindent 12 }}
           {{- end }}
@@ -118,8 +119,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.vulture.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.vulture.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.vulture.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /metrics
+            tcpSocket:
               port: {{ .Values.vulture.containerPorts.http }}
           {{- end }}
           {{- if .Values.vulture.customReadinessProbe }}

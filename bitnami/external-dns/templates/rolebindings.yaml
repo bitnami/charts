@@ -7,7 +7,7 @@ SPDX-License-Identifier: APACHE-2.0
 apiVersion: rbac.authorization.k8s.io/{{ .Values.rbac.apiVersion }}
 kind: RoleBinding
 metadata:
-  name: {{ template "external-dns.fullname" . }}
+  name: {{ template "common.names.fullname" . }}
   namespace: {{ template "external-dns.namespace" . }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
   {{- if .Values.commonAnnotations }}
@@ -16,9 +16,9 @@ metadata:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: {{ template "external-dns.fullname" . }}
+  name: {{ template "common.names.fullname" . }}
 subjects:
   - kind: ServiceAccount
     name: {{ template "external-dns.serviceAccountName" . }}
-    namespace: {{ .Release.Namespace | quote }}
+    namespace: {{ include "common.names.namespace" . | quote }}
 {{- end }}

@@ -2,6 +2,8 @@ CHART NAME: {{ .Chart.Name }}
 CHART VERSION: {{ .Chart.Version }}
 APP VERSION: {{ .Chart.AppVersion }}
 
+Did you know there are enterprise versions of the Bitnami catalog? For enhanced secure software supply chain features, unlimited pulls from Docker, LTS support, or application customization, see Bitnami Premium or Tanzu Application Catalog. See https://www.arrow.com/globalecs/na/vendors/bitnami for more information.
+
 ** Please be patient while the chart is being deployed **
 
 Watch the Prometheus Operator Deployment status using the command:
@@ -116,3 +118,5 @@ To access Alertmanager from outside the cluster execute the following commands:
 {{- include "common.warnings.rollingTag" .Values.alertmanager.image }}
 {{- include "kube-prometheus.validateValues" . }}
 {{- include "common.warnings.resources" (dict "sections" (list "alertmanager" "blackboxExporter" "operator" "prometheus" "prometheus.thanos") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.operator.image .Values.prometheus.image .Values.prometheus.thanos.image .Values.alertmanager.image .Values.blackboxExporter.image) "context" $) }}
+{{- include "common.errors.insecureImages" (dict "images" (list .Values.operator.image .Values.prometheus.image .Values.prometheus.thanos.image .Values.alertmanager.image .Values.blackboxExporter.image) "context" $) }}

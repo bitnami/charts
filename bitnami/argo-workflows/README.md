@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/argo-workflows
 ```
 
-Looking to use Argo Workflows in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Argo Workflows in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -49,13 +49,31 @@ The command deploys Argo Workflows on the Kubernetes cluster in the default conf
 
 Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
 
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcesPreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
+### [Rolling VS Immutable tags](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+### Prometheus metrics
+
+This chart can be integrated with Prometheus by setting `controller.metrics.enabled` to `true`. This will expose the Argo Workflows native Prometheus port in both the containers and services. The services will also have the necessary annotations to be automatically scraped by Prometheus.
+
+#### Prometheus requirements
+
+It is necessary to have a working installation of Prometheus or Prometheus Operator for the integration to work. Install the [Bitnami Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/prometheus) or the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) to easily have a working Prometheus in your cluster.
+
+#### Integration with Prometheus Operator
+
+The chart can deploy `ServiceMonitor` objects for integration with Prometheus Operator installations. To do so, set the value `controller.metrics.serviceMonitor.enabled=true`. Ensure that the Prometheus Operator `CustomResourceDefinitions` are installed in the cluster or it will fail with the following error:
+
+```text
+no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"
+```
+
+Install the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) for having the necessary CRDs and the Prometheus Operator.
 
 ### Database support
 
@@ -81,6 +99,10 @@ externalDatabase.password=<database_password>
 externalDatabase.database=bitnami_workflows
 ```
 
+### Backup and restore
+
+To back up and restore Helm chart deployments on Kubernetes, you need to back up the persistent volumes from the source deployment and attach them to a new deployment using [Velero](https://velero.io/), a Kubernetes backup/restore tool. Find the instructions for using Velero in [this guide](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-backup-restore-deployments-velero-index.html).
+
 ### Ingress
 
 This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application. To enable Ingress integration, set `ingress.enabled` to `true`.
@@ -95,7 +117,7 @@ Adding the TLS parameter (where available) will cause the chart to generate HTTP
 
 [Learn more about Ingress controllers](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/).
 
-### TLS secrets
+### Securing traffic using TLS
 
 This chart facilitates the creation of TLS secrets for use with the Ingress controller (although this is not mandatory). There are several common use cases:
 
@@ -196,12 +218,13 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 
 ### Global parameters
 
-| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value  |
-| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
-| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
-| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`   |
-| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value   |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`    |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`    |
+| `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`    |
+| `global.security.allowInsecureImages`                 | Allows skipping image verification                                                                                                                                                                                                                                                                                                                                  | `false` |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto`  |
 
 ### Common parameters
 
@@ -283,9 +306,9 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `server.auth.sso.scopes`                                   | Scopes requested from the SSO ID provider                                                                                                                                                                                       | `[]`                                |
 | `server.clusterWorkflowTemplates.enabled`                  | Create ClusterRole and CRB for the controoler to access ClusterWorkflowTemplates                                                                                                                                                | `true`                              |
 | `server.clusterWorkflowTemplates.enableEditing`            | Give the server permissions to edit ClusterWorkflowTemplates                                                                                                                                                                    | `true`                              |
-| `server.pdb.enabled`                                       | Create Pod Disruption Budget for the server component                                                                                                                                                                           | `false`                             |
-| `server.pdb.minAvailable`                                  | Sets the min number of pods availables for the Pod Disruption Budget                                                                                                                                                            | `1`                                 |
-| `server.pdb.maxUnavailable`                                | Sets the max number of pods unavailable for the Pod Disruption Budget                                                                                                                                                           | `1`                                 |
+| `server.pdb.enabled`                                       | Create Pod Disruption Budget for the server component                                                                                                                                                                           | `true`                              |
+| `server.pdb.minAvailable`                                  | Sets the min number of pods availables for the Pod Disruption Budget                                                                                                                                                            | `""`                                |
+| `server.pdb.maxUnavailable`                                | Sets the max number of pods unavailable for the Pod Disruption Budget                                                                                                                                                           | `""`                                |
 | `server.secure`                                            | Run Argo server in secure mode                                                                                                                                                                                                  | `false`                             |
 | `server.baseHref`                                          | Base href of the Argo Workflows deployment                                                                                                                                                                                      | `/`                                 |
 | `server.containerPorts.web`                                | argo Server container port                                                                                                                                                                                                      | `2746`                              |
@@ -407,9 +430,9 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `controller.workflowDefaults`                                  | Default Workflow Values                                                                                                                                                                                                                 | `{}`                                       |
 | `controller.logging.level`                                     | Level for the controller logging                                                                                                                                                                                                        | `info`                                     |
 | `controller.logging.globalLevel`                               | Global logging level for the controller                                                                                                                                                                                                 | `0`                                        |
-| `controller.pdb.enabled`                                       | Create Pod Disruption Budget for the controller component                                                                                                                                                                               | `false`                                    |
-| `controller.pdb.minAvailable`                                  | Sets the min number of pods availables for the Pod Disruption Budget                                                                                                                                                                    | `1`                                        |
-| `controller.pdb.maxUnavailable`                                | Sets the max number of pods unavailable for the Pod Disruption Budget                                                                                                                                                                   | `1`                                        |
+| `controller.pdb.enabled`                                       | Create Pod Disruption Budget for the controller component                                                                                                                                                                               | `true`                                     |
+| `controller.pdb.minAvailable`                                  | Sets the min number of pods availables for the Pod Disruption Budget                                                                                                                                                                    | `""`                                       |
+| `controller.pdb.maxUnavailable`                                | Sets the max number of pods unavailable for the Pod Disruption Budget                                                                                                                                                                   | `""`                                       |
 | `controller.serviceAccount.create`                             | Specifies whether a ServiceAccount should be created                                                                                                                                                                                    | `true`                                     |
 | `controller.serviceAccount.name`                               | Name of the service account to use. If not set and create is true, a name is generated using the fullname template.                                                                                                                     | `""`                                       |
 | `controller.serviceAccount.automountServiceAccountToken`       | Automount service account token for the server service account                                                                                                                                                                          | `false`                                    |
@@ -582,6 +605,28 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 11.1.0
+
+This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
+
+### To 11.0.0
+
+This major bump updates the MySQL subchart to version 12.0.0. This subchart updates the StatefulSet objects `serviceName` to use a headless service, as the current non-headless service attached to it was not providing DNS entries. This will cause an upgrade issue because it changes "immutable fields". To workaround it, delete the StatefulSet objects as follows (replace the RELEASE_NAME placeholder):
+
+```shell
+kubectl delete sts RELEASE_NAME-mysql --cascade=false
+```
+
+Then execute `helm upgrade` as usual.
+
+### To 10.0.0
+
+This major updates the PostgreSQL subchart to its newest major, 16.0.0, which uses PostgreSQL 17.x.  Follow the [official instructions](https://www.postgresql.org/docs/17/upgrading.html) to upgrade to 17.x.
+
+### To 9.0.0
+
+This major updates the MySQL subchart to its newest major, 11.0.0. For more information on this subchart's major, please refer to [Mysql upgrade notes](https://github.com/bitnami/charts/blob/main/bitnami/mysql/README.md#user-content-to-1100).
+
 ### To 8.0.0
 
 This major bump changes the following security defaults:
@@ -651,7 +696,7 @@ To upgrade to *1.0.0* from *0.x*, it should be done reusing the PVC(s) used to h
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

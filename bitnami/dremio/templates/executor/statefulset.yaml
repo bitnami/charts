@@ -1,0 +1,396 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- /*
+  Dremio supports different executor groups called "engines".
+  These are defined in executor.engines and all the executor-specific k8s objects are created per engine.
+  Each engine contains an "overrides" section which allows replacing the common executor configuration
+  set in executor.common. This logic is inspired in upstream Dremio chart.
+
+  https://docs.dremio.com/cloud/sonar/workloads/engines/
+ */}}
+{{- range $engine := .Values.executor.engines }}
+{{- $executorValues := mustMergeOverwrite $.Values.executor.common $engine.overrides }}
+---
+apiVersion: {{ include "common.capabilities.statefulset.apiVersion" $ }}
+kind: StatefulSet
+metadata:
+  name: {{ include "dremio.executor.fullname" (dict "context" $ "engine" $engine.name) }}
+  namespace: {{ include "common.names.namespace" $ | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $.Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: dremio
+    app.kubernetes.io/component: executor
+    {{- /* We need an extra label for the engine */}}
+    engine: {{ $engine.name }}
+  {{- if or $executorValues.statefulsetAnnotations $.Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list $executorValues.statefulsetAnnotations $.Values.commonAnnotations) "context" $) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if not $executorValues.autoscaling.hpa.enabled }}
+  replicas: {{ $executorValues.replicaCount }}
+  {{- end }}
+  podManagementPolicy: {{ $executorValues.podManagementPolicy | quote }}
+  {{- $podLabels := include "common.tplvalues.merge" (dict "values" (list $executorValues.podLabels $.Values.commonLabels) "context" $) }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/part-of: dremio
+      app.kubernetes.io/component: executor
+      engine: {{ $engine.name }}
+  serviceName: {{ printf "%s-headless" (include "common.names.fullname" $) | trunc 63 | trimSuffix "-" }}
+  {{- if $executorValues.updateStrategy }}
+  updateStrategy: {{- toYaml $executorValues.updateStrategy | nindent 4 }}
+  {{- end }}
+  template:
+    metadata:
+      annotations:
+        checksum/dremio-conf-cm: {{ include (print $.Template.BasePath "/executor/configmap-dremio-conf.yaml") $ | sha256sum }}
+        checksum/dremio-conf-secret: {{ include (print $.Template.BasePath "/executor/secret-dremio-conf.yaml") $ | sha256sum }}
+        checksum/core-site-secret: {{ include (print $.Template.BasePath "/secret-core-site.yaml") $ | sha256sum }}
+      {{- if $executorValues.podAnnotations }}
+      {{- include "common.tplvalues.render" (dict "value" $executorValues.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+      labels: {{- include "common.labels.standard" (dict "customLabels" $podLabels "context" $) | nindent 8 }}
+        app.kubernetes.io/part-of: dremio
+        app.kubernetes.io/component: executor
+        engine: {{ $engine.name }}
+    spec:
+      {{- include "dremio.imagePullSecrets" $ | nindent 6 }}
+      serviceAccountName: {{ include "dremio.executor.serviceAccountName" (dict "engine" $engine.name "executorValues" $executorValues "context" $) }}
+      automountServiceAccountToken: {{ $executorValues.automountServiceAccountToken }}
+      {{- if $executorValues.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" $executorValues.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if $executorValues.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" $executorValues.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" $executorValues.podAffinityPreset "component" (printf "executor-%s" $engine.name) "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" $executorValues.podAntiAffinityPreset "component" (printf "executor-%s" $engine.name) "customLabels" $podLabels "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" $executorValues.nodeAffinityPreset.type "key" $executorValues.nodeAffinityPreset.key "values" $executorValues.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if $executorValues.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" $executorValues.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if $executorValues.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" $executorValues.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if $executorValues.priorityClassName }}
+      priorityClassName: {{ $executorValues.priorityClassName | quote }}
+      {{- end }}
+      {{- if $executorValues.schedulerName }}
+      schedulerName: {{ $executorValues.schedulerName | quote }}
+      {{- end }}
+      {{- if $executorValues.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" $executorValues.topologySpreadConstraints "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if $executorValues.podSecurityContext.enabled }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" $executorValues.podSecurityContext "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if $executorValues.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ $executorValues.terminationGracePeriodSeconds }}
+      {{- end }}
+      initContainers:
+        {{- /* As most Bitnami charts have volumePermissions in the root, we add a volumePermissions.enabled check to maintain a similar UX */}}
+        {{- if and (or $.Values.defaultInitContainers.volumePermissions.enabled (($.Values.volumePermissions).enabled)) $executorValues.persistence.enabled }}
+        {{- include "dremio.init-containers.volume-permissions" (dict "context" $ "componentValues" $executorValues) | nindent 8}}
+        {{- end }}
+        {{- if $.Values.defaultInitContainers.copyDefaultConf.enabled }}
+        {{- include "dremio.init-containers.copy-default-conf" $ | nindent 8 }}
+        {{- end }}
+        {{- if $.Values.defaultInitContainers.wait.enabled }}
+        {{- include "dremio.init-containers.wait-for-s3" $ | nindent 8 }}
+        {{- include "dremio.init-containers.wait-for-zookeeper" $ | nindent 8 }}
+        {{- include "dremio.init-containers.wait-for-master-coordinator" $ | nindent 8 }}
+        {{- end }}
+        {{- if $.Values.defaultInitContainers.generateConf.enabled }}
+        {{- include "dremio.init-containers.generate-conf" (dict "context" $ "mountDremioConfSecret" (include "dremio.executor.dremio-conf.useSecret" (dict "context" $ "executorValues" $executorValues))) | nindent 8 }}
+        {{- end }}
+        {{- if and $.Values.dremio.tls.enabled $.Values.defaultInitContainers.initCerts.enabled }}
+        {{- include "dremio.init-containers.init-certs" $ | nindent 8 }}
+        {{- end }}
+        {{- if $executorValues.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" $executorValues.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+      containers:
+        - name: dremio
+          image: {{ template "dremio.image" $ }}
+          imagePullPolicy: {{ $.Values.dremio.image.pullPolicy }}
+          {{- if $executorValues.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" $executorValues.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if $.Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" $.Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if $executorValues.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" $executorValues.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if $.Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" $.Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if $executorValues.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" $executorValues.args "context" $) | nindent 12 }}
+          {{- end }}
+          env:
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" (or $.Values.dremio.image.debug $.Values.diagnosticMode.enabled) | quote }}
+            - name: DREMIO_JAVA_SERVER_EXTRA_OPTS
+              value: |
+                {{- if and (eq $.Values.dremio.distStorageType "minio") (or (and $.Values.minio.enabled ((($.Values.minio).tls).enabled) ((($.Values.minio).tls).autoGenerated)) $.Values.externalS3.disableCertChecking) }}
+                -Dcom.amazonaws.sdk.disableCertChecking=true
+                {{- end }}
+                {{- if $.Values.metrics.enabled }}
+                -Dcom.sun.management.jmxremote.port={{ $.Values.dremio.containerPorts.jmx }}
+                -Dcom.sun.management.jmxremote.authenticate=false
+                -Dcom.sun.management.jmxremote.ssl=false
+                {{- end }}
+                {{- if $executorValues.extraJavaOpts }}
+                {{- include "common.tplvalues.render" (dict "value" $executorValues.extraJavaOpts "context" $) | nindent 16 }}
+                {{- end }}
+            - name: DREMIO_MAX_MEMORY_SIZE_MB
+              valueFrom:
+                resourceFieldRef:
+                  containerName: dremio
+                  resource: limits.memory
+                  divisor: 1Mi
+            {{- if $executorValues.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" $executorValues.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- if $executorValues.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" $executorValues.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if $executorValues.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" $executorValues.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- if $executorValues.resources }}
+          resources: {{- toYaml $executorValues.resources | nindent 12 }}
+          {{- else if ne $executorValues.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" $executorValues.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          ports:
+            - containerPort: {{ $.Values.dremio.containerPorts.liveness }}
+              name: liveness
+            - containerPort: {{ $.Values.dremio.containerPorts.fabric }}
+              name: server-fabric
+            - containerPort: {{ $.Values.dremio.containerPorts.conduit }}
+              name: server-conduit
+            {{- if $.Values.metrics.enabled }}
+            - containerPort: {{ $.Values.dremio.containerPorts.jmx }}
+              name: jmx
+            {{- end }}
+            {{- if $executorValues.extraContainerPorts }}
+            {{- include "common.tplvalues.render" (dict "value" $executorValues.extraContainerPorts "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if not $.Values.diagnosticMode.enabled }}
+          {{- if $executorValues.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" $executorValues.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if $executorValues.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit $executorValues.livenessProbe "enabled") "context" $) | nindent 12 }}
+            {{- /* Using the fabric port because of a strange issue in which the liveness port is working but not the fabric one, in which case we want to restart the executor */}}
+            tcpSocket:
+              port: server-fabric
+          {{- end }}
+          {{- if $executorValues.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" $executorValues.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if $executorValues.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit $executorValues.readinessProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: liveness
+          {{- end }}
+          {{- if $executorValues.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" $executorValues.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if $executorValues.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit $executorValues.startupProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: liveness
+          {{- end }}
+          {{- end }}
+          {{- if $executorValues.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" $executorValues.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: data
+              mountPath: {{ $executorValues.persistence.mountPath }}
+              {{- if $executorValues.persistence.subPath }}
+              subPath: {{ $executorValues.persistence.subPath }}
+              {{- end }}
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/dremio/tmp
+              subPath: app-tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/dremio/run
+              subPath: app-run-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/dremio/log
+              subPath: app-log-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/dremio/conf
+              subPath: app-conf-dir
+            {{- if $.Values.metrics.enabled }}
+            - name: metrics-configuration
+              mountPath: /opt/bitnami/dremio/conf/dremio-telemetry.yaml
+              subPath: dremio-telemetry.yaml
+            {{- end }}
+            {{- if $.Values.dremio.tls.enabled }}
+            - name: empty-dir
+              mountPath: /opt/bitnami/dremio/certs
+              subPath: app-processed-certs-dir
+            {{- end }}
+          {{- if $executorValues.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" $executorValues.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+        {{- if $.Values.metrics.enabled }}
+        - name: metrics
+          image: {{ include "dremio.metrics.image" $ }}
+          imagePullPolicy: {{ $.Values.metrics.image.pullPolicy | quote }}
+          {{- if $.Values.metrics.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" $.Values.metrics.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if $.Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" $.Values.diagnosticMode.command "context" $) | nindent 12 }}
+          args: {{- include "common.tplvalues.render" (dict "value" $.Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else }}
+          command:
+            - java
+          args:
+            - -XX:MaxRAMPercentage=100
+            - -XshowSettings:vm
+            - -jar
+            - jmx_prometheus_standalone.jar
+            - {{ $.Values.metrics.containerPorts.metrics | quote }}
+            - /etc/jmx-dremio/jmx-prometheus.yml
+          {{- end }}
+          ports:
+            - name: metrics
+              containerPort: {{ $.Values.metrics.containerPorts.metrics }}
+          {{- if $.Values.metrics.resources }}
+          resources: {{- toYaml $.Values.metrics.resources | nindent 12 }}
+          {{- else if ne $.Values.metrics.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" $.Values.metrics.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          {{- if not $.Values.diagnosticMode.enabled }}
+          {{- if $.Values.metrics.livenessProbe.enabled }}
+          livenessProbe: {{- omit $.Values.metrics.livenessProbe "enabled" | toYaml | nindent 12 }}
+            tcpSocket:
+              port: metrics
+          {{- end }}
+          {{- if $.Values.metrics.readinessProbe.enabled }}
+          readinessProbe: {{- omit $.Values.metrics.readinessProbe "enabled" | toYaml | nindent 12 }}
+            httpGet:
+              path: /
+              port: metrics
+          {{- end }}
+          {{- if $.Values.metrics.startupProbe.enabled }}
+          startupProbe: {{- omit $.Values.metrics.startupProbe "enabled" | toYaml | nindent 12 }}
+            httpGet:
+              path: /
+              port: metrics
+          {{- end }}
+          {{- end }}
+          volumeMounts:
+            - name: metrics-configuration
+              mountPath: /etc/jmx-dremio/jmx-prometheus.yml
+              subPath: jmx-prometheus.yml
+        {{- end }}
+        {{- if $executorValues.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" $executorValues.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        - name: empty-dir
+          emptyDir: {}
+        - name: input-dremio-conf-cm
+          configMap:
+            name: {{ include "dremio.executor.dremio-conf.configmapName" (dict "context" $ "executorValues" $executorValues "engine" $engine.name) }}
+        {{- if (include "dremio.executor.dremio-conf.useSecret" (dict "context" $ "executorValues" $executorValues "engine" $engine.name)) }}
+        - name: input-dremio-conf-secret
+          secret:
+            secretName: {{ include "dremio.executor.dremio-conf.secretName" (dict "context" $ "executorValues" $executorValues "engine" $engine.name) }}
+        {{- end }}
+        - name: input-core-site
+          secret:
+            secretName: {{ include "dremio.core-site.secretName" $ }}
+        {{- if $.Values.metrics.enabled }}
+        - name: metrics-configuration
+          configMap:
+            name: {{ include "dremio.metrics.configmapName" $ }}
+        {{- end }}
+        {{- if $.Values.dremio.tls.enabled }}
+        - name: input-tls-certs
+          secret:
+            secretName: {{ include "dremio.tls.secretName" $ }}
+            items:
+              {{- if $.Values.dremio.tls.usePemCerts }}
+              - key: {{ $.Values.dremio.tls.certFilename }}
+                path: tls.crt
+              - key: {{ $.Values.dremio.tls.certKeyFilename }}
+                path: tls.key
+              {{- else }}
+              - key: {{ $.Values.dremio.tls.keystoreFilename }}
+                path: dremio.jks
+              {{- end }}
+        {{- end }}
+        {{- if and $executorValues.persistence.enabled $executorValues.persistence.existingClaim }}
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ $executorValues.persistence.existingClaim }}
+        {{- else if (not $executorValues.persistence.enabled)}}
+        - name: data
+          emptyDir: {}
+        {{- end }}
+        {{- if $.Values.usePasswordFiles }}
+        {{- if or $.Values.dremio.tls.passwordSecret $.Values.dremio.tls.password $.Values.dremio.tls.autoGenerated.enabled $.Values.dremio.tls.usePemCerts }}
+        - name: keystore-password
+          secret:
+            secretName: {{ include "dremio.tls.passwordSecretName" $ }}
+            items:
+              - key: keystore-password
+                path: DREMIO_KEYSTORE_PASSWORD
+        {{- end }}
+        {{- if or (eq $.Values.dremio.distStorageType "minio") (eq $.Values.dremio.distStorageType "aws") }}
+        - name: s3-credentials
+          secret:
+            secretName: {{ include "dremio.s3.secretName" $ }}
+            items:
+              - key: {{ include "dremio.s3.accessKeyIDKey" $ }}
+                path: DREMIO_AWS_ACCESS_KEY_ID
+              - key: {{ include "dremio.s3.secretAccessKeyKey" $ }}
+                path: DREMIO_AWS_SECRET_ACCESS_KEY
+        {{- end }}
+        {{- end }}
+        {{- if $executorValues.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" $executorValues.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+  {{- if $executorValues.persistence.enabled }}
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+        {{- if or $executorValues.persistence.annotations $.Values.commonAnnotations }}
+        {{- $claimAnnotations := include "common.tplvalues.merge" (dict "values" $executorValues.persistence.annotations $.Values.commonAnnotations "context" $) | fromYaml }}
+        annotations: {{- include "common.tplvalues.render" ( dict "value" $claimAnnotations "context" $ ) | nindent 10 }}
+        {{- end }}
+        {{- if $.Values.commonLabels }}
+        labels: {{- include "common.labels.matchLabels" ( dict "customLabels" $.Values.commonLabels "context" $ ) | nindent 10 }}
+        {{- end }}
+      spec:
+        accessModes:
+        {{- range $executorValues.persistence.accessModes }}
+          - {{ . | quote }}
+        {{- end }}
+        {{- if $executorValues.persistence.dataSource }}
+        dataSource: {{- include "common.tplvalues.render" (dict "value" $executorValues.persistence.dataSource "context" $) | nindent 10 }}
+        {{- end }}
+        resources:
+          requests:
+            storage: {{ $executorValues.persistence.size | quote }}
+        {{- if $executorValues.persistence.selector }}
+        selector: {{- include "common.tplvalues.render" (dict "value" $executorValues.persistence.selector "context" $) | nindent 10 }}
+        {{- end }}
+        {{- include "common.storage.class" (dict "persistence" $executorValues.persistence "global" $.Values.global) | nindent 8 }}
+  {{- end }}
+{{- end }}

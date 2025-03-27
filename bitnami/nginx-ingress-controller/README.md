@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/nginx-ingress-controller
 ```
 
-Looking to use NGINX Ingress Controller in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use NGINX Ingress Controller in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -49,13 +49,35 @@ These commands deploy nginx-ingress-controller on the Kubernetes cluster in the 
 
 Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
 
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcesPreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
+### Prometheus metrics
+
+This chart can be integrated with Prometheus by setting `metrics.enabled` to `true`. This will expose nginx-ingress-controller native Prometheus endpoint and a `metrics` service that can be configured using the `metrics.service` section. It will be have the necessary annotations to be automatically scraped by Prometheus.
+
+#### Prometheus requirements
+
+It is necessary to have a working installation of Prometheus or Prometheus Operator for the integration to work. Install the [Bitnami Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/prometheus) or the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) to easily have a working Prometheus in your cluster.
+
+#### Integration with Prometheus Operator
+
+The chart can deploy `ServiceMonitor` objects for integration with Prometheus Operator installations. To do so, set the value `metrics.serviceMonitor.enabled=true`. Ensure that the Prometheus Operator `CustomResourceDefinitions` are installed in the cluster or it will fail with the following error:
+
+```text
+no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"
+```
+
+Install the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) for having the necessary CRDs and the Prometheus Operator.
+
+### [Rolling VS Immutable tags](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+### Backup and restore
+
+To back up and restore Helm chart deployments on Kubernetes, you need to back up the persistent volumes from the source deployment and attach them to a new deployment using [Velero](https://velero.io/), a Kubernetes backup/restore tool. Find the instructions for using Velero in [this guide](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-backup-restore-deployments-velero-index.html).
 
 ### Sidecars and Init Containers
 
@@ -97,11 +119,12 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 
 ### Global parameters
 
-| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value  |
-| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
-| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
-| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value   |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`    |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`    |
+| `global.security.allowInsecureImages`                 | Allows skipping image verification                                                                                                                                                                                                                                                                                                                                  | `false` |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto`  |
 
 ### Common parameters
 
@@ -158,6 +181,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 | `dhParam`                              | A base64ed Diffie-Hellman parameter                                                                                                                | `""`                                       |
 | `tcp`                                  | TCP service key:value pairs                                                                                                                        | `{}`                                       |
 | `udp`                                  | UDP service key:value pairs                                                                                                                        | `{}`                                       |
+| `svcPortNamesPrefix`                   | Prefix for TCP and UDP ports names in ingress controller service                                                                                   | `""`                                       |
 | `command`                              | Override default container command (useful when using custom images)                                                                               | `[]`                                       |
 | `args`                                 | Override default container args (useful when using custom images)                                                                                  | `[]`                                       |
 | `lifecycleHooks`                       | for the %%MAIN_CONTAINER_NAME%% container(s) to automate configuration before or after startup                                                     | `{}`                                       |
@@ -183,7 +207,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 | `podSecurityContext.fsGroup`                        | Group ID for the container filesystem                                                                                                                                                                             | `1001`           |
 | `containerSecurityContext.enabled`                  | Enable Controller containers' Security Context                                                                                                                                                                    | `true`           |
 | `containerSecurityContext.allowPrivilegeEscalation` | Switch to allow priviledge escalation on the Controller container                                                                                                                                                 | `false`          |
-| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                  | `nil`            |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                  | `{}`             |
 | `containerSecurityContext.runAsUser`                | User ID for the Controller container                                                                                                                                                                              | `1001`           |
 | `containerSecurityContext.runAsGroup`               | Group ID for the Controller container                                                                                                                                                                             | `1001`           |
 | `containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                           | `true`           |
@@ -264,7 +288,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 | `defaultBackend.containerSecurityContext.enabled`                  | Enable Default backend containers' Security Context                                                                                                                                                                                             | `true`                  |
 | `defaultBackend.containerSecurityContext.capabilities.drop`        | Linux Kernel capabilities that should be dropped                                                                                                                                                                                                | `[]`                    |
 | `defaultBackend.containerSecurityContext.allowPrivilegeEscalation` | Switch to allow priviledge escalation on the container                                                                                                                                                                                          | `false`                 |
-| `defaultBackend.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                                                | `nil`                   |
+| `defaultBackend.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                                                | `{}`                    |
 | `defaultBackend.containerSecurityContext.runAsUser`                | User ID for the Default backend container                                                                                                                                                                                                       | `1001`                  |
 | `defaultBackend.containerSecurityContext.runAsGroup`               | Group ID for the Default backend container                                                                                                                                                                                                      | `1001`                  |
 | `defaultBackend.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                                         | `true`                  |
@@ -327,9 +351,9 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 | `defaultBackend.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy                                                                                                                                                                                                    | `[]`                    |
 | `defaultBackend.networkPolicy.ingressNSMatchLabels`                | Labels to match to allow traffic from other namespaces                                                                                                                                                                                          | `{}`                    |
 | `defaultBackend.networkPolicy.ingressNSPodMatchLabels`             | Pod labels to match to allow traffic from other namespaces                                                                                                                                                                                      | `{}`                    |
-| `defaultBackend.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation for Default backend                                                                                                                                                                             | `false`                 |
-| `defaultBackend.pdb.minAvailable`                                  | Minimum number/percentage of Default backend pods that should remain scheduled                                                                                                                                                                  | `1`                     |
-| `defaultBackend.pdb.maxUnavailable`                                | Maximum number/percentage of Default backend pods that may be made unavailable                                                                                                                                                                  | `""`                    |
+| `defaultBackend.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation for Default backend                                                                                                                                                                             | `true`                  |
+| `defaultBackend.pdb.minAvailable`                                  | Minimum number/percentage of Default backend pods that should remain scheduled                                                                                                                                                                  | `""`                    |
+| `defaultBackend.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `defaultBackend.pdb.minAvailable` and `defaultBackend.pdb.maxUnavailable` are empty.                                                                    | `""`                    |
 
 ### Traffic exposure parameters
 
@@ -345,6 +369,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 | `service.externalIPs`                   | Controller Service external IP addresses                                                                                               | `[]`           |
 | `service.ipFamilyPolicy`                | Controller Service ipFamilyPolicy (optional, cloud specific)                                                                           | `""`           |
 | `service.ipFamilies`                    | Controller Service ipFamilies (optional, cloud specific)                                                                               | `[]`           |
+| `service.loadBalancerClass`             | Load balancer class if service type is `LoadBalancer`                                                                                  | `""`           |
 | `service.loadBalancerIP`                | Kubernetes LoadBalancerIP to request for Controller (optional, cloud specific)                                                         | `""`           |
 | `service.loadBalancerSourceRanges`      | List of IP CIDRs allowed access to load balancer (if supported)                                                                        | `[]`           |
 | `service.extraPorts`                    | Extra ports to expose (normally used with the `sidecar` value)                                                                         | `[]`           |
@@ -374,16 +399,16 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 
 ### Other parameters
 
-| Name                       | Description                                                               | Value   |
-| -------------------------- | ------------------------------------------------------------------------- | ------- |
-| `pdb.create`               | Enable/disable a Pod Disruption Budget creation for Controller            | `false` |
-| `pdb.minAvailable`         | Minimum number/percentage of Controller pods that should remain scheduled | `1`     |
-| `pdb.maxUnavailable`       | Maximum number/percentage of Controller pods that may be made unavailable | `""`    |
-| `autoscaling.enabled`      | Enable autoscaling for Controller                                         | `false` |
-| `autoscaling.minReplicas`  | Minimum number of Controller replicas                                     | `1`     |
-| `autoscaling.maxReplicas`  | Maximum number of Controller replicas                                     | `11`    |
-| `autoscaling.targetCPU`    | Target CPU utilization percentage                                         | `""`    |
-| `autoscaling.targetMemory` | Target Memory utilization percentage                                      | `""`    |
+| Name                       | Description                                                                                                                                    | Value   |
+| -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `pdb.create`               | Enable/disable a Pod Disruption Budget creation for Controller                                                                                 | `true`  |
+| `pdb.minAvailable`         | Minimum number/percentage of Controller pods that should remain scheduled                                                                      | `""`    |
+| `pdb.maxUnavailable`       | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `pdb.minAvailable` and `pdb.maxUnavailable` are empty. | `""`    |
+| `autoscaling.enabled`      | Enable autoscaling for Controller                                                                                                              | `false` |
+| `autoscaling.minReplicas`  | Minimum number of Controller replicas                                                                                                          | `1`     |
+| `autoscaling.maxReplicas`  | Maximum number of Controller replicas                                                                                                          | `11`    |
+| `autoscaling.targetCPU`    | Target CPU utilization percentage                                                                                                              | `""`    |
+| `autoscaling.targetMemory` | Target Memory utilization percentage                                                                                                           | `""`    |
 
 ### Metrics parameters
 
@@ -436,6 +461,10 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/nginx
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 11.6.0
+
+This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
 
 ### To 11.0.0
 
@@ -502,7 +531,7 @@ Consequences:
 
 #### Useful links**
 
-- <https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-resolve-helm2-helm3-post-migration-issues-index.html>
+- <https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-resolve-helm2-helm3-post-migration-issues-index.html>
 - <https://helm.sh/docs/topics/v2_v3_migration/>
 - <https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/>
 
@@ -525,7 +554,7 @@ $ kubectl patch daemonset nginx-ingress-controller --type=json -p='[{"op": "remo
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

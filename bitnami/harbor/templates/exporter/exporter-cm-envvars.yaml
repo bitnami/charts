@@ -19,9 +19,11 @@ metadata:
 data:
   LOG_LEVEL: {{ .Values.logLevel | quote }}
   HARBOR_EXPORTER_PORT: {{ .Values.exporter.containerPorts.metrics | quote }}
+  {{- if .Values.metrics.enabled}}
   HARBOR_EXPORTER_METRICS_PATH: {{ .Values.metrics.path | quote }}
   HARBOR_METRIC_NAMESPACE: harbor
   HARBOR_METRIC_SUBSYSTEM: exporter
+  {{- end }}
   HARBOR_REDIS_NAMESPACE: {{ .Values.jobservice.redisNamespace | quote }}
   HARBOR_SERVICE_SCHEME: {{ ternary "https" "http" .Values.internalTLS.enabled | quote }}
   HARBOR_SERVICE_HOST: {{ include "harbor.core" . | quote }}

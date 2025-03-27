@@ -1,0 +1,243 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.passwordUpdateJob.enabled }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ printf "%s-password-update" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: mysql
+    app.kubernetes.io/component: update-job
+  {{- $defaultAnnotations := dict "helm.sh/hook" "pre-upgrade" "helm.sh/hook-delete-policy" "hook-succeeded" }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonAnnotations $defaultAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+spec:
+  backoffLimit: {{ .Values.passwordUpdateJob.backoffLimit }}
+  template:
+    metadata:
+      {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.passwordUpdateJob.podLabels .Values.commonLabels ) "context" . ) }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/part-of: mysql
+        app.kubernetes.io/component: update-job
+      {{- if .Values.passwordUpdateJob.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.passwordUpdateJob.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+    spec:
+      {{- include "mysql.imagePullSecrets" . | nindent 6 }}
+      restartPolicy: OnFailure
+      {{- if .Values.passwordUpdateJob.podSecurityContext.enabled }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.passwordUpdateJob.podSecurityContext "context" $) | nindent 8 }}
+      {{- end }}
+      automountServiceAccountToken: {{ .Values.passwordUpdateJob.automountServiceAccountToken }}
+      {{- if .Values.passwordUpdateJob.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.passwordUpdateJob.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      initContainers:
+        {{- if .Values.passwordUpdateJob.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.passwordUpdateJob.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+      containers:
+        - name: update-credentials
+          image: {{ template "mysql.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.passwordUpdateJob.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.passwordUpdateJob.command "context" $) | nindent 12 }}
+          {{- else }}
+          command:
+            - /bin/bash
+            - -ec
+          {{- end }}
+          {{- if .Values.passwordUpdateJob.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.passwordUpdateJob.args "context" $) | nindent 12 }}
+          {{- else }}
+          args:
+            - |
+              {{- if .Values.usePasswordFiles }}
+              # We need to load all the secret env vars to the system
+              for file in $(find /bitnami/mysql/secrets -type f); do
+                  env_var_name="$(basename $file)"
+                  echo "Exporting $env_var_name"
+                  export $env_var_name="$(< $file)"
+              done
+              {{- end }}
+
+              . /opt/bitnami/scripts/mysql-env.sh
+              . /opt/bitnami/scripts/libmysql.sh
+              . /opt/bitnami/scripts/liblog.sh
+
+              primary_host={{ include "mysql.primary.fullname" . }}-0.{{ printf "%s-headless" (include "mysql.primary.fullname" .) | trunc 63 | trimSuffix "-" }}
+              info "Starting password update job"
+              if [[ -f /job-status/root-password-changed ]]; then
+                  info "Root password already updated. Skipping"
+              else
+                  info "Updating root password"
+                  echo "ALTER USER 'root'@'%' IDENTIFIED BY '$MYSQL_NEW_ROOT_PASSWORD';" | mysql_remote_execute $primary_host {{ .Values.primary.containerPorts.mysql }} "" root $MYSQL_PREVIOUS_ROOT_PASSWORD
+                  touch /job-status/root-password-changed
+                  info "Root password successfully updated"
+              fi
+              {{- if not (empty .Values.auth.username) }}
+              if [[ -f /job-status/password-changed ]]; then
+                  info "User password already updated. Skipping"
+              else
+                  info "Updating user password"
+                  echo "ALTER USER '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_NEW_PASSWORD';" | mysql_remote_execute $primary_host {{ .Values.primary.containerPorts.mysql }} "" $MYSQL_USER $MYSQL_PREVIOUS_PASSWORD
+                  touch /job-status/password-changed
+                  info "User password successfully updated"
+              fi
+              {{- end }}
+              {{- if eq .Values.architecture "replication" }}
+              if [[ -f /job-status/replication-password-changed ]]; then
+                  info "Replication password already updated. Skipping"
+              else
+                  info "Updating replication password"
+                  echo "ALTER USER '$MYSQL_REPLICATION_USER'@'%' IDENTIFIED BY '$MYSQL_NEW_REPLICATION_PASSWORD';" | mysql_remote_execute $primary_host {{ .Values.primary.containerPorts.mysql }} "" $MYSQL_REPLICATION_USER  $MYSQL_PREVIOUS_REPLICATION_PASSWORD
+                  touch /job-status/replication-password-changed
+                  info "Replication password successfully updated"
+              fi
+
+              for i in $(seq 0 {{ sub .Values.secondary.replicaCount 1 }}); do
+                  if [[ -f /job-status/replica-$i-changed ]]; then
+                      info "Replica $i already updated. Skipping"
+                  else
+                      replica_host={{ include "mysql.secondary.fullname" . }}-$i.{{  printf "%s-headless" (include "mysql.secondary.fullname" .) | trunc 63 | trimSuffix "-" }}
+                      info "Updating primary password in replica $i"
+                      echo "STOP REPLICA; CHANGE REPLICATION SOURCE TO SOURCE_PASSWORD='$MYSQL_NEW_REPLICATION_PASSWORD'; START REPLICA;" | mysql_remote_execute $replica_host {{ .Values.secondary.containerPorts.mysql }} "" root $MYSQL_NEW_ROOT_PASSWORD
+                      touch /job-status/replica-$i-changed
+                      info "Replica $i updated"
+                  fi
+              done
+              {{- end }}
+              {{- if .Values.passwordUpdateJob.extraCommands }}
+              info "Running extra commmands"
+              {{- include "common.tplvalues.render" (dict "value" .Values.passwordUpdateJob.extraCommands "context" $) | nindent 14 }}
+              {{- end }}
+              info "Password update job finished successfully"
+          {{- end }}
+          env:
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" .Values.image.debug | quote }}
+            {{- if not .Values.auth.usePasswordFiles }}
+            - name: MYSQL_PREVIOUS_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "mysql.update-job.previousSecretName" . }}
+                  key: mysql-root-password
+            - name: MYSQL_NEW_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "mysql.update-job.newSecretName" . }}
+                  key: mysql-root-password
+            {{- end }}
+            {{- if not (empty .Values.auth.username) }}
+            - name: MYSQL_USER
+              value: {{ .Values.auth.username | quote }}
+            {{- if not .Values.auth.usePasswordFiles }}
+            - name: MYSQL_PREVIOUS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "mysql.update-job.previousSecretName" . }}
+                  key: mysql-password
+            - name: MYSQL_NEW_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "mysql.update-job.newSecretName" . }}
+                  key: mysql-password
+            {{- end }}
+            {{- end }}
+            {{- if eq .Values.architecture "replication" }}
+            - name: MYSQL_REPLICATION_USER
+              value: {{ .Values.auth.replicationUser | quote }}
+            {{- if not .Values.auth.usePasswordFiles }}
+            - name: MYSQL_PREVIOUS_REPLICATION_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "mysql.update-job.previousSecretName" . }}
+                  key: mysql-replication-password
+            - name: MYSQL_NEW_REPLICATION_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "mysql.update-job.newSecretName" . }}
+                  key: mysql-replication-password
+            {{- end }}
+            {{- end }}
+            {{- if .Values.passwordUpdateJob.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.passwordUpdateJob.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if or .Values.passwordUpdateJob.extraEnvVarsCM .Values.passwordUpdateJob.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.passwordUpdateJob.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ .Values.passwordUpdateJob.extraEnvVarsCM }}
+            {{- end }}
+            {{- if .Values.passwordUpdateJob.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ .Values.passwordUpdateJob.extraEnvVarsSecret }}
+            {{- end }}
+          {{- end }}
+          {{- if .Values.passwordUpdateJob.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.passwordUpdateJob.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.passwordUpdateJob.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.passwordUpdateJob.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.passwordUpdateJob.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.passwordUpdateJob.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.passwordUpdateJob.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.passwordUpdateJob.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /job-status
+              subPath: job-dir
+            {{- if .Values.usePasswordFiles }}
+            - name: mysql-previous-credentials
+              mountPath: /bitnami/mysql/secrets/previous
+            - name: mysql-new-credentials
+              mountPath: /bitnami/mysql/secrets/new
+            {{- end }}
+          {{- if .Values.passwordUpdateJob.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.passwordUpdateJob.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.passwordUpdateJob.resources }}
+          resources: {{- toYaml .Values.passwordUpdateJob.resources | nindent 12 }}
+          {{- else if ne .Values.passwordUpdateJob.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.passwordUpdateJob.resourcesPreset) | nindent 12 }}
+          {{- end }}
+      volumes:
+        - name: empty-dir
+          emptyDir: {}
+        {{- if and .Values.auth.usePasswordFiles }}
+        - name: mysql-previous-credentials
+          secret:
+            secretName: {{ template "mysql.update-job.previousSecretName" . }}
+            items:
+              - key: mysql-root-password
+                path: MYSQL_PREVIOUS_ROOT_PASSWORD
+              - key: mysql-password
+                path: MYSQL_PREVIOUS_PASSWORD
+              {{- if eq .Values.architecture "replication" }}
+              - key: mysql-replication-password
+                path: MYSQL_PREVIOUS_REPLICATION_PASSWORD
+              {{- end }}
+        - name: mysql-new-credentials
+          secret:
+            secretName: {{ template "mysql.update-job.newSecretName" . }}
+            items:
+              - key: mysql-root-password
+                path: MYSQL_NEW_ROOT_PASSWORD
+              - key: mysql-password
+                path: MYSQL_NEW_PASSWORD
+              {{- if eq .Values.architecture "replication" }}
+              - key: mysql-replication-password
+                path: MYSQL_NEW_REPLICATION_PASSWORD
+              {{- end }}
+        {{- end }}
+      {{- if .Values.passwordUpdateJob.extraVolumes }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.passwordUpdateJob.extraVolumes "context" $) | nindent 8 }}
+      {{- end }}
+{{- end }}

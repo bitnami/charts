@@ -147,8 +147,11 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.taskmanager.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.taskmanager.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.taskmanager.livenessProbe "enabled") "context" $) | nindent 12 }}
-            tcpSocket:
-              port: rpc
+            exec:
+              command:
+              - pgrep
+              - -f
+              - taskmanager
           {{- end }}
           {{- if .Values.taskmanager.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.taskmanager.customReadinessProbe "context" $) | nindent 12 }}

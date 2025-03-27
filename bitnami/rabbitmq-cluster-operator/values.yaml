@@ -9,7 +9,8 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
+## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ##
 global:
   imageRegistry: ""
@@ -18,7 +19,13 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  defaultStorageClass: ""
   storageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
   ## Compatibility adaptations for Kubernetes platforms
   ##
   compatibility:
@@ -72,7 +79,7 @@ diagnosticMode:
 rabbitmqImage:
   registry: docker.io
   repository: bitnami/rabbitmq
-  tag: 3.13.2-debian-12-r1
+  tag: 4.0.7-debian-12-r0
   digest: ""
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
@@ -93,7 +100,7 @@ rabbitmqImage:
 credentialUpdaterImage:
   registry: docker.io
   repository: bitnami/rmq-default-credential-updater
-  tag: 1.0.4-debian-12-r18
+  tag: 1.0.5-debian-12-r6
   digest: ""
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
@@ -116,10 +123,9 @@ clusterOperator:
   image:
     registry: docker.io
     repository: bitnami/rabbitmq-cluster-operator
-    tag: 2.8.0-debian-12-r4
+    tag: 2.12.1-debian-12-r6
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -225,6 +231,16 @@ clusterOperator:
   ##     memory: 1024Mi
   ##
   resources: {}
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+  ## @param clusterOperator.pdb.create Enable a Pod Disruption Budget creation
+  ## @param clusterOperator.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param clusterOperator.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param clusterOperator.podSecurityContext.enabled Enabled RabbitMQ Cluster Operator pods' Security Context
@@ -254,7 +270,7 @@ clusterOperator:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsGroup: 1001
     runAsNonRoot: true
@@ -649,10 +665,9 @@ msgTopologyOperator:
   image:
     registry: docker.io
     repository: bitnami/rmq-messaging-topology-operator
-    tag: 1.14.0-debian-12-r0
+    tag: 1.16.0-debian-12-r3
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -747,6 +762,9 @@ msgTopologyOperator:
   ## @param msgTopologyOperator.customStartupProbe Custom startupProbe that overrides the default one
   ##
   customStartupProbe: {}
+  ## @param msgTopologyOperator.skipCreateAdmissionWebhookConfig skip creation of ValidationWebhookConfiguration
+  ##
+  skipCreateAdmissionWebhookConfig: false
   ## @param msgTopologyOperator.existingWebhookCertSecret name of a secret containing the certificates (use it to avoid certManager creating one)
   ##
   existingWebhookCertSecret: ""
@@ -770,6 +788,16 @@ msgTopologyOperator:
   ##     memory: 1024Mi
   ##
   resources: {}
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+  ## @param msgTopologyOperator.pdb.create Enable a Pod Disruption Budget creation
+  ## @param msgTopologyOperator.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param msgTopologyOperator.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param msgTopologyOperator.podSecurityContext.enabled Enabled RabbitMQ Messaging Topology Operator pods' Security Context
@@ -799,7 +827,7 @@ msgTopologyOperator:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsGroup: 1001
     runAsNonRoot: true

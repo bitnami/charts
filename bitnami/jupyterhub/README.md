@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/jupyterhub
 ```
 
-Looking to use JupyterHub in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use JupyterHub in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -106,7 +106,7 @@ These commands deploy JupyterHub on the Kubernetes cluster in the default config
 
 Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
 
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcesPreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
 ### Understand the default configuration
 
@@ -164,7 +164,25 @@ After accessing the hub and creating a Single User instance, the deployment look
 
 For more information, check the official [JupyterHub documentation](https://github.com/jupyterhub/jupyterhub).
 
-### [Rolling vs Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
+### Prometheus metrics
+
+This chart can be integrated with Prometheus by setting `*.metrics.enabled` (under the `hub` and `proxy` sections) to `true`. This will expose the JupyterHub native Prometheus ports in the containers, as well as a `metrics` service. This `metrics` service will have the necessary annotations to be automatically scraped by Prometheus.
+
+#### Prometheus requirements
+
+It is necessary to have a working installation of Prometheus or Prometheus Operator for the integration to work. Install the [Bitnami Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/prometheus) or the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) to easily have a working Prometheus in your cluster.
+
+#### Integration with Prometheus Operator
+
+The chart can deploy `ServiceMonitor` objects for integration with Prometheus Operator installations. To do so, set the value `*.metrics.serviceMonitor.enabled=true` (under the `hub` and `proxy` sections). Ensure that the Prometheus Operator `CustomResourceDefinitions` are installed in the cluster or it will fail with the following error:
+
+```text
+no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"
+```
+
+Install the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) for having the necessary CRDs and the Prometheus Operator.
+
+### [Rolling vs Immutable tags](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -195,6 +213,13 @@ When deploying, you will need to sign up to set the password for the `test`` use
 
 For more information on Authenticators, check the [official JupyterHub documentation](https://jupyterhub.readthedocs.io/en/stable/getting-started/authenticators-users-basics.html).
 
+### Update credentials
+
+The Bitnami Jupyterhub chart, when upgrading, reuses the secret previously rendered by the chart or the one specified in `hub.existingSecret`. To update credentials, use one of the following:
+
+- Run `helm upgrade` specifying a new password in `hub.configuration` in the proper [authentication section](#configure-authentication)
+- Run `helm upgrade` specifying a new secret in `hub.existingSecret`
+
 ### Configure the Single User instances
 
 As explained in this [section](#understand-the-default-configuration), the Hub is responsible for deploying the Single User instances. The configuration of these instances is passed to the Hub instance via the `hub.configuration` chart parameter.
@@ -202,6 +227,10 @@ As explained in this [section](#understand-the-default-configuration), the Hub i
 In order to make the chart follow standards and to ease the generation of this configuration file, the chart has a `singleuser` section, which is then used for generating the `hub.configuration` value. This value can be easily overridden by modifying its default value or by providing a secret via the `hub.existingSecret` value. In this case, all the settings in the `singleuser` section will be ignored.
 
 All the settings specified in the `hub.configuration` value are consumed by the `jupyter_config.py` script available in the [templates/hub/configmap.yaml](https://github.com/bitnami/charts/blob/main/bitnami/jupyterhub/templates/hub/configmap.yaml) file. This script can be changed by providing a custom ConfigMap via the `hub.existingConfigmap` value. The [official JupyterHub documentation](https://jupyterhub.readthedocs.io/en/stable/reference/config-examples.html) has more examples of the `jupyter_config.py` script.
+
+### Backup and restore
+
+To back up and restore Helm chart deployments on Kubernetes, you need to back up the persistent volumes from the source deployment and attach them to a new deployment using [Velero](https://velero.io/), a Kubernetes backup/restore tool. Find the instructions for using Velero in [this guide](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-backup-restore-deployments-velero-index.html).
 
 ### Restrict traffic using NetworkPolicies
 
@@ -318,12 +347,14 @@ There are cases where you may want to deploy extra objects, such a ConfigMap con
 
 ### Global parameters
 
-| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value  |
-| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
-| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
-| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`   |
-| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value   |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`    |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`    |
+| `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`    |
+| `global.storageClass`                                 | DEPRECATED: use global.defaultStorageClass instead                                                                                                                                                                                                                                                                                                                  | `""`    |
+| `global.security.allowInsecureImages`                 | Allows skipping image verification                                                                                                                                                                                                                                                                                                                                  | `false` |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto`  |
 
 ### Common parameters
 
@@ -423,7 +454,7 @@ There are cases where you may want to deploy extra objects, such a ConfigMap con
 | `hub.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for Hub container(s)                                                                                                                                             | `[]`                         |
 | `hub.initContainers`                                    | Add additional init containers to the Hub pods                                                                                                                                                                            | `[]`                         |
 | `hub.sidecars`                                          | Add additional sidecar containers to the Hub pod                                                                                                                                                                          | `[]`                         |
-| `hub.pdb.create`                                        | Deploy Hub PodDisruptionBudget                                                                                                                                                                                            | `false`                      |
+| `hub.pdb.create`                                        | Deploy Hub PodDisruptionBudget                                                                                                                                                                                            | `true`                       |
 | `hub.pdb.minAvailable`                                  | Set minimum available hub instances                                                                                                                                                                                       | `""`                         |
 | `hub.pdb.maxUnavailable`                                | Set maximum available hub instances                                                                                                                                                                                       | `""`                         |
 
@@ -559,7 +590,7 @@ There are cases where you may want to deploy extra objects, such a ConfigMap con
 | `proxy.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for Proxy container(s)                                                                                                                                               | `[]`                                      |
 | `proxy.initContainers`                                    | Add additional init containers to the Proxy pods                                                                                                                                                                              | `[]`                                      |
 | `proxy.sidecars`                                          | Add additional sidecar containers to the Proxy pod                                                                                                                                                                            | `[]`                                      |
-| `proxy.pdb.create`                                        | Deploy Proxy PodDisruptionBudget                                                                                                                                                                                              | `false`                                   |
+| `proxy.pdb.create`                                        | Deploy Proxy PodDisruptionBudget                                                                                                                                                                                              | `true`                                    |
 | `proxy.pdb.minAvailable`                                  | Set minimum available proxy instances                                                                                                                                                                                         | `""`                                      |
 | `proxy.pdb.maxUnavailable`                                | Set maximum available proxy instances                                                                                                                                                                                         | `""`                                      |
 
@@ -658,24 +689,6 @@ There are cases where you may want to deploy extra objects, such a ConfigMap con
 | `imagePuller.extraEnvVars`                                      | Add extra environment variables to the ImagePuller container                                                                                                                                                                              | `[]`             |
 | `imagePuller.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars                                                                                                                                                                                      | `""`             |
 | `imagePuller.extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars                                                                                                                                                                                         | `""`             |
-| `imagePuller.livenessProbe.enabled`                             | Enable livenessProbe on ImagePuller containers                                                                                                                                                                                            | `true`           |
-| `imagePuller.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                                                                                                                                   | `1`              |
-| `imagePuller.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                                                                                                                                          | `10`             |
-| `imagePuller.livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                                                                                                                                                         | `3`              |
-| `imagePuller.livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                                                                                                                                                       | `30`             |
-| `imagePuller.livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                                                                                                                                                       | `1`              |
-| `imagePuller.readinessProbe.enabled`                            | Enable readinessProbe on ImagePuller containers                                                                                                                                                                                           | `true`           |
-| `imagePuller.readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                                                                                                                                                  | `1`              |
-| `imagePuller.readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                                                                                                                                                         | `10`             |
-| `imagePuller.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                                                                                                                                                        | `3`              |
-| `imagePuller.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                                                                                                                                                      | `30`             |
-| `imagePuller.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                                                                                                                                                      | `1`              |
-| `imagePuller.startupProbe.enabled`                              | Enable startupProbe on ImagePuller containers                                                                                                                                                                                             | `false`          |
-| `imagePuller.startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                                                                                                                                                                    | `1`              |
-| `imagePuller.startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                                                                                                                                                           | `10`             |
-| `imagePuller.startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                                                                                                                                                          | `3`              |
-| `imagePuller.startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                                                                                                                                                        | `30`             |
-| `imagePuller.startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                                                                                                                                                        | `1`              |
 | `imagePuller.customStartupProbe`                                | Override default startup probe                                                                                                                                                                                                            | `{}`             |
 | `imagePuller.customLivenessProbe`                               | Override default liveness probe                                                                                                                                                                                                           | `{}`             |
 | `imagePuller.customReadinessProbe`                              | Override default readiness probe                                                                                                                                                                                                          | `{}`             |
@@ -858,6 +871,14 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 8.1.0
+
+This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
+
+### To 8.0.0
+
+This major updates the PostgreSQL subchart to its newest major, 16.0.0, which uses PostgreSQL 17.x.  Follow the [official instructions](https://www.postgresql.org/docs/17/upgrading.html) to upgrade to 17.x.
+
 ### To 7.0.0
 
 This major bump changes the following security defaults:
@@ -924,7 +945,7 @@ kubectl delete pod jupyterhub-postgresql-0
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

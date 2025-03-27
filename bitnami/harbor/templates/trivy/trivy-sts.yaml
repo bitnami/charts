@@ -66,9 +66,7 @@ spec:
       {{- if .Values.trivy.schedulerName }}
       schedulerName: {{ .Values.trivy.schedulerName }}
       {{- end }}
-      {{- if .Values.trivy.serviceAccountName }}
-      serviceAccountName: {{ .Values.trivy.serviceAccountName }}
-      {{- end }}
+      serviceAccountName: {{ include "harbor.trivy.serviceAccountName" . }}
       {{- if .Values.trivy.podSecurityContext.enabled }}
       securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.trivy.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
@@ -99,6 +97,26 @@ spec:
             - name: data
               mountPath: {{ .Values.trivy.cacheDir }}
         {{- end }}
+        - name: certificate-volume
+          image: {{ include "harbor.trivy.image" . }}
+          imagePullPolicy: {{ .Values.trivy.image.pullPolicy | quote }}
+          command:
+            - /bin/bash
+          args:
+            - -ec
+            - cp -r /etc/ssl/certs/* /certs
+          {{- if .Values.trivy.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.trivy.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.certificateVolume.resources }}
+          resources: {{- toYaml .Values.certificateVolume.resources | nindent 12 }}
+          {{- else if ne .Values.certificateVolume.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.certificateVolume.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /certs
+              subPath: etc-ssl-certs
         {{- if .Values.trivy.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.trivy.initContainers "context" $) | nindent 8 }}
         {{- end }}
@@ -129,7 +147,11 @@ spec:
             - configMapRef:
                 name: {{ printf "%s-envvars" (include "harbor.trivy" .) }}
             - secretRef:
+                {{- with .Values.trivy.existingEnvVarsSecret }}
+                name: {{ . }}
+                {{- else }}
                 name: {{ printf "%s-envvars" (include "harbor.trivy" .) }}
+                {{- end }}
             {{- if .Values.trivy.extraEnvVarsCM }}
             - configMapRef:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.trivy.extraEnvVarsCM "context" $) }}
@@ -180,6 +202,9 @@ spec:
             - name: empty-dir
               mountPath: /tmp
               subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /etc/ssl/certs
+              subPath: etc-ssl-certs
             - name: data
               mountPath: {{ .Values.trivy.cacheDir }}
               readOnly: false

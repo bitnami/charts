@@ -1,0 +1,64 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.cluster.externalAccess.enabled }}
+{{- $fullName := include "common.names.fullname" . }}
+{{- $nodesCount := .Values.cluster.nodes | int }}
+{{- $root := . }}
+
+{{- range $i, $e := until $nodesCount }}
+{{- $targetPod := printf "%s-%d" (printf "%s" $fullName) $i }}
+{{- $_ := set $ "targetPod" $targetPod }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "common.names.fullname" $ }}-{{ $i }}-svc
+  namespace: {{ $.Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $root.Values.commonLabels "context" $ ) | nindent 4 }}
+    pod: {{ $targetPod }}
+  {{- if or
+    ($root.Values.cluster.externalAccess.service.annotations)
+    ($root.Values.commonAnnotations)
+    (ne $root.Values.cluster.externalAccess.service.loadBalancerIPAnnotaion "") }}
+  {{- $loadBalancerIPAnnotaion := "" }}
+  {{- if ne $root.Values.cluster.externalAccess.service.loadBalancerIPAnnotaion ""}}
+    {{- $loadBalancerIPAnnotaion = printf
+      "%s: %s"
+      $root.Values.cluster.externalAccess.service.loadBalancerIPAnnotaion
+      (index $root.Values.cluster.externalAccess.service.loadBalancerIP $i) }}
+  {{- end }}
+  {{- $annotations := include "common.tplvalues.merge"
+    ( dict "values"
+      ( list
+        $root.Values.cluster.externalAccess.service.annotations
+        $root.Values.commonAnnotations
+        $loadBalancerIPAnnotaion
+      ) "context" $ ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ $root.Values.cluster.externalAccess.service.type }}
+  {{- if and
+    ($root.Values.cluster.externalAccess.service.loadBalancerIP)
+    (eq $root.Values.cluster.externalAccess.service.loadBalancerIPAnnotaion "")
+    (not $root.Values.cluster.externalAccess.service.disableLoadBalancerIP) }}
+  loadBalancerIP: {{ index $root.Values.cluster.externalAccess.service.loadBalancerIP $i }}
+  {{- end }}
+  {{- if and (eq $root.Values.cluster.externalAccess.service.type "LoadBalancer") $root.Values.cluster.externalAccess.service.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges: {{- toYaml $root.Values.cluster.externalAccess.service.loadBalancerSourceRanges | nindent 4 }}
+  {{- end }}
+  ports:
+    - name: tcp-redis
+      port: {{ $root.Values.cluster.externalAccess.service.port }}
+      targetPort: tcp-redis
+    - name: tcp-redis-bus
+      targetPort: tcp-redis-bus
+      port: {{ $root.Values.valkey.containerPorts.bus }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list $root.Values.valkey.podLabels $root.Values.commonLabels ) "context" $ ) }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
+    statefulset.kubernetes.io/pod-name: {{ $targetPod }}
+---
+{{- end }}
+{{- end }}

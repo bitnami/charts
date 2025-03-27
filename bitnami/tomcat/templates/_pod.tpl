@@ -78,12 +78,15 @@ containers:
       - name: BITNAMI_DEBUG
         value: {{ ternary "true" "false" .Values.image.debug | quote }}
       - name: TOMCAT_USERNAME
-        value: {{ .Values.tomcatUsername | quote }}
+        valueFrom:
+          secretKeyRef:
+            name: {{ include "tomcat.secretName" . }}
+            key: {{ include "tomcat.adminUsernameKey" . }}
       - name: TOMCAT_PASSWORD
         valueFrom:
           secretKeyRef:
             name: {{ include "tomcat.secretName" . }}
-            key: tomcat-password
+            key: {{ include "tomcat.adminPasswordKey" . }}
       - name: TOMCAT_ALLOW_REMOTE_MANAGEMENT
         value: {{ .Values.tomcatAllowRemoteManagement | quote }}
       - name: TOMCAT_HTTP_PORT_NUMBER
@@ -119,8 +122,7 @@ containers:
     livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 6 }}
     {{- else if .Values.livenessProbe.enabled }}
     livenessProbe:
-      httpGet:
-        path: /
+      tcpSocket:
         port: http
         {{- include "common.tplvalues.render" (dict "value" (omit .Values.livenessProbe "enabled") "context" $) | nindent 6 }}
     {{- end }}
@@ -181,7 +183,7 @@ containers:
       - -XX:MaxRAMPercentage=100
       - -XshowSettings:vm
       - -jar
-      - jmx_prometheus_httpserver.jar
+      - jmx_prometheus_standalone.jar
       - {{ .Values.metrics.jmx.ports.metrics | quote }}
       - /etc/jmx-tomcat/jmx-tomcat-prometheus.yml
     ports:

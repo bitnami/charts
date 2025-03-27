@@ -1,11 +1,11 @@
 # Source: https://raw.githubusercontent.com/vmware-tanzu/pinniped/v{version}/deploy/supervisor/idp.supervisor.pinniped.dev_activedirectoryidentityproviders.yaml
-# Version: 0.30.0
+# Version: 0.38.0
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.14.0
+    controller-gen.kubebuilder.io/version: v0.17.2
   name: activedirectoryidentityproviders.idp.supervisor.pinniped.dev
 spec:
   group: idp.supervisor.pinniped.dev
@@ -127,20 +127,17 @@ spec:
                       to keep the groups observed in Kubernetes clusters in-sync with the identity
                       provider.
 
-
                       In some environments, frequent group membership queries may result in a
                       significant performance impact on the identity provider and/or the supervisor.
                       The best approach to handle performance impacts is to tweak the group query
                       to be more performant, for example by disabling nested group search or by
                       using a more targeted group search base.
 
-
                       If the group search query cannot be made performant and you are willing to
                       have group memberships remain static for approximately a day, then set
                       skipGroupRefresh to true.  This is an insecure configuration as authorization
                       policies that are bound to group membership will not notice if a user has
                       been removed from a particular group until their next login.
-
 
                       This is an experimental feature that may be removed or significantly altered
                       in the future.  Consumers of this configuration should carefully read all
@@ -172,6 +169,39 @@ spec:
                     description: X.509 Certificate Authority (base64-encoded PEM bundle).
                       If omitted, a default set of system roots will be trusted.
                     type: string
+                  certificateAuthorityDataSource:
+                    description: |-
+                      Reference to a CA bundle in a secret or a configmap.
+                      Any changes to the CA bundle in the secret or configmap will be dynamically reloaded.
+                    properties:
+                      key:
+                        description: |-
+                          Key is the key name within the secret or configmap from which to read the CA bundle.
+                          The value found at this key in the secret or configmap must not be empty, and must be a valid PEM-encoded
+                          certificate bundle.
+                        minLength: 1
+                        type: string
+                      kind:
+                        description: |-
+                          Kind configures whether the CA bundle is being sourced from a Kubernetes secret or a configmap.
+                          Allowed values are "Secret" or "ConfigMap".
+                          "ConfigMap" uses a Kubernetes configmap to source CA Bundles.
+                          "Secret" uses Kubernetes secrets of type kubernetes.io/tls or Opaque to source CA Bundles.
+                        enum:
+                        - Secret
+                        - ConfigMap
+                        type: string
+                      name:
+                        description: |-
+                          Name is the resource name of the secret or configmap from which to read the CA bundle.
+                          The referenced secret or configmap must be created in the same namespace where Pinniped Supervisor is installed.
+                        minLength: 1
+                        type: string
+                    required:
+                    - key
+                    - kind
+                    - name
+                    type: object
                 type: object
               userSearch:
                 description: UserSearch contains the configuration for searching for
@@ -230,16 +260,8 @@ spec:
                 description: Represents the observations of an identity provider's
                   current state.
                 items:
-                  description: "Condition contains details for one aspect of the current
-                    state of this API Resource.\n---\nThis struct is intended for
-                    direct use as an array at the field path .status.conditions.  For
-                    example,\n\n\n\ttype FooStatus struct{\n\t    // Represents the
-                    observations of a foo's current state.\n\t    // Known .status.conditions.type
-                    are: \"Available\", \"Progressing\", and \"Degraded\"\n\t    //
-                    +patchMergeKey=type\n\t    // +patchStrategy=merge\n\t    // +listType=map\n\t
-                    \   // +listMapKey=type\n\t    Conditions []metav1.Condition `json:\"conditions,omitempty\"
-                    patchStrategy:\"merge\" patchMergeKey:\"type\" protobuf:\"bytes,1,rep,name=conditions\"`\n\n\n\t
-                    \   // other fields\n\t}"
+                  description: Condition contains details for one aspect of the current
+                    state of this API Resource.
                   properties:
                     lastTransitionTime:
                       description: |-
@@ -280,12 +302,7 @@ spec:
                       - Unknown
                       type: string
                     type:
-                      description: |-
-                        type of condition in CamelCase or in foo.example.com/CamelCase.
-                        ---
-                        Many .condition.type values are consistent across resources like Available, but because arbitrary conditions can be
-                        useful (see .node.status.conditions), the ability to deconflict is important.
-                        The regex it matches is (dns1123SubdomainFmt/)?(qualifiedNameFmt)
+                      description: type of condition in CamelCase or in foo.example.com/CamelCase.
                       maxLength: 316
                       pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
                       type: string

@@ -3,14 +3,40 @@
 
 command:
   airflow-trigger-dag:
-    exec: airflow dags trigger example_bash_operator
+    exec: airflow dags trigger UI_dag
     exit-status: 0
     timeout: 40000
+  {{- $uid := .Vars.web.containerSecurityContext.runAsUser }}
+  {{- $gid := .Vars.web.podSecurityContext.fsGroup }}
+  check-user-info:
+    # The UID and GID should always be either the one specified as vars (always a bigger number that the default)
+    # or the one randomly defined by openshift (larger values). Otherwise, the chart is still using the default value.
+    exec: if [ $(id -u) -lt {{ $uid }} ] || [ $(id -G | awk '{print $2}') -lt {{ $gid }} ]; then exit 1; fi
+    exit-status: 0
 file:
   /opt/bitnami/airflow/airflow.cfg:
     mode: "0644"
     filetype: file
     exists: true
+    contents:
+      - /statsd_port.*{{ .Vars.metrics.service.ports.ingest }}/
+      # Ensure overwritten configuration is applied
+      - /colored_console_log.*True/
+  /opt/bitnami/airflow/webserver_config.py:
+    mode: "0644"
+    filetype: file
+    exists: true
+    # Ensure extra configuration is applied
+    contents:
+      - /APP_THEME = "amelia.css"/
   /opt/bitnami/airflow/dags:
     filetype: directory
     exists: true
+http:
+  http://127.0.0.1:{{ .Vars.web.containerPorts.http }}:
+    status: 200
+  {{- if .Vars.metrics.enabled }}
+  http://airflow-statsd-metrics:{{ .Vars.metrics.service.ports.metrics }}/metrics:
+    status: 200
+    timeout: 30000
+  {{- end }}

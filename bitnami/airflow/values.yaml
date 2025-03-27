@@ -8,7 +8,7 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
 ##
 global:
   imageRegistry: ""
@@ -17,7 +17,12 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass: ""
+  defaultStorageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
   ## Compatibility adaptations for Kubernetes platforms
   ##
   compatibility:
@@ -27,44 +32,86 @@ global:
       ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
       ##
       adaptSecurityContext: auto
+    ## @param global.compatibility.omitEmptySeLinuxOptions If set to true, removes the seLinuxOptions from the securityContexts when it is set to an empty object
+    ##
+    omitEmptySeLinuxOptions: false
+
 ## @section Common parameters
 
 ## @param kubeVersion Override Kubernetes version
 ##
 kubeVersion: ""
-## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
+## @param apiVersions Override Kubernetes API versions reported by .Capabilities
+##
+apiVersions: []
+## @param nameOverride String to partially override common.names.name
 ##
 nameOverride: ""
-## @param fullnameOverride String to fully override common.names.fullname template
+## @param fullnameOverride String to fully override common.names.fullname
 ##
 fullnameOverride: ""
-## @param clusterDomain Kubernetes Cluster Domain
+## @param namespaceOverride String to fully override common.names.namespace
 ##
-clusterDomain: cluster.local
-## @param extraDeploy Extra objects to deploy (evaluated as a template)
-##
-extraDeploy: []
-## @param commonLabels Add labels to all the deployed resources
+namespaceOverride: ""
+## @param commonLabels Labels to add to all deployed objects
 ##
 commonLabels: {}
-## @param commonAnnotations Add annotations to all the deployed resources
+## @param commonAnnotations Annotations to add to all deployed objects
 ##
 commonAnnotations: {}
-## Enable diagnostic mode in the deployment(s)/statefulset(s)
+## @param clusterDomain Kubernetes cluster domain name
+##
+clusterDomain: cluster.local
+## @param extraDeploy Array of extra objects to deploy with the release
+##
+extraDeploy: []
+## @param usePasswordFiles Mount credentials as files instead of using environment variables
+##
+usePasswordFiles: true
+## Diagnostic mode
+## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+## @param diagnosticMode.command Command to override all containers in the chart release
+## @param diagnosticMode.args Args to override all containers in the chart release
 ##
 diagnosticMode:
-  ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
-  ##
   enabled: false
-  ## @param diagnosticMode.command Command to override all containers in the the deployment(s)/statefulset(s)
-  ##
   command:
     - sleep
-  ## @param diagnosticMode.args Args to override all containers in the the deployment(s)/statefulset(s)
-  ##
   args:
     - infinity
+
 ## @section Airflow common parameters
+
+## Bitnami Airflow image version
+## ref: https://hub.docker.com/r/bitnami/airflow/tags
+## @param image.registry [default: REGISTRY_NAME] Airflow image registry
+## @param image.repository [default: REPOSITORY_NAME/airflow] Airflow image repository
+## @skip image.tag Airflow image tag (immutable tags are recommended)
+## @param image.digest Airflow image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+## @param image.pullPolicy Airflow image pull policy
+## @param image.pullSecrets Airflow image pull secrets
+## @param image.debug Enable image debug mode
+image:
+  registry: docker.io
+  repository: bitnami/airflow
+  tag: 2.10.5-debian-12-r7
+  digest: ""
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
+  ##
+  pullPolicy: IfNotPresent
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## e.g:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  pullSecrets: []
+  ## Set to true if you would like to see extra information on logs
+  ##
+  debug: false
 
 ## Authentication parameters
 ## ref: https://github.com/bitnami/containers/tree/main/bitnami/airflow#environment-variables
@@ -98,47 +145,306 @@ executor: CeleryExecutor
 ## @param loadExamples Switch to load some Airflow examples
 ##
 loadExamples: false
-## @param configuration Specify content for Airflow config file (auto-generated based on other env. vars otherwise)
+## @param configuration Specify content for Airflow config file (auto-generated based on other parameters otherwise)
+## ref: https://airflow.apache.org/docs/apache-airflow/stable/configurations-ref.html
+## Use YAML format, then it's transformed to .cfg format by the chart. e.g:
+##    configuration:
+##      core:
+##        dags_folder: "/opt/bitnami/airflow/dags"
+## ... will be transformed to:
+##    [core]
+##    dags_folder = "/opt/bitnami/airflow/dags"
+##
+configuration: {}
+## @param overrideConfiguration Airflow common configuration override. Values defined here takes precedence over the ones defined at `configuration`
+##
+overrideConfiguration: {}
+## @param localSettings Specify content for Airflow local settings (airflow_local_settings.py)
+## ref: https://airflow.apache.org/docs/apache-airflow/stable/howto/set-config.html#configuring-local-settings
 ## e.g:
-## configuration: |-
-##   [core]
-##   dags_folder=/opt/bitnami/airflow/dags
+## localSettings: |-
 ##   ...
 ##
-configuration: ""
-## @param existingConfigmap Name of an existing ConfigMap with the Airflow config file
+localSettings: ""
+## @param existingConfigmap Name of an existing ConfigMap with the Airflow config file and, optionally, the local settings file
 ##
 existingConfigmap: ""
-## Load custom DAGs from a ConfigMap
-## Note: an init container will be used to prepare the DAGs available in the ConfigMap to be consumed by Airflow containers
+## Load custom DAGs files from a ConfigMap or Git repositories
+## @param dags.enabled Enable loading DAGs from a ConfigMap or Git repositories
+## @param dags.existingConfigmap Name of an existing ConfigMap with all the DAGs files you want to load in Airflow
+## @param dags.repositories [array] Array of repositories from which to download DAG files
 ##
 dags:
-  ## @param dags.existingConfigmap Name of an existing ConfigMap with all the DAGs files you want to load in Airflow
-  ##
+  enabled: false
   existingConfigmap: ""
-  ## OS Shell + Utility image
-  ## ref: https://hub.docker.com/r/bitnami/os-shell/tags/
-  ## @param dags.image.registry [default: REGISTRY_NAME] Init container load-dags image registry
-  ## @param dags.image.repository [default: REPOSITORY_NAME/os-shell] Init container load-dags image repository
-  ## @skip dags.image.tag Init container load-dags image tag (immutable tags are recommended)
-  ## @param dags.image.digest Init container load-dags image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
-  ## @param dags.image.pullPolicy Init container load-dags image pull policy
-  ## @param dags.image.pullSecrets Init container load-dags image pull secrets
+  ## E.g:
+  ## repositories:
+  ##   - repository: https://github.com/myuser/myrepo
+  ##     branch: main
+  ##     name: my-dags
+  ##     path: /
   ##
-  image:
-    registry: docker.io
-    repository: bitnami/os-shell
-    tag: 12-debian-12-r20
-    digest: ""
-    pullPolicy: IfNotPresent
-    ## Optionally specify an array of imagePullSecrets.
-    ## Secrets must be manually created in the namespace.
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-    ## e.g:
-    ## pullSecrets:
-    ##   - myRegistryKeySecretName
+  repositories: []
+  ## @param dags.sshKey SSH Private key used to clone/sync DAGs from Git repositories (ignored if dags.existingSshKeySecret is set)
+  ##
+  sshKey: ""
+  ## @param dags.existingSshKeySecret Name of a secret containing the SSH private key used to clone/sync DAGs from Git repositories
+  ##
+  existingSshKeySecret: ""
+  ## @param dags.existingSshKeySecretKey Key in the existing secret containing the SSH private key
+  ##
+  existingSshKeySecretKey: ""
+## Load custom plugins from Git repositories
+## @param plugins.enabled Enable loading plugins from Git repositories
+## @param plugins.repositories [array] Array of repositories from which to download plugins
+##
+plugins:
+  enabled: false
+  ## E.g:
+  ## repositories:
+  ##   - repository: https://github.com/myuser/myrepo
+  ##     branch: main
+  ##     name: my-plugins
+  ##     path: /
+  ##
+  repositories: []
+  ## @param plugins.sshKey SSH Private key used to clone/sync plugins from Git repositories (ignored if plugins.existingSshKeySecret is set)
+  ##
+  sshKey: ""
+  ## @param plugins.existingSshKeySecret Name of a secret containing the SSH private key used to clone/sync plugins from Git repositories
+  ##
+  existingSshKeySecret: ""
+  ## @param plugins.existingSshKeySecretKey Key in the existing secret containing the SSH private key
+  ##
+  existingSshKeySecretKey: ""
+## Default init Containers
+##
+defaultInitContainers:
+  ## Airflow "prepare-config" init container
+  ## Used to prepare the Airflow configuration files for main containers to use them
+  ##
+  prepareConfig:
+    ## Configure "prepare-config" init-container Security Context
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+    ## @param defaultInitContainers.prepareConfig.containerSecurityContext.enabled Enabled "prepare-config" init-containers' Security Context
+    ## @param defaultInitContainers.prepareConfig.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in "prepare-config" init-containers
+    ## @param defaultInitContainers.prepareConfig.containerSecurityContext.runAsUser Set runAsUser in "prepare-config" init-containers' Security Context
+    ## @param defaultInitContainers.prepareConfig.containerSecurityContext.runAsGroup Set runAsUser in "prepare-config" init-containers' Security Context
+    ## @param defaultInitContainers.prepareConfig.containerSecurityContext.runAsNonRoot Set runAsNonRoot in "prepare-config" init-containers' Security Context
+    ## @param defaultInitContainers.prepareConfig.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in "prepare-config" init-containers' Security Context
+    ## @param defaultInitContainers.prepareConfig.containerSecurityContext.privileged Set privileged in "prepare-config" init-containers' Security Context
+    ## @param defaultInitContainers.prepareConfig.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in "prepare-config" init-containers' Security Context
+    ## @param defaultInitContainers.prepareConfig.containerSecurityContext.capabilities.add List of capabilities to be added in "prepare-config" init-containers
+    ## @param defaultInitContainers.prepareConfig.containerSecurityContext.capabilities.drop List of capabilities to be dropped in "prepare-config" init-containers
+    ## @param defaultInitContainers.prepareConfig.containerSecurityContext.seccompProfile.type Set seccomp profile in "prepare-config" init-containers
     ##
-    pullSecrets: []
+    containerSecurityContext:
+      enabled: true
+      seLinuxOptions: {}
+      runAsUser: 1001
+      runAsGroup: 1001
+      runAsNonRoot: true
+      readOnlyRootFilesystem: true
+      privileged: false
+      allowPrivilegeEscalation: false
+      capabilities:
+        add: []
+        drop: ["ALL"]
+      seccompProfile:
+        type: "RuntimeDefault"
+    ## Airflow "prepare-config" init container resource requests and limits
+    ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+    ## @param defaultInitContainers.prepareConfig.resourcesPreset Set Airflow "prepare-config" init container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if defaultInitContainers.prepareConfig.resources is set (defaultInitContainers.prepareConfig.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+    ##
+    resourcesPreset: "nano"
+    ## @param defaultInitContainers.prepareConfig.resources Set Airflow "prepare-config" init container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## E.g:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    resources: {}
+  ## Airflow "wait-for-db-migrations" init container
+  ## Used to wait for db migrations to be ready
+  ##
+  waitForDBMigrations:
+    ## Configure "wait-for-db-migrations" init-container Security Context
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+    ## @param defaultInitContainers.waitForDBMigrations.containerSecurityContext.enabled Enabled "wait-for-db-migrations" init-containers' Security Context
+    ## @param defaultInitContainers.waitForDBMigrations.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in "wait-for-db-migrations" init-containers
+    ## @param defaultInitContainers.waitForDBMigrations.containerSecurityContext.runAsUser Set runAsUser in "wait-for-db-migrations" init-containers' Security Context
+    ## @param defaultInitContainers.waitForDBMigrations.containerSecurityContext.runAsGroup Set runAsUser in "wait-for-db-migrations" init-containers' Security Context
+    ## @param defaultInitContainers.waitForDBMigrations.containerSecurityContext.runAsNonRoot Set runAsNonRoot in "wait-for-db-migrations" init-containers' Security Context
+    ## @param defaultInitContainers.waitForDBMigrations.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in "wait-for-db-migrations" init-containers' Security Context
+    ## @param defaultInitContainers.waitForDBMigrations.containerSecurityContext.privileged Set privileged in "wait-for-db-migrations" init-containers' Security Context
+    ## @param defaultInitContainers.waitForDBMigrations.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in "wait-for-db-migrations" init-containers' Security Context
+    ## @param defaultInitContainers.waitForDBMigrations.containerSecurityContext.capabilities.add List of capabilities to be added in "wait-for-db-migrations" init-containers
+    ## @param defaultInitContainers.waitForDBMigrations.containerSecurityContext.capabilities.drop List of capabilities to be dropped in "wait-for-db-migrations" init-containers
+    ## @param defaultInitContainers.waitForDBMigrations.containerSecurityContext.seccompProfile.type Set seccomp profile in "wait-for-db-migrations" init-containers
+    ##
+    containerSecurityContext:
+      enabled: true
+      seLinuxOptions: {}
+      runAsUser: 1001
+      runAsGroup: 1001
+      runAsNonRoot: true
+      readOnlyRootFilesystem: true
+      privileged: false
+      allowPrivilegeEscalation: false
+      capabilities:
+        add: []
+        drop: ["ALL"]
+      seccompProfile:
+        type: "RuntimeDefault"
+    ## Airflow "wait-for-db-migrations" init container resource requests and limits
+    ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+    ## @param defaultInitContainers.waitForDBMigrations.resourcesPreset Set Airflow "wait-for-db-migrations" init container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if defaultInitContainers.waitForDBMigrations.resources is set (defaultInitContainers.waitForDBMigrations.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+    ##
+    resourcesPreset: "micro"
+    ## @param defaultInitContainers.waitForDBMigrations.resources Set Airflow "wait-for-db-migrations" init container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## E.g:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    resources: {}
+  ## Airflow "load-dags-plugins" init container
+  ## Used to load DAGs and/or plugins from a ConfigMap or Git repositories
+  ##
+  loadDAGsPlugins:
+    ## @param defaultInitContainers.loadDAGsPlugins.command Override cmd
+    ## @param defaultInitContainers.loadDAGsPlugins.args Override args
+    ## @param defaultInitContainers.loadDAGsPlugins.extraVolumeMounts Add extra volume mounts
+    ## @param defaultInitContainers.loadDAGsPlugins.extraEnvVars Add extra environment variables
+    ## @param defaultInitContainers.loadDAGsPlugins.extraEnvVarsCM ConfigMap with extra environment variables
+    ## @param defaultInitContainers.loadDAGsPlugins.extraEnvVarsSecret Secret with extra environment variables
+    command: []
+    args: []
+    extraVolumeMounts: []
+    extraEnvVars: []
+    extraEnvVarsCM: ""
+    extraEnvVarsSecret: ""
+    ## Configure "load-dags-plugins" init-container Security Context
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+    ## @param defaultInitContainers.loadDAGsPlugins.containerSecurityContext.enabled Enabled "load-dags-plugins" init-containers' Security Context
+    ## @param defaultInitContainers.loadDAGsPlugins.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in "load-dags-plugins" init-containers
+    ## @param defaultInitContainers.loadDAGsPlugins.containerSecurityContext.runAsUser Set runAsUser in "load-dags-plugins" init-containers' Security Context
+    ## @param defaultInitContainers.loadDAGsPlugins.containerSecurityContext.runAsGroup Set runAsUser in "load-dags-plugins" init-containers' Security Context
+    ## @param defaultInitContainers.loadDAGsPlugins.containerSecurityContext.runAsNonRoot Set runAsNonRoot in "load-dags-plugins" init-containers' Security Context
+    ## @param defaultInitContainers.loadDAGsPlugins.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in "load-dags-plugins" init-containers' Security Context
+    ## @param defaultInitContainers.loadDAGsPlugins.containerSecurityContext.privileged Set privileged in "load-dags-plugins" init-containers' Security Context
+    ## @param defaultInitContainers.loadDAGsPlugins.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in "load-dags-plugins" init-containers' Security Context
+    ## @param defaultInitContainers.loadDAGsPlugins.containerSecurityContext.capabilities.add List of capabilities to be added in "load-dags-plugins" init-containers
+    ## @param defaultInitContainers.loadDAGsPlugins.containerSecurityContext.capabilities.drop List of capabilities to be dropped in "load-dags-plugins" init-containers
+    ## @param defaultInitContainers.loadDAGsPlugins.containerSecurityContext.seccompProfile.type Set seccomp profile in "load-dags-plugins" init-containers
+    ##
+    containerSecurityContext:
+      enabled: true
+      seLinuxOptions: {}
+      runAsUser: 1001
+      runAsGroup: 1001
+      runAsNonRoot: true
+      readOnlyRootFilesystem: true
+      privileged: false
+      allowPrivilegeEscalation: false
+      capabilities:
+        add: []
+        drop: ["ALL"]
+      seccompProfile:
+        type: "RuntimeDefault"
+    ## Airflow "load-dags-plugins" init container resource requests and limits
+    ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+    ## @param defaultInitContainers.loadDAGsPlugins.resourcesPreset Set Airflow "load-dags-plugins" init container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if defaultInitContainers.loadDAGsPlugins.resources is set (defaultInitContainers.loadDAGsPlugins.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+    ##
+    resourcesPreset: "nano"
+    ## @param defaultInitContainers.loadDAGsPlugins.resources Set Airflow "load-dags-plugins" init container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## E.g:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    resources: {}
+## Default sidecars
+##
+defaultSidecars:
+  ## Airflow "sync-dags-plugins" sidecar
+  ## Used to sync DAGs and/or plugins from Git repositories
+  ##
+  syncDAGsPlugins:
+    ## @param defaultSidecars.syncDAGsPlugins.interval Interval in seconds to pull the git repository containing the DAGs and/or plugins
+    ## @param defaultSidecars.syncDAGsPlugins.command Override cmd
+    ## @param defaultSidecars.syncDAGsPlugins.args Override args
+    ## @param defaultSidecars.syncDAGsPlugins.extraVolumeMounts Add extra volume mounts
+    ## @param defaultSidecars.syncDAGsPlugins.extraEnvVars Add extra environment variables
+    ## @param defaultSidecars.syncDAGsPlugins.extraEnvVarsCM ConfigMap with extra environment variables
+    ## @param defaultSidecars.syncDAGsPlugins.extraEnvVarsSecret Secret with extra environment variables
+    interval: 60
+    command: []
+    args: []
+    extraVolumeMounts: []
+    extraEnvVars: []
+    extraEnvVarsCM: ""
+    extraEnvVarsSecret: ""
+    ## Configure "sync-dags-plugins" sidecar Security Context
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+    ## @param defaultSidecars.syncDAGsPlugins.containerSecurityContext.enabled Enabled "sync-dags-plugins" sidecars' Security Context
+    ## @param defaultSidecars.syncDAGsPlugins.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in "sync-dags-plugins" sidecars
+    ## @param defaultSidecars.syncDAGsPlugins.containerSecurityContext.runAsUser Set runAsUser in "sync-dags-plugins" sidecars' Security Context
+    ## @param defaultSidecars.syncDAGsPlugins.containerSecurityContext.runAsGroup Set runAsUser in "sync-dags-plugins" sidecars' Security Context
+    ## @param defaultSidecars.syncDAGsPlugins.containerSecurityContext.runAsNonRoot Set runAsNonRoot in "sync-dags-plugins" sidecars' Security Context
+    ## @param defaultSidecars.syncDAGsPlugins.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in "sync-dags-plugins" sidecars' Security Context
+    ## @param defaultSidecars.syncDAGsPlugins.containerSecurityContext.privileged Set privileged in "sync-dags-plugins" sidecars' Security Context
+    ## @param defaultSidecars.syncDAGsPlugins.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in "sync-dags-plugins" sidecars' Security Context
+    ## @param defaultSidecars.syncDAGsPlugins.containerSecurityContext.capabilities.add List of capabilities to be added in "sync-dags-plugins" sidecars
+    ## @param defaultSidecars.syncDAGsPlugins.containerSecurityContext.capabilities.drop List of capabilities to be dropped in "sync-dags-plugins" sidecars
+    ## @param defaultSidecars.syncDAGsPlugins.containerSecurityContext.seccompProfile.type Set seccomp profile in "sync-dags-plugins" sidecars
+    ##
+    containerSecurityContext:
+      enabled: true
+      seLinuxOptions: {}
+      runAsUser: 1001
+      runAsGroup: 1001
+      runAsNonRoot: true
+      readOnlyRootFilesystem: true
+      privileged: false
+      allowPrivilegeEscalation: false
+      capabilities:
+        add: []
+        drop: ["ALL"]
+      seccompProfile:
+        type: "RuntimeDefault"
+    ## Airflow "sync-dags-plugins" sidecar resource requests and limits
+    ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+    ## @param defaultSidecars.syncDAGsPlugins.resourcesPreset Set Airflow "sync-dags-plugins" sidecar resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if defaultSidecars.syncDAGsPlugins.resources is set (defaultSidecars.syncDAGsPlugins.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+    ##
+    resourcesPreset: "nano"
+    ## @param defaultSidecars.syncDAGsPlugins.resources Set Airflow "sync-dags-plugins" sidecar requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## E.g:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    resources: {}
 ## @param extraEnvVars Add extra environment variables for all the Airflow pods
 ##
 extraEnvVars: []
@@ -179,72 +485,80 @@ extraVolumeMounts: []
 ## @param extraVolumes Optionally specify extra list of additional volumes for the all the Airflow pods
 ##
 extraVolumes: []
-## @section Airflow web parameters
+
+## @section Airflow webserver parameters
+##
 web:
-  ## Bitnami Airflow image version
-  ## ref: https://hub.docker.com/r/bitnami/airflow/tags/
-  ## @param web.image.registry [default: REGISTRY_NAME] Airflow image registry
-  ## @param web.image.repository [default: REPOSITORY_NAME/airflow] Airflow image repository
-  ## @skip web.image.tag Airflow image tag (immutable tags are recommended)
-  ## @param web.image.digest Airflow image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
-  ## @param web.image.pullPolicy Airflow image pull policy
-  ## @param web.image.pullSecrets Airflow image pull secrets
-  ## @param web.image.debug Enable image debug mode
-  image:
-    registry: docker.io
-    repository: bitnami/airflow
-    tag: 2.9.1-debian-12-r0
-    digest: ""
-    ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
-    ##
-    pullPolicy: IfNotPresent
-    ## Optionally specify an array of imagePullSecrets.
-    ## Secrets must be manually created in the namespace.
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-    ## e.g:
-    ## pullSecrets:
-    ##   - myRegistryKeySecretName
-    ##
-    pullSecrets: []
-    ## Set to true if you would like to see extra information on logs
-    ##
-    debug: false
-  ## @param web.baseUrl URL used to access to Airflow web ui
+  ## @param web.baseUrl URL used to access to Airflow webserver
   ##
   baseUrl: ""
-  ## @param web.existingConfigmap Name of an existing config map containing the Airflow web config file
+  ## @param web.configuration Specify content for webserver_config.py (auto-generated based on other env. vars otherwise)
+  ##
+  configuration: ""
+  ## @param web.extraConfiguration Specify extra content to be appended to default webserver_config.py (ignored if `web.configuration` or `web.existingConfigmap` are set)
+  ##
+  extraConfiguration: ""
+  ## @param web.existingConfigmap Name of an existing config map containing the Airflow webserver config file
   ##
   existingConfigmap: ""
+  ## @param web.tls.enabled Enable TLS configuration for Airflow webserver
+  ## @param web.tls.autoGenerated.enabled Enable automatic generation of TLS certificates
+  ## @param web.tls.autoGenerated.engine Mechanism to generate the certificates (allowed values: helm, cert-manager)
+  ## @param web.tls.autoGenerated.certManager.existingIssuer The name of an existing Issuer to use for generating the certificates (only for `cert-manager` engine)
+  ## @param web.tls.autoGenerated.certManager.existingIssuerKind Existing Issuer kind, defaults to Issuer (only for `cert-manager` engine)
+  ## @param web.tls.autoGenerated.certManager.keyAlgorithm Key algorithm for the certificates (only for `cert-manager` engine)
+  ## @param web.tls.autoGenerated.certManager.keySize Key size for the certificates (only for `cert-manager` engine)
+  ## @param web.tls.autoGenerated.certManager.duration Duration for the certificates (only for `cert-manager` engine)
+  ## @param web.tls.autoGenerated.certManager.renewBefore Renewal period for the certificates (only for `cert-manager` engine)
+  ## @param web.tls.ca CA certificate for TLS. Ignored if `tls.existingSecret` is set
+  ## @param web.tls.cert TLS certificate for Airflow webserver. Ignored if `tls.master.existingSecret` is set
+  ## @param web.tls.key TLS key for Airflow webserver. Ignored if `tls.master.existingSecret` is set
+  ## @param web.tls.existingSecret The name of an existing Secret containing the Airflow webserver certificates for TLS
+  ##
+  tls:
+    enabled: false
+    autoGenerated:
+      enabled: true
+      engine: helm
+      certManager:
+        existingIssuer: ""
+        existingIssuerKind: ""
+        keySize: 2048
+        keyAlgorithm: RSA
+        duration: 2160h
+        renewBefore: 360h
+    ca: ""
+    cert: ""
+    key: ""
+    existingSecret: ""
   ## @param web.command Override default container command (useful when using custom images)
   ##
   command: []
   ## @param web.args Override default container args (useful when using custom images)
   ##
   args: []
-  ## @param web.extraEnvVars Array with extra environment variables to add Airflow web pods
+  ## @param web.extraEnvVars Array with extra environment variables to add Airflow webserver pods
   ##
   extraEnvVars: []
-  ## @param web.extraEnvVarsCM ConfigMap containing extra environment variables for Airflow web pods
+  ## @param web.extraEnvVarsCM ConfigMap containing extra environment variables for Airflow webserver pods
   ##
   extraEnvVarsCM: ""
-  ## @param web.extraEnvVarsSecret Secret containing extra environment variables (in case of sensitive data) for Airflow web pods
+  ## @param web.extraEnvVarsSecret Secret containing extra environment variables (in case of sensitive data) for Airflow webserver pods
   ##
   extraEnvVarsSecret: ""
-  ## @param web.extraEnvVarsSecrets List of secrets with extra environment variables for Airflow web pods
+  ## @param web.extraEnvVarsSecrets List of secrets with extra environment variables for Airflow webserver pods
   ##
   extraEnvVarsSecrets: []
-  ## @param web.containerPorts.http Airflow web HTTP container port
+  ## @param web.containerPorts.http Airflow webserver HTTP container port
   ##
   containerPorts:
     http: 8080
-  ## @param web.replicaCount Number of Airflow web replicas
+  ## @param web.replicaCount Number of Airflow webserver replicas
   ##
   replicaCount: 1
-  ## Configure extra options for Airflow web containers' liveness, readiness and startup probes
+  ## Configure extra options for Airflow webserver containers' liveness, readiness and startup probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
-  ## @param web.livenessProbe.enabled Enable livenessProbe on Airflow web containers
+  ## @param web.livenessProbe.enabled Enable livenessProbe on Airflow webserver containers
   ## @param web.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
   ## @param web.livenessProbe.periodSeconds Period seconds for livenessProbe
   ## @param web.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
@@ -258,7 +572,7 @@ web:
     timeoutSeconds: 5
     failureThreshold: 6
     successThreshold: 1
-  ## @param web.readinessProbe.enabled Enable readinessProbe on Airflow web containers
+  ## @param web.readinessProbe.enabled Enable readinessProbe on Airflow webserver containers
   ## @param web.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
   ## @param web.readinessProbe.periodSeconds Period seconds for readinessProbe
   ## @param web.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
@@ -272,7 +586,7 @@ web:
     timeoutSeconds: 5
     failureThreshold: 6
     successThreshold: 1
-  ## @param web.startupProbe.enabled Enable startupProbe on Airflow web containers
+  ## @param web.startupProbe.enabled Enable startupProbe on Airflow webserver containers
   ## @param web.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
   ## @param web.startupProbe.periodSeconds Period seconds for startupProbe
   ## @param web.startupProbe.timeoutSeconds Timeout seconds for startupProbe
@@ -295,7 +609,7 @@ web:
   ## @param web.customStartupProbe Custom startupProbe that overrides the default one
   ##
   customStartupProbe: {}
-  ## Airflow web resource requests and limits
+  ## Airflow webserver resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param web.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if web.resources is set (web.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
@@ -312,13 +626,13 @@ web:
   ##     memory: 1024Mi
   ##
   resources: {}
-  ## Configure Airflow web pods Security Context
+  ## Configure Airflow webserver pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param web.podSecurityContext.enabled Enabled Airflow web pods' Security Context
+  ## @param web.podSecurityContext.enabled Enabled Airflow webserver pods' Security Context
   ## @param web.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
   ## @param web.podSecurityContext.sysctls Set kernel settings using the sysctl interface
   ## @param web.podSecurityContext.supplementalGroups Set filesystem extra groups
-  ## @param web.podSecurityContext.fsGroup Set Airflow web pod's Security Context fsGroup
+  ## @param web.podSecurityContext.fsGroup Set Airflow webserver pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
@@ -326,13 +640,13 @@ web:
     sysctls: []
     supplementalGroups: []
     fsGroup: 1001
-  ## Configure Airflow web containers (only main one) Security Context
+  ## Configure Airflow webserver containers (only main one) Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param web.containerSecurityContext.enabled Enabled Airflow web containers' Security Context
+  ## @param web.containerSecurityContext.enabled Enabled Airflow webserver containers' Security Context
   ## @param web.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
-  ## @param web.containerSecurityContext.runAsUser Set Airflow web containers' Security Context runAsUser
-  ## @param web.containerSecurityContext.runAsGroup Set Airflow web containers' Security Context runAsGroup
-  ## @param web.containerSecurityContext.runAsNonRoot Set Airflow web containers' Security Context runAsNonRoot
+  ## @param web.containerSecurityContext.runAsUser Set Airflow webserver containers' Security Context runAsUser
+  ## @param web.containerSecurityContext.runAsGroup Set Airflow webserver containers' Security Context runAsGroup
+  ## @param web.containerSecurityContext.runAsNonRoot Set Airflow webserver containers' Security Context runAsNonRoot
   ## @param web.containerSecurityContext.privileged Set web container's Security Context privileged
   ## @param web.containerSecurityContext.allowPrivilegeEscalation Set web container's Security Context allowPrivilegeEscalation
   ## @param web.containerSecurityContext.readOnlyRootFilesystem Set web container's Security Context readOnlyRootFilesystem
@@ -352,7 +666,7 @@ web:
       drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
-  ## @param web.lifecycleHooks for the Airflow web container(s) to automate configuration before or after startup
+  ## @param web.lifecycleHooks for the Airflow webserver container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
   ## @param web.automountServiceAccountToken Mount Service Account token in pod
@@ -362,13 +676,13 @@ web:
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
-  ## @param web.podLabels Add extra labels to the Airflow web pods
+  ## @param web.podLabels Add extra labels to the Airflow webserver pods
   ##
   podLabels: {}
-  ## @param web.podAnnotations Add extra annotations to the Airflow web pods
+  ## @param web.podAnnotations Add extra annotations to the Airflow webserver pods
   ##
   podAnnotations: {}
-  ## @param web.affinity Affinity for Airflow web pods assignment (evaluated as a template)
+  ## @param web.affinity Affinity for Airflow webserver pods assignment (evaluated as a template)
   ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## Note: `web.podAffinityPreset`, `web.podAntiAffinityPreset`, and `web.nodeAffinityPreset` will be ignored when it's set
   ##
@@ -391,7 +705,7 @@ web:
     ##   - e2e-az2
     ##
     values: []
-  ## @param web.nodeSelector Node labels for Airflow web pods assignment
+  ## @param web.nodeSelector Node labels for Airflow webserver pods assignment
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
@@ -403,7 +717,7 @@ web:
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
   podAntiAffinityPreset: soft
-  ## @param web.tolerations Tolerations for Airflow web pods assignment
+  ## @param web.tolerations Tolerations for Airflow webserver pods assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
@@ -419,18 +733,18 @@ web:
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
   schedulerName: ""
-  ## @param web.terminationGracePeriodSeconds Seconds Airflow web pod needs to terminate gracefully
+  ## @param web.terminationGracePeriodSeconds Seconds Airflow webserver pod needs to terminate gracefully
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
   ##
   terminationGracePeriodSeconds: ""
-  ## @param web.updateStrategy.type Airflow web deployment strategy type
-  ## @param web.updateStrategy.rollingUpdate Airflow web deployment rolling update configuration parameters
+  ## @param web.updateStrategy.type Airflow webserver deployment strategy type
+  ## @param web.updateStrategy.rollingUpdate Airflow webserver deployment rolling update configuration parameters
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
   ##
   updateStrategy:
     type: RollingUpdate
     rollingUpdate: {}
-  ## @param web.sidecars Add additional sidecar containers to the Airflow web pods
+  ## @param web.sidecars Add additional sidecar containers to the Airflow webserver pods
   ## Example:
   ## sidecars:
   ##   - name: your-image-name
@@ -441,7 +755,7 @@ web:
   ##         containerPort: 1234
   ##
   sidecars: []
-  ## @param web.initContainers Add additional init containers to the Airflow web pods
+  ## @param web.initContainers Add additional init containers to the Airflow webserver pods
   ## Example:
   ## initContainers:
   ##   - name: your-image-name
@@ -452,22 +766,56 @@ web:
   ##         containerPort: 1234
   ##
   initContainers: []
-  ## @param web.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Airflow web pods
+  ## @param web.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Airflow webserver pods
   ##
   extraVolumeMounts: []
-  ## @param web.extraVolumes Optionally specify extra list of additional volumes for the Airflow web pods
+  ## @param web.extraVolumes Optionally specify extra list of additional volumes for the Airflow webserver pods
   ##
   extraVolumes: []
-  ## Airflow web Pod Disruption Budget
+  ## Airflow webserver Pod Disruption Budget
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/disruptions/
-  ## @param web.pdb.create Deploy a pdb object for the Airflow web pods
-  ## @param web.pdb.minAvailable Maximum number/percentage of unavailable Airflow web replicas
-  ## @param web.pdb.maxUnavailable Maximum number/percentage of unavailable Airflow web replicas
+  ## @param web.pdb.create Deploy a pdb object for the Airflow webserver pods
+  ## @param web.pdb.minAvailable Maximum number/percentage of unavailable Airflow webserver replicas
+  ## @param web.pdb.maxUnavailable Maximum number/percentage of unavailable Airflow webserver replicas
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
+  ## Autoscaling configuration
+  ## ref: https://kubernetes.io/docs/concepts/workloads/autoscaling/
+  ##
+  autoscaling:
+    ## @param web.autoscaling.vpa.enabled Enable VPA for Airflow webserver
+    ## @param web.autoscaling.vpa.annotations Annotations for VPA resource
+    ## @param web.autoscaling.vpa.controlledResources List of resources that the VPA can control. Defaults to cpu and memory
+    ## @param web.autoscaling.vpa.maxAllowed VPA max allowed resources for the pod
+    ## @param web.autoscaling.vpa.minAllowed VPA min allowed resources for the pod
+    ##
+    vpa:
+      enabled: false
+      annotations: {}
+      controlledResources: []
+      maxAllowed: {}
+      minAllowed: {}
+      ## @param web.autoscaling.vpa.updatePolicy.updateMode Autoscaling update policy
+      ## Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod
+      ## Possible values are "Off", "Initial", "Recreate", and "Auto".
+      ##
+      updatePolicy:
+        updateMode: Auto
+    ## @param web.autoscaling.hpa.enabled Enable HPA for Airflow webserver
+    ## @param web.autoscaling.hpa.minReplicas Minimum number of replicas
+    ## @param web.autoscaling.hpa.maxReplicas Maximum number of replicas
+    ## @param web.autoscaling.hpa.targetCPU Target CPU utilization percentage
+    ## @param web.autoscaling.hpa.targetMemory Target Memory utilization percentage
+    ##
+    hpa:
+      enabled: false
+      minReplicas: ""
+      maxReplicas: ""
+      targetCPU: ""
+      targetMemory: ""
   ## Web Network Policies
   ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
   ##
@@ -523,39 +871,10 @@ web:
     ##
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
+
 ## @section Airflow scheduler parameters
+##
 scheduler:
-  ## Bitnami Airflow Scheduler image version
-  ## ref: https://hub.docker.com/r/bitnami/airflow-scheduler/tags/
-  ## @param scheduler.image.registry [default: REGISTRY_NAME] Airflow Scheduler image registry
-  ## @param scheduler.image.repository [default: REPOSITORY_NAME/airflow-scheduler] Airflow Scheduler image repository
-  ## @skip scheduler.image.tag Airflow Scheduler image tag (immutable tags are recommended)
-  ## @param scheduler.image.digest Airflow Schefuler image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
-  ## @param scheduler.image.pullPolicy Airflow Scheduler image pull policy
-  ## @param scheduler.image.pullSecrets Airflow Scheduler image pull secrets
-  ## @param scheduler.image.debug Enable image debug mode
-  ##
-  image:
-    registry: docker.io
-    repository: bitnami/airflow-scheduler
-    tag: 2.9.1-debian-12-r0
-    digest: ""
-    ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
-    ##
-    pullPolicy: IfNotPresent
-    ## Optionally specify an array of imagePullSecrets.
-    ## Secrets must be manually created in the namespace.
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-    ## e.g:
-    ## pullSecrets:
-    ##   - myRegistryKeySecretName
-    ##
-    pullSecrets: []
-    ## Set to true if you would like to see extra information on logs
-    ##
-    debug: false
   ## @param scheduler.replicaCount Number of scheduler replicas
   ##
   replicaCount: 1
@@ -606,6 +925,20 @@ scheduler:
     periodSeconds: 10
     timeoutSeconds: 15
     failureThreshold: 6
+    successThreshold: 1
+  ## @param scheduler.startupProbe.enabled Enable startupProbe on Airflow scheduler containers
+  ## @param scheduler.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param scheduler.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param scheduler.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param scheduler.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param scheduler.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 15
     successThreshold: 1
   ## @param scheduler.customLivenessProbe Custom livenessProbe that overrides the default one
   ##
@@ -786,9 +1119,43 @@ scheduler:
   ## @param scheduler.pdb.maxUnavailable Maximum number/percentage of unavailable Airflow scheduler replicas
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
+  ## Autoscaling configuration
+  ## ref: https://kubernetes.io/docs/concepts/workloads/autoscaling/
+  ##
+  autoscaling:
+    ## @param scheduler.autoscaling.vpa.enabled Enable VPA for Airflow scheduler
+    ## @param scheduler.autoscaling.vpa.annotations Annotations for VPA resource
+    ## @param scheduler.autoscaling.vpa.controlledResources List of resources that the VPA can control. Defaults to cpu and memory
+    ## @param scheduler.autoscaling.vpa.maxAllowed VPA max allowed resources for the pod
+    ## @param scheduler.autoscaling.vpa.minAllowed VPA min allowed resources for the pod
+    ##
+    vpa:
+      enabled: false
+      annotations: {}
+      controlledResources: []
+      maxAllowed: {}
+      minAllowed: {}
+      ## @param scheduler.autoscaling.vpa.updatePolicy.updateMode Autoscaling update policy
+      ## Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod
+      ## Possible values are "Off", "Initial", "Recreate", and "Auto".
+      ##
+      updatePolicy:
+        updateMode: Auto
+    ## @param scheduler.autoscaling.hpa.enabled Enable HPA for Airflow scheduler
+    ## @param scheduler.autoscaling.hpa.minReplicas Minimum number of replicas
+    ## @param scheduler.autoscaling.hpa.maxReplicas Maximum number of replicas
+    ## @param scheduler.autoscaling.hpa.targetCPU Target CPU utilization percentage
+    ## @param scheduler.autoscaling.hpa.targetMemory Target Memory utilization percentage
+    ##
+    hpa:
+      enabled: false
+      minReplicas: ""
+      maxReplicas: ""
+      targetCPU: ""
+      targetMemory: ""
   ## Scheduler Network Policies
   ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
   ##
@@ -844,39 +1211,805 @@ scheduler:
     ##
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
-## @section Airflow worker parameters
-worker:
-  ## Bitnami Airflow Worker image version
-  ## ref: https://hub.docker.com/r/bitnami/airflow-worker/tags/
-  ## @param worker.image.registry [default: REGISTRY_NAME] Airflow Worker image registry
-  ## @param worker.image.repository [default: REPOSITORY_NAME/airflow-worker] Airflow Worker image repository
-  ## @skip worker.image.tag Airflow Worker image tag (immutable tags are recommended)
-  ## @param worker.image.digest Airflow Worker image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
-  ## @param worker.image.pullPolicy Airflow Worker image pull policy
-  ## @param worker.image.pullSecrets Airflow Worker image pull secrets
-  ## @param worker.image.debug Enable image debug mode
+
+## @section Airflow Dag Processor parameters
+## ref: https://airflow.apache.org/docs/apache-airflow/stable/authoring-and-scheduling/dagfile-processing.html
+##
+dagProcessor:
+  ## @param dagProcessor.enabled Run Airflow Dag Processor Manager as a standalone component
   ##
-  image:
-    registry: docker.io
-    repository: bitnami/airflow-worker
-    tag: 2.9.1-debian-12-r0
-    digest: ""
-    ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
-    ##
-    pullPolicy: IfNotPresent
-    ## Optionally specify an array of imagePullSecrets.
-    ## Secrets must be manually created in the namespace.
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  enabled: false
+  ## @param dagProcessor.replicaCount Number of Airflow Dag Processor replicas
+  ##
+  replicaCount: 1
+  ## @param dagProcessor.command Override default Airflow Dag Processor cmd
+  ##
+  command: []
+  ## @param dagProcessor.args Override default Airflow Dag Processor args
+  ##
+  args: []
+  ## @param dagProcessor.extraEnvVars Add extra environment variables to Airflow Dag Processor containers
+  ##
+  extraEnvVars: []
+  ## @param dagProcessor.extraEnvVarsCM ConfigMap with extra environment variables
+  ##
+  extraEnvVarsCM: ""
+  ## @param dagProcessor.extraEnvVarsSecret Secret with extra environment variables
+  ##
+  extraEnvVarsSecret: ""
+  ## Configure extra options for Airflow Dag Processor containers' liveness, readiness and startup probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
+  ## @param dagProcessor.livenessProbe.enabled Enable livenessProbe on Airflow Dag Processor containers
+  ## @param dagProcessor.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param dagProcessor.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param dagProcessor.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param dagProcessor.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param dagProcessor.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 180
+    periodSeconds: 20
+    timeoutSeconds: 15
+    failureThreshold: 6
+    successThreshold: 1
+  ## @param dagProcessor.readinessProbe.enabled Enable readinessProbe on Airflow Dag Processor containers
+  ## @param dagProcessor.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param dagProcessor.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param dagProcessor.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param dagProcessor.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param dagProcessor.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 15
+    failureThreshold: 6
+    successThreshold: 1
+  ## @param dagProcessor.startupProbe.enabled Enable startupProbe on Airflow Dag Processor containers
+  ## @param dagProcessor.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param dagProcessor.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param dagProcessor.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param dagProcessor.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param dagProcessor.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 15
+    successThreshold: 1
+  ## @param dagProcessor.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param dagProcessor.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param dagProcessor.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## Airflow Dag Processor resource requests and limits
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param dagProcessor.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if dagProcessor.resources is set (dagProcessor.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "small"
+  ## @param dagProcessor.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
+  ## Configure Airflow Dag Processor pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param dagProcessor.podSecurityContext.enabled Enabled Airflow Dag Processor pods' Security Context
+  ## @param dagProcessor.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param dagProcessor.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param dagProcessor.podSecurityContext.supplementalGroups Set filesystem extra groups
+  ## @param dagProcessor.podSecurityContext.fsGroup Set Airflow Dag Processor pod's Security Context fsGroup
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
+    fsGroup: 1001
+  ## Configure Airflow Dag Processor containers (only main one) Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param dagProcessor.containerSecurityContext.enabled Enabled Airflow Dag Processor containers' Security Context
+  ## @param dagProcessor.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param dagProcessor.containerSecurityContext.runAsUser Set Airflow Dag Processor containers' Security Context runAsUser
+  ## @param dagProcessor.containerSecurityContext.runAsGroup Set Airflow Dag Processor containers' Security Context runAsGroup
+  ## @param dagProcessor.containerSecurityContext.runAsNonRoot Set Airflow Dag Processor containers' Security Context runAsNonRoot
+  ## @param dagProcessor.containerSecurityContext.privileged Set Airflow Dag Processor container's Security Context privileged
+  ## @param dagProcessor.containerSecurityContext.allowPrivilegeEscalation Set Airflow Dag Processor container's Security Context allowPrivilegeEscalation
+  ## @param dagProcessor.containerSecurityContext.readOnlyRootFilesystem Set Airflow Dag Processor container's Security Context readOnlyRootFilesystem
+  ## @param dagProcessor.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param dagProcessor.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
+  ##
+  containerSecurityContext:
+    enabled: true
+    seLinuxOptions: {}
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    privileged: false
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
+  ## @param dagProcessor.lifecycleHooks for the Airflow Dag Processor containers to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param dagProcessor.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
+  ## @param dagProcessor.hostAliases Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param dagProcessor.podLabels Add extra labels to the Airflow Dag Processor pods
+  ##
+  podLabels: {}
+  ## @param dagProcessor.podAnnotations Add extra annotations to the Airflow Dag Processor pods
+  ##
+  podAnnotations: {}
+  ## @param dagProcessor.affinity Affinity for Airflow Dag Processor pods assignment (evaluated as a template)
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## Note: `dagProcessor.podAffinityPreset`, `dagProcessor.podAntiAffinityPreset`, and `dagProcessor.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## Node affinity preset
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ## @param dagProcessor.nodeAffinityPreset.key Node label key to match. Ignored if `dagProcessor.affinity` is set.
+  ## @param dagProcessor.nodeAffinityPreset.type Node affinity preset type. Ignored if `dagProcessor.affinity` is set. Allowed values: `soft` or `hard`
+  ## @param dagProcessor.nodeAffinityPreset.values Node label values to match. Ignored if `dagProcessor.affinity` is set.
+  ##
+  nodeAffinityPreset:
     ## e.g:
-    ## pullSecrets:
-    ##   - myRegistryKeySecretName
+    ## key: "kubernetes.io/e2e-az-name"
     ##
-    pullSecrets: []
-    ## Set to true if you would like to see extra information on logs
+    key: ""
+    type: ""
+    ## e.g:
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
     ##
-    debug: false
+    values: []
+  ## @param dagProcessor.nodeSelector Node labels for Airflow Dag Processor pods assignment
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
+  ##
+  nodeSelector: {}
+  ## @param dagProcessor.podAffinityPreset Pod affinity preset. Ignored if `dagProcessor.affinity` is set. Allowed values: `soft` or `hard`.
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param dagProcessor.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `dagProcessor.affinity` is set. Allowed values: `soft` or `hard`.
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## @param dagProcessor.tolerations Tolerations for Airflow Dag Processor pods assignment
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param dagProcessor.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
+  ## @param dagProcessor.priorityClassName Priority Class Name
+  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+  ##
+  priorityClassName: ""
+  ## @param dagProcessor.schedulerName Use an alternate K8s scheduler, e.g. "stork".
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param dagProcessor.terminationGracePeriodSeconds Seconds Airflow Dag Processor pod needs to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## @param dagProcessor.updateStrategy.type Airflow Dag Processor deployment strategy type
+  ## @param dagProcessor.updateStrategy.rollingUpdate Airflow Dag Processor deployment rolling update configuration parameters
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+  ##
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate: {}
+  ## @param dagProcessor.sidecars Add additional sidecar containers to the Airflow Dag Processor pods
+  ## Example:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param dagProcessor.initContainers Add additional init containers to the Airflow Dag Processor pods
+  ## Example:
+  ## initContainers:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  initContainers: []
+  ## @param dagProcessor.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Airflow Dag Processor containers
+  ##
+  extraVolumeMounts: []
+  ## @param dagProcessor.extraVolumes Optionally specify extra list of additional volumes for the Airflow Dag Processor pods
+  ##
+  extraVolumes: []
+  ## Airflow Dag Processor Pod Disruption Budget
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/disruptions/
+  ## @param dagProcessor.pdb.create Deploy a pdb object for the Airflow Dag Processor pods
+  ## @param dagProcessor.pdb.minAvailable Maximum number/percentage of unavailable Airflow Dag Processor replicas
+  ## @param dagProcessor.pdb.maxUnavailable Maximum number/percentage of unavailable Airflow Dag Processor replicas
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
+  ## Autoscaling configuration
+  ## ref: https://kubernetes.io/docs/concepts/workloads/autoscaling/
+  ##
+  autoscaling:
+    ## @param dagProcessor.autoscaling.vpa.enabled Enable VPA for Airflow Dag Processor
+    ## @param dagProcessor.autoscaling.vpa.annotations Annotations for VPA resource
+    ## @param dagProcessor.autoscaling.vpa.controlledResources List of resources that the VPA can control. Defaults to cpu and memory
+    ## @param dagProcessor.autoscaling.vpa.maxAllowed VPA max allowed resources for the pod
+    ## @param dagProcessor.autoscaling.vpa.minAllowed VPA min allowed resources for the pod
+    ##
+    vpa:
+      enabled: false
+      annotations: {}
+      controlledResources: []
+      maxAllowed: {}
+      minAllowed: {}
+      ## @param dagProcessor.autoscaling.vpa.updatePolicy.updateMode Autoscaling update policy
+      ## Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod
+      ## Possible values are "Off", "Initial", "Recreate", and "Auto".
+      ##
+      updatePolicy:
+        updateMode: Auto
+    ## @param dagProcessor.autoscaling.hpa.enabled Enable HPA for Airflow Dag Processor
+    ## @param dagProcessor.autoscaling.hpa.minReplicas Minimum number of replicas
+    ## @param dagProcessor.autoscaling.hpa.maxReplicas Maximum number of replicas
+    ## @param dagProcessor.autoscaling.hpa.targetCPU Target CPU utilization percentage
+    ## @param dagProcessor.autoscaling.hpa.targetMemory Target Memory utilization percentage
+    ##
+    hpa:
+      enabled: false
+      minReplicas: ""
+      maxReplicas: ""
+      targetCPU: ""
+      targetMemory: ""
+  ## Airflow Dag Processor Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param dagProcessor.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param dagProcessor.networkPolicy.allowExternal Don't require client label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## client label will have network access to the ports Airflow Dag Processor is listening
+    ## on. When true, Airflow Dag Processor will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param dagProcessor.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param dagProcessor.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param dagProcessor.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param dagProcessor.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param dagProcessor.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
+
+## @section Airflow Triggerer parameters
+## ref: https://airflow.apache.org/docs/apache-airflow/stable/authoring-and-scheduling/deferring.html#deferrable-operators-triggers
+##
+triggerer:
+  ## @param triggerer.enabled Run Airflow Triggerer as a standalone component
+  ##
+  enabled: false
+  ## @param triggerer.defaultCapacity How many triggers a single Triggerer can run at once
+  ##
+  defaultCapacity: 1000
+  ## @param triggerer.replicaCount Number of Airflow Triggerer replicas
+  ##
+  replicaCount: 1
+  ## @param triggerer.command Override default Airflow Triggerer cmd
+  ##
+  command: []
+  ## @param triggerer.args Override default Airflow Triggerer args
+  ##
+  args: []
+  ## @param triggerer.extraEnvVars Add extra environment variables to Airflow Triggerer containers
+  ##
+  extraEnvVars: []
+  ## @param triggerer.extraEnvVarsCM ConfigMap with extra environment variables
+  ##
+  extraEnvVarsCM: ""
+  ## @param triggerer.extraEnvVarsSecret Secret with extra environment variables
+  ##
+  extraEnvVarsSecret: ""
+  ## @param triggerer.containerPorts.logs Airflow Triggerer logs container port
+  ##
+  containerPorts:
+    logs: 8794
+  ## Configure extra options for Airflow Triggerer containers' liveness, readiness and startup probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
+  ## @param triggerer.livenessProbe.enabled Enable livenessProbe on Airflow Triggerer containers
+  ## @param triggerer.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param triggerer.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param triggerer.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param triggerer.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param triggerer.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 180
+    periodSeconds: 20
+    timeoutSeconds: 15
+    failureThreshold: 6
+    successThreshold: 1
+  ## @param triggerer.readinessProbe.enabled Enable readinessProbe on Airflow Triggerer containers
+  ## @param triggerer.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param triggerer.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param triggerer.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param triggerer.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param triggerer.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 15
+    failureThreshold: 6
+    successThreshold: 1
+  ## @param triggerer.startupProbe.enabled Enable startupProbe on Airflow Triggerer containers
+  ## @param triggerer.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param triggerer.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param triggerer.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param triggerer.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param triggerer.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 15
+    successThreshold: 1
+  ## @param triggerer.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param triggerer.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param triggerer.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## Airflow Triggerer resource requests and limits
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param triggerer.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if triggerer.resources is set (triggerer.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "small"
+  ## @param triggerer.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
+  ## Configure Airflow Triggerer pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param triggerer.podSecurityContext.enabled Enabled Airflow Triggerer pods' Security Context
+  ## @param triggerer.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param triggerer.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param triggerer.podSecurityContext.supplementalGroups Set filesystem extra groups
+  ## @param triggerer.podSecurityContext.fsGroup Set Airflow Triggerer pod's Security Context fsGroup
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
+    fsGroup: 1001
+  ## Configure Airflow Triggerer containers (only main one) Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param triggerer.containerSecurityContext.enabled Enabled Airflow Triggerer containers' Security Context
+  ## @param triggerer.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param triggerer.containerSecurityContext.runAsUser Set Airflow Triggerer containers' Security Context runAsUser
+  ## @param triggerer.containerSecurityContext.runAsGroup Set Airflow Triggerer containers' Security Context runAsGroup
+  ## @param triggerer.containerSecurityContext.runAsNonRoot Set Airflow Triggerer containers' Security Context runAsNonRoot
+  ## @param triggerer.containerSecurityContext.privileged Set Airflow Triggerer container's Security Context privileged
+  ## @param triggerer.containerSecurityContext.allowPrivilegeEscalation Set Airflow Triggerer container's Security Context allowPrivilegeEscalation
+  ## @param triggerer.containerSecurityContext.readOnlyRootFilesystem Set Airflow Triggerer container's Security Context readOnlyRootFilesystem
+  ## @param triggerer.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param triggerer.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
+  ##
+  containerSecurityContext:
+    enabled: true
+    seLinuxOptions: {}
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    privileged: false
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
+  ## @param triggerer.lifecycleHooks for the Airflow Triggerer containers to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param triggerer.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
+  ## @param triggerer.hostAliases Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param triggerer.podLabels Add extra labels to the Airflow Triggerer pods
+  ##
+  podLabels: {}
+  ## @param triggerer.podAnnotations Add extra annotations to the Airflow Triggerer pods
+  ##
+  podAnnotations: {}
+  ## @param triggerer.affinity Affinity for Airflow Triggerer pods assignment (evaluated as a template)
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## Note: `triggerer.podAffinityPreset`, `triggerer.podAntiAffinityPreset`, and `triggerer.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## Node affinity preset
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ## @param triggerer.nodeAffinityPreset.key Node label key to match. Ignored if `triggerer.affinity` is set.
+  ## @param triggerer.nodeAffinityPreset.type Node affinity preset type. Ignored if `triggerer.affinity` is set. Allowed values: `soft` or `hard`
+  ## @param triggerer.nodeAffinityPreset.values Node label values to match. Ignored if `triggerer.affinity` is set.
+  ##
+  nodeAffinityPreset:
+    ## e.g:
+    ## key: "kubernetes.io/e2e-az-name"
+    ##
+    key: ""
+    type: ""
+    ## e.g:
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param triggerer.nodeSelector Node labels for Airflow Triggerer pods assignment
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
+  ##
+  nodeSelector: {}
+  ## @param triggerer.podAffinityPreset Pod affinity preset. Ignored if `triggerer.affinity` is set. Allowed values: `soft` or `hard`.
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param triggerer.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `triggerer.affinity` is set. Allowed values: `soft` or `hard`.
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## @param triggerer.tolerations Tolerations for Airflow Triggerer pods assignment
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param triggerer.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
+  ## @param triggerer.priorityClassName Priority Class Name
+  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+  ##
+  priorityClassName: ""
+  ## @param triggerer.schedulerName Use an alternate K8s scheduler, e.g. "stork".
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param triggerer.terminationGracePeriodSeconds Seconds Airflow Triggerer pod needs to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## @param triggerer.podManagementPolicy Pod management policy for the Airflow Triggerer statefulset
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
+  ##
+  podManagementPolicy: OrderedReady
+  ## @param triggerer.updateStrategy.type Airflow Triggerer statefulset strategy type
+  ## @param triggerer.updateStrategy.rollingUpdate Airflow Triggerer statefulset rolling update configuration parameters
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate: {}
+  ## @param triggerer.sidecars Add additional sidecar containers to the Airflow Triggerer pods
+  ## Example:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param triggerer.initContainers Add additional init containers to the Airflow Triggerer pods
+  ## Example:
+  ## initContainers:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  initContainers: []
+  ## @param triggerer.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Airflow Triggerer containers
+  ##
+  extraVolumeMounts: []
+  ## @param triggerer.extraVolumes Optionally specify extra list of additional volumes for the Airflow Triggerer pods
+  ##
+  extraVolumes: []
+  ## Airflow Triggerer Pod Disruption Budget
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/disruptions/
+  ## @param triggerer.pdb.create Deploy a pdb object for the Airflow Triggerer pods
+  ## @param triggerer.pdb.minAvailable Maximum number/percentage of unavailable Airflow Triggerer replicas
+  ## @param triggerer.pdb.maxUnavailable Maximum number/percentage of unavailable Airflow Triggerer replicas
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
+  ## Autoscaling configuration
+  ## ref: https://kubernetes.io/docs/concepts/workloads/autoscaling/
+  ##
+  autoscaling:
+    ## @param triggerer.autoscaling.vpa.enabled Enable VPA for Airflow Triggerer
+    ## @param triggerer.autoscaling.vpa.annotations Annotations for VPA resource
+    ## @param triggerer.autoscaling.vpa.controlledResources List of resources that the VPA can control. Defaults to cpu and memory
+    ## @param triggerer.autoscaling.vpa.maxAllowed VPA max allowed resources for the pod
+    ## @param triggerer.autoscaling.vpa.minAllowed VPA min allowed resources for the pod
+    ##
+    vpa:
+      enabled: false
+      annotations: {}
+      controlledResources: []
+      maxAllowed: {}
+      minAllowed: {}
+      ## @param triggerer.autoscaling.vpa.updatePolicy.updateMode Autoscaling update policy
+      ## Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod
+      ## Possible values are "Off", "Initial", "Recreate", and "Auto".
+      ##
+      updatePolicy:
+        updateMode: Auto
+    ## @param triggerer.autoscaling.hpa.enabled Enable HPA
+    ## @param triggerer.autoscaling.hpa.minReplicas Minimum number of replicas
+    ## @param triggerer.autoscaling.hpa.maxReplicas Maximum number of replicas
+    ## @param triggerer.autoscaling.hpa.targetCPU Target CPU utilization percentage
+    ## @param triggerer.autoscaling.hpa.targetMemory Target Memory utilization percentage
+    ##
+    hpa:
+      enabled: false
+      minReplicas: ""
+      maxReplicas: ""
+      targetCPU: ""
+      targetMemory: ""
+  ## Airflow Triggerer Persistence Parameters
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes
+  ##
+  persistence:
+    ## @param triggerer.persistence.enabled Enable logs persistence using Persistent Volume Claims
+    ##
+    enabled: true
+    ## @param triggerer.persistence.storageClass Storage class of backing PVC
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
+    storageClass: ""
+    ## @param triggerer.persistence.annotations Additional Persistent Volume Claim annotations
+    ##
+    annotations: {}
+    ## @param triggerer.persistence.accessModes Persistent Volume Access Modes
+    ##
+    accessModes:
+      - ReadWriteOnce
+    ## @param triggerer.persistence.size Size of logs volume
+    ##
+    size: 8Gi
+    ## @param triggerer.persistence.selector Selector to match an existing Persistent Volume for WordPress data PVC
+    ## If set, the PVC can't have a PV dynamically provisioned for it
+    ## E.g.
+    ## selector:
+    ##   matchLabels:
+    ##     app: my-app
+    ##
+    selector: {}
+    ## @param triggerer.persistence.dataSource Custom PVC data source
+    ##
+    dataSource: {}
+    ## @param triggerer.persistence.existingClaim The name of an existing PVC to use for persistence (only if triggerer.replicaCount=1)
+    ##
+    existingClaim: ""
+  ## persistentVolumeClaimRetentionPolicy
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#persistentvolumeclaim-retention
+  ## @param triggerer.persistentVolumeClaimRetentionPolicy.enabled Controls if and how PVCs are deleted during the lifecycle of a StatefulSet
+  ## @param triggerer.persistentVolumeClaimRetentionPolicy.whenScaled Volume retention behavior when the replica count of the StatefulSet is reduced
+  ## @param triggerer.persistentVolumeClaimRetentionPolicy.whenDeleted Volume retention behavior that applies when the StatefulSet is deleted
+  ##
+  persistentVolumeClaimRetentionPolicy:
+    enabled: false
+    whenScaled: Retain
+    whenDeleted: Retain
+  ## Airflow Triggerer Service
+  ##
+  service:
+    ## @param triggerer.service.type Airflow Triggerer service type
+    ##
+    type: ClusterIP
+    ## @param triggerer.service.ports.logs Airflow Triggerer service logs port
+    ##
+    ports:
+      logs: 8794
+    ## Node ports to expose
+    ## @param triggerer.service.nodePorts.logs Node port for Airflow Triggerer service logs
+    ## NOTE: choose port between <30000-32767>
+    ##
+    nodePorts:
+      logs: ""
+    ## @param triggerer.service.clusterIP Airflow Triggerer service Cluster IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param triggerer.service.loadBalancerIP Airflow Triggerer service Load Balancer IP
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerIP: ""
+    ## @param triggerer.service.loadBalancerSourceRanges Airflow Triggerer service Load Balancer sources
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param triggerer.service.externalTrafficPolicy Airflow Triggerer service external traffic policy
+    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param triggerer.service.annotations Additional custom annotations for Airflow Triggerer service
+    ##
+    annotations: {}
+    ## @param triggerer.service.extraPorts Extra ports to expose in Airflow Triggerer service (normally used with the `triggerer.sidecars` value)
+    ##
+    extraPorts: []
+    ## @param triggerer.service.sessionAffinity Control where client requests go, to the same pod or round-robin
+    ## Values: ClientIP or None
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
+    ##
+    sessionAffinity: None
+    ## @param triggerer.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
+  ## Airflow Triggerer Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param triggerer.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param triggerer.networkPolicy.allowExternal Don't require client label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## client label will have network access to the ports Airflow Triggerer is listening
+    ## on. When true, Airflow Triggerer will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param triggerer.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param triggerer.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param triggerer.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param triggerer.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param triggerer.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
+
+## @section Airflow worker parameters
+##
+worker:
   ## @param worker.command Override default container command (useful when using custom images)
   ##
   command: []
@@ -1083,9 +2216,13 @@ worker:
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
   ##
   terminationGracePeriodSeconds: ""
-  ## @param worker.updateStrategy.type Airflow worker deployment strategy type
-  ## @param worker.updateStrategy.rollingUpdate Airflow worker deployment rolling update configuration parameters
-  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+  ## @param worker.podManagementPolicy Pod management policy for the worker statefulset
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
+  ##
+  podManagementPolicy: OrderedReady
+  ## @param worker.updateStrategy.type Airflow worker statefulset strategy type
+  ## @param worker.updateStrategy.rollingUpdate Airflow worker statefulset rolling update configuration parameters
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
   updateStrategy:
     type: RollingUpdate
@@ -1131,23 +2268,53 @@ worker:
   ## @param worker.pdb.maxUnavailable Maximum number/percentage of unavailable Airflow worker replicas
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
-  ## Enable HorizontalPodAutoscaler for worker pods
-  ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
-  ## @param worker.autoscaling.enabled Whether enable horizontal pod autoscaler
-  ## @param worker.autoscaling.minReplicas Configure a minimum amount of pods
-  ## @param worker.autoscaling.maxReplicas Configure a maximum amount of pods
-  ## @param worker.autoscaling.targetCPU Define the CPU target to trigger the scaling actions (utilization percentage)
-  ## @param worker.autoscaling.targetMemory Define the memory target to trigger the scaling actions (utilization percentage)
+  ## Autoscaling configuration
+  ## ref: https://kubernetes.io/docs/concepts/workloads/autoscaling/
   ##
   autoscaling:
+    ## @param worker.autoscaling.enabled DEPRECATED: use worker.autoscaling.hpa.enabled instead
+    ## @param worker.autoscaling.minReplicas DEPRECATED: use worker.autoscaling.hpa.minReplicas instead
+    ## @param worker.autoscaling.maxReplicas DEPRECATED: use worker.autoscaling.hpa.minReplicas instead
+    ## @param worker.autoscaling.targetMemory DEPRECATED: use worker.autoscaling.hpa.targetMemory instead
+    ## @param worker.autoscaling.targetCPU DEPRECATED: use worker.autoscaling.hpa.targetCPU instead
     enabled: false
-    minReplicas: 1
-    maxReplicas: 3
-    targetCPU: 80
-    targetMemory: 80
+    minReplicas: ""
+    maxReplicas: ""
+    targetCPU: ""
+    targetMemory: ""
+    ## @param worker.autoscaling.vpa.enabled Enable VPA for Airflow Worker
+    ## @param worker.autoscaling.vpa.annotations Annotations for VPA resource
+    ## @param worker.autoscaling.vpa.controlledResources List of resources that the VPA can control. Defaults to cpu and memory
+    ## @param worker.autoscaling.vpa.maxAllowed VPA max allowed resources for the pod
+    ## @param worker.autoscaling.vpa.minAllowed VPA min allowed resources for the pod
+    ##
+    vpa:
+      enabled: false
+      annotations: {}
+      controlledResources: []
+      maxAllowed: {}
+      minAllowed: {}
+      ## @param worker.autoscaling.vpa.updatePolicy.updateMode Autoscaling update policy
+      ## Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod
+      ## Possible values are "Off", "Initial", "Recreate", and "Auto".
+      ##
+      updatePolicy:
+        updateMode: Auto
+    ## @param worker.autoscaling.hpa.enabled Enable HPA for Airflow Worker
+    ## @param worker.autoscaling.hpa.minReplicas Minimum number of replicas
+    ## @param worker.autoscaling.hpa.maxReplicas Maximum number of replicas
+    ## @param worker.autoscaling.hpa.targetCPU Target CPU utilization percentage
+    ## @param worker.autoscaling.hpa.targetMemory Target Memory utilization percentage
+    ##
+    hpa:
+      enabled: false
+      minReplicas: 1
+      maxReplicas: 3
+      targetCPU: 80
+      targetMemory: 80
   ## Worker Network Policies
   ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
   ##
@@ -1203,158 +2370,136 @@ worker:
     ##
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
-## @section Airflow git sync parameters
 
-## Configure Git to pull dags and plugins
+## @section Airflow "setup-db" K8s Job parameters
 ##
-git:
-  ## Bitnami Git image version
-  ## ref: https://hub.docker.com/r/bitnami/git/tags/
-  ## @param git.image.registry [default: REGISTRY_NAME] Git image registry
-  ## @param git.image.repository [default: REPOSITORY_NAME/git] Git image repository
-  ## @skip git.image.tag Git image tag (immutable tags are recommended)
-  ## @param git.image.digest Git image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
-  ## @param git.image.pullPolicy Git image pull policy
-  ## @param git.image.pullSecrets Git image pull secrets
+setupDBJob:
+  ## @param setupDBJob.enabled Enable setting up the Airflow database using a K8s job (otherwise it's done by the Webserver on startup)
   ##
-  image:
-    registry: docker.io
-    repository: bitnami/git
-    tag: 2.45.0-debian-12-r1
-    digest: ""
-    ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
-    ##
-    pullPolicy: IfNotPresent
-    ## Optionally specify an array of imagePullSecrets.
-    ## Secrets must be manually created in the namespace.
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-    ## e.g:
-    ## pullSecrets:
-    ##   - myRegistryKeySecretName
-    ##
-    pullSecrets: []
-  ## Get DAG files from git repositories
-  ## @param git.dags.enabled Enable in order to download DAG files from git repositories.
-  ## @param git.dags.repositories [array] Array of repositories from which to download DAG files
+  enabled: true
+  ## @param setupDBJob.backoffLimit set backoff limit of the job
   ##
-  dags:
-    enabled: false
-    ## Name for repositories can be anything unique and must follow same naming conventions as kubernetes.
-    ## Kubernetes resources can have names up to 253 characters long. The characters allowed in names are:
-    ## digits (0-9), lower case letters (a-z), -, and .
-    ## Example:
-    ##   - repository: https://github.com/myuser/myrepo
-    ##     branch: main
-    ##     name: my-dags
-    ##     path: /
-    ##
-    repositories:
-      - repository: ""
-        ## Branch from repository to checkout
-        ##
-        branch: ""
-        ## An unique identifier for repository, must be unique for each repository
-        ##
-        name: ""
-        ## Path to a folder in the repository containing the dags
-        ##
-        path: ""
-  ## Get Plugins files from git repositories.
-  ## @param git.plugins.enabled Enable in order to download Plugins files from git repositories.
-  ## @param git.plugins.repositories [array] Array of repositories from which to download DAG files
+  backoffLimit: 10
+  ## @param setupDBJob.command Override default container command on "setup-db" job's containers
   ##
-  plugins:
-    enabled: false
-    repositories:
-      - repository: ""
-        ## Branch from repository to checkout
-        ##
-        branch: ""
-        ## An unique identifier for repository, must be unique for each repository
-        ##
-        name: ""
-        ## Path to a folder in the repository containing the plugins
-        ##
-        path: ""
-  ## Properties for the Clone init container
-  ## @param git.clone.command Override cmd
-  ## @param git.clone.args Override args
-  ## @param git.clone.extraVolumeMounts Add extra volume mounts
-  ## @param git.clone.extraEnvVars Add extra environment variables
-  ## @param git.clone.extraEnvVarsCM ConfigMap with extra environment variables
-  ## @param git.clone.extraEnvVarsSecret Secret with extra environment variables
+  command: []
+  ## @param setupDBJob.args Override default container args on "setup-db" job's containers
   ##
-  clone:
-    command: []
-    args: []
-    extraVolumeMounts: []
-    extraEnvVars: []
-    extraEnvVarsCM: ""
-    extraEnvVarsSecret: ""
-    ## Clone init container resource requests and limits
-    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-    ## @param git.clone.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
-    ## Example:
-    ## resources:
-    ##   requests:
-    ##     cpu: 2
-    ##     memory: 512Mi
-    ##   limits:
-    ##     cpu: 3
-    ##     memory: 1024Mi
-    ##
-    resources: {}
-    ## @param git.clone.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if git.clone.resources is set (git.clone.resources is recommended for production).
-    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
-    ##
-    resourcesPreset: "nano"
-  ## Properties for the Sync sidecar container
-  ## @param git.sync.interval Interval in seconds to pull the git repository containing the plugins and/or DAG files
-  ## @param git.sync.command Override cmd
-  ## @param git.sync.args Override args
-  ## @param git.sync.extraVolumeMounts Add extra volume mounts
-  ## @param git.sync.extraEnvVars Add extra environment variables
-  ## @param git.sync.extraEnvVarsCM ConfigMap with extra environment variables
-  ## @param git.sync.extraEnvVarsSecret Secret with extra environment variables
+  args: []
+  ## Configure "setup-db" job's container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param setupDBJob.containerSecurityContext.enabled Enabled "setup-db" job's containers' Security Context
+  ## @param setupDBJob.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in "setup-db" job's containers
+  ## @param setupDBJob.containerSecurityContext.runAsUser Set runAsUser in "setup-db" job's containers' Security Context
+  ## @param setupDBJob.containerSecurityContext.runAsGroup Set runAsUser in "setup-db" job's containers' Security Context
+  ## @param setupDBJob.containerSecurityContext.runAsNonRoot Set runAsNonRoot in "setup-db" job's containers' Security Context
+  ## @param setupDBJob.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in "setup-db" job's containers' Security Context
+  ## @param setupDBJob.containerSecurityContext.privileged Set privileged in "setup-db" job's containers' Security Context
+  ## @param setupDBJob.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in "setup-db" job's containers' Security Context
+  ## @param setupDBJob.containerSecurityContext.capabilities.add List of capabilities to be added in "setup-db" job's containers
+  ## @param setupDBJob.containerSecurityContext.capabilities.drop List of capabilities to be dropped in "setup-db" job's containers
+  ## @param setupDBJob.containerSecurityContext.seccompProfile.type Set seccomp profile in "setup-db" job's containers
   ##
-  sync:
-    interval: 60
-    command: []
-    args: []
-    extraVolumeMounts: []
-    extraEnvVars: []
-    extraEnvVarsCM: ""
-    extraEnvVarsSecret: ""
-    ## @param git.sync.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if git.sync.resources is set (git.sync.resources is recommended for production).
-    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
-    ##
-    resourcesPreset: "nano"
-    ## @param git.sync.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
-    ## Example:
-    ## resources:
-    ##   requests:
-    ##     cpu: 2
-    ##     memory: 512Mi
-    ##   limits:
-    ##     cpu: 3
-    ##     memory: 1024Mi
-    ## Sync sidecar container resource requests and limits
-    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-    ##
-    resources: {}
+  containerSecurityContext:
+    enabled: true
+    seLinuxOptions: {}
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    readOnlyRootFilesystem: true
+    privileged: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      add: []
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
+  ## Configure "setup-db" job's pod Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param setupDBJob.podSecurityContext.enabled Enabled "setup-db" job's pods' Security Context
+  ## @param setupDBJob.podSecurityContext.fsGroupChangePolicy Set fsGroupChangePolicy in "setup-db" job's pods' Security Context
+  ## @param setupDBJob.podSecurityContext.sysctls List of sysctls to allow in "setup-db" job's pods' Security Context
+  ## @param setupDBJob.podSecurityContext.supplementalGroups List of supplemental groups to add to "setup-db" job's pods' Security Context
+  ## @param setupDBJob.podSecurityContext.fsGroup Set fsGroup in "setup-db" job's pods' Security Context
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
+    fsGroup: 1001
+  ## @param setupDBJob.extraEnvVars Array containing extra env vars to configure the Airflow "setup-db" job's container
+  ##
+  extraEnvVars: []
+  ## @param setupDBJob.extraEnvVarsCM ConfigMap containing extra env vars to configure the Airflow "setup-db" job's container
+  ##
+  extraEnvVarsCM: ""
+  ## @param setupDBJob.extraEnvVarsSecret Secret containing extra env vars to configure the Airflow "setup-db" job's container (in case of sensitive data)
+  ##
+  extraEnvVarsSecret: ""
+  ## Airflow "setup-db" job's container resource requests and limits
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param setupDBJob.resourcesPreset Set Airflow "setup-db" job's container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if setupDBJob.resources is set (setupDBJob.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "micro"
+  ## @param setupDBJob.resources Set Airflow "setup-db" job's container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## E.g:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
+  ## @param setupDBJob.automountServiceAccountToken Mount Service Account token in Airflow "setup-db" job's pods
+  ##
+  automountServiceAccountToken: false
+  ## @param setupDBJob.hostAliases Add deployment host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param setupDBJob.annotations [object] Add annotations to the Airflow "setup-db" job
+  ##
+  annotations: {}
+  ## @param setupDBJob.podLabels Additional pod labels for Airflow "setup-db" job
+  ## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param setupDBJob.podAnnotations Additional pod annotations for Airflow "setup-db" job
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param setupDBJob.extraVolumes Optionally specify extra list of additional volumes for Airflow "setup-db" job's pods
+  ##
+  extraVolumes: []
+  ## @param setupDBJob.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Airflow "setup-db" job's containers
+  ##
+  extraVolumeMounts: []
+  ## @param setupDBJob.initContainers Add additional init containers to the Airflow "setup-db" job's pods
+  ## Example:
+  ## initContainers:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  initContainers: []
+
 ## @section Airflow ldap parameters
 
 ## LDAP configuration
 ## @param ldap.enabled Enable LDAP authentication
 ## @param ldap.uri Server URI, eg. ldap://ldap_server:389
-## DEPRECATED ldap.base It will be removed in a future release, please use 'ldap.basedn' instead
 ## @param ldap.basedn Base of the search, eg. ou=example,o=org.
-## DEPRECATED ldap.uidField It will be removed in a future release,, please use 'ldap.searchAttribute' instead
 ## @param ldap.searchAttribute if doing an indirect bind to ldap, this is the field that matches the username when searching for the account to bind to
 ## @param ldap.binddn DN of the account used to search in the LDAP server.
 ## @param ldap.bindpw Bind Password
+## @param ldap.existingSecret Name of an existing secret containing the LDAP bind password
 ## @param ldap.userRegistration Set to True to enable user self registration
 ## @param ldap.userRegistrationRole Set role name to be assign when a user registers himself. This role must already exist. Mandatory when using ldap.userRegistration
 ## @param ldap.rolesMapping mapping from LDAP DN to a list of roles
@@ -1367,6 +2512,7 @@ ldap:
   searchAttribute: "cn"
   binddn: "cn=admin,dc=example,dc=org"
   bindpw: ""
+  existingSecret: ""
   userRegistration: 'True'
   userRegistrationRole: "Public"
   rolesMapping: '{ "cn=All,ou=Groups,dc=example,dc=org": ["User"], "cn=Admins,ou=Groups,dc=example,dc=org": ["Admin"], }'
@@ -1374,10 +2520,8 @@ ldap:
   ## SSL/TLS parameters for LDAP
   ## @param ldap.tls.enabled Enabled TLS/SSL for LDAP, you must include the CA file.
   ## @param ldap.tls.allowSelfSigned Allow to use self signed certificates
-  ## DEPRECATED ldap.tls.CAcertificateSecret It will be removed in a future release, please use ldap.tls.certificatesSecret instead
   ## @param ldap.tls.certificatesSecret Name of the existing secret containing the certificate CA file that will be used by ldap client
   ## @param ldap.tls.certificatesMountPath Where LDAP certifcates are mounted.
-  ## DEPRECATED ldap.tls.CAcertificateFilename It will be removed in a future release, please use ldap.tls.CAFilename instead
   ## @param ldap.tls.CAFilename LDAP CA cert filename
   ##
   tls:
@@ -1545,6 +2689,7 @@ ingress:
   ##             name: http
   ##
   extraRules: []
+
 ## @section Other Parameters
 
 ## Service account for Airflow pods to use.
@@ -1583,24 +2728,26 @@ rbac:
   ##       - list
   ##
   rules: []
-## @section Airflow metrics parameters
+
+## @section StatsD metrics parameters
+##
 metrics:
-  ## @param metrics.enabled Whether or not to create a standalone Airflow exporter to expose Airflow metrics
+  ## @param metrics.enabled Enable a StatsD exporter that collects StatsD metrics from Airflow components and expose them as Prometheus metrics
   ##
   enabled: false
-  ## Bitnami Airflow exporter image
-  ## ref: https://hub.docker.com/r/bitnami/airflow-exporter/tags/
-  ## @param metrics.image.registry [default: REGISTRY_NAME] Airflow exporter image registry
-  ## @param metrics.image.repository [default: REPOSITORY_NAME/airflow-exporter] Airflow exporter image repository
-  ## @skip metrics.image.tag Airflow exporter image tag (immutable tags are recommended)
-  ## @param metrics.image.digest Airflow exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
-  ## @param metrics.image.pullPolicy Airflow exporter image pull policy
-  ## @param metrics.image.pullSecrets Airflow exporter image pull secrets
+  ## Bitnami StatsD exporter image
+  ## ref: https://hub.docker.com/r/bitnami/statsd-exporter/tags/
+  ## @param metrics.image.registry [default: REGISTRY_NAME] StatsD exporter image registry
+  ## @param metrics.image.repository [default: REPOSITORY_NAME/statsd-exporter] StatsD exporter image repository
+  ## @skip metrics.image.tag StatsD exporter image tag (immutable tags are recommended)
+  ## @param metrics.image.digest StatsD exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param metrics.image.pullPolicy StatsD exporter image pull policy
+  ## @param metrics.image.pullSecrets StatsD exporter image pull secrets
   ##
   image:
     registry: docker.io
-    repository: bitnami/airflow-exporter
-    tag: 0.20220314.0-debian-12-r31
+    repository: bitnami/statsd-exporter
+    tag: 0.28.0-debian-12-r11
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1611,20 +2758,19 @@ metrics:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-  ## @param metrics.extraEnvVars Array with extra environment variables to add Airflow exporter pods
+  ## @param metrics.configuration Specify content for StatsD exporter's mappings.yml
   ##
-  extraEnvVars: []
-  ## @param metrics.extraEnvVarsCM ConfigMap containing extra environment variables for Airflow exporter pods
+  configuration: ""
+  ## @param metrics.existingConfigmap Name of an existing config map containing the StatsD exporter's mappings.yml
   ##
-  extraEnvVarsCM: ""
-  ## @param metrics.extraEnvVarsSecret Secret containing extra environment variables (in case of sensitive data) for Airflow exporter pods
-  ##
-  extraEnvVarsSecret: ""
-  ## @param metrics.containerPorts.http Airflow exporter metrics container port
+  existingConfigmap: ""
+  ## @param metrics.containerPorts.ingest StatsD exporter ingest container port (used for the metrics ingestion from Airflow components)
+  ## @param metrics.containerPorts.metrics StatsD exporter metrics container port (used to expose Prometheus metrics)
   ##
   containerPorts:
-    http: 9112
-  ## Airflow exporter resource requests and limits
+    ingest: 9125
+    metrics: 9102
+  ## StatsD exporter resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param metrics.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if metrics.resources is set (metrics.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
@@ -1641,13 +2787,13 @@ metrics:
   ##     memory: 1024Mi
   ##
   resources: {}
-  ## Airflow exporter pods' Security Context
+  ## StatsD exporter pods' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param metrics.podSecurityContext.enabled Enable security context for the pods
   ## @param metrics.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
   ## @param metrics.podSecurityContext.sysctls Set kernel settings using the sysctl interface
   ## @param metrics.podSecurityContext.supplementalGroups Set filesystem extra groups
-  ## @param metrics.podSecurityContext.fsGroup Set Airflow exporter pod's Security Context fsGroup
+  ## @param metrics.podSecurityContext.fsGroup Set StatsD exporter pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
@@ -1655,18 +2801,18 @@ metrics:
     sysctls: []
     supplementalGroups: []
     fsGroup: 1001
-  ## Airflow exporter containers' Security Context
+  ## StatsD exporter containers' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param metrics.containerSecurityContext.enabled Enable Airflow exporter containers' Security Context
+  ## @param metrics.containerSecurityContext.enabled Enable StatsD exporter containers' Security Context
   ## @param metrics.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
-  ## @param metrics.containerSecurityContext.runAsUser Set Airflow exporter containers' Security Context runAsUser
-  ## @param metrics.containerSecurityContext.runAsGroup Set Airflow exporter containers' Security Context runAsGroup
-  ## @param metrics.containerSecurityContext.runAsNonRoot Set Airflow exporter containers' Security Context runAsNonRoot
-  ## @param metrics.containerSecurityContext.privileged Set metrics container's Security Context privileged
-  ## @param metrics.containerSecurityContext.allowPrivilegeEscalation Set metrics container's Security Context allowPrivilegeEscalation
-  ## @param metrics.containerSecurityContext.readOnlyRootFilesystem Set metrics container's Security Context readOnlyRootFilesystem
+  ## @param metrics.containerSecurityContext.runAsUser Set StatsD exporter containers' Security Context runAsUser
+  ## @param metrics.containerSecurityContext.runAsGroup Set StatsD exporter containers' Security Context runAsGroup
+  ## @param metrics.containerSecurityContext.runAsNonRoot Set StatsD exporter containers' Security Context runAsNonRoot
+  ## @param metrics.containerSecurityContext.privileged Set StatsD exporter containers' Security Context privileged
+  ## @param metrics.containerSecurityContext.allowPrivilegeEscalation Set StatsD exporter containers' Security Context allowPrivilegeEscalation
+  ## @param metrics.containerSecurityContext.readOnlyRootFilesystem Set StatsD exporter containers' Security Context readOnlyRootFilesystem
   ## @param metrics.containerSecurityContext.capabilities.drop List of capabilities to be dropped
-  ## @param metrics.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
+  ## @param metrics.containerSecurityContext.seccompProfile.type Set containers' Security Context seccomp profile
   ## e.g:
   ##   containerSecurityContext:
   ##     enabled: true
@@ -1687,21 +2833,74 @@ metrics:
       drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
-  ## @param metrics.lifecycleHooks for the Airflow exporter container(s) to automate configuration before or after startup
+  ## Configure extra options for StatsD exporter containers' liveness, readiness and startup probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
+  ## @param metrics.livenessProbe.enabled Enable livenessProbe on StatsD exporter containers
+  ## @param metrics.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param metrics.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param metrics.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param metrics.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param metrics.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 180
+    periodSeconds: 20
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+  ## @param metrics.readinessProbe.enabled Enable readinessProbe on StatsD exporter containers
+  ## @param metrics.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param metrics.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param metrics.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param metrics.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param metrics.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+  ## @param metrics.startupProbe.enabled Enable startupProbe on StatsD exporter containers
+  ## @param metrics.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param metrics.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param metrics.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param metrics.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param metrics.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 15
+    successThreshold: 1
+  ## @param metrics.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param metrics.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param metrics.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## @param metrics.lifecycleHooks for the StatsD exporter containers' to automate configuration before or after startup
   ##
   lifecycleHooks: {}
   ## @param metrics.automountServiceAccountToken Mount Service Account token in pod
   ##
   automountServiceAccountToken: false
-  ## @param metrics.hostAliases Airflow exporter pods host aliases
+  ## @param metrics.hostAliases StatsD exporter pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
-  ## @param metrics.podLabels Extra labels for Airflow exporter pods
+  ## @param metrics.podLabels Extra labels for StatsD exporter pods
   ## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
   podLabels: {}
-  ## @param metrics.podAnnotations Extra annotations for Airflow exporter pods
+  ## @param metrics.podAnnotations Extra annotations for StatsD exporter pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
@@ -1732,30 +2931,49 @@ metrics:
     ##   - e2e-az2
     ##
     values: []
-  ## @param metrics.affinity Affinity for pod assignment
+  ## @param metrics.affinity Affinity for StatsD exporter pods assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## Note: metrics.podAffinityPreset, metrics.podAntiAffinityPreset, and metrics.nodeAffinityPreset will be ignored when it's set
   ##
   affinity: {}
-  ## @param metrics.nodeSelector Node labels for pod assignment
+  ## @param metrics.nodeSelector Node labels for StatsD exporter pods assignment
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
+  ## @param metrics.priorityClassName StatsD exporter pods' priorityClassName
+  ##
+  priorityClassName: ""
   ## @param metrics.tolerations Tolerations for pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-  ## @param metrics.schedulerName Name of the k8s scheduler (other than default) for Airflow exporter
+  ## @param metrics.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
+  ## @param metrics.schedulerName Name of the k8s scheduler (other than default) for StatsD exporter
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
   schedulerName: ""
-  ## Airflow exporter service configuration
+  ## @param metrics.terminationGracePeriodSeconds Seconds StatsD exporter pod needs to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## @param metrics.extraVolumes Optionally specify extra list of additional volumes for the StatsD exporter pods
+  ##
+  extraVolumes: []
+  ## @param metrics.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the StatsD exporter containers
+  ##
+  extraVolumeMounts: []
+  ## StatsD metrics service configuration
   ##
   service:
-    ## @param metrics.service.ports.http Airflow exporter metrics service port
+    ## @param metrics.service.ports.ingest StatsD exporter ingest service port (used for the metrics ingestion from Airflow components)
+    ## @param metrics.service.ports.metrics StatsD exporter metrics service port (used to expose Prometheus metrics)
     ##
     ports:
-      http: 9112
+      ingest: 9125
+      metrics: 9102
     ## @param metrics.service.clusterIP Static clusterIP or None for headless services
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#choosing-your-own-ip-address
     ##
@@ -1765,11 +2983,11 @@ metrics:
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
-    ## @param metrics.service.annotations [object] Annotations for the Airflow exporter service
+    ## @param metrics.service.annotations [object] Annotations for the StatsD metrics service
     ##
     annotations:
       prometheus.io/scrape: "true"
-      prometheus.io/port: "{{ .Values.metrics.service.ports.http }}"
+      prometheus.io/port: "{{ .Values.metrics.service.ports.metrics }}"
   ## Prometheus Operator ServiceMonitor configuration
   ##
   serviceMonitor:
@@ -1861,6 +3079,7 @@ metrics:
     ##
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
+
 ## @section Airflow database parameters
 
 ## PostgreSQL chart configuration
@@ -1902,13 +3121,15 @@ postgresql:
     resources: {}
 ## External PostgreSQL configuration
 ## All of these values are only used when postgresql.enabled is set to false
-## @param externalDatabase.host Database host
-## @param externalDatabase.port Database port number
-## @param externalDatabase.user Non-root username for Airflow
-## @param externalDatabase.password Password for the non-root username for Airflow
-## @param externalDatabase.database Airflow database name
+## @param externalDatabase.host Database host (ignored if externalDatabase.sqlConnection is set)
+## @param externalDatabase.port Database port number (ignored if externalDatabase.sqlConnection is set)
+## @param externalDatabase.user Non-root username for Airflow (ignored if externalDatabase.sqlConnection is set)
+## @param externalDatabase.password Password for the non-root username for Airflow (ignored if externalDatabase.sqlConnection or externalDatabase.existingSecret are set)
+## @param externalDatabase.database Airflow database name (ignored if externalDatabase.sqlConnection is set)
+## @param externalDatabase.sqlConnection SQL connection string
 ## @param externalDatabase.existingSecret Name of an existing secret resource containing the database credentials
-## @param externalDatabase.existingSecretPasswordKey Name of an existing secret key containing the database credentials
+## @param externalDatabase.existingSecretPasswordKey Name of an existing secret key containing the database credentials (ignored if externalDatabase.existingSecretSqlConnectionKey is set)
+## @param externalDatabase.existingSecretSqlConnectionKey Name of an existing secret key containing the SQL connection string
 ##
 externalDatabase:
   host: localhost
@@ -1916,8 +3137,10 @@ externalDatabase:
   user: bn_airflow
   database: bitnami_airflow
   password: ""
+  sqlConnection: ""
   existingSecret: ""
   existingSecretPasswordKey: ""
+  existingSecretSqlConnectionKey: ""
 ## Redis&reg; chart configuration
 ## ref: https://github.com/bitnami/charts/blob/main/bitnami/redis/values.yaml
 ## @param redis.enabled Switch to enable or disable the Redis&reg; helm
@@ -1938,6 +3161,11 @@ redis:
     existingSecret: ""
   architecture: standalone
   master:
+    ## @param redis.master.service.ports.redis Redis&reg; port
+    ##
+    service:
+      ports:
+        redis: 6379
     ## Redis&reg; master resource requests and limits
     ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
     ## @param redis.master.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if master.resources is set (master.resources is recommended for production).

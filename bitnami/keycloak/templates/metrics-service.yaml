@@ -18,10 +18,20 @@ metadata:
 spec:
   type: ClusterIP
   ports:
-    - name: http
-      port: {{ coalesce .Values.metrics.service.ports.http .Values.metrics.service.port }}
+    - name: metrics
+      port: {{ .Values.metrics.service.ports.metrics }}
       protocol: TCP
-      targetPort: http
+      targetPort: {{ .Values.containerPorts.metrics }}
+    - name: http
+      port: {{ .Values.metrics.service.ports.http }}
+      protocol: TCP
+      targetPort: {{ .Values.containerPorts.http }}
+    {{- if .Values.tls.enabled }}
+    - name: https
+      port: {{ .Values.metrics.service.ports.https }}
+      protocol: TCP
+      targetPort: {{ .Values.containerPorts.https }}
+    {{- end }}
     {{- if .Values.metrics.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.metrics.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}      

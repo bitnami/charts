@@ -9,7 +9,7 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
 ##
 global:
   imageRegistry: ""
@@ -18,7 +18,12 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass: ""
+  defaultStorageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
   ## Compatibility adaptations for Kubernetes platforms
   ##
   compatibility:
@@ -80,10 +85,9 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/seaweedfs
-  tag: 3.67.0-debian-12-r1
+  tag: 3.85.0-debian-12-r3
   digest: ""
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -310,14 +314,17 @@ master:
       drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
-  ## @param master.logLevel Master Server log level [0|1|2|3|4]
+  ## @param master.logLevel Master Server log level (0, 1, 2, 3, or 4)
   ##
   logLevel: 1
   ## @param master.bindAddress Master Server bind address
   ##
   bindAddress: 0.0.0.0
+  ## @param master.volumeSizeLimitMB Limit (in MB) to stop directing writes to oversized volumes
+  ##
+  volumeSizeLimitMB: 1000
   ## @param master.config Master Server configuration
-  ## Specify content for master.yml
+  ## Specify content for master.toml
   ##
   config: ""
   ## @param master.existingConfigmap The name of an existing ConfigMap with your custom configuration for Master Server
@@ -336,7 +343,7 @@ master:
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
-  ## @param master.statefulsetAnnotations Annotations for Master Server statefulset
+  ## @param master.statefulsetAnnotations Annotations for Master Server StatefulSet
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   statefulsetAnnotations: {}
@@ -386,14 +393,14 @@ master:
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-  ## @param master.updateStrategy.type Master Server statefulset strategy type
+  ## @param master.updateStrategy.type Master Server StatefulSet strategy type
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
   updateStrategy:
     ## Can be set to RollingUpdate or OnDelete
     ##
     type: RollingUpdate
-  ## @param master.podManagementPolicy Pod management policy for Master Server statefulset
+  ## @param master.podManagementPolicy Pod management policy for Master Server StatefulSet
   ## Ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
   ##
   podManagementPolicy: Parallel
@@ -459,11 +466,11 @@ master:
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param master.pdb.create Enable/disable a Pod Disruption Budget creation
   ## @param master.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
-  ## @param master.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ## @param master.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `master.pdb.minAvailable` and `master.pdb.maxUnavailable` are empty.
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
   ## Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
@@ -709,11 +716,11 @@ master:
   ## @section Master Server Persistence Parameters
   ##
 
-  ## Enable persistence using Persistent Volume Claims
+  ## Enable Master data persistence using Persistent Volume Claims
   ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ##
   persistence:
-    ## @param master.persistence.enabled Enable persistence on Master Server using Persistent Volume Claims
+    ## @param master.persistence.enabled Enable data persistence on Master Server using Persistent Volume Claims
     ##
     enabled: true
     ## @param master.persistence.mountPath Path to mount the volume at.
@@ -740,7 +747,7 @@ master:
     ## @param master.persistence.size Size of data volume
     ##
     size: 8Gi
-    ## @param master.persistence.existingClaim The name of an existing PVC to use for persistence
+    ## @param master.persistence.existingClaim The name of an existing PVC to use for data persistence
     ##
     existingClaim: ""
     ## @param master.persistence.selector Selector to match an existing Persistent Volume for data PVC
@@ -754,6 +761,61 @@ master:
     ## @param master.persistence.dataSource Custom PVC data source
     ##
     dataSource: {}
+  ## Enable Master logs persistence using Persistent Volume Claims
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
+  ##
+  logPersistence:
+    ## @param master.logPersistence.enabled Enable logs persistence on Master Server using Persistent Volume Claims
+    ##
+    enabled: false
+    ## @param master.logPersistence.mountPath Path to mount the volume at.
+    ##
+    mountPath: /logs
+    ## @param master.logPersistence.subPath The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services
+    ##
+    subPath: ""
+    ## @param master.logPersistence.storageClass Storage class of backing PVC
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
+    storageClass: ""
+    ## @param master.logPersistence.annotations Persistent Volume Claim annotations
+    ##
+    annotations: {}
+    ## @param master.logPersistence.accessModes Persistent Volume Access Modes
+    ##
+    accessModes:
+      - ReadWriteOnce
+    ## @param master.logPersistence.size Size of logs volume
+    ##
+    size: 8Gi
+    ## @param master.logPersistence.existingClaim The name of an existing PVC to use for logs persistence
+    ##
+    existingClaim: ""
+    ## @param master.logPersistence.selector Selector to match an existing Persistent Volume for logs PVC
+    ## If set, the PVC can't have a PV dynamically provisioned for it
+    ## E.g.
+    ## selector:
+    ##   matchLabels:
+    ##     app: my-app
+    ##
+    selector: {}
+    ## @param master.logPersistence.dataSource Custom PVC data source
+    ##
+    dataSource: {}
+  ## persistentVolumeClaimRetentionPolicy
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#persistentvolumeclaim-retention
+  ## @param master.persistentVolumeClaimRetentionPolicy.enabled Controls if and how PVCs are deleted during the lifecycle of the Master Server StatefulSet
+  ## @param master.persistentVolumeClaimRetentionPolicy.whenScaled Volume retention behavior when the replica count of the StatefulSet is reduced
+  ## @param master.persistentVolumeClaimRetentionPolicy.whenDeleted Volume retention behavior that applies when the StatefulSet is deleted
+  ##
+  persistentVolumeClaimRetentionPolicy:
+    enabled: false
+    whenScaled: Retain
+    whenDeleted: Retain
 
   ## @section Master Server Metrics Parameters
   ##
@@ -947,7 +1009,7 @@ volume:
       drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
-  ## @param volume.logLevel Volume Server log level [0|1|2|3|4]
+  ## @param volume.logLevel Volume Server log level (0, 1, 2, 3, or 4)
   ##
   logLevel: 1
   ## @param volume.bindAddress Volume Server bind address
@@ -957,7 +1019,7 @@ volume:
   ##
   publicUrl: ""
   ## @param volume.config Volume Server configuration
-  ## Specify content for volume.yml
+  ## Specify content for volume.toml
   ##
   config: ""
   ## @param volume.existingConfigmap The name of an existing ConfigMap with your custom configuration for Volume Server
@@ -976,7 +1038,7 @@ volume:
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
-  ## @param volume.statefulsetAnnotations Annotations for Volume Server statefulset
+  ## @param volume.statefulsetAnnotations Annotations for Volume Server StatefulSet
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   statefulsetAnnotations: {}
@@ -1026,14 +1088,14 @@ volume:
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-  ## @param volume.updateStrategy.type Volume Server statefulset strategy type
+  ## @param volume.updateStrategy.type Volume Server StatefulSet strategy type
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
   updateStrategy:
     ## Can be set to RollingUpdate or OnDelete
     ##
     type: RollingUpdate
-  ## @param volume.podManagementPolicy Pod management policy for Volume Server statefulset
+  ## @param volume.podManagementPolicy Pod management policy for Volume Server StatefulSet
   ## Ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
   ##
   podManagementPolicy: Parallel
@@ -1099,11 +1161,11 @@ volume:
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param volume.pdb.create Enable/disable a Pod Disruption Budget creation
   ## @param volume.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
-  ## @param volume.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ## @param volume.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `volume.pdb.minAvailable` and `volume.pdb.maxUnavailable` are empty.
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
   ## Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
@@ -1360,6 +1422,11 @@ volume:
       ## @param volume.dataVolumes[0].subPath The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services
       ##
       subPath: ""
+      ## @param volume.dataVolumes[0].maxVolumes Max number of SeaweedFS volumes this data volume can be divided into. If set to 0, the limit will be auto configured as free disk space divided by default volume size (30GB)
+      ## ref: https://github.com/seaweedfs/seaweedfs/wiki/FAQ#how-many-volumes-do-i-need
+      ## ref: https://github.com/seaweedfs/seaweedfs/blob/master/weed/util/constants_4bytes.go#L8
+      ##
+      maxVolumes: 8
       ## Enable persistence using Persistent Volume Claims
       ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
       ##
@@ -1399,6 +1466,61 @@ volume:
         ## @param volume.dataVolumes[0].persistence.dataSource Custom PVC data source
         ##
         dataSource: {}
+  ## Enable Volume logs persistence using Persistent Volume Claims
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
+  ##
+  logPersistence:
+    ## @param volume.logPersistence.enabled Enable logs persistence on Volume Server using Persistent Volume Claims
+    ##
+    enabled: false
+    ## @param volume.logPersistence.mountPath Path to mount the volume at.
+    ##
+    mountPath: /logs
+    ## @param volume.logPersistence.subPath The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services
+    ##
+    subPath: ""
+    ## @param volume.logPersistence.storageClass Storage class of backing PVC
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
+    storageClass: ""
+    ## @param volume.logPersistence.annotations Persistent Volume Claim annotations
+    ##
+    annotations: {}
+    ## @param volume.logPersistence.accessModes Persistent Volume Access Modes
+    ##
+    accessModes:
+      - ReadWriteOnce
+    ## @param volume.logPersistence.size Size of logs volume
+    ##
+    size: 8Gi
+    ## @param volume.logPersistence.existingClaim The name of an existing PVC to use for logs persistence
+    ##
+    existingClaim: ""
+    ## @param volume.logPersistence.selector Selector to match an existing Persistent Volume for logs PVC
+    ## If set, the PVC can't have a PV dynamically provisioned for it
+    ## E.g.
+    ## selector:
+    ##   matchLabels:
+    ##     app: my-app
+    ##
+    selector: {}
+    ## @param volume.logPersistence.dataSource Custom PVC data source
+    ##
+    dataSource: {}
+  ## persistentVolumeClaimRetentionPolicy
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#persistentvolumeclaim-retention
+  ## @param volume.persistentVolumeClaimRetentionPolicy.enabled Controls if and how PVCs are deleted during the lifecycle of the Volume Server StatefulSet
+  ## @param volume.persistentVolumeClaimRetentionPolicy.whenScaled Volume retention behavior when the replica count of the StatefulSet is reduced
+  ## @param volume.persistentVolumeClaimRetentionPolicy.whenDeleted Volume retention behavior that applies when the StatefulSet is deleted
+  ##
+  persistentVolumeClaimRetentionPolicy:
+    enabled: false
+    whenScaled: Retain
+    whenDeleted: Retain
 
   ## @section Volume Server Metrics Parameters
   ##
@@ -1595,14 +1717,14 @@ filer:
       drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
-  ## @param filer.logLevel Filer Server log level [0|1|2|3|4]
+  ## @param filer.logLevel Filer Server log level (0, 1, 2, 3, or 4)
   ##
   logLevel: 1
   ## @param filer.bindAddress Filer Server bind address
   ##
   bindAddress: 0.0.0.0
   ## @param filer.config Filer Server configuration
-  ## Specify content for filer.yml
+  ## Specify content for filer.toml
   ##
   config: |
     [leveldb2]
@@ -1610,6 +1732,13 @@ filer:
   ## @param filer.existingConfigmap The name of an existing ConfigMap with your custom configuration for Filer Server
   ##
   existingConfigmap: ""
+  ## @param filer.notificationConfig Filer Server notification configuration
+  ## Specify content for custom notification.toml
+  ##
+  notificationConfig: ""
+  ## @param filer.existingNotificationConfigmap The name of an existing ConfigMap with your custom notification configuration for Filer Server
+  ##
+  existingNotificationConfigmap: ""
   ## @param filer.command Override default Filer Server container command (useful when using custom images)
   ##
   command: []
@@ -1623,7 +1752,7 @@ filer:
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
-  ## @param filer.statefulsetAnnotations Annotations for Filer Server statefulset
+  ## @param filer.statefulsetAnnotations Annotations for Filer Server StatefulSet
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   statefulsetAnnotations: {}
@@ -1673,14 +1802,14 @@ filer:
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-  ## @param filer.updateStrategy.type Filer Server statefulset strategy type
+  ## @param filer.updateStrategy.type Filer Server StatefulSet strategy type
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
   updateStrategy:
     ## Can be set to RollingUpdate or OnDelete
     ##
     type: RollingUpdate
-  ## @param filer.podManagementPolicy Pod management policy for Filer Server statefulset
+  ## @param filer.podManagementPolicy Pod management policy for Filer Server StatefulSet
   ## Ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
   ##
   podManagementPolicy: Parallel
@@ -1746,11 +1875,11 @@ filer:
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param filer.pdb.create Enable/disable a Pod Disruption Budget creation
   ## @param filer.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
-  ## @param filer.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ## @param filer.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `filer.pdb.minAvailable` and `filer.pdb.maxUnavailable` are empty.
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
   ## Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
@@ -1993,6 +2122,65 @@ filer:
     ##
     extraRules: []
 
+  ## @section Filer Server Persistence Parameters
+  ##
+
+  ## Enable Filer logs persistence using Persistent Volume Claims
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
+  ##
+  logPersistence:
+    ## @param filer.logPersistence.enabled Enable logs persistence on Filer Server using Persistent Volume Claims
+    ##
+    enabled: false
+    ## @param filer.logPersistence.mountPath Path to mount the volume at.
+    ##
+    mountPath: /logs
+    ## @param filer.logPersistence.subPath The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services
+    ##
+    subPath: ""
+    ## @param filer.logPersistence.storageClass Storage class of backing PVC
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
+    storageClass: ""
+    ## @param filer.logPersistence.annotations Persistent Volume Claim annotations
+    ##
+    annotations: {}
+    ## @param filer.logPersistence.accessModes Persistent Volume Access Modes
+    ##
+    accessModes:
+      - ReadWriteOnce
+    ## @param filer.logPersistence.size Size of logs volume
+    ##
+    size: 8Gi
+    ## @param filer.logPersistence.existingClaim The name of an existing PVC to use for logs persistence
+    ##
+    existingClaim: ""
+    ## @param filer.logPersistence.selector Selector to match an existing Persistent Volume for logs PVC
+    ## If set, the PVC can't have a PV dynamically provisioned for it
+    ## E.g.
+    ## selector:
+    ##   matchLabels:
+    ##     app: my-app
+    ##
+    selector: {}
+    ## @param filer.logPersistence.dataSource Custom PVC data source
+    ##
+    dataSource: {}
+  ## persistentVolumeClaimRetentionPolicy
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#persistentvolumeclaim-retention
+  ## @param filer.persistentVolumeClaimRetentionPolicy.enabled Controls if and how PVCs are deleted during the lifecycle of the Master Server StatefulSet
+  ## @param filer.persistentVolumeClaimRetentionPolicy.whenScaled Volume retention behavior when the replica count of the StatefulSet is reduced
+  ## @param filer.persistentVolumeClaimRetentionPolicy.whenDeleted Volume retention behavior that applies when the StatefulSet is deleted
+  ##
+  persistentVolumeClaimRetentionPolicy:
+    enabled: false
+    whenScaled: Retain
+    whenDeleted: Retain
+
   ## @section Filer Server Metrics Parameters
   ##
   metrics:
@@ -2188,21 +2376,23 @@ s3:
       drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
-  ## @param s3.logLevel Amazon S3 API log level [0|1|2|3|4]
+  ## @param s3.logLevel Amazon S3 API log level (0, 1, 2, 3, or 4)
   ##
   logLevel: 1
   ## @param s3.bindAddress Amazon S3 API bind address
   ##
   bindAddress: 0.0.0.0
+  ## @param s3.allowEmptyFolder Allow empty folders in Amazon S3 API
+  allowEmptyFolder: true
   ## S3 Authentication
   ## ref: https://github.com/seaweedfs/seaweedfs/wiki/Amazon-S3-API#s3-authentication
   ## @param s3.auth.enabled Enable Amazon S3 API authentication
   ## @param s3.auth.existingSecret Existing secret with Amazon S3 API authentication configuration
   ## @param s3.auth.existingSecretConfigKey Key of the above existing secret with S3 API authentication configuration, defaults to `config.json`
-  ## @param s3.auth.adminAccessKeyId Amazon S3 API access key with admin privileges. Ignored if `security.mTLS.volume.existingSecret` is set
-  ## @param s3.auth.adminSecretAccessKey Amazon S3 API secret key with admin privileges. Ignored if `security.mTLS.volume.existingSecret` is set
-  ## @param s3.auth.readAccessKeyId Amazon S3 API read access key with read-only privileges. Ignored if `security.mTLS.volume.existingSecret` is set
-  ## @param s3.auth.readSecretAccessKey Amazon S3 API read secret key with read-only privileges. Ignored if `security.mTLS.volume.existingSecret` is set
+  ## @param s3.auth.adminAccessKeyId Amazon S3 API access key with admin privileges. Ignored if `s3.auth.existingSecret` is set
+  ## @param s3.auth.adminSecretAccessKey Amazon S3 API secret key with admin privileges. Ignored if `s3.auth.existingSecret` is set
+  ## @param s3.auth.readAccessKeyId Amazon S3 API read access key with read-only privileges. Ignored if `s3.auth.existingSecret` is set
+  ## @param s3.auth.readSecretAccessKey Amazon S3 API read secret key with read-only privileges. Ignored if `s3.auth.existingSecret` is set
   ##
   auth:
     enabled: false
@@ -2344,11 +2534,11 @@ s3:
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param s3.pdb.create Enable/disable a Pod Disruption Budget creation
   ## @param s3.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
-  ## @param s3.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ## @param s3.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `s3.pdb.minAvailable` and `s3.pdb.maxUnavailable` are empty.
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
   ## Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
@@ -2782,7 +2972,7 @@ webdav:
       drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
-  ## @param webdav.logLevel WebDAV log level [0|1|2|3|4]
+  ## @param webdav.logLevel WebDAV log level (0, 1, 2, 3, or 4)
   ##
   logLevel: 1
   ## TLS configuration for WebDAV
@@ -2948,11 +3138,11 @@ webdav:
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param webdav.pdb.create Enable/disable a Pod Disruption Budget creation
   ## @param webdav.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
-  ## @param webdav.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ## @param webdav.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `webdav.pdb.minAvailable` and `webdav.pdb.maxUnavailable` are empty.
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
   ## Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
@@ -3191,6 +3381,326 @@ webdav:
     ##
     extraRules: []
 
+## @section IAM Parameters
+##
+iam:
+  ## @param iam.enabled Enable IAM deployment
+  ##
+  enabled: false
+  ## @param iam.replicaCount Number of IAM replicas to deploy
+  ##
+  replicaCount: 1
+  ## @param iam.containerPorts.http IAM HTTP container port
+  ##
+  containerPorts:
+    http: 8111
+  ## Configure extra options for IAM containers' liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param iam.livenessProbe.enabled Enable livenessProbe on IAM containers
+  ## @param iam.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param iam.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param iam.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param iam.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param iam.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 30
+    timeoutSeconds: 30
+    periodSeconds: 10
+    successThreshold: 1
+    failureThreshold: 6
+  ## @param iam.readinessProbe.enabled Enable readinessProbe on IAM containers
+  ## @param iam.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param iam.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param iam.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param iam.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param iam.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 30
+    timeoutSeconds: 30
+    periodSeconds: 10
+    successThreshold: 1
+    failureThreshold: 6
+  ## @param iam.startupProbe.enabled Enable startupProbe on IAM containers
+  ## @param iam.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param iam.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param iam.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param iam.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param iam.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 5
+    periodSeconds: 5
+    timeoutSeconds: 1
+    failureThreshold: 15
+    successThreshold: 1
+
+  ## IAM resource requests and limits
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param iam.resourcesPreset Set IAM container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if webdav.resources is set (webdav.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "nano"
+  ## @param iam.resources Set IAM container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param iam.podSecurityContext.enabled Enable IAM pods' Security Context
+  ## @param iam.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy for IAM pods
+  ## @param iam.podSecurityContext.sysctls Set kernel settings using the sysctl interface for IAM pods
+  ## @param iam.podSecurityContext.supplementalGroups Set filesystem extra groups for IAM pods
+  ## @param iam.podSecurityContext.fsGroup Set fsGroup in IAM pods' Security Context
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
+    fsGroup: 1001
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param iam.containerSecurityContext.enabled Enabled IAM container' Security Context
+  ## @param iam.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in IAM container
+  ## @param iam.containerSecurityContext.runAsUser Set runAsUser in IAM container' Security Context
+  ## @param iam.containerSecurityContext.runAsGroup Set runAsGroup in IAM container' Security Context
+  ## @param iam.containerSecurityContext.runAsNonRoot Set runAsNonRoot in IAM container' Security Context
+  ## @param iam.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in IAM container' Security Context
+  ## @param iam.containerSecurityContext.privileged Set privileged in IAM container' Security Context
+  ## @param iam.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in IAM container' Security Context
+  ## @param iam.containerSecurityContext.capabilities.drop List of capabilities to be dropped in IAM container
+  ## @param iam.containerSecurityContext.seccompProfile.type Set seccomp profile in IAM container
+  ##
+  containerSecurityContext:
+    enabled: true
+    seLinuxOptions: {}
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    readOnlyRootFilesystem: true
+    privileged: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
+  ## @param iam.logLevel IAM log level (0, 1, 2, 3, or 4)
+  ##
+  logLevel: 1
+  ## @param iam.command Override default IAM container command (useful when using custom images)
+  ##
+  command: []
+  ## @param iam.args Override default IAM container args (useful when using custom images)
+  ##
+  args: []
+  ## @param iam.automountServiceAccountToken Mount Service Account token in IAM pods
+  ##
+  automountServiceAccountToken: false
+  ## @param iam.hostAliases IAM pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param iam.statefulsetAnnotations Annotations for IAM statefulset
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  statefulsetAnnotations: {}
+  ## @param iam.podLabels Extra labels for IAM pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param iam.podAnnotations Annotations for IAM pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param iam.podAffinityPreset Pod affinity preset. Ignored if `iam.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param iam.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `iam.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## Node iam.affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param iam.nodeAffinityPreset.type Node affinity preset type. Ignored if `iam.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param iam.nodeAffinityPreset.key Node label key to match. Ignored if `iam.affinity` is set
+    ##
+    key: ""
+    ## @param iam.nodeAffinityPreset.values Node label values to match. Ignored if `iam.affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param iam.affinity Affinity for IAM pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `iam.podAffinityPreset`, `iam.podAntiAffinityPreset`, and `iam.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param iam.nodeSelector Node labels for IAM pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
+  ##
+  nodeSelector: {}
+  ## @param iam.tolerations Tolerations for IAM pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param iam.updateStrategy.type IAM deployment strategy type
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy:
+    ## Can be set to RollingUpdate or Recreate
+    ##
+    type: RollingUpdate
+  ## @param iam.priorityClassName IAM pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param iam.topologySpreadConstraints Topology Spread Constraints for IAM pod assignment spread across your cluster among failure-domains
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
+  ## @param iam.schedulerName Name of the k8s scheduler (other than default) for IAM pods
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param iam.terminationGracePeriodSeconds Seconds IAM pods need to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## @param iam.lifecycleHooks for IAM containers to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param iam.extraEnvVars Array with extra environment variables to add to IAM containers
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param iam.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for IAM containers
+  ##
+  extraEnvVarsCM: ""
+  ## @param iam.extraEnvVarsSecret Name of existing Secret containing extra env vars for IAM containers
+  ##
+  extraEnvVarsSecret: ""
+  ## @param iam.extraVolumes Optionally specify extra list of additional volumes for the IAM pods
+  ##
+  extraVolumes: []
+  ## @param iam.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the IAM containers
+  ##
+  extraVolumeMounts: []
+  ## @param iam.sidecars Add additional sidecar containers to the IAM pods
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param iam.initContainers Add additional init containers to the IAM pods
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param iam.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param iam.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param iam.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `iam.pdb.minAvailable` and `iam.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
+
+
+  ## @section IAM Traffic Exposure Parameters
+  ##
+
+  ## IAM service parameters
+  ##
+  service:
+    ## @param iam.service.type IAM service type
+    ##
+    type: ClusterIP
+    ## @param iam.service.ports.http IAM service HTTP port (HTTPS if `iam.tls.enabled` is `true`)
+    ##
+    ports:
+      http: 8111
+    ## Node ports to expose
+    ## @param iam.service.nodePorts.http Node port for HTTP (HTTPS if `iam.tls.enabled` is `true`)
+    ## NOTE: choose port between <30000-32767>
+    ##
+    nodePorts:
+      http: ""
+    ## @param iam.service.clusterIP IAM service Cluster IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param iam.service.loadBalancerIP IAM service Load Balancer IP
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerIP: ""
+    ## @param iam.service.loadBalancerSourceRanges IAM service Load Balancer sources
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param iam.service.externalTrafficPolicy IAM service external traffic policy
+    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param iam.service.annotations Additional custom annotations for IAM service
+    ##
+    annotations: {}
+    ## @param iam.service.extraPorts Extra ports to expose in IAM service (normally used with the `sidecars` value)
+    ##
+    extraPorts: []
+    ## @param iam.service.sessionAffinity Control where client requests go, to the same pod or round-robin
+    ## Values: ClientIP or None
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
+    ##
+    sessionAffinity: None
+    ## @param iam.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
+    ## Headless service properties
+    ##
+  ## Network Policies for IAM
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+
 ## @section Init Container Parameters
 ##
 
@@ -3213,7 +3723,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r20
+    tag: 12-debian-12-r39
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -3272,7 +3782,7 @@ serviceAccount:
   annotations: {}
   ## @param serviceAccount.automountServiceAccountToken Automount service account token for the server service account
   ##
-  automountServiceAccountToken: true
+  automountServiceAccountToken: false
 
 ## @section Database Parameters
 ##
@@ -3285,6 +3795,31 @@ mariadb:
   ## To use an external database set this to false and configure the `externalDatabase.*` parameters
   ##
   enabled: true
+  ## Bitnami MariaDB image
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mariadb
+  ## @param mariadb.image.registry [default: REGISTRY_NAME] MariaDB image registry
+  ## @param mariadb.image.repository [default: REPOSITORY_NAME/mariadb] MariaDB image repository
+  ## @skip mariadb.image.tag MariaDB image tag (immutable tags are recommended)
+  ## @param mariadb.image.digest MariaDB image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param mariadb.image.pullPolicy MariaDB image pull policy
+  ## @param mariadb.image.pullSecrets Specify docker-registry secret names as an array
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/mariadb
+    tag: 11.4.5-debian-12-r8
+    digest: ""
+    ## Specify a imagePullPolicy
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## Example:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
   ## @param mariadb.architecture MariaDB architecture. Allowed values: `standalone` or `replication`
   ##
   architecture: standalone
@@ -3293,7 +3828,6 @@ mariadb:
   ## @param mariadb.auth.database MariaDB custom database
   ## @param mariadb.auth.username MariaDB custom user name
   ## @param mariadb.auth.password MariaDB custom user password
-  ## @param mariadb.auth.usePasswordFiles Mount credentials as a file instead of using an environment variable
   ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mariadb#setting-the-root-password-on-first-run
   ##      https://github.com/bitnami/containers/blob/main/bitnami/mariadb/README.md#creating-a-database-on-first-run
   ##      https://github.com/bitnami/containers/blob/main/bitnami/mariadb/README.md#creating-a-database-user-on-first-run
@@ -3303,13 +3837,12 @@ mariadb:
     database: bitnami_seaweedfs
     username: bn_seaweedfs
     password: ""
-    usePasswordFiles: false
   ## @param mariadb.initdbScripts [object] Specify dictionary of scripts to be run at first boot
   ##
   initdbScripts:
     create_table.sql: |
       USE bitnami_seaweedfs;
-      CREATE TABLE IF NOT EXISTS `filemeta` (
+      CREATE TABLE IF NOT EXISTS filemeta (
         `dirhash`   BIGINT NOT NULL       COMMENT 'first 64 bits of MD5 hash value of directory field',
         `name`      VARCHAR(766) NOT NULL COMMENT 'directory or file name',
         `directory` TEXT NOT NULL         COMMENT 'full path to parent directory',
@@ -3353,10 +3886,114 @@ mariadb:
     ##     memory: 1024Mi
     ##
     resources: {}
+## PostgresSQL chart configuration
+## ref: https://github.com/bitnami/charts/blob/main/bitnami/postgresql/values.yaml
+##
+postgresql:
+  ## @param postgresql.enabled Deploy a PostgresSQL server to satisfy the Filer server database requirements
+  ## To use an external database set this to false and configure the `externalDatabase.*` parameters
+  ##
+  enabled: false
+  ## Bitnami PostgreSQL image version
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/postgresql
+  ## @param postgresql.image.registry [default: REGISTRY_NAME] PostgreSQL image registry
+  ## @param postgresql.image.repository [default: REPOSITORY_NAME/postgresql] PostgreSQL image repository
+  ## @skip postgresql.image.tag PostgreSQL image tag (immutable tags are recommended)
+  ## @param postgresql.image.digest PostgreSQL image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param postgresql.image.pullPolicy PostgreSQL image pull policy
+  ## @param postgresql.image.pullSecrets Specify image pull secrets
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/postgresql
+    tag: 17.4.0-debian-12-r4
+    digest: ""
+    ## Specify a imagePullPolicy
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## Example:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+  ## @param postgresql.architecture PostgreSQL architecture (`standalone` or `replication`)
+  ##
+  architecture: standalone
+  ## @param postgresql.auth.postgresPassword Password for the "postgres" admin user. Ignored if `auth.existingSecret` with key `postgres-password` is provided
+  ## @param postgresql.auth.database Name for a custom database to create
+  ## @param postgresql.auth.username Name for a custom user to create
+  ## @param postgresql.auth.password Password for the custom user to create
+  ## @param postgresql.auth.existingSecret Name of existing secret to use for PostgreSQL credentials
+  ## @param postgresql.auth.secretKeys.userPasswordKey Name of key in existing secret to use for PostgreSQL credentials. Only used when `auth.existingSecret` is set.
+  auth:
+    postgresPassword: ""
+    database: bitnami_seaweedfs
+    username: bn_seaweedfs
+    password: some-password
+    existingSecret: ""
+    secretKeys:
+      userPasswordKey: password
+  ## PostgreSQL Primary configuration
+  ##
+  primary:
+    ## PostgreSQL Primary resource requests and limits
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+    ## @param postgresql.primary.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if postgresql.primary.resources is set (postgresql.primary.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+    ##
+    resourcesPreset: "nano"
+    ## @param postgresql.primary.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## Example:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    resources: {}
+    ## @param postgresql.primary.initdb.scripts [object] Dictionary of initdb scripts
+    ##
+    initdb:
+      scripts:
+        create_table.sql: |
+          \c bitnami_seaweedfs;
+          CREATE TABLE IF NOT EXISTS filemeta (
+            dirhash     BIGINT,
+            name        VARCHAR(65535),
+            directory   VARCHAR(65535),
+            meta        bytea,
+            PRIMARY KEY (dirhash, name)
+          );
+    ## PostgreSQL Primary Persistence parameters
+    ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
+    ## @param postgresql.primary.persistence.enabled Enable PostgreSQL Primary data persistence using PVC(s)
+    ## @param postgresql.primary.persistence.storageClass Persistent Volume storage class
+    ## @param postgresql.primary.persistence.accessModes [array] Persistent Volume access modes
+    ## @param postgresql.primary.persistence.size Persistent Volume size
+    ##
+    persistence:
+      enabled: true
+      storageClass: ""
+      accessModes:
+        - ReadWriteOnce
+      size: 8Gi
+
 ## External Database Configuration
-## All of these values are only used if `mariadb.enabled=false`
+## All of these values are only used if `mariadb.enabled=false` and `externalDatabase.enabled=true`.
 ##
 externalDatabase:
+  ## @param externalDatabase.enabled Enable external database support
+  ##
+  enabled: false
+  ## @param externalDatabase.store Database store (mariadb, postgresql)
+  ##
+  store: mariadb
   ## @param externalDatabase.host External Database server host
   ##
   host: localhost
@@ -3373,7 +4010,88 @@ externalDatabase:
   ##
   database: bitnami_seaweedfs
   ## @param externalDatabase.existingSecret The name of an existing secret with database credentials. Evaluated as a template
-  ## NOTE: Must contain key `mariadb-password`
+  ## NOTE: Must contain key `mariadb-password` for mariadb or 'postgres-password' for postgres
   ## NOTE: When it's set, the `externalDatabase.password` parameter is ignored
   ##
   existingSecret: ""
+  ## @param externalDatabase.waitForDatabaseEnabled Whether to check for external database before starting seaweedfs containers
+  ##
+  waitForDatabaseEnabled: true
+  ##
+  ## Init external database job
+  ##
+  initDatabaseJob:
+    ## @param externalDatabase.initDatabaseJob.enabled Enable the init external database job
+    ##
+    enabled: false
+    ## @param externalDatabase.initDatabaseJob.labels Extra labels for the init external database job
+    ##
+    labels: {}
+    ## @param externalDatabase.initDatabaseJob.annotations [object] Extra annotations for the init external database job
+    ##
+    annotations:
+      helm.sh/hook: post-install
+      helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+    ## @param externalDatabase.initDatabaseJob.backoffLimit Set backoff limit of the init external database job
+    ##
+    backoffLimit: 10
+    ## Configure Container Security Context
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+    ## @param externalDatabase.initDatabaseJob.containerSecurityContext.enabled Enabled init external database job containers' Security Context
+    ## @param externalDatabase.initDatabaseJob.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+    ## @param externalDatabase.initDatabaseJob.containerSecurityContext.runAsUser Set init external database job containers' Security Context runAsUser
+    ## @param externalDatabase.initDatabaseJob.containerSecurityContext.runAsGroup Set init external database job containers' Security Context runAsGroup
+    ## @param externalDatabase.initDatabaseJob.containerSecurityContext.runAsNonRoot Set init external database job containers' Security Context runAsNonRoot
+    ## @param externalDatabase.initDatabaseJob.containerSecurityContext.privileged Set init external database job containers' Security Context privileged
+    ## @param externalDatabase.initDatabaseJob.containerSecurityContext.readOnlyRootFilesystem Set init external database job containers' Security Context readOnlyRootFilesystem
+    ## @param externalDatabase.initDatabaseJob.containerSecurityContext.allowPrivilegeEscalation Set init external database job containers' Security Context allowPrivilegeEscalation
+    ## @param externalDatabase.initDatabaseJob.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+    ## @param externalDatabase.initDatabaseJob.containerSecurityContext.seccompProfile.type Set init external database job containers' Security Context seccomp profile
+    ##
+    containerSecurityContext:
+      enabled: true
+      seLinuxOptions: {}
+      runAsUser: 1001
+      runAsGroup: 1001
+      runAsNonRoot: true
+      privileged: false
+      readOnlyRootFilesystem: true
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop: ["ALL"]
+      seccompProfile:
+        type: "RuntimeDefault"
+    ## Configure Pods Security Context
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+    ## @param externalDatabase.initDatabaseJob.podSecurityContext.enabled Enabled init external database job pods' Security Context
+    ## @param externalDatabase.initDatabaseJob.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+    ## @param externalDatabase.initDatabaseJob.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+    ## @param externalDatabase.initDatabaseJob.podSecurityContext.supplementalGroups Set filesystem extra groups
+    ## @param externalDatabase.initDatabaseJob.podSecurityContext.fsGroup Set init external database job pod's Security Context fsGroup
+    ##
+    podSecurityContext:
+      enabled: true
+      fsGroupChangePolicy: Always
+      sysctls: []
+      supplementalGroups: []
+      fsGroup: 1001
+    ## Container resource requests and limits
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+    ## @param externalDatabase.initDatabaseJob.resourcesPreset Set init external database job container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if externalDatabase.initDatabaseJob.resources is set (externalDatabase.initDatabaseJob.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+    ##
+    resourcesPreset: "micro"
+    ## @param externalDatabase.initDatabaseJob.resources Set init external database job container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## Example:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    resources: {}
+    ## @param externalDatabase.initDatabaseJob.automountServiceAccountToken Mount Service Account token in external database job pod
+    ##
+    automountServiceAccountToken: false

@@ -16,6 +16,12 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    ##
+    allowInsecureImages: false
   ## Compatibility adaptations for Kubernetes platforms
   ##
   compatibility:
@@ -80,10 +86,9 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/nginx
-  tag: 1.25.5-debian-12-r0
+  tag: 1.27.4-debian-12-r6
   digest: ""
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -185,6 +190,28 @@ hostNetwork: false
 ## @param hostIPC Specify if host IPC should be enabled for NGINX pod
 ##
 hostIPC: false
+## DNS-Pod services
+## Ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/
+## @param dnsPolicy Specifies the DNS policy for the NGINX pod
+## DNS policies can be set on a per-Pod basis. Currently Kubernetes supports the following Pod-specific DNS policies.
+## Available options: Default, ClusterFirst, ClusterFirstWithHostNet, None
+## Ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-s-dns-policy
+dnsPolicy: ""
+## @param dnsConfig  Allows users more control on the DNS settings for a Pod. Required if `dnsPolicy` is set to `None`
+## The dnsConfig field is optional and it can work with any dnsPolicy settings.
+## Ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-dns-config
+## E.g.
+## dnsConfig:
+##   nameservers:
+##     - 192.0.2.1 # this is an example
+##   searches:
+##     - ns1.svc.cluster-domain.example
+##     - my.dns.search.suffix
+##   options:
+##     - name: ndots
+##       value: "2"
+##     - name: edns0
+dnsConfig: {}
 ## @param nodeSelector Node labels for pod assignment. Evaluated as a template.
 ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
 ##
@@ -274,7 +301,7 @@ podSecurityContext:
 ##
 containerSecurityContext:
   enabled: true
-  seLinuxOptions: null
+  seLinuxOptions: {}
   runAsUser: 1001
   runAsGroup: 1001
   runAsNonRoot: true
@@ -372,6 +399,7 @@ livenessProbe:
 ## NGINX containers' readiness probe.
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
 ## @param readinessProbe.enabled Enable readinessProbe
+## @param readinessProbe.path Request path for livenessProbe
 ## @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
 ## @param readinessProbe.periodSeconds Period seconds for readinessProbe
 ## @param readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
@@ -380,6 +408,7 @@ livenessProbe:
 ##
 readinessProbe:
   enabled: true
+  path: /
   initialDelaySeconds: 5
   timeoutSeconds: 3
   periodSeconds: 5
@@ -454,15 +483,15 @@ initContainers: []
 pdb:
   ## @param pdb.create Created a PodDisruptionBudget
   ##
-  create: false
+  create: true
   ## @param pdb.minAvailable Min number of pods that must still be available after the eviction.
   ## You can specify an integer or a percentage by setting the value to a string representation of a percentage (eg. "50%"). It will be disabled if set to 0
   ##
-  minAvailable: 1
+  minAvailable: ""
   ## @param pdb.maxUnavailable Max number of pods that can be unavailable after the eviction.
-  ## You can specify an integer or a percentage by setting the value to a string representation of a percentage (eg. "50%"). It will be disabled if set to 0
+  ## You can specify an integer or a percentage by setting the value to a string representation of a percentage (eg. "50%"). It will be disabled if set to 0. Defaults to `1` if both `pdb.minAvailable` and `pdb.maxUnavailable` are empty.
   ##
-  maxUnavailable: 0
+  maxUnavailable: ""
 ## @section Custom NGINX application parameters
 
 ## Get the server static content from a git repository
@@ -484,10 +513,9 @@ cloneStaticSiteFromGit:
   image:
     registry: docker.io
     repository: bitnami/git
-    tag: 2.44.0-debian-12-r2
+    tag: 2.48.1-debian-12-r9
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -578,10 +606,22 @@ cloneStaticSiteFromGit:
 ##   }
 ##
 serverBlock: ""
+## @param streamServerBlock Custom stream server block to be added to NGINX configuration
+## streamServerBlock: |-
+##   server {
+##     listen 0.0.0.0:8080 udp;
+##     proxy_pass localhost:9000;
+##   }
+##
+streamServerBlock: ""
 ## @param existingServerBlockConfigmap ConfigMap with custom server block to be added to NGINX configuration
 ## NOTE: This will override serverBlock
 ##
 existingServerBlockConfigmap: ""
+## @param existingStreamServerBlockConfigmap ConfigMap with custom stream server block to be added to NGINX configuration
+## NOTE: This will override streamServerBlock
+##
+existingStreamServerBlockConfigmap: ""
 ## @param staticSiteConfigmap Name of existing ConfigMap with the server static site content
 ##
 staticSiteConfigmap: ""
@@ -914,7 +954,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/nginx-exporter
-    tag: 1.1.0-debian-12-r11
+    tag: 1.4.1-debian-12-r9
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -952,7 +992,7 @@ metrics:
   ##
   securityContext:
     enabled: false
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
   ## Prometheus exporter service parameters
   ##

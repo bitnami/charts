@@ -4,14 +4,6 @@
  */
 
 const COMMAND_DELAY = 3000;
-export const baseURL = () => {
-  const baseURL = 'http://bitnami-matomo.my';
-  const port = Cypress.env('port');
-  if (port && port !== 80) {
-    return `${baseURL}:${port}`;
-  }
-  return baseURL;
-}
 
 for (const command of ['click', 'type']) {
   Cypress.Commands.overwrite(command, (originalFn, ...args) => {
@@ -24,10 +16,6 @@ for (const command of ['click', 'type']) {
     });
   });
 }
-
-Cypress.Commands.overwrite('visit', (originalFn, path, options) => {
-  return originalFn(`${baseURL()}${path}`, options);
-});
 
 Cypress.Commands.add(
   'login',

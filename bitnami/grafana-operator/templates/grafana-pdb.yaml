@@ -1,0 +1,27 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.grafana.enabled .Values.grafana.pdb.create }}
+apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
+kind: PodDisruptionBudget
+metadata:
+  name: {{ printf "%s-grafana" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- $grafanaLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.grafana.labels .Values.commonLabels ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $grafanaLabels "context" $ ) | nindent 4 }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if .Values.grafana.pdb.minAvailable }}
+  minAvailable: {{ .Values.grafana.pdb.minAvailable }}
+  {{- end  }}
+  {{- if or .Values.grafana.pdb.maxUnavailable (not .Values.grafana.pdb.minAvailable) }}
+  maxUnavailable: {{ .Values.grafana.pdb.maxUnavailable | default 1 }}
+  {{- end  }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $grafanaLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/component: grafana
+{{- end }}

@@ -1,0 +1,436 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
+kind: StatefulSet
+metadata:
+  name: {{ template "keydb.master.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: keydb
+    app.kubernetes.io/component: master
+  {{- if or .Values.master.statefulsetAnnotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.master.statefulsetAnnotations .Values.commonAnnotations) "context" .) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.master.replicaCount }}
+  {{- $podLabels := include "common.tplvalues.merge" (dict "values" (list .Values.master.podLabels .Values.commonLabels) "context" .) }}
+  {{- if and .Values.metrics.enabled .Values.metrics.podLabels }}
+  {{- $podLabels = include "common.tplvalues.merge" (dict "values" (list .Values.metrics.podLabels $podLabels) "context" .) }}
+  {{- end }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/part-of: keydb
+      app.kubernetes.io/component: master
+  serviceName: {{ printf "%s-hl" (include "keydb.master.fullname" .) }}
+  {{- if .Values.master.updateStrategy }}
+  updateStrategy: {{- toYaml .Values.master.updateStrategy | nindent 4 }}
+  {{- end }}
+  template:
+    metadata:
+      annotations:
+        {{- if empty .Values.master.existingConfigmap }}
+        checksum/configmap: {{ include (print $.Template.BasePath "/master/configmap.yaml") . | sha256sum }}
+        {{- end }}
+        checksum/health: {{ pick ( include (print $.Template.BasePath "/health-configmap.yaml") . | fromYaml ) "data" | toYaml | sha256sum }}
+        {{- if or .Values.master.podAnnotations (and .Values.metrics.enabled .Values.metrics.podAnnotations) }}
+        {{- $podAnnotations := include "common.tplvalues.merge" (dict "values" (list .Values.master.podAnnotations .Values.metrics.podAnnotations) "context" .) }}
+        {{- include "common.tplvalues.render" (dict "value" $podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/part-of: keydb
+        app.kubernetes.io/component: master
+    spec:
+      {{- include "keydb.imagePullSecrets" . | nindent 6 }}
+      serviceAccountName: {{ template "keydb.serviceAccountName" . }}
+      automountServiceAccountToken: {{ .Values.master.automountServiceAccountToken }}
+      {{- if .Values.master.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.master.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.master.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.master.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        {{- if not (empty .Values.master.podAffinityPreset) }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.master.podAffinityPreset "component" "master" "customLabels" $podLabels "context" $) | nindent 10 }}
+        {{- end }}
+        {{- if not (empty .Values.master.podAntiAffinityPreset) }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.master.podAntiAffinityPreset "component" "master" "customLabels" $podLabels "context" $) | nindent 10 }}
+        {{- end }}
+        {{- if not (empty .Values.master.nodeAffinityPreset.type) }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.master.nodeAffinityPreset.type "key" .Values.master.nodeAffinityPreset.key "values" .Values.master.nodeAffinityPreset.values) | nindent 10 }}
+        {{- end }}
+      {{- end }}
+      {{- if .Values.master.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.master.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.master.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.master.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.master.priorityClassName }}
+      priorityClassName: {{ .Values.master.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.master.schedulerName }}
+      schedulerName: {{ .Values.master.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.master.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.master.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.master.podSecurityContext.enabled }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.master.podSecurityContext "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.master.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.master.terminationGracePeriodSeconds }}
+      {{- end }}
+      initContainers:
+        {{- if and .Values.volumePermissions.enabled .Values.master.persistence.enabled }}
+        - name: volume-permissions
+          image: {{ include "keydb.volumePermissions.image" . }}
+          imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
+          command:
+            - /bin/bash
+            - -ec
+            - |
+              find {{ .Values.master.persistence.mountPath }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs -r chown -R {{ printf "%d:%d" (int .Values.master.containerSecurityContext.runAsUser) (int .Values.master.podSecurityContext.fsGroup) }}
+          {{- if .Values.volumePermissions.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.volumePermissions.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.volumePermissions.resources }}
+          resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: data
+              mountPath: {{ .Values.master.persistence.mountPath }}
+              {{- if .Values.master.persistence.subPath }}
+              subPath: {{ .Values.master.persistence.subPath }}
+              {{- end }}
+        {{- end }}
+        {{- if .Values.master.initContainers }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.master.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+      containers:
+        - name: keydb
+          image: {{ template "keydb.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.master.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.master.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.master.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.master.command "context" $) | nindent 12 }}
+          {{- else }}
+          command:
+            - /bin/bash
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.master.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.master.args "context" $) | nindent 12 }}
+          {{- else }}
+          args:
+            - -ec
+            - |
+              . /opt/bitnami/scripts/keydb-env.sh
+
+              args=("/opt/bitnami/keydb/etc/keydb.conf")
+              {{- if .Values.auth.enabled }}
+              args+=("--requirepass" "$KEYDB_PASSWORD")
+              args+=("--masterauth" "$KEYDB_PASSWORD")
+              {{- end }}
+
+              exec keydb-server "${args[@]}"
+          {{- end }}
+          env:
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
+            - name: KEYDB_PORT_NUMBER
+              value: {{ .Values.master.containerPorts.keydb | quote }}
+            {{- if .Values.auth.enabled }}
+            {{- if .Values.auth.usePasswordFiles }}
+            - name: KEYDB_PASSWORD_FILE
+              value: "/opt/bitnami/keydb/secrets/keydb-password"
+            {{- else }}
+            - name: KEYDB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "keydb.secretName" . }}
+                  key: {{ template "keydb.secretPasswordKey" . }}
+            {{- end }}
+            {{- end }}
+            {{- if .Values.master.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.master.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if or .Values.master.extraEnvVarsCM .Values.master.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.master.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.master.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.master.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.master.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- end }}
+          {{- if .Values.master.resources }}
+          resources: {{- toYaml .Values.master.resources | nindent 12 }}
+          {{- else if ne .Values.master.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.master.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          ports:
+            - name: keydb
+              containerPort: {{ .Values.master.containerPorts.keydb }}
+            {{- if .Values.master.extraContainerPorts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.master.extraContainerPorts "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.master.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.master.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.master.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.master.livenessProbe "enabled") "context" $) | nindent 12 }}
+            exec:
+              command:
+                - sh
+                - -c
+                - /opt/bitnami/scripts/health/ping_liveness_local.sh {{ .Values.master.livenessProbe.timeoutSeconds }}
+          {{- end }}
+          {{- if .Values.master.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.master.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.master.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.master.readinessProbe "enabled") "context" $) | nindent 12 }}
+            exec:
+              command:
+                - sh
+                - -c
+                - /opt/bitnami/scripts/health/ping_readiness_local.sh {{ .Values.master.readinessProbe.timeoutSeconds }}
+          {{- end }}
+          {{- if .Values.master.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.master.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.master.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.master.startupProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: keydb
+          {{- end }}
+          {{- end }}
+          {{- if .Values.master.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.master.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: data
+              mountPath: {{ .Values.master.persistence.mountPath }}
+              {{- if .Values.master.persistence.subPath }}
+              subPath: {{ .Values.master.persistence.subPath }}
+              {{- end }}
+            - name: health-scripts
+              mountPath: /opt/bitnami/scripts/health
+              readOnly: true
+            {{- if and .Values.auth.enabled .Values.auth.usePasswordFiles }}
+            - name: keydb-password
+              mountPath: /opt/bitnami/keydb/secrets
+              readOnly: true
+            {{- end }}
+            {{- if .Values.tls.enabled }}
+            - name: keydb-certificates
+              mountPath: /opt/bitnami/keydb/certs
+              readOnly: true
+            {{- end }}
+            - name: config
+              mountPath: /opt/bitnami/keydb/etc
+              readOnly: true
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+          {{- if .Values.master.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.master.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+        {{- if .Values.metrics.enabled }}
+        - name: metrics
+          image: {{ include "keydb.metrics.image" . }}
+          imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
+          {{- if .Values.metrics.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.metrics.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.metrics.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.command "context" $) | nindent 12 }}
+          {{- else }}
+          command:
+            - /bin/bash
+            - -c
+            - |
+              {{- if and .Values.auth.enabled .Values.auth.usePasswordFiles }}
+              export REDIS_PASSWORD="$(< $REDIS_PASSWORD_FILE)"
+              {{- end }}
+              redis_exporter{{- range $key, $value := .Values.metrics.extraArgs }} --{{ $key }}={{ $value }}{{- end }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- end }}
+          env:
+            - name: REDIS_ALIAS
+              value: {{ template "common.names.fullname" . }}
+            - name: REDIS_EXPORTER_WEB_LISTEN_ADDRESS
+              value: {{ printf ":%v" .Values.metrics.containerPorts.http }}
+            {{- if .Values.auth.enabled }}
+            - name: REDIS_USER
+              value: default
+            {{- if .Values.auth.usePasswordFiles }}
+            - name: REDIS_PASSWORD_FILE
+              value: "/secrets/keydb-password"
+            {{- else }}
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "keydb.secretName" . }}
+                  key: {{ template "keydb.secretPasswordKey" . }}
+            {{- end }}
+            {{- end }}
+            - name: REDIS_ADDR
+              value: redis://{{ .Values.metrics.keydbHost }}:{{ .Values.master.containerPorts.keydb }}
+            {{- if .Values.tls.enabled }}
+            - name: REDIS_EXPORTER_TLS_CLIENT_KEY_FILE
+              value: "/certs/tls.key"
+            - name: REDIS_EXPORTER_TLS_CLIENT_CERT_FILE
+              value: "/certs/tls.crt"
+            - name: REDIS_EXPORTER_TLS_CA_CERT_FILE
+              value: "/certs/ca.crt"
+            {{- end }}
+            {{- if .Values.metrics.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.metrics.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          ports:
+            - name: metrics
+              containerPort: {{ .Values.metrics.containerPorts.http }}
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.metrics.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.metrics.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metrics.startupProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: metrics
+          {{- end }}
+          {{- if .Values.metrics.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.metrics.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metrics.livenessProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: metrics
+          {{- end }}
+          {{- if .Values.metrics.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.metrics.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metrics.readinessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /
+              port: metrics
+          {{- end }}
+          {{- end }}
+          {{- if .Values.metrics.resources }}
+          resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
+          {{- else if ne .Values.metrics.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.metrics.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: app-tmp-dir
+            {{- if and .Values.auth.enabled .Values.auth.usePasswordFiles }}
+            - name: keydb-password
+              mountPath: /secrets
+              readOnly: true
+            {{- end }}
+            {{- if .Values.tls.enabled }}
+            - name: keydb-certificates
+              mountPath: /certs
+              readOnly: true
+            {{- end }}
+            {{- if .Values.metrics.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.extraVolumeMounts "context" $ ) | nindent 12 }}
+            {{- end }}
+        {{- end }}
+        {{- if .Values.master.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.master.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        - name: empty-dir
+          emptyDir: {}
+        - name: health-scripts
+          configMap:
+            name: {{ printf "%s-health" (include "common.names.fullname" .) }}
+            defaultMode: 0755
+        - name: config
+          configMap:
+            name: {{ template "keydb.master.configmapName" . }}
+        {{- if and .Values.auth.enabled .Values.auth.usePasswordFiles }}
+        - name: keydb-password
+          secret:
+            secretName: {{ template "keydb.secretName" . }}
+            items:
+              - key: {{ template "keydb.secretPasswordKey" . }}
+                path: keydb-password
+        {{- end }}
+        {{- if .Values.tls.enabled }}
+        - name: keydb-certificates
+          secret:
+            secretName: {{ template "keydb.tls.master.secretName" . }}
+            defaultMode: 256
+        {{- end }}
+        {{- if .Values.master.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.master.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+  {{- if or (not .Values.master.persistence.enabled) (not (empty .Values.master.persistence.existingClaim)) }}
+        - name: data
+        {{- if not (empty .Values.master.persistence.existingClaim) }}
+          persistentVolumeClaim:
+            claimName: {{ tpl .Values.master.persistence.existingClaim . }}
+        {{- else }}
+          {{- if or .Values.master.persistence.medium .Values.master.persistence.sizeLimit }}
+          emptyDir:
+            {{- if .Values.master.persistence.medium }}
+            medium: {{ .Values.master.persistence.medium | quote }}
+            {{- end }}
+            {{- if .Values.master.persistence.sizeLimit }}
+            sizeLimit: {{ .Values.master.persistence.sizeLimit | quote }}
+            {{- end }}
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
+        {{- end }}
+  {{- else }}
+  {{- if .Values.master.persistentVolumeClaimRetentionPolicy.enabled }}
+  persistentVolumeClaimRetentionPolicy:
+    whenDeleted: {{ .Values.master.persistentVolumeClaimRetentionPolicy.whenDeleted }}
+    whenScaled: {{ .Values.master.persistentVolumeClaimRetentionPolicy.whenScaled }}
+  {{- end }}
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+        {{- if or .Values.master.persistence.annotations .Values.commonAnnotations }}
+        {{- $claimAnnotations := include "common.tplvalues.merge" (dict "values" .Values.master.persistence.annotations .Values.commonAnnotations "context" .) | fromYaml }}
+        annotations: {{- include "common.tplvalues.render" ( dict "value" $claimAnnotations "context" $ ) | nindent 10 }}
+        {{- end }}
+        {{- if .Values.commonLabels }}
+        labels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 10 }}
+        {{- end }}
+      spec:
+        accessModes:
+        {{- range .Values.master.persistence.accessModes }}
+          - {{ . | quote }}
+        {{- end }}
+        resources:
+          requests:
+            storage: {{ .Values.master.persistence.size | quote }}
+        {{- if .Values.master.persistence.selector }}
+        selector: {{- include "common.tplvalues.render" (dict "value" .Values.master.persistence.selector "context" $) | nindent 10 }}
+        {{- end }}
+        {{- if .Values.master.persistence.dataSource }}
+        dataSource: {{- include "common.tplvalues.render" (dict "value" .Values.master.persistence.dataSource "context" $) | nindent 10 }}
+        {{- end }}
+        {{- include "common.storage.class" (dict "persistence" .Values.master.persistence "global" .Values.global) | nindent 8 }}
+  {{- end }}

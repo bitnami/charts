@@ -113,8 +113,9 @@ spec:
           args:
             - "--multus-conf-file=auto"
             - "--cni-conf-dir={{ .Values.CNIMountPath }}/etc/cni/net.d"
-            - "--multus-autoconfig-dir={{ .Values.CNIMountPath }}/etc/cni/net.d"
+            - "--multus-cni-conf-dir={{ .Values.CNIMountPath }}/etc/cni/net.d"
             - "--cni-bin-dir={{ .Values.CNIMountPath }}/opt/cni/bin"
+            - "--multus-kubeconfig-file-host={{ .Values.hostCNINetDir }}/multus.d/multus.kubeconfig"
             {{- if .Values.image.debug }}
             - "--multus-log-level=debug"
             {{- else }}

@@ -10,6 +10,7 @@ metadata:
   # Mandatory hardcoded name.
   # Ref: https://argoproj.github.io/argo-cd/operator-manual/declarative-setup/#ssh-known-host-public-keys
   name: argocd-ssh-known-hosts-cm
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     # Mandatory label
     # Ref: https://argoproj.github.io/argo-cd/operator-manual/declarative-setup/#atomic-configuration

@@ -1,0 +1,225 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: {{ include "chainloop.controlplane.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "chainloop.controlplane.labels" . | nindent 4 }}
+  {{- if or .Values.controlplane.deploymentAnnotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.controlplane.deploymentAnnotations .Values.commonAnnotations) "context" .) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if not .Values.controlplane.autoscaling.hpa.enabled }}
+  replicas: {{ .Values.controlplane.replicaCount }}
+  {{- end }}
+  {{- if .Values.controlplane.updateStrategy }}
+  strategy: {{- toYaml .Values.controlplane.updateStrategy | nindent 4 }}
+  {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" (dict "values" (list .Values.controlplane.podLabels .Values.commonLabels) "context" .) }}
+  selector:
+    matchLabels: {{ include "chainloop.controlplane.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/controlplane" "/configmap.yaml") . | sha256sum }}
+        checksum/secret-config: {{ include (print $.Template.BasePath "/controlplane" "/secret-config.yaml") . | sha256sum }}
+        checksum/cas-private-key: {{ include (print $.Template.BasePath "/controlplane" "/secret-jwt-cas-private-key.yaml") . | sha256sum }}
+        kubectl.kubernetes.io/default-container: controlplane
+      labels: {{- include "chainloop.controlplane.labels" . | nindent 8 }}
+    spec:
+      {{- include "common.images.renderPullSecrets" (dict "images" (list .Values.controlplane.image .Values.controlplane.migration.image) "context" $) | nindent 6 }}
+      serviceAccountName: {{ include "controlplane.serviceAccountName" . }}
+      automountServiceAccountToken: {{ .Values.controlplane.automountServiceAccountToken }}
+      {{- if .Values.controlplane.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.controlplane.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.controlplane.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.controlplane.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.controlplane.podAffinityPreset "component" "controlplane" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.controlplane.podAntiAffinityPreset "component" "controlplane" "customLabels" $podLabels "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.controlplane.nodeAffinityPreset.type "key" .Values.controlplane.nodeAffinityPreset.key "values" .Values.controlplane.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.controlplane.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.controlplane.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.controlplane.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.controlplane.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.controlplane.priorityClassName }}
+      priorityClassName: {{ .Values.controlplane.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.controlplane.schedulerName }}
+      schedulerName: {{ .Values.controlplane.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.controlplane.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.controlplane.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.controlplane.podSecurityContext.enabled }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.controlplane.podSecurityContext "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.controlplane.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.controlplane.terminationGracePeriodSeconds }}
+      {{- end }}
+      initContainers:
+        {{- if .Values.controlplane.initContainers }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.controlplane.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+        - name: migrate
+          image: {{ include "chainloop.controlplane.migration.image" . }}
+          imagePullPolicy: {{ .Values.controlplane.image.pullPolicy }}
+          {{- if .Values.controlplane.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.controlplane.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          command: [ "./atlas" ]
+          args:
+            - migrate
+            - apply
+            - --url
+            - $(CONNECTION_STRING)
+            - --dir
+            - file:///migrations
+          env:
+            - name: CONNECTION_STRING
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "chainloop.controlplane.fullname" . }}
+                  key: db_migrate_source
+      containers:
+        - name: controlplane
+          {{- if .Values.controlplane.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.controlplane.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          image: {{ include "chainloop.controlplane.image" . }}
+          imagePullPolicy: {{ .Values.controlplane.image.pullPolicy }}
+          command: [ "./control-plane" ]
+          args: [ "--conf", "/data/conf" ]
+          ports:
+            - name: http
+              containerPort: {{ .Values.controlplane.containerPorts.http }}
+            - name: metrics
+              containerPort: {{ .Values.controlplane.containerPorts.metrics }}
+            - name: grpc
+              containerPort: {{ .Values.controlplane.containerPorts.grpc }}
+          startupProbe:
+            httpGet:
+              path: /statusz
+              port: http
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /statusz
+              port: http
+            periodSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /statusz?readiness=1
+              port: http
+            periodSeconds: 5
+          {{- if .Values.controlplane.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.controlplane.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          env:
+            {{- if .Values.controlplane.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.controlplane.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- if .Values.controlplane.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.controlplane.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.controlplane.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.controlplane.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- if .Values.controlplane.resources }}
+          resources: {{- toYaml .Values.controlplane.resources | nindent 12 }}
+          {{- else if ne .Values.controlplane.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.controlplane.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: config
+              mountPath: /data/conf
+            - name: tmp
+              mountPath: /tmp
+            - name: jwt-cas-private-key
+              mountPath: /secrets
+            {{- if and .Values.controlplane.keylessSigning.enabled (eq "fileCA" .Values.controlplane.keylessSigning.backend) }}
+            - name: file-ca-cert
+              mountPath: /ca_secrets
+            {{- end }}
+            {{- if and .Values.controlplane.keylessSigning.enabled (eq "ejbcaCA" .Values.controlplane.keylessSigning.backend) }}
+            - name: ejbca-ca-client
+              mountPath: /ca_secrets
+            {{- end }}
+            {{- if .Values.controlplane.tls.existingSecret  }}
+            - name: server-certs
+              mountPath: /data/server-certs
+            {{- end }}
+            {{- if eq "gcpSecretManager" .Values.secretsBackend.backend  }}
+            - name: gcp-secretmanager-serviceaccountkey
+              mountPath: /gcp-secrets
+            {{- end }}
+            {{- if (not (empty .Values.controlplane.customCAs)) }}
+            - name: custom-cas
+              # NOTE: /etc/ssl/certs already contains the system CA certs
+              # Let's use another known path https://go.dev/src/crypto/x509/root_linux.go
+              mountPath: /etc/pki/tls/certs
+              readOnly: true
+            {{- end }}
+            {{- if .Values.controlplane.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.controlplane.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
+        {{- if .Values.controlplane.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.controlplane.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        - name: config
+          projected:
+            sources:
+            - secret:
+                name: {{ include "chainloop.controlplane.fullname" . }}
+            - configMap:
+               name: {{ include "chainloop.controlplane.fullname" . }}
+        {{- if (not (empty .Values.controlplane.customCAs)) }}
+        - name: custom-cas
+          projected:
+            sources:
+            - secret:
+               name: {{ include "chainloop.controlplane.fullname" . }}-custom-cas
+        {{- end }}
+        # required for the plugins to store the socket files
+        - name: tmp
+          emptyDir: {}
+        - name: jwt-cas-private-key
+          secret:
+            secretName: {{ include "chainloop.controlplane.fullname" . }}-jwt-cas
+        {{- if .Values.controlplane.tls.existingSecret }}
+        - name: server-certs
+          secret:
+            secretName: {{ .Values.controlplane.tls.existingSecret  }}
+        {{- end }}
+        {{- if eq "gcpSecretManager" .Values.secretsBackend.backend  }}
+        - name: gcp-secretmanager-serviceaccountkey
+          secret:
+            secretName: {{ include "chainloop.controlplane.fullname" . }}-gcp-secretmanager-serviceaccountkey
+        {{- end }}
+        {{- if and .Values.controlplane.keylessSigning.enabled (eq "fileCA" .Values.controlplane.keylessSigning.backend) }}
+        - name: file-ca-cert
+          secret:
+            secretName: {{ include "chainloop.controlplane.fullname" . }}-keyless-file-ca
+        {{- end }}
+        {{- if and .Values.controlplane.keylessSigning.enabled (eq "ejbcaCA" .Values.controlplane.keylessSigning.backend) }}
+        - name: ejbca-ca-client
+          secret:
+            secretName: {{ include "chainloop.controlplane.fullname" . }}-keyless-ejbca-ca
+        {{- end }}
+        {{- if .Values.controlplane.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.controlplane.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}

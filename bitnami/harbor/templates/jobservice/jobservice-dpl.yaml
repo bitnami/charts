@@ -31,7 +31,7 @@ spec:
       annotations:
         checksum/configmap-env: {{ include (print $.Template.BasePath "/jobservice/jobservice-cm-envvars.yaml") . | sha256sum }}
         checksum/secret-env: {{ include (print $.Template.BasePath "/jobservice/jobservice-secret-envvars.yaml") . | sha256sum }}
-        checksum/secret-config: {{ include (print $.Template.BasePath "/jobservice/jobservice-config-secret.yaml") . | sha256sum }}
+        checksum/configmap-config: {{ include (print $.Template.BasePath "/jobservice/jobservice-cm-config.yaml") . | sha256sum }}
         checksum/secret: {{ include (print $.Template.BasePath "/jobservice/jobservice-secrets.yaml") . | sha256sum }}
         checksum/secret-core: {{ include (print $.Template.BasePath "/core/core-secret.yaml") . | sha256sum }}
         {{- if and .Values.internalTLS.enabled (not .Values.core.tls.existingSecret) }}
@@ -69,9 +69,7 @@ spec:
       {{- if .Values.jobservice.schedulerName }}
       schedulerName: {{ .Values.jobservice.schedulerName }}
       {{- end }}
-      {{- if .Values.jobservice.serviceAccountName }}
-      serviceAccountName: {{ .Values.jobservice.serviceAccountName }}
-      {{- end }}
+      serviceAccountName: {{ include "harbor.jobservice.serviceAccountName" . }}
       {{- if .Values.jobservice.podSecurityContext.enabled }}
       securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.jobservice.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
@@ -104,6 +102,26 @@ spec:
               mountPath: /var/log/jobs
               subPath: {{ .Values.persistence.persistentVolumeClaim.jobservice.subPath }}
         {{- end }}
+        - name: certificate-volume
+          image: {{ include "harbor.jobservice.image" . }}
+          imagePullPolicy: {{ .Values.jobservice.image.pullPolicy | quote }}
+          command:
+            - /bin/bash
+          args:
+            - -ec
+            - cp -r /etc/ssl/certs/* /certs
+          {{- if .Values.jobservice.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.jobservice.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.certificateVolume.resources }}
+          resources: {{- toYaml .Values.certificateVolume.resources | nindent 12 }}
+          {{- else if ne .Values.certificateVolume.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.certificateVolume.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /certs
+              subPath: etc-ssl-certs
         {{- if .Values.jobservice.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.jobservice.initContainers "context" $) | nindent 8 }}
         {{- end }}
@@ -166,7 +184,11 @@ spec:
             - configMapRef:
                 name: {{ printf "%s-envvars" (include "harbor.jobservice" .) }}
             - secretRef:
+                {{- with .Values.jobservice.existingEnvVarsSecret }}
+                name: {{ . }}
+                {{- else }}
                 name: {{ printf "%s-envvars" (include "harbor.jobservice" .) }}
+                {{- end }}
             {{- if .Values.jobservice.extraEnvVarsCM }}
             - configMapRef:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.jobservice.extraEnvVarsCM "context" $) }}
@@ -194,10 +216,8 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.jobservice.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.jobservice.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.jobservice.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /api/v1/stats
+            tcpSocket:
               port: {{ ternary "https" "http" .Values.internalTLS.enabled }}
-              scheme: {{ ternary "https" "http" .Values.internalTLS.enabled | upper }}
           {{- end }}
           {{- if .Values.jobservice.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.jobservice.customReadinessProbe "context" $) | nindent 12 }}
@@ -221,6 +241,9 @@ spec:
             - name: empty-dir
               mountPath: /tmp
               subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /etc/ssl/certs
+              subPath: etc-ssl-certs
             - name: jobservice-config
               mountPath: /etc/jobservice/config.yml
               subPath: config.yml
@@ -244,8 +267,8 @@ spec:
         - name: empty-dir
           emptyDir: {}
         - name: jobservice-config
-          secret:
-            secretName: {{ include "harbor.jobservice" . }}-config
+          configMap:
+            name: {{ include "harbor.jobservice" . }}-config
         - name: job-logs
           {{- if and .Values.persistence.enabled (eq .Values.jobservice.jobLogger "file") }}
           persistentVolumeClaim:

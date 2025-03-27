@@ -1,0 +1,122 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
+Did you know there are enterprise versions of the Bitnami catalog? For enhanced secure software supply chain features, unlimited pulls from Docker, LTS support, or application customization, see Bitnami Premium or Tanzu Application Catalog. See https://www.arrow.com/globalecs/na/vendors/bitnami for more information.
+
+{{- $secretName := include "valkey-cluster.secretName" . -}}
+{{- $secretPasswordKey := include "valkey-cluster.secretPasswordKey" . -}}
+
+** Please be patient while the chart is being deployed **
+
+{{- if .Values.diagnosticMode.enabled }}
+The chart has been deployed in diagnostic mode. All probes have been disabled and the command has been overwritten with:
+
+  command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 4 }}
+  args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 4 }}
+
+Get the list of pods by executing:
+
+  kubectl get pods --namespace {{ .Release.Namespace }} -l app.kubernetes.io/instance={{ .Release.Name }}
+
+Access the pod you want to debug by executing
+
+  kubectl exec --namespace {{ .Release.Namespace }} -ti <NAME OF THE POD> -- bash
+
+In order to replicate the container startup scripts execute this command:
+
+    /opt/bitnami/scripts/valkey-cluster/entrypoint.sh /opt/bitnami/scripts/valkey-cluster/run.sh
+
+{{- else }}
+
+{{ if .Values.usePassword }}
+To get your password run:
+    {{ include "common.utils.secret.getvalue" (dict "secret" $secretName "field" $secretPasswordKey "context" $) }}
+{{- end }}
+
+{{- if .Values.cluster.externalAccess.enabled }}
+
+To connect to your Valkey server from outside the cluster check the following information:
+
+  NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "common.names.fullname" . }}'
+
+    You will have a different external IP for each Valkey node. Get the external ip from `-external` suffixed services: `kubectl get svc`.
+    Valkey port: {{ .Values.cluster.externalAccess.service.port }}
+
+    {{- if not .Values.cluster.externalAccess.service.loadBalancerIP }}
+    Once the LoadBalancerIPs are ready, you need to provide them and perform a Helm Upgrade:
+
+    helm upgrade --namespace {{ .Release.Namespace }} {{ .Release.Name }} --set "cluster.externalAccess.enabled=true,cluster.externalAccess.service.type=LoadBalancer{{- $root := . }}{{ $count := .Values.cluster.nodes | int }}{{ range $i, $v := until $count }},cluster.externalAccess.service.loadBalancerIP[{{ $i }}]=load-balancerip-{{- $i }}{{- end }}" oci://registry-1.docker.io/bitnamicharts/valkey-cluster
+    Where loadbalancer-ip-i are the LoadBalancerIPs provided by the cluster.
+    {{- else -}}
+    {{- if .Values.cluster.init -}}
+    INFO: The Job to create the cluster will be created.
+    {{- end -}}
+
+    To connect to your database from outside the cluster execute the following commands:
+
+    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }}-0-svc --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
+    valkey-cli -c -h $SERVICE_IP -p {{ .Values.service.ports.valkey }} {{- if .Values.usePassword }} -a $VALKEY_PASSWORD{{ end }}{{ if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
+    {{- end }}
+
+{{- else }}
+
+You have deployed a Valkey Cluster accessible only from within you Kubernetes Cluster.
+
+{{- if .Values.cluster.init -}}
+INFO: The Job to create the cluster will be created.
+{{- end -}}
+
+To connect to your Valkey cluster:
+
+1. Run a Valkey pod that you can use as a client:
+{{- $password_env := ternary (include "common.utils.fieldToEnvVar" (dict "field" $secretPasswordKey)) "VALKEYPASSWORD" (not (eq .Values.notEmptyString "")) -}}
+{{- if .Values.tls.enabled }}
+   kubectl run --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }}-client --restart='Never' --env VALKEY_PASSWORD=${{ $password_env }} --image {{ template "valkey-cluster.image" . }} --command -- sleep infinity
+
+   Copy your TLS certificates to the pod:
+
+   kubectl cp --namespace {{ .Release.Namespace }} /path/to/client.cert {{ template "common.names.fullname" . }}-client:/tmp/client.cert
+   kubectl cp --namespace {{ .Release.Namespace }} /path/to/client.key {{ template "common.names.fullname" . }}-client:/tmp/client.key
+   kubectl cp --namespace {{ .Release.Namespace }} /path/to/CA.cert {{ template "common.names.fullname" . }}-client:/tmp/CA.cert
+
+   Use the following command to attach to the pod:
+
+   kubectl exec --tty -i {{ template "common.names.fullname" . }}-client \
+   {{- if and (.Values.networkPolicy.enabled) (not .Values.networkPolicy.allowExternal) }}--labels="{{ template "common.names.fullname" . }}-client=true" \{{- end }}
+   --namespace {{ .Release.Namespace }} -- bash
+{{- else }}
+kubectl run --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }}-client --rm --tty -i --restart='Never' \
+{{ if .Values.usePassword }} --env VALKEY_PASSWORD=${{ $password_env }} \{{ end }}
+{{- if and (.Values.networkPolicy.enabled) (not .Values.networkPolicy.allowExternal) }}--labels="{{ template "common.names.fullname" . }}-client=true" \{{- end }}
+--image {{ template "valkey-cluster.image" . }} -- bash
+{{- end }}
+
+2. Connect using the Valkey CLI:
+
+valkey-cli -c -h {{ template "common.names.fullname" . }}{{ if .Values.usePassword }} -a ${{ $password_env }}{{ end }}{{ if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
+
+{{ if and (.Values.networkPolicy.enabled) (not .Values.networkPolicy.allowExternal) }}
+Note: Since NetworkPolicy is enabled, only pods with label
+{{ template "common.names.fullname" . }}-client=true"
+will be able to connect to valkey.
+{{- end -}}
+{{- end -}}
+
+{{- include "valkey-cluster.validateValues" . }}
+{{- include "valkey-cluster.checkRollingTags" . }}
+{{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
+{{- include "common.warnings.rollingTag" .Values.sysctlImage }}
+
+{{- if and .Values.usePassword (not .Values.existingSecret) -}}
+
+  {{- $requiredPassword := dict "valueKey" "password" "secret" $secretName "field" $secretPasswordKey "context" $ -}}
+  {{- $requiredPasswordError := include "common.validations.values.single.empty" $requiredPassword -}}
+
+  {{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" (list $requiredPasswordError) "context" $) -}}
+{{- end -}}
+{{- end }}
+{{- include "common.warnings.resources" (dict "sections" (list "metrics" "valkey" "sysctlImage" "updateJob" "volumePermissions") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.volumePermissions.image .Values.metrics.image .Values.sysctlImage) "context" $) }}
+{{- include "common.errors.insecureImages" (dict "images" (list .Values.image .Values.volumePermissions.image .Values.metrics.image .Values.sysctlImage) "context" $) }}

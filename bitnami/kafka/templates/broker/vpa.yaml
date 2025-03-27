@@ -4,11 +4,11 @@ SPDX-License-Identifier: APACHE-2.0
 */}}
 
 {{- $replicaCount := int .Values.broker.replicaCount }}
-{{- if and (gt $replicaCount 0) (.Capabilities.APIVersions.Has "autoscaling.k8s.io/v1/VerticalPodAutoscaler") .Values.broker.autoscaling.vpa.enabled }}
+{{- if and (gt $replicaCount 0) (include "common.capabilities.apiVersions.has" ( dict "version" "autoscaling.k8s.io/v1/VerticalPodAutoscaler" "context" . )) .Values.broker.autoscaling.vpa.enabled }}
 apiVersion: {{ include "common.capabilities.vpa.apiVersion" . }}
 kind: VerticalPodAutoscaler
 metadata:
-  name: {{ printf "%s-broker" (include "common.names.fullname" .) }}
+  name: {{ template "kafka.broker.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: broker
@@ -36,7 +36,7 @@ spec:
   targetRef:
     apiVersion: {{ (include "common.capabilities.statefulset.apiVersion" .) }}
     kind: StatefulSet
-    name: {{ printf "%s-broker" (include "common.names.fullname" .) }}
+    name: {{ template "kafka.broker.fullname" . }}
   {{- if .Values.broker.autoscaling.vpa.updatePolicy }}
   updatePolicy:
     {{- with .Values.broker.autoscaling.vpa.updatePolicy.updateMode }}

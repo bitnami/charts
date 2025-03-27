@@ -154,7 +154,7 @@ spec:
               value: {{ ternary "https" "http" .Values.tls.enabled | quote }}
             - name: MINIO_FORCE_NEW_KEYS
               value: {{ ternary "yes" "no" .Values.auth.forceNewKeys | quote }}
-            {{- if .Values.auth.useCredentialsFiles }}
+            {{- if .Values.auth.usePasswordFiles }}
             - name: MINIO_ROOT_USER_FILE
               value: "/opt/bitnami/minio/secrets/root-user"
             - name: MINIO_ROOT_PASSWORD_FILE
@@ -184,11 +184,11 @@ spec:
             {{- if .Values.tls.mountPath }}
             - name: MINIO_CERTS_DIR
               value: {{ .Values.tls.mountPath | quote }}
+            {{- end }}
             - name: MINIO_CONSOLE_PORT_NUMBER
               value: {{ .Values.containerPorts.console | quote }}
             - name: MINIO_API_PORT_NUMBER
               value: {{ .Values.containerPorts.api | quote }}
-            {{- end }}
             - name: MINIO_DATA_DIR
               value: {{ ternary (printf "%s-0" $mountPath) $mountPath (gt $drivesPerNode 1) | quote }}
             {{- if .Values.extraEnvVars }}
@@ -266,7 +266,7 @@ spec:
             - name: empty-dir
               mountPath: /.mc
               subPath: app-mc-dir
-            {{- if .Values.auth.useCredentialsFiles }}
+            {{- if .Values.auth.usePasswordFiles }}
             - name: minio-credentials
               mountPath: /opt/bitnami/minio/secrets/
             {{- end }}
@@ -292,7 +292,7 @@ spec:
       volumes:
         - name: empty-dir
           emptyDir: {}
-        {{- if .Values.auth.useCredentialsFiles }}
+        {{- if .Values.auth.usePasswordFiles }}
         - name: minio-credentials
           secret:
             secretName: {{ include "minio.secretName" . }}
@@ -338,6 +338,9 @@ spec:
         resources:
           requests:
             storage: {{ $.Values.persistence.size | quote }}
+        {{- if $.Values.persistence.selector }}
+        selector: {{- include "common.tplvalues.render" (dict "value" .Values.persistence.selector "context" $) | nindent 10 }}
+        {{- end }}
         {{- include "common.storage.class" (dict "persistence" $.Values.persistence "global" $.Values.global) | nindent 8 }}
     {{- end }}
   {{- else }}
@@ -355,6 +358,9 @@ spec:
         resources:
           requests:
             storage: {{ .Values.persistence.size | quote }}
+        {{- if .Values.persistence.selector }}
+        selector: {{- include "common.tplvalues.render" (dict "value" .Values.persistence.selector "context" $) | nindent 10 }}
+        {{- end }}
         {{- include "common.storage.class" (dict "persistence" .Values.persistence "global" .Values.global) | nindent 8 }}
   {{- end }}
   {{- end }}

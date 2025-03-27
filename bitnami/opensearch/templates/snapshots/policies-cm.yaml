@@ -1,0 +1,27 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if $.Values.snapshots.enabled -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: snapshots
+  name: {{ include "opensearch.snapshots.policyDataConfigMap" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+data:
+  {{- range $name, $policy := $.Values.snapshots.policies }}
+    {{- $repo := $policy.snapshot_config.repository -}}
+    {{- if (hasKey $.Values.snapshots.repositories $repo) -}}
+      {{- $name | nindent 2 }}: |
+        {{- $policy | mustToPrettyJson | nindent 4 }}
+    {{- else -}}
+      {{- fail (printf "Repository `%s` is not defined in .snapshots.repositories" $repo) -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}

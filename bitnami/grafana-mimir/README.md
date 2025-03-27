@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/grafana-mimir
 ```
 
-Looking to use Grafana Mimir in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Grafana Mimir in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -50,13 +50,31 @@ The command deploys grafana-mimir on the Kubernetes cluster in the default confi
 
 Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
 
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcesPreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
+### [Rolling VS Immutable tags](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+### Prometheus metrics
+
+This chart can be integrated with Prometheus by setting `metrics.enabled` to true. This will expose the Grafana Mimir native Prometheus port in both the containers and services. The services will also have the necessary annotations to be automatically scraped by Prometheus.
+
+#### Prometheus requirements
+
+It is necessary to have a working installation of Prometheus or Prometheus Operator for the integration to work. Install the [Bitnami Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/prometheus) or the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) to easily have a working Prometheus in your cluster.
+
+#### Integration with Prometheus Operator
+
+The chart can deploy `ServiceMonitor` objects for integration with Prometheus Operator installations. To do so, set the value `metrics.serviceMonitor.enabled=true`. Ensure that the Prometheus Operator `CustomResourceDefinitions` are installed in the cluster or it will fail with the following error:
+
+```text
+no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"
+```
+
+Install the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) for having the necessary CRDs and the Prometheus Operator.
 
 ### Mimir configuration
 
@@ -65,6 +83,10 @@ The mimir configuration file `mimir.yaml` is shared across the different compone
 ### Data
 
 The [Bitnami grafana-mimir](https://github.com/bitnami/containers/tree/main/bitnami/grafana-mimir) image stores the data at the `/bitnami` path of the container. Persistent Volume Claims are used to keep the data across deployments.
+
+### Backup and restore
+
+To back up and restore Helm chart deployments on Kubernetes, you need to back up the persistent volumes from the source deployment and attach them to a new deployment using [Velero](https://velero.io/), a Kubernetes backup/restore tool. Find the instructions for using Velero in [this guide](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-backup-restore-deployments-velero-index.html).
 
 ### Additional environment variables
 
@@ -116,12 +138,14 @@ externalMemcachedChunks.port=11211
 
 ### Global parameters
 
-| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value  |
-| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
-| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
-| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`   |
-| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value   |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`    |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`    |
+| `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`    |
+| `global.storageClass`                                 | DEPRECATED: use global.defaultStorageClass instead                                                                                                                                                                                                                                                                                                                  | `""`    |
+| `global.security.allowInsecureImages`                 | Allows skipping image verification                                                                                                                                                                                                                                                                                                                                  | `false` |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto`  |
 
 ### Common parameters
 
@@ -269,8 +293,8 @@ externalMemcachedChunks.port=11211
 | `alertmanager.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                                   | `[]`        |
 | `alertmanager.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                                         | `{}`        |
 | `alertmanager.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                                                     | `{}`        |
-| `alertmanager.pdb.create`                            | Enable/disable a Pod Disruption Budget creation                                                                | `false`     |
-| `alertmanager.pdb.minAvailable`                      | Minimum number/percentage of pods that should remain scheduled                                                 | `1`         |
+| `alertmanager.pdb.create`                            | Enable/disable a Pod Disruption Budget creation                                                                | `true`      |
+| `alertmanager.pdb.minAvailable`                      | Minimum number/percentage of pods that should remain scheduled                                                 | `""`        |
 | `alertmanager.pdb.maxUnavailable`                    | Maximum number/percentage of pods that may be made unavailable                                                 | `""`        |
 | `alertmanager.blockStorage.backend`                  | Backend storage to use. NOTE: if minio.enable == true, this configuration will be ignored.                     | `s3`        |
 | `alertmanager.blockStorage.config`                   | Configures connection to the backend store. NOTE: if minio.enable == true, this configuration will be ignored. | `{}`        |
@@ -380,8 +404,8 @@ externalMemcachedChunks.port=11211
 | `compactor.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `compactor.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces           | `{}`        |
 | `compactor.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces       | `{}`        |
-| `compactor.pdb.create`                            | Enable/disable a Pod Disruption Budget creation                  | `false`     |
-| `compactor.pdb.minAvailable`                      | Minimum number/percentage of pods that should remain scheduled   | `1`         |
+| `compactor.pdb.create`                            | Enable/disable a Pod Disruption Budget creation                  | `true`      |
+| `compactor.pdb.minAvailable`                      | Minimum number/percentage of pods that should remain scheduled   | `""`        |
 | `compactor.pdb.maxUnavailable`                    | Maximum number/percentage of pods that may be made unavailable   | `""`        |
 
 ### Distributor Deployment Parameters
@@ -482,8 +506,8 @@ externalMemcachedChunks.port=11211
 | `distributor.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `distributor.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces           | `{}`        |
 | `distributor.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces       | `{}`        |
-| `distributor.pdb.create`                            | Enable/disable a Pod Disruption Budget creation                  | `false`     |
-| `distributor.pdb.minAvailable`                      | Minimum number/percentage of pods that should remain scheduled   | `1`         |
+| `distributor.pdb.create`                            | Enable/disable a Pod Disruption Budget creation                  | `true`      |
+| `distributor.pdb.minAvailable`                      | Minimum number/percentage of pods that should remain scheduled   | `""`        |
 | `distributor.pdb.maxUnavailable`                    | Maximum number/percentage of pods that may be made unavailable   | `""`        |
 
 ### Gateway Deployment Parameters
@@ -605,8 +629,8 @@ externalMemcachedChunks.port=11211
 | `gateway.ingress.extraPaths`                    | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                     |
 | `gateway.ingress.extraTls`                      | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
 | `gateway.ingress.secrets`                       | Custom TLS certificates as secrets                                                                                               | `[]`                     |
-| `gateway.pdb.create`                            | Enable/disable a Pod Disruption Budget creation                                                                                  | `false`                  |
-| `gateway.pdb.minAvailable`                      | Minimum number/percentage of pods that should remain scheduled                                                                   | `1`                      |
+| `gateway.pdb.create`                            | Enable/disable a Pod Disruption Budget creation                                                                                  | `true`                   |
+| `gateway.pdb.minAvailable`                      | Minimum number/percentage of pods that should remain scheduled                                                                   | `""`                     |
 | `gateway.pdb.maxUnavailable`                    | Maximum number/percentage of pods that may be made unavailable                                                                   | `""`                     |
 
 ### Ingester Deployment Parameters
@@ -715,8 +739,8 @@ externalMemcachedChunks.port=11211
 | `ingester.networkPolicy.extraEgress`                                  | Add extra ingress rules to the NetworkPolicy                                                                                                                                                                                                          | `[]`             |
 | `ingester.networkPolicy.ingressNSMatchLabels`                         | Labels to match to allow traffic from other namespaces                                                                                                                                                                                                | `{}`             |
 | `ingester.networkPolicy.ingressNSPodMatchLabels`                      | Pod labels to match to allow traffic from other namespaces                                                                                                                                                                                            | `{}`             |
-| `ingester.pdb.create`                                                 | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                                       | `false`          |
-| `ingester.pdb.minAvailable`                                           | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                                        | `1`              |
+| `ingester.pdb.create`                                                 | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                                       | `true`           |
+| `ingester.pdb.minAvailable`                                           | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                                        | `""`             |
 | `ingester.pdb.maxUnavailable`                                         | Maximum number/percentage of pods that may be made unavailable                                                                                                                                                                                        | `""`             |
 | `overridesExporter.enabled`                                           | Enable overrides-exporter deployment                                                                                                                                                                                                                  | `false`          |
 | `overridesExporter.extraEnvVars`                                      | Array with extra environment variables to add to overrides-exporter nodes                                                                                                                                                                             | `[]`             |
@@ -813,8 +837,8 @@ externalMemcachedChunks.port=11211
 | `overridesExporter.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `overridesExporter.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces           | `{}`        |
 | `overridesExporter.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces       | `{}`        |
-| `overridesExporter.pdb.create`                            | Enable/disable a Pod Disruption Budget creation                  | `false`     |
-| `overridesExporter.pdb.minAvailable`                      | Minimum number/percentage of pods that should remain scheduled   | `1`         |
+| `overridesExporter.pdb.create`                            | Enable/disable a Pod Disruption Budget creation                  | `true`      |
+| `overridesExporter.pdb.minAvailable`                      | Minimum number/percentage of pods that should remain scheduled   | `""`        |
 | `overridesExporter.pdb.maxUnavailable`                    | Maximum number/percentage of pods that may be made unavailable   | `""`        |
 
 ### Querier Deployment Parameters
@@ -915,8 +939,8 @@ externalMemcachedChunks.port=11211
 | `querier.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `querier.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces           | `{}`        |
 | `querier.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces       | `{}`        |
-| `querier.pdb.create`                            | Enable/disable a Pod Disruption Budget creation                  | `false`     |
-| `querier.pdb.minAvailable`                      | Minimum number/percentage of pods that should remain scheduled   | `1`         |
+| `querier.pdb.create`                            | Enable/disable a Pod Disruption Budget creation                  | `true`      |
+| `querier.pdb.minAvailable`                      | Minimum number/percentage of pods that should remain scheduled   | `""`        |
 | `querier.pdb.maxUnavailable`                    | Maximum number/percentage of pods that may be made unavailable   | `""`        |
 
 ### Query Frontend Deployment Parameters
@@ -1017,8 +1041,8 @@ externalMemcachedChunks.port=11211
 | `queryFrontend.networkPolicy.extraEgress`                          | Add extra ingress rules to the NetworkPolicy                                                                                                                                                                                                    | `[]`             |
 | `queryFrontend.networkPolicy.ingressNSMatchLabels`                 | Labels to match to allow traffic from other namespaces                                                                                                                                                                                          | `{}`             |
 | `queryFrontend.networkPolicy.ingressNSPodMatchLabels`              | Pod labels to match to allow traffic from other namespaces                                                                                                                                                                                      | `{}`             |
-| `queryFrontend.pdb.create`                                         | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                                 | `false`          |
-| `queryFrontend.pdb.minAvailable`                                   | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                                  | `1`              |
+| `queryFrontend.pdb.create`                                         | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                                 | `true`           |
+| `queryFrontend.pdb.minAvailable`                                   | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                                  | `""`             |
 | `queryFrontend.pdb.maxUnavailable`                                 | Maximum number/percentage of pods that may be made unavailable                                                                                                                                                                                  | `""`             |
 | `queryScheduler.enabled`                                           | Enable query-scheduler deployment                                                                                                                                                                                                               | `false`          |
 | `queryScheduler.extraEnvVars`                                      | Array with extra environment variables to add to query-scheduler nodes                                                                                                                                                                          | `[]`             |
@@ -1115,8 +1139,8 @@ externalMemcachedChunks.port=11211
 | `queryScheduler.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `queryScheduler.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces           | `{}`        |
 | `queryScheduler.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces       | `{}`        |
-| `queryScheduler.pdb.create`                            | Enable/disable a Pod Disruption Budget creation                  | `false`     |
-| `queryScheduler.pdb.minAvailable`                      | Minimum number/percentage of pods that should remain scheduled   | `1`         |
+| `queryScheduler.pdb.create`                            | Enable/disable a Pod Disruption Budget creation                  | `true`      |
+| `queryScheduler.pdb.minAvailable`                      | Minimum number/percentage of pods that should remain scheduled   | `""`        |
 | `queryScheduler.pdb.maxUnavailable`                    | Maximum number/percentage of pods that may be made unavailable   | `""`        |
 
 ### Store Gateway Deployment Parameters
@@ -1226,8 +1250,8 @@ externalMemcachedChunks.port=11211
 | `storeGateway.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `storeGateway.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces           | `{}`        |
 | `storeGateway.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces       | `{}`        |
-| `storeGateway.pdb.create`                            | Enable/disable a Pod Disruption Budget creation                  | `false`     |
-| `storeGateway.pdb.minAvailable`                      | Minimum number/percentage of pods that should remain scheduled   | `1`         |
+| `storeGateway.pdb.create`                            | Enable/disable a Pod Disruption Budget creation                  | `true`      |
+| `storeGateway.pdb.minAvailable`                      | Minimum number/percentage of pods that should remain scheduled   | `""`        |
 | `storeGateway.pdb.maxUnavailable`                    | Maximum number/percentage of pods that may be made unavailable   | `""`        |
 
 ### Ruler Deployment Parameters
@@ -1340,8 +1364,8 @@ externalMemcachedChunks.port=11211
 | `ruler.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                                   | `[]`        |
 | `ruler.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                                         | `{}`        |
 | `ruler.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                                                     | `{}`        |
-| `ruler.pdb.create`                            | Enable/disable a Pod Disruption Budget creation                                                                | `false`     |
-| `ruler.pdb.minAvailable`                      | Minimum number/percentage of pods that should remain scheduled                                                 | `1`         |
+| `ruler.pdb.create`                            | Enable/disable a Pod Disruption Budget creation                                                                | `true`      |
+| `ruler.pdb.minAvailable`                      | Minimum number/percentage of pods that should remain scheduled                                                 | `""`        |
 | `ruler.pdb.maxUnavailable`                    | Maximum number/percentage of pods that may be made unavailable                                                 | `""`        |
 | `ruler.blockStorage.backend`                  | Backend storage to use. NOTE: if minio.enable == true, this configuration will be ignored.                     | `s3`        |
 | `ruler.blockStorage.config`                   | Configures connection to the backend store. NOTE: if minio.enable == true, this configuration will be ignored. | `{}`        |
@@ -1519,6 +1543,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 1.3.0
+
+This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
+
 ### To 1.0.0
 
 This major bump changes the following security defaults:
@@ -1532,7 +1560,7 @@ This could potentially break any customization or init scripts used in your depl
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

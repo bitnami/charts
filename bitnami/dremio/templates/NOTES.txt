@@ -1,0 +1,72 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
+Did you know there are enterprise versions of the Bitnami catalog? For enhanced secure software supply chain features, unlimited pulls from Docker, LTS support, or application customization, see Bitnami Premium or Tanzu Application Catalog. See https://www.arrow.com/globalecs/na/vendors/bitnami for more information.
+
+** Please be patient while the chart is being deployed **
+
+{{- if .Values.diagnosticMode.enabled }}
+The chart has been deployed in diagnostic mode. All probes have been disabled and the command has been overwritten with:
+
+  command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 4 }}
+  args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 4 }}
+
+Get the list of pods by executing:
+
+  kubectl get pods --namespace {{ include "common.names.namespace" . | quote }} -l app.kubernetes.io/instance={{ .Release.Name }}
+
+Access the pod you want to debug by executing
+
+  kubectl exec --namespace {{ include "common.names.namespace" . | quote }} -ti <NAME OF THE POD> -- bash
+
+In order to replicate the container startup scripts execute this command:
+
+    dremio start-fg
+
+{{- else }}
+
+Access Dremio from within the cluster using the following URL:
+
+  - {{ include "common.names.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}:{{ .Values.service.ports.web }} (web)
+  - {{ include "common.names.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}:{{ .Values.service.ports.client }} (client)
+  - {{ include "common.names.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}:{{ .Values.service.ports.flight }} (flight)
+
+To access Dremio web interface from outside the cluster follow the steps below:
+
+{{- if .Values.dremio.auth.enabled }}
+Get the Dremio server credentials by running these commands:
+
+echo Username: {{ .Values.dremio.auth.username }}
+echo Password: $(kubectl get secret --namespace {{ include "common.names.namespace" . }} {{ include "common.names.fullname" . }} -o jsonpath="{.data.dremio-password}" | base64 -d)
+{{- end }}
+
+Get the Dremio server URL by running these commands:
+
+{{- if .Values.ingress.enabled }}
+   export CLUSTER_IP=$(minikube ip) # On Minikube. Use: `kubectl cluster-info` on others K8s clusters
+   echo "Dremio web server URL: http{{ if .Values.ingress.tls }}s{{ end }}://{{ .Values.ingress.hostname }}/"
+   echo "$CLUSTER_IP  {{ .Values.ingress.hostname }}" | sudo tee -a /etc/hosts
+
+{{- else if contains "NodePort" .Values.service.type }}
+    export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "common.names.fullname" . }})
+    export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+    echo "Dremio web server available at $NODE_IP:$NODE_PORT"
+{{- else if contains "LoadBalancer" .Values.service.type }}
+     NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+           You can watch the status of by running 'kubectl get --namespace {{ include "common.names.namespace" . }} svc -w {{ include "common.names.fullname" . }}'
+    export SERVICE_IP=$(kubectl get svc --namespace {{ include "common.names.namespace" . }} {{ include "common.names.fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+    echo "Dremio web server available at $SERVICE_IP:{{ .Values.service.ports.web }}"
+{{- else if contains "ClusterIP" .Values.service.type }}
+    echo "Dremio web server available at 127.0.0.1:9047"
+    kubectl port-forward svc/{{ include "common.names.fullname" . }} 9047:{{ .Values.service.ports.web }} &
+{{- end }}
+{{- end }}
+
+{{- include "common.warnings.rollingTag" .Values.dremio.image }}
+{{- include "common.warnings.rollingTag" .Values.defaultInitContainers.defaultImage }}
+{{- include "common.warnings.rollingTag" .Values.metrics.image }}
+{{- include "dremio.validateValues" . }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.dremio.image .Values.defaultInitContainers.defaultImage .Values.metrics.image) "context" $) }}
+{{- include "common.warnings.resources" (dict "sections" (list "masterCoordinator" "coordinator" "executor.common" "defaultInitContainers.wait" "defaultInitContainers.generateConf" "defaultInitContainers.initCerts" "defaultInitContainers.copyDefaultConf" "defaultInitContainers.upgradeKeystore" "defaultInitContainers.volumePermissions") "context" $) }}
+{{- include "common.errors.insecureImages" (dict "images" (list .Values.dremio.image .Values.defaultInitContainers.defaultImage .Values.metrics.image) "context" $) }}

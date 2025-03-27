@@ -4,92 +4,54 @@ SPDX-License-Identifier: APACHE-2.0
 */}}
 
 {{/* vim: set filetype=mustache: */}}
+
 {{/*
-Expand the name of the chart.
+Return the proper Airflow Web server fullname
 */}}
-{{- define "airflow.name" -}}
-{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
+{{- define "airflow.web.fullname" -}}
+{{- printf "%s-web" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
-Create chart name and version as used by the chart label.
+Return the proper Airflow Scheduler fullname
 */}}
-{{- define "airflow.chart" -}}
-{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
+{{- define "airflow.scheduler.fullname" -}}
+{{- printf "%s-scheduler" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
-Full path to CA Cert file
+Return the proper Airflow Dag Processor fullname
 */}}
-{{- define "airflow.ldapCAFilename" }}
-{{- printf "%s/%s" .Values.ldap.tls.certificatesMountPath (coalesce .Values.ldap.tls.CAcertificateFilename .Values.ldap.tls.CAFilename ) }}
+{{- define "airflow.dagProcessor.fullname" -}}
+{{- printf "%s-dag-processor" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
-Fully qualified app name for LDAP
+Return the proper Airflow Triggerer fullname
 */}}
-{{- define "airflow.ldap" -}}
-{{- printf "%s-ldap" (include "common.names.fullname" .) -}}
+{{- define "airflow.triggerer.fullname" -}}
+{{- printf "%s-triggerer" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
-Return the LDAP credentials secret.
+Return the proper Airflow Worker fullname
 */}}
-{{- define "airflow.ldapSecretName" -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
-Also, we can't use a single if because lazy evaluation is not an option
-*/}}
-{{- if .Values.global }}
-    {{- if .Values.global.ldap }}
-        {{- if .Values.global.ldap.existingSecret }}
-            {{- printf "%s" .Values.global.ldap.existingSecret -}}
-        {{- else if .Values.ldap.existingSecret -}}
-            {{- printf "%s" .Values.ldap.existingSecret -}}
-        {{- else -}}
-            {{- printf "%s" (include "airflow.ldap" .) -}}
-        {{- end -}}
-     {{- else if .Values.ldap.existingSecret -}}
-         {{- printf "%s" .Values.ldap.existingSecret -}}
-     {{- else -}}
-         {{- printf "%s" (include "airflow.ldap" .) -}}
-     {{- end -}}
-{{- else -}}
-     {{- if .Values.ldap.existingSecret -}}
-         {{- printf "%s" .Values.ldap.existingSecret -}}
-     {{- else -}}
-         {{- printf "%s" (include "airflow.ldap" .) -}}
-     {{- end -}}
+{{- define "airflow.worker.fullname" -}}
+{{- printf "%s-worker" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
+
+{{/*
+Return the proper Airflow metrics fullname
+*/}}
+{{- define "airflow.metrics.fullname" -}}
+{{- printf "%s-statsd-metrics" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
 Return the proper Airflow image name
 */}}
 {{- define "airflow.image" -}}
-{{- include "common.images.image" (dict "imageRoot" .Values.web.image "global" .Values.global) -}}
-{{- end -}}
-
-{{/*
-Return the proper Airflow Scheduler image name
-*/}}
-{{- define "airflow.schedulerImage" -}}
-{{- include "common.images.image" (dict "imageRoot" .Values.scheduler.image "global" .Values.global) -}}
-{{- end -}}
-
-{{/*
-Return the proper Airflow Worker image name
-*/}}
-{{- define "airflow.workerImage" -}}
-{{- include "common.images.image" (dict "imageRoot" .Values.worker.image "global" .Values.global) -}}
-{{- end -}}
-
-{{/*
-Return the proper git image name
-*/}}
-{{- define "git.image" -}}
-{{- include "common.images.image" (dict "imageRoot" .Values.git.image "global" .Values.global) -}}
+{{- include "common.images.image" (dict "imageRoot" .Values.image "global" .Values.global) -}}
 {{- end -}}
 
 {{/*
@@ -100,17 +62,10 @@ Return the proper Airflow Metrics image name
 {{- end -}}
 
 {{/*
-Return the proper load Airflow DAGs image name
-*/}}
-{{- define "airflow.dags.image" -}}
-{{- include "common.images.image" (dict "imageRoot" .Values.dags.image "global" .Values.global) -}}
-{{- end -}}
-
-{{/*
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "airflow.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.web.image .Values.scheduler.image .Values.worker.image .Values.git .Values.metrics.image) "global" .Values.global) -}}
+{{- include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.metrics.image) "global" .Values.global) -}}
 {{- end -}}
 
 {{/*
@@ -122,56 +77,67 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{/*
+Get the Redis&reg; fullname
+*/}}
+{{- define "airflow.redis.fullname" -}}
+{{- include "common.names.dependency.fullname" (dict "chartName" "redis" "chartValues" .Values.redis "context" $) -}}
+{{- end -}}
+
+{{/*
 Create a default fully qualified redis name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
-{{- define "airflow.redis.fullname" -}}
-{{- include "common.names.dependency.fullname" (dict "chartName" "redis-master" "chartValues" .Values.redis "context" $) -}}
+{{- define "airflow.redis.host" -}}
+{{- if .Values.redis.enabled -}}
+    {{- printf "%s-master" (include "airflow.redis.fullname" .) -}}
+{{- else -}}
+    {{- printf "%s" (tpl .Values.externalRedis.host $) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Get the Redis&reg; port
+*/}}
+{{- define "airflow.redis.port" -}}
+{{- if .Values.redis.enabled -}}
+    {{- print .Values.redis.master.service.ports.redis -}}
+{{- else -}}
+    {{- print .Values.externalRedis.port  -}}
+{{- end -}}
 {{- end -}}
 
 {{/*
 Get the Redis&reg; credentials secret.
 */}}
 {{- define "airflow.redis.secretName" -}}
-{{- if and (.Values.redis.enabled) (not .Values.redis.auth.existingSecret) -}}
-    {{/* Create a include for the redis secret
-    We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-    */}}
-    {{- $name := default "redis" .Values.redis.nameOverride -}}
-    {{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
-{{- else if and (.Values.redis.enabled) ( .Values.redis.auth.existingSecret) -}}
-    {{- printf "%s" .Values.redis.auth.existingSecret -}}
-{{- else }}
-    {{- if .Values.externalRedis.existingSecret -}}
-        {{- printf "%s" .Values.externalRedis.existingSecret -}}
+{{- if .Values.redis.enabled -}}
+    {{- if .Values.redis.auth.existingSecret -}}
+        {{- print (tpl .Values.redis.auth.existingSecret .) -}}
     {{- else -}}
-        {{ printf "%s-%s" .Release.Name "externalredis" }}
+        {{- print (include "airflow.redis.fullname" .) -}}
     {{- end -}}
+{{- else if .Values.externalRedis.existingSecret -}}
+    {{- print (tpl .Values.externalRedis.existingSecret .) -}}
+{{- else -}}
+    {{- printf "%s-externalredis" (include "common.names.fullname" .) -}}
 {{- end -}}
 {{- end -}}
 
 {{/*
 Get the Postgresql credentials secret.
 */}}
-{{- define "airflow.postgresql.secretName" -}}
-{{- if .Values.postgresql.enabled }}
-    {{- if .Values.global.postgresql }}
-        {{- if .Values.global.postgresql.auth }}
-            {{- if .Values.global.postgresql.auth.existingSecret }}
-                {{- tpl .Values.global.postgresql.auth.existingSecret $ -}}
-            {{- else -}}
-                {{- default (include "airflow.postgresql.fullname" .) (tpl .Values.postgresql.auth.existingSecret $) -}}
-            {{- end -}}
-        {{- else -}}
-            {{- if and ( .Values.postgresql.auth.existingSecret ) ( .Values.postgresql.auth.enablePostgresUser ) }}
-                {{- default (include "airflow.postgresql.fullname" .) (tpl .Values.postgresql.auth.existingSecret $) -}}
-            {{- end -}}
-        {{- end -}}
+{{- define "airflow.database.secretName" -}}
+{{- if .Values.postgresql.enabled -}}
+    {{- $existingSecret := coalesce (((.Values.global.postgresql).auth).existingSecret) .Values.postgresql.auth.existingSecret -}}
+    {{- if $existingSecret -}}
+        {{- print (tpl $existingSecret .) -}}
     {{- else -}}
-        {{- default (include "airflow.postgresql.fullname" .) (tpl .Values.postgresql.auth.existingSecret $) -}}
+        {{- print (include "airflow.postgresql.fullname" .) -}}
     {{- end -}}
+{{- else if .Values.externalDatabase.existingSecret -}}
+    {{- print (tpl .Values.externalDatabase.existingSecret .) -}}
 {{- else -}}
-    {{- default (printf "%s-externaldb" .Release.Name) (tpl .Values.externalDatabase.existingSecret $) -}}
+    {{- printf "%s-externaldb" (include "common.names.fullname" .) -}}
 {{- end -}}
 {{- end -}}
 
@@ -180,9 +146,9 @@ Get the secret name
 */}}
 {{- define "airflow.secretName" -}}
 {{- if .Values.auth.existingSecret -}}
-  {{- printf "%s" .Values.auth.existingSecret -}}
+    {{- print (tpl .Values.auth.existingSecret .) -}}
 {{- else -}}
-  {{- printf "%s" (include "common.names.fullname" .) -}}
+    {{- print (include "common.names.fullname" .) -}}
 {{- end -}}
 {{- end -}}
 
@@ -191,38 +157,76 @@ Get the configmap name
 */}}
 {{- define "airflow.configMapName" -}}
 {{- if .Values.existingConfigmap -}}
-  {{- printf "%s" (tpl .Values.existingConfigmap $) -}}
+    {{- print (tpl .Values.existingConfigmap .) -}}
 {{- else -}}
-  {{- printf "%s-configuration" (include "common.names.fullname" .) -}}
+    {{- print (include "common.names.fullname" .) -}}
 {{- end -}}
 {{- end -}}
 
 {{/*
-Load DAGs init-container
+Get the configmap name for Airflow Webserver
 */}}
-{{- define "airflow.loadDAGsInitContainer" -}}
-{{- $compDefinition := (get .context.Values .component) -}}
-- name: load-dags
-  image: {{ include "airflow.dags.image" .context }}
-  imagePullPolicy: {{ .context.Values.dags.image.pullPolicy }}
-  {{- if $compDefinition.containerSecurityContext.enabled }}
-  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" $compDefinition.containerSecurityContext "context" .context) | nindent 4 }}
-  {{- end }}
-  command:
-    - /bin/bash
-  args:
-    - -ec
-    - |
-      cp /configmap/* /dags
-  volumeMounts:
-    - name: empty-dir
-      mountPath: /tmp
-      subPath: tmp-dir
-    - name: load-external-dag-files
-      mountPath: /configmap
-    - name: empty-dir
-      mountPath: /dags
-      subPath: app-external-dag-dir
+{{- define "airflow.web.configMapName" -}}
+{{- if .Values.web.existingConfigmap -}}
+    {{- print (tpl .Values.web.existingConfigmap .) -}}
+{{- else -}}
+    {{- print (include "airflow.web.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Get the configmap name for StatsD exporter
+*/}}
+{{- define "airflow.metrics.configMapName" -}}
+{{- if .Values.metrics.existingConfigmap -}}
+    {{- print (tpl .Values.metrics.existingConfigmap .) -}}
+{{- else -}}
+    {{- print (include "airflow.metrics.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the name of the secret containing the TLS certificates for Airflow webserver
+*/}}
+{{- define "airflow.web.tls.secretName" -}}
+{{- if or .Values.web.tls.autoGenerated.enabled (and (not (empty .Values.web.tls.cert)) (not (empty .Values.web.tls.key))) -}}
+    {{- printf "%s-crt" (include "airflow.web.fullname" .) -}}
+{{- else -}}
+    {{- required "An existing secret name must be provided with TLS certs for Airflow webserver if cert and key are not provided!" (tpl .Values.web.tls.existingSecret .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the LDAP credentials secret.
+*/}}
+{{- define "airflow.ldap.secretName" -}}
+{{- if .Values.ldap.existingSecret -}}
+    {{- print (tpl .Values.ldap.existingSecret .) -}}
+{{- else -}}
+    {{- printf "%s-ldap" (include "common.names.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the secret name containing the SSH keys for loading DAGs Git repositories
+*/}}
+{{- define "airflow.dags.ssh.secretName" -}}
+{{- if .Values.dags.existingSshKeySecret -}}
+    {{- print (tpl .Values.dags.existingSshKeySecret .) -}}
+{{- else -}}
+    {{- printf "%s-ssh" (include "common.names.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the secret name containing the SSH keys for loading plugins Git repositories
+*/}}
+{{- define "airflow.plugins.ssh.secretName" -}}
+{{- if .Values.plugins.existingSshKeySecret -}}
+    {{- print (tpl .Values.plugins.existingSshKeySecret .) -}}
+{{- else -}}
+    {{- printf "%s-ssh" (include "common.names.fullname" .) -}}
+{{- end -}}
 {{- end -}}
 
 {{/*
@@ -237,10 +241,23 @@ Create the name of the service account to use
 {{- end -}}
 
 {{/*
+Return true if a SQL connection string is used to connect to the database
+*/}}
+{{- define "airflow.database.useSqlConnection" -}}
+{{- if and (not .Values.postgresql.enabled) (or .Values.externalDatabase.sqlConnection (and .Values.externalDatabase.existingSecret .Values.externalDatabase.existingSecretSqlConnectionKey)) -}}
+    {{- true -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Add environment variables to configure database values
 */}}
 {{- define "airflow.database.host" -}}
-{{- ternary (include "airflow.postgresql.fullname" .) .Values.externalDatabase.host .Values.postgresql.enabled | quote -}}
+{{- if eq .Values.postgresql.architecture "replication" }}
+{{- (ternary (include "airflow.postgresql.fullname" .) (tpl .Values.externalDatabase.host $) .Values.postgresql.enabled | printf "%s-primary") | quote -}}
+{{- else -}}
+{{- ternary (include "airflow.postgresql.fullname" .) (tpl .Values.externalDatabase.host $) .Values.postgresql.enabled | quote -}}
+{{- end -}}
 {{- end -}}
 
 {{/*
@@ -284,18 +301,16 @@ Add environment variables to configure database values
 {{/*
 Add environment variables to configure database values
 */}}
-{{- define "airflow.database.existingsecret.key" -}}
+{{- define "airflow.database.secretKey" -}}
 {{- if .Values.postgresql.enabled -}}
-    {{- printf "%s" "password" -}}
+    {{- print "password" -}}
 {{- else -}}
-    {{- if .Values.externalDatabase.existingSecret -}}
-        {{- if .Values.externalDatabase.existingSecretPasswordKey -}}
-            {{- printf "%s" .Values.externalDatabase.existingSecretPasswordKey -}}
-        {{- else -}}
-            {{- printf "%s" "password" -}}
-        {{- end -}}
+    {{- if and .Values.externalDatabase.existingSecret .Values.externalDatabase.existingSecretSqlConnectionKey -}}
+        {{- print (tpl .Values.externalDatabase.existingSecretSqlConnectionKey .) -}}
+    {{- else if .Values.externalDatabase.existingSecret -}}
+        {{- default "password" (tpl .Values.externalDatabase.existingSecretPasswordKey .) -}}
     {{- else -}}
-        {{- printf "%s" "password" -}}
+        {{- ternary "password" "sql-connection" (empty .Values.externalDatabase.sqlConnection) -}}
     {{- end -}}
 {{- end -}}
 {{- end -}}
@@ -327,102 +342,28 @@ Add environment variables to configure database values
 {{- end -}}
 
 {{/*
-Add environment variables to configure database values
-*/}}
-{{- define "airflow.configure.database" -}}
-- name: AIRFLOW_DATABASE_NAME
-  value: {{ include "airflow.database.name" . }}
-- name: AIRFLOW_DATABASE_USERNAME
-  value: {{ include "airflow.database.user" . }}
-{{- if or (not .Values.postgresql.enabled) .Values.postgresql.auth.enablePostgresUser }}
-- name: AIRFLOW_DATABASE_PASSWORD
-  valueFrom:
-    secretKeyRef:
-      name: {{ include "airflow.postgresql.secretName" . }}
-      key: {{ include "airflow.database.existingsecret.key" . }}
-{{- else }}
-- name: ALLOW_EMPTY_PASSWORD
-  value: "true"
-{{- end }}
-- name: AIRFLOW_DATABASE_HOST
-  value: {{ include "airflow.database.host" . }}
-- name: AIRFLOW_DATABASE_PORT_NUMBER
-  value: {{ include "airflow.database.port" . }}
-{{- end -}}
-
-{{/*
-Add environment variables to configure redis values
-*/}}
-{{- define "airflow.configure.redis" -}}
-{{- if (not (or (eq .Values.executor "KubernetesExecutor" ) (eq .Values.executor "LocalKubernetesExecutor" ))) }}
-- name: REDIS_HOST
-  value: {{ ternary (include "airflow.redis.fullname" .) .Values.externalRedis.host .Values.redis.enabled | quote }}
-- name: REDIS_PORT_NUMBER
-  value: {{ ternary "6379" .Values.externalRedis.port .Values.redis.enabled | quote }}
-{{- if and (not .Values.redis.enabled) .Values.externalRedis.username }}
-- name: REDIS_USER
-  value: {{ .Values.externalRedis.username | quote }}
-{{- end }}
-- name: REDIS_PASSWORD
-  valueFrom:
-    secretKeyRef:
-      name: {{ include "airflow.redis.secretName" . }}
-      key: redis-password
-{{- end }}
-{{- end -}}
-
-{{/*
 Add environment variables to configure airflow common values
 */}}
 {{- define "airflow.configure.airflow.common" -}}
-- name: AIRFLOW_FERNET_KEY
+- name: BITNAMI_DEBUG
+  value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
+{{- if .Values.usePasswordFiles }}
+- name: AIRFLOW__CORE__FERNET_KEY_CMD
+  value: "cat /opt/bitnami/airflow/secrets/airflow-fernet-key"
+- name: AIRFLOW__WEBSERVER__SECRET_KEY_CMD
+  value: "cat /opt/bitnami/airflow/secrets/airflow-secret-key"
+{{- else }}
+- name: AIRFLOW__CORE__FERNET_KEY
   valueFrom:
     secretKeyRef:
       name: {{ include "airflow.secretName" . }}
       key: airflow-fernet-key
-- name: AIRFLOW_SECRET_KEY
+- name: AIRFLOW__WEBSERVER__SECRET_KEY
   valueFrom:
     secretKeyRef:
       name: {{ include "airflow.secretName" . }}
       key: airflow-secret-key
-- name: AIRFLOW_LOAD_EXAMPLES
-  value: {{ ternary "yes" "no" .Values.loadExamples | quote }}
-{{- if not (or .Values.configuration .Values.existingConfigmap) }}
-- name: AIRFLOW_FORCE_OVERWRITE_CONF_FILE
-  value: "yes"
-{{- end }}
-{{- if .Values.web.image.debug }}
-- name: BASH_DEBUG
-  value: "1"
-- name: BITNAMI_DEBUG
-  value: "true"
-{{- end }}
 {{- end -}}
-
-{{/*
-Add environment variables to configure airflow kubernetes executor
-*/}}
-{{- define "airflow.configure.airflow.kubernetesExecutor" -}}
-{{- if (contains "KubernetesExecutor" .Values.executor) }}
-- name: AIRFLOW__KUBERNETES__NAMESPACE
-  value: {{ .Release.Namespace }}
-- name: AIRFLOW__KUBERNETES__WORKER_CONTAINER_REPOSITORY
-  value: {{ printf "%s/%s" .Values.worker.image.registry .Values.worker.image.repository }}
-- name: AIRFLOW__KUBERNETES__WORKER_CONTAINER_TAG
-  value: {{ .Values.worker.image.tag }}
-- name: AIRFLOW__KUBERNETES__IMAGE_PULL_POLICY
-  value: {{ .Values.worker.image.pullPolicy }}
-- name: AIRFLOW__KUBERNETES__DAGS_IN_IMAGE
-  value: "True"
-- name: AIRFLOW__KUBERNETES__DELETE_WORKER_PODS
-  value: "True"
-- name: AIRFLOW__KUBERNETES__DELETE_WORKER_PODS_ON_FAILURE
-  value: "False"
-- name: AIRFLOW__KUBERNETES__WORKER_SERVICE_ACCOUNT_NAME
-  value: {{ include "airflow.serviceAccountName" . }}
-- name: AIRFLOW__KUBERNETES__POD_TEMPLATE_FILE
-  value: "/opt/bitnami/airflow/pod_template.yaml"
-{{- end }}
 {{- end -}}
 
 {{/*
@@ -433,7 +374,7 @@ Note, returns 127.0.0.1 if using ClusterIP.
 {{- if eq .Values.service.type "ClusterIP" -}}
 127.0.0.1
 {{- else -}}
-{{- .Values.service.loadBalancerIP | default "" -}}
+{{- .Values.service.loadBalancerIP | default "127.0.0.1" -}}
 {{- end -}}
 {{- end -}}
 
@@ -443,8 +384,8 @@ If not using ClusterIP, or if a host or LoadBalancerIP is not defined, the value
 */}}
 {{- define "airflow.baseUrl" -}}
 {{- $host := default (include "airflow.serviceIP" .) .Values.web.baseUrl -}}
-{{- $port := printf ":%v" .Values.service.ports.http -}}
-{{- $schema := "http://" -}}
+{{- $port := printf ":%d" (int .Values.service.ports.http) -}}
+{{- $schema := ternary "https://" "http://" (or .Values.web.tls.enabled (and .Values.ingress.enabled .Values.ingress.tls)) -}}
 {{- if regexMatch "^https?://" .Values.web.baseUrl -}}
   {{- $schema = "" -}}
 {{- end -}}
@@ -454,9 +395,7 @@ If not using ClusterIP, or if a host or LoadBalancerIP is not defined, the value
 {{- if and .Values.ingress.enabled .Values.ingress.hostname -}}
   {{- $host = .Values.ingress.hostname -}}
 {{- end -}}
-{{- if $host -}}
 {{- printf "%s%s%s" $schema $host $port -}}
-{{- end }}
 {{- end -}}
 
 {{/*
@@ -468,6 +407,8 @@ Compile all warnings into a single message, and call fail.
 {{- $messages := append $messages (include "airflow.validateValues.dags.repository_details" .) -}}
 {{- $messages := append $messages (include "airflow.validateValues.plugins.repositories" .) -}}
 {{- $messages := append $messages (include "airflow.validateValues.plugins.repository_details" .) -}}
+{{- $messages := append $messages (include "airflow.validateValues.triggerer.replicaCount" .) -}}
+{{- $messages := append $messages (include "airflow.validateValues.metrics" . ) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
@@ -476,71 +417,95 @@ Compile all warnings into a single message, and call fail.
 {{- end -}}
 {{- end -}}
 
-{{/* Validate values of Airflow - At least one repository details must be provided when "git.dags.enabled" is "true" */}}
+{{/*
+Validate values of Airflow - At least one repository details must be provided when "dags.enabled" is "true"
+*/}}
 {{- define "airflow.validateValues.dags.repositories" -}}
-  {{- if and .Values.git.dags.enabled (empty .Values.git.dags.repositories) -}}
-airflow: git.dags.repositories
+{{- if and .Values.dags.enabled (empty .Values.dags.repositories) (empty .Values.dags.existingConfigmap) -}}
+airflow: dags.repositories
     At least one repository must be provided when enabling downloading DAG files
-    from git repository (--set git.dags.repositories[0].repository="xxx"
-    --set git.dags.repositories[0].name="xxx"
-    --set git.dags.repositories[0].branch="name")
-  {{- end -}}
+    from git repositories (--set dags.repositories[0].repository="xxx"
+    --set dags.repositories[0].name="xxx"
+    --set dags.repositories[0].branch="name")
+{{- end -}}
 {{- end -}}
 
-{{/* Validate values of Airflow - "git.dags.repositories.repository", "git.dags.repositories.name", "git.dags.repositories.branch" must be provided when "git.dags.enabled" is "true" */}}
+{{/*
+Validate values of Airflow - "dags.repositories.repository", "dags.repositories.name", "dags.repositories.branch" must be provided when "dags.enabled" is "true"
+*/}}
 {{- define "airflow.validateValues.dags.repository_details" -}}
-{{- if .Values.git.dags.enabled -}}
-{{- range $index, $repository_detail := .Values.git.dags.repositories }}
+{{- if .Values.dags.enabled -}}
+{{- range $index, $repository_detail := .Values.dags.repositories }}
 {{- if empty $repository_detail.repository -}}
-airflow: git.dags.repositories[$index].repository
+airflow: dags.repositories[$index].repository
     The repository must be provided when enabling downloading DAG files
-    from git repository (--set git.dags.repositories[$index].repository="xxx")
+    from git repository (--set dags.repositories[$index].repository="xxx")
 {{- end -}}
 {{- if empty $repository_detail.branch -}}
-airflow: git.dags.repositories[$index].branch
+airflow: dags.repositories[$index].branch
     The branch must be provided when enabling downloading DAG files
-    from git repository (--set git.dags.repositories[$index].branch="xxx")
+    from git repository (--set dags.repositories[$index].branch="xxx")
 {{- end -}}
 {{- end -}}
 {{- end -}}
 {{- end -}}
 
-{{/* Validate values of Airflow - "git.plugins.repositories" must be provided when "git.plugins.enabled" is "true" */}}
+{{/*
+Validate values of Airflow - "plugins.repositories" must be provided when "plugins.enabled" is "true"
+*/}}
 {{- define "airflow.validateValues.plugins.repositories" -}}
-  {{- if and .Values.git.plugins.enabled (empty .Values.git.plugins.repositories) -}}
-airflow: git.plugins.repositories
-    At least one repository must be provided when enabling downloading DAG files
-    from git repository (--set git.plugins.repositories[0].repository="xxx"
-    --set git.plugins.repositories[0].name="xxx"
-    --set git.plugins.repositories[0].branch="name")
-  {{- end -}}
+{{- if and .Values.plugins.enabled (empty .Values.plugins.repositories) -}}
+airflow: plugins.repositories
+    At least one repository must be provided when enabling downloading plugins
+    from git repositories (--set plugins.repositories[0].repository="xxx"
+    --set plugins.repositories[0].name="xxx"
+    --set plugins.repositories[0].branch="name")
+{{- end -}}
 {{- end -}}
 
-{{/* Validate values of Airflow - "git.plugins.repositories.repository", "git.plugins.repositories.name", "git.plugins.repositories.branch" must be provided when "git.plugins.enabled" is "true" */}}
+{{/*
+Validate values of Airflow - "plugins.repositories.repository", "plugins.repositories.name", "plugins.repositories.branch" must be provided when "plugins.enabled" is "true"
+*/}}
 {{- define "airflow.validateValues.plugins.repository_details" -}}
-{{- if .Values.git.plugins.enabled -}}
-{{- range $index, $repository_detail := .Values.git.plugins.repositories }}
+{{- if .Values.plugins.enabled -}}
+{{- range $index, $repository_detail := .Values.plugins.repositories }}
 {{- if empty $repository_detail.repository -}}
-airflow: git.plugins.repositories[$index].repository
+airflow: plugins.repositories[$index].repository
     The repository must be provided when enabling downloading DAG files
-    from git repository (--set git.plugins.repositories[$index].repository="xxx")
+    from git repository (--set plugins.repositories[$index].repository="xxx")
 {{- end -}}
 {{- if empty $repository_detail.branch -}}
-airflow: git.plugins.repositories[$index].branch
+airflow: plugins.repositories[$index].branch
     The branch must be provided when enabling downloading DAG files
-    from git repository (--set git.plugins.repositories[$index].branch="xxx")
+    from git repository (--set plugins.repositories[$index].branch="xxx")
 {{- end -}}
 {{- end -}}
 {{- end -}}
 {{- end -}}
 
-{{/* Check if there are rolling tags in the images */}}
-{{- define "airflow.checkRollingTags" -}}
-{{- include "common.warnings.rollingTag" .Values.web.image }}
-{{- include "common.warnings.rollingTag" .Values.scheduler.image }}
-{{- include "common.warnings.rollingTag" .Values.worker.image }}
-{{- include "common.warnings.rollingTag" .Values.git.image }}
-{{- include "common.warnings.rollingTag" .Values.metrics.image }}
+{{/*
+Validate values of Airflow - number of Triggerer replicas
+*/}}
+{{- define "airflow.validateValues.triggerer.replicaCount" -}}
+{{- $replicaCount := int .Values.triggerer.replicaCount }}
+{{- if and .Values.triggerer.enabled .Values.triggerer.persistence.enabled .Values.triggerer.persistence.existingClaim (or (gt $replicaCount 1) .Values.triggerer.autoscaling.hpa.enabled) -}}
+airflow: triggerer.replicaCount
+    A single existing PVC cannot be shared between multiple replicas.
+    Please set a valid number of replicas (--set triggerer.replicaCount=1),
+    disable HPA (--set triggerer.autoscaling.hpa.enabled=false), disable persistence
+    (--set triggerer.persistence.enabled=false) or rely on dynamic provisioning via Persistent
+    Volume Claims (--set triggerer.persistence.existingClaim="").
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate values of Airflow - metrics
+*/}}
+{{- define "airflow.validateValues.metrics" -}}
+{{- if and .Values.metrics.enabled (include "airflow.database.useSqlConnection" .) }}
+airflow: metrics
+    The metrics feature is currently not supported when using an SQL connection string to connect to the database.
+{{- end -}}
 {{- end -}}
 
 {{/*
@@ -549,9 +514,5 @@ This is a workaround and is subject to Airflow official resolution.
 Ref: https://github.com/bitnami/charts/pull/6096#issuecomment-856499047
 */}}
 {{- define "airflow.worker.executor" -}}
-{{- if eq .Values.executor "CeleryKubernetesExecutor" -}}
-{{- printf "CeleryExecutor" -}}
-{{- else -}}
-{{- .Values.executor -}}
-{{- end -}}
+{{- print (ternary "CeleryExecutor" .Values.executor (eq .Values.executor "CeleryKubernetesExecutor")) -}}
 {{- end -}}
