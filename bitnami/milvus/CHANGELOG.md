@@ -1,6 +1,6 @@
 # Changelog
 
-## 12.0.0 (2025-03-26)
+## 12.0.0 (2025-03-27)
 
 * [bitnami/milvus] feat: bump major due to major bump on Kafka dep ([#32617](https://github.com/bitnami/charts/pull/32617))
 
