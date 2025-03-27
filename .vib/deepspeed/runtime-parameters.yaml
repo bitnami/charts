@@ -6,11 +6,11 @@ source:
 client:
   podSecurityContext:
     enabled: true
-    fsGroup: 1001
+    fsGroup: 1002
   containerSecurityContext:
     enabled: true
-    runAsUser: 1001
-    runAsGroup: 1001
+    runAsUser: 1002
+    runAsGroup: 1002
   serviceAccount:
     create: true
   automountServiceAccountToken: true
