@@ -55,6 +55,10 @@ spec:
               #!/bin/bash
               {{- if .Values.milvus.auth.enabled }}
               echo "Updating credentials"
+              {{- if .Values.usePasswordFiles }}
+              export MILVUS_ROOT_PASSWORD="$(< $MILVUS_ROOT_PASSWORD_FILE)"
+              export MILVUS_PASSWORD="$(< $MILVUS_PASSWORD_FILE)"
+              {{- end }}
               # Taken from https://milvus.io/docs/authenticate.md
               python - <<EOF
               # Import libraries
@@ -104,6 +108,12 @@ spec:
               {{- end }}
           env:
             {{- if .Values.milvus.auth.enabled }}
+            {{- if .Values.usePasswordFiles -}}
+            - name: MILVUS_ROOT_PASSWORD_FILE
+              value: {{ printf "/opt/bitnami/milvus/secrets/%s" (include "milvus.secretRootPasswordKey" .) }}
+            - name: MILVUS_PASSWORD_FILE
+              value: {{ printf "/opt/bitnami/milvus/secrets/%s" (include "milvus.secretPasswordKey" .) }}
+            {{- else }}
             - name: MILVUS_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -114,6 +124,7 @@ spec:
                 secretKeyRef:
                   name: {{ include "milvus.secretName" . }}
                   key: {{ include "milvus.secretPasswordKey" . }}
+            {{- end }}
             {{- end }}
           {{- if .Values.initJob.containerSecurityContext.enabled }}
           securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.initJob.containerSecurityContext "context" $) | nindent 12 }}
@@ -170,6 +181,10 @@ spec:
             - name: empty-dir
               mountPath: /tmp
               subPath: tmp-dir
+            {{- if  .Values.usePasswordFiles }}
+            - name: milvus-secrets
+              mountPath: /opt/bitnami/milvus/secrets
+            {{- end }}
             {{- if and (ne (int .Values.proxy.tls.mode) 0) (not (empty .Values.initJob.tls.existingSecret)) }}
             - name: milvus-client-certs
               mountPath: /opt/bitnami/milvus/configs/cert/milvus/client
@@ -186,6 +201,13 @@ spec:
       volumes:
         - name: empty-dir
           emptyDir: {}
+        {{- if and .Values.usePasswordFiles .Values.milvus.auth.enabled }}
+        - name: milvus-secrets
+          projected:
+            sources:
+              - secret:
+                  name:  {{ include "milvus.secretName" . }}
+        {{- end }}
         {{- if and (ne (int .Values.proxy.tls.mode) 0) (not (empty .Values.initJob.tls.existingSecret)) }}
         - name: milvus-client-certs
           secret:
