@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.6.0 (2025-03-11)
+## 11.6.1 (2025-03-27)
 
-* [bitnami/tomcat] add annotations & labels to volumeClaimTemplate ([#32396](https://github.com/bitnami/charts/pull/32396))
+* [bitnami/tomcat] Release 11.6.1 ([#32629](https://github.com/bitnami/charts/pull/32629))
+
+## 11.6.0 (2025-03-12)
+
+* [bitnami/tomcat] add annotations & labels to volumeClaimTemplate (#32396) ([553b0a8](https://github.com/bitnami/charts/commit/553b0a8ef1ef324a0da90ffe226bbe1910437bec)), closes [#32396](https://github.com/bitnami/charts/issues/32396)
 
 ## <small>11.5.6 (2025-03-08)</small>
 

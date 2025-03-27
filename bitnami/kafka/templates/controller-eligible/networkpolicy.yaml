@@ -7,16 +7,20 @@ SPDX-License-Identifier: APACHE-2.0
 kind: NetworkPolicy
 apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
 metadata:
-  name: {{ include "common.names.fullname" . }}
+  name: {{ template "kafka.controller.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: controller
+    app.kubernetes.io/part-of: kafka
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.controller.podLabels .Values.commonLabels ) "context" . ) }}
   podSelector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/component: controller
+      app.kubernetes.io/part-of: kafka
   policyTypes:
     - Ingress
     - Egress
@@ -33,9 +37,14 @@ spec:
           protocol: TCP
     # Allow internal communications between nodes
     - ports:
+        - port: {{ .Values.listeners.controller.containerPort }}
+        {{- if not .Values.controller.controllerOnly }}
         - port: {{ .Values.listeners.client.containerPort }}
         - port: {{ .Values.listeners.interbroker.containerPort }}
-        - port: {{ .Values.listeners.controller.containerPort }}
+        {{- range $listener := .Values.listeners.extraListeners }}
+        - port: {{ $listener.containerPort }}
+        {{- end }}
+        {{- end }}
         {{- if .Values.externalAccess.enabled }}
         - port: {{ .Values.listeners.external.containerPort }}
         {{- end }}
@@ -43,15 +52,20 @@ spec:
         - podSelector:
             matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
     {{- if .Values.networkPolicy.extraEgress }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.rts.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
     {{- end }}
   {{- end }}
   ingress:
     # Allow client connections
     - ports:
+        - port: {{ .Values.listeners.controller.containerPort }}
+        {{- if not .Values.controller.controllerOnly }}
         - port: {{ .Values.listeners.client.containerPort }}
         - port: {{ .Values.listeners.interbroker.containerPort }}
-        - port: {{ .Values.listeners.controller.containerPort }}
+        {{- range $listener := .Values.listeners.extraListeners }}
+        - port: {{ $listener.containerPort }}
+        {{- end }}
+        {{- end }}
         {{- if .Values.externalAccess.enabled }}
         - port: {{ .Values.listeners.external.containerPort }}
         {{- end }}
@@ -61,8 +75,8 @@ spec:
       {{- if not .Values.networkPolicy.allowExternal }}
       from:
         - podSelector:
-            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 14 }}
-        {{- if .Values.networkPolicy.addExternalClientAccess }}
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
+        {{- if and .Values.networkPolicy.addExternalClientAccess (not .Values.controller.controllerOnly) }}
         - podSelector:
             matchLabels:
               {{ template "common.names.fullname" . }}-client: "true"

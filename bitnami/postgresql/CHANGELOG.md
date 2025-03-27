@@ -1,8 +1,12 @@
 # Changelog
 
-## 16.5.5 (2025-03-20)
+## 16.5.6 (2025-03-23)
 
-* [bitnami/postgresql] allow custom service labels for primary and read ([#32368](https://github.com/bitnami/charts/pull/32368))
+* [bitnami/postgresql] Release 16.5.6 ([#32576](https://github.com/bitnami/charts/pull/32576))
+
+## <small>16.5.5 (2025-03-20)</small>
+
+* [bitnami/postgresql] allow custom service labels for primary and read (#32368) ([6703679](https://github.com/bitnami/charts/commit/6703679964429f2b0fdf853a8ac812bf7dec5302)), closes [#32368](https://github.com/bitnami/charts/issues/32368)
 
 ## <small>16.5.4 (2025-03-20)</small>
 

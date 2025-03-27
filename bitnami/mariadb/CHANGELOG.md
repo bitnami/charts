@@ -1,8 +1,12 @@
 # Changelog
 
-## 20.4.1 (2025-02-25)
+## 20.4.2 (2025-03-21)
 
-* [bitnami/mariadb] hotfix: Fix issue when `auth.username` is not set and `usePasswordFiles=true` ([#32161](https://github.com/bitnami/charts/pull/32161))
+* [bitnami/mariadb] Release 20.4.2 ([#32557](https://github.com/bitnami/charts/pull/32557))
+
+## <small>20.4.1 (2025-02-25)</small>
+
+* [bitnami/mariadb] hotfix: Fix issue when `auth.username` is not set and `usePasswordFiles=true` (#32 ([5cec013](https://github.com/bitnami/charts/commit/5cec013d573e74dddf05879c1162c62984107dd2)), closes [#32161](https://github.com/bitnami/charts/issues/32161)
 
 ## 20.4.0 (2025-02-24)
 

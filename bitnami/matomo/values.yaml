@@ -224,7 +224,7 @@ tolerations: []
 existingSecret: ""
 ## SMTP mail delivery configuration
 ## ref: https://github.com/bitnami/containers/tree/main/bitnami/matomo/#smtp-configuration
-## @param smtpAuth SMTP authentication mechanism (options: Plain, Login, Crammd5)
+## @param smtpAuth SMTP authentication mechanism (options: Plain, Login, Cram-md5)
 ## @param smtpHost SMTP host
 ## @param smtpPort SMTP port
 ## @param smtpUser SMTP user

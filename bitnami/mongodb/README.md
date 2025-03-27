@@ -336,7 +336,7 @@ passwordUpdateJob:
 In the following example we update the password via values.yaml in a MongoDB installation with replication and several usernames and databases (including metrics).
 
 ```yaml
-architecture: "replication"
+architecture: "replicaset"
 
 auth:
   usernames:
