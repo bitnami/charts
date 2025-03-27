@@ -1,8 +1,14 @@
 # Changelog
 
-## 23.0.5 (2025-03-13)
+## 23.0.6 (2025-03-27)
 
-* [bitnami/wildfly] Release 23.0.5 ([#32450](https://github.com/bitnami/charts/pull/32450))
+* [bitnami/wildfly] Release 23.0.6 ([#32630](https://github.com/bitnami/charts/pull/32630))
+
+## <small>23.0.5 (2025-03-13)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/wildfly] Release 23.0.5 (#32450) ([b5982cb](https://github.com/bitnami/charts/commit/b5982cb6845906051b0bd4e04c97e162ae330941)), closes [#32450](https://github.com/bitnami/charts/issues/32450)
 
 ## <small>23.0.4 (2025-02-11)</small>
 
