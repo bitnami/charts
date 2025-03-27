@@ -13,7 +13,7 @@ ref: https://kafka.apache.org/documentation/#configuration
 {{- else }}
 # Listeners configuration
 listeners: {{ include "kafka.listeners" (dict "isController" true "context" .) }}
-listener.security.protocol.map: {{ include "kafka.securityProtocolMap" . }}
+listener.security.protocol.map: {{ include "kafka.securityProtocolMap" (dict "isController" true "context" .) }}
 {{- if not .Values.controller.controllerOnly }}
 advertised.listeners: {{ include "kafka.advertisedListeners" . }}
 {{- end }}

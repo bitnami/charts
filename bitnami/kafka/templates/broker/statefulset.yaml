@@ -359,6 +359,11 @@ spec:
             claimName: {{ printf "%s" (tpl .Values.broker.logPersistence.existingClaim .) }}
         {{- end }}
   {{- if or (and .Values.broker.persistence.enabled (not .Values.broker.persistence.existingClaim)) (and .Values.broker.logPersistence.enabled (not .Values.broker.logPersistence.existingClaim)) }}
+  {{- if .Values.broker.persistentVolumeClaimRetentionPolicy.enabled }}
+  persistentVolumeClaimRetentionPolicy:
+    whenDeleted: {{ .Values.broker.persistentVolumeClaimRetentionPolicy.whenDeleted }}
+    whenScaled: {{ .Values.broker.persistentVolumeClaimRetentionPolicy.whenScaled }}
+  {{- end }}
   volumeClaimTemplates:
     {{- if and .Values.broker.persistence.enabled (not .Values.broker.persistence.existingClaim) }}
     - apiVersion: v1

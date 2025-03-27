@@ -174,7 +174,7 @@ spec:
             - name: external
               containerPort: {{ .Values.listeners.external.containerPort }}
             {{- end }}
-            {{- if .Values.listeners.extraListeners }}
+            {{- if and .Values.listeners.extraListeners (not .Values.controller.controllerOnly) }}
             {{- include "kafka.extraListeners.containerPorts" . | nindent 12 }}
             {{- end }}
             {{- end }}
@@ -371,6 +371,11 @@ spec:
             claimName: {{ printf "%s" (tpl .Values.controller.logPersistence.existingClaim .) }}
         {{- end }}
   {{- if or (and .Values.controller.persistence.enabled (not .Values.controller.persistence.existingClaim)) (and .Values.controller.logPersistence.enabled (not .Values.controller.logPersistence.existingClaim)) }}
+  {{- if .Values.controller.persistentVolumeClaimRetentionPolicy.enabled }}
+  persistentVolumeClaimRetentionPolicy:
+    whenDeleted: {{ .Values.controller.persistentVolumeClaimRetentionPolicy.whenDeleted }}
+    whenScaled: {{ .Values.controller.persistentVolumeClaimRetentionPolicy.whenScaled }}
+  {{- end }}
   volumeClaimTemplates:
     {{- if and .Values.controller.persistence.enabled (not .Values.controller.persistence.existingClaim) }}
     - apiVersion: v1
