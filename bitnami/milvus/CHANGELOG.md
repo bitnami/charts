@@ -1,8 +1,17 @@
 # Changelog
 
-## 11.2.4 (2025-03-25)
+## 11.3.0 (2025-03-27)
 
-* [bitnami/milvus] Release 11.2.4 ([#32593](https://github.com/bitnami/charts/pull/32593))
+* [bitnami/milvus] Set `usePasswordFiles=true` by default ([#32642](https://github.com/bitnami/charts/pull/32642))
+
+## 12.0.0 (2025-03-27)
+
+* [bitnami/milvus] feat: bump major due to major bump on Kafka dep (#32617) ([86f459a](https://github.com/bitnami/charts/commit/86f459abe1617f730a431edd103530eea4dbd59e)), closes [#32617](https://github.com/bitnami/charts/issues/32617)
+
+## <small>11.2.4 (2025-03-25)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/milvus] Release 11.2.4 (#32593) ([3521264](https://github.com/bitnami/charts/commit/3521264684c5a1b09a50a5c8c50453cc9af62f02)), closes [#32593](https://github.com/bitnami/charts/issues/32593)
 
 ## <small>11.2.3 (2025-03-05)</small>
 
