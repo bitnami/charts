@@ -1,8 +1,12 @@
 # Changelog
 
-## 15.4.1 (2025-03-27)
+## 15.4.2 (2025-03-27)
 
-* [bitnami/kong] Release 15.4.1 ([#32645](https://github.com/bitnami/charts/pull/32645))
+* [bitnami/kong] Release 15.4.2 ([#32653](https://github.com/bitnami/charts/pull/32653))
+
+## <small>15.4.1 (2025-03-27)</small>
+
+* [bitnami/kong] Release 15.4.1 (#32645) ([9cf0adc](https://github.com/bitnami/charts/commit/9cf0adc46e0c507385412f52139331017a41401c)), closes [#32645](https://github.com/bitnami/charts/issues/32645)
 
 ## 15.4.0 (2025-03-24)
 
