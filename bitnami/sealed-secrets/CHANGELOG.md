@@ -1,8 +1,13 @@
 # Changelog
 
-## 2.5.7 (2025-03-05)
+## 2.5.8 (2025-03-27)
 
-* [bitnami/sealed-secrets] Release 2.5.7 ([#32316](https://github.com/bitnami/charts/pull/32316))
+* [bitnami/sealed-secrets] Release 2.5.8 ([#32641](https://github.com/bitnami/charts/pull/32641))
+
+## <small>2.5.7 (2025-03-05)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/sealed-secrets] Release 2.5.7 (#32316) ([25a175f](https://github.com/bitnami/charts/commit/25a175f490351b3fdfe1acbfab678bbb26576ea0)), closes [#32316](https://github.com/bitnami/charts/issues/32316)
 
 ## <small>2.5.6 (2025-02-07)</small>
 
