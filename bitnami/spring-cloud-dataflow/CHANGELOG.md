@@ -1,8 +1,13 @@
 # Changelog
 
-## 34.2.2 (2025-03-04)
+## 35.0.0 (2025-03-26)
 
-* [bitnami/spring-cloud-dataflow] fix incorrect application of externalDatabase.skipper.password value ([#32251](https://github.com/bitnami/charts/pull/32251))
+* [bitnami/spring-cloud-dataflow] feat: bump major due to major bump on Kafka dep ([#32619](https://github.com/bitnami/charts/pull/32619))
+
+## <small>34.2.2 (2025-03-19)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/spring-cloud-dataflow] fix incorrect application of externalDatabase.skipper.password value ([c4f8ddf](https://github.com/bitnami/charts/commit/c4f8ddfa8f1f34f34d6e91e1283d0df883f80a5f)), closes [#32251](https://github.com/bitnami/charts/issues/32251)
 
 ## <small>34.2.1 (2025-03-02)</small>
 

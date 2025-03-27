@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.5.2 (2025-03-04)
+## 11.5.3 (2025-03-25)
 
-* [bitnami/kibana] Release 11.5.2 ([#32270](https://github.com/bitnami/charts/pull/32270))
+* [bitnami/kibana] Release 11.5.3 ([#32604](https://github.com/bitnami/charts/pull/32604))
+
+## <small>11.5.2 (2025-03-04)</small>
+
+* [bitnami/kibana] Release 11.5.2 (#32270) ([73c6f3c](https://github.com/bitnami/charts/commit/73c6f3c2a2c770b567be70a89cfe6f83b5830b84)), closes [#32270](https://github.com/bitnami/charts/issues/32270)
 
 ## <small>11.5.1 (2025-03-04)</small>
 

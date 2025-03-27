@@ -1,8 +1,13 @@
 # Changelog
 
+## 24.4.1 (2025-03-22)
+
+* [bitnami/harbor] Release 24.4.1 ([#32567](https://github.com/bitnami/charts/pull/32567))
+
 ## 24.4.0 (2025-03-13)
 
-* [bitnami/harbor] Revert merge chart generated env vart secret with existing secret ([#32382](https://github.com/bitnami/charts/pull/32382))
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/harbor] Revert merge chart generated env vart secret with existing secret (#32382) ([22c6f4e](https://github.com/bitnami/charts/commit/22c6f4eb831b8c05280e1ec215ad4fbb6cd5fd3b)), closes [#32382](https://github.com/bitnami/charts/issues/32382) [#28989](https://github.com/bitnami/charts/issues/28989)
 
 ## <small>24.3.4 (2025-03-10)</small>
 
