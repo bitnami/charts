@@ -489,7 +489,7 @@ spec:
             - name: postgresql-extended-config
               mountPath: {{ .Values.primary.persistence.mountPath }}/conf/conf.d/
             {{- end }}
-            {{- if .Values.auth.usePasswordFiles }}
+            {{- if and .Values.auth.usePasswordFiles (or .Values.auth.enablePostgresUser $customUser) }}
             - name: postgresql-password
               mountPath: /opt/bitnami/postgresql/secrets/
             {{- end }}
@@ -584,7 +584,7 @@ spec:
             - name: empty-dir
               mountPath: /tmp
               subPath: tmp-dir
-            {{- if .Values.auth.usePasswordFiles }}
+            {{- if and .Values.auth.usePasswordFiles (or .Values.auth.enablePostgresUser $customUser) }}
             - name: postgresql-password
               mountPath: /opt/bitnami/postgresql/secrets/
             {{- end }}
@@ -615,7 +615,7 @@ spec:
           configMap:
             name: {{ include "postgresql.v1.primary.extendedConfigmapName" . }}
         {{- end }}
-        {{- if .Values.auth.usePasswordFiles }}
+        {{- if and .Values.auth.usePasswordFiles (or .Values.auth.enablePostgresUser $customUser) }}
         - name: postgresql-password
           secret:
             secretName: {{ include "postgresql.v1.secretName" . }}
