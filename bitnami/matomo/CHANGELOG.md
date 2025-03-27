@@ -1,8 +1,12 @@
 # Changelog
 
-## 9.3.0 (2025-03-21)
+## 9.3.0 (2025-03-27)
 
 * [bitnami/matomo] Set `usePasswordFiles=true` by default ([#32363](https://github.com/bitnami/charts/pull/32363))
+
+## <small>9.2.7 (2025-03-24)</small>
+
+* [bitnami/matomo] Fix typo in SMTP authentication value for CRAM-MD5 (#32354) ([3e8ed41](https://github.com/bitnami/charts/commit/3e8ed41b493b1c92d2dea76d09e5e63c39a006e3)), closes [#32354](https://github.com/bitnami/charts/issues/32354)
 
 ## <small>9.2.6 (2025-03-18)</small>
 
