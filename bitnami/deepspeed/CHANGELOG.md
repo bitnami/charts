@@ -1,8 +1,13 @@
 # Changelog
 
-## 2.3.5 (2025-03-26)
+## 2.3.6 (2025-03-27)
 
-* [bitnami/deepspeed] Release 2.3.5 ([#32622](https://github.com/bitnami/charts/pull/32622))
+* [bitnami/deepspeed] Release 2.3.6 ([#32634](https://github.com/bitnami/charts/pull/32634))
+
+## <small>2.3.5 (2025-03-26)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/deepspeed] Release 2.3.5 (#32622) ([281905e](https://github.com/bitnami/charts/commit/281905e0c86510c327724ba1286900d366266094)), closes [#32622](https://github.com/bitnami/charts/issues/32622)
 
 ## <small>2.3.4 (2025-03-06)</small>
 
