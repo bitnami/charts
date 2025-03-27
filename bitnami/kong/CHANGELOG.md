@@ -1,8 +1,12 @@
 # Changelog
 
-## 15.4.0 (2025-03-21)
+## 15.4.1 (2025-03-27)
 
-* [bitnami/kong] chore(ClusterRole): Concat namespace in ClusterRole name ([#32544](https://github.com/bitnami/charts/pull/32544))
+* [bitnami/kong] Release 15.4.1 ([#32645](https://github.com/bitnami/charts/pull/32645))
+
+## 15.4.0 (2025-03-24)
+
+* [bitnami/kong] chore(ClusterRole): Concat namespace in ClusterRole name (#32544) ([0ad4fe3](https://github.com/bitnami/charts/commit/0ad4fe3aa7c49b7c50fe9b19f66bc566a0ae771d)), closes [#32544](https://github.com/bitnami/charts/issues/32544)
 
 ## <small>15.3.1 (2025-03-13)</small>
 
