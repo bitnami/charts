@@ -1,8 +1,12 @@
 # Changelog
 
-## 32.1.1 (2025-03-26)
+## 32.1.2 (2025-03-27)
 
-* [bitnami/kafka] bugfix: upgrade issue due to secret lookup ([#32621](https://github.com/bitnami/charts/pull/32621))
+* [bitnami/kakfa] bugfix: relax conditions under SASL secret must be mounted as volume ([#32631](https://github.com/bitnami/charts/pull/32631))
+
+## <small>32.1.1 (2025-03-26)</small>
+
+* [bitnami/kafka] bugfix: upgrade issue due to secret lookup (#32621) ([31af2bd](https://github.com/bitnami/charts/commit/31af2bd4ddf75dca1b9e1761a13693a8b0a90e33)), closes [#32621](https://github.com/bitnami/charts/issues/32621)
 
 ## 32.1.0 (2025-03-26)
 
