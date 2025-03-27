@@ -299,7 +299,7 @@ spec:
               mountPath: /bitnami/kibana
             - name: kibana-config
               mountPath: /bitnami/kibana/conf
-            {{- if or .Values.elasticsearch.security.auth.enabled (and .Values.tls.enabled (or .Values.tls.passwordsSecret (ternary .Values.tls.keyPassword .Values.tls.keystorePassword .Values.tls.usePemCerts))) }}
+            {{- if and .Values.usePasswordFiles (or .Values.elasticsearch.security.auth.enabled (and .Values.tls.enabled (or .Values.tls.passwordsSecret (ternary .Values.tls.keyPassword .Values.tls.keystorePassword .Values.tls.usePemCerts)))) }}
             - name: kibana-secrets
               mountPath: /opt/bitnami/kibana/secrets
             {{- end }}
@@ -342,7 +342,9 @@ spec:
       volumes:
         - name: empty-dir
           emptyDir: {}
-        {{- if or .Values.elasticsearch.security.auth.enabled (and .Values.tls.enabled ) }}
+        {{- if and .Values.usePasswordFiles (or .Values.elasticsearch.security.auth.enabled
+        (and .Values.elasticsearch.security.tls.enabled (not .Values.elasticsearch.security.tls.usePemCerts) (or .Values.elasticsearch.security.tls.truststorePassword .Values.elasticsearch.security.tls.passwordsSecret))
+        (and .Values.tls.enabled (or .Values.tls.passwordsSecret (ternary .Values.tls.keyPassword .Values.tls.keystorePassword .Values.tls.usePemCerts)))) }}
         - name: kibana-secrets
           projected:
             sources:
