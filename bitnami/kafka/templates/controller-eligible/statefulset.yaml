@@ -237,7 +237,7 @@ spec:
               mountPath: /opt/bitnami/kafka/config/certs
               readOnly: true
             {{- end }}
-            {{- if and .Values.usePasswordFiles (include "kafka.saslEnabled" .) (or (regexFind "SCRAM" (upper .Values.sasl.enabledMechanisms)) (regexFind "SCRAM" (upper .Values.sasl.controllerMechanism)) (regexFind "SCRAM" (upper .Values.sasl.interBrokerMechanism))) }}
+            {{- if and .Values.usePasswordFiles (include "kafka.saslEnabled" .) }}
             - name: kafka-sasl
               mountPath: /opt/bitnami/kafka/config/secrets
               readOnly: true
@@ -341,7 +341,7 @@ spec:
               {{- end }}
         {{- end }}
         {{- end }}
-        {{- if and .Values.usePasswordFiles (include "kafka.saslEnabled" .) (or (regexFind "SCRAM" (upper .Values.sasl.enabledMechanisms)) (regexFind "SCRAM" (upper .Values.sasl.controllerMechanism)) (regexFind "SCRAM" (upper .Values.sasl.interBrokerMechanism))) }}
+        {{- if and .Values.usePasswordFiles (include "kafka.saslEnabled" .) }}
         - name: kafka-sasl
           projected:
             sources:
