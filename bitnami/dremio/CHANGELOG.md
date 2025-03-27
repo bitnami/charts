@@ -1,8 +1,21 @@
 # Changelog
 
-## 0.6.0 (2025-02-21)
+## 0.6.3 (2025-03-26)
 
-* [bitnami/dremio] Rename `usePasswordFile` as `usePasswordFiles` and set 'true' by default ([#32105](https://github.com/bitnami/charts/pull/32105))
+* [bitnami/dremio] Release 0.6.3 ([#32625](https://github.com/bitnami/charts/pull/32625))
+
+## <small>0.6.2 (2025-03-26)</small>
+
+* [bitnami/dremio] Release 0.6.2 (#32624) ([b3cdcc0](https://github.com/bitnami/charts/commit/b3cdcc01e3e6afe770aed35c3e0b14485f0f61e3)), closes [#32624](https://github.com/bitnami/charts/issues/32624)
+
+## <small>0.6.1 (2025-03-21)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/dremio] Release 0.6.1 (#32545) ([5cb9457](https://github.com/bitnami/charts/commit/5cb9457450fe5eaffcdffc6fc7c7f568cc6a8e57)), closes [#32545](https://github.com/bitnami/charts/issues/32545)
+
+## 0.6.0 (2025-02-24)
+
+* [bitnami/dremio] Rename `usePasswordFile` as `usePasswordFiles` and set 'true' by default (#32105) ([6a11d69](https://github.com/bitnami/charts/commit/6a11d699c5b9944b232066c214ce9c80ace13ff2)), closes [#32105](https://github.com/bitnami/charts/issues/32105)
 
 ## 0.5.0 (2025-02-20)
 

@@ -1,8 +1,13 @@
 # Changelog
 
+## 25.0.0 (2025-03-26)
+
+* [bitnami/schema-registry] feat: bump major due to major bump on Kafka dep ([#32618](https://github.com/bitnami/charts/pull/32618))
+
 ## 24.0.0 (2025-03-12)
 
-* [bitnami/schema-registry] Release 24.0.0 ([#32424](https://github.com/bitnami/charts/pull/32424))
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/schema-registry] Release 24.0.0 (#32424) ([1817445](https://github.com/bitnami/charts/commit/18174456aa09c324493c5e1d08c4b9f3c68891d7)), closes [#32424](https://github.com/bitnami/charts/issues/32424)
 
 ## <small>23.1.4 (2025-03-04)</small>
 

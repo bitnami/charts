@@ -1,8 +1,21 @@
 # Changelog
 
-## 1.2.1 (2025-02-24)
+## 2.0.2 (2025-03-21)
 
-* [bitnami/nessie] Release 1.2.1 ([#32144](https://github.com/bitnami/charts/pull/32144))
+* [bitnami/nessie] Release 2.0.2 ([#32552](https://github.com/bitnami/charts/pull/32552))
+
+## <small>2.0.1 (2025-03-18)</small>
+
+* [bitnami/nessie] Release 2.0.1 (#32496) ([dcab365](https://github.com/bitnami/charts/commit/dcab3650aeb7690484cdaa85acc1eda2b2f94f29)), closes [#32496](https://github.com/bitnami/charts/issues/32496)
+
+## 2.0.0 (2025-03-13)
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/nessie] Set `usePasswordFiles=true` by default (#32114) ([7e2e48d](https://github.com/bitnami/charts/commit/7e2e48d97a122ac93bea56a28308acd8ed39b39d)), closes [#32114](https://github.com/bitnami/charts/issues/32114)
+
+## <small>1.2.1 (2025-02-24)</small>
+
+* [bitnami/nessie] Release 1.2.1 (#32144) ([6af5812](https://github.com/bitnami/charts/commit/6af5812bc806e92231e61f263b3da77017661199)), closes [#32144](https://github.com/bitnami/charts/issues/32144)
 
 ## 1.2.0 (2025-02-20)
 

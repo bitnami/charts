@@ -1,8 +1,17 @@
 # Changelog
 
-## 15.3.0 (2025-02-21)
+## 15.4.0 (2025-03-21)
 
-* [bitnami/kong] Set `usePasswordFiles=true` by default ([#32109](https://github.com/bitnami/charts/pull/32109))
+* [bitnami/kong] chore(ClusterRole): Concat namespace in ClusterRole name ([#32544](https://github.com/bitnami/charts/pull/32544))
+
+## <small>15.3.1 (2025-03-13)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/kong] Release 15.3.1 (#32451) ([e8d1314](https://github.com/bitnami/charts/commit/e8d13144e35c0390c6ac68dba03d5603e2035197)), closes [#32451](https://github.com/bitnami/charts/issues/32451)
+
+## 15.3.0 (2025-02-24)
+
+* [bitnami/kong] Set `usePasswordFiles=true` by default (#32109) ([6db9a0e](https://github.com/bitnami/charts/commit/6db9a0ed7d8feeff61edac18b7f7dd38ab737412)), closes [#32109](https://github.com/bitnami/charts/issues/32109)
 
 ## 15.2.0 (2025-02-20)
 

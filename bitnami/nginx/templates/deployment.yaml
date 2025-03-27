@@ -135,6 +135,11 @@ spec:
           {{- if .Values.cloneStaticSiteFromGit.gitClone.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.cloneStaticSiteFromGit.gitClone.args "context" $) | nindent 12 }}
           {{- end }}
+          {{- if .Values.cloneStaticSiteFromGit.gitSync.resources }}
+          resources: {{- toYaml .Values.cloneStaticSiteFromGit.gitSync.resources | nindent 12 }}
+          {{- else if ne .Values.cloneStaticSiteFromGit.gitSync.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.cloneStaticSiteFromGit.gitSync.resourcesPreset) | nindent 12 }}
+          {{- end }}
           volumeMounts:
             - name: empty-dir
               mountPath: /tmp

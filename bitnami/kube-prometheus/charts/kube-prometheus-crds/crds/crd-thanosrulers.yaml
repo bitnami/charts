@@ -1,12 +1,12 @@
 # Source: https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v{version}/example/prometheus-operator-crd/monitoring.coreos.com_thanosrulers.yaml
-# Version: 0.80.1
+# Version: 0.81.0
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.17.1
-    operator.prometheus.io/version: 0.80.1
+    controller-gen.kubebuilder.io/version: v0.17.2
+    operator.prometheus.io/version: 0.81.0
   name: thanosrulers.monitoring.coreos.com
 spec:
   group: monitoring.coreos.com
@@ -2610,6 +2610,10 @@ spec:
                 - Default
                 - None
                 type: string
+              enableServiceLinks:
+                description: Indicates whether information about services should be
+                  injected into pod's environment variables
+                type: boolean
               enforcedNamespaceLabel:
                 description: |-
                   EnforcedNamespaceLabel enforces adding a namespace label of origin for each alert
@@ -4942,6 +4946,15 @@ spec:
                 description: |-
                   ServiceAccountName is the name of the ServiceAccount to use to run the
                   Thanos Ruler Pods.
+                type: string
+              serviceName:
+                description: |-
+                  The name of the service name used by the underlying StatefulSet(s) as the governing service.
+                  If defined, the Service  must be created before the ThanosRuler resource in the same namespace and it must define a selector that matches the pod labels.
+                  If empty, the operator will create and manage a headless service named `thanos-ruler-operated` for ThanosRuler resources.
+                  When deploying multiple ThanosRuler resources in the same namespace, it is recommended to specify a different value for each.
+                  See https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#stable-network-id for more details.
+                minLength: 1
                 type: string
               storage:
                 description: Storage spec to specify how storage shall be used.

@@ -1,8 +1,17 @@
 # Changelog
 
-## 2.5.5 (2025-03-04)
+## 2.5.7 (2025-03-25)
 
-* [bitnami/fluent-bit] Release 2.5.5 ([#32255](https://github.com/bitnami/charts/pull/32255))
+* [bitnami/fluent-bit] Release 2.5.7 ([#32602](https://github.com/bitnami/charts/pull/32602))
+
+## <small>2.5.6 (2025-03-17)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/fluent-bit] Release 2.5.6 (#32489) ([47dca7d](https://github.com/bitnami/charts/commit/47dca7dc7527ee9fd39a88e76f14e2594f9bf410)), closes [#32489](https://github.com/bitnami/charts/issues/32489)
+
+## <small>2.5.5 (2025-03-04)</small>
+
+* [bitnami/fluent-bit] Release 2.5.5 (#32255) ([64c11bc](https://github.com/bitnami/charts/commit/64c11bc51e9a921a70bf06fed57c44013bc57db1)), closes [#32255](https://github.com/bitnami/charts/issues/32255)
 
 ## <small>2.5.4 (2025-03-03)</small>
 

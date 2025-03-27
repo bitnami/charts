@@ -46,7 +46,7 @@ spec:
           securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.setupDBJob.containerSecurityContext "context" .) | nindent 12 }}
           {{- end }}
           {{- if .Values.setupDBJob.resources }}
-          resources: {{- toYaml .Values.setupDBJob.resources | nindent 4 }}
+          resources: {{- toYaml .Values.setupDBJob.resources | nindent 12 }}
           {{- else if ne .Values.setupDBJob.resourcesPreset "none" }}
           resources: {{- include "common.resources.preset" (dict "type" .Values.setupDBJob.resourcesPreset) | nindent 12 }}
           {{- end }}
