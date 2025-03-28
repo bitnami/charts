@@ -60,36 +60,25 @@ Name of the Runner ConfigMap
 {{- end -}}
 
 {{/*
+Return true if the server can be deployed
+*/}}
+{{- define "gitlab-runner.canDeploy" -}}
+{{- if and .Values.gitlabUrl (coalesce .Values.runnerToken .Values.existingSecret)  -}}
+    {{- true -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Compile all warnings into a single message, and call fail.
 */}}
 {{- define "gitlab-runner.validateValues" -}}
 {{- $messages := list -}}
-{{- $messages := append $messages (include "gitlab-runner.validateValues.gitlabUrl" .) -}}
-{{- $messages := append $messages (include "gitlab-runner.validateValues.runnerToken" .) -}}
 {{- $messages := append $messages (include "gitlab-runner.validateValues.sessionServer" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
 {{- if $message -}}
 {{-   printf "\nVALUES VALIDATION:\n%s" $message | fail -}}
-{{- end -}}
-{{- end -}}
-
-{{/* Validate values of gitlab-runner - Missing Gitlab URL */}}
-{{- define "gitlab-runner.validateValues.gitlabUrl" -}}
-{{- if not .Values.gitlabUrl -}}
-gitlab-runner: Missing Gitlab URL
-    You need to specify an existing Gitlab installation using the gitlabUrl value
-{{- end -}}
-{{- end -}}
-
-{{/* Validate values of gitlab-runner - Missing Runner Token */}}
-{{- define "gitlab-runner.validateValues.runnerToken" -}}
-{{- if not (coalesce .Values.runnerToken .Values.existingSecret) -}}
-gitlab-runner: Missing Runner Token
-    You need to specify a runner token connected to your Gitlab installation using either the runnnerToken or the existingSecret values.
-
-    https://docs.gitlab.com/runner/register/
 {{- end -}}
 {{- end -}}
 

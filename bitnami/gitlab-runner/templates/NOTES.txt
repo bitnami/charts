@@ -6,6 +6,26 @@ Did you know there are enterprise versions of the Bitnami catalog? For enhanced 
 
 ** Please be patient while the chart is being deployed **
 
+{{- if not (include "gitlab-runner.canDeploy" .) }}
+######################################################################################################
+### ERROR: You did not provide the Gitlab URL and the Runner Token in the 'helm install' call      ###
+######################################################################################################
+
+Complete your Gitlab Runner deployment by running:
+
+  helm upgrade --namespace {{ include "common.names.namespace" . }} {{ .Release.Name }} oci://registry-1.docker.io/bitnamicharts/gitlab-runner \
+    --set gitlabUrl=YOUR_GITLAB_HOST,runnerToken=YOUR_RUNNER_TOKEN
+
+Replacing "YOUR_GITLAB_HOST" and "YOUR_RUNNER_TOKEN" placeholders by the proper values of your Gitlab deployment.
+
+or
+
+helm upgrade --namespace {{ include "common.names.namespace" . }} {{ .Release.Name }} oci://registry-1.docker.io/bitnamicharts/gitlab-runner \
+--set gitlabUrl=YOUR_GITLAB_HOST,existingSecret=YOUR_SECRET
+
+Replacing "YOUR_GITLAB_HOST" and "YOUR_SECRET" placeholders by the proper values of your Gitlab deployment.
+
+{{- else }}
 {{- if .Values.diagnosticMode.enabled }}
 The chart has been deployed in diagnostic mode. All probes have been disabled and the command has been overwritten with:
 
@@ -84,3 +104,4 @@ Session Server:
 {{- include "common.warnings.resources" (dict "sections" (list "") "context" $) }}
 {{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image) "context" $) }}
 {{- include "common.errors.insecureImages" (dict "images" (list .Values.image) "context" $) }}
+{{- end }}
