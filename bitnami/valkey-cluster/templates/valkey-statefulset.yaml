@@ -20,7 +20,7 @@ spec:
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.valkey.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
-  replicas: {{ .Values.cluster.nodes }}
+  replicas: {{ if eq (typeOf .Values.cluster.nodes) "float64" -}}{{ .Values.cluster.nodes }}{{- else -}}{{ tpl .Values.cluster.nodes . | int }}{{- end }}
   serviceName: {{ include "common.names.fullname" . }}-headless
   podManagementPolicy: {{ .Values.valkey.podManagementPolicy }}
   template:
@@ -116,7 +116,7 @@ spec:
               {{- if .Values.cluster.init }}
               if [[ "$pod_index" == "0" ]]; then
                 export VALKEY_CLUSTER_CREATOR="yes"
-                export VALKEY_CLUSTER_REPLICAS="{{ .Values.cluster.replicas }}"
+                export VALKEY_CLUSTER_REPLICAS="{{ if eq (typeOf .Values.cluster.replicas) "float64" -}}{{ .Values.cluster.replicas | quote }}{{- else -}}{{ tpl .Values.cluster.replicas . | int }}{{- end }}"
               fi
               {{- end }}
               /opt/bitnami/scripts/valkey-cluster/entrypoint.sh /opt/bitnami/scripts/valkey-cluster/run.sh
@@ -133,7 +133,7 @@ spec:
               pod_index="${pod_index[-1]}"
               if [[ "$pod_index" == "0" ]]; then
                 export VALKEY_CLUSTER_CREATOR="yes"
-                export VALKEY_CLUSTER_REPLICAS="{{ .Values.cluster.replicas }}"
+                export VALKEY_CLUSTER_REPLICAS="{{ if eq (typeOf .Values.cluster.replicas) "float64" -}}{{ .Values.cluster.replicas | quote }}{{- else -}}{{ tpl .Values.cluster.replicas . | int }}{{- end }}"
               fi
               {{- end }}
               /opt/bitnami/scripts/valkey-cluster/entrypoint.sh /opt/bitnami/scripts/valkey-cluster/run.sh
@@ -153,7 +153,7 @@ spec:
               value: "no"
             {{- else }}
             - name: VALKEY_NODES
-              value: "{{ $count := .Values.cluster.nodes | int }}{{ range $i, $v := until $count }}{{ include "common.names.fullname" $ }}-{{ $i }}.{{ template "common.names.fullname" $ }}-headless {{ end }}"
+              value: '{{- $count := 0 -}}{{ if eq (typeOf .Values.cluster.replicas) "float64" -}}{{ $count = .Values.cluster.nodes | int }}{{- else -}}{{ $count = tpl .Values.cluster.nodes . | int }}{{- end -}}{{ range $i, $v := until $count }}{{ include "common.names.fullname" $ }}-{{ $i }}.{{ template "common.names.fullname" $ }}-headless {{ end }}'
             {{- end }}
             {{- if .Values.usePassword }}
             - name: REDISCLI_AUTH
@@ -267,7 +267,7 @@ spec:
           {{- end }}
           {{- end }}
           {{- if .Values.valkey.resources }}
-          resources: {{- toYaml .Values.valkey.resources | nindent 12 }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.valkey.resources "context" $) | nindent 12 }}
           {{- else if ne .Values.valkey.resourcesPreset "none" }}
           resources: {{- include "common.resources.preset" (dict "type" .Values.valkey.resourcesPreset) | nindent 12 }}
           {{- end }}
@@ -492,7 +492,7 @@ spec:
         {{- end }}
         resources:
           requests:
-            storage: {{ .Values.persistence.size | quote }}
+            storage: {{ tpl .Values.persistence.size . | quote }}
         {{- include "common.storage.class" (dict "persistence" .Values.persistence "global" .Values.global) | nindent 8 }}
         {{- if or .Values.persistence.matchLabels .Values.persistence.matchExpressions }}
         selector:
