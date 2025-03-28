@@ -16,7 +16,7 @@ metadata:
   {{- end }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
-  kind: Role
+  kind: {{ ternary "ClusterRole" "Role" .Values.rbac.clusterWideAccess }}
   name: {{ template "common.names.fullname.namespace" . }}
 subjects:
   - kind: ServiceAccount

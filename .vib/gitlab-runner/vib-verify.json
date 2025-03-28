@@ -34,7 +34,7 @@
         "target_platform": {
           "target_platform_id": "{VIB_ENV_ALTERNATIVE_TARGET_PLATFORM}",
           "size": {
-            "name": "M4"
+            "name": "S4"
           }
         }
       },

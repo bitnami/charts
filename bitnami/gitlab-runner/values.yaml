@@ -38,6 +38,9 @@ kubeVersion: ""
 ## @param apiVersions Override Kubernetes API versions reported by .Capabilities
 ##
 apiVersions: []
+## @param clusterDomain Kubernetes Cluster Domain
+##
+clusterDomain: cluster.local
 ## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
 ##
 nameOverride: ""

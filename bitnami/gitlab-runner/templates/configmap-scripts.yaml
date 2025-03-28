@@ -253,4 +253,4 @@ data:
   {{ end }}
 
   pre-entrypoint-script: |
-    {{ .Values.preEntrypointScript | default "" | indent 4 }}
+    {{- include "common.tplvalues.render" (dict "values" .Values.preEntrypointScript "context" $) | nindent 4 }}

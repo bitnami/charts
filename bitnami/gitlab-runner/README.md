@@ -132,19 +132,20 @@ Adding the TLS parameter (where available) will cause the chart to generate HTTP
 
 ### Common parameters
 
-| Name                     | Description                                                                                  | Value          |
-| ------------------------ | -------------------------------------------------------------------------------------------- | -------------- |
-| `kubeVersion`            | Force target Kubernetes version (using Helm capabilities if not set)                         | `""`           |
-| `apiVersions`            | Override Kubernetes API versions reported by .Capabilities                                   | `[]`           |
-| `nameOverride`           | String to partially override common.names.fullname template (will maintain the release name) | `""`           |
-| `fullnameOverride`       | String to fully override common.names.fullname template                                      | `""`           |
-| `namespaceOverride`      | String to fully override common.names.namespace                                              | `""`           |
-| `commonLabels`           | Add labels to all the deployed resources                                                     | `{}`           |
-| `commonAnnotations`      | Add annotations to all the deployed resources                                                | `{}`           |
-| `extraDeploy`            | Array of extra objects to deploy with the release                                            | `[]`           |
-| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)      | `false`        |
-| `diagnosticMode.command` | Command to override all containers in the the deployment(s)/statefulset(s)                   | `["sleep"]`    |
-| `diagnosticMode.args`    | Args to override all containers in the the deployment(s)/statefulset(s)                      | `["infinity"]` |
+| Name                     | Description                                                                                  | Value           |
+| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
+| `kubeVersion`            | Force target Kubernetes version (using Helm capabilities if not set)                         | `""`            |
+| `apiVersions`            | Override Kubernetes API versions reported by .Capabilities                                   | `[]`            |
+| `clusterDomain`          | Kubernetes Cluster Domain                                                                    | `cluster.local` |
+| `nameOverride`           | String to partially override common.names.fullname template (will maintain the release name) | `""`            |
+| `fullnameOverride`       | String to fully override common.names.fullname template                                      | `""`            |
+| `namespaceOverride`      | String to fully override common.names.namespace                                              | `""`            |
+| `commonLabels`           | Add labels to all the deployed resources                                                     | `{}`            |
+| `commonAnnotations`      | Add annotations to all the deployed resources                                                | `{}`            |
+| `extraDeploy`            | Array of extra objects to deploy with the release                                            | `[]`            |
+| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)      | `false`         |
+| `diagnosticMode.command` | Command to override all containers in the the deployment(s)/statefulset(s)                   | `["sleep"]`     |
+| `diagnosticMode.args`    | Args to override all containers in the the deployment(s)/statefulset(s)                      | `["infinity"]`  |
 
 ### Gitlab Runner parameters
 

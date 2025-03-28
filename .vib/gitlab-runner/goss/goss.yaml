@@ -32,4 +32,4 @@ file:
     exists: true
     filetype: symlink
     contents:
-      - /{{ .Vars.runnerToken }}/
+      - {{ .Vars.runnerToken }}
