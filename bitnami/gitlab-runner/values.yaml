@@ -123,6 +123,9 @@ existingCacheSecret: ""
 ## @param existingConfigMap Name of a ConfigMap containing the configuration and scripts
 ##
 existingConfigMap: ""
+## @param extraConfig Append extra configuration to the default config file
+##
+extraConfig: ""
 ## @param unregisterRunners Unregister all runners before termination
 unregisterRunners: true
 ## @param existingCertsSecret Name of a secret containing custom certificates to connect to the Gitlab instance.
@@ -165,19 +168,6 @@ preEntrypointScript: ""
 ##
 updateStrategy:
   type: RollingUpdate
-## Role Based Access
-## ref: https://kubernetes.io/docs/admin/authorization/rbac/
-##
-rbac:
-  ## @param rbac.create Enable RBAC authentication
-  ##
-  create: true
-  ## @param rbac.clusterWideAccess Allow runner cluster-wide access
-  ##
-  clusterWideAccess: false
-  ## @param rbac.rules Define list of rules to be added to the rbac role permissions
-  ##
-  rules: []
 ## Autoscaling configuration
 ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
 ##
@@ -221,6 +211,19 @@ autoscaling:
     ## @param autoscaling.hpa.targetMemory Target Memory utilization percentage
     ##
     targetMemory: ""
+## Role Based Access
+## ref: https://kubernetes.io/docs/admin/authorization/rbac/
+##
+rbac:
+  ## @param rbac.create Enable RBAC authentication
+  ##
+  create: true
+  ## @param rbac.clusterWideAccess Allow runner cluster-wide access
+  ##
+  clusterWideAccess: false
+  ## @param rbac.rules Define list of rules to be added to the rbac role permissions
+  ##
+  rules: []
 ## Pods Service Account
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
 ##
@@ -429,7 +432,7 @@ networkPolicy:
   ##
   ingressNSMatchLabels: {}
   ingressNSPodMatchLabels: {}
-## Metric Server containers' resource requests and limits
+## Gitlab Runner containers' resource requests and limits
 ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
 ## We usually recommend not to specify default resources and to leave this as a conscious
 ## choice for the user. This also increases chances charts run on environments with little
@@ -534,7 +537,7 @@ containerSecurityContext:
 ## @param podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
 ## @param podSecurityContext.sysctls Set kernel settings using the sysctl interface
 ## @param podSecurityContext.supplementalGroups Set filesystem extra groups
-## @param podSecurityContext.fsGroup Set %%MAIN_CONTAINER_NAME%% pod's Security Context fsGroup
+## @param podSecurityContext.fsGroup Set Pod's Security Context fsGroup
 ##
 podSecurityContext:
   enabled: true

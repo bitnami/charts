@@ -3,11 +3,10 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if not .Values.existingConfigMap }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "common.names.fullname" . }}
+  name: {{ printf "%s-scripts" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: gitlab-runner
@@ -89,37 +88,6 @@ data:
       --user=gitlab-runner \
     {{- end }}
       --working-directory=/home/gitlab-runner
-
-  config.toml: |
-    shutdown_timeout = {{ .Values.shutdownTimeout }}
-    concurrent = {{ .Values.concurrent }}
-    check_interval = {{ .Values.checkInterval }}
-    log_level = {{ default "info" .Values.logLevel | quote }}
-    {{- if .Values.logFormat }}
-    log_format = {{ .Values.logFormat | quote }}
-    {{- end }}
-    {{- if .Values.metrics.enabled }}
-    listen_address = ":{{ .Values.containerPorts.metrics }}"
-    {{- end }}
-    {{- if .Values.sentryDsn }}
-    sentry_dsn = "{{ .Values.sentryDsn }}"
-    {{- end }}
-    {{- if .Values.connectionMaxAge }}
-    connection_max_age = "{{ .Values.connectionMaxAge }}"
-    {{- end }}
-    {{- if .Values.sessionServer.enabled }}
-    [session_server]
-      session_timeout = {{ .Values.sessionServer.sessionTimeout }}
-      listen_address = "0.0.0.0:{{ .Values.containerPorts.sessionServer }}"
-      advertise_address = "SESSION_SERVER_ADDRESS:SESSION_SERVER_PORT"
-    {{- end }}
-    {{- if .Values.extraConfig }}
-    {{- include "common.tplvalues.render" (dict "values" .Values.extraConfig "context" $) | nindent 4 }}
-    {{- end }}
-  {{ if .Values.runners.config }}
-  config.template.toml: |
-    {{- include "common.tplvalues.render" (dict "value" .Values.runners.config "context" $) | nindent 4 }}
-  {{ end }}
 
   register-the-runner: |
     #!/bin/sh
@@ -286,4 +254,3 @@ data:
 
   pre-entrypoint-script: |
     {{ .Values.preEntrypointScript | default "" | indent 4 }}
-{{- end }}

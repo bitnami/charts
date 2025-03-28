@@ -54,4 +54,6 @@ spec:
     {{- end }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: gitlab-runner
+    app.kubernetes.io/component: gitlab-runner
 {{- end }}

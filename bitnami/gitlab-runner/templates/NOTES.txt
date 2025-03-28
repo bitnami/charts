@@ -28,7 +28,7 @@ Check the status of the pods by running this command:
 
 Check the integration status in your Gitlab instance:
 
-https://docs.gitlab.com/runner/register/
+  https://docs.gitlab.com/runner/register/
 
 {{- if .Values.sessionServer.enabled }}
 
