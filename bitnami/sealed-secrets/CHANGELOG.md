@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.5.8 (2025-03-27)
+## 2.5.8 (2025-03-28)
 
 * [bitnami/sealed-secrets] Release 2.5.8 ([#32641](https://github.com/bitnami/charts/pull/32641))
 
