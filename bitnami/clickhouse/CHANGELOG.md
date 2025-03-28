@@ -1,6 +1,6 @@
 # Changelog
 
-## 8.0.8 (2025-03-27)
+## 8.0.8 (2025-03-28)
 
 * [bitnami/clickhouse] Release 8.0.8 ([#32647](https://github.com/bitnami/charts/pull/32647))
 
