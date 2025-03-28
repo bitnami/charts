@@ -2,15 +2,16 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
+  tanzuCategory: service
   category: Infrastructure
   licenses: Apache-2.0
   images: |
     - name: os-shell
-      image: docker.io/bitnami/os-shell:12-debian-12-r34
+      image: docker.io/bitnami/os-shell:12-debian-12-r40
     - name: solr
-      image: docker.io/bitnami/solr:9.7.0-debian-12-r4
+      image: docker.io/bitnami/solr:9.8.1-debian-12-r2
 apiVersion: v2
-appVersion: 9.7.0
+appVersion: 9.8.1
 dependencies:
 - condition: zookeeper.enabled
   name: zookeeper
@@ -23,7 +24,7 @@ dependencies:
   version: 2.x.x
 description: Apache Solr is an extremely powerful, open source enterprise search platform built on Apache Lucene. It is highly reliable and flexible, scalable, and designed to add value very quickly after launch.
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/solr/img/solr-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/solr/img/solr-stack-220x234.png
 keywords:
 - solr
 - zookeeper
@@ -34,4 +35,4 @@ maintainers:
 name: solr
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/solr
-version: 9.5.1
+version: 9.5.6

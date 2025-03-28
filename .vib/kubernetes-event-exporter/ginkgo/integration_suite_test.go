@@ -67,8 +67,8 @@ func createPodOrDie(ctx context.Context, c cv1.PodsGetter, name string, image st
 		Spec: v1.PodSpec{
 			Containers: []v1.Container{
 				{
-					Name:  name,
-					Image: image,
+					Name:            name,
+					Image:           image,
 					SecurityContext: securityContext,
 				},
 			},
@@ -124,6 +124,9 @@ func containerLogsContainPattern(ctx context.Context, c cv1.PodsGetter, podLabel
 	var containerLogs []string
 
 	k8seePods = getPodsByLabelOrDie(ctx, c, podLabel)
+	if len(k8seePods.Items) == 0 {
+		return false, fmt.Errorf("No pods found with label %q", podLabel)
+	}
 	containerLogs = getContainerLogsOrDie(ctx, c, k8seePods.Items[0].GetName(), containerName)
 
 	return containsPattern(containerLogs, pattern)

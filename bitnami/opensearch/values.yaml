@@ -34,11 +34,15 @@ global:
       ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
       ##
       adaptSecurityContext: auto
+
 ## @section Common parameters
 
 ## @param kubeVersion Override Kubernetes version
 ##
 kubeVersion: ""
+## @param apiVersions Override Kubernetes API versions reported by .Capabilities
+##
+apiVersions: []
 ## @param nameOverride String to partially override common.names.fullname
 ##
 nameOverride: ""
@@ -74,6 +78,7 @@ diagnosticMode:
   ##
   args:
     - infinity
+
 ## @section OpenSearch cluster Parameters
 
 ## @param clusterName OpenSearch cluster name
@@ -191,7 +196,7 @@ useIstioLabels: true
 image:
   registry: docker.io
   repository: bitnami/opensearch
-  tag: 2.18.0-debian-12-r2
+  tag: 2.19.1-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -345,8 +350,8 @@ security:
     ## @param security.tls.adminDN A comma separated list of DN for admins
     ##
     adminDN: ""
+
 ## @section Traffic Exposure Parameters
-##
 
 ## OpenSearch service parameters
 ##
@@ -509,7 +514,9 @@ ingress:
   ##             name: http
   ##
   extraRules: []
+
 ## @section Master-eligible nodes parameters
+
 master:
   ## @param master.masterOnly Deploy the OpenSearch master-eligible nodes as master-only nodes. Recommended for high-demand deployments.
   ## If you are
@@ -537,6 +544,7 @@ master:
   ##
   fullnameOverride: ""
   ## @param master.servicenameOverride String to fully override opensearch.master.servicename
+  ## DEPRECATED: Use master.service.headless.nameOverride instead
   ##
   servicenameOverride: ""
   ## @param master.annotations [object] Annotations for the master statefulset
@@ -934,6 +942,22 @@ master:
       ## @param master.autoscaling.hpa.targetMemory Target Memory utilization percentage
       ##
       targetMemory: ""
+  ## Master-eligible service parameters
+  ##
+  service:
+    ## Headless service properties
+    ##
+    headless:
+      ## @param master.service.headless.annotations Annotations for the Master-eligible headless service.
+      ##
+      annotations: {}
+      ## @param master.service.headless.nameOverride String to fully override opensearch.master.servicename
+      ##
+      nameOverride: ""
+      ## @param master.service.headless.trafficDistribution String Traffic distribution for the master headless service
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#traffic-distribution
+      ##
+      trafficDistribution: "PreferClose"
   ## Metrics configuration for master-eligible node
   ##
   metrics:
@@ -1035,7 +1059,9 @@ master:
       selector: {}
       namespace: monitoring
       additionalLabels: {}
+
 ## @section Data-only nodes parameters
+
 data:
   ## @param data.replicaCount Number of data-only replicas to deploy
   ##
@@ -1060,6 +1086,7 @@ data:
   ##
   fullnameOverride: ""
   ## @param data.servicenameOverride String to fully override opensearch.data.servicename
+  ## DEPRECATED: Use data.service.headless.nameOverride instead
   ##
   servicenameOverride: ""
   ## @param data.annotations [object] Annotations for the data statefulset
@@ -1453,6 +1480,22 @@ data:
       ## @param data.autoscaling.hpa.targetMemory Target Memory utilization percentage
       ##
       targetMemory: ""
+  ## Data service parameters
+  ##
+  service:
+    ## Headless service properties
+    ##
+    headless:
+      ## @param data.service.headless.annotations Annotations for the data headless service.
+      ##
+      annotations: {}
+      ## @param data.service.headless.nameOverride String to fully override opensearch.data.servicename
+      ##
+      nameOverride: ""
+      ## @param data.service.headless.trafficDistribution String Traffic distribution for the data headless service
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#traffic-distribution
+      ##
+      trafficDistribution: "PreferClose"
   ## Metrics configuration for data node
   ##
   metrics:
@@ -1554,7 +1597,9 @@ data:
       selector: {}
       namespace: monitoring
       additionalLabels: {}
+
 ## @section Coordinating-only nodes parameters
+
 coordinating:
   ## @param coordinating.replicaCount Number of coordinating-only replicas to deploy
   ##
@@ -1580,6 +1625,7 @@ coordinating:
   ##
   fullnameOverride: ""
   ## @param coordinating.servicenameOverride String to fully override opensearch.coordinating.servicename
+  ## DEPRECATED: Use coordinating.service.headless.nameOverride instead
   ##
   servicenameOverride: ""
   ## @param coordinating.annotations [object] Annotations for the coordinating-only statefulset
@@ -1934,6 +1980,22 @@ coordinating:
       ## @param coordinating.autoscaling.hpa.targetMemory Target Memory utilization percentage
       ##
       targetMemory: ""
+  ## Coordinating-only service parameters
+  ##
+  service:
+    ## Headless service properties
+    ##
+    headless:
+      ## @param coordinating.service.headless.annotations Annotations for the coordinating-only headless service.
+      ##
+      annotations: {}
+      ## @param coordinating.service.headless.nameOverride String to fully override opensearch.coordinating.servicename
+      ##
+      nameOverride: ""
+      ## @param coordinating.service.headless.trafficDistribution String Traffic distribution for the coordinating headless service
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#traffic-distribution
+      ##
+      trafficDistribution: "PreferClose"
   ## Metrics configuration for coordinating node
   ##
   metrics:
@@ -2035,7 +2097,9 @@ coordinating:
       selector: {}
       namespace: monitoring
       additionalLabels: {}
+
 ## @section Ingest-only nodes parameters
+
 ingest:
   ## @param ingest.enabled Enable ingest nodes
   ##
@@ -2062,7 +2126,8 @@ ingest:
   ## @param ingest.fullnameOverride String to fully override opensearch.ingest.fullname
   ##
   fullnameOverride: ""
-  ## @param ingest.servicenameOverride String to fully override ingest.master.servicename
+  ## @param ingest.servicenameOverride String to fully override opensearch.ingest.servicename
+  ## DEPRECATED: Use ingest.service.headless.nameOverride instead
   ##
   servicenameOverride: ""
   ## @param ingest.annotations [object] Annotations for the ingest statefulset
@@ -2479,6 +2544,19 @@ ingest:
     ##     timeoutSeconds: 300
     ##
     sessionAffinityConfig: {}
+    ## Headless service properties
+    ##
+    headless:
+      ## @param ingest.service.headless.annotations Annotations for the ingest headless service.
+      ##
+      annotations: {}
+      ## @param ingest.service.headless.nameOverride String to fully override opensearch.ingest.servicename
+      ##
+      nameOverride: ""
+      ## @param ingest.service.headless.trafficDistribution String Traffic distribution for the ingest headless service
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#traffic-distribution
+      ##
+      trafficDistribution: "PreferClose"
   ## OpenSearch Ingest-only ingress parameters
   ## ref: http://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
@@ -2684,6 +2762,7 @@ ingest:
       selector: {}
       namespace: monitoring
       additionalLabels: {}
+
 ## @section Init Container Parameters
 
 ## 'volumePermissions' init container parameters
@@ -2704,7 +2783,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r34
+    tag: 12-debian-12-r39
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -2751,7 +2830,7 @@ sysctlImage:
   ##
   registry: docker.io
   repository: bitnami/os-shell
-  tag: 12-debian-12-r34
+  tag: 12-debian-12-r39
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -2786,7 +2865,9 @@ sysctlImage:
   ##     memory: 1024Mi
   ##
   resources: {}
+
 ## @section OpenSearch Dashboards Parameters
+
 dashboards:
   ## @param dashboards.enabled Enables OpenSearch Dashboards deployment
   ##
@@ -2803,7 +2884,7 @@ dashboards:
   image:
     registry: docker.io
     repository: bitnami/opensearch-dashboards
-    tag: 2.18.0-debian-12-r2
+    tag: 2.19.0-debian-12-r2
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -2873,6 +2954,9 @@ dashboards:
     ##     timeoutSeconds: 300
     ##
     sessionAffinityConfig: {}
+    ## @param dashboards.service.nameOverride String to fully override opensearch.dashboards.servicename
+    ##
+    nameOverride: ""
   ## OpenSearch Dashboards ingress parameters
   ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
@@ -3004,6 +3088,7 @@ dashboards:
   ##
   fullnameOverride: ""
   ## @param dashboards.servicenameOverride String to fully override opensearch.dashboards.servicename
+  ## DEPRECATED: Use dashboards.service.nameOverride instead
   ##
   servicenameOverride: ""
   ## @param dashboards.updateStrategy.type Data-only nodes statefulset strategy type
@@ -3412,14 +3497,14 @@ dashboards:
     dataSource: {}
 
 ## @section OpenSearch Snapshots Parameters
+
 snapshots:
   ## @param snapshots.enabled Enable automatic setup of repositories and snapshot policies
   ##
   enabled: false
   ## @param snapshots.command Override default container command (useful when using custom images)
   ##
-  command:
-    - /usr/bin/curl
+  command: []
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param snapshots.containerSecurityContext.enabled Enabled containers' Security Context
@@ -3461,7 +3546,7 @@ snapshots:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r34
+    tag: 12-debian-12-r39
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

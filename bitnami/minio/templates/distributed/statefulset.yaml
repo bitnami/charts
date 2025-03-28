@@ -154,7 +154,7 @@ spec:
               value: {{ ternary "https" "http" .Values.tls.enabled | quote }}
             - name: MINIO_FORCE_NEW_KEYS
               value: {{ ternary "yes" "no" .Values.auth.forceNewKeys | quote }}
-            {{- if .Values.auth.useCredentialsFiles }}
+            {{- if .Values.auth.usePasswordFiles }}
             - name: MINIO_ROOT_USER_FILE
               value: "/opt/bitnami/minio/secrets/root-user"
             - name: MINIO_ROOT_PASSWORD_FILE
@@ -266,7 +266,7 @@ spec:
             - name: empty-dir
               mountPath: /.mc
               subPath: app-mc-dir
-            {{- if .Values.auth.useCredentialsFiles }}
+            {{- if .Values.auth.usePasswordFiles }}
             - name: minio-credentials
               mountPath: /opt/bitnami/minio/secrets/
             {{- end }}
@@ -292,7 +292,7 @@ spec:
       volumes:
         - name: empty-dir
           emptyDir: {}
-        {{- if .Values.auth.useCredentialsFiles }}
+        {{- if .Values.auth.usePasswordFiles }}
         - name: minio-credentials
           secret:
             secretName: {{ include "minio.secretName" . }}

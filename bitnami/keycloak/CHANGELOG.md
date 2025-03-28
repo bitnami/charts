@@ -1,8 +1,38 @@
 # Changelog
 
-## 24.4.6 (2025-01-20)
+## 24.4.13 (2025-03-13)
 
-* [bitnami/keycloak] Improve keycloak value file comments on extraEnvVars property ([#31054](https://github.com/bitnami/charts/pull/31054))
+* [bitnami/keycloak] Release 24.4.13 ([#32446](https://github.com/bitnami/charts/pull/32446))
+
+## <small>24.4.12 (2025-03-11)</small>
+
+* [bitnami/keycloak] Update secret-external-db namespace to use common helper value (#32379) ([8e0642d](https://github.com/bitnami/charts/commit/8e0642dbec69b757b4313e5bfed9065d4c9765d0)), closes [#32379](https://github.com/bitnami/charts/issues/32379)
+
+## <small>24.4.11 (2025-02-28)</small>
+
+* [bitnami/keycloak] Release 24.4.11 (#32211) ([932c291](https://github.com/bitnami/charts/commit/932c2910f0b648bbdb006a1122792e6363b3b17a)), closes [#32211](https://github.com/bitnami/charts/issues/32211)
+
+## <small>24.4.10 (2025-02-17)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/keycloak] Release 24.4.10 (#31951) ([0e98679](https://github.com/bitnami/charts/commit/0e98679e34dd8dd0098f4b0e4db96f8c69aa5a58)), closes [#31951](https://github.com/bitnami/charts/issues/31951)
+
+## <small>24.4.9 (2025-02-05)</small>
+
+* [bitnami/keycloak] Release 24.4.9 (#31788) ([0226b05](https://github.com/bitnami/charts/commit/0226b05a1ce8f96c707064f899f67313af7a5553)), closes [#31788](https://github.com/bitnami/charts/issues/31788)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>24.4.8 (2025-01-31)</small>
+
+* [bitnami/keycloak] reverts(#30368) (#31227) ([328ffc4](https://github.com/bitnami/charts/commit/328ffc4dda3229d9093819942d5d6d8057ecc201)), closes [#30368](https://github.com/bitnami/charts/issues/30368) [#31227](https://github.com/bitnami/charts/issues/31227) [#30368](https://github.com/bitnami/charts/issues/30368)
+
+## <small>24.4.7 (2025-01-28)</small>
+
+* [bitnami/keycloak] Release 24.4.7 (#31625) ([22cc5c7](https://github.com/bitnami/charts/commit/22cc5c7fa8eef1895f5d2b38fc7895e860fa4654)), closes [#31625](https://github.com/bitnami/charts/issues/31625)
+
+## <small>24.4.6 (2025-01-21)</small>
+
+* [bitnami/keycloak] Improve keycloak value file comments on extraEnvVars property (#31054) ([fb276fe](https://github.com/bitnami/charts/commit/fb276feeb53dace5c792d8cbf8a6a77162425ae1)), closes [#31054](https://github.com/bitnami/charts/issues/31054)
 
 ## <small>24.4.5 (2025-01-20)</small>
 

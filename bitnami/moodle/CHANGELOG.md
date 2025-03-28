@@ -1,8 +1,23 @@
 # Changelog
 
-## 25.1.2 (2025-01-18)
+## 25.1.5 (2025-03-17)
 
-* [bitnami/moodle] Release 25.1.2 ([#31464](https://github.com/bitnami/charts/pull/31464))
+* [bitnami/moodle] Release 25.1.5 ([#32473](https://github.com/bitnami/charts/pull/32473))
+
+## <small>25.1.4 (2025-02-21)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/moodle] Release 25.1.4 (#32103) ([f95a5d9](https://github.com/bitnami/charts/commit/f95a5d9c6bf68248e3e55aafc3e00a8df4de1a0a)), closes [#32103](https://github.com/bitnami/charts/issues/32103)
+
+## <small>25.1.3 (2025-02-10)</small>
+
+* [bitnami/clickhouse][bitnami/moodle] Remove references to deprecated kube-lego (#31726) ([4e44ec5](https://github.com/bitnami/charts/commit/4e44ec50d9144f8c3c017afa4e518c43d8f3847b)), closes [#31726](https://github.com/bitnami/charts/issues/31726)
+* [bitnami/moodle] Release 25.1.3 (#31845) ([bfa6335](https://github.com/bitnami/charts/commit/bfa63352e071c36ae8d2399e102ce96891422353)), closes [#31845](https://github.com/bitnami/charts/issues/31845)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>25.1.2 (2025-01-18)</small>
+
+* [bitnami/moodle] Release 25.1.2 (#31464) ([2dac33a](https://github.com/bitnami/charts/commit/2dac33a352eb558e87134eb8d91029ace3e9dbbb)), closes [#31464](https://github.com/bitnami/charts/issues/31464)
 
 ## <small>25.1.1 (2025-01-08)</small>
 

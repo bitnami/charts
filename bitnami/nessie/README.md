@@ -332,6 +332,7 @@ wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
 | Name                                                | Description                                                                                                                                                                                                          | Value                    |
 | --------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
 | `kubeVersion`                                       | Override Kubernetes version                                                                                                                                                                                          | `""`                     |
+| `apiVersions`                                       | Override Kubernetes API versions reported by .Capabilities                                                                                                                                                           | `[]`                     |
 | `nameOverride`                                      | String to partially override common.names.name                                                                                                                                                                       | `""`                     |
 | `fullnameOverride`                                  | String to fully override common.names.fullname                                                                                                                                                                       | `""`                     |
 | `namespaceOverride`                                 | String to fully override common.names.namespace                                                                                                                                                                      | `""`                     |
@@ -360,7 +361,7 @@ wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
 | `deploymentLabels`                                  | Add extra labels to the Deployment object                                                                                                                                                                            | `{}`                     |
 | `deploymentAnnotations`                             | Add extra annotations to the Deployment object                                                                                                                                                                       | `{}`                     |
 | `logLevel`                                          | Set application log level                                                                                                                                                                                            | `INFO`                   |
-| `usePasswordFile`                                   | Mount all sensitive information as files                                                                                                                                                                             | `true`                   |
+| `usePasswordFiles`                                  | Mount all sensitive information as files                                                                                                                                                                             | `true`                   |
 | `versionStoreType`                                  | Set version store type. The chart natively supports JDBC_POSTGRESQL, ROCKSDB and IN_MEMORY. Any other type requires you to add the configuration in configOverrides and secretConfigOverrides.                       | `JDBC_POSTGRESQL`        |
 | `livenessProbe.enabled`                             | Enable livenessProbe on nessie containers                                                                                                                                                                            | `true`                   |
 | `livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                                                                                                              | `10`                     |
@@ -621,6 +622,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 2.0.0
+
+Value `usePasswordFile` has been renamed as `usePasswordFiles` to be aligned with the rest of the catalog. Its default value has changed from `false` to `true`.
+
 ### To 1.1.0
 
 This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
@@ -631,7 +636,7 @@ This major updates the PostgreSQL subchart to its newest major, 16.0.0, which us
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

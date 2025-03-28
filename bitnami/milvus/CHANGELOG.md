@@ -1,8 +1,52 @@
 # Changelog
 
+## 12.0.0 (2025-03-27)
+
+* [bitnami/milvus] feat: bump major due to major bump on Kafka dep ([#32617](https://github.com/bitnami/charts/pull/32617))
+
+## <small>11.2.4 (2025-03-25)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/milvus] Release 11.2.4 (#32593) ([3521264](https://github.com/bitnami/charts/commit/3521264684c5a1b09a50a5c8c50453cc9af62f02)), closes [#32593](https://github.com/bitnami/charts/issues/32593)
+
+## <small>11.2.3 (2025-03-05)</small>
+
+* [bitnami/milvus] Release 11.2.3 (#32321) ([5310bf2](https://github.com/bitnami/charts/commit/5310bf26533e16a8ad32638f633ce9bda4806abc)), closes [#32321](https://github.com/bitnami/charts/issues/32321)
+
+## <small>11.2.2 (2025-03-05)</small>
+
+* [bitnami/milvus] Release 11.2.2 (#32304) ([8d604ca](https://github.com/bitnami/charts/commit/8d604ca368fce4f57c1f9b5fe7a2a370c3337cd0)), closes [#32304](https://github.com/bitnami/charts/issues/32304)
+
+## <small>11.2.1 (2025-02-26)</small>
+
+* [bitnami/milvus] Release 11.2.1 (#32169) ([0523624](https://github.com/bitnami/charts/commit/0523624ef218f2a0d58e2bb2c8383ef2b87f1787)), closes [#32169](https://github.com/bitnami/charts/issues/32169)
+
+## 11.2.0 (2025-02-20)
+
+* [bitnami/milvus] feat: use new helper for checking API versions (#32057) ([4bc1b9e](https://github.com/bitnami/charts/commit/4bc1b9ea0141ace7b557d6819192214b92f51450)), closes [#32057](https://github.com/bitnami/charts/issues/32057)
+
+## <small>11.1.4 (2025-02-19)</small>
+
+* [bitnami/*] Fix typo in named template name (#31858) ([b739b69](https://github.com/bitnami/charts/commit/b739b69532e637bd33b4a44eeb422c3e749eac77)), closes [#31858](https://github.com/bitnami/charts/issues/31858)
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/milvus] Release 11.1.4 (#32018) ([26279ff](https://github.com/bitnami/charts/commit/26279fffdefd8d2aa44828cc4508f246d718248d)), closes [#32018](https://github.com/bitnami/charts/issues/32018)
+
+## <small>11.1.2 (2025-02-05)</small>
+
+* [bitnami/milvus] Release 11.1.2 (#31783) ([830393c](https://github.com/bitnami/charts/commit/830393c91796d9fd82cc6d7bd6dd459ec3a0abfb)), closes [#31783](https://github.com/bitnami/charts/issues/31783)
+
+## <small>11.1.1 (2025-02-04)</small>
+
+* [bitnami/milvus] Release 11.0.1 (#31570) ([9602ea0](https://github.com/bitnami/charts/commit/9602ea02debd4c6a4164443ab26b48257eb24d7e)), closes [#31570](https://github.com/bitnami/charts/issues/31570)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## 11.1.0 (2025-01-29)
+
+* [bitnami/milvus] feature(minio): Bump MinIO subchart (#31661) ([4186dbc](https://github.com/bitnami/charts/commit/4186dbc2950181d8dbd9c4898b5242466637a6cf)), closes [#31661](https://github.com/bitnami/charts/issues/31661)
+
 ## 11.0.0 (2025-01-22)
 
-* [bitnami/milvus] Update ETCD to major 11 ([#31509](https://github.com/bitnami/charts/pull/31509))
+* [bitnami/milvus] Update ETCD to major 11 (#31509) ([3def614](https://github.com/bitnami/charts/commit/3def6145de0f57541026afb80f41f57c94f4a37f)), closes [#31509](https://github.com/bitnami/charts/issues/31509)
 
 ## <small>10.1.7 (2025-01-20)</small>
 

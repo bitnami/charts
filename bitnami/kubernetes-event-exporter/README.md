@@ -103,6 +103,7 @@ To back up and restore Helm chart deployments on Kubernetes, you need to back up
 | Name                     | Description                                                                                              | Value          |
 | ------------------------ | -------------------------------------------------------------------------------------------------------- | -------------- |
 | `kubeVersion`            | Override Kubernetes version                                                                              | `""`           |
+| `apiVersions`            | Override Kubernetes API versions reported by .Capabilities                                               | `[]`           |
 | `nameOverride`           | String to partially override kubernetes-event-exporter.fullname include (will maintain the release name) | `""`           |
 | `fullnameOverride`       | String to fully override kubernetes-event-exporter.fullname template                                     | `""`           |
 | `commonAnnotations`      | Annotations to add to all deployed objects                                                               | `{}`           |
@@ -270,7 +271,7 @@ This could potentially break any customization or init scripts used in your depl
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

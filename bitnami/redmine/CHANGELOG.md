@@ -1,8 +1,27 @@
 # Changelog
 
-## 32.1.2 (2025-01-21)
+## 32.1.6 (2025-03-11)
 
-* [bitnami/redmine] Release 32.1.2 ([#31487](https://github.com/bitnami/charts/pull/31487))
+* [bitnami/redmine] Release 32.1.6 ([#32389](https://github.com/bitnami/charts/pull/32389))
+
+## <small>32.1.5 (2025-02-28)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/redmine] Release 32.1.5 (#32212) ([0a274ed](https://github.com/bitnami/charts/commit/0a274ed096355dc04f6637ea1178b8b9d6a8fbc8)), closes [#32212](https://github.com/bitnami/charts/issues/32212)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>32.1.4 (2025-01-29)</small>
+
+* [bitnami/redmine] Release 32.1.4 (#31657) ([dc5cf8b](https://github.com/bitnami/charts/commit/dc5cf8bb759bbd72e6a46fd44ebfadd6a87902ca)), closes [#31657](https://github.com/bitnami/charts/issues/31657)
+
+## <small>32.1.3 (2025-01-29)</small>
+
+* [bitnami/redmine] Release 32.1.3 (#31652) ([b2e3e29](https://github.com/bitnami/charts/commit/b2e3e29653d0f9cc5530476b6325a308eecef954)), closes [#31652](https://github.com/bitnami/charts/issues/31652)
+
+## <small>32.1.2 (2025-01-21)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/redmine] Release 32.1.2 (#31487) ([28f93ad](https://github.com/bitnami/charts/commit/28f93ad2df0cb9b7f7879eb9eda2b7c20ef93247)), closes [#31487](https://github.com/bitnami/charts/issues/31487)
 
 ## <small>32.1.1 (2024-12-12)</small>
 

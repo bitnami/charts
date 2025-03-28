@@ -94,7 +94,7 @@ spec:
             - /bin/bash
             - -ec
             - |
-              find {{ .Values.master.persistence.path }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs chown -R {{ printf "%d:%d" (int .Values.master.containerSecurityContext.runAsUser) (int .Values.master.podSecurityContext.fsGroup) }}
+              find {{ .Values.master.persistence.mountPath }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs -r chown -R {{ printf "%d:%d" (int .Values.master.containerSecurityContext.runAsUser) (int .Values.master.podSecurityContext.fsGroup) }}
           {{- if .Values.volumePermissions.containerSecurityContext.enabled }}
           securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.volumePermissions.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
@@ -154,7 +154,7 @@ spec:
             {{- if .Values.auth.enabled }}
             {{- if .Values.auth.usePasswordFiles }}
             - name: KEYDB_PASSWORD_FILE
-              value: {{ printf "/opt/bitnami/keydb/secrets/%s" (include "keydb.secretPasswordKey" .) }}
+              value: "/opt/bitnami/keydb/secrets/keydb-password"
             {{- else }}
             - name: KEYDB_PASSWORD
               valueFrom:
@@ -229,7 +229,7 @@ spec:
             - name: health-scripts
               mountPath: /opt/bitnami/scripts/health
               readOnly: true
-            {{- if .Values.auth.usePasswordFiles }}
+            {{- if and .Values.auth.enabled .Values.auth.usePasswordFiles }}
             - name: keydb-password
               mountPath: /opt/bitnami/keydb/secrets
               readOnly: true
@@ -264,9 +264,9 @@ spec:
             - /bin/bash
             - -c
             - |
-              if [[ -f "$REDIS_PASSWORD_FILE" ]]; then
-              export REDIS_PASSWORD=$(cat "$REDIS_PASSWORD_FILE")
-              fi
+              {{- if and .Values.auth.enabled .Values.auth.usePasswordFiles }}
+              export REDIS_PASSWORD="$(< $REDIS_PASSWORD_FILE)"
+              {{- end }}
               redis_exporter{{- range $key, $value := .Values.metrics.extraArgs }} --{{ $key }}={{ $value }}{{- end }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
@@ -282,7 +282,7 @@ spec:
               value: default
             {{- if .Values.auth.usePasswordFiles }}
             - name: REDIS_PASSWORD_FILE
-              value: {{ printf "/secrets/%s" (include "keydb.secretPasswordKey" .) }}
+              value: "/secrets/keydb-password"
             {{- else }}
             - name: REDIS_PASSWORD
               valueFrom:
@@ -340,7 +340,7 @@ spec:
             - name: empty-dir
               mountPath: /tmp
               subPath: app-tmp-dir
-            {{- if .Values.auth.usePasswordFiles }}
+            {{- if and .Values.auth.enabled .Values.auth.usePasswordFiles }}
             - name: keydb-password
               mountPath: /secrets
               readOnly: true
@@ -367,7 +367,7 @@ spec:
         - name: config
           configMap:
             name: {{ template "keydb.master.configmapName" . }}
-        {{- if .Values.auth.usePasswordFiles }}
+        {{- if and .Values.auth.enabled .Values.auth.usePasswordFiles }}
         - name: keydb-password
           secret:
             secretName: {{ template "keydb.secretName" . }}

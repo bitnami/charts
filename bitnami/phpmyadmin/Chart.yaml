@@ -2,13 +2,14 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
+  tanzuCategory: application
   category: Infrastructure
   licenses: Apache-2.0
   images: |
     - name: apache-exporter
-      image: docker.io/bitnami/apache-exporter:1.0.9-debian-12-r8
+      image: docker.io/bitnami/apache-exporter:1.0.10-debian-12-r0
     - name: phpmyadmin
-      image: docker.io/bitnami/phpmyadmin:5.2.2-debian-12-r0
+      image: docker.io/bitnami/phpmyadmin:5.2.2-debian-12-r7
 apiVersion: v2
 appVersion: 5.2.2
 dependencies:
@@ -25,7 +26,7 @@ dependencies:
   version: 2.x.x
 description: phpMyAdmin is a free software tool written in PHP, intended to handle the administration of MySQL over the Web. phpMyAdmin supports a wide range of operations on MySQL and MariaDB.
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/phpmyadmin/img/phpmyadmin-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/phpmyadmin/img/phpmyadmin-stack-220x234.png
 keywords:
 - mariadb
 - mysql
@@ -36,4 +37,4 @@ maintainers:
 name: phpmyadmin
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/phpmyadmin
-version: 18.1.2
+version: 18.1.5

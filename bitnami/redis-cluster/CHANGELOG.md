@@ -1,8 +1,32 @@
 # Changelog
 
+## 11.4.6 (2025-03-22)
+
+* [bitnami/redis-cluster] Release 11.4.6 ([#32560](https://github.com/bitnami/charts/pull/32560))
+
+## <small>11.4.5 (2025-03-13)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/redis-cluster] Use ternary yes/no for useAOFPersistence (#32418) ([9cb94c6](https://github.com/bitnami/charts/commit/9cb94c652a935b94a7f15b4d9b3b3554591b26f2)), closes [#32418](https://github.com/bitnami/charts/issues/32418)
+
+## <small>11.4.3 (2025-02-20)</small>
+
+* [bitnami/redis-cluster] Release 11.4.3 (#32032) ([e652611](https://github.com/bitnami/charts/commit/e65261189935c2a97a9998e9fca715c08a262e44)), closes [#32032](https://github.com/bitnami/charts/issues/32032)
+
+## <small>11.4.2 (2025-02-16)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/redis-cluster] Release 11.4.2 (#31942) ([0229928](https://github.com/bitnami/charts/commit/022992851c0b19d1a89f719f95b117a0f72ebd83)), closes [#31942](https://github.com/bitnami/charts/issues/31942)
+* [bitnami/redis-cluster] Update README.md (#31705) ([1b1c34a](https://github.com/bitnami/charts/commit/1b1c34a879fd2726ac21c3f2ceb111b15aab8cab)), closes [#31705](https://github.com/bitnami/charts/issues/31705)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>11.4.1 (2025-01-23)</small>
+
+* [bitnami/redis-cluster] Address chart not working with external access enabled (#31494) ([89e4605](https://github.com/bitnami/charts/commit/89e460598d8a5373174d597941ff36b0f9315177)), closes [#31494](https://github.com/bitnami/charts/issues/31494)
+
 ## 11.4.0 (2025-01-13)
 
-* [bitnami/redis-cluster] feat: add support for svc bindings ([#31330](https://github.com/bitnami/charts/pull/31330))
+* [bitnami/redis-cluster] feat: add support for svc bindings (#31330) ([c409f1f](https://github.com/bitnami/charts/commit/c409f1fc5d34e37299878f19718410493350344e)), closes [#31330](https://github.com/bitnami/charts/issues/31330)
 
 ## 11.3.0 (2025-01-10)
 

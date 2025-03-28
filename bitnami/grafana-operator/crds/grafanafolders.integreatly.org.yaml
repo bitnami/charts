@@ -1,5 +1,5 @@
 # Source: https://raw.githubusercontent.com/grafana/grafana-operator/v{version}/deploy/helm/grafana-operator/crds/grafana.integreatly.org_grafanafolders.yaml
-# Version: 5.16.0
+# Version: 5.17.0
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
@@ -131,7 +131,11 @@ spec:
                 description: Display name of the folder in Grafana
                 type: string
               uid:
-                description: Manually specify the UID the Folder is created with
+                description: Manually specify the UID the Folder is created with.
+                  Can be any string consisting of alphanumeric characters, - and _
+                  with a maximum length of 40
+                maxLength: 40
+                pattern: ^[a-zA-Z0-9-_]+$
                 type: string
                 x-kubernetes-validations:
                 - message: spec.uid is immutable
@@ -223,6 +227,8 @@ spec:
                 format: date-time
                 type: string
             type: object
+        required:
+        - spec
         type: object
     served: true
     storage: true

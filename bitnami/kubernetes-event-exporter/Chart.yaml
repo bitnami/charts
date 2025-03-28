@@ -2,11 +2,12 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
+  tanzuCategory: clusterUtility
   category: Infrastructure
   licenses: Apache-2.0
   images: |
     - name: kubernetes-event-exporter
-      image: docker.io/bitnami/kubernetes-event-exporter:1.7.0-debian-12-r21
+      image: docker.io/bitnami/kubernetes-event-exporter:1.7.0-debian-12-r31
 apiVersion: v2
 appVersion: 1.7.0
 dependencies:
@@ -17,7 +18,7 @@ dependencies:
   version: 2.x.x
 description: Kubernetes Event Exporter makes it easy to export Kubernetes events to other tools, thereby enabling better event observability, custom alerts and aggregation.
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/kubernetes-event-exporter/img/kubernetes-event-exporter-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/kubernetes-event-exporter/img/kubernetes-event-exporter-stack-220x234.png
 keywords:
 - alerting
 - event exporting
@@ -31,4 +32,4 @@ maintainers:
 name: kubernetes-event-exporter
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/kubernetes-event-exporter
-version: 3.3.2
+version: 3.4.4

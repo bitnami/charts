@@ -850,6 +850,6 @@ Returns the name of the default secret if the AES key is set via `.Values.txtEnc
 {{- if and .Values.txtEncrypt.enabled .Values.txtEncrypt.secretName }}
     {{- printf "%s" .Values.txtEncrypt.secretName -}}
 {{- else if and .Values.txtEncrypt.enabled (not .Values.txtEncrypt.secretName) -}}
-    {{ template "external-dns.secretName" . }}
+    {{ template "common.names.fullname" . }}
 {{- end -}}
 {{- end -}}

@@ -169,12 +169,6 @@ rules:
       - storageclasses
     verbs: ["list", "watch"]
   {{- end }}
-  {{- if .Values.kubeResources.verticalpodautoscalers }}
-  - apiGroups: ["autoscaling.k8s.io"]
-    resources:
-      - verticalpodautoscalers
-    verbs: ["list", "watch"]
-  {{- end }}
   {{- if .Values.kubeResources.validatingwebhookconfigurations }}
   - apiGroups: ["admissionregistration.k8s.io"]
     resources:
@@ -186,5 +180,14 @@ rules:
     resources:
       - volumeattachments
     verbs: ["list", "watch"]
+  {{- end }}
+  {{- if .Values.customResourceState.enabled }}
+  - apiGroups: ["apiextensions.k8s.io"]
+    resources:
+      - customresourcedefinitions
+    verbs: ["list", "watch"]
+  {{- end }}
+  {{- if .Values.rbac.rules }}
+  {{- include "common.tplvalues.render" ( dict "value" .Values.rbac.rules "context" $ ) | nindent 2 }}
   {{- end }}
 {{- end }}

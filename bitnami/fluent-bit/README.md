@@ -150,6 +150,7 @@ The [Bitnami Fluent Bit](https://github.com/bitnami/containers/tree/main/bitnami
 
 | Name                     | Description                                                                             | Value          |
 | ------------------------ | --------------------------------------------------------------------------------------- | -------------- |
+| `apiVersions`            | Override Kubernetes API versions reported by .Capabilities                              | `[]`           |
 | `nameOverride`           | String to partially override common.names.fullname                                      | `""`           |
 | `fullnameOverride`       | String to fully override common.names.fullname                                          | `""`           |
 | `kubeVersion`            | Force target Kubernetes version (using Helm capabilities if not set)                    | `""`           |
@@ -370,7 +371,7 @@ This could potentially break any customization or init scripts used in your depl
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

@@ -1,8 +1,42 @@
 # Changelog
 
+## 2.1.3 (2025-03-14)
+
+* [bitnami/cilium] Release 2.1.3 ([#32463](https://github.com/bitnami/charts/pull/32463))
+
+## <small>2.1.2 (2025-03-04)</small>
+
+* [bitnami/cilium] Release 2.1.2 (#32281) ([95573f8](https://github.com/bitnami/charts/commit/95573f8302bf79081d60e97b0c68f725980cfc47)), closes [#32281](https://github.com/bitnami/charts/issues/32281)
+
+## <small>2.1.1 (2025-02-20)</small>
+
+* [bitnami/cilium] Release 2.1.1 (#32089) ([be747d9](https://github.com/bitnami/charts/commit/be747d935c070c7e3c7d0e38dfa59bd18a4bb6ad)), closes [#32089](https://github.com/bitnami/charts/issues/32089)
+
+## 2.1.0 (2025-02-20)
+
+* [bitnami/cilium] feat: use new helper for checking API versions (#32047) ([6fb5bfe](https://github.com/bitnami/charts/commit/6fb5bfe5ea8479d401b2586e8fc1c64e05029b70)), closes [#32047](https://github.com/bitnami/charts/issues/32047)
+
+## <small>2.0.4 (2025-02-12)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/cilium] Release 2.0.4 (#31884) ([ad40116](https://github.com/bitnami/charts/commit/ad40116c062a9ead17080e22c5cc597f5466d360)), closes [#31884](https://github.com/bitnami/charts/issues/31884)
+
+## <small>2.0.3 (2025-02-04)</small>
+
+* [bitnami/cilium] Release 2.0.3 (#31746) ([a36fa56](https://github.com/bitnami/charts/commit/a36fa56ebc8b4a64b0728628bc497ed24ea191e9)), closes [#31746](https://github.com/bitnami/charts/issues/31746)
+
+## <small>2.0.2 (2025-02-04)</small>
+
+* [bitnami/cilium] Release 2.0.2 (#31739) ([4f89628](https://github.com/bitnami/charts/commit/4f89628bf5fb9b73bf31c242e1276721c64d5d25)), closes [#31739](https://github.com/bitnami/charts/issues/31739)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>2.0.1 (2025-01-24)</small>
+
+* [bitnami/cilium] Release 2.0.1 (#31545) ([f9c33b4](https://github.com/bitnami/charts/commit/f9c33b4a67b6e02853f8f259ba02d9d258d3c90d)), closes [#31545](https://github.com/bitnami/charts/issues/31545)
+
 ## 2.0.0 (2025-01-22)
 
-* [bitnami/cilium] Update ETCD to major 11 ([#31510](https://github.com/bitnami/charts/pull/31510))
+* [bitnami/cilium] Update ETCD to major 11 (#31510) ([ab13b86](https://github.com/bitnami/charts/commit/ab13b86f49d57112b3bc3d9eea1645841a8f9125)), closes [#31510](https://github.com/bitnami/charts/issues/31510)
 
 ## <small>1.3.4 (2025-01-21)</small>
 

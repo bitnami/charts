@@ -1,8 +1,60 @@
 # Changelog
 
-## 2.3.2 (2025-01-20)
+## 2.5.7 (2025-03-26)
 
-* [bitnami/mlflow] Release 2.3.2 ([#31485](https://github.com/bitnami/charts/pull/31485))
+* [bitnami/mlflow] Release 2.5.7 ([#32627](https://github.com/bitnami/charts/pull/32627))
+
+## <small>2.5.6 (2025-03-26)</small>
+
+* [bitnami/mlflow] Release 2.5.6 (#32610) ([42b111e](https://github.com/bitnami/charts/commit/42b111e0fd37614ae8691830160face60afe2d6f)), closes [#32610](https://github.com/bitnami/charts/issues/32610)
+
+## <small>2.5.5 (2025-03-14)</small>
+
+* [bitnami/mlflow] Release 2.5.5 (#32462) ([b62113c](https://github.com/bitnami/charts/commit/b62113c5a1d5b7bae8896f382ef78b7dd561f48d)), closes [#32462](https://github.com/bitnami/charts/issues/32462)
+
+## <small>2.5.4 (2025-03-13)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/mlflow] Release 2.5.4 (#32435) ([20e95a7](https://github.com/bitnami/charts/commit/20e95a7001ccb50abbd23d8a445b489857c5222a)), closes [#32435](https://github.com/bitnami/charts/issues/32435)
+
+## <small>2.5.3 (2025-03-04)</small>
+
+* [bitnami/mlflow] Release 2.5.3 (#32263) ([6c8cae9](https://github.com/bitnami/charts/commit/6c8cae96201e7c01c659b5c80d3ff7f881bf87e9)), closes [#32263](https://github.com/bitnami/charts/issues/32263)
+
+## <small>2.5.2 (2025-02-26)</small>
+
+* [bitnami/mlflow] Release 2.5.2 (#32181) ([5087ab8](https://github.com/bitnami/charts/commit/5087ab8183e3b012223f155cca13b762de45895d)), closes [#32181](https://github.com/bitnami/charts/issues/32181)
+
+## <small>2.5.1 (2025-02-25)</small>
+
+* [bitnami/mlflow] Release 2.5.1 (#32146) ([9553964](https://github.com/bitnami/charts/commit/955396401facdf2dfc3fb203c0435411cc38004a)), closes [#32146](https://github.com/bitnami/charts/issues/32146)
+
+## 2.5.0 (2025-02-20)
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/mlflow] feat: use new helper for checking API versions (#32058) ([6fb67a6](https://github.com/bitnami/charts/commit/6fb67a63dcbd1284efd29a141eb81e7410232a03)), closes [#32058](https://github.com/bitnami/charts/issues/32058)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>2.4.1 (2025-01-30)</small>
+
+* [bitnami/mlflow] Release 2.4.1 (#31679) ([c06f0c7](https://github.com/bitnami/charts/commit/c06f0c7ebd4860319a1f0282c775be9c7e27d147)), closes [#31679](https://github.com/bitnami/charts/issues/31679)
+
+## 2.4.0 (2025-01-29)
+
+* [bitnami/mlflow] feature(minio): Bump MinIO subchart (#31662) ([d3d32f1](https://github.com/bitnami/charts/commit/d3d32f17477c4cd8fc12b0e0be584b7e64e408a9)), closes [#31662](https://github.com/bitnami/charts/issues/31662)
+
+## <small>2.3.4 (2025-01-24)</small>
+
+* [bitnami/mlflow] Release 2.3.4 (#31573) ([e353b25](https://github.com/bitnami/charts/commit/e353b25dd3301299be4fcf16d53669226bff805d)), closes [#31573](https://github.com/bitnami/charts/issues/31573)
+
+## <small>2.3.3 (2025-01-23)</small>
+
+* [bitnami/mlflow] Fix parsing of mlflow tracking service loadBalancerSourceRanges (#31327) ([a0cf872](https://github.com/bitnami/charts/commit/a0cf87299703c97217c7585b2d81a8d6bb8281c8)), closes [#31327](https://github.com/bitnami/charts/issues/31327)
+
+## <small>2.3.2 (2025-01-20)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/mlflow] Release 2.3.2 (#31485) ([78bbe94](https://github.com/bitnami/charts/commit/78bbe94ec731a0cb046e0387b5d610de41f97472)), closes [#31485](https://github.com/bitnami/charts/issues/31485)
 
 ## <small>2.3.1 (2024-12-11)</small>
 

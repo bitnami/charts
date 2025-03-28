@@ -139,6 +139,13 @@ spec:
                   name: {{ include "harbor.jobservice" . }}
                   key: secret
                 {{- end }}
+            {{- if and (not .Values.postgresql.enabled) .Values.externalDatabase.existingSecret }}
+            - name: POSTGRESQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.externalDatabase.existingSecret }}
+                  key: {{ .Values.externalDatabase.existingSecretPasswordKey }}
+            {{- end }}
             {{- if or .Values.core.configOverwriteJson .Values.core.configOverwriteJsonSecret }}
             - name: CONFIG_OVERWRITE_JSON
               valueFrom:
@@ -247,8 +254,6 @@ spec:
               mountPath: /etc/core/auth-ca/auth-ca.crt
               subPath: auth-ca.crt
             {{- end }}
-            - name: psc
-              mountPath: /etc/core/token
             {{- if .Values.internalTLS.caBundleSecret }}
             {{- include "harbor.caBundleVolumeMount" . | nindent 12 }}
             {{- end }}
@@ -316,8 +321,6 @@ spec:
               - key: ca.crt
                 path: auth-ca.crt
         {{- end }}
-        - name: psc
-          emptyDir: {}
       {{- if .Values.core.extraVolumes }}
       {{- include "common.tplvalues.render" (dict "value" .Values.core.extraVolumes "context" $) | nindent 8 }}
       {{- end }}

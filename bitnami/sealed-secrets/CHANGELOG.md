@@ -1,8 +1,30 @@
 # Changelog
 
-## 2.5.3 (2025-01-17)
+## 2.5.8 (2025-03-28)
 
-* [bitnami/sealed-secrets] Release 2.5.3 ([#31442](https://github.com/bitnami/charts/pull/31442))
+* [bitnami/sealed-secrets] Release 2.5.8 ([#32641](https://github.com/bitnami/charts/pull/32641))
+
+## <small>2.5.7 (2025-03-05)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/sealed-secrets] Release 2.5.7 (#32316) ([25a175f](https://github.com/bitnami/charts/commit/25a175f490351b3fdfe1acbfab678bbb26576ea0)), closes [#32316](https://github.com/bitnami/charts/issues/32316)
+
+## <small>2.5.6 (2025-02-07)</small>
+
+* [bitnami/sealed-secrets] Release 2.5.6 (#31827) ([7f76456](https://github.com/bitnami/charts/commit/7f76456f3bf48bbd7eeccd7effc667d953b8f38c)), closes [#31827](https://github.com/bitnami/charts/issues/31827)
+
+## <small>2.5.5 (2025-02-05)</small>
+
+* [bitnami/sealed-secrets] Release 2.5.5 (#31778) ([8858250](https://github.com/bitnami/charts/commit/88582507ed3d95f9667363006449112fa2ae0087)), closes [#31778](https://github.com/bitnami/charts/issues/31778)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>2.5.4 (2025-01-24)</small>
+
+* [bitnami/sealed-secrets] Release 2.5.4 (#31582) ([7f6be1f](https://github.com/bitnami/charts/commit/7f6be1ff6bea655f0b08e563b9aba0d1458332a9)), closes [#31582](https://github.com/bitnami/charts/issues/31582)
+
+## <small>2.5.3 (2025-01-17)</small>
+
+* [bitnami/sealed-secrets] Release 2.5.3 (#31442) ([3c5c031](https://github.com/bitnami/charts/commit/3c5c0310c48459c7f01584265ed28551632ccd09)), closes [#31442](https://github.com/bitnami/charts/issues/31442)
 
 ## <small>2.5.2 (2025-01-16)</small>
 

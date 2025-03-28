@@ -1,8 +1,35 @@
 # Changelog
 
-## 12.1.1 (2025-01-07)
+## 12.2.2 (2025-03-12)
 
-* [bitnami/cassandra] Release 12.1.1 ([#31233](https://github.com/bitnami/charts/pull/31233))
+* [bitnami/cassandra] bugfix #32369 ([#32415](https://github.com/bitnami/charts/pull/32415))
+
+## <small>12.2.1 (2025-03-05)</small>
+
+* [bitnami/cassandra] Release 12.2.1 (#32322) ([5543930](https://github.com/bitnami/charts/commit/554393025cd9165c851b4b139c1ec5bf012fc4e5)), closes [#32322](https://github.com/bitnami/charts/issues/32322)
+
+## 12.2.0 (2025-02-27)
+
+* [bitnami/cassandra] Add support for `usePasswordFiles` (#32080) ([0485a17](https://github.com/bitnami/charts/commit/0485a17a5c115454508c442121efbe6547fe73c6)), closes [#32080](https://github.com/bitnami/charts/issues/32080)
+
+## <small>12.1.4 (2025-02-19)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/cassandra] Release 12.1.4 (#31975) ([93617a2](https://github.com/bitnami/charts/commit/93617a28affb1ab251083cc52c9ec61c76ba647e)), closes [#31975](https://github.com/bitnami/charts/issues/31975)
+
+## <small>12.1.3 (2025-02-04)</small>
+
+* [bitnami/cassandra] Release 12.1.3 (#31721) ([ab93c8e](https://github.com/bitnami/charts/commit/ab93c8e988f52f22486e0cfbc7a6cd03ea89dde2)), closes [#31721](https://github.com/bitnami/charts/issues/31721)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>12.1.2 (2025-01-28)</small>
+
+* [bitnami/cassandra] Release 12.1.2 (#31642) ([f17fef7](https://github.com/bitnami/charts/commit/f17fef71fe687224f58eb4334b522fab535d4e5b)), closes [#31642](https://github.com/bitnami/charts/issues/31642)
+
+## <small>12.1.1 (2025-01-07)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/cassandra] Release 12.1.1 (#31233) ([bdd9622](https://github.com/bitnami/charts/commit/bdd9622b7bf579ae71d61a2e014d0dfaaf29497d)), closes [#31233](https://github.com/bitnami/charts/issues/31233)
 
 ## 12.1.0 (2024-12-10)
 
@@ -1270,7 +1297,7 @@
 ## <small>2.3.5 (2019-05-29)</small>
 
 * Change syntax because of linter failing ([adfc357](https://github.com/bitnami/charts/commit/adfc35728c2a8a9def9e1897b3772d64df621354))
-* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79)), closes [#issuecomment-496883321](https://github.com/bitnami/charts/issues/issuecomment-496883321)
+* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79))
 * Fix tensorflow and others ([6252f12](https://github.com/bitnami/charts/commit/6252f125d307e55fd638687eac09f1df8451f22f))
 * Use immutable tags in the main images ([17ca4f5](https://github.com/bitnami/charts/commit/17ca4f5c91da33da03f9e2d411fe5e004e825c4d))
 

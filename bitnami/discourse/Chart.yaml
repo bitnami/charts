@@ -2,15 +2,16 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
+  tanzuCategory: application
   category: Forum
   licenses: Apache-2.0
   images: |
     - name: discourse
-      image: docker.io/bitnami/discourse:3.3.3-debian-12-r2
+      image: docker.io/bitnami/discourse:3.4.1-debian-12-r4
     - name: os-shell
-      image: docker.io/bitnami/os-shell:12-debian-12-r35
+      image: docker.io/bitnami/os-shell:12-debian-12-r40
 apiVersion: v2
-appVersion: 3.3.3
+appVersion: 3.4.1
 dependencies:
 - condition: redis.enabled
   name: redis
@@ -27,7 +28,7 @@ dependencies:
   version: 2.x.x
 description: Discourse is an open source discussion platform with built-in moderation and governance systems that let discussion communities protect themselves from bad actors even without official moderators.
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/discourse/img/discourse-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/discourse/img/discourse-stack-220x234.png
 keywords:
 - community
 - forum
@@ -41,4 +42,4 @@ maintainers:
 name: discourse
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/discourse
-version: 15.1.2
+version: 15.1.7

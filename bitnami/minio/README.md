@@ -287,7 +287,7 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 | `auth.rootUserSecretKey`     | Key where the MINIO_ROOT_USER username is being stored inside the existing secret `auth.existingSecret`                               | `""`                           |
 | `auth.rootPasswordSecretKey` | Key where the MINIO_ROOT_USER password is being stored inside the existing secret `auth.existingSecret`                               | `""`                           |
 | `auth.forcePassword`         | Force users to specify required passwords                                                                                             | `false`                        |
-| `auth.useCredentialsFiles`   | Mount credentials as a files instead of using an environment variable                                                                 | `false`                        |
+| `auth.usePasswordFiles`      | Mount credentials as a files instead of using an environment variable                                                                 | `true`                         |
 | `auth.useSecret`             | Uses a secret to mount the credential files.                                                                                          | `true`                         |
 | `auth.forceNewKeys`          | Force root credentials (user and password) to be reconfigured every time they change in the secrets                                   | `false`                        |
 | `defaultBuckets`             | Comma, semi-colon or space separated list of buckets to create at initialization (only in standalone mode)                            | `""`                           |
@@ -569,6 +569,16 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 16.0.0
+
+This major bump introduces the following changes:
+
+- `auth.useCredentialsFiles` has been renamed to `auth.usePasswordFiles`. Its default value has been changed from `false` to `true`.
+
+## To 15.0.0
+
+This version updates MinIO&reg; to major version 2025.
+
 ### To 14.9.0
 
 This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
@@ -584,6 +594,10 @@ This major bump changes the following security defaults:
 
 This could potentially break any customization or init scripts used in your deployment. If this is the case, change the default values to the previous ones.
 
+## To 13.0.0
+
+This version updates MinIO&reg; to major version 2024.
+
 ### To 12.0.0
 
 This version updates MinIO&reg; to major version 2023. All gateway features have been removed from Minio since upstream completely dropped this feature. The related options have been removed in version 12.1.0.
@@ -593,6 +607,10 @@ This version updates MinIO&reg; to major version 2023. All gateway features have
 This version deprecates the usage of `MINIO_ACCESS_KEY` and `MINIO_SECRET_KEY` environment variables in MINIO&reg; container in favor of `MINIO_ROOT_USER` and `MINIO_ROOT_PASSWORD`.
 
 If you were already using the new variables, no issues are expected during upgrade.
+
+## To 10.0.0
+
+This version updates MinIO&reg; to major version 2022.
 
 ### To 9.0.0
 
@@ -618,6 +636,10 @@ Please note that Web UI, previously running on port 9000 will now use port 9001 
 ### To 7.0.0
 
 This version introduces pod and container securityContext support. The previous configuration of `securityContext` has moved to `podSecurityContext` and `containerSecurityContext`. Apart from this case, no issues are expected to appear when upgrading.
+
+## To 6.0.0
+
+This version updates MinIO&reg; to major version 2021.
 
 ### To 5.0.0
 
@@ -650,7 +672,7 @@ This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

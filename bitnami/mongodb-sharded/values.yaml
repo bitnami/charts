@@ -92,7 +92,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mongodb-sharded
-  tag: 8.0.4-debian-12-r1
+  tag: 8.0.6-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -130,9 +130,9 @@ auth:
   ## NOTE: When it's set the previous parameters are ignored.
   ##
   existingSecret: ""
-  ## @param auth.usePasswordFile Mount credentials as files instead of using environment variables
+  ## @param auth.usePasswordFiles Mount credentials as files instead of using environment variables
   ##
-  usePasswordFile: false
+  usePasswordFiles: true
 ## @param shards Number of shards to be created
 ## ref: https://docs.mongodb.com/manual/core/sharded-cluster-shards/
 ##
@@ -259,7 +259,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r35
+    tag: 12-debian-12-r40
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1780,7 +1780,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mongodb-exporter
-    tag: 0.43.1-debian-12-r1
+    tag: 0.43.1-debian-12-r11
     digest: ""
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.

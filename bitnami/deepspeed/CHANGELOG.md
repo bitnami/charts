@@ -1,8 +1,40 @@
 # Changelog
 
-## 2.3.1 (2024-12-19)
+## 2.3.8 (2025-03-28)
 
-* [bitnami/deepspeed] Release 2.3.1 ([#31101](https://github.com/bitnami/charts/pull/31101))
+* [bitnami/deepspeed] Release 2.3.8 ([#32656](https://github.com/bitnami/charts/pull/32656))
+
+## <small>2.3.7 (2025-03-27)</small>
+
+* [bitnami/deepspeed] Fix probes for different user ids (#32638) ([aac77c1](https://github.com/bitnami/charts/commit/aac77c1cf304985208bc47cbe67a651e44094c03)), closes [#32638](https://github.com/bitnami/charts/issues/32638)
+
+## <small>2.3.6 (2025-03-27)</small>
+
+* [bitnami/deepspeed] Release 2.3.6 (#32634) ([cc42106](https://github.com/bitnami/charts/commit/cc421064aa0bd8427215f10f196dfe77d78e07b4)), closes [#32634](https://github.com/bitnami/charts/issues/32634)
+
+## <small>2.3.5 (2025-03-26)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/deepspeed] Release 2.3.5 (#32622) ([281905e](https://github.com/bitnami/charts/commit/281905e0c86510c327724ba1286900d366266094)), closes [#32622](https://github.com/bitnami/charts/issues/32622)
+
+## <small>2.3.4 (2025-03-06)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/deepspeed] Release 2.3.4 (#32355) ([3c51e10](https://github.com/bitnami/charts/commit/3c51e107a340466e6923d67be7fa03102ff3403d)), closes [#32355](https://github.com/bitnami/charts/issues/32355)
+
+## <small>2.3.3 (2025-02-04)</small>
+
+* [bitnami/deepspeed] Release 2.3.3 (#31740) ([a82fee0](https://github.com/bitnami/charts/commit/a82fee057036ba39126277f05f8cc2c39ce9e4ab)), closes [#31740](https://github.com/bitnami/charts/issues/31740)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>2.3.2 (2025-01-23)</small>
+
+* [bitnami/deepspeed] Release 2.3.2 (#31532) ([f87c9af](https://github.com/bitnami/charts/commit/f87c9aff56eccd740252c01cf53124716deeaeb0)), closes [#31532](https://github.com/bitnami/charts/issues/31532)
+
+## <small>2.3.1 (2024-12-19)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/deepspeed] Release 2.3.1 (#31101) ([65c6de3](https://github.com/bitnami/charts/commit/65c6de3cb3602526a79e90b86f25cad32e71a3b9)), closes [#31101](https://github.com/bitnami/charts/issues/31101)
 
 ## 2.3.0 (2024-12-10)
 

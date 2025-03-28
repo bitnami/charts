@@ -1,8 +1,27 @@
 # Changelog
 
-## 6.4.2 (2025-01-21)
+## 6.4.6 (2025-03-25)
 
-* [bitnami/logstash] Release 6.4.2 ([#31497](https://github.com/bitnami/charts/pull/31497))
+* [bitnami/logstash] Release 6.4.6 ([#32600](https://github.com/bitnami/charts/pull/32600))
+
+## <small>6.4.5 (2025-03-04)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/logstash] Release 6.4.5 (#32268) ([633b036](https://github.com/bitnami/charts/commit/633b0368e43b4322af9011e4c894e4d90c2fa5c9)), closes [#32268](https://github.com/bitnami/charts/issues/32268)
+
+## <small>6.4.4 (2025-02-11)</small>
+
+* [bitnami/logstash] Release 6.4.4 (#31870) ([fa6db9e](https://github.com/bitnami/charts/commit/fa6db9edb33444f39e4c8d7fcdf16a5fd9d820e8)), closes [#31870](https://github.com/bitnami/charts/issues/31870)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>6.4.3 (2025-01-29)</small>
+
+* [bitnami/logstash] Release 6.4.3 (#31667) ([46f003b](https://github.com/bitnami/charts/commit/46f003b12847591e12fa2e5b4dad9025c14fb1e3)), closes [#31667](https://github.com/bitnami/charts/issues/31667)
+
+## <small>6.4.2 (2025-01-21)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/logstash] Release 6.4.2 (#31497) ([826cea9](https://github.com/bitnami/charts/commit/826cea9060cdb0c7d2c7ec54d7abbdd68b565d00)), closes [#31497](https://github.com/bitnami/charts/issues/31497)
 
 ## <small>6.4.1 (2024-12-12)</small>
 
@@ -857,7 +876,7 @@
 
 ## 3.3.0 (2021-04-16)
 
-* [bitnami/logstash] Added support for kubernetes secrets in environment (#6117) ([51fff54](https://github.com/bitnami/charts/commit/51fff54b0b5a8bf7316be90a9682abbf181e7ce2)), closes [#6117](https://github.com/bitnami/charts/issues/6117) [/github.com/bitnami/charts/pull/6117#discussion_r614623386](https://github.com//github.com/bitnami/charts/pull/6117/issues/discussion_r614623386)
+* [bitnami/logstash] Added support for kubernetes secrets in environment (#6117) ([51fff54](https://github.com/bitnami/charts/commit/51fff54b0b5a8bf7316be90a9682abbf181e7ce2)), closes [#6117](https://github.com/bitnami/charts/issues/6117)
 
 ## <small>3.2.3 (2021-03-24)</small>
 

@@ -89,6 +89,7 @@ To back up and restore Helm chart deployments on Kubernetes, you need to back up
 | Name                     | Description                                                                                  | Value          |
 | ------------------------ | -------------------------------------------------------------------------------------------- | -------------- |
 | `kubeVersion`            | Force target Kubernetes version (using Helm capabilities if not set)                         | `""`           |
+| `apiVersions`            | Override Kubernetes API versions reported by .Capabilities                                   | `[]`           |
 | `nameOverride`           | String to partially override common.names.fullname template (will maintain the release name) | `""`           |
 | `fullnameOverride`       | String to fully override common.names.fullname template                                      | `""`           |
 | `namespaceOverride`      | String to fully override common.names.namespace                                              | `""`           |
@@ -292,7 +293,7 @@ kubectl patch deployment metrics-server --type=json -p='[{"op": "remove", "path"
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

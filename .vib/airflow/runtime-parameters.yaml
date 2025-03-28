@@ -3,10 +3,43 @@ auth:
 overrideConfiguration:
   logging:
     colored_console_log: 'True'
-loadExamples: true
+loadExamples: false
+defaultInitContainers:
+  prepareConfig:
+    containerSecurityContext:
+      runAsUser: 1002
+  waitForDBMigrations:
+    containerSecurityContext:
+      runAsUser: 1002
+  loadDAGsPlugins:
+    containerSecurityContext:
+      runAsUser: 1002
+defaultSidecars:
+  syncDAGsPlugins:
+    containerSecurityContext:
+      runAsUser: 1002
+scheduler:
+  podSecurityContext:
+    fsGroup: 1002
+  containerSecurityContext:
+    runAsUser: 1002
+  livenessProbe:
+    periodSeconds: 30
+    timeoutSeconds: 20
+  readinessProbe:
+    periodSeconds: 30
+    timeoutSeconds: 20
 web:
+  extraConfiguration: |
+    # Theme CONFIG
+    APP_THEME = "amelia.css"
   containerPorts:
     http: 8080
+  podSecurityContext:
+    fsGroup: 1002
+  containerSecurityContext:
+    runAsUser: 1002
+worker:
   podSecurityContext:
     fsGroup: 1002
   containerSecurityContext:
@@ -17,15 +50,35 @@ service:
   type: LoadBalancer
 dagProcessor:
   enabled: true
+  podSecurityContext:
+    fsGroup: 1002
+  containerSecurityContext:
+    runAsUser: 1002
+  livenessProbe:
+    periodSeconds: 30
+    timeoutSeconds: 20
+  readinessProbe:
+    periodSeconds: 30
+    timeoutSeconds: 20
 triggerer:
   enabled: true
+  podSecurityContext:
+    fsGroup: 1002
+  containerSecurityContext:
+    runAsUser: 1002
+  livenessProbe:
+    periodSeconds: 30
+    timeoutSeconds: 20
+  readinessProbe:
+    periodSeconds: 30
+    timeoutSeconds: 20
 dags:
   enabled: true
   repositories:
-    - repository: https://github.com/astronomer/2-9-example-dags
+    - repository: https://github.com/astronomer/2-10-example-dags
       branch: main
-      name: toys
-      path: dags/toys
+      name: UI
+      path: dags/UI
 metrics:
   enabled: true
   service:

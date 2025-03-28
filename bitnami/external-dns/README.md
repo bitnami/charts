@@ -345,7 +345,7 @@ helm install my-release \
 | `txtSuffix`                                         | When using the TXT registry, a suffix for ownership records that avoids collision with CNAME entries (optional)<CNAME record>.suffix (Mutual exclusive with txt-prefix)                                           | `""`                           |
 | `txtOwnerId`                                        | A name that identifies this instance of ExternalDNS. Currently used by registry types: txt & aws-sd (optional)                                                                                                    | `""`                           |
 | `forceTxtOwnerId`                                   | (backward compatibility) When using the non-TXT registry, it will pass the value defined by `txtOwnerId` down to the application (optional)                                                                       | `false`                        |
-| `txtEncrypt.enabled`                                | Enable TXT record encrypencryption                                                                                                                                                                                | `false`                        |
+| `txtEncrypt.enabled`                                | Enable TXT record encryption                                                                                                                                                                                      | `false`                        |
 | `txtEncrypt.aesKey`                                 | 32-byte AES-256-GCM encryption key.                                                                                                                                                                               | `""`                           |
 | `txtEncrypt.secretName`                             | Use an existing secret with key "txt_aes_encryption_key" defined.                                                                                                                                                 | `""`                           |
 | `extraArgs`                                         | Extra arguments to be passed to external-dns                                                                                                                                                                      | `{}`                           |
@@ -579,7 +579,7 @@ Other mayor changes included in this major version are:
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

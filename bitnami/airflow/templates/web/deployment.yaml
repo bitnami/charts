@@ -73,6 +73,9 @@ spec:
       initContainers:
         {{- include "airflow.defaultInitContainers.prepareConfig" . | nindent 8 }}
         {{- include "airflow.defaultInitContainers.prepareWebConfig" . | nindent 8 }}
+        {{- if .Values.dags.enabled }}
+        {{- include "airflow.defaultInitContainers.loadDAGs" . | nindent 8 }}
+        {{- end }}
         {{- if .Values.plugins.enabled }}
         {{- include "airflow.defaultInitContainers.loadPlugins" . | nindent 8 }}
         {{- end }}
@@ -109,11 +112,16 @@ spec:
             {{- if not .Values.setupDBJob.enabled }}
             - name: AIRFLOW_USERNAME
               value: {{ .Values.auth.username }}
+            {{- if .Values.usePasswordFiles }}
+            - name: AIRFLOW_PASSWORD_FILE
+              value: "/opt/bitnami/airflow/secrets/airflow-password"
+            {{- else }}
             - name: AIRFLOW_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "airflow.secretName" . }}
                   key: airflow-password
+            {{- end }}
             {{- end }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
@@ -221,6 +229,10 @@ spec:
             - name: empty-dir
               mountPath: /opt/bitnami/airflow/webserver_config.py
               subPath: app-base-dir/webserver_config.py
+            {{- if  .Values.usePasswordFiles }}
+            - name: airflow-secrets
+              mountPath: /opt/bitnami/airflow/secrets
+            {{- end }}
             {{- if and .Values.ldap.enabled .Values.ldap.tls.enabled }}
             - name: airflow-ldap-ca-certificate
               mountPath: {{ .Values.ldap.tls.certificatesMountPath }}
@@ -231,6 +243,9 @@ spec:
               mountPath: /opt/bitnami/airflow/certs
               readOnly: true
             {{- end }}
+            {{- if .Values.dags.enabled }}
+            {{- include "airflow.dags.volumeMounts" . | nindent 12 }}
+            {{- end }}
             {{- if .Values.plugins.enabled }}
             {{- include "airflow.plugins.volumeMounts" . | nindent 12 }}
             {{- end }}
@@ -240,6 +255,9 @@ spec:
             {{- if .Values.web.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.web.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
+        {{- if and .Values.dags.enabled }}
+        {{- include "airflow.defaultSidecars.syncDAGs" . | nindent 8 }}
+        {{- end }}
         {{- if .Values.plugins.enabled }}
         {{- include "airflow.defaultSidecars.syncPlugins" . | nindent 8 }}
         {{- end }}
@@ -259,6 +277,26 @@ spec:
         - name: webserver-configuration
           configMap:
             name: {{ include "airflow.web.configMapName" . }}
+        {{- if .Values.usePasswordFiles }}
+        - name: airflow-secrets
+          projected:
+            sources:
+              - secret:
+                  name:  {{ include "airflow.secretName" . }}
+              - secret:
+                  name: {{ include "airflow.database.secretName" . }}
+              {{- if .Values.ldap.enabled }}
+              - secret:
+                  name: {{ include "airflow.ldap.secretName" . }}
+              {{- end }}
+              {{- if or (eq .Values.executor "CeleryExecutor") (eq .Values.executor "CeleryKubernetesExecutor") }}
+              - secret:
+                  name: {{ include "airflow.redis.secretName" . }}
+              {{- end }}
+        {{- end }}
+        {{- if .Values.dags.enabled }}
+        {{- include "airflow.dags.volumes" . | nindent 8 }}
+        {{- end }}
         {{- if .Values.plugins.enabled }}
         {{- include "airflow.plugins.volumes" . | nindent 8 }}
         {{- end }}

@@ -356,6 +356,7 @@ wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
 | Name                                                | Description                                                                                                                                                                                                          | Value                    |
 | --------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
 | `kubeVersion`                                       | Override Kubernetes version                                                                                                                                                                                          | `""`                     |
+| `apiVersions`                                       | Override Kubernetes API versions reported by .Capabilities                                                                                                                                                           | `[]`                     |
 | `nameOverride`                                      | String to partially override common.names.name                                                                                                                                                                       | `""`                     |
 | `fullnameOverride`                                  | String to fully override common.names.fullname                                                                                                                                                                       | `""`                     |
 | `namespaceOverride`                                 | String to fully override common.names.namespace                                                                                                                                                                      | `""`                     |
@@ -383,7 +384,7 @@ wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
 | `deploymentLabels`                                  | Add extra labels to the Deployment object                                                                                                                                                                            | `{}`                     |
 | `deploymentAnnotations`                             | Add extra annotations to the Deployment object                                                                                                                                                                       | `{}`                     |
 | `logLevel`                                          | Set application log level                                                                                                                                                                                            | `INFO`                   |
-| `usePasswordFile`                                   | Mount all sensitive information as files                                                                                                                                                                             | `true`                   |
+| `usePasswordFiles`                                  | Mount all sensitive information as files                                                                                                                                                                             | `true`                   |
 | `storageType`                                       | Set version store type. The chart natively supports cassandra3, mem or other. Any other type requires you to add the configuration in configOverrides and secretConfigOverrides.                                     | `cassandra3`             |
 | `tls.enabled`                                       | Enable TLS                                                                                                                                                                                                           | `false`                  |
 | `tls.usePemCerts`                                   | Use certificates in .pem format                                                                                                                                                                                      | `true`                   |
@@ -662,7 +663,7 @@ This major updates the Cassandra subchart to its newest major, 12.0.0. [Here](ht
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

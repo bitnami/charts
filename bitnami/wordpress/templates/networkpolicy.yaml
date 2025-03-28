@@ -35,7 +35,7 @@ spec:
     - ports:
         - port: {{ include "wordpress.databasePort" . }}
       {{- if .Values.mariadb.enabled }}
-      to: 
+      to:
         - podSelector:
             matchLabels:
               app.kubernetes.io/name: mariadb
@@ -61,6 +61,9 @@ spec:
     - ports:
         - port: {{ .Values.containerPorts.http }}
         - port: {{ .Values.containerPorts.https }}
+        {{- if .Values.metrics.enabled }}
+        - port: {{ .Values.metrics.containerPorts.metrics }}
+        {{- end}}
         {{- range .Values.extraContainerPorts }}
         - port: {{ . }}
         {{- end }}

@@ -3,12 +3,11 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- $replicaCount := int .Values.controller.replicaCount }}
-{{- if and .Values.kraft.enabled (gt $replicaCount 0) (.Capabilities.APIVersions.Has "autoscaling.k8s.io/v1/VerticalPodAutoscaler") .Values.controller.autoscaling.vpa.enabled }}
+{{- if and (include "common.capabilities.apiVersions.has" ( dict "version" "autoscaling.k8s.io/v1/VerticalPodAutoscaler" "context" . )) .Values.controller.autoscaling.vpa.enabled }}
 apiVersion: {{ include "common.capabilities.vpa.apiVersion" . }}
 kind: VerticalPodAutoscaler
 metadata:
-  name: {{ printf "%s-controller" (include "common.names.fullname" .) }}
+  name: {{ template "kafka.controller.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: controller
@@ -36,7 +35,7 @@ spec:
   targetRef:
     apiVersion: {{ (include "common.capabilities.statefulset.apiVersion" .) }}
     kind: StatefulSet
-    name: {{ printf "%s-controller" (include "common.names.fullname" .) }}
+    name: {{ template "kafka.controller.fullname" . }}
   {{- if .Values.controller.autoscaling.vpa.updatePolicy }}
   updatePolicy:
     {{- with .Values.controller.autoscaling.vpa.updatePolicy.updateMode }}

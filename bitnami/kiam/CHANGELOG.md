@@ -1,8 +1,30 @@
 # Changelog
 
-## 2.3.2 (2025-01-17)
+## 2.3.7 (2025-03-05)
 
-* [bitnami/kiam] Release 2.3.2 ([#31427](https://github.com/bitnami/charts/pull/31427))
+* [bitnami/kiam] Release 2.3.7 ([#32296](https://github.com/bitnami/charts/pull/32296))
+
+## <small>2.3.6 (2025-02-19)</small>
+
+* [bitnami/kiam] Release 2.3.6 (#32008) ([37bb821](https://github.com/bitnami/charts/commit/37bb8216c6d9d9981c3c6f3af78abb190b6b0e04)), closes [#32008](https://github.com/bitnami/charts/issues/32008)
+
+## <small>2.3.5 (2025-02-12)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/kiam] Release 2.3.5 (#31893) ([16987ea](https://github.com/bitnami/charts/commit/16987eab7a94e91424e7517417034f8c37dbf749)), closes [#31893](https://github.com/bitnami/charts/issues/31893)
+
+## <small>2.3.4 (2025-02-04)</small>
+
+* [bitnami/kiam] Release 2.3.4 (#31762) ([9a43739](https://github.com/bitnami/charts/commit/9a43739e0c4d8dbedb9816ecc7354c3267bcc3d4)), closes [#31762](https://github.com/bitnami/charts/issues/31762)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>2.3.3 (2025-01-24)</small>
+
+* [bitnami/kiam] Release 2.3.3 (#31561) ([497c4de](https://github.com/bitnami/charts/commit/497c4de2b3461b0e0c13b17b9703c42b7de07443)), closes [#31561](https://github.com/bitnami/charts/issues/31561)
+
+## <small>2.3.2 (2025-01-17)</small>
+
+* [bitnami/kiam] Release 2.3.2 (#31427) ([5eeec24](https://github.com/bitnami/charts/commit/5eeec24f7c3ead3be25eea12e3e4b9b8478721c6)), closes [#31427](https://github.com/bitnami/charts/issues/31427)
 
 ## <small>2.3.1 (2025-01-13)</small>
 

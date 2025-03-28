@@ -283,6 +283,7 @@ wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
 | Name                     | Description                                                                               | Value           |
 | ------------------------ | ----------------------------------------------------------------------------------------- | --------------- |
 | `kubeVersion`            | Override Kubernetes version                                                               | `""`            |
+| `apiVersions`            | Override Kubernetes API versions reported by .Capabilities                                | `[]`            |
 | `nameOverride`           | String to partially override common.names.fullname                                        | `""`            |
 | `fullnameOverride`       | String to fully override common.names.fullname                                            | `""`            |
 | `commonLabels`           | Labels to add to all deployed objects                                                     | `{}`            |
@@ -1824,15 +1825,15 @@ wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
 
 ### kafka sub-chart paramaters
 
-| Name                              | Description                                                                                   | Value                                |
-| --------------------------------- | --------------------------------------------------------------------------------------------- | ------------------------------------ |
-| `kafka.enabled`                   | Enable/disable Kafka chart installation                                                       | `true`                               |
-| `kafka.controller.replicaCount`   | Number of Kafka controller eligible (controller+broker) nodes                                 | `1`                                  |
-| `kafka.service.ports.client`      | Kafka svc port for client connections                                                         | `9092`                               |
-| `kafka.extraConfig`               | Additional configuration to be appended at the end of the generated Kafka configuration file. | `offsets.topic.replication.factor=1` |
-| `kafka.listeners.client.protocol` | Kafka authentication protocol for the client listener                                         | `SASL_PLAINTEXT`                     |
-| `kafka.sasl.enabledMechanisms`    | Kafka enabled SASL mechanisms                                                                 | `PLAIN`                              |
-| `kafka.sasl.client.users`         | Kafka client users                                                                            | `["user"]`                           |
+| Name                              | Description                                                   | Value            |
+| --------------------------------- | ------------------------------------------------------------- | ---------------- |
+| `kafka.enabled`                   | Enable/disable Kafka chart installation                       | `true`           |
+| `kafka.controller.replicaCount`   | Number of Kafka controller eligible (controller+broker) nodes | `1`              |
+| `kafka.service.ports.client`      | Kafka svc port for client connections                         | `9092`           |
+| `kafka.overrideConfiguration`     | Kafka common configuration override                           | `{}`             |
+| `kafka.listeners.client.protocol` | Kafka authentication protocol for the client listener         | `SASL_PLAINTEXT` |
+| `kafka.sasl.enabledMechanisms`    | Kafka enabled SASL mechanisms                                 | `PLAIN`          |
+| `kafka.sasl.client.users`         | Kafka client users                                            | `["user"]`       |
 
 See <https://github.com/bitnami/readme-generator-for-helm> to create the table.
 
@@ -1864,6 +1865,10 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/milvu
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 12.0.0
+
+This major updates the Kafka subchart to its newest major, 32.0.0. For more information on this subchart's major, please refer to [Kafka upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/kafka#to-3200).
 
 ### To 11.0.0
 
@@ -1926,7 +1931,7 @@ This major updates the Kafka subchart to its newest major, 23.0.0. For more info
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

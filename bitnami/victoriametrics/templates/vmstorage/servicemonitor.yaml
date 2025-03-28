@@ -1,0 +1,48 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.vmstorage.metrics.enabled .Values.vmstorage.metrics.serviceMonitor.enabled  }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ template "victoriametrics.vmstorage.fullname" . }}
+  namespace: {{ default (include "common.names.namespace" .) .Values.vmstorage.metrics.serviceMonitor.namespace | quote }}
+  labels: {{- include "common.labels.standard" (dict "customLabels" .Values.commonLabels "context" $) | nindent 4 }}
+    app.kubernetes.io/part-of: victoriametrics
+    app.kubernetes.io/component: vmstorage
+  {{- if or .Values.vmstorage.metrics.serviceMonitor.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.vmstorage.metrics.serviceMonitor.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  jobLabel: {{ .Values.vmstorage.metrics.serviceMonitor.jobLabel | quote }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/component: vmstorage
+      {{- if .Values.vmstorage.metrics.serviceMonitor.selector }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.vmstorage.metrics.serviceMonitor.selector "context" $) | nindent 6 }}
+      {{- end }}
+  endpoints:
+    - port: http-metrics
+      path: "/metrics"
+      {{- if .Values.vmstorage.metrics.serviceMonitor.interval }}
+      interval: {{ .Values.vmstorage.metrics.serviceMonitor.interval }}
+      {{- end }}
+      {{- if .Values.vmstorage.metrics.serviceMonitor.scrapeTimeout }}
+      scrapeTimeout: {{ .Values.vmstorage.metrics.serviceMonitor.scrapeTimeout }}
+      {{- end }}
+      {{- if .Values.vmstorage.metrics.serviceMonitor.honorLabels }}
+      honorLabels: {{ .Values.vmstorage.metrics.serviceMonitor.honorLabels }}
+      {{- end }}
+      {{- if .Values.vmstorage.metrics.serviceMonitor.metricRelabelings }}
+      metricRelabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.vmstorage.metrics.serviceMonitor.metricRelabelings "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.vmstorage.metrics.serviceMonitor.relabelings }}
+      relabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.vmstorage.metrics.serviceMonitor.relabelings "context" $) | nindent 8 }}
+      {{- end }}
+  namespaceSelector:
+    matchNames:
+    - {{ include "common.names.namespace" . | quote }}
+{{- end }}

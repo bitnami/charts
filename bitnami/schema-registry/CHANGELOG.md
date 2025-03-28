@@ -1,8 +1,32 @@
 # Changelog
 
-## 23.1.1 (2025-01-13)
+## 25.0.0 (2025-03-26)
 
-* [bitnami/schema-registry] Release 23.1.1 ([#31325](https://github.com/bitnami/charts/pull/31325))
+* [bitnami/schema-registry] feat: bump major due to major bump on Kafka dep ([#32618](https://github.com/bitnami/charts/pull/32618))
+
+## 24.0.0 (2025-03-12)
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/schema-registry] Release 24.0.0 (#32424) ([1817445](https://github.com/bitnami/charts/commit/18174456aa09c324493c5e1d08c4b9f3c68891d7)), closes [#32424](https://github.com/bitnami/charts/issues/32424)
+
+## <small>23.1.4 (2025-03-04)</small>
+
+* [bitnami/schema-registry] Release 23.1.4 (#32264) ([3477fc1](https://github.com/bitnami/charts/commit/3477fc14499c31ae4280b0f49bd2b516bcda4c42)), closes [#32264](https://github.com/bitnami/charts/issues/32264)
+
+## <small>23.1.3 (2025-02-21)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/schema-registry] Release 23.1.3 (#32104) ([bdb8188](https://github.com/bitnami/charts/commit/bdb818815325b07e681d8545df39ec169fe50061)), closes [#32104](https://github.com/bitnami/charts/issues/32104)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>23.1.2 (2025-01-28)</small>
+
+* [bitnami/schema-registry] Release 23.1.2 (#31640) ([4658912](https://github.com/bitnami/charts/commit/465891264547c39d6ef0530c61ba2536308791c7)), closes [#31640](https://github.com/bitnami/charts/issues/31640)
+
+## <small>23.1.1 (2025-01-13)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/schema-registry] Release 23.1.1 (#31325) ([8d00a21](https://github.com/bitnami/charts/commit/8d00a21f9a7b4c1c9dad0981ff73a4c23a1419d2)), closes [#31325](https://github.com/bitnami/charts/issues/31325)
 
 ## 23.1.0 (2024-12-10)
 

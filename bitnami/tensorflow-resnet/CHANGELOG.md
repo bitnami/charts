@@ -1,8 +1,23 @@
 # Changelog
 
-## 4.3.2 (2025-01-20)
+## 4.3.5 (2025-03-19)
 
-* [bitnami/tensorflow-resnet] Release 4.3.2 ([#31479](https://github.com/bitnami/charts/pull/31479))
+* [bitnami/tensorflow-resnet] Release 4.3.5 ([#32512](https://github.com/bitnami/charts/pull/32512))
+
+## <small>4.3.4 (2025-02-20)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/tensorflow-resnet] Release 4.3.4 (#32039) ([7f6f784](https://github.com/bitnami/charts/commit/7f6f784179a1389bd44042aae2aae9feffc71267)), closes [#32039](https://github.com/bitnami/charts/issues/32039)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>4.3.3 (2025-01-28)</small>
+
+* [bitnami/tensorflow-resnet] Release 4.3.3 (#31634) ([729d0dd](https://github.com/bitnami/charts/commit/729d0dd7c886b82ff3b3f609175cf6b657a2ce6d)), closes [#31634](https://github.com/bitnami/charts/issues/31634)
+
+## <small>4.3.2 (2025-01-20)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/tensorflow-resnet] Release 4.3.2 (#31479) ([8a2a477](https://github.com/bitnami/charts/commit/8a2a477bc67c7badb2fb32a1949d19b8801f7699)), closes [#31479](https://github.com/bitnami/charts/issues/31479)
 
 ## <small>4.3.1 (2024-12-11)</small>
 
@@ -853,7 +868,7 @@
 ## <small>0.1.4 (2019-05-29)</small>
 
 * Check secondary images ([5327cfa](https://github.com/bitnami/charts/commit/5327cfa319191dd8067ce538d53f4c44edfdc012))
-* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79)), closes [#issuecomment-496883321](https://github.com/bitnami/charts/issues/issuecomment-496883321)
+* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79))
 * Fix tensorflow and others ([6252f12](https://github.com/bitnami/charts/commit/6252f125d307e55fd638687eac09f1df8451f22f))
 * Use immutable tags in the main images ([17ca4f5](https://github.com/bitnami/charts/commit/17ca4f5c91da33da03f9e2d411fe5e004e825c4d))
 

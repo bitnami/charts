@@ -230,7 +230,6 @@ The [Bitnami vault](https://github.com/bitnami/containers/tree/main/bitnami/vaul
 | `server.image.pullPolicy`                                  | Vault Server image pull policy                                                                                                                                                                                                  | `IfNotPresent`          |
 | `server.image.pullSecrets`                                 | Vault Server image pull secrets                                                                                                                                                                                                 | `[]`                    |
 | `server.image.debug`                                       | Enable Vault Server image debug mode                                                                                                                                                                                            | `false`                 |
-| `server.replicaCount`                                      | Number of Vault Server replicas to deploy                                                                                                                                                                                       | `1`                     |
 | `server.podManagementPolicy`                               | Pod management policy                                                                                                                                                                                                           | `Parallel`              |
 | `server.containerPorts.http`                               | Vault Server http container port                                                                                                                                                                                                | `8200`                  |
 | `server.containerPorts.internal`                           | Vault Server internal (HTTPS) container port                                                                                                                                                                                    | `8201`                  |
@@ -711,7 +710,7 @@ This could potentially break any customization or init scripts used in your depl
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

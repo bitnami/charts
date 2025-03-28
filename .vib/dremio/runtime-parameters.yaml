@@ -63,7 +63,6 @@ dremio:
     firstName: VIBFIRST
     lastName: VIBNAME
     email: vib_email@example.com
-usePasswordFile: true
 service:
   type: LoadBalancer
   ports:

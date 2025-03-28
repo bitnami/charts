@@ -1,8 +1,59 @@
 # Changelog
 
-## 2.2.4 (2025-01-17)
+## 2.2.16 (2025-03-28)
 
-* [bitnami/haproxy] Release 2.2.4 ([#31425](https://github.com/bitnami/charts/pull/31425))
+* [bitnami/haproxy] Release 2.2.16 ([#32671](https://github.com/bitnami/charts/pull/32671))
+
+## <small>2.2.15 (2025-03-20)</small>
+
+* [bitnami/haproxy] Release 2.2.15 (#32533) ([93b0792](https://github.com/bitnami/charts/commit/93b0792f94ffe6753187d3a200aca830f8df2c63)), closes [#32533](https://github.com/bitnami/charts/issues/32533)
+
+## <small>2.2.14 (2025-03-18)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/haproxy] Release 2.2.14 (#32501) ([8293073](https://github.com/bitnami/charts/commit/829307324ea68250cfe0649f5d537bfe2c2dfaa4)), closes [#32501](https://github.com/bitnami/charts/issues/32501)
+
+## <small>2.2.13 (2025-03-06)</small>
+
+* [bitnami/haproxy] Release 2.2.13 (#32341) ([efd9591](https://github.com/bitnami/charts/commit/efd9591294ebe652d936442aae9b6f5d7b4b580d)), closes [#32341](https://github.com/bitnami/charts/issues/32341)
+
+## <small>2.2.12 (2025-03-05)</small>
+
+* [bitnami/haproxy] Release 2.2.12 (#32295) ([16ad539](https://github.com/bitnami/charts/commit/16ad539685f83a4fff716611d77e163883d3d862)), closes [#32295](https://github.com/bitnami/charts/issues/32295)
+
+## <small>2.2.11 (2025-02-25)</small>
+
+* [bitnami/haproxy] Release 2.2.11 (#32166) ([7af34f6](https://github.com/bitnami/charts/commit/7af34f63e42c3a44ff1c3f1192045d4d3b9b545d)), closes [#32166](https://github.com/bitnami/charts/issues/32166)
+
+## <small>2.2.10 (2025-02-20)</small>
+
+* [bitnami/haproxy] Release 2.2.10 (#32083) ([d9121e3](https://github.com/bitnami/charts/commit/d9121e33bc135a3591284257c8c07122fa2c7764)), closes [#32083](https://github.com/bitnami/charts/issues/32083)
+
+## <small>2.2.9 (2025-02-19)</small>
+
+* [bitnami/haproxy] Release 2.2.9 (#32005) ([275b708](https://github.com/bitnami/charts/commit/275b70884a7150c49bc3ba82c24a24a25950b29a)), closes [#32005](https://github.com/bitnami/charts/issues/32005)
+
+## <small>2.2.8 (2025-02-12)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/haproxy] Release 2.2.8 (#31890) ([cb84b0c](https://github.com/bitnami/charts/commit/cb84b0cef5e1ba778adec03030c3e5a2d62238bb)), closes [#31890](https://github.com/bitnami/charts/issues/31890)
+
+## <small>2.2.7 (2025-02-04)</small>
+
+* [bitnami/haproxy] Release 2.2.7 (#31759) ([34021cb](https://github.com/bitnami/charts/commit/34021cb4a569af9278cfae48918bf746a373b1f7)), closes [#31759](https://github.com/bitnami/charts/issues/31759)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>2.2.6 (2025-01-29)</small>
+
+* [bitnami/haproxy] Release 2.2.6 (#31665) ([d76a6a3](https://github.com/bitnami/charts/commit/d76a6a31c3f78b82752d8d0a5ab1f3996b24a79b)), closes [#31665](https://github.com/bitnami/charts/issues/31665)
+
+## <small>2.2.5 (2025-01-24)</small>
+
+* [bitnami/haproxy] Release 2.2.5 (#31558) ([5959c6d](https://github.com/bitnami/charts/commit/5959c6ddc48675d2c54b52a30a2c4fc426d23f5b)), closes [#31558](https://github.com/bitnami/charts/issues/31558)
+
+## <small>2.2.4 (2025-01-17)</small>
+
+* [bitnami/haproxy] Release 2.2.4 (#31425) ([1355ffd](https://github.com/bitnami/charts/commit/1355ffd8d40ebe7d7e124c0877bb3c8cbbbd7fbd)), closes [#31425](https://github.com/bitnami/charts/issues/31425)
 
 ## <small>2.2.3 (2025-01-08)</small>
 

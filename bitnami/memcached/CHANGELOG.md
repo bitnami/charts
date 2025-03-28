@@ -1,8 +1,35 @@
 # Changelog
 
-## 7.6.1 (2024-12-23)
+## 7.7.1 (2025-03-19)
 
-* [bitnami/memcached] Release 7.6.1 ([#31142](https://github.com/bitnami/charts/pull/31142))
+* [bitnami/memcached] Release 7.7.1 ([#32526](https://github.com/bitnami/charts/pull/32526))
+
+## 7.7.0 (2025-03-12)
+
+* [bitnami/memcached] Enables the ability to specify podTargetLabels on ServiceMonitor for memcached ( ([bba58fd](https://github.com/bitnami/charts/commit/bba58fd79eb67be53adca12e9c3ba5068023f54c)), closes [#32387](https://github.com/bitnami/charts/issues/32387)
+
+## <small>7.6.5 (2025-02-20)</small>
+
+* [bitnami/memcached] Release 7.6.5 (#32095) ([e720816](https://github.com/bitnami/charts/commit/e7208161c5d9284d15baf184dc846dd32ed0db8b)), closes [#32095](https://github.com/bitnami/charts/issues/32095)
+
+## <small>7.6.4 (2025-02-19)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/memcached] Release 7.6.4 (#32015) ([ab78084](https://github.com/bitnami/charts/commit/ab780848530f132440643bda0577062b2342660d)), closes [#32015](https://github.com/bitnami/charts/issues/32015)
+
+## <small>7.6.3 (2025-02-05)</small>
+
+* [bitnami/memcached] Release 7.6.3 (#31777) ([61aaceb](https://github.com/bitnami/charts/commit/61aacebb1669870f55d8e19f0a4207c5e12c3853)), closes [#31777](https://github.com/bitnami/charts/issues/31777)
+
+## <small>7.6.2 (2025-02-03)</small>
+
+* [bitnami/memcached] Release 7.6.2 (#31709) ([f210fa1](https://github.com/bitnami/charts/commit/f210fa1b5aec282e7565cfe3d43583106feea06b)), closes [#31709](https://github.com/bitnami/charts/issues/31709)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>7.6.1 (2024-12-23)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/memcached] Release 7.6.1 (#31142) ([a0056eb](https://github.com/bitnami/charts/commit/a0056ebac6b52ff17a6e57244c79acacc58d134e)), closes [#31142](https://github.com/bitnami/charts/issues/31142)
 
 ## 7.6.0 (2024-12-10)
 
@@ -389,7 +416,7 @@
 
 ## <small>6.3.4 (2023-01-10)</small>
 
-* [bitnami/memcached] Correct typo in README.md (#14186) ([906cfcb](https://github.com/bitnami/charts/commit/906cfcba5079863ae3ed9e5af2b7cca64cf190da)), closes [#14186](https://github.com/bitnami/charts/issues/14186) [1#L330-L348](https://github.com/1/issues/L330-L348)
+* [bitnami/memcached] Correct typo in README.md (#14186) ([906cfcb](https://github.com/bitnami/charts/commit/906cfcba5079863ae3ed9e5af2b7cca64cf190da)), closes [#14186](https://github.com/bitnami/charts/issues/14186)
 * [bitnami/memcached] Release 6.3.4 (#14253) ([0f5d20b](https://github.com/bitnami/charts/commit/0f5d20b6695179c7fa86ff7915c8a7e0c6893117)), closes [#14253](https://github.com/bitnami/charts/issues/14253)
 
 ## <small>6.3.3 (2023-01-04)</small>
@@ -1125,7 +1152,7 @@
 ## <small>1.5.7 (2019-05-29)</small>
 
 * Change syntax because of linter failing ([adfc357](https://github.com/bitnami/charts/commit/adfc35728c2a8a9def9e1897b3772d64df621354))
-* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79)), closes [#issuecomment-496883321](https://github.com/bitnami/charts/issues/issuecomment-496883321)
+* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79))
 * Fix tensorflow and others ([6252f12](https://github.com/bitnami/charts/commit/6252f125d307e55fd638687eac09f1df8451f22f))
 * Use immutable tags in the main images ([17ca4f5](https://github.com/bitnami/charts/commit/17ca4f5c91da33da03f9e2d411fe5e004e825c4d))
 

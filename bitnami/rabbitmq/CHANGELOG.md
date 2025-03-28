@@ -1,8 +1,38 @@
 # Changelog
 
-## 15.2.3 (2025-01-15)
+## 15.4.0 (2025-03-17)
 
-* [bitnami/rabbitmq] Fix incorrect configuration of TCP listen options by memoryHighWatermark settings ([#31336](https://github.com/bitnami/charts/pull/31336))
+* [bitnami/rabbitmq] allow to configure trafficDistribution ([#32443](https://github.com/bitnami/charts/pull/32443))
+
+## <small>15.3.3 (2025-02-26)</small>
+
+* [bitnami/rabbitmq] Release 15.3.3 (#32187) ([e4af5c8](https://github.com/bitnami/charts/commit/e4af5c8b3510c166a38cd5bc03074a39bf63da4d)), closes [#32187](https://github.com/bitnami/charts/issues/32187)
+
+## <small>15.3.2 (2025-02-21)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/rabbitmq] Release 15.3.2 (#32101) ([6779add](https://github.com/bitnami/charts/commit/6779add4a0aeb64feb6e53d8b7123e94b367e017)), closes [#32101](https://github.com/bitnami/charts/issues/32101)
+
+## <small>15.3.1 (2025-02-11)</small>
+
+* [bitnami/rabbitmq] Release 15.3.1 (#31873) ([6857694](https://github.com/bitnami/charts/commit/68576941a396c697cd98b74f6fece6201b18f41e)), closes [#31873](https://github.com/bitnami/charts/issues/31873)
+
+## 15.3.0 (2025-02-10)
+
+* [bitnami/rabbitmq]: add hostPort support to the chart (#31836) ([5bcbebf](https://github.com/bitnami/charts/commit/5bcbebf3d6c35048bf2dad13abecbdf57744a928)), closes [#31836](https://github.com/bitnami/charts/issues/31836)
+
+## <small>15.2.5 (2025-02-03)</small>
+
+* [bitnami/rabbitmq] Release 15.2.5 (#31684) ([9f2b108](https://github.com/bitnami/charts/commit/9f2b108e450d4bc837335432333fde78d946c031)), closes [#31684](https://github.com/bitnami/charts/issues/31684)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>15.2.4 (2025-01-25)</small>
+
+* [bitnami/rabbitmq] Release 15.2.4 (#31593) ([30b43f3](https://github.com/bitnami/charts/commit/30b43f32ddb93639ae7a714c7a9cbd686280d302)), closes [#31593](https://github.com/bitnami/charts/issues/31593)
+
+## <small>15.2.3 (2025-01-15)</small>
+
+* [bitnami/rabbitmq] Fix incorrect configuration of TCP listen options by memoryHighWatermark settings ([7432a31](https://github.com/bitnami/charts/commit/7432a317f4126ac2ca2b3a56e731d483a92b752a)), closes [#31336](https://github.com/bitnami/charts/issues/31336)
 
 ## <small>15.2.2 (2025-01-07)</small>
 
@@ -261,7 +291,7 @@
 
 ## <small>12.9.4 (2024-02-06)</small>
 
-* [bitnami/rabbitmq] fix: make toBytes handle numbers with a decimal dot (#22557) ([90f6e7f](https://github.com/bitnami/charts/commit/90f6e7f3e6c341fd11cd04874be33e606e56fa48)), closes [#22557](https://github.com/bitnami/charts/issues/22557) [/github.com/redpanda-data/helm-charts/blob/main/charts/redpanda/templates/_helpers.tpl#L199C1-L236C12](https://github.com//github.com/redpanda-data/helm-charts/blob/main/charts/redpanda/templates/_helpers.tpl/issues/L199C1-L236C12)
+* [bitnami/rabbitmq] fix: make toBytes handle numbers with a decimal dot (#22557) ([90f6e7f](https://github.com/bitnami/charts/commit/90f6e7f3e6c341fd11cd04874be33e606e56fa48)), closes [#22557](https://github.com/bitnami/charts/issues/22557)
 
 ## <small>12.9.3 (2024-02-03)</small>
 

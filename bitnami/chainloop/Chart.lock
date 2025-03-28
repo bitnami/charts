@@ -1,12 +1,12 @@
 dependencies:
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 2.29.0
+  version: 2.30.0
 - name: postgresql
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 16.4.3
+  version: 16.5.6
 - name: vault
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 1.4.31
-digest: sha256:bf2e17b7bf2b95171ba5ffaef0e37e5a7dd4d5403c9541b8e46bad218cda6d7a
-generated: "2025-01-15T17:18:31.410633377Z"
+  version: 1.7.0
+digest: sha256:379225c6bddac4d2a01338841ee2cb82a9c7c06887a16f5fb360d3ddad1b797b
+generated: "2025-03-24T19:00:15.31751926Z"

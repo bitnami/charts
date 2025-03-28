@@ -13,14 +13,15 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 Set the http prefix if the externalURl doesn't have it
 */}}
 {{- define "harbor.externalUrl" -}}
-{{- if hasPrefix "http" .Values.externalURL -}}
-    {{- print .Values.externalURL -}}
+{{- $templatedExternalUrl := tpl .Values.externalURL . -}}
+{{- if hasPrefix "http" $templatedExternalUrl -}}
+    {{- print $templatedExternalUrl -}}
 {{- else if and (eq .Values.exposureType "proxy") .Values.nginx.tls.enabled -}}
-    {{- printf "https://%s" .Values.externalURL -}}
+    {{- printf "https://%s" $templatedExternalUrl -}}
 {{- else if and (eq .Values.exposureType "ingress") .Values.ingress.core.tls -}}
-    {{- printf "https://%s" .Values.externalURL -}}
+    {{- printf "https://%s" $templatedExternalUrl -}}
 {{- else -}}
-    {{- printf "http://%s" .Values.externalURL -}}
+    {{- printf "http://%s" $templatedExternalUrl -}}
 {{- end -}}
 {{- end -}}
 
@@ -129,17 +130,19 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 
 {{- define "harbor.database.rawPassword" -}}
 {{- if .Values.postgresql.enabled }}
-    {{- if .Values.global.postgresql }}
-        {{- if .Values.global.postgresql.auth }}
-            {{- coalesce .Values.global.postgresql.auth.postgresPassword .Values.postgresql.auth.postgresPassword -}}
-        {{- else -}}
-            {{- .Values.postgresql.auth.postgresPassword -}}
-        {{- end -}}
+  {{- if .Values.global.postgresql }}
+    {{- if .Values.global.postgresql.auth }}
+      {{- coalesce .Values.global.postgresql.auth.postgresPassword .Values.postgresql.auth.postgresPassword -}}
     {{- else -}}
-        {{- .Values.postgresql.auth.postgresPassword -}}
+      {{- .Values.postgresql.auth.postgresPassword -}}
     {{- end -}}
+  {{- else -}}
+    {{- .Values.postgresql.auth.postgresPassword -}}
+  {{- end -}}
 {{- else -}}
+  {{- if not .Values.externalDatabase.existingSecret -}}
     {{- .Values.externalDatabase.password -}}
+  {{- end -}}
 {{- end -}}
 {{- end -}}
 
@@ -426,10 +429,10 @@ harbor: PostgreSQL password
     Please set a password (--set postgresql.auth.postgresPassword="xxxx")
   {{- end -}}
 {{- else -}}
-  {{- if not .Values.externalDatabase.password -}}
+    {{- if and (not .Values.externalDatabase.password) (not .Values.externalDatabase.existingSecret) -}}
 harbor: External PostgreSQL password
     An external database password is required!.
-    Please set a password (--set externalDatabase.password="xxxx")
+    Please set a password (--set externalDatabase.password="xxxx") or using an existing secret
   {{- end -}}
 {{- end -}}
 {{- end -}}

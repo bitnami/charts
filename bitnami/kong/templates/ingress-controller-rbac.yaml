@@ -99,7 +99,7 @@ subjects:
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
 metadata:
-  name: {{ template "common.names.fullname" . }}
+  name: {{ include "common.names.fullname.namespace" . }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: server
   {{- if .Values.commonAnnotations }}
@@ -340,7 +340,7 @@ rules:
   - kongcustomentities
   verbs:
   - list
-{{- if or (.Capabilities.APIVersions.Has "gateway.networking.k8s.io/v1alpha2") (.Capabilities.APIVersions.Has "gateway.networking.k8s.io/v1beta1") (.Capabilities.APIVersions.Has "gateway.networking.k8s.io/v1")}}
+{{- if or (include "common.capabilities.apiVersions.has" ( dict "version" "gateway.networking.k8s.io/v1alpha2" "context" . )) (include "common.capabilities.apiVersions.has" ( dict "version" "gateway.networking.k8s.io/v1beta1" "context" . )) (include "common.capabilities.apiVersions.has" ( dict "version" "gateway.networking.k8s.io/v1" "context" . )) }}
 - apiGroups:
   - gateway.networking.k8s.io
   resources:
@@ -463,7 +463,7 @@ rules:
   - patch
   - update
 {{- end }}
-{{- if (.Capabilities.APIVersions.Has "networking.internal.knative.dev/v1alpha1") }}
+{{- if include "common.capabilities.apiVersions.has" ( dict "version" "networking.internal.knative.dev/v1alpha1" "context" . ) }}
 - apiGroups:
   - networking.internal.knative.dev
   resources:
@@ -576,7 +576,7 @@ rules:
   verbs:
   - list
   - watch
-{{- if or (.Capabilities.APIVersions.Has "gateway.networking.k8s.io/v1alpha2") (.Capabilities.APIVersions.Has "gateway.networking.k8s.io/v1beta1") (.Capabilities.APIVersions.Has "gateway.networking.k8s.io/v1")}}
+{{- if or (include "common.capabilities.apiVersions.has" ( dict "version" "gateway.networking.k8s.io/v1alpha2" "context" . )) (include "common.capabilities.apiVersions.has" ( dict "version" "gateway.networking.k8s.io/v1beta1" "context" . )) (include "common.capabilities.apiVersions.has" ( dict "version" "gateway.networking.k8s.io/v1" "context" . )) }}
 - apiGroups:
   - gateway.networking.k8s.io
   resources:
@@ -616,7 +616,7 @@ rules:
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRoleBinding
 metadata:
-  name: {{ template "common.names.fullname" . }}
+  name: {{ include "common.names.fullname.namespace" . }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: server
   {{- if .Values.commonAnnotations }}
@@ -625,7 +625,7 @@ metadata:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: {{ template "common.names.fullname" . }}
+  name: {{ include "common.names.fullname.namespace" . }}
 subjects:
   - kind: ServiceAccount
     name: {{ include "kong.ingressController.serviceAccountName" . }}

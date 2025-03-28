@@ -378,6 +378,7 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 | `metrics.serviceMonitor.interval`                           | Interval at which metrics should be scraped.                                                                                                                                                                                                          | `""`                                 |
 | `metrics.serviceMonitor.scrapeTimeout`                      | Timeout after which the scrape is ended                                                                                                                                                                                                               | `""`                                 |
 | `metrics.serviceMonitor.labels`                             | Additional labels that can be used so ServiceMonitor will be discovered by Prometheus                                                                                                                                                                 | `{}`                                 |
+| `metrics.serviceMonitor.podTargetLabels`                    | Labels from the Kubernetes pod to be transferred to the created metrics                                                                                                                                                                               | `[]`                                 |
 | `metrics.serviceMonitor.selector`                           | Prometheus instance selector labels                                                                                                                                                                                                                   | `{}`                                 |
 | `metrics.serviceMonitor.relabelings`                        | RelabelConfigs to apply to samples before scraping                                                                                                                                                                                                    | `[]`                                 |
 | `metrics.serviceMonitor.metricRelabelings`                  | MetricRelabelConfigs to apply to samples before ingestion                                                                                                                                                                                             | `[]`                                 |
@@ -477,7 +478,7 @@ kubectl patch deployment memcached --type=json -p='[{"op": "remove", "path": "/s
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

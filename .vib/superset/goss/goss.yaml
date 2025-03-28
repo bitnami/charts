@@ -1,0 +1,35 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+http:
+  http://superset-web:{{ .Vars.web.service.ports.http }}/health:
+    status: 200
+    body:
+      - /OK/
+  http://127.0.0.1:{{ .Vars.web.containerPorts.http }}/health:
+    status: 200
+    body:
+      - /OK/
+  http://{{ .Vars.flower.auth.username }}:{{ .Vars.flower.auth.password }}@superset-flower:{{ .Vars.flower.service.ports.flower }}:
+    status: 200
+file:
+  /opt/bitnami/superset/superset_config.py:
+    mode: "0664"
+    filetype: file
+    exists: true
+  /opt/bitnami/superset/superset_home:
+    filetype: directory
+    exists: true
+{{- $uid := .Vars.web.containerSecurityContext.runAsUser }}
+check-user-info:
+  # The UID should always be either the one specified as vars (always a bigger number that the default)
+  # or the one randomly defined by openshift (larger values). Otherwise, the chart is still using the default value.
+  exec: if [ $(id -u) -lt {{ $uid }} ]; then exit 1; fi
+  exit-status: 0
+{{ if .Vars.serviceAccount.automountServiceAccountToken }}
+check-sa:
+  exec: cat /var/run/secrets/kubernetes.io/serviceaccount/token | cut -d '.' -f 2 | xargs -I '{}' echo '{}====' | fold -w 4 | sed '$ d' | tr -d '\n' | base64 -d
+  exit-status: 0
+  stdout:
+  - /serviceaccount.*name.*{{ .Env.BITNAMI_APP_NAME }}/
+{{ end }}

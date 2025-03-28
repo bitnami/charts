@@ -136,6 +136,10 @@ data:
         debug "$(cat /opt/bitnami/redis-sentinel/etc/sentinel.conf | grep monitor)"
     fi
 
+    if [[ -f /opt/bitnami/redis/mounted-etc/users.acl ]];then
+        cp /opt/bitnami/redis/mounted-etc/users.acl /opt/bitnami/redis/etc/users.acl
+    fi
+
     if [[ $redisRetVal -ne 0 ]]; then
         if [[ "$master_in_persisted_conf" == "$(get_full_hostname "$HOSTNAME")" ]]; then
             # Case 1: No active sentinel and in previous sentinel.conf we were the master --> MASTER
@@ -199,8 +203,15 @@ data:
 
     echo "" >> /opt/bitnami/redis/etc/replica.conf
     echo "replica-announce-port $REDISPORT" >> /opt/bitnami/redis/etc/replica.conf
+    {{- if .Values.sentinel.externalAccess.enabled }}
+    if [[ -n "${REDIS_CLUSTER_ANNOUNCE_IP}" ]]; then
+      echo "replica-announce-ip $REDIS_CLUSTER_ANNOUNCE_IP" >> /opt/bitnami/redis/etc/replica.conf
+    else
+      echo "replica-announce-ip $(get_full_hostname "$HOSTNAME")" >> /opt/bitnami/redis/etc/replica.conf
+    fi
+    {{- else }}
     echo "replica-announce-ip $(get_full_hostname "$HOSTNAME")" >> /opt/bitnami/redis/etc/replica.conf
-
+    {{- end }}
     {{- if .Values.tls.enabled }}
     ARGS=("--port" "0")
     ARGS+=("--tls-port" "${REDIS_TLS_PORT}")
@@ -393,31 +404,56 @@ data:
         exit 1
     fi
 
+    {{- if .Values.sentinel.externalAccess.enabled }}
+    {{- if .Values.sentinel.externalAccess.service.loadBalancerIP }}
+    sentinel_conf_set "sentinel monitor" "{{ .Values.sentinel.masterSet }} {{ index .Values.sentinel.externalAccess.service.loadBalancerIP 0 }} "$REDIS_MASTER_PORT_NUMBER" {{ .Values.sentinel.quorum }}"
+    {{- end }}
+    {{- else }}
     sentinel_conf_set "sentinel monitor" "{{ .Values.sentinel.masterSet }} "$REDIS_MASTER_HOST" "$REDIS_MASTER_PORT_NUMBER" {{ .Values.sentinel.quorum }}"
+    {{- end }}
 
     add_known_sentinel() {
         hostname="$1"
         ip="$2"
-
         if [[ -n "$hostname" && -n "$ip" && "$hostname" != "$HOSTNAME" ]]; then
             sentinel_conf_add "sentinel known-sentinel {{ .Values.sentinel.masterSet }} $(get_full_hostname "$hostname") $(get_port "$hostname" "SENTINEL") $(host_id "$hostname")"
         fi
     }
+
     add_known_replica() {
         hostname="$1"
         ip="$2"
-
         if [[ -n "$ip" && "$(get_full_hostname "$hostname")" != "$REDIS_MASTER_HOST" ]]; then
             sentinel_conf_add "sentinel known-replica {{ .Values.sentinel.masterSet }} $(get_full_hostname "$hostname") $(get_port "$hostname" "REDIS")"
         fi
     }
 
-    # Add available hosts on the network as known replicas & sentinels
+    add_known_sentinel_public_ip() {
+        hostname="$1"
+        ip="$2"
+        sentinel_conf_add "sentinel known-sentinel {{ .Values.sentinel.masterSet }} $ip $(get_port "$hostname" "SENTINEL") $(host_id "$hostname")"
+    }
+
+    add_known_replica_public_ip() {
+        hostname="$1"
+        ip="$2"
+        sentinel_conf_add "sentinel known-replica {{ .Values.sentinel.masterSet }} $ip $(get_port "$hostname" "REDIS")"
+    }
+
     for node in $(seq 0 $(({{ .Values.replica.replicaCount }}-1))); do
         hostname="{{ template "common.names.fullname" . }}-node-$node"
+        {{- if .Values.sentinel.externalAccess.enabled }}
+        {{- if .Values.sentinel.externalAccess.service.loadBalancerIP }}
+        ips=($(echo "$REDIS_NODES" | tr " " "\n"))
+        ip=${ips[$node]}
+        add_known_sentinel_public_ip "$hostname" "$ip"
+        add_known_replica_public_ip "$hostname" "$ip"
+        {{- end}}
+        {{- else }}
         ip="$(getent hosts "$hostname.$HEADLESS_SERVICE" | awk '{ print $1 }')"
         add_known_sentinel "$hostname" "$ip"
         add_known_replica "$hostname" "$ip"
+        {{- end}}
     done
 
     echo "" >> /opt/bitnami/redis-sentinel/etc/prepare-sentinel.conf
@@ -430,9 +466,17 @@ data:
     {{- if not (contains "sentinel announce-port" .Values.sentinel.configuration) }}
     echo "sentinel announce-port $SERVPORT" >> /opt/bitnami/redis-sentinel/etc/prepare-sentinel.conf
     {{- end }}
+    {{- if .Values.sentinel.externalAccess.enabled }}
     {{- if not (contains "sentinel announce-ip" .Values.sentinel.configuration) }}
+    if [[ -n "${REDIS_CLUSTER_ANNOUNCE_IP}" ]]; then
+      echo "sentinel announce-ip $REDIS_CLUSTER_ANNOUNCE_IP" >> /opt/bitnami/redis-sentinel/etc/prepare-sentinel.conf
+    else
+      echo "sentinel announce-ip $(get_full_hostname "$HOSTNAME")" >> /opt/bitnami/redis-sentinel/etc/prepare-sentinel.conf
+    fi 
+    {{- else }}
     echo "sentinel announce-ip $(get_full_hostname "$HOSTNAME")" >> /opt/bitnami/redis-sentinel/etc/prepare-sentinel.conf
-    {{- end }}
+    {{- end}}
+    {{- end}}
 
     {{- if .Values.tls.enabled }}
     ARGS=("--port" "0")
@@ -631,6 +675,9 @@ data:
     if [[ -f /opt/bitnami/redis/mounted-etc/redis.conf ]];then
         cp /opt/bitnami/redis/mounted-etc/redis.conf /opt/bitnami/redis/etc/redis.conf
     fi
+    if [[ -f /opt/bitnami/redis/mounted-etc/users.acl ]];then
+        cp /opt/bitnami/redis/mounted-etc/users.acl /opt/bitnami/redis/etc/users.acl
+    fi
     {{- if .Values.tls.enabled }}
     ARGS=("--port" "0")
     ARGS+=("--tls-port" "${REDIS_TLS_PORT}")
@@ -735,6 +782,9 @@ data:
     fi
     if [[ -f /opt/bitnami/redis/mounted-etc/redis.conf ]];then
         cp /opt/bitnami/redis/mounted-etc/redis.conf /opt/bitnami/redis/etc/redis.conf
+    fi
+    if [[ -f /opt/bitnami/redis/mounted-etc/users.acl ]];then
+        cp /opt/bitnami/redis/mounted-etc/users.acl /opt/bitnami/redis/etc/users.acl
     fi
 
     echo "" >> /opt/bitnami/redis/etc/replica.conf

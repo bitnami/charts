@@ -1,8 +1,16 @@
 # Changelog
 
-## 2.29.0 (2025-01-02)
+## 2.30.0 (2025-02-19)
 
-* [bitnami/common] Add "common.capabilities.job.apiVersion" template ([#31164](https://github.com/bitnami/charts/pull/31164))
+* [bitnami/common] Add helper to check API versions ([#31969](https://github.com/bitnami/charts/pull/31969))
+
+## <small>2.29.1 (2025-01-23)</small>
+
+* [bitnami/common] Removing seLinuxOptions from omission (#31279) ([e7cb168](https://github.com/bitnami/charts/commit/e7cb168ca2bccd57e28bb985e099953a4f7e3b38)), closes [#31279](https://github.com/bitnami/charts/issues/31279) [#31278](https://github.com/bitnami/charts/issues/31278)
+
+## 2.29.0 (2025-01-03)
+
+* [bitnami/common] Add "common.capabilities.job.apiVersion" template (#31164) ([2ca979a](https://github.com/bitnami/charts/commit/2ca979a6add279384d60e6b35199eaf13553cefa)), closes [#31164](https://github.com/bitnami/charts/issues/31164)
 
 ## 2.28.0 (2024-12-10)
 
@@ -265,7 +273,7 @@
 
 ## <small>2.1.2 (2022-10-31)</small>
 
-* [bitnami/common] Do not explicitly specify namespace in affinity term. (#12932) ([638a48e](https://github.com/bitnami/charts/commit/638a48e4d3ec7b5d160f4b525ec40218512c464b)), closes [#12932](https://github.com/bitnami/charts/issues/12932) [/kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#podaffinityterm-v1](https://github.com//kubernetes.io/docs/reference/generated/kubernetes-api/v1.23//issues/podaffinityterm-v1) [#12668](https://github.com/bitnami/charts/issues/12668)
+* [bitnami/common] Do not explicitly specify namespace in affinity term. (#12932) ([638a48e](https://github.com/bitnami/charts/commit/638a48e4d3ec7b5d160f4b525ec40218512c464b)), closes [#12932](https://github.com/bitnami/charts/issues/12932) [#12668](https://github.com/bitnami/charts/issues/12668)
 
 ## <small>2.1.1 (2022-10-27)</small>
 

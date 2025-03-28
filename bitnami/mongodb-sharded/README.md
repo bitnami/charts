@@ -222,7 +222,7 @@ The Bitnami Kibana chart supports mounting extra volumes (either PVCs, secrets o
 | `auth.rootPassword`                                  | MongoDB(&reg;) root password                                                                                                                                                                                                                          | `""`                              |
 | `auth.replicaSetKey`                                 | Key used for authentication in the replicaset                                                                                                                                                                                                         | `""`                              |
 | `auth.existingSecret`                                | Existing secret with MongoDB(&reg;) credentials (keys: `mongodb-password`, `mongodb-root-password`, `mongodb-replica-set-key`)                                                                                                                        | `""`                              |
-| `auth.usePasswordFile`                               | Mount credentials as files instead of using environment variables                                                                                                                                                                                     | `false`                           |
+| `auth.usePasswordFiles`                              | Mount credentials as files instead of using environment variables                                                                                                                                                                                     | `true`                            |
 | `shards`                                             | Number of shards to be created                                                                                                                                                                                                                        | `2`                               |
 | `common.mongodbEnableNumactl`                        | Enable launch MongoDB instance prefixed with "numactl --interleave=all"                                                                                                                                                                               | `false`                           |
 | `common.useHostnames`                                | Enable DNS hostnames in the replica set config                                                                                                                                                                                                        | `true`                            |
@@ -819,7 +819,7 @@ MongoDB&reg; container images were updated to `4.4.x` and it can affect compatib
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

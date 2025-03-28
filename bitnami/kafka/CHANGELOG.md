@@ -1,8 +1,63 @@
 # Changelog
 
+## 32.1.2 (2025-03-27)
+
+* [bitnami/kakfa] bugfix: relax conditions under SASL secret must be mounted as volume ([#32631](https://github.com/bitnami/charts/pull/32631))
+
+## <small>32.1.1 (2025-03-26)</small>
+
+* [bitnami/kafka] bugfix: upgrade issue due to secret lookup (#32621) ([31af2bd](https://github.com/bitnami/charts/commit/31af2bd4ddf75dca1b9e1761a13693a8b0a90e33)), closes [#32621](https://github.com/bitnami/charts/issues/32621)
+
+## 32.1.0 (2025-03-26)
+
+* [bitnami/kafka] bugfix: add missing persistentVolumeClaimRetentionPolicy and fix config & network po ([9d1b911](https://github.com/bitnami/charts/commit/9d1b911d005add455ed5db1b379e1df13c33ddd6)), closes [#32615](https://github.com/bitnami/charts/issues/32615)
+
+## <small>32.0.3 (2025-03-26)</small>
+
+* [bitnami/kafka] bugfix: use kafka-broker-api-versions.sh to wait for Kafka on provisioning (#32613) ([328166c](https://github.com/bitnami/charts/commit/328166c403f2d3b4a9a548561b25dc43efb7eebf)), closes [#32613](https://github.com/bitnami/charts/issues/32613)
+
+## <small>32.0.2 (2025-03-26)</small>
+
+* [bitnami/kafka] bugfix: conditions to create Kraft secret (#32612) ([2120902](https://github.com/bitnami/charts/commit/2120902bdf6ee15b80e93d425fc99d89b51091be)), closes [#32612](https://github.com/bitnami/charts/issues/32612)
+
+## <small>32.0.1 (2025-03-25)</small>
+
+* [bitnami/kafka] Release 32.0.1 (#32592) ([5f3eb03](https://github.com/bitnami/charts/commit/5f3eb0376ab9b7f04a95fe197568405c0d875b92)), closes [#32592](https://github.com/bitnami/charts/issues/32592)
+
+## 32.0.0 (2025-03-25)
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/kafka] feat: Kafka 4.0.0 (#32516) ([8bea6f9](https://github.com/bitnami/charts/commit/8bea6f9e210b967f1c27270f75d307623afa1974)), closes [#32516](https://github.com/bitnami/charts/issues/32516)
+
+## 31.5.0 (2025-03-06)
+
+* [bitnami/kafka] IpFamilies and IpFamilyPolicy configurables (#31456) ([30daf36](https://github.com/bitnami/charts/commit/30daf368a955addaa59136ed6b18f8702124f72a)), closes [#31456](https://github.com/bitnami/charts/issues/31456) [#31389](https://github.com/bitnami/charts/issues/31389)
+
+## <small>31.4.1 (2025-03-04)</small>
+
+* [bitnami/kafka] Release 31.4.1 (#32257) ([5136e86](https://github.com/bitnami/charts/commit/5136e8603c2c5402ba07026948965da7011cae8e)), closes [#32257](https://github.com/bitnami/charts/issues/32257)
+
+## 31.4.0 (2025-02-20)
+
+* [bitnami/kafka] feat: use new helper for checking API versions (#32051) ([8abc389](https://github.com/bitnami/charts/commit/8abc389c429c32d900b68429730dfbfad02c8208)), closes [#32051](https://github.com/bitnami/charts/issues/32051)
+
+## <small>31.3.2 (2025-02-20)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/kafka] Release 31.3.2 (#32034) ([3f4ca72](https://github.com/bitnami/charts/commit/3f4ca729b3192c7cc742da1ccefc0676e93cdd38)), closes [#32034](https://github.com/bitnami/charts/issues/32034)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>31.3.1 (2025-01-28)</small>
+
+* [bitnami/kafka] Release 31.3.1 (#31624) ([21e8180](https://github.com/bitnami/charts/commit/21e8180f88d4f0f85e31086fa609220ae1b853e0)), closes [#31624](https://github.com/bitnami/charts/issues/31624)
+
+## 31.3.0 (2025-01-23)
+
+* [binami/kafka] Setting broker.rack for azure based on brokerRackAssignment parameter (#31496) ([43c0dd0](https://github.com/bitnami/charts/commit/43c0dd099f1feb3df890ba3852dff2e143f496bb)), closes [#31496](https://github.com/bitnami/charts/issues/31496)
+
 ## 31.2.0 (2025-01-08)
 
-* [bitnami/kafka] chore(jmx-exporter): Upgrade image and change args ([#31108](https://github.com/bitnami/charts/pull/31108))
+* [bitnami/kafka] chore(jmx-exporter): Upgrade image and change args (#31108) ([70d7aac](https://github.com/bitnami/charts/commit/70d7aac72b9adf6496589418054d5b4f66c16b18)), closes [#31108](https://github.com/bitnami/charts/issues/31108)
 
 ## <small>31.1.1 (2024-12-22)</small>
 
@@ -2254,7 +2309,7 @@
 ## <small>2.2.3 (2019-05-29)</small>
 
 * Change syntax because of linter failing ([adfc357](https://github.com/bitnami/charts/commit/adfc35728c2a8a9def9e1897b3772d64df62135428c2a8a9def9e1897b3772d64df621354))
-* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c796430f28ec3593053afb0bfccb75703c79)), closes [#issuecomment-496883321](https://github.com/bitnami/charts/issues/issuecomment-496883321)
+* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c796430f28ec3593053afb0bfccb75703c79))
 * Use immutable tags in the main images ([17ca4f5](https://github.com/bitnami/charts/commit/17ca4f5c91da33da03f9e2d411fe5e004e825c4dc91da33da03f9e2d411fe5e004e825c4d))
 
 ## <small>2.2.2 (2019-05-28)</small>
@@ -2281,7 +2336,7 @@
 ## <small>2.2.3 (2019-05-29)</small>
 
 * Change syntax because of linter failing ([adfc357](https://github.com/bitnami/charts/commit/adfc35728c2a8a9def9e1897b3772d64df62135428c2a8a9def9e1897b3772d64df621354))
-* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c796430f28ec3593053afb0bfccb75703c79)), closes [#issuecomment-496883321](https://github.com/bitnami/charts/issues/issuecomment-496883321)
+* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c796430f28ec3593053afb0bfccb75703c79))
 * Use immutable tags in the main images ([17ca4f5](https://github.com/bitnami/charts/commit/17ca4f5c91da33da03f9e2d411fe5e004e825c4dc91da33da03f9e2d411fe5e004e825c4d))
 
 ## <small>2.2.2 (2019-05-28)</small>

@@ -1,8 +1,46 @@
 # Changelog
 
-## 8.5.3 (2025-01-17)
+## 9.0.7 (2025-03-19)
 
-* [bitnami/nats] Release 8.5.3 ([#31435](https://github.com/bitnami/charts/pull/31435))
+* [bitnami/nats] Release 9.0.7 ([#32517](https://github.com/bitnami/charts/pull/32517))
+
+## <small>9.0.6 (2025-03-11)</small>
+
+* [bitnami/nats] allow to modify JetStream store directory (#32359) ([9d5238f](https://github.com/bitnami/charts/commit/9d5238f55b072d6d769a8b3023c9af9c75516fa8)), closes [#32359](https://github.com/bitnami/charts/issues/32359)
+
+## <small>9.0.5 (2025-03-05)</small>
+
+* [bitnami/nats] Release 9.0.5 (#32307) ([a8104c6](https://github.com/bitnami/charts/commit/a8104c627677ac03a2ea97c21ba0769cbb0a7a6f)), closes [#32307](https://github.com/bitnami/charts/issues/32307)
+
+## <small>9.0.4 (2025-02-25)</small>
+
+* [bitnami/nats] Release 9.0.4 (#32167) ([8c7b9c9](https://github.com/bitnami/charts/commit/8c7b9c9a40e180d24147d7f98d8865ebc518a1b9)), closes [#32167](https://github.com/bitnami/charts/issues/32167)
+
+## <small>9.0.3 (2025-02-12)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/nats] Release 9.0.3 (#31901) ([21d36d6](https://github.com/bitnami/charts/commit/21d36d6aebea4cde7c02efc6dc2c4299943e9f74)), closes [#31901](https://github.com/bitnami/charts/issues/31901)
+
+## <small>9.0.2 (2025-02-07)</small>
+
+* [bitnami/nats] Release 9.0.2 (#31833) ([c3c402f](https://github.com/bitnami/charts/commit/c3c402f1c143fb06c3cb43df4fa8bf1744920068)), closes [#31833](https://github.com/bitnami/charts/issues/31833)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>9.0.1 (2025-01-24)</small>
+
+* [bitnami/nats] Release 9.0.1 (#31572) ([c381adb](https://github.com/bitnami/charts/commit/c381adb2c648402d8b88b8d211a9538e1aafd087)), closes [#31572](https://github.com/bitnami/charts/issues/31572)
+
+## 9.0.0 (2025-01-23)
+
+* [bitnami/nats] NATS chart based on scratch image (#31516) ([37c61ed](https://github.com/bitnami/charts/commit/37c61ed57feb0c18938fc18ce7099e51662d924a)), closes [#31516](https://github.com/bitnami/charts/issues/31516)
+
+## <small>8.5.4 (2025-01-23)</small>
+
+* [bitnami/nats] Improve NATS routes configuration (#31523) ([293d9e2](https://github.com/bitnami/charts/commit/293d9e20aa93cf76f020561a38f5380f55e5567b)), closes [#31523](https://github.com/bitnami/charts/issues/31523) [#30124](https://github.com/bitnami/charts/issues/30124)
+
+## <small>8.5.3 (2025-01-17)</small>
+
+* [bitnami/nats] Release 8.5.3 (#31435) ([cac021d](https://github.com/bitnami/charts/commit/cac021d449a1235e44e88bb383ad377518710340)), closes [#31435](https://github.com/bitnami/charts/issues/31435)
 
 ## <small>8.5.2 (2024-12-17)</small>
 

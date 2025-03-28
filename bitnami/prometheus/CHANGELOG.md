@@ -1,8 +1,34 @@
 # Changelog
 
-## 1.4.3 (2025-01-22)
+## 1.4.9 (2025-03-10)
 
-* [bitnami/prometheus] Remove GOSS duplicated command ([#31513](https://github.com/bitnami/charts/pull/31513))
+* [bitnami/prometheus] Fix RBAC for Prometheus endpointslices role ([#31924](https://github.com/bitnami/charts/pull/31924))
+
+## <small>1.4.8 (2025-03-05)</small>
+
+* [bitnami/prometheus] Release 1.4.8 (#32314) ([13fdecf](https://github.com/bitnami/charts/commit/13fdecf57b33168f4d07b5e6185b40c23931ea3e)), closes [#32314](https://github.com/bitnami/charts/issues/32314)
+
+## <small>1.4.7 (2025-02-20)</small>
+
+* [bitnami/prometheus] Release 1.4.7 (#32031) ([03acf9e](https://github.com/bitnami/charts/commit/03acf9e455bbd0acd679fa0714e3727a68a79245)), closes [#32031](https://github.com/bitnami/charts/issues/32031)
+
+## <small>1.4.6 (2025-02-12)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/prometheus] Release 1.4.6 (#31900) ([89f7e53](https://github.com/bitnami/charts/commit/89f7e53a19af293a4ce2fcd1261abcb5c0803feb)), closes [#31900](https://github.com/bitnami/charts/issues/31900)
+
+## <small>1.4.5 (2025-02-05)</small>
+
+* [bitnami/prometheus] Release 1.4.5 (#31776) ([8d72f34](https://github.com/bitnami/charts/commit/8d72f34addc80047ac7fdf2dc5035b74f8f1d51d)), closes [#31776](https://github.com/bitnami/charts/issues/31776)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>1.4.4 (2025-01-24)</small>
+
+* [bitnami/prometheus] Release 1.4.4 (#31580) ([67f0ae3](https://github.com/bitnami/charts/commit/67f0ae3dc65683ccd661c84a66177d0839cc65b0)), closes [#31580](https://github.com/bitnami/charts/issues/31580)
+
+## <small>1.4.3 (2025-01-22)</small>
+
+* [bitnami/prometheus] Remove GOSS duplicated command (#31513) ([433437c](https://github.com/bitnami/charts/commit/433437cf7c5dca688668de467173382963febe1c)), closes [#31513](https://github.com/bitnami/charts/issues/31513)
 
 ## <small>1.4.2 (2025-01-17)</small>
 

@@ -1,8 +1,51 @@
 # Changelog
 
-## 2.4.3 (2024-12-30)
+## 2.5.7 (2025-03-25)
 
-* [bitnami/fluent-bit] Release 2.4.3 ([#31186](https://github.com/bitnami/charts/pull/31186))
+* [bitnami/fluent-bit] Release 2.5.7 ([#32602](https://github.com/bitnami/charts/pull/32602))
+
+## <small>2.5.6 (2025-03-17)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/fluent-bit] Release 2.5.6 (#32489) ([47dca7d](https://github.com/bitnami/charts/commit/47dca7dc7527ee9fd39a88e76f14e2594f9bf410)), closes [#32489](https://github.com/bitnami/charts/issues/32489)
+
+## <small>2.5.5 (2025-03-04)</small>
+
+* [bitnami/fluent-bit] Release 2.5.5 (#32255) ([64c11bc](https://github.com/bitnami/charts/commit/64c11bc51e9a921a70bf06fed57c44013bc57db1)), closes [#32255](https://github.com/bitnami/charts/issues/32255)
+
+## <small>2.5.4 (2025-03-03)</small>
+
+* [bitnami/fluent-bit] Release 2.5.4 (#32247) ([74b219d](https://github.com/bitnami/charts/commit/74b219dcca1cbcb6aa59ecc91f5dd3a38b4286a6)), closes [#32247](https://github.com/bitnami/charts/issues/32247)
+
+## <small>2.5.3 (2025-03-03)</small>
+
+* [bitnami/fluent-bit] Release 2.5.3 (#32245) ([f9cba71](https://github.com/bitnami/charts/commit/f9cba711df3ae367c26a34bea5344a4622da0f64)), closes [#32245](https://github.com/bitnami/charts/issues/32245)
+
+## <small>2.5.2 (2025-03-03)</small>
+
+* [bitnami/fluent-bit] Release 2.5.2 (#32242) ([af34835](https://github.com/bitnami/charts/commit/af348355f1917e339120f0de74ba6c5fb417f32a)), closes [#32242](https://github.com/bitnami/charts/issues/32242)
+
+## <small>2.5.1 (2025-02-20)</small>
+
+* [bitnami/fluent-bit] Release 2.5.1 (#32090) ([5e1ff1f](https://github.com/bitnami/charts/commit/5e1ff1f9c34224f8053af5051f28b56155d720ea)), closes [#32090](https://github.com/bitnami/charts/issues/32090)
+
+## 2.5.0 (2025-02-20)
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/fluent-bit] feat: use new helper for checking API versions (#32049) ([d098ed1](https://github.com/bitnami/charts/commit/d098ed13754597c257fd32a09228b09f31b09b0b)), closes [#32049](https://github.com/bitnami/charts/issues/32049)
+
+## <small>2.4.5 (2025-02-07)</small>
+
+* [bitnami/fluent-bit] Release 2.4.5 (#31835) ([ade7a48](https://github.com/bitnami/charts/commit/ade7a48bd37b52a6d70cecb1fa2670eb25480c72)), closes [#31835](https://github.com/bitnami/charts/issues/31835)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>2.4.4 (2025-01-24)</small>
+
+* [bitnami/fluent-bit] Release 2.4.4 (#31551) ([67f7f3b](https://github.com/bitnami/charts/commit/67f7f3b8fe90c9edf097e323e9b530fe55887155)), closes [#31551](https://github.com/bitnami/charts/issues/31551)
+
+## <small>2.4.3 (2024-12-30)</small>
+
+* [bitnami/fluent-bit] Release 2.4.3 (#31186) ([343ce6d](https://github.com/bitnami/charts/commit/343ce6df75c858132b0a42cb7691441da56768df)), closes [#31186](https://github.com/bitnami/charts/issues/31186)
 
 ## <small>2.4.2 (2024-12-20)</small>
 

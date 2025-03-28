@@ -1,8 +1,22 @@
 # Changelog
 
-## 6.3.2 (2025-01-14)
+## 6.3.5 (2025-03-11)
 
-* [bitnami/aspnet-core] Release 6.3.2 ([#31366](https://github.com/bitnami/charts/pull/31366))
+* [bitnami/aspnet-core] Release 6.3.5 ([#32412](https://github.com/bitnami/charts/pull/32412))
+
+## <small>6.3.4 (2025-02-18)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/aspnet-core] Release 6.3.4 (#31973) ([7ba54fc](https://github.com/bitnami/charts/commit/7ba54fc3775106036c813a3819c76feab6deee83)), closes [#31973](https://github.com/bitnami/charts/issues/31973)
+
+## <small>6.3.3 (2025-02-11)</small>
+
+* [bitnami/aspnet-core] Release 6.3.3 (#31874) ([db3c9e4](https://github.com/bitnami/charts/commit/db3c9e400b8152027d120b00eaba06e23f98a562)), closes [#31874](https://github.com/bitnami/charts/issues/31874)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>6.3.2 (2025-01-14)</small>
+
+* [bitnami/aspnet-core] Release 6.3.2 (#31366) ([512fab2](https://github.com/bitnami/charts/commit/512fab283eed06406546218f56fad376799945c3)), closes [#31366](https://github.com/bitnami/charts/issues/31366)
 
 ## <small>6.3.1 (2024-12-28)</small>
 

@@ -1,8 +1,34 @@
 # Changelog
 
-## 6.5.2 (2025-01-17)
+## 6.6.1 (2025-03-05)
 
-* [bitnami/influxdb] Release 6.5.2 ([#31426](https://github.com/bitnami/charts/pull/31426))
+* [bitnami/influxdb] Release 6.6.1 ([#32332](https://github.com/bitnami/charts/pull/32332))
+
+## 6.6.0 (2025-02-26)
+
+* [bitnami/influxdb] Set `usePasswordFiles=true` by default (#32106) ([dddc4ff](https://github.com/bitnami/charts/commit/dddc4fffacf074669c9e354adfdfd59fb012088e)), closes [#32106](https://github.com/bitnami/charts/issues/32106)
+
+## <small>6.5.6 (2025-02-19)</small>
+
+* [bitnami/influxdb] Release 6.5.6 (#32003) ([a568190](https://github.com/bitnami/charts/commit/a568190d35ce528080a72e1b966dadf12bd0630e)), closes [#32003](https://github.com/bitnami/charts/issues/32003)
+
+## <small>6.5.5 (2025-02-12)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/influxdb] Release 6.5.5 (#31891) ([aa14ac9](https://github.com/bitnami/charts/commit/aa14ac945ee0cc775dabfe5b85e7ef1e22be984c)), closes [#31891](https://github.com/bitnami/charts/issues/31891)
+
+## <small>6.5.4 (2025-02-04)</small>
+
+* [bitnami/influxdb] Release 6.5.4 (#31761) ([12626a7](https://github.com/bitnami/charts/commit/12626a7766e8f7236c31acf52e2adc24c4bed28a)), closes [#31761](https://github.com/bitnami/charts/issues/31761)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>6.5.3 (2025-01-24)</small>
+
+* [bitnami/influxdb] Release 6.5.3 (#31565) ([6442881](https://github.com/bitnami/charts/commit/6442881d5de8ad5de7cce74e7a96d4a52003ee12)), closes [#31565](https://github.com/bitnami/charts/issues/31565)
+
+## <small>6.5.2 (2025-01-17)</small>
+
+* [bitnami/influxdb] Release 6.5.2 (#31426) ([cf843ee](https://github.com/bitnami/charts/commit/cf843ee793068cf3aa51f0f59faf8ad5fe650fcf)), closes [#31426](https://github.com/bitnami/charts/issues/31426)
 
 ## <small>6.5.1 (2025-01-13)</small>
 
@@ -804,7 +830,7 @@
 
 ## <small>2.3.13 (2021-10-01)</small>
 
-* [bitnami/influxdb] extrahosts creates the same paths as hostname (#7654) ([0b46c43](https://github.com/bitnami/charts/commit/0b46c43c141f21eeab971db035a66be16bbb2354)), closes [#7654](https://github.com/bitnami/charts/issues/7654) [/github.com/bitnami/charts/blob/31f75b5950840b3939c65360a781bc1d66b9e9d2/bitnami/influxdb/Chart.yaml#L27](https://github.com//github.com/bitnami/charts/blob/31f75b5950840b3939c65360a781bc1d66b9e9d2/bitnami/influxdb/Chart.yaml/issues/L27)
+* [bitnami/influxdb] extrahosts creates the same paths as hostname (#7654) ([0b46c43](https://github.com/bitnami/charts/commit/0b46c43c141f21eeab971db035a66be16bbb2354)), closes [#7654](https://github.com/bitnami/charts/issues/7654)
 * [bitnami/several] Regenerate README tables ([c3367d9](https://github.com/bitnami/charts/commit/c3367d910710aece8db3ece72554597fce871ae1))
 
 ## <small>2.3.12 (2021-10-01)</small>

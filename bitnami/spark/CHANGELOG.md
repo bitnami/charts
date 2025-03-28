@@ -1,8 +1,23 @@
 # Changelog
 
-## 9.3.2 (2024-12-21)
+## 9.3.5 (2025-02-27)
 
-* [bitnami/spark] Release 9.3.2 ([#31136](https://github.com/bitnami/charts/pull/31136))
+* [bitnami/spark] Release 9.3.5 ([#32206](https://github.com/bitnami/charts/pull/32206))
+
+## <small>9.3.4 (2025-02-20)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/spark] Release 9.3.4 (#32043) ([68cc908](https://github.com/bitnami/charts/commit/68cc908851f185068b83d033b63933f11781ea6b)), closes [#32043](https://github.com/bitnami/charts/issues/32043)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>9.3.3 (2025-01-28)</small>
+
+* [bitnami/spark] Release 9.3.3 (#31629) ([e3b25fd](https://github.com/bitnami/charts/commit/e3b25fd171105803c76475111ffd44474f92ae12)), closes [#31629](https://github.com/bitnami/charts/issues/31629)
+
+## <small>9.3.2 (2024-12-21)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/spark] Release 9.3.2 (#31136) ([a1c8548](https://github.com/bitnami/charts/commit/a1c854821dca9f467d4ae999880d15dc702f5afc)), closes [#31136](https://github.com/bitnami/charts/issues/31136)
 
 ## <small>9.3.1 (2024-12-14)</small>
 

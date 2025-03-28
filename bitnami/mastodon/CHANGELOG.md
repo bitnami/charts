@@ -1,8 +1,42 @@
 # Changelog
 
-## 9.1.3 (2025-01-16)
+## 9.2.7 (2025-03-13)
 
-* [bitnami/mastodon] Release 9.1.3 ([#31400](https://github.com/bitnami/charts/pull/31400))
+* [bitnami/mastodon] Release 9.2.7 ([#32447](https://github.com/bitnami/charts/pull/32447))
+
+## <small>9.2.6 (2025-03-10)</small>
+
+* [bitnami/mastodon] Release 9.2.6 (#32380) ([bb410bc](https://github.com/bitnami/charts/commit/bb410bc61d3e15edb683b5c264b8388628968ee0)), closes [#32380](https://github.com/bitnami/charts/issues/32380)
+
+## <small>9.2.5 (2025-02-27)</small>
+
+* [bitnami/mastodon] Release 9.2.5 (#32205) ([d84356d](https://github.com/bitnami/charts/commit/d84356dc0c4fac089b3cfc2c9a189e228e3f7809)), closes [#32205](https://github.com/bitnami/charts/issues/32205)
+
+## <small>9.2.4 (2025-02-27)</small>
+
+* [bitnami/mastodon] Release 9.2.4 (#32199) ([dd96507](https://github.com/bitnami/charts/commit/dd965077cbfcedbb6998d5a56eee410fa6e0e6f3)), closes [#32199](https://github.com/bitnami/charts/issues/32199)
+
+## <small>9.2.3 (2025-02-14)</small>
+
+* [bitnami/mastodon] Release 9.2.3 (#31933) ([82aa57f](https://github.com/bitnami/charts/commit/82aa57ff62a509052831636fad761932a744a678)), closes [#31933](https://github.com/bitnami/charts/issues/31933)
+
+## <small>9.2.2 (2025-02-13)</small>
+
+* [bitnami/mastodon] Release 9.2.2 (#31920) ([7d7cc5b](https://github.com/bitnami/charts/commit/7d7cc5bb02f8d539f3e4e2b32f0f0ec4c59d8631)), closes [#31920](https://github.com/bitnami/charts/issues/31920)
+
+## <small>9.2.1 (2025-02-13)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/mastodon] Release 9.2.1 (#31916) ([27d24fb](https://github.com/bitnami/charts/commit/27d24fbec625ce5c4ca93018e618da004a4df131)), closes [#31916](https://github.com/bitnami/charts/issues/31916)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## 9.2.0 (2025-01-29)
+
+* [bitnami/mastodon] feature(minio): Bump MinIO subchart (#31660) ([fcdd884](https://github.com/bitnami/charts/commit/fcdd88475b946b0a56e1738dc8d4c3d775416dba)), closes [#31660](https://github.com/bitnami/charts/issues/31660)
+
+## <small>9.1.3 (2025-01-16)</small>
+
+* [bitnami/mastodon] Release 9.1.3 (#31400) ([a5b97a0](https://github.com/bitnami/charts/commit/a5b97a0c64ce4cabccde11f94e3a641d63cd125b)), closes [#31400](https://github.com/bitnami/charts/issues/31400)
 
 ## <small>9.1.2 (2025-01-12)</small>
 

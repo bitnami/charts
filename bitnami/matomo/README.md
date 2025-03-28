@@ -220,7 +220,7 @@ helm install my-release --set persistence.existingClaim=PVC_NAME oci://REGISTRY_
 | `serviceAccountName`                                | Attach serviceAccountName to the pod and sidecars                                                                                                                                                                 | `""`                     |
 | `tolerations`                                       | Tolerations for pod assignment                                                                                                                                                                                    | `[]`                     |
 | `existingSecret`                                    | Name of a secret with the application password                                                                                                                                                                    | `""`                     |
-| `smtpAuth`                                          | SMTP authentication mechanism (options: Plain, Login, Crammd5)                                                                                                                                                    | `""`                     |
+| `smtpAuth`                                          | SMTP authentication mechanism (options: Plain, Login, Cram-md5)                                                                                                                                                   | `""`                     |
 | `smtpHost`                                          | SMTP host                                                                                                                                                                                                         | `""`                     |
 | `smtpPort`                                          | SMTP port                                                                                                                                                                                                         | `""`                     |
 | `smtpUser`                                          | SMTP user                                                                                                                                                                                                         | `""`                     |
@@ -563,7 +563,7 @@ This major release bumps the MariaDB version to 10.11. Follow the [upstream inst
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

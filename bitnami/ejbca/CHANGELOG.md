@@ -1,8 +1,22 @@
 # Changelog
 
-## 17.0.1 (2024-12-27)
+## 17.0.4 (2025-03-28)
 
-* [bitnami/ejbca] Release 17.0.1 ([#31178](https://github.com/bitnami/charts/pull/31178))
+* [bitnami/ejbca] Release 17.0.4 ([#32674](https://github.com/bitnami/charts/pull/32674))
+
+## <small>17.0.3 (2025-03-08)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/ejbca] Release 17.0.3 (#32370) ([f419d29](https://github.com/bitnami/charts/commit/f419d2908a049a6e9608bf2ea63939554baa14c2)), closes [#32370](https://github.com/bitnami/charts/issues/32370)
+
+## <small>17.0.2 (2025-02-05)</small>
+
+* [bitnami/ejbca] Release 17.0.2 (#31802) ([2878ff7](https://github.com/bitnami/charts/commit/2878ff7b71b392b49e189bfc1f2e94de971ecd2e)), closes [#31802](https://github.com/bitnami/charts/issues/31802)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>17.0.1 (2024-12-27)</small>
+
+* [bitnami/ejbca] Release 17.0.1 (#31178) ([bcf57b8](https://github.com/bitnami/charts/commit/bcf57b8a708139f72542da86b39bd0539a798c30)), closes [#31178](https://github.com/bitnami/charts/issues/31178)
 
 ## 17.0.0 (2024-12-27)
 
