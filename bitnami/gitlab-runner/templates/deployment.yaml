@@ -238,12 +238,12 @@ spec:
         {{- end }}
         # The gitlab script expect all scripts and configuration files to be mounted in the same folder
         - name: configmaps
-          projeced:
+          projected:
             sources:
               - configMap:
-                name: {{ include "gitlab-runner.configmapName" . }}
+                  name: {{ include "gitlab-runner.configmapName" . }}
               - configMap:
-                name: {{ printf "%s-scripts" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+                  name: {{ printf "%s-scripts" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
         {{- if .Values.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
