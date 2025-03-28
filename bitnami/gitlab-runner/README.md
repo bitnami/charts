@@ -2,9 +2,9 @@
 
 # Bitnami package for Gitlab Runner
 
- Gitlab Runner is an auxiliary application for Gitlab installations. Written in Go, it allows to run CI/CD jobs and send the results back to Gitlab.
+Gitlab Runner is an auxiliary application for Gitlab installations. Written in Go, it allows to run CI/CD jobs and send the results back to Gitlab.
 
-[Overview of Gitlab Runner](https://docs.gitlab.com/runner/)
+[Overview of Gitlab Runner](https://gitlab.com/gitlab-org/gitlab-runner/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
