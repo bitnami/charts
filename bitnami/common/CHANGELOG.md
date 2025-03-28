@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.31.0 (2025-03-28)
+
+* [bitnami/common] Add global.security.allowEmptyPassword ([#32669](https://github.com/bitnami/charts/pull/32669))
+
 ## 2.30.0 (2025-02-19)
 
 * [bitnami/common] Add helper to check API versions ([#31969](https://github.com/bitnami/charts/pull/31969))
