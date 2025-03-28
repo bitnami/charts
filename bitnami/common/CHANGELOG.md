@@ -2,11 +2,13 @@
 
 ## 2.31.0 (2025-03-28)
 
-* [bitnami/common] Add global.security.allowEmptyPassword ([#32669](https://github.com/bitnami/charts/pull/32669))
+* [bitnami/common] Add global.security.allowEmptyPassword ([#32675](https://github.com/bitnami/charts/pull/32675))
 
 ## 2.30.0 (2025-02-19)
 
-* [bitnami/common] Add helper to check API versions ([#31969](https://github.com/bitnami/charts/pull/31969))
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/common] Add helper to check API versions (#31969) ([5ba89c5](https://github.com/bitnami/charts/commit/5ba89c5afc3d57e36f90364638d9beabb32499f4)), closes [#31969](https://github.com/bitnami/charts/issues/31969)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
 
 ## <small>2.29.1 (2025-01-23)</small>
 
