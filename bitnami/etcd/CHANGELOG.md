@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.2.0 (2025-03-24)
+## 11.2.1 (2025-03-28)
 
-* [bitnami/etcd] Set `usePasswordFiles=true` by default ([#32345](https://github.com/bitnami/charts/pull/32345))
+* [bitnami/etcd] Release 11.2.1 ([#32654](https://github.com/bitnami/charts/pull/32654))
+
+## 11.2.0 (2025-03-27)
+
+* [bitnami/etcd] Set `usePasswordFiles=true` by default (#32345) ([c46b195](https://github.com/bitnami/charts/commit/c46b195f624cdcc487dc503fed040bf80278b615)), closes [#32345](https://github.com/bitnami/charts/issues/32345)
 
 ## <small>11.1.6 (2025-03-21)</small>
 
