@@ -11,7 +11,7 @@ Return the proper Docker Image Registry Secret Names
 {{- end -}}
 
 {{/*
-Return the proper minio-operator Operator image name
+Return the proper MinIO(R) Operator image name
 */}}
 {{- define "minio-operator.operator.image" -}}
 {{ include "common.images.image" (dict "imageRoot" .Values.image "global" .Values.global) }}
@@ -32,14 +32,14 @@ Return the proper MinIO(R) Operator Sidecar image name
 {{- end -}}
 
 {{/*
-Return the proper KES(r) image name
+Return the proper KES(R) image name
 */}}
 {{- define "minio-operator.kes.image" -}}
 {{ include "common.images.image" (dict "imageRoot" .Values.kesImage "global" .Values.global) }}
 {{- end -}}
 
 {{/*
-Create the name of the service account to use (minio-operator Operator)
+Create the name of the service account to use
 */}}
 {{- define "minio-operator.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create -}}
@@ -50,7 +50,7 @@ Create the name of the service account to use (minio-operator Operator)
 {{- end -}}
 
 {{/*
-Validate values for minio-operator.
+Validate values for MinIO(R) Operator
 */}}
 {{- define "minio-operator.validateValues" -}}
 {{- $messages := list -}}
@@ -63,7 +63,7 @@ Validate values for minio-operator.
 {{- end -}}
 
 {{/*
-Validate values of Apache - Incorrect extra volume settings
+Validate values of MinIO(R) Operator - Incorrect extra volume settings
 */}}
 {{- define "minio-operator.validateValues.extraVolumes" -}}
 {{- if and .Values.extraVolumes (not .Values.extraVolumeMounts) -}}

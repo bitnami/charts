@@ -63,15 +63,15 @@ clusterDomain: cluster.local
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
-## Bitnami minio-operator image
+## Bitnami MinIO&reg; Operator image
 ## ref: https://hub.docker.com/r/bitnami/minio-operator/tags/
-## @param image.registry [default: REGISTRY_NAME] minio-operator image registry
-## @param image.repository [default: REPOSITORY_NAME/minio-operator] minio-operator image repository
-## @skip image.tag minio-operator image tag (immutable tags are recommended)
-## @param image.digest minio-operator image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
-## @param image.pullPolicy minio-operator image pull policy
-## @param image.pullSecrets minio-operator image pull secrets
-## @param image.debug Enable minio-operator image debug mode
+## @param image.registry [default: REGISTRY_NAME] MinIO&reg; Operator image registry
+## @param image.repository [default: REPOSITORY_NAME/minio-operator] MinIO&reg; Operator image repository
+## @skip image.tag MinIO&reg; Operator image tag (immutable tags are recommended)
+## @param image.digest MinIO&reg; Operator image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
+## @param image.pullPolicy MinIO&reg; Operator image pull policy
+## @param image.pullSecrets MinIO&reg; Operator image pull secrets
+## @param image.debug Enable MinIO&reg; Operator image debug mode
 ##
 image:
   registry: docker.io
@@ -129,12 +129,12 @@ kesImage:
   repository: bitnami/kes
   tag: 2025.3.12-debian-12-r0
   digest: ""
-## @param replicaCount Number of minio-operator replicas to deploy
+## @param replicaCount Number of MinIO;reg; Operator replicas to deploy
 ##
 replicaCount: 1
-## Configure extra options for minio-operator containers' liveness and readiness probes
+## Configure extra options for MinIO;reg; Operator containers' liveness and readiness probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
-## @param livenessProbe.enabled Enable livenessProbe on minio-operator containers
+## @param livenessProbe.enabled Enable livenessProbe on MinIO;reg; Operator containers
 ## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
 ## @param livenessProbe.periodSeconds Period seconds for livenessProbe
 ## @param livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
@@ -148,7 +148,7 @@ livenessProbe:
   timeoutSeconds: 5
   failureThreshold: 5
   successThreshold: 1
-## @param readinessProbe.enabled Enable readinessProbe on minio-operator containers
+## @param readinessProbe.enabled Enable readinessProbe on MinIO;reg; Operator containers
 ## @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
 ## @param readinessProbe.periodSeconds Period seconds for readinessProbe
 ## @param readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
@@ -162,7 +162,7 @@ readinessProbe:
   timeoutSeconds: 5
   failureThreshold: 5
   successThreshold: 1
-## @param startupProbe.enabled Enable startupProbe on minio-operator containers
+## @param startupProbe.enabled Enable startupProbe on MinIO;reg; Operator containers
 ## @param startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
 ## @param startupProbe.periodSeconds Period seconds for startupProbe
 ## @param startupProbe.timeoutSeconds Timeout seconds for startupProbe
@@ -185,13 +185,13 @@ customReadinessProbe: {}
 ## @param customStartupProbe Custom startupProbe that overrides the default one
 ##
 customStartupProbe: {}
-## @param watchAllNamespaces Watch for minio-operator resources in all namespaces
+## @param watchAllNamespaces Watch for MinIO;reg; Operator resources in all namespaces
 ##
 watchAllNamespaces: true
-## @param watchNamespaces [array] Watch for minio-operator resources in the given namespaces
+## @param watchNamespaces [array] Watch for MinIO;reg; Operator resources in the given namespaces
 ##
 watchNamespaces: []
-## minio-operator resource requests and limits
+## MinIO;reg; Operator resource requests and limits
 ## ref: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
 ## @param resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if operator.resources is set (operator.resources is recommended for production).
 ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
@@ -210,11 +210,11 @@ resourcesPreset: "nano"
 resources: {}
 ## Configure Pods Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-## @param podSecurityContext.enabled Enabled minio-operator pods' Security Context
+## @param podSecurityContext.enabled Enabled MinIO;reg; Operator pods' Security Context
 ## @param podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
 ## @param podSecurityContext.sysctls Set kernel settings using the sysctl interface
 ## @param podSecurityContext.supplementalGroups Set filesystem extra groups
-## @param podSecurityContext.fsGroup Set minio-operator pod's Security Context fsGroup
+## @param podSecurityContext.fsGroup Set MinIO;reg; Operator pod's Security Context fsGroup
 ##
 podSecurityContext:
   enabled: true
@@ -260,15 +260,15 @@ extraArgs: []
 ## @param automountServiceAccountToken Mount Service Account token in pod
 ##
 automountServiceAccountToken: true
-## @param hostAliases minio-operator pods host aliases
+## @param hostAliases MinIO;reg; Operator pods host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
 hostAliases: []
-## @param podLabels Extra labels for minio-operator pods
+## @param podLabels Extra labels for MinIO;reg; Operator pods
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##
 podLabels: {}
-## @param podAnnotations Annotations for minio-operator pods
+## @param podAnnotations Annotations for MinIO;reg; Operator pods
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
 podAnnotations: {}
@@ -320,20 +320,20 @@ nodeAffinityPreset:
   ##   - e2e-az2
   ##
   values: []
-## @param affinity Affinity for minio-operator pods assignment
+## @param affinity Affinity for MinIO;reg; Operator pods assignment
 ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 ## NOTE: `podAffinityPreset`, `podAntiAffinityPreset`, and `nodeAffinityPreset` will be ignored when it's set
 ##
 affinity: {}
-## @param nodeSelector Node labels for minio-operator pods assignment
+## @param nodeSelector Node labels for MinIO;reg; Operator pods assignment
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/assign-pods-nodes/
 ##
 nodeSelector: {}
-## @param tolerations Tolerations for minio-operator pods assignment
+## @param tolerations Tolerations for MinIO;reg; Operator pods assignment
 ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: []
-## @param updateStrategy.type minio-operator statefulset strategy type
+## @param updateStrategy.type MinIO;reg; Operator statefulset strategy type
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
 ##
 updateStrategy:
@@ -341,44 +341,44 @@ updateStrategy:
   ## Can be set to RollingUpdate or OnDelete
   ##
   type: RollingUpdate
-## @param priorityClassName minio-operator pods' priorityClassName
+## @param priorityClassName MinIO;reg; Operator pods' priorityClassName
 ##
 priorityClassName: ""
 ## @param topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
 ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
 ##
 topologySpreadConstraints: []
-## @param schedulerName Name of the k8s scheduler (other than default) for minio-operator pods
+## @param schedulerName Name of the k8s scheduler (other than default) for MinIO;reg; Operator pods
 ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
 ##
 schedulerName: ""
-## @param terminationGracePeriodSeconds Seconds Redmine pod needs to terminate gracefully
+## @param terminationGracePeriodSeconds Seconds MinIO;reg Operator pod needs to terminate gracefully
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
 ##
 terminationGracePeriodSeconds: ""
-## @param lifecycleHooks for the minio-operator container(s) to automate configuration before or after startup
+## @param lifecycleHooks for the MinIO;reg; Operator container(s) to automate configuration before or after startup
 ##
 lifecycleHooks: {}
-## @param extraEnvVars Array with extra environment variables to add to minio-operator nodes
+## @param extraEnvVars Array with extra environment variables to add to MinIO;reg; Operator nodes
 ## e.g:
 ## extraEnvVars:
 ##   - name: FOO
 ##     value: "bar"
 ##
 extraEnvVars: []
-## @param extraEnvVarsCM Name of existing ConfigMap containing extra env vars for minio-operator nodes
+## @param extraEnvVarsCM Name of existing ConfigMap containing extra env vars for MinIO;reg; Operator nodes
 ##
 extraEnvVarsCM: ""
-## @param extraEnvVarsSecret Name of existing Secret containing extra env vars for minio-operator nodes
+## @param extraEnvVarsSecret Name of existing Secret containing extra env vars for MinIO;reg; Operator nodes
 ##
 extraEnvVarsSecret: ""
-## @param extraVolumes Optionally specify extra list of additional volumes for the minio-operator pod(s)
+## @param extraVolumes Optionally specify extra list of additional volumes for the MinIO;reg; Operator pod(s)
 ##
 extraVolumes: []
-## @param extraVolumeMounts Optionally specify extra list of additional volumeMounts for the minio-operator container(s)
+## @param extraVolumeMounts Optionally specify extra list of additional volumeMounts for the MinIO;reg; Operator container(s)
 ##
 extraVolumeMounts: []
-## @param sidecars Add additional sidecar containers to the minio-operator pod(s)
+## @param sidecars Add additional sidecar containers to the MinIO;reg; Operator pod(s)
 ## e.g:
 ## sidecars:
 ##   - name: your-image-name
@@ -389,7 +389,7 @@ extraVolumeMounts: []
 ##         containerPort: 1234
 ##
 sidecars: []
-## @param initContainers Add additional init containers to the minio-operator pod(s)
+## @param initContainers Add additional init containers to the MinIO;reg; Operator pod(s)
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
 ## e.g:
 ## initContainers:
@@ -443,10 +443,10 @@ autoscaling:
     ## @param autoscaling.hpa.targetMemory Target Memory utilization percentage
     ##
     targetMemory: ""
-## @section minio-operator Traffic Exposure Parameters
+## @section MinIO;reg; Operator Traffic Exposure Parameters
 ##
 service:
-  ## @param service.type minio-operator service type
+  ## @param service.type MinIO;reg; Operator service type
   ##
   type: ClusterIP
   ## Node ports to expose
@@ -455,33 +455,33 @@ service:
   ##
   nodePorts:
     http: ""
-  ## @param service.clusterIP minio-operator service Cluster IP
+  ## @param service.clusterIP MinIO;reg; Operator service Cluster IP
   ## e.g.:
   ## clusterIP: None
   ##
   clusterIP: ""
-  ## @param service.loadBalancerIP minio-operator service Load Balancer IP
+  ## @param service.loadBalancerIP MinIO;reg; Operator service Load Balancer IP
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
   ##
   loadBalancerIP: ""
-  ## @param service.loadBalancerSourceRanges minio-operator service Load Balancer sources
+  ## @param service.loadBalancerSourceRanges MinIO;reg; Operator service Load Balancer sources
   ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
   ## e.g:
   ## loadBalancerSourceRanges:
   ##   - 10.10.10.0/24
   ##
   loadBalancerSourceRanges: []
-  ## @param service.externalTrafficPolicy minio-operator service external traffic policy
+  ## @param service.externalTrafficPolicy MinIO;reg; Operator service external traffic policy
   ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-web-source-ip
   ##
   externalTrafficPolicy: Cluster
   ## @param service.labels [object] Labels for the service
   ##
   labels: {}
-  ## @param service.annotations Additional custom annotations for minio-operator service
+  ## @param service.annotations Additional custom annotations for MinIO;reg; Operator service
   ##
   annotations: {}
-  ## @param service.extraPorts Extra ports to expose in minio-operator service (normally used with the `sidecars` value)
+  ## @param service.extraPorts Extra ports to expose in MinIO;reg; Operator service (normally used with the `sidecars` value)
   ##
   extraPorts: []
   ## @param service.sessionAffinity Control where web requests go, to the same pod or round-robin
@@ -496,14 +496,14 @@ service:
   ##
   sessionAffinityConfig: {}
 
-## @section minio-operator Security Token Service (STS) Traffic Exposure Parameters
+## @section MinIO;reg; Operator Security Token Service (STS) Traffic Exposure Parameters
 ##
 sts:
   ## @param sts.enabled Enable Security Token Service (STS) in MinIO instances
   ##
   enabled: true
   service:
-    ## @param sts.service.type minio-operator Security Token Service (STS) service type
+    ## @param sts.service.type MinIO;reg; Operator Security Token Service (STS) service type
     ##
     type: ClusterIP
     ## Node ports to expose
@@ -512,33 +512,33 @@ sts:
     ##
     nodePorts:
       sts: ""
-    ## @param sts.service.clusterIP minio-operator Security Token Service (STS) service Cluster IP
+    ## @param sts.service.clusterIP MinIO;reg; Operator Security Token Service (STS) service Cluster IP
     ## e.g.:
     ## clusterIP: None
     ##
     clusterIP: ""
-    ## @param sts.service.loadBalancerIP minio-operator Security Token Service (STS) service Load Balancer IP
+    ## @param sts.service.loadBalancerIP MinIO;reg; Operator Security Token Service (STS) service Load Balancer IP
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
     ##
     loadBalancerIP: ""
-    ## @param sts.service.loadBalancerSourceRanges minio-operator Security Token Service (STS) service Load Balancer sources
+    ## @param sts.service.loadBalancerSourceRanges MinIO;reg; Operator Security Token Service (STS) service Load Balancer sources
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## e.g:
     ## loadBalancerSourceRanges:
     ##   - 10.10.10.0/24
     ##
     loadBalancerSourceRanges: []
-    ## @param sts.service.externalTrafficPolicy minio-operator Security Token Service (STS) service external traffic policy
+    ## @param sts.service.externalTrafficPolicy MinIO;reg; Operator Security Token Service (STS) service external traffic policy
     ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-web-source-ip
     ##
     externalTrafficPolicy: Cluster
     ## @param sts.service.labels [object] Labels for the service
     ##
     labels: {}
-    ## @param sts.service.annotations Additional custom annotations for minio-operator Security Token Service (STS) service
+    ## @param sts.service.annotations Additional custom annotations for MinIO;reg; Operator Security Token Service (STS) service
     ##
     annotations: {}
-    ## @param sts.service.extraPorts Extra ports to expose in minio-operator Security Token Service (STS) service (normally used with the `sidecars` value)
+    ## @param sts.service.extraPorts Extra ports to expose in MinIO;reg; Operator Security Token Service (STS) service (normally used with the `sidecars` value)
     ##
     extraPorts: []
     ## @param sts.service.sessionAffinity Control where web requests go, to the same pod or round-robin
@@ -612,7 +612,7 @@ networkPolicy:
   ingressNSMatchLabels: {}
   ingressNSPodMatchLabels: {}
 
-## @section minio-operator RBAC Parameters
+## @section MinIO;reg; Operator RBAC Parameters
 ##
 
 ## RBAC configuration

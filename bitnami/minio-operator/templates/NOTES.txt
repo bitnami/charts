@@ -10,24 +10,24 @@ Check the status of the pods by running this command:
 
   kubectl get pods --namespace {{ include "common.names.namespace" . | quote }} -l app.kubernetes.io/instance={{ .Release.Name }}
 
-Check the minio-operator documentation for instructions on how to deploy Tentant instaces.
+Check the MinIO(R) Operator documentation for instructions on how to deploy Tentant instaces.
 
 https://operator.min.io/
 
 {{- if .Values.rbac.create }}
 {{- if .Values.watchAllNamespaces }}
-WARNING: minio-operator can access all secrets in the cluster. This could pose a security risk if the application gets compromised.
+WARNING: MinIO(R) Operator can access all secrets in the cluster. This could pose a security risk if the application gets compromised.
 
 You can limit accessed namespaces by setting watchAllNamespaces = false and configuring watchNamespaces
 {{- else }}
 
-minio-operator will ONLY access resources in the following namespaces:
+MinIO(R) Operator will ONLY access resources in the following namespaces:
 {{ $namespaces := .Values.watchNamespaces | default (list (include "common.names.namespace" .)) }}
 {{- range $namespace := $namespaces }}
   - {{ $namespace }}
 {{- end }}
 
-minio-operator won't access resources in other namespaces. You can configure this behavior by setting watchNamespaces
+MinIO(R) Operator won't access resources in other namespaces. You can configure this behavior by setting watchNamespaces
 
 {{- end }}
 {{- end }}
