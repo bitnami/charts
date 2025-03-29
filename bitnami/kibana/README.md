@@ -283,6 +283,7 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 | `commonLabels`           | Labels to add to all deployed objects                                                                     | `{}`            |
 | `extraDeploy`            | A list of extra kubernetes resources to be deployed                                                       | `[]`            |
 | `clusterDomain`          | Kubernetes cluster domain name                                                                            | `cluster.local` |
+| `usePasswordFiles`       | Mount credentials as files instead of using environment variables                                         | `true`          |
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                   | `false`         |
 | `diagnosticMode.command` | Command to override all containers in the the deployment(s)/statefulset(s)                                | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the the deployment(s)/statefulset(s)                                   | `["infinity"]`  |

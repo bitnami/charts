@@ -166,32 +166,52 @@ spec:
               value: "true"
             {{- end }}
             {{- if and .Values.tls.enabled .Values.tls.usePemCerts (or .Values.tls.keyPassword .Values.tls.passwordsSecret) }}
+            {{- if .Values.usePasswordFiles }}
+            - name: KIBANA_SERVER_KEY_PASSWORD_FILE
+              value: "/opt/bitnami/kibana/secrets/kibana-key-password"
+            {{- else }}
             - name: KIBANA_SERVER_KEY_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "kibana.tls.secretName" . }}
                   key: kibana-key-password
             {{- end }}
+            {{- end }}
             {{- if and .Values.tls.enabled (not .Values.tls.usePemCerts) (or .Values.tls.keystorePassword .Values.tls.passwordsSecret) }}
+            {{- if .Values.usePasswordFiles }}
+            - name: KIBANA_SERVER_KEYSTORE_PASSWORD_FILE
+              value: "/opt/bitnami/kibana/secrets/kibana-keystore-password"
+            {{- else }}
             - name: KIBANA_SERVER_KEYSTORE_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "kibana.tls.secretName" . }}
                   key: kibana-keystore-password
             {{- end }}
+            {{- end }}
             {{- if .Values.elasticsearch.security.auth.enabled }}
+            {{- if .Values.usePasswordFiles }}
+            - name: KIBANA_PASSWORD_FILE
+              value: "/opt/bitnami/kibana/secrets/kibana-password"
+            {{- else }}
             - name: KIBANA_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "kibana.elasticsearch.auth.secretName" . }}
                   key: kibana-password
             {{- end }}
+            {{- end }}
             {{- if and .Values.elasticsearch.security.auth.enabled .Values.elasticsearch.security.auth.createSystemUser }}
+            {{- if .Values.usePasswordFiles }}
+            - name: KIBANA_ELASTICSEARCH_PASSWORD_FILE
+              value: "/opt/bitnami/kibana/secrets/elasticsearch-password"
+            {{- else }}
             - name: KIBANA_ELASTICSEARCH_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ tpl .Values.elasticsearch.security.auth.elasticsearchPasswordSecret . }}
                   key: elasticsearch-password
+            {{- end }}
             - name: KIBANA_CREATE_USER
               value: "true"
             {{- end }}
@@ -202,11 +222,16 @@ spec:
             - name: KIBANA_ELASTICSEARCH_TLS_VERIFICATION_MODE
               value: {{ .Values.elasticsearch.security.tls.verificationMode | quote }}
             {{- if and .Values.elasticsearch.security.tls.enabled (not .Values.elasticsearch.security.tls.usePemCerts) (or .Values.elasticsearch.security.tls.truststorePassword .Values.elasticsearch.security.tls.passwordsSecret) }}
+            {{- if .Values.usePasswordFiles }}
+            - name: KIBANA_ELASTICSEARCH_TRUSTSTORE_PASSWORD_FILE
+              value: "/opt/bitnami/kibana/secrets/elasticsearch-truststore-password"
+            {{- else }}
             - name: KIBANA_ELASTICSEARCH_TRUSTSTORE_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "kibana.elasticsearch.tls.secretName" . }}
                   key: elasticsearch-truststore-password
+            {{- end }}
             {{- end }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
@@ -274,6 +299,10 @@ spec:
               mountPath: /bitnami/kibana
             - name: kibana-config
               mountPath: /bitnami/kibana/conf
+            {{- if or .Values.elasticsearch.security.auth.enabled (and .Values.tls.enabled (or .Values.tls.passwordsSecret (ternary .Values.tls.keyPassword .Values.tls.keystorePassword .Values.tls.usePemCerts))) }}
+            - name: kibana-secrets
+              mountPath: /opt/bitnami/kibana/secrets
+            {{- end }}
             {{- if .Values.tls.enabled }}
             - name: kibana-certificates
               mountPath: /opt/bitnami/kibana/config/certs/server
@@ -313,6 +342,27 @@ spec:
       volumes:
         - name: empty-dir
           emptyDir: {}
+        {{- if or .Values.elasticsearch.security.auth.enabled (and .Values.tls.enabled ) }}
+        - name: kibana-secrets
+          projected:
+            sources:
+                {{- if and .Values.tls.enabled (or .Values.tls.passwordsSecret (ternary .Values.tls.keyPassword .Values.tls.keystorePassword .Values.tls.usePemCerts)) }}
+                - secret:
+                  name: {{ include "kibana.tls.secretName" . }}
+                {{- end }}
+                {{- if .Values.elasticsearch.security.auth.enabled }}
+                - secret:
+                  name: {{ include "kibana.elasticsearch.auth.secretName" . }}
+                {{- end }}
+                {{- if and .Values.elasticsearch.security.auth.enabled .Values.elasticsearch.security.auth.createSystemUser }}
+                - secret:
+                  name: {{ tpl .Values.elasticsearch.security.auth.elasticsearchPasswordSecret . }}
+                {{- end }}
+                {{- if and .Values.elasticsearch.security.tls.enabled (not .Values.elasticsearch.security.tls.usePemCerts) (or .Values.elasticsearch.security.tls.truststorePassword .Values.elasticsearch.security.tls.passwordsSecret) }}
+                - secret:
+                  name: {{ include "kibana.elasticsearch.tls.secretName" . }}
+                {{- end }}
+        {{- end }}
         - name: kibana-data
         {{- if .Values.persistence.enabled }}
           persistentVolumeClaim:
