@@ -636,6 +636,9 @@ serviceMonitor:
   ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
   ##
   metricRelabelings: []
+  ## @param serviceMonitor.keepMetrics ServiceMonitor keepMetrics
+  ##
+  keepMetrics: []
   ## @param serviceMonitor.labels Extra labels for the ServiceMonitor
   ##
   labels: {}
