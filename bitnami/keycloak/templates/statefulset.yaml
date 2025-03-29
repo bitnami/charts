@@ -154,6 +154,40 @@ spec:
                   fieldPath: metadata.namespace
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" .Values.image.debug | quote }}
+            {{- if .Values.usePasswordFiles }}
+            - name: KC_BOOTSTRAP_ADMIN_PASSWORD_FILE
+              value: {{ printf "/opt/bitnami/keycloak/secrets/%s" (include "keycloak.secretKey" .) }}
+            - name: KEYCLOAK_DATABASE_PASSWORD_FILE
+              value: {{ printf "/opt/bitnami/keycloak/secrets/%s" (include "keycloak.databaseSecretPasswordKey" .) }}
+            {{- if .Values.externalDatabase.existingSecretHostKey }}
+            - name: KEYCLOAK_DATABASE_HOST_FILE
+              value: {{ printf "/opt/bitnami/keycloak/secrets/%s" (include "keycloak.databaseSecretHostKey" .) }}
+            {{- end }}
+            {{- if .Values.externalDatabase.existingSecretPortKey }}
+            - name: KEYCLOAK_DATABASE_PORT_FILE
+              value: {{ printf "/opt/bitnami/keycloak/secrets/%s" (include "keycloak.databaseSecretPortKey" .) }}
+            {{- end }}
+            {{- if .Values.externalDatabase.existingSecretUserKey }}
+            - name: KEYCLOAK_DATABASE_USER_FILE
+              value: {{ printf "/opt/bitnami/keycloak/secrets/%s" (include "keycloak.databaseSecretUserKey" .) }}
+            {{- end }}
+            {{- if .Values.externalDatabase.existingSecretDatabaseKey }}
+            - name: KEYCLOAK_DATABASE_NAME_FILE
+              value: {{ printf "/opt/bitnami/keycloak/secrets/%s" (include "keycloak.databaseSecretDatabaseKey" .) }}
+            {{- end }}
+            {{- if and .Values.tls.enabled (or .Values.tls.keystorePassword .Values.tls.passwordsSecret) }}
+            - name: KEYCLOAK_HTTPS_KEY_STORE_PASSWORD_FILE
+              value: "/opt/bitnami/keycloak/secrets/tls-keystore-password"
+            {{- end }}
+            {{- if and .Values.tls.enabled (or .Values.tls.truststorePassword .Values.tls.passwordsSecret) }}
+            - name: KEYCLOAK_HTTPS_TRUST_STORE_PASSWORD_FILE
+              value: "/opt/bitnami/keycloak/secrets/tls-truststore-password"
+            {{- end }}
+            {{- if and .Values.spi.existingSecret (or .Values.spi.truststorePassword .Values.spi.passwordsSecret) }}
+            - name: KEYCLOAK_SPI_TRUSTSTORE_PASSWORD_FILE
+              value: "/opt/bitnami/keycloak/secrets/spi-truststore-password"
+            {{- end }}
+            {{- else }}
             - name: KC_BOOTSTRAP_ADMIN_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -212,6 +246,7 @@ spec:
                 secretKeyRef:
                   name: {{ include "keycloak.spiPasswordsSecretName" . }}
                   key: "spi-truststore-password"
+            {{- end }}
             {{- end }}
             - name: KEYCLOAK_HTTP_RELATIVE_PATH
               value: {{ .Values.httpRelativePath | quote }}
@@ -306,6 +341,10 @@ spec:
             - name: empty-dir
               mountPath: /opt/bitnami/keycloak/providers
               subPath: app-providers-dir
+            {{- if  .Values.usePasswordFiles }}
+            - name: keycloak-secrets
+              mountPath: /opt/bitnami/keycloak/secrets
+            {{- end }}
             {{- if or .Values.configuration .Values.existingConfigmap }}
             - name: keycloak-config
               mountPath: /bitnami/keycloak/conf/keycloak.conf
@@ -339,6 +378,23 @@ spec:
       volumes:
         - name: empty-dir
           emptyDir: {}
+        {{- if .Values.usePasswordFiles }}
+        - name: keycloak-secrets
+          projected:
+            sources:
+              - secret:
+                  name:  {{ include "keycloak.secretName" . }}
+              - secret:
+                  name:  {{ include "keycloak.databaseSecretName" . }}
+              {{- if and .Values.tls.enabled (or .Values.tls.keystorePassword .Values.tls.truststorePassword .Values.tls.passwordsSecret) }}
+              - secret:
+                  name:  {{ include "keycloak.tlsPasswordsSecretName" . }}
+              {{- end }}
+              {{- if and .Values.spi.existingSecret (or .Values.spi.truststorePassword .Values.spi.passwordsSecret) }}
+              - secret:
+                  name:  {{ include "keycloak.spiPasswordsSecretName" . }}
+              {{- end }}
+        {{- end }}
         {{- if or .Values.configuration .Values.existingConfigmap }}
         - name: keycloak-config
           configMap:
