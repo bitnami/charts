@@ -1,8 +1,14 @@
 # Changelog
 
-## 13.7.4 (2025-02-27)
+## 13.7.5 (2025-03-29)
 
-* [bitnami/zookeeper] Release 13.7.4 ([#32204](https://github.com/bitnami/charts/pull/32204))
+* [bitnami/zookeeper] Release 13.7.5 ([#32680](https://github.com/bitnami/charts/pull/32680))
+
+## <small>13.7.4 (2025-02-27)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/zookeeper] Release 13.7.4 (#32204) ([db53e62](https://github.com/bitnami/charts/commit/db53e622ecf1be5a78d1ce683cec8baa41110fa3)), closes [#32204](https://github.com/bitnami/charts/issues/32204)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
 
 ## <small>13.7.3 (2025-01-28)</small>
 
