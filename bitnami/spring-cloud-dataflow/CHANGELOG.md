@@ -1,6 +1,6 @@
 # Changelog
 
-## 35.0.1 (2025-03-28)
+## 35.0.1 (2025-03-29)
 
 * bitnami/spring-cloud-dataflow fix for #32453 ([#32677](https://github.com/bitnami/charts/pull/32677))
 
