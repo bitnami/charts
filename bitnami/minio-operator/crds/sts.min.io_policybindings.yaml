@@ -1,0 +1,135 @@
+# Source: https://raw.githubusercontent.com/minio/operator/refs/tags/v{version}/helm/operator/templates/sts.min.io_policybindings.yaml
+# Version: 7.0.1
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.17.2
+    operator.min.io/version: v7.0.1
+  name: policybindings.sts.min.io
+spec:
+  group: sts.min.io
+  names:
+    kind: PolicyBinding
+    listKind: PolicyBindingList
+    plural: policybindings
+    shortNames:
+    - policybinding
+    singular: policybinding
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns:
+    - jsonPath: .status.currentState
+      name: State
+      type: string
+    - jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        properties:
+          apiVersion:
+            type: string
+          kind:
+            type: string
+          metadata:
+            type: object
+          spec:
+            properties:
+              application:
+                properties:
+                  namespace:
+                    type: string
+                  serviceaccount:
+                    type: string
+                required:
+                - namespace
+                - serviceaccount
+                type: object
+              policies:
+                items:
+                  type: string
+                type: array
+            required:
+            - application
+            - policies
+            type: object
+          status:
+            properties:
+              currentState:
+                type: string
+              usage:
+                nullable: true
+                properties:
+                  authotizations:
+                    format: int64
+                    type: integer
+                type: object
+            required:
+            - currentState
+            - usage
+            type: object
+        type: object
+    served: true
+    storage: false
+    subresources:
+      status: {}
+  - additionalPrinterColumns:
+    - jsonPath: .status.currentState
+      name: State
+      type: string
+    - jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    name: v1beta1
+    schema:
+      openAPIV3Schema:
+        properties:
+          apiVersion:
+            type: string
+          kind:
+            type: string
+          metadata:
+            type: object
+          spec:
+            properties:
+              application:
+                properties:
+                  namespace:
+                    type: string
+                  serviceaccount:
+                    type: string
+                required:
+                - namespace
+                - serviceaccount
+                type: object
+              policies:
+                items:
+                  type: string
+                type: array
+            required:
+            - application
+            - policies
+            type: object
+          status:
+            properties:
+              currentState:
+                type: string
+              usage:
+                nullable: true
+                properties:
+                  authotizations:
+                    format: int64
+                    type: integer
+                type: object
+            required:
+            - currentState
+            - usage
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}

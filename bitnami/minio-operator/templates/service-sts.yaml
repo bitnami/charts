@@ -1,0 +1,60 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+{{- if .Values.sts.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  # It is expected the service name to be sts
+  # https://github.com/minio/operator/blob/22c01e4d5f317b87afe2d80ce6e42926b3a4853a/examples/kustomization/sts-example/sample-data/mc-job-setup-bucket.yaml#L56
+  name: sts
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.sts.service.labels .Values.commonLabels ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: minio-operator
+    app.kubernetes.io/component: operator
+  {{- if or .Values.sts.service.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.sts.service.annotations .Values.commonAnnotations) "context" .) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.sts.service.type }}
+  {{- if and .Values.sts.service.clusterIP (eq .Values.sts.service.type "ClusterIP") }}
+  clusterIP: {{ .Values.sts.service.clusterIP }}
+  {{- end }}
+  {{- if .Values.sts.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.sts.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.sts.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.sts.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if or (eq .Values.sts.service.type "LoadBalancer") (eq .Values.sts.service.type "NodePort") }}
+  externalTrafficPolicy: {{ .Values.sts.service.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{- if and (eq .Values.sts.service.type "LoadBalancer") (not (empty .Values.sts.service.loadBalancerSourceRanges)) }}
+  loadBalancerSourceRanges: {{ .Values.sts.service.loadBalancerSourceRanges }}
+  {{- end }}
+  {{- if and (eq .Values.sts.service.type "LoadBalancer") (not (empty .Values.sts.service.loadBalancerIP)) }}
+  loadBalancerIP: {{ .Values.sts.service.loadBalancerIP }}
+  {{- end }}
+  ports:
+    - name: https-sts
+      # Hardcoded in minio-operator code
+      # https://github.com/minio/operator/blob/22c01e4d5f317b87afe2d80ce6e42926b3a4853a/pkg/controller/sts.go#L38
+      port: 4223
+      targetPort: https-sts
+      protocol: TCP
+      {{- if and (or (eq .Values.sts.service.type "NodePort") (eq .Values.sts.service.type "LoadBalancer")) (not (empty .Values.sts.service.nodePorts.sts)) }}
+      nodePort: {{ .Values.sts.service.nodePorts.sts }}
+      {{- else if eq .Values.sts.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    {{- if .Values.sts.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.sts.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" (dict "values" (list .Values.podLabels .Values.commonLabels) "context" .) | fromYaml }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: minio-operator
+    app.kubernetes.io/component: operator
+{{- end }}

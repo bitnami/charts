@@ -1,0 +1,99 @@
+extraDeploy:
+# Taken from https://github.com/minio/operator/tree/master/examples
+- |
+  apiVersion: v1
+  kind: Secret
+  metadata:
+    name: storage-configuration
+    namespace: {{ include "common.names.namespace" . | quote }}
+  stringData:
+    config.env: |-
+      export MINIO_ROOT_USER="minio"
+      export MINIO_ROOT_PASSWORD="minio123"
+      export MINIO_STORAGE_CLASS_STANDARD="EC:2"
+      export MINIO_BROWSER="on"
+      export NAMESPACE={{ include "common.names.namespace" . | quote }}
+  type: Opaque
+- |
+  apiVersion: v1
+  stringData:
+    CONSOLE_ACCESS_KEY: console
+    CONSOLE_SECRET_KEY: console123
+  kind: Secret
+  metadata:
+    name: storage-user
+    namespace: {{ include "common.names.namespace" . | quote }}
+  type: Opaque
+- |
+  apiVersion: minio.min.io/v2
+  kind: Tenant
+  metadata:
+    labels:
+      app: minio
+    name: vib-minio
+    namespace: {{ include "common.names.namespace" . | quote }}
+  spec:
+    {{- include "minio-operator.imagePullSecrets" . | nindent 2 }}
+    certConfig: {}
+    configuration:
+      name: storage-configuration
+    env: []
+    externalCaCertSecret: []
+    externalCertSecret: []
+    externalClientCertSecrets: []
+    features:
+      bucketDNS: false
+      domains: {}
+    mountPath: /export
+    podManagementPolicy: Parallel
+    pools:
+    - affinity:
+        nodeAffinity: {}
+        podAffinity: {}
+        podAntiAffinity: {}
+      containerSecurityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+          - ALL
+        runAsGroup: 1001
+        runAsNonRoot: true
+        runAsUser: 1001
+        seccompProfile:
+          type: RuntimeDefault
+      name: pool-0
+      nodeSelector: {}
+      resources: {}
+      securityContext:
+        fsGroup: 1001
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 1001
+        runAsNonRoot: true
+        runAsUser: 1001
+      servers: 2
+      tolerations: []
+      topologySpreadConstraints: []
+      volumeClaimTemplate:
+        apiVersion: v1
+        kind: persistentvolumeclaims
+        metadata: {}
+        spec:
+          accessModes:
+          - ReadWriteOnce
+          resources:
+            requests:
+              storage: 8Gi
+          storageClassName: standard
+        status: {}
+      volumesPerServer: 2
+    priorityClassName: ""
+    requestAutoCert: true
+    serviceAccountName: ""
+    serviceMetadata:
+      consoleServiceAnnotations: {}
+      consoleServiceLabels: {}
+      minioServiceAnnotations: {}
+      minioServiceLabels: {}
+    subPath: ""
+    users:
+    - name: storage-user
