@@ -1,8 +1,13 @@
 # Changelog
 
-## 21.4.9 (2025-03-25)
+## 21.5.0 (2025-03-27)
 
-* [bitnami/elasticsearch] Release 21.4.9 ([#32601](https://github.com/bitnami/charts/pull/32601))
+* [bitnami/elasticsearch] Set `usePasswordFiles=true` by default ([#32344](https://github.com/bitnami/charts/pull/32344))
+
+## <small>21.4.9 (2025-03-25)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/elasticsearch] Release 21.4.9 (#32601) ([2db1009](https://github.com/bitnami/charts/commit/2db10093cf6f47e959774f6c262b9314480a7bcb)), closes [#32601](https://github.com/bitnami/charts/issues/32601)
 
 ## <small>21.4.8 (2025-03-04)</small>
 
