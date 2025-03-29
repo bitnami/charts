@@ -102,8 +102,12 @@ spec:
             - name: rsocket
               containerPort: {{ .Values.metrics.containerPorts.rsocket }}
               protocol: TCP
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
           {{- if .Values.metrics.extraVolumeMounts }}
-          volumeMounts: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.metrics.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.metrics.resources }}
           resources: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.resources "context" $) | nindent 12 }}
