@@ -122,6 +122,9 @@ auth:
   ## @param auth.existingPasswordSecret Existing secret with Memcached credentials (must contain a value for `memcached-password` key)
   ##
   existingPasswordSecret: ""
+  ## @param auth.usePasswordFiles Mount credentials as files instead of using environment variables
+  ##
+  usePasswordFiles: true
 ## @param command Override default container command (useful when using custom images)
 ##
 command: []
