@@ -1,8 +1,12 @@
 # Changelog
 
-## 25.0.1 (2025-03-10)
+## 25.0.2 (2025-03-31)
 
-* [bitnami/parse] Release 25.0.1 ([#32377](https://github.com/bitnami/charts/pull/32377))
+* [bitnami/parse] Release 25.0.2 ([#32687](https://github.com/bitnami/charts/pull/32687))
+
+## <small>25.0.1 (2025-03-10)</small>
+
+* [bitnami/parse] Release 25.0.1 (#32377) ([8bd7796](https://github.com/bitnami/charts/commit/8bd7796d56dd6886ba7031e5e6d6e97bc0093a5a)), closes [#32377](https://github.com/bitnami/charts/issues/32377)
 
 ## 25.0.0 (2025-03-10)
 
