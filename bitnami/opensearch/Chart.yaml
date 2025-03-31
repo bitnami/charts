@@ -31,4 +31,4 @@ maintainers:
 name: opensearch
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/opensearch
-version: 1.8.0
+version: 1.8.1
