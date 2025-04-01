@@ -1,3 +1,7 @@
+# Adding an extra initial delay to avoid race conditions with the
+# deployment and goss stages
+readinessProbe:
+  initialDelaySeconds: 60
 extraDeploy:
 # Taken from https://github.com/minio/operator/tree/master/examples
 - |
