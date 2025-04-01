@@ -20,7 +20,7 @@ dependencies:
 - condition: minio.enabled
   name: minio
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 15.x.x
+  version: 16.x.x
 - alias: memcachedmetadata
   condition: memcachedmetadata.enabled
   name: memcached
