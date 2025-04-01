@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.5.7 (2025-03-26)
+## 2.6.0 (2025-04-01)
 
-* [bitnami/mlflow] Release 2.5.7 ([#32627](https://github.com/bitnami/charts/pull/32627))
+* [bitnami/mlflow] Set `usePasswordFiles=true` by default ([#32697](https://github.com/bitnami/charts/pull/32697))
+
+## <small>2.5.7 (2025-03-26)</small>
+
+* [bitnami/mlflow] Release 2.5.7 (#32627) ([f531adf](https://github.com/bitnami/charts/commit/f531adf25113b96a5b7ad2327783250e29399003)), closes [#32627](https://github.com/bitnami/charts/issues/32627)
 
 ## <small>2.5.6 (2025-03-26)</small>
 
