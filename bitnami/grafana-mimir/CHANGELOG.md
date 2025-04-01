@@ -1,8 +1,12 @@
 # Changelog
 
+## 2.0.1 (2025-04-01)
+
+* [bitnami/grafana-mimir] Release 2.0.1 ([#32732](https://github.com/bitnami/charts/pull/32732))
+
 ## 2.0.0 (2025-04-01)
 
-* [bitnami/grafana-mimir] Bump MinIO major version 16.x.x ([#32699](https://github.com/bitnami/charts/pull/32699))
+* [bitnami/grafana-mimir] Bump MinIO major version 16.x.x (#32699) ([03e195b](https://github.com/bitnami/charts/commit/03e195bff6757cc3f7ceef76e6179d51d0be8a4e)), closes [#32699](https://github.com/bitnami/charts/issues/32699)
 
 ## <small>1.4.6 (2025-03-31)</small>
 
