@@ -20,7 +20,7 @@ dependencies:
 - condition: minio.enabled
   name: minio
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 15.x.x
+  version: 16.x.x
 - alias: memcachedmetadata
   condition: memcachedmetadata.enabled
   name: memcached
@@ -60,4 +60,4 @@ maintainers:
 name: grafana-mimir
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/grafana-mimir
-version: 1.4.6
+version: 2.0.0
