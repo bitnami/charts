@@ -1,8 +1,12 @@
 # Changelog
 
+## 3.2.1 (2025-04-01)
+
+* [bitnami/gitea] Release 3.2.1 ([#32730](https://github.com/bitnami/charts/pull/32730))
+
 ## 3.2.0 (2025-03-27)
 
-* [bitnami/gitea] Set `usePasswordFiles=true` by default ([#32347](https://github.com/bitnami/charts/pull/32347))
+* [bitnami/gitea] Set `usePasswordFiles=true` by default (#32347) ([f82ce08](https://github.com/bitnami/charts/commit/f82ce081fed5aaddc123caae618776df141bf691)), closes [#32347](https://github.com/bitnami/charts/issues/32347)
 
 ## <small>3.1.14 (2025-03-24)</small>
 
