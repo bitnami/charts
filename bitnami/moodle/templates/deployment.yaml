@@ -169,20 +169,30 @@ spec:
               value: {{ include "moodle.databaseName" . | quote }}
             - name: MOODLE_DATABASE_USER
               value: {{ include "moodle.databaseUser" . | quote }}
+            {{- if .Values.usePasswordFiles }}
+            - name: MOODLE_DATABASE_PASSWORD_FILE
+              value: "/opt/bitnami/moodle/secrets/mariadb-password"
+            {{- else }}
             - name: MOODLE_DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "moodle.databaseSecretName" . }}
                   key: mariadb-password
+            {{- end }}
             - name: MOODLE_SKIP_BOOTSTRAP
               value: {{ ternary "yes" "no" .Values.moodleSkipInstall | quote }}
             - name: MOODLE_USERNAME
               value: {{ .Values.moodleUsername | quote }}
+            {{- if .Values.usePasswordFiles }}
+            - name: MOODLE_PASSWORD_FILE
+              value: "/opt/bitnami/moodle/secrets/moodle-password"
+            {{- else }}
             - name: MOODLE_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "moodle.secretName" . }}
                   key: moodle-password
+            {{- end }}
             {{- if .Values.moodleSiteName }}
             - name: MOODLE_SITE_NAME
               value: {{ .Values.moodleSiteName| quote }}
@@ -206,11 +216,16 @@ spec:
               value: {{ .Values.smtpUser | quote }}
             {{- end }}
             {{- if .Values.smtpPassword }}
+            {{- if .Values.usePasswordFiles }}
+            - name: SMTP_PASSWORD
+              value: "/opt/bitnami/moodle/secrets/smtp-password"
+            {{- else }}
             - name: SMTP_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "common.names.fullname" . }}
                   key: smtp-password
+            {{- end }}
             {{- end }}
             {{- if .Values.smtpProtocol }}
             - name: SMTP_PROTOCOL
@@ -289,6 +304,10 @@ spec:
             - name: moodle-data
               mountPath: /bitnami/moodledata
               subPath: moodledata
+            {{- if  .Values.usePasswordFiles }}
+            - name: moodle-secrets
+              mountPath: /opt/bitnami/moodle/secrets
+            {{- end }}
             {{- if .Values.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
@@ -322,6 +341,19 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        {{- if .Values.usePasswordFiles }}
+        - name: moodle-secrets
+          projected:
+            sources:
+              - secret:
+                  name: {{ include "moodle.databaseSecretName" . }}
+              - secret:
+                  name: {{ include "moodle.secretName" . }}
+              {{- if .Values.smtpPassword }}
+              - secret:
+                  name: {{ include "common.names.fullname" . }}
+              {{- end }}
+        {{- end }}
         - name: moodle-data
           {{- if .Values.persistence.enabled }}
           persistentVolumeClaim:
