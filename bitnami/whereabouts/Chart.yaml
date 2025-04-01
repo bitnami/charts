@@ -7,9 +7,9 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: whereabouts
-      image: docker.io/bitnami/whereabouts:0.8.0-debian-12-r20
+      image: docker.io/bitnami/whereabouts:0.9.0-debian-12-r0
 apiVersion: v2
-appVersion: 0.8.0
+appVersion: 0.9.0
 dependencies:
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
@@ -30,4 +30,4 @@ maintainers:
 name: whereabouts
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/whereabouts
-version: 1.2.7
+version: 1.2.8
