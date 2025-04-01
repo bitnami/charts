@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.4.3 (2025-03-18)
+## 1.4.4 (2025-04-01)
 
-* [bitnami/kuberay] Release 1.4.3 ([#32495](https://github.com/bitnami/charts/pull/32495))
+* [bitnami/kuberay] Release 1.4.4 ([#32743](https://github.com/bitnami/charts/pull/32743))
+
+## <small>1.4.3 (2025-03-18)</small>
+
+* [bitnami/kuberay] Release 1.4.3 (#32495) ([e5716fd](https://github.com/bitnami/charts/commit/e5716fd11e0d994973d026685004123b1d1a1451)), closes [#32495](https://github.com/bitnami/charts/issues/32495)
 
 ## <small>1.4.2 (2025-03-15)</small>
 
