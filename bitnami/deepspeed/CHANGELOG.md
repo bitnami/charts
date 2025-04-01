@@ -1,8 +1,16 @@
 # Changelog
 
-## 2.3.6 (2025-03-27)
+## 2.3.8 (2025-03-28)
 
-* [bitnami/deepspeed] Release 2.3.6 ([#32634](https://github.com/bitnami/charts/pull/32634))
+* [bitnami/deepspeed] Release 2.3.8 ([#32656](https://github.com/bitnami/charts/pull/32656))
+
+## <small>2.3.7 (2025-03-27)</small>
+
+* [bitnami/deepspeed] Fix probes for different user ids (#32638) ([aac77c1](https://github.com/bitnami/charts/commit/aac77c1cf304985208bc47cbe67a651e44094c03)), closes [#32638](https://github.com/bitnami/charts/issues/32638)
+
+## <small>2.3.6 (2025-03-27)</small>
+
+* [bitnami/deepspeed] Release 2.3.6 (#32634) ([cc42106](https://github.com/bitnami/charts/commit/cc421064aa0bd8427215f10f196dfe77d78e07b4)), closes [#32634](https://github.com/bitnami/charts/issues/32634)
 
 ## <small>2.3.5 (2025-03-26)</small>
 

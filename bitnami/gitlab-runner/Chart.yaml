@@ -1,0 +1,32 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+annotations:
+  tanzuCategory: application
+  category: Infrastructure
+  licenses: Apache-2.0
+  images: |
+    - name: gitlab-runner
+      image: docker.io/bitnami/gitlab-runner:17.10.1-debian-12-r0
+apiVersion: v2
+appVersion: 17.10.1
+dependencies:
+- name: common
+  repository: oci://registry-1.docker.io/bitnamicharts
+  tags:
+  - bitnami-common
+  version: 2.x.x
+description: Gitlab Runner is an auxiliary application for Gitlab installations. Written in Go, it allows to run CI/CD jobs and send the results back to Gitlab.
+home: https://bitnami.com
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/gitlab-runner/img/gitlab-runner-stack-220x234.png
+keywords:
+- git
+- ci
+- deploy
+maintainers:
+- name: Broadcom, Inc. All Rights Reserved.
+  url: https://github.com/bitnami/charts
+name: gitlab-runner
+sources:
+- https://github.com/bitnami/charts/tree/main/bitnami/gitlab-runner
+version: 0.1.1
