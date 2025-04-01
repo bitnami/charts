@@ -1,8 +1,12 @@
 # Changelog
 
-## 15.13.2 (2025-03-05)
+## 16.0.0 (2025-04-01)
 
-* [bitnami/thanos] fix: remove quotes from ruler.ruleFile parameter ([#32201](https://github.com/bitnami/charts/pull/32201))
+* [bitnami/thanos] Bump MinIO major version 16.x.x ([#32703](https://github.com/bitnami/charts/pull/32703))
+
+## <small>15.13.2 (2025-03-06)</small>
+
+* [bitnami/thanos] fix: remove quotes from ruler.ruleFile parameter (#32201) ([1086c9b](https://github.com/bitnami/charts/commit/1086c9b831ade76d81749c91c4056531c050aba8)), closes [#32201](https://github.com/bitnami/charts/issues/32201)
 
 ## <small>15.13.1 (2025-03-05)</small>
 
