@@ -1,8 +1,17 @@
 # Changelog
 
-## 11.4.3 (2025-02-20)
+## 11.4.6 (2025-03-22)
 
-* [bitnami/redis-cluster] Release 11.4.3 ([#32032](https://github.com/bitnami/charts/pull/32032))
+* [bitnami/redis-cluster] Release 11.4.6 ([#32560](https://github.com/bitnami/charts/pull/32560))
+
+## <small>11.4.5 (2025-03-13)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/redis-cluster] Use ternary yes/no for useAOFPersistence (#32418) ([9cb94c6](https://github.com/bitnami/charts/commit/9cb94c652a935b94a7f15b4d9b3b3554591b26f2)), closes [#32418](https://github.com/bitnami/charts/issues/32418)
+
+## <small>11.4.3 (2025-02-20)</small>
+
+* [bitnami/redis-cluster] Release 11.4.3 (#32032) ([e652611](https://github.com/bitnami/charts/commit/e65261189935c2a97a9998e9fca715c08a262e44)), closes [#32032](https://github.com/bitnami/charts/issues/32032)
 
 ## <small>11.4.2 (2025-02-16)</small>
 

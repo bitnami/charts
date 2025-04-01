@@ -118,7 +118,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/postgresql
-  tag: 17.4.0-debian-12-r4
+  tag: 17.4.0-debian-12-r11
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -175,7 +175,7 @@ auth:
     replicationPasswordKey: replication-password
   ## @param auth.usePasswordFiles Mount credentials as a files instead of using an environment variable
   ##
-  usePasswordFiles: false
+  usePasswordFiles: true
 ## @param architecture PostgreSQL architecture (`standalone` or `replication`)
 ##
 architecture: standalone
@@ -731,6 +731,9 @@ primary:
     ## clusterIP: None
     ##
     clusterIP: ""
+    ## @param primary.service.labels Map of labels to add to the primary service
+    ##
+    labels: {}
     ## @param primary.service.annotations Annotations for PostgreSQL primary service
     ##
     annotations: {}
@@ -1185,6 +1188,9 @@ readReplicas:
     ## clusterIP: None
     ##
     clusterIP: ""
+    ## @param readReplicas.service.labels Map of labels to add to the read service
+    ##
+    labels: {}
     ## @param readReplicas.service.annotations Annotations for PostgreSQL read only service
     ##
     annotations: {}
@@ -1387,7 +1393,7 @@ backup:
       ##
       enabled: true
     storage:
-      ## @param backup.cronjob.storage.enabled Enable using a `PersistentVolumeClaim` as backup data volume 
+      ## @param backup.cronjob.storage.enabled Enable using a `PersistentVolumeClaim` as backup data volume
       ##
       enabled: true
       ## @param backup.cronjob.storage.existingClaim Provide an existing `PersistentVolumeClaim` (only when `architecture=standalone`)
@@ -1590,7 +1596,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r39
+    tag: 12-debian-12-r40
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1699,7 +1705,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/postgres-exporter
-    tag: 0.17.1-debian-12-r0
+    tag: 0.17.1-debian-12-r2
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

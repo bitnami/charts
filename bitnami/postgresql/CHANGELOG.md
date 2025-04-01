@@ -1,8 +1,37 @@
 # Changelog
 
+## 16.6.0 (2025-03-24)
+
+* [bitnami/postgresql] Set `usePasswordFiles=true` by default ([#32115](https://github.com/bitnami/charts/pull/32115))
+
+## <small>16.5.6 (2025-03-23)</small>
+
+* [bitnami/postgresql] Release 16.5.6 (#32576) ([7aac5fd](https://github.com/bitnami/charts/commit/7aac5fd297380af0d94f85922657fbc999dfaadc)), closes [#32576](https://github.com/bitnami/charts/issues/32576)
+
+## <small>16.5.5 (2025-03-20)</small>
+
+* [bitnami/postgresql] allow custom service labels for primary and read (#32368) ([6703679](https://github.com/bitnami/charts/commit/6703679964429f2b0fdf853a8ac812bf7dec5302)), closes [#32368](https://github.com/bitnami/charts/issues/32368)
+
+## <small>16.5.4 (2025-03-20)</small>
+
+* [bitnami/postgresql] Release 16.5.4 (#32527) ([423422d](https://github.com/bitnami/charts/commit/423422dab9ddcb40b1e8e9bb007ade8e82da7892)), closes [#32527](https://github.com/bitnami/charts/issues/32527)
+
+## <small>16.5.3 (2025-03-19)</small>
+
+* [bitnami/postgresql] Release 16.5.3 (#32525) ([150c5aa](https://github.com/bitnami/charts/commit/150c5aa26dfe351cfbdeb17e480c1de935430a9b)), closes [#32525](https://github.com/bitnami/charts/issues/32525)
+
+## <small>16.5.2 (2025-03-17)</small>
+
+* [bitnami/postgresql] Release 16.5.2 (#32484) ([89b026d](https://github.com/bitnami/charts/commit/89b026dc5e9d23f3cd35d0e07ff57b9b605f4376)), closes [#32484](https://github.com/bitnami/charts/issues/32484)
+
+## <small>16.5.1 (2025-03-17)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/postgresql] Release 16.5.1 (#32482) ([758a0c6](https://github.com/bitnami/charts/commit/758a0c6fe0de62873a475692ed2e12378784e051)), closes [#32482](https://github.com/bitnami/charts/issues/32482)
+
 ## 16.5.0 (2025-03-10)
 
-* [bitnami/postgresql] Add secretAnnotation value ([#31984](https://github.com/bitnami/charts/pull/31984))
+* [bitnami/postgresql] Add secretAnnotation value (#31984) ([7284b3f](https://github.com/bitnami/charts/commit/7284b3f65ac7a209ba65396bbc2f6cc8c188ddec)), closes [#31984](https://github.com/bitnami/charts/issues/31984)
 
 ## <small>16.4.16 (2025-03-03)</small>
 

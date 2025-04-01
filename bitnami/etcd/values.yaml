@@ -59,6 +59,9 @@ clusterDomain: cluster.local
 ## @param extraDeploy [array] Array of extra objects to deploy with the release
 ##
 extraDeploy: []
+## @param usePasswordFiles Mount credentials as files instead of using environment variables
+##
+usePasswordFiles: true
 ## Enable diagnostic mode in the deployment
 ##
 diagnosticMode:
@@ -86,7 +89,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/etcd
-  tag: 3.5.19-debian-12-r1
+  tag: 3.5.21-debian-12-r0
   digest: ""
   ## @param image.pullPolicy etcd image pull policy
   ## Specify a imagePullPolicy
@@ -670,7 +673,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r39
+    tag: 12-debian-12-r40
     digest: ""
     ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
     ##
@@ -1091,7 +1094,7 @@ defrag:
     ## @param defrag.cronjob.concurrencyPolicy Set the cronjob parameter concurrencyPolicy
     ##
     concurrencyPolicy: Forbid
-    ## @param defrag.cronjob.suspend Boolean that indicates if the controller must suspend subsequent executions (not applied to already started executions) 
+    ## @param defrag.cronjob.suspend Boolean that indicates if the controller must suspend subsequent executions (not applied to already started executions)
     ##
     suspend: false
     ## @param defrag.cronjob.successfulJobsHistoryLimit Number of successful finished jobs to retain

@@ -1,8 +1,27 @@
 # Changelog
 
-## 9.2.4 (2025-02-23)
+## 9.3.0 (2025-03-27)
 
-* [bitnami/matomo] Release 9.2.4 ([#32138](https://github.com/bitnami/charts/pull/32138))
+* [bitnami/matomo] Set `usePasswordFiles=true` by default ([#32363](https://github.com/bitnami/charts/pull/32363))
+
+## <small>9.2.7 (2025-03-24)</small>
+
+* [bitnami/matomo] Fix typo in SMTP authentication value for CRAM-MD5 (#32354) ([3e8ed41](https://github.com/bitnami/charts/commit/3e8ed41b493b1c92d2dea76d09e5e63c39a006e3)), closes [#32354](https://github.com/bitnami/charts/issues/32354)
+
+## <small>9.2.6 (2025-03-18)</small>
+
+* [bitnami/matomo] Release 9.2.6 (#32503) ([1d91b5e](https://github.com/bitnami/charts/commit/1d91b5ec19f2299c60784bc35827cb4c2e2e072e)), closes [#32503](https://github.com/bitnami/charts/issues/32503)
+
+## <small>9.2.5 (2025-03-14)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/matomo] Release 9.2.5 (#32452) ([07c6216](https://github.com/bitnami/charts/commit/07c6216527f19cdf7467a0676a111987d60d251f)), closes [#32452](https://github.com/bitnami/charts/issues/32452)
+
+## <small>9.2.4 (2025-02-23)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/matomo] Release 9.2.4 (#32138) ([a276308](https://github.com/bitnami/charts/commit/a2763082856d2e1eb93f4adc9ed26c36b3e13156)), closes [#32138](https://github.com/bitnami/charts/issues/32138)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
 
 ## <small>9.2.3 (2025-01-24)</small>
 

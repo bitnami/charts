@@ -1,8 +1,17 @@
 # Changelog
 
-## 1.4.4 (2025-02-21)
+## 2.0.0 (2025-03-28)
 
-* [bitnami/flink] Release 1.4.4 ([#31995](https://github.com/bitnami/charts/pull/31995))
+* [bitnami/flink] Release 2.0.0 ([#32603](https://github.com/bitnami/charts/pull/32603))
+
+## <small>1.4.5 (2025-03-21)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/flink] Release 1.4.5 (#32547) ([ff4abfc](https://github.com/bitnami/charts/commit/ff4abfc3109f98fe88a26b2e451a7e8dd087a4cc)), closes [#32547](https://github.com/bitnami/charts/issues/32547)
+
+## <small>1.4.4 (2025-02-21)</small>
+
+* [bitnami/flink] Release 1.4.4 (#31995) ([1312886](https://github.com/bitnami/charts/commit/1312886050b597105af3f2ae07fac701213dbcab)), closes [#31995](https://github.com/bitnami/charts/issues/31995)
 
 ## <small>1.4.3 (2025-02-12)</small>
 

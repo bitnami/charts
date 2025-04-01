@@ -43,7 +43,7 @@ var _ = Describe("Kubernetes Event Exporter:", func() {
 
 		Describe("the exporter logs", func() {
 			It("shows its kubernetes events", func() {
-				pattern := "event=.*Created container: nginx-" + *namespace + ".*sink=.*dump"
+				pattern := "event=.*Created container.*nginx-" + *namespace + ".*sink=.*dump"
 				podLabel := "app.kubernetes.io/name=kubernetes-event-exporter"
 				containerName := "event-exporter"
 

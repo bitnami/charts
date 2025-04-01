@@ -1,8 +1,26 @@
 # Changelog
 
-## 16.4.7 (2025-03-11)
+## 16.4.11 (2025-03-28)
 
-* [bitnami/mongodb] Update dns-check init container condition ([#32394](https://github.com/bitnami/charts/pull/32394))
+* [bitnami/mongodb] backup cronjob time zone variable should be camel case ([#32663](https://github.com/bitnami/charts/pull/32663))
+
+## <small>16.4.10 (2025-03-25)</small>
+
+* [bitnami/mongodb] fix broken conditional (#32591) ([f98e77e](https://github.com/bitnami/charts/commit/f98e77e989c35d7fa67e3b118bf69e64121d7454)), closes [#32591](https://github.com/bitnami/charts/issues/32591)
+* Update README.md (#32588) ([3c9e14a](https://github.com/bitnami/charts/commit/3c9e14ac3fa81ac439f64a20c284244eadb9481d)), closes [#32588](https://github.com/bitnami/charts/issues/32588)
+
+## <small>16.4.9 (2025-03-24)</small>
+
+* [bitnami/mongodb] #27482 - fix replicaset config handling (#32381) ([5f50d43](https://github.com/bitnami/charts/commit/5f50d43900bd5305b9d83ceddd17354081109641)), closes [#32381](https://github.com/bitnami/charts/issues/32381)
+
+## <small>16.4.8 (2025-03-21)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/mongodb] Release 16.4.8 (#32551) ([07d0b66](https://github.com/bitnami/charts/commit/07d0b664ed13ac2388db93f4369597948f16ee25)), closes [#32551](https://github.com/bitnami/charts/issues/32551)
+
+## <small>16.4.7 (2025-03-12)</small>
+
+* [bitnami/mongodb] Update dns-check init container condition (#32394) ([430e759](https://github.com/bitnami/charts/commit/430e7599e01ab720e67cc6f0fb5098704434ef28)), closes [#32394](https://github.com/bitnami/charts/issues/32394)
 
 ## <small>16.4.6 (2025-03-10)</small>
 

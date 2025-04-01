@@ -86,7 +86,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/memcached
-  tag: 1.6.37-debian-12-r0
+  tag: 1.6.38-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -122,6 +122,9 @@ auth:
   ## @param auth.existingPasswordSecret Existing secret with Memcached credentials (must contain a value for `memcached-password` key)
   ##
   existingPasswordSecret: ""
+  ## @param auth.usePasswordFiles Mount credentials as files instead of using environment variables
+  ##
+  usePasswordFiles: true
 ## @param command Override default container command (useful when using custom images)
 ##
 command: []
@@ -624,7 +627,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r39
+    tag: 12-debian-12-r40
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -679,7 +682,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/memcached-exporter
-    tag: 0.15.0-debian-12-r12
+    tag: 0.15.1-debian-12-r2
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

@@ -7,11 +7,11 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: nats
-      image: docker.io/bitnami/nats:2.10.26-debian-12-r1
+      image: docker.io/bitnami/nats:2.11.0-debian-12-r0
     - name: nats-exporter
-      image: docker.io/bitnami/nats-exporter:0.16.0-debian-12-r10
+      image: docker.io/bitnami/nats-exporter:0.16.0-debian-12-r11
 apiVersion: v2
-appVersion: 2.10.26
+appVersion: 2.11.0
 dependencies:
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
@@ -32,4 +32,4 @@ maintainers:
 name: nats
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/nats
-version: 9.0.6
+version: 9.0.7

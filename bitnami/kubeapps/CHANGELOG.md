@@ -1,8 +1,13 @@
 # Changelog
 
-## 17.1.3 (2025-02-20)
+## 17.1.4 (2025-03-23)
 
-* [bitnami/kubeapps] Release 17.1.3 ([#32093](https://github.com/bitnami/charts/pull/32093))
+* [bitnami/kubeapps] Release 17.1.4 ([#32568](https://github.com/bitnami/charts/pull/32568))
+
+## <small>17.1.3 (2025-02-21)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/kubeapps] Release 17.1.3 (#32093) ([51dcb53](https://github.com/bitnami/charts/commit/51dcb533a096a5df4787bed39f306854a55bbca4)), closes [#32093](https://github.com/bitnami/charts/issues/32093)
 
 ## <small>17.1.2 (2025-02-03)</small>
 

@@ -7,25 +7,25 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: harbor-adapter-trivy
-      image: docker.io/bitnami/harbor-adapter-trivy:2.12.2-debian-12-r6
+      image: docker.io/bitnami/harbor-adapter-trivy:2.12.2-debian-12-r8
     - name: harbor-core
-      image: docker.io/bitnami/harbor-core:2.12.2-debian-12-r7
+      image: docker.io/bitnami/harbor-core:2.12.2-debian-12-r9
     - name: harbor-exporter
-      image: docker.io/bitnami/harbor-exporter:2.12.2-debian-12-r7
+      image: docker.io/bitnami/harbor-exporter:2.12.2-debian-12-r9
     - name: harbor-jobservice
-      image: docker.io/bitnami/harbor-jobservice:2.12.2-debian-12-r7
+      image: docker.io/bitnami/harbor-jobservice:2.12.2-debian-12-r9
     - name: harbor-portal
-      image: docker.io/bitnami/harbor-portal:2.12.2-debian-12-r4
+      image: docker.io/bitnami/harbor-portal:2.12.2-debian-12-r5
     - name: harbor-registry
-      image: docker.io/bitnami/harbor-registry:2.12.2-debian-12-r7
+      image: docker.io/bitnami/harbor-registry:2.12.2-debian-12-r9
     - name: harbor-registryctl
-      image: docker.io/bitnami/harbor-registryctl:2.12.2-debian-12-r7
+      image: docker.io/bitnami/harbor-registryctl:2.12.2-debian-12-r9
     - name: nginx
-      image: docker.io/bitnami/nginx:1.27.4-debian-12-r4
+      image: docker.io/bitnami/nginx:1.27.4-debian-12-r7
     - name: os-shell
-      image: docker.io/bitnami/os-shell:12-debian-12-r39
+      image: docker.io/bitnami/os-shell:12-debian-12-r40
     - name: postgresql
-      image: docker.io/bitnami/postgresql:14.16.0-debian-12-r4
+      image: docker.io/bitnami/postgresql:14.17.0-debian-12-r8
 apiVersion: v2
 appVersion: 2.12.2
 dependencies:
@@ -56,4 +56,4 @@ maintainers:
 name: harbor
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/harbor
-version: 24.3.4
+version: 24.5.0
