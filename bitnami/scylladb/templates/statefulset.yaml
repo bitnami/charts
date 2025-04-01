@@ -208,11 +208,16 @@ spec:
               value: {{ .Values.cluster.name }}
             - name: SCYLLADB_SEEDS
               value: {{ (include "scylladb.seeds" .) | quote }}
+            {{- if .Values.usePasswordFiles }}
+            - name: SCYLLADB_PASSWORD_FILE
+              value: {{ printf "/opt/bitnami/airflow/secrets/%s" (include "common.secrets.key" (dict "existingSecret" .Values.dbUser.existingSecret "key" "scylladb-password") }}
+            {{- else }}
             - name: SCYLLADB_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "common.secrets.name" (dict "existingSecret" .Values.dbUser.existingSecret "context" $) }}
                   key: {{ include "common.secrets.key" (dict "existingSecret" .Values.dbUser.existingSecret "key" "scylladb-password") }}
+            {{- end }}
             - name: POD_NAME
               valueFrom:
                 fieldRef:
@@ -461,6 +466,10 @@ spec:
             - name: empty-dir
               mountPath: /.cassandra
               subPath: app-cqlsh-tmp-dir
+            {{- if  .Values.usePasswordFiles }}
+            - name: scylladb-secrets
+              mountPath: /opt/bitnami/scylladb/secrets
+            {{- end }}
             {{- if .Values.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
@@ -622,6 +631,13 @@ spec:
         - name: init-db-secret
           secret:
             secretName: {{ tpl .Values.initDBSecret $ }}
+        {{- end }}
+        {{- if .Values.usePasswordFiles }}
+        - name: scylladb-secrets
+          projected:
+            sources:
+              - secret:
+                  name: {{ include "common.secrets.name" (dict "existingSecret" .Values.dbUser.existingSecret "context" $) }}
         {{- end }}
         {{- if .Values.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
