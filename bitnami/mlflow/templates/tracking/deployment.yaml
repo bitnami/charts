@@ -381,6 +381,17 @@ spec:
             name: {{ include "mlflow.v0.tracking.auth.overridesConfigMapName" . }}
         - name: rendered-basic-auth
           emptyDir: {}
+        {{- if .Values.usePasswordFiles}}
+        - name: mlflow-secrets
+          projected:
+            sources:
+              - secret:
+                  name: {{ include "mlflow.v0.tracking.secretName" . }}
+              {{- if (include "mlflow.v0.database.enabled" .) }}
+              - secret:
+                  name: {{ include "mlflow.v0.database.secretName" . }}
+              {{- end }}
+        {{- end }}
         {{- end }}
         - name: data
           {{- if .Values.tracking.persistence.enabled }}

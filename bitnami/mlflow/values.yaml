@@ -62,6 +62,9 @@ commonAnnotations: {}
 ## @param clusterDomain Kubernetes cluster domain name
 ##
 clusterDomain: cluster.local
+## @param usePasswordFiles Mount credentials as files instead of using environment variables
+##
+usePasswordFiles: true
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
@@ -144,8 +147,8 @@ tracking:
   ## @param tracking.replicaCount Number of mlflow replicas to deploy
   ##
   replicaCount: 1
-  ## @param tracking.host mlflow tracking listening host. Set to "[::]" to use ipv6. 
-  ## 
+  ## @param tracking.host mlflow tracking listening host. Set to "[::]" to use ipv6.
+  ##
   host: "0.0.0.0"
   ## @param tracking.containerPorts.http mlflow HTTP container port
   ##

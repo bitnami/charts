@@ -178,6 +178,14 @@ Init container definition for waiting for the database to be ready
     - -ec
     - |
       #!/bin/bash
+
+      {{- if .Values.usePasswordFiles }}
+      export MLFLOW_TRACKING_USERNAME="$(< $MLFLOW_TRACKING_USERNAME_FILE)"
+      export MLFLOW_TRACKING_PASSWORD="$(< $MLFLOW_TRACKING_PASSWORD_FILE)"
+      {{- if (include "mlflow.v0.database.enabled" .) }}
+      export MLFLOW_DATABASE_PASSWORD="$(< $MLFLOW_DATABASE_PASSWORD_FILE)"
+      {{- end }}
+      {{- end }}
       # First render the overrides
       render-template /bitnami/basic-auth-overrides/*.ini > /tmp/rendered-overrides.ini
       # Loop through the ini overrides and apply it to the final basic_auth.ini
@@ -194,6 +202,10 @@ Init container definition for waiting for the database to be ready
       rm /tmp/rendered-overrides.ini
   env:
     {{- if (include "mlflow.v0.database.enabled" .) }}
+    {{- if .Values.usePasswordFiles }}
+    - name: MLFLOW_DATABASE_PASSWORD_FILE
+      value: {{ printf "/opt/bitnami/mlflow/secrets/%s" (include "mlflow.v0.database.passwordKey" .) }}
+    {{- else }}
     - name: MLFLOW_DATABASE_PASSWORD
       valueFrom:
         secretKeyRef:
@@ -202,6 +214,14 @@ Init container definition for waiting for the database to be ready
     - name: MLFLOW_DATABASE_AUTH_URI
       value: {{ include "mlflow.v0.database-auth.uri" . | quote }}
     {{- end }}
+    {{- end }}
+    {{- if .Values.usePasswordFiles }}
+    - name: MLFLOW_TRACKING_USERNAME
+      value: {{ printf "/opt/bitnami/mlflow/secrets/%s" (include "mlflow.v0.tracking.userKey" .) }}
+    - name: MLFLOW_TRACKING_PASSWORD
+      value: {{ printf "/opt/bitnami/mlflow/secrets/%s" (include "mlflow.v0.tracking.passwordKey" .) }}
+    {{- else }}
+      value:
     - name: MLFLOW_TRACKING_USERNAME
       valueFrom:
         secretKeyRef:
@@ -212,6 +232,7 @@ Init container definition for waiting for the database to be ready
         secretKeyRef:
           name: {{ include "mlflow.v0.tracking.secretName" . }}
           key: {{ include "mlflow.v0.tracking.passwordKey" . | quote }}
+    {{- end }}
     {{- if .Values.tracking.extraEnvVars }}
     {{- include "common.tplvalues.render" (dict "value" .Values.tracking.extraEnvVars "context" $) | nindent 4 }}
     {{- end }}
@@ -231,6 +252,10 @@ Init container definition for waiting for the database to be ready
       mountPath: /bitnami/basic-auth-overrides
     - name: rendered-basic-auth
       mountPath: /bitnami/rendered-basic-auth
+    {{- if .Values.usePasswordFiles }}
+    - name: mlflow-secrets
+      mountPath: /opt/bitnami/mlflow/secrets
+    {{- end }}
 {{- end -}}
 
 {{/*
