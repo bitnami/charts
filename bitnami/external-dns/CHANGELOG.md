@@ -1,8 +1,13 @@
 # Changelog
 
-## 8.7.8 (2025-03-26)
+## 8.7.9 (2025-04-01)
 
-* [bitnami/external-dns] Release 8.7.8 ([#32475](https://github.com/bitnami/charts/pull/32475))
+* [bitnami/external-dns] Release 8.7.9 ([#32728](https://github.com/bitnami/charts/pull/32728))
+
+## <small>8.7.8 (2025-03-26)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/external-dns] Release 8.7.8 (#32475) ([01bb09c](https://github.com/bitnami/charts/commit/01bb09ca9cf48bdcd53b7a968e808cc22da1108d)), closes [#32475](https://github.com/bitnami/charts/issues/32475)
 
 ## <small>8.7.7 (2025-03-10)</small>
 
