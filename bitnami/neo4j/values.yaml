@@ -66,6 +66,9 @@ clusterDomain: cluster.local
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
+## @param usePasswordFiles Mount credentials as files instead of using environment variables
+##
+usePasswordFiles: true
 ## Diagnostic mode
 ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
 ## @param diagnosticMode.command Command to override all containers in the chart release

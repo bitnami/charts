@@ -129,6 +129,10 @@ spec:
               value: {{ .Values.service.ports.bolt | quote }}
             - name: NEO4J_HTTP_ADVERTISED_PORT_NUMBER
               value: {{ .Values.service.ports.http | quote }}
+            {{- if .Values.usePasswordFiles }}
+            - name: NEO4J_PASSWORD_FILE
+              value: "/opt/bitnami/neo4j/secrets/password"
+            {{- else }}
             - name: NEO4J_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -223,6 +227,10 @@ spec:
             - name: empty-dir
               mountPath: /opt/bitnami/neo4j/run
               subPath: app-run-dir
+            {{- if  .Values.usePasswordFiles }}
+            - name: neo4j-secrets
+              mountPath: /opt/bitnami/neo4j/secrets
+            {{- end }}
             {{- if or .Values.existingConfigmap .Values.configuration .Values.apocConfiguration }}
             - name: config-dir
               mountPath: /bitnami/neo4j/conf
@@ -250,6 +258,13 @@ spec:
       volumes:
         - name: empty-dir
           emptyDir: {}
+        {{- if .Values.usePasswordFiles }}
+        - name: neo4j-secrets
+          projected:
+            sources:
+              - secret:
+                  name: {{ include "neo4j.secretName" . }}
+        {{- end }}
         - name: data
         {{- if .Values.persistence.enabled }}
           persistentVolumeClaim:
