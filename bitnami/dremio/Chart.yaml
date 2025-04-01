@@ -42,4 +42,4 @@ sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/dremio
 - https://github.com/bitnami/containers/tree/main/bitnami/dremio
 - https://github.com/dremio/dremio-oss
-version: 0.6.3
+version: 1.0.0
