@@ -83,7 +83,6 @@ extraDeploy:
           resources:
             requests:
               storage: 8Gi
-          storageClassName: standard
         status: {}
       volumesPerServer: 2
     priorityClassName: ""
