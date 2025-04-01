@@ -40,8 +40,8 @@ spec:
         {{- if include "kafka.broker.createConfigmap" . }}
         checksum/configuration: {{ include (print $.Template.BasePath "/broker/configmap.yaml") . | sha256sum }}
         {{- end }}
-        {{- if include "kafka.createSaslSecret" . }}
-        checksum/passwords-secret: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }}
+        {{- if or (include "kafka.createSaslSecret" .) (not .Values.existingKraftSecret) }}
+        checksum/secret: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }}
         {{- end }}
          {{- if include "kafka.createTlsSecret" . }}
         checksum/tls-secret: {{ include (print $.Template.BasePath "/tls-secret.yaml") . | sha256sum }}

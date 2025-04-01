@@ -390,7 +390,7 @@ Returns an init-container that prepares the Kafka configuration files for main c
       value: {{ printf "%s-headless" (include "kafka.controller.fullname" .context) | trunc 63 | trimSuffix "-" }}
     - name: KAFKA_CONTROLLER_PORT
       value: {{ .context.Values.listeners.controller.containerPort | quote }}
-    {{- $kraftSecret := default (printf "%s-kraft" (include "common.names.fullname" .context)) .context.Values.existingKraftSecret }}
+    {{- $kraftSecret := include "kafka.kraftSecretName" .context }}
     {{- range $i := until (int .context.Values.controller.replicaCount) }}
     - name: KAFKA_CONTROLLER_{{ $i }}_DIR_ID
       valueFrom:
