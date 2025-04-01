@@ -4,6 +4,10 @@
 
 * [bitnami/thanos] Bump MinIO major version 16.x.x ([#32703](https://github.com/bitnami/charts/pull/32703))
 
+## 15.14.0 (2025-03-19)
+
+* [bitnami/thanos] feature: allow configuring labels for all ingress ([#32511](https://github.com/bitnami/charts/pull/32511))
+
 ## <small>15.13.2 (2025-03-06)</small>
 
 * [bitnami/thanos] fix: remove quotes from ruler.ruleFile parameter (#32201) ([1086c9b](https://github.com/bitnami/charts/commit/1086c9b831ade76d81749c91c4056531c050aba8)), closes [#32201](https://github.com/bitnami/charts/issues/32201)
