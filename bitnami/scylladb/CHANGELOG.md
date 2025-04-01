@@ -1,8 +1,13 @@
 # Changelog
 
-## 3.2.1 (2025-03-22)
+## 3.3.0 (2025-04-01)
 
-* [bitnami/scylladb] Release 3.2.1 ([#32562](https://github.com/bitnami/charts/pull/32562))
+* [bitnami/scylladb] Set `usePasswordFiles=true` by default ([#32710](https://github.com/bitnami/charts/pull/32710))
+
+## <small>3.2.1 (2025-03-22)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/scylladb] Release 3.2.1 (#32562) ([5e073d5](https://github.com/bitnami/charts/commit/5e073d57d40783d8ac90e9a5861f3d10d0499750)), closes [#32562](https://github.com/bitnami/charts/issues/32562)
 
 ## 3.2.0 (2025-02-20)
 
