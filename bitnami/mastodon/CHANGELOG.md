@@ -1,8 +1,12 @@
 # Changelog
 
-## 9.2.8 (2025-04-01)
+## 9.2.9 (2025-04-02)
 
-* [bitnami/mastodon] Release 9.2.8 ([#32711](https://github.com/bitnami/charts/pull/32711))
+* [bitnami/mastodon] Release 9.2.9 ([#32785](https://github.com/bitnami/charts/pull/32785))
+
+## <small>9.2.8 (2025-04-01)</small>
+
+* [bitnami/mastodon] Release 9.2.8 (#32711) ([256efe8](https://github.com/bitnami/charts/commit/256efe8969ab8f46739d15b8d25ccf42988521c2)), closes [#32711](https://github.com/bitnami/charts/issues/32711)
 
 ## <small>9.2.7 (2025-03-13)</small>
 
