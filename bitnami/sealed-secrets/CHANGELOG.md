@@ -1,8 +1,13 @@
 # Changelog
 
-## 2.5.8 (2025-03-28)
+## 2.5.9 (2025-04-02)
 
-* [bitnami/sealed-secrets] Release 2.5.8 ([#32641](https://github.com/bitnami/charts/pull/32641))
+* [bitnami/sealed-secrets] Release 2.5.9 ([#32762](https://github.com/bitnami/charts/pull/32762))
+
+## <small>2.5.8 (2025-03-28)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/sealed-secrets] Release 2.5.8 (#32641) ([08742e3](https://github.com/bitnami/charts/commit/08742e3f0a3aa6134b4f9a6971fa4721e7c30cfc)), closes [#32641](https://github.com/bitnami/charts/issues/32641)
 
 ## <small>2.5.7 (2025-03-05)</small>
 
