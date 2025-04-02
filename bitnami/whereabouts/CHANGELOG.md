@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.2.8 (2025-04-01)
+## 1.2.8 (2025-04-02)
 
 * [bitnami/whereabouts] Release 1.2.8 ([#32715](https://github.com/bitnami/charts/pull/32715))
 
