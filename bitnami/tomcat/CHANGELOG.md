@@ -1,8 +1,13 @@
 # Changelog
 
-## 11.6.1 (2025-03-27)
+## 11.7.0 (2025-04-02)
 
-* [bitnami/tomcat] Release 11.6.1 ([#32629](https://github.com/bitnami/charts/pull/32629))
+* [bitnami/tomcat] Set `usePasswordFiles=true` by default ([#32767](https://github.com/bitnami/charts/pull/32767))
+
+## <small>11.6.1 (2025-03-27)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/tomcat] Release 11.6.1 (#32629) ([da54156](https://github.com/bitnami/charts/commit/da541565254f8a73b4bf1eb62746235e70dbed12)), closes [#32629](https://github.com/bitnami/charts/issues/32629)
 
 ## 11.6.0 (2025-03-12)
 
