@@ -1,8 +1,12 @@
 # Changelog
 
-## 24.1.18 (2025-03-06)
+## 24.2.0 (2025-04-02)
 
-* [bitnami/wordpress] fix network policy when metrics enabled ([#32338](https://github.com/bitnami/charts/pull/32338))
+* [bitnami/wordpress] Set `usePasswordFiles=true` by default ([#32770](https://github.com/bitnami/charts/pull/32770))
+
+## <small>24.1.18 (2025-03-07)</small>
+
+* [bitnami/wordpress] fix network policy when metrics enabled (#32338) ([ddcee74](https://github.com/bitnami/charts/commit/ddcee74411ab886e7ff1831e248392cf6dfed668)), closes [#32338](https://github.com/bitnami/charts/issues/32338)
 
 ## <small>24.1.17 (2025-03-06)</small>
 
