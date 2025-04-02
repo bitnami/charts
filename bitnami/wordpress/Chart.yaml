@@ -45,4 +45,4 @@ maintainers:
 name: wordpress
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/wordpress
-version: 24.1.18
+version: 24.2.0

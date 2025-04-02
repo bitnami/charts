@@ -198,18 +198,28 @@ spec:
               value: {{ include "wordpress.databaseName" . | quote }}
             - name: WORDPRESS_DATABASE_USER
               value: {{ include "wordpress.databaseUser" . | quote }}
+            {{- if .Values.usePasswordFiles }}
+            - name: WORDPRESS_DATABASE_PASSWORD_FILE
+              value: "/opt/bitnami/wordpress/secrets/mariadb-password"
+            {{- else }}
             - name: WORDPRESS_DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "wordpress.databaseSecretName" . }}
                   key: mariadb-password
+            {{- end }}
             - name: WORDPRESS_USERNAME
               value: {{ .Values.wordpressUsername | quote }}
+            {{- if .Values.usePasswordFiles }}
+            - name: WORDPRESS_PASSWORD_FILE
+              value: "/opt/bitnami/wordpress/secrets/wordpress-password"
+            {{- else }}
             - name: WORDPRESS_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "wordpress.secretName" . }}
                   key: wordpress-password
+            {{- end }}
             - name: WORDPRESS_EMAIL
               value: {{ .Values.wordpressEmail | quote }}
             - name: WORDPRESS_FIRST_NAME
@@ -260,11 +270,16 @@ spec:
               value: {{ .Values.smtpUser | quote }}
             {{- end }}
             {{- if or .Values.smtpPassword .Values.smtpExistingSecret }}
+            {{- if .Values.usePasswordFiles }}
+            - name: SMTP_PASSWORD_FILE
+              value: "/opt/bitnami/wordpress/secrets/smtp-password"
+            {{- else }}
             - name: SMTP_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "wordpress.smtpSecretName" . }}
                   key: smtp-password
+            {{- end }}
             {{- end }}
             {{- if .Values.smtpProtocol }}
             - name: SMTP_PROTOCOL
@@ -355,6 +370,23 @@ spec:
             - mountPath: /bitnami/wordpress
               name: wordpress-data
               subPath: wordpress
+            {{- if .Values.usePasswordFiles }}
+            - name: wordpress-secrets
+              projected:
+                sources:
+                  - secret:
+                      name:  {{ include "wordpress.secretName" . }}
+                  - secret:
+                      name:  {{ include "wordpress.databaseSecretName" . }}
+                  {{- if or .Values.smtpPassword .Values.smtpExistingSecret }}
+                  - secret:
+                      name:  {{ include "wordpress.smtpSecretName" . }}
+                  {{- end }}
+            {{- end }}
+            {{- if  .Values.usePasswordFiles }}
+            - name: wordpress-secrets
+              mountPath: /opt/bitnami/wordpress/secrets
+            {{- end }}
             {{- if or .Values.wordpressConfiguration .Values.existingWordPressConfigurationSecret }}
             - name: wordpress-config
               mountPath: /opt/bitnami/wordpress/wp-config.php
