@@ -59,6 +59,9 @@ commonAnnotations: {}
 ## @param extraDeploy Extra objects to deploy (value evaluated as a template)
 ##
 extraDeploy: []
+## @param usePasswordFiles Mount credentials as files instead of using environment variables
+##
+usePasswordFiles: true
 ## Enable diagnostic mode in the statefulset
 ##
 diagnosticMode:
