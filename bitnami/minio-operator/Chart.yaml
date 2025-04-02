@@ -7,13 +7,13 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: kes
-      image: docker.io/bitnami/kes:2025.3.12-debian-12-r0
+      image: docker.io/bitnami/kes:2025.3.12-debian-12-r2
     - name: minio
-      image: docker.io/bitnami/minio:2025.3.12-debian-12-r2
+      image: docker.io/bitnami/minio:2025.3.12-debian-12-r3
     - name: minio-operator
-      image: docker.io/bitnami/minio-operator:7.0.1-debian-12-r0
+      image: docker.io/bitnami/minio-operator:7.0.1-debian-12-r1
     - name: minio-operator-sidecar
-      image: docker.io/bitnami/minio-operator-sidecar:7.0.1-debian-12-r0
+      image: docker.io/bitnami/minio-operator-sidecar:7.0.1-debian-12-r1
 apiVersion: v2
 appVersion: 7.0.1
 dependencies:
@@ -35,4 +35,4 @@ maintainers:
 name: minio-operator
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/minio-operator
-version: 0.1.1
+version: 0.1.2
