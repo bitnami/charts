@@ -1,8 +1,12 @@
 # Changelog
 
-## 16.0.0 (2025-03-13)
+## 16.0.1 (2025-04-02)
 
-* [bitnami/minio] Set `usePasswordFiles=true` by default ([#32361](https://github.com/bitnami/charts/pull/32361))
+* [bitnami/minio] Release 16.0.1 ([#32749](https://github.com/bitnami/charts/pull/32749))
+
+## 16.0.0 (2025-03-27)
+
+* [bitnami/minio] Set `usePasswordFiles=true` by default (#32361) ([4f16379](https://github.com/bitnami/charts/commit/4f1637923c52c3f209a20e3dc617c3433de4083c)), closes [#32361](https://github.com/bitnami/charts/issues/32361)
 
 ## <small>15.0.7 (2025-03-12)</small>
 
