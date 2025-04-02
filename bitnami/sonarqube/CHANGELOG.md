@@ -1,8 +1,12 @@
 # Changelog
 
-## 8.0.6 (2025-03-04)
+## 8.1.0 (2025-04-02)
 
-* [bitnami/sonarqube] Release 8.0.6 ([#32275](https://github.com/bitnami/charts/pull/32275))
+* [bitnami/sonarqube] Set `usePasswordFiles=true` by default ([#32769](https://github.com/bitnami/charts/pull/32769))
+
+## <small>8.0.6 (2025-03-04)</small>
+
+* [bitnami/sonarqube] Release 8.0.6 (#32275) ([02898e2](https://github.com/bitnami/charts/commit/02898e2451f52577262d28b652497ce3b0fa8f3a)), closes [#32275](https://github.com/bitnami/charts/issues/32275)
 
 ## <small>8.0.5 (2025-02-27)</small>
 
