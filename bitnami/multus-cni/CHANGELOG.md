@@ -1,8 +1,13 @@
 # Changelog
 
-## 2.2.9 (2025-03-24)
+## 2.2.10 (2025-04-02)
 
-* [bitnami/multus-cni] Release 2.2.9 ([#32584](https://github.com/bitnami/charts/pull/32584))
+* [bitnami/multus-cni] Release 2.2.10 ([#32753](https://github.com/bitnami/charts/pull/32753))
+
+## <small>2.2.9 (2025-03-24)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/multus-cni] Release 2.2.9 (#32584) ([52607fa](https://github.com/bitnami/charts/commit/52607faf0d32ed0c7741b0fc224863596fcdc271)), closes [#32584](https://github.com/bitnami/charts/issues/32584)
 
 ## <small>2.2.8 (2025-03-05)</small>
 
