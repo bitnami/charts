@@ -201,11 +201,16 @@ Add environment variables to configure database values
 - name: SUPERSET_DATABASE_USER
   value: {{ include "superset.database.user" . | quote }}
 {{- if or (not .Values.postgresql.enabled) .Values.postgresql.auth.enablePostgresUser }}
+{{- if .Values.usePasswordFiles }}
+- name: SUPERSET_DATABASE_PASSWORD_FILE
+  value: {{ printf "/opt/bitnami/superset/secrets/%s" (include "superset.postgresql.secretName" .) }}
+{{- else }}
 - name: SUPERSET_DATABASE_PASSWORD
   valueFrom:
     secretKeyRef:
       name: {{ include "superset.postgresql.secretName" . }}
       key: {{ include "superset.database.secretKey" . }}
+{{- end }}
 {{- else }}
 - name: ALLOW_EMPTY_PASSWORD
   value: "true"
@@ -222,22 +227,32 @@ Add environment variables to configure redis values
   value: {{ include "superset.redis.port" . | quote }}
 - name: REDIS_USER
   value: {{ ternary "default" .Values.externalRedis.username .Values.redis.enabled  | quote }}
+{{- if .Values.usePasswordFiles }}
+- name: REDIS_PASSWORD_FILE
+  value: {{ printf "/opt/bitnami/superset/secrets/%s" (include "superset.redis.secretKey" .) }}
+{{- else }}
 - name: REDIS_PASSWORD
   valueFrom:
     secretKeyRef:
       name: {{ include "superset.redis.secretName" . }}
       key: {{ include "superset.redis.secretKey" . }}
+{{- end }}
 {{- end -}}
 
 {{/*
 Add environment variables to configure superset common values
 */}}
 {{- define "superset.configure.common" -}}
+{{- if .Values.usePasswordFiles }}
+- name: SUPERSET_SECRET_KEY_FILE
+  value: "/opt/bitnami/superset/secrets/superset-secret-key"
+{{- else }}
 - name: SUPERSET_SECRET_KEY
   valueFrom:
     secretKeyRef:
       name: {{ include "superset.secretName" . }}
       key: superset-secret-key
+{{- end }}
 {{- if or .Values.existingConfigmap .Values.config }}
 - name: SUPERSET_CONF_FILE
   value: "/bitnami/superset/conf/superset_config.py"

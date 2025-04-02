@@ -740,6 +740,12 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/super
 
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
+## Upgrading
+
+### To 2.0.0
+
+This version replaces the value `flower.auth.usePasswordFiles` with the new value `usePasswordFiles`. When using `usePasswordFiles=true`, all credentials will be mounted as files instead of using an environment variable.
+
 ## License
 
 Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
