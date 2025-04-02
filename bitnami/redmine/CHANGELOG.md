@@ -1,8 +1,12 @@
 # Changelog
 
-## 32.1.6 (2025-03-11)
+## 32.2.0 (2025-04-02)
 
-* [bitnami/redmine] Release 32.1.6 ([#32389](https://github.com/bitnami/charts/pull/32389))
+* [bitnami/redmine] Set `usePasswordFiles=true` by default ([#32771](https://github.com/bitnami/charts/pull/32771))
+
+## <small>32.1.6 (2025-03-11)</small>
+
+* [bitnami/redmine] Release 32.1.6 (#32389) ([15830e2](https://github.com/bitnami/charts/commit/15830e283f3cdfe6000a1366b2b7e52a1e2a85ea)), closes [#32389](https://github.com/bitnami/charts/issues/32389)
 
 ## <small>32.1.5 (2025-02-28)</small>
 
