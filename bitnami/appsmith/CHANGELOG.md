@@ -1,6 +1,6 @@
 # Changelog
 
-## 5.2.3 (2025-04-01)
+## 5.2.3 (2025-04-02)
 
 * [bitnami/appsmith] Release 5.2.3 ([#32737](https://github.com/bitnami/charts/pull/32737))
 
