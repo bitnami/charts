@@ -744,7 +744,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ### To 2.0.0
 
-This version replaces the value `flower.auth.usePasswordFiles` with the new value `usePasswordFiles`. When using `usePasswordFiles=true`, all credentials will be mounted as files instead of using an environment variable.
+This version replaces the value `flower.auth.usePasswordFiles` with the new value `usePasswordFiles`. When using `usePasswordFiles=true`, , all credentials will be mounted as files instead of using an environment variable.
 
 ## License
 
