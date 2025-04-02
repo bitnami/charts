@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.1.1 (2025-04-01)
+## 0.1.2 (2025-04-02)
 
-* [bitnami/minio-operator] Release 0.1.1 ([#32694](https://github.com/bitnami/charts/pull/32694))
+* [bitnami/minio-operator] Release 0.1.2 ([#32748](https://github.com/bitnami/charts/pull/32748))
+
+## <small>0.1.1 (2025-04-01)</small>
+
+* [bitnami/minio-operator] Release 0.1.1 (#32694) ([9b6e866](https://github.com/bitnami/charts/commit/9b6e86696b426426fee449849691e1838aae49d9)), closes [#32694](https://github.com/bitnami/charts/issues/32694)
 
 ## 0.1.0 (2025-04-01)
 
