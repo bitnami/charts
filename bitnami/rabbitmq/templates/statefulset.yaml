@@ -250,11 +250,16 @@ spec:
             {{- end }}
             - name: RABBITMQ_USE_LONGNAME
               value: "true"
+            {{- if .Values.usePasswordFiles }}
+            - name: RABBITMQ_ERL_COOKIE_FILE
+              value: {{ printf "/opt/bitnami/rabbitmq/secrets/%s" (include "rabbitmq.secretErlangKey" .) }}
+            {{- else }}
             - name: RABBITMQ_ERL_COOKIE
               valueFrom:
                 secretKeyRef:
                   name: {{ template "rabbitmq.secretErlangName" . }}
                   key: {{ template "rabbitmq.secretErlangKey" . }}
+            {{- end }}
             {{- if and .Values.clustering.rebalance (gt (.Values.replicaCount | int) 1) }}
             - name: RABBITMQ_CLUSTER_REBALANCE
               value: "true"
@@ -267,11 +272,16 @@ spec:
               value: {{ ternary "yes" "no" (or .Values.auth.securePassword (not .Values.auth.password)) | quote }}
             - name: RABBITMQ_USERNAME
               value: {{ .Values.auth.username | quote }}
+            {{- if .Values.usePasswordFiles }}
+            - name: RABBITMQ_PASSWORD_FILE
+              value: {{ printf "/opt/bitnami/rabbitmq/secrets/%s" (include "rabbitmq.secretPasswordKey" .) }}
+            {{- else }}
             - name: RABBITMQ_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ template "rabbitmq.secretPasswordName" . }}
                   key: {{ template "rabbitmq.secretPasswordKey" . }}
+            {{- end }}
             - name: RABBITMQ_PLUGINS
               value: {{ include "rabbitmq.plugins" . | quote }}
             {{- if .Values.communityPlugins }}
@@ -388,6 +398,10 @@ spec:
               {{- if .Values.persistence.subPath }}
               subPath: {{ .Values.persistence.subPath }}
               {{- end }}
+            {{- if  .Values.usePasswordFiles }}
+            - name: rabbitmq-secrets
+              mountPath: /opt/bitnami/rabbitmq/secrets
+            {{- end }}
             {{- if .Values.auth.tls.enabled }}
             - name: certs
               mountPath: /opt/bitnami/rabbitmq/certs
@@ -429,10 +443,10 @@ spec:
               - secret:
                   name: {{ template "rabbitmq.tlsSecretName" . }}
                   items:
-                    {{- if not .Values.auth.tls.overrideCaCertificate }}                  
+                    {{- if not .Values.auth.tls.overrideCaCertificate }}
                     - key: {{ ternary "tls.crt" "ca.crt" .Values.auth.tls.existingSecretFullChain }}
                       path: ca_certificate.pem
-                    {{- end }}                      
+                    {{- end }}
                     - key: tls.crt
                       path: server_certificate.pem
                     - key: tls.key
@@ -456,7 +470,7 @@ spec:
               {{- if or (and (empty .Values.configurationExistingSecret) .Values.configuration) (and (not .Values.advancedConfigurationExistingSecret) .Values.advancedConfiguration) }}
               - secret:
                   name: {{ printf "%s-config" (include "common.names.fullname" .) }}
-              {{- end }}    
+              {{- end }}
               {{- if and .Values.advancedConfigurationExistingSecret (not .Values.advancedConfiguration) }}
               - secret:
                   name: {{ tpl .Values.advancedConfigurationExistingSecret . | quote }}
@@ -465,6 +479,15 @@ spec:
               - secret:
                   name: {{ tpl .Values.configurationExistingSecret . | quote }}
               {{- end }}
+        {{- if .Values.usePasswordFiles }}
+        - name: rabbitmq-secrets
+          projected:
+            sources:
+              - secret:
+                  name: {{ template "rabbitmq.secretPasswordName" . }}
+              - secret:
+                  name: {{ template "rabbitmq.secretErlangName" . }}
+        {{- end }}
         {{- if .Values.loadDefinition.enabled }}
         - name: load-definition-volume
           secret:
@@ -498,7 +521,7 @@ spec:
             {{- with .Values.persistence.existingClaim }}
             claimName: {{ tpl . $ }}
             {{- end }}
-  {{- else }} 
+  {{- else }}
   {{- if .Values.persistentVolumeClaimRetentionPolicy.enabled }}
   persistentVolumeClaimRetentionPolicy:
     whenDeleted: {{ .Values.persistentVolumeClaimRetentionPolicy.whenDeleted }}
