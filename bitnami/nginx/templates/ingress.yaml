@@ -20,7 +20,7 @@ spec:
   {{- end }}
   rules:
     {{- if .Values.ingress.hostname }}
-    - host: {{ .Values.ingress.hostname | quote }}
+    - host: {{ (tpl .Values.ingress.hostname .) | quote }}
       http:
         paths:
           {{- if .Values.ingress.extraPaths }}
@@ -60,11 +60,11 @@ spec:
   tls:
     {{- if and .Values.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.ingress.annotations )) .Values.ingress.selfSigned (not (empty .Values.ingress.secrets))) }}
     - hosts:
-        - {{ .Values.ingress.hostname | quote }}
-        {{- if and (or (.Values.ingress.tlsWwwPrefix) (eq (index .Values.ingress.annotations "nginx.ingress.kubernetes.io/from-to-www-redirect") "true" )) (not (contains "www." .Values.ingress.hostname))  }}
+        - {{ (tpl .Values.ingress.hostname .) | quote }}
+        {{- if and (or (.Values.ingress.tlsWwwPrefix) (eq (index .Values.ingress.annotations "nginx.ingress.kubernetes.io/from-to-www-redirect") "true" )) (not (contains "www." (tpl .Values.ingress.hostname .)))  }}
         - {{ printf "www.%s" (tpl .Values.ingress.hostname $) | quote }}
         {{- end }}
-      secretName: {{ printf "%s-tls" .Values.ingress.hostname }}
+      secretName: {{ printf "%s-tls" (tpl .Values.ingress.hostname .) }}
     {{- end }}
     {{- if .Values.ingress.extraTls }}
     {{- include "common.tplvalues.render" (dict "value" .Values.ingress.extraTls "context" $) | nindent 4 }}
