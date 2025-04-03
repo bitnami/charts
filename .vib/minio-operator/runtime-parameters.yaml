@@ -1,3 +1,7 @@
+# Adding an extra initial delay to avoid race conditions with the
+# deployment and goss stages
+readinessProbe:
+  initialDelaySeconds: 30
 extraDeploy:
 # Taken from https://github.com/minio/operator/tree/master/examples
 - |
@@ -25,6 +29,13 @@ extraDeploy:
     namespace: {{ include "common.names.namespace" . | quote }}
   type: Opaque
 - |
+  apiVersion: v1
+  kind: ServiceAccount
+  metadata:
+    name: vib-service-account
+    namespace: {{ include "common.names.namespace" . | quote }}
+  {{ include "minio-operator.imagePullSecrets" . }}
+- |
   apiVersion: minio.min.io/v2
   kind: Tenant
   metadata:
@@ -33,7 +44,7 @@ extraDeploy:
     name: vib-minio
     namespace: {{ include "common.names.namespace" . | quote }}
   spec:
-    {{- include "minio-operator.imagePullSecrets" . | nindent 2 }}
+    serviceAccountName: vib-service-account
     certConfig: {}
     configuration:
       name: storage-configuration
@@ -56,20 +67,24 @@ extraDeploy:
         capabilities:
           drop:
           - ALL
-        runAsGroup: 1001
-        runAsNonRoot: true
-        runAsUser: 1001
         seccompProfile:
           type: RuntimeDefault
+        runAsNonRoot: true
+        {{- if not (include "common.compatibility.isOpenshift" .) }}
+        runAsGroup: 1001
+        runAsUser: 1001
+        {{- end }}
       name: pool-0
       nodeSelector: {}
       resources: {}
       securityContext:
-        fsGroup: 1001
         fsGroupChangePolicy: OnRootMismatch
-        runAsGroup: 1001
         runAsNonRoot: true
+        {{- if not (include "common.compatibility.isOpenshift" .) }}
+        fsGroup: 1001
+        runAsGroup: 1001
         runAsUser: 1001
+        {{- end }}
       servers: 2
       tolerations: []
       topologySpreadConstraints: []
@@ -83,12 +98,10 @@ extraDeploy:
           resources:
             requests:
               storage: 8Gi
-          storageClassName: standard
         status: {}
       volumesPerServer: 2
     priorityClassName: ""
     requestAutoCert: true
-    serviceAccountName: ""
     serviceMetadata:
       consoleServiceAnnotations: {}
       consoleServiceLabels: {}
