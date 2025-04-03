@@ -304,10 +304,11 @@ Dynamic Seed Discovery Init-Container
       - "-c"
       - |
         export DYNAMIC_SEED_DIR=/opt/bitnami/cassandra/tmp &&
-        apt update -y && apt install -y netcat-traditional dnsutils &&
+        install_packages netcat-traditional &&
+        install_packages dnsutils &&
         dig +short {{ .Release.Name }}-headless.{{ .Release.Namespace}}.svc.{{ .Values.clusterDomain }} | grep -v $POD_IP | \
           while read NODE_IP; do \
-            nc -zvw3 $NODE_IP 9042 && \
+            nc -zvw3 $NODE_IP {{ .Values.service.ports.cql }} && \
             echo "$NODE_IP" >> ${DYNAMIC_SEED_DIR}/seed-ips.lst; \
           done && \
         if [ ! -s ${DYNAMIC_SEED_DIR}/seed-ips.lst ]; then \
