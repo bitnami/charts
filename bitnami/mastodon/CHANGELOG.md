@@ -1,8 +1,12 @@
 # Changelog
 
+## 10.0.1 (2025-04-03)
+
+* [bitnami/mastodon] Release 10.0.1 ([#32803](https://github.com/bitnami/charts/pull/32803))
+
 ## 10.0.0 (2025-04-03)
 
-* [bitnami/mastodon] Bump MinIO major version 16.x.x ([#32700](https://github.com/bitnami/charts/pull/32700))
+* [bitnami/mastodon] Bump MinIO major version 16.x.x (#32700) ([dfd61a0](https://github.com/bitnami/charts/commit/dfd61a00e9e7ac67251f68b3a273e7b6368e84ff)), closes [#32700](https://github.com/bitnami/charts/issues/32700)
 
 ## <small>9.2.9 (2025-04-02)</small>
 
