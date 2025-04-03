@@ -1,8 +1,12 @@
 # Changelog
 
-## 9.2.9 (2025-04-02)
+## 10.0.0 (2025-04-03)
 
-* [bitnami/mastodon] Release 9.2.9 ([#32785](https://github.com/bitnami/charts/pull/32785))
+* [bitnami/mastodon] Bump MinIO major version 16.x.x ([#32700](https://github.com/bitnami/charts/pull/32700))
+
+## <small>9.2.9 (2025-04-02)</small>
+
+* [bitnami/mastodon] Release 9.2.9 (#32785) ([14e9623](https://github.com/bitnami/charts/commit/14e96230f82d5a26ae12bd381a43819fd1ec2847)), closes [#32785](https://github.com/bitnami/charts/issues/32785)
 
 ## <small>9.2.8 (2025-04-01)</small>
 

@@ -28,7 +28,7 @@ dependencies:
 - condition: minio.enabled
   name: minio
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 15.x.x
+  version: 16.x.x
 - condition: apache.enabled
   name: apache
   repository: oci://registry-1.docker.io/bitnamicharts
@@ -50,4 +50,4 @@ maintainers:
 name: mastodon
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/mastodon
-version: 9.2.9
+version: 10.0.0
