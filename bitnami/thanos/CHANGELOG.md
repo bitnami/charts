@@ -1,8 +1,17 @@
 # Changelog
 
-## 15.14.0 (2025-03-19)
+## 16.0.0 (2025-04-03)
 
-* [bitnami/thanos] feature: allow configuring labels for all ingress ([#32511](https://github.com/bitnami/charts/pull/32511))
+* [bitnami/thanos] Bump MinIO major version 16.x.x ([#32703](https://github.com/bitnami/charts/pull/32703))
+
+## <small>15.14.1 (2025-04-02)</small>
+
+* [bitnami/thanos] Release 15.14.1 (#32764) ([41ff3b1](https://github.com/bitnami/charts/commit/41ff3b1ab077594728c97e522c21837c6fef1106)), closes [#32764](https://github.com/bitnami/charts/issues/32764)
+
+## 15.14.0 (2025-04-01)
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/thanos] feature: allow configuring labels for all ingress (#32511) ([d65f94a](https://github.com/bitnami/charts/commit/d65f94a5bb8d2ba12d0c5ee59e2c4fee9b534578)), closes [#32511](https://github.com/bitnami/charts/issues/32511)
 
 ## <small>15.13.2 (2025-03-06)</small>
 
