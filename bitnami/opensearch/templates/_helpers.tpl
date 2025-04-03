@@ -580,6 +580,14 @@ Add environment variables to configure database values
   value: {{ coalesce .Values.security.tls.adminDN "CN=admin;CN=admin" }}
 - name: OPENSEARCH_ENABLE_SECURITY
   value: "true"
+{{- if .Values.usePasswordFiles }}
+- name: OPENSEARCH_PASSWORD_FILE
+  value: "/opt/bitnami/opensearch/secrets/opensearch-password"
+- name: OPENSEARCH_DASHBOARDS_PASSWORD_FILE
+  value: "/opt/bitnami/opensearch/secrets/opensearch-dashboards-password"
+- name: LOGSTASH_PASSWORD_FILE
+  value: "/opt/bitnami/opensearch/secrets/logstash-password"
+{{- else }}
 - name: OPENSEARCH_PASSWORD
   valueFrom:
     secretKeyRef:
@@ -595,6 +603,7 @@ Add environment variables to configure database values
     secretKeyRef:
         name: {{ include "opensearch.secretName" . }}
         key: logstash-password
+{{- end }}
 - name: OPENSEARCH_ENABLE_FIPS_MODE
   value: {{ .Values.security.fipsMode | quote }}
 - name: OPENSEARCH_TLS_VERIFICATION_MODE
@@ -611,25 +620,40 @@ Add environment variables to configure database values
   value: "/opt/bitnami/opensearch/config/certs/{{ .Values.security.tls.truststoreFilename }}"
 {{- end }}
 {{- if and (not .Values.security.tls.usePemCerts) (or .Values.security.tls.keystorePassword .Values.security.tls.passwordsSecret) }}
+{{- if .Values.usePasswordFiles }}
+- name: OPENSEARCH_KEYSTORE_PASSWORD_FILE
+  value: {{ printf "/opt/bitnami/opensearch/secrets/%s" (include "opensearch.keystorePasswordKey" .) }}
+{{- else }}
 - name: OPENSEARCH_KEYSTORE_PASSWORD
   valueFrom:
     secretKeyRef:
       name: {{ include "opensearch.tlsPasswordsSecret" . }}
       key: {{ include "opensearch.keystorePasswordKey" . | quote }}
 {{- end }}
+{{- end }}
 {{- if and (not .Values.security.tls.usePemCerts) (or .Values.security.tls.truststorePassword .Values.security.tls.passwordsSecret) }}
+{{- if .Values.usePasswordFiles }}
+- name: OPENSEARCH_KEYSTORE_PASSWORD_FILE
+  value: {{ printf "/opt/bitnami/opensearch/secrets/%s" (include "opensearch.truststorePasswordKey" .) }}
+{{- else }}
 - name: OPENSEARCH_TRUSTSTORE_PASSWORD
   valueFrom:
     secretKeyRef:
       name: {{ include "opensearch.tlsPasswordsSecret" . }}
       key: {{ include "opensearch.truststorePasswordKey" . | quote }}
 {{- end }}
+{{- end }}
 {{- if and .Values.security.tls.usePemCerts (or .Values.security.tls.keyPassword .Values.security.tls.passwordsSecret) }}
+{{- if .Values.usePasswordFiles }}
+- name: OPENSEARCH_KEY_PASSWORD_FILE
+  value: {{ printf "/opt/bitnami/opensearch/secrets/%s" (include "opensearch.keyPasswordKey" .) }}
+{{- else }}
 - name: OPENSEARCH_KEY_PASSWORD
   valueFrom:
     secretKeyRef:
       name: {{ include "opensearch.tlsPasswordsSecret" . }}
       key: {{ include "opensearch.keyPasswordKey" . | quote }}
+{{- end }}
 {{- end }}
 {{- end -}}
 

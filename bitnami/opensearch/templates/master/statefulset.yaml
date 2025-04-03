@@ -109,7 +109,7 @@ spec:
             - name: data
               mountPath: /bitnami/opensearch/data
         {{- end }}
-        {{- include "opensearch.copy-default-plugins.initContainer" (dict "component" "master" "context" $) | nindent 8 }} 
+        {{- include "opensearch.copy-default-plugins.initContainer" (dict "component" "master" "context" $) | nindent 8 }}
         {{- if .Values.master.initContainers }}
           {{- include "common.tplvalues.render" (dict "value" .Values.master.initContainers "context" $) | nindent 8 }}
         {{- end }}
@@ -269,6 +269,10 @@ spec:
               subPath: app-plugins-dir
             - name: data
               mountPath: /bitnami/opensearch/data
+            {{- if and .Values.usePasswordFiles .Values.security.enabled }}
+            - name: opensearch-secrets
+              mountPath: /opt/bitnami/opensearch/secrets
+            {{- end }}
             {{- if .Values.config }}
             - mountPath: /opt/bitnami/opensearch/config/opensearch.yml
               name: config
@@ -324,6 +328,17 @@ spec:
         - name: config
           configMap:
             name: {{ template "common.names.fullname" . }}
+        {{- end }}
+        {{- if and .Values.usePasswordFiles .Values.security.enabled  }}
+        - name: opensearch-secrets
+          projected:
+            sources:
+              - secret:
+                  name: {{ include "opensearch.secretName" . }}
+              {{- if or .Values.security.tls.keystorePassword .Values.security.tls.truststorePassword .Values.security.tls.keyPassword .Values.security.tls.passwordsSecret }}
+              - secret:
+                  name: {{ include "opensearch.tlsPasswordsSecret" . }}
+              {{- end }}
         {{- end }}
         {{- if .Values.security.enabled }}
         - name: opensearch-certificates
