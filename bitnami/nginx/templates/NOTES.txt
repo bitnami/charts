@@ -36,8 +36,8 @@ To access NGINX from outside the cluster, follow the steps below:
 1. Get the NGINX URL and associate its hostname to your cluster external IP:
 
    export CLUSTER_IP=$(minikube ip) # On Minikube. Use: `kubectl cluster-info` on others K8s clusters
-   echo "NGINX URL: http{{ if .Values.ingress.tls }}s{{ end }}://{{ .Values.ingress.hostname }}"
-   echo "$CLUSTER_IP  {{ .Values.ingress.hostname }}" | sudo tee -a /etc/hosts
+   echo "NGINX URL: http{{ if .Values.ingress.tls }}s{{ end }}://{{ tpl .Values.ingress.hostname . }}"
+   echo "$CLUSTER_IP  {{ tpl .Values.ingress.hostname . }}" | sudo tee -a /etc/hosts
 
 {{- else }}
 

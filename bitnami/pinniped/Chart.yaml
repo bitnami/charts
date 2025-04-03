@@ -7,7 +7,7 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: pinniped
-      image: docker.io/bitnami/pinniped:0.38.0-debian-12-r0
+      image: docker.io/bitnami/pinniped:0.38.0-debian-12-r1
 apiVersion: v2
 appVersion: 0.38.0
 dependencies:
@@ -28,4 +28,4 @@ maintainers:
 name: pinniped
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/pinniped
-version: 2.4.12
+version: 2.4.13
