@@ -216,14 +216,25 @@ spec:
             {{- end }}
             {{- if .Values.auth.enabled }}
             {{- if and (not (empty $customUsers)) (not (empty $customDatabases)) }}
+            {{- if .Values.usePasswordFiles }}
+            - name: MONGODB_EXTRA_PASSWORDS_FILE
+              value: "/opt/bitnami/mongodb/secrets/mongodb-passwords"
+            {{- else }}
             - name: MONGODB_EXTRA_PASSWORDS
               valueFrom:
                 secretKeyRef:
                   name: {{ include "mongodb.secretName" . }}
                   key: mongodb-passwords
             {{- end }}
+            {{- end }}
             - name: MONGODB_ROOT_USER
               value: {{ .Values.auth.rootUser | quote }}
+            {{- if .Values.usePasswordFiles }}
+            - name: MONGODB_ROOT_PASSWORD_FILE
+              value: "/opt/bitnami/mongodb/secrets/mongodb-root-password"
+            - name: MONGODB_REPLICA_SET_KEY_FILE
+              value: "/opt/bitnami/mongodb/secrets/mongodb-replica-set-key"
+            {{- else }}
             - name: MONGODB_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -235,15 +246,21 @@ spec:
                   name: {{ include "mongodb.secretName" . }}
                   key: mongodb-replica-set-key
             {{- end }}
+            {{- end }}
             {{- if and .Values.metrics.enabled (not (empty .Values.metrics.username)) }}
             - name: MONGODB_METRICS_USERNAME
               value: {{ .Values.metrics.username | quote }}
             {{- if .Values.auth.enabled }}
+            {{- if .Values.usePasswordFiles }}
+            - name: MONGODB_METRICS_PASSWORD_FILE
+              value: "/opt/bitnami/mongodb/secrets/mongodb-metrics-password"
+            {{- else }}
             - name: MONGODB_METRICS_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "mongodb.secretName" . }}
                   key: mongodb-metrics-password
+            {{- end }}
             {{- end }}
             {{- end }}
             - name: ALLOW_EMPTY_PASSWORD
@@ -341,6 +358,10 @@ spec:
             - name: empty-dir
               mountPath: /.mongodb
               subPath: mongosh-home
+            {{- if and .Values.usePasswordFiles .Values.auth.enabled }}
+            - name: mongodb-secrets
+              mountPath: /opt/bitnami/mongodb/secrets
+            {{- end }}
             - name: {{ .Values.persistence.name | default "datadir" }}
               mountPath: {{ .Values.persistence.mountPath }}
               subPath: {{ .Values.persistence.subPath }}
@@ -397,6 +418,13 @@ spec:
           {{- else }}
           args:
             - |
+              {{- if and .Values.usePasswordFiles .Values.auth.enabled }}
+              {{- if .Values.metrics.username }}
+              export MONGODB_METRICS_PASSWORD="$(< $MONGODB_METRICS_PASSWORD_FILE)"
+              {{- else }}
+              export MONGODB_ROOT_USER="$(< $MONGODB_ROOT_USER_FILE)"
+              {{- end }}
+              {{- end }}
               /bin/mongodb_exporter {{ include "mongodb.exporterArgs" $ }} --mongodb.direct-connect --mongodb.global-conn-pool --web.listen-address ":{{ .Values.metrics.containerPort }}" --mongodb.uri "{{ include "mongodb.mongodb_exporter.uri" . }}" {{ .Values.metrics.extraFlags }}
           {{- end }}
           env:
@@ -404,14 +432,23 @@ spec:
             {{- if not .Values.metrics.username }}
             - name: MONGODB_ROOT_USER
               value: {{ .Values.auth.rootUser | quote }}
+            {{- if .Values.usePasswordFiles }}
+            - name: MONGODB_ROOT_PASSWORD_FILE
+              value: "/opt/bitnami/mongodb/secrets/mongodb-root-password"
+            {{- else }}
             - name: MONGODB_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "mongodb.secretName" . }}
                   key: mongodb-root-password
+            {{- end }}
             {{- else }}
             - name: MONGODB_METRICS_USERNAME
               value: {{ .Values.metrics.username | quote }}
+            {{- if .Values.usePasswordFiles }}
+            - name: MONGODB_METRICS_PASSWORD_FILE
+              value: "/opt/bitnami/mongodb/secrets/mongodb-metrics-password"
+            {{- else }}
             - name: MONGODB_METRICS_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -419,10 +456,15 @@ spec:
                   key: mongodb-metrics-password
             {{- end }}
             {{- end }}
+            {{- end }}
           volumeMounts:
             - name: empty-dir
               mountPath: /tmp
               subPath: tmp-dir
+            {{- if and .Values.usePasswordFiles .Values.auth.enabled }}
+            - name: mongodb-secrets
+              mountPath: /opt/bitnami/mongodb/secrets
+            {{- end }}
             {{- if .Values.tls.enabled }}
             - name: certs
               mountPath: /certs
@@ -473,6 +515,11 @@ spec:
           configMap:
             name: {{ printf "%s-common-scripts" (include "mongodb.fullname" .) }}
             defaultMode: 0o550
+        {{- if and .Values.usePasswordFiles .Values.auth.enabled }}
+        - name: mongodb-secrets
+          secret:
+            secretName: {{ include "mongodb.secretName" . }}
+        {{- end }}
         {{- if or .Values.initdbScriptsConfigMap .Values.initdbScripts }}
         - name: custom-init-scripts
           configMap:
