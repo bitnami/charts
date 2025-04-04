@@ -1,8 +1,40 @@
 # Changelog
 
+## 20.11.4 (2025-03-22)
+
+* [bitnami/redis] Release 20.11.4 ([#32561](https://github.com/bitnami/charts/pull/32561))
+
+## <small>20.11.3 (2025-03-10)</small>
+
+* [bitnami/redis] fix 32214 - REDIS_PASSWORD_FILE uses wrong filename from volume (#32215) ([5a31fa6](https://github.com/bitnami/charts/commit/5a31fa6eabad974edbc281782505e3bcb07efb98)), closes [#32215](https://github.com/bitnami/charts/issues/32215)
+
+## <small>20.11.2 (2025-03-05)</small>
+
+* [bitnami/redis] Fix usePasswordFile typo in metrics container (#32259) ([a2cb202](https://github.com/bitnami/charts/commit/a2cb202e10168a70dae7b569eec62168e9e0f654)), closes [#32259](https://github.com/bitnami/charts/issues/32259)
+
+## <small>20.11.1 (2025-03-04)</small>
+
+* [bitnami/redis] Disable all usages of usePasswordFiles if auth.enabled is unset (#32253) ([1642f81](https://github.com/bitnami/charts/commit/1642f819c11793ff688f96b831a80bef863d7f98)), closes [#32253](https://github.com/bitnami/charts/issues/32253)
+
+## 20.11.0 (2025-03-03)
+
+* [bitnami/redis] feat: Add external access service for redis sentinel (#32190) ([0582ac3](https://github.com/bitnami/charts/commit/0582ac395c8aa9ef5e9d9df7772775397dd674b1)), closes [#32190](https://github.com/bitnami/charts/issues/32190)
+
+## <small>20.10.1 (2025-03-03)</small>
+
+* [bitnami/redis]: only use auth.usePasswordFiles if auth.enabled is set (#32208) ([1d96748](https://github.com/bitnami/charts/commit/1d96748d8f8231ac4b3fa98b3f8fff234e0bffe7)), closes [#32208](https://github.com/bitnami/charts/issues/32208)
+
+## 20.10.0 (2025-02-27)
+
+* [bitnami/redis] Set `usePasswordFiles=true` by default (#32117) ([2f80b74](https://github.com/bitnami/charts/commit/2f80b749c9a2e692d51beb3e001708694b94c17f)), closes [#32117](https://github.com/bitnami/charts/issues/32117)
+
+## 20.9.0 (2025-02-24)
+
+* [bitnami/redis] Add ACL Authentication for Sentinel Nodes (#31974) ([61b2888](https://github.com/bitnami/charts/commit/61b2888198b718ca7d9ada49ee40d6e11c60ed50)), closes [#31974](https://github.com/bitnami/charts/issues/31974)
+
 ## 20.8.0 (2025-02-20)
 
-* [bitnami/redis] feat: add parameter to disable checksums ([#31948](https://github.com/bitnami/charts/pull/31948))
+* [bitnami/redis] feat: add parameter to disable checksums (#31948) ([990014f](https://github.com/bitnami/charts/commit/990014f4d627d9a681d9775af69d11ad207c156a)), closes [#31948](https://github.com/bitnami/charts/issues/31948)
 
 ## <small>20.7.2 (2025-02-20)</small>
 

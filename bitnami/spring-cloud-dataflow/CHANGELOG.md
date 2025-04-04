@@ -1,8 +1,36 @@
 # Changelog
 
-## 34.1.2 (2025-01-31)
+## 35.0.2 (2025-04-01)
 
-* [bitnami/spring-cloud-dataflow] Release 34.1.2 ([#31688](https://github.com/bitnami/charts/pull/31688))
+* [bitnami/spring-cloud-dataflow] Release 35.0.2 ([#32714](https://github.com/bitnami/charts/pull/32714))
+
+## <small>35.0.1 (2025-04-01)</small>
+
+* bitnami/spring-cloud-dataflow fix for #32453 (#32677) ([f4c345d](https://github.com/bitnami/charts/commit/f4c345daab91d654148de2017ec7cfc0a55248d7)), closes [#32453](https://github.com/bitnami/charts/issues/32453) [#32677](https://github.com/bitnami/charts/issues/32677) [#32453](https://github.com/bitnami/charts/issues/32453)
+
+## 35.0.0 (2025-03-26)
+
+* [bitnami/spring-cloud-dataflow] feat: bump major due to major bump on Kafka dep (#32619) ([66ba328](https://github.com/bitnami/charts/commit/66ba328a95e0bc9426e952a7f3f0ae68ceb1b510)), closes [#32619](https://github.com/bitnami/charts/issues/32619)
+
+## <small>34.2.2 (2025-03-19)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/spring-cloud-dataflow] fix incorrect application of externalDatabase.skipper.password value ([c4f8ddf](https://github.com/bitnami/charts/commit/c4f8ddfa8f1f34f34d6e91e1283d0df883f80a5f)), closes [#32251](https://github.com/bitnami/charts/issues/32251)
+
+## <small>34.2.1 (2025-03-02)</small>
+
+* [bitnami/spring-cloud-dataflow] Release 34.2.1 (#32230) ([4b9681d](https://github.com/bitnami/charts/commit/4b9681d82f879514596211815f7cb9f5e12d2667)), closes [#32230](https://github.com/bitnami/charts/issues/32230)
+
+## 34.2.0 (2025-02-26)
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/spring-cloud-dataflow] Use subchart default value for `usePasswordFiles` (#32120) ([b9d42d0](https://github.com/bitnami/charts/commit/b9d42d04ad7b8ba4a8bbd66e3e4570853a9acf64)), closes [#32120](https://github.com/bitnami/charts/issues/32120)
+
+## <small>34.1.2 (2025-02-03)</small>
+
+* [bitnami/spring-cloud-dataflow] Release 34.1.2 (#31688) ([d39f48a](https://github.com/bitnami/charts/commit/d39f48aec34ce2a277bece9196709afa63c32ec3)), closes [#31688](https://github.com/bitnami/charts/issues/31688)
+* Typo fix  CHANGELOG.md (#31536) ([315f9c2](https://github.com/bitnami/charts/commit/315f9c2f9b1c582eee30d983cc358bf66d3da0ad)), closes [#31536](https://github.com/bitnami/charts/issues/31536)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
 
 ## <small>34.1.1 (2025-01-17)</small>
 

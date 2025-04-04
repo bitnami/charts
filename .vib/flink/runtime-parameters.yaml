@@ -67,7 +67,7 @@ extraDeploy:
                     sleep 10
                     while true
                     do
-                    ./bin/flink run ./examples/batch/EnumTriangles.jar --jobmanager $host:$port -Drest.port={{ .Values.jobmanager.service.ports.http }}
+                    ./bin/flink run --jobmanager $host:$port -Drest.port={{ .Values.jobmanager.service.ports.http }} ./examples/streaming/WordCount.jar --input README.txt
                     echo "1" > /tmp/ready
                     # Adding a sleep to not overload the deployment
                     sleep 10
@@ -112,6 +112,11 @@ extraDeploy:
       name: flink-job-config
     data:
       config.yaml: |+
+        # These parameters are required for Java 17 support.
+        env:
+          java:
+            opts:
+              all: --add-exports=java.base/sun.net.util=ALL-UNNAMED --add-exports=java.rmi/sun.rmi.registry=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED --add-exports=java.security.jgss/sun.security.krb5=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.net=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED --add-opens=java.base/java.nio=ALL-UNNAMED --add-opens=java.base/sun.nio.ch=ALL-UNNAMED --add-opens=java.base/java.lang.reflect=ALL-UNNAMED --add-opens=java.base/java.text=ALL-UNNAMED --add-opens=java.base/java.time=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.util.concurrent=ALL-UNNAMED --add-opens=java.base/java.util.concurrent.atomic=ALL-UNNAMED --add-opens=java.base/java.util.concurrent.locks=ALL-UNNAMED
         jobmanager.rpc.address: flink-jobmanager
         jobmanager.rpc.port: {{ .Values.jobmanager.service.ports.rpc }}
         rest.address: flink-jobmanager

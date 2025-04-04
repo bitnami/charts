@@ -1,8 +1,57 @@
 # Changelog
 
+## 15.3.8 (2025-03-23)
+
+* [bitnami/postgresql-ha] Release 15.3.8 ([#32575](https://github.com/bitnami/charts/pull/32575))
+
+## <small>15.3.7 (2025-03-19)</small>
+
+* [bitnami/postgresql-ha] Release 15.3.7 (#32524) ([525aa4d](https://github.com/bitnami/charts/commit/525aa4de360f488bbca7f65526953793e588ceee)), closes [#32524](https://github.com/bitnami/charts/issues/32524)
+
+## <small>15.3.6 (2025-03-17)</small>
+
+* [bitnami/postgresql-ha] Release 15.3.6 (#32486) ([2d27651](https://github.com/bitnami/charts/commit/2d2765190e1aac040f934071a8de47b0a215cc71)), closes [#32486](https://github.com/bitnami/charts/issues/32486)
+
+## <small>15.3.5 (2025-03-17)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/postgresql-ha] Release 15.3.5 (#32485) ([3f01165](https://github.com/bitnami/charts/commit/3f01165d7488844ebec789d3b81d83ae04e8fd9a)), closes [#32485](https://github.com/bitnami/charts/issues/32485)
+
+## <small>15.3.4 (2025-03-11)</small>
+
+* [bitnami/postgresql-ha] Added missing LDAP configuation variables (#32378) ([303eb44](https://github.com/bitnami/charts/commit/303eb44f8b76fb41dfaab46b1548f64cfe4e2a65)), closes [#32378](https://github.com/bitnami/charts/issues/32378)
+
+## <small>15.3.3 (2025-03-03)</small>
+
+* [bitnami/postgresql-ha] Release 15.3.3 (#32249) ([d3b369d](https://github.com/bitnami/charts/commit/d3b369dc6839911d334a960887920d708067a57c)), closes [#32249](https://github.com/bitnami/charts/issues/32249)
+
+## <small>15.3.2 (2025-03-03)</small>
+
+* [bitnami/postgresql-ha] Release 15.3.2 (#32244) ([d68c231](https://github.com/bitnami/charts/commit/d68c231d91c3993c329ab6513d575ab35b5d6cd7)), closes [#32244](https://github.com/bitnami/charts/issues/32244)
+
+## <small>15.3.1 (2025-03-03)</small>
+
+* [bitnami/postgresql-ha] Release 15.3.1 (#32243) ([2bcc51c](https://github.com/bitnami/charts/commit/2bcc51cbe305fe723dd14a3642885459be1b9f5a)), closes [#32243](https://github.com/bitnami/charts/issues/32243)
+
+## 15.3.0 (2025-02-27)
+
+* [bitnami/postgresql-ha] Set `usePasswordFiles=true` by default (#32116) ([7fb6d1a](https://github.com/bitnami/charts/commit/7fb6d1ad4db1382a561a81a8bf37ee5f04831935)), closes [#32116](https://github.com/bitnami/charts/issues/32116)
+
+## <small>15.2.3 (2025-02-21)</small>
+
+* [bitnami/postgresql-ha] Release 15.2.3 (#32132) ([7fd61cd](https://github.com/bitnami/charts/commit/7fd61cd76b751a68024b86f0d634705e3d494e90)), closes [#32132](https://github.com/bitnami/charts/issues/32132)
+
+## <small>15.2.2 (2025-02-21)</small>
+
+* [bitnami/postgresql-ha] Release 15.2.2 (#32096) ([9aa77e8](https://github.com/bitnami/charts/commit/9aa77e84b4473cc488ebfb2645f882ddeb612b69)), closes [#32096](https://github.com/bitnami/charts/issues/32096)
+
+## <small>15.2.1 (2025-02-20)</small>
+
+* [bitnami/postgresql-ha] Release 15.2.1 (#32082) ([97d1814](https://github.com/bitnami/charts/commit/97d1814fabc335ca4c789612f0f6ac88d29cb66b)), closes [#32082](https://github.com/bitnami/charts/issues/32082)
+
 ## 15.2.0 (2025-02-20)
 
-* [bitnami/postgresql-ha] Add resources for backup cronjob ([#31957](https://github.com/bitnami/charts/pull/31957))
+* [bitnami/postgresql-ha] Add resources for backup cronjob (#31957) ([c11a433](https://github.com/bitnami/charts/commit/c11a4331eebba0bd59f7ca64f633119ff5e90e9f)), closes [#31957](https://github.com/bitnami/charts/issues/31957)
 
 ## <small>15.1.10 (2025-02-20)</small>
 

@@ -6,6 +6,7 @@ podSecurityContext:
 containerSecurityContext:
   enabled: true
   runAsUser: 1002
+resourcesPreset: medium
 extraConfiguration:
   "csp.strict": false
 service:

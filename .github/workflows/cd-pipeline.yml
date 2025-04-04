@@ -96,7 +96,7 @@ jobs:
       - vib-publish
     name: Update branch deprecated-index
     steps:
-      - uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16
+      - uses: actions/download-artifact@95815c38cf2ff2164869cbab79da8d1f422bc89e
         with:
           path: ~/artifacts
       # If we perform a checkout of the main branch, we will find conflicts with the submodules
@@ -132,8 +132,8 @@ jobs:
           aws s3 cp s3://${{ secrets.AWS_S3_BUCKET }}/bitnami/${chart_name}-${chart_version}.tgz download/
 
           cd deprecated-index
-          git config user.name "Bitnami Containers"
-          git config user.email "bitnami-bot@vmware.com"
+          git config user.name "Bitnami Bot"
+          git config user.email "bitnami.bot@broadcom.com"
 
           attempts=0
           max_attempts=5

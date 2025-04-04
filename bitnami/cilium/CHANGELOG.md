@@ -1,8 +1,25 @@
 # Changelog
 
+## 2.1.4 (2025-04-04)
+
+* [bitnami/cilium] Release 2.1.4 ([#32722](https://github.com/bitnami/charts/pull/32722))
+
+## <small>2.1.3 (2025-03-14)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/cilium] Release 2.1.3 (#32463) ([88d08c0](https://github.com/bitnami/charts/commit/88d08c0ac887ef0c89d37c421aa76dc501237a5f)), closes [#32463](https://github.com/bitnami/charts/issues/32463)
+
+## <small>2.1.2 (2025-03-04)</small>
+
+* [bitnami/cilium] Release 2.1.2 (#32281) ([95573f8](https://github.com/bitnami/charts/commit/95573f8302bf79081d60e97b0c68f725980cfc47)), closes [#32281](https://github.com/bitnami/charts/issues/32281)
+
+## <small>2.1.1 (2025-02-20)</small>
+
+* [bitnami/cilium] Release 2.1.1 (#32089) ([be747d9](https://github.com/bitnami/charts/commit/be747d935c070c7e3c7d0e38dfa59bd18a4bb6ad)), closes [#32089](https://github.com/bitnami/charts/issues/32089)
+
 ## 2.1.0 (2025-02-20)
 
-* [bitnami/cilium] feat: use new helper for checking API versions ([#32047](https://github.com/bitnami/charts/pull/32047))
+* [bitnami/cilium] feat: use new helper for checking API versions (#32047) ([6fb5bfe](https://github.com/bitnami/charts/commit/6fb5bfe5ea8479d401b2586e8fc1c64e05029b70)), closes [#32047](https://github.com/bitnami/charts/issues/32047)
 
 ## <small>2.0.4 (2025-02-12)</small>
 

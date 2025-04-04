@@ -188,7 +188,7 @@ spec:
             - name: PGDATA
               value: {{ printf "%s/%s" .Values.persistence.mountPath "data" | quote }}
             {{- if and (not (eq (include "postgresql-ha.postgresqlUsername" .) "postgres")) (or (not (include "postgresql-ha.postgresqlCreateSecret" .)) (include "postgresql-ha.postgresqlPasswordProvided" .)) }}
-            {{- if .Values.postgresql.usePasswordFile }}
+            {{- if .Values.postgresql.usePasswordFiles }}
             - name: POSTGRES_POSTGRES_PASSWORD_FILE
               value: "/opt/bitnami/postgresql/secrets/postgres-password"
             {{- else }}
@@ -201,7 +201,7 @@ spec:
             {{- end }}
             - name: POSTGRES_USER
               value: {{ (include "postgresql-ha.postgresqlUsername" .) | quote }}
-            {{- if .Values.postgresql.usePasswordFile }}
+            {{- if .Values.postgresql.usePasswordFiles }}
             - name: POSTGRES_PASSWORD_FILE
               value: "/opt/bitnami/postgresql/secrets/password"
             {{- else }}
@@ -334,7 +334,7 @@ spec:
               value: {{ .Values.postgresql.repmgrReconnectInterval | quote }}
             - name: REPMGR_USERNAME
               value: {{ (include "postgresql-ha.postgresqlRepmgrUsername" .) | quote }}
-            {{- if .Values.postgresql.usePasswordFile }}
+            {{- if .Values.postgresql.usePasswordFiles }}
             - name: REPMGR_PASSWORD_FILE
               value: "/opt/bitnami/postgresql/secrets/repmgr-password"
             {{- else }}
@@ -470,7 +470,7 @@ spec:
             - name: custom-init-scripts-secret
               mountPath: /docker-entrypoint-initdb.d/secret
             {{- end }}
-            {{- if .Values.postgresql.usePasswordFile }}
+            {{- if .Values.postgresql.usePasswordFiles }}
             - name: password
               mountPath: /opt/bitnami/postgresql/secrets/
             {{- end }}
@@ -501,7 +501,7 @@ spec:
               value: :{{ .Values.metrics.containerPorts.http }}
             - name: DATA_SOURCE_URI
               value: {{ printf "127.0.0.1:%d/%s?sslmode=disable" (.Values.postgresql.containerPorts.postgresql | int64) (include "postgresql-ha.postgresqlDatabase" .) | quote }}
-            {{- if .Values.postgresql.usePasswordFile }}
+            {{- if .Values.postgresql.usePasswordFiles }}
             - name: DATA_SOURCE_PASS_FILE
               value: "/opt/bitnami/postgresql/secrets/password"
             {{- else }}
@@ -563,8 +563,8 @@ spec:
             - name: empty-dir
               mountPath: /tmp
               subPath: tmp-dir
-          {{- if or .Values.postgresql.usePasswordFile .Values.metrics.customMetrics }}
-            {{- if .Values.postgresql.usePasswordFile }}
+          {{- if or .Values.postgresql.usePasswordFiles .Values.metrics.customMetrics }}
+            {{- if .Values.postgresql.usePasswordFiles }}
             - name: password
               mountPath: /opt/bitnami/postgresql/secrets/
             {{- end }}
@@ -618,7 +618,7 @@ spec:
           secret:
             secretName: {{ template "postgresql-ha.postgresqlInitdbScriptsSecret" . }}
         {{- end }}
-        {{- if .Values.postgresql.usePasswordFile }}
+        {{- if .Values.postgresql.usePasswordFiles }}
         - name: password
           secret:
             secretName: {{ include "postgresql-ha.postgresqlSecretName" . }}
@@ -668,7 +668,7 @@ spec:
         {{- end }}
         {{- if .Values.persistence.storageClass }}
         storageClassName: {{ .Values.persistence.storageClass }}
-        {{- end }}        
+        {{- end }}
         resources:
           requests:
             storage: {{ .Values.persistence.size | quote }}

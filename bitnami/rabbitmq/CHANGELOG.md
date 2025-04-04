@@ -1,8 +1,30 @@
 # Changelog
 
-## 15.3.1 (2025-02-11)
+## 15.4.2 (2025-04-03)
 
-* [bitnami/rabbitmq] Release 15.3.1 ([#31873](https://github.com/bitnami/charts/pull/31873))
+* [bitnami/rabbitmq] Release 15.4.2 ([#32793](https://github.com/bitnami/charts/pull/32793))
+
+## <small>15.4.1 (2025-03-28)</small>
+
+* [bitnami/rabbitmq] Release 15.4.1 (#32679) ([b941af0](https://github.com/bitnami/charts/commit/b941af0e5e720e5bbd7c34cf16f3c65ca5e6be50)), closes [#32679](https://github.com/bitnami/charts/issues/32679)
+
+## 15.4.0 (2025-03-19)
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/rabbitmq] allow to configure trafficDistribution (#32443) ([49e8182](https://github.com/bitnami/charts/commit/49e81822b9ebe29f544f6276d367489cdb0c121d)), closes [#32443](https://github.com/bitnami/charts/issues/32443)
+
+## <small>15.3.3 (2025-02-26)</small>
+
+* [bitnami/rabbitmq] Release 15.3.3 (#32187) ([e4af5c8](https://github.com/bitnami/charts/commit/e4af5c8b3510c166a38cd5bc03074a39bf63da4d)), closes [#32187](https://github.com/bitnami/charts/issues/32187)
+
+## <small>15.3.2 (2025-02-21)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/rabbitmq] Release 15.3.2 (#32101) ([6779add](https://github.com/bitnami/charts/commit/6779add4a0aeb64feb6e53d8b7123e94b367e017)), closes [#32101](https://github.com/bitnami/charts/issues/32101)
+
+## <small>15.3.1 (2025-02-11)</small>
+
+* [bitnami/rabbitmq] Release 15.3.1 (#31873) ([6857694](https://github.com/bitnami/charts/commit/68576941a396c697cd98b74f6fece6201b18f41e)), closes [#31873](https://github.com/bitnami/charts/issues/31873)
 
 ## 15.3.0 (2025-02-10)
 
@@ -278,7 +300,7 @@
 
 ## <small>12.9.4 (2024-02-06)</small>
 
-* [bitnami/rabbitmq] fix: make toBytes handle numbers with a decimal dot (#22557) ([90f6e7f](https://github.com/bitnami/charts/commit/90f6e7f3e6c341fd11cd04874be33e606e56fa48)), closes [#22557](https://github.com/bitnami/charts/issues/22557) [/github.com/redpanda-data/helm-charts/blob/main/charts/redpanda/templates/_helpers.tpl#L199C1-L236C12](https://github.com//github.com/redpanda-data/helm-charts/blob/main/charts/redpanda/templates/_helpers.tpl/issues/L199C1-L236C12)
+* [bitnami/rabbitmq] fix: make toBytes handle numbers with a decimal dot (#22557) ([90f6e7f](https://github.com/bitnami/charts/commit/90f6e7f3e6c341fd11cd04874be33e606e56fa48)), closes [#22557](https://github.com/bitnami/charts/issues/22557)
 
 ## <small>12.9.3 (2024-02-03)</small>
 

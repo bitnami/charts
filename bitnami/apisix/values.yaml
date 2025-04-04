@@ -65,6 +65,9 @@ clusterDomain: cluster.local
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
+## @param usePasswordFiles Mount credentials as files instead of using environment variables
+##
+usePasswordFiles: true
 ## Enable diagnostic mode in the deployment
 ##
 diagnosticMode:
@@ -92,7 +95,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/apisix
-  tag: 3.11.0-debian-12-r8
+  tag: 3.12.0-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1692,7 +1695,7 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/apisix-dashboard
-    tag: 3.0.1-debian-12-r61
+    tag: 3.0.1-debian-12-r64
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1845,7 +1848,7 @@ dashboard:
       - ai
       - cas-auth
       - multi-auth
-      
+
   ## @param dashboard.extraConfig extra configuration settings for APISIX Dashboard
   ##
   extraConfig: {}
@@ -2438,7 +2441,7 @@ ingressController:
   image:
     registry: docker.io
     repository: bitnami/apisix-ingress-controller
-    tag: 1.8.3-debian-12-r12
+    tag: 1.8.4-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -3157,7 +3160,7 @@ waitContainer:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r38
+    tag: 12-debian-12-r40
     digest: ""
     ## @param waitContainer.image.pullPolicy Init container wait-container image pull policy
     ##

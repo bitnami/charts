@@ -1,8 +1,20 @@
 # Changelog
 
-## 5.1.10 (2025-02-19)
+## 5.1.13 (2025-04-01)
 
-* [bitnami/jaeger] Release 5.1.10 ([#32002](https://github.com/bitnami/charts/pull/32002))
+* [bitnami/jaeger] Release 5.1.13 ([#32741](https://github.com/bitnami/charts/pull/32741))
+
+## <small>5.1.12 (2025-03-08)</small>
+
+* [bitnami/jaeger] Release 5.1.12 (#32372) ([0c4e213](https://github.com/bitnami/charts/commit/0c4e213f95debcad6d09674ba05e0e87ac5da530)), closes [#32372](https://github.com/bitnami/charts/issues/32372)
+
+## <small>5.1.11 (2025-03-05)</small>
+
+* [bitnami/jaeger] Release 5.1.11 (#32311) ([2ddba1b](https://github.com/bitnami/charts/commit/2ddba1b315b59895bb47401ac339d9081517d2ec)), closes [#32311](https://github.com/bitnami/charts/issues/32311)
+
+## <small>5.1.10 (2025-02-19)</small>
+
+* [bitnami/jaeger] Release 5.1.10 (#32002) ([84c85d3](https://github.com/bitnami/charts/commit/84c85d35b58326f48d492979fabd9ef2a6da67a7)), closes [#32002](https://github.com/bitnami/charts/issues/32002)
 
 ## <small>5.1.9 (2025-02-12)</small>
 

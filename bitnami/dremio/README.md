@@ -567,7 +567,7 @@ There are cases where you may want to deploy extra objects, such a ConfigMap con
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
 | `diagnosticMode.command` | Command to override all containers in the chart release                                 | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the chart release                                    | `["infinity"]`  |
-| `usePasswordFile`        | Mount secrets as files                                                                  | `true`          |
+| `usePasswordFiles`       | Mount secrets as files                                                                  | `true`          |
 
 ### Dremio common configuration settings
 
@@ -1293,6 +1293,12 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/dremi
 > **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/blob/main/template/dremio/values.yaml)
 
 ## Troubleshooting
+
+## Upgrading
+
+### To 1.0.0
+
+This major updates the `minio` subchart to its newest major, 16.0.0. For more information on this subchart's major, please refer to [minio upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/minio#to-1600).
 
 ## License
 

@@ -29,6 +29,18 @@ spec:
           for: 15m
           labels:
             severity: warning
+        - alert: KubeNodePressure
+          annotations:
+            description: '{{`{{`}} $labels.node {{`}}`}} on cluster {{`{{`}} $labels.cluster {{`}}`}} has active Condition {{`{{`}} $labels.condition {{`}}`}}. This is caused by resource usage exceeding eviction thresholds.'
+            runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubenodepressure
+            summary: Node has as active Condition.
+          expr: |-
+            kube_node_status_condition{job="kube-state-metrics",condition=~"(MemoryPressure|DiskPressure|PIDPressure)",status="true"} == 1
+            and on (cluster, node)
+            kube_node_spec_unschedulable{job="kube-state-metrics"} == 0
+          for: 10m
+          labels:
+            severity: info
         - alert: KubeNodeUnreachable
           annotations:
             description: '{{`{{`}} $labels.node {{`}}`}} is unreachable and some workloads may be rescheduled on cluster {{`{{`}} $labels.cluster {{`}}`}}.'
@@ -44,14 +56,16 @@ spec:
             runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubelettoomanypods
             summary: Kubelet is running at capacity.
           expr: |-
-            count by (cluster, node) (
-              (kube_pod_status_phase{job="kube-state-metrics", phase="Running"} == 1)
-              * on (cluster, namespace, pod) group_left (node)
-              group by (cluster, namespace, pod, node) (
-                kube_pod_info{job="kube-state-metrics"}
+            (
+              max by (cluster, instance) (
+                kubelet_running_pods{job="kubelet", metrics_path="/metrics"} > 1
+              )
+              * on (cluster, instance) group_left(node)
+              max by (cluster, instance, node) (
+                kubelet_node_name{job="kubelet", metrics_path="/metrics"}
               )
             )
-            /
+            / on (cluster, node) group_left()
             max by (cluster, node) (
               kube_node_status_capacity{job="kube-state-metrics", resource="pods"} != 1
             ) > 0.95
@@ -70,6 +84,21 @@ spec:
           for: 15m
           labels:
             severity: warning
+        - alert: KubeNodeEviction
+          annotations:
+            description: Node {{`{{`}} $labels.node {{`}}`}} on {{`{{`}} $labels.cluster {{`}}`}} is evicting Pods due to {{`{{`}} $labels.eviction_signal {{`}}`}}.  Eviction occurs when eviction thresholds are crossed, typically caused by Pods exceeding RAM/ephemeral-storage limits.
+            runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubenodeeviction
+            summary: Node is evicting pods.
+          expr: |-
+            sum(rate(kubelet_evictions{job="kubelet", metrics_path="/metrics"}[15m])) by (cluster, eviction_signal, instance)
+            * on (cluster, instance) group_left(node)
+            max by (cluster, instance, node) (
+              kubelet_node_name{job="kubelet", metrics_path="/metrics"}
+            )
+            > 0
+          for: 0s
+          labels:
+            severity: info
         - alert: KubeletPlegDurationHigh
           annotations:
             description: The Kubelet Pod Lifecycle Event Generator has a 99th percentile duration of {{`{{`}} $value {{`}}`}} seconds on node {{`{{`}} $labels.node {{`}}`}} on cluster {{`{{`}} $labels.cluster {{`}}`}}.

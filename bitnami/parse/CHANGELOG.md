@@ -1,8 +1,31 @@
 # Changelog
 
-## 24.1.3 (2025-02-02)
+## 25.0.3 (2025-04-04)
 
-* [bitnami/parse] Release 24.1.3 ([#31704](https://github.com/bitnami/charts/pull/31704))
+* [bitnami/parse] Release 25.0.3 ([#32810](https://github.com/bitnami/charts/pull/32810))
+
+## <small>25.0.2 (2025-03-31)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/parse] Release 25.0.2 (#32687) ([e95d3a8](https://github.com/bitnami/charts/commit/e95d3a8ee8c5087cc103997e3da4cdac938d6017)), closes [#32687](https://github.com/bitnami/charts/issues/32687)
+
+## <small>25.0.1 (2025-03-10)</small>
+
+* [bitnami/parse] Release 25.0.1 (#32377) ([8bd7796](https://github.com/bitnami/charts/commit/8bd7796d56dd6886ba7031e5e6d6e97bc0093a5a)), closes [#32377](https://github.com/bitnami/charts/issues/32377)
+
+## 25.0.0 (2025-03-10)
+
+* [bitnami/parse] Release 25.0.0 (#32374) ([bedc812](https://github.com/bitnami/charts/commit/bedc812c168c21fd205c2c6e09d4988c3f3a0b27)), closes [#32374](https://github.com/bitnami/charts/issues/32374)
+
+## <small>24.1.4 (2025-03-04)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/parse] Release 24.1.4 (#32266) ([857b09a](https://github.com/bitnami/charts/commit/857b09a38cdbba1b9704aa5d07246b5cd6afd967)), closes [#32266](https://github.com/bitnami/charts/issues/32266)
+
+## <small>24.1.3 (2025-02-03)</small>
+
+* [bitnami/parse] Release 24.1.3 (#31704) ([0b74962](https://github.com/bitnami/charts/commit/0b749624bf96d6cc8c08cad321c12f89ea9f9437)), closes [#31704](https://github.com/bitnami/charts/issues/31704)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
 
 ## <small>24.1.2 (2024-12-24)</small>
 

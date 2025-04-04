@@ -3,7 +3,7 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if (include "kafka.metrics.jmx.createConfigmap" .) }}
+{{- if include "kafka.metrics.jmx.createConfigmap" . }}
 apiVersion: v1
 kind: ConfigMap
 metadata:

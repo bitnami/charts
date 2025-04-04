@@ -1,8 +1,29 @@
 # Changelog
 
+## 15.4.2 (2025-03-27)
+
+* [bitnami/kong] Release 15.4.2 ([#32653](https://github.com/bitnami/charts/pull/32653))
+
+## <small>15.4.1 (2025-03-27)</small>
+
+* [bitnami/kong] Release 15.4.1 (#32645) ([9cf0adc](https://github.com/bitnami/charts/commit/9cf0adc46e0c507385412f52139331017a41401c)), closes [#32645](https://github.com/bitnami/charts/issues/32645)
+
+## 15.4.0 (2025-03-24)
+
+* [bitnami/kong] chore(ClusterRole): Concat namespace in ClusterRole name (#32544) ([0ad4fe3](https://github.com/bitnami/charts/commit/0ad4fe3aa7c49b7c50fe9b19f66bc566a0ae771d)), closes [#32544](https://github.com/bitnami/charts/issues/32544)
+
+## <small>15.3.1 (2025-03-13)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/kong] Release 15.3.1 (#32451) ([e8d1314](https://github.com/bitnami/charts/commit/e8d13144e35c0390c6ac68dba03d5603e2035197)), closes [#32451](https://github.com/bitnami/charts/issues/32451)
+
+## 15.3.0 (2025-02-24)
+
+* [bitnami/kong] Set `usePasswordFiles=true` by default (#32109) ([6db9a0e](https://github.com/bitnami/charts/commit/6db9a0ed7d8feeff61edac18b7f7dd38ab737412)), closes [#32109](https://github.com/bitnami/charts/issues/32109)
+
 ## 15.2.0 (2025-02-20)
 
-* [bitnami/kong] feat: use new helper for checking API versions ([#32053](https://github.com/bitnami/charts/pull/32053))
+* [bitnami/kong] feat: use new helper for checking API versions (#32053) ([28a9be8](https://github.com/bitnami/charts/commit/28a9be8cc91b30bae601544cc0500f7534c3a663)), closes [#32053](https://github.com/bitnami/charts/issues/32053)
 
 ## <small>15.1.3 (2025-02-19)</small>
 

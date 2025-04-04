@@ -1,8 +1,18 @@
 # Changelog
 
-## 17.1.2 (2025-02-02)
+## 17.1.4 (2025-03-23)
 
-* [bitnami/kubeapps] Release 17.1.2 ([#31703](https://github.com/bitnami/charts/pull/31703))
+* [bitnami/kubeapps] Release 17.1.4 ([#32568](https://github.com/bitnami/charts/pull/32568))
+
+## <small>17.1.3 (2025-02-21)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/kubeapps] Release 17.1.3 (#32093) ([51dcb53](https://github.com/bitnami/charts/commit/51dcb533a096a5df4787bed39f306854a55bbca4)), closes [#32093](https://github.com/bitnami/charts/issues/32093)
+
+## <small>17.1.2 (2025-02-03)</small>
+
+* [bitnami/kubeapps] Release 17.1.2 (#31703) ([f12f39a](https://github.com/bitnami/charts/commit/f12f39ab142fd10d7e1303b2706ad57c6231c8bd)), closes [#31703](https://github.com/bitnami/charts/issues/31703)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
 
 ## <small>17.1.1 (2024-12-24)</small>
 
@@ -584,7 +594,7 @@
 
 ## <small>8.0.16 (2022-05-05)</small>
 
-* [bitnami/kubeapps] Values references postgresPassword used by Kubeapps. (#10006) ([ec5fbdd](https://github.com/bitnami/charts/commit/ec5fbdd0148f1c2de0ba40d649508b8a636b1a32)), closes [#10006](https://github.com/bitnami/charts/issues/10006) [/github.com/bitnami/charts/pull/9441/files#diff-0f1b69af1b7c9c48d9d4f43c74fd880405aec305533aa650e1c26d7a2d20c300R1976-R1988](https://github.com//github.com/bitnami/charts/pull/9441/files/issues/diff-0f1b69af1b7c9c48d9d4f43c74fd880405aec305533aa650e1c26d7a2d20c300R1976-R1988)
+* [bitnami/kubeapps] Values references postgresPassword used by Kubeapps. (#10006) ([ec5fbdd](https://github.com/bitnami/charts/commit/ec5fbdd0148f1c2de0ba40d649508b8a636b1a32)), closes [#10006](https://github.com/bitnami/charts/issues/10006)
 
 ## <small>8.0.15 (2022-04-30)</small>
 

@@ -1,8 +1,21 @@
 # Changelog
 
-## 8.0.4 (2025-02-20)
+## 8.0.7 (2025-04-03)
 
-* [bitnami/sonarqube] Release 8.0.4 ([#32038](https://github.com/bitnami/charts/pull/32038))
+* [bitnami/sonarqube] Release 8.0.7 ([#32805](https://github.com/bitnami/charts/pull/32805))
+
+## <small>8.0.6 (2025-03-04)</small>
+
+* [bitnami/sonarqube] Release 8.0.6 (#32275) ([02898e2](https://github.com/bitnami/charts/commit/02898e2451f52577262d28b652497ce3b0fa8f3a)), closes [#32275](https://github.com/bitnami/charts/issues/32275)
+
+## <small>8.0.5 (2025-02-27)</small>
+
+* [bitnami/sonarqube] Release 8.0.5 (#32200) ([37e0d02](https://github.com/bitnami/charts/commit/37e0d028a60609e9610d143176d0d83fd81bbcc9)), closes [#32200](https://github.com/bitnami/charts/issues/32200)
+
+## <small>8.0.4 (2025-02-20)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/sonarqube] Release 8.0.4 (#32038) ([35c69c2](https://github.com/bitnami/charts/commit/35c69c2727ad3fb9d484b5534002bac5a48fb209)), closes [#32038](https://github.com/bitnami/charts/issues/32038)
 
 ## <small>8.0.3 (2025-02-03)</small>
 

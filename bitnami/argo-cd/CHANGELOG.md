@@ -1,8 +1,54 @@
 # Changelog
 
-## 7.1.10 (2025-02-06)
+## 7.3.3 (2025-04-02)
 
-* [bitnami/argo-cd] Release 7.1.10 ([#31804](https://github.com/bitnami/charts/pull/31804))
+* [bitnami/argo-cd] Release 7.3.3 ([#32787](https://github.com/bitnami/charts/pull/32787))
+
+## <small>7.3.2 (2025-04-01)</small>
+
+* [bitnami/argo-cd] Release 7.3.2 (#32717) ([50928db](https://github.com/bitnami/charts/commit/50928db539e9e5e3a6667914b37054aabe8fbd77)), closes [#32717](https://github.com/bitnami/charts/issues/32717)
+
+## <small>7.3.1 (2025-03-24)</small>
+
+* [bitnami/argo-cd] Release 7.3.1 (#32585) ([bbe5469](https://github.com/bitnami/charts/commit/bbe546947f67cd71da25fafbf7920b888b93e8cd)), closes [#32585](https://github.com/bitnami/charts/issues/32585)
+
+## 7.3.0 (2025-03-20)
+
+* [bitnami/argo-cd] Revert usePasswordFiles (#32514) ([016a597](https://github.com/bitnami/charts/commit/016a597e764b446d97c17b1afff359ea778ecbd1)), closes [#32514](https://github.com/bitnami/charts/issues/32514)
+
+## <small>7.2.6 (2025-03-19)</small>
+
+* [bitnami/argo-cd] Release 7.2.6 (#32519) ([d87cdeb](https://github.com/bitnami/charts/commit/d87cdeb893d9d3648c633506688e5961a5c88a1c)), closes [#32519](https://github.com/bitnami/charts/issues/32519)
+
+## <small>7.2.5 (2025-03-18)</small>
+
+* [bitnami/argo-cd] Release 7.2.5 (#32500) ([fbd0309](https://github.com/bitnami/charts/commit/fbd03096412bb47cfcea68313db5b6bc4b26da42)), closes [#32500](https://github.com/bitnami/charts/issues/32500)
+
+## <small>7.2.4 (2025-03-18)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/argo-cd] Fix redis password not read when using passwordFiles (#32477) ([12ba544](https://github.com/bitnami/charts/commit/12ba544f66f96aaf966851129f1da684dd19363a)), closes [#32477](https://github.com/bitnami/charts/issues/32477)
+
+## <small>7.2.3 (2025-03-11)</small>
+
+* [bitnami/argo-cd] Release 7.2.3 (#32390) ([a2c149b](https://github.com/bitnami/charts/commit/a2c149b171e9dcb86ac2d67d06c08be894b4ca76)), closes [#32390](https://github.com/bitnami/charts/issues/32390)
+
+## <small>7.2.2 (2025-03-04)</small>
+
+* [bitnami/argo-cd] Release 7.2.2 (#32282) ([1ade191](https://github.com/bitnami/charts/commit/1ade1913a84d4c1547700e80fe11366bcbe943c2)), closes [#32282](https://github.com/bitnami/charts/issues/32282)
+
+## <small>7.2.1 (2025-02-28)</small>
+
+* [bitnami/argo-cd] Release 7.2.1 (#32207) ([35852d5](https://github.com/bitnami/charts/commit/35852d579f9f1a4e533a11da606da30b565211ef)), closes [#32207](https://github.com/bitnami/charts/issues/32207)
+
+## 7.2.0 (2025-02-24)
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/argo-cd] Add support for `usePasswordFiles` (#32079) ([d9a4702](https://github.com/bitnami/charts/commit/d9a4702bfd5ac892d2cebaa9fc076dc39d0ca792)), closes [#32079](https://github.com/bitnami/charts/issues/32079)
+
+## <small>7.1.10 (2025-02-06)</small>
+
+* [bitnami/argo-cd] Release 7.1.10 (#31804) ([c0db7b0](https://github.com/bitnami/charts/commit/c0db7b02d6129b86c343c8d65fa920b8e848670f)), closes [#31804](https://github.com/bitnami/charts/issues/31804)
 
 ## <small>7.1.9 (2025-02-04)</small>
 

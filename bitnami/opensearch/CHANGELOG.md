@@ -1,8 +1,38 @@
 # Changelog
 
+## 1.8.2 (2025-04-02)
+
+* [bitnami/opensearch] Release 1.8.2 ([#32783](https://github.com/bitnami/charts/pull/32783))
+
+## <small>1.8.1 (2025-03-31)</small>
+
+* [bitnami/opensearch] Update nodes heapSize to half the memory preset (#32686) ([e467b2b](https://github.com/bitnami/charts/commit/e467b2b30b36dcaca94d9355315e05d50adf09f6)), closes [#32686](https://github.com/bitnami/charts/issues/32686)
+
+## 1.8.0 (2025-03-19)
+
+* [bitnami/opensearch] allow to configure trafficDistribution (#32442) ([42f6123](https://github.com/bitnami/charts/commit/42f61239d2afba35ef8f58087b634762fcbc7bbc)), closes [#32442](https://github.com/bitnami/charts/issues/32442)
+
+## 1.7.0 (2025-03-19)
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/opensearch] Add support for customizing headless services annotations (#32507) ([95945cb](https://github.com/bitnami/charts/commit/95945cb1a592b0b2ef3d9c01eb1986621aac42eb)), closes [#32507](https://github.com/bitnami/charts/issues/32507)
+
+## <small>1.6.3 (2025-03-03)</small>
+
+* [bitnami/opensearch] Release 1.6.3 (#32239) ([ee35be0](https://github.com/bitnami/charts/commit/ee35be0d9b67dd681723cffac287dac164f516be)), closes [#32239](https://github.com/bitnami/charts/issues/32239)
+
+## <small>1.6.2 (2025-02-25)</small>
+
+* [bitnami/opensearch] Release 1.6.2 (#32168) ([bb3f465](https://github.com/bitnami/charts/commit/bb3f4656caea7f38c423548874c06a55a261fe1e)), closes [#32168](https://github.com/bitnami/charts/issues/32168)
+
+## <small>1.6.1 (2025-02-25)</small>
+
+* [bitnami/opensearch] Release 1.6.1 (#32027) ([fdbd862](https://github.com/bitnami/charts/commit/fdbd862be60ddbea1ea1e919cac7cbdf0814048e)), closes [#32027](https://github.com/bitnami/charts/issues/32027)
+
 ## 1.6.0 (2025-02-20)
 
-* [bitnami/opensearch] feat: use new helper for checking API versions ([#32061](https://github.com/bitnami/charts/pull/32061))
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/opensearch] feat: use new helper for checking API versions (#32061) ([5e7a94f](https://github.com/bitnami/charts/commit/5e7a94fae9e873dc14e0c2743fa1d9597cef24b6)), closes [#32061](https://github.com/bitnami/charts/issues/32061)
 
 ## <small>1.5.4 (2025-02-06)</small>
 

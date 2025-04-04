@@ -1,8 +1,26 @@
 # Changelog
 
-## 11.6.9 (2025-02-20)
+## 11.6.13 (2025-04-02)
 
-* [bitnami/nginx-ingress-controller] Release 11.6.9 ([#32023](https://github.com/bitnami/charts/pull/32023))
+* [bitnami/nginx-ingress-controller] Release 11.6.13 ([#32755](https://github.com/bitnami/charts/pull/32755))
+
+## <small>11.6.12 (2025-03-25)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/nginx-ingress-controller] Release 11.6.12 (#32589) ([af06d0b](https://github.com/bitnami/charts/commit/af06d0b9da2bf9585753a417727a7b67e9467c63)), closes [#32589](https://github.com/bitnami/charts/issues/32589)
+
+## <small>11.6.11 (2025-03-05)</small>
+
+* [bitnami/nginx-ingress-controller] Release 11.6.11 (#32308) ([719ca59](https://github.com/bitnami/charts/commit/719ca5950319183b7f5f09b8f9e2008b287fa690)), closes [#32308](https://github.com/bitnami/charts/issues/32308)
+
+## <small>11.6.10 (2025-02-27)</small>
+
+* [bitnami/nginx-ingress-controller] Release 11.6.10 (#32193) ([878e738](https://github.com/bitnami/charts/commit/878e738d72e5dc959f4a729177f5b7e80aef85e1)), closes [#32193](https://github.com/bitnami/charts/issues/32193)
+
+## <small>11.6.9 (2025-02-20)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/nginx-ingress-controller] Release 11.6.9 (#32023) ([4751c26](https://github.com/bitnami/charts/commit/4751c26bbfbabb368b90a3b70f59e0275a6b1101)), closes [#32023](https://github.com/bitnami/charts/issues/32023)
 
 ## <small>11.6.8 (2025-02-05)</small>
 

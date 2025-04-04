@@ -1,8 +1,39 @@
 # Changelog
 
-## 21.1.3 (2025-02-06)
+## 21.2.2 (2025-04-04)
 
-* [bitnami/drupal] Release 21.1.3 ([#31803](https://github.com/bitnami/charts/pull/31803))
+* [bitnami/drupal] Release 21.2.2 ([#32811](https://github.com/bitnami/charts/pull/32811))
+
+## <small>21.2.1 (2025-04-03)</small>
+
+* [bitnami/drupal] Release 21.2.1 (#32788) ([a63e76d](https://github.com/bitnami/charts/commit/a63e76de8aaed9e7fad4da91244c4fd58b684ced)), closes [#32788](https://github.com/bitnami/charts/issues/32788)
+
+## 21.2.0 (2025-03-27)
+
+* [bitnami/drupal] Set `usePasswordFiles=true` by default (#32342) ([ee46d82](https://github.com/bitnami/charts/commit/ee46d82b4b0cfc4b5a8ba878d1594dc35be53143)), closes [#32342](https://github.com/bitnami/charts/issues/32342)
+
+## <small>21.1.7 (2025-03-19)</small>
+
+* [bitnami/drupal] Release 21.1.7 (#32521) ([408a911](https://github.com/bitnami/charts/commit/408a911fabee705100f4c9f64987367f2730d4eb)), closes [#32521](https://github.com/bitnami/charts/issues/32521)
+
+## <small>21.1.6 (2025-03-18)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/drupal] Release 21.1.6 (#32505) ([545e4d2](https://github.com/bitnami/charts/commit/545e4d232f536c84a6c3378e6fd516808f9cac88)), closes [#32505](https://github.com/bitnami/charts/issues/32505)
+
+## <small>21.1.5 (2025-03-05)</small>
+
+* [bitnami/drupal] Release 21.1.5 (#32333) ([b8409f0](https://github.com/bitnami/charts/commit/b8409f0940c9bd07719981b049eed6dd05252fa9)), closes [#32333](https://github.com/bitnami/charts/issues/32333)
+
+## <small>21.1.4 (2025-02-26)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/drupal] Release 21.1.4 (#32174) ([d01701e](https://github.com/bitnami/charts/commit/d01701e2a86f8653eabdec8875d57213fe6c0c8a)), closes [#32174](https://github.com/bitnami/charts/issues/32174)
+
+## <small>21.1.3 (2025-02-06)</small>
+
+* [bitnami/drupal] Release 21.1.3 (#31803) ([5f4890c](https://github.com/bitnami/charts/commit/5f4890c2c54371b3e06660fd1c7e65315a742225)), closes [#31803](https://github.com/bitnami/charts/issues/31803)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
 
 ## <small>21.1.2 (2025-01-07)</small>
 

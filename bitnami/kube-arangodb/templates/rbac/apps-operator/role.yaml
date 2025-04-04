@@ -1,0 +1,50 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{ if and .Values.rbac.create .Values.features.apps }}
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
+kind: Role
+metadata:
+  name: {{ printf "%s-apps" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: kube-arangodb
+    app.kubernetes.io/component: operator
+rules:
+  - apiGroups: [""]
+    resources: ["pods", "services", "endpoints"]
+    verbs: ["get", "update"]
+  - apiGroups: [""]
+    resources: ["events"]
+    verbs: ["*"]
+  - apiGroups: [""]
+    resources: ["secrets"]
+    verbs: ["get"]
+  - apiGroups: ["apps"]
+    resources: ["deployments", "replicasets"]
+    verbs: ["get"]
+  - apiGroups: ["batch"]
+    resources: ["jobs"]
+    verbs: ["*"]
+  - apiGroups: ["database.arangodb.com"]
+    resources: ["arangodeployments"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: ["apps.arangodb.com"]
+    resources: ["arangojobs","arangojobs/status"]
+    verbs: ["*"]
+---
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
+kind: Role
+metadata:
+  name: {{ printf "%s-job" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: kube-arangodb
+    app.kubernetes.io/component: operator
+rules:
+  - apiGroups: ["database.arangodb.com"]
+    resources: ["arangodeployments"]
+    verbs: ["get", "list", "watch"]
+{{- end }}

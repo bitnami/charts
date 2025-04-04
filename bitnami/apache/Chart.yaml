@@ -2,15 +2,16 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
+  tanzuCategory: service
   category: Infrastructure
   licenses: Apache-2.0
   images: |
     - name: apache
-      image: docker.io/bitnami/apache:2.4.63-debian-12-r4
+      image: docker.io/bitnami/apache:2.4.63-debian-12-r7
     - name: apache-exporter
-      image: docker.io/bitnami/apache-exporter:1.0.9-debian-12-r14
+      image: docker.io/bitnami/apache-exporter:1.0.10-debian-12-r0
     - name: git
-      image: docker.io/bitnami/git:2.48.1-debian-12-r6
+      image: docker.io/bitnami/git:2.49.0-debian-12-r1
 apiVersion: v2
 appVersion: 2.4.63
 dependencies:
@@ -35,4 +36,4 @@ maintainers:
 name: apache
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/apache
-version: 11.3.3
+version: 11.3.5

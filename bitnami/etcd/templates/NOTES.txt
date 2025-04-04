@@ -88,7 +88,7 @@ To connect to your etcd server from outside the cluster execute the following co
 {{- if .Values.auth.client.secureTransport }}
 {{- if .Values.auth.client.useAutoTLS }}
 
- * As TLS is enabled you should add the flag `--cert-file /bitnami/etcd/data/fixtures/client/cert.pem --key-file /bitnami/etcd/data/fixtures/client/key.pem` to the etcdctl commands.
+ * As TLS is enabled you should add the flag `--cert-file /bitnami/etcd/data/fixtures/client/cert.pem --key-file /bitnami/etcd/data/fixtures/client/key.pem --insecure-skip-tls-verify` to the etcdctl commands.
 
 {{- else }}
 
@@ -117,6 +117,6 @@ To connect to your etcd server from outside the cluster execute the following co
 {{- include "common.warnings.rollingTag" .Values.image }}
 {{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
 {{- include "etcd.validateValues" . }}
-{{- include "common.warnings.resources" (dict "sections" (list "disasterRecovery.cronjob" "" "volumePermissions") "context" $) }}
+{{- include "common.warnings.resources" (dict "sections" (list "" "volumePermissions" "preUpgradeJob" "disasterRecovery.cronjob") "context" $) }}
 {{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.volumePermissions.image) "context" $) }}
 {{- include "common.errors.insecureImages" (dict "images" (list .Values.image .Values.volumePermissions.image) "context" $) }}

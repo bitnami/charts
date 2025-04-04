@@ -1,0 +1,104 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.webhook.validating.create }}
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingWebhookConfiguration
+metadata:
+  # Hardcoded in source code
+  # https://github.com/cloudnative-pg/cloudnative-pg/blob/main/internal/cmd/manager/controller/controller.go#L51
+  name: cnpg-validating-webhook-configuration
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: cloudnative-pg
+    app.kubernetes.io/component: operator
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+webhooks:
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      service:
+        name: cnpg-webhook-service
+        namespace: {{ include "common.names.namespace" . }}
+        path: /validate-postgresql-cnpg-io-v1-backup
+        port: {{ .Values.service.ports.webhook }}
+    failurePolicy: {{ .Values.webhook.validating.failurePolicy }}
+    name: vbackup.cnpg.io
+    rules:
+      - apiGroups:
+          - postgresql.cnpg.io
+        apiVersions:
+          - v1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - backups
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      service:
+        name: cnpg-webhook-service
+        namespace: {{ include "common.names.namespace" . }}
+        path: /validate-postgresql-cnpg-io-v1-cluster
+        port: {{ .Values.service.ports.webhook }}
+    failurePolicy: {{ .Values.webhook.validating.failurePolicy }}
+    name: vcluster.cnpg.io
+    rules:
+      - apiGroups:
+          - postgresql.cnpg.io
+        apiVersions:
+          - v1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - clusters
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      service:
+        name: cnpg-webhook-service
+        namespace: {{ include "common.names.namespace" . }}
+        path: /validate-postgresql-cnpg-io-v1-scheduledbackup
+        port: {{ .Values.service.ports.webhook }}
+    failurePolicy: {{ .Values.webhook.validating.failurePolicy }}
+    name: vscheduledbackup.cnpg.io
+    rules:
+      - apiGroups:
+          - postgresql.cnpg.io
+        apiVersions:
+          - v1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - scheduledbackups
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      service:
+        name: cnpg-webhook-service
+        namespace: {{ include "common.names.namespace" . }}
+        path: /validate-postgresql-cnpg-io-v1-pooler
+        port: {{ .Values.service.ports.webhook }}
+    failurePolicy: {{ .Values.webhook.validating.failurePolicy }}
+    name: vpooler.cnpg.io
+    rules:
+      - apiGroups:
+          - postgresql.cnpg.io
+        apiVersions:
+          - v1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - poolers
+    sideEffects: None
+{{- end }}

@@ -1,8 +1,18 @@
 # Changelog
 
-## 13.7.3 (2025-01-28)
+## 13.7.5 (2025-03-29)
 
-* [bitnami/zookeeper] Release 13.7.3 ([#31631](https://github.com/bitnami/charts/pull/31631))
+* [bitnami/zookeeper] Release 13.7.5 ([#32680](https://github.com/bitnami/charts/pull/32680))
+
+## <small>13.7.4 (2025-02-27)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/zookeeper] Release 13.7.4 (#32204) ([db53e62](https://github.com/bitnami/charts/commit/db53e622ecf1be5a78d1ce683cec8baa41110fa3)), closes [#32204](https://github.com/bitnami/charts/issues/32204)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>13.7.3 (2025-01-28)</small>
+
+* [bitnami/zookeeper] Release 13.7.3 (#31631) ([3113cbe](https://github.com/bitnami/charts/commit/3113cbe599f09d1470b94d3b95890571be4795c4)), closes [#31631](https://github.com/bitnami/charts/issues/31631)
 
 ## <small>13.7.2 (2025-01-13)</small>
 
@@ -1329,7 +1339,7 @@
 ## <small>2.2.4 (2019-05-29)</small>
 
 * Change syntax because of linter failing ([adfc357](https://github.com/bitnami/charts/commit/adfc35728c2a8a9def9e1897b3772d64df621354))
-* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79)), closes [#issuecomment-496883321](https://github.com/bitnami/charts/issues/issuecomment-496883321)
+* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79))
 * Use immutable tags in the main images ([17ca4f5](https://github.com/bitnami/charts/commit/17ca4f5c91da33da03f9e2d411fe5e004e825c4d))
 
 ## <small>2.2.3 (2019-05-28)</small>

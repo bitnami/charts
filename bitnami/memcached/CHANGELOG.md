@@ -1,8 +1,26 @@
 # Changelog
 
-## 7.6.4 (2025-02-19)
+## 7.8.0 (2025-03-21)
 
-* [bitnami/memcached] Release 7.6.4 ([#32015](https://github.com/bitnami/charts/pull/32015))
+* [bitnami/memcached] Set `usePasswordFiles=true` by default ([#32362](https://github.com/bitnami/charts/pull/32362))
+
+## <small>7.7.1 (2025-03-19)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/memcached] Release 7.7.1 (#32526) ([8d5d1bf](https://github.com/bitnami/charts/commit/8d5d1bfdb67a25630b430d06dc0e1caca6f9f043)), closes [#32526](https://github.com/bitnami/charts/issues/32526)
+
+## 7.7.0 (2025-03-12)
+
+* [bitnami/memcached] Enables the ability to specify podTargetLabels on ServiceMonitor for memcached ( ([bba58fd](https://github.com/bitnami/charts/commit/bba58fd79eb67be53adca12e9c3ba5068023f54c)), closes [#32387](https://github.com/bitnami/charts/issues/32387)
+
+## <small>7.6.5 (2025-02-20)</small>
+
+* [bitnami/memcached] Release 7.6.5 (#32095) ([e720816](https://github.com/bitnami/charts/commit/e7208161c5d9284d15baf184dc846dd32ed0db8b)), closes [#32095](https://github.com/bitnami/charts/issues/32095)
+
+## <small>7.6.4 (2025-02-19)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/memcached] Release 7.6.4 (#32015) ([ab78084](https://github.com/bitnami/charts/commit/ab780848530f132440643bda0577062b2342660d)), closes [#32015](https://github.com/bitnami/charts/issues/32015)
 
 ## <small>7.6.3 (2025-02-05)</small>
 

@@ -1,8 +1,17 @@
 # Changelog
 
-## 5.0.3 (2025-02-19)
+## 5.0.5 (2025-04-02)
 
-* [bitnami/kube-state-metrics] Release 5.0.3 ([#32010](https://github.com/bitnami/charts/pull/32010))
+* [bitnami/kube-state-metrics] Release 5.0.5 ([#32745](https://github.com/bitnami/charts/pull/32745))
+
+## <small>5.0.4 (2025-03-05)</small>
+
+* [bitnami/kube-state-metrics] Release 5.0.4 (#32297) ([b141399](https://github.com/bitnami/charts/commit/b14139969db1e24805425b679c490a7bdc268212)), closes [#32297](https://github.com/bitnami/charts/issues/32297)
+
+## <small>5.0.3 (2025-02-19)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/kube-state-metrics] Release 5.0.3 (#32010) ([e15f092](https://github.com/bitnami/charts/commit/e15f0928a9521e308e6975805fa801f26200ecac)), closes [#32010](https://github.com/bitnami/charts/issues/32010)
 
 ## <small>5.0.2 (2025-02-04)</small>
 

@@ -55,7 +55,7 @@ For Redis Sentinel:
 {{- end }}
 {{- end }}
 
-{{- if and .Values.auth.usePasswordFiles (not .Values.auth.usePasswordFileFromSecret) (or (empty .Values.master.initContainers) (empty .Values.replica.initContainers)) }}
+{{- if and .Values.auth.enabled .Values.auth.usePasswordFiles (not .Values.auth.usePasswordFileFromSecret) (or (empty .Values.master.initContainers) (empty .Values.replica.initContainers)) }}
 
 -------------------------------------------------------------------------------
  WARNING

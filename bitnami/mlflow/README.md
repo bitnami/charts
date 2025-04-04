@@ -177,9 +177,11 @@ To back up and restore Helm chart deployments on Kubernetes, you need to back up
 | `tracking.auth.enabled`                                      | Enable basic authentication                                                                                                                                                                                                         | `true`           |
 | `tracking.auth.username`                                     | Admin username                                                                                                                                                                                                                      | `user`           |
 | `tracking.auth.password`                                     | Admin password                                                                                                                                                                                                                      | `""`             |
+| `tracking.auth.flaskServerSecretKey`                         | Flask server secret key (required for enabling CSRF protection)                                                                                                                                                                     | `""`             |
 | `tracking.auth.existingSecret`                               | Name of a secret containing the admin password                                                                                                                                                                                      | `""`             |
 | `tracking.auth.existingSecretUserKey`                        | Key inside the secret containing the admin password                                                                                                                                                                                 | `""`             |
 | `tracking.auth.existingSecretPasswordKey`                    | Key inside the secret containing the admin password                                                                                                                                                                                 | `""`             |
+| `tracking.auth.existingSecretFlaskServerSecretKey`           | Key inside the secret containing the flask server secret key                                                                                                                                                                        | `""`             |
 | `tracking.auth.extraOverrides`                               | Add extra settings to the basic_auth.ini file                                                                                                                                                                                       | `{}`             |
 | `tracking.auth.overridesConfigMap`                           | Name of a ConfigMap containing overrides to the basic_auth.ini file                                                                                                                                                                 | `""`             |
 | `tracking.tls.enabled`                                       | Enable TLS traffic support                                                                                                                                                                                                          | `false`          |
@@ -554,6 +556,10 @@ run.source.git.revision=master
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 3.0.0
+
+This major updates the `minio` subchart to its newest major, 16.0.0. For more information on this subchart's major, please refer to [minio upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/minio#to-1600).
 
 ### To 2.3.0
 

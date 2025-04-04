@@ -2,17 +2,18 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
+  tanzuCategory: application
   category: ApplicationServer
   licenses: Apache-2.0
   images: |
     - name: jmx-exporter
-      image: docker.io/bitnami/jmx-exporter:1.1.0-debian-12-r4
+      image: docker.io/bitnami/jmx-exporter:1.2.0-debian-12-r1
     - name: os-shell
-      image: docker.io/bitnami/os-shell:12-debian-12-r37
+      image: docker.io/bitnami/os-shell:12-debian-12-r40
     - name: tomcat
-      image: docker.io/bitnami/tomcat:10.1.35-debian-12-r0
+      image: docker.io/bitnami/tomcat:10.1.39-debian-12-r3
 apiVersion: v2
-appVersion: 10.1.35
+appVersion: 10.1.39
 dependencies:
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
@@ -35,4 +36,4 @@ maintainers:
 name: tomcat
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/tomcat
-version: 11.5.4
+version: 11.6.1

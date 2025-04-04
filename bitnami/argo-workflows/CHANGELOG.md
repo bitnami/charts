@@ -1,8 +1,25 @@
 # Changelog
 
-## 11.1.7 (2025-02-10)
+## 11.1.11 (2025-04-01)
 
-* [bitnami/argo-workflows] Release 11.1.7 ([#31853](https://github.com/bitnami/charts/pull/31853))
+* [bitnami/argo-workflows] Release 11.1.11 ([#32718](https://github.com/bitnami/charts/pull/32718))
+
+## <small>11.1.10 (2025-03-11)</small>
+
+* [bitnami/argo-workflows] Release 11.1.10 (#32399) ([daca813](https://github.com/bitnami/charts/commit/daca813b2a0beaa4654d4202faff934572f16f3f)), closes [#32399](https://github.com/bitnami/charts/issues/32399)
+
+## <small>11.1.9 (2025-03-04)</small>
+
+* [bitnami/argo-workflows] Release 11.1.9 (#32277) ([fd874cc](https://github.com/bitnami/charts/commit/fd874ccdf91e737d41978d40a2a42dc245ca3980)), closes [#32277](https://github.com/bitnami/charts/issues/32277)
+
+## <small>11.1.8 (2025-02-20)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/argo-workflows] Release 11.1.8 (#32087) ([db716bb](https://github.com/bitnami/charts/commit/db716bbde52b9b6a47732be5107edc04215505a1)), closes [#32087](https://github.com/bitnami/charts/issues/32087)
+
+## <small>11.1.7 (2025-02-10)</small>
+
+* [bitnami/argo-workflows] Release 11.1.7 (#31853) ([01abe92](https://github.com/bitnami/charts/commit/01abe92e2e1ca50450f2096b5492652b05c10227)), closes [#31853](https://github.com/bitnami/charts/issues/31853)
 
 ## <small>11.1.6 (2025-02-07)</small>
 

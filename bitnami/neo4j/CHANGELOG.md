@@ -1,8 +1,29 @@
 # Changelog
 
+## 0.3.5 (2025-04-02)
+
+* [bitnami/neo4j] Release 0.3.5 ([#32775](https://github.com/bitnami/charts/pull/32775))
+
+## <small>0.3.4 (2025-04-02)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/neo4j] Release 0.3.4 (#32772) ([e5d11c6](https://github.com/bitnami/charts/commit/e5d11c6699449494b5c892c1234f69075952b64f)), closes [#32772](https://github.com/bitnami/charts/issues/32772)
+
+## <small>0.3.3 (2025-03-11)</small>
+
+* [bitnami/neo4j] Release 0.3.3 (#32407) ([c144fd2](https://github.com/bitnami/charts/commit/c144fd2bfeca9387f5b3f76bbd0c9d32400b1909)), closes [#32407](https://github.com/bitnami/charts/issues/32407)
+
+## <small>0.3.2 (2025-02-24)</small>
+
+* [bitnami/neo4j] Release 0.3.2 (#32149) ([dd66fc4](https://github.com/bitnami/charts/commit/dd66fc49e35ebfddb07084304d0064ab374a54d1)), closes [#32149](https://github.com/bitnami/charts/issues/32149)
+
+## <small>0.3.1 (2025-02-24)</small>
+
+* [bitnami/neo4j] Release 0.3.1 (#32145) ([ae1177a](https://github.com/bitnami/charts/commit/ae1177a872e2dfefc5c260f662f6c8432e664199)), closes [#32145](https://github.com/bitnami/charts/issues/32145)
+
 ## 0.3.0 (2025-02-20)
 
-* [bitnami/neo4j] feat: use new helper for checking API versions ([#32059](https://github.com/bitnami/charts/pull/32059))
+* [bitnami/neo4j] feat: use new helper for checking API versions (#32059) ([5a8d661](https://github.com/bitnami/charts/commit/5a8d661156facd094be4bd1597ba58cb6d0988e8)), closes [#32059](https://github.com/bitnami/charts/issues/32059)
 
 ## <small>0.2.5 (2025-02-20)</small>
 

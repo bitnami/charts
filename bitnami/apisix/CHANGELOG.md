@@ -1,8 +1,21 @@
 # Changelog
 
+## 4.2.2 (2025-04-01)
+
+* [bitnami/apisix] Release 4.2.2 ([#32695](https://github.com/bitnami/charts/pull/32695))
+
+## <small>4.2.1 (2025-03-20)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/apisix] Release 4.2.1 (#32540) ([740e6c3](https://github.com/bitnami/charts/commit/740e6c318f0cdd53e45a6ad0d9cedeb4a19b7248)), closes [#32540](https://github.com/bitnami/charts/issues/32540)
+
+## 4.2.0 (2025-02-24)
+
+* [bitnami/apisix] Add support for `usePasswordFiles` (#32077) ([cb5df90](https://github.com/bitnami/charts/commit/cb5df905951bede532a1ef73a88a0a66c67e5044)), closes [#32077](https://github.com/bitnami/charts/issues/32077)
+
 ## 4.1.0 (2025-02-20)
 
-* [bitnami/apisix] feat: use new helper for checking API versions ([#32045](https://github.com/bitnami/charts/pull/32045))
+* [bitnami/apisix] feat: use new helper for checking API versions (#32045) ([c327f4b](https://github.com/bitnami/charts/commit/c327f4ba9cf6889d452e0f3fce495c10c6d1c106)), closes [#32045](https://github.com/bitnami/charts/issues/32045)
 
 ## <small>4.0.2 (2025-02-18)</small>
 

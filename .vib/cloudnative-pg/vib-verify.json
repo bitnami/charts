@@ -1,0 +1,66 @@
+{
+  "phases": {
+    "package": {
+      "context": {
+        "credentials": [
+          {
+            "url": "{VIB_ENV_CHARTS_REGISTRY}",
+            "authn": {
+              "username": "{VIB_ENV_CHARTS_REGISTRY_USERNAME}",
+              "password": "{VIB_ENV_CHARTS_REGISTRY_PASSWORD}"
+            }
+          }
+        ],
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/cloudnative-pg"
+        }
+      },
+      "actions": [
+        {
+          "action_id": "helm-package"
+        },
+        {
+          "action_id": "helm-lint"
+        }
+      ]
+    },
+    "verify": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/cloudnative-pg"
+        },
+        "target_platform": {
+          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
+          "size": {
+            "name": "M4"
+          }
+        }
+      },
+      "actions": [
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib"
+            },
+            "tests_file": "cloudnative-pg/goss/goss.yaml",
+            "vars_file": "cloudnative-pg/runtime-parameters.yaml",
+            "remote": {
+              "pod": {
+                "workload": "deploy-vib-postgresql-test"
+              }
+            }
+          }
+        },
+        {
+          "action_id": "kubescape",
+          "params": {
+            "threshold": {VIB_ENV_KUBESCAPE_SCORE_THRESHOLD}
+          }
+        }
+      ]
+    }
+  }
+}

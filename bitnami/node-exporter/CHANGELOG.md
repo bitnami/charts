@@ -1,8 +1,21 @@
 # Changelog
 
-## 4.5.7 (2025-02-20)
+## 4.5.10 (2025-04-02)
 
-* [bitnami/node-exporter] Release 4.5.7 ([#32024](https://github.com/bitnami/charts/pull/32024))
+* [bitnami/node-exporter] Release 4.5.10 ([#32756](https://github.com/bitnami/charts/pull/32756))
+
+## <small>4.5.9 (2025-04-01)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/node-exporter] Release 4.5.9 (#32716) ([a6119aa](https://github.com/bitnami/charts/commit/a6119aaf9253fc48d3d4368feeb7a7c4f4b18922)), closes [#32716](https://github.com/bitnami/charts/issues/32716)
+
+## <small>4.5.8 (2025-03-05)</small>
+
+* [bitnami/node-exporter] Release 4.5.8 (#32309) ([923bbe5](https://github.com/bitnami/charts/commit/923bbe5daf868a45e96fdfacb80bc9407abf983a)), closes [#32309](https://github.com/bitnami/charts/issues/32309)
+
+## <small>4.5.7 (2025-02-20)</small>
+
+* [bitnami/node-exporter] Release 4.5.7 (#32024) ([af56254](https://github.com/bitnami/charts/commit/af56254abd92dc5f594e0960efcd763e30d1c4ca)), closes [#32024](https://github.com/bitnami/charts/issues/32024)
 
 ## <small>4.5.6 (2025-02-17)</small>
 

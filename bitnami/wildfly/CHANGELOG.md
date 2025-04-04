@@ -1,8 +1,18 @@
 # Changelog
 
-## 23.0.4 (2025-02-11)
+## 23.0.6 (2025-03-27)
 
-* [bitnami/wildfly] Release 23.0.4 ([#31876](https://github.com/bitnami/charts/pull/31876))
+* [bitnami/wildfly] Release 23.0.6 ([#32630](https://github.com/bitnami/charts/pull/32630))
+
+## <small>23.0.5 (2025-03-13)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/wildfly] Release 23.0.5 (#32450) ([b5982cb](https://github.com/bitnami/charts/commit/b5982cb6845906051b0bd4e04c97e162ae330941)), closes [#32450](https://github.com/bitnami/charts/issues/32450)
+
+## <small>23.0.4 (2025-02-11)</small>
+
+* [bitnami/wildfly] Release 23.0.4 (#31876) ([236072d](https://github.com/bitnami/charts/commit/236072d28bfeddd496ede9cd78aa62ed1bbedb99)), closes [#31876](https://github.com/bitnami/charts/issues/31876)
 
 ## <small>23.0.3 (2025-02-06)</small>
 
@@ -1104,7 +1114,7 @@
 ## <small>2.2.3 (2019-05-29)</small>
 
 * Change syntax because of linter failing ([adfc357](https://github.com/bitnami/charts/commit/adfc35728c2a8a9def9e1897b3772d64df621354))
-* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79)), closes [#issuecomment-496883321](https://github.com/bitnami/charts/issues/issuecomment-496883321)
+* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79))
 * Use immutable tags in the main images ([17ca4f5](https://github.com/bitnami/charts/commit/17ca4f5c91da33da03f9e2d411fe5e004e825c4d))
 
 ## <small>2.2.2 (2019-05-28)</small>

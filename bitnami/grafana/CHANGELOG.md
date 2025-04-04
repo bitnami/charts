@@ -1,8 +1,42 @@
 # Changelog
 
-## 11.4.8 (2025-02-20)
+## 11.6.3 (2025-04-01)
 
-* [bitnami/grafana] Release 11.4.8 ([#32042](https://github.com/bitnami/charts/pull/32042))
+* [bitnami/grafana] Release 11.6.3 ([#32735](https://github.com/bitnami/charts/pull/32735))
+
+## <small>11.6.2 (2025-03-27)</small>
+
+* [bitnami/grafana] Release 11.6.2 (#32651) ([47bcd2f](https://github.com/bitnami/charts/commit/47bcd2f546675862b1945f66b3e3f620e2bb66b4)), closes [#32651](https://github.com/bitnami/charts/issues/32651)
+
+## <small>11.6.1 (2025-03-25)</small>
+
+* [bitnami/grafana] Release 11.6.1 (#32597) ([20d2203](https://github.com/bitnami/charts/commit/20d220329bc848dbd3f6871af0ac08e081c78319)), closes [#32597](https://github.com/bitnami/charts/issues/32597)
+
+## 11.6.0 (2025-03-14)
+
+* [bitnami/grafana] Set `usePasswordFiles=true` by default (#32348) ([fcc1fc1](https://github.com/bitnami/charts/commit/fcc1fc1bf9c7e97dd5d4c21ecbc13dd729a56292)), closes [#32348](https://github.com/bitnami/charts/issues/32348)
+
+## <small>11.5.1 (2025-03-13)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/grafana] Release 11.5.1 (#32437) ([602e678](https://github.com/bitnami/charts/commit/602e678b446cac381a72500fafbcd4c640acfb1c)), closes [#32437](https://github.com/bitnami/charts/issues/32437)
+
+## 11.5.0 (2025-03-12)
+
+* [bitnami/grafana] Add `optional` option to the extraEnvVars (#32401) ([7b1e396](https://github.com/bitnami/charts/commit/7b1e3966d5c2433e828e61133c0f3a5d156ed67a)), closes [#32401](https://github.com/bitnami/charts/issues/32401)
+
+## <small>11.4.10 (2025-03-05)</small>
+
+* [bitnami/grafana] Release 11.4.10 (#32294) ([61e42e2](https://github.com/bitnami/charts/commit/61e42e2c2f16f44403f60e5c7e41252c5e5290bf)), closes [#32294](https://github.com/bitnami/charts/issues/32294)
+
+## <small>11.4.9 (2025-02-20)</small>
+
+* [bitnami/grafana] Release 11.4.9 (#32092) ([58bd78a](https://github.com/bitnami/charts/commit/58bd78aec8dba598955a16bd6672834281de59ca)), closes [#32092](https://github.com/bitnami/charts/issues/32092)
+
+## <small>11.4.8 (2025-02-20)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/grafana] Release 11.4.8 (#32042) ([52642ef](https://github.com/bitnami/charts/commit/52642ef968fc7746c95715b13f16aebe376bdfa2)), closes [#32042](https://github.com/bitnami/charts/issues/32042)
 
 ## <small>11.4.7 (2025-02-04)</small>
 

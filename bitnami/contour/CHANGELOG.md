@@ -1,8 +1,21 @@
 # Changelog
 
-## 19.5.7 (2025-02-19)
+## 19.5.10 (2025-04-01)
 
-* [bitnami/contour] Release 19.5.7 ([#31983](https://github.com/bitnami/charts/pull/31983))
+* [bitnami/contour] Release 19.5.10 ([#32725](https://github.com/bitnami/charts/pull/32725))
+
+## <small>19.5.9 (2025-03-28)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/contour] Release 19.5.9 (#32605) ([9b43801](https://github.com/bitnami/charts/commit/9b438019afb0599e62400f9a16687af0e2e6b5c0)), closes [#32605](https://github.com/bitnami/charts/issues/32605)
+
+## <small>19.5.8 (2025-03-05)</small>
+
+* [bitnami/contour] Release 19.5.8 (#32285) ([d397ec5](https://github.com/bitnami/charts/commit/d397ec574f2f2cb9b7f915e49275ee4eee1fa26a)), closes [#32285](https://github.com/bitnami/charts/issues/32285)
+
+## <small>19.5.7 (2025-02-19)</small>
+
+* [bitnami/contour] Release 19.5.7 (#31983) ([119f27b](https://github.com/bitnami/charts/commit/119f27b8bdecf8c9ba1ea571e573b87823782799)), closes [#31983](https://github.com/bitnami/charts/issues/31983)
 
 ## <small>19.5.6 (2025-02-12)</small>
 

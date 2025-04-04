@@ -1,8 +1,26 @@
 # Changelog
 
-## 11.4.5 (2025-02-11)
+## 11.5.3 (2025-03-25)
 
-* [bitnami/kibana] Release 11.4.5 ([#31871](https://github.com/bitnami/charts/pull/31871))
+* [bitnami/kibana] Release 11.5.3 ([#32604](https://github.com/bitnami/charts/pull/32604))
+
+## <small>11.5.2 (2025-03-04)</small>
+
+* [bitnami/kibana] Release 11.5.2 (#32270) ([73c6f3c](https://github.com/bitnami/charts/commit/73c6f3c2a2c770b567be70a89cfe6f83b5830b84)), closes [#32270](https://github.com/bitnami/charts/issues/32270)
+
+## <small>11.5.1 (2025-03-04)</small>
+
+* [bitnami/kibana] Update configmap definition (#32246) ([9c6ab89](https://github.com/bitnami/charts/commit/9c6ab89a2ad4ffee6fd96617add1dd46bf486e6d)), closes [#32246](https://github.com/bitnami/charts/issues/32246)
+
+## 11.5.0 (2025-02-24)
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/kibana] Template hostname everywhere (#30807) ([82d4893](https://github.com/bitnami/charts/commit/82d4893118dc94da0fea5055188c3a750cc414ae)), closes [#30807](https://github.com/bitnami/charts/issues/30807)
+
+## <small>11.4.5 (2025-02-11)</small>
+
+* [bitnami/kibana] Release 11.4.5 (#31871) ([b99a5eb](https://github.com/bitnami/charts/commit/b99a5eb6f8510efc5d3a5c75e176889c176fb00f)), closes [#31871](https://github.com/bitnami/charts/issues/31871)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
 
 ## <small>11.4.4 (2025-01-30)</small>
 

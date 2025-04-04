@@ -1,8 +1,41 @@
 # Changelog
 
+## 13.0.0 (2025-04-04)
+
+* [bitnami/milvus] Bump MinIO major version 16.x.x ([#32701](https://github.com/bitnami/charts/pull/32701))
+
+## <small>12.0.2 (2025-04-02)</small>
+
+* [bitnami/milvus] Release 12.0.2 (#32747) ([03cba8a](https://github.com/bitnami/charts/commit/03cba8a5cd6dc34089fd235193b93f22a8a99f1f)), closes [#32747](https://github.com/bitnami/charts/issues/32747)
+
+## <small>12.0.1 (2025-03-31)</small>
+
+* [bitnami/milvus] Release 12.0.1 (#32690) ([cae0234](https://github.com/bitnami/charts/commit/cae02342c38ff522d3d8d061c1074afd187b4c81)), closes [#32690](https://github.com/bitnami/charts/issues/32690)
+
+## 12.0.0 (2025-03-27)
+
+* [bitnami/milvus] feat: bump major due to major bump on Kafka dep (#32617) ([86f459a](https://github.com/bitnami/charts/commit/86f459abe1617f730a431edd103530eea4dbd59e)), closes [#32617](https://github.com/bitnami/charts/issues/32617)
+
+## <small>11.2.4 (2025-03-25)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/milvus] Release 11.2.4 (#32593) ([3521264](https://github.com/bitnami/charts/commit/3521264684c5a1b09a50a5c8c50453cc9af62f02)), closes [#32593](https://github.com/bitnami/charts/issues/32593)
+
+## <small>11.2.3 (2025-03-05)</small>
+
+* [bitnami/milvus] Release 11.2.3 (#32321) ([5310bf2](https://github.com/bitnami/charts/commit/5310bf26533e16a8ad32638f633ce9bda4806abc)), closes [#32321](https://github.com/bitnami/charts/issues/32321)
+
+## <small>11.2.2 (2025-03-05)</small>
+
+* [bitnami/milvus] Release 11.2.2 (#32304) ([8d604ca](https://github.com/bitnami/charts/commit/8d604ca368fce4f57c1f9b5fe7a2a370c3337cd0)), closes [#32304](https://github.com/bitnami/charts/issues/32304)
+
+## <small>11.2.1 (2025-02-26)</small>
+
+* [bitnami/milvus] Release 11.2.1 (#32169) ([0523624](https://github.com/bitnami/charts/commit/0523624ef218f2a0d58e2bb2c8383ef2b87f1787)), closes [#32169](https://github.com/bitnami/charts/issues/32169)
+
 ## 11.2.0 (2025-02-20)
 
-* [bitnami/milvus] feat: use new helper for checking API versions ([#32057](https://github.com/bitnami/charts/pull/32057))
+* [bitnami/milvus] feat: use new helper for checking API versions (#32057) ([4bc1b9e](https://github.com/bitnami/charts/commit/4bc1b9ea0141ace7b557d6819192214b92f51450)), closes [#32057](https://github.com/bitnami/charts/issues/32057)
 
 ## <small>11.1.4 (2025-02-19)</small>
 

@@ -1,8 +1,27 @@
 # Changelog
 
+## 19.0.4 (2025-03-25)
+
+* [bitnami/nginx] Ingress hostname dynamic tpl function ([#32421](https://github.com/bitnami/charts/pull/32421))
+
+## <small>19.0.3 (2025-03-25)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/nginx] Add resources to git-clone-repository initcontainer (#32530) ([4c795a8](https://github.com/bitnami/charts/commit/4c795a8f58e03c85e1ca6ae278a2c0214d6f7b92)), closes [#32530](https://github.com/bitnami/charts/issues/32530)
+
+## <small>19.0.2 (2025-03-12)</small>
+
+* [bitnami/nginx] Release 19.0.2 (#32416) ([af1b19b](https://github.com/bitnami/charts/commit/af1b19b07b85e6b5ed81f159c2a141752610bf98)), closes [#32416](https://github.com/bitnami/charts/issues/32416)
+
+## <small>19.0.1 (2025-03-04)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/nginx] Release 19.0.1 (#32261) ([5fe381a](https://github.com/bitnami/charts/commit/5fe381a12d5f85d2627f109e66718ccf63e4f773)), closes [#32261](https://github.com/bitnami/charts/issues/32261)
+* [bitnami/nginx] Update README.md (#31855) ([c7a9144](https://github.com/bitnami/charts/commit/c7a9144046d04863af4e0ed1d5b8584357d2ddb2)), closes [#31855](https://github.com/bitnami/charts/issues/31855)
+
 ## 19.0.0 (2025-02-10)
 
-* [bitnami/nginx] Release 19.0.0 ([#31852](https://github.com/bitnami/charts/pull/31852))
+* [bitnami/nginx] Release 19.0.0 (#31852) ([3af1f49](https://github.com/bitnami/charts/commit/3af1f49c473b8edbcf890583e3f54ad22bc3a7bc)), closes [#31852](https://github.com/bitnami/charts/issues/31852)
 
 ## <small>18.3.6 (2025-02-05)</small>
 
@@ -1491,7 +1510,7 @@
 
 * Change syntax because of linter failing ([adfc357](https://github.com/bitnami/charts/commit/adfc35728c2a8a9def9e1897b3772d64df621354))
 * Create NOTES.txt for apache and nginx ([f564ac1](https://github.com/bitnami/charts/commit/f564ac1dedbb88abaa6f3a1c79790a5dff950c33))
-* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79)), closes [#issuecomment-496883321](https://github.com/bitnami/charts/issues/issuecomment-496883321)
+* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79))
 * Use immutable tags in the main images ([17ca4f5](https://github.com/bitnami/charts/commit/17ca4f5c91da33da03f9e2d411fe5e004e825c4d))
 
 ## <small>3.2.1 (2019-05-28)</small>

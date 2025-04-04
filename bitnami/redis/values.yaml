@@ -114,7 +114,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/redis
-  tag: 7.4.2-debian-12-r4
+  tag: 7.4.2-debian-12-r6
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -145,7 +145,7 @@ auth:
   ## @param auth.enabled Enable password authentication
   ##
   enabled: true
-  ## @param auth.sentinel Enable password authentication on sentinels too
+  ## @param auth.sentinel Enable authentication on sentinels too
   ##
   sentinel: true
   ## @param auth.password Redis&reg; password
@@ -162,7 +162,7 @@ auth:
   existingSecretPasswordKey: ""
   ## @param auth.usePasswordFiles Mount credentials as files instead of using an environment variable
   ##
-  usePasswordFiles: false
+  usePasswordFiles: true
   ## @param auth.usePasswordFileFromSecret Mount password file from secret
   ##
   usePasswordFileFromSecret: true
@@ -173,6 +173,9 @@ auth:
     ## @param auth.acl.enabled Enables the support of the Redis ACL system
     ##
     enabled: false
+    ## @param auth.acl.sentinel Enables the support of the Redis ACL system for Sentinel Nodes
+    ##
+    sentinel: false
     ## @param auth.acl.users A list of the configured users in the Redis ACL system
     ##
     ## Example:
@@ -1181,7 +1184,7 @@ sentinel:
   image:
     registry: docker.io
     repository: bitnami/redis-sentinel
-    tag: 7.4.2-debian-12-r4
+    tag: 7.4.2-debian-12-r6
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1571,6 +1574,44 @@ sentinel:
   ## @param sentinel.extraPodSpec Optionally specify extra PodSpec for the Redis&reg; Sentinel pod(s)
   ##
   extraPodSpec: {}
+  
+  externalAccess:
+    ## @param sentinel.externalAccess.enabled Enable external access to the Redis
+    ##
+    enabled: false
+    service:
+        ## @param sentinel.externalAccess.service.loadBalancerIPAnnotaion Name of annotation to specify fixed IP for service in.
+        ##
+      loadBalancerIPAnnotaion: ""
+        ## @param sentinel.externalAccess.service.type Type for the services used to expose every Pod
+        ## At this moment only LoadBalancer is supported
+        ##
+      type: LoadBalancer
+      ## @param sentinel.externalAccess.service.redisPort Port for the services used to expose redis-server
+        ##
+      redisPort: 6379
+    
+      ## @param sentinel.externalAccess.service.sentinelPort Port for the services used to expose redis-sentinel
+        ##   
+      sentinelPort: 26379 
+        ## @param sentinel.externalAccess.service.loadBalancerIP Array of load balancer IPs for each Redis&reg; node. Length must be the same as sentinel.replicaCount
+        ##
+      loadBalancerIP: []
+        ## @param sentinel.externalAccess.service.loadBalancerClass Load Balancer class if service type is `LoadBalancer` (optional, cloud specific)
+        ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+        ##
+      loadBalancerClass: ""
+        ## @param sentinel.externalAccess.service.loadBalancerSourceRanges Service Load Balancer sources
+        ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+        ## e.g:
+        ## loadBalancerSourceRanges:
+        ##   - 10.10.10.0/24
+        ##
+      loadBalancerSourceRanges: []
+        ## @param sentinel.externalAccess.service.annotations Annotations to add to the services used to expose every Pod of the Redis&reg; Cluster
+        ##
+      annotations: {}
+
 ## @section Other Parameters
 ##
 
@@ -1742,7 +1783,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/redis-exporter
-    tag: 1.67.0-debian-12-r9
+    tag: 1.69.0-debian-12-r1
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -2114,7 +2155,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r38
+    tag: 12-debian-12-r40
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -2178,7 +2219,7 @@ kubectl:
   image:
     registry: docker.io
     repository: bitnami/kubectl
-    tag: 1.32.2-debian-12-r2
+    tag: 1.32.3-debian-12-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -2247,7 +2288,7 @@ sysctl:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r38
+    tag: 12-debian-12-r40
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

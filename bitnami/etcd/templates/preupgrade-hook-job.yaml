@@ -2,6 +2,8 @@
 Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
+
+{{- if .Values.preUpgradeJob.enabled }}
 apiVersion: {{ include "common.capabilities.job.apiVersion" . }}
 kind: Job
 metadata:
@@ -10,17 +12,17 @@ metadata:
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: etcd-pre-upgrade-job
   {{- $defaultAnnotations := dict "helm.sh/hook" "pre-upgrade" "helm.sh/hook-delete-policy" "before-hook-creation" }}
-  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonAnnotations $defaultAnnotations ) "context" . ) }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.preUpgradeJob.annotations .Values.commonAnnotations $defaultAnnotations ) "context" . ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
 spec:
-  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.preUpgradeJob.podLabels .Values.commonLabels ) "context" . ) }}
   template:
     metadata:
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: etcd-pre-upgrade-job
       annotations:
-        {{- if .Values.podAnnotations }}
-        {{- include "common.tplvalues.render" ( dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
+        {{- if .Values.preUpgradeJob.podAnnotations }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.preUpgradeJob.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
         {{- if (include "etcd.createConfigmap" .) }}
         checksum/configuration: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
@@ -69,8 +71,8 @@ spec:
         - name: pre-upgrade-job
           image: {{ include "etcd.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
-          {{- if .Values.containerSecurityContext.enabled }}
-          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
+          {{- if .Values.preUpgradeJob.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.preUpgradeJob.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           command: [ "/opt/bitnami/scripts/etcd/entrypoint.sh" ]
           args: [ "/opt/bitnami/scripts/etcd/preupgrade.sh" ]
@@ -82,11 +84,16 @@ spec:
             - name: ETCD_DATA_DIR
               value: "/bitnami/etcd/data"
             {{- if or .Values.auth.rbac.create .Values.auth.rbac.enabled }}
+            {{- if .Values.usePasswordFiles }}
+            - name: ETCD_ROOT_PASSWORD_FILE
+              value: {{ printf "/opt/bitnami/etcd/secrets/%s" (include "etcd.secretPasswordKey" .) }}
+            {{- else }}
             - name: ETCD_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "etcd.secretName" . }}
                   key: {{ include "etcd.secretPasswordKey" . }}
+            {{- end }}
             {{- end }}
             {{- $initialCluster := list }}
             {{- range $e, $i := until $replicaCount }}
@@ -109,7 +116,10 @@ spec:
               value: "/opt/bitnami/etcd/certs/client/{{ .Values.auth.client.caFilename | default "ca.crt" }}"
             {{- else if .Values.auth.client.caFilename }}
             - name: ETCD_TRUSTED_CA_FILE
-              value: "/opt/bitnami/etcd/certs/client/{{ .Values.auth.client.caFilename | default "ca.crt" }}"
+              value: "/opt/bitnami/etcd/certs/client/{{ .Values.auth.client.caFilename }}"
+            {{- else }}
+            - name: ETCD_EXTRA_AUTH_FLAGS
+              value: "--insecure-skip-tls-verify"
             {{- end }}
             {{- end }}
             {{- if .Values.extraEnvVars }}
@@ -124,6 +134,11 @@ spec:
             - secretRef:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.extraEnvVarsSecret "context" $) }}
             {{- end }}
+          {{- if .Values.preUpgradeJob.resources }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.preUpgradeJob.resources "context" $) | nindent 12 }}
+          {{- else if ne .Values.preUpgradeJob.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.preUpgradeJob.resourcesPreset) | nindent 12 }}
+          {{- end }}
           volumeMounts:
             {{- if or .Values.configuration .Values.existingConfigmap }}
             - name: configuration
@@ -145,6 +160,10 @@ spec:
             - name: etcd-client-certs
               mountPath: /opt/bitnami/etcd/certs/client/
               readOnly: true
+            {{- end }}
+            {{- if and .Values.usePasswordFiles (or .Values.auth.rbac.create .Values.auth.rbac.enabled) }}
+            - name: etcd-secrets
+              mountPath: /opt/bitnami/etcd/secrets
             {{- end }}
             {{- if .Values.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
@@ -169,6 +188,14 @@ spec:
             secretName: {{ required "A secret containing the client certificates is required" (tpl .Values.auth.client.existingSecret .) }}
             defaultMode: 256
         {{- end }}
+        {{- if and .Values.usePasswordFiles (or .Values.auth.rbac.create .Values.auth.rbac.enabled) }}
+        - name: etcd-secrets
+          projected:
+            sources:
+              - secret:
+                  name:  {{ include "etcd.secretName" . }}
+        {{- end }}
         {{- if .Values.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
+{{- end }}

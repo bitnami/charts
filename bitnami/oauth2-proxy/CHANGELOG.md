@@ -1,8 +1,21 @@
 # Changelog
 
-## 6.2.8 (2025-02-20)
+## 6.2.11 (2025-04-02)
 
-* [bitnami/oauth2-proxy] Release 6.2.8 ([#32025](https://github.com/bitnami/charts/pull/32025))
+* [bitnami/oauth2-proxy] Release 6.2.11 ([#32757](https://github.com/bitnami/charts/pull/32757))
+
+## <small>6.2.10 (2025-03-25)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/oauth2-proxy] Release 6.2.10 (#32609) ([218d09f](https://github.com/bitnami/charts/commit/218d09fa753c6fd3a6e2d4405b460a1116ba3964)), closes [#32609](https://github.com/bitnami/charts/issues/32609)
+
+## <small>6.2.9 (2025-03-05)</small>
+
+* [bitnami/oauth2-proxy] Release 6.2.9 (#32310) ([4938a37](https://github.com/bitnami/charts/commit/4938a374362519323a13e081c2174445728ccddf)), closes [#32310](https://github.com/bitnami/charts/issues/32310)
+
+## <small>6.2.8 (2025-02-20)</small>
+
+* [bitnami/oauth2-proxy] Release 6.2.8 (#32025) ([ebb4e1a](https://github.com/bitnami/charts/commit/ebb4e1ab1cd30071c0e918a2353730db27a41dec)), closes [#32025](https://github.com/bitnami/charts/issues/32025)
 
 ## <small>6.2.7 (2025-02-12)</small>
 

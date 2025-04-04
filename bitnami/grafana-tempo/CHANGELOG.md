@@ -1,8 +1,25 @@
 # Changelog
 
-## 3.8.7 (2025-02-19)
+## 4.0.2 (2025-04-01)
 
-* [bitnami/grafana-tempo] Release 3.8.7 ([#32001](https://github.com/bitnami/charts/pull/32001))
+* [bitnami/grafana-tempo] Release 4.0.2 ([#32738](https://github.com/bitnami/charts/pull/32738))
+
+## <small>4.0.1 (2025-03-25)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/grafana-tempo] Release 4.0.1 (#32608) ([5f46177](https://github.com/bitnami/charts/commit/5f4617731516a19148070f1fe4eaae4cf048876b)), closes [#32608](https://github.com/bitnami/charts/issues/32608)
+
+## 4.0.0 (2025-03-10)
+
+* [bitnami/grafana-tempo] Add persistence options for Grafana Tempo metrics generator (#31495) ([54531ce](https://github.com/bitnami/charts/commit/54531ce059d1156a615749485e11e2f30143ea16)), closes [#31495](https://github.com/bitnami/charts/issues/31495)
+
+## <small>3.8.8 (2025-03-05)</small>
+
+* [bitnami/grafana-tempo] Release 3.8.8 (#32293) ([db224f4](https://github.com/bitnami/charts/commit/db224f45293da4a8d9ef81b3e1620272f4e83c8c)), closes [#32293](https://github.com/bitnami/charts/issues/32293)
+
+## <small>3.8.7 (2025-02-19)</small>
+
+* [bitnami/grafana-tempo] Release 3.8.7 (#32001) ([772bb0f](https://github.com/bitnami/charts/commit/772bb0fdf4b08bbb8c2a9f3957502848196c75c3)), closes [#32001](https://github.com/bitnami/charts/issues/32001)
 
 ## <small>3.8.6 (2025-02-14)</small>
 

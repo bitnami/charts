@@ -1,8 +1,23 @@
 # Changelog
 
-## 9.5.4 (2025-02-20)
+## 9.5.7 (2025-04-02)
 
-* [bitnami/solr] Release 9.5.4 ([#32037](https://github.com/bitnami/charts/pull/32037))
+* [bitnami/solr] Release 9.5.7 ([#32784](https://github.com/bitnami/charts/pull/32784))
+
+## <small>9.5.6 (2025-03-28)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/solr] Release 9.5.6 (#32650) ([fc2728c](https://github.com/bitnami/charts/commit/fc2728cf08cbc7bb526b359e8188f3e9001f74f8)), closes [#32650](https://github.com/bitnami/charts/issues/32650)
+
+## <small>9.5.5 (2025-03-12)</small>
+
+* [bitnami/solr] Release 9.5.5 (#32414) ([2e718f5](https://github.com/bitnami/charts/commit/2e718f57ccae98f3116f89f6f11b31f0755b570b)), closes [#32414](https://github.com/bitnami/charts/issues/32414)
+
+## <small>9.5.4 (2025-02-20)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/solr] Release 9.5.4 (#32037) ([e5dfb89](https://github.com/bitnami/charts/commit/e5dfb896fe160c69a800206563312d98fb031ea4)), closes [#32037](https://github.com/bitnami/charts/issues/32037)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
 
 ## <small>9.5.3 (2025-01-28)</small>
 

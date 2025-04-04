@@ -1,0 +1,185 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.vmalert.enabled }}
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: {{ template "victoriametrics.vmalert.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: victoriametrics
+    app.kubernetes.io/component: vmalert
+  {{- if or .Values.vmalert.deploymentAnnotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.vmalert.deploymentAnnotations .Values.commonAnnotations) "context" .) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if not .Values.vmalert.autoscaling.hpa.enabled }}
+  replicas: {{ .Values.vmalert.replicaCount }}
+  {{- end }}
+  {{- if .Values.vmalert.updateStrategy }}
+  strategy: {{- toYaml .Values.vmalert.updateStrategy | nindent 4 }}
+  {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" (dict "values" (list .Values.vmalert.podLabels .Values.commonLabels) "context" . ) }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/component: vmalert
+  template:
+    metadata:
+      {{- if or .Values.vmalert.podAnnotations (not .Values.vmalert.existingRulesConfigMap) }}
+      annotations:
+        {{- if .Values.vmalert.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.vmalert.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if not .Values.vmalert.existingRulesConfigMap }}
+        checksum/rules-config: {{ include (print $.Template.BasePath "/vmalert/configmap.yaml") $ | sha256sum }}
+        {{- end }}
+      {{- end }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/part-of: victoriametrics
+        app.kubernetes.io/component: vmalert
+    spec:
+      serviceAccountName: {{ template "victoriametrics.vmalert.serviceAccountName" . }}
+      {{- include "victoriametrics.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.vmalert.automountServiceAccountToken }}
+      {{- if .Values.vmalert.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.vmalert.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.vmalert.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.vmalert.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.vmalert.podAffinityPreset "component" "vmalert" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.vmalert.podAntiAffinityPreset "component" "vmalert" "customLabels" $podLabels "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.vmalert.nodeAffinityPreset.type "key" .Values.vmalert.nodeAffinityPreset.key "values" .Values.vmalert.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.vmalert.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.vmalert.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.vmalert.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.vmalert.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.vmalert.priorityClassName }}
+      priorityClassName: {{ .Values.vmalert.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.vmalert.schedulerName }}
+      schedulerName: {{ .Values.vmalert.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.vmalert.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.vmalert.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.vmalert.podSecurityContext.enabled }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.vmalert.podSecurityContext "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.vmalert.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.vmalert.terminationGracePeriodSeconds }}
+      {{- end }}
+      {{- if .Values.vmalert.initContainers }}
+      initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.vmalert.initContainers "context" $) | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: vmalert
+          image: {{ template "victoriametrics.vmalert.image" . }}
+          imagePullPolicy: {{ .Values.vmalert.image.pullPolicy }}
+          {{- if .Values.vmalert.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.vmalert.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.vmalert.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.vmalert.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.vmalert.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.vmalert.args "context" $) | nindent 12 }}
+          {{- else }}
+          args:
+            {{- if .Values.envflagEnable }}
+            - --envflag.enable
+            - --envflag.prefix={{ .Values.envflagPrefix }}
+            {{- end }}
+            - --loggerFormat={{ .Values.loggerFormat }}
+            - --httpListenAddr=:{{ .Values.vmalert.containerPorts.http }}
+            - --rule=/config/alert-rules.yaml
+            {{- $remoteWriteHost := ternary (include "victoriametrics.vmauth.fullname" .) (include "victoriametrics.vminsert.fullname" .) .Values.vmauth.enabled }}
+            {{- $remoteWritePort := ternary .Values.vmauth.service.ports.http .Values.vminsert.service.ports.http .Values.vmauth.enabled }}
+            - --remoteWrite.url=http://{{ $remoteWriteHost }}:{{ $remoteWritePort }}/insert/0/prometheus
+            {{- $remoteReadHost := ternary (include "victoriametrics.vmauth.fullname" .) (include "victoriametrics.vmselect.fullname" .) .Values.vmauth.enabled }}
+            {{- $remoteReadPort := ternary .Values.vmauth.service.ports.http .Values.vmselect.service.ports.http .Values.vmauth.enabled }}
+            - --remoteWrite.url=http://{{ $remoteWriteHost }}:{{ $remoteWritePort }}/select/0/prometheus
+            {{- if .Values.vmalert.datasourceUrl }}
+            - --datasource.url={{ .Values.vmalert.datasourceUrl }}
+            {{- else }}
+            - --datasource.url=http://{{ $remoteWriteHost }}:{{ $remoteWritePort }}/select/0/prometheus
+            {{- end }}
+            {{- if .Values.vmalert.notifierUrl }}
+            - --notifier.url={{ .Values.vmalert.notifierUrl }}
+            {{- end }}
+            {{- if .Values.vmalert.extraArgs }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.vmalert.extraArgs "context" $) | nindent 12 }}
+            {{- end }}
+          {{- end }}
+          env:
+            {{- if .Values.vmalert.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.vmalert.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- if .Values.vmalert.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.vmalert.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.vmalert.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.vmalert.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- if .Values.vmalert.resources }}
+          resources: {{- toYaml .Values.vmalert.resources | nindent 12 }}
+          {{- else if ne .Values.vmalert.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.vmalert.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.vmalert.containerPorts.http }}
+          {{- if .Values.vmalert.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.vmalert.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.vmalert.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.vmalert.livenessProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: http
+          {{- end }}
+          {{- if .Values.vmalert.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.vmalert.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.vmalert.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.vmalert.readinessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /health
+              port: http
+          {{- end }}
+          {{- if .Values.vmalert.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.vmalert.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.vmalert.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.vmalert.startupProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /health
+              port: http
+          {{- end }}
+          {{- if .Values.vmalert.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.vmalert.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: rules-configuration
+              mountPath: /config
+          {{- if .Values.vmalert.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.vmalert.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+        {{- if .Values.vmalert.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.vmalert.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        - name: rules-configuration
+          configMap:
+            name: {{ include "victoriametrics.vmalert.rulesConfigMapName" . }}
+        {{- if .Values.vmalert.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.vmalert.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+{{- end }}
