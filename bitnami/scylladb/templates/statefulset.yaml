@@ -210,7 +210,7 @@ spec:
               value: {{ (include "scylladb.seeds" .) | quote }}
             {{- if .Values.usePasswordFiles }}
             - name: SCYLLADB_PASSWORD_FILE
-              value: {{ printf "/opt/bitnami/airflow/secrets/%s" (include "common.secrets.key" (dict "existingSecret" .Values.dbUser.existingSecret "key" "scylladb-password") }}
+              value: {{ printf "/opt/bitnami/scylladb/secrets/%s" (include "common.secrets.key" (dict "existingSecret" .Values.dbUser.existingSecret "key" "scylladb-password") }}
             {{- else }}
             - name: SCYLLADB_PASSWORD
               valueFrom:
