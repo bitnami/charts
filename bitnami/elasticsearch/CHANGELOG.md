@@ -1,6 +1,6 @@
 # Changelog
 
-## 21.5.0 (2025-03-27)
+## 21.5.0 (2025-04-04)
 
 * [bitnami/elasticsearch] Set `usePasswordFiles=true` by default ([#32344](https://github.com/bitnami/charts/pull/32344))
 
