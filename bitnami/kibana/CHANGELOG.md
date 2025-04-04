@@ -1,8 +1,13 @@
 # Changelog
 
-## 11.5.3 (2025-03-25)
+## 11.6.0 (2025-04-04)
 
-* [bitnami/kibana] Release 11.5.3 ([#32604](https://github.com/bitnami/charts/pull/32604))
+* [bitnami/kibana] Set `usePasswordFiles=true` by default ([#32636](https://github.com/bitnami/charts/pull/32636))
+
+## <small>11.5.3 (2025-03-25)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/kibana] Release 11.5.3 (#32604) ([2bc41c9](https://github.com/bitnami/charts/commit/2bc41c9aa9ff2014a0c89cd626e0039a0108b29d)), closes [#32604](https://github.com/bitnami/charts/issues/32604)
 
 ## <small>11.5.2 (2025-03-04)</small>
 
