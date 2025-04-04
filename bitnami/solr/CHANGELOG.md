@@ -1,8 +1,12 @@
 # Changelog
 
-## 9.5.7 (2025-04-02)
+## 9.6.0 (2025-04-04)
 
-* [bitnami/solr] Release 9.5.7 ([#32784](https://github.com/bitnami/charts/pull/32784))
+* [bitnami/solr] Set `usePasswordFiles=true` by default ([#32782](https://github.com/bitnami/charts/pull/32782))
+
+## <small>9.5.7 (2025-04-02)</small>
+
+* [bitnami/solr] Release 9.5.7 (#32784) ([fd41f2d](https://github.com/bitnami/charts/commit/fd41f2d13d80e1dce5fee2703667d3a7d26ca103)), closes [#32784](https://github.com/bitnami/charts/issues/32784)
 
 ## <small>9.5.6 (2025-03-28)</small>
 
