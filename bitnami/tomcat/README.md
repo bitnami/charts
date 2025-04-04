@@ -195,6 +195,7 @@ You can enable this init container by setting `volumePermissions.enabled` to `tr
 | `commonAnnotations` | Add annotations to all the deployed resources                                                | `{}`            |
 | `clusterDomain`     | Kubernetes Cluster Domain                                                                    | `cluster.local` |
 | `extraDeploy`       | Array of extra objects to deploy with the release                                            | `[]`            |
+| `usePasswordFiles`  | Mount credentials as files instead of using environment variables                            | `true`          |
 
 ### Tomcat parameters
 
