@@ -108,7 +108,7 @@ spec:
               {{- end }}
           env:
             {{- if .Values.milvus.auth.enabled }}
-            {{- if .Values.usePasswordFiles -}}
+            {{- if .Values.usePasswordFiles }}
             - name: MILVUS_ROOT_PASSWORD_FILE
               value: {{ printf "/opt/bitnami/milvus/secrets/%s" (include "milvus.secretRootPasswordKey" .) }}
             - name: MILVUS_PASSWORD_FILE
