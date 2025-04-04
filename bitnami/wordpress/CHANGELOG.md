@@ -1,6 +1,6 @@
 # Changelog
 
-## 24.2.0 (2025-04-02)
+## 24.2.0 (2025-04-04)
 
 * [bitnami/wordpress] Set `usePasswordFiles=true` by default ([#32770](https://github.com/bitnami/charts/pull/32770))
 
