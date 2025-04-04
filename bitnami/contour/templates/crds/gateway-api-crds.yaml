@@ -1,5 +1,5 @@
 # Source: https://raw.githubusercontent.com/projectcontour/contour/v{version}/examples/gateway/00-crds.yaml
-# Version: 1.30.2
+# Version: 1.30.3
 # Conditional: .Values.gatewayAPI.manageCRDs
 {{- if .Values.gatewayAPI.manageCRDs }}
 # Copyright 2024 The Kubernetes Authors.

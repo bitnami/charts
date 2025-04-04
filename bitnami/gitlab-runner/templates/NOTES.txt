@@ -1,0 +1,107 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
+Did you know there are enterprise versions of the Bitnami catalog? For enhanced secure software supply chain features, unlimited pulls from Docker, LTS support, or application customization, see Bitnami Premium or Tanzu Application Catalog. See https://www.arrow.com/globalecs/na/vendors/bitnami for more information.
+
+** Please be patient while the chart is being deployed **
+
+{{- if not (include "gitlab-runner.canDeploy" .) }}
+######################################################################################################
+### ERROR: You did not provide the Gitlab URL and the Runner Token in the 'helm install' call      ###
+######################################################################################################
+
+Complete your Gitlab Runner deployment by running:
+
+  helm upgrade --namespace {{ include "common.names.namespace" . }} {{ .Release.Name }} oci://registry-1.docker.io/bitnamicharts/gitlab-runner \
+    --set gitlabUrl=YOUR_GITLAB_HOST,runnerToken=YOUR_RUNNER_TOKEN
+
+Replacing "YOUR_GITLAB_HOST" and "YOUR_RUNNER_TOKEN" placeholders by the proper values of your Gitlab deployment.
+
+or
+
+helm upgrade --namespace {{ include "common.names.namespace" . }} {{ .Release.Name }} oci://registry-1.docker.io/bitnamicharts/gitlab-runner \
+--set gitlabUrl=YOUR_GITLAB_HOST,existingSecret=YOUR_SECRET
+
+Replacing "YOUR_GITLAB_HOST" and "YOUR_SECRET" placeholders by the proper values of your Gitlab deployment.
+
+{{- else }}
+{{- if .Values.diagnosticMode.enabled }}
+The chart has been deployed in diagnostic mode. All probes have been disabled and the command has been overwritten with:
+
+  command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 4 }}
+  args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 4 }}
+
+Get the list of pods by executing:
+
+  kubectl get pods --namespace {{ include "common.names.namespace" . }} -l app.kubernetes.io/instance={{ .Release.Name }}
+
+Access the pod you want to debug by executing
+
+  kubectl exec --namespace {{ include "common.names.namespace" . }} -ti <NAME OF THE POD> -- bash
+
+{{- else }}
+
+Check the status of the pods by running this command:
+
+  kubectl get pods --namespace {{ include "common.names.namespace" . | quote }} -l app.kubernetes.io/instance={{ .Release.Name }}
+
+Check the integration status in your Gitlab instance:
+
+  https://docs.gitlab.com/runner/register/
+
+{{- if .Values.sessionServer.enabled }}
+
+Session Server:
+
+    Your Session Server site can be accessed through the following DNS name from within your cluster:
+
+        {{ include "gitlab-runner.session-server.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }} (port {{ .Values.sessionServer.service.ports.sessionServer }})
+
+    To access your Session Server from outside the cluster follow the steps below:
+
+    {{- if .Values.sessionServer.ingress.enabled }}
+
+    1. Get the Session Server URL and associate Session Server hostname to your cluster external IP:
+
+       export CLUSTER_IP=$(minikube ip) # On Minikube. Use: `kubectl cluster-info` on others K8s clusters
+       echo "Session Server URL: http{{ if .Values.sessionServer.ingress.tls }}s{{ end }}://{{ .Values.sessionServer.ingress.hostname }}/"
+       echo "$CLUSTER_IP  {{ .Values.sessionServer.ingress.hostname }}" | sudo tee -a /etc/hosts
+
+    {{- else }}
+    {{- $port := .Values.sessionServer.service.ports.sessionServer | toString }}
+
+    1. Get the Session Server URL by running these commands:
+
+    {{- if contains "NodePort" .Values.sessionServer.service.type }}
+
+       export NODE_PORT=$(kubectl get --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "gitlab-runner.session-server.fullname" . }})
+       export NODE_IP=$(kubectl get nodes --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.items[0].status.addresses[0].address}")
+       echo "Session Server URL: http://$NODE_IP:$NODE_PORT/"
+
+    {{- else if contains "LoadBalancer" .Values.sessionServer.service.type }}
+
+      NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+            Watch the status with: 'kubectl get svc --namespace {{ include "common.names.namespace" . }} -w {{ include "gitlab-runner.session-server.fullname" . }}'
+
+       export SERVICE_IP=$(kubectl get svc --namespace {{ include "common.names.namespace" . }} {{ include "gitlab-runner.session-server.fullname" . }} --include "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
+       echo "Session Sever URL: http://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.sessionServer.service.ports.sessionServer }}{{ end }}/"
+
+    {{- else if contains "ClusterIP"  .Values.sessionServer.service.type }}
+
+       kubectl port-forward --namespace {{ include "common.names.namespace" . }} svc/{{ include "gitlab-runner.session-server.fullname" . }} {{ .Values.sessionServer.service.ports.sessionServer }}:{{ .Values.sessionServer.service.ports.sessionServer }} &
+       echo "Session Server URL: http://127.0.0.1{{- if ne $port "80" }}:{{ .Values.sessionServer.service.ports.sessionServer }}{{ end }}//"
+
+    {{- end }}
+    {{- end }}
+
+{{- end }}
+{{- end }}
+
+{{- include "gitlab-runner.validateValues" . }}
+{{- include "gitlab-runner.checkRollingTags" . }}
+
+{{- include "common.warnings.resources" (dict "sections" (list "") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image) "context" $) }}
+{{- include "common.errors.insecureImages" (dict "images" (list .Values.image) "context" $) }}
+{{- end }}

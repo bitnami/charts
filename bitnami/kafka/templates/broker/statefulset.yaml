@@ -40,8 +40,8 @@ spec:
         {{- if include "kafka.broker.createConfigmap" . }}
         checksum/configuration: {{ include (print $.Template.BasePath "/broker/configmap.yaml") . | sha256sum }}
         {{- end }}
-        {{- if include "kafka.createSaslSecret" . }}
-        checksum/passwords-secret: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }}
+        {{- if or (include "kafka.createSaslSecret" .) (not .Values.existingKraftSecret) }}
+        checksum/secret: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }}
         {{- end }}
          {{- if include "kafka.createTlsSecret" . }}
         checksum/tls-secret: {{ include (print $.Template.BasePath "/tls-secret.yaml") . | sha256sum }}
@@ -225,7 +225,7 @@ spec:
               mountPath: /opt/bitnami/kafka/config/certs
               readOnly: true
             {{- end }}
-            {{- if and .Values.usePasswordFiles (include "kafka.saslEnabled" .) (or (regexFind "SCRAM" (upper .Values.sasl.enabledMechanisms)) (regexFind "SCRAM" (upper .Values.sasl.controllerMechanism)) (regexFind "SCRAM" (upper .Values.sasl.interBrokerMechanism))) }}
+            {{- if and .Values.usePasswordFiles (include "kafka.saslEnabled" .) }}
             - name: kafka-sasl
               mountPath: /opt/bitnami/kafka/config/secrets
               readOnly: true
@@ -329,7 +329,7 @@ spec:
               {{- end }}
         {{- end }}
         {{- end }}
-        {{- if and .Values.usePasswordFiles (include "kafka.saslEnabled" .) (or (regexFind "SCRAM" (upper .Values.sasl.enabledMechanisms)) (regexFind "SCRAM" (upper .Values.sasl.controllerMechanism)) (regexFind "SCRAM" (upper .Values.sasl.interBrokerMechanism))) }}
+        {{- if and .Values.usePasswordFiles (include "kafka.saslEnabled" .) }}
         - name: kafka-sasl
           projected:
             sources:
@@ -359,6 +359,11 @@ spec:
             claimName: {{ printf "%s" (tpl .Values.broker.logPersistence.existingClaim .) }}
         {{- end }}
   {{- if or (and .Values.broker.persistence.enabled (not .Values.broker.persistence.existingClaim)) (and .Values.broker.logPersistence.enabled (not .Values.broker.logPersistence.existingClaim)) }}
+  {{- if .Values.broker.persistentVolumeClaimRetentionPolicy.enabled }}
+  persistentVolumeClaimRetentionPolicy:
+    whenDeleted: {{ .Values.broker.persistentVolumeClaimRetentionPolicy.whenDeleted }}
+    whenScaled: {{ .Values.broker.persistentVolumeClaimRetentionPolicy.whenScaled }}
+  {{- end }}
   volumeClaimTemplates:
     {{- if and .Values.broker.persistence.enabled (not .Values.broker.persistence.existingClaim) }}
     - apiVersion: v1

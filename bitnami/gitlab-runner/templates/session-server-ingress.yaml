@@ -1,0 +1,61 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.sessionServer.enabled .Values.sessionServer.ingress.enabled }}
+apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
+kind: Ingress
+metadata:
+  name: {{ include "gitlab-runner.session-server.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" (dict "customLabels" .Values.commonLabels "context" $) | nindent 4 }}
+    app.kubernetes.io/part-of: gitlab-runner
+    app.kubernetes.io/component: gitlab-runner
+  {{- if or .Values.sessionServer.ingress.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.sessionServer.ingress.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if and .Values.sessionServer.ingress.ingressClassName (eq "true" (include "common.ingress.supportsIngressClassname" .)) }}
+  ingressClassName: {{ .Values.sessionServer.ingress.ingressClassName | quote }}
+  {{- end }}
+  rules:
+    {{- if .Values.sessionServer.ingress.hostname }}
+    - host: {{ .Values.sessionServer.ingress.hostname }}
+      http:
+        paths:
+          {{- if .Values.sessionServer.ingress.extraPaths }}
+          {{- toYaml .Values.sessionServer.ingress.extraPaths | nindent 10 }}
+          {{- end }}
+          - path: {{ .Values.sessionServer.ingress.path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
+            pathType: {{ .Values.sessionServer.ingress.pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "gitlab-runner.session-server.fullname" .) "servicePort" "http-session" "context" $)  | nindent 14 }}
+    {{- end }}
+    {{- range .Values.sessionServer.ingress.extraHosts }}
+    - host: {{ .name | quote }}
+      http:
+        paths:
+          - path: {{ default "/" .path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
+            pathType: {{ default "ImplementationSpecific" .pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "gitlab-runner.session-server.fullname" .) "servicePort" "http-session" "context" $) | nindent 14 }}
+    {{- end }}
+    {{- if .Values.sessionServer.ingress.extraRules }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.sessionServer.ingress.extraRules "context" $) | nindent 4 }}
+    {{- end }}
+  {{- if or (and .Values.sessionServer.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.sessionServer.ingress.annotations )) .Values.sessionServer.ingress.selfSigned)) .Values.sessionServer.ingress.extraTls }}
+  tls:
+    {{- if and .Values.sessionServer.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.sessionServer.ingress.annotations )) .Values.sessionServer.ingress.selfSigned) }}
+    - hosts:
+        - {{ .Values.sessionServer.ingress.hostname | quote }}
+      secretName: {{ printf "%s-tls" .Values.sessionServer.ingress.hostname }}
+    {{- end }}
+    {{- if .Values.sessionServer.ingress.extraTls }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.sessionServer.ingress.extraTls "context" $) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+{{- end }}

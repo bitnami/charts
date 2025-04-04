@@ -1,8 +1,16 @@
 # Changelog
 
-## 21.1.7 (2025-03-19)
+## 21.2.1 (2025-04-02)
 
-* [bitnami/drupal] Release 21.1.7 ([#32521](https://github.com/bitnami/charts/pull/32521))
+* [bitnami/drupal] Release 21.2.1 ([#32788](https://github.com/bitnami/charts/pull/32788))
+
+## 21.2.0 (2025-03-27)
+
+* [bitnami/drupal] Set `usePasswordFiles=true` by default (#32342) ([ee46d82](https://github.com/bitnami/charts/commit/ee46d82b4b0cfc4b5a8ba878d1594dc35be53143)), closes [#32342](https://github.com/bitnami/charts/issues/32342)
+
+## <small>21.1.7 (2025-03-19)</small>
+
+* [bitnami/drupal] Release 21.1.7 (#32521) ([408a911](https://github.com/bitnami/charts/commit/408a911fabee705100f4c9f64987367f2730d4eb)), closes [#32521](https://github.com/bitnami/charts/issues/32521)
 
 ## <small>21.1.6 (2025-03-18)</small>
 

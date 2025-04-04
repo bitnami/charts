@@ -1,8 +1,21 @@
 # Changelog
 
-## 15.0.7 (2025-03-12)
+## 16.0.2 (2025-04-03)
 
-* [bitnami/minio] Release 15.0.7 ([#32425](https://github.com/bitnami/charts/pull/32425))
+* [bitnami/minio] Release 16.0.2 ([#32806](https://github.com/bitnami/charts/pull/32806))
+
+## <small>16.0.1 (2025-04-02)</small>
+
+* [bitnami/minio] Release 16.0.1 (#32749) ([351fb51](https://github.com/bitnami/charts/commit/351fb511b701966825902719875eac6a8a1c08be)), closes [#32749](https://github.com/bitnami/charts/issues/32749)
+
+## 16.0.0 (2025-03-27)
+
+* [bitnami/minio] Set `usePasswordFiles=true` by default (#32361) ([4f16379](https://github.com/bitnami/charts/commit/4f1637923c52c3f209a20e3dc617c3433de4083c)), closes [#32361](https://github.com/bitnami/charts/issues/32361)
+
+## <small>15.0.7 (2025-03-12)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/minio] Release 15.0.7 (#32425) ([48a854a](https://github.com/bitnami/charts/commit/48a854ac39c08841258ab185f7af68024ab8569e)), closes [#32425](https://github.com/bitnami/charts/issues/32425)
 
 ## <small>15.0.6 (2025-03-05)</small>
 

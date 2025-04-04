@@ -143,18 +143,28 @@ spec:
               value: {{ include "gitea.databaseName" . | quote }}
             - name: GITEA_DATABASE_USERNAME
               value: {{ include "gitea.databaseUser" . | quote }}
+            {{- if .Values.usePasswordFiles }}
+            - name: GITEA_DATABASE_PASSWORD_FILE
+              value: {{ printf "/opt/bitnami/gitea/secrets/%s" (include "gitea.databasePasswordKey" .) }}
+            {{- else }}
             - name: GITEA_DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "gitea.databaseSecretName" . }}
                   key: {{ include "gitea.databasePasswordKey" . | quote }}
+            {{- end }}
             - name: GITEA_ADMIN_USER
               value: {{ .Values.adminUsername | quote }}
+            {{- if .Values.usePasswordFiles }}
+            - name: GITEA_ADMIN_PASSWORD_FILE
+              value: {{ printf "/opt/bitnami/gitea/secrets/%s" (include "gitea.secretKey" .) }}
+            {{- else }}
             - name: GITEA_ADMIN_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "gitea.secretName" . }}
                   key: {{ include "gitea.secretKey" . }}
+            {{- end }}
             - name: GITEA_ADMIN_EMAIL
               value: {{ .Values.adminEmail | quote }}
             - name: GITEA_APP_NAME
@@ -178,11 +188,16 @@ spec:
               value: {{ .Values.smtpUser | quote }}
             {{- end }}
             {{- if or .Values.smtpPassword .Values.smtpExistingSecret }}
+            {{- if .Values.usePasswordFiles }}
+            - name: GITEA_SMTP_PASSWORD_FILE
+              value: "/opt/bitnami/gitea/secrets/smtp-password"
+            {{- else }}
             - name: GITEA_SMTP_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "gitea.smtpSecretName" . }}
                   key: smtp-password
+            {{- end }}
             {{- end }}
             - name: GITEA_ENABLE_OPENID_SIGNIN
               value: {{ .Values.openid.enableSignIn | quote }}
@@ -263,6 +278,10 @@ spec:
             - name: empty-dir
               mountPath: /tmp
               subPath: tmp-dir
+            {{- if .Values.usePasswordFiles }}
+            - name: gitea-secrets
+              mountPath: /opt/bitnami/gitea/secrets
+            {{- end }}
             {{- if .Values.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
@@ -272,6 +291,19 @@ spec:
       volumes:
         - name: empty-dir
           emptyDir: {}
+        {{- if .Values.usePasswordFiles }}
+        - name: gitea-secrets
+          projected:
+            sources:
+              - secret:
+                  name: {{ include "gitea.secretName" . }}
+              - secret:
+                  name: {{ include "gitea.databaseSecretName" . }}
+              {{- if or .Values.smtpPassword .Values.smtpExistingSecret }}
+              - secret:
+                  name: {{ include "gitea.smtpSecretName" . }}
+              {{- end }}
+        {{- end }}
         - name: gitea-data
           {{- if .Values.persistence.enabled }}
           persistentVolumeClaim:

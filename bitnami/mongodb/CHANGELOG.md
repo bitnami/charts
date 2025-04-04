@@ -1,8 +1,17 @@
 # Changelog
 
-## 16.4.10 (2025-03-25)
+## 16.4.12 (2025-04-02)
 
-* [bitnami/mongodb] fix broken conditional ([#32591](https://github.com/bitnami/charts/pull/32591))
+* [bitnami/mongodb] Release 16.4.12 ([#32752](https://github.com/bitnami/charts/pull/32752))
+
+## <small>16.4.11 (2025-03-28)</small>
+
+* [bitnami/mongodb] backup cronjob time zone variable should be camel case (#32663) ([e5b94bc](https://github.com/bitnami/charts/commit/e5b94bc5c00c2c96d3e8f0fcedf02ad2c020f2a6)), closes [#32663](https://github.com/bitnami/charts/issues/32663)
+
+## <small>16.4.10 (2025-03-25)</small>
+
+* [bitnami/mongodb] fix broken conditional (#32591) ([f98e77e](https://github.com/bitnami/charts/commit/f98e77e989c35d7fa67e3b118bf69e64121d7454)), closes [#32591](https://github.com/bitnami/charts/issues/32591)
+* Update README.md (#32588) ([3c9e14a](https://github.com/bitnami/charts/commit/3c9e14ac3fa81ac439f64a20c284244eadb9481d)), closes [#32588](https://github.com/bitnami/charts/issues/32588)
 
 ## <small>16.4.9 (2025-03-24)</small>
 

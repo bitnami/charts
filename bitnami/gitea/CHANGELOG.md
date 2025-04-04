@@ -1,8 +1,17 @@
 # Changelog
 
-## 3.1.14 (2025-03-24)
+## 3.2.1 (2025-04-01)
 
-* [bitnami/gitea] Release 3.1.14 ([#32586](https://github.com/bitnami/charts/pull/32586))
+* [bitnami/gitea] Release 3.2.1 ([#32730](https://github.com/bitnami/charts/pull/32730))
+
+## 3.2.0 (2025-03-27)
+
+* [bitnami/gitea] Set `usePasswordFiles=true` by default (#32347) ([f82ce08](https://github.com/bitnami/charts/commit/f82ce081fed5aaddc123caae618776df141bf691)), closes [#32347](https://github.com/bitnami/charts/issues/32347)
+
+## <small>3.1.14 (2025-03-24)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/gitea] Release 3.1.14 (#32586) ([bdb0cd7](https://github.com/bitnami/charts/commit/bdb0cd798e223e1603551f5000c63c733d6d5966)), closes [#32586](https://github.com/bitnami/charts/issues/32586)
 
 ## <small>3.1.13 (2025-03-05)</small>
 

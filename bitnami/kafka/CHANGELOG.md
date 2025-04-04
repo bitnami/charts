@@ -1,8 +1,24 @@
 # Changelog
 
-## 32.0.3 (2025-03-26)
+## 32.1.3 (2025-04-01)
 
-* [bitnami/kafka] bugfix: use kafka-broker-api-versions.sh to wait for Kafka on provisioning ([#32613](https://github.com/bitnami/charts/pull/32613))
+* [bitnami/kafka] bugfix: recompute secret checksum on Kafka kraft secret changes ([#32692](https://github.com/bitnami/charts/pull/32692))
+
+## <small>32.1.2 (2025-03-27)</small>
+
+* [bitnami/kakfa] bugfix: relax conditions under SASL secret must be mounted as volume (#32631) ([d336c50](https://github.com/bitnami/charts/commit/d336c507835a021108b9ce9aa0f5e377662e363f)), closes [#32631](https://github.com/bitnami/charts/issues/32631)
+
+## <small>32.1.1 (2025-03-26)</small>
+
+* [bitnami/kafka] bugfix: upgrade issue due to secret lookup (#32621) ([31af2bd](https://github.com/bitnami/charts/commit/31af2bd4ddf75dca1b9e1761a13693a8b0a90e33)), closes [#32621](https://github.com/bitnami/charts/issues/32621)
+
+## 32.1.0 (2025-03-26)
+
+* [bitnami/kafka] bugfix: add missing persistentVolumeClaimRetentionPolicy and fix config & network po ([9d1b911](https://github.com/bitnami/charts/commit/9d1b911d005add455ed5db1b379e1df13c33ddd6)), closes [#32615](https://github.com/bitnami/charts/issues/32615)
+
+## <small>32.0.3 (2025-03-26)</small>
+
+* [bitnami/kafka] bugfix: use kafka-broker-api-versions.sh to wait for Kafka on provisioning (#32613) ([328166c](https://github.com/bitnami/charts/commit/328166c403f2d3b4a9a548561b25dc43efb7eebf)), closes [#32613](https://github.com/bitnami/charts/issues/32613)
 
 ## <small>32.0.2 (2025-03-26)</small>
 
