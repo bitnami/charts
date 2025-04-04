@@ -319,7 +319,7 @@ spec:
               - /bin/bash
               - -ec
               - |
-                {{- if .Values.usePasswordFiles }}
+                {{- if and .Values.usePasswordFiles .Values.auth.enabled }}
                 export SOLR_ADMIN_PASSWORD="$(< $SOLR_ADMIN_PASSWORD_FILE)"
                 {{- end }}
                 curl --silent --connect-timeout 15000 {{ ternary "--user ${SOLR_ADMIN_USERNAME}:${SOLR_ADMIN_PASSWORD}" "" .Values.auth.enabled }} http://localhost:${SOLR_PORT_NUMBER}/solr/admin/info/system | grep --quiet  '\"status\":0'
@@ -333,7 +333,7 @@ spec:
               - /bin/bash
               - -ec
               - |
-                {{- if .Values.usePasswordFiles }}
+                {{- if and .Values.usePasswordFiles .Values.auth.enabled }}
                 export SOLR_ADMIN_PASSWORD="$(< $SOLR_ADMIN_PASSWORD_FILE)"
                 {{- end }}
                 curl --silent --connect-timeout 15000 {{ ternary "--user ${SOLR_ADMIN_USERNAME}:${SOLR_ADMIN_PASSWORD}" "" .Values.auth.enabled }} http://localhost:${SOLR_PORT_NUMBER}/api/node/health | grep --quiet  '\"status\":\"OK\"'
@@ -347,7 +347,7 @@ spec:
               - /bin/bash
               - -ec
               - |
-                {{- if .Values.usePasswordFiles }}
+                {{- if and .Values.usePasswordFiles .Values.auth.enabled }}
                 export SOLR_ADMIN_PASSWORD="$(< $SOLR_ADMIN_PASSWORD_FILE)"
                 {{- end }}
                 curl --silent --connect-timeout 15000  {{ ternary "--user ${SOLR_ADMIN_USERNAME}:${SOLR_ADMIN_PASSWORD}" "" .Values.auth.enabled }} http://localhost:${SOLR_PORT_NUMBER}/api/node/health | grep --quiet  '\"status\":\"OK\"'
@@ -372,11 +372,13 @@ spec:
             - name: scripts
               mountPath: /scripts/setup.sh
               subPath: setup.sh
-            {{- if .Values.usePasswordFiles }}
+            {{- if and .Values.usePasswordFiles .Values.auth.enabled }}
             - name: solr-pass-secret
-              mountPath: /opt/bitnami/solr/secrets/tls/pass
+              mountPath: /opt/bitnami/solr/secrets/pass
+            {{- end }}
+            {{- if and .Values.usePasswordFiles .Values.tls.enabled }}
             - name: solr-tls-secret
-              mountPath: /opt/bitnami/solr/secrets/tls/tls
+              mountPath: /opt/bitnami/solr/secrets/tls
             {{- end }}
             - name: data
               mountPath: {{ .Values.persistence.mountPath }}
@@ -403,12 +405,12 @@ spec:
           configMap:
             name: {{ printf "%s-scripts" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
             defaultMode: 0755
-        {{- if and .Values.usePasswordFiles (or .Values.auth.enabled .Values.tls.enabled)}}
+        {{- if and .Values.usePasswordFiles .Values.auth.enabled }}
         - name: solr-pass-secret
           secret:
             secretName: {{ include "solr.secretName" . }}
         {{- end }}
-        {{- if and .Values.usePasswordFiles (or .Values.auth.enabled .Values.tls.enabled)}}
+        {{- if and .Values.usePasswordFiles .Values.tls.enabled }}
         - name: solr-tls-secret
           secret:
             secretName: {{ include "solr.tlsPasswordsSecret" . }}
