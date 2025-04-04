@@ -304,8 +304,7 @@ Dynamic Seed Discovery Init-Container
       - "-c"
       - |
         export DYNAMIC_SEED_DIR=/opt/bitnami/cassandra/tmp &&
-        install_packages netcat-traditional &&
-        install_packages dnsutils &&
+        install_packages netcat-traditional dnsutils &&
         dig +short {{ .Release.Name }}-headless.{{ .Release.Namespace}}.svc.{{ .Values.clusterDomain }} | grep -v $POD_IP | \
           while read NODE_IP; do \
             nc -zvw3 $NODE_IP {{ .Values.service.ports.cql }} && \
