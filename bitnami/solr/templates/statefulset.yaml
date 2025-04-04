@@ -319,6 +319,9 @@ spec:
               - /bin/bash
               - -ec
               - |
+                {{- if .Values.usePasswordFiles }}
+                export SOLR_ADMIN_PASSWORD="$(< $SOLR_ADMIN_PASSWORD_FILE)"
+                {{- end }}
                 curl --silent --connect-timeout 15000 {{ ternary "--user ${SOLR_ADMIN_USERNAME}:${SOLR_ADMIN_PASSWORD}" "" .Values.auth.enabled }} http://localhost:${SOLR_PORT_NUMBER}/solr/admin/info/system | grep --quiet  '\"status\":0'
           {{- end }}
           {{- if .Values.customReadinessProbe }}
@@ -330,6 +333,9 @@ spec:
               - /bin/bash
               - -ec
               - |
+                {{- if .Values.usePasswordFiles }}
+                export SOLR_ADMIN_PASSWORD="$(< $SOLR_ADMIN_PASSWORD_FILE)"
+                {{- end }}
                 curl --silent --connect-timeout 15000 {{ ternary "--user ${SOLR_ADMIN_USERNAME}:${SOLR_ADMIN_PASSWORD}" "" .Values.auth.enabled }} http://localhost:${SOLR_PORT_NUMBER}/api/node/health | grep --quiet  '\"status\":\"OK\"'
           {{- end }}
           {{- if .Values.customStartupProbe }}
@@ -341,6 +347,9 @@ spec:
               - /bin/bash
               - -ec
               - |
+                {{- if .Values.usePasswordFiles }}
+                export SOLR_ADMIN_PASSWORD="$(< $SOLR_ADMIN_PASSWORD_FILE)"
+                {{- end }}
                 curl --silent --connect-timeout 15000  {{ ternary "--user ${SOLR_ADMIN_USERNAME}:${SOLR_ADMIN_PASSWORD}" "" .Values.auth.enabled }} http://localhost:${SOLR_PORT_NUMBER}/api/node/health | grep --quiet  '\"status\":\"OK\"'
           {{- end }}
           {{- end }}
