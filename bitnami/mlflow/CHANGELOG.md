@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.6.0 (2025-04-01)
+## 3.0.0 (2025-04-03)
 
-* [bitnami/mlflow] Set `usePasswordFiles=true` by default ([#32697](https://github.com/bitnami/charts/pull/32697))
+* [bitnami/mlflow] Bump MinIO major version 16.x.x ([#32702](https://github.com/bitnami/charts/pull/32702))
+
+## <small>2.5.8 (2025-04-03)</small>
+
+* [bitnami/mlflow] Release 2.5.8 (#32796) ([e6051d1](https://github.com/bitnami/charts/commit/e6051d10cc68bb6b52c468d51bc35a022584e56d)), closes [#32796](https://github.com/bitnami/charts/issues/32796)
 
 ## <small>2.5.7 (2025-03-26)</small>
 

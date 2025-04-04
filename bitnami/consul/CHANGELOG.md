@@ -1,8 +1,13 @@
 # Changelog
 
-## 11.4.10 (2025-03-12)
+## 11.4.11 (2025-04-01)
 
-* [bitnami/consul] Release 11.4.10 ([#32423](https://github.com/bitnami/charts/pull/32423))
+* [bitnami/consul] Release 11.4.11 ([#32726](https://github.com/bitnami/charts/pull/32726))
+
+## <small>11.4.10 (2025-03-12)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/consul] Release 11.4.10 (#32423) ([774ed2e](https://github.com/bitnami/charts/commit/774ed2e5b0d61eb21a1aa2102c6904947b5d96d3)), closes [#32423](https://github.com/bitnami/charts/issues/32423)
 
 ## <small>11.4.9 (2025-03-04)</small>
 
