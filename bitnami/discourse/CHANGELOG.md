@@ -1,6 +1,6 @@
 # Changelog
 
-## 15.1.8 (2025-04-03)
+## 15.1.8 (2025-04-04)
 
 * [bitnami/discourse] Release 15.1.8 ([#32809](https://github.com/bitnami/charts/pull/32809))
 
