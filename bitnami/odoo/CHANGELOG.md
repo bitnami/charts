@@ -1,8 +1,13 @@
 # Changelog
 
-## 28.1.5 (2025-04-04)
+## 28.2.0 (2025-04-04)
 
-* [bitnami/odoo] Release 28.1.5 ([#32815](https://github.com/bitnami/charts/pull/32815))
+* [bitnami/odoo] Set `usePasswordFiles=true` by default ([#32708](https://github.com/bitnami/charts/pull/32708))
+
+## <small>28.1.5 (2025-04-04)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/odoo] Release 28.1.5 (#32815) ([f69b715](https://github.com/bitnami/charts/commit/f69b715c6851244fb92e1120962bbfb6ce28cab3)), closes [#32815](https://github.com/bitnami/charts/issues/32815)
 
 ## <small>28.1.4 (2025-03-05)</small>
 
