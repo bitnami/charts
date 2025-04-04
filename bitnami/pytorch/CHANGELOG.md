@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.3.6 (2025-03-11)
+## 4.3.7 (2025-03-30)
 
-* [bitnami/pytorch] Update Chart.yaml ([#32411](https://github.com/bitnami/charts/pull/32411))
+* [bitnami/pytorch] Release 4.3.7 ([#32683](https://github.com/bitnami/charts/pull/32683))
+
+## <small>4.3.6 (2025-03-11)</small>
+
+* [bitnami/pytorch] Update Chart.yaml (#32411) ([0a8723b](https://github.com/bitnami/charts/commit/0a8723b979c6d111fafdbea07409f642c653721c)), closes [#32411](https://github.com/bitnami/charts/issues/32411)
 
 ## <small>4.3.5 (2025-03-11)</small>
 

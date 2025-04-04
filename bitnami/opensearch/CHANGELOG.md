@@ -1,8 +1,16 @@
 # Changelog
 
+## 1.8.2 (2025-04-02)
+
+* [bitnami/opensearch] Release 1.8.2 ([#32783](https://github.com/bitnami/charts/pull/32783))
+
+## <small>1.8.1 (2025-03-31)</small>
+
+* [bitnami/opensearch] Update nodes heapSize to half the memory preset (#32686) ([e467b2b](https://github.com/bitnami/charts/commit/e467b2b30b36dcaca94d9355315e05d50adf09f6)), closes [#32686](https://github.com/bitnami/charts/issues/32686)
+
 ## 1.8.0 (2025-03-19)
 
-* [bitnami/opensearch] allow to configure trafficDistribution ([#32442](https://github.com/bitnami/charts/pull/32442))
+* [bitnami/opensearch] allow to configure trafficDistribution (#32442) ([42f6123](https://github.com/bitnami/charts/commit/42f61239d2afba35ef8f58087b634762fcbc7bbc)), closes [#32442](https://github.com/bitnami/charts/issues/32442)
 
 ## 1.7.0 (2025-03-19)
 

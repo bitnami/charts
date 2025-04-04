@@ -1,8 +1,12 @@
 # Changelog
 
-## 32.1.2 (2025-03-27)
+## 32.1.3 (2025-04-01)
 
-* [bitnami/kakfa] bugfix: relax conditions under SASL secret must be mounted as volume ([#32631](https://github.com/bitnami/charts/pull/32631))
+* [bitnami/kafka] bugfix: recompute secret checksum on Kafka kraft secret changes ([#32692](https://github.com/bitnami/charts/pull/32692))
+
+## <small>32.1.2 (2025-03-27)</small>
+
+* [bitnami/kakfa] bugfix: relax conditions under SASL secret must be mounted as volume (#32631) ([d336c50](https://github.com/bitnami/charts/commit/d336c507835a021108b9ce9aa0f5e377662e363f)), closes [#32631](https://github.com/bitnami/charts/issues/32631)
 
 ## <small>32.1.1 (2025-03-26)</small>
 

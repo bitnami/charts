@@ -528,6 +528,171 @@ persistence:
       chunksize: ""
       rootdirectory: ""
       secretkey: ""
+
+## @section Migration job parameters
+##
+migration:
+  ## @param migration.enabled Enable migration job
+  ##
+  enabled: false
+  ## @param migration.podLabels Additional pod labels
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param migration.podAnnotations Additional pod annotations
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param migration.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
+  ## @param migration.hostAliases Migration job host aliases
+  ##
+  hostAliases: []
+  ## @param migration.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param migration.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param migration.annotations [object] Provide any additional annotations which may be required.
+  ## This can be used to set the LoadBalancer service type to internal only.
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+  ##
+  annotations:
+    helm.sh/hook: pre-upgrade
+    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+  ## Pod security context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param migration.podSecurityContext.enabled Enabled Jaeger pods' Security Context
+  ## @param migration.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param migration.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param migration.podSecurityContext.supplementalGroups Set filesystem extra groups
+  ## @param migration.podSecurityContext.fsGroup Set Jaeger pod's Security Context fsGroup
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
+    fsGroup: 1001
+  ## @param migration.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param migration.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param migration.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param migration.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+  ## @param migration.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param migration.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param migration.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param migration.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param migration.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param migration.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
+  containerSecurityContext:
+    enabled: true
+    seLinuxOptions: {}
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
+  ## @param migration.extraEnvVars Extra environment variables to be set on jaeger migration container
+  ## For example:
+  ##  - name: FOO
+  ##    value: BAR
+  ##
+  extraEnvVars: []
+  ## @param migration.extraEnvVarsCM Name of existing ConfigMap containing extra env vars
+  ##
+  extraEnvVarsCM: ""
+  ## @param migration.extraEnvVarsSecret Name of existing Secret containing extra env vars
+  ##
+  extraEnvVarsSecret: ""
+  ## @param migration.extraVolumeMounts Optionally specify extra list of additional volumeMounts for jaeger container
+  ##
+  extraVolumeMounts: []
+  ## Jaeger pods' resource requests and limits
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## Minimum memory for development is 4GB and 2 CPU cores
+  ## Minimum memory for production is 8GB and 4 CPU cores
+  ## ref: http://docs.datastax.com/en/archived/jaeger/2.0/jaeger/architecture/architecturePlanningHardware_c.html
+  ##
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## @param migration.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if migration.resources is set (migration.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "small"
+  ## @param migration.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param migration.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param migration.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param migration.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param migration.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param migration.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+  ## @param migration.extraVolumes Optionally specify extra list of additional volumes for jaeger container
+  ##
+  extraVolumes: []
+
 ## @section Tracing parameters
 ##
 

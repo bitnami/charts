@@ -165,6 +165,17 @@ org.apache.kafka.common.security.oauthbearer.OAuthBearerLoginModule required
 {{- end -}}
 
 {{/*
+Return the Kafka Kraft secret
+*/}}
+{{- define "kafka.kraftSecretName" -}}
+{{- if .Values.existingKraftSecret -}}
+    {{- print (tpl .Values.existingKraftSecret .) -}}
+{{- else -}}
+    {{- printf "%s-kraft" (include "common.names.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the Kafka SASL credentials secret
 */}}
 {{- define "kafka.saslSecretName" -}}
@@ -706,7 +717,7 @@ Environment variables shared by both controller-eligible and broker nodes
 - name: KAFKA_KRAFT_CLUSTER_ID
   valueFrom:
     secretKeyRef:
-      name: {{ default (printf "%s-kraft" (include "common.names.fullname" .)) .Values.existingKraftSecret }}
+      name: {{ template "kafka.kraftSecretName" . }}
       key: cluster-id
 {{- if and (include "kafka.saslEnabled" .) (or (regexFind "SCRAM" (upper .Values.sasl.enabledMechanisms)) (regexFind "SCRAM" (upper .Values.sasl.controllerMechanism)) (regexFind "SCRAM" (upper .Values.sasl.interBrokerMechanism))) }}
 - name: KAFKA_KRAFT_BOOTSTRAP_SCRAM_USERS

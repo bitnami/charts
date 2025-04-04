@@ -170,15 +170,16 @@ helm install my-release --set persistence.existingClaim=PVC_NAME oci://REGISTRY_
 
 ### Common parameters
 
-| Name                | Description                                                                                                | Value |
-| ------------------- | ---------------------------------------------------------------------------------------------------------- | ----- |
-| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)                                       | `""`  |
-| `nameOverride`      | String to partially override drupal.fullname template (will maintain the release name)                     | `""`  |
-| `fullnameOverride`  | String to fully override drupal.fullname template                                                          | `""`  |
-| `namespaceOverride` | String to fully override common.names.namespace                                                            | `""`  |
-| `commonAnnotations` | Common annotations to add to all Drupal resources (sub-charts are not considered). Evaluated as a template | `{}`  |
-| `commonLabels`      | Common labels to add to all Drupal resources (sub-charts are not considered). Evaluated as a template      | `{}`  |
-| `extraDeploy`       | Array of extra objects to deploy with the release (evaluated as a template).                               | `[]`  |
+| Name                | Description                                                                                                | Value  |
+| ------------------- | ---------------------------------------------------------------------------------------------------------- | ------ |
+| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)                                       | `""`   |
+| `nameOverride`      | String to partially override drupal.fullname template (will maintain the release name)                     | `""`   |
+| `fullnameOverride`  | String to fully override drupal.fullname template                                                          | `""`   |
+| `namespaceOverride` | String to fully override common.names.namespace                                                            | `""`   |
+| `commonAnnotations` | Common annotations to add to all Drupal resources (sub-charts are not considered). Evaluated as a template | `{}`   |
+| `commonLabels`      | Common labels to add to all Drupal resources (sub-charts are not considered). Evaluated as a template      | `{}`   |
+| `extraDeploy`       | Array of extra objects to deploy with the release (evaluated as a template).                               | `[]`   |
+| `usePasswordFiles`  | Mount credentials as files instead of using environment variables                                          | `true` |
 
 ### Drupal parameters
 
