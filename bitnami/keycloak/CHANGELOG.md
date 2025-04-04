@@ -1,8 +1,12 @@
 # Changelog
 
-## 24.4.14 (2025-04-01)
+## 24.5.0 (2025-04-04)
 
-* [bitnami/keycloak] Release 24.4.14 ([#32707](https://github.com/bitnami/charts/pull/32707))
+* [bitnami/keycloak] Set `usePasswordFiles=true` by default ([#32594](https://github.com/bitnami/charts/pull/32594))
+
+## <small>24.4.14 (2025-04-01)</small>
+
+* [bitnami/keycloak] Release 24.4.14 (#32707) ([4b6ae25](https://github.com/bitnami/charts/commit/4b6ae257d1f2710f3c13d858e4a39d219b75df2b)), closes [#32707](https://github.com/bitnami/charts/issues/32707)
 
 ## <small>24.4.13 (2025-03-13)</small>
 
