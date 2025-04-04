@@ -161,11 +161,6 @@ spec:
               value: "{{ $count := .Values.cluster.nodes | int }}{{ range $i, $v := until $count }}{{ include "common.names.fullname" $ }}-{{ $i }}.{{ template "common.names.fullname" $ }}-headless {{ end }}"
             {{- end }}
             {{- if .Values.usePassword }}
-            - name: REDISCLI_AUTH
-              valueFrom:
-                secretKeyRef:
-                  name: {{ template "redis-cluster.secretName" . }}
-                  key: {{ template "redis-cluster.secretPasswordKey" . }}
             {{- if .Values.usePasswordFiles }}
             - name: REDIS_PASSWORD_FILE
               value: "/opt/bitnami/redis/secrets/redis-password"
@@ -279,7 +274,7 @@ spec:
           volumeMounts:
             - name: scripts
               mountPath: /scripts
-            {{- if .Values.usePasswordFiles }}
+            {{- if and .Values.usePassword .Values.usePasswordFiles }}
             - name: redis-password
               mountPath: /opt/bitnami/redis/secrets/
             {{- end }}
@@ -361,12 +356,12 @@ spec:
             {{- if .Values.metrics.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.metrics.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
-          {{- if or .Values.usePasswordFiles .Values.tls.enabled }}
+          {{- if or (and .Values.usePassword .Values.usePasswordFiles ) .Values.tls.enabled }}
           volumeMounts:
             - name: empty-dir
               mountPath: /tmp
               subPath: tmp-dir
-            {{- if .Values.usePasswordFiles }}
+            {{- if and .Values.usePassword .Values.usePasswordFiles }}
             - name: redis-password
               mountPath: /opt/bitnami/redis/secrets/
             {{- end }}
@@ -443,7 +438,7 @@ spec:
           configMap:
             name: {{ include "common.names.fullname" . }}-scripts
             defaultMode: 0755
-        {{- if .Values.usePasswordFiles }}
+        {{- if and .Values.usePassword .Values.usePasswordFiles }}
         - name: redis-password
           secret:
             secretName: {{ include "redis-cluster.secretName" . }}
@@ -506,11 +501,11 @@ spec:
         {{- if .Values.persistence.matchLabels }}
           matchLabels:
           {{- toYaml .Values.persistence.matchLabels | nindent 12 }}
-        {{- end -}}
+        {{- end }}
         {{- if .Values.persistence.matchExpressions }}
           matchExpressions:
           {{- toYaml .Values.persistence.matchExpressions | nindent 12 }}
-        {{- end -}}
+        {{- end }}
         {{- end }}
   {{- end }}
 {{- end }}
