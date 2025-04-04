@@ -202,6 +202,23 @@ spec:
         - name: config-common
           configMap:
             name: {{ template "milvus.configmapName" . }}
+        {{- if and .Values.usePasswordFiles (or (include "milvus.s3.deployed" .) (and (include "milvus.kafka.deployed" .) (or (include "milvus.kafka.authEnabled" .) (and .Values.externalKafka.tls.enabled .Values.externalKafka.tls.keyPassword .Values.externalKafka.tls.existingSecret)))) }}
+        - name: milvus-secrets
+          projected:
+            sources:
+              {{- if and (include "milvus.kafka.deployed" .) (include "milvus.kafka.authEnabled" .)}}
+              - secret:
+                  name: {{ include "milvus.kafka.secretName" . }}
+              {{- end }}
+              {{- if and (include "milvus.kafka.deployed" .) .Values.externalKafka.tls.enabled .Values.externalKafka.tls.keyPassword .Values.externalKafka.tls.existingSecret }}
+              - secret:
+                  name: {{ printf "%s-external-kafka-tls-passwords" (include "common.names.fullname" .) }}
+              {{- end }}
+              {{- if (include "milvus.s3.deployed" .) }}
+              - secret:
+                  name: {{ include "milvus.s3.secretName" . }}
+              {{- end }}
+        {{- end }}
         {{- if or .Values.milvus.extraConfig .Values.milvus.extraConfigExistingConfigMap }}
         - name: extra-config-common
           configMap:
