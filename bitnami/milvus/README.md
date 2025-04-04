@@ -1866,6 +1866,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 13.0.0
+
+This major updates the `minio` subchart to its newest major, 16.0.0. For more information on this subchart's major, please refer to [minio upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/minio#to-1600).
+
 ### To 12.0.0
 
 This major updates the Kafka subchart to its newest major, 32.0.0. For more information on this subchart's major, please refer to [Kafka upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/kafka#to-3200).
