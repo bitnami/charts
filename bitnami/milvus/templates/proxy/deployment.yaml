@@ -209,7 +209,7 @@ spec:
         - name: config-common
           configMap:
             name: {{ template "milvus.configmapName" . }}
-        {{- if and .Values.usePasswordFiles (or (include "milvus.s3.deployed" .) (and (include "milvus.kafka.deployed" .) (or (include "milvus.kafka.authEnabled" .) (and (include "milvus.kafka.deployed" .) .Values.externalKafka.tls.enabled .Values.externalKafka.tls.keyPassword .Values.externalKafka.tls.existingSecret)))) }}
+        {{- if and .Values.usePasswordFiles (or (include "milvus.s3.deployed" .) (and (include "milvus.kafka.deployed" .) (or (include "milvus.kafka.authEnabled" .) (and .Values.externalKafka.tls.enabled .Values.externalKafka.tls.keyPassword .Values.externalKafka.tls.existingSecret)))) }}
         - name: milvus-secrets
           projected:
             sources:

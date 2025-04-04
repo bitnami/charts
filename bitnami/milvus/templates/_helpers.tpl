@@ -1086,9 +1086,9 @@ Init container definition for waiting for the database to be ready
       value: {{ ternary "true" "false" (or .context.Values.milvus.image.debug .context.Values.diagnosticMode.enabled) | quote }}
     {{- if (include "milvus.kafka.deployed" .context) }}
     {{- if (include "milvus.kafka.authEnabled" .context) }}
-    {{- if .context.Values.usePasswordFiles -}}
+    {{- if .context.Values.usePasswordFiles }}
     - name: MILVUS_KAFKA_PASSWORD_FILE
-      value: {{ printf "/opt/bitnami/milvus/secrets/%s" (include "milvus.kafka.secretPasswordKey" .) }}
+      value: {{ printf "/opt/bitnami/milvus/secrets/%s" (include "milvus.kafka.secretPasswordKey" .context) }}
     {{- else }}
     - name: MILVUS_KAFKA_PASSWORD
       valueFrom:
@@ -1098,7 +1098,7 @@ Init container definition for waiting for the database to be ready
     {{- end }}
     {{- end }}
     {{- if and .context.Values.externalKafka.tls.enabled .context.Values.externalKafka.tls.keyPassword .context.Values.externalKafka.tls.existingSecret }}
-    {{- if .context.Values.usePasswordFiles -}}
+    {{- if .context.Values.usePasswordFiles }}
     - name: MILVUS_KAFKA_TLS_KEY_PASSWORD_FILE
       value: "/opt/bitnami/milvus/secrets/key-password"
     {{- else }}
@@ -1111,11 +1111,11 @@ Init container definition for waiting for the database to be ready
     {{- end }}
     {{- end }}
     {{- if (include "milvus.s3.deployed" .context) }}
-    {{- if .context.Values.usePasswordFiles -}}
+    {{- if .context.Values.usePasswordFiles }}
     - name: MILVUS_S3_ACCESS_ID_FILE
-      value: {{ printf "/opt/bitnami/milvus/secrets/%s" (include "milvus.s3.accessKeyIDKey" .) }}
+      value: {{ printf "/opt/bitnami/milvus/secrets/%s" (include "milvus.s3.accessKeyIDKey" .context) }}
     - name: MILVUS_S3_SECRET_ACCESS_KEY_FILE
-      value: {{ printf "/opt/bitnami/milvus/secrets/%s" (include "milvus.s3.secretAccessKeyKey" .) }}
+      value: {{ printf "/opt/bitnami/milvus/secrets/%s" (include "milvus.s3.secretAccessKeyKey" .context) }}
     {{- else }}
     - name: MILVUS_S3_ACCESS_ID
       valueFrom:
