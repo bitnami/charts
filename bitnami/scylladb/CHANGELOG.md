@@ -1,6 +1,6 @@
 # Changelog
 
-## 3.3.0 (2025-04-01)
+## 3.3.0 (2025-04-04)
 
 * [bitnami/scylladb] Set `usePasswordFiles=true` by default ([#32710](https://github.com/bitnami/charts/pull/32710))
 
