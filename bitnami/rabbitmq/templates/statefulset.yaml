@@ -337,12 +337,16 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.livenessProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command:
-                - sh
+                - /bin/bash
                 - -ec
                 {{- if or (.Values.loadDefinition.enabled) (not (contains "rabbitmq_management" .Values.plugins )) }}
                 - rabbitmq-diagnostics -q ping
                 {{- else }}
+                {{- if .Values.usePasswordFiles }}
+                - curl -f --user "{{ .Values.auth.username }}:$(< $RABBITMQ_PASSWORD_FILE)" 127.0.0.1:{{ .Values.containerPorts.manager }}/api/health/checks/virtual-hosts
+                {{- else }}
                 - curl -f --user {{ .Values.auth.username }}:$RABBITMQ_PASSWORD 127.0.0.1:{{ .Values.containerPorts.manager }}/api/health/checks/virtual-hosts
+                {{- end }}
                 {{- end }}
           {{- end }}
           {{- if .Values.customReadinessProbe }}
@@ -351,12 +355,16 @@ spec:
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.readinessProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command:
-                - sh
+                - /bin/bash
                 - -ec
                 {{- if or (.Values.loadDefinition.enabled) (not (contains "rabbitmq_management" .Values.plugins )) }}
                 - rabbitmq-diagnostics -q check_running && rabbitmq-diagnostics -q check_local_alarms
                 {{- else }}
+                {{- if .Values.usePasswordFiles }}
+                - curl -f --user "{{ .Values.auth.username }}:$(< $RABBITMQ_PASSWORD_FILE)" 127.0.0.1:{{ .Values.containerPorts.manager }}/api/health/checks/local-alarms
+                {{- else }}
                 - curl -f --user {{ .Values.auth.username }}:$RABBITMQ_PASSWORD 127.0.0.1:{{ .Values.containerPorts.manager }}/api/health/checks/local-alarms
+                {{- end }}
                 {{- end }}
           {{- end }}
           {{- if .Values.customStartupProbe }}
