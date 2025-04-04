@@ -370,19 +370,6 @@ spec:
             - mountPath: /bitnami/wordpress
               name: wordpress-data
               subPath: wordpress
-            {{- if .Values.usePasswordFiles }}
-            - name: wordpress-secrets
-              projected:
-                sources:
-                  - secret:
-                      name:  {{ include "wordpress.secretName" . }}
-                  - secret:
-                      name:  {{ include "wordpress.databaseSecretName" . }}
-                  {{- if or .Values.smtpPassword .Values.smtpExistingSecret }}
-                  - secret:
-                      name:  {{ include "wordpress.smtpSecretName" . }}
-                  {{- end }}
-            {{- end }}
             {{- if  .Values.usePasswordFiles }}
             - name: wordpress-secrets
               mountPath: /opt/bitnami/wordpress/secrets
@@ -466,6 +453,19 @@ spec:
       volumes:
         - name: empty-dir
           emptyDir: {}
+        {{- if .Values.usePasswordFiles }}
+        - name: wordpress-secrets
+          projected:
+            sources:
+              - secret:
+                  name:  {{ include "wordpress.secretName" . }}
+              - secret:
+                  name:  {{ include "wordpress.databaseSecretName" . }}
+              {{- if or .Values.smtpPassword .Values.smtpExistingSecret }}
+              - secret:
+                  name:  {{ include "wordpress.smtpSecretName" . }}
+              {{- end }}
+        {{- end }}
         {{- if or .Values.wordpressConfiguration .Values.existingWordPressConfigurationSecret }}
         - name: wordpress-config
           secret:
