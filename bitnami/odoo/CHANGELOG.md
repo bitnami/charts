@@ -1,8 +1,12 @@
 # Changelog
 
-## 28.1.4 (2025-03-05)
+## 28.1.5 (2025-04-04)
 
-* [bitnami/odoo] Release 28.1.4 ([#32324](https://github.com/bitnami/charts/pull/32324))
+* [bitnami/odoo] Release 28.1.5 ([#32815](https://github.com/bitnami/charts/pull/32815))
+
+## <small>28.1.4 (2025-03-05)</small>
+
+* [bitnami/odoo] Release 28.1.4 (#32324) ([4ffe055](https://github.com/bitnami/charts/commit/4ffe05501fe37fd073a04942182edce479a4d77c)), closes [#32324](https://github.com/bitnami/charts/issues/32324)
 
 ## <small>28.1.3 (2025-02-12)</small>
 
