@@ -171,7 +171,7 @@ spec:
               value: {{ include "moodle.databaseUser" . | quote }}
             {{- if .Values.usePasswordFiles }}
             - name: MOODLE_DATABASE_PASSWORD_FILE
-              value: "/opt/bitnami/moodle/secrets/mariadb-password"
+              value: "/secrets/mariadb-password"
             {{- else }}
             - name: MOODLE_DATABASE_PASSWORD
               valueFrom:
@@ -185,7 +185,7 @@ spec:
               value: {{ .Values.moodleUsername | quote }}
             {{- if .Values.usePasswordFiles }}
             - name: MOODLE_PASSWORD_FILE
-              value: "/opt/bitnami/moodle/secrets/moodle-password"
+              value: "/secrets/moodle-password"
             {{- else }}
             - name: MOODLE_PASSWORD
               valueFrom:
@@ -218,7 +218,7 @@ spec:
             {{- if .Values.smtpPassword }}
             {{- if .Values.usePasswordFiles }}
             - name: SMTP_PASSWORD
-              value: "/opt/bitnami/moodle/secrets/smtp-password"
+              value: "/secrets/smtp-password"
             {{- else }}
             - name: SMTP_PASSWORD
               valueFrom:
@@ -306,7 +306,7 @@ spec:
               subPath: moodledata
             {{- if  .Values.usePasswordFiles }}
             - name: moodle-secrets
-              mountPath: /opt/bitnami/moodle/secrets
+              mountPath: /secrets
             {{- end }}
             {{- if .Values.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
