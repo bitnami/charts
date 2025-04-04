@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.3.4 (2025-02-25)
+## 11.3.5 (2025-03-27)
 
-* [bitnami/apache] Release 11.3.4 ([#32165](https://github.com/bitnami/charts/pull/32165))
+* [bitnami/apache] Release 11.3.5 ([#32652](https://github.com/bitnami/charts/pull/32652))
+
+## <small>11.3.4 (2025-02-25)</small>
+
+* [bitnami/apache] Release 11.3.4 (#32165) ([354108d](https://github.com/bitnami/charts/commit/354108dd12cce5176fe86348f53d5d55c237f4c1)), closes [#32165](https://github.com/bitnami/charts/issues/32165)
 
 ## <small>11.3.3 (2025-02-18)</small>
 

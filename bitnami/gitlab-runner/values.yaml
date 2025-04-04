@@ -1,0 +1,874 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+## @section Global parameters
+## Global Docker image parameters
+## Please, note that this will override the image parameters, including dependencies, configured to use the global value
+## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+
+## @param global.imageRegistry Global Docker image registry
+## @param global.imagePullSecrets Global Docker registry secret names as an array
+##
+global:
+  imageRegistry: ""
+  ## E.g.
+  ## imagePullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  imagePullSecrets: []
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: auto
+## @section Common parameters
+
+## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
+##
+kubeVersion: ""
+## @param apiVersions Override Kubernetes API versions reported by .Capabilities
+##
+apiVersions: []
+## @param clusterDomain Kubernetes Cluster Domain
+##
+clusterDomain: cluster.local
+## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
+##
+nameOverride: ""
+## @param fullnameOverride String to fully override common.names.fullname template
+##
+fullnameOverride: ""
+## @param namespaceOverride String to fully override common.names.namespace
+##
+namespaceOverride: ""
+## @param commonLabels Add labels to all the deployed resources
+##
+commonLabels: {}
+## @param commonAnnotations Add annotations to all the deployed resources
+##
+commonAnnotations: {}
+## @param extraDeploy Array of extra objects to deploy with the release
+##
+extraDeploy: []
+## Enable diagnostic mode in the deployment(s)/statefulset(s)
+##
+diagnosticMode:
+  ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+  ##
+  enabled: false
+  ## @param diagnosticMode.command Command to override all containers in the the deployment(s)/statefulset(s)
+  ##
+  command:
+    - sleep
+  ## @param diagnosticMode.args Args to override all containers in the the deployment(s)/statefulset(s)
+  ##
+  args:
+    - infinity
+## @section Gitlab Runner parameters
+
+## Bitnami Gitlab Runner image version
+## ref: https://hub.docker.com/r/bitnami/gitlab-runner/tags/
+## @param image.registry [default: REGISTRY_NAME] Gitlab Runner image registry
+## @param image.repository [default: REPOSITORY_NAME/gitlab-runner] Gitlab Runner image repository
+## @skip image.tag Gitlab Runner image tag (immutable tags are recommended)
+## @param image.digest Gitlab Runner image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+## @param image.pullPolicy Gitlab Runner image pull policy
+## @param image.pullSecrets Gitlab Runner image pull secrets
+##
+image:
+  registry: docker.io
+  repository: bitnami/gitlab-runner
+  tag: 17.10.1-debian-12-r1
+  digest: ""
+  ## Specify a imagePullPolicy
+  ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
+  ##
+  pullPolicy: IfNotPresent
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## e.g:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  pullSecrets: []
+## @param automountServiceAccountToken Mount Service Account token in pod
+##
+automountServiceAccountToken: true
+## @param hostAliases Add deployment host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases: []
+## @param replicaCount Number of gitlab-runner nodes to deploy
+##
+replicaCount: 1
+## @param gitlabUrl GitLab Server URL (with protocol) to register the runner
+##
+gitlabUrl: ""
+## @param runnerToken Token for adding new Runners to the GitLab Server
+##
+runnerToken: ""
+## @param existingSecret Name of a secret containing the runner token
+##
+existingSecret: ""
+## @param existingCacheSecret Name of a secret containing the distributed cache credentials
+##
+existingCacheSecret: ""
+## @param existingConfigMap Name of a ConfigMap containing the configuration and scripts
+##
+existingConfigMap: ""
+## @param extraConfig Append extra configuration to the default config file
+##
+extraConfig: ""
+## @param unregisterRunners Unregister all runners before termination
+unregisterRunners: true
+## @param existingCertsSecret Name of a secret containing custom certificates to connect to the Gitlab instance.
+##
+existingCertsSecret: ""
+## @param concurrent Maximum number of concurrent jobs
+##
+concurrent: 10
+## @param shutdownTimeout Time in seconds before a forceful shutdown
+##
+shutdownTimeout: 0
+## @param checkInterval Time in seconds to check for Gitlab builds
+##
+checkInterval: 3
+## @param logLevel Runner logging level
+##
+logLevel: info
+## @param logFormat Runner logging format
+##
+logFormat: runner
+## @param sentryDsn Runner's Sentry DSN.
+##
+sentryDsn: ""
+## @param connectionMaxAge Maximum connection age for TLS keepalive connections.
+## ref https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-global-section
+##
+connectionMaxAge: "15m"
+## @param preEntrypointScript Commands to execute prior to the entrypoint
+##
+preEntrypointScript: ""
+## @param updateStrategy.type Set up update strategy for gitlab-runner installation.
+## Set to Recreate if you use persistent volume that cannot be mounted by more than one pods to make sure the pods is destroyed first.
+## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+## Example:
+## updateStrategy:
+##  type: RollingUpdate
+##  rollingUpdate:
+##    maxSurge: 25%
+##    maxUnavailable: 25%
+##
+updateStrategy:
+  type: RollingUpdate
+## Autoscaling configuration
+## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
+##
+autoscaling:
+  vpa:
+    ## @param autoscaling.vpa.enabled Enable VPA
+    ##
+    enabled: false
+    ## @param autoscaling.vpa.annotations Annotations for VPA resource
+    ##
+    annotations: {}
+    ## @param autoscaling.vpa.controlledResources VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory
+    ##
+    controlledResources: []
+    ## @param autoscaling.vpa.maxAllowed VPA Max allowed resources for the pod
+    ## cpu: 200m
+    ## memory: 100Mi
+    maxAllowed: {}
+    ## @param autoscaling.vpa.minAllowed VPA Min allowed resources for the pod
+    ## cpu: 200m
+    ## memory: 100Mi
+    minAllowed: {}
+    updatePolicy:
+      ## @param autoscaling.vpa.updatePolicy.updateMode Autoscaling update policy Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod
+      ## Possible values are "Off", "Initial", "Recreate", and "Auto".
+      ##
+      updateMode: Auto
+  hpa:
+    ## @param autoscaling.hpa.enabled Enable autoscaling for operator
+    ##
+    enabled: false
+    ## @param autoscaling.hpa.minReplicas Minimum number of operator replicas
+    ##
+    minReplicas: ""
+    ## @param autoscaling.hpa.maxReplicas Maximum number of operator replicas
+    ##
+    maxReplicas: ""
+    ## @param autoscaling.hpa.targetCPU Target CPU utilization percentage
+    ##
+    targetCPU: ""
+    ## @param autoscaling.hpa.targetMemory Target Memory utilization percentage
+    ##
+    targetMemory: ""
+## Role Based Access
+## ref: https://kubernetes.io/docs/admin/authorization/rbac/
+##
+rbac:
+  ## @param rbac.create Enable RBAC authentication
+  ##
+  create: true
+  ## @param rbac.clusterWideAccess Allow runner cluster-wide access
+  ##
+  clusterWideAccess: false
+  ## @param rbac.rules Define list of rules to be added to the rbac role permissions
+  ##
+  rules: []
+## Pods Service Account
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+##
+serviceAccount:
+  ## @param serviceAccount.create Specifies whether a ServiceAccount should be created
+  ##
+  create: true
+  ## @param serviceAccount.name The name of the ServiceAccount to create
+  ## If not set and create is true, a name is generated using the common.names.fullname template
+  name: ""
+  ## @param serviceAccount.automountServiceAccountToken Automount API credentials for a service account
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/#use-the-default-service-account-to-access-the-api-server
+  ##
+  automountServiceAccountToken: false
+  ## @param serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
+  ##
+  annotations: {}
+## @param containerPorts.metrics Port where gitlab-runner will expose metrics
+## @param containerPorts.sessionServer Port where gitlab-runner will use the sessionServer
+##
+containerPorts:
+  metrics: 9252
+  sessionServer: 8093
+## @param dnsPolicy Default dnsPolicy setting
+## If you enable hostNetwork then you may need to set your dnsPolicy to something other
+## than "ClusterFirst" depending on your requirements.
+dnsPolicy: "ClusterFirst"
+## @param command Override default container command (useful when using custom images)
+##
+command: []
+## @param args Override default container args (useful when using custom images)
+##
+args: []
+## @param lifecycleHooks for the gitlab-runner container(s) to automate configuration before or after startup
+##
+lifecycleHooks: {}
+## @param extraEnvVars Array with extra environment variables to add to gitlab-runner nodes
+## e.g:
+## extraEnvVars:
+##   - name: FOO
+##     value: "bar"
+##
+extraEnvVars: []
+## @param extraEnvVarsCM Name of existing ConfigMap containing extra env vars for gitlab-runner nodes
+##
+extraEnvVarsCM: ""
+## @param extraEnvVarsSecret Name of existing Secret containing extra env vars for gitlab-runner nodes
+##
+extraEnvVarsSecret: ""
+## @param extraArgs Extra arguments to pass to gitlab-runner on start up
+## ref: https://github.com/kubernetes-incubator/gitlab-runner#flags
+##
+## extraArgs:
+##   - --kubelet-insecure-tls=true
+##   - --kubelet-preferred-address-types=InternalIP
+##
+extraArgs: []
+## @param sidecars Add additional sidecar containers to the gitlab-runner pod(s)
+## e.g:
+## sidecars:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
+##
+sidecars: []
+## @param initContainers Add additional init containers to the gitlab-runner pod(s)
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+## e.g:
+## initContainers:
+##  - name: your-image-name
+##    image: your-image
+##    imagePullPolicy: Always
+##    command: ['sh', '-c', 'echo "hello world"']
+##
+initContainers: []
+## @param podLabels Pod labels
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+##
+podLabels: {}
+## @param podAnnotations Pod annotations
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+##
+podAnnotations: {}
+## @param priorityClassName Priority class for pod scheduling
+## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+priorityClassName: ""
+## @param schedulerName Name of the k8s scheduler (other than default)
+## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+##
+schedulerName: ""
+## @param terminationGracePeriodSeconds In seconds, time the given to the gitlab-runner pod needs to terminate gracefully
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+##
+terminationGracePeriodSeconds: ""
+## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+##
+podAffinityPreset: ""
+## @param podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+##
+podAntiAffinityPreset: soft
+## Pod disruption budget
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets
+## @param pdb.create Create a PodDisruptionBudget
+## @param pdb.minAvailable Minimum available instances
+## @param pdb.maxUnavailable Maximum unavailable instances
+##
+pdb:
+  create: true
+  minAvailable: ""
+  maxUnavailable: ""
+## Node affinity preset
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+##
+nodeAffinityPreset:
+  ## @param nodeAffinityPreset.type Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+  ##
+  type: ""
+  ## @param nodeAffinityPreset.key Node label key to match. Ignored if `affinity` is set.
+  ## E.g.
+  ## key: "kubernetes.io/e2e-az-name"
+  ##
+  key: ""
+  ## @param nodeAffinityPreset.values Node label values to match. Ignored if `affinity` is set.
+  ## E.g.
+  ## values:
+  ##   - e2e-az1
+  ##   - e2e-az2
+  ##
+  values: []
+## @param affinity Affinity for pod assignment
+## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+## Note: podAffinityPreset, podAntiAffinityPreset, and nodeAffinityPreset will be ignored when it's set
+##
+affinity: {}
+## @param topologySpreadConstraints Topology spread constraints for pod
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints
+##
+topologySpreadConstraints: []
+## @param nodeSelector Node labels for pod assignment
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
+##
+nodeSelector: {}
+## @param tolerations Tolerations for pod assignment
+## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+##
+tolerations: []
+## Network Policy configuration
+## ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+##
+networkPolicy:
+  ## @param networkPolicy.enabled Enable creation of NetworkPolicy resources
+  ##
+  enabled: true
+  ## @param networkPolicy.allowExternal The Policy model to apply
+  ## When set to false, only pods with the correct client label will have network access to the ports Gitlab Runner is
+  ## listening on. When true, Gitlab Runner will accept connections from any source (with the correct destination port).
+  ##
+  allowExternal: true
+  ## @param networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+  ##
+  allowExternalEgress: true
+  ## @param networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kubernetes components like kube-apiserver or kubelet (limit to your cluster settings to increase security)
+  ##
+  kubeAPIServerPorts: [443, 6443, 8443, 10250]
+  ## @param networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+  ## e.g:
+  ## extraIngress:
+  ##   - ports:
+  ##       - port: 1234
+  ##     from:
+  ##       - podSelector:
+  ##           - matchLabels:
+  ##               - role: frontend
+  ##       - podSelector:
+  ##           - matchExpressions:
+  ##               - key: role
+  ##                 operator: In
+  ##                 values:
+  ##                   - frontend
+  ##
+  extraIngress: []
+  ## @param networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+  ## e.g:
+  ## extraEgress:
+  ##   - ports:
+  ##       - port: 1234
+  ##     to:
+  ##       - podSelector:
+  ##           - matchLabels:
+  ##               - role: frontend
+  ##       - podSelector:
+  ##           - matchExpressions:
+  ##               - key: role
+  ##                 operator: In
+  ##                 values:
+  ##                   - frontend
+  ##
+  extraEgress: []
+  ## @param networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+  ## @param networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+  ##
+  ingressNSMatchLabels: {}
+  ingressNSPodMatchLabels: {}
+## Gitlab Runner containers' resource requests and limits
+## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+## We usually recommend not to specify default resources and to leave this as a conscious
+## choice for the user. This also increases chances charts run on environments with little
+## resources, such as Minikube. If you do want to specify resources, uncomment the following
+## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+## @param resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
+## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+##
+resourcesPreset: "small"
+## @param resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+## Example:
+## resources:
+##   requests:
+##     cpu: 2
+##     memory: 512Mi
+##   limits:
+##     cpu: 3
+##     memory: 1024Mi
+##
+resources: {}
+## Configure extra options for gitlab-runner containers' liveness, readiness and startup probes
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
+## @param startupProbe.enabled Enable startupProbe
+## @param startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+## @param startupProbe.periodSeconds Period seconds for startupProbe
+## @param startupProbe.timeoutSeconds Timeout seconds for startupProbe
+## @param startupProbe.failureThreshold Failure threshold for startupProbe
+## @param startupProbe.successThreshold Success threshold for startupProbe
+startupProbe:
+  enabled: false
+  initialDelaySeconds: 0
+  periodSeconds: 10
+  timeoutSeconds: 1
+  failureThreshold: 3
+  successThreshold: 1
+## @param livenessProbe.enabled Enable livenessProbe
+## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+## @param livenessProbe.periodSeconds Period seconds for livenessProbe
+## @param livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+## @param livenessProbe.failureThreshold Failure threshold for livenessProbe
+## @param livenessProbe.successThreshold Success threshold for livenessProbe
+##
+livenessProbe:
+  enabled: true
+  initialDelaySeconds: 0
+  periodSeconds: 10
+  timeoutSeconds: 1
+  failureThreshold: 3
+  successThreshold: 1
+## @param readinessProbe.enabled Enable readinessProbe
+## @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+## @param readinessProbe.periodSeconds Period seconds for readinessProbe
+## @param readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+## @param readinessProbe.failureThreshold Failure threshold for readinessProbe
+## @param readinessProbe.successThreshold Success threshold for readinessProbe
+##
+readinessProbe:
+  enabled: true
+  initialDelaySeconds: 0
+  periodSeconds: 10
+  timeoutSeconds: 1
+  failureThreshold: 3
+  successThreshold: 1
+## @param customStartupProbe Custom liveness probe for the Web component
+##
+customStartupProbe: {}
+## @param customLivenessProbe Custom Liveness probes for gitlab-runner
+##
+customLivenessProbe: {}
+## @param customReadinessProbe Custom Readiness probes gitlab-runner
+##
+customReadinessProbe: {}
+## Container security context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+## @param containerSecurityContext.enabled Enabled containers' Security Context
+## @param containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+## @param containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+## @param containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+## @param containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+## @param containerSecurityContext.privileged Set container's Security Context privileged
+## @param containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+## @param containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+## @param containerSecurityContext.capabilities.drop List of capabilities to be dropped
+## @param containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
+##
+containerSecurityContext:
+  enabled: true
+  seLinuxOptions: {}
+  runAsUser: 1001
+  runAsGroup: 1001
+  runAsNonRoot: true
+  privileged: false
+  readOnlyRootFilesystem: true
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop: ["ALL"]
+  seccompProfile:
+    type: "RuntimeDefault"
+## Pod security context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+## @param podSecurityContext.enabled Pod security context
+## @param podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+## @param podSecurityContext.sysctls Set kernel settings using the sysctl interface
+## @param podSecurityContext.supplementalGroups Set filesystem extra groups
+## @param podSecurityContext.fsGroup Set Pod's Security Context fsGroup
+##
+podSecurityContext:
+  enabled: true
+  fsGroupChangePolicy: Always
+  sysctls: []
+  supplementalGroups: []
+  fsGroup: 1001
+## Extra volumes to mount
+## @param extraVolumes Extra volumes
+## @param extraVolumeMounts Mount extra volume(s)
+## Example Use Case: mount an `emptyDir` to allow running with a `readOnlyRootFilesystem: true`
+##  extraVolumes:
+##  - name: tmpdir
+##    emptyDir: {}
+##
+extraVolumes: []
+##  extraVolumeMounts:
+##  - name: tmpdir
+##    mountPath: /tmp
+##
+extraVolumeMounts: []
+
+## Configuration for the Pods that the runner launches for each new job
+##
+runners:
+  ## @param runners.config [string] configuration for the pods created by the runner
+  ##
+  config: |
+    [[runners]]
+      [runners.kubernetes]
+        namespace = "{{ include "common.names.namespace" . }}"
+        image = "{{ include "gitlab-runner.image" . }}"
+
+  ## @param runners.configPath Absolute path for an existing runner configuration file (to be used with volumes/extraVolumes)
+  ##
+  configPath: ""
+
+  ## @param runners.executor Executor to be used by the runner
+  ##
+  executor: kubernetes
+
+  ## @param runners.name Name of the runner.
+  ##
+  name: ""
+
+  ## @param runners.maximumTimeout Specify the maximum timeout (in seconds) that will be set for job when using this Runner
+  maximumTimeout: ""
+
+  ## @param runners.runUntagged Allow running jobs without tags
+  runUntagged: true
+
+  ## @param runners.protected Run only in protected branches
+  ##
+  protected: true
+
+## @section Session Server Parameters
+##
+sessionServer:
+  ## @param sessionServer.enabled Enable Session Server
+  ##
+  enabled: false
+  ## @param sessionServer.sessionTimeout Session timeout in seconds
+  ##
+  sessionTimeout: 1800
+  ## Service parameters
+  ##
+  service:
+    ## @param sessionServer.service.type Session Server service type
+    ##
+    type: ClusterIP
+    ## @param sessionServer.service.ports.sessionServer Session Server service port
+    ##
+    ports:
+      sessionServer: 9000
+    ## Node ports to expose
+    ## @param sessionServer.service.nodePorts.sessionServer Node port for the Session Server
+    ## NOTE: choose port between <30000-32767>
+    ##
+    nodePorts:
+      sessionServer: ""
+    ## @param sessionServer.service.labels Service labels
+    ##
+    labels: {}
+    ## @param sessionServer.service.clusterIP Session Server service Cluster IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param sessionServer.service.loadBalancerIP Session Server service Load Balancer IP
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerIP: ""
+    ## @param sessionServer.service.loadBalancerSourceRanges Session Server service Load Balancer sources
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param sessionServer.service.externalTrafficPolicy Session Server service external traffic policy
+    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param sessionServer.service.annotations [object] Additional custom annotations for Session Server service
+    ##
+    annotations: {}
+    ## @param sessionServer.service.extraPorts Extra ports to expose in Session Server service (normally used with the `sidecars` value)
+    ##
+    extraPorts: []
+    ## @param sessionServer.service.sessionAffinity Control where client requests go, to the same pod or round-robin
+    ## Values: ClientIP or None
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
+    ##
+    sessionAffinity: None
+    ## @param sessionServer.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
+  ## ref: http://kubernetes.io/docs/concepts/services-networking/ingress/
+  ##
+  ingress:
+    ## @param sessionServer.ingress.enabled Enable ingress record generation for Session Server
+    ##
+    enabled: false
+    ## @param sessionServer.ingress.pathType Ingress path type
+    ##
+    pathType: ImplementationSpecific
+    ## @param sessionServer.ingress.apiVersion Force Ingress API version (automatically detected if not set)
+    ##
+    apiVersion: ""
+    ## @param sessionServer.ingress.hostname Default host for the ingress record
+    ##
+    hostname: session-server.local
+    ## @param sessionServer.ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+    ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+    ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+    ##
+    ingressClassName: ""
+    ## @param sessionServer.ingress.path Default path for the ingress record
+    ## NOTE: You may need to set this to '/*' in order to use this with ALB ingress controllers
+    ##
+    path: /
+    ## @param sessionServer.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
+    ## Use this parameter to set the required annotations for cert-manager, see
+    ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
+    ## e.g:
+    ## annotations:
+    ##   kubernetes.io/ingress.class: nginx
+    ##   cert-manager.io/cluster-issuer: cluster-issuer-name
+    ##
+    annotations: {}
+    ## @param sessionServer.ingress.tls Enable TLS configuration for the host defined at `sessionServer.ingress.hostname` parameter
+    ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.ingress.hostname }}`
+    ## You can:
+    ##   - Use the `sessionServer.ingress.secrets` parameter to create this TLS secret
+    ##   - Rely on cert-manager to create it by setting the corresponding annotations
+    ##   - Rely on Helm to create self-signed certificates by setting `sessionServer.ingress.selfSigned=true`
+    ##
+    tls: false
+    ## @param sessionServer.ingress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
+    ##
+    selfSigned: false
+    ## @param sessionServer.ingress.extraHosts An array with additional hostname(s) to be covered with the ingress record
+    ## e.g:
+    ## extraHosts:
+    ##   - name: Session Server.local
+    ##     path: /
+    ##
+    extraHosts: []
+    ## @param sessionServer.ingress.extraPaths An array with additional arbitrary paths that may need to be added to the ingress under the main host
+    ## e.g:
+    ## extraPaths:
+    ## - path: /*
+    ##   backend:
+    ##     serviceName: ssl-redirect
+    ##     servicePort: use-annotation
+    ##
+    extraPaths: []
+    ## @param sessionServer.ingress.extraTls TLS configuration for additional hostname(s) to be covered with this ingress record
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+    ## e.g:
+    ## extraTls:
+    ## - hosts:
+    ##     - Session Server.local
+    ##   secretName: Session Server.local-tls
+    ##
+    extraTls: []
+    ## @param sessionServer.ingress.secrets Custom TLS certificates as secrets
+    ## NOTE: 'key' and 'certificate' are expected in PEM format
+    ## NOTE: 'name' should line up with a 'secretName' set further up
+    ## If it is not set and you're using cert-manager, this is unneeded, as it will create a secret for you with valid certificates
+    ## If it is not set and you're NOT using cert-manager either, self-signed certificates will be created valid for 365 days
+    ## It is also possible to create and manage the certificates outside of this helm chart
+    ## Please see README.md for more information
+    ## e.g:
+    ## secrets:
+    ##   - name: Session Server.local-tls
+    ##     key: |-
+    ##       -----BEGIN RSA PRIVATE KEY-----
+    ##       ...
+    ##       -----END RSA PRIVATE KEY-----
+    ##     certificate: |-
+    ##       -----BEGIN CERTIFICATE-----
+    ##       ...
+    ##       -----END CERTIFICATE-----
+    ##
+    secrets: []
+    ## @param sessionServer.ingress.extraRules Additional rules to be covered with this ingress record
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+    ## e.g:
+    ## extraRules:
+    ## - host: example.local
+    ##     http:
+    ##       path: /
+    ##       backend:
+    ##         service:
+    ##           name: example-svc
+    ##           port:
+    ##             name: http
+    ##
+    extraRules: []
+
+## Prometheus metrics
+##
+metrics:
+  ## @param metrics.enabled Enable the export of Prometheus metrics
+  ##
+  enabled: false
+  ## Service parameters
+  ##
+  service:
+    ## @param metrics.service.type Session Server service type
+    ##
+    type: ClusterIP
+    ## @param metrics.service.ports.metrics Session Server service http port
+    ##
+    ports:
+      metrics: 9252
+    ## Node ports to expose
+    ## @param metrics.service.nodePorts.metrics Node port for HTTP
+    ## NOTE: choose port between <30000-32767>
+    ##
+    nodePorts:
+      metrics: ""
+    ## @param metrics.service.labels Service labels
+    ##
+    labels: {}
+    ## @param metrics.service.clusterIP Session Server service Cluster IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param metrics.service.loadBalancerIP Session Server service Load Balancer IP
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerIP: ""
+    ## @param metrics.service.loadBalancerSourceRanges Session Server service Load Balancer sources
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param metrics.service.externalTrafficPolicy Session Server service external traffic policy
+    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param metrics.service.annotations [object] Additional custom annotations for Session Server service
+    ##
+    annotations: {}
+    ## @param metrics.service.extraPorts Extra ports to expose in Session Server service (normally used with the `sidecars` value)
+    ##
+    extraPorts: []
+    ## @param metrics.service.sessionAffinity Control where client requests go, to the same pod or round-robin
+    ## Values: ClientIP or None
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
+    ##
+    sessionAffinity: None
+    ## @param metrics.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
+  ## Prometheus Operator ServiceMonitor configuration
+  ##
+  serviceMonitor:
+    ## @param metrics.serviceMonitor.enabled if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)
+    ##
+    enabled: false
+    ## @param metrics.serviceMonitor.namespace Namespace in which Prometheus is running
+    ##
+    namespace: ""
+    ## @param metrics.serviceMonitor.annotations Additional custom annotations for the ServiceMonitor
+    ##
+    annotations: {}
+    ## @param metrics.serviceMonitor.labels Extra labels for the ServiceMonitor
+    ##
+    labels: {}
+    ## @param metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in Prometheus
+    ##
+    jobLabel: ""
+    ## @param metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
+    ##
+    honorLabels: false
+    ## @param metrics.serviceMonitor.interval Interval at which metrics should be scraped.
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    ## e.g:
+    ## interval: 10s
+    ##
+    interval: ""
+    ## @param metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    ## e.g:
+    ## scrapeTimeout: 10s
+    ##
+    scrapeTimeout: ""
+    ## @param metrics.serviceMonitor.metricRelabelings Specify additional relabeling of metrics
+    ##
+    metricRelabelings: []
+    ## @param metrics.serviceMonitor.relabelings Specify general relabeling
+    ##
+    relabelings: []
+    ## @param metrics.serviceMonitor.selector Prometheus instance selector labels
+    ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
+    ## selector:
+    ##   prometheus: my-prometheus
+    ##
+    selector: {}

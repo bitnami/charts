@@ -7,9 +7,11 @@ SPDX-License-Identifier: APACHE-2.0
 kind: NetworkPolicy
 apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
 metadata:
-  name: {{ include "common.names.fullname" . }}
+  name: {{ template "common.names.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: operator
+    app.kubernetes.io/part-of: minio-operator
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -17,6 +19,8 @@ spec:
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
   podSelector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/part-of: minio-operator
+      app.kubernetes.io/component: operator
   policyTypes:
     - Ingress
     - Egress
@@ -25,58 +29,65 @@ spec:
     - {}
   {{- else }}
   egress:
-    # Allow dns resolution
     - ports:
+        # Allow dns resolution
         - port: 53
           protocol: UDP
         - port: 53
           protocol: TCP
-    # Allow internal communications between nodes
-    - ports:
-        - port: {{ .Values.listeners.client.containerPort }}
-        - port: {{ .Values.listeners.interbroker.containerPort }}
-        - port: {{ .Values.listeners.controller.containerPort }}
-        {{- if .Values.externalAccess.enabled }}
-        - port: {{ .Values.listeners.external.containerPort }}
+        # Allow access to kube-apiserver
+        {{- range $port := .Values.networkPolicy.kubeAPIServerPorts }}
+        - port: {{ $port }}
         {{- end }}
-      to:
+    # MinIO(R) instances have the label v1.min.io/tenant: .*
+    - to:
         - podSelector:
-            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
+            matchExpressions:
+              - key: v1.min.io/tenant
+                operator: Exists
+        {{- if not .Values.watchAllNamespaces }}
+        {{- $watchNamespaces := default (list (include "common.names.namespace" .)) .Values.watchNamespaces }}
+          namespaceSelector:
+            matchExpressions:
+              - key: namespace
+                operator: In
+                values:
+                {{- range $namespace := $watchNamespaces }}
+                  - {{ $namespace }}
+                {{- end }}
+        {{- end }}
     {{- if .Values.networkPolicy.extraEgress }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
     {{- end }}
   {{- end }}
   ingress:
-    # Allow client connections
     - ports:
-        - port: {{ .Values.listeners.client.containerPort }}
-        - port: {{ .Values.listeners.interbroker.containerPort }}
-        - port: {{ .Values.listeners.controller.containerPort }}
-        {{- if .Values.externalAccess.enabled }}
-        - port: {{ .Values.listeners.external.containerPort }}
-        {{- end }}
-        {{- if .Values.metrics.jmx.enabled }}
-        - port: {{ .Values.metrics.jmx.containerPorts.metrics }}
+        # Port hardcoded in operator code
+        # https://github.com/minio/operator/blob/a7dfa7c12072efa56c46d628d09ba29b3baa1c91/pkg/common/const.go#L22
+        - port: 4221
+        {{- if .Values.sts.enabled }}
+        - port: 4223
         {{- end }}
       {{- if not .Values.networkPolicy.allowExternal }}
       from:
         - podSelector:
-            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 14 }}
-        {{- if .Values.networkPolicy.addExternalClientAccess }}
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
+              app.kubernetes.io/part-of: minio-operator
         - podSelector:
             matchLabels:
               {{ template "common.names.fullname" . }}-client: "true"
-        {{- end }}
-        {{- if .Values.networkPolicy.ingressPodMatchLabels }}
-        - podSelector:
-            matchLabels: {{- include "common.tplvalues.render" (dict "value" .Values.networkPolicy.ingressPodMatchLabels "context" $ ) | nindent 14 }}
-        {{- end }}
         {{- if .Values.networkPolicy.ingressNSMatchLabels }}
         - namespaceSelector:
-            matchLabels: {{- include "common.tplvalues.render" (dict "value" .Values.networkPolicy.ingressNSMatchLabels "context" $ ) | nindent 14 }}
+            matchLabels:
+              {{- range $key, $value := .Values.networkPolicy.ingressNSMatchLabels }}
+              {{ $key | quote }}: {{ $value | quote }}
+              {{- end }}
           {{- if .Values.networkPolicy.ingressNSPodMatchLabels }}
           podSelector:
-            matchLabels: {{- include "common.tplvalues.render" (dict "value" .Values.networkPolicy.ingressNSPodMatchLabel "context" $ ) | nindent 14 }}
+            matchLabels:
+              {{- range $key, $value := .Values.networkPolicy.ingressNSPodMatchLabels }}
+              {{ $key | quote }}: {{ $value | quote }}
+              {{- end }}
           {{- end }}
         {{- end }}
       {{- end }}

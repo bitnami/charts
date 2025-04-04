@@ -1,8 +1,12 @@
 # Changelog
 
-## 24.4.1 (2025-03-22)
+## 24.5.0 (2025-03-27)
 
-* [bitnami/harbor] Release 24.4.1 ([#32567](https://github.com/bitnami/charts/pull/32567))
+* [bitnami/harbor] feat: :sparkles: Add migration job ([#32640](https://github.com/bitnami/charts/pull/32640))
+
+## <small>24.4.1 (2025-03-22)</small>
+
+* [bitnami/harbor] Release 24.4.1 (#32567) ([27dcc0f](https://github.com/bitnami/charts/commit/27dcc0f3f5bddc982d2292690303f12fa6d0bcac)), closes [#32567](https://github.com/bitnami/charts/issues/32567)
 
 ## 24.4.0 (2025-03-13)
 

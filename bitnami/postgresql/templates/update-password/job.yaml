@@ -58,7 +58,7 @@ spec:
             - |
               {{- $customUser := include "postgresql.v1.username" . }}
               {{- $customDatabase := include "postgresql.v1.database" . | default "postgres" }}
-              {{- if .Values.usePasswordFiles }}
+              {{- if .Values.auth.usePasswordFiles }}
               # We need to load all the secret env vars to the system
               for file in $(find /bitnami/postgresql/secrets -type f); do
                   env_var_name="$(basename $file)"
@@ -186,7 +186,7 @@ spec:
             - name: empty-dir
               mountPath: /job-status
               subPath: job-dir
-            {{- if .Values.usePasswordFiles }}
+            {{- if .Values.auth.usePasswordFiles }}
             - name: postgresql-previous-credentials
               mountPath: /bitnami/postgresql/secrets/previous
             - name: postgresql-new-credentials
@@ -203,7 +203,7 @@ spec:
       volumes:
         - name: empty-dir
           emptyDir: {}
-        {{- if and .Values.auth.usePasswordFiles }}
+        {{- if .Values.auth.usePasswordFiles }}
         - name: postgresql-previous-credentials
           secret:
             secretName: {{ template "postgresql.update-job.previousSecretName" . }}

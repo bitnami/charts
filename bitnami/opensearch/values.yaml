@@ -582,7 +582,7 @@ master:
   ## Example:
   ##   heapSize: 128m
   ##
-  heapSize: 128m
+  heapSize: 256m
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param master.podSecurityContext.enabled Enabled master-eligible pods' Security Context
@@ -1659,7 +1659,7 @@ coordinating:
   ## Example:
   ##   heapSize: 128m
   ##
-  heapSize: 128m
+  heapSize: 256m
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param coordinating.podSecurityContext.enabled Enabled coordinating-only pods' Security Context
@@ -2161,7 +2161,7 @@ ingest:
   ## Example:
   ##   heapSize: 128m
   ##
-  heapSize: 128m
+  heapSize: 256m
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param ingest.podSecurityContext.enabled Enabled ingest-only pods' Security Context

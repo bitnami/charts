@@ -483,7 +483,7 @@ defaultInitContainers:
     image:
       registry: docker.io
       repository: bitnami/os-shell
-      tag: 12-debian-12-r39
+      tag: 12-debian-12-r40
       digest: ""
       pullPolicy: IfNotPresent
       ## Optionally specify an array of imagePullSecrets.
@@ -604,7 +604,7 @@ defaultInitContainers:
     image:
       registry: docker.io
       repository: bitnami/kubectl
-      tag: 1.32.2-debian-12-r3
+      tag: 1.32.3-debian-12-r1
       digest: ""
       ## Specify a imagePullPolicy
       ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1037,6 +1037,16 @@ controller:
     create: true
     minAvailable: ""
     maxUnavailable: ""
+  ## persistentVolumeClaimRetentionPolicy
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#persistentvolumeclaim-retention
+  ## @param controller.persistentVolumeClaimRetentionPolicy.enabled Controls if and how PVCs are deleted during the lifecycle of a StatefulSet
+  ## @param controller.persistentVolumeClaimRetentionPolicy.whenScaled Volume retention behavior when the replica count of the StatefulSet is reduced
+  ## @param controller.persistentVolumeClaimRetentionPolicy.whenDeleted Volume retention behavior that applies when the StatefulSet is deleted
+  ##
+  persistentVolumeClaimRetentionPolicy:
+    enabled: false
+    whenScaled: Retain
+    whenDeleted: Retain
   ## Enable persistence using Persistent Volume Claims
   ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ##
@@ -1483,6 +1493,16 @@ broker:
       ## @param broker.autoscaling.hpa.targetMemory Target Memory utilization percentage
       ##
       targetMemory: ""
+  ## persistentVolumeClaimRetentionPolicy
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#persistentvolumeclaim-retention
+  ## @param broker.persistentVolumeClaimRetentionPolicy.enabled Controls if and how PVCs are deleted during the lifecycle of a StatefulSet
+  ## @param broker.persistentVolumeClaimRetentionPolicy.whenScaled Volume retention behavior when the replica count of the StatefulSet is reduced
+  ## @param broker.persistentVolumeClaimRetentionPolicy.whenDeleted Volume retention behavior that applies when the StatefulSet is deleted
+  ##
+  persistentVolumeClaimRetentionPolicy:
+    enabled: false
+    whenScaled: Retain
+    whenDeleted: Retain
   ## Enable persistence using Persistent Volume Claims
   ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ##
@@ -1968,7 +1988,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/jmx-exporter
-      tag: 1.1.0-debian-12-r7
+      tag: 1.2.0-debian-12-r1
       digest: ""
       ## Specify a imagePullPolicy
       ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -2186,9 +2206,15 @@ metrics:
 ## Kafka provisioning
 ##
 provisioning:
-  ## @param provisioning.enabled Enable kafka provisioning Job
+  ## @param provisioning.enabled Enable Kafka provisioning Job
   ##
   enabled: false
+  ## @param provisioning.waitForKafka Whether an init container should be created to wait until Kafka is ready before provisioning
+  ##
+  waitForKafka: true
+  ## @param provisioning.useHelmHooks Flag to indicate usage of helm hooks
+  ##
+  useHelmHooks: true
   ## @param provisioning.automountServiceAccountToken Mount Service Account token in pod
   ##
   automountServiceAccountToken: false
@@ -2446,8 +2472,3 @@ provisioning:
   ##         containerPort: 1234
   ##
   initContainers: []
-  ## @param provisioning.waitForKafka If true use an init container to wait until kafka is ready before starting provisioning
-  ##
-  waitForKafka: true
-  ## @param provisioning.useHelmHooks Flag to indicate usage of helm hooks
-  useHelmHooks: true

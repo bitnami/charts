@@ -38,8 +38,8 @@ spec:
         {{- if include "kafka.controller.createConfigmap" . }}
         checksum/configuration: {{ include (print $.Template.BasePath "/controller-eligible/configmap.yaml") . | sha256sum }}
         {{- end }}
-        {{- if include "kafka.createSaslSecret" . }}
-        checksum/passwords-secret: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }}
+        {{- if or (include "kafka.createSaslSecret" .) (not .Values.existingKraftSecret) }}
+        checksum/secret: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }}
         {{- end }}
          {{- if include "kafka.createTlsSecret" . }}
         checksum/tls-secret: {{ include (print $.Template.BasePath "/tls-secret.yaml") . | sha256sum }}
@@ -174,7 +174,7 @@ spec:
             - name: external
               containerPort: {{ .Values.listeners.external.containerPort }}
             {{- end }}
-            {{- if .Values.listeners.extraListeners }}
+            {{- if and .Values.listeners.extraListeners (not .Values.controller.controllerOnly) }}
             {{- include "kafka.extraListeners.containerPorts" . | nindent 12 }}
             {{- end }}
             {{- end }}
@@ -237,7 +237,7 @@ spec:
               mountPath: /opt/bitnami/kafka/config/certs
               readOnly: true
             {{- end }}
-            {{- if and .Values.usePasswordFiles (include "kafka.saslEnabled" .) (or (regexFind "SCRAM" (upper .Values.sasl.enabledMechanisms)) (regexFind "SCRAM" (upper .Values.sasl.controllerMechanism)) (regexFind "SCRAM" (upper .Values.sasl.interBrokerMechanism))) }}
+            {{- if and .Values.usePasswordFiles (include "kafka.saslEnabled" .) }}
             - name: kafka-sasl
               mountPath: /opt/bitnami/kafka/config/secrets
               readOnly: true
@@ -341,7 +341,7 @@ spec:
               {{- end }}
         {{- end }}
         {{- end }}
-        {{- if and .Values.usePasswordFiles (include "kafka.saslEnabled" .) (or (regexFind "SCRAM" (upper .Values.sasl.enabledMechanisms)) (regexFind "SCRAM" (upper .Values.sasl.controllerMechanism)) (regexFind "SCRAM" (upper .Values.sasl.interBrokerMechanism))) }}
+        {{- if and .Values.usePasswordFiles (include "kafka.saslEnabled" .) }}
         - name: kafka-sasl
           projected:
             sources:
@@ -371,6 +371,11 @@ spec:
             claimName: {{ printf "%s" (tpl .Values.controller.logPersistence.existingClaim .) }}
         {{- end }}
   {{- if or (and .Values.controller.persistence.enabled (not .Values.controller.persistence.existingClaim)) (and .Values.controller.logPersistence.enabled (not .Values.controller.logPersistence.existingClaim)) }}
+  {{- if .Values.controller.persistentVolumeClaimRetentionPolicy.enabled }}
+  persistentVolumeClaimRetentionPolicy:
+    whenDeleted: {{ .Values.controller.persistentVolumeClaimRetentionPolicy.whenDeleted }}
+    whenScaled: {{ .Values.controller.persistentVolumeClaimRetentionPolicy.whenScaled }}
+  {{- end }}
   volumeClaimTemplates:
     {{- if and .Values.controller.persistence.enabled (not .Values.controller.persistence.existingClaim) }}
     - apiVersion: v1

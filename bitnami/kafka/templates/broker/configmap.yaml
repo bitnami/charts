@@ -13,7 +13,7 @@ ref: https://kafka.apache.org/documentation/#configuration
 {{- else }}
 # Listeners configuration
 listeners: {{ include "kafka.listeners" (dict "isController" false "context" .) }}
-listener.security.protocol.map: {{ include "kafka.securityProtocolMap" . }}
+listener.security.protocol.map: {{ include "kafka.securityProtocolMap" (dict "isController" false "context" .) }}
 advertised.listeners: {{ include "kafka.advertisedListeners" . }}
 # Kafka data logs directory
 log.dir: {{ printf "%s/data" .Values.broker.persistence.mountPath }}

@@ -158,8 +158,11 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.client.livenessProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command:
-                - deepspeed
-                - --help
+                - bash
+                - -c
+                - |
+                  [[ -f "/opt/bitnami/scripts/deepspeed/entrypoint.sh" ]] && source "/opt/bitnami/scripts/deepspeed/entrypoint.sh"
+                  deepspeed --help
           {{- end }}
           {{- if .Values.client.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.client.customReadinessProbe "context" $) | nindent 12 }}
@@ -167,9 +170,11 @@ spec:
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.client.readinessProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command:
-                - python
+                - bash
                 - -c
-                - import deepspeed; deepspeed.__version__
+                - |
+                  [[ -f "/opt/bitnami/scripts/deepspeed/entrypoint.sh" ]] && source "/opt/bitnami/scripts/deepspeed/entrypoint.sh"
+                  python -c "import deepspeed; print(deepspeed.__version__)"
           {{- end }}
           {{- if .Values.client.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.client.customStartupProbe "context" $) | nindent 12 }}

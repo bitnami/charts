@@ -396,7 +396,7 @@ spec:
             - name: empty-dir
               mountPath: /opt/bitnami/postgresql/tmp
               subPath: app-tmp-dir
-            {{- if .Values.auth.usePasswordFiles }}
+            {{- if and .Values.auth.usePasswordFiles (or .Values.auth.enablePostgresUser $customUser) }}
             - name: postgresql-password
               mountPath: /opt/bitnami/postgresql/secrets/
             {{- end }}
@@ -491,7 +491,7 @@ spec:
             - name: empty-dir
               mountPath: /tmp
               subPath: tmp-dir
-            {{- if .Values.auth.usePasswordFiles }}
+            {{- if and .Values.auth.usePasswordFiles (or .Values.auth.enablePostgresUser $customUser) }}
             - name: postgresql-password
               mountPath: /opt/bitnami/postgresql/secrets/
             {{- end }}
@@ -515,7 +515,7 @@ spec:
           configMap:
             name: {{ include "postgresql.v1.readReplicas.extendedConfigmapName" . }}
         {{- end }}
-        {{- if .Values.auth.usePasswordFiles }}
+        {{- if and .Values.auth.usePasswordFiles (or .Values.auth.enablePostgresUser $customUser) }}
         - name: postgresql-password
           secret:
             secretName: {{ include "postgresql.v1.secretName" . }}
