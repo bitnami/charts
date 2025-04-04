@@ -3,7 +3,7 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if .Values.rbac.create -}}
+{{- if .Values.rbac.create }}
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: Role
 metadata:
@@ -19,8 +19,8 @@ rules:
     resources: ['podsecuritypolicies']
     verbs: ['use']
     resourceNames: [{{ template "common.names.fullname" . }}]
-{{- end -}}
+{{- end }}
 {{- if .Values.rbac.role.rules }}
 {{- toYaml .Values.rbac.role.rules | nindent 2 }}
-{{- end -}}
-{{- end -}}
+{{- end }}
+{{- end }}

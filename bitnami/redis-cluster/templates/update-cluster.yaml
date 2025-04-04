@@ -79,6 +79,10 @@ spec:
             - |
               . /opt/bitnami/scripts/libnet.sh
               . /opt/bitnami/scripts/libos.sh
+
+              {{- if .Values.usePassword }}
+              export REDISCLI_AUTH={{ ternary "$(< $REDIS_PASSWORD_FILE)" "$REDIS_PASSWORD" .Values.usePasswordFiles }}
+              {{- end }}
               # Backwards compatibility change
               if ! [[ -f /opt/bitnami/redis/etc/redis.conf ]]; then
                   cp /opt/bitnami/redis/etc/redis-default.conf /opt/bitnami/redis/etc/redis.conf
@@ -209,11 +213,16 @@ spec:
             - name: REDIS_CLUSTER_REPLICAS
               value: {{ .Values.cluster.replicas | quote }}
             {{- if .Values.usePassword }}
-            - name: REDISCLI_AUTH
+            {{- if .Values.usePasswordFiles }}
+            - name: REDIS_PASSWORD_FILE
+              value: "/opt/bitnami/redis/secrets/redis-password"
+            {{- else }}
+            - name: REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ template "redis-cluster.secretName" . }}
                   key: {{ template "redis-cluster.secretPasswordKey" . }}
+            {{- end }}
             {{- end }}
             {{- if .Values.updateJob.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.updateJob.extraEnvVars "context" $) | nindent 12 }}
@@ -234,11 +243,15 @@ spec:
           {{- else if ne .Values.updateJob.resourcesPreset "none" }}
           resources: {{- include "common.resources.preset" (dict "type" .Values.updateJob.resourcesPreset) | nindent 12 }}
           {{- end }}
-          {{- if or .Values.tls.enabled .Values.updateJob.extraVolumeMounts }}
+          {{- if or .Values.tls.enabled (and .Values.usePassword .Values.usePasswordFiles) .Values.updateJob.extraVolumeMounts }}
           volumeMounts:
             - name: empty-dir
               mountPath: /tmp
               subPath: tmp-dir
+            {{- if and .Values.usePassword .Values.usePasswordFiles }}
+            - name: redis-password
+              mountPath: /opt/bitnami/redis/secrets/
+            {{- end }}
             {{- if .Values.tls.enabled }}
             - name: redis-certificates
               mountPath: /opt/bitnami/redis/certs
@@ -249,18 +262,26 @@ spec:
             {{- end }}
           {{- end }}
       restartPolicy: OnFailure
-      {{- if or .Values.tls.enabled .Values.updateJob.extraVolumes }}
+      {{- if or .Values.tls.enabled (and .Values.usePassword .Values.usePasswordFiles) .Values.updateJob.extraVolumes }}
       volumes:
         - name: empty-dir
           emptyDir: {}
-      {{- if .Values.tls.enabled }}
+        {{- if and .Values.usePassword .Values.usePasswordFiles }}
+        - name: redis-password
+          secret:
+            secretName: {{ include "redis-cluster.secretName" . }}
+            items:
+              - key: {{ include "redis-cluster.secretPasswordKey" . }}
+                path: redis-password
+        {{- end }}
+        {{- if .Values.tls.enabled }}
         - name: redis-certificates
           secret:
             secretName: {{ include "common.tplvalues.render" (dict "value" .Values.tls.certificatesSecret "context" $) }}
-      {{- end }}
-      {{- if .Values.updateJob.extraVolumes }}
-      {{- include "common.tplvalues.render" (dict "value" .Values.updateJob.extraVolumes "context" $) | nindent 6 }}
-      {{- end }}
+        {{- end }}
+        {{- if .Values.updateJob.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.updateJob.extraVolumes "context" $) | nindent 6 }}
+        {{- end }}
       {{- end }}
 {{- end }}
 

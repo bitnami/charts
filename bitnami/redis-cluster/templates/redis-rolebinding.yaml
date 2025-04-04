@@ -3,7 +3,7 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if .Values.rbac.create -}}
+{{- if .Values.rbac.create }}
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: RoleBinding
 metadata:
@@ -20,4 +20,4 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: {{ template "redis-cluster.serviceAccountName" . }}
-{{- end -}}
+{{- end }}
