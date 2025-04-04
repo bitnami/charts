@@ -1,8 +1,12 @@
 # Changelog
 
-## 8.7.9 (2025-04-01)
+## 8.7.10 (2025-04-02)
 
-* [bitnami/external-dns] Release 8.7.9 ([#32728](https://github.com/bitnami/charts/pull/32728))
+* [bitnami/external-dns] Add RBAC to support F5 TransportServer source ([#32633](https://github.com/bitnami/charts/pull/32633))
+
+## <small>8.7.9 (2025-04-01)</small>
+
+* [bitnami/external-dns] Release 8.7.9 (#32728) ([dc2f56a](https://github.com/bitnami/charts/commit/dc2f56a79f2e7bf69385081c50fba9ea1109baad)), closes [#32728](https://github.com/bitnami/charts/issues/32728)
 
 ## <small>8.7.8 (2025-03-26)</small>
 

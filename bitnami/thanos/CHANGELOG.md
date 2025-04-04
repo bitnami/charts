@@ -1,8 +1,12 @@
 # Changelog
 
-## 15.14.1 (2025-04-02)
+## 16.0.0 (2025-04-03)
 
-* [bitnami/thanos] Release 15.14.1 ([#32764](https://github.com/bitnami/charts/pull/32764))
+* [bitnami/thanos] Bump MinIO major version 16.x.x ([#32703](https://github.com/bitnami/charts/pull/32703))
+
+## <small>15.14.1 (2025-04-02)</small>
+
+* [bitnami/thanos] Release 15.14.1 (#32764) ([41ff3b1](https://github.com/bitnami/charts/commit/41ff3b1ab077594728c97e522c21837c6fef1106)), closes [#32764](https://github.com/bitnami/charts/issues/32764)
 
 ## 15.14.0 (2025-04-01)
 
