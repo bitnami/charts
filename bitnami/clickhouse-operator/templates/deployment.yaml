@@ -191,9 +191,29 @@ spec:
             - name: chi-templates
               mountPath: /etc/clickhouse-operator/chi/templates.d
               readOnly: true
+            {{- if .Values.existingChiConfigdConfigmap }}
+            - name: chi-configd
+              mountPath: /etc/clickhouse-operator/chi/config.d
+              readOnly: true
+            {{- end }}
+            {{- if .Values.existingChiUsersdConfigmap }}
+            - name: chi-usersd
+              mountPath: /etc/clickhouse-operator/chi/users.d
+              readOnly: true
+            {{- end }}
             - name: chk-templates
               mountPath: /etc/clickhouse-operator/chk/templates.d
               readOnly: true
+            {{- if .Values.existingChkConfigdConfigmap }}
+            - name: chk-configd
+              mountPath: /etc/clickhouse-operator/chk/config.d
+              readOnly: true
+            {{- end }}
+            {{- if .Values.existingChkUsersdConfigmap }}
+            - name: chk-usersd
+              mountPath: /etc/clickhouse-operator/chk/users.d
+              readOnly: true
+            {{- end }}
             {{- if .Values.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
@@ -316,6 +336,26 @@ spec:
         - name: chk-templates
           configMap:
             name: {{ template "clickhouse-operator.chkTemplates.configmap.name" . }}
+        {{- if .Values.existingChiConfigdConfigmap }}
+        - name: chi-configd
+          configMap:
+            name: {{ tpl .Values.existingChiConfigdConfigmap . }}
+        {{- end }}
+        {{- if .Values.existingChiUsersdConfigmap }}
+        - name: chi-usersd
+          configMap:
+            name: {{ tpl .Values.existingChiUsersdConfigmap . }}
+        {{- end }}
+        {{- if .Values.existingChkConfigdConfigmap }}
+        - name: chk-configd
+          configMap:
+            name: {{ tpl .Values.existingChkConfigdConfigmap . }}
+        {{- end }}
+        {{- if .Values.existingChkUsersdConfigmap }}
+        - name: chk-usersd
+          configMap:
+            name: {{ tpl .Values.existingChkUsersdConfigmap . }}
+        {{- end }}
         {{- if .Values.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
         {{- end }}

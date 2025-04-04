@@ -309,15 +309,27 @@ chiTemplate: {}
 ## @param existingChiTemplatesConfigmap The name of an existing ConfigMap with your custom ClickHouse Installation templates
 ##
 existingChiTemplatesConfigmap: ""
+## @param existingChiConfigdConfigmap The name of an existing ConfigMap with your custom configuration files for ClickHouse
+##
+existingChiConfigdConfigmap: ""
+## @param existingChiUsersdConfigmap The name of an existing ConfigMap with your custom users configuration files for ClickHouse
+##
+existingChiUsersdConfigmap: ""
 ## @param chkTemplate ClickHouse Keeper Installation default template (basic ones auto-generated based on other values otherwise)
 ##
 chkTemplate: {}
 ## @param existingChkTemplatesConfigmap The name of an existing ConfigMap with your custom ClickHouse Keeper Installation templates
 ##
 existingChkTemplatesConfigmap: ""
+## @param existingChkConfigdConfigmap The name of an existing ConfigMap with your custom configuration files for ClickHouse Keeper
+##
+existingChkConfigdConfigmap: ""
+## @param existingChkUsersdConfigmap The name of an existing ConfigMap with your custom users configuration files for ClickHouse Keeper
+##
+existingChkUsersdConfigmap: ""
 ## @param watchAllNamespaces Watch for ClickHouse Operator resources in all namespaces
 ##
-watchAllNamespaces: true
+watchAllNamespaces: false
 ## @param watchNamespaces [array] Watch for ClickHouse Operator resources in the given namespaces
 ##
 watchNamespaces: []

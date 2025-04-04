@@ -231,8 +231,12 @@ Install the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/char
 | `existingConfigmap`                                 | The name of an existing ConfigMap with your custom configuration for ClickHouse Operator                                                                                                                                       | `""`                                  |
 | `chiTemplate`                                       | ClickHouse Installation default template (basic ones auto-generated based on other values otherwise)                                                                                                                           | `{}`                                  |
 | `existingChiTemplatesConfigmap`                     | The name of an existing ConfigMap with your custom ClickHouse Installation templates                                                                                                                                           | `""`                                  |
+| `existingChiConfigdConfigmap`                       | The name of an existing ConfigMap with your custom configuration files for ClickHouse                                                                                                                                          | `""`                                  |
+| `existingChiUsersdConfigmap`                        | The name of an existing ConfigMap with your custom users configuration files for ClickHouse                                                                                                                                    | `""`                                  |
 | `chkTemplate`                                       | ClickHouse Keeper Installation default template (basic ones auto-generated based on other values otherwise)                                                                                                                    | `{}`                                  |
 | `existingChkTemplatesConfigmap`                     | The name of an existing ConfigMap with your custom ClickHouse Keeper Installation templates                                                                                                                                    | `""`                                  |
+| `existingChkConfigdConfigmap`                       | The name of an existing ConfigMap with your custom configuration files for ClickHouse Keeper                                                                                                                                   | `""`                                  |
+| `existingChkUsersdConfigmap`                        | The name of an existing ConfigMap with your custom users configuration files for ClickHouse Keeper                                                                                                                             | `""`                                  |
 | `watchAllNamespaces`                                | Watch for ClickHouse Operator resources in all namespaces                                                                                                                                                                      | `true`                                |
 | `watchNamespaces`                                   | Watch for ClickHouse Operator resources in the given namespaces                                                                                                                                                                | `[]`                                  |
 | `command`                                           | Override default ClickHouse Operator container command (useful when using custom images)                                                                                                                                       | `[]`                                  |
@@ -364,20 +368,19 @@ Install the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/char
 | `metrics.serviceMonitor.relabelings`                        | Specify general relabeling                                                                                                                                                                                                                                      | `[]`                                  |
 | `metrics.serviceMonitor.selector`                           | Prometheus instance selector labels                                                                                                                                                                                                                             | `{}`                                  |
 
-
 The above parameters map to the env variables defined in [bitnami/clickhouse-operator](https://github.com/bitnami/containers/tree/main/bitnami/clickhouse-operator). For more information please refer to the [bitnami/clickhouse-operator](https://github.com/bitnami/containers/tree/main/bitnami/clickhouse-operator) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
 helm install my-release \
-  --set %%TODO%%=%%TODO%% \
+  --set watchAllNamespaces=true \
     oci://REGISTRY_NAME/REPOSITORY_NAME/clickhouse-operator
 ```
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
-The above command %%TODO%%
+The above command configures the ClickHouse Operator to watch for ClickHouseInstallation and ClickHouseKeeperInstallation objects in all namespaces.
 
 > NOTE: Once this chart is deployed, it is not possible to change the application's access credentials, such as usernames or passwords, using Helm. To change these application credentials after deployment, delete any persistent volumes (PVs) used by the chart and re-deploy it, or use the application's built-in administrative tools if available.
 
