@@ -6,14 +6,14 @@ annotations:
   category: Infrastructure
   licenses: Apache-2.0
   images: |
-    - name: minio-operator
-      image: docker.io/bitnami/minio-operator:7.0.1-debian-12-r0
-    - name: minio-operator-sidecar
-      image: docker.io/bitnami/minio-operator-sidecar:7.0.1-debian-12-r0
     - name: kes
-      image: docker.io/bitnami/kes:2025.3.12-debian-12-r0
+      image: docker.io/bitnami/kes:2025.3.12-debian-12-r4
     - name: minio
-      image: docker.io/bitnami/minio:2025.3.12-debian-12-r2
+      image: docker.io/bitnami/minio:2025.3.12-debian-12-r3
+    - name: minio-operator
+      image: docker.io/bitnami/minio-operator:7.0.1-debian-12-r3
+    - name: minio-operator-sidecar
+      image: docker.io/bitnami/minio-operator-sidecar:7.0.1-debian-12-r3
 apiVersion: v2
 appVersion: 7.0.1
 dependencies:
@@ -22,7 +22,7 @@ dependencies:
   tags:
   - bitnami-common
   version: 2.x.x
-description: MinIO(R) Operator is a Kubernetes-native tool for deploying and managing high-performance, S3-compatible MinIO object storage across hybrid cloud infrastructures
+description: MinIO(R) Operator is a Kubernetes-native tool for deploying and managing high-performance, S3-compatible MinIO(R) object storage across hybrid cloud infrastructures.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/minio-operator/img/minio-operator-stack-220x234.png
 keywords:
@@ -35,4 +35,4 @@ maintainers:
 name: minio-operator
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/minio-operator
-version: 0.1.0
+version: 0.1.4

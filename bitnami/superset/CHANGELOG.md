@@ -1,8 +1,8 @@
 # Changelog
 
-## 2.0.0 (2025-04-02)
+## 1.1.3 (2025-04-02)
 
-* [bitnami/superset] Set `usePasswordFiles=true` by default ([#32778](https://github.com/bitnami/charts/pull/32778))
+* [bitnami/superset] Release 1.1.3 ([#32777](https://github.com/bitnami/charts/pull/32777))
 
 ## <small>1.1.2 (2025-03-25)</small>
 
