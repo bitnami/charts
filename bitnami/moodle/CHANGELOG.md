@@ -1,6 +1,6 @@
 # Changelog
 
-## 25.2.0 (2025-04-01)
+## 25.2.0 (2025-04-04)
 
 * [bitnami/moodle] Set `usePasswordFiles=true` by default ([#32705](https://github.com/bitnami/charts/pull/32705))
 
