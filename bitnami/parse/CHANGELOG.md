@@ -1,8 +1,8 @@
 # Changelog
 
-## 25.1.0 (2025-04-01)
+## 25.0.3 (2025-04-04)
 
-* [bitnami/parse] Set `usePasswordFiles=true` by default ([#32709](https://github.com/bitnami/charts/pull/32709))
+* [bitnami/parse] Release 25.0.3 ([#32810](https://github.com/bitnami/charts/pull/32810))
 
 ## <small>25.0.2 (2025-03-31)</small>
 

@@ -111,6 +111,7 @@ rules:
       - cis.f5.com
     resources:
       - virtualservers
+      - transportservers
     verbs:
       - get
       - watch
