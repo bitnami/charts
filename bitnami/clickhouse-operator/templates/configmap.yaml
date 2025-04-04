@@ -1,0 +1,161 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{/*
+Return the ClickHouse Operator configuration.
+ref: https://github.com/Altinity/clickhouse-operator/blob/master/docs/operator_configuration.md
+*/}}
+{{- define "clickhouse-operator.configuration" -}}
+{{- if .Values.configuration }}
+{{- include "common.tplvalues.render" (dict "value" .Values.configuration "context" .) }}
+{{- else }}
+watch:
+  # List of namespaces where ClickHouse Operator watches for events.
+  # Concurrently running operators should watch on different namespaces.
+  {{- if .Values.watchAllNamespaces }}
+  namespaces: ['*']
+  {{- else }}
+  namespaces:
+  {{- range .Values.watchNamespaces }}
+    - {{ . | quote }}
+  {{- end }}
+  {{- end }}
+clickhouse:
+  configuration:
+    file:
+      path:
+        common: chi/config.d
+        host: chi/conf.d
+        user: chi/users.d
+    user:
+      default:
+        profile: "default"
+        quota: "default"
+        networksIP:
+          - "::1"
+          - "127.0.0.1"
+        password: "default"
+      network:
+        hostRegexpTemplate: "(chi-{chi}-[^.]+\\d+-\\d+|clickhouse\\-{chi})\\.{namespace}\\.svc\\.cluster\\.local$"
+  configurationRestartPolicy:
+    rules:
+      - version: "*"
+        rules:
+          - settings/*: "yes"
+          - settings/access_control_path: "no"
+          - settings/dictionaries_config: "no"
+          - settings/max_server_memory_*: "no"
+          - settings/max_*_to_drop: "no"
+          - settings/max_concurrent_queries: "no"
+          - settings/models_config: "no"
+          - settings/user_defined_executable_functions_config: "no"
+          - settings/logger/*: "no"
+          - settings/macros/*: "no"
+          - settings/remote_servers/*: "no"
+          - settings/user_directories/*: "no"
+          - zookeeper/*: "yes"
+          - files/*.xml: "yes"
+          - files/config.d/*.xml: "yes"
+          - files/config.d/*dict*.xml: "no"
+          - files/config.d/*no_restart*: "no"
+          - profiles/default/background_*_pool_size: "yes"
+          - profiles/default/max_*_for_server: "yes"
+  access:
+    scheme: "auto"
+    username: ""
+    password: ""
+    rootCA: ""
+    secret:
+      namespace: {{ include "common.names.namespace" . | quote }}
+      name: {{ include "clickhouse-operator.secret.name" . | quote }}
+    port: 8123
+    timeouts:
+      connect: 1
+      query: 4
+  metrics:
+    timeouts:
+      collect: 9
+keeper:
+  configuration:
+    file:
+      path:
+        common: chk/keeper_config.d
+        host: chk/conf.d
+        user: chk/users.d
+template:
+  chi:
+    policy: ApplyOnNextReconcile
+    path: chi/templates.d
+  chk:
+    policy: ApplyOnNextReconcile
+    path: chk/templates.d
+reconcile:
+  runtime:
+    reconcileCHIsThreadsNumber: 10
+    reconcileShardsThreadsNumber: 5
+    reconcileShardsMaxConcurrencyPercent: 50
+  statefulSet:
+    create:
+      onFailure: ignore
+    update:
+      timeout: 300
+      pollInterval: 5
+      onFailure: abort
+  host:
+    wait:
+      exclude: true
+      queries: true
+      include: false
+annotation:
+  include: []
+  exclude: []
+label:
+  include: []
+  exclude: []
+  appendScope: "no"
+metrics:
+  labels:
+    exclude: []
+status:
+  fields:
+    action: false
+    actions: false
+    error: false
+    errors: false
+statefulSet:
+  revisionHistoryLimit: 0
+pod:
+  terminationGracePeriod: {{ .Values.terminationGracePeriodSeconds }}
+logger:
+  logtostderr: "true"
+  alsologtostderr: "false"
+  v: "1"
+  stderrthreshold: ""
+  vmodule: ""
+  log_backtrace_at: ""
+{{- end }}
+{{- end }}
+
+{{- if not .Values.existingConfigmap }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "common.names.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: clickhouse-operator
+    app.kubernetes.io/component: operator
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+data:
+  {{- $configuration := include "clickhouse-operator.configuration" . | fromYaml -}}
+  {{- if .Values.overrideConfiguration }}
+  {{- $overrideConfiguration := include "common.tplvalues.render" (dict "value" .Values.overrideConfiguration "context" .) | fromYaml }}
+  {{- $configuration = mustMergeOverwrite $configuration $overrideConfiguration }}
+  {{- end }}
+  config.yaml: |
+  {{- $configuration | toYaml | nindent 4 }}
+{{- end }}

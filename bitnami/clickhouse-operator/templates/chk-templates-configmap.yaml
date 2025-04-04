@@ -1,0 +1,48 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if not .Values.existingchkTemplatesConfigmap }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ printf "%s-chk-templates" (include "common.names.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: clickhouse-operator
+    app.kubernetes.io/component: operator
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+data:
+  default-template.yaml: |
+  {{- if .Values.chkTemplate }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.chkTemplate "context" .) | nindent 4 }}
+  {{- else }}
+    apiVersion: clickhouse.altinity.com/v1
+    kind: ClickHouseKeeperInstallation
+    metadata:
+      name: default-pod-template
+    spec:
+      templates:
+        podTemplates:
+          - name: clickhouse-keeper
+            distribution: Unspecified
+            spec:
+              containers:
+                image: {{ template "clickhouse-operator.keeper.image" . }}
+                imagePullPolicy: {{ .Values.keeperImage.pullPolicy | quote }}
+                volumeMounts:
+                  - name: clickhouse-keeper-data
+                    mountPath: /bitnami/clickhouse-keeper
+        volumeClaimTemplates:
+          - name: clickhouse-keeper-data
+            spec:
+              accessModes:
+              - ReadWriteOnce
+              resources:
+                requests:
+                  storage: 8Gi
+    {{- end }}
+{{- end }}
