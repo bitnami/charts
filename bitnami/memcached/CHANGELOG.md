@@ -1,8 +1,17 @@
 # Changelog
 
-## 7.7.0 (2025-03-11)
+## 7.8.0 (2025-03-21)
 
-* [bitnami/memcached] Enables the ability to specify podTargetLabels on ServiceMonitor for memcached ([#32387](https://github.com/bitnami/charts/pull/32387))
+* [bitnami/memcached] Set `usePasswordFiles=true` by default ([#32362](https://github.com/bitnami/charts/pull/32362))
+
+## <small>7.7.1 (2025-03-19)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/memcached] Release 7.7.1 (#32526) ([8d5d1bf](https://github.com/bitnami/charts/commit/8d5d1bfdb67a25630b430d06dc0e1caca6f9f043)), closes [#32526](https://github.com/bitnami/charts/issues/32526)
+
+## 7.7.0 (2025-03-12)
+
+* [bitnami/memcached] Enables the ability to specify podTargetLabels on ServiceMonitor for memcached ( ([bba58fd](https://github.com/bitnami/charts/commit/bba58fd79eb67be53adca12e9c3ba5068023f54c)), closes [#32387](https://github.com/bitnami/charts/issues/32387)
 
 ## <small>7.6.5 (2025-02-20)</small>
 

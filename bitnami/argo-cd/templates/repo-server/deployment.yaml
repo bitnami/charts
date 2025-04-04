@@ -121,10 +121,6 @@ spec:
                   fi
                 }
 
-                {{- if .Values.usePasswordFiles }}
-                  export REDISCLI_AUTH="$(< $REDISCLI_AUTH_FILE)"
-                {{- end }}
-
                 info "Checking redis connection..."
                 if ! retry_while "check_redis_connection"; then
                     error "Could not connect to the Redis server"
@@ -134,21 +130,11 @@ spec:
                 fi
           {{- if include "argocd.redis.auth.enabled" . }}
           env:
-            {{- if .Values.usePasswordFiles }}
-            - name: REDISCLI_AUTH_FILE
-              value: {{ printf "/opt/bitnami/argo-cd/secrets/%s" (include "argocd.redis.secretPasswordKey" .) }}
-            {{- else }}
             - name: REDISCLI_AUTH
               valueFrom:
                 secretKeyRef:
                   name: {{ include "argocd.redis.secretName" . }}
                   key: {{ include "argocd.redis.secretPasswordKey" . }}
-            {{- end }}
-          {{- if and .Values.usePasswordFiles }}
-          volumeMounts:
-            - name: argocd-secrets
-              mountPath: /opt/bitnami/argo-cd/secrets
-          {{- end }}
           {{- end }}
         {{- end }}
         {{- if .Values.repoServer.initContainers }}
@@ -192,17 +178,22 @@ spec:
               containerPort: {{ .Values.repoServer.containerPorts.metrics }}
               protocol: TCP
           env:
-            {{- if (include "argocd.redis.auth.enabled" .) }}
-            {{- if .Values.usePasswordFiles }}
-            - name: REDIS_PASSWORD_FILE
-              value: {{ printf "/opt/bitnami/argo-cd/secrets/%s" (include "argocd.redis.secretPasswordKey" .) }}
-            {{- else }}
+            {{- if and .Values.redis.enabled (include "argocd.redis.auth.enabled" .) }}
             - name: REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "argocd.redis.secretName" . }}
                   key: {{ include "argocd.redis.secretPasswordKey" . }}
-            {{- end }}
+            {{- else if .Values.externalRedis.enabled }}
+            - name: REDIS_PASSWORD
+              {{- if not ( eq "" .Values.externalRedis.password ) }}
+              value: {{ .Values.externalRedis.password }}
+              {{- else }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.externalRedis.existingSecret }}
+                  key: {{ .Values.externalRedis.existingSecretPasswordKey }}
+              {{- end }}
             {{- end }}
             {{- if .Values.repoServer.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.repoServer.extraEnvVars "context" $) | nindent 12 }}
@@ -282,10 +273,6 @@ spec:
             - name: empty-dir
               mountPath: /tmp
               subPath: tmp-dir
-            {{- if and .Values.usePasswordFiles (include "argocd.redis.auth.enabled" .)}}
-            - name: argocd-secrets
-              mountPath: /opt/bitnami/argo-cd/secrets
-            {{- end }}
           {{- if .Values.repoServer.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.repoServer.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -296,13 +283,6 @@ spec:
         - name: ssh-known-hosts
           configMap:
             name: argocd-ssh-known-hosts-cm
-        {{- if and .Values.usePasswordFiles (include "argocd.redis.auth.enabled" .)}}
-        - name: argocd-secrets
-          projected:
-            sources:
-              - secret:
-                  name: {{ include "argocd.redis.secretName" . }}
-        {{- end }}
         {{- if .Values.config.tlsCerts }}
         - configMap:
             name: argocd-tls-certs-cm

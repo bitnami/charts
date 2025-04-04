@@ -1,8 +1,25 @@
 # Changelog
 
-## 11.2.3 (2025-03-05)
+## 12.0.2 (2025-04-02)
 
-* [bitnami/milvus] Release 11.2.3 ([#32321](https://github.com/bitnami/charts/pull/32321))
+* [bitnami/milvus] Release 12.0.2 ([#32747](https://github.com/bitnami/charts/pull/32747))
+
+## <small>12.0.1 (2025-03-31)</small>
+
+* [bitnami/milvus] Release 12.0.1 (#32690) ([cae0234](https://github.com/bitnami/charts/commit/cae02342c38ff522d3d8d061c1074afd187b4c81)), closes [#32690](https://github.com/bitnami/charts/issues/32690)
+
+## 12.0.0 (2025-03-27)
+
+* [bitnami/milvus] feat: bump major due to major bump on Kafka dep (#32617) ([86f459a](https://github.com/bitnami/charts/commit/86f459abe1617f730a431edd103530eea4dbd59e)), closes [#32617](https://github.com/bitnami/charts/issues/32617)
+
+## <small>11.2.4 (2025-03-25)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/milvus] Release 11.2.4 (#32593) ([3521264](https://github.com/bitnami/charts/commit/3521264684c5a1b09a50a5c8c50453cc9af62f02)), closes [#32593](https://github.com/bitnami/charts/issues/32593)
+
+## <small>11.2.3 (2025-03-05)</small>
+
+* [bitnami/milvus] Release 11.2.3 (#32321) ([5310bf2](https://github.com/bitnami/charts/commit/5310bf26533e16a8ad32638f633ce9bda4806abc)), closes [#32321](https://github.com/bitnami/charts/issues/32321)
 
 ## <small>11.2.2 (2025-03-05)</small>
 

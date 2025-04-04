@@ -1,8 +1,33 @@
 # Changelog
 
-## 7.2.4 (2025-03-17)
+## 7.3.3 (2025-04-02)
 
-* [bitnami/argo-cd] Fix redis password not read when using passwordFiles ([#32477](https://github.com/bitnami/charts/pull/32477))
+* [bitnami/argo-cd] Release 7.3.3 ([#32787](https://github.com/bitnami/charts/pull/32787))
+
+## <small>7.3.2 (2025-04-01)</small>
+
+* [bitnami/argo-cd] Release 7.3.2 (#32717) ([50928db](https://github.com/bitnami/charts/commit/50928db539e9e5e3a6667914b37054aabe8fbd77)), closes [#32717](https://github.com/bitnami/charts/issues/32717)
+
+## <small>7.3.1 (2025-03-24)</small>
+
+* [bitnami/argo-cd] Release 7.3.1 (#32585) ([bbe5469](https://github.com/bitnami/charts/commit/bbe546947f67cd71da25fafbf7920b888b93e8cd)), closes [#32585](https://github.com/bitnami/charts/issues/32585)
+
+## 7.3.0 (2025-03-20)
+
+* [bitnami/argo-cd] Revert usePasswordFiles (#32514) ([016a597](https://github.com/bitnami/charts/commit/016a597e764b446d97c17b1afff359ea778ecbd1)), closes [#32514](https://github.com/bitnami/charts/issues/32514)
+
+## <small>7.2.6 (2025-03-19)</small>
+
+* [bitnami/argo-cd] Release 7.2.6 (#32519) ([d87cdeb](https://github.com/bitnami/charts/commit/d87cdeb893d9d3648c633506688e5961a5c88a1c)), closes [#32519](https://github.com/bitnami/charts/issues/32519)
+
+## <small>7.2.5 (2025-03-18)</small>
+
+* [bitnami/argo-cd] Release 7.2.5 (#32500) ([fbd0309](https://github.com/bitnami/charts/commit/fbd03096412bb47cfcea68313db5b6bc4b26da42)), closes [#32500](https://github.com/bitnami/charts/issues/32500)
+
+## <small>7.2.4 (2025-03-18)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/argo-cd] Fix redis password not read when using passwordFiles (#32477) ([12ba544](https://github.com/bitnami/charts/commit/12ba544f66f96aaf966851129f1da684dd19363a)), closes [#32477](https://github.com/bitnami/charts/issues/32477)
 
 ## <small>7.2.3 (2025-03-11)</small>
 

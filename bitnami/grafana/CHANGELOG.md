@@ -1,8 +1,20 @@
 # Changelog
 
-## 11.6.0 (2025-03-13)
+## 11.6.3 (2025-04-01)
 
-* [bitnami/grafana] Set `usePasswordFiles=true` by default ([#32348](https://github.com/bitnami/charts/pull/32348))
+* [bitnami/grafana] Release 11.6.3 ([#32735](https://github.com/bitnami/charts/pull/32735))
+
+## <small>11.6.2 (2025-03-27)</small>
+
+* [bitnami/grafana] Release 11.6.2 (#32651) ([47bcd2f](https://github.com/bitnami/charts/commit/47bcd2f546675862b1945f66b3e3f620e2bb66b4)), closes [#32651](https://github.com/bitnami/charts/issues/32651)
+
+## <small>11.6.1 (2025-03-25)</small>
+
+* [bitnami/grafana] Release 11.6.1 (#32597) ([20d2203](https://github.com/bitnami/charts/commit/20d220329bc848dbd3f6871af0ac08e081c78319)), closes [#32597](https://github.com/bitnami/charts/issues/32597)
+
+## 11.6.0 (2025-03-14)
+
+* [bitnami/grafana] Set `usePasswordFiles=true` by default (#32348) ([fcc1fc1](https://github.com/bitnami/charts/commit/fcc1fc1bf9c7e97dd5d4c21ecbc13dd729a56292)), closes [#32348](https://github.com/bitnami/charts/issues/32348)
 
 ## <small>11.5.1 (2025-03-13)</small>
 

@@ -95,17 +95,26 @@ spec:
                   value: {{ include "matomo.databaseName" . | quote }}
                 - name: MATOMO_DATABASE_USER
                   value: {{ include "matomo.databaseUser" . | quote }}
+                {{- if .Values.usePasswordFiles }}
+                - name: MATOMO_DATABASE_PASSWORD_FILE
+                  value: {{ printf "/opt/bitnami/matomo/secrets/%s" (include "matomo.databasePasswordKey" .) }}
+                {{- else }}
                 - name: MATOMO_DATABASE_PASSWORD
                   valueFrom:
                     secretKeyRef:
                       name: {{ include "matomo.databaseSecretName" . }}
                       key: {{ include "matomo.databasePasswordKey" . | quote }}
+                {{- end }}
                 {{- if gt (len .Values.cronjobs.archive.extraEnvVars) 0  }}
                 {{- toYaml .Values.cronjobs.archive.extraEnvVars | nindent 16 }}
                 {{- end }}
               volumeMounts:
                 - name: matomo-data
                   mountPath: /bitnami/matomo
+                {{- if .Values.usePasswordFiles }}
+                - name: matomo-secrets
+                  mountPath: /opt/bitnami/matomo/secrets
+                {{- end }}
                 {{- if .Values.certificates.customCertificate.certificateSecret }}
                 - name: custom-certificate
                   mountPath: {{ .Values.certificates.customCertificate.certificateLocation }}
@@ -274,17 +283,26 @@ spec:
                   value: {{ include "matomo.databaseName" . | quote }}
                 - name: MATOMO_DATABASE_USER
                   value: {{ include "matomo.databaseUser" . | quote }}
+                {{- if .Values.usePasswordFiles }}
+                - name: MATOMO_DATABASE_PASSWORD_FILE
+                  value: {{ printf "/opt/bitnami/matomo/secrets/%s" (include "matomo.databasePasswordKey" .) }}
+                {{- else }}
                 - name: MATOMO_DATABASE_PASSWORD
                   valueFrom:
                     secretKeyRef:
                       name: {{ include "matomo.databaseSecretName" . }}
                       key: {{ include "matomo.databasePasswordKey" . | quote }}
+                {{- end }}
                 {{- if gt (len .Values.cronjobs.taskScheduler.extraEnvVars) 0  }}
                 {{- toYaml .Values.cronjobs.taskScheduler.extraEnvVars | nindent 16 }}
                 {{- end }}
               volumeMounts:
                 - name: matomo-data
                   mountPath: /bitnami/matomo
+                {{- if .Values.usePasswordFiles }}
+                - name: matomo-secrets
+                  mountPath: /opt/bitnami/matomo/secrets
+                {{- end }}
                 {{- if .Values.certificates.customCertificate.certificateSecret }}
                 - name: custom-certificate
                   mountPath: {{ .Values.certificates.customCertificate.certificateLocation }}
@@ -312,6 +330,13 @@ spec:
               resources: {{- toYaml .Values.cronjobs.taskScheduler.resources | nindent 16 }}
               {{- end }}
           volumes:
+            {{- if .Values.usePasswordFiles }}
+            - name: matomo-secrets
+              projected:
+                sources:
+                  - secret:
+                      name:  {{ include "matomo.databaseSecretName" . }}
+            {{- end }}
             {{- if .Values.certificates.customCAs }}
             - name: etc-ssl-certs
               emptyDir:

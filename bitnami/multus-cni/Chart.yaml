@@ -7,9 +7,9 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: multus-cni
-      image: docker.io/bitnami/multus-cni:4.1.4-debian-12-r10
+      image: docker.io/bitnami/multus-cni:4.2.0-debian-12-r1
 apiVersion: v2
-appVersion: 4.1.4
+appVersion: 4.2.0
 dependencies:
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
@@ -30,4 +30,4 @@ maintainers:
 name: multus-cni
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/multus-cni
-version: 2.2.8
+version: 2.2.10

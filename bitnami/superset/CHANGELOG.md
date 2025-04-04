@@ -1,8 +1,17 @@
 # Changelog
 
-## 1.1.1 (2025-02-26)
+## 1.1.3 (2025-04-02)
 
-* [bitnami/superset] Release 1.1.1 ([#32170](https://github.com/bitnami/charts/pull/32170))
+* [bitnami/superset] Release 1.1.3 ([#32777](https://github.com/bitnami/charts/pull/32777))
+
+## <small>1.1.2 (2025-03-25)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/superset] Release 1.1.2 (#32587) ([fae378c](https://github.com/bitnami/charts/commit/fae378ccb0efdb7a8d7fe7abad3fbb1bc39b04f0)), closes [#32587](https://github.com/bitnami/charts/issues/32587)
+
+## <small>1.1.1 (2025-02-26)</small>
+
+* [bitnami/superset] Release 1.1.1 (#32170) ([db53a0c](https://github.com/bitnami/charts/commit/db53a0c94e57ad54130754132e8cf74b46227225)), closes [#32170](https://github.com/bitnami/charts/issues/32170)
 
 ## 1.1.0 (2025-02-20)
 

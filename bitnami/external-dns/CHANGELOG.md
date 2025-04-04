@@ -1,8 +1,21 @@
 # Changelog
 
-## 8.7.7 (2025-03-07)
+## 8.7.10 (2025-04-02)
 
-* [bitnami/external-dns] Fix TXT AES key being read from incorrect secret ([#32360](https://github.com/bitnami/charts/pull/32360))
+* [bitnami/external-dns] Add RBAC to support F5 TransportServer source ([#32633](https://github.com/bitnami/charts/pull/32633))
+
+## <small>8.7.9 (2025-04-01)</small>
+
+* [bitnami/external-dns] Release 8.7.9 (#32728) ([dc2f56a](https://github.com/bitnami/charts/commit/dc2f56a79f2e7bf69385081c50fba9ea1109baad)), closes [#32728](https://github.com/bitnami/charts/issues/32728)
+
+## <small>8.7.8 (2025-03-26)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/external-dns] Release 8.7.8 (#32475) ([01bb09c](https://github.com/bitnami/charts/commit/01bb09ca9cf48bdcd53b7a968e808cc22da1108d)), closes [#32475](https://github.com/bitnami/charts/issues/32475)
+
+## <small>8.7.7 (2025-03-10)</small>
+
+* [bitnami/external-dns] Fix TXT AES key being read from incorrect secret (#32360) ([fb7b925](https://github.com/bitnami/charts/commit/fb7b9259095f8c0f5b76872f416b22a5403d5949)), closes [#32360](https://github.com/bitnami/charts/issues/32360)
 
 ## <small>8.7.6 (2025-03-05)</small>
 

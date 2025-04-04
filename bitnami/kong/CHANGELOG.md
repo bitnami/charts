@@ -1,8 +1,21 @@
 # Changelog
 
-## 15.3.1 (2025-03-13)
+## 15.4.2 (2025-03-27)
 
-* [bitnami/kong] Release 15.3.1 ([#32451](https://github.com/bitnami/charts/pull/32451))
+* [bitnami/kong] Release 15.4.2 ([#32653](https://github.com/bitnami/charts/pull/32653))
+
+## <small>15.4.1 (2025-03-27)</small>
+
+* [bitnami/kong] Release 15.4.1 (#32645) ([9cf0adc](https://github.com/bitnami/charts/commit/9cf0adc46e0c507385412f52139331017a41401c)), closes [#32645](https://github.com/bitnami/charts/issues/32645)
+
+## 15.4.0 (2025-03-24)
+
+* [bitnami/kong] chore(ClusterRole): Concat namespace in ClusterRole name (#32544) ([0ad4fe3](https://github.com/bitnami/charts/commit/0ad4fe3aa7c49b7c50fe9b19f66bc566a0ae771d)), closes [#32544](https://github.com/bitnami/charts/issues/32544)
+
+## <small>15.3.1 (2025-03-13)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/kong] Release 15.3.1 (#32451) ([e8d1314](https://github.com/bitnami/charts/commit/e8d13144e35c0390c6ac68dba03d5603e2035197)), closes [#32451](https://github.com/bitnami/charts/issues/32451)
 
 ## 15.3.0 (2025-02-24)
 

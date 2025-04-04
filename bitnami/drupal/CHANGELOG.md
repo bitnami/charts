@@ -1,8 +1,25 @@
 # Changelog
 
-## 21.1.5 (2025-03-05)
+## 21.2.1 (2025-04-02)
 
-* [bitnami/drupal] Release 21.1.5 ([#32333](https://github.com/bitnami/charts/pull/32333))
+* [bitnami/drupal] Release 21.2.1 ([#32788](https://github.com/bitnami/charts/pull/32788))
+
+## 21.2.0 (2025-03-27)
+
+* [bitnami/drupal] Set `usePasswordFiles=true` by default (#32342) ([ee46d82](https://github.com/bitnami/charts/commit/ee46d82b4b0cfc4b5a8ba878d1594dc35be53143)), closes [#32342](https://github.com/bitnami/charts/issues/32342)
+
+## <small>21.1.7 (2025-03-19)</small>
+
+* [bitnami/drupal] Release 21.1.7 (#32521) ([408a911](https://github.com/bitnami/charts/commit/408a911fabee705100f4c9f64987367f2730d4eb)), closes [#32521](https://github.com/bitnami/charts/issues/32521)
+
+## <small>21.1.6 (2025-03-18)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/drupal] Release 21.1.6 (#32505) ([545e4d2](https://github.com/bitnami/charts/commit/545e4d232f536c84a6c3378e6fd516808f9cac88)), closes [#32505](https://github.com/bitnami/charts/issues/32505)
+
+## <small>21.1.5 (2025-03-05)</small>
+
+* [bitnami/drupal] Release 21.1.5 (#32333) ([b8409f0](https://github.com/bitnami/charts/commit/b8409f0940c9bd07719981b049eed6dd05252fa9)), closes [#32333](https://github.com/bitnami/charts/issues/32333)
 
 ## <small>21.1.4 (2025-02-26)</small>
 

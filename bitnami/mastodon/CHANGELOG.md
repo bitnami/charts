@@ -1,8 +1,20 @@
 # Changelog
 
-## 9.3.0 (2025-03-25)
+## 10.0.1 (2025-04-03)
 
-* [bitnami/mastodon] Set `usePasswordFiles=true` by default ([#32367](https://github.com/bitnami/charts/pull/32367))
+* [bitnami/mastodon] Release 10.0.1 ([#32803](https://github.com/bitnami/charts/pull/32803))
+
+## 10.0.0 (2025-04-03)
+
+* [bitnami/mastodon] Bump MinIO major version 16.x.x (#32700) ([dfd61a0](https://github.com/bitnami/charts/commit/dfd61a00e9e7ac67251f68b3a273e7b6368e84ff)), closes [#32700](https://github.com/bitnami/charts/issues/32700)
+
+## <small>9.2.9 (2025-04-02)</small>
+
+* [bitnami/mastodon] Release 9.2.9 (#32785) ([14e9623](https://github.com/bitnami/charts/commit/14e96230f82d5a26ae12bd381a43819fd1ec2847)), closes [#32785](https://github.com/bitnami/charts/issues/32785)
+
+## <small>9.2.8 (2025-04-01)</small>
+
+* [bitnami/mastodon] Release 9.2.8 (#32711) ([256efe8](https://github.com/bitnami/charts/commit/256efe8969ab8f46739d15b8d25ccf42988521c2)), closes [#32711](https://github.com/bitnami/charts/issues/32711)
 
 ## <small>9.2.7 (2025-03-13)</small>
 

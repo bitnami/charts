@@ -91,7 +91,7 @@ vmselect:
   image:
     registry: docker.io
     repository: bitnami/victoriametrics-vmselect
-    tag: 1.113.0-debian-12-r0
+    tag: 1.114.0-debian-12-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -714,7 +714,7 @@ vminsert:
   image:
     registry: docker.io
     repository: bitnami/victoriametrics-vminsert
-    tag: 1.113.0-debian-12-r0
+    tag: 1.114.0-debian-12-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1322,7 +1322,7 @@ vmstorage:
   image:
     registry: docker.io
     repository: bitnami/victoriametrics-vmstorage
-    tag: 1.113.0-debian-12-r0
+    tag: 1.114.0-debian-12-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1889,7 +1889,7 @@ vmauth:
   image:
     registry: docker.io
     repository: bitnami/victoriametrics-vmauth
-    tag: 1.113.0-debian-12-r0
+    tag: 1.114.0-debian-12-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -2515,7 +2515,7 @@ vmagent:
   image:
     registry: docker.io
     repository: bitnami/victoriametrics-vmagent
-    tag: 1.113.0-debian-12-r0
+    tag: 1.114.0-debian-12-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -3088,7 +3088,7 @@ vmalert:
   image:
     registry: docker.io
     repository: bitnami/victoriametrics-vmalert
-    tag: 1.113.0-debian-12-r0
+    tag: 1.114.0-debian-12-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images

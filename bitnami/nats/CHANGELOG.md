@@ -1,8 +1,17 @@
 # Changelog
 
-## 9.0.6 (2025-03-07)
+## 9.0.8 (2025-04-02)
 
-* [bitnami/nats] allow to modify JetStream store directory ([#32359](https://github.com/bitnami/charts/pull/32359))
+* [bitnami/nats] Release 9.0.8 ([#32754](https://github.com/bitnami/charts/pull/32754))
+
+## <small>9.0.7 (2025-03-19)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/nats] Release 9.0.7 (#32517) ([a902ef8](https://github.com/bitnami/charts/commit/a902ef8c45ad542e44e8e89171ad03ba47ea31fc)), closes [#32517](https://github.com/bitnami/charts/issues/32517)
+
+## <small>9.0.6 (2025-03-11)</small>
+
+* [bitnami/nats] allow to modify JetStream store directory (#32359) ([9d5238f](https://github.com/bitnami/charts/commit/9d5238f55b072d6d769a8b3023c9af9c75516fa8)), closes [#32359](https://github.com/bitnami/charts/issues/32359)
 
 ## <small>9.0.5 (2025-03-05)</small>
 
