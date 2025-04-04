@@ -182,7 +182,6 @@ spec:
                   name: {{ include "mlflow.v0.tracking.secretName" . }}
                   key: {{ include "mlflow.v0.tracking.flaskServerSecretKey" . | quote }}
             {{- end }}
-
             {{- if (include "mlflow.v0.database.enabled" .) }}
             - name: MLFLOW_DATABASE_PASSWORD
               valueFrom:

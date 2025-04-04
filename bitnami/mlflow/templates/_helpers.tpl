@@ -182,9 +182,6 @@ Init container definition for waiting for the database to be ready
       {{- if .Values.usePasswordFiles }}
       export MLFLOW_TRACKING_USERNAME="$(< $MLFLOW_TRACKING_USERNAME_FILE)"
       export MLFLOW_TRACKING_PASSWORD="$(< $MLFLOW_TRACKING_PASSWORD_FILE)"
-      {{- if (include "mlflow.v0.database.enabled" .) }}
-      export MLFLOW_DATABASE_PASSWORD="$(< $MLFLOW_DATABASE_PASSWORD_FILE)"
-      {{- end }}
       {{- end }}
       # First render the overrides
       render-template /bitnami/basic-auth-overrides/*.ini > /tmp/rendered-overrides.ini
@@ -202,10 +199,6 @@ Init container definition for waiting for the database to be ready
       rm /tmp/rendered-overrides.ini
   env:
     {{- if (include "mlflow.v0.database.enabled" .) }}
-    {{- if .Values.usePasswordFiles }}
-    - name: MLFLOW_DATABASE_PASSWORD_FILE
-      value: {{ printf "/opt/bitnami/mlflow/secrets/%s" (include "mlflow.v0.database.passwordKey" .) }}
-    {{- else }}
     - name: MLFLOW_DATABASE_PASSWORD
       valueFrom:
         secretKeyRef:
@@ -213,7 +206,6 @@ Init container definition for waiting for the database to be ready
           key: {{ include "mlflow.v0.database.passwordKey" . | quote }}
     - name: MLFLOW_DATABASE_AUTH_URI
       value: {{ include "mlflow.v0.database-auth.uri" . | quote }}
-    {{- end }}
     {{- end }}
     {{- if .Values.usePasswordFiles }}
     - name: MLFLOW_TRACKING_USERNAME
