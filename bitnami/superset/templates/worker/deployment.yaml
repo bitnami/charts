@@ -131,6 +131,9 @@ spec:
                 - /bin/bash
                 - -ec
                 - |
+                  {{- if .Values.usePasswordFiles }}
+                  export SUPERSET_SECRET_KEY="$(< $SUPERSET_SECRET_KEY_FILE)"
+                  {{- end }}
                   . /opt/bitnami/scripts/superset-env.sh && celery -A superset.tasks.celery_app:app inspect ping -d celery@$HOSTNAME
           {{- end }}
           {{- if .Values.worker.customReadinessProbe }}
@@ -142,6 +145,9 @@ spec:
                 - /bin/bash
                 - -ec
                 - |
+                  {{- if .Values.usePasswordFiles }}
+                  export SUPERSET_SECRET_KEY="$(< $SUPERSET_SECRET_KEY_FILE)"
+                  {{- end }}
                   . /opt/bitnami/scripts/superset-env.sh && celery -A superset.tasks.celery_app:app inspect ping -d celery@$HOSTNAME
           {{- end }}
           {{- if .Values.worker.customStartupProbe }}
@@ -153,6 +159,9 @@ spec:
                 - /bin/bash
                 - -ec
                 - |
+                  {{- if .Values.usePasswordFiles }}
+                  export SUPERSET_SECRET_KEY="$(< $SUPERSET_SECRET_KEY_FILE)"
+                  {{- end }}
                   . /opt/bitnami/scripts/superset-env.sh && celery -A superset.tasks.celery_app:app inspect ping -d celery@$HOSTNAME
           {{- end }}
           {{- end }}
