@@ -213,7 +213,6 @@ Init container definition for waiting for the database to be ready
     - name: MLFLOW_TRACKING_PASSWORD
       value: {{ printf "/opt/bitnami/mlflow/secrets/%s" (include "mlflow.v0.tracking.passwordKey" .) }}
     {{- else }}
-      value:
     - name: MLFLOW_TRACKING_USERNAME
       valueFrom:
         secretKeyRef:
