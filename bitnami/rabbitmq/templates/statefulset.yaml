@@ -342,11 +342,7 @@ spec:
                 {{- if or (.Values.loadDefinition.enabled) (not (contains "rabbitmq_management" .Values.plugins )) }}
                 - rabbitmq-diagnostics -q ping
                 {{- else }}
-                {{- if .Values.usePasswordFiles }}
-                - curl -f --user "{{ .Values.auth.username }}:$(< $RABBITMQ_PASSWORD_FILE)" 127.0.0.1:{{ .Values.containerPorts.manager }}/api/health/checks/virtual-hosts
-                {{- else }}
-                - curl -f --user {{ .Values.auth.username }}:$RABBITMQ_PASSWORD 127.0.0.1:{{ .Values.containerPorts.manager }}/api/health/checks/virtual-hosts
-                {{- end }}
+                - curl -f --user {{ .Values.auth.username }}:{{ ternary "$(< $RABBITMQ_PASSWORD_FILE)" "$RABBITMQ_PASSWORD"  .Values.usePasswordFiles }} 127.0.0.1:{{ .Values.containerPorts.manager }}/api/health/checks/virtual-hosts
                 {{- end }}
           {{- end }}
           {{- if .Values.customReadinessProbe }}
@@ -360,11 +356,7 @@ spec:
                 {{- if or (.Values.loadDefinition.enabled) (not (contains "rabbitmq_management" .Values.plugins )) }}
                 - rabbitmq-diagnostics -q check_running && rabbitmq-diagnostics -q check_local_alarms
                 {{- else }}
-                {{- if .Values.usePasswordFiles }}
-                - curl -f --user "{{ .Values.auth.username }}:$(< $RABBITMQ_PASSWORD_FILE)" 127.0.0.1:{{ .Values.containerPorts.manager }}/api/health/checks/local-alarms
-                {{- else }}
-                - curl -f --user {{ .Values.auth.username }}:$RABBITMQ_PASSWORD 127.0.0.1:{{ .Values.containerPorts.manager }}/api/health/checks/local-alarms
-                {{- end }}
+                - curl -f --user {{ .Values.auth.username }}:{{ ternary "$(< $RABBITMQ_PASSWORD_FILE)" "$RABBITMQ_PASSWORD"  .Values.usePasswordFiles }} 127.0.0.1:{{ .Values.containerPorts.manager }}/api/health/checks/local-alarms
                 {{- end }}
           {{- end }}
           {{- if .Values.customStartupProbe }}
