@@ -1,6 +1,6 @@
 # Changelog
 
-## 11.6.0 (2025-03-27)
+## 11.6.0 (2025-04-04)
 
 * [bitnami/kibana] Set `usePasswordFiles=true` by default ([#32636](https://github.com/bitnami/charts/pull/32636))
 
