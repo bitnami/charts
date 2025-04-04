@@ -1,8 +1,16 @@
 # Changelog
 
+## 35.0.2 (2025-04-01)
+
+* [bitnami/spring-cloud-dataflow] Release 35.0.2 ([#32714](https://github.com/bitnami/charts/pull/32714))
+
+## <small>35.0.1 (2025-04-01)</small>
+
+* bitnami/spring-cloud-dataflow fix for #32453 (#32677) ([f4c345d](https://github.com/bitnami/charts/commit/f4c345daab91d654148de2017ec7cfc0a55248d7)), closes [#32453](https://github.com/bitnami/charts/issues/32453) [#32677](https://github.com/bitnami/charts/issues/32677) [#32453](https://github.com/bitnami/charts/issues/32453)
+
 ## 35.0.0 (2025-03-26)
 
-* [bitnami/spring-cloud-dataflow] feat: bump major due to major bump on Kafka dep ([#32619](https://github.com/bitnami/charts/pull/32619))
+* [bitnami/spring-cloud-dataflow] feat: bump major due to major bump on Kafka dep (#32619) ([66ba328](https://github.com/bitnami/charts/commit/66ba328a95e0bc9426e952a7f3f0ae68ceb1b510)), closes [#32619](https://github.com/bitnami/charts/issues/32619)
 
 ## <small>34.2.2 (2025-03-19)</small>
 

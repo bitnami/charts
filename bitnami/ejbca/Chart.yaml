@@ -36,4 +36,4 @@ maintainers:
 name: ejbca
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/ejbca
-version: 17.0.4
+version: 17.1.0

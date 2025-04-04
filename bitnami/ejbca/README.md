@@ -177,6 +177,7 @@ Persistent Volume Claims are used to keep the data across deployments. This is k
 | `commonLabels`           | Add labels to all the deployed resources                                                | `{}`           |
 | `commonAnnotations`      | Annotations to be added to all deployed resources                                       | `{}`           |
 | `extraDeploy`            | Array of extra objects to deploy with the release                                       | `[]`           |
+| `usePasswordFiles`       | Mount credentials as files instead of using environment variables                       | `true`         |
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`        |
 | `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`    |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]` |

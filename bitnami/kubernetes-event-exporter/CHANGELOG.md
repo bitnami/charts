@@ -1,8 +1,13 @@
 # Changelog
 
-## 3.4.4 (2025-03-17)
+## 3.4.5 (2025-04-01)
 
-* [bitnami/kubernetes-event-exporter] ci: more flexible regexp on Ginkgo tests ([#32481](https://github.com/bitnami/charts/pull/32481))
+* [bitnami/kubernetes-event-exporter] Release 3.4.5 ([#32742](https://github.com/bitnami/charts/pull/32742))
+
+## <small>3.4.4 (2025-03-17)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/kubernetes-event-exporter] ci: more flexible regexp on Ginkgo tests (#32481) ([0a716b2](https://github.com/bitnami/charts/commit/0a716b2248d6648e03afd7e160fc5b424230bdc5)), closes [#32481](https://github.com/bitnami/charts/issues/32481)
 
 ## <small>3.4.3 (2025-03-05)</small>
 
