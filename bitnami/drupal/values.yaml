@@ -73,7 +73,7 @@ usePasswordFiles: true
 image:
   registry: docker.io
   repository: bitnami/drupal
-  tag: 11.1.6-debian-12-r0
+  tag: 11.1.6-debian-12-r1
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
