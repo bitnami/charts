@@ -1,6 +1,6 @@
 # Changelog
 
-## 13.0.0 (2025-04-03)
+## 13.0.0 (2025-04-04)
 
 * [bitnami/milvus] Bump MinIO major version 16.x.x ([#32701](https://github.com/bitnami/charts/pull/32701))
 
