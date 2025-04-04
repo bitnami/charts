@@ -138,6 +138,7 @@ spec:
                 secretKeyRef:
                   name: {{ include "neo4j.secretName" . }}
                   key: password
+            {{- end }}
             {{- if (include "neo4j.tls.bolt.enabled" .) }}
             - name: NEO4J_BOLT_TLS_LEVEL
               value: {{ upper .Values.tls.bolt.level | quote }}
