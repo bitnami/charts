@@ -469,7 +469,7 @@ Add environment variables to configure database values
   value: "true"
 {{- if .Values.usePasswordFiles }}
 - name: ELASTICSEARCH_PASSWORD_FILE
-    value: "/opt/bitnami/elasticsearch/secrets/elasticsearch-password"
+  value: "/opt/bitnami/elasticsearch/secrets/elasticsearch-password"
 {{- else }}
 - name: ELASTICSEARCH_PASSWORD
   valueFrom:
@@ -495,7 +495,7 @@ Add environment variables to configure database values
 {{- if and (not .Values.security.tls.usePemCerts) (or .Values.security.tls.keystorePassword .Values.security.tls.passwordsSecret) }}
 {{- if .Values.usePasswordFiles }}
 - name: ELASTICSEARCH_KEYSTORE_PASSWORD_FILE
-    value: {{ printf "/opt/bitnami/elasticsearch/secrets/%s" (include "elasticsearch.keystorePasswordKey" .) }}
+  value: {{ printf "/opt/bitnami/elasticsearch/secrets/%s" (include "elasticsearch.keystorePasswordKey" .) }}
 {{- else }}
 - name: ELASTICSEARCH_KEYSTORE_PASSWORD
   valueFrom:
@@ -507,7 +507,7 @@ Add environment variables to configure database values
 {{- if and (not .Values.security.tls.usePemCerts) (or .Values.security.tls.truststorePassword .Values.security.tls.passwordsSecret) }}
 {{- if .Values.usePasswordFiles }}
 - name: ELASTICSEARCH_TRUSTSTORE_PASSWORD_FILE
-    value: {{ printf "/opt/bitnami/elasticsearch/secrets/%s" (include "elasticsearch.truststorePasswordKey" .) }}
+  value: {{ printf "/opt/bitnami/elasticsearch/secrets/%s" (include "elasticsearch.truststorePasswordKey" .) }}
 {{- else }}
 - name: ELASTICSEARCH_TRUSTSTORE_PASSWORD
   valueFrom:
@@ -519,7 +519,7 @@ Add environment variables to configure database values
 {{- if and .Values.security.tls.usePemCerts (or .Values.security.tls.keyPassword .Values.security.tls.passwordsSecret) }}
 {{- if .Values.usePasswordFiles }}
 - name: ELASTICSEARCH_KEY_PASSWORD_FILE
-    value: {{ printf "/opt/bitnami/elasticsearch/secrets/%s" (include "elasticsearch.keyPasswordKey" .) }}
+  value: {{ printf "/opt/bitnami/elasticsearch/secrets/%s" (include "elasticsearch.keyPasswordKey" .) }}
 {{- else }}
 - name: ELASTICSEARCH_KEY_PASSWORD
   valueFrom:

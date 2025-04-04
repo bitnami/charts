@@ -397,10 +397,10 @@ spec:
           projected:
             sources:
               - secret:
-                  name:  {{ include "elasticsearch.secretName" . }}
+                  name: {{ include "elasticsearch.secretName" . }}
               {{- if or .Values.security.tls.passwordsSecret .Values.security.tls.keystorePassword .Values.security.tls.truststorePassword .Values.security.tls.keyPassword }}
               - secret:
-                  name:  {{ include "elasticsearch.tlsPasswordsSecret" . }}
+                  name: {{ include "elasticsearch.tlsPasswordsSecret" . }}
               {{- end }}
         {{- end }}
         {{- if or .Values.config .Values.extraConfig }}
