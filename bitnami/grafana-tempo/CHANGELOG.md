@@ -1,8 +1,13 @@
 # Changelog
 
-## 4.0.1 (2025-03-25)
+## 4.0.2 (2025-04-01)
 
-* [bitnami/grafana-tempo] Release 4.0.1 ([#32608](https://github.com/bitnami/charts/pull/32608))
+* [bitnami/grafana-tempo] Release 4.0.2 ([#32738](https://github.com/bitnami/charts/pull/32738))
+
+## <small>4.0.1 (2025-03-25)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/grafana-tempo] Release 4.0.1 (#32608) ([5f46177](https://github.com/bitnami/charts/commit/5f4617731516a19148070f1fe4eaae4cf048876b)), closes [#32608](https://github.com/bitnami/charts/issues/32608)
 
 ## 4.0.0 (2025-03-10)
 

@@ -1,8 +1,12 @@
 # Changelog
 
-## 12.0.1 (2025-03-31)
+## 12.0.2 (2025-04-02)
 
-* [bitnami/milvus] Release 12.0.1 ([#32690](https://github.com/bitnami/charts/pull/32690))
+* [bitnami/milvus] Release 12.0.2 ([#32747](https://github.com/bitnami/charts/pull/32747))
+
+## <small>12.0.1 (2025-03-31)</small>
+
+* [bitnami/milvus] Release 12.0.1 (#32690) ([cae0234](https://github.com/bitnami/charts/commit/cae02342c38ff522d3d8d061c1074afd187b4c81)), closes [#32690](https://github.com/bitnami/charts/issues/32690)
 
 ## 12.0.0 (2025-03-27)
 
