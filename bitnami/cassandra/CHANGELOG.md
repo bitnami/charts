@@ -1,8 +1,13 @@
 # Changelog
 
-## 12.2.2 (2025-03-12)
+## 12.2.3 (2025-04-04)
 
-* [bitnami/cassandra] bugfix #32369 ([#32415](https://github.com/bitnami/charts/pull/32415))
+* [bitnami/cassandra] Release 12.2.3 ([#32813](https://github.com/bitnami/charts/pull/32813))
+
+## <small>12.2.2 (2025-03-20)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/cassandra] bugfix #32369 (#32415) ([74346fb](https://github.com/bitnami/charts/commit/74346fb2715f349727c5e0468b4066d55ddd2a02)), closes [#32369](https://github.com/bitnami/charts/issues/32369) [#32415](https://github.com/bitnami/charts/issues/32415) [#32369](https://github.com/bitnami/charts/issues/32369)
 
 ## <small>12.2.1 (2025-03-05)</small>
 
