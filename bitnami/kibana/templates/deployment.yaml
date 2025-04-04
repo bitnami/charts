@@ -350,19 +350,19 @@ spec:
             sources:
                 {{- if and .Values.tls.enabled (or .Values.tls.passwordsSecret (ternary .Values.tls.keyPassword .Values.tls.keystorePassword .Values.tls.usePemCerts)) }}
                 - secret:
-                  name: {{ include "kibana.tls.secretName" . }}
+                    name: {{ include "kibana.tls.secretName" . }}
                 {{- end }}
                 {{- if .Values.elasticsearch.security.auth.enabled }}
                 - secret:
-                  name: {{ include "kibana.elasticsearch.auth.secretName" . }}
+                    name: {{ include "kibana.elasticsearch.auth.secretName" . }}
                 {{- end }}
                 {{- if and .Values.elasticsearch.security.auth.enabled .Values.elasticsearch.security.auth.createSystemUser }}
                 - secret:
-                  name: {{ tpl .Values.elasticsearch.security.auth.elasticsearchPasswordSecret . }}
+                    name: {{ tpl .Values.elasticsearch.security.auth.elasticsearchPasswordSecret . }}
                 {{- end }}
                 {{- if and .Values.elasticsearch.security.tls.enabled (not .Values.elasticsearch.security.tls.usePemCerts) (or .Values.elasticsearch.security.tls.truststorePassword .Values.elasticsearch.security.tls.passwordsSecret) }}
                 - secret:
-                  name: {{ include "kibana.elasticsearch.tls.secretName" . }}
+                    name: {{ include "kibana.elasticsearch.tls.secretName" . }}
                 {{- end }}
         {{- end }}
         - name: kibana-data
