@@ -1,8 +1,13 @@
 # Changelog
 
-## 8.0.7 (2025-04-03)
+## 8.1.0 (2025-04-04)
 
-* [bitnami/sonarqube] Release 8.0.7 ([#32805](https://github.com/bitnami/charts/pull/32805))
+* [bitnami/sonarqube] Set `usePasswordFiles=true` by default ([#32769](https://github.com/bitnami/charts/pull/32769))
+
+## <small>8.0.7 (2025-04-03)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/sonarqube] Release 8.0.7 (#32805) ([70b4f28](https://github.com/bitnami/charts/commit/70b4f2859fc026cab0b083749f00c704d63534a2)), closes [#32805](https://github.com/bitnami/charts/issues/32805)
 
 ## <small>8.0.6 (2025-03-04)</small>
 
