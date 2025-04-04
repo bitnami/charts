@@ -1,8 +1,13 @@
 # Changelog
 
-## 9.5.6 (2025-03-28)
+## 9.5.7 (2025-04-02)
 
-* [bitnami/solr] Release 9.5.6 ([#32650](https://github.com/bitnami/charts/pull/32650))
+* [bitnami/solr] Release 9.5.7 ([#32784](https://github.com/bitnami/charts/pull/32784))
+
+## <small>9.5.6 (2025-03-28)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/solr] Release 9.5.6 (#32650) ([fc2728c](https://github.com/bitnami/charts/commit/fc2728cf08cbc7bb526b359e8188f3e9001f74f8)), closes [#32650](https://github.com/bitnami/charts/issues/32650)
 
 ## <small>9.5.5 (2025-03-12)</small>
 

@@ -1,8 +1,13 @@
 # Changelog
 
-## 24.4.13 (2025-03-13)
+## 24.4.14 (2025-04-01)
 
-* [bitnami/keycloak] Release 24.4.13 ([#32446](https://github.com/bitnami/charts/pull/32446))
+* [bitnami/keycloak] Release 24.4.14 ([#32707](https://github.com/bitnami/charts/pull/32707))
+
+## <small>24.4.13 (2025-03-13)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/keycloak] Release 24.4.13 (#32446) ([af8d013](https://github.com/bitnami/charts/commit/af8d01385b9fba2b809351b06bfa75d4a32ab178)), closes [#32446](https://github.com/bitnami/charts/issues/32446)
 
 ## <small>24.4.12 (2025-03-11)</small>
 
