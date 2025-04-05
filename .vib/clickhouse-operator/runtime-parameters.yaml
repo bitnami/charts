@@ -1,0 +1,26 @@
+# Adding an extra initial delay to avoid race conditions with the
+# deployment and Goss stages (so the operator has time to deploy
+# ClickHouse and ClickHouse Keeper instances)
+readinessProbe:
+  initialDelaySeconds: 30
+extraDeploy:
+# ref: https://github.com/Altinity/clickhouse-operator/tree/master/docs/chi-examples
+- |
+  apiVersion: clickhouse.altinity.com/v1
+  kind: ClickHouseInstallation
+  metadata:
+    name: test
+  spec:
+    defaults:
+      templates:
+        podTemplate: default-pod-template
+    configuration:
+      settings:
+        http_port: 8124
+        tcp_port: 9001
+        interserver_http_port: 9010
+      clusters:
+        - name: test
+          layout:
+            shardsCount: 1
+            replicasCount: 1
