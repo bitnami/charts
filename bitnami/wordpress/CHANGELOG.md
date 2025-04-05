@@ -1,8 +1,13 @@
 # Changelog
 
+## 24.2.1 (2025-04-05)
+
+* [bitnami/wordpress] Release 24.2.1 ([#32824](https://github.com/bitnami/charts/pull/32824))
+
 ## 24.2.0 (2025-04-04)
 
-* [bitnami/wordpress] Set `usePasswordFiles=true` by default ([#32770](https://github.com/bitnami/charts/pull/32770))
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/wordpress] Set `usePasswordFiles=true` by default (#32770) ([d31ec15](https://github.com/bitnami/charts/commit/d31ec15591a7ed93fdb9087a87a87ec436084ac4)), closes [#32770](https://github.com/bitnami/charts/issues/32770)
 
 ## <small>24.1.18 (2025-03-07)</small>
 
