@@ -173,6 +173,12 @@ spec:
             {{- if .Values.auth.enabled }}
             - name: MONGODB_INITIAL_PRIMARY_ROOT_USER
               value: {{ .Values.auth.rootUser | quote }}
+            {{- if .Values.usePasswordFiles }}
+            - name: MONGODB_INITIAL_PRIMARY_ROOT_PASSWORD_FILE
+              value: "/opt/bitnami/mongodb/secrets/mongodb-root-password"
+            - name: MONGODB_REPLICA_SET_KEY_FILE
+              value: "/opt/bitnami/mongodb/secrets/mongodb-replica-set-key"
+            {{- else }}
             - name: MONGODB_INITIAL_PRIMARY_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -183,6 +189,7 @@ spec:
                 secretKeyRef:
                   name: {{ include "mongodb.secretName" . }}
                   key: mongodb-replica-set-key
+            {{- end }}
             {{- end }}
             - name: ALLOW_EMPTY_PASSWORD
               value: {{ ternary "no" "yes" .Values.auth.enabled | quote }}
@@ -265,6 +272,10 @@ spec:
             - name: empty-dir
               mountPath: /bitnami/mongodb
               subPath: app-volume-dir
+            {{- if and .Values.usePasswordFiles .Values.auth.enabled }}
+            - name: mongodb-secrets
+              mountPath: /opt/bitnami/mongodb/secrets
+            {{- end }}
             {{- if or .Values.arbiter.configuration .Values.arbiter.existingConfigmap }}
             - name: config
               mountPath: /opt/bitnami/mongodb/conf/mongodb.conf
@@ -283,7 +294,12 @@ spec:
       volumes:
         - name: empty-dir
           emptyDir: {}
-      {{- if or .Values.arbiter.configuration .Values.arbiter.existingConfigmap .Values.arbiter.extraVolumes .Values.tls.enabled }}
+        {{- if and .Values.usePasswordFiles .Values.auth.enabled }}
+        - name: mongodb-secrets
+          secret:
+            secretName: {{ include "mongodb.secretName" . }}
+        {{- end }}
+        {{- if or .Values.arbiter.configuration .Values.arbiter.existingConfigmap .Values.arbiter.extraVolumes .Values.tls.enabled }}
         - name: common-scripts
           configMap:
             name: {{ printf "%s-common-scripts" (include "mongodb.fullname" .) }}

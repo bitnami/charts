@@ -1,8 +1,12 @@
 # Changelog
 
-## 16.4.12 (2025-04-02)
+## 16.5.0 (2025-04-03)
 
-* [bitnami/mongodb] Release 16.4.12 ([#32752](https://github.com/bitnami/charts/pull/32752))
+* [bitnami/mongodb] Set `usePasswordFiles=true` by default ([#32800](https://github.com/bitnami/charts/pull/32800))
+
+## <small>16.4.12 (2025-04-02)</small>
+
+* [bitnami/mongodb] Release 16.4.12 (#32752) ([a28adbd](https://github.com/bitnami/charts/commit/a28adbd7b634755e6320c2321e37f97be9578cca)), closes [#32752](https://github.com/bitnami/charts/issues/32752)
 
 ## <small>16.4.11 (2025-03-28)</small>
 
