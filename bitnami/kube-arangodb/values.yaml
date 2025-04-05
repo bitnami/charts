@@ -188,7 +188,7 @@ customStartupProbe: {}
 ## @param scope Define namespace scope: Allowed values: legacy, namespaced
 ##
 scope: legacy
-## @param allowChaos Allow chaows in deployments
+## @param allowChaos Allow chaos in deployments
 ##
 allowChaos: false
 ## @param enableAPI Enable operator API endpoints
