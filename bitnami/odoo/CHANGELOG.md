@@ -1,8 +1,12 @@
 # Changelog
 
+## 28.2.1 (2025-04-05)
+
+* [bitnami/odoo] Release 28.2.1 ([#32825](https://github.com/bitnami/charts/pull/32825))
+
 ## 28.2.0 (2025-04-04)
 
-* [bitnami/odoo] Set `usePasswordFiles=true` by default ([#32708](https://github.com/bitnami/charts/pull/32708))
+* [bitnami/odoo] Set `usePasswordFiles=true` by default (#32708) ([bd67257](https://github.com/bitnami/charts/commit/bd67257b171efc29461033046b19d6287fa98af9)), closes [#32708](https://github.com/bitnami/charts/issues/32708)
 
 ## <small>28.1.5 (2025-04-04)</small>
 
