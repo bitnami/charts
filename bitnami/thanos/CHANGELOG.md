@@ -1,8 +1,12 @@
 # Changelog
 
+## 16.0.1 (2025-04-04)
+
+* [bitnami/thanos] Fix default value for ruler.alertmanagersconfig ([#32812](https://github.com/bitnami/charts/pull/32812))
+
 ## 16.0.0 (2025-04-03)
 
-* [bitnami/thanos] Bump MinIO major version 16.x.x ([#32703](https://github.com/bitnami/charts/pull/32703))
+* [bitnami/thanos] Bump MinIO major version 16.x.x (#32703) ([ef3b5b1](https://github.com/bitnami/charts/commit/ef3b5b1e69200239d9efa4b31887baeb71bd6d17)), closes [#32703](https://github.com/bitnami/charts/issues/32703)
 
 ## <small>15.14.1 (2025-04-02)</small>
 
