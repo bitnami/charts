@@ -635,7 +635,7 @@ spec:
                   key: infoblox_wapi_password
             {{- end }}
             {{- end }}
-            {{- if .Values.rfc2136.tsigSecret | or (and .Values.rfc2136.kerberosUsername .Values.rfc2136.kerberosPassword) | or .Values.rfc2136.secretName }}
+            {{- if and ( eq .Values.provider "rfc2136" ) ( .Values.rfc2136.tsigSecret | or (and .Values.rfc2136.kerberosUsername .Values.rfc2136.kerberosPassword) | or .Values.rfc2136.secretName ) }}
             # RFC 2136 environment variables
             {{- if .Values.rfc2136.rfc3645Enabled }}
             - name: EXTERNAL_DNS_RFC2136_KERBEROS_USERNAME
