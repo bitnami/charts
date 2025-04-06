@@ -135,8 +135,8 @@ persistence:
   accessMode: ReadWriteOnce
   existingClaim: ""
   size: 10Gi
-```
-
+```  
+  
 ## Parameters
 
 ### Global parameters
