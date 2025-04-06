@@ -384,6 +384,15 @@ persistence:
 | `taskmanager.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                            | `""`             |
 | `taskmanager.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable.Defaults to `1` if both `secondary.pdb.minAvailable` and `secondary.pdb.maxUnavailable` are empty.                                                                         | `""`             |
 
+### Persistence parameters
+
+| Name                        | Description                                                                                               | Value           |
+| --------------------------- | --------------------------------------------------------------------------------------------------------- | --------------- |
+| `persistence.enabled`       | Enable persistence                                                                                        | `false`         |
+| `persistence.accessMode`    | Persistent Volume Access Mode                                                                             | `ReadWriteOnce` |
+| `persistence.existingClaim` | If you want to reuse an existing claim, you can pass the name of the PVC using the existingClaim variable | `""`            |
+| `persistence.size`          | Size for the PV                                                                                           | `10Gi`          |
+
 ## Upgrading
 
 ### To 1.4.0
