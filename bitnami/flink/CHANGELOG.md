@@ -1,8 +1,12 @@
 # Changelog
 
+## 2.0.1 (2025-04-06)
+
+* [bitnami/flink] Add support for PersistentVolume and PersistentVolumeClaim ([#32828](https://github.com/bitnami/charts/pull/32828))
+
 ## 2.0.0 (2025-03-28)
 
-* [bitnami/flink] Release 2.0.0 ([#32603](https://github.com/bitnami/charts/pull/32603))
+* [bitnami/flink] Release 2.0.0 (#32603) ([086de00](https://github.com/bitnami/charts/commit/086de005636344e119bd3ad636dc12f2333f38ef)), closes [#32603](https://github.com/bitnami/charts/issues/32603)
 
 ## <small>1.4.5 (2025-03-21)</small>
 
