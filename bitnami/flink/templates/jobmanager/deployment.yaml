@@ -175,6 +175,10 @@ spec:
             {{- if .Values.jobmanager.extraVolumeMounts }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.jobmanager.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
+            {{- if .Values.persistence.enabled }}
+            - name: data
+              mountPath: /data
+            {{- end }}
         {{- if .Values.jobmanager.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.jobmanager.sidecars "context" $) | nindent 8 }}
         {{- end }}
@@ -183,4 +187,15 @@ spec:
           emptyDir: {}
         {{- if .Values.jobmanager.extraVolumes }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.jobmanager.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.persistence.enabled }}
+        {{- if .Values.persistence.existingClaim }}
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ .Values.persistence.existingClaim }}
+        {{- else }}
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ include "flink.jobmanager.fullname" . }}-data
+        {{- end }}
         {{- end }}

@@ -883,3 +883,16 @@ taskmanager:
     create: true
     minAvailable: ""
     maxUnavailable: ""
+
+## @section Persistence parameters
+## Note: If global.defaultStorageClass is not empty and persistence.enabled is true, defaultStorageClass is used.
+## Note: If existingClaim is set, then global.defaultStorageClass is ignored.
+## @param persistence.enabled Enable persistence
+## @param persistence.accessMode Persistent Volume Access Mode
+## @param persistence.existingClaim If you want to reuse an existing claim, you can pass the name of the PVC using the existingClaim variable
+## @param persistence.size Size for the PV
+persistence:
+  enabled: false
+  accessMode: ReadWriteOnce
+  existingClaim: ""
+  size: 10Gi
