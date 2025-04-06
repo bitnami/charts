@@ -125,8 +125,17 @@ This chart allows you to set your custom affinity using the `affinity` parameter
 As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters inside each of the subsections: `jobmanager`, `taskmanager`.
 
 ## Persistence
+> Note: If global.defaultStorageClass is not empty and persistence.enabled is true, defaultStorageClass is used. If existingClaim is set, then global.defaultStorageClass is ignored.  
 
 The [Bitnami Flink](https://github.com/bitnami/containers/tree/main/bitnami/flink) image stores the trace onto an external database. Persistent Volume Claims are used to keep the data across deployments.
+
+```yaml
+persistence:
+  enabled: false
+  accessMode: ReadWriteOnce
+  existingClaim: ""
+  size: 10Gi
+```
 
 ## Parameters
 
