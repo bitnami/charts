@@ -1,8 +1,13 @@
 # Changelog
 
-## 6.6.2 (2025-04-01)
+## 6.6.3 (2025-04-07)
 
-* [bitnami/influxdb] Release 6.6.2 ([#32739](https://github.com/bitnami/charts/pull/32739))
+* [bitnami/influxdb] Fix typo in backup cronjob ([#32843](https://github.com/bitnami/charts/pull/32843))
+
+## <small>6.6.2 (2025-04-01)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/influxdb] Release 6.6.2 (#32739) ([7cbd52e](https://github.com/bitnami/charts/commit/7cbd52ec214f321e3cad390eaf0f7e2667a06309)), closes [#32739](https://github.com/bitnami/charts/issues/32739)
 
 ## <small>6.6.1 (2025-03-05)</small>
 
