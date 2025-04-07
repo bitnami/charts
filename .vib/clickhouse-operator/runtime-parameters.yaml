@@ -14,7 +14,7 @@ extraDeploy:
   spec:
     templates:
       podTemplates:
-        - name: clickhouse
+        - name: default-clickhouse
           distribution: Unspecified
           metadata:
             labels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 12 }}
@@ -39,8 +39,15 @@ extraDeploy:
                     containerPort: 9001
                   - name: interserver
                     containerPort: 9010
+                resources:
+                  requests:
+                    memory: "256M"
+                    cpu: "0.5"
+                  limits:
+                    memory: "1Gi"
+                    cpu: "1"
                 volumeMounts:
-                  - name: clickhouse-data
+                  - name: default-volume-claim
                     mountPath: /bitnami/clickhouse
                   - name: empty-dir
                     mountPath: /opt/bitnami/clickhouse/logs
@@ -55,7 +62,7 @@ extraDeploy:
               - name: empty-dir
                 emptyDir: {}
       volumeClaimTemplates:
-        - name: clickhouse-data
+        - name: default-volume-claim
           spec:
             accessModes:
             - ReadWriteOnce
@@ -71,8 +78,8 @@ extraDeploy:
     - name: default-chi-template
     defaults:
       templates:
-        podTemplate: clickhouse
-        dataVolumeClaimTemplate: clickhouse-data
+        podTemplate: default-clickhouse
+        dataVolumeClaimTemplate: default-volume-claim
     configuration:
       settings:
         http_port: 8124
@@ -80,12 +87,11 @@ extraDeploy:
         interserver_http_port: 9010
       zookeeper:
         nodes:
-          - host: clickhouse-keeper
+          - host: chk-vib-vib-0-0
             port: 2181
       clusters:
         - name: vib
           layout:
-            shardsCount: 1
             replicasCount: 1
 # ref: https://github.com/Altinity/clickhouse-operator/tree/master/docs/chk-examples
 - |
@@ -96,8 +102,8 @@ extraDeploy:
   spec:
     defaults:
       templates:
-        podTemplate: clickhouse-keeper
-        dataVolumeClaimTemplate: clickhouse-keeper-data
+        podTemplate: default-clickhouse-keeper
+        dataVolumeClaimTemplate: default-volume-claim
     configuration:
       clusters:
         - name: vib
@@ -105,7 +111,7 @@ extraDeploy:
             replicasCount: 1
     templates:
       podTemplates:
-        - name: clickhouse-keeper
+        - name: default-clickhouse-keeper
           distribution: Unspecified
           metadata:
             labels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 12 }}
@@ -118,18 +124,21 @@ extraDeploy:
                 imagePullPolicy: {{ .Values.keeperImage.pullPolicy | quote }}
                 workingDir: /bitnami/clickhouse-keeper
                 env:
-                  - name: CLICKHOUSE_KEEPER_SKIP_SETUP
-                    value: "yes"
-                ports:
-                  - name: zk
-                    containerPort: 2181
-                  - name: raft
-                    containerPort: 9444
-                livenessProbe:
-                  tcpSocket:
-                    port: zk
+                  - name: CLICKHOUSE_KEEPER_SERVER_ID
+                    value: "0"
+                  - name: CLICKHOUSE_KEEPER_TCP_PORT
+                    value: "2181"
+                  - name: CLICKHOUSE_KEEPER_RAFT_PORT
+                    value: "9444"
+                resources:
+                  requests:
+                    memory: "256M"
+                    cpu: "0.5"
+                  limits:
+                    memory: "1Gi"
+                    cpu: "1"
                 volumeMounts:
-                  - name: clickhouse-keeper-data
+                  - name: default-volume-claim
                     mountPath: /bitnami/clickhouse-keeper
                   - name: empty-dir
                     mountPath: /opt/bitnami/clickhouse-keeper/logs
@@ -144,29 +153,10 @@ extraDeploy:
               - name: empty-dir
                 emptyDir: {}
       volumeClaimTemplates:
-        - name: clickhouse-keeper-data
+        - name: default-volume-claim
           spec:
             accessModes:
             - ReadWriteOnce
             resources:
               requests:
                 storage: 8Gi
-- |
-  apiVersion: v1
-  kind: Service
-  metadata:
-    name: clickhouse-keeper
-    labels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
-      app.kubernetes.io/part-of: clickhouse-operator
-      app.kubernetes.io/component: clickhouse-keeper
-  spec:
-    ports:
-      - port: 2181
-        name: zk
-        targetPort: 2181
-      - port: 9444
-        name: raft
-        targetPort: 9444
-    selector:
-      app.kubernetes.io/part-of: clickhouse-operator
-      app.kubernetes.io/component: clickhouse-keeper
