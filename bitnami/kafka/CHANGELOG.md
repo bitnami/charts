@@ -1,6 +1,6 @@
 # Changelog
 
-## 32.2.0 (2025-04-03)
+## 32.2.0 (2025-04-07)
 
 * [bitnami/kafka] add topologyKey value ([#32792](https://github.com/bitnami/charts/pull/32792))
 
