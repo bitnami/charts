@@ -1,6 +1,6 @@
 # Changelog
 
-## 16.0.1 (2025-04-04)
+## 16.0.1 (2025-04-07)
 
 * [bitnami/thanos] Fix default value for ruler.alertmanagersconfig ([#32812](https://github.com/bitnami/charts/pull/32812))
 
