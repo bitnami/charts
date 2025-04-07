@@ -1,6 +1,6 @@
 # Changelog
 
-## 16.5.0 (2025-04-03)
+## 16.5.0 (2025-04-07)
 
 * [bitnami/mongodb] Set `usePasswordFiles=true` by default ([#32800](https://github.com/bitnami/charts/pull/32800))
 
