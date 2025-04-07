@@ -1,6 +1,6 @@
 # Changelog
 
-## 15.1.8 (2025-04-03)
+## 15.1.8 (2025-04-07)
 
 * [bitnami/discourse] Support envFrom in `install-plugins` ([#32790](https://github.com/bitnami/charts/pull/32790))
 
