@@ -1,6 +1,6 @@
 # Changelog
 
-## 9.3.1 (2025-04-02)
+## 9.3.1 (2025-04-07)
 
 * [bitnami/matomo] Add missing `app.kubernetes.io/component` label to deployment and pdb ([#32774](https://github.com/bitnami/charts/pull/32774))
 
