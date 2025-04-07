@@ -122,6 +122,9 @@ spec:
               if [[ "$pod_index" == "0" ]]; then
                 export REDIS_CLUSTER_CREATOR="yes"
                 export REDIS_CLUSTER_REPLICAS="{{ .Values.cluster.replicas }}"
+                {{- if .Values.usePassword }}
+                export REDISCLI_AUTH={{ ternary "`cat $REDIS_PASSWORD_FILE`" "$REDIS_PASSWORD" .Values.usePasswordFiles }}
+                {{- end }}
               fi
               {{- end }}
               /opt/bitnami/scripts/redis-cluster/entrypoint.sh /opt/bitnami/scripts/redis-cluster/run.sh
@@ -139,6 +142,9 @@ spec:
               if [[ "$pod_index" == "0" ]]; then
                 export REDIS_CLUSTER_CREATOR="yes"
                 export REDIS_CLUSTER_REPLICAS="{{ .Values.cluster.replicas }}"
+                {{- if .Values.usePassword }}
+                export REDISCLI_AUTH={{ ternary "`cat $REDIS_PASSWORD_FILE`" "$REDIS_PASSWORD" .Values.usePasswordFiles }}
+                {{- end }}
               fi
               {{- end }}
               /opt/bitnami/scripts/redis-cluster/entrypoint.sh /opt/bitnami/scripts/redis-cluster/run.sh
