@@ -1,6 +1,6 @@
 # Changelog
 
-## 11.5.0 (2025-04-04)
+## 11.5.0 (2025-04-07)
 
 * [bitnami/redis-cluster] Set `usePasswordFiles=true` by default ([#32118](https://github.com/bitnami/charts/pull/32118))
 
