@@ -2,7 +2,7 @@
 
 ## 21.5.1 (2025-04-07)
 
-* fix coordinating security.enabled ([#32840](https://github.com/bitnami/charts/pull/32840))
+* [bitnami/elasticsearch] fix coordinating security.enabled ([#32840](https://github.com/bitnami/charts/pull/32840))
 
 ## 21.5.0 (2025-04-04)
 
