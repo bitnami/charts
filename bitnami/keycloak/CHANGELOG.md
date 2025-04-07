@@ -1,8 +1,12 @@
 # Changelog
 
+## 24.5.1 (2025-04-07)
+
+* [bitnami/keycloak] The secret name of the externaldb is inherited by the .Release.Name and not by the (include "common.names.fullname" .) function. ([#32823](https://github.com/bitnami/charts/pull/32823))
+
 ## 24.5.0 (2025-04-04)
 
-* [bitnami/keycloak] Set `usePasswordFiles=true` by default ([#32594](https://github.com/bitnami/charts/pull/32594))
+* [bitnami/keycloak] Set `usePasswordFiles=true` by default (#32594) ([6206296](https://github.com/bitnami/charts/commit/620629645b6354dc79fd49c5e33e794ab569d024)), closes [#32594](https://github.com/bitnami/charts/issues/32594)
 
 ## <small>24.4.14 (2025-04-01)</small>
 

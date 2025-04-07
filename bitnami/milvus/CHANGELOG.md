@@ -1,8 +1,12 @@
 # Changelog
 
+## 13.1.0 (2025-04-04)
+
+* [bitnami/milvus] Set `usePasswordFiles=true` by default ([#32642](https://github.com/bitnami/charts/pull/32642))
+
 ## 13.0.0 (2025-04-04)
 
-* [bitnami/milvus] Bump MinIO major version 16.x.x ([#32701](https://github.com/bitnami/charts/pull/32701))
+* [bitnami/milvus] Bump MinIO major version 16.x.x (#32701) ([a6fc148](https://github.com/bitnami/charts/commit/a6fc148e3681569d589034aff435f1aadaf8d00e)), closes [#32701](https://github.com/bitnami/charts/issues/32701)
 
 ## <small>12.0.2 (2025-04-02)</small>
 

@@ -1,8 +1,21 @@
 # Changelog
 
-## 15.1.7 (2025-03-28)
+## 15.1.10 (2025-04-07)
 
-* [bitnami/discourse] Release 15.1.7 ([#32672](https://github.com/bitnami/charts/pull/32672))
+* [bitnami/discourse] Release 15.1.10 ([#32847](https://github.com/bitnami/charts/pull/32847))
+
+## <small>15.1.9 (2025-04-07)</small>
+
+* [bitnami/discourse] Release 15.1.9 (#32844) ([602149a](https://github.com/bitnami/charts/commit/602149a7195940d078e560ce95224d5def8d2c2a)), closes [#32844](https://github.com/bitnami/charts/issues/32844)
+
+## <small>15.1.8 (2025-04-07)</small>
+
+* [bitnami/discourse] Support envFrom in `install-plugins` (#32790) ([7345c0b](https://github.com/bitnami/charts/commit/7345c0bb2842b73f299aacd2af37147bd7b714cd)), closes [#32790](https://github.com/bitnami/charts/issues/32790)
+
+## <small>15.1.7 (2025-03-28)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/discourse] Release 15.1.7 (#32672) ([57d6e90](https://github.com/bitnami/charts/commit/57d6e9026b8539d3c993fee402acd47234c4e182)), closes [#32672](https://github.com/bitnami/charts/issues/32672)
 
 ## <small>15.1.6 (2025-02-26)</small>
 
