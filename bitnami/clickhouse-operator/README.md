@@ -47,13 +47,15 @@ The command deploys ClickHouse Operator on the Kubernetes cluster in the default
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
+### Configure the operator
 
-It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+The ClickHouse Operator chart is designed to be easily configurable. The default configuration is suitable for most use cases, but you can customize it to suit your needs.
 
-Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+The `configuration` parameter allows you to specify the content of the ClickHouse Operator configuration. By default, it is auto-generated based on other values. You can also use the `overrideConfiguration` parameter to override specific values in the configuration. You can also use the `chiTemplate` and `chkTemplate` parameters to specify the templates for ClickHouse installations and ClickHouse Keeper installation, respectively.
 
-### %%OTHER_SECTIONS%%
+As an alternative, existing ConfigMaps containing the configuration can be used. To do so, the chart exposes parameter such as `existingConfigmap`, `existingChiTemplatesConfigmap` or `existingChkTemplatesConfigmap`.
+
+Please refer to the [official documentation](https://github.com/Altinity/clickhouse-operator/blob/master/docs/operator_configuration.md) to learn more about the configuration options available for ClickHouse Operator.
 
 ### Additional environment variables
 
@@ -65,11 +67,23 @@ extraEnvVars:
     value: error
 ```
 
+### Resource requests and limits
+
+Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
+
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcesPreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+
 Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` values.
+
+### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
 ### Sidecars
 
-If additional containers are needed in the same pod as ClickHouse Operator (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter.
+If additional containers are needed in the same pod as ClickHouse Operator (such as additional logging exporters), they can be defined using the `sidecars` parameter.
 
 ```yaml
 sidecars:
@@ -115,7 +129,7 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 
 ### Prometheus metrics
 
-This chart can be integrated with Prometheus by setting `metrics.enabled` to `true`. %% EXPLAIN INTEGRATION. CHECK OTHER EXAMPLES %%. It will have the necessary annotations to be automatically scraped by Prometheus.
+This chart can be integrated with Prometheus by setting `metrics.enabled` to `true`. This will deploy a sidecar container with [ClickHouse Operator Metrics exporter](https://github.com/bitnami/containers/tree/main/bitnami/clickhouse-operator-metrics-exporter) in all pods and a K8s service, which can be configured under the `service` section. This service will have the necessary annotations to be automatically scraped by Prometheus.
 
 #### Prometheus requirements
 
@@ -130,6 +144,34 @@ no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"
 ```
 
 Install the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) for having the necessary CRDs and the Prometheus Operator.
+
+### Deploying extra resources
+
+Apart from the Operator, you may want to deploy ClickHouse Installation or ClickHouse Keeper Installation objects. For covering this case, the chart allows adding the full specification of other objects using the `extraDeploy` parameter. The following example creates a ClickHouse Installation using the `default-pod-template` pod template:
+
+```yaml
+extraDeploy:
+- apiVersion: clickhouse.altinity.com/v1
+  kind: ClickHouseInstallation
+  metadata:
+    name: test
+  spec:
+    defaults:
+      templates:
+        podTemplate: default-pod-template
+    configuration:
+      settings:
+        http_port: 8124
+        tcp_port: 9001
+        interserver_http_port: 9010
+      clusters:
+        - name: test
+          layout:
+            shardsCount: 1
+            replicasCount: 1
+```
+
+Check the [official quickstart guide](https://github.com/Altinity/clickhouse-operator/blob/master/docs/quick_start.md) for more examples of how to deploy ClickHouse Installations.
 
 ## Parameters
 
