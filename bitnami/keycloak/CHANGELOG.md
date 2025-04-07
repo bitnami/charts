@@ -1,6 +1,6 @@
 # Changelog
 
-## 24.5.1 (2025-04-05)
+## 24.5.1 (2025-04-07)
 
 * [bitnami/keycloak] The secret name of the externaldb is inherited by the .Release.Name and not by the (include "common.names.fullname" .) function. ([#32823](https://github.com/bitnami/charts/pull/32823))
 
