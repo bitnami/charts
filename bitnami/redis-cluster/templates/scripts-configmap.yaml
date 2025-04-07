@@ -20,7 +20,7 @@ data:
     REDIS_STATUS_FILE=/tmp/.redis_cluster_check
 
     {{- if .Values.usePassword }}
-    export REDISCLI_AUTH={{ ternary "$(< $REDIS_PASSWORD_FILE)" "$REDIS_PASSWORD" .Values.usePasswordFiles }}
+    export REDISCLI_AUTH={{ ternary "`cat $REDIS_PASSWORD_FILE`" "$REDIS_PASSWORD" .Values.usePasswordFiles }}
     {{- end }}
     response=$(
       timeout -s 15 $1 \
@@ -79,7 +79,7 @@ data:
     set -e
 
     {{- if .Values.usePassword }}
-    export REDISCLI_AUTH={{ ternary "$(< $REDIS_PASSWORD_FILE)" "$REDIS_PASSWORD" .Values.usePasswordFiles }}
+    export REDISCLI_AUTH={{ ternary "`cat $REDIS_PASSWORD_FILE`" "$REDIS_PASSWORD" .Values.usePasswordFiles }}
     {{- end }}
     response=$(
       timeout -s 15 $1 \

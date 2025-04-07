@@ -81,7 +81,7 @@ spec:
               . /opt/bitnami/scripts/libos.sh
 
               {{- if .Values.usePassword }}
-              export REDISCLI_AUTH={{ ternary "$(< $REDIS_PASSWORD_FILE)" "$REDIS_PASSWORD" .Values.usePasswordFiles }}
+              export REDISCLI_AUTH={{ ternary "`cat $REDIS_PASSWORD_FILE`" "$REDIS_PASSWORD" .Values.usePasswordFiles }}
               {{- end }}
               # Backwards compatibility change
               if ! [[ -f /opt/bitnami/redis/etc/redis.conf ]]; then
