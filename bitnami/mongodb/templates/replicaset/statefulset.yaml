@@ -422,7 +422,7 @@ spec:
               {{- if .Values.metrics.username }}
               export MONGODB_METRICS_PASSWORD="$(< $MONGODB_METRICS_PASSWORD_FILE)"
               {{- else }}
-              export MONGODB_ROOT_USER="$(< $MONGODB_ROOT_USER_FILE)"
+              export MONGODB_ROOT_PASSWORD="$(< $MONGODB_ROOT_PASSWORD_FILE)"
               {{- end }}
               {{- end }}
               /bin/mongodb_exporter {{ include "mongodb.exporterArgs" $ }} --mongodb.direct-connect --mongodb.global-conn-pool --web.listen-address ":{{ .Values.metrics.containerPort }}" --mongodb.uri "{{ include "mongodb.mongodb_exporter.uri" . }}" {{ .Values.metrics.extraFlags }}
