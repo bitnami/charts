@@ -82,6 +82,28 @@ Return the ClickHouse Installation templates configmap
 {{- end -}}
 
 {{/*
+Return the ClickHouse Installation configd configmap
+*/}}
+{{- define "clickhouse-operator.chiConfigd.configmap.name" -}}
+{{- if .Values.existingChiConfigdConfigmap -}}
+    {{- print (tpl .Values.existingChiConfigdConfigmap $) -}}
+{{- else -}}
+    {{- printf "%s-chi-configd" (include "common.names.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the ClickHouse Installation usersd configmap
+*/}}
+{{- define "clickhouse-operator.chiUsersd.configmap.name" -}}
+{{- if .Values.existingChiUsersdConfigmap -}}
+    {{- print (tpl .Values.existingChiUsersdConfigmap $) -}}
+{{- else -}}
+    {{- printf "%s-chi-usersd" (include "common.names.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the ClickHouse Keeper Installation templates configmap
 */}}
 {{- define "clickhouse-operator.chkTemplates.configmap.name" -}}
@@ -89,6 +111,28 @@ Return the ClickHouse Keeper Installation templates configmap
     {{- print (tpl .Values.existingChkTemplatesConfigmap $) -}}
 {{- else -}}
     {{- printf "%s-chk-templates" (include "common.names.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the ClickHouse Keeper Installation configd configmap
+*/}}
+{{- define "clickhouse-operator.chkConfigd.configmap.name" -}}
+{{- if .Values.existingChkConfigdConfigmap -}}
+    {{- print (tpl .Values.existingChkConfigdConfigmap $) -}}
+{{- else -}}
+    {{- printf "%s-chk-configd" (include "common.names.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the ClickHouse Keeper Installation usersd configmap
+*/}}
+{{- define "clickhouse-operator.chkUsersd.configmap.name" -}}
+{{- if .Values.existingChkUsersdConfigmap -}}
+    {{- print (tpl .Values.existingChkUsersdConfigmap $) -}}
+{{- else -}}
+    {{- printf "%s-chk-usersd" (include "common.names.fullname" .) -}}
 {{- end -}}
 {{- end -}}
 

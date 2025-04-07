@@ -23,19 +23,51 @@ data:
     apiVersion: clickhouse.altinity.com/v1
     kind: ClickHouseInstallationTemplate
     metadata:
-      name: default-pod-template
+      name: default-chi-template
+      namespace: {{ include "common.names.namespace" . | quote }}
     spec:
       templates:
         podTemplates:
           - name: clickhouse
             distribution: Unspecified
+            metadata:
+              labels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 16 }}
+                app.kubernetes.io/part-of: clickhouse-operator
+                app.kubernetes.io/component: clickhouse
             spec:
               containers:
-                image: {{ template "clickhouse-operator.clickhouse.image" . }}
-                imagePullPolicy: {{ .Values.clickHouseImage.pullPolicy | quote }}
-                volumeMounts:
-                  - name: clickhouse-data
-                    mountPath: /bitnami/clickhouse
+                - name: clickhouse
+                  image: {{ template "clickhouse-operator.clickhouse.image" . }}
+                  imagePullPolicy: {{ .Values.clickHouseImage.pullPolicy | quote }}
+                  env:
+                    - name: CLICKHOUSE_HTTP_PORT
+                      value: "8124"
+                    - name: CLICKHOUSE_TCP_PORT
+                      value: "9001"
+                    - name: CLICKHOUSE_INTERSERVER_HTTP_PORT
+                      value: "9010"
+                  ports:
+                    - name: http
+                      containerPort: 8124
+                    - name: tcp
+                      containerPort: 9001
+                    - name: interserver
+                      containerPort: 9010
+                  volumeMounts:
+                    - name: clickhouse-data
+                      mountPath: /bitnami/clickhouse
+                    - name: empty-dir
+                      mountPath: /opt/bitnami/clickhouse/logs
+                      subPath: app-logs-dir
+                    - name: empty-dir
+                      mountPath: /opt/bitnami/clickhouse/tmp
+                      subPath: app-tmp-dir
+                    - name: empty-dir
+                      mountPath: /tmp
+                      subPath: tmp-dir
+              volumes:
+                - name: empty-dir
+                  emptyDir: {}
         volumeClaimTemplates:
           - name: clickhouse-data
             spec:

@@ -1,0 +1,43 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if not .Values.existingChiConfigdConfigmap }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ printf "%s-chi-configd" (include "common.names.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: clickhouse-operator
+    app.kubernetes.io/component: operator
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+data:
+  {{- if .Values.chiConfigd }}
+  {{- range $key, $value := .Values.chiConfigd }}
+  {{ $key }}: |
+    {{- include "common.tplvalues.render" (dict "value" $value "context" $) | nindent 4 }}
+  {{- end }}
+  {{- else }}
+  01-clickhouse-01-listen.xml: |
+    <yandex>
+        <listen_host>::</listen_host>
+        <listen_host>0.0.0.0</listen_host>
+        <listen_try>1</listen_try>
+    </yandex>
+  01-clickhouse-02-logger.xml: |
+    <yandex>
+        <logger>
+            <level>debug</level>
+            <log>/opt/bitnami/clickhouse/logs/clickhouse-server.log</log>
+            <errorlog>/opt/bitnami/clickhouse/logs/clickhouse-server.err.log</errorlog>
+            <size>1000M</size>
+            <count>10</count>
+            <console>1</console>
+        </logger>
+    </yandex>
+  {{- end }}
+{{- end }}

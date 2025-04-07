@@ -112,7 +112,7 @@ image:
 clickHouseImage:
   registry: docker.io
   repository: bitnami/clickhouse
-  tag: 25.3.2-debian-12-r0
+  tag: 25.3.2-debian-12-r2
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -141,7 +141,7 @@ clickHouseImage:
 keeperImage:
   registry: docker.io
   repository: bitnami/clickhouse-keeper
-  tag: 25.3.2-debian-12-r0
+  tag: 25.3.2-debian-12-r3
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -303,27 +303,39 @@ overrideConfiguration: {}
 ## @param existingConfigmap The name of an existing ConfigMap with your custom configuration for ClickHouse Operator
 ##
 existingConfigmap: ""
-## @param chiTemplate ClickHouse Installation default template (basic ones auto-generated based on other values otherwise)
+## @param chiTemplate ClickHouse Installation default template (basic one auto-generated based on other values otherwise)
 ##
 chiTemplate: {}
 ## @param existingChiTemplatesConfigmap The name of an existing ConfigMap with your custom ClickHouse Installation templates
 ##
 existingChiTemplatesConfigmap: ""
+## @param chiConfigd Configuration files for ClickHouse (basic ones auto-generated based on other values otherwise)
+##
+chiConfigd: []
 ## @param existingChiConfigdConfigmap The name of an existing ConfigMap with your custom configuration files for ClickHouse
 ##
 existingChiConfigdConfigmap: ""
+## @param chiUsersd Users configuration files for ClickHouse (basic ones auto-generated based on other values otherwise)
+##
+chiUsersd: []
 ## @param existingChiUsersdConfigmap The name of an existing ConfigMap with your custom users configuration files for ClickHouse
 ##
 existingChiUsersdConfigmap: ""
-## @param chkTemplate ClickHouse Keeper Installation default template (basic ones auto-generated based on other values otherwise)
+## @param chkTemplate ClickHouse Keeper Installation default template (basic one auto-generated based on other values otherwise)
 ##
 chkTemplate: {}
 ## @param existingChkTemplatesConfigmap The name of an existing ConfigMap with your custom ClickHouse Keeper Installation templates
 ##
 existingChkTemplatesConfigmap: ""
+## @param chkConfigd Configuration files for ClickHouse Keeper (basic ones auto-generated based on other values otherwise)
+##
+chkConfigd: []
 ## @param existingChkConfigdConfigmap The name of an existing ConfigMap with your custom configuration files for ClickHouse Keeper
 ##
 existingChkConfigdConfigmap: ""
+## @param chkUsersd Users configuration files for ClickHouse Keeper (basic ones auto-generated based on other values otherwise)
+##
+chkUsersd: []
 ## @param existingChkUsersdConfigmap The name of an existing ConfigMap with your custom users configuration files for ClickHouse Keeper
 ##
 existingChkUsersdConfigmap: ""

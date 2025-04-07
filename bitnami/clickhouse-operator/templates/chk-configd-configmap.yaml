@@ -1,0 +1,67 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if not .Values.existingChkConfigdConfigmap }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ printf "%s-chk-configd" (include "common.names.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: clickhouse-operator
+    app.kubernetes.io/component: operator
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+data:
+  {{- if .Values.chkConfigd }}
+  {{- range $key, $value := .Values.chkConfigd }}
+  {{ $key }}: |
+    {{- include "common.tplvalues.render" (dict "value" $value "context" $) | nindent 4 }}
+  {{- end }}
+  {{- else }}
+  01-keeper-01-default-config.xml: |
+    <clickhouse>
+        <keeper_server>
+            <coordination_settings>
+                <min_session_timeout_ms>10000</min_session_timeout_ms>
+                <operation_timeout_ms>10000</operation_timeout_ms>
+                <raft_logs_level>information</raft_logs_level>
+                <session_timeout_ms>100000</session_timeout_ms>
+            </coordination_settings>
+            <hostname_checks_enabled>true</hostname_checks_enabled>
+            <log_storage_path>/bitnami/clickhouse-keeper/coordination/logs</log_storage_path>
+            <snapshot_storage_path>/bitnami/clickhouse-keeper/coordination/snapshots</snapshot_storage_path>
+            <storage_path>/bitnami/clickhouse-keeper</storage_path>
+            <tcp_port>2181</tcp_port>
+        </keeper_server>
+        <listen_host>::</listen_host>
+        <listen_host>0.0.0.0</listen_host>
+        <listen_try>1</listen_try>
+        <logger>
+            <console>1</console>
+            <level>information</level>
+        </logger>
+        <max_connections>4096</max_connections>
+    </clickhouse>
+  01-keeper-02-readiness.xml: |
+    <clickhouse>
+        <keeper_server>
+            <http_control>
+                <port>9182</port>
+                <readiness>
+                    <endpoint>/ready</endpoint>
+                </readiness>
+            </http_control>
+        </keeper_server>
+    </clickhouse>
+  01-keeper-03-enable-reconfig.xml: |-
+    <clickhouse>
+        <keeper_server>
+            <enable_reconfiguration>false</enable_reconfiguration>
+        </keeper_server>
+    </clickhouse>
+  {{- end }}
+{{- end }}

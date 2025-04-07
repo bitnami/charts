@@ -7,20 +7,166 @@ extraDeploy:
 # ref: https://github.com/Altinity/clickhouse-operator/tree/master/docs/chi-examples
 - |
   apiVersion: clickhouse.altinity.com/v1
+  kind: ClickHouseInstallationTemplate
+  metadata:
+    name: default-chi-template
+    namespace: {{ include "common.names.namespace" . | quote }}
+  spec:
+    templates:
+      podTemplates:
+        - name: clickhouse
+          distribution: Unspecified
+          metadata:
+            labels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 12 }}
+              app.kubernetes.io/part-of: clickhouse-operator
+              app.kubernetes.io/component: clickhouse
+          spec:
+            containers:
+              - name: clickhouse
+                image: {{ template "clickhouse-operator.clickhouse.image" . }}
+                imagePullPolicy: {{ .Values.clickHouseImage.pullPolicy | quote }}
+                env:
+                  - name: CLICKHOUSE_HTTP_PORT
+                    value: "8124"
+                  - name: CLICKHOUSE_TCP_PORT
+                    value: "9001"
+                  - name: CLICKHOUSE_INTERSERVER_HTTP_PORT
+                    value: "9010"
+                ports:
+                  - name: http
+                    containerPort: 8124
+                  - name: tcp
+                    containerPort: 9001
+                  - name: interserver
+                    containerPort: 9010
+                volumeMounts:
+                  - name: clickhouse-data
+                    mountPath: /bitnami/clickhouse
+                  - name: empty-dir
+                    mountPath: /opt/bitnami/clickhouse/logs
+                    subPath: app-logs-dir
+                  - name: empty-dir
+                    mountPath: /opt/bitnami/clickhouse/tmp
+                    subPath: app-tmp-dir
+                  - name: empty-dir
+                    mountPath: /tmp
+                    subPath: tmp-dir
+            volumes:
+              - name: empty-dir
+                emptyDir: {}
+      volumeClaimTemplates:
+        - name: clickhouse-data
+          spec:
+            accessModes:
+            - ReadWriteOnce
+            resources:
+              requests:
+                storage: 8Gi
+- apiVersion: clickhouse.altinity.com/v1
   kind: ClickHouseInstallation
   metadata:
-    name: test
+    name: vib
   spec:
+    useTemplates:
+    - name: default-chi-template
     defaults:
       templates:
-        podTemplate: default-pod-template
+        podTemplate: clickhouse
+        dataVolumeClaimTemplate: clickhouse-data
     configuration:
       settings:
         http_port: 8124
         tcp_port: 9001
         interserver_http_port: 9010
+      zookeeper:
+        nodes:
+          - host: clickhouse-keeper
+            port: 2181
       clusters:
-        - name: test
+        - name: vib
           layout:
             shardsCount: 1
             replicasCount: 1
+# ref: https://github.com/Altinity/clickhouse-operator/tree/master/docs/chk-examples
+- |
+  apiVersion: clickhouse-keeper.altinity.com/v1
+  kind: ClickHouseKeeperInstallation
+  metadata:
+    name: vib
+  spec:
+    defaults:
+      templates:
+        podTemplate: clickhouse-keeper
+        dataVolumeClaimTemplate: clickhouse-keeper-data
+    configuration:
+      clusters:
+        - name: vib
+          layout:
+            replicasCount: 1
+    templates:
+      podTemplates:
+        - name: clickhouse-keeper
+          distribution: Unspecified
+          metadata:
+            labels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 12 }}
+              app.kubernetes.io/part-of: clickhouse-operator
+              app.kubernetes.io/component: clickhouse-keeper
+          spec:
+            containers:
+              - name: clickhouse-keeper
+                image: {{ template "clickhouse-operator.keeper.image" . }}
+                imagePullPolicy: {{ .Values.keeperImage.pullPolicy | quote }}
+                workingDir: /bitnami/clickhouse-keeper
+                env:
+                  - name: CLICKHOUSE_KEEPER_SKIP_SETUP
+                    value: "yes"
+                ports:
+                  - name: zk
+                    containerPort: 2181
+                  - name: raft
+                    containerPort: 9444
+                livenessProbe:
+                  tcpSocket:
+                    port: zk
+                volumeMounts:
+                  - name: clickhouse-keeper-data
+                    mountPath: /bitnami/clickhouse-keeper
+                  - name: empty-dir
+                    mountPath: /opt/bitnami/clickhouse-keeper/logs
+                    subPath: app-logs-dir
+                  - name: empty-dir
+                    mountPath: /opt/bitnami/clickhouse-keeper/tmp
+                    subPath: app-tmp-dir
+                  - name: empty-dir
+                    mountPath: /tmp
+                    subPath: tmp-dir
+            volumes:
+              - name: empty-dir
+                emptyDir: {}
+      volumeClaimTemplates:
+        - name: clickhouse-keeper-data
+          spec:
+            accessModes:
+            - ReadWriteOnce
+            resources:
+              requests:
+                storage: 8Gi
+- |
+  apiVersion: v1
+  kind: Service
+  metadata:
+    name: clickhouse-keeper
+    labels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+      app.kubernetes.io/part-of: clickhouse-operator
+      app.kubernetes.io/component: clickhouse-keeper
+  spec:
+    ports:
+      - port: 2181
+        name: zk
+        targetPort: 2181
+      - port: 9444
+        name: raft
+        targetPort: 9444
+    selector:
+      app.kubernetes.io/part-of: clickhouse-operator
+      app.kubernetes.io/component: clickhouse-keeper

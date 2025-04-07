@@ -49,7 +49,7 @@
             "vars_file": "clickhouse-operator/runtime-parameters.yaml",
             "remote": {
               "pod": {
-                "workload": "TODO"
+                "workload": "sts-chi-vib-vib-0-0"
               }
             }
           }

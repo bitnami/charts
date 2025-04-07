@@ -159,6 +159,7 @@ extraDeploy:
     defaults:
       templates:
         podTemplate: default-pod-template
+        dataVolumeClaimTemplate: clickhouse-data
     configuration:
       settings:
         http_port: 8124
@@ -169,9 +170,54 @@ extraDeploy:
           layout:
             shardsCount: 1
             replicasCount: 1
+    templates:
+      podTemplates:
+        - name: clickhouse
+          distribution: Unspecified
+          spec:
+            containers:
+              - name: clickhouse
+                image: docker.io/bitnami/clickhouse
+                env:
+                  - name: CLICKHOUSE_HTTP_PORT
+                    value: "8124"
+                  - name: CLICKHOUSE_TCP_PORT
+                    value: "9001"
+                  - name: CLICKHOUSE_INTERSERVER_HTTP_PORT
+                    value: "9010"
+                ports:
+                  - name: http
+                    containerPort: 8124
+                  - name: tcp
+                    containerPort: 9001
+                  - name: interserver
+                    containerPort: 9010
+                volumeMounts:
+                  - name: clickhouse-data
+                    mountPath: /bitnami/clickhouse
+                  - name: empty-dir
+                    mountPath: /opt/bitnami/clickhouse/logs
+                    subPath: app-logs-dir
+                  - name: empty-dir
+                    mountPath: /opt/bitnami/clickhouse/tmp
+                    subPath: app-tmp-dir
+                  - name: empty-dir
+                    mountPath: /tmp
+                    subPath: tmp-dir
+            volumes:
+              - name: empty-dir
+                emptyDir: {}
+      volumeClaimTemplates:
+        - name: clickhouse-data
+          spec:
+            accessModes:
+            - ReadWriteOnce
+            resources:
+              requests:
+                storage: 8Gi
 ```
 
-Check the [official quickstart guide](https://github.com/Altinity/clickhouse-operator/blob/master/docs/quick_start.md) for more examples of how to deploy ClickHouse Installations.
+Check the [official quickstart guide](https://docs.altinity.com/altinitykubernetesoperator/kubernetesquickstartguide/quickcluster/) for more examples of how to deploy ClickHouse Installations.
 
 ## Parameters
 
@@ -271,13 +317,17 @@ Check the [official quickstart guide](https://github.com/Altinity/clickhouse-ope
 | `configuration`                                     | Specify content for ClickHouse Operator configuration (basic one auto-generated based on other values otherwise)                                                                                                               | `{}`                                  |
 | `overrideConfiguration`                             | ClickHouse Operator configuration override. Values defined here takes precedence over the ones defined at `configuration`                                                                                                      | `{}`                                  |
 | `existingConfigmap`                                 | The name of an existing ConfigMap with your custom configuration for ClickHouse Operator                                                                                                                                       | `""`                                  |
-| `chiTemplate`                                       | ClickHouse Installation default template (basic ones auto-generated based on other values otherwise)                                                                                                                           | `{}`                                  |
+| `chiTemplate`                                       | ClickHouse Installation default template (basic one auto-generated based on other values otherwise)                                                                                                                            | `{}`                                  |
 | `existingChiTemplatesConfigmap`                     | The name of an existing ConfigMap with your custom ClickHouse Installation templates                                                                                                                                           | `""`                                  |
+| `chiConfigd`                                        | Configuration files for ClickHouse (basic ones auto-generated based on other values otherwise)                                                                                                                                 | `[]`                                  |
 | `existingChiConfigdConfigmap`                       | The name of an existing ConfigMap with your custom configuration files for ClickHouse                                                                                                                                          | `""`                                  |
+| `chiUsersd`                                         | Users configuration files for ClickHouse (basic ones auto-generated based on other values otherwise)                                                                                                                           | `[]`                                  |
 | `existingChiUsersdConfigmap`                        | The name of an existing ConfigMap with your custom users configuration files for ClickHouse                                                                                                                                    | `""`                                  |
-| `chkTemplate`                                       | ClickHouse Keeper Installation default template (basic ones auto-generated based on other values otherwise)                                                                                                                    | `{}`                                  |
+| `chkTemplate`                                       | ClickHouse Keeper Installation default template (basic one auto-generated based on other values otherwise)                                                                                                                     | `{}`                                  |
 | `existingChkTemplatesConfigmap`                     | The name of an existing ConfigMap with your custom ClickHouse Keeper Installation templates                                                                                                                                    | `""`                                  |
+| `chkConfigd`                                        | Configuration files for ClickHouse Keeper (basic ones auto-generated based on other values otherwise)                                                                                                                          | `[]`                                  |
 | `existingChkConfigdConfigmap`                       | The name of an existing ConfigMap with your custom configuration files for ClickHouse Keeper                                                                                                                                   | `""`                                  |
+| `chkUsersd`                                         | Users configuration files for ClickHouse Keeper (basic ones auto-generated based on other values otherwise)                                                                                                                    | `[]`                                  |
 | `existingChkUsersdConfigmap`                        | The name of an existing ConfigMap with your custom users configuration files for ClickHouse Keeper                                                                                                                             | `""`                                  |
 | `watchAllNamespaces`                                | Watch for ClickHouse Operator resources in all namespaces                                                                                                                                                                      | `false`                               |
 | `watchNamespaces`                                   | Watch for ClickHouse Operator resources in the given namespaces                                                                                                                                                                | `[]`                                  |

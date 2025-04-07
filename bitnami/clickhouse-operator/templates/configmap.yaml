@@ -18,8 +18,12 @@ watch:
   namespaces: ['*']
   {{- else }}
   namespaces:
+  {{- if .Values.watchNamespaces }}
   {{- range .Values.watchNamespaces }}
     - {{ . | quote }}
+  {{- end }}
+  {{- else }}
+    - {{ include "common.names.namespace" . | quote }}
   {{- end }}
   {{- end }}
 clickhouse:

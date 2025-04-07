@@ -33,6 +33,24 @@ spec:
         {{- if not .Values.existingConfigmap }}
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
         {{- end }}
+        {{- if not .Values.existingChiTemplatesConfigmap }}
+        checksum/chi-templates: {{ include (print $.Template.BasePath "/chi-templates-configmap.yaml") . | sha256sum }}
+        {{- end }}
+        {{- if not .Values.existingChiConfigdConfigmap }}
+        checksum/chi-configd: {{ include (print $.Template.BasePath "/chi-configd-configmap.yaml") . | sha256sum }}
+        {{- end }}
+        {{- if not .Values.existingChiUsersdConfigmap }}
+        checksum/chi-usersd: {{ include (print $.Template.BasePath "/chi-usersd-configmap.yaml") . | sha256sum }}
+        {{- end }}
+        {{- if not .Values.existingChkTemplatesConfigmap }}
+        checksum/chk-templates: {{ include (print $.Template.BasePath "/chk-templates-configmap.yaml") . | sha256sum }}
+        {{- end }}
+        {{- if not .Values.existingChkConfigdConfigmap }}
+        checksum/chk-configd: {{ include (print $.Template.BasePath "/chk-configd-configmap.yaml") . | sha256sum }}
+        {{- end }}
+        {{- if not .Values.existingChkUsersdConfigmap }}
+        checksum/chk-usersd: {{ include (print $.Template.BasePath "/chk-usersd-configmap.yaml") . | sha256sum }}
+        {{- end }}
         {{- if or .Values.podAnnotations .Values.commonAnnotations }}
         {{- $podAnnotations := include "common.tplvalues.merge" (dict "values" (list .Values.podAnnotations .Values.commonAnnotations) "context" .) }}
         {{- include "common.tplvalues.render" (dict "value" $podAnnotations "context" $) | nindent 8 }}
@@ -169,7 +187,7 @@ spec:
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /metrics
-              port: health
+              port: metrics
           {{- end }}
           {{- if .Values.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customStartupProbe "context" $) | nindent 12 }}
@@ -191,25 +209,21 @@ spec:
             - name: chi-templates
               mountPath: /etc/clickhouse-operator/chi/templates.d
               readOnly: true
-            {{- if .Values.existingChiConfigdConfigmap }}
             - name: chi-configd
               mountPath: /etc/clickhouse-operator/chi/config.d
               readOnly: true
-            {{- end }}
-            {{- if .Values.existingChiUsersdConfigmap }}
             - name: chi-usersd
               mountPath: /etc/clickhouse-operator/chi/users.d
               readOnly: true
-            {{- end }}
+            {{- if or .Values.chkTemplate .Values.existingchkTemplatesConfigmap }}
             - name: chk-templates
               mountPath: /etc/clickhouse-operator/chk/templates.d
               readOnly: true
-            {{- if .Values.existingChkConfigdConfigmap }}
-            - name: chk-configd
-              mountPath: /etc/clickhouse-operator/chk/config.d
-              readOnly: true
             {{- end }}
-            {{- if .Values.existingChkUsersdConfigmap }}
+            - name: chk-configd
+              mountPath: /etc/clickhouse-operator/chk/keeper_config.d
+              readOnly: true
+            {{- if or .Values.chkUsersd .Values.existingChkUsersdConfigmap }}
             - name: chk-usersd
               mountPath: /etc/clickhouse-operator/chk/users.d
               readOnly: true
@@ -301,7 +315,7 @@ spec:
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metrics.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /metrics
-              port: health
+              port: metrics
           {{- end }}
           {{- if .Values.metrics.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customStartupProbe "context" $) | nindent 12 }}
@@ -333,28 +347,24 @@ spec:
         - name: chi-templates
           configMap:
             name: {{ template "clickhouse-operator.chiTemplates.configmap.name" . }}
+        - name: chi-configd
+          configMap:
+            name: {{ template "clickhouse-operator.chiConfigd.configmap.name" . }}
+        - name: chi-usersd
+          configMap:
+            name: {{ template "clickhouse-operator.chiUsersd.configmap.name" . }}
+        {{- if or .Values.chkTemplate .Values.existingchkTemplatesConfigmap }}
         - name: chk-templates
           configMap:
             name: {{ template "clickhouse-operator.chkTemplates.configmap.name" . }}
-        {{- if .Values.existingChiConfigdConfigmap }}
-        - name: chi-configd
-          configMap:
-            name: {{ tpl .Values.existingChiConfigdConfigmap . }}
         {{- end }}
-        {{- if .Values.existingChiUsersdConfigmap }}
-        - name: chi-usersd
-          configMap:
-            name: {{ tpl .Values.existingChiUsersdConfigmap . }}
-        {{- end }}
-        {{- if .Values.existingChkConfigdConfigmap }}
         - name: chk-configd
           configMap:
-            name: {{ tpl .Values.existingChkConfigdConfigmap . }}
-        {{- end }}
-        {{- if .Values.existingChkUsersdConfigmap }}
+            name: {{ template "clickhouse-operator.chkConfigd.configmap.name" . }}
+        {{- if or .Values.chkUsersd .Values.existingChkUsersdConfigmap }}
         - name: chk-usersd
           configMap:
-            name: {{ tpl .Values.existingChkUsersdConfigmap . }}
+            name: {{ template "clickhouse-operator.chkUsersd.configmap.name" . }}
         {{- end }}
         {{- if .Values.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
