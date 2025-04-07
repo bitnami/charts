@@ -136,6 +136,12 @@ spec:
                   apiVersion: v1
                   fieldPath: metadata.name
             {{- if or .Values.tls.client.passwordsSecretName (include "zookeeper.client.createTlsPasswordsSecret" .) }}
+            {{- if .Values.usePasswordFiles }}
+            - name: ZOO_TLS_CLIENT_KEYSTORE_PASSWORD_FILE
+              value: {{ printf "/opt/bitnami/zookeeper/secrets/%s" (include "zookeeper.client.tlsPasswordKeystoreKey" .) }}
+            - name: ZOO_TLS_CLIENT_TRUSTSTORE_PASSWORD_FILE
+              value: {{ printf "/opt/bitnami/zookeeper/secrets/%s" (include "zookeeper.client.tlsPasswordTruststoreKey" .) }}
+            {{- else }}
             - name: ZOO_TLS_CLIENT_KEYSTORE_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -147,7 +153,14 @@ spec:
                   name: {{ include "zookeeper.client.tlsPasswordsSecret" . }}
                   key: {{ include "zookeeper.client.tlsPasswordTruststoreKey" . }}
             {{- end }}
+            {{- end }}
             {{- if or .Values.tls.quorum.passwordsSecretName (include "zookeeper.quorum.createTlsPasswordsSecret" .) }}
+            {{- if .Values.usePasswordFiles }}
+            - name: ZOO_TLS_QUORUM_KEYSTORE_PASSWORD_FILE
+              value: {{ printf "/opt/bitnami/zookeeper/secrets/%s" (include "zookeeper.quorum.tlsPasswordKeystoreKey" .) }}
+            - name: ZOO_TLS_QUORUM_TRUSTSTORE_PASSWORD_FILE
+              value: {{ printf "/opt/bitnami/zookeeper/secrets/%s" (include "zookeeper.quorum.tlsPasswordTruststoreKey" .) }}
+            {{- else }}
             - name: ZOO_TLS_QUORUM_KEYSTORE_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -158,6 +171,7 @@ spec:
                 secretKeyRef:
                   name: {{ include "zookeeper.quorum.tlsPasswordsSecret" . }}
                   key: {{ include "zookeeper.quorum.tlsPasswordTruststoreKey" . }}
+            {{- end }}
             {{- end }}
           {{- if .Values.tls.resources }}
           resources: {{- toYaml .Values.tls.resources | nindent 12 }}
@@ -171,6 +185,10 @@ spec:
             - name: scripts
               mountPath: /scripts/init-certs.sh
               subPath: init-certs.sh
+            {{- if and .Values.usePasswordFiles (or .Values.tls.quorum.passwordsSecretName .Values.tls.client.passwordsSecretName (include "zookeeper.quorum.createTlsPasswordsSecret" .) (include "zookeeper.client.createTlsPasswordsSecret" .) )}}
+            - name: zookeeper-secrets
+              mountPath: /opt/bitnami/zookeeper/secrets
+            {{- end }}
             {{- if or .Values.tls.client.enabled }}
             - name: client-certificates
               mountPath: /certs/client
@@ -257,36 +275,56 @@ spec:
             {{- if .Values.auth.client.enabled }}
             - name: ZOO_CLIENT_USER
               value: {{ .Values.auth.client.clientUser | quote }}
+            {{- if .Values.usePasswordFiles }}
+            - name: ZOO_CLIENT_PASSWORD_FILE
+              value: "/opt/bitnami/zookeeper/secrets/client-password"
+            {{- else }}
             - name: ZOO_CLIENT_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "zookeeper.client.secretName" . }}
                   key: client-password
+            {{- end }}
             - name: ZOO_SERVER_USERS
               value: {{ .Values.auth.client.serverUsers | quote }}
+            {{- if .Values.usePasswordFiles }}
+            - name: ZOO_SERVER_PASSWORDS_FILE
+              value: "/opt/bitnami/zookeeper/secrets/server-password"
+            {{- else }}
             - name: ZOO_SERVER_PASSWORDS
               valueFrom:
                 secretKeyRef:
                   name: {{ include "zookeeper.client.secretName" . }}
                   key: server-password
             {{- end }}
+            {{- end }}
             - name: ZOO_ENABLE_QUORUM_AUTH
               value: {{ ternary "yes" "no" .Values.auth.quorum.enabled | quote }}
             {{- if .Values.auth.quorum.enabled }}
             - name: ZOO_QUORUM_LEARNER_USER
               value: {{ .Values.auth.quorum.learnerUser | quote }}
+            {{- if .Values.usePasswordFiles }}
+            - name: ZOO_QUORUM_LEARNER_PASSWORD_FILE
+              value: "/opt/bitnami/zookeeper/secrets/quorum-learner-password"
+            {{- else }}
             - name: ZOO_QUORUM_LEARNER_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "zookeeper.quorum.secretName" . }}
                   key: quorum-learner-password
+            {{- end }}
             - name: ZOO_QUORUM_SERVER_USERS
               value: {{ .Values.auth.quorum.serverUsers | quote }}
+            {{- if .Values.usePasswordFiles }}
+            - name: ZOO_QUORUM_SERVER_PASSWORDS_FILE
+              value: "/opt/bitnami/zookeeper/secrets/quorum-server-password"
+            {{- else }}
             - name: ZOO_QUORUM_SERVER_PASSWORDS
               valueFrom:
                 secretKeyRef:
                   name: {{ include "zookeeper.quorum.secretName" . }}
                   key: quorum-server-password
+            {{- end }}
             {{- end }}
             - name: ZOO_HEAP_SIZE
               value: {{ .Values.heapSize | quote }}
@@ -316,18 +354,28 @@ spec:
             - name: ZOO_TLS_CLIENT_TRUSTSTORE_FILE
               value: {{ .Values.tls.client.truststorePath | quote }}
             {{- if or .Values.tls.client.keystorePassword .Values.tls.client.passwordsSecretName .Values.tls.client.autoGenerated }}
+            {{- if .Values.usePasswordFiles }}
+            - name: ZOO_TLS_CLIENT_KEYSTORE_PASSWORD_FILE
+              value: {{ printf "/opt/bitnami/zookeeper/secrets/%s" (include "zookeeper.client.tlsPasswordKeystoreKey" .) }}
+            {{- else }}
             - name: ZOO_TLS_CLIENT_KEYSTORE_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "zookeeper.client.tlsPasswordsSecret" . }}
                   key: {{ include "zookeeper.client.tlsPasswordKeystoreKey" . }}
             {{- end }}
+            {{- end }}
             {{- if or .Values.tls.client.truststorePassword .Values.tls.client.passwordsSecretName .Values.tls.client.autoGenerated }}
+            {{- if .Values.usePasswordFiles }}
+            - name: ZOO_TLS_CLIENT_TRUSTSTORE_PASSWORD_FILE
+              value: {{ printf "/opt/bitnami/zookeeper/secrets/%s" (include "zookeeper.client.tlsPasswordTruststoreKey" .) }}
+            {{- else }}
             - name: ZOO_TLS_CLIENT_TRUSTSTORE_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "zookeeper.client.tlsPasswordsSecret" . }}
                   key: {{ include "zookeeper.client.tlsPasswordTruststoreKey" . }}
+            {{- end }}
             {{- end }}
             {{- end }}
             {{- if .Values.tls.quorum.enabled }}
@@ -340,18 +388,28 @@ spec:
             - name: ZOO_TLS_QUORUM_TRUSTSTORE_FILE
               value: {{ .Values.tls.quorum.truststorePath | quote }}
             {{- if or .Values.tls.quorum.keystorePassword .Values.tls.quorum.passwordsSecretName .Values.tls.quorum.autoGenerated }}
+            {{- if .Values.usePasswordFiles }}
+            - name: ZOO_TLS_QUORUM_KEYSTORE_PASSWORD_FILE
+              value: {{ printf "/opt/bitnami/zookeeper/secrets/%s" (include "zookeeper.quorum.tlsPasswordKeystoreKey" .) }}
+            {{- else }}
             - name: ZOO_TLS_QUORUM_KEYSTORE_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "zookeeper.quorum.tlsPasswordsSecret" . }}
                   key: {{ include "zookeeper.quorum.tlsPasswordKeystoreKey" . }}
             {{- end }}
+            {{- end }}
             {{- if or .Values.tls.quorum.truststorePassword .Values.tls.quorum.passwordsSecretName .Values.tls.quorum.autoGenerated }}
+            {{- if .Values.usePasswordFiles }}
+            - name: ZOO_TLS_QUORUM_TRUSTSTORE_PASSWORD_FILE
+              value: {{ printf "/opt/bitnami/zookeeper/secrets/%s" (include "zookeeper.quorum.tlsPasswordTruststoreKey" .) }}
+            {{- else }}
             - name: ZOO_TLS_QUORUM_TRUSTSTORE_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "zookeeper.quorum.tlsPasswordsSecret" . }}
                   key: {{ include "zookeeper.quorum.tlsPasswordTruststoreKey" . }}
+            {{- end }}
             {{- end }}
             {{- end }}
             - name: POD_NAME
@@ -448,6 +506,12 @@ spec:
               subPath: setup.sh
             - name: data
               mountPath: /bitnami/zookeeper
+            {{- if and .Values.usePasswordFiles (or .Values.auth.client.enabled .Values.auth.quorum.enabled
+                  (and .Values.tls.client.enabled (or .Values.tls.quorum.keystorePassword .Values.tls.quorum.truststorePassword .Values.tls.quorum.passwordsSecretName .Values.tls.quorum.autoGenerated))
+                  (and .Values.tls.quorum.enabled (or .Values.tls.client.keystorePassword .Values.tls.client.truststorePassword .Values.tls.client.passwordsSecretName .Values.tls.client.autoGenerated))) }}
+            - name: zookeeper-secrets
+              mountPath: /opt/bitnami/zookeeper/secrets
+            {{- end }}
             {{- if .Values.dataLogDir }}
             - name: data-log
               mountPath: {{ .Values.dataLogDir }}
@@ -480,6 +544,29 @@ spec:
           configMap:
             name: {{ printf "%s-scripts" (include "common.names.fullname" .) }}
             defaultMode: 493
+        {{- if and .Values.usePasswordFiles (or .Values.auth.client.enabled .Values.auth.quorum.enabled
+              (and .Values.tls.client.enabled (or .Values.tls.quorum.keystorePassword .Values.tls.quorum.truststorePassword .Values.tls.quorum.passwordsSecretName .Values.tls.quorum.autoGenerated))
+              (and .Values.tls.quorum.enabled (or .Values.tls.client.keystorePassword .Values.tls.client.truststorePassword .Values.tls.client.passwordsSecretName .Values.tls.client.autoGenerated))) }}
+        - name: zookeeper-secrets
+          projected:
+            sources:
+              {{- if .Values.auth.client.enabled }}
+              - secret:
+                  name:  {{ include "zookeeper.client.secretName" . }}
+              {{- end }}
+              {{- if .Values.auth.quorum.enabled }}
+              - secret:
+                  name:  {{ include "zookeeper.quorum.secretName" . }}
+              {{- end }}
+              {{- if and .Values.tls.client.enabled (or .Values.tls.quorum.keystorePassword .Values.tls.quorum.truststorePassword .Values.tls.quorum.passwordsSecretName .Values.tls.quorum.autoGenerated) }}
+              - secret:
+                  name:  {{ include "zookeeper.client.tlsPasswordsSecret" . }}
+              {{- end }}
+              {{- if and .Values.tls.quorum.enabled (or .Values.tls.client.keystorePassword .Values.tls.client.truststorePassword .Values.tls.client.passwordsSecretName .Values.tls.client.autoGenerated) }}
+              - secret:
+                  name:  {{ include "zookeeper.quorum.tlsPasswordsSecret" . }}
+              {{- end }}
+        {{- end }}
         {{- if or .Values.configuration .Values.existingConfigmap }}
         - name: config
           configMap:
