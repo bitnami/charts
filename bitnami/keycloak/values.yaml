@@ -637,6 +637,7 @@ ingress:
   ##
   controller: default
   ## @param ingress.hostname Default host for the ingress record (evaluated as template)
+  ## leave as empty string if KEYCLOAK_HOSTNAME shall be not set e.g. as outlined in https://www.keycloak.org/server/hostname#_validations
   ##
   hostname: keycloak.local
   ## @param ingress.hostnameStrict Disables dynamically resolving the hostname from request headers.
