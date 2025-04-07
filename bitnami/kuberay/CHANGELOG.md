@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.4.6 (2025-04-06)
+## 1.4.6 (2025-04-07)
 
 * [bitnami/kuberay] match upstream clusterrole ([#32829](https://github.com/bitnami/charts/pull/32829))
 
