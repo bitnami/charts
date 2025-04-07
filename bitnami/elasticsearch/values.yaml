@@ -189,6 +189,9 @@ sidecars: []
 ##    command: ['sh', '-c', 'echo "hello world"']
 ##
 initContainers: []
+## @param enableDefaultInitContainers enables (or disables if false) the default init containers (sysctl, volume permissions, copy plugins etc...)
+##
+enableDefaultInitContainers: true
 ## @param useIstioLabels Use this variable to add Istio labels to all pods
 ##
 useIstioLabels: true
