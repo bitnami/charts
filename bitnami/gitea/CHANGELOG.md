@@ -1,6 +1,6 @@
 # Changelog
 
-## 3.2.2 (2025-04-07)
+## 3.2.2 (2025-04-08)
 
 * [bitnami/gitea] Release 3.2.2 ([#32856](https://github.com/bitnami/charts/pull/32856))
 
