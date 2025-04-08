@@ -2,7 +2,7 @@
 
 ## 15.3.12 (2025-04-08)
 
-* [ bitnami/postgresql-ha] Fixed duplicated storage class value ([#32860](https://github.com/bitnami/charts/pull/32860))
+* [bitnami/postgresql-ha] Fixed duplicated storage class value ([#32860](https://github.com/bitnami/charts/pull/32860))
 
 ## <small>15.3.11 (2025-04-07)</small>
 
