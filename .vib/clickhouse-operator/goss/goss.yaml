@@ -3,7 +3,7 @@
 
 file:
   /bitnami/clickhouse/data:
-    mode: "0750"
+    mode: "2750"
     filetype: directory
     exists: true
   /opt/bitnami/clickhouse/etc/config.d/01-clickhouse-01-listen.xml:
