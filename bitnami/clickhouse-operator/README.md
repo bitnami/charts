@@ -147,7 +147,7 @@ Install the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/char
 
 ### Deploying extra resources
 
-Apart from the Operator, you may want to deploy ClickHouse Installation or ClickHouse Keeper Installation objects. For covering this case, the chart allows adding the full specification of other objects using the `extraDeploy` parameter. The following example creates a ClickHouse Installation using the `default-pod-template` pod template:
+Apart from the Operator, you may want to deploy ClickHouse Installation or ClickHouse Keeper Installation objects. For covering this case, the chart allows adding the full specification of other objects using the `extraDeploy` parameter. The following example creates a ClickHouse Installation using the `default-clickhouse` pod template:
 
 ```yaml
 extraDeploy:
@@ -158,21 +158,24 @@ extraDeploy:
   spec:
     defaults:
       templates:
-        podTemplate: default-pod-template
-        dataVolumeClaimTemplate: clickhouse-data
+        podTemplate: default-clickhouse
+        dataVolumeClaimTemplate: default-volume-claim
     configuration:
       settings:
         http_port: 8124
         tcp_port: 9001
         interserver_http_port: 9010
+      users:
+        test_user/networks/ip:
+          - 0.0.0.0/0
+          - '::/0'
       clusters:
         - name: test
           layout:
-            shardsCount: 1
             replicasCount: 1
     templates:
       podTemplates:
-        - name: clickhouse
+        - name: default-clickhouse
           distribution: Unspecified
           spec:
             containers:
@@ -193,7 +196,7 @@ extraDeploy:
                   - name: interserver
                     containerPort: 9010
                 volumeMounts:
-                  - name: clickhouse-data
+                  - name: default-volume-claim
                     mountPath: /bitnami/clickhouse
                   - name: empty-dir
                     mountPath: /opt/bitnami/clickhouse/logs
@@ -208,7 +211,7 @@ extraDeploy:
               - name: empty-dir
                 emptyDir: {}
       volumeClaimTemplates:
-        - name: clickhouse-data
+        - name: default-volume-claim
           spec:
             accessModes:
             - ReadWriteOnce
