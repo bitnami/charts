@@ -1,8 +1,11 @@
 # Adding an extra initial delay to avoid race conditions with the
 # deployment and Goss stages (so the operator has time to deploy
-# ClickHouse and ClickHouse Keeper instances)
+# ClickHouse and ClickHouse Keeper installations)
 readinessProbe:
-  initialDelaySeconds: 30
+  initialDelaySeconds: 45
+auth:
+  username: test_user
+  password: bitnami1234
 extraDeploy:
 # ref: https://github.com/Altinity/clickhouse-operator/tree/master/docs/chi-examples
 - |
@@ -21,10 +24,28 @@ extraDeploy:
               app.kubernetes.io/part-of: clickhouse-operator
               app.kubernetes.io/component: clickhouse
           spec:
+            securityContext:
+              fsGroup: 1001
+              fsGroupChangePolicy: Always
+              supplementalGroups: []
+              sysctls: []
             containers:
               - name: clickhouse
                 image: {{ template "clickhouse-operator.clickhouse.image" . }}
                 imagePullPolicy: {{ .Values.clickHouseImage.pullPolicy | quote }}
+                securityContext:
+                  allowPrivilegeEscalation: false
+                  capabilities:
+                    drop:
+                    - ALL
+                  privileged: false
+                  readOnlyRootFilesystem: true
+                  runAsGroup: 1001
+                  runAsNonRoot: true
+                  runAsUser: 1001
+                  seLinuxOptions: {}
+                  seccompProfile:
+                    type: RuntimeDefault
                 env:
                   - name: CLICKHOUSE_HTTP_PORT
                     value: "8124"
@@ -49,12 +70,23 @@ extraDeploy:
                 volumeMounts:
                   - name: default-volume-claim
                     mountPath: /bitnami/clickhouse
+                  # Hack required for read-only fs
+                  - name: chi-vib-deploy-confd-vib-0-0
+                    mountPath: /opt/bitnami/clickhouse/etc/conf.d
+                  - name: chi-vib-common-configd
+                    mountPath: /opt/bitnami/clickhouse/etc/config.d
+                  - name: chi-vib-common-usersd
+                    mountPath: /opt/bitnami/clickhouse/etc/users.d
+                  - name: empty-dir
+                    mountPath: /opt/bitnami/clickhouse/etc
+                    subPath: app-conf-dir
                   - name: empty-dir
                     mountPath: /opt/bitnami/clickhouse/logs
                     subPath: app-logs-dir
                   - name: empty-dir
                     mountPath: /opt/bitnami/clickhouse/tmp
                     subPath: app-tmp-dir
+                  # end of hack
                   - name: empty-dir
                     mountPath: /tmp
                     subPath: tmp-dir
@@ -85,6 +117,10 @@ extraDeploy:
         http_port: 8124
         tcp_port: 9001
         interserver_http_port: 9010
+      users:
+        test_user/networks/ip:
+          - 0.0.0.0/0
+          - '::/0'
       zookeeper:
         nodes:
           - host: chk-vib-vib-0-0
@@ -118,14 +154,34 @@ extraDeploy:
               app.kubernetes.io/part-of: clickhouse-operator
               app.kubernetes.io/component: clickhouse-keeper
           spec:
+            securityContext:
+              fsGroup: 1001
+              fsGroupChangePolicy: Always
+              supplementalGroups: []
+              sysctls: []
             containers:
               - name: clickhouse-keeper
                 image: {{ template "clickhouse-operator.keeper.image" . }}
                 imagePullPolicy: {{ .Values.keeperImage.pullPolicy | quote }}
-                workingDir: /bitnami/clickhouse-keeper
+                securityContext:
+                  allowPrivilegeEscalation: false
+                  capabilities:
+                    drop:
+                    - ALL
+                  privileged: false
+                  readOnlyRootFilesystem: true
+                  runAsGroup: 1001
+                  runAsNonRoot: true
+                  runAsUser: 1001
+                  seLinuxOptions: {}
+                  seccompProfile:
+                    type: RuntimeDefault
+                workingDir: /var/lib/clickhouse-keeper
                 env:
+                  - name: BITNAMI_DEBUG
+                    value: "true"
                   - name: CLICKHOUSE_KEEPER_SERVER_ID
-                    value: "0"
+                    value: "1"
                   - name: CLICKHOUSE_KEEPER_TCP_PORT
                     value: "2181"
                   - name: CLICKHOUSE_KEEPER_RAFT_PORT
@@ -140,12 +196,23 @@ extraDeploy:
                 volumeMounts:
                   - name: default-volume-claim
                     mountPath: /bitnami/clickhouse-keeper
+                  # Hack required for read-only fs
+                  - name: chk-vib-deploy-confd-vib-0-0
+                    mountPath: /opt/bitnami/clickhouse-keeper/etc/conf.d
+                  - name: chk-vib-common-configd
+                    mountPath: /opt/bitnami/clickhouse-keeper/etc/keeper_config.d
+                  - name: chk-vib-common-usersd
+                    mountPath: /opt/bitnami/clickhouse-keeper/etc/users.d
+                  - name: empty-dir
+                    mountPath: /opt/bitnami/clickhouse-keeper/etc
+                    subPath: app-conf-dir
                   - name: empty-dir
                     mountPath: /opt/bitnami/clickhouse-keeper/logs
                     subPath: app-logs-dir
                   - name: empty-dir
                     mountPath: /opt/bitnami/clickhouse-keeper/tmp
                     subPath: app-tmp-dir
+                  # end of hack
                   - name: empty-dir
                     mountPath: /tmp
                     subPath: tmp-dir
