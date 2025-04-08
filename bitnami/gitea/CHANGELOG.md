@@ -1,8 +1,12 @@
 # Changelog
 
-## 3.2.1 (2025-04-01)
+## 3.2.2 (2025-04-08)
 
-* [bitnami/gitea] Release 3.2.1 ([#32730](https://github.com/bitnami/charts/pull/32730))
+* [bitnami/gitea] Release 3.2.2 ([#32856](https://github.com/bitnami/charts/pull/32856))
+
+## <small>3.2.1 (2025-04-01)</small>
+
+* [bitnami/gitea] Release 3.2.1 (#32730) ([bad3639](https://github.com/bitnami/charts/commit/bad3639d7d8dc68ecc2ff9ae0fad8f189f1cfa21)), closes [#32730](https://github.com/bitnami/charts/issues/32730)
 
 ## 3.2.0 (2025-03-27)
 
