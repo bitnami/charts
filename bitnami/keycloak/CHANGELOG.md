@@ -1,6 +1,6 @@
 # Changelog
 
-## 24.5.2 (2025-04-07)
+## 24.5.2 (2025-04-08)
 
 * [bitnami/keycloak] fix to enable empty hostname ([#32846](https://github.com/bitnami/charts/pull/32846))
 
