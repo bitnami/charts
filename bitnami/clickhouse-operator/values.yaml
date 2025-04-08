@@ -78,7 +78,6 @@ extraDeploy: []
 ## @param image.digest ClickHouse Operator image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
 ## @param image.pullPolicy ClickHouse Operator image pull policy
 ## @param image.pullSecrets ClickHouse Operator image pull secrets
-## @param image.debug Enable ClickHouse Operator image debug mode
 ##
 image:
   registry: docker.io
@@ -98,7 +97,6 @@ image:
   ##   - myRegistryKeySecretName
   ##
   pullSecrets: []
-  debug: false
 ## Bitnami ClickHouse image
 ## ref: https://hub.docker.com/r/bitnami/clickhouse/tags/
 ## @param clickHouseImage.registry [default: REGISTRY_NAME] ClickHouse image registry
@@ -107,7 +105,6 @@ image:
 ## @param clickHouseImage.digest ClickHouse image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
 ## @param clickHouseImage.pullPolicy ClickHouse image pull policy
 ## @param clickHouseImage.pullSecrets ClickHouse image pull secrets
-## @param clickHouseImage.debug Enable ClickHouse image debug mode
 ##
 clickHouseImage:
   registry: docker.io
@@ -127,7 +124,6 @@ clickHouseImage:
   ##   - myRegistryKeySecretName
   ##
   pullSecrets: []
-  debug: false
 ## Bitnami ClickHouse Keeper image
 ## ref: https://hub.docker.com/r/bitnami/clickhouse-keeper/tags/
 ## @param keeperImage.registry [default: REGISTRY_NAME] ClickHouse Keeper image registry
@@ -136,7 +132,6 @@ clickHouseImage:
 ## @param keeperImage.digest ClickHouse Keeper image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
 ## @param keeperImage.pullPolicy ClickHouse Keeper image pull policy
 ## @param keeperImage.pullSecrets ClickHouse Keeper image pull secrets
-## @param keeperImage.debug Enable ClickHouse Keeper image debug mode
 ##
 keeperImage:
   registry: docker.io
@@ -156,7 +151,6 @@ keeperImage:
   ##   - myRegistryKeySecretName
   ##
   pullSecrets: []
-  debug: false
 ## Authentication
 ## @param auth.username ClickHouse Admin username
 ## @param auth.password ClickHouse Admin password
@@ -547,6 +541,9 @@ networkPolicy:
   ## @param networkPolicy.enabled Specifies whether a NetworkPolicy should be created
   ##
   enabled: true
+  ## @param networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
+  ##
+  kubeAPIServerPorts: [443, 6443, 8443]
   ## @param networkPolicy.allowExternal Don't require server label for connections
   ## The Policy model to apply. When set to false, only pods with the correct
   ## server label will have network access to the ports server is listening
@@ -656,7 +653,6 @@ metrics:
   ## @param metrics.image.digest ClickHouse Operator Metrics exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
   ## @param metrics.image.pullPolicy ClickHouse Operator Metrics exporter image pull policy
   ## @param metrics.image.pullSecrets ClickHouse Operator Metrics exporter image pull secrets
-  ## @param metrics.image.debug Enable ClickHouse Operator Metrics exporter image debug mode
   ##
   image:
     registry: docker.io
@@ -676,7 +672,6 @@ metrics:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-    debug: false
   ## @param metrics.containerPorts.metrics ClickHouse Operator Metrics exporter container port
   ##
   containerPorts:

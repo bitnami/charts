@@ -34,6 +34,10 @@ spec:
           protocol: UDP
         - port: 53
           protocol: TCP
+        # Allow access to kube-apiserver
+        {{- range $port := .Values.networkPolicy.kubeAPIServerPorts }}
+        - port: {{ $port }}
+        {{- end }}
     {{- if .Values.networkPolicy.extraEgress }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
     {{- end }}

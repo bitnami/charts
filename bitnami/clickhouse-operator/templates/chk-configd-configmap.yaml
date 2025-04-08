@@ -22,6 +22,7 @@ data:
     {{- include "common.tplvalues.render" (dict "value" $value "context" $) | nindent 4 }}
   {{- end }}
   {{- else }}
+  # Ref: https://github.com/Altinity/clickhouse-operator/tree/master/deploy/builder/templates-config/chk/keeper_config.d
   01-keeper-01-default-config.xml: |
     <clickhouse>
         <keeper_server>

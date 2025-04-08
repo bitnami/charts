@@ -14,6 +14,24 @@ Check the ClickHouse Operator documentation for instructions on how to deploy a 
 
   https://docs.altinity.com/altinitykubernetesoperator/kubernetesquickstartguide/quickcluster
 
+{{- if .Values.rbac.create }}
+{{- if .Values.watchAllNamespaces }}
+WARNING: ClickHouse Operator can access all secrets in the cluster. This could pose a security risk if the application gets compromised.
+
+You can limit allowed namespaces by setting watchAllNamespaces = false and configuring watchNamespaces
+{{- else }}
+
+ClickHouse Operator can ONLY access resources in the following namespaces:
+{{ $namespaces := .Values.watchNamespaces | default (list (include "common.names.namespace" .)) }}
+{{- range $namespace := $namespaces }}
+  - {{ $namespace }}
+{{- end }}
+
+ClickHouse Operator won't be able to access resources in other namespaces. You can configure this behavior by setting watchNamespaces
+
+{{- end }}
+{{- end }}
+
 {{- include "clickhouse-operator.checkRollingTags" . }}
 {{- include "clickhouse-operator.validateValues" . }}
 {{- include "common.warnings.resources" (dict "sections" (list "" "metrics") "context" $) }}

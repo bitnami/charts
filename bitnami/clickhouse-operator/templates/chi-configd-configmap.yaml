@@ -22,6 +22,7 @@ data:
     {{- include "common.tplvalues.render" (dict "value" $value "context" $) | nindent 4 }}
   {{- end }}
   {{- else }}
+  # Ref: https://github.com/Altinity/clickhouse-operator/tree/master/deploy/builder/templates-config/chi/config.d
   01-clickhouse-01-listen.xml: |
     <yandex>
         <listen_host>::</listen_host>

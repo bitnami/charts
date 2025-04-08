@@ -24,11 +24,12 @@ extraDeploy:
               app.kubernetes.io/part-of: clickhouse-operator
               app.kubernetes.io/component: clickhouse
           spec:
+            {{- include "clickhouse-operator.imagePullSecrets" . | nindent 10 }}
             securityContext:
+              fsGroupChangePolicy: OnRootMismatch
+              {{- if not (include "common.compatibility.isOpenshift" .) }}
               fsGroup: 1001
-              fsGroupChangePolicy: Always
-              supplementalGroups: []
-              sysctls: []
+              {{- end }}
             containers:
               - name: clickhouse
                 image: {{ template "clickhouse-operator.clickhouse.image" . }}
@@ -38,14 +39,14 @@ extraDeploy:
                   capabilities:
                     drop:
                     - ALL
-                  privileged: false
-                  readOnlyRootFilesystem: true
-                  runAsGroup: 1001
-                  runAsNonRoot: true
-                  runAsUser: 1001
-                  seLinuxOptions: {}
                   seccompProfile:
                     type: RuntimeDefault
+                  readOnlyRootFilesystem: true
+                  runAsNonRoot: true
+                  {{- if not (include "common.compatibility.isOpenshift" .) }}
+                  runAsGroup: 1001
+                  runAsUser: 1001
+                  {{- end }}
                 env:
                   - name: BITNAMI_DEBUG
                     value: "true"
@@ -156,11 +157,12 @@ extraDeploy:
               app.kubernetes.io/part-of: clickhouse-operator
               app.kubernetes.io/component: clickhouse-keeper
           spec:
+            {{- include "clickhouse-operator.imagePullSecrets" . | nindent 10 }}
             securityContext:
+              fsGroupChangePolicy: OnRootMismatch
+              {{- if not (include "common.compatibility.isOpenshift" .) }}
               fsGroup: 1001
-              fsGroupChangePolicy: Always
-              supplementalGroups: []
-              sysctls: []
+              {{- end }}
             containers:
               - name: clickhouse-keeper
                 image: {{ template "clickhouse-operator.keeper.image" . }}
@@ -170,14 +172,14 @@ extraDeploy:
                   capabilities:
                     drop:
                     - ALL
-                  privileged: false
-                  readOnlyRootFilesystem: true
-                  runAsGroup: 1001
-                  runAsNonRoot: true
-                  runAsUser: 1001
-                  seLinuxOptions: {}
                   seccompProfile:
                     type: RuntimeDefault
+                  readOnlyRootFilesystem: true
+                  runAsNonRoot: true
+                  {{- if not (include "common.compatibility.isOpenshift" .) }}
+                  runAsGroup: 1001
+                  runAsUser: 1001
+                  {{- end }}
                 workingDir: /var/lib/clickhouse-keeper
                 env:
                   - name: BITNAMI_DEBUG

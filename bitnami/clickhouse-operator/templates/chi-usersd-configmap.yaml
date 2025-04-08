@@ -22,6 +22,7 @@ data:
     {{- include "common.tplvalues.render" (dict "value" $value "context" $) | nindent 4 }}
   {{- end }}
   {{- else }}
+  # Ref: https://github.com/Altinity/clickhouse-operator/tree/master/deploy/builder/templates-config/chi/users.d
   01-clickhouse-operator-profile.xml: |
     <yandex>
         <profiles>

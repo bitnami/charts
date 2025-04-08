@@ -16,6 +16,14 @@ metadata:
   {{- end }}
 rules:
   - apiGroups:
+      - apiextensions.k8s.io
+    resources:
+      - customresourcedefinitions
+    verbs:
+      - get
+      - list
+  {{- if .Values.watchAllNamespaces }}
+  - apiGroups:
       - ""
     resources:
       - configmaps
@@ -105,13 +113,6 @@ rules:
       - watch
       - create
       - delete
-  - apiGroups:
-      - apiextensions.k8s.io
-    resources:
-      - customresourcedefinitions
-    verbs:
-      - get
-      - list
   # The operator deployment personally, identified by name
   - apiGroups:
       - apps
@@ -193,6 +194,7 @@ rules:
       - patch
       - create
       - delete
+  {{- end }}
   {{- if .Values.rbac.rules }}
   {{- include "common.tplvalues.render" ( dict "value" .Values.rbac.rules "context" $ ) | nindent 2 }}
   {{- end }}
@@ -215,4 +217,216 @@ subjects:
   - kind: ServiceAccount
     name: {{ template "clickhouse-operator.serviceAccount.name" . }}
     namespace: {{ include "common.names.namespace" . | quote }}
+{{- if not .Values.watchAllNamespaces }}
+{{- $watchNamespaces := default (list (include "common.names.namespace" .)) .Values.watchNamespaces }}
+{{- range $namespace := $watchNamespaces }}
+---
+kind: Role
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" $ }}
+metadata:
+  name: {{ include "common.names.fullname" $ | trunc 63 | trimSuffix "-" }}
+  namespace: {{ $namespace | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $.Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: clickhouse-operator
+    app.kubernetes.io/component: operator
+  {{- if $.Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $.Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - configmaps
+      - services
+      - persistentvolumeclaims
+      - secrets
+    verbs:
+      - get
+      - list
+      - patch
+      - update
+      - watch
+      - create
+      - delete
+  - apiGroups:
+      - ""
+    resources:
+      - endpoints
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - ""
+    resources:
+      - events
+    verbs:
+      - create
+  - apiGroups:
+      - ""
+    resources:
+      - persistentvolumes
+    verbs:
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - ""
+    resources:
+      - pods
+    verbs:
+      - get
+      - list
+      - patch
+      - update
+      - watch
+      - delete
+  - apiGroups:
+      - ""
+    resources:
+      - secrets
+    verbs:
+      - get
+      - list
+  - apiGroups:
+      - apps
+    resources:
+      - statefulsets
+    verbs:
+      - get
+      - list
+      - patch
+      - update
+      - watch
+      - create
+      - delete
+  - apiGroups:
+      - apps
+    resources:
+      - replicasets
+    verbs:
+      - get
+      - patch
+      - update
+      - delete
+  - apiGroups:
+      - policy
+    resources:
+      - poddisruptionbudgets
+    verbs:
+      - get
+      - list
+      - patch
+      - update
+      - watch
+      - create
+      - delete
+  # The operator deployment personally, identified by name
+  - apiGroups:
+      - apps
+    resources:
+      - deployments
+    resourceNames:
+      - {{ template "common.names.fullname" $ }}
+    verbs:
+      - get
+      - patch
+      - update
+      - delete
+  # ClickHouse
+  - apiGroups:
+      - clickhouse.altinity.com
+    resources:
+      - clickhouseinstallations
+    verbs:
+      - get
+      - list
+      - watch
+      - patch
+      - update
+      - delete
+  - apiGroups:
+      - clickhouse.altinity.com
+    resources:
+      - clickhouseinstallationtemplates
+      - clickhouseoperatorconfigurations
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - clickhouse.altinity.com
+    resources:
+      - clickhouseinstallations/finalizers
+      - clickhouseinstallationtemplates/finalizers
+      - clickhouseoperatorconfigurations/finalizers
+    verbs:
+      - update
+  - apiGroups:
+      - clickhouse.altinity.com
+    resources:
+      - clickhouseinstallations/status
+      - clickhouseinstallationtemplates/status
+      - clickhouseoperatorconfigurations/status
+    verbs:
+      - get
+      - update
+      - patch
+      - create
+      - delete
+  # ClickHouse Keeper
+  - apiGroups:
+      - clickhouse-keeper.altinity.com
+    resources:
+      - clickhousekeeperinstallations
+    verbs:
+      - get
+      - list
+      - watch
+      - patch
+      - update
+      - delete
+  - apiGroups:
+      - clickhouse-keeper.altinity.com
+    resources:
+      - clickhousekeeperinstallations/finalizers
+    verbs:
+      - update
+  - apiGroups:
+      - clickhouse-keeper.altinity.com
+    resources:
+      - clickhousekeeperinstallations/status
+    verbs:
+      - get
+      - update
+      - patch
+      - create
+      - delete
+  {{- if $.Values.rbac.rules }}
+  {{- include "common.tplvalues.render" ( dict "value" $.Values.rbac.rules "context" $ ) | nindent 2 }}
+  {{- end }}
+---
+kind: RoleBinding
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" $ }}
+metadata:
+  name: {{ include "common.names.fullname" $ | trunc 63 | trimSuffix "-" }}
+  namespace: {{ $namespace | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $.Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: clickhouse-operator
+    app.kubernetes.io/component: operator
+  {{- if $.Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $.Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ include "common.names.fullname" $ | trunc 63 | trimSuffix "-" }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ template "clickhouse-operator.serviceAccount.name" $ }}
+    namespace: {{ include "common.names.namespace" $ | quote }}
+{{- end }}
+{{- end }}
 {{- end }}
