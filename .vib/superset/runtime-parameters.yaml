@@ -27,3 +27,6 @@ flower:
 serviceAccount:
   create: true
   automountServiceAccountToken: true
+postgresql:
+  primary:
+    resourcesPreset: small
