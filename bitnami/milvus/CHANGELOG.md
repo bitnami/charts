@@ -1,8 +1,12 @@
 # Changelog
 
-## 13.1.0 (2025-04-04)
+## 13.2.0 (2025-04-08)
 
-* [bitnami/milvus] Set `usePasswordFiles=true` by default ([#32642](https://github.com/bitnami/charts/pull/32642))
+* [bitnami/milvus] Update minio chart ([#32867](https://github.com/bitnami/charts/pull/32867))
+
+## 13.1.0 (2025-04-07)
+
+* [bitnami/milvus] Set `usePasswordFiles=true` by default (#32642) ([acd95f9](https://github.com/bitnami/charts/commit/acd95f9000cbb69abaa282d6149d59e036fc77b1)), closes [#32642](https://github.com/bitnami/charts/issues/32642)
 
 ## 13.0.0 (2025-04-04)
 
