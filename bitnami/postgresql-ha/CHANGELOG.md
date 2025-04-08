@@ -1,8 +1,12 @@
 # Changelog
 
-## 15.3.11 (2025-04-07)
+## 15.3.12 (2025-04-08)
 
-* [bitnami/postgresql-ha] Release 15.3.11 ([#32841](https://github.com/bitnami/charts/pull/32841))
+* [ bitnami/postgresql-ha] Fixed duplicated storage class value ([#32860](https://github.com/bitnami/charts/pull/32860))
+
+## <small>15.3.11 (2025-04-07)</small>
+
+* [bitnami/postgresql-ha] Release 15.3.11 (#32841) ([8d8b2ad](https://github.com/bitnami/charts/commit/8d8b2ada0609dc15882ebe546e458cab27f6916e)), closes [#32841](https://github.com/bitnami/charts/issues/32841)
 
 ## <small>15.3.10 (2025-04-07)</small>
 
