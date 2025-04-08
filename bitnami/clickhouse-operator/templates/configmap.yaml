@@ -40,7 +40,6 @@ clickhouse:
         networksIP:
           - "::1"
           - "127.0.0.1"
-        password: "default"
       network:
         hostRegexpTemplate: "(chi-{chi}-[^.]+\\d+-\\d+|clickhouse\\-{chi})\\.{namespace}\\.svc\\.cluster\\.local$"
   configurationRestartPolicy:
@@ -68,8 +67,6 @@ clickhouse:
           - profiles/default/max_*_for_server: "yes"
   access:
     scheme: "auto"
-    username: ""
-    password: ""
     rootCA: ""
     secret:
       namespace: {{ include "common.names.namespace" . | quote }}

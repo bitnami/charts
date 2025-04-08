@@ -215,7 +215,7 @@ spec:
             - name: chi-usersd
               mountPath: /etc/clickhouse-operator/chi/users.d
               readOnly: true
-            {{- if or .Values.chkTemplate .Values.existingchkTemplatesConfigmap }}
+            {{- if or .Values.chkTemplate .Values.existingChkTemplatesConfigmap }}
             - name: chk-templates
               mountPath: /etc/clickhouse-operator/chk/templates.d
               readOnly: true
@@ -353,7 +353,7 @@ spec:
         - name: chi-usersd
           configMap:
             name: {{ template "clickhouse-operator.chiUsersd.configmap.name" . }}
-        {{- if or .Values.chkTemplate .Values.existingchkTemplatesConfigmap }}
+        {{- if or .Values.chkTemplate .Values.existingChkTemplatesConfigmap }}
         - name: chk-templates
           configMap:
             name: {{ template "clickhouse-operator.chkTemplates.configmap.name" . }}
