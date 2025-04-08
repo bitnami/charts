@@ -297,7 +297,7 @@ spec:
                 - /opt/bitnami/scripts/etcd/healthcheck.sh
             {{- else }}
             httpGet:
-              port: {{ .Values.containerPorts.client }}
+              port: {{ .Values.metrics.useSeparateEndpoint | ternary .Values.containerPorts.metrics .Values.containerPorts.client }}
               path: /livez
               scheme: "HTTP"
             {{- end }}
