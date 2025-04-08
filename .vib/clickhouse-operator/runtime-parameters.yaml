@@ -47,6 +47,8 @@ extraDeploy:
                   seccompProfile:
                     type: RuntimeDefault
                 env:
+                  - name: BITNAMI_DEBUG
+                    value: "true"
                   - name: CLICKHOUSE_HTTP_PORT
                     value: "8124"
                   - name: CLICKHOUSE_TCP_PORT
