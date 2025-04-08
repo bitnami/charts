@@ -1,6 +1,6 @@
 # Changelog
 
-## 3.5.0 (2025-04-07)
+## 3.5.0 (2025-04-08)
 
 * [bitnami/kubernetes-event-exporter] Add clusterName config setting to values ([#32852](https://github.com/bitnami/charts/pull/32852))
 
