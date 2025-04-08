@@ -1,8 +1,12 @@
 # Changelog
 
-## 16.0.2 (2025-04-03)
+## 16.0.3 (2025-04-08)
 
-* [bitnami/minio] Release 16.0.2 ([#32806](https://github.com/bitnami/charts/pull/32806))
+* [bitnami/minio] Release 16.0.3 ([#32877](https://github.com/bitnami/charts/pull/32877))
+
+## <small>16.0.2 (2025-04-03)</small>
+
+* [bitnami/minio] Release 16.0.2 (#32806) ([c163d18](https://github.com/bitnami/charts/commit/c163d18d92e8a2c3fcfd16596b395659ca83a675)), closes [#32806](https://github.com/bitnami/charts/issues/32806)
 
 ## <small>16.0.1 (2025-04-02)</small>
 
