@@ -1,8 +1,8 @@
 # Changelog
 
-## 0.1.7 (2025-04-07)
+## 0.1.7 (2025-04-08)
 
-* Chore/kube arangodb correct typo chaows ([#32849](https://github.com/bitnami/charts/pull/32849))
+* [bitnami/kube-arangodb] Chore/kube arangodb correct typo chaows ([#32849](https://github.com/bitnami/charts/pull/32849))
 
 ## <small>0.1.6 (2025-03-28)</small>
 
