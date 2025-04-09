@@ -900,7 +900,7 @@ persistence:
     accessModes:
       - ReadWriteOnce
     existingClaim: ""
-    size: 2Gi
+    size: 5Gi
     ## @param persistence.taskmanager.enabled Enable persistence.taskmanager
     ## @param persistence.taskmanager.accessModes Persistent Volume Access Mode
     ## @param persistence.taskmanager.existingClaim If you want to reuse an existing claim, you can pass the name of the PVC using the existingClaim variable
@@ -911,4 +911,4 @@ persistence:
     accessModes:
       - ReadWriteOnce
     existingClaim: ""
-    size: 2Gi
+    size: 5Gi
