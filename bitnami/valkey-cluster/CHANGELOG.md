@@ -1,8 +1,13 @@
 # Changelog
 
-## 2.2.1 (2025-03-28)
+## 3.0.0 (2025-04-09)
 
-* [bitnami/valkey-cluster] Release 2.2.1 ([#32564](https://github.com/bitnami/charts/pull/32564))
+* [bitnami/valkey-cluster] Release 3.0.0 ([#32934](https://github.com/bitnami/charts/pull/32934))
+
+## <small>2.2.1 (2025-03-28)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/valkey-cluster] Release 2.2.1 (#32564) ([1c23328](https://github.com/bitnami/charts/commit/1c23328f1e9cb6d076adb8e7b548a40b341f3c0c)), closes [#32564](https://github.com/bitnami/charts/issues/32564)
 
 ## 2.2.0 (2025-02-24)
 
