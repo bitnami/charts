@@ -1,6 +1,6 @@
 # Changelog
 
-## 7.4.2 (2025-04-03)
+## 7.4.2 (2025-04-09)
 
 * [bitnami/metrics-server] Release 7.4.2 ([#32746](https://github.com/bitnami/charts/pull/32746))
 
