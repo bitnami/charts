@@ -1,8 +1,12 @@
 # Changelog
 
+## 3.0.1 (2025-04-09)
+
+* [bitnami/valkey-cluster] Release 3.0.1 ([#32935](https://github.com/bitnami/charts/pull/32935))
+
 ## 3.0.0 (2025-04-09)
 
-* [bitnami/valkey-cluster] Release 3.0.0 ([#32934](https://github.com/bitnami/charts/pull/32934))
+* [bitnami/valkey-cluster] Release 3.0.0 (#32934) ([7b1a034](https://github.com/bitnami/charts/commit/7b1a03414cce9425fb364332f5f669dc0bda348d)), closes [#32934](https://github.com/bitnami/charts/issues/32934)
 
 ## <small>2.2.1 (2025-03-28)</small>
 
