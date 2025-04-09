@@ -42,4 +42,4 @@ maintainers:
 name: discourse
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/discourse
-version: 15.1.12
+version: 15.1.13
