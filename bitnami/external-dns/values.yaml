@@ -858,6 +858,10 @@ txtEncrypt:
   ## This ignores txtEncrypt.aesKey
   ##
   secretName: ""
+## @param txtNewFormatOnly When using the TXT registry, use only the new format for ownership records (optional)
+## ref: https://github.com/kubernetes-sigs/external-dns/blob/master/docs/registry/txt.md#record-format-options
+##
+txtNewFormatOnly: false
 ## @param extraArgs Extra arguments to be passed to external-dns
 ##
 extraArgs: {}
