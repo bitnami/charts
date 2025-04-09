@@ -7,11 +7,11 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: concourse
-      image: docker.io/bitnami/concourse:7.13.0-debian-12-r1
+      image: docker.io/bitnami/concourse:7.13.1-debian-12-r0
     - name: os-shell
       image: docker.io/bitnami/os-shell:12-debian-12-r42
 apiVersion: v2
-appVersion: 7.13.0
+appVersion: 7.13.1
 dependencies:
 - condition: postgresql.enabled
   name: postgresql
@@ -38,4 +38,4 @@ maintainers:
 name: concourse
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/concourse
-version: 5.1.21
+version: 5.1.22
