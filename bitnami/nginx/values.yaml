@@ -105,7 +105,7 @@ image:
   debug: false
 ## @param enableDefaultInitContainers If set to false, disable all init containers except user-defined at `initContainer`.
 ##
-enableDefaultInitContainers: false
+enableDefaultInitContainers: true
 ## @param automountServiceAccountToken Mount Service Account token in pod
 ##
 automountServiceAccountToken: false
