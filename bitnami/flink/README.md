@@ -386,16 +386,16 @@ persistence:
 
 ### Persistence parameters
 
-| Name                                    | Description                                                                                               | Value           |
-| --------------------------------------- | ----------------------------------------------------------------------------------------------------------| --------------- |
-| `persistence.jobmanager.enabled`        | Enable jobmanager persistence                                                                             | `false`         |
-| `persistence.jobmanager.accessMode`     | Persistent Volume Access Mode                                                                             | `ReadWriteOnce` |
-| `persistence.jobmanager.existingClaim`  | If you want to reuse an existing claim, you can pass the name of the PVC using the existingClaim variable | `""`            |
-| `persistence.jobmanager.size`           | Size for the PV                                                                                           | `5Gi`           |
-| `persistence.taskmanager.enabled`       | Enable taskmanager persistence                                                                            | `false`         |
-| `persistence.taskmanager.accessMode`    | Persistent Volume Access Mode                                                                             | `ReadWriteOnce` |
-| `persistence.taskmanager.existingClaim` | If you want to reuse an existing claim, you can pass the name of the PVC using the existingClaim variable | `""`            |
-| `persistence.taskmanager.size`          | Size for the PV                                                                                           | `5Gi`           |
+| Name                                    | Description                                                                                               | Value               |
+| --------------------------------------- | --------------------------------------------------------------------------------------------------------- | ------------------- |
+| `persistence.jobmanager.enabled`        | Enable persistence.jobmanager                                                                             | `false`             |
+| `persistence.jobmanager.accessModes`    | Persistent Volume Access Mode                                                                             | `["ReadWriteOnce"]` |
+| `persistence.jobmanager.existingClaim`  | If you want to reuse an existing claim, you can pass the name of the PVC using the existingClaim variable | `""`                |
+| `persistence.jobmanager.size`           | Size for the PV                                                                                           | `5Gi`               |
+| `persistence.taskmanager.enabled`       | Enable persistence.taskmanager                                                                            | `false`             |
+| `persistence.taskmanager.accessModes`   | Persistent Volume Access Mode                                                                             | `["ReadWriteOnce"]` |
+| `persistence.taskmanager.existingClaim` | If you want to reuse an existing claim, you can pass the name of the PVC using the existingClaim variable | `""`                |
+| `persistence.taskmanager.size`          | Size for the PV                                                                                           | `5Gi`               |
 
 ## Upgrading
 
