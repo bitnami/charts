@@ -1,6 +1,6 @@
 # Changelog
 
-## 11.2.3 (2025-04-08)
+## 11.2.3 (2025-04-09)
 
 * [bitnami/etcd] fix livenessprobe when metrics.useSeparateEndpoint is set ([#32870](https://github.com/bitnami/charts/pull/32870))
 
