@@ -84,8 +84,9 @@ spec:
       {{- if .Values.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
       {{- end }}
-      {{- if and (not .Values.enableDefaultInitContainers) (or .Values.containerSecurityContext.readOnlyRootFilesystem .Values.cloneStaticSiteFromGit.enabled .Values.initContainers) }}
+      {{- if or .Values.initContainers (and .Values.enableDefaultInitContainers (or .Values.containerSecurityContext.readOnlyRootFilesystem .Values.cloneStaticSiteFromGit.enabled)) }}
       initContainers:
+      {{- if .Values.enableDefaultInitContainers }}
       {{- if .Values.containerSecurityContext.readOnlyRootFilesystem }}
         - name: preserve-logs-symlinks
           image: {{ include "nginx.image" . }}
@@ -112,7 +113,8 @@ spec:
           volumeMounts:
             - name: empty-dir
               mountPath: /emptydir
-      {{- end }}        
+      {{- end }}
+      {{- end }}
       {{- if or .Values.cloneStaticSiteFromGit.enabled .Values.initContainers }}
         {{- if .Values.cloneStaticSiteFromGit.enabled }}
         - name: git-clone-repository
