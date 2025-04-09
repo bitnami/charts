@@ -40,4 +40,4 @@ maintainers:
 name: appsmith
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/appsmith
-version: 5.2.3
+version: 5.2.4

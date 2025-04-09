@@ -1,8 +1,12 @@
 # Changelog
 
+## 1.9.1 (2025-04-09)
+
+* [bitnami/opensearch] Release 1.9.1 ([#32916](https://github.com/bitnami/charts/pull/32916))
+
 ## 1.9.0 (2025-04-04)
 
-* [bitnami/opensearch] Set `usePasswordFiles=true` by default ([#32797](https://github.com/bitnami/charts/pull/32797))
+* [bitnami/opensearch] Set `usePasswordFiles=true` by default (#32797) ([d1ea259](https://github.com/bitnami/charts/commit/d1ea2593fc3a34439b742ac077edec74a1b8b3a6)), closes [#32797](https://github.com/bitnami/charts/issues/32797)
 
 ## <small>1.8.2 (2025-04-02)</small>
 
