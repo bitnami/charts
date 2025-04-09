@@ -887,12 +887,28 @@ taskmanager:
 ## @section Persistence parameters
 ## Note: If global.defaultStorageClass is not empty and persistence.enabled is true, defaultStorageClass is used.
 ## Note: If existingClaim is set, then global.defaultStorageClass is ignored.
-## @param persistence.enabled Enable persistence
-## @param persistence.accessMode Persistent Volume Access Mode
-## @param persistence.existingClaim If you want to reuse an existing claim, you can pass the name of the PVC using the existingClaim variable
-## @param persistence.size Size for the PV
+##
 persistence:
-  enabled: false
-  accessMode: ReadWriteOnce
-  existingClaim: ""
-  size: 10Gi
+  jobmanager:
+    ## @param persistence.jobmanager.enabled Enable persistence.jobmanager
+    ## @param persistence.jobmanager.accessModes Persistent Volume Access Mode
+    ## Note: if jobmanager replicCount > 1, set ReadWriteMany
+    ## @param persistence.jobmanager.existingClaim If you want to reuse an existing claim, you can pass the name of the PVC using the existingClaim variable
+    ## @param persistence.jobmanager.size Size for the PV
+    ##
+    enabled: false
+    accessModes:
+      - ReadWriteOnce
+    existingClaim: ""
+    size: 2Gi
+    ## @param persistence.taskmanager.enabled Enable persistence.taskmanager
+    ## @param persistence.taskmanager.accessModes Persistent Volume Access Mode
+    ## @param persistence.taskmanager.existingClaim If you want to reuse an existing claim, you can pass the name of the PVC using the existingClaim variable
+    ## @param persistence.taskmanager.size Size for the PV
+    ##
+  taskmanager:
+    enabled: false
+    accessModes:
+      - ReadWriteOnce
+    existingClaim: ""
+    size: 2Gi

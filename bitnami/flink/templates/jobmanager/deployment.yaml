@@ -172,12 +172,12 @@ spec:
             - name: empty-dir
               mountPath: /bitnami/flink/conf
               subPath: app-conf-dir
-            {{- if .Values.jobmanager.extraVolumeMounts }}
-            {{- include "common.tplvalues.render" ( dict "value" .Values.jobmanager.extraVolumeMounts "context" $) | nindent 12 }}
-            {{- end }}
-            {{- if .Values.persistence.enabled }}
+            {{- if .Values.persistence.jobmanager.enabled }}
             - name: data
               mountPath: /data
+            {{- end }}
+            {{- if .Values.jobmanager.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.jobmanager.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
         {{- if .Values.jobmanager.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.jobmanager.sidecars "context" $) | nindent 8 }}
@@ -188,14 +188,12 @@ spec:
         {{- if .Values.jobmanager.extraVolumes }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.jobmanager.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
-        {{- if .Values.persistence.enabled }}
-        {{- if .Values.persistence.existingClaim }}
+        {{- if .Values.persistence.jobmanager.enabled }}
         - name: data
           persistentVolumeClaim:
-            claimName: {{ .Values.persistence.existingClaim }}
-        {{- else }}
-        - name: data
-          persistentVolumeClaim:
-            claimName: {{ include "flink.jobmanager.fullname" . }}-data
-        {{- end }}
+            {{- if .Values.persistence.jobmanager.existingClaim }}
+            claimName: {{ tpl .Values.persistence.jobmanager.existingClaim . }}
+            {{- else }}
+            claimName: {{ printf "data-%s" (include "flink.jobmanager.fullname" .) }}
+            {{- end }}
         {{- end }}
