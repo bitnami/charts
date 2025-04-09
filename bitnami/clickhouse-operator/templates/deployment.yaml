@@ -151,6 +151,10 @@ spec:
                 resourceFieldRef:
                   containerName: operator
                   resource: limits.memory
+            - name: CLICKHOUSE_CONTAINER_IMAGE
+              value: {{ include "clickhouse-operator.clickhouse.image" . | quote }}
+            - name: KEEPER_CONTAINER_IMAGE
+              value: {{ include "clickhouse-operator.keeper.image" . | quote }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
