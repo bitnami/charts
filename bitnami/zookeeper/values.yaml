@@ -63,6 +63,9 @@ commonAnnotations: {}
 ## Useful when including ZooKeeper as a chart dependency, so it can be released into a different namespace than the parent
 ##
 namespaceOverride: ""
+## @param usePasswordFiles Mount credentials as files instead of using environment variables
+##
+usePasswordFiles: true
 ## Enable diagnostic mode in the statefulset
 ##
 diagnosticMode:
@@ -92,7 +95,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/zookeeper
-  tag: 3.9.3-debian-12-r8
+  tag: 3.9.3-debian-12-r10
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -776,7 +779,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r39
+    tag: 12-debian-12-r40
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

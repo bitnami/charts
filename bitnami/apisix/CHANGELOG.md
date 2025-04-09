@@ -1,8 +1,13 @@
 # Changelog
 
-## 4.2.1 (2025-03-20)
+## 4.2.2 (2025-04-01)
 
-* [bitnami/apisix] Release 4.2.1 ([#32540](https://github.com/bitnami/charts/pull/32540))
+* [bitnami/apisix] Release 4.2.2 ([#32695](https://github.com/bitnami/charts/pull/32695))
+
+## <small>4.2.1 (2025-03-20)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/apisix] Release 4.2.1 (#32540) ([740e6c3](https://github.com/bitnami/charts/commit/740e6c318f0cdd53e45a6ad0d9cedeb4a19b7248)), closes [#32540](https://github.com/bitnami/charts/issues/32540)
 
 ## 4.2.0 (2025-02-24)
 

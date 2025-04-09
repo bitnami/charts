@@ -1,0 +1,20 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+http:
+  # Services names and ports hardcoded in the operator
+  http://operator:4221:
+    status: 404
+  https://sts:4223:
+    status: 404
+    allow-insecure: true
+command:
+  # Check that the operator formed the cluster correctly
+  check-cluster-formation:
+    exec: bash -ec '. /tmp/minio/config.env && HOME=/tmp mc alias set vibminio https://minio.$NAMESPACE $MINIO_ROOT_USER $MINIO_ROOT_PASSWORD --insecure && HOME=/tmp mc admin info vibminio --insecure'
+    exit-status: 0
+    stdout:
+      - /vib-minio-pool-0-0/
+      - /vib-minio-pool-0-1/
+      - "Drives: 2/2 OK"
+      - "Pool: 1"

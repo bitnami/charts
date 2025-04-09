@@ -57,6 +57,9 @@ extraDeploy: []
 ## @param clusterDomain Kubernetes cluster domain name
 ##
 clusterDomain: cluster.local
+## @param usePasswordFiles Mount credentials as files instead of using environment variables
+##
+usePasswordFiles: true
 ## Enable diagnostic mode in the deployment(s)/statefulset(s)
 ##
 diagnosticMode:
@@ -510,7 +513,7 @@ ingress:
   ##   path: /
   ##
   extraHosts: []
-  ## @param ingress.extraPaths Additional arbitrary path/backend objects. Evaluated as a template. 
+  ## @param ingress.extraPaths Additional arbitrary path/backend objects. Evaluated as a template.
   ## For example: The ALB ingress controller requires a special rule for handling SSL redirection.
   ## extraPaths:
   ## - path: /*

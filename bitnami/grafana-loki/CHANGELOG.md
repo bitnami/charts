@@ -1,8 +1,17 @@
 # Changelog
 
-## 4.7.6 (2025-03-05)
+## 4.7.8 (2025-04-04)
 
-* [bitnami/grafana-loki] Release 4.7.6 ([#32290](https://github.com/bitnami/charts/pull/32290))
+* [bitnami/grafana-loki] Release 4.7.8 ([#32818](https://github.com/bitnami/charts/pull/32818))
+
+## <small>4.7.7 (2025-04-01)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/grafana-loki] Release 4.7.7 (#32733) ([0a73e2b](https://github.com/bitnami/charts/commit/0a73e2bbc57dfa6a0114f40730717a1f79f918f7)), closes [#32733](https://github.com/bitnami/charts/issues/32733)
+
+## <small>4.7.6 (2025-03-05)</small>
+
+* [bitnami/grafana-loki] Release 4.7.6 (#32290) ([b88e4c4](https://github.com/bitnami/charts/commit/b88e4c40285eee65ea33132671cf7de0e27ca0ac)), closes [#32290](https://github.com/bitnami/charts/issues/32290)
 
 ## <small>4.7.5 (2025-02-19)</small>
 

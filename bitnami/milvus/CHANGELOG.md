@@ -1,8 +1,33 @@
 # Changelog
 
-## 11.2.4 (2025-03-25)
+## 13.2.0 (2025-04-08)
 
-* [bitnami/milvus] Release 11.2.4 ([#32593](https://github.com/bitnami/charts/pull/32593))
+* [bitnami/milvus] Update minio chart ([#32867](https://github.com/bitnami/charts/pull/32867))
+
+## 13.1.0 (2025-04-07)
+
+* [bitnami/milvus] Set `usePasswordFiles=true` by default (#32642) ([acd95f9](https://github.com/bitnami/charts/commit/acd95f9000cbb69abaa282d6149d59e036fc77b1)), closes [#32642](https://github.com/bitnami/charts/issues/32642)
+
+## 13.0.0 (2025-04-04)
+
+* [bitnami/milvus] Bump MinIO major version 16.x.x (#32701) ([a6fc148](https://github.com/bitnami/charts/commit/a6fc148e3681569d589034aff435f1aadaf8d00e)), closes [#32701](https://github.com/bitnami/charts/issues/32701)
+
+## <small>12.0.2 (2025-04-02)</small>
+
+* [bitnami/milvus] Release 12.0.2 (#32747) ([03cba8a](https://github.com/bitnami/charts/commit/03cba8a5cd6dc34089fd235193b93f22a8a99f1f)), closes [#32747](https://github.com/bitnami/charts/issues/32747)
+
+## <small>12.0.1 (2025-03-31)</small>
+
+* [bitnami/milvus] Release 12.0.1 (#32690) ([cae0234](https://github.com/bitnami/charts/commit/cae02342c38ff522d3d8d061c1074afd187b4c81)), closes [#32690](https://github.com/bitnami/charts/issues/32690)
+
+## 12.0.0 (2025-03-27)
+
+* [bitnami/milvus] feat: bump major due to major bump on Kafka dep (#32617) ([86f459a](https://github.com/bitnami/charts/commit/86f459abe1617f730a431edd103530eea4dbd59e)), closes [#32617](https://github.com/bitnami/charts/issues/32617)
+
+## <small>11.2.4 (2025-03-25)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/milvus] Release 11.2.4 (#32593) ([3521264](https://github.com/bitnami/charts/commit/3521264684c5a1b09a50a5c8c50453cc9af62f02)), closes [#32593](https://github.com/bitnami/charts/issues/32593)
 
 ## <small>11.2.3 (2025-03-05)</small>
 

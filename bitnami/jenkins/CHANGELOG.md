@@ -1,8 +1,17 @@
 # Changelog
 
-## 13.5.7 (2025-03-05)
+## 13.6.1 (2025-04-02)
 
-* [bitnami/jenkins] Release 13.5.7 ([#32326](https://github.com/bitnami/charts/pull/32326))
+* [bitnami/jenkins] Release 13.6.1 ([#32781](https://github.com/bitnami/charts/pull/32781))
+
+## 13.6.0 (2025-03-27)
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/jenkins] Set `usePasswordFiles=true` by default (#32349) ([7ea2171](https://github.com/bitnami/charts/commit/7ea2171d3dfac06a7fc58781629f1c589ac2d7f1)), closes [#32349](https://github.com/bitnami/charts/issues/32349)
+
+## <small>13.5.7 (2025-03-05)</small>
+
+* [bitnami/jenkins] Release 13.5.7 (#32326) ([9b1a7c4](https://github.com/bitnami/charts/commit/9b1a7c4495ad5f9642e2b26849f900c05d7e77a4)), closes [#32326](https://github.com/bitnami/charts/issues/32326)
 
 ## <small>13.5.6 (2025-02-19)</small>
 

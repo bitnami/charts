@@ -62,6 +62,9 @@ clusterDomain: cluster.local
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
+## @param usePasswordFiles Mount credentials as files instead of using environment variables
+##
+usePasswordFiles: true
 ## Enable diagnostic mode in the deployment
 ##
 diagnosticMode:
@@ -89,7 +92,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mastodon
-  tag: 4.3.6-debian-12-r0
+  tag: 4.3.7-debian-12-r1
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1761,7 +1764,7 @@ defaultInitContainers:
     image:
       registry: docker.io
       repository: bitnami/os-shell
-      tag: 12-debian-12-r39
+      tag: 12-debian-12-r40
       pullPolicy: IfNotPresent
       ## Optionally specify an array of imagePullSecrets.
       ## Secrets must be manually created in the namespace.

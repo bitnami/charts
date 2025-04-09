@@ -122,11 +122,16 @@ spec:
               value: {{ ternary "true" "false" (or .Values.dashboard.image.debug .Values.diagnosticMode.enabled) | quote }}
             - name: PARSE_DASHBOARD_USER
               value: {{ .Values.dashboard.username }}
+            {{- if .Values.usePasswordFiles }}
+            - name: PARSE_DASHBOARD_PASSWORD_FILE
+              value: "/opt/bitnami/parse-dashboard/secrets/parse-dashboard-password"
+            {{- else }}
             - name: PARSE_DASHBOARD_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "common.names.fullname" . }}
                   key: parse-dashboard-password
+            {{- end }}
             - name: PARSE_HOST
               value: {{ include "parse.host" . | quote }}
             - name: PARSE_USE_HOSTNAME
@@ -137,11 +142,16 @@ spec:
               value: {{ .Values.dashboard.parseServerUrlProtocol | quote }}
             - name: PARSE_APP_ID
               value: {{ .Values.server.appId | quote }}
+            {{- if .Values.usePasswordFiles }}
+            - name: PARSE_MASTER_KEY_FILE
+              value: "/opt/bitnami/parse-dashboard/secrets/master-key"
+            {{- else }}
             - name: PARSE_MASTER_KEY
               valueFrom:
                 secretKeyRef:
                   name: {{ include "common.names.fullname" . }}
                   key: master-key
+            {{- end }}
             - name: PARSE_DASHBOARD_APP_NAME
               value: {{ .Values.dashboard.appName | quote }}
             - name: PARSE_FORCE_OVERWRITE_CONF_FILE
@@ -216,6 +226,10 @@ spec:
             - name: empty-dir
               mountPath: /tmp
               subPath: tmp-dir
+            {{- if  .Values.usePasswordFiles }}
+            - name: parse-dashboard-secrets
+              mountPath: /opt/bitnami/parse-dashboard/secrets
+            {{- end }}
           {{- if .Values.dashboard.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.dashboard.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -225,6 +239,13 @@ spec:
       volumes:
         - name: empty-dir
           emptyDir: {}
+        {{- if .Values.usePasswordFiles }}
+        - name: parse-dashboard-secrets
+          projected:
+            sources:
+              - secret:
+                  name: {{ include "common.names.fullname" . }}
+        {{- end }}
         {{- if .Values.dashboard.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.dashboard.extraVolumes "context" $) | nindent 8 }}
         {{- end }}

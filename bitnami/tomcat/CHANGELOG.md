@@ -1,8 +1,21 @@
 # Changelog
 
-## 11.6.0 (2025-03-11)
+## 11.7.1 (2025-04-08)
 
-* [bitnami/tomcat] add annotations & labels to volumeClaimTemplate ([#32396](https://github.com/bitnami/charts/pull/32396))
+* [bitnami/tomcat] Release 11.7.1 ([#32871](https://github.com/bitnami/charts/pull/32871))
+
+## 11.7.0 (2025-04-04)
+
+* [bitnami/tomcat] Set `usePasswordFiles=true` by default (#32767) ([eae8740](https://github.com/bitnami/charts/commit/eae8740db4531b00fa202e12c50bfe7edc9a73b7)), closes [#32767](https://github.com/bitnami/charts/issues/32767)
+
+## <small>11.6.1 (2025-03-27)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/tomcat] Release 11.6.1 (#32629) ([da54156](https://github.com/bitnami/charts/commit/da541565254f8a73b4bf1eb62746235e70dbed12)), closes [#32629](https://github.com/bitnami/charts/issues/32629)
+
+## 11.6.0 (2025-03-12)
+
+* [bitnami/tomcat] add annotations & labels to volumeClaimTemplate (#32396) ([553b0a8](https://github.com/bitnami/charts/commit/553b0a8ef1ef324a0da90ffe226bbe1910437bec)), closes [#32396](https://github.com/bitnami/charts/issues/32396)
 
 ## <small>11.5.6 (2025-03-08)</small>
 

@@ -3,7 +3,7 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if .Values.rbac.create -}}
+{{- if .Values.rbac.create }}
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: RoleBinding
 metadata:
@@ -22,4 +22,4 @@ subjects:
   - kind: ServiceAccount
     name: {{ include "neo4j.serviceAccountName" . }}
     namespace: {{ .Release.Namespace | quote }}
-{{- end -}}
+{{- end }}

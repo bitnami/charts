@@ -65,6 +65,9 @@ extraDeploy: []
 ## If you experience slow pod startups or slow running of the scripts you probably want to set this to `false`.
 ##
 enableServiceLinks: false
+## @param usePasswordFiles Mount credentials as files instead of using environment variables
+##
+usePasswordFiles: true
 ## Enable diagnostic mode in the deployments/statefulsets
 ##
 diagnosticMode:
@@ -95,7 +98,7 @@ milvus:
   image:
     registry: docker.io
     repository: bitnami/milvus
-    tag: 2.5.7-debian-12-r0
+    tag: 2.5.8-debian-12-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -175,7 +178,7 @@ milvus:
         {{- if .Values.kafka.enabled  }}
           {{- $brokerReplicas := $.Values.kafka.broker.replicaCount | int }}
           {{- $controllerReplicas := 0 }}
-          {{- if or (not .Values.kafka.kraft.enabled) (not .Values.kafka.controller.controllerOnly)}}
+          {{- if not .Values.kafka.controller.controllerOnly }}
           {{- $controllerReplicas = $.Values.kafka.controller.replicaCount | int }}
           {{- end }}
           {{- range $i, $_e := until $brokerReplicas }}
@@ -4607,7 +4610,7 @@ attu:
   image:
     registry: docker.io
     repository: bitnami/attu
-    tag: 2.5.5-debian-12-r1
+    tag: 2.5.6-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -5438,10 +5441,10 @@ kafka:
   service:
     ports:
       client: 9092
-  ## @param kafka.extraConfig Additional configuration to be appended at the end of the generated Kafka configuration file.
+  ## @param kafka.overrideConfiguration [object] Kafka common configuration override
   ##
-  extraConfig: |-
-    offsets.topic.replication.factor=1
+  overrideConfiguration:
+    offsets.topic.replication.factor: 1
   ## @param kafka.listeners.client.protocol Kafka authentication protocol for the client listener
   ##
   listeners:

@@ -1,6 +1,8 @@
 module vib-tests
 
-go 1.19
+go 1.23.0
+
+toolchain go1.24.1
 
 require (
 	github.com/onsi/ginkgo/v2 v2.7.0

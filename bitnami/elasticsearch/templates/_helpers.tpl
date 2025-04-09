@@ -467,11 +467,16 @@ Add environment variables to configure database values
 {{- define "elasticsearch.configure.security" -}}
 - name: ELASTICSEARCH_ENABLE_SECURITY
   value: "true"
+{{- if .Values.usePasswordFiles }}
+- name: ELASTICSEARCH_PASSWORD_FILE
+  value: "/opt/bitnami/elasticsearch/secrets/elasticsearch-password"
+{{- else }}
 - name: ELASTICSEARCH_PASSWORD
   valueFrom:
     secretKeyRef:
         name: {{ include "elasticsearch.secretName" . }}
         key: elasticsearch-password
+{{- end }}
 - name: ELASTICSEARCH_ENABLE_FIPS_MODE
   value: {{ .Values.security.fipsMode | quote }}
 - name: ELASTICSEARCH_TLS_VERIFICATION_MODE
@@ -488,25 +493,40 @@ Add environment variables to configure database values
   value: "/opt/bitnami/elasticsearch/config/certs/{{ .Values.security.tls.truststoreFilename }}"
 {{- end }}
 {{- if and (not .Values.security.tls.usePemCerts) (or .Values.security.tls.keystorePassword .Values.security.tls.passwordsSecret) }}
+{{- if .Values.usePasswordFiles }}
+- name: ELASTICSEARCH_KEYSTORE_PASSWORD_FILE
+  value: {{ printf "/opt/bitnami/elasticsearch/secrets/%s" (include "elasticsearch.keystorePasswordKey" .) }}
+{{- else }}
 - name: ELASTICSEARCH_KEYSTORE_PASSWORD
   valueFrom:
     secretKeyRef:
       name: {{ include "elasticsearch.tlsPasswordsSecret" . }}
       key: {{ include "elasticsearch.keystorePasswordKey" . | quote }}
 {{- end }}
+{{- end }}
 {{- if and (not .Values.security.tls.usePemCerts) (or .Values.security.tls.truststorePassword .Values.security.tls.passwordsSecret) }}
+{{- if .Values.usePasswordFiles }}
+- name: ELASTICSEARCH_TRUSTSTORE_PASSWORD_FILE
+  value: {{ printf "/opt/bitnami/elasticsearch/secrets/%s" (include "elasticsearch.truststorePasswordKey" .) }}
+{{- else }}
 - name: ELASTICSEARCH_TRUSTSTORE_PASSWORD
   valueFrom:
     secretKeyRef:
       name: {{ include "elasticsearch.tlsPasswordsSecret" . }}
       key: {{ include "elasticsearch.truststorePasswordKey" . | quote }}
 {{- end }}
+{{- end }}
 {{- if and .Values.security.tls.usePemCerts (or .Values.security.tls.keyPassword .Values.security.tls.passwordsSecret) }}
+{{- if .Values.usePasswordFiles }}
+- name: ELASTICSEARCH_KEY_PASSWORD_FILE
+  value: {{ printf "/opt/bitnami/elasticsearch/secrets/%s" (include "elasticsearch.keyPasswordKey" .) }}
+{{- else }}
 - name: ELASTICSEARCH_KEY_PASSWORD
   valueFrom:
     secretKeyRef:
       name: {{ include "elasticsearch.tlsPasswordsSecret" . }}
       key: {{ include "elasticsearch.keyPasswordKey" . | quote }}
+{{- end }}
 {{- end }}
 {{- end -}}
 

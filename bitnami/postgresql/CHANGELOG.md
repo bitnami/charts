@@ -1,8 +1,20 @@
 # Changelog
 
-## 16.5.6 (2025-03-23)
+## 16.6.2 (2025-04-07)
 
-* [bitnami/postgresql] Release 16.5.6 ([#32576](https://github.com/bitnami/charts/pull/32576))
+* [bitnami/postgresql] Release 16.6.2 ([#32842](https://github.com/bitnami/charts/pull/32842))
+
+## <small>16.6.1 (2025-04-07)</small>
+
+* [bitnami/postgresql] Release 16.6.1 (#32834) ([d254ab7](https://github.com/bitnami/charts/commit/d254ab737a59c0c0a546979057f89bcf74d788a0)), closes [#32834](https://github.com/bitnami/charts/issues/32834)
+
+## 16.6.0 (2025-03-27)
+
+* [bitnami/postgresql] Set `usePasswordFiles=true` by default (#32115) ([2203c41](https://github.com/bitnami/charts/commit/2203c41cb173248d26c8fb073d28e93165888ebc)), closes [#32115](https://github.com/bitnami/charts/issues/32115)
+
+## <small>16.5.6 (2025-03-23)</small>
+
+* [bitnami/postgresql] Release 16.5.6 (#32576) ([7aac5fd](https://github.com/bitnami/charts/commit/7aac5fd297380af0d94f85922657fbc999dfaadc)), closes [#32576](https://github.com/bitnami/charts/issues/32576)
 
 ## <small>16.5.5 (2025-03-20)</small>
 

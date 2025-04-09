@@ -33,4 +33,4 @@ maintainers:
 name: kibana
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/kibana
-version: 11.5.3
+version: 11.6.0

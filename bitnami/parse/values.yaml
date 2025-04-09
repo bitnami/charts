@@ -57,6 +57,9 @@ commonAnnotations: {}
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
+## @param usePasswordFiles Mount credentials as files instead of using environment variables
+##
+usePasswordFiles: true
 ## Enable diagnostic mode in the deployment
 ##
 diagnosticMode:
@@ -91,7 +94,7 @@ server:
   image:
     registry: docker.io
     repository: bitnami/parse
-    tag: 8.0.0-debian-12-r1
+    tag: 8.1.0-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -527,7 +530,7 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/parse-dashboard
-    tag: 6.1.0-debian-12-r0
+    tag: 6.2.0-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1114,7 +1117,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r39
+    tag: 12-debian-12-r40
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
