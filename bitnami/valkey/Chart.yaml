@@ -13,7 +13,7 @@ annotations:
     - name: redis-exporter
       image: docker.io/bitnami/redis-exporter:1.69.0-debian-12-r4
     - name: valkey
-      image: docker.io/bitnami/valkey:8.1.0-debian-12-r0
+      image: docker.io/bitnami/valkey:8.1.0-debian-12-r2
     - name: valkey-sentinel
       image: docker.io/bitnami/valkey-sentinel:8.1.0-debian-12-r0
 apiVersion: v2
@@ -37,4 +37,4 @@ maintainers:
 name: valkey
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/valkey
-version: 3.0.0
+version: 3.0.1
