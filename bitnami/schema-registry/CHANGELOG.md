@@ -1,5 +1,9 @@
 # Changelog
 
+## 25.1.1 (2025-04-09)
+
+* [bitnami/schema-registry] Set statefulset as reference for HPA instead of deployment ([#32869](https://github.com/bitnami/charts/issues/32869))
+
 ## 25.1.0 (2025-04-01)
 
 * [bitnami/schema-registry] Set `usePasswordFiles=true` by default ([#32713](https://github.com/bitnami/charts/pull/32713))
