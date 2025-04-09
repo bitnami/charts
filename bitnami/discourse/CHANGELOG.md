@@ -1,8 +1,12 @@
 # Changelog
 
-## 15.1.11 (2025-04-08)
+## 15.1.12 (2025-04-09)
 
-* [bitnami/discourse] Release 15.1.11 ([#32876](https://github.com/bitnami/charts/pull/32876))
+* [bitnami/discourse] Release 15.1.12 ([#32879](https://github.com/bitnami/charts/pull/32879))
+
+## <small>15.1.11 (2025-04-08)</small>
+
+* [bitnami/discourse] Release 15.1.11 (#32876) ([707afb7](https://github.com/bitnami/charts/commit/707afb70e81836b102ec50ff89f58cad97a74306)), closes [#32876](https://github.com/bitnami/charts/issues/32876)
 
 ## <small>15.1.10 (2025-04-07)</small>
 

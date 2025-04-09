@@ -4,6 +4,10 @@
 
 * [bitnami/external-dns] Add support for --txt-new-format-only ([#32880](https://github.com/bitnami/charts/pull/32880))
 
+## <small>8.7.11 (2025-04-08)</small>
+
+* bitnami/external-dns: do not set EXTERNAL_DNS_RFC2136_TSIG_SECRET when rfc2136 provider is not used ([#32661](https://github.com/bitnami/charts/pull/32661))
+
 ## <small>8.7.10 (2025-04-03)</small>
 
 * [bitnami/external-dns] Add RBAC to support F5 TransportServer source (#32633) ([8ac86c0](https://github.com/bitnami/charts/commit/8ac86c06ed7fafd739abb335a9ff99794ca548aa)), closes [#32633](https://github.com/bitnami/charts/issues/32633)
