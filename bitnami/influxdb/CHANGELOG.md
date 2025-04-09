@@ -1,6 +1,6 @@
 # Changelog
 
-## 6.6.3 (2025-04-08)
+## 6.6.3 (2025-04-09)
 
 * [bitnami/influxdb] Fix typo in backup cronjob ([#32843](https://github.com/bitnami/charts/pull/32843))
 
