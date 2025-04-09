@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.2.2 (2025-04-01)
+## 11.2.3 (2025-04-09)
 
-* [bitnami/etcd] Release 11.2.2 ([#32727](https://github.com/bitnami/charts/pull/32727))
+* [bitnami/etcd] Simplify condition ([#32814](https://github.com/bitnami/charts/pull/32814))
+
+## <small>11.2.2 (2025-04-01)</small>
+
+* [bitnami/etcd] Release 11.2.2 (#32727) ([b34eff7](https://github.com/bitnami/charts/commit/b34eff75291633a39b02ed46c27c60250a07d3f9)), closes [#32727](https://github.com/bitnami/charts/issues/32727)
 
 ## <small>11.2.1 (2025-03-28)</small>
 
