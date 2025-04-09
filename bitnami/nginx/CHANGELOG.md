@@ -1,8 +1,12 @@
 # Changelog
 
-## 19.0.4 (2025-03-25)
+## 19.1.0 (2025-04-09)
 
-* [bitnami/nginx] Ingress hostname dynamic tpl function ([#32421](https://github.com/bitnami/charts/pull/32421))
+* [bitnami/nginx] feat(nginx-optional-initcontainers): Enable optional initcontainers ([#32577](https://github.com/bitnami/charts/pull/32577))
+
+## <small>19.0.4 (2025-04-02)</small>
+
+* [bitnami/nginx] Ingress hostname dynamic tpl function (#32421) ([4e232c3](https://github.com/bitnami/charts/commit/4e232c32dcced4935ccc378597a0bfb9e1432f63)), closes [#32421](https://github.com/bitnami/charts/issues/32421)
 
 ## <small>19.0.3 (2025-03-25)</small>
 
