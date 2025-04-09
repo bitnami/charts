@@ -1,8 +1,12 @@
 # Changelog
 
-## 16.0.3 (2025-04-08)
+## 16.0.4 (2025-04-09)
 
-* [bitnami/minio] Release 16.0.3 ([#32877](https://github.com/bitnami/charts/pull/32877))
+* [bitnami/minio] Fix issue when using custom secret keys ([#32882](https://github.com/bitnami/charts/pull/32882))
+
+## <small>16.0.3 (2025-04-08)</small>
+
+* [bitnami/minio] Release 16.0.3 (#32877) ([3dc1ea0](https://github.com/bitnami/charts/commit/3dc1ea0dbbcf21bd58182639486c7be75b20524d)), closes [#32877](https://github.com/bitnami/charts/issues/32877)
 
 ## <small>16.0.2 (2025-04-03)</small>
 
