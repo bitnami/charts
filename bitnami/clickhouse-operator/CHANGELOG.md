@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.1.2 (2025-04-09)
+## 0.1.3 (2025-04-09)
 
-* [bitnami/clickhouse-operator] Release 0.1.2 ([#32888](https://github.com/bitnami/charts/pull/32888))
+* [bitnami/clickhouse-operator] Release 0.1.3 ([#32899](https://github.com/bitnami/charts/pull/32899))
+
+## <small>0.1.2 (2025-04-09)</small>
+
+* [bitnami/clickhouse-operator] Release 0.1.2 (#32888) ([2df3136](https://github.com/bitnami/charts/commit/2df313651655137db32edb0dfeab5cb82b5535b6)), closes [#32888](https://github.com/bitnami/charts/issues/32888)
 
 ## <small>0.1.1 (2025-04-08)</small>
 
