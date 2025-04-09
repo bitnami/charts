@@ -1,8 +1,12 @@
 # Changelog
 
+## 3.0.1 (2025-04-09)
+
+* [bitnami/mlflow] Release 3.0.1 ([#32908](https://github.com/bitnami/charts/pull/32908))
+
 ## 3.0.0 (2025-04-03)
 
-* [bitnami/mlflow] Bump MinIO major version 16.x.x ([#32702](https://github.com/bitnami/charts/pull/32702))
+* [bitnami/mlflow] Bump MinIO major version 16.x.x (#32702) ([a617c30](https://github.com/bitnami/charts/commit/a617c304ad4f18ac118dfa84052b7612865c9b52)), closes [#32702](https://github.com/bitnami/charts/issues/32702)
 
 ## <small>2.5.8 (2025-04-03)</small>
 
