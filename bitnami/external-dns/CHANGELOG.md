@@ -4,9 +4,9 @@
 
 * [bitnami/external-dns] Add support for --txt-new-format-only ([#32880](https://github.com/bitnami/charts/pull/32880))
 
-## <small>8.7.11 (2025-04-08)</small>
+## <small>8.7.11 (2025-04-09)</small>
 
-* bitnami/external-dns: do not set EXTERNAL_DNS_RFC2136_TSIG_SECRET when rfc2136 provider is not used ([#32661](https://github.com/bitnami/charts/pull/32661))
+* bitnami/external-dns: do not set EXTERNAL_DNS_RFC2136_TSIG_SECRET when rfc2136 provider is not used  ([5707499](https://github.com/bitnami/charts/commit/5707499ee4917a7c592b5d47098bb0dc8661dc13)), closes [#32661](https://github.com/bitnami/charts/issues/32661)
 
 ## <small>8.7.10 (2025-04-03)</small>
 
