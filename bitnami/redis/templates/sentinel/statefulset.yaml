@@ -640,6 +640,12 @@ spec:
           image: {{ template "redis.kubectl.image" . }}
           imagePullPolicy: {{ .Values.kubectl.image.pullPolicy | quote }}
           command: {{- toYaml .Values.kubectl.command | nindent 12 }}
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - touch
+                  - /etc/shared/terminate
           {{- if .Values.kubectl.containerSecurityContext.enabled }}
           securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.kubectl.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
