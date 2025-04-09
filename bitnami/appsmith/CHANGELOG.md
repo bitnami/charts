@@ -1,8 +1,17 @@
 # Changelog
 
-## 5.2.2 (2025-03-20)
+## 5.2.4 (2025-04-09)
 
-* [bitnami/appsmith] Release 5.2.2 ([#32534](https://github.com/bitnami/charts/pull/32534))
+* [bitnami/appsmith] Release 5.2.4 ([#32896](https://github.com/bitnami/charts/pull/32896))
+
+## <small>5.2.3 (2025-04-08)</small>
+
+* [bitnami/appsmith] Release 5.2.3 (#32864) ([3984dbf](https://github.com/bitnami/charts/commit/3984dbf04eb6011547c48b0ff2241d7f011b7227)), closes [#32864](https://github.com/bitnami/charts/issues/32864)
+
+## <small>5.2.2 (2025-03-20)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/appsmith] Release 5.2.2 (#32534) ([c276082](https://github.com/bitnami/charts/commit/c276082de22e8eddfcef1aff31e14a447c807f07)), closes [#32534](https://github.com/bitnami/charts/issues/32534)
 
 ## <small>5.2.1 (2025-02-26)</small>
 
