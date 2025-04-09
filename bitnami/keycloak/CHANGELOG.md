@@ -2,7 +2,7 @@
 
 ## 24.5.2 (2025-04-09)
 
-* null ([#32885](https://github.com/bitnami/charts/pull/32885))
+* [bitnami/keycloak] Improvements to Keycloak cache handling ([#32885](https://github.com/bitnami/charts/pull/32885))
 
 ## <small>24.5.1 (2025-04-07)</small>
 
