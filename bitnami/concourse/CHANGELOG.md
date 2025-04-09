@@ -1,8 +1,12 @@
 # Changelog
 
-## 5.1.22 (2025-04-09)
+## 5.1.23 (2025-04-09)
 
-* [bitnami/concourse] Release 5.1.22 ([#32940](https://github.com/bitnami/charts/pull/32940))
+* [bitnami/concourse] Release 5.1.23 ([#32941](https://github.com/bitnami/charts/pull/32941))
+
+## <small>5.1.22 (2025-04-09)</small>
+
+* [bitnami/concourse] Release 5.1.22 (#32940) ([5b16416](https://github.com/bitnami/charts/commit/5b16416c03542e1fd9f7219526b2ddb65ccfde6c)), closes [#32940](https://github.com/bitnami/charts/issues/32940)
 
 ## <small>5.1.21 (2025-04-09)</small>
 
