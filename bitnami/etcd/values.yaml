@@ -1000,6 +1000,9 @@ preUpgradeJob:
   ## @param preUpgradeJob.enabled Enable running a pre-upgrade job on Helm upgrades that removes obsolete members
   ##
   enabled: true
+  ## @param preUpgradeJob.useHelmHooks Flag to indicate usage of helm hooks
+  ##
+  useHelmHooks: true
   ## @param preUpgradeJob.annotations [object] Add annotations to the etcd "pre-upgrade" job
   ##
   annotations: {}

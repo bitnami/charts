@@ -12,8 +12,13 @@ metadata:
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: etcd-pre-upgrade-job
   {{- $defaultAnnotations := dict "helm.sh/hook" "pre-upgrade" "helm.sh/hook-delete-policy" "before-hook-creation" }}
-  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.preUpgradeJob.annotations .Values.commonAnnotations $defaultAnnotations ) "context" . ) }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+  annotations:
+    {{- if .Values.preUpgradeJob.useHelmHooks }}
+    "helm.sh/hook": "pre-install"
+    "helm.sh/hook-delete-policy": "before-hook-creation"
+    {{- end }}
+    {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.preUpgradeJob.annotations .Values.commonAnnotations $defaultAnnotations ) "context" . ) }}
+    {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
 spec:
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.preUpgradeJob.podLabels .Values.commonLabels ) "context" . ) }}
   template:
