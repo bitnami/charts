@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.7.1 (2025-04-08)
+## 11.7.2 (2025-04-09)
 
-* [bitnami/tomcat] Release 11.7.1 ([#32871](https://github.com/bitnami/charts/pull/32871))
+* [bitnami/tomcat] Release 11.7.2 ([#32918](https://github.com/bitnami/charts/pull/32918))
+
+## <small>11.7.1 (2025-04-08)</small>
+
+* [bitnami/tomcat] Release 11.7.1 (#32871) ([972a98e](https://github.com/bitnami/charts/commit/972a98e88b8d999876909d656b7e20d09a62c6ab)), closes [#32871](https://github.com/bitnami/charts/issues/32871)
 
 ## 11.7.0 (2025-04-04)
 
