@@ -1,8 +1,13 @@
 # Changelog
 
-## 20.11.4 (2025-03-22)
+## 20.11.5 (2025-04-09)
 
-* [bitnami/redis] Release 20.11.4 ([#32561](https://github.com/bitnami/charts/pull/32561))
+* [bitnami/redis] If labeling isMaster failed, add a retry. ([#32865](https://github.com/bitnami/charts/pull/32865))
+
+## <small>20.11.4 (2025-03-22)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/redis] Release 20.11.4 (#32561) ([f40ecff](https://github.com/bitnami/charts/commit/f40ecff063a597f93d251613746c3d52c11c638d)), closes [#32561](https://github.com/bitnami/charts/issues/32561)
 
 ## <small>20.11.3 (2025-03-10)</small>
 
