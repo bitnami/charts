@@ -1,3 +1,4 @@
+logLevel: information
 auth:
   username: test_user
   password: bitnami1234
