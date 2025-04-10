@@ -82,7 +82,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/clickhouse-operator
-  tag: 0.24.5-debian-12-r2
+  tag: 0.24.5-debian-12-r3
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -136,7 +136,7 @@ clickHouseImage:
 keeperImage:
   registry: docker.io
   repository: bitnami/clickhouse-keeper
-  tag: 25.3.2-debian-12-r5
+  tag: 25.3.2-debian-12-r6
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

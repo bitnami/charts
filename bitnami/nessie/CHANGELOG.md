@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.0.3 (2025-04-08)
+## 2.0.4 (2025-04-09)
 
-* [bitnami/nessie] Release 2.0.3 ([#32872](https://github.com/bitnami/charts/pull/32872))
+* [bitnami/nessie] Release 2.0.4 ([#32913](https://github.com/bitnami/charts/pull/32913))
+
+## <small>2.0.3 (2025-04-08)</small>
+
+* [bitnami/nessie] Release 2.0.3 (#32872) ([d8de398](https://github.com/bitnami/charts/commit/d8de39855a8f2cbd3bd106eaebe62f212d5f762e)), closes [#32872](https://github.com/bitnami/charts/issues/32872)
 
 ## <small>2.0.2 (2025-03-21)</small>
 

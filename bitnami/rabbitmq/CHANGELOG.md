@@ -1,8 +1,12 @@
 # Changelog
 
+## 15.5.1 (2025-04-09)
+
+* [bitnami/rabbitmq] Release 15.5.1 ([#32894](https://github.com/bitnami/charts/pull/32894))
+
 ## 15.5.0 (2025-04-04)
 
-* [bitnami/rabbitmq] Set `usePasswordFiles=true` by default ([#32768](https://github.com/bitnami/charts/pull/32768))
+* [bitnami/rabbitmq] Set `usePasswordFiles=true` by default (#32768) ([4a88674](https://github.com/bitnami/charts/commit/4a886740c6abb96f510eb6736de03737e60e8835)), closes [#32768](https://github.com/bitnami/charts/issues/32768)
 
 ## <small>15.4.2 (2025-04-03)</small>
 

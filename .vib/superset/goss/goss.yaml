@@ -8,6 +8,7 @@ http:
       - /OK/
   http://127.0.0.1:{{ .Vars.web.containerPorts.http }}/health:
     status: 200
+    timeout: 10000
     body:
       - /OK/
   http://{{ .Vars.flower.auth.username }}:{{ .Vars.flower.auth.password }}@superset-flower:{{ .Vars.flower.service.ports.flower }}:
