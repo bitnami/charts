@@ -1083,6 +1083,11 @@ gateway:
     ## @param gateway.service.extraPorts Extra ports to expose in the Gateway service
     ##
     extraPorts: []
+    ## @param gateway.service.nginx.clientMaxBodySize to override client_max_body_size in nginx http block
+    ##
+    nginx:
+      clientMaxBodySize: ""
+
   ## Network Policies
   ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
   ##
