@@ -1,8 +1,12 @@
 # Changelog
 
+## 13.2.1 (2025-04-10)
+
+* [bitnami/milvus] Release 13.2.1 ([#32956](https://github.com/bitnami/charts/pull/32956))
+
 ## 13.2.0 (2025-04-08)
 
-* [bitnami/milvus] Update minio chart ([#32867](https://github.com/bitnami/charts/pull/32867))
+* [bitnami/milvus] Update minio chart (#32867) ([4a1bdbe](https://github.com/bitnami/charts/commit/4a1bdbeb4c7467d2e34ecea0a6930e195c255922)), closes [#32867](https://github.com/bitnami/charts/issues/32867)
 
 ## 13.1.0 (2025-04-07)
 
