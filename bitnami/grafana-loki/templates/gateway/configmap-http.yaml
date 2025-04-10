@@ -36,7 +36,7 @@ data:
         scgi_temp_path        /tmp/scgi_temp;
         
         {{- if .Values.gateway.service.nginx.clientMaxBodySize }}
-        client_max_body_size {{ .Values.gateway.nginx.clientMaxBodySize }};
+        client_max_body_size {{ .Values.gateway.service.nginx.clientMaxBodySize }};
         {{- else }}
         client_max_body_size 1m;
         {{- end }}
