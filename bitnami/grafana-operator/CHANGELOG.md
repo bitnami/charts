@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.9.11 (2025-04-02)
+## 4.9.12 (2025-04-10)
 
-* [bitnami/grafana-operator] Add new CRDs and RBAC ([#32413](https://github.com/bitnami/charts/pull/32413))
+* [bitnami/grafana-operator] Release 4.9.12 ([#32949](https://github.com/bitnami/charts/pull/32949))
+
+## <small>4.9.11 (2025-04-07)</small>
+
+* [bitnami/grafana-operator] Add new CRDs and RBAC (#32413) ([bc5dfb5](https://github.com/bitnami/charts/commit/bc5dfb5935e85426494bf6ccddc0aa3a8ec0658e)), closes [#32413](https://github.com/bitnami/charts/issues/32413)
 
 ## <small>4.9.10 (2025-04-01)</small>
 
