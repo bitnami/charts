@@ -1,5 +1,5 @@
 # Source: https://raw.githubusercontent.com/grafana/grafana-operator/v{version}/deploy/helm/grafana-operator/crds/grafana.integreatly.org_grafanadatasources.yaml
-# Version: 5.17.0
+# Version: 5.17.1
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
@@ -163,7 +163,6 @@ spec:
                 default: 10m0s
                 description: How often the resource is synced, defaults to 10m0s if
                   not set
-                format: duration
                 pattern: ^([0-9]+(\.[0-9]+)?(ns|us|µs|ms|s|m|h))+$
                 type: string
               uid:
