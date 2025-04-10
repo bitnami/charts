@@ -30,3 +30,6 @@ podSecurityContext:
 containerSecurityContext:
   enabled: true
   runAsUser: 1002
+keeper:
+  enabled: true
+  replicas: 3
