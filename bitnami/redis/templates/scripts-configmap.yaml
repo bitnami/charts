@@ -847,15 +847,24 @@ data:
   update-master-label.sh: |
     #!/bin/bash
     while true; do
-        while [ ! -f "/etc/shared/current" ]; do
+        while [ ! -f "/etc/shared/current" ] && [ ! -f "/etc/shared/terminate" ]; do
             sleep 1
         done
-        echo "new master elected, updating label(s)..."
-        kubectl label pod --field-selector metadata.name="$(< "/etc/shared/current")" isMaster="true" --overwrite  || continue
-        kubectl label pod --field-selector metadata.name="$(< "/etc/shared/current")" app.kubernetes.io/role-
-        if [ -f /etc/shared/previous ]; then
-            kubectl label pod --field-selector metadata.name="$(< "/etc/shared/previous")" isMaster="false" --overwrite
+
+        if [ -f "/etc/shared/current" ]; then
+            echo "new master elected, updating label(s)..."
+            kubectl label pod --field-selector metadata.name="$(< "/etc/shared/current")" isMaster="true" --overwrite || contimue
+            kubectl label pod --field-selector metadata.name="$(< "/etc/shared/current")" app.kubernetes.io/role-
+            if [ -f /etc/shared/previous ]; then
+                kubectl label pod --field-selector metadata.name="$(< "/etc/shared/previous")" isMaster="false" --overwrite
+            fi
+            rm "/etc/shared/current" "/etc/shared/previous"
         fi
-        rm "/etc/shared/current" "/etc/shared/previous"
+
+        if [ -f "/etc/shared/terminate" ]; then
+            echo "received signal to terminate"
+            rm "/etc/shared/terminate"
+            exit
+        fi
     done
 {{- end }}

@@ -3,6 +3,9 @@
 ## 20.11.5 (2025-04-09)
 
 * [bitnami/redis] If labeling isMaster failed, add a retry. ([#32865](https://github.com/bitnami/charts/pull/32865))
+## 20.11.5 (2025-03-26)
+
+* [bitnami/redis] Handle SIGTERM in `kubectl-shared` container ([#32085](https://github.com/bitnami/charts/pull/32085))
 
 ## <small>20.11.4 (2025-03-22)</small>
 
