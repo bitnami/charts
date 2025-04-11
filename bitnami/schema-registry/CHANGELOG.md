@@ -1,6 +1,6 @@
 # Changelog
 
-## 25.1.1 (2025-04-10)
+## 25.1.1 (2025-04-11)
 
 * Update HPA with statefulset as reference instead of deployment ([#32945](https://github.com/bitnami/charts/pull/32945))
 
