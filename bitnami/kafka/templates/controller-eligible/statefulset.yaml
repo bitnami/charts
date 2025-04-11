@@ -65,8 +65,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.controller.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.controller.podAffinityPreset "component" "controller-eligible" "customLabels" $podLabels "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.controller.podAntiAffinityPreset "component" "controller-eligible" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.controller.podAffinityPreset "component" "controller-eligible" "customLabels" $podLabels "topologyKey" .Values.controller.topologyKey "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.controller.podAntiAffinityPreset "component" "controller-eligible" "customLabels" $podLabels "topologyKey" .Values.controller.topologyKey "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.controller.nodeAffinityPreset.type "key" .Values.controller.nodeAffinityPreset.key "values" .Values.controller.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.controller.nodeSelector }}
