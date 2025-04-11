@@ -1,8 +1,12 @@
 # Changelog
 
-## 19.0.5 (2025-04-11)
+## 19.1.0 (2025-04-11)
 
-* [bitnami/nginx] Release 19.0.5 ([#32964](https://github.com/bitnami/charts/pull/32964))
+* [bitnami/nginx] feat(nginx-optional-initcontainers): Enable optional initcontainers ([#32577](https://github.com/bitnami/charts/pull/32577))
+
+## <small>19.0.5 (2025-04-11)</small>
+
+* [bitnami/nginx] Release 19.0.5 (#32964) ([d38c92a](https://github.com/bitnami/charts/commit/d38c92a6037deda6ff3807e7b26c02fdf9183fbc)), closes [#32964](https://github.com/bitnami/charts/issues/32964)
 
 ## <small>19.0.4 (2025-04-02)</small>
 
