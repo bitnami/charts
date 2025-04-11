@@ -1,8 +1,16 @@
 # Changelog
 
+## 25.1.1 (2025-04-11)
+
+* Update HPA with statefulset as reference instead of deployment ([#32945](https://github.com/bitnami/charts/pull/32945))
+
+## 25.1.0 (2025-04-04)
+
+* [bitnami/schema-registry] Set `usePasswordFiles=true` by default (#32713) ([c9033c6](https://github.com/bitnami/charts/commit/c9033c64e2a9872b805936416d0a4940ec8ceced)), closes [#32713](https://github.com/bitnami/charts/issues/32713)
+
 ## 25.0.0 (2025-03-26)
 
-* [bitnami/schema-registry] feat: bump major due to major bump on Kafka dep ([#32618](https://github.com/bitnami/charts/pull/32618))
+* [bitnami/schema-registry] feat: bump major due to major bump on Kafka dep (#32618) ([d1bd546](https://github.com/bitnami/charts/commit/d1bd54623e3b6c26ae2358a5295e106b396e3702)), closes [#32618](https://github.com/bitnami/charts/issues/32618)
 
 ## 24.0.0 (2025-03-12)
 

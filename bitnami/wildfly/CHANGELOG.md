@@ -1,8 +1,16 @@
 # Changelog
 
-## 23.0.6 (2025-03-27)
+## 24.0.0 (2025-04-11)
 
-* [bitnami/wildfly] Release 23.0.6 ([#32630](https://github.com/bitnami/charts/pull/32630))
+* [bitnami/wildfly] Release 24.0.0 ([#32971](https://github.com/bitnami/charts/pull/32971))
+
+## 23.1.0 (2025-04-04)
+
+* [bitnami/wildfly] Set `usePasswordFiles=true` by default (#32704) ([5793762](https://github.com/bitnami/charts/commit/579376244d9acd91eaae547fbf9011a3e8e022aa)), closes [#32704](https://github.com/bitnami/charts/issues/32704)
+
+## <small>23.0.6 (2025-03-27)</small>
+
+* [bitnami/wildfly] Release 23.0.6 (#32630) ([a28ac2f](https://github.com/bitnami/charts/commit/a28ac2f0c9ed06113d9c4a03db96e15d540422db)), closes [#32630](https://github.com/bitnami/charts/issues/32630)
 
 ## <small>23.0.5 (2025-03-13)</small>
 

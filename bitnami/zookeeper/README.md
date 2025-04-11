@@ -189,6 +189,7 @@ As an alternative, you can use any of the preset configurations for pod affinity
 | `commonLabels`           | Add labels to all the deployed resources                                                     | `{}`            |
 | `commonAnnotations`      | Add annotations to all the deployed resources                                                | `{}`            |
 | `namespaceOverride`      | Override namespace for ZooKeeper resources                                                   | `""`            |
+| `usePasswordFiles`       | Mount credentials as files instead of using environment variables                            | `true`          |
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)      | `false`         |
 | `diagnosticMode.command` | Command to override all containers in the statefulset                                        | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the statefulset                                           | `["infinity"]`  |

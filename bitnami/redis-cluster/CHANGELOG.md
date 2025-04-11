@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.4.6 (2025-03-22)
+## 11.5.0 (2025-04-07)
 
-* [bitnami/redis-cluster] Release 11.4.6 ([#32560](https://github.com/bitnami/charts/pull/32560))
+* [bitnami/redis-cluster] Set `usePasswordFiles=true` by default ([#32118](https://github.com/bitnami/charts/pull/32118))
+
+## <small>11.4.6 (2025-03-22)</small>
+
+* [bitnami/redis-cluster] Release 11.4.6 (#32560) ([e433131](https://github.com/bitnami/charts/commit/e43313143d767e4cd8fa744a5b868ff3341ead47)), closes [#32560](https://github.com/bitnami/charts/issues/32560)
 
 ## <small>11.4.5 (2025-03-13)</small>
 

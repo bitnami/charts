@@ -1,8 +1,21 @@
 # Changelog
 
-## 11.6.1 (2025-03-27)
+## 11.7.2 (2025-04-09)
 
-* [bitnami/tomcat] Release 11.6.1 ([#32629](https://github.com/bitnami/charts/pull/32629))
+* [bitnami/tomcat] Release 11.7.2 ([#32918](https://github.com/bitnami/charts/pull/32918))
+
+## <small>11.7.1 (2025-04-08)</small>
+
+* [bitnami/tomcat] Release 11.7.1 (#32871) ([972a98e](https://github.com/bitnami/charts/commit/972a98e88b8d999876909d656b7e20d09a62c6ab)), closes [#32871](https://github.com/bitnami/charts/issues/32871)
+
+## 11.7.0 (2025-04-04)
+
+* [bitnami/tomcat] Set `usePasswordFiles=true` by default (#32767) ([eae8740](https://github.com/bitnami/charts/commit/eae8740db4531b00fa202e12c50bfe7edc9a73b7)), closes [#32767](https://github.com/bitnami/charts/issues/32767)
+
+## <small>11.6.1 (2025-03-27)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/tomcat] Release 11.6.1 (#32629) ([da54156](https://github.com/bitnami/charts/commit/da541565254f8a73b4bf1eb62746235e70dbed12)), closes [#32629](https://github.com/bitnami/charts/issues/32629)
 
 ## 11.6.0 (2025-03-12)
 

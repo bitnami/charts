@@ -172,6 +172,7 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `commonAnnotations`      | Annotations to add to all deployed objects                                              | `{}`            |
 | `clusterDomain`          | Kubernetes cluster domain name                                                          | `cluster.local` |
 | `extraDeploy`            | Array of extra objects to deploy with the release                                       | `[]`            |
+| `usePasswordFiles`       | Mount credentials as files instead of using an environment variable                     | `true`          |
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
 | `diagnosticMode.command` | Command to override all containers in the chart release                                 | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the chart release                                    | `["infinity"]`  |
@@ -516,7 +517,6 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `flower.auth.enabled`                                                   | Enables Apache Celery flower HTTP basic authentication                                                                                                                                                                                          | `true`                     |
 | `flower.auth.username`                                                  | Apache Celery flower username                                                                                                                                                                                                                   | `user`                     |
 | `flower.auth.password`                                                  | Apache Celery flower password                                                                                                                                                                                                                   | `""`                       |
-| `flower.auth.usePasswordFiles`                                          | Mount credentials as files instead of using an environment variable                                                                                                                                                                             | `true`                     |
 | `flower.auth.existingSecret`                                            | Name of existing secret to use for Superset Celery flower                                                                                                                                                                                       | `""`                       |
 | `flower.livenessProbe.enabled`                                          | Enable livenessProbe on Superset celery flower containers                                                                                                                                                                                       | `true`                     |
 | `flower.livenessProbe.initialDelaySeconds`                              | Initial delay seconds for livenessProbe                                                                                                                                                                                                         | `30`                       |
@@ -739,6 +739,12 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/super
 ## Troubleshooting
 
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+
+## Upgrading
+
+### To 2.0.0
+
+This version replaces the value `flower.auth.usePasswordFiles` with the new value `usePasswordFiles`. When using `usePasswordFiles=true`, , all credentials will be mounted as files instead of using an environment variable.
 
 ## License
 

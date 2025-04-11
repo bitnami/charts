@@ -1,8 +1,17 @@
 # Changelog
 
-## 1.7.1 (2025-04-02)
+## 1.7.3 (2025-04-09)
 
-* [bitnami/vault] Release 1.7.1 ([#32765](https://github.com/bitnami/charts/pull/32765))
+* [bitnami/vault] Release 1.7.3 ([#32919](https://github.com/bitnami/charts/pull/32919))
+
+## <small>1.7.2 (2025-04-04)</small>
+
+* [bitnami/vault] Release 1.7.2 (#32819) ([79a15c6](https://github.com/bitnami/charts/commit/79a15c68659a535de55bdcaffb37824fd844af6e)), closes [#32819](https://github.com/bitnami/charts/issues/32819)
+
+## <small>1.7.1 (2025-04-02)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/vault] Release 1.7.1 (#32765) ([af1ea05](https://github.com/bitnami/charts/commit/af1ea053672509dbaef2b96426d9bf63a166eaa1)), closes [#32765](https://github.com/bitnami/charts/issues/32765)
 
 ## 1.7.0 (2025-03-11)
 

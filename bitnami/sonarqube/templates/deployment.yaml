@@ -214,11 +214,16 @@ spec:
               value: {{ ternary "yes" "no" .Values.sonarqubeSkipInstall | quote }}
             - name: SONARQUBE_USERNAME
               value: {{ .Values.sonarqubeUsername | quote }}
+            {{- if .Values.usePasswordFiles }}
+            - name: SONARQUBE_PASSWORD_FILE
+              value: "/opt/bitnami/sonarqube/secrets/sonarqube-password"
+            {{- else }}
             - name: SONARQUBE_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "sonarqube.secretName" . }}
                   key: sonarqube-password
+            {{- end }}
             - name: SONARQUBE_EMAIL
               value: {{ .Values.sonarqubeEmail | quote }}
             {{- if or .Values.plugins.install .Values.caCerts.enabled}}
@@ -311,11 +316,16 @@ spec:
               value: {{ include "sonarqube.database.name" . | quote }}
             - name: SONARQUBE_DATABASE_USER
               value: {{ include "sonarqube.database.username" . | quote }}
+            {{- if .Values.usePasswordFiles }}
+            - name: SONARQUBE_DATABASE_PASSWORD_FILE
+              value: "/opt/bitnami/sonarqube/secrets/password"
+            {{- else }}
             - name: SONARQUBE_DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "sonarqube.database.secretName" . }}
                   key: password
+            {{- end }}
             {{- if .Values.smtpHost }}
             - name: SONARQUBE_SMTP_HOST
               value: {{ .Values.smtpHost | quote }}
@@ -329,11 +339,16 @@ spec:
               value: {{ .Values.smtpUser | quote }}
             {{- end }}
             {{- if or .Values.smtpPassword .Values.smtpExistingSecret }}
+            {{- if .Values.usePasswordFiles }}
+            - name: SONARQUBE_SMTP_PASSWORD_FILE
+              value: "/opt/bitnami/sonarqube/secrets/smtp-password"
+            {{- else }}
             - name: SONARQUBE_SMTP_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "sonarqube.smtpSecretName" . }}
                   key: smtp-password
+            {{- end }}
             {{- end }}
             {{- if .Values.smtpProtocol }}
             - name: SONARQUBE_SMTP_PROTOCOL
@@ -407,8 +422,12 @@ spec:
             - name: empty-dir
               mountPath: /tmp
               subPath: tmp-dir
-            - mountPath: /bitnami/sonarqube
-              name: sonarqube
+            - name: sonarqube
+              mountPath: /bitnami/sonarqube
+            {{- if  .Values.usePasswordFiles }}
+            - name: sonarqube-secrets
+              mountPath: /opt/bitnami/sonarqube/secrets
+            {{- end }}
             {{- if or .Values.plugins.install .Values.caCerts.enabled }}
             - name: provisioning
               mountPath: {{ .Values.provisioningFolder }}
@@ -468,6 +487,19 @@ spec:
       volumes:
         - name: empty-dir
           emptyDir: {}
+        {{- if .Values.usePasswordFiles }}
+        - name: sonarqube-secrets
+          projected:
+            sources:
+              - secret:
+                  name: {{ include "sonarqube.secretName" . }}
+              - secret:
+                  name: {{ include "sonarqube.database.secretName" . }}
+              {{- if or .Values.smtpPassword .Values.smtpExistingSecret }}
+              - secret:
+                  name: {{ include "sonarqube.smtpSecretName" . }}
+              {{- end }}
+        {{- end }}
         {{- if or .Values.plugins.install .Values.caCerts.enabled }}
         - name: provisioning
           emptyDir: {}

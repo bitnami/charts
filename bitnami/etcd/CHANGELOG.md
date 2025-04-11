@@ -1,8 +1,11 @@
 # Changelog
 
-## 11.2.3 (2025-04-09)
+## 11.2.4 (2025-04-11)
 
 * [bitnami/etcd] Simplify condition ([#32814](https://github.com/bitnami/charts/pull/32814))
+
+## <small>11.2.3 (2025-04-09)</small>
+* [bitnami/etcd] fix livenessprobe when metrics.useSeparateEndpoint is set ([#32870](https://github.com/bitnami/charts/pull/32870))
 
 ## <small>11.2.2 (2025-04-01)</small>
 
