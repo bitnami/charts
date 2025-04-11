@@ -1,8 +1,12 @@
 # Changelog
 
-## 24.5.2 (2025-04-11)
+## 24.5.3 (2025-04-11)
 
-* [bitnami/keycloak] Release 24.5.2 ([#32968](https://github.com/bitnami/charts/pull/32968))
+* [bitnami/keycloak] Release 24.5.3 ([#32970](https://github.com/bitnami/charts/pull/32970))
+
+## <small>24.5.2 (2025-04-11)</small>
+
+* [bitnami/keycloak] Release 24.5.2 (#32968) ([2c775ce](https://github.com/bitnami/charts/commit/2c775ce92ee74c9222f060369bfaeed849f95efb)), closes [#32968](https://github.com/bitnami/charts/issues/32968)
 
 ## <small>24.5.1 (2025-04-07)</small>
 
