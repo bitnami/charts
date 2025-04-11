@@ -57,6 +57,10 @@ commonLabels: {}
 ## @param extraDeploy Array of extra objects to deploy with the release (evaluated as a template).
 ##
 extraDeploy: []
+## @param usePasswordFiles Mount credentials as files instead of using environment variables
+##
+usePasswordFiles: true
+
 ## @section Matomo parameters
 ##
 
@@ -220,7 +224,7 @@ tolerations: []
 existingSecret: ""
 ## SMTP mail delivery configuration
 ## ref: https://github.com/bitnami/containers/tree/main/bitnami/matomo/#smtp-configuration
-## @param smtpAuth SMTP authentication mechanism (options: Plain, Login, Crammd5)
+## @param smtpAuth SMTP authentication mechanism (options: Plain, Login, Cram-md5)
 ## @param smtpHost SMTP host
 ## @param smtpPort SMTP port
 ## @param smtpUser SMTP user

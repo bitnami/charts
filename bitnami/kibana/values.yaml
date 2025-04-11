@@ -57,6 +57,9 @@ extraDeploy: []
 ## @param clusterDomain Kubernetes cluster domain name
 ##
 clusterDomain: cluster.local
+## @param usePasswordFiles Mount credentials as files instead of using environment variables
+##
+usePasswordFiles: true
 ## Enable diagnostic mode in the deployment(s)/statefulset(s)
 ##
 diagnosticMode:
@@ -86,7 +89,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/kibana
-  tag: 8.17.3-debian-12-r0
+  tag: 8.17.4-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -210,7 +213,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r39
+    tag: 12-debian-12-r40
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -510,7 +513,7 @@ ingress:
   ##   path: /
   ##
   extraHosts: []
-  ## @param ingress.extraPaths Additional arbitrary path/backend objects. Evaluated as a template. 
+  ## @param ingress.extraPaths Additional arbitrary path/backend objects. Evaluated as a template.
   ## For example: The ALB ingress controller requires a special rule for handling SSL redirection.
   ## extraPaths:
   ## - path: /*

@@ -1,8 +1,19 @@
 # Changelog
 
-## 13.7.4 (2025-02-27)
+## 13.8.0 (2025-04-02)
 
-* [bitnami/zookeeper] Release 13.7.4 ([#32204](https://github.com/bitnami/charts/pull/32204))
+* [bitnami/zookeeper] Set `usePasswordFiles=true` by default ([#32780](https://github.com/bitnami/charts/pull/32780))
+
+## <small>13.7.5 (2025-03-29)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/zookeeper] Release 13.7.5 (#32680) ([9605372](https://github.com/bitnami/charts/commit/9605372e658eea7cadd026f16ae487571a1397e2)), closes [#32680](https://github.com/bitnami/charts/issues/32680)
+
+## <small>13.7.4 (2025-02-27)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/zookeeper] Release 13.7.4 (#32204) ([db53e62](https://github.com/bitnami/charts/commit/db53e622ecf1be5a78d1ce683cec8baa41110fa3)), closes [#32204](https://github.com/bitnami/charts/issues/32204)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
 
 ## <small>13.7.3 (2025-01-28)</small>
 

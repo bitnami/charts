@@ -1,8 +1,29 @@
 # Changelog
 
-## 15.3.3 (2025-02-26)
+## 15.5.1 (2025-04-09)
 
-* [bitnami/rabbitmq] Release 15.3.3 ([#32187](https://github.com/bitnami/charts/pull/32187))
+* [bitnami/rabbitmq] Release 15.5.1 ([#32894](https://github.com/bitnami/charts/pull/32894))
+
+## 15.5.0 (2025-04-04)
+
+* [bitnami/rabbitmq] Set `usePasswordFiles=true` by default (#32768) ([4a88674](https://github.com/bitnami/charts/commit/4a886740c6abb96f510eb6736de03737e60e8835)), closes [#32768](https://github.com/bitnami/charts/issues/32768)
+
+## <small>15.4.2 (2025-04-03)</small>
+
+* [bitnami/rabbitmq] Release 15.4.2 (#32793) ([b6e252b](https://github.com/bitnami/charts/commit/b6e252bd85d43b7686ff0c9b525b91563e557af8)), closes [#32793](https://github.com/bitnami/charts/issues/32793)
+
+## <small>15.4.1 (2025-03-28)</small>
+
+* [bitnami/rabbitmq] Release 15.4.1 (#32679) ([b941af0](https://github.com/bitnami/charts/commit/b941af0e5e720e5bbd7c34cf16f3c65ca5e6be50)), closes [#32679](https://github.com/bitnami/charts/issues/32679)
+
+## 15.4.0 (2025-03-19)
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/rabbitmq] allow to configure trafficDistribution (#32443) ([49e8182](https://github.com/bitnami/charts/commit/49e81822b9ebe29f544f6276d367489cdb0c121d)), closes [#32443](https://github.com/bitnami/charts/issues/32443)
+
+## <small>15.3.3 (2025-02-26)</small>
+
+* [bitnami/rabbitmq] Release 15.3.3 (#32187) ([e4af5c8](https://github.com/bitnami/charts/commit/e4af5c8b3510c166a38cd5bc03074a39bf63da4d)), closes [#32187](https://github.com/bitnami/charts/issues/32187)
 
 ## <small>15.3.2 (2025-02-21)</small>
 

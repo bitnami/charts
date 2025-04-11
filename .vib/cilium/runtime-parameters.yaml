@@ -1,8 +1,12 @@
-gcp:
+aws:
   enabled: true
+gcp:
+  enabled: false
 agent:
+  enableENI: true
   cniPlugin:
     install: true
+    uninstall: true
   enablePprof: true
   containerSecurityContext:
     enabled: true

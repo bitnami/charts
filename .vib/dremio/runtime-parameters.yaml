@@ -76,6 +76,7 @@ metrics:
       metrics: 41881
   containerPorts:
     metrics: 41884
+  resourcesPreset: small
 # We deploy a PostgreSQL instance so we can use it in Dremio as a data source. We create a database
 # that we can verify in the Cypress test
 extraDeploy:

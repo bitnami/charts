@@ -71,7 +71,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/thanos
-  tag: 0.37.2-debian-12-r8
+  tag: 0.38.0-debian-12-r1
   digest: ""
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
@@ -761,13 +761,13 @@ query:
     ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
     ##
     ingressClassName: ""
-    ## @param query.ingress.labels Additional label for the Ingress resource. 
+    ## @param query.ingress.labels Additional label for the Ingress resource.
     ## Use this parameter to set the required labels for your needs
     ## e.g:
     ## labels:
     ##   dns-managed-by-external-dns: 'true'
     ##
-    labels: {}    
+    labels: {}
     ## @param query.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
     ## For a full list of possible ingress annotations, please see
     ## ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md
@@ -1402,6 +1402,13 @@ queryFrontend:
     ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
     ##
     ingressClassName: ""
+    ## @param queryFrontend.ingress.labels Additional label for the Ingress resource.
+    ## Use this parameter to set the required labels for your needs
+    ## e.g:
+    ## labels:
+    ##   dns-managed-by-external-dns: 'true'
+    ##
+    labels: {}
     ## @param queryFrontend.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
     ## For a full list of possible ingress annotations, please see
     ## ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md
@@ -1906,6 +1913,13 @@ bucketweb:
     ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
     ##
     ingressClassName: ""
+    ## @param bucketweb.ingress.labels Additional label for the Ingress resource.
+    ## Use this parameter to set the required labels for your needs
+    ## e.g:
+    ## labels:
+    ##   dns-managed-by-external-dns: 'true'
+    ##
+    labels: {}
     ## @param bucketweb.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
     ## For a full list of possible ingress annotations, please see
     ## ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md
@@ -2423,6 +2437,13 @@ compactor:
     ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
     ##
     ingressClassName: ""
+    ## @param compactor.ingress.labels Additional label for the Ingress resource.
+    ## Use this parameter to set the required labels for your needs
+    ## e.g:
+    ## labels:
+    ##   dns-managed-by-external-dns: 'true'
+    ##
+    labels: {}
     ## @param compactor.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
     ## For a full list of possible ingress annotations, please see
     ## ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md
@@ -3064,6 +3085,13 @@ storegateway:
     ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
     ##
     ingressClassName: ""
+    ## @param storegateway.ingress.labels Additional label for the Ingress resource.
+    ## Use this parameter to set the required labels for your needs
+    ## e.g:
+    ## labels:
+    ##   dns-managed-by-external-dns: 'true'
+    ##
+    labels: {}
     ## @param storegateway.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
     ## For a full list of possible ingress annotations, please see
     ## ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md
@@ -3325,7 +3353,7 @@ ruler:
   ##       timeout: 10s
   ##       api_version: v2
   ##
-  alertmanagersConfig: ""
+  alertmanagersConfig: {}
   ## @param ruler.evalInterval The default evaluation interval to use
   ##
   evalInterval: 1m
@@ -3818,6 +3846,13 @@ ruler:
     ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
     ##
     ingressClassName: ""
+    ## @param ruler.ingress.labels Additional label for the Ingress resource.
+    ## Use this parameter to set the required labels for your needs
+    ## e.g:
+    ## labels:
+    ##   dns-managed-by-external-dns: 'true'
+    ##
+    labels: {}
     ## @param ruler.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
     ## For a full list of possible ingress annotations, please see
     ## ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md
@@ -4457,6 +4492,13 @@ receive:
     ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
     ##
     ingressClassName: ""
+    ## @param receive.ingress.labels Additional label for the Ingress resource.
+    ## Use this parameter to set the required labels for your needs
+    ## e.g:
+    ## labels:
+    ##   dns-managed-by-external-dns: 'true'
+    ##
+    labels: {}
     ## @param receive.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
     ## For a full list of possible ingress annotations, please see
     ## ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md
@@ -5014,7 +5056,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r39
+    tag: 12-debian-12-r42
     digest: ""
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##

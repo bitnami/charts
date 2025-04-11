@@ -1,8 +1,22 @@
 # Changelog
 
-## 4.9.9 (2025-03-11)
+## 4.9.12 (2025-04-10)
 
-* [bitnami/grafana-operator] Release 4.9.9 ([#32410](https://github.com/bitnami/charts/pull/32410))
+* [bitnami/grafana-operator] Release 4.9.12 ([#32949](https://github.com/bitnami/charts/pull/32949))
+
+## <small>4.9.11 (2025-04-07)</small>
+
+* [bitnami/grafana-operator] Add new CRDs and RBAC (#32413) ([bc5dfb5](https://github.com/bitnami/charts/commit/bc5dfb5935e85426494bf6ccddc0aa3a8ec0658e)), closes [#32413](https://github.com/bitnami/charts/issues/32413)
+
+## <small>4.9.10 (2025-04-01)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/grafana-operator] Release 4.9.10 (#32734) ([538d51f](https://github.com/bitnami/charts/commit/538d51fa430b14705c5dc4ce69e40c712107b0d4)), closes [#32734](https://github.com/bitnami/charts/issues/32734)
+* fix link to grafana-operator dashboards documentation (#32510) ([c6498ed](https://github.com/bitnami/charts/commit/c6498ed13efd28e092a989813731bcb0d558bfab)), closes [#32510](https://github.com/bitnami/charts/issues/32510)
+
+## <small>4.9.9 (2025-03-11)</small>
+
+* [bitnami/grafana-operator] Release 4.9.9 (#32410) ([77da59f](https://github.com/bitnami/charts/commit/77da59f1443559ce618a8e512dd60b3a3a083211)), closes [#32410](https://github.com/bitnami/charts/issues/32410)
 
 ## <small>4.9.8 (2025-03-05)</small>
 

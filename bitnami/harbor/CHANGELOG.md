@@ -1,8 +1,22 @@
 # Changelog
 
+## 24.5.1 (2025-04-11)
+
+* [bitnami/harbor] Release 24.5.1 ([#32973](https://github.com/bitnami/charts/pull/32973))
+
+## 24.5.0 (2025-03-27)
+
+* [bitnami/harbor] feat: :sparkles: Add migration job (#32640) ([3d2b832](https://github.com/bitnami/charts/commit/3d2b832d5b7253f6c73d0f75f9cd7e75cbba7d03)), closes [#32640](https://github.com/bitnami/charts/issues/32640)
+* [bitnami/harbor] Update README.md ([f2425d8](https://github.com/bitnami/charts/commit/f2425d822a6996c36860169268b220a3935092ec))
+
+## <small>24.4.1 (2025-03-22)</small>
+
+* [bitnami/harbor] Release 24.4.1 (#32567) ([27dcc0f](https://github.com/bitnami/charts/commit/27dcc0f3f5bddc982d2292690303f12fa6d0bcac)), closes [#32567](https://github.com/bitnami/charts/issues/32567)
+
 ## 24.4.0 (2025-03-13)
 
-* [bitnami/harbor] Revert merge chart generated env vart secret with existing secret ([#32382](https://github.com/bitnami/charts/pull/32382))
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/harbor] Revert merge chart generated env vart secret with existing secret (#32382) ([22c6f4e](https://github.com/bitnami/charts/commit/22c6f4eb831b8c05280e1ec215ad4fbb6cd5fd3b)), closes [#32382](https://github.com/bitnami/charts/issues/32382) [#28989](https://github.com/bitnami/charts/issues/28989)
 
 ## <small>24.3.4 (2025-03-10)</small>
 

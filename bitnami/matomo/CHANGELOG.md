@@ -1,8 +1,20 @@
 # Changelog
 
-## 9.2.6 (2025-03-18)
+## 9.3.1 (2025-04-08)
 
-* [bitnami/matomo] Release 9.2.6 ([#32503](https://github.com/bitnami/charts/pull/32503))
+* [bitnami/matomo] Add missing `app.kubernetes.io/component` label to deployment and pdb ([#32774](https://github.com/bitnami/charts/pull/32774))
+
+## 9.3.0 (2025-03-31)
+
+* [bitnami/matomo] Set `usePasswordFiles=true` by default (#32363) ([ceca10c](https://github.com/bitnami/charts/commit/ceca10c0dcd20d46bebf5f3fd9abea9b7a4144ef)), closes [#32363](https://github.com/bitnami/charts/issues/32363)
+
+## <small>9.2.7 (2025-03-24)</small>
+
+* [bitnami/matomo] Fix typo in SMTP authentication value for CRAM-MD5 (#32354) ([3e8ed41](https://github.com/bitnami/charts/commit/3e8ed41b493b1c92d2dea76d09e5e63c39a006e3)), closes [#32354](https://github.com/bitnami/charts/issues/32354)
+
+## <small>9.2.6 (2025-03-18)</small>
+
+* [bitnami/matomo] Release 9.2.6 (#32503) ([1d91b5e](https://github.com/bitnami/charts/commit/1d91b5ec19f2299c60784bc35827cb4c2e2e072e)), closes [#32503](https://github.com/bitnami/charts/issues/32503)
 
 ## <small>9.2.5 (2025-03-14)</small>
 

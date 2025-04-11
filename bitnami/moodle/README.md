@@ -162,14 +162,15 @@ You may want to review the [PV reclaim policy](https://kubernetes.io/docs/tasks/
 
 ### Common parameters
 
-| Name                | Description                                                                                                | Value |
-| ------------------- | ---------------------------------------------------------------------------------------------------------- | ----- |
-| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)                                       | `""`  |
-| `nameOverride`      | String to partially override moodle.fullname template                                                      | `""`  |
-| `fullnameOverride`  | String to fully override moodle.fullname template                                                          | `""`  |
-| `commonAnnotations` | Common annotations to add to all Harbor resources (sub-charts are not considered). Evaluated as a template | `{}`  |
-| `commonLabels`      | Common labels to add to all Harbor resources (sub-charts are not considered). Evaluated as a template      | `{}`  |
-| `extraDeploy`       | Array with extra yaml to deploy with the chart. Evaluated as a template                                    | `[]`  |
+| Name                | Description                                                                                                | Value  |
+| ------------------- | ---------------------------------------------------------------------------------------------------------- | ------ |
+| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)                                       | `""`   |
+| `nameOverride`      | String to partially override moodle.fullname template                                                      | `""`   |
+| `fullnameOverride`  | String to fully override moodle.fullname template                                                          | `""`   |
+| `commonAnnotations` | Common annotations to add to all Harbor resources (sub-charts are not considered). Evaluated as a template | `{}`   |
+| `commonLabels`      | Common labels to add to all Harbor resources (sub-charts are not considered). Evaluated as a template      | `{}`   |
+| `extraDeploy`       | Array with extra yaml to deploy with the chart. Evaluated as a template                                    | `[]`   |
+| `usePasswordFiles`  | Mount credentials as files instead of using environment variables                                          | `true` |
 
 ### Moodle&trade; parameters
 

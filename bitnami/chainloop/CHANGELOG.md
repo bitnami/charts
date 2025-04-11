@@ -1,8 +1,32 @@
 # Changelog
 
-## 2.2.17 (2025-03-18)
+## 2.2.23 (2025-04-01)
 
-* [bitnami/chainloop] Release 2.2.17 ([#32504](https://github.com/bitnami/charts/pull/32504))
+* [bitnami/chainloop] Release 2.2.23 ([#32720](https://github.com/bitnami/charts/pull/32720))
+
+## <small>2.2.22 (2025-04-01)</small>
+
+* [bitnami/chainloop] Release 2.2.22 (#32696) ([683de85](https://github.com/bitnami/charts/commit/683de85302c533fb31e6b2244316c798cc288b94)), closes [#32696](https://github.com/bitnami/charts/issues/32696)
+
+## <small>2.2.21 (2025-03-31)</small>
+
+* [bitnami/chainloop] Release 2.2.21 (#32691) ([5b1d179](https://github.com/bitnami/charts/commit/5b1d179a321119b621e64d829c6d4e8205b33456)), closes [#32691](https://github.com/bitnami/charts/issues/32691)
+
+## <small>2.2.20 (2025-03-28)</small>
+
+* [bitnami/chainloop] Release 2.2.20 (#32659) ([0656c2a](https://github.com/bitnami/charts/commit/0656c2a976a9c803a919dda912f2cb9eb771792e)), closes [#32659](https://github.com/bitnami/charts/issues/32659)
+
+## <small>2.2.19 (2025-03-25)</small>
+
+* [bitnami/chainloop] Release 2.2.19 (#32598) ([ec46980](https://github.com/bitnami/charts/commit/ec46980d2ee0434230278c793d6a200a6e604e1d)), closes [#32598](https://github.com/bitnami/charts/issues/32598)
+
+## <small>2.2.18 (2025-03-24)</small>
+
+* [bitnami/chainloop] Release 2.2.18 (#32583) ([1225654](https://github.com/bitnami/charts/commit/12256546a656d9aedc00c2fc4687249f75d0fc2a)), closes [#32583](https://github.com/bitnami/charts/issues/32583)
+
+## <small>2.2.17 (2025-03-18)</small>
+
+* [bitnami/chainloop] Release 2.2.17 (#32504) ([47e5d4c](https://github.com/bitnami/charts/commit/47e5d4cec8978c72107c7bd5b59e3ed0b8286743)), closes [#32504](https://github.com/bitnami/charts/issues/32504)
 
 ## <small>2.2.16 (2025-03-17)</small>
 

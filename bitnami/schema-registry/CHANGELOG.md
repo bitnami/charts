@@ -1,8 +1,21 @@
 # Changelog
 
+## 25.1.1 (2025-04-11)
+
+* Update HPA with statefulset as reference instead of deployment ([#32945](https://github.com/bitnami/charts/pull/32945))
+
+## 25.1.0 (2025-04-04)
+
+* [bitnami/schema-registry] Set `usePasswordFiles=true` by default (#32713) ([c9033c6](https://github.com/bitnami/charts/commit/c9033c64e2a9872b805936416d0a4940ec8ceced)), closes [#32713](https://github.com/bitnami/charts/issues/32713)
+
+## 25.0.0 (2025-03-26)
+
+* [bitnami/schema-registry] feat: bump major due to major bump on Kafka dep (#32618) ([d1bd546](https://github.com/bitnami/charts/commit/d1bd54623e3b6c26ae2358a5295e106b396e3702)), closes [#32618](https://github.com/bitnami/charts/issues/32618)
+
 ## 24.0.0 (2025-03-12)
 
-* [bitnami/schema-registry] Release 24.0.0 ([#32424](https://github.com/bitnami/charts/pull/32424))
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/schema-registry] Release 24.0.0 (#32424) ([1817445](https://github.com/bitnami/charts/commit/18174456aa09c324493c5e1d08c4b9f3c68891d7)), closes [#32424](https://github.com/bitnami/charts/issues/32424)
 
 ## <small>23.1.4 (2025-03-04)</small>
 

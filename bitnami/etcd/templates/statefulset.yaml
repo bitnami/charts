@@ -165,11 +165,16 @@ spec:
             - name: ALLOW_NONE_AUTHENTICATION
               value: {{ ternary "yes" "no" (and (not (or .Values.auth.rbac.create .Values.auth.rbac.enabled)) .Values.auth.rbac.allowNoneAuthentication) | quote }}
             {{- if or .Values.auth.rbac.create .Values.auth.rbac.enabled }}
+            {{- if .Values.usePasswordFiles }}
+            - name: ETCD_ROOT_PASSWORD_FILE
+              value: {{ printf "/opt/bitnami/etcd/secrets/%s" (include "etcd.secretPasswordKey" .) }}
+            {{- else }}
             - name: ETCD_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "etcd.secretName" . }}
                   key: {{ include "etcd.secretPasswordKey" . }}
+            {{- end }}
             {{- end }}
             {{- if .Values.auth.token.enabled }}
             - name: ETCD_AUTH_TOKEN
@@ -292,7 +297,7 @@ spec:
                 - /opt/bitnami/scripts/etcd/healthcheck.sh
             {{- else }}
             httpGet:
-              port: {{ .Values.containerPorts.client }} 
+              port: {{ .Values.metrics.useSeparateEndpoint | ternary .Values.containerPorts.metrics .Values.containerPorts.client }}
               path: /livez
               scheme: "HTTP"
             {{- end }}
@@ -360,7 +365,7 @@ spec:
             - name: init-snapshot-volume
               mountPath: /init-snapshot
             {{- end }}
-            {{- if or .Values.disasterRecovery.enabled (and .Values.disasterRecovery.enabled .Values.startFromSnapshot.enabled) }}
+            {{- if .Values.disasterRecovery.enabled }}
             - name: snapshot-volume
               mountPath: /snapshots
               {{- if .Values.disasterRecovery.pvc.subPath }}
@@ -376,6 +381,10 @@ spec:
             - name: etcd-peer-certs
               mountPath: /opt/bitnami/etcd/certs/peer/
               readOnly: true
+            {{- end }}
+            {{- if and .Values.usePasswordFiles (or .Values.auth.rbac.create .Values.auth.rbac.enabled) }}
+            - name: etcd-secrets
+              mountPath: /opt/bitnami/etcd/secrets
             {{- end }}
             {{- if .Values.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
@@ -418,6 +427,13 @@ spec:
           secret:
             secretName: {{ required "A secret containing the peer certificates is required" (tpl .Values.auth.peer.existingSecret .) }}
             defaultMode: 256
+        {{- end }}
+        {{- if and .Values.usePasswordFiles (or .Values.auth.rbac.create .Values.auth.rbac.enabled) }}
+        - name: etcd-secrets
+          projected:
+            sources:
+              - secret:
+                  name:  {{ include "etcd.secretName" . }}
         {{- end }}
         {{- if .Values.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}

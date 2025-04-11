@@ -1,8 +1,25 @@
 # Changelog
 
-## 2.2.0 (2025-02-21)
+## 3.0.2 (2025-04-09)
 
-* [bitnami/valkey-cluster] Set `usePasswordFiles=true` by default ([#32122](https://github.com/bitnami/charts/pull/32122))
+* [bitnami/valkey-cluster] Release 3.0.2 ([#32937](https://github.com/bitnami/charts/pull/32937))
+
+## <small>3.0.1 (2025-04-09)</small>
+
+* [bitnami/valkey-cluster] Release 3.0.1 (#32935) ([eae8e95](https://github.com/bitnami/charts/commit/eae8e95db651adfe54d3ec3929387bc1a9167f82)), closes [#32935](https://github.com/bitnami/charts/issues/32935)
+
+## 3.0.0 (2025-04-09)
+
+* [bitnami/valkey-cluster] Release 3.0.0 (#32934) ([7b1a034](https://github.com/bitnami/charts/commit/7b1a03414cce9425fb364332f5f669dc0bda348d)), closes [#32934](https://github.com/bitnami/charts/issues/32934)
+
+## <small>2.2.1 (2025-03-28)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/valkey-cluster] Release 2.2.1 (#32564) ([1c23328](https://github.com/bitnami/charts/commit/1c23328f1e9cb6d076adb8e7b548a40b341f3c0c)), closes [#32564](https://github.com/bitnami/charts/issues/32564)
+
+## 2.2.0 (2025-02-24)
+
+* [bitnami/valkey-cluster] Set `usePasswordFiles=true` by default (#32122) ([c46b8f0](https://github.com/bitnami/charts/commit/c46b8f0029226245c04a3fed93225e82a9ab3e57)), closes [#32122](https://github.com/bitnami/charts/issues/32122)
 
 ## <small>2.1.3 (2025-02-20)</small>
 

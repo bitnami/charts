@@ -195,6 +195,7 @@ You can enable this init container by setting `volumePermissions.enabled` to `tr
 | `commonAnnotations` | Add annotations to all the deployed resources                                                | `{}`            |
 | `clusterDomain`     | Kubernetes Cluster Domain                                                                    | `cluster.local` |
 | `extraDeploy`       | Array of extra objects to deploy with the release                                            | `[]`            |
+| `usePasswordFiles`  | Mount credentials as files instead of using environment variables                            | `true`          |
 
 ### Tomcat parameters
 
@@ -293,8 +294,7 @@ You can enable this init container by setting `volumePermissions.enabled` to `tr
 | `sidecars`                                          | Add sidecars to the Tomcat pods.                                                                                                                                                                                  | `[]`                |
 | `persistence.enabled`                               | Enable persistence                                                                                                                                                                                                | `true`              |
 | `persistence.storageClass`                          | PVC Storage Class for Tomcat volume                                                                                                                                                                               | `""`                |
-| `persistence.annotations`                           | Annotations for the PVC                                                                                                                                                                               | `{}`                |
-| `persistence.labels`                           | Labels for the PVC                                                                                                                                                                               | `{}`                |
+| `persistence.annotations`                           | Persistent Volume Claim annotations                                                                                                                                                                               | `{}`                |
 | `persistence.accessModes`                           | PVC Access Modes for Tomcat volume                                                                                                                                                                                | `["ReadWriteOnce"]` |
 | `persistence.size`                                  | PVC Storage Request for Tomcat volume                                                                                                                                                                             | `8Gi`               |
 | `persistence.existingClaim`                         | An Existing PVC name for Tomcat volume                                                                                                                                                                            | `""`                |

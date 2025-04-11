@@ -97,7 +97,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mysql
-  tag: 8.4.4-debian-12-r4
+  tag: 8.4.4-debian-12-r7
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -613,6 +613,10 @@ primary:
     ## @param primary.service.externalTrafficPolicy Enable client source IP preservation
     ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
+    externalIPs: []
+    ## @param primary.service.externalIPs MySQL Primary K8s service externalIPs
+    ## ref https://kubernetes.io/docs/concepts/services-networking/service/#external-ips
+    ##
     externalTrafficPolicy: Cluster
     ## @param primary.service.loadBalancerSourceRanges Addresses that are allowed when MySQL Primary service is LoadBalancer
     ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
@@ -1049,6 +1053,10 @@ secondary:
     ## @param secondary.service.externalTrafficPolicy Enable client source IP preservation
     ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
+    externalIPs: []
+    ## @param secondary.service.externalIPs MySQL Secondary K8s service externalIPs
+    ## ref https://kubernetes.io/docs/concepts/services-networking/service/#external-ips
+    ##
     externalTrafficPolicy: Cluster
     ## @param secondary.service.loadBalancerSourceRanges Addresses that are allowed when MySQL secondary service is LoadBalancer
     ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
@@ -1347,7 +1355,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r38
+    tag: 12-debian-12-r40
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1392,7 +1400,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mysqld-exporter
-    tag: 0.16.0-debian-12-r10
+    tag: 0.17.2-debian-12-r2
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

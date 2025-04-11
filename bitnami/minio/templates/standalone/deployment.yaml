@@ -121,11 +121,11 @@ spec:
               value: {{ ternary "yes" "no" .Values.auth.forceNewKeys | quote }}
             - name: MINIO_API_PORT_NUMBER
               value: {{ .Values.containerPorts.api | quote }}
-            {{- if .Values.auth.useCredentialsFiles }}
+            {{- if .Values.auth.usePasswordFiles }}
             - name: MINIO_ROOT_USER_FILE
-              value: "/opt/bitnami/minio/secrets/root-user"
+              value: {{ printf "/opt/bitnami/minio/secrets/%s" (include "minio.rootUserKey" .) }}
             - name: MINIO_ROOT_PASSWORD_FILE
-              value: "/opt/bitnami/minio/secrets/root-password"
+              value: {{ printf "/opt/bitnami/minio/secrets/%s" (include "minio.rootPasswordKey" .) }}
             {{- else }}
             - name: MINIO_ROOT_USER
               valueFrom:
@@ -231,7 +231,7 @@ spec:
             - name: empty-dir
               mountPath: /.mc
               subPath: app-mc-dir
-            {{- if and .Values.auth.useSecret .Values.auth.useCredentialsFiles }}
+            {{- if and .Values.auth.useSecret .Values.auth.usePasswordFiles }}
             - name: minio-credentials
               mountPath: /opt/bitnami/minio/secrets/
             {{- end }}
@@ -250,7 +250,7 @@ spec:
       volumes:
         - name: empty-dir
           emptyDir: {}
-        {{- if and .Values.auth.useSecret .Values.auth.useCredentialsFiles }}
+        {{- if and .Values.auth.useSecret .Values.auth.usePasswordFiles }}
         - name: minio-credentials
           secret:
             secretName: {{ include "minio.secretName" . }}

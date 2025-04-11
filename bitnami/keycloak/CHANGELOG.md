@@ -1,8 +1,29 @@
 # Changelog
 
-## 24.4.13 (2025-03-13)
+## 24.5.3 (2025-04-11)
 
-* [bitnami/keycloak] Release 24.4.13 ([#32446](https://github.com/bitnami/charts/pull/32446))
+* [bitnami/keycloak] Release 24.5.3 ([#32970](https://github.com/bitnami/charts/pull/32970))
+
+## <small>24.5.2 (2025-04-11)</small>
+
+* [bitnami/keycloak] Release 24.5.2 (#32968) ([2c775ce](https://github.com/bitnami/charts/commit/2c775ce92ee74c9222f060369bfaeed849f95efb)), closes [#32968](https://github.com/bitnami/charts/issues/32968)
+
+## <small>24.5.1 (2025-04-07)</small>
+
+* [bitnami/keycloak] Change .Release.Name to (include "common.names.fullname) ([c3573fd](https://github.com/bitnami/charts/commit/c3573fdc21301f06007546ad4faadab598f6305d))
+
+## 24.5.0 (2025-04-04)
+
+* [bitnami/keycloak] Set `usePasswordFiles=true` by default (#32594) ([6206296](https://github.com/bitnami/charts/commit/620629645b6354dc79fd49c5e33e794ab569d024)), closes [#32594](https://github.com/bitnami/charts/issues/32594)
+
+## <small>24.4.14 (2025-04-01)</small>
+
+* [bitnami/keycloak] Release 24.4.14 (#32707) ([4b6ae25](https://github.com/bitnami/charts/commit/4b6ae257d1f2710f3c13d858e4a39d219b75df2b)), closes [#32707](https://github.com/bitnami/charts/issues/32707)
+
+## <small>24.4.13 (2025-03-13)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/keycloak] Release 24.4.13 (#32446) ([af8d013](https://github.com/bitnami/charts/commit/af8d01385b9fba2b809351b06bfa75d4a32ab178)), closes [#32446](https://github.com/bitnami/charts/issues/32446)
 
 ## <small>24.4.12 (2025-03-11)</small>
 

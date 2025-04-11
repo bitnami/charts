@@ -1,8 +1,36 @@
 # Changelog
 
-## 7.2.5 (2025-03-18)
+## 7.3.5 (2025-04-09)
 
-* [bitnami/argo-cd] Release 7.2.5 ([#32500](https://github.com/bitnami/charts/pull/32500))
+* [bitnami/argo-cd] Release 7.3.5 ([#32900](https://github.com/bitnami/charts/pull/32900))
+
+## <small>7.3.4 (2025-04-04)</small>
+
+* [bitnami/argo-cd] Release 7.3.4 (#32817) ([5e5f51d](https://github.com/bitnami/charts/commit/5e5f51da2ebf0fdfa867e59673721b6a19a457e3)), closes [#32817](https://github.com/bitnami/charts/issues/32817)
+
+## <small>7.3.3 (2025-04-02)</small>
+
+* [bitnami/argo-cd] Release 7.3.3 (#32787) ([7908e5f](https://github.com/bitnami/charts/commit/7908e5faf01c42428a497d93f0aadd5af9bfbb3e)), closes [#32787](https://github.com/bitnami/charts/issues/32787)
+
+## <small>7.3.2 (2025-04-01)</small>
+
+* [bitnami/argo-cd] Release 7.3.2 (#32717) ([50928db](https://github.com/bitnami/charts/commit/50928db539e9e5e3a6667914b37054aabe8fbd77)), closes [#32717](https://github.com/bitnami/charts/issues/32717)
+
+## <small>7.3.1 (2025-03-24)</small>
+
+* [bitnami/argo-cd] Release 7.3.1 (#32585) ([bbe5469](https://github.com/bitnami/charts/commit/bbe546947f67cd71da25fafbf7920b888b93e8cd)), closes [#32585](https://github.com/bitnami/charts/issues/32585)
+
+## 7.3.0 (2025-03-20)
+
+* [bitnami/argo-cd] Revert usePasswordFiles (#32514) ([016a597](https://github.com/bitnami/charts/commit/016a597e764b446d97c17b1afff359ea778ecbd1)), closes [#32514](https://github.com/bitnami/charts/issues/32514)
+
+## <small>7.2.6 (2025-03-19)</small>
+
+* [bitnami/argo-cd] Release 7.2.6 (#32519) ([d87cdeb](https://github.com/bitnami/charts/commit/d87cdeb893d9d3648c633506688e5961a5c88a1c)), closes [#32519](https://github.com/bitnami/charts/issues/32519)
+
+## <small>7.2.5 (2025-03-18)</small>
+
+* [bitnami/argo-cd] Release 7.2.5 (#32500) ([fbd0309](https://github.com/bitnami/charts/commit/fbd03096412bb47cfcea68313db5b6bc4b26da42)), closes [#32500](https://github.com/bitnami/charts/issues/32500)
 
 ## <small>7.2.4 (2025-03-18)</small>
 

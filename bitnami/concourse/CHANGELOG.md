@@ -1,8 +1,33 @@
 # Changelog
 
-## 5.1.18 (2025-03-17)
+## 5.1.24 (2025-04-10)
 
-* [bitnami/concourse] Release 5.1.18 ([#32491](https://github.com/bitnami/charts/pull/32491))
+* [bitnami/concourse] Release 5.1.24 ([#32946](https://github.com/bitnami/charts/pull/32946))
+
+## <small>5.1.23 (2025-04-09)</small>
+
+* [bitnami/concourse] Release 5.1.23 (#32941) ([58aee8b](https://github.com/bitnami/charts/commit/58aee8b6cbd12e046221e74816f0be298081cc49)), closes [#32941](https://github.com/bitnami/charts/issues/32941)
+
+## <small>5.1.22 (2025-04-09)</small>
+
+* [bitnami/concourse] Release 5.1.22 (#32940) ([5b16416](https://github.com/bitnami/charts/commit/5b16416c03542e1fd9f7219526b2ddb65ccfde6c)), closes [#32940](https://github.com/bitnami/charts/issues/32940)
+
+## <small>5.1.21 (2025-04-09)</small>
+
+* [bitnami/concourse] Release 5.1.21 (#32936) ([489697a](https://github.com/bitnami/charts/commit/489697ae5d554cc551b5b866eefa904b9e6dc9d0)), closes [#32936](https://github.com/bitnami/charts/issues/32936)
+
+## <small>5.1.20 (2025-04-09)</small>
+
+* [bitnami/concourse] Release 5.1.20 (#32931) ([66f1bf3](https://github.com/bitnami/charts/commit/66f1bf3a27e8702df9fe17b66ff086ad6c626891)), closes [#32931](https://github.com/bitnami/charts/issues/32931)
+
+## <small>5.1.19 (2025-04-01)</small>
+
+* [bitnami/concourse] Release 5.1.19 (#32724) ([f6c9831](https://github.com/bitnami/charts/commit/f6c9831e6e56f3c07b0b14aa38e62849ef3fe20e)), closes [#32724](https://github.com/bitnami/charts/issues/32724)
+
+## <small>5.1.18 (2025-03-17)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/concourse] Release 5.1.18 (#32491) ([27841fb](https://github.com/bitnami/charts/commit/27841fb4e7c2ce55e22041e4a9a4d0a2f6a14e53)), closes [#32491](https://github.com/bitnami/charts/issues/32491)
 
 ## <small>5.1.17 (2025-03-04)</small>
 

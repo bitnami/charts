@@ -170,15 +170,16 @@ helm install my-release --set persistence.existingClaim=PVC_NAME oci://REGISTRY_
 
 ### Common parameters
 
-| Name                | Description                                                                                                | Value |
-| ------------------- | ---------------------------------------------------------------------------------------------------------- | ----- |
-| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)                                       | `""`  |
-| `nameOverride`      | String to partially override matomo.fullname template (will maintain the release name)                     | `""`  |
-| `fullnameOverride`  | String to fully override matomo.fullname template                                                          | `""`  |
-| `namespaceOverride` | String to fully override common.names.namespace                                                            | `""`  |
-| `commonAnnotations` | Common annotations to add to all Matomo resources (sub-charts are not considered). Evaluated as a template | `{}`  |
-| `commonLabels`      | Common labels to add to all Matomo resources (sub-charts are not considered). Evaluated as a template      | `{}`  |
-| `extraDeploy`       | Array of extra objects to deploy with the release (evaluated as a template).                               | `[]`  |
+| Name                | Description                                                                                                | Value  |
+| ------------------- | ---------------------------------------------------------------------------------------------------------- | ------ |
+| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)                                       | `""`   |
+| `nameOverride`      | String to partially override matomo.fullname template (will maintain the release name)                     | `""`   |
+| `fullnameOverride`  | String to fully override matomo.fullname template                                                          | `""`   |
+| `namespaceOverride` | String to fully override common.names.namespace                                                            | `""`   |
+| `commonAnnotations` | Common annotations to add to all Matomo resources (sub-charts are not considered). Evaluated as a template | `{}`   |
+| `commonLabels`      | Common labels to add to all Matomo resources (sub-charts are not considered). Evaluated as a template      | `{}`   |
+| `extraDeploy`       | Array of extra objects to deploy with the release (evaluated as a template).                               | `[]`   |
+| `usePasswordFiles`  | Mount credentials as files instead of using environment variables                                          | `true` |
 
 ### Matomo parameters
 
@@ -220,7 +221,7 @@ helm install my-release --set persistence.existingClaim=PVC_NAME oci://REGISTRY_
 | `serviceAccountName`                                | Attach serviceAccountName to the pod and sidecars                                                                                                                                                                 | `""`                     |
 | `tolerations`                                       | Tolerations for pod assignment                                                                                                                                                                                    | `[]`                     |
 | `existingSecret`                                    | Name of a secret with the application password                                                                                                                                                                    | `""`                     |
-| `smtpAuth`                                          | SMTP authentication mechanism (options: Plain, Login, Crammd5)                                                                                                                                                    | `""`                     |
+| `smtpAuth`                                          | SMTP authentication mechanism (options: Plain, Login, Cram-md5)                                                                                                                                                   | `""`                     |
 | `smtpHost`                                          | SMTP host                                                                                                                                                                                                         | `""`                     |
 | `smtpPort`                                          | SMTP port                                                                                                                                                                                                         | `""`                     |
 | `smtpUser`                                          | SMTP user                                                                                                                                                                                                         | `""`                     |

@@ -1,8 +1,17 @@
 # Changelog
 
-## 20.11.3 (2025-03-10)
+## 20.11.5 (2025-03-26)
 
-* [bitnami/redis] fix 32214 - REDIS_PASSWORD_FILE uses wrong filename from volume ([#32215](https://github.com/bitnami/charts/pull/32215))
+* [bitnami/redis] Handle SIGTERM in `kubectl-shared` container ([#32085](https://github.com/bitnami/charts/pull/32085))
+
+## <small>20.11.4 (2025-03-22)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/redis] Release 20.11.4 (#32561) ([f40ecff](https://github.com/bitnami/charts/commit/f40ecff063a597f93d251613746c3d52c11c638d)), closes [#32561](https://github.com/bitnami/charts/issues/32561)
+
+## <small>20.11.3 (2025-03-10)</small>
+
+* [bitnami/redis] fix 32214 - REDIS_PASSWORD_FILE uses wrong filename from volume (#32215) ([5a31fa6](https://github.com/bitnami/charts/commit/5a31fa6eabad974edbc281782505e3bcb07efb98)), closes [#32215](https://github.com/bitnami/charts/issues/32215)
 
 ## <small>20.11.2 (2025-03-05)</small>
 

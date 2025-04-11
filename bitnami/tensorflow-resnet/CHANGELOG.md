@@ -1,8 +1,14 @@
 # Changelog
 
-## 4.3.4 (2025-02-20)
+## 4.3.5 (2025-03-19)
 
-* [bitnami/tensorflow-resnet] Release 4.3.4 ([#32039](https://github.com/bitnami/charts/pull/32039))
+* [bitnami/tensorflow-resnet] Release 4.3.5 ([#32512](https://github.com/bitnami/charts/pull/32512))
+
+## <small>4.3.4 (2025-02-20)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/tensorflow-resnet] Release 4.3.4 (#32039) ([7f6f784](https://github.com/bitnami/charts/commit/7f6f784179a1389bd44042aae2aae9feffc71267)), closes [#32039](https://github.com/bitnami/charts/issues/32039)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
 
 ## <small>4.3.3 (2025-01-28)</small>
 

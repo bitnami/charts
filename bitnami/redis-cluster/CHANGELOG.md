@@ -1,8 +1,17 @@
 # Changelog
 
-## 11.4.5 (2025-03-12)
+## 11.5.0 (2025-04-07)
 
-* [bitnami/redis-cluster] Use ternary yes/no for useAOFPersistence ([#32418](https://github.com/bitnami/charts/pull/32418))
+* [bitnami/redis-cluster] Set `usePasswordFiles=true` by default ([#32118](https://github.com/bitnami/charts/pull/32118))
+
+## <small>11.4.6 (2025-03-22)</small>
+
+* [bitnami/redis-cluster] Release 11.4.6 (#32560) ([e433131](https://github.com/bitnami/charts/commit/e43313143d767e4cd8fa744a5b868ff3341ead47)), closes [#32560](https://github.com/bitnami/charts/issues/32560)
+
+## <small>11.4.5 (2025-03-13)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/redis-cluster] Use ternary yes/no for useAOFPersistence (#32418) ([9cb94c6](https://github.com/bitnami/charts/commit/9cb94c652a935b94a7f15b4d9b3b3554591b26f2)), closes [#32418](https://github.com/bitnami/charts/issues/32418)
 
 ## <small>11.4.3 (2025-02-20)</small>
 

@@ -20,9 +20,9 @@ metadata:
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
     {{- end }}
 spec:
-  {{- if .Values.provisioning.cleanupAfterFinished.enabled }} 
-  ttlSecondsAfterFinished: {{ .Values.provisioning.cleanupAfterFinished.seconds }} 
-  {{- end }} 
+  {{- if .Values.provisioning.cleanupAfterFinished.enabled }}
+  ttlSecondsAfterFinished: {{ .Values.provisioning.cleanupAfterFinished.seconds }}
+  {{- end }}
   parallelism: 1
   template:
     metadata:
@@ -142,8 +142,8 @@ spec:
               };
 
               {{- $minioUrl := printf "$MINIO_SCHEME://%s:%d" (include "common.names.fullname" .) (.Values.service.ports.api | int) }}
-              {{- $minioRootUser := ternary ("$(<$MINIO_ROOT_USER_FILE)") ("$MINIO_ROOT_USER") (.Values.auth.useCredentialsFiles) }}
-              {{- $minioRootPassword := ternary ("$(<$MINIO_ROOT_PASSWORD_FILE)") ("$MINIO_ROOT_PASSWORD") (.Values.auth.useCredentialsFiles) }}
+              {{- $minioRootUser := ternary ("$(<$MINIO_ROOT_USER_FILE)") ("$MINIO_ROOT_USER") (.Values.auth.usePasswordFiles) }}
+              {{- $minioRootPassword := ternary ("$(<$MINIO_ROOT_PASSWORD_FILE)") ("$MINIO_ROOT_PASSWORD") (.Values.auth.usePasswordFiles) }}
               mc alias set {{ $minioAlias }} {{ $minioUrl }} {{ $minioRootUser }} {{ $minioRootPassword }};
 
               {{- range $config := .Values.provisioning.config }}
@@ -256,11 +256,11 @@ spec:
           env:
             - name: MINIO_SCHEME
               value: {{ ternary "https" "http" .Values.tls.enabled | quote }}
-            {{- if .Values.auth.useCredentialsFiles }}
+            {{- if .Values.auth.usePasswordFiles }}
             - name: MINIO_ROOT_USER_FILE
-              value: "/opt/bitnami/minio/secrets/root-user"
+              value: {{ printf "/opt/bitnami/minio/secrets/%s" (include "minio.rootUserKey" .) }}
             - name: MINIO_ROOT_PASSWORD_FILE
-              value: "/opt/bitnami/minio/secrets/root-password"
+              value: {{ printf "/opt/bitnami/minio/secrets/%s" (include "minio.rootPasswordKey" .) }}
             {{- else }}
             - name: MINIO_ROOT_USER
               valueFrom:
@@ -305,7 +305,7 @@ spec:
             - name: minio-provisioning
               mountPath: /etc/ilm
             {{- end }}
-            {{- if .Values.auth.useCredentialsFiles }}
+            {{- if .Values.auth.usePasswordFiles }}
             - name: minio-credentials
               mountPath: /opt/bitnami/minio/secrets/
             {{- end }}
@@ -336,7 +336,7 @@ spec:
           configMap:
             name: {{ $fullname }}
         {{- end }}
-        {{- if .Values.auth.useCredentialsFiles }}
+        {{- if .Values.auth.usePasswordFiles }}
         - name: minio-credentials
           secret:
             secretName: {{ include "minio.secretName" . }}

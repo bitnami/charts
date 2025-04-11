@@ -1,8 +1,17 @@
 # Changelog
 
-## 12.3.1 (2025-03-06)
+## 12.3.3 (2025-04-08)
 
-* [bitnami/mysql] Fix network policy extraEgress bug ([#32328](https://github.com/bitnami/charts/pull/32328))
+* [bitnami/mysql]  Allow setting externalIPs for services ([#32858](https://github.com/bitnami/charts/pull/32858))
+
+## <small>12.3.2 (2025-03-22)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/mysql] Release 12.3.2 (#32558) ([6070eb2](https://github.com/bitnami/charts/commit/6070eb2d51c4200b3ecdf5e8f30c2742501fde6f)), closes [#32558](https://github.com/bitnami/charts/issues/32558)
+
+## <small>12.3.1 (2025-03-06)</small>
+
+* [bitnami/mysql] Fix network policy extraEgress bug (#32328) ([bceae22](https://github.com/bitnami/charts/commit/bceae22f78d550f8b33589e2579843ac2fad3629)), closes [#32328](https://github.com/bitnami/charts/issues/32328)
 
 ## 12.3.0 (2025-02-24)
 

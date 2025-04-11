@@ -1,8 +1,40 @@
 # Changelog
 
-## 16.5.2 (2025-03-17)
+## 16.6.3 (2025-04-09)
 
-* [bitnami/postgresql] Release 16.5.2 ([#32484](https://github.com/bitnami/charts/pull/32484))
+* [bitnami/postgresql] Release 16.6.3 ([#32915](https://github.com/bitnami/charts/pull/32915))
+
+## <small>16.6.2 (2025-04-07)</small>
+
+* [bitnami/postgresql] Release 16.6.2 (#32842) ([9668041](https://github.com/bitnami/charts/commit/96680412e57a9beefcebc0d86be4e859fd393197)), closes [#32842](https://github.com/bitnami/charts/issues/32842)
+
+## <small>16.6.1 (2025-04-07)</small>
+
+* [bitnami/postgresql] Release 16.6.1 (#32834) ([d254ab7](https://github.com/bitnami/charts/commit/d254ab737a59c0c0a546979057f89bcf74d788a0)), closes [#32834](https://github.com/bitnami/charts/issues/32834)
+
+## 16.6.0 (2025-03-27)
+
+* [bitnami/postgresql] Set `usePasswordFiles=true` by default (#32115) ([2203c41](https://github.com/bitnami/charts/commit/2203c41cb173248d26c8fb073d28e93165888ebc)), closes [#32115](https://github.com/bitnami/charts/issues/32115)
+
+## <small>16.5.6 (2025-03-23)</small>
+
+* [bitnami/postgresql] Release 16.5.6 (#32576) ([7aac5fd](https://github.com/bitnami/charts/commit/7aac5fd297380af0d94f85922657fbc999dfaadc)), closes [#32576](https://github.com/bitnami/charts/issues/32576)
+
+## <small>16.5.5 (2025-03-20)</small>
+
+* [bitnami/postgresql] allow custom service labels for primary and read (#32368) ([6703679](https://github.com/bitnami/charts/commit/6703679964429f2b0fdf853a8ac812bf7dec5302)), closes [#32368](https://github.com/bitnami/charts/issues/32368)
+
+## <small>16.5.4 (2025-03-20)</small>
+
+* [bitnami/postgresql] Release 16.5.4 (#32527) ([423422d](https://github.com/bitnami/charts/commit/423422dab9ddcb40b1e8e9bb007ade8e82da7892)), closes [#32527](https://github.com/bitnami/charts/issues/32527)
+
+## <small>16.5.3 (2025-03-19)</small>
+
+* [bitnami/postgresql] Release 16.5.3 (#32525) ([150c5aa](https://github.com/bitnami/charts/commit/150c5aa26dfe351cfbdeb17e480c1de935430a9b)), closes [#32525](https://github.com/bitnami/charts/issues/32525)
+
+## <small>16.5.2 (2025-03-17)</small>
+
+* [bitnami/postgresql] Release 16.5.2 (#32484) ([89b026d](https://github.com/bitnami/charts/commit/89b026dc5e9d23f3cd35d0e07ff57b9b605f4376)), closes [#32484](https://github.com/bitnami/charts/issues/32484)
 
 ## <small>16.5.1 (2025-03-17)</small>
 

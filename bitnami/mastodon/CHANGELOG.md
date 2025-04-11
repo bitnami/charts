@@ -1,8 +1,33 @@
 # Changelog
 
-## 9.2.7 (2025-03-13)
+## 10.1.1 (2025-04-09)
 
-* [bitnami/mastodon] Release 9.2.7 ([#32447](https://github.com/bitnami/charts/pull/32447))
+* [bitnami/mastodon] Release 10.1.1 ([#32909](https://github.com/bitnami/charts/pull/32909))
+
+## 10.1.0 (2025-04-04)
+
+* [bitnami/mastodon] Set `usePasswordFiles=true` by default (#32367) ([410b9a2](https://github.com/bitnami/charts/commit/410b9a27153710a4fae9a1eeb1ca182c63e76118)), closes [#32367](https://github.com/bitnami/charts/issues/32367)
+
+## <small>10.0.1 (2025-04-03)</small>
+
+* [bitnami/mastodon] Release 10.0.1 (#32803) ([41f62c8](https://github.com/bitnami/charts/commit/41f62c8333b88d11169ca08f7f1c8ce9b3a1ed73)), closes [#32803](https://github.com/bitnami/charts/issues/32803)
+
+## 10.0.0 (2025-04-03)
+
+* [bitnami/mastodon] Bump MinIO major version 16.x.x (#32700) ([dfd61a0](https://github.com/bitnami/charts/commit/dfd61a00e9e7ac67251f68b3a273e7b6368e84ff)), closes [#32700](https://github.com/bitnami/charts/issues/32700)
+
+## <small>9.2.9 (2025-04-02)</small>
+
+* [bitnami/mastodon] Release 9.2.9 (#32785) ([14e9623](https://github.com/bitnami/charts/commit/14e96230f82d5a26ae12bd381a43819fd1ec2847)), closes [#32785](https://github.com/bitnami/charts/issues/32785)
+
+## <small>9.2.8 (2025-04-01)</small>
+
+* [bitnami/mastodon] Release 9.2.8 (#32711) ([256efe8](https://github.com/bitnami/charts/commit/256efe8969ab8f46739d15b8d25ccf42988521c2)), closes [#32711](https://github.com/bitnami/charts/issues/32711)
+
+## <small>9.2.7 (2025-03-13)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/mastodon] Release 9.2.7 (#32447) ([9e82185](https://github.com/bitnami/charts/commit/9e8218519bb1197509174b5c88f1dff86e8daea4)), closes [#32447](https://github.com/bitnami/charts/issues/32447)
 
 ## <small>9.2.6 (2025-03-10)</small>
 

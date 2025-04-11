@@ -84,9 +84,10 @@ spec:
       {{- if .Values.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
       {{- end }}
-      {{- if or .Values.containerSecurityContext.readOnlyRootFilesystem .Values.cloneStaticSiteFromGit.enabled .Values.initContainers }}
+      {{- if or .Values.initContainers (and .Values.enableDefaultInitContainers (or .Values.containerSecurityContext.readOnlyRootFilesystem .Values.cloneStaticSiteFromGit.enabled)) }}
       initContainers:
-      {{- if .Values.containerSecurityContext.readOnlyRootFilesystem }}
+        {{- if .Values.enableDefaultInitContainers }}
+        {{- if .Values.containerSecurityContext.readOnlyRootFilesystem }}
         - name: preserve-logs-symlinks
           image: {{ include "nginx.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
@@ -112,8 +113,7 @@ spec:
           volumeMounts:
             - name: empty-dir
               mountPath: /emptydir
-      {{- end }}        
-      {{- if or .Values.cloneStaticSiteFromGit.enabled .Values.initContainers }}
+        {{- end }}
         {{- if .Values.cloneStaticSiteFromGit.enabled }}
         - name: git-clone-repository
           image: {{ include "nginx.cloneStaticSiteFromGit.image" . }}
@@ -134,6 +134,11 @@ spec:
           {{- end }}
           {{- if .Values.cloneStaticSiteFromGit.gitClone.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.cloneStaticSiteFromGit.gitClone.args "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.cloneStaticSiteFromGit.gitSync.resources }}
+          resources: {{- toYaml .Values.cloneStaticSiteFromGit.gitSync.resources | nindent 12 }}
+          {{- else if ne .Values.cloneStaticSiteFromGit.gitSync.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.cloneStaticSiteFromGit.gitSync.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: empty-dir
@@ -159,10 +164,10 @@ spec:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.cloneStaticSiteFromGit.extraEnvVarsSecret "context" $) }}
           {{- end }}
         {{- end }}
+        {{- end }}
         {{- if .Values.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
         {{- end }}
-      {{- end }}
       {{- end }}
       containers:
         {{- if .Values.cloneStaticSiteFromGit.enabled }}

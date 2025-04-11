@@ -16,19 +16,17 @@ Looking to use Harbor in production? Try [VMware Tanzu Application Catalog](http
 
 ## Introduction
 
-This [Helm](https://github.com/kubernetes/helm) chart installs [Harbor](https://github.com/goharbor/harbor) in a Kubernetes cluster. Welcome to [contribute](https://github.com/bitnami/charts/blob/main/CONTRIBUTING.md) to Helm Chart for Harbor.
+This [Helm](https://github.com/kubernetes/helm) chart installs [Harbor](https://github.com/goharbor/harbor) in a Kubernetes cluster.
 
-This Helm chart has been developed based on [goharbor/harbor-helm](https://github.com/goharbor/harbor-helm) chart but including some features common to the Bitnami chart library.
+This Helm chart has been developed based on [goharbor/harbor-helm](https://github.com/goharbor/harbor-helm) chart but includes some features common to the Bitnami chart library.
 For example, the following changes have been introduced:
 
-- Possibility to pull all the required images from a private registry through the  Global Docker image parameters.
+- It is possible to pull all the required images from a private registry through the  Global Docker image parameters.
 - Redis&reg; and PostgreSQL are managed as chart dependencies.
 - Liveness and Readiness probes for all deployments are exposed to the values.yaml.
-- Uses new Helm chart labels formatting.
-- Uses Bitnami container images:
-  - non-root by default
-  - published for debian-10 and ol-7
-- This chart support the Harbor optional components.
+- Uses new Helm chart label formatting.
+- Uses Bitnami non-root container images by default.
+- This chart supports the Harbor optional components.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
@@ -107,6 +105,12 @@ Format: `protocol://domain[:port]`. Usually:
 - if expose Harbor core via NGINX proxy using a `LoadBalancer` service type, set the `domain` as your own domain name and add a CNAME record to map the domain name to the one you got from the cloud provider.
 
 If Harbor is deployed behind the proxy, set it as the URL of proxy.
+
+### Update database schema
+
+In order to update the database schema, the helm chart deploys a special Job that performs the migration. Enable this by setting the `migration.enabled=true` value.
+
+This Job relies on helm hooks, so any upgrade operation will wait for this Job to succeed.
 
 ### Securing traffic using TLS
 
@@ -355,6 +359,46 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 | `persistence.imageChartStorage.oss.chunksize`                 | OSS storage type setting: Chunk                                                                                                                                                                                                                                                                                                                      | `""`                                     |
 | `persistence.imageChartStorage.oss.rootdirectory`             | OSS storage type setting: Directory                                                                                                                                                                                                                                                                                                                  | `""`                                     |
 | `persistence.imageChartStorage.oss.secretkey`                 | OSS storage type setting: Secret key                                                                                                                                                                                                                                                                                                                 | `""`                                     |
+
+### Migration job parameters
+
+| Name                                                          | Description                                                                                                                                                                                                                           | Value            |
+| ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
+| `migration.enabled`                                           | Enable migration job                                                                                                                                                                                                                  | `false`          |
+| `migration.podLabels`                                         | Additional pod labels                                                                                                                                                                                                                 | `{}`             |
+| `migration.podAnnotations`                                    | Additional pod annotations                                                                                                                                                                                                            | `{}`             |
+| `migration.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                                                                                                                                    | `false`          |
+| `migration.hostAliases`                                       | Migration job host aliases                                                                                                                                                                                                            | `[]`             |
+| `migration.command`                                           | Override default container command (useful when using custom images)                                                                                                                                                                  | `[]`             |
+| `migration.args`                                              | Override default container args (useful when using custom images)                                                                                                                                                                     | `[]`             |
+| `migration.annotations`                                       | Provide any additional annotations which may be required.                                                                                                                                                                             | `{}`             |
+| `migration.podSecurityContext.enabled`                        | Enabled Jaeger pods' Security Context                                                                                                                                                                                                 | `true`           |
+| `migration.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                                                                                    | `Always`         |
+| `migration.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                                                                                                                                        | `[]`             |
+| `migration.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                                                                                           | `[]`             |
+| `migration.podSecurityContext.fsGroup`                        | Set Jaeger pod's Security Context fsGroup                                                                                                                                                                                             | `1001`           |
+| `migration.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                                                  | `true`           |
+| `migration.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                                      | `{}`             |
+| `migration.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                                            | `1001`           |
+| `migration.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                                           | `1001`           |
+| `migration.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                                                         | `true`           |
+| `migration.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                                                           | `false`          |
+| `migration.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                               | `true`           |
+| `migration.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                                                                                                                             | `false`          |
+| `migration.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                                                                                                                                    | `["ALL"]`        |
+| `migration.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                                                                                      | `RuntimeDefault` |
+| `migration.extraEnvVars`                                      | Extra environment variables to be set on jaeger migration container                                                                                                                                                                   | `[]`             |
+| `migration.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars                                                                                                                                                                                  | `""`             |
+| `migration.extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars                                                                                                                                                                                     | `""`             |
+| `migration.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for jaeger container                                                                                                                                                         | `[]`             |
+| `migration.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if migration.resources is set (migration.resources is recommended for production). | `small`          |
+| `migration.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                     | `{}`             |
+| `migration.networkPolicy.enabled`                             | Specifies whether a NetworkPolicy should be created                                                                                                                                                                                   | `true`           |
+| `migration.networkPolicy.allowExternal`                       | Don't require server label for connections                                                                                                                                                                                            | `true`           |
+| `migration.networkPolicy.allowExternalEgress`                 | Allow the pod to access any range of port and all destinations.                                                                                                                                                                       | `true`           |
+| `migration.networkPolicy.extraIngress`                        | Add extra ingress rules to the NetworkPolicy                                                                                                                                                                                          | `[]`             |
+| `migration.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy                                                                                                                                                                                          | `[]`             |
+| `migration.extraVolumes`                                      | Optionally specify extra list of additional volumes for jaeger container                                                                                                                                                              | `[]`             |
 
 ### Tracing parameters
 

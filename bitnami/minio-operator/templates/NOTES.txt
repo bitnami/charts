@@ -1,0 +1,41 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
+Did you know there are enterprise versions of the Bitnami catalog? For enhanced secure software supply chain features, unlimited pulls from Docker, LTS support, or application customization, see Bitnami Premium or Tanzu Application Catalog. See https://www.arrow.com/globalecs/na/vendors/bitnami for more information.
+
+** Please be patient while the chart is being deployed **
+
+Check the status of the pods by running this command:
+
+  kubectl get pods --namespace {{ include "common.names.namespace" . | quote }} -l app.kubernetes.io/instance={{ .Release.Name }}
+
+Check the MinIO(R) Operator documentation for instructions on how to deploy Tentant instaces.
+
+https://operator.min.io/
+
+{{- if .Values.rbac.create }}
+{{- if .Values.watchAllNamespaces }}
+WARNING: MinIO(R) Operator can access all secrets in the cluster. This could pose a security risk if the application gets compromised.
+
+You can limit accessed namespaces by setting watchAllNamespaces = false and configuring watchNamespaces
+{{- else }}
+
+MinIO(R) Operator will ONLY access resources in the following namespaces:
+{{ $namespaces := .Values.watchNamespaces | default (list (include "common.names.namespace" .)) }}
+{{- range $namespace := $namespaces }}
+  - {{ $namespace }}
+{{- end }}
+
+MinIO(R) Operator won't access resources in other namespaces. You can configure this behavior by setting watchNamespaces
+
+{{- end }}
+{{- end }}
+
+{{- include "common.warnings.rollingTag" .Values.image }}
+{{- include "common.warnings.rollingTag" .Values.minioImage }}
+{{- include "common.warnings.rollingTag" .Values.kesImage }}
+{{- include "minio-operator.validateValues" . }}
+{{- include "common.warnings.resources" (dict "sections" (list "") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.kesImage .Values.sidecarImage .Values.minioImage .Values.image) "context" $) }}
+{{- include "common.errors.insecureImages" (dict "images" (list .Values.kesImage .Values.sidecarImage .Values.minioImage .Values.image) "context" $) }}

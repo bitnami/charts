@@ -4,6 +4,7 @@ automountServiceAccountToken: true
 extraArgs:
 - --authorization-always-allow-paths=/metrics
 - --kubelet-insecure-tls=true
+- --kubelet-preferred-address-types=InternalIP,ExternalDNS,ExternalIP
 containerPorts:
   https: 8444
 service:

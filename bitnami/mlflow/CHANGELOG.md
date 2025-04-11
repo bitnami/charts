@@ -1,8 +1,28 @@
 # Changelog
 
-## 2.5.5 (2025-03-14)
+## 3.0.1 (2025-04-09)
 
-* [bitnami/mlflow] Release 2.5.5 ([#32462](https://github.com/bitnami/charts/pull/32462))
+* [bitnami/mlflow] Release 3.0.1 ([#32908](https://github.com/bitnami/charts/pull/32908))
+
+## 3.0.0 (2025-04-03)
+
+* [bitnami/mlflow] Bump MinIO major version 16.x.x (#32702) ([a617c30](https://github.com/bitnami/charts/commit/a617c304ad4f18ac118dfa84052b7612865c9b52)), closes [#32702](https://github.com/bitnami/charts/issues/32702)
+
+## <small>2.5.8 (2025-04-03)</small>
+
+* [bitnami/mlflow] Release 2.5.8 (#32796) ([e6051d1](https://github.com/bitnami/charts/commit/e6051d10cc68bb6b52c468d51bc35a022584e56d)), closes [#32796](https://github.com/bitnami/charts/issues/32796)
+
+## <small>2.5.7 (2025-03-26)</small>
+
+* [bitnami/mlflow] Release 2.5.7 (#32627) ([f531adf](https://github.com/bitnami/charts/commit/f531adf25113b96a5b7ad2327783250e29399003)), closes [#32627](https://github.com/bitnami/charts/issues/32627)
+
+## <small>2.5.6 (2025-03-26)</small>
+
+* [bitnami/mlflow] Release 2.5.6 (#32610) ([42b111e](https://github.com/bitnami/charts/commit/42b111e0fd37614ae8691830160face60afe2d6f)), closes [#32610](https://github.com/bitnami/charts/issues/32610)
+
+## <small>2.5.5 (2025-03-14)</small>
+
+* [bitnami/mlflow] Release 2.5.5 (#32462) ([b62113c](https://github.com/bitnami/charts/commit/b62113c5a1d5b7bae8896f382ef78b7dd561f48d)), closes [#32462](https://github.com/bitnami/charts/issues/32462)
 
 ## <small>2.5.4 (2025-03-13)</small>
 

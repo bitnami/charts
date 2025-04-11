@@ -143,6 +143,12 @@ spec:
                 fieldRef:
                   apiVersion: v1
                   fieldPath: metadata.name
+            {{- if .Values.usePasswordFiles }}
+            - name: SOLR_SSL_KEY_STORE_PASSWORD_FILE
+              value: "/opt/bitnami/solr/secrets/tls/keystore-password"
+            - name: SOLR_SSL_TRUST_STORE_PASSWORD_FILE
+              value: "/opt/bitnami/solr/secrets/tls/truststore-password"
+            {{- else }}
             - name: SOLR_SSL_KEY_STORE_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -153,6 +159,7 @@ spec:
                 secretKeyRef:
                   name: {{ include "solr.tlsPasswordsSecret" . }}
                   key: truststore-password
+            {{- end }}
           {{- if .Values.tls.resources }}
           resources: {{- toYaml .Values.tls.resources | nindent 12 }}
           {{- else if ne .Values.tls.resourcesPreset "none" }}
@@ -170,6 +177,10 @@ spec:
             - name: empty-dir
               mountPath: /tmp
               subPath: tmp-dir
+            {{- if .Values.usePasswordFiles }}
+            - name: solr-secrets
+              mountPath: /opt/bitnami/solr/secrets
+            {{- end }}
         {{- end }}
         {{- if .Values.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
@@ -230,11 +241,16 @@ spec:
             {{- if .Values.auth.enabled }}
             - name: SOLR_ADMIN_USERNAME
               value: {{ .Values.auth.adminUsername | quote }}
+            {{- if .Values.usePasswordFiles }}
+            - name: SOLR_ADMIN_PASSWORD_FILE
+              value: {{ printf "/opt/bitnami/solr/secrets/pass/%s" (include "solr.secretPasswordKey" .) }}
+            {{- else }}
             - name: SOLR_ADMIN_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "solr.secretName" . }}
                   key: {{ include "solr.secretPasswordKey" . }}
+            {{- end }}
             {{- end }}
             - name: SOLR_ZK_HOSTS
               value: {{ include "solr.zookeeper.hosts" . | quote }}
@@ -249,18 +265,25 @@ spec:
             {{- end }}
             - name: SOLR_SSL_KEY_STORE
               value: /opt/bitnami/solr/certs/keystore.p12
+            - name: SOLR_SSL_TRUST_STORE
+              value: /opt/bitnami/solr/certs/truststore.p12
+            {{- if .Values.usePasswordFiles }}
+            - name: SOLR_SSL_KEY_STORE_PASSWORD_FILE
+              value: "/opt/bitnami/solr/secrets/tls/keystore-password"
+            - name: SOLR_SSL_TRUST_STORE_PASSWORD_FILE
+              value: "/opt/bitnami/solr/secrets/tls/truststore-password"
+            {{- else }}
             - name: SOLR_SSL_KEY_STORE_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "solr.tlsPasswordsSecret" . }}
                   key: keystore-password
-            - name: SOLR_SSL_TRUST_STORE
-              value: /opt/bitnami/solr/certs/truststore.p12
             - name: SOLR_SSL_TRUST_STORE_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "solr.tlsPasswordsSecret" . }}
                   key: truststore-password
+            {{- end }}
             - name: SOLR_SSL_CHECK_PEER_NAME
               value: "false"
             {{- end }}
@@ -296,6 +319,9 @@ spec:
               - /bin/bash
               - -ec
               - |
+                {{- if and .Values.usePasswordFiles .Values.auth.enabled }}
+                export SOLR_ADMIN_PASSWORD="$(< $SOLR_ADMIN_PASSWORD_FILE)"
+                {{- end }}
                 curl --silent --connect-timeout 15000 {{ ternary "--user ${SOLR_ADMIN_USERNAME}:${SOLR_ADMIN_PASSWORD}" "" .Values.auth.enabled }} http://localhost:${SOLR_PORT_NUMBER}/solr/admin/info/system | grep --quiet  '\"status\":0'
           {{- end }}
           {{- if .Values.customReadinessProbe }}
@@ -307,6 +333,9 @@ spec:
               - /bin/bash
               - -ec
               - |
+                {{- if and .Values.usePasswordFiles .Values.auth.enabled }}
+                export SOLR_ADMIN_PASSWORD="$(< $SOLR_ADMIN_PASSWORD_FILE)"
+                {{- end }}
                 curl --silent --connect-timeout 15000 {{ ternary "--user ${SOLR_ADMIN_USERNAME}:${SOLR_ADMIN_PASSWORD}" "" .Values.auth.enabled }} http://localhost:${SOLR_PORT_NUMBER}/api/node/health | grep --quiet  '\"status\":\"OK\"'
           {{- end }}
           {{- if .Values.customStartupProbe }}
@@ -318,6 +347,9 @@ spec:
               - /bin/bash
               - -ec
               - |
+                {{- if and .Values.usePasswordFiles .Values.auth.enabled }}
+                export SOLR_ADMIN_PASSWORD="$(< $SOLR_ADMIN_PASSWORD_FILE)"
+                {{- end }}
                 curl --silent --connect-timeout 15000  {{ ternary "--user ${SOLR_ADMIN_USERNAME}:${SOLR_ADMIN_PASSWORD}" "" .Values.auth.enabled }} http://localhost:${SOLR_PORT_NUMBER}/api/node/health | grep --quiet  '\"status\":\"OK\"'
           {{- end }}
           {{- end }}
@@ -340,6 +372,14 @@ spec:
             - name: scripts
               mountPath: /scripts/setup.sh
               subPath: setup.sh
+            {{- if and .Values.usePasswordFiles .Values.auth.enabled }}
+            - name: solr-pass-secret
+              mountPath: /opt/bitnami/solr/secrets/pass
+            {{- end }}
+            {{- if and .Values.usePasswordFiles .Values.tls.enabled }}
+            - name: solr-tls-secret
+              mountPath: /opt/bitnami/solr/secrets/tls
+            {{- end }}
             - name: data
               mountPath: {{ .Values.persistence.mountPath }}
             {{- if .Values.persistence.subPath }}
@@ -365,6 +405,16 @@ spec:
           configMap:
             name: {{ printf "%s-scripts" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
             defaultMode: 0755
+        {{- if and .Values.usePasswordFiles .Values.auth.enabled }}
+        - name: solr-pass-secret
+          secret:
+            secretName: {{ include "solr.secretName" . }}
+        {{- end }}
+        {{- if and .Values.usePasswordFiles .Values.tls.enabled }}
+        - name: solr-tls-secret
+          secret:
+            secretName: {{ include "solr.tlsPasswordsSecret" . }}
+        {{- end }}
         {{- if and .Values.persistence.enabled .Values.persistence.existingClaim }}
         - name: data
           persistentVolumeClaim:

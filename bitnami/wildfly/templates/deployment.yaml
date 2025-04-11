@@ -126,11 +126,16 @@ spec:
               value: {{ ternary "true" "false" .Values.image.debug | quote }}
             - name: WILDFLY_USERNAME
               value: {{ default "" .Values.wildflyUsername | quote }}
+            {{- if .Values.usePasswordFiles }}
+            - name: WILDFLY_PASSWORD_FILE
+              value: "/opt/bitnami/wildfly/secrets/wildfly-password"
+            {{- else }}
             - name: WILDFLY_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ template "common.names.fullname" . }}
                   key: wildfly-password
+            {{- end }}
             - name: WILDFLY_HTTP_PORT_NUMBER
               value: {{ .Values.containerPorts.http | quote }}
             - name: WILDFLY_HTTPS_PORT_NUMBER
@@ -205,6 +210,10 @@ spec:
               subPath: tmp-dir
             - name: data
               mountPath: /bitnami/wildfly
+            {{- if  .Values.usePasswordFiles }}
+            - name: wildfly-secrets
+              mountPath: /opt/bitnami/wildfly/secrets
+            {{- end }}
             {{- if .Values.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
@@ -214,6 +223,13 @@ spec:
       volumes:
         - name: empty-dir
           emptyDir: {}
+        {{- if .Values.usePasswordFiles }}
+        - name: wildfly-secrets
+          projected:
+            sources:
+              - secret:
+                  name:  {{ template "common.names.fullname" . }}
+        {{- end }}
         - name: data
           {{- if .Values.persistence.enabled }}
           persistentVolumeClaim:

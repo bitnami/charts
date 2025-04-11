@@ -336,7 +336,7 @@ passwordUpdateJob:
 In the following example we update the password via values.yaml in a MongoDB installation with replication and several usernames and databases (including metrics).
 
 ```yaml
-architecture: "replication"
+architecture: "replicaset"
 
 auth:
   usernames:
@@ -520,6 +520,7 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 | `topologyKey`             | Override common lib default topology key. If empty - "kubernetes.io/hostname" is used                     | `""`            |
 | `serviceBindings.enabled` | Create secret for service binding (Experimental)                                                          | `false`         |
 | `enableServiceLinks`      | Whether information about services should be injected into pod's environment variable                     | `true`          |
+| `usePasswordFiles`        | Mount credentials as files instead of using environment variables                                         | `true`          |
 | `diagnosticMode.enabled`  | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                   | `false`         |
 | `diagnosticMode.command`  | Command to override all containers in the deployment                                                      | `["sleep"]`     |
 | `diagnosticMode.args`     | Args to override all containers in the deployment                                                         | `["infinity"]`  |
