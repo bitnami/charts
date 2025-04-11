@@ -12,6 +12,7 @@ metadata:
   {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.metrics.serviceMonitor.labels .Values.commonLabels ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: clickhouse
+    app.kubernetes.io/part-of: clickhouse
   {{- if or .Values.metrics.serviceMonitor.annotations .Values.commonAnnotations }}
   {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.metrics.serviceMonitor.annotations .Values.commonAnnotations ) "context" . ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
@@ -23,6 +24,8 @@ spec:
       {{- if .Values.metrics.serviceMonitor.selector }}
       {{- include "common.tplvalues.render" (dict "value" .Values.metrics.serviceMonitor.selector "context" $) | nindent 6 }}
       {{- end }}
+      app.kubernetes.io/component: clickhouse
+      app.kubernetes.io/part-of: clickhouse
   endpoints:
     - port: http-metrics
       path: "/metrics"

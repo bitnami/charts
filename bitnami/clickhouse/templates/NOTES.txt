@@ -51,13 +51,22 @@ NOTE: It may take a few minutes for the LoadBalancer IP to be available.
 
 Credentials:
 
-    echo "Username      : {{ .Values.auth.username }}"
-    echo "Password      : $(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "clickhouse.secretName" . }} -o jsonpath="{.data.{{ include "clickhouse.secretKey" .}}}" | base64 -d)"
+    echo "Username: {{ .Values.auth.username }}"
+    echo "Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "clickhouse.secretName" . }} -o jsonpath="{.data.{{ include "clickhouse.secretKey" .}}}" | base64 -d)"
 
 {{- end }}
 
 {{- include "common.warnings.rollingTag" .Values.image }}
+{{- include "common.warnings.rollingTag" .Values.keeper.image }}
+{{- include "common.warnings.rollingTag" .Values.defaultInitContainers.volumePermissions.image }}
 {{- include "clickhouse.validateValues" . }}
-{{- include "common.warnings.resources" (dict "sections" (list "" "volumePermissions") "context" $) }}
-{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.volumePermissions.image) "context" $) }}
-{{- include "common.errors.insecureImages" (dict "images" (list .Values.image .Values.volumePermissions.image) "context" $) }}
+{{- $resourcesSections := list "" }}
+{{- if .Values.keeper.enabled }}
+  {{- $resourcesSections = append $resourcesSections "keeper" }}
+{{- end }}
+{{- if .Values.defaultInitContainers.volumePermissions.enabled }}
+  {{- $resourcesSections = append $resourcesSections "defaultInitContainers.volumePermissions" }}
+{{- end }}
+{{- include "common.warnings.resources" (dict "sections" $resourcesSections "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.keeper.image .Values.defaultInitContainers.volumePermissions.image) "context" $) }}
+{{- include "common.errors.insecureImages" (dict "images" (list .Values.image .Values.keeper.image .Values.defaultInitContainers.volumePermissions.image) "context" $) }}

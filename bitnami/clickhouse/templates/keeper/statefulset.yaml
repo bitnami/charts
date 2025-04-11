@@ -1,0 +1,272 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.keeper.enabled }}
+apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
+kind: StatefulSet
+metadata:
+  name: {{ template "clickhouse.keeper.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" (dict "customLabels" .Values.commonLabels "context" .) | nindent 4 }}
+    app.kubernetes.io/component: keeper
+    app.kubernetes.io/part-of: clickhouse
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" .) | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.keeper.replicaCount }}
+  podManagementPolicy: {{ .Values.keeper.podManagementPolicy }}
+  {{- $podLabels := include "common.tplvalues.merge" (dict "values" ( list .Values.keeper.podLabels .Values.commonLabels ) "context" . ) }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" (dict "customLabels" $podLabels "context" .) | nindent 6 }}
+      app.kubernetes.io/component: keeper
+      app.kubernetes.io/part-of: clickhouse
+  serviceName: {{ template "clickhouse.keeper.headlessServiceName" . }}
+  updateStrategy: {{- include "common.tplvalues.render" (dict "value" .Values.keeper.updateStrategy "context" .) | nindent 4 }}
+  template:
+    metadata:
+      annotations:
+        {{- if and .Values.keeper.configuration (not .Values.keeper.existingConfigmap) }}
+        checksum/configuration: {{ include (print $.Template.BasePath "/keeper/configmap.yaml") . | sha256sum }}
+        {{- end }}
+        {{- if and (or .Values.keeper.configdFiles (gt (int .Values.keeper.replicaCount) 1)) (not .Values.keeper.existingConfigdConfigmap) }}
+        checksum/configd-configuration: {{ include (print $.Template.BasePath "/keeper/configd-configmap.yaml") . | sha256sum }}
+        {{- end }}
+        {{- if and .Values.keeper.usersdFiles (not .Values.keeper.existingUsersdConfigmap) }}
+        checksum/usersd-configuration: {{ include (print $.Template.BasePath "/keeper/usersd-configmap.yaml") . | sha256sum }}
+        {{- end }}
+        {{- if .Values.keeper.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.keeper.podAnnotations "context" .) | nindent 8 }}
+        {{- end }}
+      labels: {{- include "common.labels.standard" (dict "customLabels" $podLabels "context" .) | nindent 8 }}
+        app.kubernetes.io/component: keeper
+        app.kubernetes.io/part-of: clickhouse
+    spec:
+      {{- include "clickhouse.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.keeper.automountServiceAccountToken }}
+      serviceAccountName: {{ include "clickhouse.serviceAccountName" . }}
+      {{- if .Values.keeper.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.keeper.hostAliases "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.keeper.affinity }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.keeper.affinity "context" .) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.keeper.podAffinityPreset "component" "keeper" "customLabels" $podLabels "context" .) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.keeper.podAntiAffinityPreset "component" "keeper" "customLabels" $podLabels "context" .) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.keeper.nodeAffinityPreset.type "key" .Values.keeper.nodeAffinityPreset.key "values" .Values.keeper.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.keeper.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.keeper.nodeSelector "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.keeper.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.keeper.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.keeper.priorityClassName }}
+      priorityClassName: {{ .Values.keeper.priorityClassName }}
+      {{- end }}
+      {{- if .Values.keeper.schedulerName }}
+      schedulerName: {{ .Values.keeper.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.keeper.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.keeper.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.keeper.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.keeper.terminationGracePeriodSeconds }}
+      {{- end }}
+      {{- if .Values.keeper.podSecurityContext.enabled }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.keeper.podSecurityContext "context" .) | nindent 8 }}
+      {{- end }}
+      initContainers:
+      {{- if and .Values.defaultInitContainers.volumePermissions.enabled .Values.keeper.persistence.enabled }}
+        {{- include "clickhouse.defaultInitContainers.volumePermissions" (dict "context" . "role" "keeper") | nindent 8 }}
+      {{- end }}
+      {{- if .Values.keeper.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.keeper.initContainers "context" .) | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: keeper
+          image: {{ template "clickhouse.keeper.image" . }}
+          imagePullPolicy: {{ .Values.keeper.image.pullPolicy | quote }}
+          {{- if .Values.keeper.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.keeper.containerSecurityContext "context" .) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" .) | nindent 12 }}
+          {{- else if .Values.keeper.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.keeper.command "context" .) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" .) | nindent 12 }}
+          {{- else if .Values.keeper.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.keeper.args "context" .) | nindent 12 }}
+          {{- end }}
+          env:
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" (or .Values.keeper.image.debug .Values.diagnosticMode.enabled) | quote }}
+            - name: CLICKHOUSE_KEEPER_SERVER_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: CLICKHOUSE_KEEPER_TCP_PORT
+              value: {{ .Values.keeper.containerPorts.tcp | quote }}
+            - name: CLICKHOUSE_KEEPER_RAFT_PORT
+              value: {{ .Values.keeper.containerPorts.raft | quote }}
+            {{- if .Values.keeper.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.keeper.extraEnvVars "context" .) | nindent 12 }}
+            {{- end }}
+          {{- if or .Values.keeper.extraEnvVarsCM .Values.keeper.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.keeper.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.keeper.extraEnvVarsCM "context" .) }}
+            {{- end }}
+            {{- if .Values.keeper.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.keeper.extraEnvVarsSecret "context" .) }}
+            {{- end }}
+          {{- end }}
+          ports:
+            - name: tcp
+              containerPort: {{ .Values.keeper.containerPorts.tcp }}
+            - name: raft
+              containerPort: {{ .Values.keeper.containerPorts.raft }}
+            {{- if .Values.keeper.extraContainerPorts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.keeper.extraContainerPorts "context" .) | nindent 12 }}
+            {{- end }}
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.keeper.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.keeper.customLivenessProbe "context" .) | nindent 12 }}
+          {{- else if .Values.keeper.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.keeper.livenessProbe "enabled") "context" .) | nindent 12 }}
+            tcpSocket:
+              port: tcp
+          {{- end }}
+          {{- if .Values.keeper.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.keeper.customReadinessProbe "context" .) | nindent 12 }}
+          {{- else if .Values.keeper.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.keeper.readinessProbe "enabled") "context" .) | nindent 12 }}
+            exec:
+              command:
+                - bash
+                - -ec
+                - |
+                  OK=$(exec 3<>/dev/tcp/127.0.0.1/{{ .Values.keeper.containerPorts.tcp }}; printf 'ruok' >&3; IFS=; tee <&3; exec 3<&-;)
+                  if [[ "${OK}" == "imok" ]]; then exit 0; else exit 1; fi
+          {{- end }}
+          {{- if .Values.keeper.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.keeper.customStartupProbe "context" .) | nindent 12 }}
+          {{- else if .Values.keeper.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.keeper.startupProbe "enabled") "context" .) | nindent 12 }}
+            tcpSocket:
+              port: tcp
+          {{- end }}
+          {{- end }}
+          {{- if .Values.keeper.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.keeper.lifecycleHooks "context" .) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.keeper.resources }}
+          resources: {{- toYaml .Values.keeper.resources | nindent 12 }}
+          {{- else if ne .Values.keeper.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.keeper.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: data
+              mountPath: {{ .Values.keeper.persistence.mountPath }}
+            {{- if or .Values.keeper.configuration .Values.keeper.existingConfigmap }}
+            - name: configuration
+              mountPath: /bitnami/clickhouse-keeper/etc/keeper_config.xml
+              subPath: keeper_config.xml
+            {{- end }}
+            {{- if or .Values.keeper.configdFiles (gt (int .Values.keeper.replicaCount) 1) .Values.keeper.existingConfigdConfigmap }}
+            - name: configd-configuration
+              mountPath: /bitnami/clickhouse-keeper/etc/keeper_config.d
+            {{- end }}
+            {{- if or .Values.keeper.usersdFiles .Values.keeper.existingUsersdConfigmap }}
+            - name: usersd-configuration-configuration
+              mountPath: /bitnami/clickhouse-keeper/etc/users.d
+            {{- end }}
+            - name: empty-dir
+              mountPath: /opt/bitnami/clickhouse-keeper/etc
+              subPath: app-conf-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/clickhouse-keeper/logs
+              subPath: app-logs-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/clickhouse-keeper/tmp
+              subPath: app-tmp-dir
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            {{- if .Values.keeper.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.keeper.extraVolumeMounts "context" .) | nindent 12 }}
+            {{- end }}
+        {{- if .Values.keeper.sidecars }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.keeper.sidecars "context" .) | nindent 8 }}
+        {{- end }}
+      volumes:
+        - name: empty-dir
+          emptyDir: {}
+        {{- if or .Values.keeper.configuration .Values.keeper.existingConfigmap }}
+        - name: configuration
+          configMap:
+            name: {{ template "clickhouse.keeper.configmapName" . }}
+        {{- end }}
+        {{- if or .Values.keeper.configdFiles (gt (int .Values.keeper.replicaCount) 1) .Values.keeper.existingConfigdConfigmap }}
+        - name: configd-configuration
+          configMap:
+            name: {{ template "clickhouse.keeper.configd.configmapName" . }}
+        {{- end }}
+        {{- if or .Values.keeper.usersdFiles .Values.keeper.existingUsersdConfigmap }}
+        - name: usersd-configuration-configuration
+          configMap:
+            name: {{ template "clickhouse.keeper.usersd.configmapName" . }}
+        {{- end }}
+        {{- if .Values.keeper.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.keeper.extraVolumes "context" .) | nindent 8 }}
+        {{- end }}
+{{- if not .Values.keeper.persistence.enabled }}
+        - name: data
+          emptyDir: {}
+{{- else if .Values.keeper.persistence.existingClaim }}
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ tpl .Values.keeper.persistence.existingClaim . }}
+{{- else }}
+  {{- if .Values.keeper.persistentVolumeClaimRetentionPolicy.enabled }}
+  persistentVolumeClaimRetentionPolicy:
+    whenDeleted: {{ .Values.keeper.persistentVolumeClaimRetentionPolicy.whenDeleted }}
+    whenScaled: {{ .Values.keeper.persistentVolumeClaimRetentionPolicy.whenScaled }}
+  {{- end }}
+  volumeClaimTemplates:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        name: data
+        {{- if or .Values.keeper.persistence.annotations .Values.commonAnnotations }}
+        {{- $claimAnnotations := include "common.tplvalues.merge" (dict "values" (list .Values.keeper.persistence.annotations .Values.commonAnnotations) "context" . ) }}
+        annotations: {{- include "common.tplvalues.render" (dict "value" $claimAnnotations "context" .) | nindent 10 }}
+        {{- end }}
+        {{- $claimLabels := include "common.tplvalues.merge" (dict "values" (list .Values.keeper.persistence.labels .Values.commonLabels ) "context" .) }}
+        labels: {{- include "common.labels.matchLabels" (dict "customLabels" $claimLabels "context" .) | nindent 10 }}
+          app.kubernetes.io/component: keeper
+          app.kubernetes.io/part-of: clickhouse
+      spec:
+        accessModes:
+        {{- range .Values.keeper.persistence.accessModes }}
+          - {{ . | quote }}
+        {{- end }}
+        resources:
+          requests:
+            storage: {{ .Values.keeper.persistence.size | quote }}
+        {{- if .Values.keeper.persistence.dataSource }}
+        dataSource: {{- include "common.tplvalues.render" (dict "value" .Values.keeper.persistence.dataSource "context" .) | nindent 10 }}
+        {{- end }}
+        {{- include "common.storage.class" (dict "persistence" .Values.keeper.persistence "global" .Values.global) | nindent 8 }}
+        {{- if .Values.keeper.persistence.selector }}
+        selector: {{- include "common.tplvalues.render" (dict "value" .Values.keeper.persistence.selector "context" .) | nindent 10 }}
+        {{- end -}}
+{{- end }}
+{{- end }}

@@ -20,6 +20,7 @@ metadata:
   {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list $.Values.externalAccess.service.labels $.Values.commonLabels ) "context" $ ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: clickhouse
+    app.kubernetes.io/part-of: clickhouse
     pod: {{ $targetPod }}
   {{- if or $.Values.externalAccess.service.annotations $.Values.commonAnnotations $.Values.externalAccess.service.loadBalancerAnnotations }}
   annotations:
@@ -90,34 +91,6 @@ spec:
       nodePort: null
       {{- end }}
     {{- end }}
-    {{- if $.Values.keeper.enabled }}
-    - name: tcp-keeper
-      port: {{ $.Values.externalAccess.service.ports.keeper }}
-      targetPort: tcp-keeper
-      {{- if not (empty $.Values.externalAccess.service.nodePorts.keeper) }}
-      nodePort: {{ index $.Values.externalAccess.service.nodePorts.keeper $i }}
-      {{- else }}
-      nodePort: null
-      {{- end }}
-    - name: tcp-keeperinter
-      port: {{ $.Values.externalAccess.service.ports.keeperInter }}
-      targetPort: tcp-keeperinter
-      {{- if not (empty $.Values.externalAccess.service.nodePorts.keeperInter) }}
-      nodePort: {{ index $.Values.externalAccess.service.nodePorts.keeperInter $i }}
-      {{- else }}
-      nodePort: null
-      {{- end }}
-    {{- if $.Values.tls.enabled }}
-    - name: tcp-keepertls
-      port: {{ $.Values.externalAccess.service.ports.keeperSecure }}
-      targetPort: tcp-keepertls
-      {{- if not (empty $.Values.externalAccess.service.nodePorts.keeperSecure) }}
-      nodePort: {{ index $.Values.externalAccess.service.nodePorts.keeperSecure $i }}
-      {{- else }}
-      nodePort: null
-      {{- end }}
-    {{- end }}
-    {{- end }}
     - name: tcp-mysql
       port: {{ $.Values.externalAccess.service.ports.mysql }}
       targetPort: tcp-mysql
@@ -148,6 +121,7 @@ spec:
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list $.Values.podLabels $.Values.commonLabels ) "context" $ ) }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: clickhouse
+    app.kubernetes.io/part-of: clickhouse
     statefulset.kubernetes.io/pod-name: {{ $targetPod }}
 ---
 {{- end }}
