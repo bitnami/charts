@@ -1,8 +1,12 @@
 # Changelog
 
-## 19.0.4 (2025-03-25)
+## 19.0.5 (2025-04-11)
 
-* [bitnami/nginx] Ingress hostname dynamic tpl function ([#32421](https://github.com/bitnami/charts/pull/32421))
+* [bitnami/nginx] Release 19.0.5 ([#32964](https://github.com/bitnami/charts/pull/32964))
+
+## <small>19.0.4 (2025-04-02)</small>
+
+* [bitnami/nginx] Ingress hostname dynamic tpl function (#32421) ([4e232c3](https://github.com/bitnami/charts/commit/4e232c32dcced4935ccc378597a0bfb9e1432f63)), closes [#32421](https://github.com/bitnami/charts/issues/32421)
 
 ## <small>19.0.3 (2025-03-25)</small>
 
