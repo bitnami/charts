@@ -234,6 +234,9 @@ spec:
             - name: ELASTICSEARCH_HEAP_SIZE
               value: {{ .Values.coordinating.heapSize | quote }}
             {{- end }}
+            {{- if .Values.security.enabled }}
+            {{- include "elasticsearch.configure.security" . | nindent 12 }}
+            {{- end }}
             {{- if .Values.coordinating.extraEnvVars }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.coordinating.extraEnvVars "context" $ ) | nindent 12 }}
             {{- end }}
