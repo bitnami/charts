@@ -1,6 +1,6 @@
 # Changelog
 
-## 20.11.6 (2025-04-10)
+## 20.11.6 (2025-04-11)
 
 * [bitnami/redis] Fix sentinel masterService extraPorts not rendered ([#32961](https://github.com/bitnami/charts/pull/32961))
 
