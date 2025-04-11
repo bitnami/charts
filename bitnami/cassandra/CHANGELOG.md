@@ -1,6 +1,6 @@
 # Changelog
 
-## 12.3.2 (2025-04-10)
+## 12.3.2 (2025-04-11)
 
 * [bitnami/cassandra] Release 12.3.2 ([#32962](https://github.com/bitnami/charts/pull/32962))
 
