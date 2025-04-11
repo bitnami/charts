@@ -31,7 +31,7 @@ spec:
         {{- end }}
       annotations:
         checksum/scripts: {{ include (print $.Template.BasePath "/scripts-configmap.yaml") . | sha256sum }}
-        {{- if .Values.existingSecret }}
+        {{- if and (not .Values.existingSecret) .Values.usePassword }}
         checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
         {{- end }}
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
