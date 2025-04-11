@@ -172,6 +172,10 @@ spec:
             - name: empty-dir
               mountPath: /bitnami/flink/conf
               subPath: app-conf-dir
+            {{- if .Values.persistence.jobmanager.enabled }}
+            - name: data
+              mountPath: /data
+            {{- end }}
             {{- if .Values.jobmanager.extraVolumeMounts }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.jobmanager.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
@@ -183,4 +187,13 @@ spec:
           emptyDir: {}
         {{- if .Values.jobmanager.extraVolumes }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.jobmanager.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.persistence.jobmanager.enabled }}
+        - name: data
+          persistentVolumeClaim:
+            {{- if .Values.persistence.jobmanager.existingClaim }}
+            claimName: {{ tpl .Values.persistence.jobmanager.existingClaim . }}
+            {{- else }}
+            claimName: {{ printf "data-%s" (include "flink.jobmanager.fullname" .) }}
+            {{- end }}
         {{- end }}

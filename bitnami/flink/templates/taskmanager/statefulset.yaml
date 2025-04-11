@@ -24,6 +24,22 @@ spec:
   podManagementPolicy: {{ .Values.taskmanager.podManagementPolicy }}
   serviceName: {{ printf "%s-headless" (include "flink.taskmanager.fullname" .) | trunc 63 | trimSuffix "-" }}
   updateStrategy: {{- toYaml .Values.taskmanager.updateStrategy | nindent 4 }}
+  {{- if and .Values.persistence.taskmanager.enabled (not .Values.persistence.taskmanager.existingClaim) }}
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes:
+        {{- range .Values.persistence.taskmanager.accessModes }}
+          - {{ . }}
+        {{- end }}
+        resources:
+          requests:
+            storage: {{ .Values.persistence.taskmanager.size }}
+        {{- if .Values.global.defaultStorageClass }}
+        storageClassName: "{{ .Values.global.defaultStorageClass }}"
+        {{- end }}
+  {{- end }}
   template:
     metadata:
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
@@ -183,6 +199,10 @@ spec:
             {{- if .Values.taskmanager.extraVolumeMounts }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.taskmanager.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
+            {{- if .Values.persistence.taskmanager.enabled }}
+            - name: data
+              mountPath: /data
+            {{- end }}
         {{- if .Values.taskmanager.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.taskmanager.sidecars "context" $) | nindent 8 }}
         {{- end }}
@@ -191,4 +211,9 @@ spec:
           emptyDir: {}
         {{- if .Values.taskmanager.extraVolumes }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.taskmanager.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if and .Values.persistence.taskmanager.enabled .Values.persistence.taskmanager.existingClaim }}
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ .Values.persistence.taskmanager.existingClaim }}
         {{- end }}
