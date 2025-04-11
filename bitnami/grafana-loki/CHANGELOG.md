@@ -1,6 +1,6 @@
 # Changelog
 
-## 4.7.11 (2025-04-10)
+## 4.7.11 (2025-04-11)
 
 * [bitnami/grafana-loki] Add support to override client_max_body_size in nginx ([#32955](https://github.com/bitnami/charts/pull/32955))
 
