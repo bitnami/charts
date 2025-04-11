@@ -147,6 +147,13 @@ spec:
                 {{- toYaml .Values.resources | nindent 16 }}
               {{- end }}
           volumes:
+            {{- if .Values.usePasswordFiles }}
+            - name: matomo-secrets
+              projected:
+                sources:
+                  - secret:
+                      name:  {{ include "matomo.databaseSecretName" . }}
+            {{- end }}
             {{- if .Values.certificates.customCAs }}
             - name: etc-ssl-certs
               emptyDir:

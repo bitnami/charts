@@ -1,8 +1,12 @@
 # Changelog
 
-## 9.3.1 (2025-04-08)
+## 9.3.2 (2025-04-09)
 
-* [bitnami/matomo] Add missing `app.kubernetes.io/component` label to deployment and pdb ([#32774](https://github.com/bitnami/charts/pull/32774))
+* [bitnami/matomo] Adds matomo-secrets volume to matomo-archive cronjob ([#32924](https://github.com/bitnami/charts/pull/32924))
+
+## <small>9.3.1 (2025-04-09)</small>
+
+* [bitnami/matomo] Add missing `app.kubernetes.io/component` label to deployment and pdb (#32774) ([eacfbe1](https://github.com/bitnami/charts/commit/eacfbe1d77a27ad59168aef51ddcf7a2c220dea8)), closes [#32774](https://github.com/bitnami/charts/issues/32774)
 
 ## 9.3.0 (2025-03-31)
 
