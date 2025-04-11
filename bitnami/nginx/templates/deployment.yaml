@@ -86,8 +86,8 @@ spec:
       {{- end }}
       {{- if or .Values.initContainers (and .Values.enableDefaultInitContainers (or .Values.containerSecurityContext.readOnlyRootFilesystem .Values.cloneStaticSiteFromGit.enabled)) }}
       initContainers:
-      {{- if .Values.enableDefaultInitContainers }}
-      {{- if .Values.containerSecurityContext.readOnlyRootFilesystem }}
+        {{- if .Values.enableDefaultInitContainers }}
+        {{- if .Values.containerSecurityContext.readOnlyRootFilesystem }}
         - name: preserve-logs-symlinks
           image: {{ include "nginx.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
@@ -113,9 +113,7 @@ spec:
           volumeMounts:
             - name: empty-dir
               mountPath: /emptydir
-      {{- end }}
-      {{- end }}
-      {{- if or .Values.cloneStaticSiteFromGit.enabled .Values.initContainers }}
+        {{- end }}
         {{- if .Values.cloneStaticSiteFromGit.enabled }}
         - name: git-clone-repository
           image: {{ include "nginx.cloneStaticSiteFromGit.image" . }}
@@ -166,10 +164,10 @@ spec:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.cloneStaticSiteFromGit.extraEnvVarsSecret "context" $) }}
           {{- end }}
         {{- end }}
+        {{- end }}
         {{- if .Values.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
         {{- end }}
-      {{- end }}
       {{- end }}
       containers:
         {{- if .Values.cloneStaticSiteFromGit.enabled }}
