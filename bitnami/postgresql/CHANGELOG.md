@@ -1,8 +1,8 @@
 # Changelog
 
-## 16.6.4 (2025-04-11)
+## 16.6.4 (2025-04-13)
 
-* [bitnami/postgresql] Fix passwordUpdateJob annotation ([#32969](https://github.com/bitnami/charts/pull/32969))
+*  [bitnami/postgresql] Fix annotations not applied to passwordUpdateJob ([#32969](https://github.com/bitnami/charts/pull/32969))
 
 ## <small>16.6.3 (2025-04-09)</small>
 
