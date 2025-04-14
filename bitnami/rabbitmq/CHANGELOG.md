@@ -1,8 +1,12 @@
 # Changelog
 
-## 15.5.2 (2025-04-14)
+## 15.5.3 (2025-04-14)
 
-* [bitnami/rabbitmq] Release 15.5.2 ([#32995](https://github.com/bitnami/charts/pull/32995))
+* [bitnami/rabbitmq] Release 15.5.3 ([#32997](https://github.com/bitnami/charts/pull/32997))
+
+## <small>15.5.2 (2025-04-14)</small>
+
+* [bitnami/rabbitmq] Release 15.5.2 (#32995) ([b9930e0](https://github.com/bitnami/charts/commit/b9930e0f17873bea04e5bceae164ac954bf00004)), closes [#32995](https://github.com/bitnami/charts/issues/32995)
 
 ## <small>15.5.1 (2025-04-09)</small>
 
