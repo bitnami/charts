@@ -164,7 +164,7 @@ spec:
           resources: {{- include "common.resources.preset" (dict "type" .Values.copyTlsCerts.resourcesPreset) | nindent 12 }}
           {{- end }}
         {{- end }}
-        {{- if (default true .Values.enableDefaultInitContainers) }}
+        {{- if .Values.enableDefaultInitContainers }}
         - name: copy-default-plugins
           image: {{ include "elasticsearch.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
