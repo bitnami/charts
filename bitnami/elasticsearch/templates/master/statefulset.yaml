@@ -85,7 +85,7 @@ spec:
       {{- end }}
       {{- if and .Values.enableDefaultInitContainers (or (or .Values.initContainers .Values.master.initContainers) .Values.security.enabled .Values.sysctlImage.enabled (and .Values.volumePermissions.enabled .Values.master.persistence.enabled)) }}
       initContainers:
-        {{- if and .Values.sysctlImage.enabled (default true .Values.enableDefaultInitContainers) }}
+        {{- if and .Values.sysctlImage.enabled .Values.enableDefaultInitContainers }}
         ## Image that performs the sysctl operation to modify Kernel settings (needed sometimes to avoid boot errors)
         - name: sysctl
           image: {{ include "elasticsearch.sysctl.image" . }}
