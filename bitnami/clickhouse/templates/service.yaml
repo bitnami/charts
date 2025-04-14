@@ -180,6 +180,7 @@ spec:
 {{- range $shard := until (.Values.shards | int) }}
 {{- range $i := until ($.Values.replicaCount | int) }}
 {{- include "clickhouse.service" (dict "shard" $shard "replica" $i "context" $) }}
+---
 {{- end }}
 {{- end }}
 {{- else }}
