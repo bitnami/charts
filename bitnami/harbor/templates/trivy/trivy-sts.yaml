@@ -212,6 +212,7 @@ spec:
             - name: internal-tls-certs
               mountPath: /etc/harbor/ssl/trivy
             {{- end }}
+            {{- include "harbor.redis.caVolumeMount" . | nindent 12 }}
             {{- if .Values.internalTLS.caBundleSecret }}
             {{- include "harbor.caBundleVolumeMount" . | nindent 12 }}
             {{- end }}
@@ -236,6 +237,7 @@ spec:
         - name: data
           emptyDir: {}
       {{- end }}
+      {{- include "harbor.redis.caVolumeMount" . | nindent 8 }}
       {{- if .Values.trivy.extraVolumes }}
       {{- include "common.tplvalues.render" (dict "value" .Values.trivy.extraVolumes "context" $) | nindent 8 }}
       {{- end }}
