@@ -57,9 +57,11 @@ spec:
         - podSelector:
             matchLabels: {{- include "common.labels.matchLabels" (dict "customLabels" .Values.commonLabels "context" .) | nindent 14 }}
               app.kubernetes.io/part-of: clickhouse
+        {{- if .Values.keeper.networkPolicy.addExternalClientAccess }}
         - podSelector:
             matchLabels:
               {{ include "common.names.fullname" . }}-client: "true"
+        {{- end }}
         {{- if .Values.keeper.networkPolicy.ingressNSMatchLabels }}
         - namespaceSelector:
             matchLabels:

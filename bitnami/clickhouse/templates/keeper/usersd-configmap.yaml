@@ -3,7 +3,7 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if and .Values.keeper.enabled .Values.keeper.extraUsersFiles (not .Values.keeper.existingExtraUsersConfigmap) }}
+{{- if and .Values.keeper.enabled .Values.keeper.usersdFiles (not .Values.keeper.existingUsersdConfigmap) }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -16,7 +16,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" .) | nindent 4 }}
   {{- end }}
 data:
-  {{- range $key, $value := .Values.keeper.extraUsersFiles }}
+  {{- range $key, $value := .Values.keeper.usersdFiles }}
   {{ $key }}: |
     {{- include "common.tplvalues.render" (dict "value" $value "context" $) | nindent 4 }}
   {{- end }}

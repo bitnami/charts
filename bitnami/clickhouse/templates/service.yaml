@@ -17,14 +17,23 @@ metadata:
   labels: {{- include "common.labels.standard" (dict "customLabels" .context.Values.commonLabels "context" .context) | nindent 4 }}
     app.kubernetes.io/component: clickhouse
     app.kubernetes.io/part-of: clickhouse
+    {{- if and .context.Values.metrics.enabled .context.Values.metrics.serviceMonitor.enabled }}
+    {{- /* Adding extra selector for the ServiceMonitor object to avoid duplicate targets  */}}
+    prometheus.io/scrape: true
+    {{- end }}
     {{- if .context.Values.service.perReplicaAccess }}
     pod: {{ $name }}
     {{- end }}
   {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .context.Values.service.annotations .context.Values.commonAnnotations) "context" .context) }}
+  {{- if .context.Values.metrics.enabled }}
+    {{- $defaultMetricsAnnotations := dict "prometheus.io/scrape" "true" "prometheus.io/port" .context.Values.service.ports.metrics "prometheus.io/path" "/metrics" }}
+    {{- $annotations = include "common.tplvalues.merge" (dict "values" (list $annotations $defaultMetricsAnnotations) "context" .context) }}
+  {{- end }}
   {{- if and .context.Values.service.perReplicaAccess .context.Values.service.loadBalancerAnnotations }}
-  {{- $posOffset := mul (int .shard) (.context.Values.replicaCount | int) }}
-  {{- $position := add $posOffset (int .replica) }}
-  {{- $annotations = include "common.tplvalues.merge" (dict "values" (list $annotations (index .context.Values.service.loadBalancerAnnotations $position)) "context" .context) }}
+    {{- /* We expect an annotation per replica. Given there are shards * replicaCount replicas, we need to calculate the offset to retrieve the proper annotation */}}
+    {{- $posOffset := mul (int .shard) (.context.Values.replicaCount | int) }}
+    {{- $position := add $posOffset (int .replica) }}
+    {{- $annotations = include "common.tplvalues.merge" (dict "values" (list $annotations (index .context.Values.service.loadBalancerAnnotations $position)) "context" .context) }}
   {{- end }}
   annotations: {{- include "common.tplvalues.render" (dict "value" $annotations "context" .context) | nindent 4 }}
 spec:
@@ -46,6 +55,7 @@ spec:
   {{- end }}
   {{- if eq .context.Values.service.type "LoadBalancer" }}
   {{- if and .context.Values.service.perReplicaAccess (not (empty .context.Values.service.loadBalancerIPs)) }}
+  {{- /* We expect an IP per replica. Given there are shards * replicaCount replicas, we need to calculate the offset to retrieve the proper IP */}}
   {{- $posOffset := mul (int .shard) (.context.Values.replicaCount | int) }}
   {{- $position := add $posOffset (int .replica) }}
   loadBalancerIP: {{ index .context.Values.service.loadBalancerIPs $position }}

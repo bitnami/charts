@@ -262,7 +262,6 @@ The [Bitnami ClickHouse](https://github.com/bitnami/containers/tree/main/bitnami
 | `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`    |
 | `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`    |
 | `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`    |
-| `global.storageClass`                                 | DEPRECATED: use global.defaultStorageClass instead                                                                                                                                                                                                                                                                                                                  | `""`    |
 | `global.security.allowInsecureImages`                 | Allows skipping image verification                                                                                                                                                                                                                                                                                                                                  | `false` |
 | `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto`  |
 
@@ -484,6 +483,7 @@ The [Bitnami ClickHouse](https://github.com/bitnami/containers/tree/main/bitnami
 | `networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                                                                                         | `true`                   |
 | `networkPolicy.allowExternal`           | Don't require client label for connections                                                                                                                  | `true`                   |
 | `networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                                                                             | `true`                   |
+| `networkPolicy.addExternalClientAccess` | Allow access from pods with client label set to "true". Ignored if `networkPolicy.allowExternal` is true.                                                   | `true`                   |
 | `networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                                                                                                                | `[]`                     |
 | `networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                                                                                | `[]`                     |
 | `networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                                                                                      | `{}`                     |
@@ -607,29 +607,30 @@ The [Bitnami ClickHouse](https://github.com/bitnami/containers/tree/main/bitnami
 
 ### ClickHouse Keeper Traffic Exposure parameters
 
-| Name                                           | Description                                                                                  | Value       |
-| ---------------------------------------------- | -------------------------------------------------------------------------------------------- | ----------- |
-| `keeper.service.type`                          | ClickHouse Keeper service type                                                               | `ClusterIP` |
-| `keeper.service.ports.tcp`                     | ClickHouse Keeper service TCP port                                                           | `9181`      |
-| `keeper.service.ports.raft`                    | ClickHouse Keeper service Raft port                                                          | `9234`      |
-| `keeper.service.nodePorts.tcp`                 | Node port for ClickHouse Keeper service TCP port                                             | `""`        |
-| `keeper.service.nodePorts.raft`                | Node port for ClickHouse Keeper service Raft port                                            | `""`        |
-| `keeper.service.clusterIP`                     | ClickHouse Keeper service Cluster IP                                                         | `""`        |
-| `keeper.service.loadBalancerIP`                | ClickHouse Keeper service Load Balancer IP                                                   | `""`        |
-| `keeper.service.loadBalancerSourceRanges`      | ClickHouse Keeper service Load Balancer sources                                              | `[]`        |
-| `keeper.service.externalTrafficPolicy`         | ClickHouse Keeper service external traffic policy                                            | `Cluster`   |
-| `keeper.service.annotations`                   | Additional custom annotations for ClickHouse Keeper service                                  | `{}`        |
-| `keeper.service.extraPorts`                    | Extra ports to expose in ClickHouse Keeper service (normally used with the `sidecars` value) | `[]`        |
-| `keeper.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin                             | `None`      |
-| `keeper.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                  | `{}`        |
-| `keeper.service.headless.annotations`          | Annotations for the headless service.                                                        | `{}`        |
-| `keeper.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                          | `true`      |
-| `keeper.networkPolicy.allowExternal`           | Don't require client label for connections                                                   | `true`      |
-| `keeper.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                              | `true`      |
-| `keeper.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                                                 | `[]`        |
-| `keeper.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                 | `[]`        |
-| `keeper.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                       | `{}`        |
-| `keeper.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                                   | `{}`        |
+| Name                                           | Description                                                                                                      | Value       |
+| ---------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | ----------- |
+| `keeper.service.type`                          | ClickHouse Keeper service type                                                                                   | `ClusterIP` |
+| `keeper.service.ports.tcp`                     | ClickHouse Keeper service TCP port                                                                               | `9181`      |
+| `keeper.service.ports.raft`                    | ClickHouse Keeper service Raft port                                                                              | `9234`      |
+| `keeper.service.nodePorts.tcp`                 | Node port for ClickHouse Keeper service TCP port                                                                 | `""`        |
+| `keeper.service.nodePorts.raft`                | Node port for ClickHouse Keeper service Raft port                                                                | `""`        |
+| `keeper.service.clusterIP`                     | ClickHouse Keeper service Cluster IP                                                                             | `""`        |
+| `keeper.service.loadBalancerIP`                | ClickHouse Keeper service Load Balancer IP                                                                       | `""`        |
+| `keeper.service.loadBalancerSourceRanges`      | ClickHouse Keeper service Load Balancer sources                                                                  | `[]`        |
+| `keeper.service.externalTrafficPolicy`         | ClickHouse Keeper service external traffic policy                                                                | `Cluster`   |
+| `keeper.service.annotations`                   | Additional custom annotations for ClickHouse Keeper service                                                      | `{}`        |
+| `keeper.service.extraPorts`                    | Extra ports to expose in ClickHouse Keeper service (normally used with the `sidecars` value)                     | `[]`        |
+| `keeper.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin                                                 | `None`      |
+| `keeper.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                      | `{}`        |
+| `keeper.service.headless.annotations`          | Annotations for the headless service.                                                                            | `{}`        |
+| `keeper.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                                              | `true`      |
+| `keeper.networkPolicy.allowExternal`           | Don't require client label for connections                                                                       | `true`      |
+| `keeper.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                                  | `true`      |
+| `keeper.networkPolicy.addExternalClientAccess` | Allow access from pods with client label set to "true". Ignored if `keeper.networkPolicy.allowExternal` is true. | `true`      |
+| `keeper.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                                                                     | `[]`        |
+| `keeper.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                                     | `[]`        |
+| `keeper.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                                           | `{}`        |
+| `keeper.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                                                       | `{}`        |
 
 ### ClickHouse Keeper Persistence parameters
 
@@ -663,7 +664,7 @@ The [Bitnami ClickHouse](https://github.com/bitnami/containers/tree/main/bitnami
 | Name                                       | Description                                                                                            | Value   |
 | ------------------------------------------ | ------------------------------------------------------------------------------------------------------ | ------- |
 | `metrics.enabled`                          | Enable the export of Prometheus metrics                                                                | `false` |
-| `metrics.podAnnotations`                   | Annotations for metrics scraping                                                                       | `{}`    |
+| `metrics.podAnnotations`                   | Pod annotations for enabling Prometheus to access the metrics endpoint                                 | `{}`    |
 | `metrics.serviceMonitor.enabled`           | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`) | `false` |
 | `metrics.serviceMonitor.namespace`         | Namespace in which Prometheus is running                                                               | `""`    |
 | `metrics.serviceMonitor.annotations`       | Additional custom annotations for the ServiceMonitor                                                   | `{}`    |

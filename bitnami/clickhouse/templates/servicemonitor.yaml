@@ -26,6 +26,7 @@ spec:
       {{- end }}
       app.kubernetes.io/component: clickhouse
       app.kubernetes.io/part-of: clickhouse
+      prometheus.io/scrape: true
   endpoints:
     - port: http-metrics
       path: "/metrics"

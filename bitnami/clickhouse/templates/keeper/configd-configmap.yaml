@@ -23,21 +23,21 @@ data:
   {{- if gt (int .Values.keeper.replicaCount) 1 }}
   raft_configuration.xml: |
     <clickhouse>
-      <keeper_server>
-          <raft_configuration>
-              {{- $fullname := include "clickhouse.keeper.fullname" . }}
-              {{- $headlessSvcName := include "clickhouse.keeper.headlessServiceName" . }}
-              {{- $releaseNamespace := .Release.Namespace }}
-              {{- $clusterDomain := .Values.clusterDomain }}
-              {{- range $i := until (int .Values.keeper.replicaCount) }}
-              <server>
-                  <id>{{ $i }}</id>
-                  <hostname>{{ printf "%s-%d.%s.%s.svc.%s" $fullname $i $headlessSvcName $releaseNamespace $clusterDomain }}</hostname>
-                  <port>{{ $.Values.keeper.containerPorts.raft }}</port>
-              </server>
-              {{- end }}
-          </raft_configuration>
-      </keeper_server>
+        <keeper_server>
+            <raft_configuration>
+                {{- $fullname := include "clickhouse.keeper.fullname" . }}
+                {{- $headlessSvcName := include "clickhouse.keeper.headlessServiceName" . }}
+                {{- $releaseNamespace := .Release.Namespace }}
+                {{- $clusterDomain := .Values.clusterDomain }}
+                {{- range $i := until (int .Values.keeper.replicaCount) }}
+                <server>
+                    <id>{{ $i }}</id>
+                    <hostname>{{ printf "%s-%d.%s.%s.svc.%s" $fullname $i $headlessSvcName $releaseNamespace $clusterDomain }}</hostname>
+                    <port>{{ $.Values.keeper.containerPorts.raft }}</port>
+                </server>
+                {{- end }}
+            </raft_configuration>
+        </keeper_server>
     </clickhouse>
   {{- end }}
 {{- end }}

@@ -10,7 +10,6 @@
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
 ## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
-## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ##
 global:
   imageRegistry: ""
@@ -20,7 +19,6 @@ global:
   ##
   imagePullSecrets: []
   defaultStorageClass: ""
-  storageClass: ""
   ## Security parameters
   ##
   security:
@@ -816,6 +814,9 @@ networkPolicy:
   ## @param networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
   ##
   allowExternalEgress: true
+  ## @param networkPolicy.addExternalClientAccess Allow access from pods with client label set to "true". Ignored if `networkPolicy.allowExternal` is true.
+  ##
+  addExternalClientAccess: true
   ## @param networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
   ## e.g:
   ## extraIngress:
@@ -1341,6 +1342,9 @@ keeper:
     ## @param keeper.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
+    ## @param keeper.networkPolicy.addExternalClientAccess Allow access from pods with client label set to "true". Ignored if `keeper.networkPolicy.allowExternal` is true.
+    ##
+    addExternalClientAccess: true
     ## @param keeper.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
@@ -1462,11 +1466,9 @@ metrics:
   ## @param metrics.enabled Enable the export of Prometheus metrics
   ##
   enabled: false
-  ## @param metrics.podAnnotations [object] Annotations for metrics scraping
+  ## @param metrics.podAnnotations Pod annotations for enabling Prometheus to access the metrics endpoint
   ##
-  podAnnotations:
-    prometheus.io/scrape: "true"
-    prometheus.io/port: "{{ .Values.containerPorts.metrics }}"
+  podAnnotations: {}
   ## Prometheus Operator ServiceMonitor configuration
   ##
   serviceMonitor:
