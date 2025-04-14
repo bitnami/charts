@@ -1,8 +1,13 @@
 # Changelog
 
-## 1.2.8 (2025-04-03)
+## 1.2.9 (2025-04-09)
 
-* [bitnami/whereabouts] Release 1.2.8 ([#32798](https://github.com/bitnami/charts/pull/32798))
+* [bitnami/whereabouts] Release 1.2.9 ([#32923](https://github.com/bitnami/charts/pull/32923))
+
+## <small>1.2.8 (2025-04-03)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/whereabouts] Release 1.2.8 (#32798) ([69994d3](https://github.com/bitnami/charts/commit/69994d3efbda2763507e74c64a345bb315708886)), closes [#32798](https://github.com/bitnami/charts/issues/32798)
 
 ## <small>1.2.7 (2025-03-05)</small>
 

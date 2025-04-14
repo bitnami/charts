@@ -1,8 +1,20 @@
 # Changelog
 
+## 24.5.3 (2025-04-11)
+
+* [bitnami/keycloak] Release 24.5.3 ([#32970](https://github.com/bitnami/charts/pull/32970))
+
+## <small>24.5.2 (2025-04-11)</small>
+
+* [bitnami/keycloak] Release 24.5.2 (#32968) ([2c775ce](https://github.com/bitnami/charts/commit/2c775ce92ee74c9222f060369bfaeed849f95efb)), closes [#32968](https://github.com/bitnami/charts/issues/32968)
+
+## <small>24.5.1 (2025-04-07)</small>
+
+* [bitnami/keycloak] Change .Release.Name to (include "common.names.fullname) ([c3573fd](https://github.com/bitnami/charts/commit/c3573fdc21301f06007546ad4faadab598f6305d))
+
 ## 24.5.0 (2025-04-04)
 
-* [bitnami/keycloak] Set `usePasswordFiles=true` by default ([#32594](https://github.com/bitnami/charts/pull/32594))
+* [bitnami/keycloak] Set `usePasswordFiles=true` by default (#32594) ([6206296](https://github.com/bitnami/charts/commit/620629645b6354dc79fd49c5e33e794ab569d024)), closes [#32594](https://github.com/bitnami/charts/issues/32594)
 
 ## <small>24.4.14 (2025-04-01)</small>
 

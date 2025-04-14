@@ -1,38 +1,28 @@
-# Source: https://raw.githubusercontent.com/grafana/grafana-operator/v{version}/deploy/helm/grafana-operator/crds/grafana.integreatly.org_grafanafolders.yaml
-# Version: 5.17.0
+# Source: https://raw.githubusercontent.com/grafana/grafana-operator/v{version}/deploy/helm/grafana-operator/crds/grafana.integreatly.org_grafananotificationpolicyroutes.yaml
+# Version: 5.17.1
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.16.3
-  name: grafanafolders.grafana.integreatly.org
+  name: grafananotificationpolicyroutes.grafana.integreatly.org
 spec:
   group: grafana.integreatly.org
   names:
     categories:
     - grafana-operator
-    kind: GrafanaFolder
-    listKind: GrafanaFolderList
-    plural: grafanafolders
-    singular: grafanafolder
+    kind: GrafanaNotificationPolicyRoute
+    listKind: GrafanaNotificationPolicyRouteList
+    plural: grafananotificationpolicyroutes
+    singular: grafananotificationpolicyroute
   scope: Namespaced
   versions:
-  - additionalPrinterColumns:
-    - jsonPath: .status.NoMatchingInstances
-      name: No matching instances
-      type: boolean
-    - format: date-time
-      jsonPath: .status.lastResync
-      name: Last resync
-      type: date
-    - jsonPath: .metadata.creationTimestamp
-      name: Age
-      type: date
-    name: v1beta1
+  - name: v1beta1
     schema:
       openAPIV3Schema:
-        description: GrafanaFolder is the Schema for the grafanafolders API
+        description: GrafanaNotificationPolicyRoute is the Schema for the grafananotificationpolicyroutes
+          API
         properties:
           apiVersion:
             description: |-
@@ -52,15 +42,79 @@ spec:
           metadata:
             type: object
           spec:
-            description: GrafanaFolderSpec defines the desired state of GrafanaFolder
+            description: GrafanaNotificationPolicyRouteSpec defines the desired state
+              of GrafanaNotificationPolicyRoute
             properties:
-              allowCrossNamespaceImport:
-                default: false
-                description: Allow the Operator to match this resource with Grafanas
-                  outside the current namespace
+              continue:
+                description: continue
                 type: boolean
-              instanceSelector:
-                description: Selects Grafana instances for import
+              group_by:
+                description: group by
+                items:
+                  type: string
+                type: array
+              group_interval:
+                description: group interval
+                type: string
+              group_wait:
+                description: group wait
+                type: string
+              match_re:
+                additionalProperties:
+                  type: string
+                description: match re
+                type: object
+              matchers:
+                description: matchers
+                items:
+                  properties:
+                    isEqual:
+                      description: is equal
+                      type: boolean
+                    isRegex:
+                      description: is regex
+                      type: boolean
+                    name:
+                      description: name
+                      type: string
+                    value:
+                      description: value
+                      type: string
+                  required:
+                  - isRegex
+                  - value
+                  type: object
+                type: array
+              mute_time_intervals:
+                description: mute time intervals
+                items:
+                  type: string
+                type: array
+              object_matchers:
+                description: object matchers
+                items:
+                  description: |-
+                    ObjectMatcher ObjectMatcher is a matcher that can be used to filter alerts.
+
+                    swagger:model ObjectMatcher
+                  items:
+                    type: string
+                  type: array
+                type: array
+              provenance:
+                description: provenance
+                type: string
+              receiver:
+                description: receiver
+                minLength: 1
+                type: string
+              repeat_interval:
+                description: repeat interval
+                type: string
+              routeSelector:
+                description: |-
+                  selects GrafanaNotificationPolicyRoutes to merge in when specified
+                  mutually exclusive with Routes
                 properties:
                   matchExpressions:
                     description: matchExpressions is a list of label selector requirements.
@@ -105,63 +159,15 @@ spec:
                     type: object
                 type: object
                 x-kubernetes-map-type: atomic
-                x-kubernetes-validations:
-                - message: spec.instanceSelector is immutable
-                  rule: self == oldSelf
-              parentFolderRef:
-                description: Reference to an existing GrafanaFolder CR in the same
-                  namespace
-                type: string
-              parentFolderUID:
-                description: UID of the folder in which the current folder should
-                  be created
-                type: string
-              permissions:
-                description: Raw json with folder permissions, potentially exported
-                  from Grafana
-                type: string
-              resyncPeriod:
-                default: 10m0s
-                description: How often the resource is synced, defaults to 10m0s if
-                  not set
-                format: duration
-                pattern: ^([0-9]+(\.[0-9]+)?(ns|us|µs|ms|s|m|h))+$
-                type: string
-              title:
-                description: Display name of the folder in Grafana
-                type: string
-              uid:
-                description: Manually specify the UID the Folder is created with.
-                  Can be any string consisting of alphanumeric characters, - and _
-                  with a maximum length of 40
-                maxLength: 40
-                pattern: ^[a-zA-Z0-9-_]+$
-                type: string
-                x-kubernetes-validations:
-                - message: spec.uid is immutable
-                  rule: self == oldSelf
+              routes:
+                description: routes, mutually exclusive with RouteSelector
+                x-kubernetes-preserve-unknown-fields: true
             required:
-            - instanceSelector
+            - receiver
             type: object
-            x-kubernetes-validations:
-            - message: Only one of parentFolderUID or parentFolderRef can be set
-              rule: (has(self.parentFolderUID) && !(has(self.parentFolderRef))) ||
-                (has(self.parentFolderRef) && !(has(self.parentFolderUID))) || !(has(self.parentFolderRef)
-                && (has(self.parentFolderUID)))
-            - message: spec.uid is immutable
-              rule: ((!has(oldSelf.uid) && !has(self.uid)) || (has(oldSelf.uid) &&
-                has(self.uid)))
-            - message: disabling spec.allowCrossNamespaceImport requires a recreate
-                to ensure desired state
-              rule: '!oldSelf.allowCrossNamespaceImport || (oldSelf.allowCrossNamespaceImport
-                && self.allowCrossNamespaceImport)'
           status:
-            description: GrafanaFolderStatus defines the observed state of GrafanaFolder
+            description: The most recent observed state of a Grafana resource
             properties:
-              NoMatchingInstances:
-                description: The folder instanceSelector can't find matching grafana
-                  instances
-                type: boolean
               conditions:
                 description: Results when synchonizing resource with Grafana instances
                 items:
@@ -219,8 +225,6 @@ spec:
                   - type
                   type: object
                 type: array
-              hash:
-                type: string
               lastResync:
                 description: Last time the resource was synchronized with Grafana
                   instances

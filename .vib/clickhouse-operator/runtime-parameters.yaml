@@ -1,0 +1,233 @@
+# Adding an extra initial delay to avoid race conditions with the
+# deployment and Goss stages (so the operator has time to deploy
+# ClickHouse and ClickHouse Keeper installations)
+readinessProbe:
+  initialDelaySeconds: 45
+auth:
+  username: test_user
+  password: bitnami1234
+extraDeploy:
+# ref: https://github.com/Altinity/clickhouse-operator/tree/master/docs/chi-examples
+- |
+  apiVersion: clickhouse.altinity.com/v1
+  kind: ClickHouseInstallationTemplate
+  metadata:
+    name: default-chi-template
+    namespace: {{ include "common.names.namespace" . | quote }}
+  spec:
+    templates:
+      podTemplates:
+        - name: default-clickhouse
+          distribution: Unspecified
+          metadata:
+            labels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 12 }}
+              app.kubernetes.io/part-of: clickhouse-operator
+              app.kubernetes.io/component: clickhouse
+          spec:
+            {{- include "clickhouse-operator.imagePullSecrets" . | nindent 10 }}
+            securityContext:
+              fsGroupChangePolicy: OnRootMismatch
+              {{- if not (include "common.compatibility.isOpenshift" .) }}
+              fsGroup: 1001
+              {{- end }}
+            containers:
+              - name: clickhouse
+                image: {{ template "clickhouse-operator.clickhouse.image" . }}
+                imagePullPolicy: {{ .Values.clickHouseImage.pullPolicy | quote }}
+                securityContext:
+                  allowPrivilegeEscalation: false
+                  capabilities:
+                    drop:
+                    - ALL
+                  seccompProfile:
+                    type: RuntimeDefault
+                  readOnlyRootFilesystem: true
+                  runAsNonRoot: true
+                  {{- if not (include "common.compatibility.isOpenshift" .) }}
+                  runAsGroup: 1001
+                  runAsUser: 1001
+                  {{- end }}
+                env:
+                  - name: BITNAMI_DEBUG
+                    value: "true"
+                  - name: CLICKHOUSE_HTTP_PORT
+                    value: "8124"
+                  - name: CLICKHOUSE_TCP_PORT
+                    value: "9001"
+                  - name: CLICKHOUSE_INTERSERVER_HTTP_PORT
+                    value: "9010"
+                ports:
+                  - name: http
+                    containerPort: 8124
+                  - name: tcp
+                    containerPort: 9001
+                  - name: interserver
+                    containerPort: 9010
+                resources:
+                  requests:
+                    memory: "256M"
+                    cpu: "0.5"
+                  limits:
+                    memory: "1Gi"
+                    cpu: "1"
+                volumeMounts:
+                  - name: default-volume-claim
+                    mountPath: /bitnami/clickhouse
+                  # Hack required for read-only fs
+                  - name: chi-vib-deploy-confd-vib-0-0
+                    mountPath: /opt/bitnami/clickhouse/etc/conf.d
+                  - name: chi-vib-common-configd
+                    mountPath: /opt/bitnami/clickhouse/etc/config.d
+                  - name: chi-vib-common-usersd
+                    mountPath: /opt/bitnami/clickhouse/etc/users.d
+                  - name: empty-dir
+                    mountPath: /opt/bitnami/clickhouse/etc
+                    subPath: app-conf-dir
+                  - name: empty-dir
+                    mountPath: /opt/bitnami/clickhouse/logs
+                    subPath: app-logs-dir
+                  - name: empty-dir
+                    mountPath: /opt/bitnami/clickhouse/tmp
+                    subPath: app-tmp-dir
+                  # end of hack
+                  - name: empty-dir
+                    mountPath: /tmp
+                    subPath: tmp-dir
+            volumes:
+              - name: empty-dir
+                emptyDir: {}
+      volumeClaimTemplates:
+        - name: default-volume-claim
+          spec:
+            accessModes:
+            - ReadWriteOnce
+            resources:
+              requests:
+                storage: 8Gi
+- apiVersion: clickhouse.altinity.com/v1
+  kind: ClickHouseInstallation
+  metadata:
+    name: vib
+  spec:
+    useTemplates:
+    - name: default-chi-template
+    defaults:
+      templates:
+        podTemplate: default-clickhouse
+        dataVolumeClaimTemplate: default-volume-claim
+    configuration:
+      settings:
+        http_port: 8124
+        tcp_port: 9001
+        interserver_http_port: 9010
+      users:
+        test_user/networks/ip:
+          - 0.0.0.0/0
+          - '::/0'
+      zookeeper:
+        nodes:
+          - host: chk-vib-vib-0-0
+            port: 2181
+      clusters:
+        - name: vib
+          layout:
+            replicasCount: 1
+# ref: https://github.com/Altinity/clickhouse-operator/tree/master/docs/chk-examples
+- |
+  apiVersion: clickhouse-keeper.altinity.com/v1
+  kind: ClickHouseKeeperInstallation
+  metadata:
+    name: vib
+  spec:
+    defaults:
+      templates:
+        podTemplate: default-clickhouse-keeper
+        dataVolumeClaimTemplate: default-volume-claim
+    configuration:
+      clusters:
+        - name: vib
+          layout:
+            replicasCount: 1
+    templates:
+      podTemplates:
+        - name: default-clickhouse-keeper
+          distribution: Unspecified
+          metadata:
+            labels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 12 }}
+              app.kubernetes.io/part-of: clickhouse-operator
+              app.kubernetes.io/component: clickhouse-keeper
+          spec:
+            {{- include "clickhouse-operator.imagePullSecrets" . | nindent 10 }}
+            securityContext:
+              fsGroupChangePolicy: OnRootMismatch
+              {{- if not (include "common.compatibility.isOpenshift" .) }}
+              fsGroup: 1001
+              {{- end }}
+            containers:
+              - name: clickhouse-keeper
+                image: {{ template "clickhouse-operator.keeper.image" . }}
+                imagePullPolicy: {{ .Values.keeperImage.pullPolicy | quote }}
+                securityContext:
+                  allowPrivilegeEscalation: false
+                  capabilities:
+                    drop:
+                    - ALL
+                  seccompProfile:
+                    type: RuntimeDefault
+                  readOnlyRootFilesystem: true
+                  runAsNonRoot: true
+                  {{- if not (include "common.compatibility.isOpenshift" .) }}
+                  runAsGroup: 1001
+                  runAsUser: 1001
+                  {{- end }}
+                workingDir: /var/lib/clickhouse-keeper
+                env:
+                  - name: BITNAMI_DEBUG
+                    value: "true"
+                  - name: CLICKHOUSE_KEEPER_SERVER_ID
+                    value: "1"
+                  - name: CLICKHOUSE_KEEPER_TCP_PORT
+                    value: "2181"
+                  - name: CLICKHOUSE_KEEPER_RAFT_PORT
+                    value: "9444"
+                resources:
+                  requests:
+                    memory: "256M"
+                    cpu: "0.5"
+                  limits:
+                    memory: "1Gi"
+                    cpu: "1"
+                volumeMounts:
+                  - name: default-volume-claim
+                    mountPath: /bitnami/clickhouse-keeper
+                  # Hack required for read-only fs
+                  - name: chk-vib-deploy-confd-vib-0-0
+                    mountPath: /opt/bitnami/clickhouse-keeper/etc/conf.d
+                  - name: chk-vib-common-configd
+                    mountPath: /opt/bitnami/clickhouse-keeper/etc/keeper_config.d
+                  - name: chk-vib-common-usersd
+                    mountPath: /opt/bitnami/clickhouse-keeper/etc/users.d
+                  - name: empty-dir
+                    mountPath: /opt/bitnami/clickhouse-keeper/etc
+                    subPath: app-conf-dir
+                  - name: empty-dir
+                    mountPath: /opt/bitnami/clickhouse-keeper/logs
+                    subPath: app-logs-dir
+                  - name: empty-dir
+                    mountPath: /opt/bitnami/clickhouse-keeper/tmp
+                    subPath: app-tmp-dir
+                  # end of hack
+                  - name: empty-dir
+                    mountPath: /tmp
+                    subPath: tmp-dir
+            volumes:
+              - name: empty-dir
+                emptyDir: {}
+      volumeClaimTemplates:
+        - name: default-volume-claim
+          spec:
+            accessModes:
+            - ReadWriteOnce
+            resources:
+              requests:
+                storage: 8Gi
