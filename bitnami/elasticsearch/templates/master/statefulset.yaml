@@ -161,7 +161,7 @@ spec:
             - name: data
               mountPath: /bitnami/elasticsearch/data
         {{- end }}
-        {{- if (default true .Values.enableDefaultInitContainers) }}
+        {{- if .Values.enableDefaultInitContainers }}
         - name: copy-default-plugins
           image: {{ include "elasticsearch.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
