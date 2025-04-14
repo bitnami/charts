@@ -1,6 +1,6 @@
 # Changelog
 
-## 21.6.0 (2025-04-09)
+## 21.6.0 (2025-04-14)
 
 * [bitnami/elasticsearch] Fixes #32794, add enableDefaultInitContainers to elasticsearch chart ([#32855](https://github.com/bitnami/charts/pull/32855))
 
