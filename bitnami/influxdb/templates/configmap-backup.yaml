@@ -24,7 +24,8 @@ data:
 
     DATE="$(date +%Y%m%d_%H%M%S)"
 
-    host="{{ include "common.names.fullname" . }}.{{ .Release.Namespace }}.svc"
+
+    host="{{ include "common.names.fullname" . }}.{{ include "common.names.namespace" . }}.svc"
 
     get_orgs() {
       INFLUX_TOKEN="${INFLUXDB_ADMIN_USER_TOKEN}" influx org list --host "http://${host}:{{ coalesce .Values.influxdb.service.ports.http .Values.influxdb.service.port }}" 2> /dev/null | grep -v 'ID' | awk -F '\t' 'BEGIN{ORS=" "} {print $2}'
