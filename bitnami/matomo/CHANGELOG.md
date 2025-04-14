@@ -1,8 +1,12 @@
 # Changelog
 
-## 9.3.2 (2025-04-09)
+## 9.3.3 (2025-04-14)
 
-* [bitnami/matomo] Adds matomo-secrets volume to matomo-archive cronjob ([#32924](https://github.com/bitnami/charts/pull/32924))
+* [bitnami/matomo] fix mount path for `matomo-secrets` volume on cronjobs ([#32773](https://github.com/bitnami/charts/pull/32773))
+
+## <small>9.3.2 (2025-04-14)</small>
+
+* [bitnami/matomo] Adds matomo-secrets volume to matomo-archive cronjob (#32924) ([3505304](https://github.com/bitnami/charts/commit/350530478550b5b300b06fee2493fbd64050f9b0)), closes [#32924](https://github.com/bitnami/charts/issues/32924)
 
 ## <small>9.3.1 (2025-04-09)</small>
 
