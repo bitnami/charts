@@ -1,8 +1,12 @@
 # Changelog
 
+## 4.0.0 (2025-04-14)
+
+* [bitnami/scylladb] Release 4.0.0 ([#32986](https://github.com/bitnami/charts/pull/32986))
+
 ## 3.3.0 (2025-04-04)
 
-* [bitnami/scylladb] Set `usePasswordFiles=true` by default ([#32710](https://github.com/bitnami/charts/pull/32710))
+* [bitnami/scylladb] Set `usePasswordFiles=true` by default (#32710) ([5bdbf23](https://github.com/bitnami/charts/commit/5bdbf23b803e784ffafa47108f839a6d1a64ae0b)), closes [#32710](https://github.com/bitnami/charts/issues/32710)
 
 ## <small>3.2.1 (2025-03-22)</small>
 
