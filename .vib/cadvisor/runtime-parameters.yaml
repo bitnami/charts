@@ -1,0 +1,17 @@
+containerSecurityContext:
+  enabled: true
+  runAsUser: 0
+containerPorts:
+  http: 9332
+service:
+  type: LoadBalancer
+  ports:
+    http: 80
+metrics:
+  enabled: true
+extraVolumes:
+  - name: tmp
+    emptyDir: {}
+extraVolumeMounts:
+  - name: tmp
+    mountPath: /tmp
