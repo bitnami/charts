@@ -593,6 +593,10 @@ service:
   ## @param service.type ClickHouse service type
   ##
   type: ClusterIP
+  ## @param service.perReplicaAccess Enable per-replica service creation
+  ## This is useful for exposing individual replicas externally via LoadBalancer or NodePort
+  ##
+  perReplicaAccess: false
   ## @param service.ports.http ClickHouse service HTTP port
   ## @param service.ports.https ClickHouse service HTTPS port
   ## @param service.ports.tcp ClickHouse service TCP port
@@ -636,10 +640,24 @@ service:
   ## clusterIP: None
   ##
   clusterIP: ""
-  ## @param service.loadBalancerIP ClickHouse service Load Balancer IP
+  ## @param service.loadBalancerIP ClickHouse service Load Balancer IP (only if per-replica access is disabled)
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
   ##
   loadBalancerIP: ""
+  ## @param service.loadBalancerIPs Array of ClickHouse service Load Balancer IPs (only if per-replica access is enabled). Length must be the same as shards multiplied by replicaCount
+  ## e.g:
+  ## loadBalancerIPs:
+  ##   - X.X.X.X
+  ##   - Y.Y.Y.Y
+  ##
+  loadBalancerIPs: []
+  ## @param service.loadBalancerAnnotations Array of ClickHouse service Load Balancer annotations (only if per-replica access is enabled). Length must be the same as shards multiplied by replicaCount
+  ## e.g:
+  ## loadBalancerAnnotations:
+  ##   - external-dns.alpha.kubernetes.io/hostname: 1.external.example.com.
+  ##   - external-dns.alpha.kubernetes.io/hostname: 2.external.example.com.
+  ##
+  loadBalancerAnnotations: []
   ## @param service.loadBalancerSourceRanges ClickHouse service Load Balancer sources
   ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
   ## e.g:
@@ -674,91 +692,6 @@ service:
     ## @param service.headless.annotations Annotations for the headless service.
     ##
     annotations: {}
-## External Access to ClickHouse configuration
-##
-externalAccess:
-  ## @param externalAccess.enabled Enable Kubernetes external cluster access to ClickHouse
-  ##
-  enabled: false
-  ## Parameters to configure K8s service(s) used to externally access ClickHouse
-  ## Note: A new service per  will be created
-  ##
-  service:
-    ## @param externalAccess.service.type Kubernetes Service type for external access. It can be NodePort, LoadBalancer or ClusterIP
-    ##
-    type: LoadBalancer
-    ## @param externalAccess.service.ports.http ClickHouse service HTTP port
-    ## @param externalAccess.service.ports.https ClickHouse service HTTPS port
-    ## @param externalAccess.service.ports.tcp ClickHouse service TCP port
-    ## @param externalAccess.service.ports.tcpSecure ClickHouse service TCP (secure) port
-    ## @param externalAccess.service.ports.mysql ClickHouse service MySQL port
-    ## @param externalAccess.service.ports.postgresql ClickHouse service PostgreSQL port
-    ## @param externalAccess.service.ports.interserver ClickHouse service Interserver port
-    ## @param externalAccess.service.ports.metrics ClickHouse service metrics port
-    ##
-    ports:
-      http: 80
-      https: 443
-      tcp: 9000
-      tcpSecure: 9440
-      mysql: 9004
-      postgresql: 9005
-      interserver: 9009
-      metrics: 8001
-    ## @param externalAccess.service.loadBalancerIPs Array of load balancer IPs for each ClickHouse . Length must be the same as replicaCount
-    ## e.g:
-    ## loadBalancerIPs:
-    ##   - X.X.X.X
-    ##   - Y.Y.Y.Y
-    ##
-    loadBalancerIPs: []
-    ## @param externalAccess.service.loadBalancerAnnotations Array of load balancer annotations for each ClickHouse . Length must be the same as shards multiplied by replicaCount
-    ## e.g:
-    ## loadBalancerAnnotations:
-    ##   - external-dns.alpha.kubernetes.io/hostname: 1.external.example.com.
-    ##   - external-dns.alpha.kubernetes.io/hostname: 2.external.example.com.
-    ##
-    loadBalancerAnnotations: []
-    ## @param externalAccess.service.loadBalancerSourceRanges Address(es) that are allowed when service is LoadBalancer
-    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
-    ## e.g:
-    ## loadBalancerSourceRanges:
-    ## - 10.10.10.0/24
-    ##
-    loadBalancerSourceRanges: []
-    ## @param externalAccess.service.nodePorts.http Node port for HTTP
-    ## @param externalAccess.service.nodePorts.https Node port for HTTPS
-    ## @param externalAccess.service.nodePorts.tcp Node port for TCP
-    ## @param externalAccess.service.nodePorts.tcpSecure Node port for TCP (with TLS)
-    ## @param externalAccess.service.nodePorts.mysql Node port for MySQL
-    ## @param externalAccess.service.nodePorts.postgresql Node port for PostgreSQL
-    ## @param externalAccess.service.nodePorts.interserver Node port for Interserver
-    ## @param externalAccess.service.nodePorts.metrics Node port for metrics
-    ## NOTE: choose port between <30000-32767>
-    ## e.g:
-    ## nodePorts:
-    ##   tls:
-    ##   - 30001
-    ##   - 30002
-    ##
-    nodePorts:
-      http: []
-      https: []
-      tcp: []
-      tcpSecure: []
-      mysql: []
-      postgresql: []
-      interserver: []
-      metrics: []
-    ## @param externalAccess.service.labels Service labels for external access
-    ##
-    labels: {}
-    ## @param externalAccess.service.annotations Service annotations for external access
-    ##
-    annotations: {}
-    ## @param externalAccess.service.extraPorts Extra ports to expose in the ClickHouse external service
-    ##
-    extraPorts: []
 ## ClickHouse Ingress parameters
 ## ref: http://kubernetes.io/docs/concepts/services-networking/ingress/
 ##

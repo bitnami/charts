@@ -66,22 +66,6 @@ spec:
         {{- if .Values.metrics.enabled }}
         - port: {{ .Values.service.ports.metrics }}
         {{- end }}
-      {{- if .Values.externalAccess.enabled }}
-        - port: {{ .Values.externalAccess.service.ports.http }}
-        {{- if .Values.tls.enabled }}
-        - port: {{ .Values.externalAccess.service.ports.https }}
-        {{- end }}
-        {{- if .Values.metrics.enabled }}
-        - port: {{ .Values.externalAccess.service.ports.metrics }}
-        {{- end }}
-        - port: {{ .Values.externalAccess.service.ports.tcp }}
-        {{- if .Values.tls.enabled }}
-        - port: {{ .Values.externalAccess.service.ports.tcpSecure }}
-        {{- end }}
-        - port: {{ .Values.externalAccess.service.ports.mysql }}
-        - port: {{ .Values.externalAccess.service.ports.postgresql }}
-        - port: {{ .Values.externalAccess.service.ports.interserver }}
-      {{- end }}
       to:
         - podSelector:
             matchLabels: {{- include "common.labels.matchLabels" (dict "customLabels" $podLabels "context" .) | nindent 14 }}

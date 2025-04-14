@@ -28,22 +28,19 @@ In order to replicate the container startup scripts execute this command:
 
 ClickHouse is available in the following address:
 
-{{- if .Values.externalAccess.enabled }}
+{{- if eq "LoadBalancer" .Values.service.type }}
 
 NOTE: It may take a few minutes for the LoadBalancer IP to be available.
 
     kubectl get svc --namespace {{ template "common.names.namespace" . }} -l "app.kubernetes.io/name={{ template "common.names.fullname" . }},app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=clickhouse" -w
-
-{{- else if (eq "LoadBalancer" .Values.service.type) }}
-
     export SERVICE_IP=$(kubectl get svc --namespace {{ template "common.names.namespace" . }} {{ template "common.names.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
 
-{{- else if (eq "NodePort" .Values.service.type)}}
+{{- else if eq "NodePort" .Values.service.type }}
 
     export NODE_IP=$(kubectl get nodes --namespace {{ template "common.names.namespace" . }} -o jsonpath="{.items[0].status.addresses[0].address}")
     export NODE_PORT=$(kubectl get --namespace {{ template "common.names.namespace" . }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "common.names.fullname" . }})
 
-{{- else if (eq "ClusterIP" .Values.service.type)}}
+{{- else if eq "ClusterIP" .Values.service.type }}
 
     kubectl port-forward --namespace {{ template "common.names.namespace" . }} svc/{{ template "common.names.fullname" . }} {{ .Values.service.ports.tcp }}:9000 &
 

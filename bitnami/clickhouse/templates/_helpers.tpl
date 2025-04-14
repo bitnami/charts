@@ -200,6 +200,7 @@ Compile all warnings into a single message.
 */}}
 {{- define "clickhouse.validateValues" -}}
 {{- $messages := list -}}
+{{- $messages := append $messages (include "clickhouse.validateValues.service.perReplicaAccess" .) -}}
 {{- $messages := append $messages (include "clickhouse.validateValues.keeper" .) -}}
 {{- $messages := append $messages (include "clickhouse.validateValues.keeper.replicaCount" .) -}}
 {{- $messages := without $messages "" -}}
@@ -207,6 +208,29 @@ Compile all warnings into a single message.
 
 {{- if $message -}}
 {{-   printf "\nVALUES VALIDATION:\n%s" $message -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate values of ClickHouse - service per-replica access
+*/}}
+{{- define "clickhouse.validateValues.service.perReplicaAccess" -}}
+{{- if and .Values.service.perReplicaAccess (eq .Values.service.type "ClusterIP") -}}
+service.perReplicaAccess:
+    The service type ClusterIP is not compatible with enabling per-replica access.
+    Please set the service type to NodePort or LoadBalancer
+    (--set service.type=NodePort) or disable per-replica access
+    (--set service.perReplicaAccess=false)
+{{- else if and .Values.service.perReplicaAccess .Values.service.loadBalancerAnnotations (ne (len .Values.service.loadBalancerAnnotations) (mul .Values.shards .Values.replicaCount)) }}
+service.loadBalancerAnnotations:
+    The number of loadBalancerAnnotations must be equal to the number of shards * replicas.
+    Please set proper number of load balancer annotations or
+    disable per-replica access (--set service.perReplicaAccess=false)
+{{- else if and .Values.service.perReplicaAccess .Values.service.loadBalancerIPs (ne (len .Values.service.loadBalancerIPs) (mul .Values.shards .Values.replicaCount)) }}
+service.loadBalancerIPs:
+    The number of loadBalancerIPs must be equal to the number of shards * replicas.
+    Please set proper number of load balancer IPs or
+    disable per-replica access (--set service.perReplicaAccess=false)
 {{- end -}}
 {{- end -}}
 
@@ -234,7 +258,7 @@ Validate values of ClickHouse - Keeper replicas
 {{- define "clickhouse.validateValues.keeper.replicaCount" -}}
 {{- $keeperReplicaCount := int .Values.keeper.replicaCount }}
 {{- if and .Values.keeper.enabled .Values.keeper.persistence.enabled .Values.keeper.persistence.existingClaim (gt $keeperReplicaCount 1) -}}
-keeper.replicaCount
+keeper.replicaCount:
     A single existing PVC cannot be shared between multiple ClickHouse Keeper replicas.
     Please set a valid number of replicas (--set keeper.replicaCount=1), disable persistence
     (--set keeper.persistence.enabled=false) or rely on dynamic provisioning via Persistent
