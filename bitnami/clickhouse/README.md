@@ -466,6 +466,7 @@ The [Bitnami ClickHouse](https://github.com/bitnami/containers/tree/main/bitnami
 | `service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin                                                                                            | `None`                   |
 | `service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                                                                 | `{}`                     |
 | `service.headless.annotations`          | Annotations for the headless service.                                                                                                                       | `{}`                     |
+| `service.headless.extraPorts`           | Optionally specify extra ports to expose for the headless service.                                                                                          | `[]`                     |
 | `ingress.enabled`                       | Enable ingress record generation for ClickHouse                                                                                                             | `false`                  |
 | `ingress.pathType`                      | Ingress path type                                                                                                                                           | `ImplementationSpecific` |
 | `ingress.apiVersion`                    | Force Ingress API version (automatically detected if not set)                                                                                               | `""`                     |
@@ -623,6 +624,7 @@ The [Bitnami ClickHouse](https://github.com/bitnami/containers/tree/main/bitnami
 | `keeper.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin                                                 | `None`      |
 | `keeper.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                      | `{}`        |
 | `keeper.service.headless.annotations`          | Annotations for the headless service.                                                                            | `{}`        |
+| `keeper.service.headless.extraPorts`           | Optionally specify extra ports to expose for the headless service.                                               | `[]`        |
 | `keeper.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                                              | `true`      |
 | `keeper.networkPolicy.allowExternal`           | Don't require client label for connections                                                                       | `true`      |
 | `keeper.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                                  | `true`      |

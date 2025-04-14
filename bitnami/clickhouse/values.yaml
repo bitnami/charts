@@ -693,6 +693,9 @@ service:
     ## @param service.headless.annotations Annotations for the headless service.
     ##
     annotations: {}
+    ## @param service.headless.extraPorts Optionally specify extra ports to expose for the headless service.
+    ##
+    extraPorts: []
 ## ClickHouse Ingress parameters
 ## ref: http://kubernetes.io/docs/concepts/services-networking/ingress/
 ##
@@ -1325,6 +1328,9 @@ keeper:
       ## @param keeper.service.headless.annotations Annotations for the headless service.
       ##
       annotations: {}
+      ## @param keeper.service.headless.extraPorts Optionally specify extra ports to expose for the headless service.
+      ##
+      extraPorts: []
   ## ClickHouse Keeper Network Policies
   ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
   ##

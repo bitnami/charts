@@ -29,8 +29,8 @@ spec:
       port: {{ .Values.keeper.containerPorts.raft }}
       protocol: TCP
       targetPort: raft
-    {{- if .Values.keeper.service.extraPorts }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.keeper.service.extraPorts "context" .) | nindent 4 }}
+    {{- if .Values.keeper.service.headless.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.keeper.service.headless.extraPorts "context" .) | nindent 4 }}
     {{- end }}
   {{- $podLabels := include "common.tplvalues.merge" (dict "values" (list .Values.keeper.podLabels .Values.commonLabels) "context" .) }}
   selector: {{- include "common.labels.matchLabels" (dict "customLabels" $podLabels "context" .) | nindent 4 }}
