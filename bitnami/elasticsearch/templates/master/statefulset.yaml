@@ -139,7 +139,7 @@ spec:
           resources: {{- include "common.resources.preset" (dict "type" .Values.copyTlsCerts.resourcesPreset) | nindent 12 }}
           {{- end }}
         {{- end }}
-        {{- if and .Values.volumePermissions.enabled .Values.master.persistence.enabled (default true .Values.enableDefaultInitContainers) }}
+        {{- if and .Values.volumePermissions.enabled .Values.master.persistence.enabled  .Values.enableDefaultInitContainers }}
         - name: volume-permissions
           image: {{ include "elasticsearch.volumePermissions.image" . }}
           imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
