@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.4.8 (2025-04-09)
+## 1.4.9 (2025-04-14)
 
-* [bitnami/kuberay] Release 1.4.8 ([#32932](https://github.com/bitnami/charts/pull/32932))
+* [bitnami/kuberay] match upstream clusterrole ([#32829](https://github.com/bitnami/charts/pull/32829))
+
+## <small>1.4.8 (2025-04-09)</small>
+
+* [bitnami/kuberay] Release 1.4.8 (#32932) ([2824293](https://github.com/bitnami/charts/commit/28242930c9814f6c46f0a0268d4a036324f5ba33)), closes [#32932](https://github.com/bitnami/charts/issues/32932)
 
 ## <small>1.4.7 (2025-04-09)</small>
 
