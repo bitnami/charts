@@ -279,6 +279,7 @@ The [Bitnami ClickHouse](https://github.com/bitnami/containers/tree/main/bitnami
 | `commonAnnotations`      | Annotations to add to all deployed objects                                              | `{}`            |
 | `clusterDomain`          | Kubernetes cluster domain name                                                          | `cluster.local` |
 | `extraDeploy`            | Array of extra objects to deploy with the release                                       | `[]`            |
+| `usePasswordFiles`       | Mount credentials as files instead of using environment variables                       | `true`          |
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
 | `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]`  |

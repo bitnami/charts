@@ -141,11 +141,16 @@ spec:
                   fieldPath: metadata.name
             - name: CLICKHOUSE_ADMIN_USER
               value: {{ $.Values.auth.username | quote }}
+            {{- if $.Values.usePasswordFiles }}
+            - name: CLICKHOUSE_ADMIN_PASSWORD_FILE
+              value: {{ printf "/opt/bitnami/clickhouse/secrets/%s" (include "clickhouse.secretKey" $) }}
+            {{- else }}
             - name: CLICKHOUSE_ADMIN_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "clickhouse.secretName" $ }}
                   key: {{ include "clickhouse.secretKey" $ }}
+            {{- end }}
             {{- if $.Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" $.Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
@@ -216,17 +221,22 @@ spec:
           volumeMounts:
             - name: data
               mountPath: {{ $.Values.persistence.mountPath }}
-            {{- if or $.Values.configuration $.Values.existingConfigmap }}
+          {{- if or $.Values.configuration $.Values.existingConfigmap }}
             - name: configuration
               mountPath: /bitnami/clickhouse/etc/config.xml
               subPath: config.xml
-            {{- end }}
+          {{- end }}
             - name: configd-configuration
               mountPath: /bitnami/clickhouse/etc/config.d
-            {{- if or $.Values.usersdFiles $.Values.existingUsersdConfigmap }}
+          {{- if or $.Values.usersdFiles $.Values.existingUsersdConfigmap }}
             - name: usersd-configuration-configuration
               mountPath: /bitnami/clickhouse/etc/users.d
-            {{- end }}
+          {{- end }}
+          {{- if $.Values.usePasswordFiles }}
+            - name: secrets
+              mountPath: /opt/bitnami/clickhouse/secrets
+              readOnly: true
+          {{- end }}
           {{- if $.Values.tls.enabled }}
             - name: ca-cert
               mountPath: /opt/bitnami/clickhouse/certs/ca
@@ -276,6 +286,12 @@ spec:
         - name: usersd-configuration-configuration
           configMap:
             name: {{ template "clickhouse.usersd.configmapName" $ }}
+        {{- end }}
+        {{- if $.Values.usePasswordFiles }}
+        - name: secrets
+          secret:
+            secretName: {{ include "clickhouse.secretName" $ }}
+            defaultMode: 256
         {{- end }}
         {{- if $.Values.tls.enabled }}
         - name: ca-cert
