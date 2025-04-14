@@ -1,5 +1,9 @@
 # Changelog
 
+## 25.5.4 (2025-04-14)
+
+* [bitnami/keycloak] Added themes to the list of writable dirs ([#32993](https://github.com/bitnami/charts/pull/32993))
+
 ## 24.5.3 (2025-04-11)
 
 * [bitnami/keycloak] Release 24.5.3 ([#32970](https://github.com/bitnami/charts/pull/32970))
