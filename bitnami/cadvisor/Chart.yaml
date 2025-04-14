@@ -21,9 +21,8 @@ home: https://bitnami.com
 icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/cadvisor/img/cadvisor-stack-220x234.png
 keywords:
 - cadvisor
-- cni
+- monitoring
 - kubernetes
-- networking
 maintainers:
 - name: Broadcom, Inc. All Rights Reserved.
   url: https://github.com/bitnami/charts
