@@ -130,7 +130,7 @@ spec:
             - name: data
               mountPath: /bitnami/elasticsearch/data
         {{- end }}
-        {{- if and .Values.security.enabled (default true .Values.enableDefaultInitContainers) }}
+        {{- if and .Values.security.enabled .Values.enableDefaultInitContainers }}
         - name: copy-tls-certificates
           image: {{ include "elasticsearch.copyTlsCerts.image" . }}
           imagePullPolicy: {{ .Values.copyTlsCerts.image.pullPolicy | quote }}
