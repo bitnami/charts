@@ -301,6 +301,7 @@ The [Bitnami ClickHouse](https://github.com/bitnami/containers/tree/main/bitnami
 | `tls.server.key`                                    | TLS key for ClickHouse servers. Ignored if `tls.server.existingSecret` is set                                                                                                                                     | `""`                         |
 | `tls.server.existingSecret`                         | The name of an existing Secret containing the TLS certificates for ClickHouse servers                                                                                                                             | `""`                         |
 | `logLevel`                                          | Logging level                                                                                                                                                                                                     | `information`                |
+| `sampling.enabled`                                  | Enable logging tables collected by sampling query profiler                                                                                                                                                        | `false`                      |
 | `configuration`                                     | Specify content for ClickHouse configuration (basic one auto-generated based on other values otherwise)                                                                                                           | `{}`                         |
 | `existingConfigmap`                                 | The name of an existing ConfigMap with your custom configuration for ClickHouse                                                                                                                                   | `""`                         |
 | `configdFiles`                                      | Extra configuration files to be mounted at config.d                                                                                                                                                               | `{}`                         |
@@ -651,7 +652,6 @@ The [Bitnami ClickHouse](https://github.com/bitnami/containers/tree/main/bitnami
 | `metrics.prometheusRule.namespace`         | Namespace for the PrometheusRule Resource (defaults to the Release Namespace)                          | `""`    |
 | `metrics.prometheusRule.additionalLabels`  | Additional labels that can be used so PrometheusRule will be discovered by Prometheus                  | `{}`    |
 | `metrics.prometheusRule.rules`             | PrometheusRule definitions                                                                             | `[]`    |
-| `sampling.enabled`                         | Enable logging tables collected by sampling query profiler                                             | `false` |
 
 ### External ClickHouse Keeper / Zookeeper parameters
 

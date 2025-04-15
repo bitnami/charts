@@ -234,6 +234,10 @@ tls:
 ## @param logLevel Logging level
 ##
 logLevel: information
+## @param sampling.enabled Enable logging tables collected by sampling query profiler
+##
+sampling:
+  enabled: false
 ## @param configuration Specify content for ClickHouse configuration (basic one auto-generated based on other values otherwise)
 ##
 configuration: {}
@@ -1547,11 +1551,6 @@ metrics:
     ##    labels:
     ##      severity: warning
     rules: []
-
-## @param sampling.enabled Enable logging tables collected by sampling query profiler
-##
-sampling:
-  enabled: false
 
 ## @section External ClickHouse Keeper / Zookeeper parameters
 ##
