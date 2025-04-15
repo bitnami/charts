@@ -109,7 +109,7 @@ args: []
 ## @param extraArgs Add extra arguments to the default command
 ##
 extraArgs: []
-## @param forwarder.updateStrategy.type Set up update strategy.
+## @param updateStrategy.type Set up update strategy.
 ##
 updateStrategy:
   type: RollingUpdate
