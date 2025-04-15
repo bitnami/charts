@@ -1,9 +1,6 @@
 # Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
-# This application performs modifications at host-level, injecting new configuration files. Therefore the
-# container has root user and is privileged. In order to properly test wherebauts, we would need to access the host and
-# change the default host networking configuration, which is something we cannot do. Therefore the test suite is simpler
 command:
   {{- $uid := .Vars.containerSecurityContext.runAsUser }}
   check-user-info:

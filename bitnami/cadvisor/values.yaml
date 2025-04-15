@@ -109,10 +109,7 @@ args: []
 ## @param extraArgs Add extra arguments to the default command
 ##
 extraArgs: []
-## @param updateStrategy.type Update strategy - only really applicable for deployments with RWO PVs attached
-## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
-## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
-## terminate the single previous pod, so that the new, incoming pod can attach to the PV
+## @param forwarder.updateStrategy.type Set up update strategy.
 ##
 updateStrategy:
   type: RollingUpdate
@@ -131,7 +128,7 @@ topologySpreadConstraints: []
 ## @param automountServiceAccountToken Mount Service Account token in pod
 ##
 automountServiceAccountToken: false
-## @param hostAliases [array] Add deployment host aliases
+## @param hostAliases [array] Add daemonset host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
 hostAliases: []
@@ -165,7 +162,7 @@ defaultMounts:
   ## @param defaultMounts.devDisk Mount host /dev/disk
   ##
   devDisk: true
-## @param extraVolumes Array of extra volumes to be added to the deployment (evaluated as template). Requires setting `extraVolumeMounts`
+## @param extraVolumes Array of extra volumes to be added to the daemonset (evaluated as template). Requires setting `extraVolumeMounts`
 ##
 extraVolumes: []
 ## @param extraVolumeMounts Array of extra volume mounts to be added to the container (evaluated as template). Normally used with `extraVolumes`.

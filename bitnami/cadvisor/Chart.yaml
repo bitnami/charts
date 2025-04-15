@@ -16,7 +16,7 @@ dependencies:
   tags:
   - bitnami-common
   version: 2.x.x
-description:  cAdvisor (Container Advisor) is an open-source tool by Google for monitoring containers, collecting metrics like CPU, memory, and network usage
+description: cAdvisor (Container Advisor) is an open-source tool by Google for monitoring containers, collecting metrics like CPU, memory, and network usage
 home: https://bitnami.com
 icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/cadvisor/img/cadvisor-stack-220x234.png
 keywords:

@@ -1,3 +1,4 @@
+# This application accesses the host filesystem, so it needs to be root
 containerSecurityContext:
   enabled: true
   runAsUser: 0

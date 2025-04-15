@@ -18,8 +18,8 @@ Return the proper Docker Image Registry Secret Names
 {{- end -}}
 
 {{/*
- Create the name of the service account to use
- */}}
+Create the name of the service account to use
+*/}}
 {{- define "cadvisor.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create -}}
     {{- default (include "common.names.fullname" .) .Values.serviceAccount.name -}}

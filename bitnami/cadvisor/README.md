@@ -26,8 +26,6 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 
 - Kubernetes 1.23+
 - Helm 3.8.0+
-- PV provisioner support in the underlying infrastructure
-- ReadWriteMany volumes for deployment scaling
 
 ## Installing the Chart
 
@@ -363,7 +361,7 @@ helm install my-release \
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
-The above command sets the cAdvisor scheduler to high-priority.
+The above command sets the scheduler for cAdvisor pods to high-priority.
 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
@@ -377,22 +375,6 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/cadvi
 ## Troubleshooting
 
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
-
-## Upgrading
-
-### To 1.2.0
-
-This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
-
-### To 1.0.0
-
-This major bump changes the following security defaults:
-
-- `readOnlyRootFilesystem` is set to `true`
-- `resourcesPreset` is changed from `none` to the minimum size working in our test suites (NOTE: `resourcesPreset` is not meant for production usage, but `resources` adapted to your use case).
-- `global.compatibility.openshift.adaptSecurityContext` is changed from `disabled` to `auto`.
-
-This could potentially break any customization or init scripts used in your deployment. If this is the case, change the default values to the previous ones.
 
 ## License
 
