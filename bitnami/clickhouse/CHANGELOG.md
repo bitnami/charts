@@ -1,6 +1,6 @@
 # Changelog
 
-## 9.0.0 (2025-04-14)
+## 9.0.0 (2025-04-15)
 
 * [bitnami/clickhouse] feat: replace ZooKeeper with ClickHouse Keeper ([#32958](https://github.com/bitnami/charts/pull/32958))
 
