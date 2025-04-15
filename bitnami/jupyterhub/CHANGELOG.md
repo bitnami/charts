@@ -1,8 +1,12 @@
 # Changelog
 
+## 9.0.1 (2025-04-14)
+
+* [bitnami/jupyterhub] Update jupyterhub_config.py and z2hj.py ([#32991](https://github.com/bitnami/charts/pull/32991))
+
 ## 9.0.0 (2025-04-14)
 
-* [bitnami/jupyterhub] Release 9.0.0 ([#32989](https://github.com/bitnami/charts/pull/32989))
+* [bitnami/jupyterhub] Release 9.0.0 (#32989) ([c9f5654](https://github.com/bitnami/charts/commit/c9f5654d04847f65d61db4cd07266d831df7f127)), closes [#32989](https://github.com/bitnami/charts/issues/32989)
 
 ## <small>8.1.5 (2025-03-21)</small>
 
