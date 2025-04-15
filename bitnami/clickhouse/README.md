@@ -113,7 +113,7 @@ ClickHouse configuration can be extended on two different ways:
 - Using the `configuration` parameter you can override the default configuration file (`config.xml`) with your own configuration. Alternatively, you can use the `existingConfigmap` parameter to load a custom configuration file from a ConfigMap.
 - Using the `configdFiles` and `usersdFiles` parameters you can add extra configuration files to be mounted at `config.d` and `users.d` respectively (refer to [upstream documentation to learn more about these configuration files](https://clickhouse.com/docs/operations/configuration-files). Alternatively, you can use the `existingConfigdConfigmap` and `existingUsersdConfigmap` parameters to load custom configuration files from ConfigMaps.
 
-> Note: please note the chart already mounts by default a series of configuration files auto-generated based on other values at `config.d`. These files are prefixed with `01-`, `02-`, etc. up to `06-`. If you wan to override these files, ensure you add a prefix with a higher number (e.g. `99-`) to your custom configuration files. Otherwise, the default configuration files will override your custom ones.
+> Note: please note the chart already mounts by default a series of configuration files auto-generated based on other values at `config.d`. These files are prefixed with `01-`, `02-`, etc. up to `06-`. If you want to override these files, ensure you add a prefix with a higher number (e.g. `99-`) to your custom configuration files. Otherwise, the default configuration files will override your custom ones.
 
 ### Ingress
 
