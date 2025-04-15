@@ -1,0 +1,32 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+annotations:
+  tanzuCategory: clusterUtility
+  category: Analytics
+  licenses: Apache-2.0
+  images: |
+    - name: cadvisor
+      image: docker.io/bitnami/cadvisor:0.52.1-debian-12-r0
+apiVersion: v2
+appVersion: 0.52.1
+dependencies:
+- name: common
+  repository: oci://registry-1.docker.io/bitnamicharts
+  tags:
+  - bitnami-common
+  version: 2.x.x
+description: cAdvisor (Container Advisor) is an open-source tool by Google for monitoring containers, collecting metrics like CPU, memory, and network usage
+home: https://bitnami.com
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/cadvisor/img/cadvisor-stack-220x234.png
+keywords:
+- cadvisor
+- monitoring
+- kubernetes
+maintainers:
+- name: Broadcom, Inc. All Rights Reserved.
+  url: https://github.com/bitnami/charts
+name: cadvisor
+sources:
+- https://github.com/bitnami/charts/tree/main/bitnami/cadvisor
+version: 0.1.0
