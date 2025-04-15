@@ -147,7 +147,7 @@ Install the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/char
 
 ### Deploying extra resources
 
-Apart from the Operator, you may want to deploy ClickHouse Installation or ClickHouse Keeper Installation objects. For covering this case, the chart allows adding the full specification of other objects using the `extraDeploy` parameter. The following example creates a ClickHouse Installation using the `default-clickhouse` pod template:
+Apart from the Operator, you may want to deploy ClickHouse Installation or ClickHouse Keeper Installation objects. For covering this case, the chart allows adding the full specification of other objects using the `extraDeploy` parameter. The following examples creates a ClickHouse Installation using the `default-clickhouse` pod template and a ClickHouse Keeper Installation using the `default-keeper` pod template:
 
 ```yaml
 extraDeploy:
@@ -162,62 +162,94 @@ extraDeploy:
         dataVolumeClaimTemplate: default-volume-claim
     configuration:
       settings:
-        http_port: 8124
-        tcp_port: 9001
-        interserver_http_port: 9010
+        http_port: 8123
+        tcp_port: 9000
+        interserver_http_port: 9009
       users:
-        test_user/networks/ip:
-          - 0.0.0.0/0
-          - '::/0'
+        default/networks/ip:
+        - 0.0.0.0/0
+        - '::/0'
       clusters:
-        - name: test
+      - name: cluster
+        layout:
+          replicasCount: 1
+      zookeeper:
+        nodes:
+          - host: chk-test-cluster
+            port: 2181
+    templates:
+      podTemplates:
+      - name: default-clickhouse
+        distribution: Unspecified
+        spec:
+          containers:
+          - name: clickhouse
+            image: docker.io/bitnami/clickhouse
+            volumeMounts:
+            - name: default-volume-claim
+              mountPath: /bitnami/clickhouse
+      volumeClaimTemplates:
+      - name: default-volume-claim
+        spec:
+          accessModes:
+          - ReadWriteOnce
+          resources:
+            requests:
+              storage: 8Gi
+- apiVersion: clickhouse-keeper.altinity.com/v1
+  kind: ClickHouseKeeperInstallation
+  metadata:
+    name: test
+  spec:
+    defaults:
+      templates:
+        podTemplate: default-keeper
+        dataVolumeClaimTemplate: default-volume-claim
+    configuration:
+      clusters:
+        - name: cluster
           layout:
             replicasCount: 1
     templates:
       podTemplates:
-        - name: default-clickhouse
-          distribution: Unspecified
-          spec:
-            containers:
-              - name: clickhouse
-                image: docker.io/bitnami/clickhouse
-                env:
-                  - name: CLICKHOUSE_HTTP_PORT
-                    value: "8124"
-                  - name: CLICKHOUSE_TCP_PORT
-                    value: "9001"
-                  - name: CLICKHOUSE_INTERSERVER_HTTP_PORT
-                    value: "9010"
-                ports:
-                  - name: http
-                    containerPort: 8124
-                  - name: tcp
-                    containerPort: 9001
-                  - name: interserver
-                    containerPort: 9010
-                volumeMounts:
-                  - name: default-volume-claim
-                    mountPath: /bitnami/clickhouse
-                  - name: empty-dir
-                    mountPath: /opt/bitnami/clickhouse/logs
-                    subPath: app-logs-dir
-                  - name: empty-dir
-                    mountPath: /opt/bitnami/clickhouse/tmp
-                    subPath: app-tmp-dir
-                  - name: empty-dir
-                    mountPath: /tmp
-                    subPath: tmp-dir
-            volumes:
-              - name: empty-dir
-                emptyDir: {}
+      - name: default-keeper
+        distribution: Unspecified
+        spec:
+          containers:
+          - name: clickhouse-keeper
+            image: docker.io/bitnami/clickhouse-keeper
+            workingDir: /var/lib/clickhouse-keeper
+            env:
+            - name: CLICKHOUSE_KEEPER_SERVER_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            volumeMounts:
+            - name: default-volume-claim
+              mountPath: /bitnami/clickhouse-keeper
       volumeClaimTemplates:
-        - name: default-volume-claim
-          spec:
-            accessModes:
-            - ReadWriteOnce
-            resources:
-              requests:
-                storage: 8Gi
+      - name: default-volume-claim
+        spec:
+          accessModes:
+          - ReadWriteOnce
+          resources:
+            requests:
+              storage: 8Gi
+- apiVersion: v1
+  kind: Service
+  metadata:
+    name: chk-test-cluster
+    labels:
+      clickhouse-keeper.altinity.com/chk: test
+      clickhouse-keeper.altinity.com/cluster: cluster
+  spec:
+    ports:
+      - port: 2181
+        name: client
+    selector:
+      clickhouse-keeper.altinity.com/chk: test
+      clickhouse-keeper.altinity.com/cluster: cluster
+      clickhouse-keeper.altinity.com/ready: "yes"
 ```
 
 Check the [official quickstart guide](https://docs.altinity.com/altinitykubernetesoperator/kubernetesquickstartguide/quickcluster/) for more examples of how to deploy ClickHouse Installations.
