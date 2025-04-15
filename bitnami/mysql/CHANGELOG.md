@@ -1,8 +1,12 @@
 # Changelog
 
-## 12.3.3 (2025-04-08)
+## 12.3.4 (2025-04-15)
 
-* [bitnami/mysql]  Allow setting externalIPs for services ([#32858](https://github.com/bitnami/charts/pull/32858))
+* [bitnami/mysql] Release 12.3.4 ([#33017](https://github.com/bitnami/charts/pull/33017))
+
+## <small>12.3.3 (2025-04-09)</small>
+
+* [bitnami/mysql]  Allow setting externalIPs for services (#32858) ([a9077e0](https://github.com/bitnami/charts/commit/a9077e0501cbc9f4460b91866ced3bd4d789ecff)), closes [#32858](https://github.com/bitnami/charts/issues/32858)
 
 ## <small>12.3.2 (2025-03-22)</small>
 
