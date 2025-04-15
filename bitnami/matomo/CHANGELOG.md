@@ -1,6 +1,6 @@
 # Changelog
 
-## 9.3.3 (2025-04-14)
+## 9.3.3 (2025-04-15)
 
 * [bitnami/matomo] fix mount path for `matomo-secrets` volume on cronjobs ([#32773](https://github.com/bitnami/charts/pull/32773))
 
