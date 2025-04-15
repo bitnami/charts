@@ -216,7 +216,7 @@ Return whether Redis&reg; uses password authentication or not
 
 {{/* Redis Scheme used in the connection URL */}}
 {{- define "harbor.redis.scheme" -}}
-  {{- $defaultScheme := (ternary "rediss" "redis" (or .Values.externalRedis.tls.enabled .Values.redis.tls.enabled )) -}}
+  {{- $defaultScheme := ternary "rediss" "redis" (or .Values.externalRedis.tls.enabled .Values.redis.tls.enabled ) -}}
   {{- if or .Values.externalRedis.sentinel.enabled .Values.redis.sentinel.enabled -}}
     {{- printf "%s+sentinel" $defaultScheme -}}
   {{- else -}}
