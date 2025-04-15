@@ -1,9 +1,9 @@
 # Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
-name: "\U0001F680 Feature request"
-description: Suggest an idea for this project
-labels: ["feature-request"]
+name: "\U0001F680 chromy image"
+description: Adding a container image for Chrony to the Bitnami container image catalog 
+labels: ["chrony-image"]
 body:
   - type: markdown
     attributes:
@@ -14,20 +14,22 @@ body:
     attributes:
       label: Name and Version
       description: Name and version of the affected chart
-      placeholder: bitnami/wordpress 1.2.3
+      placeholder: bitnami/chrony 1.0
     validations:
       required: true
   - type: textarea
     attributes:
       label: What is the problem this feature will solve?
+      description: Currently, there is no official Chrony container image available in the Bitnami registry.
     validations:
       required: true
   - type: textarea
     attributes:
       label: What is the feature you are proposing to solve the problem?
-      description: Describe the requests. If you already have something in mind... PRs are welcome!
+      description: Since Bitnami charts are typically built around Bitnami-maintained images, the lack of an official image makes it difficult to develop and maintain a Chrony chart in the Bitnami ecosystem.
     validations:
       required: true
   - type: textarea
     attributes:
       label: What alternatives have you considered?
+      describtion: Currently, I'm using this public image and it's working:cturra/ntp
