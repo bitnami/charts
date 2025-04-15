@@ -219,13 +219,13 @@ extraDeploy:
   metadata:
     name: chk-vib-vib
     labels:
-      clickhouse-keeper.altinity.com/chk: test
-      clickhouse-keeper.altinity.com/cluster: cluster
+      clickhouse-keeper.altinity.com/chk: vib
+      clickhouse-keeper.altinity.com/cluster: vib
   spec:
     ports:
       - port: 2181
         name: client
     selector:
-      clickhouse-keeper.altinity.com/chk: test
-      clickhouse-keeper.altinity.com/cluster: cluster
+      clickhouse-keeper.altinity.com/chk: vib
+      clickhouse-keeper.altinity.com/cluster: vib
       clickhouse-keeper.altinity.com/ready: "yes"
