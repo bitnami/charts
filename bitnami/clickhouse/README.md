@@ -651,6 +651,7 @@ The [Bitnami ClickHouse](https://github.com/bitnami/containers/tree/main/bitnami
 | `metrics.prometheusRule.namespace`         | Namespace for the PrometheusRule Resource (defaults to the Release Namespace)                          | `""`    |
 | `metrics.prometheusRule.additionalLabels`  | Additional labels that can be used so PrometheusRule will be discovered by Prometheus                  | `{}`    |
 | `metrics.prometheusRule.rules`             | PrometheusRule definitions                                                                             | `[]`    |
+| `sampling.enabled`                         | Enable logging tables collected by sampling query profiler                                             | `false` |
 
 ### External ClickHouse Keeper / Zookeeper parameters
 
