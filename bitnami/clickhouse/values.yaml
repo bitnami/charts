@@ -10,7 +10,6 @@
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
 ## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
-## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ##
 global:
   imageRegistry: ""
@@ -20,7 +19,6 @@ global:
   ##
   imagePullSecrets: []
   defaultStorageClass: ""
-  storageClass: ""
   ## Security parameters
   ##
   security:
@@ -35,12 +33,15 @@ global:
       ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
       ##
       adaptSecurityContext: auto
+
 ## @section Common parameters
-##
 
 ## @param kubeVersion Override Kubernetes version
 ##
 kubeVersion: ""
+## @param apiVersions Override Kubernetes API versions reported by .Capabilities
+##
+apiVersions: []
 ## @param nameOverride String to partially override common.names.name
 ##
 nameOverride: ""
@@ -62,6 +63,9 @@ clusterDomain: cluster.local
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
+## @param usePasswordFiles Mount credentials as files instead of using environment variables
+##
+usePasswordFiles: true
 ## Enable diagnostic mode in the deployment
 ##
 diagnosticMode:
@@ -76,8 +80,79 @@ diagnosticMode:
   ##
   args:
     - infinity
-## @section ClickHouse Parameters
-##
+
+## @section Default Init Container Parameters
+
+defaultInitContainers:
+  ## 'volume-permissions' init container
+  ## Used to change the owner and group of the persistent volume(s) mountpoint(s) to 'runAsUser:fsGroup' on each node
+  ##
+  volumePermissions:
+    ## @param defaultInitContainers.volumePermissions.enabled Enable init container that changes the owner and group of the persistent volume
+    ##
+    enabled: false
+    ## @param defaultInitContainers.volumePermissions.image.registry [default: REGISTRY_NAME] "volume-permissions" init-containers' image registry
+    ## @param defaultInitContainers.volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] "volume-permissions" init-containers' image repository
+    ## @skip defaultInitContainers.volumePermissions.image.tag "volume-permissions" init-containers' image tag (immutable tags are recommended)
+    ## @param defaultInitContainers.volumePermissions.image.digest "volume-permissions" init-containers' image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+    ## @param defaultInitContainers.volumePermissions.image.pullPolicy "volume-permissions" init-containers' image pull policy
+    ## @param defaultInitContainers.volumePermissions.image.pullSecrets "volume-permissions" init-containers' image pull secrets
+    ##
+    image:
+      registry: docker.io
+      repository: bitnami/os-shell
+      tag: 12-debian-12-r42
+      digest: ""
+      pullPolicy: IfNotPresent
+      ## Optionally specify an array of imagePullSecrets.
+      ## Secrets must be manually created in the namespace.
+      ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+      ## Example:
+      ## pullSecrets:
+      ##   - myRegistryKeySecretName
+      ##
+      pullSecrets: []
+    ## Configure "volume-permissions" init-container Security Context
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+    ## @param defaultInitContainers.volumePermissions.containerSecurityContext.enabled Enabled "volume-permissions" init-containers' Security Context
+    ## @param defaultInitContainers.volumePermissions.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in "volume-permissions" init-containers
+    ## @param defaultInitContainers.volumePermissions.containerSecurityContext.runAsUser Set runAsUser in "volume-permissions" init-containers' Security Context
+    ## @param defaultInitContainers.volumePermissions.containerSecurityContext.privileged Set privileged in "volume-permissions" init-containers' Security Context
+    ## @param defaultInitContainers.volumePermissions.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in "volume-permissions" init-containers' Security Context
+    ## @param defaultInitContainers.volumePermissions.containerSecurityContext.capabilities.add List of capabilities to be added in "volume-permissions" init-containers
+    ## @param defaultInitContainers.volumePermissions.containerSecurityContext.capabilities.drop List of capabilities to be dropped in "volume-permissions" init-containers
+    ## @param defaultInitContainers.volumePermissions.containerSecurityContext.seccompProfile.type Set seccomp profile in "volume-permissions" init-containers
+    ##
+    containerSecurityContext:
+      enabled: true
+      seLinuxOptions: {}
+      runAsUser: 0
+      privileged: false
+      allowPrivilegeEscalation: false
+      capabilities:
+        add: []
+        drop: ["ALL"]
+      seccompProfile:
+        type: "RuntimeDefault"
+    ## ClickHouse Keeper "volume-permissions" init container resource requests and limits
+    ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+    ## @param defaultInitContainers.volumePermissions.resourcesPreset Set ClickHouse Keeper "volume-permissions" init container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if defaultInitContainers.volumePermissions.resources is set (defaultInitContainers.volumePermissions.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+    ##
+    resourcesPreset: "nano"
+    ## @param defaultInitContainers.volumePermissions.resources Set ClickHouse Keeper "volume-permissions" init container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## E.g:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    resources: {}
+
+## @section ClickHouse parameters
 
 ## Bitnami ClickHouse image
 ## ref: https://hub.docker.com/r/bitnami/clickhouse/tags/
@@ -112,6 +187,104 @@ image:
 ## @param clusterName ClickHouse cluster name
 ##
 clusterName: default
+## Authentication
+## @param auth.username ClickHouse Admin username
+## @param auth.password ClickHouse Admin password
+## @param auth.existingSecret Name of a secret containing the Admin password
+## @param auth.existingSecretKey Name of the key inside the existing secret
+##
+auth:
+  username: default
+  password: ""
+  existingSecret: ""
+  existingSecretKey: ""
+## @param tls.enabled Enable TLS configuration for ClickHouse
+## @param tls.autoGenerated.enabled Enable automatic generation of TLS certificates
+## @param tls.autoGenerated.engine Mechanism to generate the certificates (allowed values: helm, cert-manager)
+## @param tls.autoGenerated.certManager.existingIssuer The name of an existing Issuer to use for generating the certificates (only for `cert-manager` engine)
+## @param tls.autoGenerated.certManager.existingIssuerKind Existing Issuer kind, defaults to Issuer (only for `cert-manager` engine)
+## @param tls.autoGenerated.certManager.keyAlgorithm Key algorithm for the certificates (only for `cert-manager` engine)
+## @param tls.autoGenerated.certManager.keySize Key size for the certificates (only for `cert-manager` engine)
+## @param tls.autoGenerated.certManager.duration Duration for the certificates (only for `cert-manager` engine)
+## @param tls.autoGenerated.certManager.renewBefore Renewal period for the certificates (only for `cert-manager` engine)
+## @param tls.ca CA certificate for TLS. Ignored if `tls.existingCASecret` is set
+## @param tls.existingCASecret The name of an existing Secret containing the CA certificate for TLS
+## @param tls.server.cert TLS certificate for ClickHouse servers. Ignored if `tls.server.existingSecret` is set
+## @param tls.server.key TLS key for ClickHouse servers. Ignored if `tls.server.existingSecret` is set
+## @param tls.server.existingSecret The name of an existing Secret containing the TLS certificates for ClickHouse servers
+##
+tls:
+  enabled: false
+  autoGenerated:
+    enabled: true
+    engine: helm
+    certManager:
+      existingIssuer: ""
+      existingIssuerKind: ""
+      keySize: 2048
+      keyAlgorithm: RSA
+      duration: 2160h
+      renewBefore: 360h
+  ca: ""
+  existingCASecret: ""
+  server:
+    cert: ""
+    key: ""
+    existingSecret: ""
+## @param logLevel Logging level
+##
+logLevel: information
+## @param sampling.enabled Enable logging tables collected by sampling query profiler
+##
+sampling:
+  enabled: false
+## @param configuration Specify content for ClickHouse configuration (basic one auto-generated based on other values otherwise)
+##
+configuration: {}
+## @param existingConfigmap The name of an existing ConfigMap with your custom configuration for ClickHouse
+##
+existingConfigmap: ""
+## @param configdFiles Extra configuration files to be mounted at config.d
+## ref: https://clickhouse.com/docs/operations/configuration-files
+##
+configdFiles: {}
+## @param existingConfigdConfigmap The name of an existing ConfigMap with extra configuration files for ClickHouse
+##
+existingConfigdConfigmap: ""
+## @param usersdFiles Extra users configuration files to be mounted at users.d
+## ref: https://clickhouse.com/docs/operations/configuration-files#user-settings
+##
+usersdFiles: {}
+## @param existingUsersdConfigmap The name of an existing ConfigMap with extra users configuration files for ClickHouse
+##
+existingUsersdConfigmap: ""
+## @param existingUsersdSecret The name of an existing Secret with extra users configuration files for ClickHouse
+##
+existingUsersdSecret: ""
+## @param initdbScripts Dictionary of initdb scripts
+## Specify dictionary of scripts to be run at first boot
+## Example:
+## initdbScripts:
+##   my_init_script.sh: |
+##      #!/bin/bash
+##      echo "Do something."
+##
+initdbScripts: {}
+## @param initdbScriptsSecret ConfigMap with the initdb scripts (Note: Overrides `initdbScripts`)
+##
+initdbScriptsSecret: ""
+## @param startdbScripts Dictionary of startdb scripts
+## Specify dictionary of scripts to be run on every start
+## Example:
+## startdbScripts:
+##   my_start_script.sh: |
+##      #!/bin/bash
+##      echo "Do something."
+##
+startdbScripts: {}
+## @param startdbScriptsSecret ConfigMap with the startdb scripts (Note: Overrides `startdbScripts`)
+##
+startdbScriptsSecret: ""
 ## @param shards Number of ClickHouse shards to deploy
 ##
 shards: 2
@@ -126,9 +299,6 @@ distributeReplicasByZone: false
 ## @param containerPorts.https ClickHouse HTTPS container port
 ## @param containerPorts.tcp ClickHouse TCP container port
 ## @param containerPorts.tcpSecure ClickHouse TCP (secure) container port
-## @param containerPorts.keeper ClickHouse keeper TCP container port
-## @param containerPorts.keeperSecure ClickHouse keeper TCP (secure) container port
-## @param containerPorts.keeperInter ClickHouse keeper interserver TCP container port
 ## @param containerPorts.mysql ClickHouse MySQL container port
 ## @param containerPorts.postgresql ClickHouse PostgreSQL container port
 ## @param containerPorts.interserver ClickHouse Interserver container port
@@ -139,9 +309,6 @@ containerPorts:
   https: 8443
   tcp: 9000
   tcpSecure: 9440
-  keeper: 2181
-  keeperSecure: 3181
-  keeperInter: 9444
   mysql: 9004
   postgresql: 9005
   interserver: 9009
@@ -239,9 +406,9 @@ podSecurityContext:
 ## @param containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
 ## @param containerSecurityContext.runAsNonRoot Set containers' Security Context runAsNonRoot
 ## @param containerSecurityContext.readOnlyRootFilesystem Set read only root file system pod's
-## @param containerSecurityContext.privileged Set contraller container's Security Context privileged
-## @param containerSecurityContext.allowPrivilegeEscalation Set contraller container's Security Context allowPrivilegeEscalation
-## @param containerSecurityContext.capabilities.drop List of capabilities to be droppedn
+## @param containerSecurityContext.privileged Set ClickHouse container's Security Context privileged
+## @param containerSecurityContext.allowPrivilegeEscalation Set ClickHouse container's Security Context allowPrivilegeEscalation
+## @param containerSecurityContext.capabilities.drop List of capabilities to be dropped
 ## @param containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
 ##
 containerSecurityContext:
@@ -257,217 +424,9 @@ containerSecurityContext:
     drop: ["ALL"]
   seccompProfile:
     type: "RuntimeDefault"
-## Authentication
-## @param auth.username ClickHouse Admin username
-## @param auth.password ClickHouse Admin password
-## @param auth.existingSecret Name of a secret containing the Admin password
-## @param auth.existingSecretKey Name of the key inside the existing secret
-##
-auth:
-  username: default
-  password: ""
-  existingSecret: ""
-  existingSecretKey: ""
-## @param logLevel Logging level
-##
-logLevel: information
-## @section ClickHouse keeper configuration parameters
-## @param keeper.enabled Deploy ClickHouse keeper. Support is experimental.
-##
-keeper:
-  enabled: false
-## @param defaultConfigurationOverrides [string] Default configuration overrides (evaluated as a template)
-##
-defaultConfigurationOverrides: |
-  <clickhouse>
-    <!-- Macros -->
-    <macros>
-      <shard from_env="CLICKHOUSE_SHARD_ID"></shard>
-      <replica from_env="CLICKHOUSE_REPLICA_ID"></replica>
-      <layer>{{ include "common.names.fullname" . }}</layer>
-    </macros>
-    <!-- Log Level -->
-    <logger>
-      <level>{{ .Values.logLevel }}</level>
-    </logger>
-    {{- if or (ne (int .Values.shards) 1) (ne (int .Values.replicaCount) 1)}}
-    <!-- Cluster configuration - Any update of the shards and replicas requires helm upgrade -->
-    <remote_servers>
-      <{{ .Values.clusterName }}>
-        {{- $shards := $.Values.shards | int }}
-        {{- range $shard, $e := until $shards }}
-        <shard>
-            {{- $replicas := $.Values.replicaCount | int }}
-            {{- range $i, $_e := until $replicas }}
-            <replica>
-                <host>{{ printf "%s-shard%d-%d.%s.%s.svc.%s" (include "common.names.fullname" $ ) $shard $i (include "clickhouse.headlessServiceName" $) (include "common.names.namespace" $) $.Values.clusterDomain }}</host>
-                <port>{{ $.Values.service.ports.tcp }}</port>
-                <user from_env="CLICKHOUSE_ADMIN_USER"></user>
-                <password from_env="CLICKHOUSE_ADMIN_PASSWORD"></password>
-            </replica>
-            {{- end }}
-        </shard>
-        {{- end }}
-      </{{ .Values.clusterName }}>
-    </remote_servers>
-    {{- end }}
-    {{- if .Values.keeper.enabled }}
-    <!-- keeper configuration -->
-    <keeper_server>
-      {{/*ClickHouse keeper configuration using the helm chart */}}
-      <tcp_port>{{ $.Values.containerPorts.keeper }}</tcp_port>
-      {{- if .Values.tls.enabled }}
-      <tcp_port_secure>{{ $.Values.containerPorts.keeperSecure }}</tcp_port_secure>
-      {{- end }}
-      <server_id from_env="KEEPER_SERVER_ID"></server_id>
-      <log_storage_path>/bitnami/clickhouse/keeper/coordination/log</log_storage_path>
-      <snapshot_storage_path>/bitnami/clickhouse/keeper/coordination/snapshots</snapshot_storage_path>
-
-      <coordination_settings>
-          <operation_timeout_ms>10000</operation_timeout_ms>
-          <session_timeout_ms>30000</session_timeout_ms>
-          <raft_logs_level>trace</raft_logs_level>
-      </coordination_settings>
-
-      <raft_configuration>
-      {{- $nodes := .Values.replicaCount | int }}
-      {{- range $node, $e := until $nodes }}
-      <server>
-        <id>{{ $node | int }}</id>
-        <hostname from_env="{{ printf "KEEPER_NODE_%d" $node }}"></hostname>
-        <port>{{ $.Values.service.ports.keeperInter }}</port>
-      </server>
-      {{- end }}
-      </raft_configuration>
-    </keeper_server>
-    {{- end }}
-    {{- if or .Values.keeper.enabled .Values.zookeeper.enabled .Values.externalZookeeper.servers }}
-    <!-- Zookeeper configuration -->
-    <zookeeper>
-      {{- if or .Values.keeper.enabled }}
-      {{- $nodes := .Values.replicaCount | int }}
-      {{- range $node, $e := until $nodes }}
-      <node>
-        <host from_env="{{ printf "KEEPER_NODE_%d" $node }}"></host>
-        <port>{{ $.Values.service.ports.keeper }}</port>
-      </node>
-      {{- end }}
-      {{- else if .Values.zookeeper.enabled }}
-      {{/* Zookeeper configuration using the helm chart */}}
-      {{- $nodes := .Values.zookeeper.replicaCount | int }}
-      {{- range $node, $e := until $nodes }}
-      <node>
-        <host from_env="{{ printf "KEEPER_NODE_%d" $node }}"></host>
-        <port>{{ $.Values.zookeeper.service.ports.client }}</port>
-      </node>
-      {{- end }}
-      {{- else if .Values.externalZookeeper.servers }}
-      {{/* Zookeeper configuration using an external instance */}}
-      {{- range $node :=.Values.externalZookeeper.servers }}
-      <node>
-        <host>{{ $node }}</host>
-        <port>{{ $.Values.externalZookeeper.port }}</port>
-      </node>
-      {{- end }}
-      {{- end }}
-    </zookeeper>
-    {{- end }}
-    {{- if .Values.tls.enabled }}
-    <!-- TLS configuration -->
-    <tcp_port_secure from_env="CLICKHOUSE_TCP_SECURE_PORT"></tcp_port_secure>
-    <https_port from_env="CLICKHOUSE_HTTPS_PORT"></https_port>
-    <openSSL>
-        <server>
-            {{- $certFileName := default "tls.crt" .Values.tls.certFilename }}
-            {{- $keyFileName := default "tls.key" .Values.tls.certKeyFilename }}
-            <certificateFile>/bitnami/clickhouse/certs/{{$certFileName}}</certificateFile>
-            <privateKeyFile>/bitnami/clickhouse/certs/{{$keyFileName}}</privateKeyFile>
-            <verificationMode>none</verificationMode>
-            <cacheSessions>true</cacheSessions>
-            <disableProtocols>sslv2,sslv3</disableProtocols>
-            <preferServerCiphers>true</preferServerCiphers>
-            {{- if or .Values.tls.autoGenerated .Values.tls.certCAFilename }}
-            {{- $caFileName := default "ca.crt" .Values.tls.certCAFilename }}
-            <caConfig>/bitnami/clickhouse/certs/{{$caFileName}}</caConfig>
-            {{- else }}
-            <loadDefaultCAFile>true</loadDefaultCAFile>
-            {{- end }}
-        </server>
-        <client>
-            <loadDefaultCAFile>true</loadDefaultCAFile>
-            <cacheSessions>true</cacheSessions>
-            <disableProtocols>sslv2,sslv3</disableProtocols>
-            <preferServerCiphers>true</preferServerCiphers>
-            <verificationMode>none</verificationMode>
-            <invalidCertificateHandler>
-                <name>AcceptCertificateHandler</name>
-            </invalidCertificateHandler>
-        </client>
-    </openSSL>
-    {{- end }}
-    {{- if .Values.metrics.enabled }}
-     <!-- Prometheus metrics -->
-     <prometheus>
-        <endpoint>/metrics</endpoint>
-        <port from_env="CLICKHOUSE_METRICS_PORT"></port>
-        <metrics>true</metrics>
-        <events>true</events>
-        <asynchronous_metrics>true</asynchronous_metrics>
-    </prometheus>
-    {{- end }}
-    <listen_host>0.0.0.0</listen_host>
-    <listen_host>::</listen_host>
-    <listen_try>1</listen_try>
-  </clickhouse>
-## @param existingOverridesConfigmap The name of an existing ConfigMap with your custom configuration for ClickHouse
-##
-existingOverridesConfigmap: ""
-## @param extraOverrides Extra configuration overrides (evaluated as a template) apart from the default
-##
-extraOverrides: ""
-## @param extraOverridesConfigmap The name of an existing ConfigMap with extra configuration for ClickHouse
-##
-extraOverridesConfigmap: ""
-## @param extraOverridesSecret The name of an existing ConfigMap with your custom configuration for ClickHouse
-##
-extraOverridesSecret: ""
-## @param usersExtraOverrides Users extra configuration overrides (evaluated as a template) apart from the default
-##
-usersExtraOverrides: ""
-## @param usersExtraOverridesConfigmap The name of an existing ConfigMap with users extra configuration for ClickHouse
-##
-usersExtraOverridesConfigmap: ""
-## @param usersExtraOverridesSecret The name of an existing ConfigMap with your custom users configuration for ClickHouse
-##
-usersExtraOverridesSecret: ""
-## @param initdbScripts Dictionary of initdb scripts
-## Specify dictionary of scripts to be run at first boot
-## Example:
-## initdbScripts:
-##   my_init_script.sh: |
-##      #!/bin/bash
-##      echo "Do something."
-##
-initdbScripts: {}
-## @param initdbScriptsSecret ConfigMap with the initdb scripts (Note: Overrides `initdbScripts`)
-##
-initdbScriptsSecret: ""
-## @param startdbScripts Dictionary of startdb scripts
-## Specify dictionary of scripts to be run on every start
-## Example:
-## startdbScripts:
-##   my_start_script.sh: |
-##      #!/bin/bash
-##      echo "Do something."
-##
-startdbScripts: {}
-## @param startdbScriptsSecret ConfigMap with the startdb scripts (Note: Overrides `startdbScripts`)
-##
-startdbScriptsSecret: ""
 ## @param command Override default container command (useful when using custom images)
 ##
-command:
-  - /scripts/setup.sh
+command: []
 ## @param args Override default container args (useful when using custom images)
 ##
 args: []
@@ -524,14 +483,13 @@ nodeSelector: {}
 ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: []
-## @param updateStrategy.type ClickHouse statefulset strategy type
+## @param updateStrategy.type ClickHouse StatefulSet strategy type
+## @param updateStrategy.rollingUpdate ClickHouse StatefulSet rolling update configuration parameters
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
 ##
 updateStrategy:
-  ## StrategyType
-  ## Can be set to RollingUpdate or OnDelete
-  ##
   type: RollingUpdate
+  rollingUpdate: {}
 ## @param podManagementPolicy Statefulset Pod management policy, it needs to be Parallel to be able to complete the cluster join
 ## Ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
 ##
@@ -606,32 +564,36 @@ initContainers: []
 pdb:
   create: true
   minAvailable: ""
-  maxUnavailable: ""
-## TLS configuration
+  maxUnavailable: ""    
+## ClickHouse Autoscaling configuration
+## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
 ##
-tls:
-  ## @param tls.enabled Enable TLS traffic support
-  ##
-  enabled: false
-  ## @param tls.autoGenerated Generate automatically self-signed TLS certificates
-  ##
-  autoGenerated: false
-  ## @param tls.certificatesSecret Name of an existing secret that contains the certificates
-  ##
-  certificatesSecret: ""
-  ## @param tls.certFilename Certificate filename
-  ##
-  certFilename: ""
-  ## @param tls.certKeyFilename Certificate key filename
-  ##
-  certKeyFilename: ""
-  ## @param tls.certCAFilename CA Certificate filename
-  ## If provided, PostgreSQL will authenticate TLS/SSL clients by requesting them a certificate
-  ## ref: https://www.postgresql.org/docs/9.6/auth-methods.html
-  ##
-  certCAFilename: ""
-## @section Traffic Exposure Parameters
-##
+autoscaling:
+  vpa:
+    ## @param autoscaling.vpa.enabled Enable VPA
+    ##
+    enabled: false
+    ## @param autoscaling.vpa.annotations Annotations for VPA resource
+    ##
+    annotations: {}
+    ## @param autoscaling.vpa.controlledResources VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory
+    ##
+    controlledResources: []
+    ## @param autoscaling.vpa.maxAllowed VPA Max allowed resources for the pod
+    ## cpu: 200m
+    ## memory: 100Mi
+    maxAllowed: {}
+    ## @param autoscaling.vpa.minAllowed VPA Min allowed resources for the pod
+    ## cpu: 200m
+    ## memory: 100Mi
+    minAllowed: {}
+    updatePolicy:
+      ## @param autoscaling.vpa.updatePolicy.updateMode Autoscaling update policy Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod
+      ## Possible values are "Off", "Initial", "Recreate", and "Auto".
+      ##
+      updateMode: Auto
+
+## @section ClickHouse Traffic Exposure parameters
 
 ## ClickHouse service parameters
 ##
@@ -639,13 +601,14 @@ service:
   ## @param service.type ClickHouse service type
   ##
   type: ClusterIP
+  ## @param service.perReplicaAccess Enable per-replica service creation
+  ## This is useful for exposing individual replicas externally via LoadBalancer or NodePort
+  ##
+  perReplicaAccess: false
   ## @param service.ports.http ClickHouse service HTTP port
   ## @param service.ports.https ClickHouse service HTTPS port
   ## @param service.ports.tcp ClickHouse service TCP port
   ## @param service.ports.tcpSecure ClickHouse service TCP (secure) port
-  ## @param service.ports.keeper ClickHouse keeper TCP container port
-  ## @param service.ports.keeperSecure ClickHouse keeper TCP (secure) container port
-  ## @param service.ports.keeperInter ClickHouse keeper interserver TCP container port
   ## @param service.ports.mysql ClickHouse service MySQL port
   ## @param service.ports.postgresql ClickHouse service PostgreSQL port
   ## @param service.ports.interserver ClickHouse service Interserver port
@@ -656,9 +619,6 @@ service:
     https: 443
     tcp: 9000
     tcpSecure: 9440
-    keeper: 2181
-    keeperSecure: 3181
-    keeperInter: 9444
     mysql: 9004
     postgresql: 9005
     interserver: 9009
@@ -668,9 +628,6 @@ service:
   ## @param service.nodePorts.https Node port for HTTPS
   ## @param service.nodePorts.tcp Node port for TCP
   ## @param service.nodePorts.tcpSecure Node port for TCP (with TLS)
-  ## @param service.nodePorts.keeper ClickHouse keeper TCP container port
-  ## @param service.nodePorts.keeperSecure ClickHouse keeper TCP (secure) container port
-  ## @param service.nodePorts.keeperInter ClickHouse keeper interserver TCP container port
   ## @param service.nodePorts.mysql Node port for MySQL
   ## @param service.nodePorts.postgresql Node port for PostgreSQL
   ## @param service.nodePorts.interserver Node port for Interserver
@@ -682,9 +639,6 @@ service:
     https: ""
     tcp: ""
     tcpSecure: ""
-    keeper: ""
-    keeperSecure: ""
-    keeperInter: ""
     mysql: ""
     postgresql: ""
     interserver: ""
@@ -694,10 +648,24 @@ service:
   ## clusterIP: None
   ##
   clusterIP: ""
-  ## @param service.loadBalancerIP ClickHouse service Load Balancer IP
+  ## @param service.loadBalancerIP ClickHouse service Load Balancer IP (only if per-replica access is disabled)
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
   ##
   loadBalancerIP: ""
+  ## @param service.loadBalancerIPs Array of ClickHouse service Load Balancer IPs (only if per-replica access is enabled). Length must be the same as shards multiplied by replicaCount
+  ## e.g:
+  ## loadBalancerIPs:
+  ##   - X.X.X.X
+  ##   - Y.Y.Y.Y
+  ##
+  loadBalancerIPs: []
+  ## @param service.loadBalancerAnnotations Array of ClickHouse service Load Balancer annotations (only if per-replica access is enabled). Length must be the same as shards multiplied by replicaCount
+  ## e.g:
+  ## loadBalancerAnnotations:
+  ##   - external-dns.alpha.kubernetes.io/hostname: 1.external.example.com.
+  ##   - external-dns.alpha.kubernetes.io/hostname: 2.external.example.com.
+  ##
+  loadBalancerAnnotations: []
   ## @param service.loadBalancerSourceRanges ClickHouse service Load Balancer sources
   ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
   ## e.g:
@@ -732,104 +700,10 @@ service:
     ## @param service.headless.annotations Annotations for the headless service.
     ##
     annotations: {}
-## External Access to ClickHouse  configuration
-##
-externalAccess:
-  ## @param externalAccess.enabled Enable Kubernetes external cluster access to ClickHouse
-  ##
-  enabled: false
-  ## Parameters to configure K8s service(s) used to externally access ClickHouse
-  ## Note: A new service per  will be created
-  ##
-  service:
-    ## @param externalAccess.service.type Kubernetes Service type for external access. It can be NodePort, LoadBalancer or ClusterIP
-    ##
-    type: LoadBalancer
-    ## @param externalAccess.service.ports.http ClickHouse service HTTP port
-    ## @param externalAccess.service.ports.https ClickHouse service HTTPS port
-    ## @param externalAccess.service.ports.tcp ClickHouse service TCP port
-    ## @param externalAccess.service.ports.tcpSecure ClickHouse service TCP (secure) port
-    ## @param externalAccess.service.ports.keeper ClickHouse keeper TCP container port
-    ## @param externalAccess.service.ports.keeperSecure ClickHouse keeper TCP (secure) container port
-    ## @param externalAccess.service.ports.keeperInter ClickHouse keeper interserver TCP container port
-    ## @param externalAccess.service.ports.mysql ClickHouse service MySQL port
-    ## @param externalAccess.service.ports.postgresql ClickHouse service PostgreSQL port
-    ## @param externalAccess.service.ports.interserver ClickHouse service Interserver port
-    ## @param externalAccess.service.ports.metrics ClickHouse service metrics port
-    ##
-    ports:
-      http: 80
-      https: 443
-      tcp: 9000
-      tcpSecure: 9440
-      keeper: 2181
-      keeperSecure: 3181
-      keeperInter: 9444
-      mysql: 9004
-      postgresql: 9005
-      interserver: 9009
-      metrics: 8001
-    ## @param externalAccess.service.loadBalancerIPs Array of load balancer IPs for each ClickHouse . Length must be the same as replicaCount
-    ## e.g:
-    ## loadBalancerIPs:
-    ##   - X.X.X.X
-    ##   - Y.Y.Y.Y
-    ##
-    loadBalancerIPs: []
-    ## @param externalAccess.service.loadBalancerAnnotations Array of load balancer annotations for each ClickHouse . Length must be the same as shards multiplied by replicaCount
-    ## e.g:
-    ## loadBalancerAnnotations:
-    ##   - external-dns.alpha.kubernetes.io/hostname: 1.external.example.com.
-    ##   - external-dns.alpha.kubernetes.io/hostname: 2.external.example.com.
-    ##
-    loadBalancerAnnotations: []
-    ## @param externalAccess.service.loadBalancerSourceRanges Address(es) that are allowed when service is LoadBalancer
-    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
-    ## e.g:
-    ## loadBalancerSourceRanges:
-    ## - 10.10.10.0/24
-    ##
-    loadBalancerSourceRanges: []
-    ## @param externalAccess.service.nodePorts.http Node port for HTTP
-    ## @param externalAccess.service.nodePorts.https Node port for HTTPS
-    ## @param externalAccess.service.nodePorts.tcp Node port for TCP
-    ## @param externalAccess.service.nodePorts.tcpSecure Node port for TCP (with TLS)
-    ## @param externalAccess.service.nodePorts.keeper ClickHouse keeper TCP container port
-    ## @param externalAccess.service.nodePorts.keeperSecure ClickHouse keeper TCP container port (with TLS)
-    ## @param externalAccess.service.nodePorts.keeperInter ClickHouse keeper interserver TCP container port
-    ## @param externalAccess.service.nodePorts.mysql Node port for MySQL
-    ## @param externalAccess.service.nodePorts.postgresql Node port for PostgreSQL
-    ## @param externalAccess.service.nodePorts.interserver Node port for Interserver
-    ## @param externalAccess.service.nodePorts.metrics Node port for metrics
-    ## NOTE: choose port between <30000-32767>
-    ## e.g:
-    ## nodePorts:
-    ##   tls:
-    ##   - 30001
-    ##   - 30002
-    ##
-    nodePorts:
-      http: []
-      https: []
-      tcp: []
-      tcpSecure: []
-      keeper: []
-      keeperSecure: []
-      keeperInter: []
-      mysql: []
-      postgresql: []
-      interserver: []
-      metrics: []
-    ## @param externalAccess.service.labels Service labels for external access
-    ##
-    labels: {}
-    ## @param externalAccess.service.annotations Service annotations for external access
-    ##
-    annotations: {}
-    ## @param externalAccess.service.extraPorts Extra ports to expose in the ClickHouse external service
+    ## @param service.headless.extraPorts Optionally specify extra ports to expose for the headless service.
     ##
     extraPorts: []
-## ClickHouse ingress parameters
+## ClickHouse Ingress parameters
 ## ref: http://kubernetes.io/docs/concepts/services-networking/ingress/
 ##
 ingress:
@@ -933,9 +807,77 @@ ingress:
   ##             name: http
   ##
   extraRules: []
-## @section Persistence Parameters
+## ClickHouse Network Policies
+## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
 ##
+networkPolicy:
+  ## @param networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+  ##
+  enabled: true
+  ## @param networkPolicy.allowExternal Don't require client label for connections
+  ## The Policy model to apply. When set to false, only pods with the correct
+  ## client label will have network access to the ports ClickHouse is listening
+  ## on. When true, ClickHouse will accept connections from any source
+  ## (with the correct destination port).
+  ##
+  allowExternal: true
+  ## @param networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+  ##
+  allowExternalEgress: true
+  ## @param networkPolicy.addExternalClientAccess Allow access from pods with client label set to "true". Ignored if `networkPolicy.allowExternal` is true.
+  ##
+  addExternalClientAccess: true
+  ## @param networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+  ## e.g:
+  ## extraIngress:
+  ##   - ports:
+  ##       - port: 1234
+  ##     from:
+  ##       - podSelector:
+  ##           - matchLabels:
+  ##               - role: frontend
+  ##       - podSelector:
+  ##           - matchExpressions:
+  ##               - key: role
+  ##                 operator: In
+  ##                 values:
+  ##                   - frontend
+  extraIngress: []
+  ## @param networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+  ## e.g:
+  ## extraEgress:
+  ##   - ports:
+  ##       - port: 1234
+  ##     to:
+  ##       - podSelector:
+  ##           - matchLabels:
+  ##               - role: frontend
+  ##       - podSelector:
+  ##           - matchExpressions:
+  ##               - key: role
+  ##                 operator: In
+  ##                 values:
+  ##                   - frontend
+  ##
+  extraEgress: []
+  ## @param networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+  ## @param networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+  ##
+  ingressNSMatchLabels: {}
+  ingressNSPodMatchLabels: {}
 
+## @section ClickHouse Persistence parameters
+
+## persistentVolumeClaimRetentionPolicy
+## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#persistentvolumeclaim-retention
+## @param persistentVolumeClaimRetentionPolicy.enabled Controls if and how PVCs are deleted during the lifecycle of a StatefulSet
+## @param persistentVolumeClaimRetentionPolicy.whenScaled Volume retention behavior when the replica count of the StatefulSet is reduced
+## @param persistentVolumeClaimRetentionPolicy.whenDeleted Volume retention behavior that applies when the StatefulSet is deleted
+##
+persistentVolumeClaimRetentionPolicy:
+  enabled: false
+  whenScaled: Retain
+  whenDeleted: Retain
 ## Enable persistence using Persistent Volume Claims
 ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
 ##
@@ -978,29 +920,35 @@ persistence:
   ## @param persistence.dataSource Custom PVC data source
   ##
   dataSource: {}
-## @section Init Container Parameters
-##
-
-## 'volumePermissions' init container parameters
-## Changes the owner and group of the persistent volume mount point to runAsUser:fsGroup values
-##   based on the *podSecurityContext/*containerSecurityContext parameters
-##
-volumePermissions:
-  ## @param volumePermissions.enabled Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`
+  ## @param persistence.mountPath Mount path of the ClickHouse data volume
   ##
-  enabled: false
-  ## OS Shell + Utility image
-  ## ref: https://hub.docker.com/r/bitnami/os-shell/tags/
-  ## @param volumePermissions.image.registry [default: REGISTRY_NAME] OS Shell + Utility image registry
-  ## @param volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] OS Shell + Utility image repository
-  ## @skip volumePermissions.image.tag OS Shell + Utility image tag (immutable tags are recommended)
-  ## @param volumePermissions.image.pullPolicy OS Shell + Utility image pull policy
-  ## @param volumePermissions.image.pullSecrets OS Shell + Utility image pull secrets
+  mountPath: /bitnami/clickhouse
+
+## @section ClickHouse Keeper parameters
+
+keeper:
+  ## @param keeper.enabled Deploy ClickHouse Keeper to provide coordination capabilities
+  ##
+  enabled: true
+  ## Bitnami ClickHouse Keeper image
+  ## ref: https://hub.docker.com/r/bitnami/clickhouse-keeper/tags/
+  ## @param keeper.image.registry [default: REGISTRY_NAME] ClickHouse Keeper image registry
+  ## @param keeper.image.repository [default: REPOSITORY_NAME/clickhouse-keeper] ClickHouse Keeper image repository
+  ## @skip keeper.image.tag ClickHouse Keeper image tag (immutable tags are recommended)
+  ## @param keeper.image.digest ClickHouse Keeper image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
+  ## @param keeper.image.pullPolicy ClickHouse Keeper image pull policy
+  ## @param keeper.image.pullSecrets ClickHouse Keeper image pull secrets
+  ## @param keeper.image.debug Enable ClickHouse image debug mode
   ##
   image:
     registry: docker.io
-    repository: bitnami/os-shell
-    tag: 12-debian-12-r42
+    repository: bitnami/clickhouse-keeper
+    tag: 25.3.2-debian-12-r7
+    digest: ""
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
+    ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1010,13 +958,104 @@ volumePermissions:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-  ## Init container's resource requests and limits
+    ## Set to true if you would like to see extra information on logs
+    ##
+    debug: false
+  ## @param keeper.replicaCount Number of ClickHouse Keeper replicas to deploy
+  ##
+  replicaCount: 3
+  ## @param keeper.configuration Specify content for ClickHouse Keeper configuration (basic one auto-generated based on other values otherwise)
+  ##
+  configuration: {}
+  ## @param keeper.existingConfigmap The name of an existing ConfigMap with your custom configuration for ClickHouse Keeper
+  ##
+  existingConfigmap: ""
+  ## @param keeper.configdFiles Extra configuration files to be mounted at keeper_config.d
+  ## ref: https://clickhouse.com/docs/operations/configuration-files
+  ##
+  configdFiles: {}
+  ## @param keeper.existingConfigdConfigmap The name of an existing ConfigMap with extra configuration files for ClickHouse Keeper
+  ##
+  existingConfigdConfigmap: ""
+  ## @param keeper.usersdFiles Extra users configuration files to be mounted at users.d
+  ## ref: https://clickhouse.com/docs/operations/configuration-files#user-settings
+  ##
+  usersdFiles: {}
+  ## @param keeper.existingUsersdConfigmap The name of an existing ConfigMap with extra users configuration files for ClickHouse Keeper
+  ##
+  existingUsersdConfigmap: ""
+  ## @param keeper.existingUsersdSecret The name of an existing Secret with extra users configuration files for ClickHouse Keeper
+  ##
+  existingUsersdSecret: ""
+  ## @param keeper.containerPorts.tcp ClickHouse Keeper TCP container port
+  ## @param keeper.containerPorts.raft ClickHouse Keeper Raft container port
+  ##
+  containerPorts:
+    tcp: 9181
+    raft: 9234
+  ## @param keeper.extraContainerPorts ClickHouse Keeper extra containerPorts
+  ##
+  extraContainerPorts: []
+  ## Configure extra options for ClickHouse Keeper containers' liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param keeper.livenessProbe.enabled Enable livenessProbe on ClickHouse Keeper containers
+  ## @param keeper.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param keeper.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param keeper.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param keeper.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param keeper.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    failureThreshold: 3
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+  ## @param keeper.readinessProbe.enabled Enable readinessProbe on ClickHouse Keeper containers
+  ## @param keeper.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param keeper.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param keeper.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param keeper.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param keeper.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    failureThreshold: 3
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+  ## @param keeper.startupProbe.enabled Enable startupProbe on ClickHouse Keeper containers
+  ## @param keeper.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param keeper.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param keeper.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param keeper.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param keeper.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    failureThreshold: 3
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+  ## @param keeper.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param keeper.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param keeper.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## ClickHouse Keeper resource requests and limits
   ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param volumePermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
+  ## @param keeper.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if keeper.resources is set (keeper.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "nano"
-  ## @param volumePermissions.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  resourcesPreset: "small"
+  ## @param keeper.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
   ##   requests:
@@ -1027,19 +1066,398 @@ volumePermissions:
   ##     memory: 1024Mi
   ##
   resources: {}
-  ## Init container Container Security Context
+  ## Configure ClickHouse Keeper pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param keeper.podSecurityContext.enabled Enabled ClickHouse Keeper pods' Security Context
+  ## @param keeper.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param keeper.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param keeper.podSecurityContext.supplementalGroups Set filesystem extra groups
+  ## @param keeper.podSecurityContext.fsGroup Set ClickHouse Keeper pod's Security Context fsGroup
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
+    fsGroup: 1001
+  ## Configure ClickHouse Keeper containers (only main one) Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param volumePermissions.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
-  ## @param volumePermissions.containerSecurityContext.runAsUser Set init container's Security Context runAsUser
-  ## NOTE: when runAsUser is set to special value "auto", init container will try to chown the
-  ##   data folder to auto-determined user&group, using commands: `id -u`:`id -G | cut -d" " -f2`
-  ##   "auto" is especially useful for OpenShift which has scc with dynamic user ids (and 0 is not allowed)
+  ## @param keeper.containerSecurityContext.enabled Enabled ClickHouse Keeper containers' Security Context
+  ## @param keeper.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param keeper.containerSecurityContext.runAsUser Set ClickHouse Keeper containers' Security Context runAsUser
+  ## @param keeper.containerSecurityContext.runAsGroup Set ClickHouse Keeper containers' Security Context runAsGroup
+  ## @param keeper.containerSecurityContext.runAsNonRoot Set ClickHouse Keeper containers' Security Context runAsNonRoot
+  ## @param keeper.containerSecurityContext.privileged Set web container's Security Context privileged
+  ## @param keeper.containerSecurityContext.allowPrivilegeEscalation Set web container's Security Context allowPrivilegeEscalation
+  ## @param keeper.containerSecurityContext.readOnlyRootFilesystem Set web container's Security Context readOnlyRootFilesystem
+  ## @param keeper.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param keeper.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
+    enabled: true
     seLinuxOptions: {}
-    runAsUser: 0
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    privileged: false
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
+  ## @param keeper.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param keeper.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param keeper.extraEnvVars Array with extra environment variables to add to ClickHouse Keeper container(s)
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param keeper.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for ClickHouse Keeper container(s)
+  ##
+  extraEnvVarsCM: ""
+  ## @param keeper.extraEnvVarsSecret Name of existing Secret containing extra env vars for ClickHouse Keeper container(s)
+  ##
+  extraEnvVarsSecret: ""
+  ## @param keeper.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
+  ## @param keeper.hostAliases ClickHouse Keeper pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param keeper.podLabels Extra labels for ClickHouse Keeper pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param keeper.podAnnotations Annotations for ClickHouse Keeper pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param keeper.podAffinityPreset Pod affinity preset. Ignored if `keeper.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param keeper.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `keeper.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## Node affinity preset
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ## @param keeper.nodeAffinityPreset.key Node label key to match. Ignored if `keeper.affinity` is set.
+  ## @param keeper.nodeAffinityPreset.type Node affinity preset type. Ignored if `keeper.affinity` is set. Allowed values: `soft` or `hard`
+  ## @param keeper.nodeAffinityPreset.values Node label values to match. Ignored if `keeper.affinity` is set.
+  ##
+  nodeAffinityPreset:
+    ## e.g:
+    ## key: "kubernetes.io/e2e-az-name"
+    ##
+    key: ""
+    type: ""
+    ## e.g:
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param keeper.affinity Affinity for ClickHouse Keeper pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `keeper.podAffinityPreset`, `keeper.podAntiAffinityPreset`, and `keeper.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param keeper.nodeSelector Node labels for ClickHouse Keeper pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
+  ##
+  nodeSelector: {}
+  ## @param keeper.tolerations Tolerations for ClickHouse Keeper pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param keeper.updateStrategy.type ClickHouse Keeper StatefulSet strategy type
+  ## @param keeper.updateStrategy.rollingUpdate ClickHouse Keeper StatefulSet rolling update configuration parameters
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate: {}
+  ## @param keeper.podManagementPolicy StatefulSet Pod management policy, it needs to be Parallel to be able to complete the cluster join
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
+  ##
+  podManagementPolicy: Parallel
+  ## @param keeper.priorityClassName ClickHouse Keeper pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param keeper.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
+  ## @param keeper.schedulerName Name of the k8s scheduler (other than default) for ClickHouse pods
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param keeper.terminationGracePeriodSeconds Seconds Redmine pod needs to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## @param keeper.lifecycleHooks for the ClickHouse Keeper container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param keeper.extraVolumes Optionally specify extra list of additional volumes for the ClickHouse Keeper pod(s)
+  ##
+  extraVolumes: []
+  ## @param keeper.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the ClickHouse Keeper container(s)
+  ##
+  extraVolumeMounts: []
+  ## @param keeper.sidecars Add additional sidecar containers to the ClickHouse Keeper pod(s)
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param keeper.initContainers Add additional init containers to the ClickHouse Keeper pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
+  ## ClickHouse Keeper Pod Disruption Budget
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/disruptions/
+  ## @param keeper.pdb.create Deploy a pdb object for the ClickHouse Keeper pods
+  ## @param keeper.pdb.minAvailable Maximum number/percentage of unavailable ClickHouse Keeper replicas
+  ## @param keeper.pdb.maxUnavailable Maximum number/percentage of unavailable ClickHouse Keeper replicas
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
+  ## ClickHouse Keeper Autoscaling configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
+  ##
+  autoscaling:
+    vpa:
+      ## @param keeper.autoscaling.vpa.enabled Enable VPA
+      ##
+      enabled: false
+      ## @param keeper.autoscaling.vpa.annotations Annotations for VPA resource
+      ##
+      annotations: {}
+      ## @param keeper.autoscaling.vpa.controlledResources VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory
+      ##
+      controlledResources: []
+      ## @param keeper.autoscaling.vpa.maxAllowed VPA Max allowed resources for the pod
+      ## cpu: 200m
+      ## memory: 100Mi
+      maxAllowed: {}
+      ## @param keeper.autoscaling.vpa.minAllowed VPA Min allowed resources for the pod
+      ## cpu: 200m
+      ## memory: 100Mi
+      minAllowed: {}
+      updatePolicy:
+        ## @param keeper.autoscaling.vpa.updatePolicy.updateMode Autoscaling update policy Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod
+        ## Possible values are "Off", "Initial", "Recreate", and "Auto".
+        ##
+        updateMode: Auto
+
+  ## @section ClickHouse Keeper Traffic Exposure parameters
+
+  ## ClickHouse Keeper service parameters
+  ##
+  service:
+    ## @param keeper.service.type ClickHouse Keeper service type
+    ##
+    type: ClusterIP
+    ## @param keeper.service.ports.tcp ClickHouse Keeper service TCP port
+    ## @param keeper.service.ports.raft ClickHouse Keeper service Raft port
+    ##
+    ports:
+      tcp: 9181
+      raft: 9234
+    ## Node ports to expose
+    ## @param keeper.service.nodePorts.tcp Node port for ClickHouse Keeper service TCP port
+    ## @param keeper.service.nodePorts.raft Node port for ClickHouse Keeper service Raft port
+    ## NOTE: choose port between <30000-32767>
+    ##
+    nodePorts:
+      tcp: ""
+      raft: ""
+    ## @param keeper.service.clusterIP ClickHouse Keeper service Cluster IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param keeper.service.loadBalancerIP ClickHouse Keeper service Load Balancer IP
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerIP: ""
+    ## @param keeper.service.loadBalancerSourceRanges ClickHouse Keeper service Load Balancer sources
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param keeper.service.externalTrafficPolicy ClickHouse Keeper service external traffic policy
+    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param keeper.service.annotations Additional custom annotations for ClickHouse Keeper service
+    ##
+    annotations: {}
+    ## @param keeper.service.extraPorts Extra ports to expose in ClickHouse Keeper service (normally used with the `sidecars` value)
+    ##
+    extraPorts: []
+    ## @param keeper.service.sessionAffinity Control where client requests go, to the same pod or round-robin
+    ## Values: ClientIP or None
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
+    ##
+    sessionAffinity: None
+    ## @param keeper.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
+    ## Headless service properties
+    ##
+    headless:
+      ## @param keeper.service.headless.annotations Annotations for the headless service.
+      ##
+      annotations: {}
+      ## @param keeper.service.headless.extraPorts Optionally specify extra ports to expose for the headless service.
+      ##
+      extraPorts: []
+  ## ClickHouse Keeper Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param keeper.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param keeper.networkPolicy.allowExternal Don't require client label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## client label will have network access to the ports ClickHouse Keeper is listening
+    ## on. When true, ClickHouse Keeper will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param keeper.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param keeper.networkPolicy.addExternalClientAccess Allow access from pods with client label set to "true". Ignored if `keeper.networkPolicy.allowExternal` is true.
+    ##
+    addExternalClientAccess: true
+    ## @param keeper.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param keeper.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param keeper.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param keeper.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
+
+  ## @section ClickHouse Keeper Persistence parameters
+
+  ## persistentVolumeClaimRetentionPolicy
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#persistentvolumeclaim-retention
+  ## @param keeper.persistentVolumeClaimRetentionPolicy.enabled Controls if and how PVCs are deleted during the lifecycle of a StatefulSet
+  ## @param keeper.persistentVolumeClaimRetentionPolicy.whenScaled Volume retention behavior when the replica count of the StatefulSet is reduced
+  ## @param keeper.persistentVolumeClaimRetentionPolicy.whenDeleted Volume retention behavior that applies when the StatefulSet is deleted
+  ##
+  persistentVolumeClaimRetentionPolicy:
+    enabled: false
+    whenScaled: Retain
+    whenDeleted: Retain
+  ## Enable persistence using Persistent Volume Claims
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
+  ##
+  persistence:
+    ## @param keeper.persistence.enabled Enable ClickHouse Keeper data persistence using PVC
+    ##
+    enabled: true
+    ## @param keeper.persistence.existingClaim A manually managed Persistent Volume and Claim
+    ## If defined, PVC must be created manually before volume will be bound
+    ## The value is evaluated as a template
+    ##
+    existingClaim: ""
+    ## @param keeper.persistence.storageClass PVC Storage Class for ClickHouse Keeper data volume
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ## set, choosing the default provisioner.
+    ##
+    storageClass: ""
+    ## @param keeper.persistence.accessModes Persistent Volume Access Modes
+    ##
+    accessModes:
+      - ReadWriteOnce
+    ## @param keeper.persistence.size PVC Storage Request for ClickHouse Keeper data volume
+    ##
+    size: 8Gi
+    ## @param keeper.persistence.annotations Annotations for the PVC
+    ##
+    annotations: {}
+    ## @param keeper.persistence.labels Labels for the PVC
+    ##
+    labels: {}
+    ## @param keeper.persistence.selector Selector to match an existing Persistent Volume for ClickHouse Keeper data PVC. If set, the PVC can't have a PV dynamically provisioned for it
+    ## selector:
+    ##   matchLabels:
+    ##     app: my-app
+    ##
+    selector: {}
+    ## @param keeper.persistence.dataSource Custom PVC data source
+    ##
+    dataSource: {}
+    ## @param keeper.persistence.mountPath Mount path of the ClickHouse Keeper data volume
+    ##
+    mountPath: /bitnami/clickhouse-keeper
+
 ## @section Other Parameters
-##
 
 ## ServiceAccount configuration
 ##
@@ -1057,17 +1475,16 @@ serviceAccount:
   ## @param serviceAccount.automountServiceAccountToken Automount service account token for the server service account
   ##
   automountServiceAccountToken: false
-## Prometheus metrics
-##
+
+## @section Prometheus metrics parameters
+
 metrics:
   ## @param metrics.enabled Enable the export of Prometheus metrics
   ##
   enabled: false
-  ## @param metrics.podAnnotations [object] Annotations for metrics scraping
+  ## @param metrics.podAnnotations Pod annotations for enabling Prometheus to access the metrics endpoint
   ##
-  podAnnotations:
-    prometheus.io/scrape: "true"
-    prometheus.io/port: "{{ .Values.containerPorts.metrics }}"
+  podAnnotations: {}
   ## Prometheus Operator ServiceMonitor configuration
   ##
   serviceMonitor:
@@ -1126,103 +1543,20 @@ metrics:
     ##
     additionalLabels: {}
     ## @param metrics.prometheusRule.rules PrometheusRule definitions
-    ##  - alert: ClickhouseServerRestart
+    ##  - alert: ClickHouseServerRestart
     ##    annotations:
-    ##      message: Clickhouse-server started recently
+    ##      message: ClickHouse server started recently
     ##    expr: ClickHouseAsyncMetrics_Uptime > 1 < 180
     ##    for: 5m
     ##    labels:
     ##      severity: warning
     rules: []
-## @section External Zookeeper paramaters
+
+## @section External ClickHouse Keeper / Zookeeper parameters
 ##
 externalZookeeper:
-  ## @param externalZookeeper.servers List of external zookeeper servers to use
-  ## @param externalZookeeper.port Port of the Zookeeper servers
+  ## @param externalZookeeper.servers List of external ClickHouse Keeper / Zookeeper servers to use
+  ## @param externalZookeeper.port Port of the ClickHouse Keeper / Zookeeper servers
   ##
   servers: []
   port: 2888
-## @section Zookeeper subchart parameters
-##
-## @param zookeeper.enabled Deploy Zookeeper subchart
-## @param zookeeper.replicaCount Number of Zookeeper instances
-## @param zookeeper.service.ports.client Zookeeper client port
-##
-zookeeper:
-  enabled: true
-  replicaCount: 3
-  service:
-    ports:
-      client: 2181
-  ## ZooKeeper resource requests and limits
-  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param zookeeper.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
-  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
-  ##
-  resourcesPreset: "micro"
-  ## @param zookeeper.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
-  ## Example:
-  ## resources:
-  ##   requests:
-  ##     cpu: 2
-  ##     memory: 512Mi
-  ##   limits:
-  ##     cpu: 3
-  ##     memory: 1024Mi
-  ##
-  resources: {}
-## @section Network Policies
-## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
-##
-networkPolicy:
-  ## @param networkPolicy.enabled Specifies whether a NetworkPolicy should be created
-  ##
-  enabled: true
-  ## @param networkPolicy.allowExternal Don't require client label for connections
-  ## The Policy model to apply. When set to false, only pods with the correct
-  ## client label will have network access to the ports Clickhouse is listening
-  ## on. When true, Clickhouse will accept connections from any source
-  ## (with the correct destination port).
-  ##
-  allowExternal: true
-  ## @param networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
-  ##
-  allowExternalEgress: true
-  ## @param networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
-  ## e.g:
-  ## extraIngress:
-  ##   - ports:
-  ##       - port: 1234
-  ##     from:
-  ##       - podSelector:
-  ##           - matchLabels:
-  ##               - role: frontend
-  ##       - podSelector:
-  ##           - matchExpressions:
-  ##               - key: role
-  ##                 operator: In
-  ##                 values:
-  ##                   - frontend
-  extraIngress: []
-  ## @param networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
-  ## e.g:
-  ## extraEgress:
-  ##   - ports:
-  ##       - port: 1234
-  ##     to:
-  ##       - podSelector:
-  ##           - matchLabels:
-  ##               - role: frontend
-  ##       - podSelector:
-  ##           - matchExpressions:
-  ##               - key: role
-  ##                 operator: In
-  ##                 values:
-  ##                   - frontend
-  ##
-  extraEgress: []
-  ## @param networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
-  ## @param networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
-  ##
-  ingressNSMatchLabels: {}
-  ingressNSPodMatchLabels: {}

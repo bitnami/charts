@@ -1,8 +1,12 @@
 # Changelog
 
-## 24.5.4 (2025-04-13)
+## 24.5.5 (2025-04-13)
 
-* [bitnami/keycloak] Release 24.5.4 ([#32980](https://github.com/bitnami/charts/pull/32980))
+* [bitnami/keycloak] Release 24.5.5 ([#32980](https://github.com/bitnami/charts/pull/32980))
+
+## 24.5.4 (2025-04-15)
+
+* [bitnami/keycloak] bugfix: add prefix on projected db secret keys ([#33004](https://github.com/bitnami/charts/pull/33004))
 
 ## <small>24.5.3 (2025-04-11)</small>
 

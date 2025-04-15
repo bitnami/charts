@@ -28,22 +28,19 @@ In order to replicate the container startup scripts execute this command:
 
 ClickHouse is available in the following address:
 
-{{- if .Values.externalAccess.enabled }}
+{{- if eq "LoadBalancer" .Values.service.type }}
 
 NOTE: It may take a few minutes for the LoadBalancer IP to be available.
 
     kubectl get svc --namespace {{ template "common.names.namespace" . }} -l "app.kubernetes.io/name={{ template "common.names.fullname" . }},app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=clickhouse" -w
-
-{{- else if (eq "LoadBalancer" .Values.service.type) }}
-
     export SERVICE_IP=$(kubectl get svc --namespace {{ template "common.names.namespace" . }} {{ template "common.names.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
 
-{{- else if (eq "NodePort" .Values.service.type)}}
+{{- else if eq "NodePort" .Values.service.type }}
 
     export NODE_IP=$(kubectl get nodes --namespace {{ template "common.names.namespace" . }} -o jsonpath="{.items[0].status.addresses[0].address}")
     export NODE_PORT=$(kubectl get --namespace {{ template "common.names.namespace" . }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "common.names.fullname" . }})
 
-{{- else if (eq "ClusterIP" .Values.service.type)}}
+{{- else if eq "ClusterIP" .Values.service.type }}
 
     kubectl port-forward --namespace {{ template "common.names.namespace" . }} svc/{{ template "common.names.fullname" . }} {{ .Values.service.ports.tcp }}:9000 &
 
@@ -51,13 +48,22 @@ NOTE: It may take a few minutes for the LoadBalancer IP to be available.
 
 Credentials:
 
-    echo "Username      : {{ .Values.auth.username }}"
-    echo "Password      : $(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "clickhouse.secretName" . }} -o jsonpath="{.data.{{ include "clickhouse.secretKey" .}}}" | base64 -d)"
+    echo "Username: {{ .Values.auth.username }}"
+    echo "Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "clickhouse.secretName" . }} -o jsonpath="{.data.{{ include "clickhouse.secretKey" .}}}" | base64 -d)"
 
 {{- end }}
 
 {{- include "common.warnings.rollingTag" .Values.image }}
+{{- include "common.warnings.rollingTag" .Values.keeper.image }}
+{{- include "common.warnings.rollingTag" .Values.defaultInitContainers.volumePermissions.image }}
 {{- include "clickhouse.validateValues" . }}
-{{- include "common.warnings.resources" (dict "sections" (list "" "volumePermissions") "context" $) }}
-{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.volumePermissions.image) "context" $) }}
-{{- include "common.errors.insecureImages" (dict "images" (list .Values.image .Values.volumePermissions.image) "context" $) }}
+{{- $resourcesSections := list "" }}
+{{- if .Values.keeper.enabled }}
+  {{- $resourcesSections = append $resourcesSections "keeper" }}
+{{- end }}
+{{- if .Values.defaultInitContainers.volumePermissions.enabled }}
+  {{- $resourcesSections = append $resourcesSections "defaultInitContainers.volumePermissions" }}
+{{- end }}
+{{- include "common.warnings.resources" (dict "sections" $resourcesSections "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.keeper.image .Values.defaultInitContainers.volumePermissions.image) "context" $) }}
+{{- include "common.errors.insecureImages" (dict "images" (list .Values.image .Values.keeper.image .Values.defaultInitContainers.volumePermissions.image) "context" $) }}

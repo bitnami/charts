@@ -1,8 +1,12 @@
 # Changelog
 
-## 20.11.5 (2025-03-26)
+## 20.12.0 (2025-04-12)
 
-* [bitnami/redis] Handle SIGTERM in `kubectl-shared` container ([#32085](https://github.com/bitnami/charts/pull/32085))
+* [bitnami/redis] Support retrieving Redis ACL user passwords from Kubernetes Secrets  ([#32434](https://github.com/bitnami/charts/pull/32434))
+
+## <small>20.11.5 (2025-04-09)</small>
+
+* [bitnami/redis] Handle SIGTERM in `kubectl-shared` container (#32085) ([dad454d](https://github.com/bitnami/charts/commit/dad454d7912fa3328dd1ba528d3be370d6c00342)), closes [#32085](https://github.com/bitnami/charts/issues/32085)
 
 ## <small>20.11.4 (2025-03-22)</small>
 

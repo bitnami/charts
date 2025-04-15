@@ -1,8 +1,17 @@
 # Changelog
 
-## 8.1.5 (2025-03-21)
+## 9.0.1 (2025-04-14)
 
-* [bitnami/jupyterhub] Release 8.1.5 ([#32553](https://github.com/bitnami/charts/pull/32553))
+* [bitnami/jupyterhub] Update jupyterhub_config.py and z2hj.py ([#32991](https://github.com/bitnami/charts/pull/32991))
+
+## 9.0.0 (2025-04-14)
+
+* [bitnami/jupyterhub] Release 9.0.0 (#32989) ([c9f5654](https://github.com/bitnami/charts/commit/c9f5654d04847f65d61db4cd07266d831df7f127)), closes [#32989](https://github.com/bitnami/charts/issues/32989)
+
+## <small>8.1.5 (2025-03-21)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/jupyterhub] Release 8.1.5 (#32553) ([997d302](https://github.com/bitnami/charts/commit/997d302643d3c2f5aee2f3dceb9bcf989efe80ec)), closes [#32553](https://github.com/bitnami/charts/issues/32553)
 
 ## <small>8.1.4 (2025-02-19)</small>
 

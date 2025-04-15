@@ -254,6 +254,7 @@ spec:
               mountPath: /etc/core/auth-ca/auth-ca.crt
               subPath: auth-ca.crt
             {{- end }}
+            {{- include "harbor.redis.caVolumeMount" . | nindent 12 }}
             {{- if .Values.internalTLS.caBundleSecret }}
             {{- include "harbor.caBundleVolumeMount" . | nindent 12 }}
             {{- end }}
@@ -321,6 +322,7 @@ spec:
               - key: ca.crt
                 path: auth-ca.crt
         {{- end }}
+      {{- include "harbor.redis.caVolume" . | nindent 8 }}
       {{- if .Values.core.extraVolumes }}
       {{- include "common.tplvalues.render" (dict "value" .Values.core.extraVolumes "context" $) | nindent 8 }}
       {{- end }}
