@@ -1,8 +1,12 @@
 # Changelog
 
+## 21.5.1 (2025-04-15)
+
+* [bitnami/elasticsearch] Release 21.5.1 ([#33016](https://github.com/bitnami/charts/pull/33016))
+
 ## 21.5.0 (2025-04-04)
 
-* [bitnami/elasticsearch] Set `usePasswordFiles=true` by default ([#32344](https://github.com/bitnami/charts/pull/32344))
+* [bitnami/elasticsearch] Set `usePasswordFiles=true` by default (#32344) ([3ab212e](https://github.com/bitnami/charts/commit/3ab212e680be626360e561dd6eab6e324b557834)), closes [#32344](https://github.com/bitnami/charts/issues/32344)
 
 ## <small>21.4.9 (2025-03-25)</small>
 
