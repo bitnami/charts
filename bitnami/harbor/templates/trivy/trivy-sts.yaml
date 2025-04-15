@@ -237,7 +237,7 @@ spec:
         - name: data
           emptyDir: {}
       {{- end }}
-      {{- include "harbor.redis.caVolumeMount" . | nindent 8 }}
+      {{- include "harbor.redis.caVolume" . | nindent 8 }}
       {{- if .Values.trivy.extraVolumes }}
       {{- include "common.tplvalues.render" (dict "value" .Values.trivy.extraVolumes "context" $) | nindent 8 }}
       {{- end }}
