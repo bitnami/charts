@@ -113,7 +113,7 @@ extraDeploy:
           - '::/0'
       zookeeper:
         nodes:
-          - host: chk-test-cluster
+          - host: chk-vib-vib
             port: 2181
       clusters:
         - name: vib
@@ -217,7 +217,7 @@ extraDeploy:
 - apiVersion: v1
   kind: Service
   metadata:
-    name: chk-test-cluster
+    name: chk-vib-vib
     labels:
       clickhouse-keeper.altinity.com/chk: test
       clickhouse-keeper.altinity.com/cluster: cluster
