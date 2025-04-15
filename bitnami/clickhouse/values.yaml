@@ -1548,8 +1548,9 @@ metrics:
     ##      severity: warning
     rules: []
 
+## @param sampling.enabled Enable logging tables collected by sampling query profiler
+##
 sampling:
-  # Enables log tables collected by the sampling query profiler.
   enabled: false
 
 ## @section External ClickHouse Keeper / Zookeeper parameters
