@@ -311,9 +311,9 @@ Return whether Redis&reg; uses password authentication or not
 {{/* Get Redis secret with the CA certificate */}}
 {{- define "harbor.redis.caSecretName" -}}
   {{- if and .Values.redis.enabled .Values.redis.tls.enabled .Values.redis.tls.existingSecret -}}
-    {{- print .Values.redis.tls.existingSecret -}}
+    {{- print (tpl .Values.redis.tls.existingSecret .) -}}
   {{- else if and .Values.externalRedis .Values.externalRedis.tls.enabled .Values.externalRedis.tls.existingSecret -}}
-    {{- print .Values.externalRedis.tls.existingSecret -}}
+    {{- print (tpl .Values.externalRedis.tls.existingSecret .) -}}
   {{- else -}}
     {{- printf "%s-crt" (include "harbor.redis.fullname" .) -}}
   {{- end -}}
@@ -322,9 +322,9 @@ Return whether Redis&reg; uses password authentication or not
 {{/* Get key in Redis secret with the CA certificate */}}
 {{- define "harbor.redis.caFileName" -}}
   {{- if and .Values.redis.enabled .Values.redis.tls.enabled .Values.redis.tls.certCAFilename -}}
-    {{- print .Values.redis.tls.certCAFilename -}}
+    {{- print (tpl .Values.redis.tls.certCAFilename .) -}}
   {{- else if and .Values.externalRedis .Values.externalRedis.tls.enabled .Values.externalRedis.tls.certCAFilename -}}
-    {{- print .Values.externalRedis.tls.certCAFilename -}}
+    {{- print (tpl .Values.externalRedis.tls.certCAFilename .) -}}
   {{- else -}}
     {{- print "ca.crt" -}}
   {{- end -}}
