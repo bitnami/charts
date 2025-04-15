@@ -56,6 +56,7 @@ rules:
     resources:
       - endpoints
     verbs:
+      - get
       - list
       - watch
   - apiGroups:
@@ -65,6 +66,7 @@ rules:
     verbs:
       - create
       - delete
+      - deletecollection
       - get
       - list
       - patch
@@ -114,6 +116,7 @@ rules:
       - update
   - apiGroups:
       - extensions
+      - networking.k8s.io
     resources:
       - ingresses
     verbs:
@@ -133,72 +136,10 @@ rules:
       - list
       - watch
   - apiGroups:
-      - networking.k8s.io
-    resources:
-      - ingresses
-    verbs:
-      - create
-      - delete
-      - get
-      - list
-      - patch
-      - update
-      - watch
-  - apiGroups:
       - ray.io
     resources:
       - rayclusters
-    verbs:
-      - create
-      - delete
-      - get
-      - list
-      - patch
-      - update
-      - watch
-  - apiGroups:
-      - ray.io
-    resources:
-      - rayclusters/finalizers
-    verbs:
-      - update
-  - apiGroups:
-      - ray.io
-    resources:
-      - rayclusters/status
-    verbs:
-      - get
-      - patch
-      - update
-  - apiGroups:
-      - ray.io
-    resources:
       - rayjobs
-    verbs:
-      - create
-      - delete
-      - get
-      - list
-      - patch
-      - update
-      - watch
-  - apiGroups:
-      - ray.io
-    resources:
-      - rayjobs/finalizers
-    verbs:
-      - update
-  - apiGroups:
-      - ray.io
-    resources:
-      - rayjobs/status
-    verbs:
-      - get
-      - patch
-      - update
-  - apiGroups:
-      - ray.io
-    resources:
       - rayservices
     verbs:
       - create
@@ -211,12 +152,16 @@ rules:
   - apiGroups:
       - ray.io
     resources:
+      - rayclusters/finalizers
+      - rayjobs/finalizers
       - rayservices/finalizers
     verbs:
       - update
   - apiGroups:
       - ray.io
     resources:
+      - rayclusters/status
+      - rayjobs/status
       - rayservices/status
     verbs:
       - get
