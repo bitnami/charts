@@ -228,7 +228,7 @@ spec:
           {{- end }}
             - name: configd-configuration
               mountPath: /bitnami/clickhouse/etc/config.d
-          {{- if or $.Values.usersdFiles $.Values.existingUsersdConfigmap }}
+          {{- if or $.Values.usersdFiles $.Values.existingUsersdConfigmap $.Values.existingUsersdSecret }}
             - name: usersd-configuration-configuration
               mountPath: /bitnami/clickhouse/etc/users.d
           {{- end }}
@@ -282,10 +282,18 @@ spec:
         - name: configd-configuration
           configMap:
             name: {{ template "clickhouse.configd.configmapName" $ }}
-        {{- if or $.Values.usersdFiles $.Values.existingUsersdConfigmap }}
+        {{- if or $.Values.usersdFiles $.Values.existingUsersdConfigmap $.Values.existingUsersdSecret }}
         - name: usersd-configuration-configuration
-          configMap:
-            name: {{ template "clickhouse.usersd.configmapName" $ }}
+          projected:
+            sources:
+              {{- if $.Values.existingUsersdSecret }}
+              - secret:
+                  name: {{ tpl $.Values.existingUsersdSecret $ }}
+              {{- end }}
+              {{- if or $.Values.usersdFiles $.Values.existingUsersdConfigmap }}
+              - configMap:
+                  name: {{ template "clickhouse.usersd.configmapName" $ }}
+              {{- end }}
         {{- end }}
         {{- if $.Values.usePasswordFiles }}
         - name: secrets

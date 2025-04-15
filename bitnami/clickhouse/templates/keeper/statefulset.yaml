@@ -184,7 +184,7 @@ spec:
             - name: configd-configuration
               mountPath: /bitnami/clickhouse-keeper/etc/keeper_config.d
             {{- end }}
-            {{- if or .Values.keeper.usersdFiles .Values.keeper.existingUsersdConfigmap }}
+            {{- if or .Values.keeper.usersdFiles .Values.keeper.existingUsersdConfigmap .Values.keeper.existingUsersdSecret }}
             - name: usersd-configuration-configuration
               mountPath: /bitnami/clickhouse-keeper/etc/users.d
             {{- end }}
@@ -219,10 +219,18 @@ spec:
           configMap:
             name: {{ template "clickhouse.keeper.configd.configmapName" . }}
         {{- end }}
-        {{- if or .Values.keeper.usersdFiles .Values.keeper.existingUsersdConfigmap }}
+        {{- if or .Values.keeper.usersdFiles .Values.keeper.existingUsersdConfigmap .Values.keeper.existingUsersdSecret }}
         - name: usersd-configuration-configuration
-          configMap:
-            name: {{ template "clickhouse.keeper.usersd.configmapName" . }}
+          projected:
+            sources:
+              {{- if .Values.keeper.existingUsersdSecret }}
+              - secret:
+                  name: {{ tpl .Values.keeper.existingUsersdSecret . }}
+              {{- end }}
+              {{- if or .Values.keeper.usersdFiles .Values.keeper.existingUsersdConfigmap }}
+              - configMap:
+                  name: {{ template "clickhouse.keeper.usersd.configmapName" . }}
+              {{- end }}
         {{- end }}
         {{- if .Values.keeper.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.keeper.extraVolumes "context" .) | nindent 8 }}

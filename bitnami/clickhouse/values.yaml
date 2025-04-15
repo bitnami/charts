@@ -254,6 +254,9 @@ usersdFiles: {}
 ## @param existingUsersdConfigmap The name of an existing ConfigMap with extra users configuration files for ClickHouse
 ##
 existingUsersdConfigmap: ""
+## @param existingUsersdSecret The name of an existing Secret with extra users configuration files for ClickHouse
+##
+existingUsersdSecret: ""
 ## @param initdbScripts Dictionary of initdb scripts
 ## Specify dictionary of scripts to be run at first boot
 ## Example:
@@ -977,6 +980,9 @@ keeper:
   ## @param keeper.existingUsersdConfigmap The name of an existing ConfigMap with extra users configuration files for ClickHouse Keeper
   ##
   existingUsersdConfigmap: ""
+  ## @param keeper.existingUsersdSecret The name of an existing Secret with extra users configuration files for ClickHouse Keeper
+  ##
+  existingUsersdSecret: ""
   ## @param keeper.containerPorts.tcp ClickHouse Keeper TCP container port
   ## @param keeper.containerPorts.raft ClickHouse Keeper Raft container port
   ##
