@@ -3933,9 +3933,9 @@ redis:
 ## @param externalRedis.jobserviceDatabaseIndex Index for jobservice database
 ## @param externalRedis.registryDatabaseIndex Index for registry database
 ## @param externalRedis.trivyAdapterDatabaseIndex Index for trivy adapter database
-## @param externalRedis.tls.enabled Enable TLS traffic
-## @param externalRedis.tls.existingSecret The name of the existing secret that contains the TLS certificates
-## @param externalRedis.tls.certCAFilename Name of key in existing secret for the CA certificate
+## @param externalRedis.tls.enabled Enable Redis TLS traffic
+## @param externalRedis.tls.existingSecret The name of the existing secret that contains the Redis TLS certificates
+## @param externalRedis.tls.certCAFilename Name of key in existing secret for the Redis CA certificate
 ##
 externalRedis:
   host: localhost
