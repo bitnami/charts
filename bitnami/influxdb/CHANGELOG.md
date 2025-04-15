@@ -1,8 +1,12 @@
 # Changelog
 
-## 6.6.4 (2025-04-14)
+## 6.6.5 (2025-04-15)
 
-* [bitnami/influxdb] fix invalid template syntax ([#33001](https://github.com/bitnami/charts/pull/33001))
+* [bitnami/influxdb] Release 6.6.5 ([#33009](https://github.com/bitnami/charts/pull/33009))
+
+## <small>6.6.4 (2025-04-15)</small>
+
+* [bitnami/influxdb] fix invalid template syntax (#33001) ([3fb2db6](https://github.com/bitnami/charts/commit/3fb2db63a542daaa83a04520df4505f3f86e4cb6)), closes [#33001](https://github.com/bitnami/charts/issues/33001)
 
 ## <small>6.6.3 (2025-04-14)</small>
 
