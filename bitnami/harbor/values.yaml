@@ -3881,7 +3881,7 @@ externalDatabase:
 redis:
   enabled: true
   tls:
-    ## Redis TLS configuration
+    ## Redis TLS configuration
     enabled: false
     # Please note that Mutual TLS is not supported by Harbor.
     authClients: false
