@@ -1548,6 +1548,10 @@ metrics:
     ##      severity: warning
     rules: []
 
+sampling:
+  # Enables log tables collected by the sampling query profiler.
+  enabled: false
+
 ## @section External ClickHouse Keeper / Zookeeper parameters
 ##
 externalZookeeper:
