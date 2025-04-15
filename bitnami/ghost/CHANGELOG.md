@@ -1,8 +1,12 @@
 # Changelog
 
-## 22.2.12 (2025-04-11)
+## 22.2.13 (2025-04-15)
 
-* [bitnami/ghost] Release 22.2.12 ([#32978](https://github.com/bitnami/charts/pull/32978))
+* [bitnami/ghost] Release 22.2.13 ([#33021](https://github.com/bitnami/charts/pull/33021))
+
+## <small>22.2.12 (2025-04-11)</small>
+
+* [bitnami/ghost] Release 22.2.12 (#32978) ([d4559af](https://github.com/bitnami/charts/commit/d4559af429c3c39b03cd8144d5de083339d74c31)), closes [#32978](https://github.com/bitnami/charts/issues/32978)
 
 ## <small>22.2.11 (2025-04-11)</small>
 
