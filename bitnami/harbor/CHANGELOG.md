@@ -2,7 +2,7 @@
 
 ## 24.6.0 (2025-04-15)
 
-* [bitnami/harbor] feat(readis tls): Add support for TLS in redis client ([#32999](https://github.com/bitnami/charts/pull/32999))
+* [bitnami/harbor] feat(redis tls): Support connecting to SSL/TLS Redis endpoints ([#32999](https://github.com/bitnami/charts/pull/32999))
 
 ## <small>24.5.1 (2025-04-11)</small>
 
