@@ -1,8 +1,12 @@
 # Changelog
 
-## 32.1.3 (2025-04-01)
+## 32.2.0 (2025-04-07)
 
-* [bitnami/kafka] bugfix: recompute secret checksum on Kafka kraft secret changes ([#32692](https://github.com/bitnami/charts/pull/32692))
+* [bitnami/kafka] add topologyKey value ([#32792](https://github.com/bitnami/charts/pull/32792))
+
+## <small>32.1.3 (2025-04-01)</small>
+
+* [bitnami/kafka] bugfix: recompute secret checksum on Kafka kraft secret changes (#32692) ([773b6c5](https://github.com/bitnami/charts/commit/773b6c541ec64473e68a74996717eb266de41faa)), closes [#32692](https://github.com/bitnami/charts/issues/32692)
 
 ## <small>32.1.2 (2025-03-27)</small>
 
