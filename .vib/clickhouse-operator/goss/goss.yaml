@@ -22,7 +22,7 @@ file:
     exists: true
     filetype: symlink
     contents:
-      - /chk-vib-vib-0-0/
+      - /chk-vib-vib/
   /opt/bitnami/clickhouse/etc/users.d/chop-generated-users.xml:
     exists: true
     filetype: symlink
