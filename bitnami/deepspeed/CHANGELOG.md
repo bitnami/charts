@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.3.8 (2025-03-28)
+## 2.3.9 (2025-04-16)
 
-* [bitnami/deepspeed] Release 2.3.8 ([#32656](https://github.com/bitnami/charts/pull/32656))
+* [bitnami/deepspeed] Release 2.3.9 ([#33043](https://github.com/bitnami/charts/pull/33043))
+
+## <small>2.3.8 (2025-03-28)</small>
+
+* [bitnami/deepspeed] Release 2.3.8 (#32656) ([6799cb5](https://github.com/bitnami/charts/commit/6799cb55b92bc05e3022e07f0c5de52d89aebed8)), closes [#32656](https://github.com/bitnami/charts/issues/32656)
 
 ## <small>2.3.7 (2025-03-27)</small>
 
