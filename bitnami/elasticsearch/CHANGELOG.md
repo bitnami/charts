@@ -1,8 +1,12 @@
 # Changelog
 
-## 21.5.1 (2025-04-08)
+## 21.5.2 (2025-04-16)
 
 * [bitnami/elasticsearch] fix coordinating security.enabled ([#32840](https://github.com/bitnami/charts/pull/32840))
+
+## 21.5.1 (2025-04-15)
+
+* [bitnami/elasticsearch] Release 21.5.1 ([#33016](https://github.com/bitnami/charts/pull/33016))
 
 ## 21.5.0 (2025-04-04)
 
