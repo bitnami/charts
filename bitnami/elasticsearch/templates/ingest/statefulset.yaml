@@ -85,7 +85,7 @@ spec:
       {{- end }}
       {{- if or .Values.initContainers .Values.ingest.initContainers (and  .Values.enableDefaultInitContainers (or .Values.security.enabled .Values.sysctlImage.enabled)) }}
       initContainers:
-        {{- if and .Values.sysctlImage.enabled (default true .Values.enableDefaultInitContainers) }}
+        {{- if and .Values.sysctlImage.enabled .Values.enableDefaultInitContainers }}
         ## Image that performs the sysctl operation to modify Kernel settings (needed sometimes to avoid boot errors)
         - name: sysctl
           image: {{ include "elasticsearch.sysctl.image" . }}
@@ -105,7 +105,7 @@ spec:
           resources: {{- include "common.resources.preset" (dict "type" .Values.sysctlImage.resourcesPreset) | nindent 12 }}
           {{- end }}
         {{- end }}
-        {{- if and .Values.security.enabled (default true .Values.enableDefaultInitContainers) }}
+        {{- if and .Values.security.enabled .Values.enableDefaultInitContainers }}
         - name: copy-tls-certificates
           image: {{ include "elasticsearch.copyTlsCerts.image" . }}
           imagePullPolicy: {{ .Values.copyTlsCerts.image.pullPolicy | quote }}
