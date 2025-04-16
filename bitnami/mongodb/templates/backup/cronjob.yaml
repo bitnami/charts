@@ -120,15 +120,20 @@ spec:
             image: {{ include "mongodb.image" . }}
             imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
             env:
-            {{- if .Values.auth.enabled }}
+              {{- if .Values.auth.enabled }}
               - name: MONGODB_ROOT_USER
                 value: {{ .Values.auth.rootUser | quote }}
+              {{- if .Values.usePasswordFiles }}
+              - name: MONGODB_ROOT_PASSWORD_FILE
+                value: "/opt/bitnami/mongodb/secrets/mongodb-root-password"
+              {{- else }}
               - name: MONGODB_ROOT_PASSWORD
                 valueFrom:
                   secretKeyRef:
                     name: {{ include "mongodb.secretName" . }}
                     key: mongodb-root-password
-            {{- end }}
+              {{- end }}
+              {{- end }}
               - name: MONGODB_SERVICE_NAME
                 value: {{ include "mongodb.service.nameOverride" . }}
               - name: MONGODB_PORT_NUMBER
@@ -145,7 +150,11 @@ spec:
             command:
               - /bin/sh
               - -c
-              - "mongodump {{- if .Values.auth.enabled }} --username=${MONGODB_ROOT_USER} --password=${MONGODB_ROOT_PASSWORD} --authenticationDatabase=admin {{- end }} --host=${MONGODB_SERVICE_NAME} --port=${MONGODB_PORT_NUMBER} ${MONGODB_CLIENT_EXTRA_FLAGS} {{- if (eq $.Values.architecture "replicaset") }}--oplog{{- end }} --gzip --archive=${MONGODUMP_DIR}/mongodump-$(date '+%Y-%m-%d-%H-%M').gz"
+              - |
+                {{- if and .Values.auth.enabled .Values.usePasswordFiles }}
+                export MONGODB_ROOT_PASSWORD="$(< $MONGODB_ROOT_PASSWORD_FILE)"
+                {{- end }}
+                mongodump {{- if .Values.auth.enabled }} --username=${MONGODB_ROOT_USER} --password=${MONGODB_ROOT_PASSWORD} --authenticationDatabase=admin {{- end }} --host=${MONGODB_SERVICE_NAME} --port=${MONGODB_PORT_NUMBER} ${MONGODB_CLIENT_EXTRA_FLAGS} {{- if (eq $.Values.architecture "replicaset") }}--oplog{{- end }} --gzip --archive=${MONGODUMP_DIR}/mongodump-$(date '+%Y-%m-%d-%H-%M').gz
             {{- end }}
             {{- if .Values.backup.cronjob.resources }}
             resources: {{- include "common.tplvalues.render" (dict "value" .Values.backup.cronjob.resources "context" $) | nindent 14 }}
@@ -156,6 +165,10 @@ spec:
               - name: empty-dir
                 mountPath: /tmp
                 subPath: tmp-dir
+              {{- if and .Values.usePasswordFiles .Values.auth.enabled }}
+              - name: mongodb-secrets
+                mountPath: /opt/bitnami/mongodb/secrets
+              {{- end }}
               {{- if .Values.tls.enabled }}
               - name: certs
                 mountPath: /certs
@@ -182,6 +195,11 @@ spec:
               configMap:
                 name: {{ printf "%s-common-scripts" (include "mongodb.fullname" .) }}
                 defaultMode: 0o550
+            {{- if and .Values.usePasswordFiles .Values.auth.enabled }}
+            - name: mongodb-secrets
+              secret:
+                secretName: {{ include "mongodb.secretName" . }}
+            {{- end }}
             {{- if .Values.tls.enabled }}
             - name: certs
               emptyDir: {}

@@ -63,6 +63,9 @@ commonAnnotations: {}
 ## Useful when including ZooKeeper as a chart dependency, so it can be released into a different namespace than the parent
 ##
 namespaceOverride: ""
+## @param usePasswordFiles Mount credentials as files instead of using environment variables
+##
+usePasswordFiles: true
 ## Enable diagnostic mode in the statefulset
 ##
 diagnosticMode:
@@ -221,7 +224,7 @@ dataLogDir: ""
 ## @param configuration Configure ZooKeeper with a custom zoo.cfg file
 ## e.g:
 ## configuration: |-
-##   deploy-working-dir=/bitnami/geode/data
+##   deploy-working-dir=/bitnami/zookeeper/data
 ##   log-level=info
 ##   ...
 ##

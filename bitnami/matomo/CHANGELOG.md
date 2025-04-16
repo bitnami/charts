@@ -1,8 +1,16 @@
 # Changelog
 
-## 9.3.0 (2025-03-27)
+## 9.3.2 (2025-04-09)
 
-* [bitnami/matomo] Set `usePasswordFiles=true` by default ([#32363](https://github.com/bitnami/charts/pull/32363))
+* [bitnami/matomo] Adds matomo-secrets volume to matomo-archive cronjob ([#32924](https://github.com/bitnami/charts/pull/32924))
+
+## <small>9.3.1 (2025-04-09)</small>
+
+* [bitnami/matomo] Add missing `app.kubernetes.io/component` label to deployment and pdb (#32774) ([eacfbe1](https://github.com/bitnami/charts/commit/eacfbe1d77a27ad59168aef51ddcf7a2c220dea8)), closes [#32774](https://github.com/bitnami/charts/issues/32774)
+
+## 9.3.0 (2025-03-31)
+
+* [bitnami/matomo] Set `usePasswordFiles=true` by default (#32363) ([ceca10c](https://github.com/bitnami/charts/commit/ceca10c0dcd20d46bebf5f3fd9abea9b7a4144ef)), closes [#32363](https://github.com/bitnami/charts/issues/32363)
 
 ## <small>9.2.7 (2025-03-24)</small>
 

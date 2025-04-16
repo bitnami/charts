@@ -1,8 +1,17 @@
 # Changelog
 
-## 12.3.2 (2025-03-22)
+## 12.3.4 (2025-04-15)
 
-* [bitnami/mysql] Release 12.3.2 ([#32558](https://github.com/bitnami/charts/pull/32558))
+* [bitnami/mysql] Release 12.3.4 ([#33017](https://github.com/bitnami/charts/pull/33017))
+
+## <small>12.3.3 (2025-04-09)</small>
+
+* [bitnami/mysql]  Allow setting externalIPs for services (#32858) ([a9077e0](https://github.com/bitnami/charts/commit/a9077e0501cbc9f4460b91866ced3bd4d789ecff)), closes [#32858](https://github.com/bitnami/charts/issues/32858)
+
+## <small>12.3.2 (2025-03-22)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/mysql] Release 12.3.2 (#32558) ([6070eb2](https://github.com/bitnami/charts/commit/6070eb2d51c4200b3ecdf5e8f30c2742501fde6f)), closes [#32558](https://github.com/bitnami/charts/issues/32558)
 
 ## <small>12.3.1 (2025-03-06)</small>
 

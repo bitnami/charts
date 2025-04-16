@@ -1,8 +1,16 @@
 # Changelog
 
-## 1.7.2 (2025-04-04)
+## 1.7.4 (2025-04-14)
 
-* [bitnami/vault] Release 1.7.2 ([#32819](https://github.com/bitnami/charts/pull/32819))
+* [bitnami/vault] bugfix: enable back server.replicaCount parameter ([#32992](https://github.com/bitnami/charts/pull/32992))
+
+## <small>1.7.3 (2025-04-09)</small>
+
+* [bitnami/vault] Release 1.7.3 (#32919) ([32020c1](https://github.com/bitnami/charts/commit/32020c1a7047c5717374c972e6ca755545477650)), closes [#32919](https://github.com/bitnami/charts/issues/32919)
+
+## <small>1.7.2 (2025-04-04)</small>
+
+* [bitnami/vault] Release 1.7.2 (#32819) ([79a15c6](https://github.com/bitnami/charts/commit/79a15c68659a535de55bdcaffb37824fd844af6e)), closes [#32819](https://github.com/bitnami/charts/issues/32819)
 
 ## <small>1.7.1 (2025-04-02)</small>
 

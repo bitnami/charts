@@ -86,7 +86,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/nginx
-  tag: 1.27.4-debian-12-r6
+  tag: 1.27.4-debian-12-r9
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -103,6 +103,9 @@ image:
   ## Set to true if you would like to see extra information on logs
   ##
   debug: false
+## @param enableDefaultInitContainers If set to false, disable all init containers except user-defined at `initContainer`.
+##
+enableDefaultInitContainers: true
 ## @param automountServiceAccountToken Mount Service Account token in pod
 ##
 automountServiceAccountToken: false
@@ -513,7 +516,7 @@ cloneStaticSiteFromGit:
   image:
     registry: docker.io
     repository: bitnami/git
-    tag: 2.48.1-debian-12-r9
+    tag: 2.49.0-debian-12-r4
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -954,7 +957,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/nginx-exporter
-    tag: 1.4.1-debian-12-r9
+    tag: 1.4.1-debian-12-r13
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
