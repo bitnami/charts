@@ -1,8 +1,20 @@
 # Changelog
 
-## 8.0.9 (2025-04-07)
+## 9.1.0 (2025-04-15)
 
-* [bitnami/clickhouse] Release 8.0.9 ([#32838](https://github.com/bitnami/charts/pull/32838))
+* [bitnami/clickhouse] Stops unnecessary logging ([#32988](https://github.com/bitnami/charts/pull/32988))
+
+## 9.0.0 (2025-04-15)
+
+* [bitnami/clickhouse] feat: replace ZooKeeper with ClickHouse Keeper (#32958) ([d526c9a](https://github.com/bitnami/charts/commit/d526c9a5b91e206e3c00f944c80178c1cf6ccd34)), closes [#32958](https://github.com/bitnami/charts/issues/32958)
+
+## <small>8.0.10 (2025-04-09)</small>
+
+* [bitnami/clickhouse] Release 8.0.10 (#32898) ([c52bca4](https://github.com/bitnami/charts/commit/c52bca4a603ab3072d5d4ecbb36a341f44c67332)), closes [#32898](https://github.com/bitnami/charts/issues/32898)
+
+## <small>8.0.9 (2025-04-07)</small>
+
+* [bitnami/clickhouse] Release 8.0.9 (#32838) ([1ba3356](https://github.com/bitnami/charts/commit/1ba33566f406b8e52287c8123f2289a97fcd28fd)), closes [#32838](https://github.com/bitnami/charts/issues/32838)
 
 ## <small>8.0.8 (2025-03-28)</small>
 

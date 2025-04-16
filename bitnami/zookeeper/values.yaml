@@ -224,7 +224,7 @@ dataLogDir: ""
 ## @param configuration Configure ZooKeeper with a custom zoo.cfg file
 ## e.g:
 ## configuration: |-
-##   deploy-working-dir=/bitnami/geode/data
+##   deploy-working-dir=/bitnami/zookeeper/data
 ##   log-level=info
 ##   ...
 ##

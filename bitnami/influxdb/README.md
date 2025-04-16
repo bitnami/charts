@@ -198,6 +198,7 @@ There are K8s distribution, such as OpenShift, where you can dynamically define 
 | `kubeVersion`            | Force target Kubernetes version (using Helm capabilities if not set)                                  | `""`            |
 | `nameOverride`           | String to partially override influxdb.fullname template with a string (will prepend the release name) | `""`            |
 | `fullnameOverride`       | String to fully override influxdb.fullname template with a string                                     | `""`            |
+| `namespaceOverride`      | String to fully override common.names.namespace                                                       | `""`            |
 | `clusterDomain`          | Default Kubernetes cluster domain                                                                     | `cluster.local` |
 | `commonAnnotations`      | Annotations to add to all deployed objects                                                            | `{}`            |
 | `commonLabels`           | Labels to add to all deployed objects                                                                 | `{}`            |

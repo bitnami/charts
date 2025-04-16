@@ -1,8 +1,20 @@
 # Changelog
 
-## 15.1.10 (2025-04-07)
+## 15.1.13 (2025-04-09)
 
-* [bitnami/discourse] Release 15.1.10 ([#32847](https://github.com/bitnami/charts/pull/32847))
+* [bitnami/discourse] Release 15.1.13 ([#32897](https://github.com/bitnami/charts/pull/32897))
+
+## <small>15.1.12 (2025-04-09)</small>
+
+* [bitnami/discourse] Release 15.1.12 (#32879) ([a9cb381](https://github.com/bitnami/charts/commit/a9cb381c3e824b15789e8b57bb609bfe793f2ede)), closes [#32879](https://github.com/bitnami/charts/issues/32879)
+
+## <small>15.1.11 (2025-04-08)</small>
+
+* [bitnami/discourse] Release 15.1.11 (#32876) ([707afb7](https://github.com/bitnami/charts/commit/707afb70e81836b102ec50ff89f58cad97a74306)), closes [#32876](https://github.com/bitnami/charts/issues/32876)
+
+## <small>15.1.10 (2025-04-07)</small>
+
+* [bitnami/discourse] Release 15.1.10 (#32847) ([ea7f23c](https://github.com/bitnami/charts/commit/ea7f23c95a98a6804e337ed7e4dff9bd6d9d5f2a)), closes [#32847](https://github.com/bitnami/charts/issues/32847)
 
 ## <small>15.1.9 (2025-04-07)</small>
 

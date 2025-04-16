@@ -7,11 +7,11 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: git
-      image: docker.io/bitnami/git:2.48.1-debian-12-r9
+      image: docker.io/bitnami/git:2.49.0-debian-12-r4
     - name: nginx
-      image: docker.io/bitnami/nginx:1.27.4-debian-12-r6
+      image: docker.io/bitnami/nginx:1.27.4-debian-12-r9
     - name: nginx-exporter
-      image: docker.io/bitnami/nginx-exporter:1.4.1-debian-12-r9
+      image: docker.io/bitnami/nginx-exporter:1.4.1-debian-12-r13
 apiVersion: v2
 appVersion: 1.27.4
 dependencies:
@@ -35,4 +35,4 @@ maintainers:
 name: nginx
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/nginx
-version: 19.0.4
+version: 19.1.0
