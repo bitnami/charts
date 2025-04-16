@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.1.5 (2025-04-15)
+## 0.1.5 (2025-04-16)
 
 * [bitnami/clickhouse-operator] docs: improve examples on READMEs ([#33020](https://github.com/bitnami/charts/pull/33020))
 
