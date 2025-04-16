@@ -186,7 +186,9 @@ auth:
     ##     commands: "+@all"
     ##     keys: "~*"
     ##     channels: "&*"
-    users: [ ]
+    users: []
+    ## @param auth.acl.userSecret Name of the Secret, containing user credentials for ACL users. Keys must match usernames.
+    userSecret: ""
 ## @param commonConfiguration [string] Common configuration to be added into the ConfigMap
 ## ref: https://redis.io/topics/config
 ##

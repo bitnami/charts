@@ -10,6 +10,7 @@ metadata:
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: clickhouse
+    app.kubernetes.io/part-of: clickhouse
   {{- if or .Values.service.headless.annotations .Values.commonAnnotations }}
   {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.service.headless.annotations .Values.commonAnnotations ) "context" . ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
@@ -33,22 +34,6 @@ spec:
       port: {{ .Values.containerPorts.tcpSecure }}
       protocol: TCP
     {{- end }}
-    {{- if .Values.keeper.enabled }}
-    - name: tcp-keeper
-      targetPort: tcp-keeper
-      port: {{ .Values.containerPorts.keeper }}
-      protocol: TCP
-    - name: tcp-keeperinter
-      targetPort: tcp-keeperinter
-      port: {{ .Values.containerPorts.keeperInter }}
-      protocol: TCP
-    {{- if .Values.tls.enabled }}
-    - name: tcp-keepertls
-      targetPort: tcp-keepertls
-      port: {{ .Values.containerPorts.keeperSecure }}
-      protocol: TCP
-    {{- end }}
-    {{- end }}
     - name: tcp-mysql
       targetPort: tcp-mysql
       port: {{ .Values.containerPorts.mysql }}
@@ -61,9 +46,10 @@ spec:
       targetPort: http-intersrv
       port: {{ .Values.containerPorts.interserver }}
       protocol: TCP
-    {{- if .Values.service.extraPorts }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.service.extraPorts "context" $) | nindent 4 }}
+    {{- if .Values.service.headless.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.service.headless.extraPorts "context" $) | nindent 4 }}
     {{- end }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: clickhouse
+    app.kubernetes.io/part-of: clickhouse

@@ -1,8 +1,16 @@
 # Changelog
 
-## 5.2.4 (2025-04-09)
+## 5.2.6 (2025-04-10)
 
-* [bitnami/appsmith] Release 5.2.4 ([#32896](https://github.com/bitnami/charts/pull/32896))
+* [bitnami/appsmith] Release 5.2.6 ([#32954](https://github.com/bitnami/charts/pull/32954))
+
+## <small>5.2.5 (2025-04-10)</small>
+
+* [bitnami/appsmith] Release 5.2.5 (#32952) ([e69014a](https://github.com/bitnami/charts/commit/e69014a74d60279f7c144e5119b0f9e04c43d35c)), closes [#32952](https://github.com/bitnami/charts/issues/32952)
+
+## <small>5.2.4 (2025-04-09)</small>
+
+* [bitnami/appsmith] Release 5.2.4 (#32896) ([dd0a865](https://github.com/bitnami/charts/commit/dd0a865070dd0d1ce85d97cc290a7465e793879d)), closes [#32896](https://github.com/bitnami/charts/issues/32896)
 
 ## <small>5.2.3 (2025-04-08)</small>
 

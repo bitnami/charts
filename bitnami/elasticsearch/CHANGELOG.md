@@ -1,8 +1,16 @@
 # Changelog
 
+## 21.6.0 (2025-04-16)
+
+* [bitnami/elasticsearch] Fixes #32794, add enableDefaultInitContainers to elasticsearch chart ([#32855](https://github.com/bitnami/charts/pull/32855))
+
+## <small>21.5.1 (2025-04-15)</small>
+
+* [bitnami/elasticsearch] Release 21.5.1 (#33016) ([2add1cd](https://github.com/bitnami/charts/commit/2add1cdd0bc988f860ef182c0da3dc500317fa50)), closes [#33016](https://github.com/bitnami/charts/issues/33016)
+
 ## 21.5.0 (2025-04-04)
 
-* [bitnami/elasticsearch] Set `usePasswordFiles=true` by default ([#32344](https://github.com/bitnami/charts/pull/32344))
+* [bitnami/elasticsearch] Set `usePasswordFiles=true` by default (#32344) ([3ab212e](https://github.com/bitnami/charts/commit/3ab212e680be626360e561dd6eab6e324b557834)), closes [#32344](https://github.com/bitnami/charts/issues/32344)
 
 ## <small>21.4.9 (2025-03-25)</small>
 

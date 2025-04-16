@@ -2,7 +2,7 @@
 
 ## 11.2.4 (2025-04-11)
 
-* [bitnami/etcd] Add possibility to pass extra env vars to the defrag cronjob ([#32953](https://github.com/bitnami/charts/pull/32953))
+* [bitnami/etcd] Simplify condition ([#32814](https://github.com/bitnami/charts/pull/32814))
 
 ## <small>11.2.3 (2025-04-09)</small>
 
