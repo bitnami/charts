@@ -7,7 +7,7 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: appsmith
-      image: docker.io/bitnami/appsmith:1.68.0-debian-12-r0
+      image: docker.io/bitnami/appsmith:1.68.0-debian-12-r1
     - name: haproxy
       image: docker.io/bitnami/haproxy:3.1.6-debian-12-r5
     - name: os-shell
@@ -40,4 +40,4 @@ maintainers:
 name: appsmith
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/appsmith
-version: 5.2.7
+version: 5.2.8
