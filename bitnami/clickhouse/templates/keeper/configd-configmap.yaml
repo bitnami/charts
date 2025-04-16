@@ -1,0 +1,43 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.keeper.enabled (or .Values.keeper.configdFiles (gt (int .Values.keeper.replicaCount) 1)) (not .Values.keeper.existingConfigdConfigmap) }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "clickhouse.keeper.configd.configmapName" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" (dict "customLabels" .Values.commonLabels "context" .) | nindent 4 }}
+    app.kubernetes.io/component: keeper
+    app.kubernetes.io/part-of: clickhouse
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" .) | nindent 4 }}
+  {{- end }}
+data:
+  {{- range $key, $value := .Values.keeper.configdFiles }}
+  {{ $key }}: |
+    {{- include "common.tplvalues.render" (dict "value" $value "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if gt (int .Values.keeper.replicaCount) 1 }}
+  raft_configuration.xml: |
+    <clickhouse>
+        <keeper_server>
+            <raft_configuration>
+                {{- $fullname := include "clickhouse.keeper.fullname" . }}
+                {{- $headlessSvcName := include "clickhouse.keeper.headlessServiceName" . }}
+                {{- $releaseNamespace := .Release.Namespace }}
+                {{- $clusterDomain := .Values.clusterDomain }}
+                {{- range $i := until (int .Values.keeper.replicaCount) }}
+                <server>
+                    <id>{{ $i }}</id>
+                    <hostname>{{ printf "%s-%d.%s.%s.svc.%s" $fullname $i $headlessSvcName $releaseNamespace $clusterDomain }}</hostname>
+                    <port>{{ $.Values.keeper.containerPorts.raft }}</port>
+                </server>
+                {{- end }}
+            </raft_configuration>
+        </keeper_server>
+    </clickhouse>
+  {{- end }}
+{{- end }}

@@ -1,8 +1,13 @@
 # Changelog
 
-## 5.1.13 (2025-04-01)
+## 5.1.14 (2025-04-15)
 
-* [bitnami/jaeger] Release 5.1.13 ([#32741](https://github.com/bitnami/charts/pull/32741))
+* [bitnami/jaeger] Release 5.1.14 ([#33010](https://github.com/bitnami/charts/pull/33010))
+
+## <small>5.1.13 (2025-04-02)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/jaeger] Release 5.1.13 (#32741) ([2466579](https://github.com/bitnami/charts/commit/24665791672ee53d82a226d7a3c7fa150795eaf4)), closes [#32741](https://github.com/bitnami/charts/issues/32741)
 
 ## <small>5.1.12 (2025-03-08)</small>
 

@@ -1,0 +1,156 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if not .Values.existingConfigdConfigmap }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "clickhouse.configd.configmapName" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" (dict "customLabels" .Values.commonLabels "context" .) | nindent 4 }}
+    app.kubernetes.io/component: clickhouse
+    app.kubernetes.io/part-of: clickhouse
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" .) | nindent 4 }}
+  {{- end }}
+data:
+  {{- range $key, $value := .Values.configdFiles }}
+  {{ $key }}: |
+    {{- include "common.tplvalues.render" (dict "value" $value "context" $) | nindent 4 }}
+  {{- end }}
+  01-listen.xml: |
+    <yandex>
+        <listen_host>::</listen_host>
+        <listen_host>0.0.0.0</listen_host>
+        <listen_try>1</listen_try>
+    </yandex>
+  02-logger.xml: |
+    <yandex>
+        <logger>
+            <level>{{ .Values.logLevel }}</level>
+        </logger>
+    </yandex>
+  03-macros.xml: |
+    <yandex>
+        <macros>
+            <shard from_env="CLICKHOUSE_SHARD_ID"></shard>
+            <replica from_env="CLICKHOUSE_REPLICA_ID"></replica>
+            <layer>{{ include "common.names.fullname" . }}</layer>
+        </macros>
+    </yandex>
+  {{- if or (ne (int .Values.shards) 1) (ne (int .Values.replicaCount) 1) }}
+  {{- $shards := .Values.shards | int }}
+  {{- $replicas := .Values.replicaCount | int }}
+  {{- $fullname := include "common.names.fullname" . }}
+  {{- $headlessSvcName := include "clickhouse.headlessServiceName" . }}
+  {{- $releaseNamespace := .Release.Namespace }}
+  {{- $clusterDomain := .Values.clusterDomain }}
+  04-cluster.xml: |
+    <yandex>
+        <remote_servers>
+            <{{ .Values.clusterName }}>
+                {{- range $shard := until $shards }}
+                <shard>
+                    {{- range $i := until $replicas }}
+                    <replica>
+                        <host>{{ printf "%s-shard%d-%d.%s.%s.svc.%s" $fullname $shard $i $headlessSvcName $releaseNamespace $clusterDomain }}</host>
+                        <port>{{ $.Values.containerPorts.tcp }}</port>
+                        <user from_env="CLICKHOUSE_ADMIN_USER"></user>
+                        <password from_env="CLICKHOUSE_ADMIN_PASSWORD"></password>
+                    </replica>
+                    {{- end }}
+                </shard>
+                {{- end }}
+            </{{ .Values.clusterName }}>
+        </remote_servers>
+    </yandex>
+  {{- end }}
+  {{- if or .Values.keeper.enabled .Values.externalZookeeper.servers }}
+  {{- $fullname := include "clickhouse.keeper.fullname" . }}
+  {{- $headlessSvcName := include "clickhouse.keeper.headlessServiceName" . }}
+  {{- $releaseNamespace := .Release.Namespace }}
+  {{- $clusterDomain := .Values.clusterDomain }}
+  05-zookeeper.xml: |
+    <yandex>
+        <zookeeper>
+            {{- if or .Values.keeper.enabled }}
+            {{- range $i := until (int .Values.keeper.replicaCount) }}
+            <node>
+                <host>{{ printf "%s-%d.%s.%s.svc.%s" $fullname $i $headlessSvcName $releaseNamespace $clusterDomain }}</host>
+                <port>{{ $.Values.keeper.containerPorts.tcp }}</port>
+            </node>
+            {{- end }}
+            {{- else if .Values.externalZookeeper.servers }}
+            {{- range $node :=.Values.externalZookeeper.servers }}
+            <node>
+                <host>{{ $node }}</host>
+                <port>{{ $.Values.externalZookeeper.port }}</port>
+            </node>
+            {{- end }}
+            {{- end }}
+        </zookeeper>    
+    </yandex>
+  {{- end }}
+  {{- if .Values.tls.enabled }}
+  06-tls.xml: |
+    <yandex>
+        <tcp_port_secure from_env="CLICKHOUSE_TCP_SECURE_PORT"></tcp_port_secure>
+        <https_port from_env="CLICKHOUSE_HTTPS_PORT"></https_port>
+        <openSSL>
+            <server>
+                <certificateFile>/opt/bitnami/clickhouse/certs/server/tls.crt</certificateFile>
+                <privateKeyFile>/opt/bitnami/clickhouse/certs/server/tls.key</privateKeyFile>
+                <caConfig>/opt/bitnami/clickhouse/certs/ca/tls.crt</caConfig>
+                <verificationMode>none</verificationMode>
+                <cacheSessions>true</cacheSessions>
+                <disableProtocols>sslv2,sslv3</disableProtocols>
+                <preferServerCiphers>true</preferServerCiphers>
+            </server>
+            <client>
+                <loadDefaultCAFile>true</loadDefaultCAFile>
+                <cacheSessions>true</cacheSessions>
+                <disableProtocols>sslv2,sslv3</disableProtocols>
+                <preferServerCiphers>true</preferServerCiphers>
+                <verificationMode>none</verificationMode>
+                <invalidCertificateHandler>
+                    <name>AcceptCertificateHandler</name>
+                </invalidCertificateHandler>
+            </client>
+        </openSSL>
+    </yandex>
+  {{- end }}
+  {{- if .Values.metrics.enabled }}
+  07-prometheus.xml: |
+    <yandex>
+        <prometheus>
+            <endpoint>/metrics</endpoint>
+            <port from_env="CLICKHOUSE_METRICS_PORT"></port>
+            <metrics>true</metrics>
+            <events>true</events>
+            <asynchronous_metrics>true</asynchronous_metrics>
+        </prometheus>
+    </yandex>
+  {{- end }}
+  {{- if not .Values.sampling.enabled }}
+  08-sampling.xml: |
+    <yandex>
+        <asynchronous_insert_log remove="1"/>
+        <asynchronous_metric_log remove="1"/>
+        <error_log remove="1"/>
+        <event_log remove="1"/>
+        <latency_log remove="1"/>
+        <metric_log remove="1"/>
+        <query_log remove="1"/>
+        <query_metric_log remove="1"/>
+        <query_thread_log remove="1"/>
+        <query_views_log remove="1"/>
+        <part_log remove="1"/>
+        <text_log remove="1"/>
+        <trace_log remove="1"/>
+        <opentelemetry_span_log remove="1"/>
+        <processors_profile_log remove="1"/>
+    </yandex>
+  {{- end }}
+{{- end }}

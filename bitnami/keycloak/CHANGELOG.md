@@ -1,8 +1,20 @@
 # Changelog
 
-## 24.5.1 (2025-04-07)
+## 24.5.4 (2025-04-15)
 
-* [bitnami/keycloak] The secret name of the externaldb is inherited by the .Release.Name and not by the (include "common.names.fullname" .) function. ([#32823](https://github.com/bitnami/charts/pull/32823))
+* [bitnami/keycloak] bugfix: add prefix on projected db secret keys ([#33004](https://github.com/bitnami/charts/pull/33004))
+
+## <small>24.5.3 (2025-04-11)</small>
+
+* [bitnami/keycloak] Release 24.5.3 (#32970) ([5f9e017](https://github.com/bitnami/charts/commit/5f9e0175fa8e09211ccb591d36abcbe9abfd71a3)), closes [#32970](https://github.com/bitnami/charts/issues/32970)
+
+## <small>24.5.2 (2025-04-11)</small>
+
+* [bitnami/keycloak] Release 24.5.2 (#32968) ([2c775ce](https://github.com/bitnami/charts/commit/2c775ce92ee74c9222f060369bfaeed849f95efb)), closes [#32968](https://github.com/bitnami/charts/issues/32968)
+
+## <small>24.5.1 (2025-04-07)</small>
+
+* [bitnami/keycloak] Change .Release.Name to (include "common.names.fullname) ([c3573fd](https://github.com/bitnami/charts/commit/c3573fdc21301f06007546ad4faadab598f6305d))
 
 ## 24.5.0 (2025-04-04)
 

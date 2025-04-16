@@ -1,8 +1,12 @@
 # Changelog
 
-## 20.11.6 (2025-04-14)
+## 20.12.1 (2025-04-16)
 
 * [bitnami/redis] Fix sentinel masterService extraPorts not rendered ([#32961](https://github.com/bitnami/charts/pull/32961))
+
+## 20.12.0 (2025-04-12)
+
+* [bitnami/redis] Support retrieving Redis ACL user passwords from Kubernetes Secrets  ([#32434](https://github.com/bitnami/charts/pull/32434))
 
 ## <small>20.11.5 (2025-04-09)</small>
 

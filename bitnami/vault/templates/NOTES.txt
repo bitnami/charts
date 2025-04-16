@@ -47,6 +47,13 @@ Read the upstream vault documentation for unsealing and initializing the instanc
 
   https://developer.hashicorp.com/vault/docs/platform/k8s/helm/run#initialize-and-unseal-vault
 
+{{- if gt (int .Values.server.replicaCount) 1 }}
+WARNING: HA setup isn't currently supported and running multiple Vault Server replicas could result on running independent standalone servers, unless a backend storage (such as DynamoDB) is used via custom configuration.
+Find more information in the issue below:
+
+  https://github.com/bitnami/charts/issues/32373
+{{- end }}
+
 {{- include "common.warnings.rollingTag" .Values.server.image }}
 {{- include "common.warnings.rollingTag" .Values.injector.image }}
 {{- include "common.warnings.rollingTag" .Values.csiProvider.image }}
