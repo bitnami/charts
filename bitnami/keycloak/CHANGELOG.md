@@ -2,7 +2,7 @@
 
 ## 24.5.5 (2025-04-16)
 
-* Dynamic tpl rendering of the external database port ([#33040](https://github.com/bitnami/charts/pull/33040))
+* [bitnami/keycloak] Dynamic tpl rendering of the external database port ([#33040](https://github.com/bitnami/charts/pull/33040))
 
 ## <small>24.5.4 (2025-04-15)</small>
 
