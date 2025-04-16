@@ -4,9 +4,9 @@
 
 * [bitnami/influxdb] Add revisionHistoryLimit variable ([#32509](https://github.com/bitnami/charts/pull/32509))
 
-## 6.6.5 (2025-04-15)
+## <small>6.6.5 (2025-04-15)</small>
 
-* [bitnami/influxdb] Release 6.6.5 ([#33009](https://github.com/bitnami/charts/pull/33009))
+* [bitnami/influxdb] Release 6.6.5 (#33009) ([b6c0dc4](https://github.com/bitnami/charts/commit/b6c0dc442aa40f42aea91ff3af6a847e70b3c912)), closes [#33009](https://github.com/bitnami/charts/issues/33009)
 
 ## <small>6.6.4 (2025-04-15)</small>
 
