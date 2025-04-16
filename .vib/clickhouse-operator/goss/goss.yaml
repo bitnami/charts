@@ -12,12 +12,6 @@ file:
     contents:
       - /listen_host>::</
       - /listen_host>0.0.0.0</
-  /opt/bitnami/clickhouse/etc/conf.d/chop-generated-hostname-ports.xml:
-    exists: true
-    filetype: symlink
-    contents:
-      - /tcp_port>9000</
-      - /http_port>8123</
   /opt/bitnami/clickhouse/etc/conf.d/chop-generated-zookeeper.xml:
     exists: true
     filetype: symlink
