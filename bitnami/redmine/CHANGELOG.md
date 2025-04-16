@@ -1,8 +1,13 @@
 # Changelog
 
-## 32.2.0 (2025-04-02)
+## 32.2.1 (2025-04-10)
 
-* [bitnami/redmine] Set `usePasswordFiles=true` by default ([#32771](https://github.com/bitnami/charts/pull/32771))
+* [bitnami/redmine] Release 32.2.1 ([#32947](https://github.com/bitnami/charts/pull/32947))
+
+## 32.2.0 (2025-04-04)
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/redmine] Set `usePasswordFiles=true` by default (#32771) ([aa11aae](https://github.com/bitnami/charts/commit/aa11aaeecb5604baea8dea51be186195212cfb41)), closes [#32771](https://github.com/bitnami/charts/issues/32771)
 
 ## <small>32.1.6 (2025-03-11)</small>
 

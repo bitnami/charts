@@ -2,14 +2,38 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 file:
-  /opt/bitnami/clickhouse/etc/conf.d/00_default_overrides.xml:
+  /opt/bitnami/clickhouse/etc/config.d/01-listen.xml:
+    mode: "0644"
+    filetype: file
+    exists: true
+    contents:
+      - /listen_host>::</
+      - /listen_host>0.0.0.0</
+  /opt/bitnami/clickhouse/etc/config.d/02-logger.xml:
+    mode: "0644"
+    filetype: file
+    exists: true
+    contents:
+      - /level>{{ .Vars.logLevel }}</
+  /opt/bitnami/clickhouse/etc/config.d/03-macros.xml:
+    mode: "0644"
+    filetype: file
+    exists: true
+    contents:
+      - /shard from_env="CLICKHOUSE_SHARD_ID">/
+      - /replica from_env="CLICKHOUSE_REPLICA_ID">/
+  /opt/bitnami/clickhouse/etc/config.d/04-cluster.xml:
+    mode: "0644"
+    filetype: file
+    exists: true
+    contents:
+      - "remote_servers"
+  /opt/bitnami/clickhouse/etc/config.d/05-zookeeper.xml:
     mode: "0644"
     filetype: file
     exists: true
     contents:
       - "zookeeper"
-      - "remote_servers"
-      - "logger"
   /bitnami/clickhouse/data:
     mode: "2750"
     filetype: directory

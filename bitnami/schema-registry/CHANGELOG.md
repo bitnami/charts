@@ -1,8 +1,12 @@
 # Changelog
 
-## 25.1.1 (2025-04-11)
+## 25.1.2 (2025-04-11)
 
-* Update HPA with statefulset as reference instead of deployment ([#32945](https://github.com/bitnami/charts/pull/32945))
+* [bitnami/schema-registry] Release 25.1.2 ([#32975](https://github.com/bitnami/charts/pull/32975))
+
+## <small>25.1.1 (2025-04-11)</small>
+
+* Update HPA with statefulset as reference instead of deployment (#32945) ([a313f9f](https://github.com/bitnami/charts/commit/a313f9f2d32f5d6847e75668953d054f819beb15)), closes [#32945](https://github.com/bitnami/charts/issues/32945)
 
 ## 25.1.0 (2025-04-04)
 

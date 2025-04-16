@@ -16,7 +16,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  replicas: 1
+  replicas: {{ .Values.server.replicaCount }}
   serviceName: {{ printf "%s-headless" (include "vault.server.fullname" .) }}
   podManagementPolicy: {{ .Values.server.podManagementPolicy }}
   {{- if .Values.server.updateStrategy }}

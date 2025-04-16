@@ -1,8 +1,13 @@
 # Changelog
 
-## 6.4.6 (2025-03-25)
+## 6.4.7 (2025-04-15)
 
-* [bitnami/logstash] Release 6.4.6 ([#32600](https://github.com/bitnami/charts/pull/32600))
+* [bitnami/logstash] Release 6.4.7 ([#33013](https://github.com/bitnami/charts/pull/33013))
+
+## <small>6.4.6 (2025-03-25)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/logstash] Release 6.4.6 (#32600) ([53428ac](https://github.com/bitnami/charts/commit/53428acc98fb7b075a311f611c26bab5a627ce5f)), closes [#32600](https://github.com/bitnami/charts/issues/32600)
 
 ## <small>6.4.5 (2025-03-04)</small>
 

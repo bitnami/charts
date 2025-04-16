@@ -1,8 +1,12 @@
 # Changelog
 
+## 25.2.1 (2025-04-16)
+
+* [bitnami/moodle] Release 25.2.1 ([#33030](https://github.com/bitnami/charts/pull/33030))
+
 ## 25.2.0 (2025-04-04)
 
-* [bitnami/moodle] Set `usePasswordFiles=true` by default ([#32705](https://github.com/bitnami/charts/pull/32705))
+* [bitnami/moodle] Set `usePasswordFiles=true` by default (#32705) ([1414fd1](https://github.com/bitnami/charts/commit/1414fd1b628b67034905dd591ef58cdc8009115f)), closes [#32705](https://github.com/bitnami/charts/issues/32705)
 
 ## <small>25.1.5 (2025-03-17)</small>
 

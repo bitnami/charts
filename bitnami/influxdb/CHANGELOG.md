@@ -1,8 +1,20 @@
 # Changelog
 
-## 6.6.3 (2025-04-11)
+## 6.6.6 (2025-04-16)
 
 * [bitnami/influxdb] Add revisionHistoryLimit variable ([#32509](https://github.com/bitnami/charts/pull/32509))
+
+## 6.6.5 (2025-04-15)
+
+* [bitnami/influxdb] Release 6.6.5 ([#33009](https://github.com/bitnami/charts/pull/33009))
+
+## <small>6.6.4 (2025-04-15)</small>
+
+* [bitnami/influxdb] fix invalid template syntax (#33001) ([3fb2db6](https://github.com/bitnami/charts/commit/3fb2db63a542daaa83a04520df4505f3f86e4cb6)), closes [#33001](https://github.com/bitnami/charts/issues/33001)
+
+## <small>6.6.3 (2025-04-14)</small>
+
+* [bitnami/influxdb] bugfix: replace references to .Release.Namespace (#32985) ([b0f1dff](https://github.com/bitnami/charts/commit/b0f1dff958692696851a7c169cbe2d4924023de5)), closes [#32985](https://github.com/bitnami/charts/issues/32985)
 
 ## <small>6.6.2 (2025-04-01)</small>
 
