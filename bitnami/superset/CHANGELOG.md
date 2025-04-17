@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.1 (2025-04-17)
+
+* [bitnami/superset] Fix fresh installation error with `ingress.extraHosts` #33031
+
 ## 2.0.0 (2025-04-04)
 
 * [bitnami/superset] Set `usePasswordFiles=true` by default ([#32778](https://github.com/bitnami/charts/pull/32778))
