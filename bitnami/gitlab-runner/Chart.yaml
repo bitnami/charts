@@ -7,9 +7,9 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: gitlab-runner
-      image: docker.io/bitnami/gitlab-runner:17.10.1-debian-12-r1
+      image: docker.io/bitnami/gitlab-runner:17.11.0-debian-12-r0
 apiVersion: v2
-appVersion: 17.10.1
+appVersion: 17.11.0
 dependencies:
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
@@ -29,4 +29,4 @@ maintainers:
 name: gitlab-runner
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/gitlab-runner
-version: 0.1.2
+version: 0.1.3
