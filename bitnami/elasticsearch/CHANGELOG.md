@@ -1,8 +1,12 @@
 # Changelog
 
-## 21.5.2 (2025-04-16)
+## 21.6.1 (2025-04-16)
 
 * [bitnami/elasticsearch] fix coordinating security.enabled ([#32840](https://github.com/bitnami/charts/pull/32840))
+
+## 21.6.0 (2025-04-16)
+
+* [bitnami/elasticsearch] Fixes #32794, add enableDefaultInitContainers to elasticsearch chart ([#32855](https://github.com/bitnami/charts/pull/32855))
 
 ## <small>21.5.1 (2025-04-15)</small>
 
