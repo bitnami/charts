@@ -1,6 +1,6 @@
 # Changelog
 
-## 8.8.0 (2025-04-09)
+## 8.8.0 (2025-04-17)
 
 * [bitnami/external-dns] Add support for --txt-new-format-only ([#32880](https://github.com/bitnami/charts/pull/32880))
 
