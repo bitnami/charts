@@ -1,6 +1,6 @@
 # Changelog
 
-## 4.9.13 (2025-04-16)
+## 4.9.13 (2025-04-17)
 
 * [bitnami/grafana-operator] don't add common labels to Grafana resources ([#33049](https://github.com/bitnami/charts/pull/33049))
 
