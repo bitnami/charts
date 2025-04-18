@@ -3276,6 +3276,9 @@ queryFrontend:
 ## @section Query Scheduler Deployment Parameters
 ##
 queryScheduler:
+  ## @param queryScheduler.enabled Deploy Query Scheduler component
+  ##
+  enabled: false
   ## @param queryScheduler.extraEnvVars Array with extra environment variables to add to queryScheduler nodes
   ## e.g:
   ## extraEnvVars:
