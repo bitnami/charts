@@ -1198,6 +1198,20 @@ defrag:
     ##     memory: 1024Mi
     ##
     resources: {}
+    ## @param defrag.cronjob.extraEnvVars [array] Extra environment variables to be set on defrag cronjob container
+    ## e.g:
+    ## extraEnvVars:
+    ##   - name: FOO
+    ##     value: "bar"
+    ##
+    extraEnvVars: []
+    ## @param defrag.cronjob.extraEnvVarsCM Name of existing ConfigMap containing extra env vars
+    ##
+    extraEnvVarsCM: ""
+    ## @param defrag.cronjob.extraEnvVarsSecret Name of existing Secret containing extra env vars
+    ##
+    extraEnvVarsSecret: ""
+
 ## @section Other parameters
 ##
 
