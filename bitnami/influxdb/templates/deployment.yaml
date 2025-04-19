@@ -15,6 +15,7 @@ metadata:
   {{- end }}
 spec:
   replicas: 1
+  revisionHistoryLimit: {{ .Values.influxdb.revisionHistoryLimit }}
   {{- if .Values.influxdb.updateStrategy }}
   strategy: {{- toYaml .Values.influxdb.updateStrategy | nindent 4 }}
   {{- end }}
