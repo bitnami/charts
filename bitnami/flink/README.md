@@ -122,12 +122,22 @@ Learn more about [sidecar containers](https://kubernetes.io/docs/concepts/worklo
 
 This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters inside each of the subsections: `jobmanager`, `taskmanager`.
+As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters inside each of the subsections: `jobmanager`, `taskmanager`.  
 
-## Persistence
+## Persistence  
+
+> Note: If global.defaultStorageClass is not empty and persistence.enabled is true, defaultStorageClass is used. If existingClaim is set, then global.defaultStorageClass is ignored.  
 
 The [Bitnami Flink](https://github.com/bitnami/containers/tree/main/bitnami/flink) image stores the trace onto an external database. Persistent Volume Claims are used to keep the data across deployments.
 
+```yaml
+persistence:
+  enabled: false
+  accessMode: ReadWriteOnce
+  existingClaim: ""
+  size: 10Gi
+```  
+  
 ## Parameters
 
 ### Global parameters
@@ -373,6 +383,19 @@ The [Bitnami Flink](https://github.com/bitnami/containers/tree/main/bitnami/flin
 | `taskmanager.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                           | `true`           |
 | `taskmanager.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                            | `""`             |
 | `taskmanager.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable.Defaults to `1` if both `secondary.pdb.minAvailable` and `secondary.pdb.maxUnavailable` are empty.                                                                         | `""`             |
+
+### Persistence parameters
+
+| Name                                    | Description                                                                                               | Value               |
+| --------------------------------------- | --------------------------------------------------------------------------------------------------------- | ------------------- |
+| `persistence.jobmanager.enabled`        | Enable persistence.jobmanager                                                                             | `false`             |
+| `persistence.jobmanager.accessModes`    | Persistent Volume Access Mode                                                                             | `["ReadWriteOnce"]` |
+| `persistence.jobmanager.existingClaim`  | If you want to reuse an existing claim, you can pass the name of the PVC using the existingClaim variable | `""`                |
+| `persistence.jobmanager.size`           | Size for the PV                                                                                           | `5Gi`               |
+| `persistence.taskmanager.enabled`       | Enable persistence.taskmanager                                                                            | `false`             |
+| `persistence.taskmanager.accessModes`   | Persistent Volume Access Mode                                                                             | `["ReadWriteOnce"]` |
+| `persistence.taskmanager.existingClaim` | If you want to reuse an existing claim, you can pass the name of the PVC using the existingClaim variable | `""`                |
+| `persistence.taskmanager.size`          | Size for the PV                                                                                           | `5Gi`               |
 
 ## Upgrading
 
