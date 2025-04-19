@@ -269,9 +269,9 @@ Get the password to use to access Cassandra
 {{- end -}}
 
 {{/*
-Get the metrics config map name.
+Get the metrics secret name.
 */}}
-{{- define "cassandra.metricsConfConfigMap" -}}
+{{- define "cassandra.metricsConfSecret" -}}
     {{- printf "%s-metrics-conf" (include "common.names.fullname" . ) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
