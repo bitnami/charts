@@ -20,5 +20,10 @@ spec:
     {{- range $port := .Values.service.ports }}
     - {{- omit (include "common.tplvalues.render" ( dict "value" $port "context" $ ) | fromYaml) "nodePort" | toYaml | nindent 6 }}
     {{- end }}
+    {{- if .Values.service.extraPorts }}
+    {{- range $port := .Values.service.extraPorts }}
+    - {{- omit (include "common.tplvalues.render" ( dict "value" $port "context" $ ) | fromYaml) "nodePort" | toYaml | nindent 6 }}
+    {{- end }}
+    {{- end }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
