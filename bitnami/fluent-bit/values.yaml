@@ -260,11 +260,13 @@ containerPorts:
   ## @param containerPorts.http Port for HTTP port
   ##
   http: 2020
-## @param extraContainerPorts [array] List of container ports to enable in the fluent-bit container
+## @param extraContainerPorts Optionally specify extra list of additional ports for fluent-bit containers
+## e.g:
+## extraContainerPorts:
+##   - name: forward
+##     containerPort: 24224
 ##
-#extraContainerPorts:
-#  - name: forward
-#    containerPort: 24224
+extraContainerPorts: []
 ## Fluent Bit service parameters
 ##
 service:
