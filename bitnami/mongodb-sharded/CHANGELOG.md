@@ -1,8 +1,17 @@
 # Changelog
 
-## 9.2.1 (2025-03-21)
+## 9.2.3 (2025-04-14)
 
-* [bitnami/mongodb-sharded] Release 9.2.1 ([#32550](https://github.com/bitnami/charts/pull/32550))
+* [bitnami/mongodb-sharded] Release 9.2.3 ([#32994](https://github.com/bitnami/charts/pull/32994))
+
+## <small>9.2.2 (2025-04-02)</small>
+
+* [bitnami/mongodb-sharded] Release 9.2.2 (#32751) ([828a6e1](https://github.com/bitnami/charts/commit/828a6e12d079ff09cc34f1ec26f4c2a929f04e7c)), closes [#32751](https://github.com/bitnami/charts/issues/32751)
+
+## <small>9.2.1 (2025-03-21)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/mongodb-sharded] Release 9.2.1 (#32550) ([73a090e](https://github.com/bitnami/charts/commit/73a090eab45cd85a0623bb50906b3ae4d1d3c366)), closes [#32550](https://github.com/bitnami/charts/issues/32550)
 
 ## 9.2.0 (2025-02-27)
 

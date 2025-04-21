@@ -1,8 +1,25 @@
 # Changelog
 
-## 19.0.3 (2025-03-21)
+## 19.1.1 (2025-04-16)
 
-* [bitnami/nginx] Add resources to git-clone-repository initcontainer ([#32530](https://github.com/bitnami/charts/pull/32530))
+* [bitnami/nginx] Release 19.1.1 ([#33047](https://github.com/bitnami/charts/pull/33047))
+
+## 19.1.0 (2025-04-11)
+
+* [bitnami/nginx] feat(nginx-optional-initcontainers): Enable optional initcontainers (#32577) ([f0805ab](https://github.com/bitnami/charts/commit/f0805ab27224a65adc902729d7d334a14f00833a)), closes [#32577](https://github.com/bitnami/charts/issues/32577)
+
+## <small>19.0.5 (2025-04-11)</small>
+
+* [bitnami/nginx] Release 19.0.5 (#32964) ([d38c92a](https://github.com/bitnami/charts/commit/d38c92a6037deda6ff3807e7b26c02fdf9183fbc)), closes [#32964](https://github.com/bitnami/charts/issues/32964)
+
+## <small>19.0.4 (2025-04-02)</small>
+
+* [bitnami/nginx] Ingress hostname dynamic tpl function (#32421) ([4e232c3](https://github.com/bitnami/charts/commit/4e232c32dcced4935ccc378597a0bfb9e1432f63)), closes [#32421](https://github.com/bitnami/charts/issues/32421)
+
+## <small>19.0.3 (2025-03-25)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/nginx] Add resources to git-clone-repository initcontainer (#32530) ([4c795a8](https://github.com/bitnami/charts/commit/4c795a8f58e03c85e1ca6ae278a2c0214d6f7b92)), closes [#32530](https://github.com/bitnami/charts/issues/32530)
 
 ## <small>19.0.2 (2025-03-12)</small>
 

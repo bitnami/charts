@@ -86,7 +86,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/fluent-bit
-  tag: 3.2.10-debian-12-r0
+  tag: 4.0.0-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -260,6 +260,13 @@ containerPorts:
   ## @param containerPorts.http Port for HTTP port
   ##
   http: 2020
+## @param extraContainerPorts Optionally specify extra list of additional ports for fluent-bit containers
+## e.g:
+## extraContainerPorts:
+##   - name: forward
+##     containerPort: 24224
+##
+extraContainerPorts: []
 ## Fluent Bit service parameters
 ##
 service:

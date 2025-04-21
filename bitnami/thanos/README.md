@@ -1155,7 +1155,7 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 | `ruler.dnsDiscovery.enabled`                              | Dynamically configure Query APIs using DNS discovery                                                                                                                                                                          | `true`                   |
 | `ruler.queryURL`                                          | Thanos query/query-frontend URL to link in Ruler UI.                                                                                                                                                                          | `""`                     |
 | `ruler.alertmanagers`                                     | Alert managers URLs array                                                                                                                                                                                                     | `[]`                     |
-| `ruler.alertmanagersConfig`                               | Alert managers configuration                                                                                                                                                                                                  | `""`                     |
+| `ruler.alertmanagersConfig`                               | Alert managers configuration                                                                                                                                                                                                  | `{}`                     |
 | `ruler.evalInterval`                                      | The default evaluation interval to use                                                                                                                                                                                        | `1m`                     |
 | `ruler.clusterName`                                       | Used to set the 'ruler_cluster' label                                                                                                                                                                                         | `""`                     |
 | `ruler.ruleFile`                                          | Change the location Thanos checks for rule files                                                                                                                                                                              | `/conf/rules/*.yml`      |
@@ -1671,6 +1671,10 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/thano
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 16.0.0
+
+This major updates the `minio` subchart to its newest major, 16.0.0. For more information on this subchart's major, please refer to [minio upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/minio#to-1600).
 
 ### To 15.9.0
 

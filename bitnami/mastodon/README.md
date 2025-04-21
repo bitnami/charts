@@ -255,6 +255,7 @@ The [Bitnami mastodon](https://github.com/bitnami/containers/tree/main/bitnami/m
 | `commonAnnotations`      | Annotations to add to all deployed objects                                                                                                          | `{}`                       |
 | `clusterDomain`          | Kubernetes cluster domain name                                                                                                                      | `cluster.local`            |
 | `extraDeploy`            | Array of extra objects to deploy with the release                                                                                                   | `[]`                       |
+| `usePasswordFiles`       | Mount credentials as files instead of using environment variables                                                                                   | `true`                     |
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                                                             | `false`                    |
 | `diagnosticMode.command` | Command to override all containers in the deployment                                                                                                | `["sleep"]`                |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                                                                                   | `["infinity"]`             |
@@ -885,6 +886,10 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/masto
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 10.0.0
+
+This major updates the `minio` subchart to its newest major, 16.0.0. For more information on this subchart's major, please refer to [minio upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/minio#to-1600).
 
 ### To 9.1.0
 

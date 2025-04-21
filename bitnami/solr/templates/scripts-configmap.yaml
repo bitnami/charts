@@ -19,6 +19,11 @@ data:
 
     . /opt/bitnami/scripts/liblog.sh
 
+    {{- if .Values.usePasswordFiles }}
+    export SOLR_SSL_KEY_STORE_PASSWORD="$(< $SOLR_SSL_KEY_STORE_PASSWORD_FILE)"
+    export SOLR_SSL_TRUST_STORE_PASSWORD="$(< $SOLR_SSL_TRUST_STORE_PASSWORD_FILE)"
+    {{- end }}
+
     if [[ -f "/certs/keystore.p12" ]] && [[ -f "/certs/truststore.p12" ]]; then
         # the user provided keystore.p12 and truststore.p12 files (prefered)
         cp "/certs/keystore.p12" "/opt/bitnami/solr/certs/keystore.p12"

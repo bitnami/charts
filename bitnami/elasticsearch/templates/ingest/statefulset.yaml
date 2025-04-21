@@ -83,9 +83,9 @@ spec:
       {{- if .Values.ingest.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.ingest.terminationGracePeriodSeconds }}
       {{- end }}
-      {{- if or (or .Values.initContainers .Values.ingest.initContainers) .Values.security.enabled .Values.sysctlImage.enabled }}
+      {{- if or .Values.initContainers .Values.ingest.initContainers (and  .Values.enableDefaultInitContainers (or .Values.security.enabled .Values.sysctlImage.enabled)) }}
       initContainers:
-        {{- if .Values.sysctlImage.enabled }}
+        {{- if and .Values.sysctlImage.enabled .Values.enableDefaultInitContainers }}
         ## Image that performs the sysctl operation to modify Kernel settings (needed sometimes to avoid boot errors)
         - name: sysctl
           image: {{ include "elasticsearch.sysctl.image" . }}
@@ -105,7 +105,7 @@ spec:
           resources: {{- include "common.resources.preset" (dict "type" .Values.sysctlImage.resourcesPreset) | nindent 12 }}
           {{- end }}
         {{- end }}
-        {{- if .Values.security.enabled }}
+        {{- if and .Values.security.enabled .Values.enableDefaultInitContainers }}
         - name: copy-tls-certificates
           image: {{ include "elasticsearch.copyTlsCerts.image" . }}
           imagePullPolicy: {{ .Values.copyTlsCerts.image.pullPolicy | quote }}
@@ -123,7 +123,7 @@ spec:
                       echo "Copied $file to $dst_file"
                   fi
               done
-              echo "All files have been copied." 
+              echo "All files have been copied."
           volumeMounts:
             - name: elasticsearch-certificates
               mountPath: /certs
@@ -139,6 +139,7 @@ spec:
           resources: {{- include "common.resources.preset" (dict "type" .Values.copyTlsCerts.resourcesPreset) | nindent 12 }}
           {{- end }}
         {{- end }}
+        {{- if .Values.enableDefaultInitContainers }}
         - name: copy-default-plugins
           image: {{ include "elasticsearch.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
@@ -170,6 +171,7 @@ spec:
             - name: empty-dir
               mountPath: /plugins
               subPath: app-plugins-dir
+        {{- end }}
         {{- if .Values.ingest.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.ingest.initContainers "context" $) | nindent 8 }}
         {{- end }}
@@ -317,6 +319,10 @@ spec:
               subPath: app-volume-dir
             - name: data
               mountPath: /bitnami/elasticsearch/data
+            {{- if and .Values.usePasswordFiles .Values.security.enabled }}
+            - name: elasticsearch-secrets
+              mountPath: /opt/bitnami/elasticsearch/secrets
+            {{- end }}
             {{- if .Values.config }}
             - mountPath: /opt/bitnami/elasticsearch/config/elasticsearch.yml
               name: config
@@ -361,6 +367,17 @@ spec:
           emptyDir: {}
         - name: "data"
           emptyDir: {}
+        {{- if and .Values.usePasswordFiles .Values.security.enabled }}
+        - name: elasticsearch-secrets
+          projected:
+            sources:
+              - secret:
+                  name: {{ include "elasticsearch.secretName" . }}
+              {{- if or .Values.security.tls.passwordsSecret .Values.security.tls.keystorePassword .Values.security.tls.truststorePassword .Values.security.tls.keyPassword }}
+              - secret:
+                  name: {{ include "elasticsearch.tlsPasswordsSecret" . }}
+              {{- end }}
+        {{- end }}
         {{- if or .Values.config .Values.extraConfig }}
         - name: config
           configMap:

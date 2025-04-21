@@ -1,8 +1,20 @@
 # Changelog
 
-## 1.8.1 (2025-03-31)
+## 1.9.1 (2025-04-09)
 
-* [bitnami/opensearch] Update nodes heapSize to half the memory preset ([#32686](https://github.com/bitnami/charts/pull/32686))
+* [bitnami/opensearch] Release 1.9.1 ([#32916](https://github.com/bitnami/charts/pull/32916))
+
+## 1.9.0 (2025-04-04)
+
+* [bitnami/opensearch] Set `usePasswordFiles=true` by default (#32797) ([d1ea259](https://github.com/bitnami/charts/commit/d1ea2593fc3a34439b742ac077edec74a1b8b3a6)), closes [#32797](https://github.com/bitnami/charts/issues/32797)
+
+## <small>1.8.2 (2025-04-02)</small>
+
+* [bitnami/opensearch] Release 1.8.2 (#32783) ([be1ab6d](https://github.com/bitnami/charts/commit/be1ab6dd868fdbd45d25d97e9cbc5cf54005b0e4)), closes [#32783](https://github.com/bitnami/charts/issues/32783)
+
+## <small>1.8.1 (2025-03-31)</small>
+
+* [bitnami/opensearch] Update nodes heapSize to half the memory preset (#32686) ([e467b2b](https://github.com/bitnami/charts/commit/e467b2b30b36dcaca94d9355315e05d50adf09f6)), closes [#32686](https://github.com/bitnami/charts/issues/32686)
 
 ## 1.8.0 (2025-03-19)
 

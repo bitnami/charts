@@ -67,20 +67,24 @@ extraDeploy:
         capabilities:
           drop:
           - ALL
-        runAsGroup: 1001
-        runAsNonRoot: true
-        runAsUser: 1001
         seccompProfile:
           type: RuntimeDefault
+        runAsNonRoot: true
+        {{- if not (include "common.compatibility.isOpenshift" .) }}
+        runAsGroup: 1001
+        runAsUser: 1001
+        {{- end }}
       name: pool-0
       nodeSelector: {}
       resources: {}
       securityContext:
-        fsGroup: 1001
         fsGroupChangePolicy: OnRootMismatch
-        runAsGroup: 1001
         runAsNonRoot: true
+        {{- if not (include "common.compatibility.isOpenshift" .) }}
+        fsGroup: 1001
+        runAsGroup: 1001
         runAsUser: 1001
+        {{- end }}
       servers: 2
       tolerations: []
       topologySpreadConstraints: []

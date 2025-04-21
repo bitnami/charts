@@ -131,6 +131,9 @@ spec:
                 - /bin/bash
                 - -ec
                 - |
+                  {{- if .Values.usePasswordFiles }}
+                  export SUPERSET_SECRET_KEY="$(< $SUPERSET_SECRET_KEY_FILE)"
+                  {{- end }}
                   . /opt/bitnami/scripts/superset-env.sh && celery -A superset.tasks.celery_app:app inspect ping -d celery@$HOSTNAME
           {{- end }}
           {{- if .Values.worker.customReadinessProbe }}
@@ -142,6 +145,9 @@ spec:
                 - /bin/bash
                 - -ec
                 - |
+                  {{- if .Values.usePasswordFiles }}
+                  export SUPERSET_SECRET_KEY="$(< $SUPERSET_SECRET_KEY_FILE)"
+                  {{- end }}
                   . /opt/bitnami/scripts/superset-env.sh && celery -A superset.tasks.celery_app:app inspect ping -d celery@$HOSTNAME
           {{- end }}
           {{- if .Values.worker.customStartupProbe }}
@@ -153,6 +159,9 @@ spec:
                 - /bin/bash
                 - -ec
                 - |
+                  {{- if .Values.usePasswordFiles }}
+                  export SUPERSET_SECRET_KEY="$(< $SUPERSET_SECRET_KEY_FILE)"
+                  {{- end }}
                   . /opt/bitnami/scripts/superset-env.sh && celery -A superset.tasks.celery_app:app inspect ping -d celery@$HOSTNAME
           {{- end }}
           {{- end }}
@@ -166,6 +175,11 @@ spec:
             - name: empty-dir
               mountPath: /opt/bitnami/superset/superset_home
               subPath: superset-home
+            {{- if .Values.usePasswordFiles }}
+            - name: superset-secrets
+              mountPath: /opt/bitnami/superset/secrets
+              readOnly: true
+            {{- end }}
             {{- if or .Values.existingConfigmap .Values.config }}
             - name: superset-config
               mountPath: /bitnami/superset/conf
@@ -179,6 +193,22 @@ spec:
       volumes:
         - name: empty-dir
           emptyDir: {}
+        {{- if .Values.usePasswordFiles }}
+        - name: superset-secrets
+          projected:
+            sources:
+              - secret:
+                  name: {{ include "superset.secretName" . }}
+                  items:
+                    - key: superset-secret-key
+                      path: superset-secret-key
+              - secret:
+                  name: {{ include "superset.redis.secretName" . }}
+              {{- if or (not .Values.postgresql.enabled) .Values.postgresql.auth.enablePostgresUser }}
+              - secret:
+                  name: {{ include "superset.postgresql.secretName" . }}
+              {{- end }}
+        {{- end }}
         {{- if or .Values.existingConfigmap .Values.config }}
         - name: superset-config
           configMap:

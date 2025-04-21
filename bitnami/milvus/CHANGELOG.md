@@ -1,8 +1,32 @@
 # Changelog
 
-## 12.0.1 (2025-03-31)
+## 13.2.2 (2025-04-17)
 
-* [bitnami/milvus] Release 12.0.1 ([#32690](https://github.com/bitnami/charts/pull/32690))
+* [bitnami/milvus] Release 13.2.2 ([#33053](https://github.com/bitnami/charts/pull/33053))
+
+## <small>13.2.1 (2025-04-10)</small>
+
+* [bitnami/milvus] Release 13.2.1 (#32956) ([5b01b03](https://github.com/bitnami/charts/commit/5b01b030219eb6f935e4fafd20d3f8d46bf5b297)), closes [#32956](https://github.com/bitnami/charts/issues/32956)
+
+## 13.2.0 (2025-04-08)
+
+* [bitnami/milvus] Update minio chart (#32867) ([4a1bdbe](https://github.com/bitnami/charts/commit/4a1bdbeb4c7467d2e34ecea0a6930e195c255922)), closes [#32867](https://github.com/bitnami/charts/issues/32867)
+
+## 13.1.0 (2025-04-07)
+
+* [bitnami/milvus] Set `usePasswordFiles=true` by default (#32642) ([acd95f9](https://github.com/bitnami/charts/commit/acd95f9000cbb69abaa282d6149d59e036fc77b1)), closes [#32642](https://github.com/bitnami/charts/issues/32642)
+
+## 13.0.0 (2025-04-04)
+
+* [bitnami/milvus] Bump MinIO major version 16.x.x (#32701) ([a6fc148](https://github.com/bitnami/charts/commit/a6fc148e3681569d589034aff435f1aadaf8d00e)), closes [#32701](https://github.com/bitnami/charts/issues/32701)
+
+## <small>12.0.2 (2025-04-02)</small>
+
+* [bitnami/milvus] Release 12.0.2 (#32747) ([03cba8a](https://github.com/bitnami/charts/commit/03cba8a5cd6dc34089fd235193b93f22a8a99f1f)), closes [#32747](https://github.com/bitnami/charts/issues/32747)
+
+## <small>12.0.1 (2025-03-31)</small>
+
+* [bitnami/milvus] Release 12.0.1 (#32690) ([cae0234](https://github.com/bitnami/charts/commit/cae02342c38ff522d3d8d061c1074afd187b4c81)), closes [#32690](https://github.com/bitnami/charts/issues/32690)
 
 ## 12.0.0 (2025-03-27)
 

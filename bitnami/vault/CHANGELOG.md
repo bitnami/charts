@@ -1,8 +1,29 @@
 # Changelog
 
+## 1.7.5 (2025-04-18)
+
+* [bitnami/vault] Release 1.7.5 ([#33075](https://github.com/bitnami/charts/pull/33075))
+
+## <small>1.7.4 (2025-04-14)</small>
+
+* [bitnami/vault] bugfix: enable back server.replicaCount parameter (#32992) ([6f734f4](https://github.com/bitnami/charts/commit/6f734f419d4809e7b80be9f2c412e2f8c1c99421)), closes [#32992](https://github.com/bitnami/charts/issues/32992)
+
+## <small>1.7.3 (2025-04-09)</small>
+
+* [bitnami/vault] Release 1.7.3 (#32919) ([32020c1](https://github.com/bitnami/charts/commit/32020c1a7047c5717374c972e6ca755545477650)), closes [#32919](https://github.com/bitnami/charts/issues/32919)
+
+## <small>1.7.2 (2025-04-04)</small>
+
+* [bitnami/vault] Release 1.7.2 (#32819) ([79a15c6](https://github.com/bitnami/charts/commit/79a15c68659a535de55bdcaffb37824fd844af6e)), closes [#32819](https://github.com/bitnami/charts/issues/32819)
+
+## <small>1.7.1 (2025-04-02)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/vault] Release 1.7.1 (#32765) ([af1ea05](https://github.com/bitnami/charts/commit/af1ea053672509dbaef2b96426d9bf63a166eaa1)), closes [#32765](https://github.com/bitnami/charts/issues/32765)
+
 ## 1.7.0 (2025-03-11)
 
-* [bitnami/vault] Remove server.replicaCount parameter ([#32384](https://github.com/bitnami/charts/pull/32384))
+* [bitnami/vault] Remove server.replicaCount parameter (#32384) ([3dcf30f](https://github.com/bitnami/charts/commit/3dcf30f59eb2febfd69f48ad06f31b51e7bb69b4)), closes [#32384](https://github.com/bitnami/charts/issues/32384)
 
 ## <small>1.6.10 (2025-03-05)</small>
 

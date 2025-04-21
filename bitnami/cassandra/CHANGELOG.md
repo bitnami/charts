@@ -1,8 +1,29 @@
 # Changelog
 
-## 12.2.2 (2025-03-12)
+## 12.3.3 (2025-04-21)
 
-* [bitnami/cassandra] bugfix #32369 ([#32415](https://github.com/bitnami/charts/pull/32415))
+* [bitnami/cassandra] Release 12.3.3 ([#33094](https://github.com/bitnami/charts/pull/33094))
+
+## <small>12.3.2 (2025-04-21)</small>
+
+* [bitnami/cassandra] Release 12.3.2 (#32966) ([4f6012d](https://github.com/bitnami/charts/commit/4f6012d7dad6a03aebce1af424863d39eaec8e4a)), closes [#32966](https://github.com/bitnami/charts/issues/32966)
+
+## <small>12.3.1 (2025-04-09)</small>
+
+* [bitnami/cassandra] Release 12.3.1 (#32901) ([8295c9d](https://github.com/bitnami/charts/commit/8295c9d7e5f5e4cfeb76c0840c048fa167413c07)), closes [#32901](https://github.com/bitnami/charts/issues/32901)
+
+## 12.3.0 (2025-04-08)
+
+* [bitnami/cassandra] Cassandra dynamic seed discovery (#32464) ([7e84568](https://github.com/bitnami/charts/commit/7e845681d98407d9d57105aa231a90c91c93f207)), closes [#32464](https://github.com/bitnami/charts/issues/32464)
+
+## <small>12.2.3 (2025-04-04)</small>
+
+* [bitnami/cassandra] Release 12.2.3 (#32813) ([450a2ae](https://github.com/bitnami/charts/commit/450a2ae38a9b69b2f2ce9e99d8f071060b77130c)), closes [#32813](https://github.com/bitnami/charts/issues/32813)
+
+## <small>12.2.2 (2025-03-20)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/cassandra] bugfix #32369 (#32415) ([74346fb](https://github.com/bitnami/charts/commit/74346fb2715f349727c5e0468b4066d55ddd2a02)), closes [#32369](https://github.com/bitnami/charts/issues/32369) [#32415](https://github.com/bitnami/charts/issues/32415) [#32369](https://github.com/bitnami/charts/issues/32369)
 
 ## <small>12.2.1 (2025-03-05)</small>
 

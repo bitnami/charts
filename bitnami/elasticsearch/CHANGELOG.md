@@ -1,8 +1,25 @@
 # Changelog
 
-## 21.4.9 (2025-03-25)
+## 21.6.1 (2025-04-17)
 
-* [bitnami/elasticsearch] Release 21.4.9 ([#32601](https://github.com/bitnami/charts/pull/32601))
+* [bitnami/elasticsearch] fix coordinating security.enabled ([#32840](https://github.com/bitnami/charts/pull/32840))
+
+## 21.6.0 (2025-04-16)
+
+* [bitnami/elasticsearch] Fixes #32794, add enableDefaultInitContainers to elasticsearch chart (#32855 ([652f468](https://github.com/bitnami/charts/commit/652f4680167a2c5fd88f1978959668837ea85d33)), closes [#32794](https://github.com/bitnami/charts/issues/32794) [#32855](https://github.com/bitnami/charts/issues/32855) [#32794](https://github.com/bitnami/charts/issues/32794)
+
+## <small>21.5.1 (2025-04-15)</small>
+
+* [bitnami/elasticsearch] Release 21.5.1 (#33016) ([2add1cd](https://github.com/bitnami/charts/commit/2add1cdd0bc988f860ef182c0da3dc500317fa50)), closes [#33016](https://github.com/bitnami/charts/issues/33016)
+
+## 21.5.0 (2025-04-04)
+
+* [bitnami/elasticsearch] Set `usePasswordFiles=true` by default (#32344) ([3ab212e](https://github.com/bitnami/charts/commit/3ab212e680be626360e561dd6eab6e324b557834)), closes [#32344](https://github.com/bitnami/charts/issues/32344)
+
+## <small>21.4.9 (2025-03-25)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/elasticsearch] Release 21.4.9 (#32601) ([2db1009](https://github.com/bitnami/charts/commit/2db10093cf6f47e959774f6c262b9314480a7bcb)), closes [#32601](https://github.com/bitnami/charts/issues/32601)
 
 ## <small>21.4.8 (2025-03-04)</small>
 

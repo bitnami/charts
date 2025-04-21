@@ -1,8 +1,33 @@
 # Changelog
 
-## 6.6.1 (2025-03-05)
+## 6.6.7 (2025-04-21)
 
-* [bitnami/influxdb] Release 6.6.1 ([#32332](https://github.com/bitnami/charts/pull/32332))
+* [bitnami/influxdb] Fix backup functionality, closes bitnami#33038 ([#33092](https://github.com/bitnami/charts/pull/33092))
+
+## <small>6.6.6 (2025-04-21)</small>
+
+* [bitnami/influxdb] Add revisionHistoryLimit variable (#32509) ([54ba28d](https://github.com/bitnami/charts/commit/54ba28d9a28249fb731b151b58dcaac00bbfa076)), closes [#32509](https://github.com/bitnami/charts/issues/32509)
+
+## <small>6.6.5 (2025-04-15)</small>
+
+* [bitnami/influxdb] Release 6.6.5 (#33009) ([b6c0dc4](https://github.com/bitnami/charts/commit/b6c0dc442aa40f42aea91ff3af6a847e70b3c912)), closes [#33009](https://github.com/bitnami/charts/issues/33009)
+
+## <small>6.6.4 (2025-04-15)</small>
+
+* [bitnami/influxdb] fix invalid template syntax (#33001) ([3fb2db6](https://github.com/bitnami/charts/commit/3fb2db63a542daaa83a04520df4505f3f86e4cb6)), closes [#33001](https://github.com/bitnami/charts/issues/33001)
+
+## <small>6.6.3 (2025-04-14)</small>
+
+* [bitnami/influxdb] bugfix: replace references to .Release.Namespace (#32985) ([b0f1dff](https://github.com/bitnami/charts/commit/b0f1dff958692696851a7c169cbe2d4924023de5)), closes [#32985](https://github.com/bitnami/charts/issues/32985)
+
+## <small>6.6.2 (2025-04-01)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/influxdb] Release 6.6.2 (#32739) ([7cbd52e](https://github.com/bitnami/charts/commit/7cbd52ec214f321e3cad390eaf0f7e2667a06309)), closes [#32739](https://github.com/bitnami/charts/issues/32739)
+
+## <small>6.6.1 (2025-03-05)</small>
+
+* [bitnami/influxdb] Release 6.6.1 (#32332) ([c15d866](https://github.com/bitnami/charts/commit/c15d866508518a783f4cb6fd56f12609ace756fd)), closes [#32332](https://github.com/bitnami/charts/issues/32332)
 
 ## 6.6.0 (2025-02-26)
 

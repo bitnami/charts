@@ -297,6 +297,7 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 | `clusterDomain`          | Kubernetes cluster domain name                                                          | `cluster.local` |
 | `extraDeploy`            | Array of extra objects to deploy with the release                                       | `[]`            |
 | `namespaceOverride`      | String to fully override common.names.namespace                                         | `""`            |
+| `usePasswordFiles`       | Mount credentials as files instead of using environment variables                       | `true`          |
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
 | `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]`  |
@@ -323,6 +324,7 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 | `extraEnvVarsSecret`                       | Secret containing extra env vars to be added to all pods (evaluated as a template)                                                                  | `""`                            |
 | `sidecars`                                 | Add additional sidecar containers to the all elasticsearch node pod(s)                                                                              | `[]`                            |
 | `initContainers`                           | Add additional init containers to the all elasticsearch node pod(s)                                                                                 | `[]`                            |
+| `enableDefaultInitContainers`              | enables (or disables if false) the default init containers (sysctl, volume permissions, copy plugins etc...)                                        | `true`                          |
 | `useIstioLabels`                           | Use this variable to add Istio labels to all pods                                                                                                   | `true`                          |
 | `image.registry`                           | Elasticsearch image registry                                                                                                                        | `REGISTRY_NAME`                 |
 | `image.repository`                         | Elasticsearch image repository                                                                                                                      | `REPOSITORY_NAME/elasticsearch` |

@@ -45,6 +45,9 @@ nameOverride: ""
 ## @param fullnameOverride String to fully override influxdb.fullname template with a string
 ##
 fullnameOverride: ""
+## @param namespaceOverride String to fully override common.names.namespace
+##
+namespaceOverride: ""
 ## @param clusterDomain Default Kubernetes cluster domain
 ##
 clusterDomain: cluster.local
@@ -86,7 +89,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/influxdb
-  tag: 2.7.11-debian-12-r11
+  tag: 2.7.11-debian-12-r18
   digest: ""
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
@@ -255,6 +258,9 @@ influxdb:
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
+  ## @param influxdb.revisionHistoryLimit InfluxDB&trade; statefulset/deployment revision history limit
+  ##
+  revisionHistoryLimit: 10
   ## @param influxdb.updateStrategy.type InfluxDB&trade; statefulset/deployment strategy type
   ## Statefulset ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ## Deployment ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
@@ -901,7 +907,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r39
+    tag: 12-debian-12-r43
     digest: ""
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
@@ -1127,7 +1133,7 @@ backup:
       image:
         registry: docker.io
         repository: bitnami/google-cloud-sdk
-        tag: 0.513.0-debian-12-r0
+        tag: 0.517.0-debian-12-r3
         digest: ""
         ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
         ##
@@ -1180,7 +1186,7 @@ backup:
       image:
         registry: docker.io
         repository: bitnami/azure-cli
-        tag: 2.70.0-debian-12-r0
+        tag: 2.71.0-debian-12-r3
         digest: ""
         ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
         ##
@@ -1237,7 +1243,7 @@ backup:
       image:
         registry: docker.io
         repository: bitnami/aws-cli
-        tag: 2.24.10-debian-12-r0
+        tag: 2.26.0-debian-12-r3
         digest: ""
         ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
         ##

@@ -1,8 +1,25 @@
 # Changelog
 
-## 9.0.7 (2025-03-19)
+## 9.0.11 (2025-04-09)
 
-* [bitnami/nats] Release 9.0.7 ([#32517](https://github.com/bitnami/charts/pull/32517))
+* [bitnami/nats] Release 9.0.11 ([#32929](https://github.com/bitnami/charts/pull/32929))
+
+## <small>9.0.10 (2025-04-09)</small>
+
+* [bitnami/nats] Release 9.0.10 (#32907) ([85f9f14](https://github.com/bitnami/charts/commit/85f9f14119a4f8693116c4b1f346fdff3bcd03eb)), closes [#32907](https://github.com/bitnami/charts/issues/32907)
+
+## <small>9.0.9 (2025-04-08)</small>
+
+* [bitnami/nats] Release 9.0.9 (#32873) ([138f5a9](https://github.com/bitnami/charts/commit/138f5a9dcd179ce78354423b43b037ce13bdcc73)), closes [#32873](https://github.com/bitnami/charts/issues/32873)
+
+## <small>9.0.8 (2025-04-02)</small>
+
+* [bitnami/nats] Release 9.0.8 (#32754) ([fbba74c](https://github.com/bitnami/charts/commit/fbba74c68011f672055966d535858be10a8dd74e)), closes [#32754](https://github.com/bitnami/charts/issues/32754)
+
+## <small>9.0.7 (2025-03-19)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/nats] Release 9.0.7 (#32517) ([a902ef8](https://github.com/bitnami/charts/commit/a902ef8c45ad542e44e8e89171ad03ba47ea31fc)), closes [#32517](https://github.com/bitnami/charts/issues/32517)
 
 ## <small>9.0.6 (2025-03-11)</small>
 

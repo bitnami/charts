@@ -450,6 +450,7 @@ The [Bitnami grafana-loki](https://github.com/bitnami/containers/tree/main/bitna
 | `gateway.service.externalTrafficPolicy`         | Gateway service external traffic policy                                                                                          | `Cluster`                |
 | `gateway.service.annotations`                   | Additional custom annotations for Gateway service                                                                                | `{}`                     |
 | `gateway.service.extraPorts`                    | Extra ports to expose in the Gateway service                                                                                     | `[]`                     |
+| `gateway.service.nginx.config`                  | to override configurations i.e (client_max_body_size) in nginx http block                                                        | `""`                     |
 | `gateway.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                                                              | `true`                   |
 | `gateway.networkPolicy.allowExternal`           | Don't require server label for connections                                                                                       | `true`                   |
 | `gateway.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                                                  | `true`                   |

@@ -291,6 +291,7 @@ wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
 | `clusterDomain`          | Kubernetes cluster domain name                                                            | `cluster.local` |
 | `extraDeploy`            | Array of extra objects to deploy with the release                                         | `[]`            |
 | `enableServiceLinks`     | Whether information about services should be injected into all pods' environment variable | `false`         |
+| `usePasswordFiles`       | Mount credentials as files instead of using environment variables                         | `true`          |
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)   | `false`         |
 | `diagnosticMode.command` | Command to override all containers in the deployments/statefulsets                        | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the deployments/statefulsets                           | `["infinity"]`  |
@@ -1865,6 +1866,10 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/milvu
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 13.0.0
+
+This major updates the `minio` subchart to its newest major, 16.0.0. For more information on this subchart's major, please refer to [minio upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/minio#to-1600) (effective in 13.2.0).
 
 ### To 12.0.0
 

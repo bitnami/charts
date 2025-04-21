@@ -1,8 +1,21 @@
 # Changelog
 
-## 25.0.2 (2025-03-31)
+## 25.1.1 (2025-04-09)
 
-* [bitnami/parse] Release 25.0.2 ([#32687](https://github.com/bitnami/charts/pull/32687))
+* [bitnami/parse] Release 25.1.1 ([#32912](https://github.com/bitnami/charts/pull/32912))
+
+## 25.1.0 (2025-04-04)
+
+* [bitnami/parse] Set `usePasswordFiles=true` by default (#32709) ([5166f77](https://github.com/bitnami/charts/commit/5166f773fda498d5fc6ba9dbfa2adab226386824)), closes [#32709](https://github.com/bitnami/charts/issues/32709)
+
+## <small>25.0.3 (2025-04-04)</small>
+
+* [bitnami/parse] Release 25.0.3 (#32810) ([920a2d6](https://github.com/bitnami/charts/commit/920a2d667af0321b87ead6f38726c4fcb1742c60)), closes [#32810](https://github.com/bitnami/charts/issues/32810)
+
+## <small>25.0.2 (2025-03-31)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/parse] Release 25.0.2 (#32687) ([e95d3a8](https://github.com/bitnami/charts/commit/e95d3a8ee8c5087cc103997e3da4cdac938d6017)), closes [#32687](https://github.com/bitnami/charts/issues/32687)
 
 ## <small>25.0.1 (2025-03-10)</small>
 

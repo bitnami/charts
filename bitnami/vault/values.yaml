@@ -95,7 +95,7 @@ server:
   image:
     registry: docker.io
     repository: bitnami/vault
-    tag: 1.19.0-debian-12-r0
+    tag: 1.19.2-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -112,6 +112,9 @@ server:
     ## Enable debug mode
     ##
     debug: false
+  ## @param server.replicaCount Number of Vault Server replicas to deploy
+  ##
+  replicaCount: 1
   ## @param server.podManagementPolicy Pod management policy
   ## Should be initialized one by one when building the replicaset for the first time
   ##
@@ -826,7 +829,7 @@ csiProvider:
   image:
     registry: docker.io
     repository: bitnami/vault-csi-provider
-    tag: 1.5.0-debian-12-r17
+    tag: 1.5.0-debian-12-r22
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1330,7 +1333,7 @@ injector:
   image:
     registry: docker.io
     repository: bitnami/vault-k8s
-    tag: 1.6.2-debian-12-r1
+    tag: 1.6.2-debian-12-r6
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1797,7 +1800,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r39
+    tag: 12-debian-12-r43
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

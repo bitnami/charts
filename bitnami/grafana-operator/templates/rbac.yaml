@@ -78,7 +78,10 @@ rules:
       - grafanadashboards
       - grafanadatasources
       - grafanafolders
+      - grafanalibrarypanels
+      - grafanamutetimings
       - grafananotificationpolicies
+      - grafananotificationpolicyroutes
       - grafananotificationtemplates
       - grafanas
     verbs:
@@ -97,7 +100,10 @@ rules:
       - grafanadashboards/finalizers
       - grafanadatasources/finalizers
       - grafanafolders/finalizers
+      - grafanalibrarypanels/finalizers
+      - grafanamutetimings/finalizers
       - grafananotificationpolicies/finalizers
+      - grafananotificationpolicyroutes/finalizers
       - grafananotificationtemplates/finalizers
       - grafanas/finalizers
     verbs:
@@ -110,7 +116,10 @@ rules:
       - grafanadashboards/status
       - grafanadatasources/status
       - grafanafolders/status
+      - grafanalibrarypanels/status
+      - grafanamutetimings/status
       - grafananotificationpolicies/status
+      - grafananotificationpolicyroutes/status
       - grafananotificationtemplates/status
       - grafanas/status
     verbs:

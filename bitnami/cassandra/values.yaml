@@ -90,7 +90,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/cassandra
-  tag: 5.0.3-debian-12-r6
+  tag: 5.0.4-debian-12-r3
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -158,6 +158,35 @@ existingConfiguration: ""
 ## @param cluster.extraSeeds For an external/second cassandra ring.
 ## @param cluster.enableUDF Enable User defined functions
 ##
+
+dynamicSeedDiscovery:
+  ## @param dynamicSeedDiscovery.enabled Enable dynamic-seed-discovery init container
+  ##
+  enabled: false
+  ## @param dynamicSeedDiscovery.image.registry [default: REGISTRY_NAME] Init container dynamic-seed-discovery image registry
+  ## @param dynamicSeedDiscovery.image.repository [default: REPOSITORY_NAME/alpine] Init container dynamic-seed-discovery image repository
+  ## @skip dynamicSeedDiscovery.image.tag Init container dynamic-seed-discovery image tag (immutable tags are recommended)
+  ## @param dynamicSeedDiscovery.image.digest Init container dynamic-seed-discovery image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param dynamicSeedDiscovery.image.pullPolicy Init container dynamic-seed-discovery pull policy
+  ## @param dynamicSeedDiscovery.image.pullSecrets Specify docker-registry secret names as an array
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/os-shell
+    tag: 12-debian-12-r43
+    digest: ""
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+
+
+
 cluster:
   name: cassandra
   seedCount: 1
@@ -173,6 +202,7 @@ cluster:
   ##
   extraSeeds: []
   enableUDF: false
+
 ## JVM Settings
 ## @param jvm.extraOpts Set the value for Java Virtual Machine extra options
 ## @param jvm.maxHeapSize Set Java Virtual Machine maximum heap size (MAX_HEAP_SIZE). Calculated automatically if `nil`
@@ -684,7 +714,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r39
+    tag: 12-debian-12-r43
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -752,7 +782,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/cassandra-exporter
-    tag: 2.3.8-debian-12-r41
+    tag: 2.3.8-debian-12-r45
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

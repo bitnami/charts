@@ -1,8 +1,21 @@
 # Changelog
 
-## 9.5.6 (2025-03-28)
+## 9.6.1 (2025-04-09)
 
-* [bitnami/solr] Release 9.5.6 ([#32650](https://github.com/bitnami/charts/pull/32650))
+* [bitnami/solr] Release 9.6.1 ([#32893](https://github.com/bitnami/charts/pull/32893))
+
+## 9.6.0 (2025-04-04)
+
+* [bitnami/solr] Set `usePasswordFiles=true` by default (#32782) ([84a3fb4](https://github.com/bitnami/charts/commit/84a3fb444e51f5c9cd0d417edc155390ee1b2ff0)), closes [#32782](https://github.com/bitnami/charts/issues/32782)
+
+## <small>9.5.7 (2025-04-02)</small>
+
+* [bitnami/solr] Release 9.5.7 (#32784) ([fd41f2d](https://github.com/bitnami/charts/commit/fd41f2d13d80e1dce5fee2703667d3a7d26ca103)), closes [#32784](https://github.com/bitnami/charts/issues/32784)
+
+## <small>9.5.6 (2025-03-28)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/solr] Release 9.5.6 (#32650) ([fc2728c](https://github.com/bitnami/charts/commit/fc2728cf08cbc7bb526b359e8188f3e9001f74f8)), closes [#32650](https://github.com/bitnami/charts/issues/32650)
 
 ## <small>9.5.5 (2025-03-12)</small>
 
