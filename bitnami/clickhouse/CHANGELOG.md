@@ -1,8 +1,12 @@
 # Changelog
 
+## 9.1.1 (2025-04-21)
+
+* [bitnami/clickhouse] bugfix: prometheus.io/scrape label ([#33091](https://github.com/bitnami/charts/pull/33091))
+
 ## 9.1.0 (2025-04-15)
 
-* [bitnami/clickhouse] Stops unnecessary logging ([#32988](https://github.com/bitnami/charts/pull/32988))
+* [bitnami/clickhouse] Stops unnecessary logging (#32988) ([24167d1](https://github.com/bitnami/charts/commit/24167d12f4a9b9088ad36b7aa6cacb2e1f458826)), closes [#32988](https://github.com/bitnami/charts/issues/32988)
 
 ## 9.0.0 (2025-04-15)
 
