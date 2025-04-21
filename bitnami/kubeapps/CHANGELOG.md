@@ -1,8 +1,13 @@
 # Changelog
 
-## 17.1.4 (2025-03-23)
+## 17.1.5 (2025-04-21)
 
-* [bitnami/kubeapps] Release 17.1.4 ([#32568](https://github.com/bitnami/charts/pull/32568))
+* [bitnami/kubeapps] Release 17.1.5 ([#33097](https://github.com/bitnami/charts/pull/33097))
+
+## <small>17.1.4 (2025-03-23)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/kubeapps] Release 17.1.4 (#32568) ([d9f041d](https://github.com/bitnami/charts/commit/d9f041d9cca4c83fd77f3dcba95d741ccf320e9a)), closes [#32568](https://github.com/bitnami/charts/issues/32568)
 
 ## <small>17.1.3 (2025-02-21)</small>
 
