@@ -1,8 +1,12 @@
 # Changelog
 
-## 24.5.5 (2025-04-17)
+## 24.5.6 (2025-04-21)
 
 * [bitnami/keycloak] Dynamic tpl rendering of the external database port ([#33040](https://github.com/bitnami/charts/pull/33040))
+
+## <small>24.5.5 (2025-04-21)</small>
+
+* [bitnami/keycloak] Added themes to the list of writable dirs (#32993) ([7fb4af5](https://github.com/bitnami/charts/commit/7fb4af548b0cfe95748d654bb61ecb1f84fc3540)), closes [#32993](https://github.com/bitnami/charts/issues/32993)
 
 ## <small>24.5.4 (2025-04-15)</small>
 
