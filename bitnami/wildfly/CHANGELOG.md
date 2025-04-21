@@ -1,8 +1,12 @@
 # Changelog
 
-## 24.0.1 (2025-04-15)
+## 24.0.2 (2025-04-21)
 
-* [bitnami/wildfly] Release 24.0.1 ([#33019](https://github.com/bitnami/charts/pull/33019))
+* [bitnami/wildfly] Release 24.0.2 ([#33095](https://github.com/bitnami/charts/pull/33095))
+
+## <small>24.0.1 (2025-04-15)</small>
+
+* [bitnami/wildfly] Release 24.0.1 (#33019) ([ab8e7f5](https://github.com/bitnami/charts/commit/ab8e7f596ddaa48ac6a91d7a16a59a46629e196a)), closes [#33019](https://github.com/bitnami/charts/issues/33019)
 
 ## 24.0.0 (2025-04-11)
 
