@@ -109,6 +109,7 @@ spec:
               cp -r --preserve=mode /opt/bitnami/keycloak/lib/quarkus /emptydir/app-quarkus-dir
               cp -r --preserve=mode /opt/bitnami/keycloak/data /emptydir/app-data-dir
               cp -r --preserve=mode /opt/bitnami/keycloak/providers /emptydir/app-providers-dir
+              cp -r --preserve=mode /opt/bitnami/keycloak/themes /emptydir/app-themes-dir
               info "Copy operation completed"
           {{- if .Values.containerSecurityContext.enabled }}
           securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
@@ -341,7 +342,10 @@ spec:
             - name: empty-dir
               mountPath: /opt/bitnami/keycloak/providers
               subPath: app-providers-dir
-            {{- if .Values.usePasswordFiles }}
+            - name: empty-dir
+              mountPath: /opt/bitnami/keycloak/themes
+              subPath: app-themes-dir
+            {{- if  .Values.usePasswordFiles }}
             - name: keycloak-secrets
               mountPath: /opt/bitnami/keycloak/secrets
             {{- end }}

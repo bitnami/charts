@@ -1,8 +1,16 @@
 # Changelog
 
-## 20.12.0 (2025-04-12)
+## 20.12.2 (2025-04-16)
 
-* [bitnami/redis] Support retrieving Redis ACL user passwords from Kubernetes Secrets  ([#32434](https://github.com/bitnami/charts/pull/32434))
+* [bitnami/redis] fix 32573 - Always announce hostname independent of external service configuration ([#33024](https://github.com/bitnami/charts/pull/33024))
+
+## <small>20.12.1 (2025-04-16)</small>
+
+* [bitnami/redis] Fix sentinel masterService extraPorts not rendered (#32961) ([cbc134f](https://github.com/bitnami/charts/commit/cbc134f26b1f146e2a482a27db72d98c1d1b344e)), closes [#32961](https://github.com/bitnami/charts/issues/32961)
+
+## 20.12.0 (2025-04-15)
+
+* [bitnami/redis] Support retrieving Redis ACL user passwords from Kubernetes Secrets  (#32434) ([e4fd127](https://github.com/bitnami/charts/commit/e4fd1274291da70e85b0891c9f1a985bd5dc7e0e)), closes [#32434](https://github.com/bitnami/charts/issues/32434)
 
 ## <small>20.11.5 (2025-04-09)</small>
 

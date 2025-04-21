@@ -2,7 +2,7 @@
 
 ## 24.5.5 (2025-04-15)
 
-* [bitnami/keycloak] Release 24.5.5 ([#32980](https://github.com/bitnami/charts/pull/32980))
+* [bitnami/keycloak] Added themes to the list of writable dirs ([#32993](https://github.com/bitnami/charts/pull/32993))
 
 ## <small>24.5.4 (2025-04-15)</small>
 
