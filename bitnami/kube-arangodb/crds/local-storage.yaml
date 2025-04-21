@@ -1,4 +1,4 @@
-# Note this CRD was taken from : https://github.com/arangodb/kube-arangodb/blob/1.2.47/chart/kube-arangodb/templates/storage-operator/crd.yaml
+# Note this CRD was taken from : https://raw.githubusercontent.com/arangodb/kube-arangodb/refs/tags/1.2.47/chart/kube-arangodb/templates/storage-operator/crd.yaml
 # At the moment we can not automate this CRD because is templated in the upstream.
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
