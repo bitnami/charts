@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.31.0 (2025-03-28)
+## 2.31.0 (2025-04-21)
 
 * [bitnami/common] Add global.security.allowEmptyPassword ([#32675](https://github.com/bitnami/charts/pull/32675))
 
