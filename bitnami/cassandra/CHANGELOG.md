@@ -1,6 +1,6 @@
 # Changelog
 
-## 12.3.2 (2025-04-18)
+## 12.3.2 (2025-04-21)
 
 * [bitnami/cassandra] Store cassandra-exporter configuration in Secret ([#33069](https://github.com/bitnami/charts/pull/33069))
 
