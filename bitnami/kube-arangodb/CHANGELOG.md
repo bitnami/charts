@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.1.7 (2025-04-08)
+## 0.1.8 (2025-04-21)
 
-* [bitnami/kube-arangodb] Chore/kube arangodb correct typo chaows ([#32849](https://github.com/bitnami/charts/pull/32849))
+* [bitnami/kube-arangodb] Release 0.1.7 ([#32740](https://github.com/bitnami/charts/pull/32740))
+
+## <small>0.1.7 (2025-04-08)</small>
+
+* [bitnami/kube-arangodb] Chore/kube arangodb correct typo chaows (#32849) ([30434ab](https://github.com/bitnami/charts/commit/30434ab690cb6b52d248ff1289adff0c9a2d4dcd)), closes [#32849](https://github.com/bitnami/charts/issues/32849)
 
 ## <small>0.1.6 (2025-03-28)</small>
 
