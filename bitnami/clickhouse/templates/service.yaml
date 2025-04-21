@@ -19,7 +19,7 @@ metadata:
     app.kubernetes.io/part-of: clickhouse
     {{- if and .context.Values.metrics.enabled .context.Values.metrics.serviceMonitor.enabled }}
     {{- /* Adding extra selector for the ServiceMonitor object to avoid duplicate targets  */}}
-    prometheus.io/scrape: true
+    prometheus.io/scrape: "true"
     {{- end }}
     {{- if .context.Values.service.perReplicaAccess }}
     pod: {{ $name }}
