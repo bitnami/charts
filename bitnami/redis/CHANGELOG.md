@@ -1,8 +1,12 @@
 # Changelog
 
-## 20.12.1 (2025-04-16)
+## 20.12.2 (2025-04-21)
 
-* [bitnami/redis] Fix sentinel masterService extraPorts not rendered ([#32961](https://github.com/bitnami/charts/pull/32961))
+* [bitnami/redis] Release 20.12.2 ([#33089](https://github.com/bitnami/charts/pull/33089))
+
+## <small>20.12.1 (2025-04-16)</small>
+
+* [bitnami/redis] Fix sentinel masterService extraPorts not rendered (#32961) ([cbc134f](https://github.com/bitnami/charts/commit/cbc134f26b1f146e2a482a27db72d98c1d1b344e)), closes [#32961](https://github.com/bitnami/charts/issues/32961)
 
 ## 20.12.0 (2025-04-15)
 
