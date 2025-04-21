@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.5.1 (2025-04-14)
+## 11.5.2 (2025-04-21)
 
-*  [bitnami/redis-cluster] fix: Do not generate secret checksum when is not existing ([#32967](https://github.com/bitnami/charts/pull/32967))
+* [bitnami/redis-cluster] Release 11.5.2 ([#33088](https://github.com/bitnami/charts/pull/33088))
+
+## <small>11.5.1 (2025-04-14)</small>
+
+*  [bitnami/redis-cluster] fix: Do not generate secret checksum when is not existing (#32967) ([9982c19](https://github.com/bitnami/charts/commit/9982c197fc3b4837b20382972eade19af6f6f66b)), closes [#32967](https://github.com/bitnami/charts/issues/32967)
 
 ## 11.5.0 (2025-04-07)
 

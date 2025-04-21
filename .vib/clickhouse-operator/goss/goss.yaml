@@ -12,17 +12,11 @@ file:
     contents:
       - /listen_host>::</
       - /listen_host>0.0.0.0</
-  /opt/bitnami/clickhouse/etc/conf.d/chop-generated-hostname-ports.xml:
-    exists: true
-    filetype: symlink
-    contents:
-      - /tcp_port>9001</
-      - /http_port>8124</
   /opt/bitnami/clickhouse/etc/conf.d/chop-generated-zookeeper.xml:
     exists: true
     filetype: symlink
     contents:
-      - /chk-vib-vib-0-0/
+      - /chk-vib-vib/
   /opt/bitnami/clickhouse/etc/users.d/chop-generated-users.xml:
     exists: true
     filetype: symlink
@@ -30,11 +24,11 @@ file:
       - /<{{ .Vars.auth.username }}>/
 # Host and ports are hardcoded in the ClickHouseInstallationTemplate
 http:
-  http://127.0.0.1:8124/replicas_status:
+  http://127.0.0.1:8123/replicas_status:
     status: 200
     body:
       - Ok
-  http://chi-vib-vib-0-0:8124/replicas_status:
+  http://chi-vib-vib-0-0:8123/replicas_status:
     status: 200
     body:
       - Ok
@@ -46,7 +40,7 @@ addr:
 command:
   check-cluster-status:
     # Hardcoded port based on the ClickHouseInstallationTemplate spec
-    exec: clickhouse-client --port 9001 --user '{{ .Vars.auth.username }}' --password '{{ .Vars.auth.password }}' --query='SELECT COUNT(*) FROM system.clusters;'
+    exec: clickhouse-client --port 9000 --user '{{ .Vars.auth.username }}' --password '{{ .Vars.auth.password }}' --query='SELECT COUNT(*) FROM system.clusters;'
     exit-status: 0
     stdout:
       - "4"
@@ -55,7 +49,7 @@ command:
     {{- $database := printf "test_goss_%s" (randAlpha 5) }}
     {{- $table := printf "%s.table_%s" $database (randAlpha 5) }}
     {{- $insertValue := 23 }}
-    exec: clickhouse-client --host chi-vib-vib-0-0 --port 9001 --user '{{ .Vars.auth.username }}' --password '{{ .Vars.auth.password }}' --multiquery --query='CREATE DATABASE {{ $database }} ON CLUSTER vib ENGINE = Memory; CREATE TABLE {{ $table }} (a UInt8) ENGINE = Memory;  INSERT INTO {{ $table }} VALUES({{ $insertValue }}); SELECT * FROM {{ $table }};'
+    exec: clickhouse-client --host chi-vib-vib-0-0 --port 9000 --user '{{ .Vars.auth.username }}' --password '{{ .Vars.auth.password }}' --multiquery --query='CREATE DATABASE {{ $database }} ON CLUSTER vib ENGINE = Memory; CREATE TABLE {{ $table }} (a UInt8) ENGINE = Memory;  INSERT INTO {{ $table }} VALUES({{ $insertValue }}); SELECT * FROM {{ $table }};'
     exit-status: 0
     stdout:
       - "{{ $insertValue }}"

@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.1.2 (2025-04-01)
+## 0.1.3 (2025-04-17)
 
-* [bitnami/gitlab-runner] Release 0.1.2 ([#32731](https://github.com/bitnami/charts/pull/32731))
+* [bitnami/gitlab-runner] Release 0.1.3 ([#33060](https://github.com/bitnami/charts/pull/33060))
+
+## <small>0.1.2 (2025-04-01)</small>
+
+* [bitnami/gitlab-runner] Release 0.1.2 (#32731) ([a6abc17](https://github.com/bitnami/charts/commit/a6abc177b589876309abf9e31178f769672ed710)), closes [#32731](https://github.com/bitnami/charts/issues/32731)
 
 ## <small>0.1.1 (2025-03-28)</small>
 
