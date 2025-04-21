@@ -1,6 +1,6 @@
 # Changelog
 
-## 3.0.1 (2025-04-20)
+## 3.0.1 (2025-04-21)
 
 * [bitnami/fluent-bit] Added support for extraContainerPorts ([#33083](https://github.com/bitnami/charts/pull/33083))
 
