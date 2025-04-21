@@ -1,8 +1,16 @@
 # Changelog
 
-## 12.3.1 (2025-04-09)
+## 12.3.3 (2025-04-21)
 
-* [bitnami/cassandra] Release 12.3.1 ([#32901](https://github.com/bitnami/charts/pull/32901))
+* [bitnami/cassandra] Release 12.3.3 ([#33094](https://github.com/bitnami/charts/pull/33094))
+
+## <small>12.3.2 (2025-04-21)</small>
+
+* [bitnami/cassandra] Release 12.3.2 (#32966) ([4f6012d](https://github.com/bitnami/charts/commit/4f6012d7dad6a03aebce1af424863d39eaec8e4a)), closes [#32966](https://github.com/bitnami/charts/issues/32966)
+
+## <small>12.3.1 (2025-04-09)</small>
+
+* [bitnami/cassandra] Release 12.3.1 (#32901) ([8295c9d](https://github.com/bitnami/charts/commit/8295c9d7e5f5e4cfeb76c0840c048fa167413c07)), closes [#32901](https://github.com/bitnami/charts/issues/32901)
 
 ## 12.3.0 (2025-04-08)
 
