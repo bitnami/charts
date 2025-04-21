@@ -1,6 +1,6 @@
 # Changelog
 
-## 4.8.1 (2025-04-18)
+## 4.8.1 (2025-04-21)
 
 * [bitnami/grafana-loki] add missing queryScheduler.enabled parameter ([#33072](https://github.com/bitnami/charts/pull/33072))
 
