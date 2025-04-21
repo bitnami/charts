@@ -1,8 +1,12 @@
 # Changelog
 
-## 6.6.6 (2025-04-16)
+## 6.6.7 (2025-04-21)
 
-* [bitnami/influxdb] Add revisionHistoryLimit variable ([#32509](https://github.com/bitnami/charts/pull/32509))
+* [bitnami/influxdb] Fix backup functionality, closes bitnami#33038 ([#33092](https://github.com/bitnami/charts/pull/33092))
+
+## <small>6.6.6 (2025-04-21)</small>
+
+* [bitnami/influxdb] Add revisionHistoryLimit variable (#32509) ([54ba28d](https://github.com/bitnami/charts/commit/54ba28d9a28249fb731b151b58dcaac00bbfa076)), closes [#32509](https://github.com/bitnami/charts/issues/32509)
 
 ## <small>6.6.5 (2025-04-15)</small>
 
