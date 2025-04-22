@@ -1,6 +1,6 @@
 # Changelog
 
-## 11.6.4 (2025-04-16)
+## 11.6.4 (2025-04-22)
 
 * [bitnami/grafana] fixed namespaceOverride options ([#33014](https://github.com/bitnami/charts/pull/33014))
 
