@@ -1417,6 +1417,9 @@ backup:
     restartPolicy: OnFailure
     ## @param backup.cronjob.backoffLimit Set the cronjob parameter backoffLimit
     backoffLimit: 6
+    ## @param backup.cronjob.serviceAccount.name Set the cronjob parameter serviceAccountName. If you change from the default values make sure that the SA already exists.
+    serviceAccount:
+      name: "default"
     ## backup container's Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
     ## @param backup.cronjob.containerSecurityContext.enabled Enabled containers' Security Context
