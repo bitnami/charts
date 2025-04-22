@@ -1,8 +1,12 @@
 # Changelog
 
-## 9.1.1 (2025-04-21)
+## 9.1.2 (2025-04-22)
 
-* [bitnami/clickhouse] bugfix: prometheus.io/scrape label ([#33091](https://github.com/bitnami/charts/pull/33091))
+* [bitnami/clickhouse] Release 9.1.2 ([#33122](https://github.com/bitnami/charts/pull/33122))
+
+## <small>9.1.1 (2025-04-21)</small>
+
+* [bitnami/clickhouse] bugfix: prometheus.io/scrape label (#33091) ([f7c9301](https://github.com/bitnami/charts/commit/f7c93019cdb4e1b6c17c6f5260a81b5bb22a555a)), closes [#33091](https://github.com/bitnami/charts/issues/33091)
 
 ## 9.1.0 (2025-04-15)
 
