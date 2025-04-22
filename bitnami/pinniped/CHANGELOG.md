@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.4.13 (2025-04-02)
+## 2.4.14 (2025-04-22)
 
-* [bitnami/pinniped] Release 2.4.13 ([#32758](https://github.com/bitnami/charts/pull/32758))
+* [bitnami/pinniped] Release 2.4.14 ([#33118](https://github.com/bitnami/charts/pull/33118))
+
+## <small>2.4.13 (2025-04-02)</small>
+
+* [bitnami/pinniped] Release 2.4.13 (#32758) ([d9da8e8](https://github.com/bitnami/charts/commit/d9da8e850244ddc5e02e1c68f067e54f43705f3a)), closes [#32758](https://github.com/bitnami/charts/issues/32758)
 
 ## <small>2.4.12 (2025-03-19)</small>
 
