@@ -21,6 +21,7 @@ var (
 	namespace      string
 	timeoutSeconds int
 	timeout        time.Duration
+	password       string
 )
 
 func init() {
@@ -28,6 +29,7 @@ func init() {
 	flag.StringVar(&releaseName, "name", "", "name of the primary statefulset")
 	flag.StringVar(&namespace, "namespace", "", "namespace where the application is running")
 	flag.IntVar(&timeoutSeconds, "timeout", 900, "timeout in seconds")
+	flag.StringVar(&password, "password", "", "Password for elastic user")
 	timeout = time.Duration(timeoutSeconds) * time.Second
 }
 
@@ -63,7 +65,7 @@ func createJob(ctx context.Context, c kubernetes.Interface, name string, port st
 						{
 							Name:            "elasticsearch",
 							Image:           image,
-							Command:         []string{"curl", "-X", op, fmt.Sprintf("http://%s/%s", releaseName, index)},
+							Command:         []string{"curl", "-u", fmt.Sprintf("elastic:%s", password), "-k", "-X", op, fmt.Sprintf("https://%s/%s", releaseName, index)},
 							SecurityContext: securityContext,
 						},
 					},
