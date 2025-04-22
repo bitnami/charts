@@ -481,7 +481,7 @@ spec:
           hostPath:
             path: /sys
         {{- end }}
-        {{- if or (and .Values.master.containerSecurityContext.enabled .Values.master.containerSecurityContext.readOnlyRootFilesystem) (and .Values.metrics.containerSecurityContext.enabled .Values.metrics.containerSecurityContext.readOnlyRootFilesystem) }}
+        {{- if or (and .Values.master.containerSecurityContext.enabled .Values.master.containerSecurityContext.readOnlyRootFilesystem) (and .Values.metrics.enabled .Values.metrics.containerSecurityContext.enabled .Values.metrics.containerSecurityContext.readOnlyRootFilesystem) }}
         - name: empty-dir
           {{- if or .Values.master.persistence.medium .Values.master.persistence.sizeLimit }}
           emptyDir:
