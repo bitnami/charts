@@ -10,7 +10,7 @@ ingest:
 service:
   type: LoadBalancer
   ports:
-    restAPI: 80
+    restAPI: 443
     transport: 9300
 sysctlImage:
   enabled: true

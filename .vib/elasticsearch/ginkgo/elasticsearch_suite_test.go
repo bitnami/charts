@@ -65,7 +65,7 @@ func createJob(ctx context.Context, c kubernetes.Interface, name string, port st
 						{
 							Name:            "elasticsearch",
 							Image:           image,
-							Command:         []string{"curl", "-u", fmt.Sprintf("elastic:%s", password), "-k", "-X", op, fmt.Sprintf("https://%s/%s", releaseName, index)},
+							Command:         []string{"curl", "-u", fmt.Sprintf("'elastic:%s'", password), "-k", "-X", op, fmt.Sprintf("https://%s/%s", releaseName, index)},
 							SecurityContext: securityContext,
 						},
 					},
