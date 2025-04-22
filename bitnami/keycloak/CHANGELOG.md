@@ -1,8 +1,16 @@
 # Changelog
 
-## 24.5.4 (2025-04-15)
+## 24.5.6 (2025-04-21)
 
-* [bitnami/keycloak] bugfix: add prefix on projected db secret keys ([#33004](https://github.com/bitnami/charts/pull/33004))
+* [bitnami/keycloak] Release 24.5.5 ([#32980](https://github.com/bitnami/charts/pull/32980))
+
+## <small>24.5.5 (2025-04-21)</small>
+
+* [bitnami/keycloak] Added themes to the list of writable dirs (#32993) ([7fb4af5](https://github.com/bitnami/charts/commit/7fb4af548b0cfe95748d654bb61ecb1f84fc3540)), closes [#32993](https://github.com/bitnami/charts/issues/32993)
+
+## <small>24.5.4 (2025-04-15)</small>
+
+* [bitnami/keycloak] bugfix: add prefix on projected db secret keys (#33004) ([5909cc7](https://github.com/bitnami/charts/commit/5909cc71c60b24b405bcc23562030de7953c38db)), closes [#33004](https://github.com/bitnami/charts/issues/33004)
 
 ## <small>24.5.3 (2025-04-11)</small>
 
