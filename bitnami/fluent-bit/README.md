@@ -75,6 +75,25 @@ It is strongly recommended to use immutable tags in a production environment. Th
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
+### Configure extraPorts
+
+- Based on your fluent-bit configuration, edit the `extraContainerPorts` and `service.extraPorts` parameters. In the `extraContainerPorts` parameter, set the extra ports that the fluent-bit configuration uses, and in the `service.extraPorts` parameter, set the extra ports to be externally exposed.
+
+  Example:
+
+  ```yaml
+  service:
+    extraPorts:
+      - name: forward
+        port: 24224 # We use port 24224 for receiving logs over TCP
+        protocol: TCP
+        targetPort: forward
+
+  extraContainerPorts:
+    - name: forward
+      containerPort: 24224
+  ```
+
 ### Backup and restore
 
 To back up and restore Helm chart deployments on Kubernetes, you need to back up the persistent volumes from the source deployment and attach them to a new deployment using [Velero](https://velero.io/), a Kubernetes backup/restore tool. Find the instructions for using Velero in [this guide](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-backup-restore-deployments-velero-index.html).
@@ -220,6 +239,7 @@ The [Bitnami Fluent Bit](https://github.com/bitnami/containers/tree/main/bitnami
 | `resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                 | `{}`                         |
 | `extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for fluent-bit container                                                                                                                                 | `[]`                         |
 | `containerPorts.http`                               | Port for HTTP port                                                                                                                                                                                                | `2020`                       |
+| `extraContainerPorts`                               | Optionally specify extra list of additional ports for fluent-bit containers                                                                                                                                       | `[]`                         |
 | `service.type`                                      | Fluent Bit service type                                                                                                                                                                                           | `ClusterIP`                  |
 | `service.ports.http`                                | Port for HTTP port                                                                                                                                                                                                | `2020`                       |
 | `service.nodePorts.http`                            | Node port for HTTP port                                                                                                                                                                                           | `""`                         |

@@ -3,150 +3,196 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
+{{/* Returns a K8s service to expose ClickHouse */}}
+{{- define "clickhouse.service" -}}
+{{- $name := include "common.names.fullname" .context }}
+{{- if .context.Values.service.perReplicaAccess }}
+  {{- $name = printf "%s-shard%d-%d" $name (int .shard) (int .replica) | trunc 63 | trimSuffix "-" }}
+{{- end }}
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "common.names.fullname" . }}
-  namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  name: {{ $name }}
+  namespace: {{ include "common.names.namespace" .context | quote }}
+  labels: {{- include "common.labels.standard" (dict "customLabels" .context.Values.commonLabels "context" .context) | nindent 4 }}
     app.kubernetes.io/component: clickhouse
-  {{- if or .Values.service.annotations .Values.commonAnnotations }}
-  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.service.annotations .Values.commonAnnotations ) "context" . ) }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+    app.kubernetes.io/part-of: clickhouse
+    {{- if and .context.Values.metrics.enabled .context.Values.metrics.serviceMonitor.enabled }}
+    {{- /* Adding extra selector for the ServiceMonitor object to avoid duplicate targets  */}}
+    prometheus.io/scrape: "true"
+    {{- end }}
+    {{- if .context.Values.service.perReplicaAccess }}
+    pod: {{ $name }}
+    {{- end }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .context.Values.service.annotations .context.Values.commonAnnotations) "context" .context) }}
+  {{- if .context.Values.metrics.enabled }}
+    {{- $defaultMetricsAnnotations := dict "prometheus.io/scrape" "true" "prometheus.io/port" (.context.Values.service.ports.metrics | toString) "prometheus.io/path" "/metrics" }}
+    {{- $annotations = include "common.tplvalues.merge" (dict "values" (list $annotations $defaultMetricsAnnotations) "context" .context) }}
   {{- end }}
+  {{- if and .context.Values.service.perReplicaAccess .context.Values.service.loadBalancerAnnotations }}
+    {{- /* We expect an annotation per replica. Given there are shards * replicaCount replicas, we need to calculate the offset to retrieve the proper annotation */}}
+    {{- $posOffset := mul (int .shard) (.context.Values.replicaCount | int) }}
+    {{- $position := add $posOffset (int .replica) }}
+    {{- $annotations = include "common.tplvalues.merge" (dict "values" (list $annotations (index .context.Values.service.loadBalancerAnnotations $position)) "context" .context) }}
+  {{- end }}
+  annotations: {{- include "common.tplvalues.render" (dict "value" $annotations "context" .context) | nindent 4 }}
 spec:
-  type: {{ .Values.service.type }}
-  {{- if and .Values.service.clusterIP (eq .Values.service.type "ClusterIP") }}
-  clusterIP: {{ .Values.service.clusterIP }}
+  type: {{ .context.Values.service.type }}
+  {{- if and .context.Values.service.clusterIP (eq .context.Values.service.type "ClusterIP") }}
+  clusterIP: {{ .context.Values.service.clusterIP }}
   {{- end }}
-  {{- if .Values.service.sessionAffinity }}
-  sessionAffinity: {{ .Values.service.sessionAffinity }}
+  {{- if .context.Values.service.sessionAffinity }}
+  sessionAffinity: {{ .context.Values.service.sessionAffinity }}
   {{- end }}
-  {{- if .Values.service.sessionAffinityConfig }}
-  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- if .context.Values.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .context.Values.service.sessionAffinityConfig "context" .context) | nindent 4 }}
   {{- end }}
-  {{- if or (eq .Values.service.type "LoadBalancer") (eq .Values.service.type "NodePort") }}
-  externalTrafficPolicy: {{ .Values.service.externalTrafficPolicy | quote }}
+  {{- if or (eq .context.Values.service.type "LoadBalancer") (eq .context.Values.service.type "NodePort") }}
+  externalTrafficPolicy: {{ .context.Values.service.externalTrafficPolicy | quote }}
   {{- end }}
-  {{- if and (eq .Values.service.type "LoadBalancer") (not (empty .Values.service.loadBalancerSourceRanges)) }}
-  loadBalancerSourceRanges: {{- toYaml .Values.service.loadBalancerSourceRanges | nindent 4 }}
+  {{- if and (eq .context.Values.service.type "LoadBalancer") (not (empty .context.Values.service.loadBalancerSourceRanges)) }}
+  loadBalancerSourceRanges: {{- toYaml .context.Values.service.loadBalancerSourceRanges | nindent 4 }}
   {{- end }}
-  {{- if and (eq .Values.service.type "LoadBalancer") (not (empty .Values.service.loadBalancerIP)) }}
-  loadBalancerIP: {{ .Values.service.loadBalancerIP }}
+  {{- if eq .context.Values.service.type "LoadBalancer" }}
+  {{- if and .context.Values.service.perReplicaAccess (not (empty .context.Values.service.loadBalancerIPs)) }}
+  {{- /* We expect an IP per replica. Given there are shards * replicaCount replicas, we need to calculate the offset to retrieve the proper IP */}}
+  {{- $posOffset := mul (int .shard) (.context.Values.replicaCount | int) }}
+  {{- $position := add $posOffset (int .replica) }}
+  loadBalancerIP: {{ index .context.Values.service.loadBalancerIPs $position }}
+  {{- else if not (empty .context.Values.service.loadBalancerIP) }}
+  loadBalancerIP: {{ .context.Values.service.loadBalancerIP }}
+  {{- end }}
   {{- end }}
   ports:
     - name: http
       targetPort: http
-      port: {{ .Values.service.ports.http }}
+      port: {{ .context.Values.service.ports.http }}
       protocol: TCP
-      {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.http)) }}
-      nodePort: {{ .Values.service.nodePorts.http }}
-      {{- else if eq .Values.service.type "ClusterIP" }}
+      {{- if and .context.Values.service.perReplicaAccess (not (empty .context.Values.service.nodePorts.http)) }}
+      {{- $posOffset := mul (int .shard) (.context.Values.replicaCount | int) }}
+      {{- $position := add $posOffset (int .replica) }}
+      nodePort: {{ index .context.Values.service.nodePorts.http $position }}
+      {{- else if and (or (eq .context.Values.service.type "NodePort") (eq .context.Values.service.type "LoadBalancer")) (not (empty .context.Values.service.nodePorts.http)) }}
+      nodePort: {{ .context.Values.service.nodePorts.http }}
+      {{- else if eq .context.Values.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
-    {{- if .Values.tls.enabled }}
+    {{- if .context.Values.tls.enabled }}
     - name: https
       targetPort: https
-      port: {{ .Values.service.ports.https }}
+      port: {{ .context.Values.service.ports.https }}
       protocol: TCP
-      {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.https)) }}
-      nodePort: {{ .Values.service.nodePorts.https }}
-      {{- else if eq .Values.service.type "ClusterIP" }}
+      {{- if and .context.Values.service.perReplicaAccess (not (empty .context.Values.service.nodePorts.https)) }}
+      {{- $posOffset := mul (int .shard) (.context.Values.replicaCount | int) }}
+      {{- $position := add $posOffset (int .replica) }}
+      nodePort: {{ index .context.Values.service.nodePorts.https $position }}
+      {{- else if and (or (eq .context.Values.service.type "NodePort") (eq .context.Values.service.type "LoadBalancer")) (not (empty .context.Values.service.nodePorts.https)) }}
+      nodePort: {{ .context.Values.service.nodePorts.https }}
+      {{- else if eq .context.Values.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
     {{- end }}
     - name: tcp
       targetPort: tcp
-      port: {{ .Values.service.ports.tcp }}
+      port: {{ .context.Values.service.ports.tcp }}
       protocol: TCP
-      {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.tcp)) }}
-      nodePort: {{ .Values.service.nodePorts.tcp }}
-      {{- else if eq .Values.service.type "ClusterIP" }}
+      {{- if and .context.Values.service.perReplicaAccess (not (empty .context.Values.service.nodePorts.tcp)) }}
+      {{- $posOffset := mul (int .shard) (.context.Values.replicaCount | int) }}
+      {{- $position := add $posOffset (int .replica) }}
+      nodePort: {{ index .context.Values.service.nodePorts.tcp $position }}
+      {{- else if and (or (eq .context.Values.service.type "NodePort") (eq .context.Values.service.type "LoadBalancer")) (not (empty .context.Values.service.nodePorts.tcp)) }}
+      nodePort: {{ .context.Values.service.nodePorts.tcp }}
+      {{- else if eq .context.Values.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
-    {{- if .Values.tls.enabled }}
+    {{- if .context.Values.tls.enabled }}
     - name: tcp-secure
       targetPort: tcp-secure
-      port: {{ .Values.service.ports.tcpSecure }}
+      port: {{ .context.Values.service.ports.tcpSecure }}
       protocol: TCP
-      {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.tcpSecure)) }}
-      nodePort: {{ .Values.service.nodePorts.tcpSecure }}
-      {{- else if eq .Values.service.type "ClusterIP" }}
+      {{- if and .context.Values.service.perReplicaAccess (not (empty .context.Values.service.nodePorts.tcpSecure)) }}
+      {{- $posOffset := mul (int .shard) (.context.Values.replicaCount | int) }}
+      {{- $position := add $posOffset (int .replica) }}
+      nodePort: {{ index .context.Values.service.nodePorts.tcpSecure $position }}
+      {{- else if and (or (eq .context.Values.service.type "NodePort") (eq .context.Values.service.type "LoadBalancer")) (not (empty .context.Values.service.nodePorts.tcpSecure)) }}
+      nodePort: {{ .context.Values.service.nodePorts.tcpSecure }}
+      {{- else if eq .context.Values.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
-    {{- end }}
-    {{- if .Values.keeper.enabled }}
-    - name: tcp-keeper
-      targetPort: tcp-keeper
-      port: {{ .Values.service.ports.keeper }}
-      protocol: TCP
-      {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.tcp)) }}
-      nodePort: {{ .Values.service.nodePorts.keeper }}
-      {{- else if eq .Values.service.type "ClusterIP" }}
-      nodePort: null
-      {{- end }}
-    - name: tcp-keeperinter
-      targetPort: tcp-keeperinter
-      port: {{ .Values.service.ports.keeperInter }}
-      protocol: TCP
-      {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.tcp)) }}
-      nodePort: {{ .Values.service.nodePorts.keeperInter }}
-      {{- else if eq .Values.service.type "ClusterIP" }}
-      nodePort: null
-      {{- end }}
-    {{- if .Values.tls.enabled }}
-    - name: tcp-keepertls
-      targetPort: tcp-keepertls
-      port: {{ .Values.service.ports.keeperSecure }}
-      protocol: TCP
-      {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.tcpSecure)) }}
-      nodePort: {{ .Values.service.nodePorts.keeperSecure }}
-      {{- else if eq .Values.service.type "ClusterIP" }}
-      nodePort: null
-      {{- end }}
-    {{- end }}
     {{- end }}
     - name: tcp-mysql
       targetPort: tcp-mysql
-      port: {{ .Values.service.ports.mysql }}
+      port: {{ .context.Values.service.ports.mysql }}
       protocol: TCP
-      {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.mysql)) }}
-      nodePort: {{ .Values.service.nodePorts.mysql }}
-      {{- else if eq .Values.service.type "ClusterIP" }}
+      {{- if and .context.Values.service.perReplicaAccess (not (empty .context.Values.service.nodePorts.mysql)) }}
+      {{- $posOffset := mul (int .shard) (.context.Values.replicaCount | int) }}
+      {{- $position := add $posOffset (int .replica) }}
+      nodePort: {{ index .context.Values.service.nodePorts.mysql $position }}
+      {{- else if and (or (eq .context.Values.service.type "NodePort") (eq .context.Values.service.type "LoadBalancer")) (not (empty .context.Values.service.nodePorts.mysql)) }}
+      nodePort: {{ .context.Values.service.nodePorts.mysql }}
+      {{- else if eq .context.Values.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
     - name: tcp-postgresql
       targetPort: tcp-postgresql
-      port: {{ .Values.service.ports.postgresql }}
+      port: {{ .context.Values.service.ports.postgresql }}
       protocol: TCP
-      {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.postgresql)) }}
-      nodePort: {{ .Values.service.nodePorts.postgresql }}
-      {{- else if eq .Values.service.type "ClusterIP" }}
+      {{- if and .context.Values.service.perReplicaAccess (not (empty .context.Values.service.nodePorts.postgresql)) }}
+      {{- $posOffset := mul (int .shard) (.context.Values.replicaCount | int) }}
+      {{- $position := add $posOffset (int .replica) }}
+      nodePort: {{ index .context.Values.service.nodePorts.postgresql $position }}
+      {{- else if and (or (eq .context.Values.service.type "NodePort") (eq .context.Values.service.type "LoadBalancer")) (not (empty .context.Values.service.nodePorts.postgresql)) }}
+      nodePort: {{ .context.Values.service.nodePorts.postgresql }}
+      {{- else if eq .context.Values.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
     - name: http-intersrv
       targetPort: http-intersrv
-      port: {{ .Values.service.ports.interserver }}
+      port: {{ .context.Values.service.ports.interserver }}
       protocol: TCP
-      {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.interserver)) }}
-      nodePort: {{ .Values.service.nodePorts.interserver }}
-      {{- else if eq .Values.service.type "ClusterIP" }}
+      {{- if and .context.Values.service.perReplicaAccess (not (empty .context.Values.service.nodePorts.interserver)) }}
+      {{- $posOffset := mul (int .shard) (.context.Values.replicaCount | int) }}
+      {{- $position := add $posOffset (int .replica) }}
+      nodePort: {{ index .context.Values.service.nodePorts.interserver $position }}
+      {{- else if and (or (eq .context.Values.service.type "NodePort") (eq .context.Values.service.type "LoadBalancer")) (not (empty .context.Values.service.nodePorts.interserver)) }}
+      nodePort: {{ .context.Values.service.nodePorts.interserver }}
+      {{- else if eq .context.Values.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
-    {{- if .Values.metrics.enabled }}
+    {{- if .context.Values.metrics.enabled }}
     - name: http-metrics
       targetPort: http-metrics
-      port: {{ .Values.service.ports.metrics }}
+      port: {{ .context.Values.service.ports.metrics }}
       protocol: TCP
-      {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.metrics)) }}
-      nodePort: {{ .Values.service.nodePorts.metrics }}
-      {{- else if eq .Values.service.type "ClusterIP" }}
+     {{- if and .context.Values.service.perReplicaAccess (not (empty .context.Values.service.nodePorts.metrics)) }}
+      {{- $posOffset := mul (int .shard) (.context.Values.replicaCount | int) }}
+      {{- $position := add $posOffset (int .replica) }}
+      nodePort: {{ index .context.Values.service.nodePorts.metrics $position }}
+      {{- else if and (or (eq .context.Values.service.type "NodePort") (eq .context.Values.service.type "LoadBalancer")) (not (empty .context.Values.service.nodePorts.metrics)) }}
+      nodePort: {{ .context.Values.service.nodePorts.metrics }}
+      {{- else if eq .context.Values.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
     {{- end }}
-    {{- if .Values.service.extraPorts }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.service.extraPorts "context" $) | nindent 4 }}
+    {{- if .context.Values.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .context.Values.service.extraPorts "context" .context) | nindent 4 }}
     {{- end }}
-  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
-  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
+  {{- $podLabels := include "common.tplvalues.merge" (dict "values" ( list .context.Values.podLabels .context.Values.commonLabels ) "context" .context) }}
+  selector: {{- include "common.labels.matchLabels" (dict "customLabels" $podLabels "context" .context) | nindent 4 }}
     app.kubernetes.io/component: clickhouse
+    app.kubernetes.io/part-of: clickhouse
+    {{- if .context.Values.service.perReplicaAccess }}
+    pod: {{ $name }}
+    {{- end }}
+{{- end -}}
+
+{{- if .Values.service.perReplicaAccess }}
+{{- range $shard := until (.Values.shards | int) }}
+{{- range $i := until ($.Values.replicaCount | int) }}
+{{- include "clickhouse.service" (dict "shard" $shard "replica" $i "context" $) }}
+---
+{{- end }}
+{{- end }}
+{{- else }}
+{{- include "clickhouse.service" (dict "context" .) }}
+{{- end }}

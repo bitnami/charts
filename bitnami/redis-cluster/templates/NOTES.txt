@@ -4,8 +4,8 @@ APP VERSION: {{ .Chart.AppVersion }}
 
 Did you know there are enterprise versions of the Bitnami catalog? For enhanced secure software supply chain features, unlimited pulls from Docker, LTS support, or application customization, see Bitnami Premium or Tanzu Application Catalog. See https://www.arrow.com/globalecs/na/vendors/bitnami for more information.
 
-{{- $secretName := include "redis-cluster.secretName" . -}}
-{{- $secretPasswordKey := include "redis-cluster.secretPasswordKey" . -}}
+{{- $secretName := include "redis-cluster.secretName" . }}
+{{- $secretPasswordKey := include "redis-cluster.secretPasswordKey" . }}
 
 ** Please be patient while the chart is being deployed **
 
@@ -49,10 +49,10 @@ To connect to your Redis&reg; server from outside the cluster check the followin
 
     helm upgrade --namespace {{ .Release.Namespace }} {{ .Release.Name }} --set "cluster.externalAccess.enabled=true,cluster.externalAccess.service.type=LoadBalancer{{- $root := . }}{{ $count := .Values.cluster.nodes | int }}{{ range $i, $v := until $count }},cluster.externalAccess.service.loadBalancerIP[{{ $i }}]=load-balancerip-{{- $i }}{{- end }}" oci://registry-1.docker.io/bitnamicharts/redis-cluster
     Where loadbalancer-ip-i are the LoadBalancerIPs provided by the cluster.
-    {{- else -}}
-    {{- if .Values.cluster.init -}}
+    {{- else }}
+    {{- if .Values.cluster.init }}
     INFO: The Job to create the cluster will be created.
-    {{- end -}}
+    {{- end }}
 
     To connect to your database from outside the cluster execute the following commands:
 
@@ -64,9 +64,9 @@ To connect to your Redis&reg; server from outside the cluster check the followin
 
 You have deployed a Redis&reg; Cluster accessible only from within you Kubernetes Cluster.
 
-{{- if .Values.cluster.init -}}
+{{- if .Values.cluster.init }}
 INFO: The Job to create the cluster will be created.
-{{- end -}}
+{{- end }}
 
 To connect to your Redis&reg; cluster:
 
@@ -101,21 +101,21 @@ redis-cli -c -h {{ template "common.names.fullname" . }}{{ if .Values.usePasswor
 Note: Since NetworkPolicy is enabled, only pods with label
 {{ template "common.names.fullname" . }}-client=true"
 will be able to connect to redis.
-{{- end -}}
-{{- end -}}
+{{- end }}
+{{- end }}
 
 {{- include "redis-cluster.validateValues" . }}
 {{- include "redis-cluster.checkRollingTags" . }}
 {{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
 {{- include "common.warnings.rollingTag" .Values.sysctlImage }}
 
-{{- if and .Values.usePassword (not .Values.existingSecret) -}}
+{{- if and .Values.usePassword (not .Values.existingSecret) }}
 
-  {{- $requiredPassword := dict "valueKey" "password" "secret" $secretName "field" $secretPasswordKey "context" $ -}}
-  {{- $requiredPasswordError := include "common.validations.values.single.empty" $requiredPassword -}}
+  {{- $requiredPassword := dict "valueKey" "password" "secret" $secretName "field" $secretPasswordKey "context" $ }}
+  {{- $requiredPasswordError := include "common.validations.values.single.empty" $requiredPassword }}
 
-  {{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" (list $requiredPasswordError) "context" $) -}}
-{{- end -}}
+  {{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" (list $requiredPasswordError) "context" $) }}
+{{- end }}
 {{- end }}
 {{- include "common.warnings.resources" (dict "sections" (list "metrics" "redis" "sysctlImage" "updateJob" "volumePermissions") "context" $) }}
 {{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.volumePermissions.image .Values.metrics.image .Values.sysctlImage) "context" $) }}

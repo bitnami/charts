@@ -1,8 +1,21 @@
 # Changelog
 
-## 0.1.5 (2025-03-05)
+## 0.1.8 (2025-04-21)
 
-* [bitnami/kube-arangodb] Release 0.1.5 ([#32298](https://github.com/bitnami/charts/pull/32298))
+* [bitnami/kube-arangodb] Release 0.1.7 ([#32740](https://github.com/bitnami/charts/pull/32740))
+
+## <small>0.1.7 (2025-04-08)</small>
+
+* [bitnami/kube-arangodb] Chore/kube arangodb correct typo chaows (#32849) ([30434ab](https://github.com/bitnami/charts/commit/30434ab690cb6b52d248ff1289adff0c9a2d4dcd)), closes [#32849](https://github.com/bitnami/charts/issues/32849)
+
+## <small>0.1.6 (2025-03-28)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/kube-arangodb] Release 0.1.6 updating components versions (#32655) ([00660b2](https://github.com/bitnami/charts/commit/00660b2d4d38484b27e9754fbc0c34fa28b7b75b)), closes [#32655](https://github.com/bitnami/charts/issues/32655)
+
+## <small>0.1.5 (2025-03-05)</small>
+
+* [bitnami/kube-arangodb] Release 0.1.5 (#32298) ([4c9f284](https://github.com/bitnami/charts/commit/4c9f284bbe42918aacab93b6315add30528abe6b)), closes [#32298](https://github.com/bitnami/charts/issues/32298)
 
 ## <small>0.1.4 (2025-02-26)</small>
 

@@ -109,6 +109,7 @@ spec:
               cp -r --preserve=mode /opt/bitnami/keycloak/lib/quarkus /emptydir/app-quarkus-dir
               cp -r --preserve=mode /opt/bitnami/keycloak/data /emptydir/app-data-dir
               cp -r --preserve=mode /opt/bitnami/keycloak/providers /emptydir/app-providers-dir
+              cp -r --preserve=mode /opt/bitnami/keycloak/themes /emptydir/app-themes-dir
               info "Copy operation completed"
           {{- if .Values.containerSecurityContext.enabled }}
           securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
@@ -158,22 +159,22 @@ spec:
             - name: KC_BOOTSTRAP_ADMIN_PASSWORD_FILE
               value: {{ printf "/opt/bitnami/keycloak/secrets/%s" (include "keycloak.secretKey" .) }}
             - name: KEYCLOAK_DATABASE_PASSWORD_FILE
-              value: {{ printf "/opt/bitnami/keycloak/secrets/%s" (include "keycloak.databaseSecretPasswordKey" .) }}
+              value: {{ printf "/opt/bitnami/keycloak/secrets/db-%s" (include "keycloak.databaseSecretPasswordKey" .) }}
             {{- if .Values.externalDatabase.existingSecretHostKey }}
             - name: KEYCLOAK_DATABASE_HOST_FILE
-              value: {{ printf "/opt/bitnami/keycloak/secrets/%s" (include "keycloak.databaseSecretHostKey" .) }}
+              value: {{ printf "/opt/bitnami/keycloak/secrets/db-%s" (include "keycloak.databaseSecretHostKey" .) }}
             {{- end }}
             {{- if .Values.externalDatabase.existingSecretPortKey }}
             - name: KEYCLOAK_DATABASE_PORT_FILE
-              value: {{ printf "/opt/bitnami/keycloak/secrets/%s" (include "keycloak.databaseSecretPortKey" .) }}
+              value: {{ printf "/opt/bitnami/keycloak/secrets/db-%s" (include "keycloak.databaseSecretPortKey" .) }}
             {{- end }}
             {{- if .Values.externalDatabase.existingSecretUserKey }}
             - name: KEYCLOAK_DATABASE_USER_FILE
-              value: {{ printf "/opt/bitnami/keycloak/secrets/%s" (include "keycloak.databaseSecretUserKey" .) }}
+              value: {{ printf "/opt/bitnami/keycloak/secrets/db-%s" (include "keycloak.databaseSecretUserKey" .) }}
             {{- end }}
             {{- if .Values.externalDatabase.existingSecretDatabaseKey }}
             - name: KEYCLOAK_DATABASE_NAME_FILE
-              value: {{ printf "/opt/bitnami/keycloak/secrets/%s" (include "keycloak.databaseSecretDatabaseKey" .) }}
+              value: {{ printf "/opt/bitnami/keycloak/secrets/db-%s" (include "keycloak.databaseSecretDatabaseKey" .) }}
             {{- end }}
             {{- if and .Values.tls.enabled (or .Values.tls.keystorePassword .Values.tls.passwordsSecret) }}
             - name: KEYCLOAK_HTTPS_KEY_STORE_PASSWORD_FILE
@@ -341,6 +342,9 @@ spec:
             - name: empty-dir
               mountPath: /opt/bitnami/keycloak/providers
               subPath: app-providers-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/keycloak/themes
+              subPath: app-themes-dir
             {{- if  .Values.usePasswordFiles }}
             - name: keycloak-secrets
               mountPath: /opt/bitnami/keycloak/secrets
@@ -383,16 +387,35 @@ spec:
           projected:
             sources:
               - secret:
-                  name:  {{ include "keycloak.secretName" . }}
+                  name: {{ include "keycloak.secretName" . }}
               - secret:
-                  name:  {{ include "keycloak.databaseSecretName" . }}
+                  name: {{ include "keycloak.databaseSecretName" . }}
+                  items:
+                    - key: {{ include "keycloak.databaseSecretPasswordKey" . }}
+                      path: {{ printf "db-%s" (include "keycloak.databaseSecretPasswordKey" .) }}
+                    {{- if .Values.externalDatabase.existingSecretHostKey }}
+                    - key: {{ include "keycloak.databaseSecretHostKey" . }}
+                      path: {{ printf "db-%s" (include "keycloak.databaseSecretHostKey" .) }}
+                    {{- end }}
+                    {{- if .Values.externalDatabase.existingSecretPortKey }}
+                    - key: {{ include "keycloak.databaseSecretHostKey" . }}
+                      path: {{ printf "db-%s" (include "keycloak.databaseSecretPortKey" .) }}
+                    {{- end }}
+                    {{- if .Values.externalDatabase.existingSecretUserKey }}
+                    - key: {{ include "keycloak.databaseSecretHostKey" . }}
+                      path: {{ printf "db-%s" (include "keycloak.databaseSecretUserKey" .) }}
+                    {{- end }}
+                    {{- if .Values.externalDatabase.existingSecretDatabaseKey }}
+                    - key: {{ include "keycloak.databaseSecretHostKey" . }}
+                      path: {{ printf "db-%s" (include "keycloak.databaseSecretDatabaseKey" .) }}
+                    {{- end }}
               {{- if and .Values.tls.enabled (or .Values.tls.keystorePassword .Values.tls.truststorePassword .Values.tls.passwordsSecret) }}
               - secret:
-                  name:  {{ include "keycloak.tlsPasswordsSecretName" . }}
+                  name: {{ include "keycloak.tlsPasswordsSecretName" . }}
               {{- end }}
               {{- if and .Values.spi.existingSecret (or .Values.spi.truststorePassword .Values.spi.passwordsSecret) }}
               - secret:
-                  name:  {{ include "keycloak.spiPasswordsSecretName" . }}
+                  name: {{ include "keycloak.spiPasswordsSecretName" . }}
               {{- end }}
         {{- end }}
         {{- if or .Values.configuration .Values.existingConfigmap }}

@@ -1,0 +1,35 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+command:
+  {{- $uid := .Vars.containerSecurityContext.runAsUser }}
+  check-user-info:
+    # The UID should always be either the one specified as vars (always a bigger number that the default)
+    # or the one randomly defined by openshift (larger values). Otherwise, the chart is still using the default value.
+    exec: if [ $(id -u) -lt {{ $uid }} ]; then exit 1; fi
+    exit-status: 0
+http:
+  http://127.0.0.1:{{ .Vars.containerPorts.http }}/healthz:
+    status: 200
+  http://cadvisor:{{ .Vars.service.ports.http }}/healthz:
+    status: 200
+  http://127.0.0.1:{{ .Vars.containerPorts.http }}/:
+    status: 200
+    body:
+      - /containers/
+  http://cadvisor:{{ .Vars.service.ports.http }}/:
+    status: 200
+    body:
+      - /containers/
+  # cAdvisor generates a huge amount of prometheus metrics, so we
+  # need to give it extra time to avoid timeout issues in the test
+  http://127.0.0.1:{{ .Vars.containerPorts.http }}/metrics:
+    status: 200
+    timeout: 20000
+    body:
+      - /container_tasks_state/
+  http://cadvisor:{{ .Vars.service.ports.http }}/metrics:
+    status: 200
+    timeout: 20000
+    body:
+      - /container_tasks_state/

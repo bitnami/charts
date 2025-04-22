@@ -1,8 +1,16 @@
 # Changelog
 
-## 25.1.0 (2025-04-01)
+## 25.1.2 (2025-04-11)
 
-* [bitnami/schema-registry] Set `usePasswordFiles=true` by default ([#32713](https://github.com/bitnami/charts/pull/32713))
+* [bitnami/schema-registry] Release 25.1.2 ([#32975](https://github.com/bitnami/charts/pull/32975))
+
+## <small>25.1.1 (2025-04-11)</small>
+
+* Update HPA with statefulset as reference instead of deployment (#32945) ([a313f9f](https://github.com/bitnami/charts/commit/a313f9f2d32f5d6847e75668953d054f819beb15)), closes [#32945](https://github.com/bitnami/charts/issues/32945)
+
+## 25.1.0 (2025-04-04)
+
+* [bitnami/schema-registry] Set `usePasswordFiles=true` by default (#32713) ([c9033c6](https://github.com/bitnami/charts/commit/c9033c64e2a9872b805936416d0a4940ec8ceced)), closes [#32713](https://github.com/bitnami/charts/issues/32713)
 
 ## 25.0.0 (2025-03-26)
 

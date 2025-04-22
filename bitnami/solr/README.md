@@ -343,7 +343,7 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 | `networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                                                     | `[]`                     |
 | `networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                                                           | `{}`                     |
 | `networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                                                                       | `{}`                     |
-| `ingress.enabled`                       | Enable ingress record generation for Apache Geode                                                                                | `false`                  |
+| `ingress.enabled`                       | Enable ingress record generation for Solr                                                                                        | `false`                  |
 | `ingress.ingressClassName`              | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
 | `ingress.pathType`                      | Ingress path type                                                                                                                | `ImplementationSpecific` |
 | `ingress.apiVersion`                    | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |

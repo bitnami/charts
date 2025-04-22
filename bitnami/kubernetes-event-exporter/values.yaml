@@ -118,12 +118,14 @@ hostAliases: []
 ## ref: https://github.com/resmoio/kubernetes-event-exporter#configuration
 ## @param config.logLevel Verbosity of the logs (options: `fatal`, `error`, `warn`, `info` or `debug`)
 ## @param config.logFormat How the logs are formatted. Allowed values: `pretty` or `json`
+## @param config.clusterName The name of the kubernetes cluster that the events are originating from
 ## @param config.receivers [array] Array containing event receivers
 ## @param config.route.routes [array] Array containing event route configuration
 ##
 config:
   logLevel: debug
   logFormat: pretty
+  clusterName: ""
   receivers:
     - name: "dump"
       file:

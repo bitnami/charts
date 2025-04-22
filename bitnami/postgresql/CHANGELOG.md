@@ -1,8 +1,16 @@
 # Changelog
 
-## 16.6.1 (2025-04-07)
+## 16.6.3 (2025-04-09)
 
-* [bitnami/postgresql] Release 16.6.1 ([#32834](https://github.com/bitnami/charts/pull/32834))
+* [bitnami/postgresql] Release 16.6.3 ([#32915](https://github.com/bitnami/charts/pull/32915))
+
+## <small>16.6.2 (2025-04-07)</small>
+
+* [bitnami/postgresql] Release 16.6.2 (#32842) ([9668041](https://github.com/bitnami/charts/commit/96680412e57a9beefcebc0d86be4e859fd393197)), closes [#32842](https://github.com/bitnami/charts/issues/32842)
+
+## <small>16.6.1 (2025-04-07)</small>
+
+* [bitnami/postgresql] Release 16.6.1 (#32834) ([d254ab7](https://github.com/bitnami/charts/commit/d254ab737a59c0c0a546979057f89bcf74d788a0)), closes [#32834](https://github.com/bitnami/charts/issues/32834)
 
 ## 16.6.0 (2025-03-27)
 

@@ -1,0 +1,39 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+annotations:
+  category: Database
+  licenses: Apache-2.0
+  images: |
+    - name: clickhouse
+      image: docker.io/bitnami/clickhouse:25.3.2-debian-12-r3
+    - name: clickhouse-keeper
+      image: docker.io/bitnami/clickhouse-keeper:25.3.2-debian-12-r6
+    - name: clickhouse-operator
+      image: docker.io/bitnami/clickhouse-operator:0.24.5-debian-12-r3
+    - name: clickhouse-operator-metrics-exporter
+      image: docker.io/bitnami/clickhouse-operator-metrics-exporter:0.24.5-debian-12-r1
+apiVersion: v2
+appVersion: 0.24.5
+dependencies:
+- name: common
+  repository: oci://registry-1.docker.io/bitnamicharts
+  tags:
+  - bitnami-common
+  version: 2.x.x
+description: ClickHouse Operator is a production-ready operator that manages ClickHouse databases delivering robust features required for cost-efficient, real-time analytic applications.
+home: https://bitnami.com
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/clickhouse-operator/img/clickhouse-operator-stack-220x234.png
+keywords:
+- database
+- sharding
+- clickhouse
+- operator
+maintainers:
+- name: Broadcom, Inc. All Rights Reserved.
+  url: https://github.com/bitnami/charts
+name: clickhouse-operator
+sources:
+- https://github.com/bitnami/charts/tree/main/bitnami/clickhouse-operator
+- https://github.com/bitnami/containers/tree/main/bitnami/clickhouse-operator
+version: 0.1.5

@@ -76,7 +76,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/minio-operator
-  tag: 7.0.1-debian-12-r3
+  tag: 7.1.0-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -103,7 +103,7 @@ image:
 sidecarImage:
   registry: docker.io
   repository: bitnami/minio-operator-sidecar
-  tag: 7.0.1-debian-12-r3
+  tag: 7.1.0-debian-12-r0
   digest: ""
 ## Bitnami KES;reg; image version
 ## ref: https://hub.docker.com/r/bitnami/minio/tags/
@@ -115,7 +115,7 @@ sidecarImage:
 minioImage:
   registry: docker.io
   repository: bitnami/minio
-  tag: 2025.3.12-debian-12-r3
+  tag: 2025.4.8-debian-12-r3
   digest: ""
 ## Bitnami KES;reg; image version
 ## ref: https://hub.docker.com/r/bitnami/kes/tags/
@@ -127,7 +127,7 @@ minioImage:
 kesImage:
   registry: docker.io
   repository: bitnami/kes
-  tag: 2025.3.12-debian-12-r4
+  tag: 2025.3.12-debian-12-r5
   digest: ""
 ## @param replicaCount Number of MinIO;reg; Operator replicas to deploy
 ##

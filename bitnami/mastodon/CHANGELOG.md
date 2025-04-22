@@ -1,8 +1,12 @@
 # Changelog
 
+## 10.1.1 (2025-04-09)
+
+* [bitnami/mastodon] Release 10.1.1 ([#32909](https://github.com/bitnami/charts/pull/32909))
+
 ## 10.1.0 (2025-04-04)
 
-* [bitnami/mastodon] Set `usePasswordFiles=true` by default ([#32367](https://github.com/bitnami/charts/pull/32367))
+* [bitnami/mastodon] Set `usePasswordFiles=true` by default (#32367) ([410b9a2](https://github.com/bitnami/charts/commit/410b9a27153710a4fae9a1eeb1ca182c63e76118)), closes [#32367](https://github.com/bitnami/charts/issues/32367)
 
 ## <small>10.0.1 (2025-04-03)</small>
 
