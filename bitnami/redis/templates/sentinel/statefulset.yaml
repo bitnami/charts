@@ -787,7 +787,7 @@ spec:
           emptyDir: {}
           {{- end }}
         {{- end }}
-        {{- if and .Values.replica.containerSecurityContext.enabled .Values.replica.containerSecurityContext.readOnlyRootFilesystem }}
+        {{- if or (and .Values.sentinel.containerSecurityContext.enabled .Values.sentinel.containerSecurityContext.readOnlyRootFilesystem) (and .Values.metrics.containerSecurityContext.enabled .Values.metrics.containerSecurityContext.readOnlyRootFilesystem) }}
         - name: empty-dir
           {{- if or .Values.sentinel.persistence.medium .Values.sentinel.persistence.sizeLimit }}
           emptyDir:
