@@ -4,10 +4,6 @@
 
 * [bitnami/keycloak] Making keycloak config cli Availability Check configurable ([#33130](https://github.com/bitnami/charts/pull/33130))
 
-## 24.5.8 (2025-04-23)
-
-* [bitnami/keycloak] Fix Keycloak external DB secret keys ([#33117](https://github.com/bitnami/charts/pull/33117))
-
 ## <small>24.5.7 (2025-04-22)</small>
 
 * [bitnami/keycloak] Dynamic tpl rendering of the external database port (#33040) ([43e308c](https://github.com/bitnami/charts/commit/43e308c340e6bc97bcda538be220c0866889dfe6)), closes [#33040](https://github.com/bitnami/charts/issues/33040)
