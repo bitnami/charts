@@ -12,7 +12,8 @@ metadata:
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: postgresql
     app.kubernetes.io/component: update-job
-{{- $defaultAnnotations := dict "helm.sh/hook" "pre-upgrade" "helm.sh/hook-delete-policy" "hook-succeeded" }}  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.passwordUpdateJob.annotations .Values.commonAnnotations $defaultAnnotations ) "context" . ) }}
+  {{- $defaultAnnotations := dict "helm.sh/hook" "pre-upgrade" "helm.sh/hook-delete-policy" "hook-succeeded" }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.passwordUpdateJob.annotations .Values.commonAnnotations $defaultAnnotations ) "context" . ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
 spec:
   backoffLimit: {{ .Values.passwordUpdateJob.backoffLimit }}
