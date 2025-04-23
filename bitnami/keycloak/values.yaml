@@ -1247,10 +1247,9 @@ keycloakConfigCli:
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   podTolerations: []
-  ##
-  ## keycloak-config-cli availabilityCheck environment variables
+  ## keycloak-config-cli availability-check configuration
   ## ref: https://github.com/adorsys/keycloak-config-cli#Configuration
-  ## @param keycloakConfigCli.availabilityCheck.enabled Is KEYCLOAK_AVAILABILITYCHECK_ENABLED Environment variable enabled
+  ## @param keycloakConfigCli.availabilityCheck.enabled Whether to wait until Keycloak is available
   ## @param keycloakConfigCli.availabilityCheck.timeout Timeout for the availability check (Default is 120s)
   ##
   availabilityCheck:
