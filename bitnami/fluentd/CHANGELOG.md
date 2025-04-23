@@ -1,8 +1,13 @@
 # Changelog
 
-## 7.1.4 (2025-03-13)
+## 7.1.5 (2025-04-12)
 
-* [bitnami/fluentd] Release 7.1.4 ([#32439](https://github.com/bitnami/charts/pull/32439))
+* [bitnami/fluentd] Release 7.1.5 ([#32979](https://github.com/bitnami/charts/pull/32979))
+
+## <small>7.1.4 (2025-03-13)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/fluentd] Release 7.1.4 (#32439) ([026852a](https://github.com/bitnami/charts/commit/026852acb7b38c9a01720e2378a74f33c85f8806)), closes [#32439](https://github.com/bitnami/charts/issues/32439)
 
 ## <small>7.1.3 (2025-02-19)</small>
 

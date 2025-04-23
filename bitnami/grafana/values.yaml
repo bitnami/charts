@@ -48,6 +48,9 @@ nameOverride: ""
 ## @param fullnameOverride String to fully override grafana.fullname template
 ##
 fullnameOverride: ""
+## @param namespaceOverride String to fully override common.names.namespace
+##
+namespaceOverride: ""
 ## @param clusterDomain Default Kubernetes cluster domain
 ##
 clusterDomain: cluster.local

@@ -466,8 +466,8 @@ data:
     {{- if not (contains "sentinel announce-port" .Values.sentinel.configuration) }}
     echo "sentinel announce-port $SERVPORT" >> /opt/bitnami/redis-sentinel/etc/prepare-sentinel.conf
     {{- end }}
-    {{- if .Values.sentinel.externalAccess.enabled }}
     {{- if not (contains "sentinel announce-ip" .Values.sentinel.configuration) }}
+    {{- if .Values.sentinel.externalAccess.enabled }}
     if [[ -n "${REDIS_CLUSTER_ANNOUNCE_IP}" ]]; then
       echo "sentinel announce-ip $REDIS_CLUSTER_ANNOUNCE_IP" >> /opt/bitnami/redis-sentinel/etc/prepare-sentinel.conf
     else
@@ -847,15 +847,24 @@ data:
   update-master-label.sh: |
     #!/bin/bash
     while true; do
-        while [ ! -f "/etc/shared/current" ]; do
+        while [ ! -f "/etc/shared/current" ] && [ ! -f "/etc/shared/terminate" ]; do
             sleep 1
         done
-        echo "new master elected, updating label(s)..."
-        kubectl label pod --field-selector metadata.name="$(< "/etc/shared/current")" isMaster="true" --overwrite
-        kubectl label pod --field-selector metadata.name="$(< "/etc/shared/current")" app.kubernetes.io/role-
-        if [ -f /etc/shared/previous ]; then
-            kubectl label pod --field-selector metadata.name="$(< "/etc/shared/previous")" isMaster="false" --overwrite
+
+        if [ -f "/etc/shared/current" ]; then
+            echo "new master elected, updating label(s)..."
+            kubectl label pod --field-selector metadata.name="$(< "/etc/shared/current")" isMaster="true" --overwrite
+            kubectl label pod --field-selector metadata.name="$(< "/etc/shared/current")" app.kubernetes.io/role-
+            if [ -f /etc/shared/previous ]; then
+                kubectl label pod --field-selector metadata.name="$(< "/etc/shared/previous")" isMaster="false" --overwrite
+            fi
+            rm "/etc/shared/current" "/etc/shared/previous"
         fi
-        rm "/etc/shared/current" "/etc/shared/previous"
+
+        if [ -f "/etc/shared/terminate" ]; then
+            echo "received signal to terminate"
+            rm "/etc/shared/terminate"
+            exit
+        fi
     done
 {{- end }}

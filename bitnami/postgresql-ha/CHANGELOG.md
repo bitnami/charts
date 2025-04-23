@@ -1,8 +1,8 @@
 # Changelog
 
-## 15.3.12 (2025-04-16)
+## 15.3.13 (2025-04-22)
 
-* [bitnami/postgresql-ha] Fixed duplicated storage class value ([#32860](https://github.com/bitnami/charts/pull/32860))
+* [bitnami/postgresql-ha] Update POSTGRES_POSTGRES_PASSWORD condition ([#33102](https://github.com/bitnami/charts/pull/33102))
 
 ## <small>15.3.12 (2025-04-09)</small>
 

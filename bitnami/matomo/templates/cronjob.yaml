@@ -97,7 +97,7 @@ spec:
                   value: {{ include "matomo.databaseUser" . | quote }}
                 {{- if .Values.usePasswordFiles }}
                 - name: MATOMO_DATABASE_PASSWORD_FILE
-                  value: {{ printf "/opt/bitnami/matomo/secrets/%s" (include "matomo.databasePasswordKey" .) }}
+                  value: {{ printf "/secrets/%s" (include "matomo.databasePasswordKey" .) }}
                 {{- else }}
                 - name: MATOMO_DATABASE_PASSWORD
                   valueFrom:
@@ -113,7 +113,7 @@ spec:
                   mountPath: /bitnami/matomo
                 {{- if .Values.usePasswordFiles }}
                 - name: matomo-secrets
-                  mountPath: /opt/bitnami/matomo/secrets
+                  mountPath: /secrets
                 {{- end }}
                 {{- if .Values.certificates.customCertificate.certificateSecret }}
                 - name: custom-certificate
@@ -147,6 +147,13 @@ spec:
                 {{- toYaml .Values.resources | nindent 16 }}
               {{- end }}
           volumes:
+            {{- if .Values.usePasswordFiles }}
+            - name: matomo-secrets
+              projected:
+                sources:
+                  - secret:
+                      name:  {{ include "matomo.databaseSecretName" . }}
+            {{- end }}
             {{- if .Values.certificates.customCAs }}
             - name: etc-ssl-certs
               emptyDir:
@@ -285,7 +292,7 @@ spec:
                   value: {{ include "matomo.databaseUser" . | quote }}
                 {{- if .Values.usePasswordFiles }}
                 - name: MATOMO_DATABASE_PASSWORD_FILE
-                  value: {{ printf "/opt/bitnami/matomo/secrets/%s" (include "matomo.databasePasswordKey" .) }}
+                  value: {{ printf "/secrets/%s" (include "matomo.databasePasswordKey" .) }}
                 {{- else }}
                 - name: MATOMO_DATABASE_PASSWORD
                   valueFrom:
@@ -301,7 +308,7 @@ spec:
                   mountPath: /bitnami/matomo
                 {{- if .Values.usePasswordFiles }}
                 - name: matomo-secrets
-                  mountPath: /opt/bitnami/matomo/secrets
+                  mountPath: /secrets
                 {{- end }}
                 {{- if .Values.certificates.customCertificate.certificateSecret }}
                 - name: custom-certificate

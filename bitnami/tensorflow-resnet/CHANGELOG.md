@@ -1,8 +1,13 @@
 # Changelog
 
-## 4.3.5 (2025-03-19)
+## 4.3.6 (2025-04-18)
 
-* [bitnami/tensorflow-resnet] Release 4.3.5 ([#32512](https://github.com/bitnami/charts/pull/32512))
+* [bitnami/tensorflow-resnet] Release 4.3.6 ([#33070](https://github.com/bitnami/charts/pull/33070))
+
+## <small>4.3.5 (2025-03-19)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/tensorflow-resnet] Release 4.3.5 (#32512) ([f394a4e](https://github.com/bitnami/charts/commit/f394a4e763960f5d853d45cb24cc6c632f0120d7)), closes [#32512](https://github.com/bitnami/charts/issues/32512)
 
 ## <small>4.3.4 (2025-02-20)</small>
 

@@ -254,6 +254,7 @@ spec:
             - name: internal-tls-certs
               mountPath: /etc/harbor/ssl/jobservice
             {{- end }}
+            {{- include "harbor.redis.caVolumeMount" . | nindent 12 }}
             {{- if .Values.internalTLS.caBundleSecret }}
             {{- include "harbor.caBundleVolumeMount" . | nindent 12 }}
             {{- end }}
@@ -284,6 +285,7 @@ spec:
           secret:
             secretName: {{ include "harbor.jobservice.tls.secretName" . }}
         {{- end }}
+      {{- include "harbor.redis.caVolume" . | nindent 8 }}
       {{- if .Values.jobservice.extraVolumes }}
       {{- include "common.tplvalues.render" (dict "value" .Values.jobservice.extraVolumes "context" $) | nindent 8 }}
       {{- end }}
