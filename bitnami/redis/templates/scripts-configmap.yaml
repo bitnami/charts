@@ -466,8 +466,8 @@ data:
     {{- if not (contains "sentinel announce-port" .Values.sentinel.configuration) }}
     echo "sentinel announce-port $SERVPORT" >> /opt/bitnami/redis-sentinel/etc/prepare-sentinel.conf
     {{- end }}
-    {{- if .Values.sentinel.externalAccess.enabled }}
     {{- if not (contains "sentinel announce-ip" .Values.sentinel.configuration) }}
+    {{- if .Values.sentinel.externalAccess.enabled }}
     if [[ -n "${REDIS_CLUSTER_ANNOUNCE_IP}" ]]; then
       echo "sentinel announce-ip $REDIS_CLUSTER_ANNOUNCE_IP" >> /opt/bitnami/redis-sentinel/etc/prepare-sentinel.conf
     else

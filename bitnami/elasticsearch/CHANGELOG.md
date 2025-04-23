@@ -1,8 +1,16 @@
 # Changelog
 
+## 21.6.2 (2025-04-22)
+
+* [bitnami/elasticsearch] tests: Enable security during testing ([#33100](https://github.com/bitnami/charts/pull/33100))
+
+## <small>21.6.1 (2025-04-21)</small>
+
+* [bitnami/elasticsearch] fix coordinating security.enabled (#32840) ([1357e5c](https://github.com/bitnami/charts/commit/1357e5c51767e632accff2258deb4c6dd16b9d5b)), closes [#32840](https://github.com/bitnami/charts/issues/32840)
+
 ## 21.6.0 (2025-04-16)
 
-* [bitnami/elasticsearch] Fixes #32794, add enableDefaultInitContainers to elasticsearch chart ([#32855](https://github.com/bitnami/charts/pull/32855))
+* [bitnami/elasticsearch] Fixes #32794, add enableDefaultInitContainers to elasticsearch chart (#32855 ([652f468](https://github.com/bitnami/charts/commit/652f4680167a2c5fd88f1978959668837ea85d33)), closes [#32794](https://github.com/bitnami/charts/issues/32794) [#32855](https://github.com/bitnami/charts/issues/32855) [#32794](https://github.com/bitnami/charts/issues/32794)
 
 ## <small>21.5.1 (2025-04-15)</small>
 

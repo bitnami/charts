@@ -61,7 +61,11 @@
               "path": "/.vib/elasticsearch/cypress"
             },
             "endpoint": "lb-elasticsearch-tcp-rest-api",
-            "app_protocol": "HTTP"
+            "app_protocol": "HTTPS",
+            "env": {
+              "username": "elastic",
+              "password": "ComplicatedPassword123!4"
+            }
           }
         },
         {
@@ -73,7 +77,8 @@
             "params": {
               "kubeconfig": "{{kubeconfig}}",
               "namespace": "{{namespace}}",
-              "name": "elasticsearch"
+              "name": "elasticsearch",
+              "password": "ComplicatedPassword123!4"
             }
           }
         },

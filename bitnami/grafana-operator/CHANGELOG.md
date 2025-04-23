@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.9.12 (2025-04-10)
+## 4.9.13 (2025-04-17)
 
-* [bitnami/grafana-operator] Release 4.9.12 ([#32949](https://github.com/bitnami/charts/pull/32949))
+* [bitnami/grafana-operator] don't add common labels to Grafana resources ([#33049](https://github.com/bitnami/charts/pull/33049))
+
+## <small>4.9.12 (2025-04-10)</small>
+
+* [bitnami/grafana-operator] Release 4.9.12 (#32949) ([1fc4f9b](https://github.com/bitnami/charts/commit/1fc4f9bf14da9ee68952cc20e5f2aa798c0d05e9)), closes [#32949](https://github.com/bitnami/charts/issues/32949)
 
 ## <small>4.9.11 (2025-04-07)</small>
 
