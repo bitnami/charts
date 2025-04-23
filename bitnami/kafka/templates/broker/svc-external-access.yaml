@@ -48,8 +48,6 @@ spec:
       port: {{ $.Values.externalAccess.broker.service.ports.external }}
       {{- if le (add $i 1) (len $.Values.externalAccess.broker.service.nodePorts) }}
       nodePort: {{ index $.Values.externalAccess.broker.service.nodePorts $i }}
-      {{- else }}
-      nodePort: null
       {{- end }}
       targetPort: external
     {{- if $.Values.externalAccess.broker.service.extraPorts }}
