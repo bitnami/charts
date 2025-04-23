@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.8.0 (2025-04-14)
+## 4.8.1 (2025-04-23)
 
-* [bitnami/grafana-loki] Add support to override client_max_body_size in nginx ([#32955](https://github.com/bitnami/charts/pull/32955))
+* [bitnami/grafana-loki] Release 4.8.1 ([#33133](https://github.com/bitnami/charts/pull/33133))
+
+## 4.8.0 (2025-04-16)
+
+* [bitnami/grafana-loki] Add support to override client_max_body_size in nginx (#32955) ([9354dd0](https://github.com/bitnami/charts/commit/9354dd06459286bc49e29c499fe3e4774792a5b2)), closes [#32955](https://github.com/bitnami/charts/issues/32955)
 
 ## <small>4.7.10 (2025-04-09)</small>
 
