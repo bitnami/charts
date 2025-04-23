@@ -6,7 +6,11 @@
 
 ## 24.6.0 (2025-04-23)
 
-* [bitnami/keycloak] Making keycloak config cli Availability Check configurable ([#33130](https://github.com/bitnami/charts/pull/33130))
+* [bitnami/keycloak] Making keycloak config cli Availability Check configurable (#33130) ([0d4a0eb](https://github.com/bitnami/charts/commit/0d4a0ebad0f54693bfb92211b88500c638c53316)), closes [#33130](https://github.com/bitnami/charts/issues/33130)
+
+## <small>24.5.8 (2025-04-23)</small>
+
+* [bitnami/keycloak] Fix Keycloak external DB secret keys (#33117) ([afdd69c](https://github.com/bitnami/charts/commit/afdd69c8b509c8667cbb24b53ace764d7c77ff8d)), closes [#33117](https://github.com/bitnami/charts/issues/33117)
 
 ## <small>24.5.7 (2025-04-22)</small>
 
