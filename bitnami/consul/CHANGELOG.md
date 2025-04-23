@@ -1,6 +1,6 @@
 # Changelog
 
-## 11.4.12 (2025-04-22)
+## 11.4.12 (2025-04-23)
 
 * [bitnami/consul] Fix mismatched serfLAN and serfWAN ports in consul-headless-service ([#33114](https://github.com/bitnami/charts/pull/33114))
 
