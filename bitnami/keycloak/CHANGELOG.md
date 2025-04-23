@@ -1,6 +1,6 @@
 # Changelog
 
-## 24.5.8 (2025-04-22)
+## 24.5.8 (2025-04-23)
 
 * [bitnami/keycloak] Fix Keycloak external DB secret keys ([#33117](https://github.com/bitnami/charts/pull/33117))
 
