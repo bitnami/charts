@@ -55,8 +55,12 @@ spec:
               - name: PGUSER
                 value: "postgres"
               {{- if .Values.postgresql.usePasswordFiles }}
-              - name: PGPASSFILE
+              - name: PGPASSWORD_FILE
+                {{- if (include "postgresql-ha.postgresqlSeparatePostgresPassword" .) }}
                 value: "/opt/bitnami/postgresql/secrets/postgres-password"
+                {{- else }}
+                value: "/opt/bitnami/postgresql/secrets/password"
+                {{- end }}
               {{- else }}
               - name: PGPASSWORD
                 valueFrom:
@@ -102,6 +106,10 @@ spec:
               - name: datadir
                 mountPath: {{ .Values.backup.cronjob.storage.mountPath }}
                 subPath: {{ .Values.backup.cronjob.storage.subPath }}
+              {{- if .Values.postgresql.usePasswordFiles }}
+              - name: password
+                mountPath: /opt/bitnami/postgresql/secrets/
+              {{- end }}
               {{- if .Values.backup.cronjob.extraVolumeMounts }}
               {{- include "common.tplvalues.render" (dict "value" .Values.backup.cronjob.extraVolumeMounts "context" $) | nindent 14 }}
               {{- end }}
@@ -129,6 +137,11 @@ spec:
             - name: datadir
               persistentVolumeClaim:
                 claimName: {{ include "postgresql-ha.postgresql" . }}-pgdumpall
+            {{- end }}
+            {{- if .Values.postgresql.usePasswordFiles }}
+            - name: password
+              secret:
+                secretName: {{ include "postgresql-ha.postgresqlSecretName" . }}
             {{- end }}
           {{- if .Values.backup.cronjob.extraVolumes }}
           {{- include "common.tplvalues.render" (dict "value" .Values.backup.cronjob.extraVolumes "context" $) | nindent 12 }}
