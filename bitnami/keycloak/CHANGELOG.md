@@ -1,6 +1,6 @@
 # Changelog
 
-## 24.5.8 (2025-04-22)
+## 24.6.0 (2025-04-23)
 
 * [bitnami/keycloak] Making keycloak config cli Availability Check configurable ([#33130](https://github.com/bitnami/charts/pull/33130))
 
