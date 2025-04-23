@@ -97,7 +97,7 @@ spec:
               - name: empty-dir
                 mountPath: /tmp
                 subPath: tmp-dir
-              {{- if and .Values.auth.usePasswordFiles }}
+              {{- if .Values.auth.usePasswordFiles }}
               - name: postgresql-password
                 mountPath: /opt/bitnami/postgresql/secrets/
               {{- end }}
@@ -136,7 +136,7 @@ spec:
             {{- end }}
             - name: empty-dir
               emptyDir: {}
-            {{- if and .Values.auth.usePasswordFiles }}
+            {{- if .Values.auth.usePasswordFiles }}
             - name: postgresql-password
               secret:
                 secretName: {{ include "postgresql.v1.secretName" . }}
