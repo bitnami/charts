@@ -1,6 +1,6 @@
 # Changelog
 
-## 9.1.3 (2025-04-22)
+## 9.1.3 (2025-04-23)
 
 * [bitnami/clickhouse] Release 9.1.3 ([#33131](https://github.com/bitnami/charts/pull/33131))
 
