@@ -1,12 +1,12 @@
 # Source: https://raw.githubusercontent.com/minio/operator/refs/tags/v{version}/helm/operator/templates/sts.min.io_policybindings.yaml
-# Version: 7.1.0
+# Version: 7.1.1
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.17.2
-    operator.min.io/version: v5.0.15
+    operator.min.io/version: v7.1.1
   name: policybindings.sts.min.io
 spec:
   group: sts.min.io
