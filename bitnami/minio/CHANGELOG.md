@@ -1,8 +1,12 @@
 # Changelog
 
-## 16.0.7 (2025-04-09)
+## 16.0.8 (2025-04-23)
 
-* [bitnami/minio] Release 16.0.7 ([#32944](https://github.com/bitnami/charts/pull/32944))
+* [bitnami/minio] Release 16.0.8 ([#33132](https://github.com/bitnami/charts/pull/33132))
+
+## <small>16.0.7 (2025-04-09)</small>
+
+* [bitnami/minio] Release 16.0.7 (#32944) ([d60498a](https://github.com/bitnami/charts/commit/d60498aba9a35307591b36f1dae948ba5a9f3c19)), closes [#32944](https://github.com/bitnami/charts/issues/32944)
 
 ## <small>16.0.6 (2025-04-09)</small>
 
