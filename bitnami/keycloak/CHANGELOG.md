@@ -1,8 +1,8 @@
 # Changelog
 
-## 24.5.8 (2025-04-23)
+## 24.6.0 (2025-04-23)
 
-* [bitnami/keycloak] Fix Keycloak external DB secret keys ([#33117](https://github.com/bitnami/charts/pull/33117))
+* [bitnami/keycloak] Making keycloak config cli Availability Check configurable ([#33130](https://github.com/bitnami/charts/pull/33130))
 
 ## <small>24.5.7 (2025-04-22)</small>
 
