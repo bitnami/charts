@@ -19,7 +19,7 @@ spec:
       rules:
         - alert: KubeCPUOvercommit
           annotations:
-            description: Cluster {{`{{`}} $labels.cluster {{`}}`}} has overcommitted CPU resource requests for Pods by {{`{{`}} $value {{`}}`}} CPU shares and cannot tolerate node failure.
+            description: Cluster {{`{{`}} $labels.cluster {{`}}`}} has overcommitted CPU resource requests for Pods by {{`{{`}} printf "%.2f" $value {{`}}`}} CPU shares and cannot tolerate node failure.
             runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubecpuovercommit
             summary: Cluster has overcommitted CPU resource requests.
           expr: |-
@@ -56,7 +56,7 @@ spec:
             severity: warning
         - alert: KubeMemoryQuotaOvercommit
           annotations:
-            description: Cluster {{`{{`}} $labels.cluster {{`}}`}}  has overcommitted memory resource requests for Namespaces.
+            description: Cluster {{`{{`}} $labels.cluster {{`}}`}} has overcommitted memory resource requests for Namespaces.
             runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubememoryquotaovercommit
             summary: Cluster has overcommitted memory resource requests.
           expr: |-
