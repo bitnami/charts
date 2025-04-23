@@ -59,7 +59,7 @@ spec:
           protocol: {{ default "TCP" .protocol }}
         {{- end }}
         {{- range .Values.extraContainerPorts }}
-        - port: {{ . }}
+        - port: {{ .containerPort }}
           protocol: {{ default "TCP" .protocol }}
         {{- end }}
         {{- if .Values.enableMonitoringAPI }}

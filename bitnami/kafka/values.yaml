@@ -867,6 +867,10 @@ controller:
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
+  ## @param controller.topologyKey Override common lib default topology key. If empty - "kubernetes.io/hostname" is used
+  ## i.e. topologyKey: topology.kubernetes.io/zone
+  ##
+  topologyKey: ""
   ## @param controller.podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
@@ -1323,6 +1327,10 @@ broker:
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
+  ## @param broker.topologyKey Override common lib default topology key. If empty - "kubernetes.io/hostname" is used
+  ## i.e. topologyKey: topology.kubernetes.io/zone
+  ##
+  topologyKey: ""
   ## @param broker.podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##

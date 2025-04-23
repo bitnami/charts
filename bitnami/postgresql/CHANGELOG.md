@@ -1,8 +1,16 @@
 # Changelog
 
-## 16.6.2 (2025-04-07)
+## 16.6.4 (2025-04-23)
 
-* [bitnami/postgresql] Release 16.6.2 ([#32842](https://github.com/bitnami/charts/pull/32842))
+*  [bitnami/postgresql] Fix annotations not applied to passwordUpdateJob ([#32969](https://github.com/bitnami/charts/pull/32969))
+
+## <small>16.6.3 (2025-04-09)</small>
+
+* [bitnami/postgresql] Release 16.6.3 (#32915) ([ea17904](https://github.com/bitnami/charts/commit/ea1790406d0ec080c9eed3157402f702eb6c73a1)), closes [#32915](https://github.com/bitnami/charts/issues/32915)
+
+## <small>16.6.2 (2025-04-07)</small>
+
+* [bitnami/postgresql] Release 16.6.2 (#32842) ([9668041](https://github.com/bitnami/charts/commit/96680412e57a9beefcebc0d86be4e859fd393197)), closes [#32842](https://github.com/bitnami/charts/issues/32842)
 
 ## <small>16.6.1 (2025-04-07)</small>
 

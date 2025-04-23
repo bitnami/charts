@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.0.1 (2025-04-01)
+## 2.0.2 (2025-04-22)
 
-* [bitnami/grafana-mimir] Release 2.0.1 ([#32732](https://github.com/bitnami/charts/pull/32732))
+* [bitnami/grafana-mimir] Release 2.0.2 ([#33115](https://github.com/bitnami/charts/pull/33115))
+
+## <small>2.0.1 (2025-04-01)</small>
+
+* [bitnami/grafana-mimir] Release 2.0.1 (#32732) ([1138fee](https://github.com/bitnami/charts/commit/1138feec6afe8ec7ad763c29f0798f8a2bdf01b8)), closes [#32732](https://github.com/bitnami/charts/issues/32732)
 
 ## 2.0.0 (2025-04-01)
 

@@ -86,6 +86,20 @@ spec:
                 - name: ETCDCTL_CERT
                   value: "/opt/bitnami/etcd/certs/client/{{ .Values.auth.client.certFilename }}"
                 {{- end }}
+                {{- if .Values.defrag.cronjob.extraEnvVars }}
+                {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
+                {{- end }}
+              {{- if or .Values.defrag.cronjob.extraEnvVarsCM .Values.defrag.cronjob.extraEnvVarsSecret }}
+              envFrom:
+                {{- if .Values.defrag.cronjob.extraEnvVarsCM }}
+                - configMapRef:
+                    name: {{ include "common.tplvalues.render" (dict "value" .Values.defrag.cronjob.extraEnvVarsCM "context" $) }}
+                {{- end }}
+                {{- if .Values.defrag.cronjob.extraEnvVarsSecret }}
+                - secretRef:
+                    name: {{ include "common.tplvalues.render" (dict "value" .Values.defrag.cronjob.extraEnvVarsSecret "context" $) }}
+                {{- end }}
+              {{- end }}
               {{- if .Values.defrag.cronjob.command }}
               command: {{ .Values.defrag.cronjob.command | toYaml | nindent 16 }}
               {{- else }}

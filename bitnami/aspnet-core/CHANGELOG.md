@@ -1,8 +1,17 @@
 # Changelog
 
-## 6.3.6 (2025-04-08)
+## 6.3.8 (2025-04-09)
 
-* [bitnami/aspnet-core] Release 6.3.6 ([#32878](https://github.com/bitnami/charts/pull/32878))
+* [bitnami/aspnet-core] Release 6.3.8 ([#32925](https://github.com/bitnami/charts/pull/32925))
+
+## <small>6.3.7 (2025-04-09)</small>
+
+* [bitnami/aspnet-core] Release 6.3.7 (#32895) ([9403482](https://github.com/bitnami/charts/commit/94034822b0da9edd1896eaddc770387fbda6515d)), closes [#32895](https://github.com/bitnami/charts/issues/32895)
+
+## <small>6.3.6 (2025-04-08)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/aspnet-core] Release 6.3.6 (#32878) ([8420d30](https://github.com/bitnami/charts/commit/8420d30e0560abaa05ab748f2871fcfb905680e2)), closes [#32878](https://github.com/bitnami/charts/issues/32878)
 
 ## <small>6.3.5 (2025-03-11)</small>
 

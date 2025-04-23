@@ -692,6 +692,9 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 | `defrag.cronjob.args`                                              | Override default container args (useful when using custom images)                                                                          | `[]`             |
 | `defrag.cronjob.resourcesPreset`                                   | Set container resources according to one common preset                                                                                     | `nano`           |
 | `defrag.cronjob.resources`                                         | Set container requests and limits for different resources like CPU or                                                                      | `{}`             |
+| `defrag.cronjob.extraEnvVars`                                      | Extra environment variables to be set on defrag cronjob container                                                                          | `[]`             |
+| `defrag.cronjob.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars                                                                                       | `""`             |
+| `defrag.cronjob.extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars                                                                                          | `""`             |
 
 ### Other parameters
 

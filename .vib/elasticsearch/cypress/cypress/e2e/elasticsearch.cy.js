@@ -12,6 +12,10 @@ it('can check cluster health', () => {
     method: 'GET',
     url: '/_cluster/health',
     form: true,
+    auth: {
+      username: Cypress.env('username'),
+      password: Cypress.env('password'),
+    },
   }).then((response) => {
     expect(response.status).to.eq(200);
     expect(response.body.status).to.contain('green');
@@ -24,6 +28,10 @@ it('can index a search and retrieve it', () => {
     method: 'PUT',
     url: 'favorite_candy' + random,
     form: true,
+    auth: {
+      username: Cypress.env('username'),
+      password: Cypress.env('password'),
+    },
   }).then((response) => {
     expect(response.status).to.eq(200);
     expect(response.body.acknowledged).to.eq(true);
@@ -35,6 +43,10 @@ it('can index a search and retrieve it', () => {
     method: 'GET',
     url: 'favorite_candy' + random,
     form: true,
+    auth: {
+      username: Cypress.env('username'),
+      password: Cypress.env('password'),
+    },
   }).then((response) => {
     expect(response.status).to.eq(200);
   });
@@ -46,6 +58,10 @@ it('can index a document and retrieve it', () => {
     headers: { 'Content-Type': 'application/json; charset=utf-8' },
     url: `favorite_dj/_create/${random}`,
     body: body,
+    auth: {
+      username: Cypress.env('username'),
+      password: Cypress.env('password'),
+    },
   }).then((response) => {
     expect(response.status).to.eq(201);
     expect(response.body._index).to.eq('favorite_dj');
@@ -56,6 +72,10 @@ it('can index a document and retrieve it', () => {
     method: 'GET',
     url: 'favorite_dj/_source/' + random,
     form: true,
+    auth: {
+      username: Cypress.env('username'),
+      password: Cypress.env('password'),
+    },
   }).then((response) => {
     expect(response.status).to.eq(200);
     expect(response.body.name).to.eq(body.name);

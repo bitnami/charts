@@ -153,6 +153,9 @@ spec:
       {{- else if eq $masterServiceConfig.type "NodePort" }}
       nodePort:  {{ $redisport }}
       {{- end }}
+      {{- if $masterServiceConfig.extraPorts }}
+      {{- include "common.tplvalues.render" (dict "value" $masterServiceConfig.extraPorts "context" $) | nindent 4 }}
+      {{- end }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     isMaster: "true"
 {{- end }}

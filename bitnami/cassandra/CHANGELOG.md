@@ -1,8 +1,28 @@
 # Changelog
 
+## 12.3.5 (2025-04-22)
+
+* [bitnami/cassandra]fix(readinessProbe): Remove path for metrics readinessProbe ([#33121](https://github.com/bitnami/charts/pull/33121))
+
+## <small>12.3.4 (2025-04-22)</small>
+
+* [bitnami/cassandra] Store cassandra-exporter configuration in Secret (#33069) ([597d759](https://github.com/bitnami/charts/commit/597d7598bf4a6968ed7ec67a840c97677f23fe6d)), closes [#33069](https://github.com/bitnami/charts/issues/33069)
+
+## <small>12.3.3 (2025-04-21)</small>
+
+* [bitnami/cassandra] Release 12.3.3 (#33094) ([9d364ee](https://github.com/bitnami/charts/commit/9d364ee60ba1b4beac37efb5b28f80adf3ac9329)), closes [#33094](https://github.com/bitnami/charts/issues/33094)
+
+## <small>12.3.2 (2025-04-21)</small>
+
+* [bitnami/cassandra] Release 12.3.2 (#32966) ([4f6012d](https://github.com/bitnami/charts/commit/4f6012d7dad6a03aebce1af424863d39eaec8e4a)), closes [#32966](https://github.com/bitnami/charts/issues/32966)
+
+## <small>12.3.1 (2025-04-09)</small>
+
+* [bitnami/cassandra] Release 12.3.1 (#32901) ([8295c9d](https://github.com/bitnami/charts/commit/8295c9d7e5f5e4cfeb76c0840c048fa167413c07)), closes [#32901](https://github.com/bitnami/charts/issues/32901)
+
 ## 12.3.0 (2025-04-08)
 
-* [bitnami/cassandra] Cassandra dynamic seed discovery ([#32464](https://github.com/bitnami/charts/pull/32464))
+* [bitnami/cassandra] Cassandra dynamic seed discovery (#32464) ([7e84568](https://github.com/bitnami/charts/commit/7e845681d98407d9d57105aa231a90c91c93f207)), closes [#32464](https://github.com/bitnami/charts/issues/32464)
 
 ## <small>12.2.3 (2025-04-04)</small>
 

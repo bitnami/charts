@@ -1,5 +1,5 @@
 # Source: https://raw.githubusercontent.com/grafana/grafana-operator/v{version}/deploy/helm/grafana-operator/crds/grafana.integreatly.org_grafanas.yaml
-# Version: 5.17.0
+# Version: 5.17.1
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
@@ -8209,6 +8209,10 @@ spec:
                         type: object
                     type: object
                 type: object
+              disableDefaultAdminSecret:
+                description: DisableDefaultAdminSecret prevents operator from creating
+                  default admin-credentials secret
+                type: boolean
               external:
                 description: External enables you to configure external grafana instances
                   that is not managed by the operator.
