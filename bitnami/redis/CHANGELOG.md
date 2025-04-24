@@ -1,8 +1,12 @@
 # Changelog
 
-## 20.13.1 (2025-04-23)
+## 20.13.2 (2025-04-24)
 
-* [bitnami/redis] Release 20.13.1 ([#33089](https://github.com/bitnami/charts/pull/33089))
+* [bitnami/redis] Release 20.13.2 ([#33157](https://github.com/bitnami/charts/pull/33157))
+
+## <small>20.13.1 (2025-04-23)</small>
+
+* [bitnami/redis] Release 20.13.1 (#33089) ([f23fc62](https://github.com/bitnami/charts/commit/f23fc626c47a6f041bdbbbf36ad4b8033c4b4f83)), closes [#33089](https://github.com/bitnami/charts/issues/33089)
 
 ## 20.13.0 (2025-04-22)
 

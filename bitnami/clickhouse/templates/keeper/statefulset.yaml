@@ -112,6 +112,10 @@ spec:
                   fieldPath: metadata.name
             - name: CLICKHOUSE_KEEPER_TCP_PORT
               value: {{ .Values.keeper.containerPorts.tcp | quote }}
+            {{- if .Values.tls.enabled }}
+            - name: CLICKHOUSE_KEEPER_TCP_SECURE_PORT
+              value: {{ .Values.keeper.containerPorts.tcpSecure | quote }}
+            {{- end }}
             - name: CLICKHOUSE_KEEPER_RAFT_PORT
               value: {{ .Values.keeper.containerPorts.raft | quote }}
             {{- if .Values.keeper.extraEnvVars }}
@@ -131,6 +135,10 @@ spec:
           ports:
             - name: tcp
               containerPort: {{ .Values.keeper.containerPorts.tcp }}
+            {{- if .Values.tls.enabled }}
+            - name: tcp-secure
+              containerPort: {{ .Values.keeper.containerPorts.tcpSecure }}
+            {{- end }}
             - name: raft
               containerPort: {{ .Values.keeper.containerPorts.raft }}
             {{- if .Values.keeper.extraContainerPorts }}
@@ -188,6 +196,14 @@ spec:
             - name: usersd-configuration-configuration
               mountPath: /bitnami/clickhouse-keeper/etc/users.d
             {{- end }}
+            {{- if .Values.tls.enabled }}
+            - name: ca-cert
+              mountPath: /opt/bitnami/clickhouse-keeper/certs/ca
+              readOnly: true
+            - name: keeper-cert
+              mountPath: /opt/bitnami/clickhouse-keeper/certs/keeper
+              readOnly: true
+            {{- end }}
             - name: empty-dir
               mountPath: /opt/bitnami/clickhouse-keeper/etc
               subPath: app-conf-dir
@@ -231,6 +247,16 @@ spec:
               - configMap:
                   name: {{ template "clickhouse.keeper.usersd.configmapName" . }}
               {{- end }}
+        {{- end }}
+        {{- if .Values.tls.enabled }}
+        - name: ca-cert
+          secret:
+            secretName: {{ template "clickhouse.tls.ca.secretName" . }}
+            defaultMode: 256
+        - name: keeper-cert
+          secret:
+            secretName: {{ template "clickhouse.tls.keeper.secretName" . }}
+            defaultMode: 256
         {{- end }}
         {{- if .Values.keeper.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.keeper.extraVolumes "context" .) | nindent 8 }}
