@@ -1,8 +1,12 @@
 # Changelog
 
-## 19.1.1 (2025-04-16)
+## 20.0.0 (2025-04-24)
 
-* [bitnami/nginx] Release 19.1.1 ([#33047](https://github.com/bitnami/charts/pull/33047))
+* [bitnami/nginx] Release 20.0.0 ([#33169](https://github.com/bitnami/charts/pull/33169))
+
+## <small>19.1.1 (2025-04-16)</small>
+
+* [bitnami/nginx] Release 19.1.1 (#33047) ([9664b32](https://github.com/bitnami/charts/commit/9664b32f2d374565e8eb7c95b3ea9218242e8631)), closes [#33047](https://github.com/bitnami/charts/issues/33047)
 
 ## 19.1.0 (2025-04-11)
 
