@@ -49,8 +49,6 @@ spec:
       port: {{ $.Values.externalAccess.controller.service.ports.external }}
       {{- if le (add $i 1) (len $.Values.externalAccess.controller.service.nodePorts) }}
       nodePort: {{ index $.Values.externalAccess.controller.service.nodePorts $i }}
-      {{- else }}
-      nodePort: null
       {{- end }}
       targetPort: external
     {{- if $.Values.externalAccess.controller.service.extraPorts }}
