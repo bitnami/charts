@@ -1,8 +1,13 @@
 # Changelog
 
-## 4.3.7 (2025-03-30)
+## 4.3.8 (2025-04-23)
 
-* [bitnami/pytorch] Release 4.3.7 ([#32683](https://github.com/bitnami/charts/pull/32683))
+* [bitnami/pytorch] Release 4.3.8 ([#33148](https://github.com/bitnami/charts/pull/33148))
+
+## <small>4.3.7 (2025-03-30)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/pytorch] Release 4.3.7 (#32683) ([2a1b864](https://github.com/bitnami/charts/commit/2a1b8643c7c0e0db962efd7a0eaefb0d00228d0e)), closes [#32683](https://github.com/bitnami/charts/issues/32683)
 
 ## <small>4.3.6 (2025-03-11)</small>
 
