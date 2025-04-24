@@ -128,13 +128,13 @@ requiredDuringSchedulingIgnoredDuringExecution:
         {{- range $key, $value := $extraMatchLabels }}
         {{ $key }}: {{ $value | quote }}
         {{- end }}
-      {{- if $extraNamespaces }}
-      namespaces:
-        - {{ .context.Release.Namespace }}
-        {{- with $extraNamespaces }}
-        {{ include "common.tplvalues.render" (dict "value" . "context" $) | nindent 8 }}
-        {{- end }}
+    {{- if $extraNamespaces }}
+    namespaces:
+      - {{ .context.Release.Namespace }}
+      {{- with $extraNamespaces }}
+      {{- include "common.tplvalues.render" (dict "value" . "context" $) | nindent 6 }}
       {{- end }}
+    {{- end }}
     topologyKey: {{ include "common.affinities.topologyKey" (dict "topologyKey" .topologyKey) }}
   {{- range $extraPodAffinityTerms }}
   - labelSelector:
@@ -145,6 +145,13 @@ requiredDuringSchedulingIgnoredDuringExecution:
         {{- range $key, $value := .extraMatchLabels }}
         {{ $key }}: {{ $value | quote }}
         {{- end }}
+    {{- if .namespaces }}
+    namespaces:
+      - {{ $.context.Release.Namespace }}
+      {{- with .namespaces }}
+      {{- include "common.tplvalues.render" (dict "value" . "context" $) | nindent 6 }}
+      {{- end }}
+    {{- end }}
     topologyKey: {{ include "common.affinities.topologyKey" (dict "topologyKey" .topologyKey) }}
   {{- end -}}
 {{- end -}}
