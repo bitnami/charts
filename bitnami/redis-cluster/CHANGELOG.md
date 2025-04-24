@@ -1,8 +1,16 @@
 # Changelog
 
+## 11.5.2 (2025-04-21)
+
+* [bitnami/redis-cluster] Release 11.5.2 ([#33088](https://github.com/bitnami/charts/pull/33088))
+
+## <small>11.5.1 (2025-04-14)</small>
+
+*  [bitnami/redis-cluster] fix: Do not generate secret checksum when is not existing (#32967) ([9982c19](https://github.com/bitnami/charts/commit/9982c197fc3b4837b20382972eade19af6f6f66b)), closes [#32967](https://github.com/bitnami/charts/issues/32967)
+
 ## 11.5.0 (2025-04-07)
 
-* [bitnami/redis-cluster] Set `usePasswordFiles=true` by default ([#32118](https://github.com/bitnami/charts/pull/32118))
+* [bitnami/redis-cluster] Set `usePasswordFiles=true` by default (#32118) ([2e2ac61](https://github.com/bitnami/charts/commit/2e2ac61c4cb2945873e61bd21cf6ecac15c3f08b)), closes [#32118](https://github.com/bitnami/charts/issues/32118)
 
 ## <small>11.4.6 (2025-03-22)</small>
 

@@ -1,8 +1,16 @@
 # Changelog
 
-## 11.1.4 (2025-04-02)
+## 11.1.6 (2025-04-23)
 
-* [bitnami/kube-prometheus] Release 11.1.4 ([#32759](https://github.com/bitnami/charts/pull/32759))
+* [bitnami/kube-prometheus] Release 11.1.6 ([#33135](https://github.com/bitnami/charts/pull/33135))
+
+## <small>11.1.5 (2025-04-23)</small>
+
+* [bitnami/kube-prometheus] Release 11.1.5 (#33059) ([13b7f1f](https://github.com/bitnami/charts/commit/13b7f1f862e614c221959bbf7bee336cc0f29341)), closes [#33059](https://github.com/bitnami/charts/issues/33059)
+
+## <small>11.1.4 (2025-04-02)</small>
+
+* [bitnami/kube-prometheus] Release 11.1.4 (#32759) ([01d53df](https://github.com/bitnami/charts/commit/01d53df89f942d7b2a31104b41a989a05554f7c5)), closes [#32759](https://github.com/bitnami/charts/issues/32759)
 
 ## <small>11.1.3 (2025-03-17)</small>
 

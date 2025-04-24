@@ -98,7 +98,7 @@ milvus:
   image:
     registry: docker.io
     repository: bitnami/milvus
-    tag: 2.5.8-debian-12-r1
+    tag: 2.5.10-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -278,7 +278,7 @@ initJob:
   image:
     registry: docker.io
     repository: bitnami/pymilvus
-    tag: 2.5.6-debian-12-r0
+    tag: 2.5.6-debian-12-r3
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -4610,7 +4610,7 @@ attu:
   image:
     registry: docker.io
     repository: bitnami/attu
-    tag: 2.5.6-debian-12-r0
+    tag: 2.5.6-debian-12-r3
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -5168,7 +5168,7 @@ waitContainer:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r40
+    tag: 12-debian-12-r43
     digest: ""
     ## @param waitContainer.image.pullPolicy Init container wait-container image pull policy
     ##

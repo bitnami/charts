@@ -1,8 +1,28 @@
 # Changelog
 
-## 8.0.10 (2025-04-09)
+## 9.1.3 (2025-04-23)
 
-* [bitnami/clickhouse] Release 8.0.10 ([#32898](https://github.com/bitnami/charts/pull/32898))
+* [bitnami/clickhouse] Release 9.1.3 ([#33131](https://github.com/bitnami/charts/pull/33131))
+
+## <small>9.1.2 (2025-04-22)</small>
+
+* [bitnami/clickhouse] Release 9.1.2 (#33122) ([fc309eb](https://github.com/bitnami/charts/commit/fc309eb7c483e31cb26b0ff7d802536c6c8417f0)), closes [#33122](https://github.com/bitnami/charts/issues/33122)
+
+## <small>9.1.1 (2025-04-21)</small>
+
+* [bitnami/clickhouse] bugfix: prometheus.io/scrape label (#33091) ([f7c9301](https://github.com/bitnami/charts/commit/f7c93019cdb4e1b6c17c6f5260a81b5bb22a555a)), closes [#33091](https://github.com/bitnami/charts/issues/33091)
+
+## 9.1.0 (2025-04-15)
+
+* [bitnami/clickhouse] Stops unnecessary logging (#32988) ([24167d1](https://github.com/bitnami/charts/commit/24167d12f4a9b9088ad36b7aa6cacb2e1f458826)), closes [#32988](https://github.com/bitnami/charts/issues/32988)
+
+## 9.0.0 (2025-04-15)
+
+* [bitnami/clickhouse] feat: replace ZooKeeper with ClickHouse Keeper (#32958) ([d526c9a](https://github.com/bitnami/charts/commit/d526c9a5b91e206e3c00f944c80178c1cf6ccd34)), closes [#32958](https://github.com/bitnami/charts/issues/32958)
+
+## <small>8.0.10 (2025-04-09)</small>
+
+* [bitnami/clickhouse] Release 8.0.10 (#32898) ([c52bca4](https://github.com/bitnami/charts/commit/c52bca4a603ab3072d5d4ecbb36a341f44c67332)), closes [#32898](https://github.com/bitnami/charts/issues/32898)
 
 ## <small>8.0.9 (2025-04-07)</small>
 

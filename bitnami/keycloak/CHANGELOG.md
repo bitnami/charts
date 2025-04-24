@@ -1,8 +1,44 @@
 # Changelog
 
-## 24.5.1 (2025-04-07)
+## 24.6.1 (2025-04-23)
 
-* [bitnami/keycloak] The secret name of the externaldb is inherited by the .Release.Name and not by the (include "common.names.fullname" .) function. ([#32823](https://github.com/bitnami/charts/pull/32823))
+* [bitnami/keycloak] Release 24.6.1 ([#33140](https://github.com/bitnami/charts/pull/33140))
+
+## 24.6.0 (2025-04-23)
+
+* [bitnami/keycloak] Making keycloak config cli Availability Check configurable (#33130) ([0d4a0eb](https://github.com/bitnami/charts/commit/0d4a0ebad0f54693bfb92211b88500c638c53316)), closes [#33130](https://github.com/bitnami/charts/issues/33130)
+
+## <small>24.5.8 (2025-04-23)</small>
+
+* [bitnami/keycloak] Fix Keycloak external DB secret keys (#33117) ([afdd69c](https://github.com/bitnami/charts/commit/afdd69c8b509c8667cbb24b53ace764d7c77ff8d)), closes [#33117](https://github.com/bitnami/charts/issues/33117)
+
+## <small>24.5.7 (2025-04-22)</small>
+
+* [bitnami/keycloak] Dynamic tpl rendering of the external database port (#33040) ([43e308c](https://github.com/bitnami/charts/commit/43e308c340e6bc97bcda538be220c0866889dfe6)), closes [#33040](https://github.com/bitnami/charts/issues/33040)
+
+## <small>24.5.6 (2025-04-21)</small>
+
+* [bitnami/keycloak] Release 24.5.5 (#32980) ([20bfbca](https://github.com/bitnami/charts/commit/20bfbcad6062d5b369ede5ff56c157edccffeb4b)), closes [#32980](https://github.com/bitnami/charts/issues/32980)
+
+## <small>24.5.5 (2025-04-21)</small>
+
+* [bitnami/keycloak] Added themes to the list of writable dirs (#32993) ([7fb4af5](https://github.com/bitnami/charts/commit/7fb4af548b0cfe95748d654bb61ecb1f84fc3540)), closes [#32993](https://github.com/bitnami/charts/issues/32993)
+
+## <small>24.5.4 (2025-04-15)</small>
+
+* [bitnami/keycloak] bugfix: add prefix on projected db secret keys (#33004) ([5909cc7](https://github.com/bitnami/charts/commit/5909cc71c60b24b405bcc23562030de7953c38db)), closes [#33004](https://github.com/bitnami/charts/issues/33004)
+
+## <small>24.5.3 (2025-04-11)</small>
+
+* [bitnami/keycloak] Release 24.5.3 (#32970) ([5f9e017](https://github.com/bitnami/charts/commit/5f9e0175fa8e09211ccb591d36abcbe9abfd71a3)), closes [#32970](https://github.com/bitnami/charts/issues/32970)
+
+## <small>24.5.2 (2025-04-11)</small>
+
+* [bitnami/keycloak] Release 24.5.2 (#32968) ([2c775ce](https://github.com/bitnami/charts/commit/2c775ce92ee74c9222f060369bfaeed849f95efb)), closes [#32968](https://github.com/bitnami/charts/issues/32968)
+
+## <small>24.5.1 (2025-04-07)</small>
+
+* [bitnami/keycloak] Change .Release.Name to (include "common.names.fullname) ([c3573fd](https://github.com/bitnami/charts/commit/c3573fdc21301f06007546ad4faadab598f6305d))
 
 ## 24.5.0 (2025-04-04)
 

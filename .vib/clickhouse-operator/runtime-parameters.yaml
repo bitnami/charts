@@ -50,19 +50,6 @@ extraDeploy:
                 env:
                   - name: BITNAMI_DEBUG
                     value: "true"
-                  - name: CLICKHOUSE_HTTP_PORT
-                    value: "8124"
-                  - name: CLICKHOUSE_TCP_PORT
-                    value: "9001"
-                  - name: CLICKHOUSE_INTERSERVER_HTTP_PORT
-                    value: "9010"
-                ports:
-                  - name: http
-                    containerPort: 8124
-                  - name: tcp
-                    containerPort: 9001
-                  - name: interserver
-                    containerPort: 9010
                 resources:
                   requests:
                     memory: "256M"
@@ -117,16 +104,16 @@ extraDeploy:
         dataVolumeClaimTemplate: default-volume-claim
     configuration:
       settings:
-        http_port: 8124
-        tcp_port: 9001
-        interserver_http_port: 9010
+        http_port: 8123
+        tcp_port: 9000
+        interserver_http_port: 9009
       users:
         test_user/networks/ip:
           - 0.0.0.0/0
           - '::/0'
       zookeeper:
         nodes:
-          - host: chk-vib-vib-0-0
+          - host: chk-vib-vib
             port: 2181
       clusters:
         - name: vib
@@ -186,10 +173,6 @@ extraDeploy:
                     value: "true"
                   - name: CLICKHOUSE_KEEPER_SERVER_ID
                     value: "1"
-                  - name: CLICKHOUSE_KEEPER_TCP_PORT
-                    value: "2181"
-                  - name: CLICKHOUSE_KEEPER_RAFT_PORT
-                    value: "9444"
                 resources:
                   requests:
                     memory: "256M"
@@ -231,3 +214,18 @@ extraDeploy:
             resources:
               requests:
                 storage: 8Gi
+- apiVersion: v1
+  kind: Service
+  metadata:
+    name: chk-vib-vib
+    labels:
+      clickhouse-keeper.altinity.com/chk: vib
+      clickhouse-keeper.altinity.com/cluster: vib
+  spec:
+    ports:
+      - port: 2181
+        name: client
+    selector:
+      clickhouse-keeper.altinity.com/chk: vib
+      clickhouse-keeper.altinity.com/cluster: vib
+      clickhouse-keeper.altinity.com/ready: "yes"
