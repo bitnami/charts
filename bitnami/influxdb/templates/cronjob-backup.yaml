@@ -261,22 +261,22 @@ spec:
                 - name: AWS_ACCESS_KEY_ID
                   valueFrom:
                     secretKeyRef:
-                      name: {{ include "infuxdb.backup.secretName" .}}
+                      name: {{ include "influxdb.backup.secretName" .}}
                       key: accessKeyID
                 - name: AWS_SECRET_ACCESS_KEY
                   valueFrom:
                     secretKeyRef:
-                      name: {{ include "infuxdb.backup.secretName" .}}
+                      name: {{ include "influxdb.backup.secretName" .}}
                       key: secretAccessKey
                 - name: AWS_DEFAULT_REGION
                   valueFrom:
                     secretKeyRef:
-                      name: {{ include "infuxdb.backup.secretName" .}}
+                      name: {{ include "influxdb.backup.secretName" .}}
                       key: region
                 - name: AWS_ENDPOINT_URL_S3
                   valueFrom:
                     secretKeyRef:
-                      name: {{ include "infuxdb.backup.secretName" .}}
+                      name: {{ include "influxdb.backup.secretName" .}}
                       key: endpoint
                 {{- end }}
                 {{- if .Values.backup.cronjob.caBundle.enabled }}

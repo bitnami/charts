@@ -1,8 +1,24 @@
 # Changelog
 
-## 24.5.6 (2025-04-21)
+## 24.6.1 (2025-04-23)
 
-* [bitnami/keycloak] Release 24.5.5 ([#32980](https://github.com/bitnami/charts/pull/32980))
+* [bitnami/keycloak] Release 24.6.1 ([#33140](https://github.com/bitnami/charts/pull/33140))
+
+## 24.6.0 (2025-04-23)
+
+* [bitnami/keycloak] Making keycloak config cli Availability Check configurable (#33130) ([0d4a0eb](https://github.com/bitnami/charts/commit/0d4a0ebad0f54693bfb92211b88500c638c53316)), closes [#33130](https://github.com/bitnami/charts/issues/33130)
+
+## <small>24.5.8 (2025-04-23)</small>
+
+* [bitnami/keycloak] Fix Keycloak external DB secret keys (#33117) ([afdd69c](https://github.com/bitnami/charts/commit/afdd69c8b509c8667cbb24b53ace764d7c77ff8d)), closes [#33117](https://github.com/bitnami/charts/issues/33117)
+
+## <small>24.5.7 (2025-04-22)</small>
+
+* [bitnami/keycloak] Dynamic tpl rendering of the external database port (#33040) ([43e308c](https://github.com/bitnami/charts/commit/43e308c340e6bc97bcda538be220c0866889dfe6)), closes [#33040](https://github.com/bitnami/charts/issues/33040)
+
+## <small>24.5.6 (2025-04-21)</small>
+
+* [bitnami/keycloak] Release 24.5.5 (#32980) ([20bfbca](https://github.com/bitnami/charts/commit/20bfbcad6062d5b369ede5ff56c157edccffeb4b)), closes [#32980](https://github.com/bitnami/charts/issues/32980)
 
 ## <small>24.5.5 (2025-04-21)</small>
 

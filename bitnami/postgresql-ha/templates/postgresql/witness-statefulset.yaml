@@ -616,9 +616,6 @@ spec:
         {{- range .Values.persistence.accessModes }}
           - {{ . | quote }}
         {{- end }}
-        {{- if .Values.persistence.storageClass }}
-        storageClassName: {{ .Values.persistence.storageClass }}
-        {{- end }}
         resources:
           requests:
             storage: {{ .Values.persistence.size | quote }}

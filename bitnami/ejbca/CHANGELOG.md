@@ -1,8 +1,12 @@
 # Changelog
 
-## 17.1.0 (2025-04-01)
+## 17.1.1 (2025-04-23)
 
-* [bitnami/ejbca] Set `usePasswordFiles=true` by default ([#32343](https://github.com/bitnami/charts/pull/32343))
+* [bitnami/ejbca] Release 17.1.1 ([#33136](https://github.com/bitnami/charts/pull/33136))
+
+## 17.1.0 (2025-04-04)
+
+* [bitnami/ejbca] Set `usePasswordFiles=true` by default (#32343) ([cfa2cc8](https://github.com/bitnami/charts/commit/cfa2cc85a37e59b73aea8bad93948a843182df59)), closes [#32343](https://github.com/bitnami/charts/issues/32343)
 
 ## <small>17.0.4 (2025-03-28)</small>
 
