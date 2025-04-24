@@ -789,6 +789,10 @@ Find more information about how to deal with common errors related to Bitnami He
 
 ## Upgrading
 
+### To 36.0.0
+
+This major updates the RabbitMQ subchart to its newest major, 16.0.0. For more information on this subchart's major, please refer to [RabbitMQ upgrade notes](https://www.rabbitmq.com/docs/4.1/upgrade).
+
 ### To 35.0.0
 
 This major updates the Kafka subchart to its newest major, 32.0.0. For more information on this subchart's major, please refer to [Kafka upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/kafka#to-3200).

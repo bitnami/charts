@@ -40,6 +40,9 @@ spec:
     - ports:
       {{- if .Values.keeper.enabled }}
         - port: {{ .Values.keeper.containerPorts.tcp }}
+        {{- if .Values.tls.enabled }}
+        - port: {{ .Values.keeper.containerPorts.tcpSecure }}
+        {{- end }}
       to:
         {{- $keeperPodLabels := include "common.tplvalues.merge" (dict "values" (list .Values.keeper.podLabels .Values.commonLabels) "context" .) }}
         - podSelector:

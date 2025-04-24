@@ -159,6 +159,9 @@ spec:
             {{- if .Values.txtSuffix }}
             - --txt-suffix={{ .Values.txtSuffix }}
             {{- end }}
+            {{- if .Values.txtNewFormatOnly }}
+            - --txt-new-format-only
+            {{- end }}
             {{- end }}
             {{- if .Values.annotationFilter }}
             - --annotation-filter={{ .Values.annotationFilter }}

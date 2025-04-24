@@ -1,8 +1,13 @@
 # Changelog
 
-## 32.2.0 (2025-04-07)
+## 32.2.1 (2025-04-24)
 
-* [bitnami/kafka] add topologyKey value ([#32792](https://github.com/bitnami/charts/pull/32792))
+* [bitnami/kafka] Release 32.2.1 ([#33159](https://github.com/bitnami/charts/pull/33159))
+
+## 32.2.0 (2025-04-15)
+
+* [bitnami/kafka] add topologyKey value (#32792) ([4ba4ac8](https://github.com/bitnami/charts/commit/4ba4ac8fad117ebcd60f87eab03f038d313158ae)), closes [#32792](https://github.com/bitnami/charts/issues/32792)
+* bitnami/kafka Adjust parameters in example of section "Deploying extra resources" in README  (#32445 ([cac0f81](https://github.com/bitnami/charts/commit/cac0f8110af628b25c84cbe916191fa3f8ce21ea)), closes [#32445](https://github.com/bitnami/charts/issues/32445)
 
 ## <small>32.1.3 (2025-04-01)</small>
 
