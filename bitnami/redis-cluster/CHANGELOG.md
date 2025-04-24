@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.5.2 (2025-04-21)
+## 11.5.3 (2025-04-24)
 
-* [bitnami/redis-cluster] Release 11.5.2 ([#33088](https://github.com/bitnami/charts/pull/33088))
+* [bitnami/redis-cluster] Release 11.5.3 ([#33156](https://github.com/bitnami/charts/pull/33156))
+
+## <small>11.5.2 (2025-04-21)</small>
+
+* [bitnami/redis-cluster] Release 11.5.2 (#33088) ([b00414f](https://github.com/bitnami/charts/commit/b00414fb0fc5398962714d59688409aa147d078f)), closes [#33088](https://github.com/bitnami/charts/issues/33088)
 
 ## <small>11.5.1 (2025-04-14)</small>
 
