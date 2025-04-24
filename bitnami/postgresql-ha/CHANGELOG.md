@@ -1,6 +1,6 @@
 # Changelog
 
-## 15.3.15 (2025-04-23)
+## 15.3.15 (2025-04-24)
 
 * [bitnami/postgresql-ha] fix(backup): mount secrets with password file ([#33145](https://github.com/bitnami/charts/pull/33145))
 
