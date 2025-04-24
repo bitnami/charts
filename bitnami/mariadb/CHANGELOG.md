@@ -2,7 +2,7 @@
 
 ## 20.5.3 (2025-04-24)
 
-*  ([#33168](https://github.com/bitnami/charts/pull/33168))
+* adds spec.terminationGracePeriodSeconds to mariadb ([#33168](https://github.com/bitnami/charts/pull/33168))
 
 ## <small>20.4.3 (2025-04-20)</small>
 
