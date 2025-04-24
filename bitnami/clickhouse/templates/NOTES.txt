@@ -26,7 +26,11 @@ In order to replicate the container startup scripts execute this command:
 
 {{- else }}
 
-ClickHouse is available in the following address:
+ClickHouse can be accessed on the following DNS name from within your cluster:
+
+    {{ printf "%s.%s.svc.%s" (include "common.names.fullname" .) (include "common.names.namespace" . ) .Values.clusterDomain }} (port {{ ternary .Values.service.ports.tcpSecure .Values.service.ports.tcp .Values.tls.enabled }})
+
+To connect to your ClickHouse from outside the cluster execute the following commands:
 
 {{- if eq "LoadBalancer" .Values.service.type }}
 
@@ -42,7 +46,7 @@ NOTE: It may take a few minutes for the LoadBalancer IP to be available.
 
 {{- else if eq "ClusterIP" .Values.service.type }}
 
-    kubectl port-forward --namespace {{ template "common.names.namespace" . }} svc/{{ template "common.names.fullname" . }} {{ .Values.service.ports.tcp }}:9000 &
+    kubectl port-forward --namespace {{ template "common.names.namespace" . }} svc/{{ template "common.names.fullname" . }} {{ ternary .Values.service.ports.tcpSecure .Values.service.ports.tcp .Values.tls.enabled }}:9000 &
 
 {{- end }}
 
@@ -51,6 +55,11 @@ Credentials:
     echo "Username: {{ .Values.auth.username }}"
     echo "Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "clickhouse.secretName" . }} -o jsonpath="{.data.{{ include "clickhouse.secretKey" .}}}" | base64 -d)"
 
+{{- if .Values.tls.enabled }}
+
+TLS is enabled, as a consequence please ensure you add the `--secure` flag to your `clickhouse-client` commands.
+
+{{- end }}
 {{- end }}
 
 {{- include "common.warnings.rollingTag" .Values.image }}

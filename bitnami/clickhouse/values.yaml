@@ -212,6 +212,9 @@ auth:
 ## @param tls.server.cert TLS certificate for ClickHouse servers. Ignored if `tls.server.existingSecret` is set
 ## @param tls.server.key TLS key for ClickHouse servers. Ignored if `tls.server.existingSecret` is set
 ## @param tls.server.existingSecret The name of an existing Secret containing the TLS certificates for ClickHouse servers
+## @param tls.keeper.cert TLS certificate for ClickHouse Keeper. Ignored if `tls.keeper.existingSecret` is set
+## @param tls.keeper.key TLS key for ClickHouse Keeper. Ignored if `tls.keeper.existingSecret` is set
+## @param tls.keeper.existingSecret The name of an existing Secret containing the TLS certificates for ClickHouse Keeper
 ##
 tls:
   enabled: false
@@ -228,6 +231,10 @@ tls:
   ca: ""
   existingCASecret: ""
   server:
+    cert: ""
+    key: ""
+    existingSecret: ""
+  keeper:
     cert: ""
     key: ""
     existingSecret: ""
@@ -988,10 +995,12 @@ keeper:
   ##
   existingUsersdSecret: ""
   ## @param keeper.containerPorts.tcp ClickHouse Keeper TCP container port
+  ## @param keeper.containerPorts.tcpSecure ClickHouse TCP (secure) container port
   ## @param keeper.containerPorts.raft ClickHouse Keeper Raft container port
   ##
   containerPorts:
     tcp: 9181
+    tcpSecure: 9281
     raft: 9234
   ## @param keeper.extraContainerPorts ClickHouse Keeper extra containerPorts
   ##
@@ -1282,18 +1291,22 @@ keeper:
     ##
     type: ClusterIP
     ## @param keeper.service.ports.tcp ClickHouse Keeper service TCP port
+    ## @param keeper.service.ports.tcpSecure ClickHouse Keeper service TCP (secure) port
     ## @param keeper.service.ports.raft ClickHouse Keeper service Raft port
     ##
     ports:
       tcp: 9181
+      tcpSecure: 9281
       raft: 9234
     ## Node ports to expose
     ## @param keeper.service.nodePorts.tcp Node port for ClickHouse Keeper service TCP port
+    ## @param keeper.service.nodePorts.tcpSecure Node port for ClickHouse Keeper service TCP (secure) port
     ## @param keeper.service.nodePorts.raft Node port for ClickHouse Keeper service Raft port
     ## NOTE: choose port between <30000-32767>
     ##
     nodePorts:
       tcp: ""
+      tcpSecure: ""
       raft: ""
     ## @param keeper.service.clusterIP ClickHouse Keeper service Cluster IP
     ## e.g.:
