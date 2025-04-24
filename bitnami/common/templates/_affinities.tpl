@@ -82,7 +82,7 @@ preferredDuringSchedulingIgnoredDuringExecution:
       namespaces:
         - {{ .context.Release.Namespace }}
         {{- with $extraNamespaces }}
-        {{ include "common.tplvalues.render" (dict "value" . "context" $) | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" . "context" $) | nindent 8 }}
         {{- end }}
       {{- end }}
       topologyKey: {{ include "common.affinities.topologyKey" (dict "topologyKey" .topologyKey) }}
@@ -99,8 +99,9 @@ preferredDuringSchedulingIgnoredDuringExecution:
           {{- end }}
       {{- if .namespaces }}
       namespaces:
+        - {{ $.context.Release.Namespace }}
         {{- with .namespaces }}
-        {{ include "common.tplvalues.render" (dict "value" . "context" $) | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" . "context" $) | nindent 8 }}
         {{- end }}
       {{- end }}
       topologyKey: {{ include "common.affinities.topologyKey" (dict "topologyKey" .topologyKey) }}
