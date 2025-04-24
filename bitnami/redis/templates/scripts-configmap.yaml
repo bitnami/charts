@@ -853,7 +853,7 @@ data:
 
         if [ -f "/etc/shared/current" ]; then
             echo "new master elected, updating label(s)..."
-            kubectl label pod --field-selector metadata.name="$(< "/etc/shared/current")" isMaster="true" --overwrite || contimue
+            kubectl label pod --field-selector metadata.name="$(< "/etc/shared/current")" isMaster="true" --overwrite || continue
             kubectl label pod --field-selector metadata.name="$(< "/etc/shared/current")" app.kubernetes.io/role-
             if [ -f /etc/shared/previous ]; then
                 kubectl label pod --field-selector metadata.name="$(< "/etc/shared/previous")" isMaster="false" --overwrite
