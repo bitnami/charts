@@ -58,7 +58,7 @@ var _ = Describe("ClickHouse", Ordered, func() {
 			svc, err := c.CoreV1().Services(namespace).Get(ctx, releaseName, getOpts)
 			Expect(err).NotTo(HaveOccurred())
 
-			port, err := utils.SvcGetPortByName(svc, "tcp")
+			port, err := utils.SvcGetPortByName(svc, "tcp-secure")
 			Expect(err).NotTo(HaveOccurred())
 
 			// Use current time for allowing the test suite to repeat
