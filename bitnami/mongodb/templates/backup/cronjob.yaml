@@ -148,11 +148,11 @@ spec:
             command: {{- include "common.tplvalues.render" (dict "value" .Values.backup.cronjob.command "context" $) | nindent 14 }}
             {{- else }}
             command:
-              - /bin/sh
+              - /bin/bash
               - -c
               - |
                 {{- if and .Values.auth.enabled .Values.usePasswordFiles }}
-                export MONGODB_ROOT_PASSWORD="$(cat $MONGODB_ROOT_PASSWORD_FILE)"
+                export MONGODB_ROOT_PASSWORD="$(< $MONGODB_ROOT_PASSWORD_FILE)"
                 {{- end }}
                 mongodump {{- if .Values.auth.enabled }} --username=${MONGODB_ROOT_USER} --password=${MONGODB_ROOT_PASSWORD} --authenticationDatabase=admin {{- end }} --host=${MONGODB_SERVICE_NAME} --port=${MONGODB_PORT_NUMBER} ${MONGODB_CLIENT_EXTRA_FLAGS} {{- if (eq $.Values.architecture "replicaset") }}--oplog{{- end }} --gzip --archive=${MONGODUMP_DIR}/mongodump-$(date '+%Y-%m-%d-%H-%M').gz
             {{- end }}
