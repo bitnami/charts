@@ -1,8 +1,12 @@
 # Changelog
 
-## 12.3.4 (2025-04-22)
+## 12.3.5 (2025-04-22)
 
-* [bitnami/cassandra] Store cassandra-exporter configuration in Secret ([#33069](https://github.com/bitnami/charts/pull/33069))
+* [bitnami/cassandra]fix(readinessProbe): Remove path for metrics readinessProbe ([#33121](https://github.com/bitnami/charts/pull/33121))
+
+## <small>12.3.4 (2025-04-22)</small>
+
+* [bitnami/cassandra] Store cassandra-exporter configuration in Secret (#33069) ([597d759](https://github.com/bitnami/charts/commit/597d7598bf4a6968ed7ec67a840c97677f23fe6d)), closes [#33069](https://github.com/bitnami/charts/issues/33069)
 
 ## <small>12.3.3 (2025-04-21)</small>
 
