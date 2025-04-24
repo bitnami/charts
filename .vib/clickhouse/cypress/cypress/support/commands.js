@@ -4,7 +4,7 @@
  */
 
 const COMMAND_DELAY = 2000;
-const BASE_URL = 'http://vmware-clickhouse.my';
+const BASE_URL = 'https://vmware-clickhouse.my';
 
 for (const command of ['click']) {
   Cypress.Commands.overwrite(command, (originalFn, ...args) => {

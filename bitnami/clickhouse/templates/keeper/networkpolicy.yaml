@@ -38,6 +38,9 @@ spec:
     # Allow outbound connections to other cluster pods
     - ports:
         - port: {{ .Values.keeper.containerPorts.tcp }}
+        {{- if .Values.tls.enabled }}
+        - port: {{ .Values.keeper.containerPorts.tcpSecure }}
+        {{- end }}
         - port: {{ .Values.keeper.containerPorts.raft }}
       to:
         - podSelector:
@@ -51,6 +54,9 @@ spec:
   ingress:
     - ports:
         - port: {{ .Values.keeper.containerPorts.tcp }}
+        {{- if .Values.tls.enabled }}
+        - port: {{ .Values.keeper.containerPorts.tcpSecure }}
+        {{- end }}
         - port: {{ .Values.keeper.containerPorts.raft }}
       {{- if not .Values.keeper.networkPolicy.allowExternal }}
       from:
