@@ -97,6 +97,12 @@ preferredDuringSchedulingIgnoredDuringExecution:
           {{- range $key, $value := .extraMatchLabels }}
           {{ $key }}: {{ $value | quote }}
           {{- end }}
+      {{- if .namespaces }}
+      namespaces:
+        {{- with .namespaces }}
+        {{ include "common.tplvalues.render" (dict "value" . "context" $) | nindent 8 }}
+        {{- end }}
+      {{- end }}
       topologyKey: {{ include "common.affinities.topologyKey" (dict "topologyKey" .topologyKey) }}
     weight: {{ .weight | default 1 -}}
   {{- end -}}
