@@ -1,8 +1,12 @@
 # Changelog
 
-## 9.0.3 (2025-04-16)
+## 9.0.4 (2025-04-25)
 
-* [bitnami/jupyterhub] Release 9.0.3 ([#33046](https://github.com/bitnami/charts/pull/33046))
+* [jupyterhub] Fix singleuser image pull secrets ([#33176](https://github.com/bitnami/charts/pull/33176))
+
+## <small>9.0.3 (2025-04-16)</small>
+
+* [bitnami/jupyterhub] Release 9.0.3 (#33046) ([4d95659](https://github.com/bitnami/charts/commit/4d95659a2b163f32ff6623f1c4b70a9df4cd8142)), closes [#33046](https://github.com/bitnami/charts/issues/33046)
 
 ## <small>9.0.2 (2025-04-16)</small>
 
