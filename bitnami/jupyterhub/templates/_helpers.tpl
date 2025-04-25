@@ -136,7 +136,7 @@ Return the proper hub image name
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "jupyterhub.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.hub.image .Values.proxy.image .Values.auxiliaryImage) "global" .Values.global) -}}
+{{- include "common.images.pullSecrets" (dict "images" (list .Values.hub.image .Values.proxy.image .Values.singleuser.image) "global" .Values.global) -}}
 {{- end -}}
 
 {{/*
