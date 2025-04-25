@@ -1,8 +1,12 @@
 # Changelog
 
-## 16.0.4 (2025-04-22)
+## 16.0.5 (2025-04-25)
 
-* [bitnami/thanos] Release 16.0.4 ([#33109](https://github.com/bitnami/charts/pull/33109))
+* [bitnami/thanos] Allow custom objstore secret key in receive component ([#33180](https://github.com/bitnami/charts/pull/33180))
+
+## <small>16.0.4 (2025-04-22)</small>
+
+* [bitnami/thanos] Release 16.0.4 (#33109) ([e88eeed](https://github.com/bitnami/charts/commit/e88eeed2db08e09cb06ba2cdbbaa5ab1a8d8f4fc)), closes [#33109](https://github.com/bitnami/charts/issues/33109)
 
 ## <small>16.0.3 (2025-04-09)</small>
 
