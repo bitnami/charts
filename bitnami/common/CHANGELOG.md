@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.31.0 (2025-04-24)
+## 2.31.0 (2025-04-25)
 
 * [bitnami/common] add namespaces to extraPodAffinityTerms for affinities ([#33173](https://github.com/bitnami/charts/pull/33173))
 
