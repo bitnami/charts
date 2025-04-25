@@ -38,4 +38,4 @@ maintainers:
 name: jupyterhub
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/jupyterhub
-version: 9.0.3
+version: 9.0.4
