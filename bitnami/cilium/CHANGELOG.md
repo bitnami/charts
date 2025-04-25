@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.1.5 (2025-04-14)
+## 2.1.6 (2025-04-25)
 
-* [bitnami/cilium] Release 2.1.5 ([#32998](https://github.com/bitnami/charts/pull/32998))
+* [bitnami/cilium] Release 2.1.6 ([#33179](https://github.com/bitnami/charts/pull/33179))
+
+## <small>2.1.5 (2025-04-14)</small>
+
+* [bitnami/cilium] Release 2.1.5 (#32998) ([40b6117](https://github.com/bitnami/charts/commit/40b6117c7bbcbcbe78aad39a184c17471928ba18)), closes [#32998](https://github.com/bitnami/charts/issues/32998)
 
 ## <small>2.1.4 (2025-04-04)</small>
 
