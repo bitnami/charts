@@ -566,7 +566,6 @@ spec:
               port: metrics
           readinessProbe:
             httpGet:
-              path: /metrics
               port: metrics
             initialDelaySeconds: {{ .Values.metrics.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.metrics.readinessProbe.periodSeconds }}
@@ -590,8 +589,8 @@ spec:
         {{- end }}
       volumes:
         - name: metrics-conf
-          configMap:
-            name: {{ include "cassandra.metricsConfConfigMap" . }}
+          secret:
+            secretName: {{ include "cassandra.metricsConfSecret" . }}
         {{- if .Values.usePasswordFiles }}
         - name: cassandra-secrets
           projected:

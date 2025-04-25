@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.8.1 (2025-04-21)
+## 4.8.2 (2025-04-23)
 
-* [bitnami/grafana-loki] add missing queryScheduler.enabled parameter ([#33072](https://github.com/bitnami/charts/pull/33072))
+* [bitnami/grafana-loki] Release 4.8.2 ([#33137](https://github.com/bitnami/charts/pull/33137))
+
+## <small>4.8.1 (2025-04-23)</small>
+
+* [bitnami/grafana-loki] Release 4.8.1 (#33133) ([61f3ddb](https://github.com/bitnami/charts/commit/61f3ddb44d6ea09b0e64e0f0020e2b7da9479f8a)), closes [#33133](https://github.com/bitnami/charts/issues/33133)
 
 ## 4.8.0 (2025-04-16)
 

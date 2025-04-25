@@ -1,8 +1,24 @@
 # Changelog
 
-## 20.12.1 (2025-04-16)
+## 20.13.2 (2025-04-24)
 
-* [bitnami/redis] Fix sentinel masterService extraPorts not rendered ([#32961](https://github.com/bitnami/charts/pull/32961))
+* [bitnami/redis] Release 20.13.2 ([#33157](https://github.com/bitnami/charts/pull/33157))
+
+## <small>20.13.1 (2025-04-23)</small>
+
+* [bitnami/redis] Release 20.13.1 (#33089) ([f23fc62](https://github.com/bitnami/charts/commit/f23fc626c47a6f041bdbbbf36ad4b8033c4b4f83)), closes [#33089](https://github.com/bitnami/charts/issues/33089)
+
+## 20.13.0 (2025-04-22)
+
+* [bitnami/redis] feat: :sparkles: Disable empty-dirs when readOnlyRootFS is disabled (#33108) ([ed03d4d](https://github.com/bitnami/charts/commit/ed03d4d35176239e124e5fd7ed26f92eb49db9ba)), closes [#33108](https://github.com/bitnami/charts/issues/33108)
+
+## <small>20.12.2 (2025-04-21)</small>
+
+* [bitnami/redis] fix 32573 - Always announce hostname independent of external service configuration ( ([282ae5c](https://github.com/bitnami/charts/commit/282ae5c01b12f4a0ad72e6cd0463f5f941244f3d)), closes [#33024](https://github.com/bitnami/charts/issues/33024)
+
+## <small>20.12.1 (2025-04-16)</small>
+
+* [bitnami/redis] Fix sentinel masterService extraPorts not rendered (#32961) ([cbc134f](https://github.com/bitnami/charts/commit/cbc134f26b1f146e2a482a27db72d98c1d1b344e)), closes [#32961](https://github.com/bitnami/charts/issues/32961)
 
 ## 20.12.0 (2025-04-15)
 

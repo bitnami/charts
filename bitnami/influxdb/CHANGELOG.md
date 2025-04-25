@@ -1,8 +1,20 @@
 # Changelog
 
-## 6.6.5 (2025-04-15)
+## 6.6.8 (2025-04-22)
 
-* [bitnami/influxdb] Release 6.6.5 ([#33009](https://github.com/bitnami/charts/pull/33009))
+* [bitnami/influxdb] Fix typo in backup cronjob ([#32843](https://github.com/bitnami/charts/pull/32843))
+
+## <small>6.6.7 (2025-04-21)</small>
+
+* [bitnami/influxdb] Fix backup functionality, closes bitnami#33038 (#33092) ([25f2b73](https://github.com/bitnami/charts/commit/25f2b73042b394eb4d2bfdfb6625c3559bbc945d)), closes [bitnami#33038](https://github.com/bitnami/issues/33038) [#33092](https://github.com/bitnami/charts/issues/33092) [#33038](https://github.com/bitnami/charts/issues/33038)
+
+## <small>6.6.6 (2025-04-21)</small>
+
+* [bitnami/influxdb] Add revisionHistoryLimit variable (#32509) ([54ba28d](https://github.com/bitnami/charts/commit/54ba28d9a28249fb731b151b58dcaac00bbfa076)), closes [#32509](https://github.com/bitnami/charts/issues/32509)
+
+## <small>6.6.5 (2025-04-15)</small>
+
+* [bitnami/influxdb] Release 6.6.5 (#33009) ([b6c0dc4](https://github.com/bitnami/charts/commit/b6c0dc442aa40f42aea91ff3af6a847e70b3c912)), closes [#33009](https://github.com/bitnami/charts/issues/33009)
 
 ## <small>6.6.4 (2025-04-15)</small>
 

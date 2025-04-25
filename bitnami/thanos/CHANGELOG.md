@@ -1,8 +1,12 @@
 # Changelog
 
-## 16.0.3 (2025-04-09)
+## 16.0.4 (2025-04-22)
 
-* [bitnami/thanos] Release 16.0.3 ([#32920](https://github.com/bitnami/charts/pull/32920))
+* [bitnami/thanos] Release 16.0.4 ([#33109](https://github.com/bitnami/charts/pull/33109))
+
+## <small>16.0.3 (2025-04-09)</small>
+
+* [bitnami/thanos] Release 16.0.3 (#32920) ([06b8213](https://github.com/bitnami/charts/commit/06b82139571baa2eb87e023f64a7942d618ada5f)), closes [#32920](https://github.com/bitnami/charts/issues/32920)
 
 ## <small>16.0.2 (2025-04-08)</small>
 

@@ -410,6 +410,7 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 | `extraDeploy`       | Array of extra objects to deploy with the release                                       | `[]`            |
 | `nameOverride`      | String to partially override grafana.fullname template (will maintain the release name) | `""`            |
 | `fullnameOverride`  | String to fully override grafana.fullname template                                      | `""`            |
+| `namespaceOverride` | String to fully override common.names.namespace                                         | `""`            |
 | `clusterDomain`     | Default Kubernetes cluster domain                                                       | `cluster.local` |
 | `commonLabels`      | Labels to add to all deployed objects                                                   | `{}`            |
 | `commonAnnotations` | Annotations to add to all deployed objects                                              | `{}`            |

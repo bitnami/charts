@@ -56,7 +56,12 @@ data:
                     {{- range $i := until $replicas }}
                     <replica>
                         <host>{{ printf "%s-shard%d-%d.%s.%s.svc.%s" $fullname $shard $i $headlessSvcName $releaseNamespace $clusterDomain }}</host>
-                        <port>{{ $.Values.containerPorts.tcp }}</port>
+                        {{- if $.Values.tls.enabled }}
+                        <secure>1</secure>
+                        <port from_env="CLICKHOUSE_TCP_SECURE_PORT"></port>
+                        {{- else }}
+                        <port from_env="CLICKHOUSE_TCP_PORT"></port>
+                        {{- end }}
                         <user from_env="CLICKHOUSE_ADMIN_USER"></user>
                         <password from_env="CLICKHOUSE_ADMIN_PASSWORD"></password>
                     </replica>
@@ -75,11 +80,16 @@ data:
   05-zookeeper.xml: |
     <yandex>
         <zookeeper>
-            {{- if or .Values.keeper.enabled }}
+            {{- if .Values.keeper.enabled }}
             {{- range $i := until (int .Values.keeper.replicaCount) }}
             <node>
                 <host>{{ printf "%s-%d.%s.%s.svc.%s" $fullname $i $headlessSvcName $releaseNamespace $clusterDomain }}</host>
+                {{- if $.Values.tls.enabled }}
+                <port>{{ $.Values.keeper.containerPorts.tcpSecure }}</port>
+                <secure>1</secure>
+                {{- else }}
                 <port>{{ $.Values.keeper.containerPorts.tcp }}</port>
+                {{- end }}
             </node>
             {{- end }}
             {{- else if .Values.externalZookeeper.servers }}
@@ -103,17 +113,18 @@ data:
                 <certificateFile>/opt/bitnami/clickhouse/certs/server/tls.crt</certificateFile>
                 <privateKeyFile>/opt/bitnami/clickhouse/certs/server/tls.key</privateKeyFile>
                 <caConfig>/opt/bitnami/clickhouse/certs/ca/tls.crt</caConfig>
-                <verificationMode>none</verificationMode>
                 <cacheSessions>true</cacheSessions>
                 <disableProtocols>sslv2,sslv3</disableProtocols>
                 <preferServerCiphers>true</preferServerCiphers>
+                <verificationMode>relaxed</verificationMode>
             </server>
             <client>
-                <loadDefaultCAFile>true</loadDefaultCAFile>
+                <loadDefaultCAFile>false</loadDefaultCAFile>
+                <caConfig>/opt/bitnami/clickhouse/certs/ca/tls.crt</caConfig>
                 <cacheSessions>true</cacheSessions>
                 <disableProtocols>sslv2,sslv3</disableProtocols>
                 <preferServerCiphers>true</preferServerCiphers>
-                <verificationMode>none</verificationMode>
+                <verificationMode>relaxed</verificationMode>
                 <invalidCertificateHandler>
                     <name>AcceptCertificateHandler</name>
                 </invalidCertificateHandler>

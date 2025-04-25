@@ -24,16 +24,17 @@ data:
 
     DATE="$(date +%Y%m%d_%H%M%S)"
 
-
     host="{{ include "common.names.fullname" . }}.{{ include "common.names.namespace" . }}.svc"
 
+    export INFLUX_TOKEN={{ ternary "cat $(INFLUXDB_ADMIN_USER_TOKEN_FILE)" "${INFLUXDB_ADMIN_USER_TOKEN}" .Values.auth.usePasswordFiles }}
+
     get_orgs() {
-      INFLUX_TOKEN="${INFLUXDB_ADMIN_USER_TOKEN}" influx org list --host "http://${host}:{{ coalesce .Values.influxdb.service.ports.http .Values.influxdb.service.port }}" 2> /dev/null | grep -v 'ID' | awk -F '\t' 'BEGIN{ORS=" "} {print $2}'
+      influx org list --host "http://${host}:{{ coalesce .Values.influxdb.service.ports.http .Values.influxdb.service.port }}" 2> /dev/null | grep -v 'ID' | awk -F '\t' 'BEGIN{ORS=" "} {print $2}'
     }
 
     get_databases() {
         local org_name="${1:-}"
-        INFLUX_TOKEN="${INFLUXDB_ADMIN_USER_TOKEN}" influx bucket list --host "http://${host}:{{ coalesce .Values.influxdb.service.ports.http .Values.influxdb.service.port }}" --org "${org_name}" 2> /dev/null | grep -v 'ID' | awk -F '\t' 'BEGIN{ORS=" "} {print $2}'
+        influx bucket list --host "http://${host}:{{ coalesce .Values.influxdb.service.ports.http .Values.influxdb.service.port }}" --org "${org_name}" 2> /dev/null | grep -v 'ID' | awk -F '\t' 'BEGIN{ORS=" "} {print $2}'
     }
 
     for ORG in $(get_orgs); do
@@ -43,7 +44,7 @@ data:
             echo "backuping ${BUCKET} bucket to ${backup_dir}"
             mkdir -p "${backup_dir}"
 
-            INFLUX_TOKEN="${INFLUXDB_ADMIN_USER_TOKEN}" influx backup --host "http://${host}:{{ coalesce .Values.influxdb.service.ports.http .Values.influxdb.service.port }}" --bucket "${BUCKET}" "${backup_dir}/${DATE}"
+            influx backup --host "http://${host}:{{ coalesce .Values.influxdb.service.ports.http .Values.influxdb.service.port }}" --bucket "${BUCKET}" "${backup_dir}/${DATE}"
         done
     done
 

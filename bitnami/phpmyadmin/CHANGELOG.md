@@ -1,8 +1,13 @@
 # Changelog
 
-## 18.1.5 (2025-03-23)
+## 18.1.6 (2025-04-22)
 
-* [bitnami/phpmyadmin] Release 18.1.5 ([#32569](https://github.com/bitnami/charts/pull/32569))
+* [bitnami/phpmyadmin] Release 18.1.6 ([#33105](https://github.com/bitnami/charts/pull/33105))
+
+## <small>18.1.5 (2025-03-23)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/phpmyadmin] Release 18.1.5 (#32569) ([ed597ae](https://github.com/bitnami/charts/commit/ed597aedeac700e2a8a1557ae69a0791ecbebee8)), closes [#32569](https://github.com/bitnami/charts/issues/32569)
 
 ## <small>18.1.4 (2025-02-21)</small>
 
