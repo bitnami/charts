@@ -1,8 +1,12 @@
 # Changelog
 
-## 16.6.5 (2025-04-24)
+## 16.6.6 (2025-04-24)
 
-* [bitnami/postgresql] Release 16.6.5 ([#33165](https://github.com/bitnami/charts/pull/33165))
+* [bitnami/postgresql] fix(backup): mount secrets with password file ([#33144](https://github.com/bitnami/charts/pull/33144))
+
+## <small>16.6.5 (2025-04-24)</small>
+
+* [bitnami/postgresql] Release 16.6.5 (#33165) ([67bec6a](https://github.com/bitnami/charts/commit/67bec6a685cbec208524c7f67397e2a55549b187)), closes [#33165](https://github.com/bitnami/charts/issues/33165)
 
 ## <small>16.6.4 (2025-04-23)</small>
 
