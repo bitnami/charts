@@ -4,6 +4,10 @@
 
 * [bitnami/nessie] Release 2.0.6 ([#33192](https://github.com/bitnami/charts/pull/33192))
 
+## <small>2.0.6 (2025-04-26)</small>
+
+* [bitnami/nessie] Release 2.0.6 (#33191) ([be2cd4b](https://github.com/bitnami/charts/commit/be2cd4bf4e81b4db3698b8c38521cef2b6858855)), closes [#33191](https://github.com/bitnami/charts/issues/33191)
+
 ## <small>2.0.5 (2025-04-24)</small>
 
 * [bitnami/nessie] Release 2.0.5 (#33171) ([199b095](https://github.com/bitnami/charts/commit/199b095d8455710813cdaf811060865d412f3809)), closes [#33171](https://github.com/bitnami/charts/issues/33171)
