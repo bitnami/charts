@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.3.2 (2025-04-17)
+## 1.3.3 (2025-04-27)
 
-* [bitnami/zipkin] Release 1.3.2 ([#33065](https://github.com/bitnami/charts/pull/33065))
+* [bitnami/zipkin] Release 1.3.3 ([#33199](https://github.com/bitnami/charts/pull/33199))
+
+## <small>1.3.2 (2025-04-17)</small>
+
+* [bitnami/zipkin] Release 1.3.2 (#33065) ([ad4d926](https://github.com/bitnami/charts/commit/ad4d926dcd262d576b331b9bdca15f2c5a812dc5)), closes [#33065](https://github.com/bitnami/charts/issues/33065)
 
 ## <small>1.3.1 (2025-03-18)</small>
 
