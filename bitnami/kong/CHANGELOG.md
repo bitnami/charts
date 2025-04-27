@@ -1,6 +1,6 @@
 # Changelog
 
-## 15.4.3 (2025-04-26)
+## 15.4.3 (2025-04-27)
 
 * [bitnami/kong] Release 15.4.3 ([#33195](https://github.com/bitnami/charts/pull/33195))
 
