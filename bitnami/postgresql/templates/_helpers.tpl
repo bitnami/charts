@@ -13,7 +13,6 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- $fullname := default (include "common.names.fullname" .) .Values.global.postgresql.fullnameOverride -}}
 {{- ternary (printf "%s-%s" $fullname .Values.primary.name | trunc 63 | trimSuffix "-") $fullname (eq .Values.architecture "replication") -}}
 {{- end -}}
-{{- end -}}
 
 {{/*
 Create a default fully qualified app name for PostgreSQL read-only replicas objects
