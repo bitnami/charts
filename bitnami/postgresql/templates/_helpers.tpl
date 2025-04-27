@@ -10,10 +10,8 @@ Create a default fully qualified app name for PostgreSQL Primary objects
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
 {{- define "postgresql.v1.primary.fullname" -}}
-{{- if eq .Values.architecture "replication" -}}
-    {{- printf "%s-%s" (include "common.names.fullname" .) .Values.primary.name | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-    {{- include "common.names.fullname" . -}}
+{{- $fullname := default (include "common.names.fullname" .) .Values.global.postgresql.fullnameOverride -}}
+{{- ternary (printf "%s-%s" $fullname .Values.primary.name | trunc 63 | trimSuffix "-") $fullname (eq .Values.architecture "replication") -}}
 {{- end -}}
 {{- end -}}
 
