@@ -1,0 +1,98 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
+Did you know there are enterprise versions of the Bitnami catalog? For enhanced secure software supply chain features, unlimited pulls from Docker, LTS support, or application customization, see Bitnami Premium or Tanzu Application Catalog. See https://www.arrow.com/globalecs/na/vendors/bitnami for more information.
+
+** Please be patient while the chart is being deployed **
+
+{{- if .Values.diagnosticMode.enabled }}
+
+The chart has been deployed in diagnostic mode. All probes have been disabled and the command has been overwritten with:
+
+  command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 4 }}
+  args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 4 }}
+
+Get the list of pods by executing:
+
+    kubectl get pods --namespace {{ include "common.names.namespace" . }} -l app.kubernetes.io/instance={{ include "common.names.namespace" . | quote }}
+
+Access the pod you want to debug by executing
+
+    kubectl exec --namespace {{ include "common.names.namespace" . }} -ti <NAME OF THE POD> -- bash
+
+{{- else }}
+
+Check the status of the pods by running this command:
+
+    kubectl get pods --namespace {{ include "common.names.namespace" . | quote }} -l app.kubernetes.io/instance={{ include "common.names.namespace" . | quote }}
+
+Check the envoy-gateway documentation for instructions on how to handle routing, traffic and rate limiting.
+
+https://gateway.envoyproxy.io/latest/tasks/quickstart/#what-to-explore-next
+
+{{- if .Values.rbac.create }}
+{{- if .Values.watchAllNamespaces }}
+WARNING: Envoy Gateway can access all secrets in the cluster. This could pose a security risk if the application gets compromised.
+
+You can limit allowed namespaces by setting watchAllNamespaces = false and configuring watchNamespaces
+{{- else }}
+
+Envoy Gateway can ONLY access resources in the following namespaces:
+{{ $namespaces := .Values.watchNamespaces | default (list (include "common.names.namespace" .)) }}
+{{- range $namespace := $namespaces }}
+  - {{ $namespace }}
+{{- end }}
+
+Envoy Gateway won't be able to access resources in other namespaces. You can configure this behavior by setting watchNamespaces
+
+{{- end }}
+{{- end }}
+
+{{- if .Values.exposeAdmin }}
+
+WARNING: The administration interface is accessible. This could pose a security threat if not properly monitored.
+
+    {{ include "common.names.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }} (port {{ .Values.service.ports.admin }})
+
+{{- end }}
+
+Access the administration interface following the steps below:
+
+{{- $port := .Values.service.ports.admin | toString }}
+
+1. Get the Envoy Gateway admin URL by running these commands:
+
+{{- if and .Values.exposeAdmin (contains "NodePort" .Values.service.type) }}
+
+   export NODE_PORT=$(kubectl get --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "common.names.fullname" . }})
+   export NODE_IP=$(kubectl get nodes --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.items[0].status.addresses[0].address}")
+   echo "Admin URL: http://$NODE_IP:$NODE_PORT/"
+
+{{- else if and .Values.exposeAdmin (contains "LoadBalancer" .Values.service.type) }}
+
+  NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+        Watch the status with: 'kubectl get svc --namespace {{ include "common.names.namespace" . }} -w {{ include "common.names.fullname" . }}'
+
+   export SERVICE_IP=$(kubectl get svc --namespace {{ include "common.names.namespace" . }} {{ include "common.names.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
+   echo "Admin URL: http://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.service.ports.admin }}{{ end }}/"
+
+{{- else if and .Values.exposeAdmin (contains "ClusterIP"  .Values.service.type) }}
+
+   kubectl port-forward --namespace {{ include "common.names.namespace" . }} svc/{{ include "common.names.fullname" . }} {{ .Values.service.ports.admin }}:{{ .Values.service.ports.admin }} &
+   echo "Admin URL: http://127.0.0.1{{- if ne $port "80" }}:{{ .Values.service.ports.admin }}{{ end }}/"
+{{- else }}
+
+  pod=$(kubectl get --namespace {{ include "common.names.namespace" . }} pods -o name | grep {{ include "common.names.fullname" . }} | head -n 1)
+  kubectl port-forward --namespace {{ include "common.names.namespace" . }} ${pod} {{ .Values.containerPorts.admin }}:{{ .Values.containerPorts.admin }} &
+  echo "Admin URL: http://127.0.0.1{{- if ne $port "80" }}:{{ .Values.containerPorts.admin }}{{ end }}/"
+{{- end }}
+{{- end }}
+
+{{- include "common.warnings.rollingTag" .Values.image }}
+{{- include "common.warnings.rollingTag" .Values.ratelimitImage }}
+{{- include "common.warnings.rollingTag" .Values.envoyImage }}
+{{- include "envoy-gateway.validateValues" . }}
+{{- include "common.warnings.resources" (dict "sections" (list "") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.ratelimitImage .Values.envoyImage .Values.image) "context" $) }}
+{{- include "common.errors.insecureImages" (dict "images" (list .Values.ratelimitImage .Values.envoyImage .Values.image) "context" $) }}

@@ -1,0 +1,103 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.networkPolicy.enabled }}
+kind: NetworkPolicy
+apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
+metadata:
+  name: {{ template "common.names.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: envoy-gateway
+    app.kubernetes.io/part-of: envoy-gateway
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
+  podSelector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/part-of: envoy-gateway
+      app.kubernetes.io/component: envoy-gateway
+  policyTypes:
+    - Ingress
+    - Egress
+  {{- if .Values.networkPolicy.allowExternalEgress }}
+  egress:
+    - {}
+  {{- else }}
+  egress:
+    - ports:
+        # Allow dns resolution
+        - port: 53
+          protocol: UDP
+        - port: 53
+          protocol: TCP
+        # Allow access to kube-apiserver
+        {{- range $port := .Values.networkPolicy.kubeAPIServerPorts }}
+        - port: {{ $port }}
+        {{- end }}
+    # Envoy instances contain the label gateway.envoyproxy.io/owning-gateway-name
+    - to:
+        - podSelector:
+            matchExpressions:
+              - key: gateway.envoyproxy.io/owning-gateway-name
+                operator: Exists
+        {{- if not .Values.watchAllNamespaces }}
+        {{- $watchNamespaces := default (list (include "common.names.namespace" .)) .Values.watchNamespaces }}
+          namespaceSelector:
+            matchExpressions:
+              - key: namespace
+                operator: In
+                values:
+                {{- range $namespace := $watchNamespaces }}
+                  - {{ $namespace }}
+                {{- end }}
+        {{- end }}
+    {{- if .Values.networkPolicy.extraEgress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+  ingress:
+    - ports:
+        # All ports except admin are hardcoded and cannot be edited
+        # https://github.com/envoyproxy/gateway/blob/main/site/content/en/latest/install/install-helm.md
+        - port: 18000 # grpc
+        - port: 18001 # ratelimit
+        - port: 18002 # wasm
+        - port: 8081  # health
+        {{- if .Values.metrics.enabled }}
+        - port: 19001 # metrics
+        {{- end }}
+        {{- if .Values.exposeAdmin }}
+        - port: {{ .Values.containerPorts.admin }} # admin
+        {{- end }}
+        {{- range .Values.extraContainerPorts }}
+        - port: {{ . }}
+        {{- end }}
+      {{- if not .Values.networkPolicy.allowExternal }}
+      from:
+        - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
+              app.kubernetes.io/part-of: envoy-gateway
+        {{- if .Values.networkPolicy.ingressNSMatchLabels }}
+        - namespaceSelector:
+            matchLabels:
+              {{- range $key, $value := .Values.networkPolicy.ingressNSMatchLabels }}
+              {{ $key | quote }}: {{ $value | quote }}
+              {{- end }}
+          {{- if .Values.networkPolicy.ingressNSPodMatchLabels }}
+          podSelector:
+            matchLabels:
+              {{- range $key, $value := .Values.networkPolicy.ingressNSPodMatchLabels }}
+              {{ $key | quote }}: {{ $value | quote }}
+              {{- end }}
+          {{- end }}
+        {{- end }}
+      {{- end }}
+    {{- if .Values.networkPolicy.extraIngress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
+    {{- end }}
+{{- end }}

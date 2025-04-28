@@ -1,0 +1,68 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{/* Adding the helper in here for better readability */}}
+{{- define "envoy-gateway.defaultConfiguration" }}
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: EnvoyGateway
+gateway:
+  controllerName: {{ .Values.controllerName }}
+logging:
+  level:
+    default: {{ .Values.logLevel }}
+provider:
+  type: Kubernetes
+  kubernetes:
+    rateLimitDeployment:
+      container:
+        image: {{ include "envoy-gateway.ratelimit.image" . }}
+      pod:
+        {{- include "envoy-gateway.imagePullSecrets" . | nindent 8 }}
+      patch:
+        type: StrategicMerge
+        value:
+          spec:
+            template:
+              spec:
+                containers:
+                - name: envoy-ratelimit
+                  imagePullPolicy: {{ .Values.ratelimitImage.pullPolicy }}
+      {{- if not .Values.watchAllNamespaces }}
+      {{- $watchNamespaces := default (list (include "common.names.namespace" .)) .Values.watchNamespaces }}
+      watch:
+        namespaces:
+          {{- range $namespace := $watchNamespaces }}
+          - {{ $namespace }}
+          {{- end }}
+      {{- end }}
+    shutdownManager:
+      image: {{ include "envoy-gateway.image" . }}
+admin:
+  address:
+    port: {{ .Values.containerPorts.admin }}
+    host: {{ ternary "0.0.0.0" "127.0.0.1" .Values.exposeAdmin }}
+{{- end }}
+
+{{- if not .Values.existingConfigMap }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "common.names.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: envoy-gateway
+    app.kubernetes.io/component: envoy-gateway
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+  {{- $configuration := include "envoy-gateway.defaultConfiguration" . | fromYaml -}}
+  {{- if .Values.overrideConfiguration }}
+  {{- $overrideConfiguration := include "common.tplvalues.render" (dict "value" .Values.overrideConfiguration "context" .) | fromYaml }}
+  {{- $configuration = mustMergeOverwrite $configuration $overrideConfiguration }}
+  {{- end }}
+data:
+  envoy-gateway.yaml: |
+    {{- toYaml $configuration | nindent 4 }}
+{{- end }}
