@@ -10,11 +10,15 @@ http:
   http://envoy-gateway:{{ .Vars.service.ports.metrics }}/metrics:
     status: 200
     body:
-      # As the envoy service has a random identifier, we cannot test it using goss, but we can
-      # verify that it has been created by checking the metrics using an expected pattern: envoy-[a-z0-9]-eg-[a-z0-9]*
-      # The metrics show that the service and the deployment succeeded if the count of apply total in success state was 1
-      - /resource_apply_total.*kind="Service".*envoy-[a-z0-9]+-eg-[a-z0-9]+.*status="success".*1/
-      - /resource_apply_total.*kind="Deployment".*envoy-[a-z0-9]+-eg-[a-z0-9]+.*status="success".*1/
+      - /gatewayclass-status/
+  # Use the extra fixed service that points to the envoy instance. This verifies
+  # that envoy has the correct configuration
+  http://vib-envoy-gateway:80:
+    status: 200
+    request-headers:
+      - "Host: bitnami-envoy.my"
+    body:
+      - /nginx/
 file:
   /config/envoy-gateway.yaml:
     exists: true

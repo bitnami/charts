@@ -1,5 +1,6 @@
 # Taken from https://gateway.envoyproxy.io/latest/tasks/quickstart/
 extraDeploy:
+  # Begin example
   - apiVersion: gateway.networking.k8s.io/v1
     kind: GatewayClass
     metadata:
@@ -101,6 +102,20 @@ extraDeploy:
             - path:
                 type: PathPrefix
                 value: /
+  # End of the example
+  # HACK: As the created envoy service has a random-generated name, we
+  # create one with a fixed name using the expected selectors
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: vib-envoy-gateway
+    spec:
+      ports:
+        - name: http
+          port: 80
+          targetPort: 10080
+      selector:
+        gateway.envoyproxy.io/owning-gateway-name: eg
 exposeAdmin: true
 overrideConfiguration:
   admin:
@@ -123,4 +138,4 @@ extraVolumeMounts:
 # Adding an extra initial delay to avoid race conditions with the
 # deployment and goss stages
 readinessProbe:
-  initialDelaySeconds: 30
+  initialDelaySeconds: 60
