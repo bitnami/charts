@@ -120,3 +120,7 @@ extraVolumes:
 extraVolumeMounts:
   - name: empty-dir
     mountPath: /tmp
+# Adding an extra initial delay to avoid race conditions with the
+# deployment and goss stages
+readinessProbe:
+  initialDelaySeconds: 30
