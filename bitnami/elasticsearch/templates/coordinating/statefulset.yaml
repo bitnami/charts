@@ -77,6 +77,9 @@ spec:
       {{- if .Values.coordinating.priorityClassName }}
       priorityClassName: {{ .Values.coordinating.priorityClassName | quote }}
       {{- end }}
+      {{- if .Values.coordinating.shareProcessNamespace }}
+      shareProcessNamespace: {{ .Values.coordinating.shareProcessNamespace }}
+      {{- end }}
       {{- if .Values.coordinating.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.coordinating.terminationGracePeriodSeconds }}
       {{- end }}
