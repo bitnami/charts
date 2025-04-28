@@ -1,6 +1,6 @@
 # Changelog
 
-## 16.7.0 (2025-04-27)
+## 16.7.0 (2025-04-28)
 
 * [bitnami/postgresql] Global postgres fullname override, needed when the fullname needs to be shared across subcharts. ([#33198](https://github.com/bitnami/charts/pull/33198))
 
