@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.30.1 (2025-04-26)
+## 2.30.1 (2025-04-28)
 
 * [bitnami/common] Allows tpl in provided passwords "common.secrets.passwords.manage" ([#33196](https://github.com/bitnami/charts/pull/33196))
 
