@@ -1,8 +1,12 @@
 # Changelog
 
+## 36.0.1 (2025-04-28)
+
+* [bitnami/spring-cloud-dataflow] Release 36.0.1 ([#33218](https://github.com/bitnami/charts/pull/33218))
+
 ## 36.0.0 (2025-04-24)
 
-* [bitnami/spring-cloud-dataflow] Update RabbitMQ to major 16 ([#33163](https://github.com/bitnami/charts/pull/33163))
+* [bitnami/spring-cloud-dataflow] Update RabbitMQ to major 16 (#33163) ([6632365](https://github.com/bitnami/charts/commit/66323656953e2f43a172026729301eff75ec3b1d)), closes [#33163](https://github.com/bitnami/charts/issues/33163)
 
 ## <small>35.0.2 (2025-04-01)</small>
 
