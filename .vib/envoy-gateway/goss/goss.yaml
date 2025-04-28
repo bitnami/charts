@@ -11,7 +11,7 @@ http:
     status: 200
     body:
       - /gatewayclass-status/
-  # Use the extra fixed service that points to the envoy instance. This verifies
+  # Use the deployed fixed service that points to the envoy instance. This verifies
   # that envoy has the correct configuration
   http://vib-envoy-gateway:80:
     status: 200
