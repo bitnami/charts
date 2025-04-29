@@ -1,8 +1,12 @@
 # Changelog
 
+## 12.0.0 (2025-04-29)
+
+* [bitnami/kibana] Release 12.0.0 ([#33244](https://github.com/bitnami/charts/pull/33244))
+
 ## 11.6.0 (2025-04-04)
 
-* [bitnami/kibana] Set `usePasswordFiles=true` by default ([#32636](https://github.com/bitnami/charts/pull/32636))
+* [bitnami/kibana] Set `usePasswordFiles=true` by default (#32636) ([5ee2a7e](https://github.com/bitnami/charts/commit/5ee2a7edaf8731c0590c65b47b9bd5d9201386fa)), closes [#32636](https://github.com/bitnami/charts/issues/32636)
 
 ## <small>11.5.3 (2025-03-25)</small>
 
