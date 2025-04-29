@@ -1,9 +1,9 @@
 dependencies:
 - name: cassandra
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 12.3.1
+  version: 12.3.5
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
   version: 2.30.0
-digest: sha256:d5811f6da8ddcb9f02c340fe8b05f7a225190bdd88457cd2994c608652a524f8
-generated: "2025-04-17T19:42:22.40145911Z"
+digest: sha256:a2c2e139a194aaa98cecd70f0627d3d793508362b4d7607e3bd6f1e8a8db4d2c
+generated: "2025-04-27T21:01:53.508622981Z"

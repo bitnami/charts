@@ -1,8 +1,12 @@
 # Changelog
 
-## 6.6.8 (2025-04-22)
+## 6.6.9 (2025-04-23)
 
-* [bitnami/influxdb] Fix typo in backup cronjob ([#32843](https://github.com/bitnami/charts/pull/32843))
+*  [bitnami/influxdb] Fix backup functionality, closes bitnami#33110 ([#33111](https://github.com/bitnami/charts/pull/33111))
+
+## <small>6.6.8 (2025-04-22)</small>
+
+* [bitnami/influxdb] Fix typo in backup cronjob (#32843) ([408bc3f](https://github.com/bitnami/charts/commit/408bc3f3ece7839e610a4e02ced15cfb692c5ee1)), closes [#32843](https://github.com/bitnami/charts/issues/32843)
 
 ## <small>6.6.7 (2025-04-21)</small>
 

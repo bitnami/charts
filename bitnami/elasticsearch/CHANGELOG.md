@@ -1,8 +1,12 @@
 # Changelog
 
-## 21.6.2 (2025-04-22)
+## 21.6.3 (2025-04-28)
 
-* [bitnami/elasticsearch] tests: Enable security during testing ([#33100](https://github.com/bitnami/charts/pull/33100))
+* [bitnami/elasticsearch] Release 21.6.3 ([#33223](https://github.com/bitnami/charts/pull/33223))
+
+## <small>21.6.2 (2025-04-22)</small>
+
+* [bitnami/elasticsearch] tests: Enable security during testing (#33100) ([6285807](https://github.com/bitnami/charts/commit/62858076100c5e868eb3022125d1e13df29b9339)), closes [#33100](https://github.com/bitnami/charts/issues/33100)
 
 ## <small>21.6.1 (2025-04-21)</small>
 

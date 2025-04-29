@@ -4,12 +4,12 @@ dependencies:
   version: 16.0.0
 - name: mariadb
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 20.4.3
+  version: 20.5.3
 - name: kafka
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 32.2.0
+  version: 32.2.1
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
   version: 2.30.0
-digest: sha256:219cf63ddb27894ff5c6619349a8230a96facc7125ddd0519d5b6a8b3e896fc8
-generated: "2025-04-24T14:24:43.775939+02:00"
+digest: sha256:6d31b38885cd491a0b5fbbf102b986b7043c1811df8850edce74de154af57435
+generated: "2025-04-28T08:50:44.204869788Z"
