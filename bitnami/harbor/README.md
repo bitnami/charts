@@ -1311,9 +1311,17 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 25.0.0
+
+This version uses the PostgreSQL version provided by the bitnami/postgresql subchart, PostgreSQL 17.x, instead of overriding it with version 14.x.
+
 ### To 24.1.0
 
 This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
+
+### To 24.0.1
+
+This version updates the PostgreSQL version to 14.x. Follow the [official instructions](https://www.postgresql.org/docs/14/upgrading.html) to upgrade to 14.x.
 
 ### To 24.0.0
 
