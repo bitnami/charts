@@ -1,6 +1,6 @@
 # Changelog
 
-## 9.0.4 (2025-04-25)
+## 9.0.4 (2025-04-29)
 
 * [jupyterhub] Fix singleuser image pull secrets ([#33176](https://github.com/bitnami/charts/pull/33176))
 
