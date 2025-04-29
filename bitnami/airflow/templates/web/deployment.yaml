@@ -185,11 +185,7 @@ spec:
               command:
                 - pgrep
                 - -f
-                {{- if eq (.Values.image.majorVersion | toString) "2" }}
-                - "airflow webserver"
-                {{- else }}
-                - "airflow api-server"
-                {{- end }}
+                - airflow
           {{- end }}
           {{- if .Values.web.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.web.customReadinessProbe "context" $) | nindent 12 }}

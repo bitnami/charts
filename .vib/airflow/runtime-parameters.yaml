@@ -42,6 +42,7 @@ web:
     runAsUser: 1002
   # Give some extra time for the service to start
   startupProbe:
+    enabled: true
     failureThreshold: 30
     periodSeconds: 10
 worker:
