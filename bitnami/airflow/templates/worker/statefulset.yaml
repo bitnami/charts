@@ -114,6 +114,8 @@ spec:
               value: "worker"
             - name: AIRFLOW_EXECUTOR
               value: {{ include "airflow.worker.executor" . }}
+            - name: PYTHONPYCACHEPREFIX
+              value: "/opt/bitnami/airflow/venv/tmp"
             {{- if or (eq .Values.executor "CeleryExecutor") (eq .Values.executor "CeleryKubernetesExecutor") }}
             - name: REDIS_HOST
               value: {{ include "airflow.redis.host" . | quote }}
@@ -221,6 +223,11 @@ spec:
             - name: empty-dir
               mountPath: /opt/bitnami/airflow/webserver_config.py
               subPath: app-base-dir/webserver_config.py
+            {{- if and .Values.web.containerSecurityContext.enabled .Values.web.containerSecurityContext.readOnlyRootFilesystem }}
+            - name: empty-dir
+              mountPath: /opt/bitnami/airflow/venv/tmp
+              subPath: app-pyc-cache-dir
+            {{- end }}
             {{- if  .Values.usePasswordFiles }}
             - name: airflow-secrets
               mountPath: /opt/bitnami/airflow/secrets

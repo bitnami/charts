@@ -99,7 +99,7 @@ Bitnami charts configure credentials at first boot. Any further change in the se
 - Update the password secret with the new values (replace the SECRET_NAME, PASSWORD, FERNET_KEY and SECRET_KEY placeholders)
 
 ```shell
-kubectl create secret generic SECRET_NAME --from-literal=airflow-password=PASSWORD --from-literal=airflow-fernet-key=FERNET_KEY --from-literal=airflow-secret-key=SECRET_KEY --dry-run -o yaml | kubectl apply -f -
+kubectl create secret generic SECRET_NAME --from-literal=airflow-password=PASSWORD --from-literal=airflow-fernet-key=FERNET_KEY --from-literal=airflow-secret-key=SECRET_KEY --from-literal=airflow-jwt-secret-key=JWT_SECRET_KEY --dry-run -o yaml | kubectl apply -f -
 ```
 
 ### Airflow configuration file
@@ -1286,6 +1286,10 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/airfl
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 23.0.0
+
+This major release adds support for Airflow 3 versions. Additionally, previous Airflow 2 images can be deployed by setting the new `image.majorVersion=2` option and updating the rest of the image related parameters accordingly.
 
 ### To 22.4.0
 

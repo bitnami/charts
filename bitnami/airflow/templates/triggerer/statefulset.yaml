@@ -112,6 +112,8 @@ spec:
               value: "triggerer"
             - name: AIRFLOW_EXECUTOR
               value: {{ .Values.executor }}
+            - name: PYTHONPYCACHEPREFIX
+              value: "/opt/bitnami/airflow/venv/tmp"
             {{- if or (eq .Values.executor "CeleryExecutor") (eq .Values.executor "CeleryKubernetesExecutor") }}
             - name: REDIS_HOST
               value: {{ include "airflow.redis.host" . | quote }}
@@ -158,19 +160,17 @@ spec:
                 - -ec
                 - |
                   export CONNECTION_CHECK_MAX_COUNT=0
-                  timeout {{ $livenessTimeout }} airflow jobs check --job-type TriggererJob --local {{- if not .Values.diagnosticMode.enabled }} 2>/dev/null {{- end }}
+                  timeout {{ $livenessTimeout }} airflow jobs check --job-type TriggererJob --local --limit 0 {{- if not .Values.diagnosticMode.enabled }} 2>/dev/null {{- end }}
           {{- end }}
           {{- if .Values.triggerer.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.triggerer.customReadinessProbe "context" $) | trim | nindent 12 }}
           {{- else if .Values.triggerer.readinessProbe.enabled }}
-          {{- $readinessTimeout := sub (int .Values.triggerer.readinessProbe.timeoutSeconds) 1 }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.triggerer.readinessProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command:
-                - /bin/bash
-                - -ec
-                - |
-                  timeout {{ $readinessTimeout }} airflow jobs check --job-type TriggererJob --local {{- if not .Values.diagnosticMode.enabled }} 2>/dev/null {{- end }}
+                - pgrep
+                - -f
+                - "airflow triggerer"
           {{- end }}
           {{- if .Values.triggerer.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.triggerer.customStartupProbe "context" $) | nindent 12 }}
@@ -183,7 +183,7 @@ spec:
                 - -ec
                 - |
                   export CONNECTION_CHECK_MAX_COUNT=0
-                  timeout {{ $startupTimeout }} airflow jobs check --job-type TriggererJob --local {{- if not .Values.diagnosticMode.enabled }} 2>/dev/null {{- end }}
+                  timeout {{ $startupTimeout }} airflow jobs check --job-type TriggererJob --local --limit 0 {{- if not .Values.diagnosticMode.enabled }} 2>/dev/null {{- end }}
           {{- end }}
           {{- end }}
           {{- if .Values.triggerer.lifecycleHooks }}
@@ -213,6 +213,11 @@ spec:
             - name: empty-dir
               mountPath: /opt/bitnami/airflow/config/airflow_local_settings.py
               subPath: app-conf-dir/airflow_local_settings.py
+            {{- if and .Values.web.containerSecurityContext.enabled .Values.web.containerSecurityContext.readOnlyRootFilesystem }}
+            - name: empty-dir
+              mountPath: /opt/bitnami/airflow/venv/tmp
+              subPath: app-pyc-cache-dir
+            {{- end }}
             {{- if  .Values.usePasswordFiles }}
             - name: airflow-secrets
               mountPath: /opt/bitnami/airflow/secrets

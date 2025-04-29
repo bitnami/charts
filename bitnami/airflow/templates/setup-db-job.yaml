@@ -70,14 +70,24 @@ spec:
 
               if ! airflow_execute db check-migrations; then
                   info "Populating database"
+                  {{- if eq (.Values.image.majorVersion | toString) "2" }}
                   airflow_execute db init
+                  {{- else }}
+                  airflow_execute db migrate
+                  {{- end }}
 
                   airflow_create_admin_user
               else
                   info "Upgrading database schema"
+                  {{- if eq (.Values.image.majorVersion | toString) "2" }}
                   airflow_execute db upgrade
+                  {{- else }}
+                  airflow_execute db migrate
+                  {{- end }}
                   true
               fi
+              info "Synchronizing internal metadata"
+              airflow_execute sync-perm
           {{- end }}
           env:
             - name: BITNAMI_DEBUG

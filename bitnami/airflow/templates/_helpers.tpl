@@ -352,6 +352,10 @@ Add environment variables to configure airflow common values
   value: "cat /opt/bitnami/airflow/secrets/airflow-fernet-key"
 - name: AIRFLOW__WEBSERVER__SECRET_KEY_CMD
   value: "cat /opt/bitnami/airflow/secrets/airflow-secret-key"
+{{- if eq (.Values.image.majorVersion | toString) "3" }}
+- name: AIRFLOW__API_AUTH__JWT_SECRET_CMD
+  value: "cat /opt/bitnami/airflow/secrets/airflow-jwt-secret-key"
+{{- end }}
 {{- else }}
 - name: AIRFLOW__CORE__FERNET_KEY
   valueFrom:
@@ -363,6 +367,13 @@ Add environment variables to configure airflow common values
     secretKeyRef:
       name: {{ include "airflow.secretName" . }}
       key: airflow-secret-key
+{{- if eq (.Values.image.majorVersion | toString) "3" }}
+- name: AIRFLOW__API_AUTH__JWT_SECRET_CMD
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "airflow.secretName" . }}
+      key: airflow-jwt-secret-key
+{{- end -}}
 {{- end -}}
 {{- end -}}
 

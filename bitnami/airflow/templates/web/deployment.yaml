@@ -123,6 +123,12 @@ spec:
                   key: airflow-password
             {{- end }}
             {{- end }}
+            - name: PYTHONPYCACHEPREFIX
+              value: "/opt/bitnami/airflow/venv/tmp"
+            {{- if eq (.Values.image.majorVersion | toString) "2" }}
+            - name: AIRFLOW_COMPONENT_TYPE
+              value: "webserver"
+            {{- end }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
@@ -179,7 +185,7 @@ spec:
               command:
                 - pgrep
                 - -f
-                - airflow-webserver
+                - airflow
           {{- end }}
           {{- if .Values.web.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.web.customReadinessProbe "context" $) | nindent 12 }}
@@ -229,6 +235,11 @@ spec:
             - name: empty-dir
               mountPath: /opt/bitnami/airflow/webserver_config.py
               subPath: app-base-dir/webserver_config.py
+            {{- if and .Values.web.containerSecurityContext.enabled .Values.web.containerSecurityContext.readOnlyRootFilesystem }}
+            - name: empty-dir
+              mountPath: /opt/bitnami/airflow/venv/tmp
+              subPath: app-pyc-cache-dir
+            {{- end }}
             {{- if  .Values.usePasswordFiles }}
             - name: airflow-secrets
               mountPath: /opt/bitnami/airflow/secrets
@@ -282,7 +293,7 @@ spec:
           projected:
             sources:
               - secret:
-                  name:  {{ include "airflow.secretName" . }}
+                  name: {{ include "airflow.secretName" . }}
               - secret:
                   name: {{ include "airflow.database.secretName" . }}
               {{- if .Values.ldap.enabled }}
