@@ -77,6 +77,8 @@ spec:
                   {{- end }}
 
                   airflow_create_admin_user
+                  info "Synchronizing internal metadata"
+                  airflow_execute sync-perm
                   true
               else
                   info "Upgrading database schema"
@@ -87,8 +89,6 @@ spec:
                   {{- end }}
                   true
               fi
-              info "Synchronizing internal metadata"
-              airflow_execute sync-perm
           {{- end }}
           env:
             - name: BITNAMI_DEBUG

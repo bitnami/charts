@@ -230,6 +230,8 @@ Returns an init-container that waits for db migrations to be ready
       . /opt/bitnami/scripts/airflow-env.sh
       . /opt/bitnami/scripts/libairflow.sh
 
+      info "Trying to connect to the database server"
+      airflow_wait_for_db_connection
       info "Waiting for db migrations to be completed"
       airflow_wait_for_db_migrations
       {{- if eq (.Values.image.majorVersion | toString) "3" }}
