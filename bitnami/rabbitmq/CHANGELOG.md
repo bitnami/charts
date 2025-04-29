@@ -1,6 +1,6 @@
 # Changelog
 
-## 16.0.1 (2025-04-25)
+## 16.0.1 (2025-04-29)
 
 * [bitnami/rabbitmq] fixed validation for memoryHighWatermark using resourcesPreset ([#33186](https://github.com/bitnami/charts/pull/33186))
 
