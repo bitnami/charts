@@ -236,7 +236,7 @@ spec:
             failureThreshold: {{ .Values.redis.livenessProbe.failureThreshold }}
             exec:
               command:
-                - /bin/bash
+                - sh
                 - -ec
                 - /scripts/ping_liveness_local.sh {{ .Values.redis.livenessProbe.timeoutSeconds }}
           {{- end }}
@@ -252,7 +252,7 @@ spec:
             failureThreshold: {{ .Values.redis.readinessProbe.failureThreshold }}
             exec:
               command:
-                - /bin/bash
+                - sh
                 - -ec
                 - /scripts/ping_readiness_local.sh {{ .Values.redis.readinessProbe.timeoutSeconds }}
           {{- end }}
@@ -323,7 +323,7 @@ spec:
           {{- else }}
           command:
             - /bin/bash
-            - -ec
+            - -c
             - |
               {{- if and .Values.usePassword .Values.usePasswordFiles }}
               export REDIS_PASSWORD="$(< "${REDIS_PASSWORD_FILE}")"

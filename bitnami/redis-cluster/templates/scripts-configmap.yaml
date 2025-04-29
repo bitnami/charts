@@ -14,7 +14,7 @@ metadata:
   {{- end }}
 data:
   ping_readiness_local.sh: |-
-    #!/bin/bash
+    #!/bin/sh
     set -e
 
     REDIS_STATUS_FILE=/tmp/.redis_cluster_check
@@ -75,7 +75,7 @@ data:
     fi
 {{- end }}
   ping_liveness_local.sh: |-
-    #!/bin/bash
+    #!/bin/sh
     set -e
 
     {{- if .Values.usePassword }}
