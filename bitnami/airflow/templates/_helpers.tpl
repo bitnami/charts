@@ -533,7 +533,7 @@ Validates a semver constraint
 */}}
 {{- define "airflow.semverCondition" -}}
 {{- $constraint := .constraint -}}
-{{- $imageVersion := .imageVersion -}}
+{{- $imageVersion := (.imageVersion | toString) -}}
 
 {{/* tag 'latest' is an special case, where we fall to .Chart.AppVersion value */}}
 {{- if eq "latest" $imageVersion -}}

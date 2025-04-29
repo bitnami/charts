@@ -152,7 +152,6 @@ spec:
           {{- if .Values.triggerer.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.triggerer.customLivenessProbe "context" $) | trim | nindent 12 }}
           {{- else if .Values.triggerer.livenessProbe.enabled }}
-          {{- $livenessTimeout := sub (int .Values.triggerer.livenessProbe.timeoutSeconds) 1 }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.triggerer.livenessProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command:
@@ -163,6 +162,7 @@ spec:
           {{- if .Values.triggerer.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.triggerer.customReadinessProbe "context" $) | trim | nindent 12 }}
           {{- else if .Values.triggerer.readinessProbe.enabled }}
+          {{- $readinessTimeout := sub (int .Values.triggerer.readinessProbe.timeoutSeconds) 1 }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.triggerer.readinessProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command:
@@ -170,7 +170,7 @@ spec:
                 - -ec
                 - |
                   export CONNECTION_CHECK_MAX_COUNT=0
-                  timeout {{ $livenessTimeout }} airflow jobs check --job-type TriggererJob --local --limit 0 {{- if not .Values.diagnosticMode.enabled }} 2>/dev/null {{- end }}
+                  timeout {{ $readinessTimeout }} airflow jobs check --job-type TriggererJob --local --limit 0 {{- if not .Values.diagnosticMode.enabled }} 2>/dev/null {{- end }}
           {{- end }}
           {{- if .Values.triggerer.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.triggerer.customStartupProbe "context" $) | nindent 12 }}
