@@ -99,7 +99,7 @@ Bitnami charts configure credentials at first boot. Any further change in the se
 - Update the password secret with the new values (replace the SECRET_NAME, PASSWORD, FERNET_KEY and SECRET_KEY placeholders)
 
 ```shell
-kubectl create secret generic SECRET_NAME --from-literal=airflow-password=PASSWORD --from-literal=airflow-fernet-key=FERNET_KEY --from-literal=airflow-secret-key=SECRET_KEY --dry-run -o yaml | kubectl apply -f -
+kubectl create secret generic SECRET_NAME --from-literal=airflow-password=PASSWORD --from-literal=airflow-fernet-key=FERNET_KEY --from-literal=airflow-secret-key=SECRET_KEY --from-literal=airflow-jwt-secret-key=JWT_SECRET_KEY --dry-run -o yaml | kubectl apply -f -
 ```
 
 ### Airflow configuration file
@@ -410,6 +410,7 @@ The Bitnami Airflow chart relies on the PostgreSQL chart persistence. This means
 | `auth.password`                                                                               | Password to access web UI                                                                                                                                                                                                                                                                                                            | `""`                      |
 | `auth.fernetKey`                                                                              | Fernet key to secure connections                                                                                                                                                                                                                                                                                                     | `""`                      |
 | `auth.secretKey`                                                                              | Secret key to run your flask app                                                                                                                                                                                                                                                                                                     | `""`                      |
+| `auth.jwtSecretKey`                                                                           | JWT secret key to run your flask app                                                                                                                                                                                                                                                                                                 | `""`                      |
 | `auth.existingSecret`                                                                         | Name of an existing secret to use for Airflow credentials                                                                                                                                                                                                                                                                            | `""`                      |
 | `executor`                                                                                    | Airflow executor. Allowed values: `SequentialExecutor`, `LocalExecutor`, `CeleryExecutor`, `KubernetesExecutor`, `CeleryKubernetesExecutor` and `LocalKubernetesExecutor`                                                                                                                                                            | `CeleryExecutor`          |
 | `loadExamples`                                                                                | Switch to load some Airflow examples                                                                                                                                                                                                                                                                                                 | `false`                   |
@@ -712,7 +713,7 @@ The Bitnami Airflow chart relies on the PostgreSQL chart persistence. This means
 
 | Name                                                             | Description                                                                                                                                                                                                                                 | Value            |
 | ---------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
-| `dagProcessor.enabled`                                           | Run Airflow Dag Processor Manager as a standalone component                                                                                                                                                                                 | `false`          |
+| `dagProcessor.enabled`                                           | Run Airflow Dag Processor Manager as a standalone component                                                                                                                                                                                 | `true`           |
 | `dagProcessor.replicaCount`                                      | Number of Airflow Dag Processor replicas                                                                                                                                                                                                    | `1`              |
 | `dagProcessor.command`                                           | Override default Airflow Dag Processor cmd                                                                                                                                                                                                  | `[]`             |
 | `dagProcessor.args`                                              | Override default Airflow Dag Processor args                                                                                                                                                                                                 | `[]`             |
@@ -806,7 +807,7 @@ The Bitnami Airflow chart relies on the PostgreSQL chart persistence. This means
 
 | Name                                                          | Description                                                                                                                                                                                                                           | Value               |
 | ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
-| `triggerer.enabled`                                           | Run Airflow Triggerer as a standalone component                                                                                                                                                                                       | `false`             |
+| `triggerer.enabled`                                           | Run Airflow Triggerer as a standalone component                                                                                                                                                                                       | `true`              |
 | `triggerer.defaultCapacity`                                   | How many triggers a single Triggerer can run at once                                                                                                                                                                                  | `1000`              |
 | `triggerer.replicaCount`                                      | Number of Airflow Triggerer replicas                                                                                                                                                                                                  | `1`                 |
 | `triggerer.command`                                           | Override default Airflow Triggerer cmd                                                                                                                                                                                                | `[]`                |
@@ -1286,6 +1287,26 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/airfl
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 23.0.0
+
+This major release adds support for Airflow `3.x.y` series. Additionally, previous Airflow `2.x.y` series can be deployed by setting the corresponding image parameters. The chart logic will detect which image version you are using, and it will generate the required Airflow configuration and Kubernetes objects.
+
+We recommend following the next procedure in order to upgrade from `22.x.y` chart version to the `23.x.y` series, and also upgrade to Airflow `3.y.z` series:
+
+- Upgrade your release (maintaining Airflow `2.x.y` series):
+
+```console
+helm upgrade airflow oci://REGISTRY_NAME/REPOSITORY_NAME/airflow --set image.tag=2
+```
+
+- Follow the recommended steps for the database backup and the DAGs files verification available at the [official "upgrading to Airflow 3" guide](https://airflow.apache.org/docs/apache-airflow/stable/installation/upgrading_to_airflow3.html).
+
+- Upgrade your release now using the default Airflow `3.x.y` series:
+
+```console
+helm upgrade airflow oci://REGISTRY_NAME/REPOSITORY_NAME/airflow
+```
 
 ### To 22.4.0
 

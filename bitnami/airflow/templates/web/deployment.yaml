@@ -123,6 +123,12 @@ spec:
                   key: airflow-password
             {{- end }}
             {{- end }}
+            - name: PYTHONPYCACHEPREFIX
+              value: "/opt/bitnami/airflow/venv/tmp"
+            {{- if (include "airflow.isImageMajorVersion2" .) }}
+            - name: AIRFLOW_COMPONENT_TYPE
+              value: "webserver"
+            {{- end }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
@@ -175,25 +181,29 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.web.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.web.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.web.livenessProbe "enabled") "context" $) | nindent 12 }}
-            exec:
-              command:
-                - pgrep
-                - -f
-                - airflow-webserver
-          {{- end }}
-          {{- if .Values.web.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.web.customReadinessProbe "context" $) | nindent 12 }}
-          {{- else if .Values.web.readinessProbe.enabled }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.web.readinessProbe "enabled") "context" $) | nindent 12 }}
             {{- if contains "127.0.0.1" (include "airflow.baseUrl" .) }}
             httpGet:
+              {{- if (include "airflow.isImageMajorVersion3" .) }}
+              path: /api/v2/monitor/health
+              {{- else }}
               path: /health
+              {{- end }}
               port: http
               scheme: {{ ternary "HTTPS" "HTTP" .Values.web.tls.enabled }}
             {{- else }}
             tcpSocket:
               port: http
             {{- end }}
+          {{- end }}
+          {{- if .Values.web.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.web.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.web.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.web.readinessProbe "enabled") "context" $) | nindent 12 }}
+            exec:
+              command:
+                - pgrep
+                - -f
+                - airflow
           {{- end }}
           {{- end }}
           {{- if .Values.web.lifecycleHooks }}
@@ -229,6 +239,11 @@ spec:
             - name: empty-dir
               mountPath: /opt/bitnami/airflow/webserver_config.py
               subPath: app-base-dir/webserver_config.py
+            {{- if and .Values.web.containerSecurityContext.enabled .Values.web.containerSecurityContext.readOnlyRootFilesystem }}
+            - name: empty-dir
+              mountPath: /opt/bitnami/airflow/venv/tmp
+              subPath: app-pyc-cache-dir
+            {{- end }}
             {{- if  .Values.usePasswordFiles }}
             - name: airflow-secrets
               mountPath: /opt/bitnami/airflow/secrets
@@ -282,7 +297,7 @@ spec:
           projected:
             sources:
               - secret:
-                  name:  {{ include "airflow.secretName" . }}
+                  name: {{ include "airflow.secretName" . }}
               - secret:
                   name: {{ include "airflow.database.secretName" . }}
               {{- if .Values.ldap.enabled }}
