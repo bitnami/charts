@@ -202,11 +202,19 @@ Validate values of rabbitmq - Memory high watermark
 rabbitmq: memoryHighWatermark.type
     Invalid Memory high watermark type. Valid values are "absolute" and
     "relative". Please set a valid mode (--set memoryHighWatermark.type="xxxx")
-{{- else if and .Values.memoryHighWatermark.enabled (eq .Values.memoryHighWatermark.type "relative") (not (dig "limits" "memory" "" .Values.resources)) }}
+{{- else if and .Values.memoryHighWatermark.enabled (eq .Values.memoryHighWatermark.type "relative") (or (not (dig "limits" "memory" "" .Values.resources)) (and (empty .Values.resources) (eq .Values.resourcesPreset "none"))) }}
 rabbitmq: memoryHighWatermark
     You enabled configuring memory high watermark using a relative limit. However,
     no memory limits were defined at POD level. Define your POD limits as shown below:
 
+    Using resourcesPreset (not recommended for production):
+    $ helm install {{ .Release.Name }} oci://registry-1.docker.io/bitnamicharts/rabbitmq \
+      --set memoryHighWatermark.enabled=true \
+      --set memoryHighWatermark.type="relative" \
+      --set memoryHighWatermark.value="0.4" \
+      --set resourcesPreset="micro"
+
+    Using resources:
     $ helm install {{ .Release.Name }} oci://registry-1.docker.io/bitnamicharts/rabbitmq \
       --set memoryHighWatermark.enabled=true \
       --set memoryHighWatermark.type="relative" \
