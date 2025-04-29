@@ -1,8 +1,12 @@
 # Changelog
 
-## 24.6.1 (2025-04-28)
+## 25.0.0 (2025-04-29)
 
-* [bitnami/harbor] Release 24.6.1 ([#33209](https://github.com/bitnami/charts/pull/33209))
+* [bitnami/harbor] Major 25.0.0: Upgrade PostgreSQL to 17.x.x ([#33242](https://github.com/bitnami/charts/pull/33242))
+
+## <small>24.6.1 (2025-04-28)</small>
+
+* [bitnami/harbor] Release 24.6.1 (#33209) ([57c27d4](https://github.com/bitnami/charts/commit/57c27d473c55998289d776a9834fd0adf9effb3c)), closes [#33209](https://github.com/bitnami/charts/issues/33209)
 
 ## 24.6.0 (2025-04-15)
 
