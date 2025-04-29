@@ -1,6 +1,6 @@
 # Changelog
 
-## 21.6.4 (2025-04-28)
+## 21.6.4 (2025-04-29)
 
 * [bitnami/elasticsearch] add shareProcessNamespace support ([#33232](https://github.com/bitnami/charts/pull/33232))
 
