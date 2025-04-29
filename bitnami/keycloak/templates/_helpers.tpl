@@ -126,7 +126,7 @@ Return the Database database name
         {{- .Values.postgresql.auth.database -}}
     {{- end -}}
 {{- else -}}
-    {{- .Values.externalDatabase.database -}}
+    {{- tpl .Values.externalDatabase.database $ -}}
 {{- end -}}
 {{- end -}}
 
@@ -145,7 +145,7 @@ Return the Database user
         {{- .Values.postgresql.auth.username -}}
     {{- end -}}
 {{- else -}}
-    {{- .Values.externalDatabase.user -}}
+    {{- tpl .Values.externalDatabase.user $ -}}
 {{- end -}}
 {{- end -}}
 

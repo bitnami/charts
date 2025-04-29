@@ -1,8 +1,12 @@
 # Changelog
 
-## 16.5.2 (2025-04-24)
+## 16.5.3 (2025-04-28)
 
-* [bitnami/mongodb] Fix authentication in mongodump job ([#33143](https://github.com/bitnami/charts/pull/33143))
+* [bitnami/mongodb] Release 16.5.3 ([#33211](https://github.com/bitnami/charts/pull/33211))
+
+## <small>16.5.2 (2025-04-25)</small>
+
+* [bitnami/mongodb] Fix authentication in mongodump job (#33143) ([3b50d1b](https://github.com/bitnami/charts/commit/3b50d1b1199d31408b26a7b2c71320087a2fd77f)), closes [#33143](https://github.com/bitnami/charts/issues/33143) [#33121](https://github.com/bitnami/charts/issues/33121) [#33140](https://github.com/bitnami/charts/issues/33140)
 
 ## <small>16.5.1 (2025-04-14)</small>
 
