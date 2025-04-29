@@ -1816,17 +1816,6 @@ mariadb:
   jdbcParameter:
     ## @param mariadb.jdbcParameter.useMysqlMetadata Use MariaDB useMysqlMetadata parameter.
     useMysqlMetadata: true
-  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mariadb
-  ## @param mariadb.image.registry [default: REGISTRY_NAME] MariaDB image registry
-  ## @param mariadb.image.repository [default: REPOSITORY_NAME/mariadb] MariaDB image repository
-  ## @skip mariadb.image.tag MariaDB image tag (immutable tags are recommended)
-  ## @param mariadb.image.digest MariaDB image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
-  ##
-  image:
-    registry: docker.io
-    repository: bitnami/mariadb
-    tag: 10.11.11-debian-12-r11
-    digest: ""
   ## @param mariadb.architecture MariaDB architecture. Allowed values: `standalone` or `replication`
   ##
   architecture: standalone
