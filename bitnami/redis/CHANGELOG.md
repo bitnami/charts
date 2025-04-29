@@ -1,8 +1,8 @@
 # Changelog
 
-## 20.13.3 (2025-04-28)
+## 20.13.4 (2025-04-29)
 
-* [bitnami/redis] Release 20.13.3 ([#33217](https://github.com/bitnami/charts/pull/33217))
+* [bitnami/redis] Switch shell from /bin/sh to /bin/bash to improve process handling ([#33181](https://github.com/bitnami/charts/pull/33181))
 
 ## <small>20.13.2 (2025-04-24)</small>
 
