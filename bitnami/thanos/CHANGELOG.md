@@ -1,6 +1,6 @@
 # Changelog
 
-## 16.0.5 (2025-04-25)
+## 16.0.5 (2025-04-29)
 
 * [bitnami/thanos] Allow custom objstore secret key in receive component ([#33180](https://github.com/bitnami/charts/pull/33180))
 
