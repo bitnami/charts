@@ -1295,12 +1295,15 @@ This major release adds support for Airflow `3.x.y` series. Additionally, previo
 We recommend following the next procedure in order to upgrade from `22.x.y` chart version to the `23.x.y` series, and also upgrade to Airflow `3.y.z` series:
 
 - Upgrade your release (maintaining Airflow `2.x.y` series):
+
 ```console
 helm upgrade airflow oci://REGISTRY_NAME/REPOSITORY_NAME/airflow --set image.tag=2
 ```
 
 - Follow the recommended steps for the database backup and the DAGs files verification available at the [official "upgrading to Airflow 3" guide](https://airflow.apache.org/docs/apache-airflow/stable/installation/upgrading_to_airflow3.html).
+
 - Upgrade your release now using the default Airflow `3.x.y` series:
+
 ```console
 helm upgrade airflow oci://REGISTRY_NAME/REPOSITORY_NAME/airflow
 ```
