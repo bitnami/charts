@@ -42,7 +42,7 @@ data:
     AUTH_LDAP_TLS_CACERTFILE = {{ printf "%s/%s" .Values.ldap.tls.certificatesMountPath .Values.ldap.tls.CAFilename | squote }}
   {{- end }}
   {{- else }}
-    {{- if eq (.Values.image.majorVersion | toString) "2" }}
+    {{- if (include "airflow.isImageMajorVersion2" .) }}
     from airflow.www.fab_security.manager import AUTH_DB
     {{- else }}
     from flask_appbuilder.const import AUTH_DB

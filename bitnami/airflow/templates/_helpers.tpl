@@ -352,7 +352,7 @@ Add environment variables to configure airflow common values
   value: "cat /opt/bitnami/airflow/secrets/airflow-fernet-key"
 - name: AIRFLOW__WEBSERVER__SECRET_KEY_CMD
   value: "cat /opt/bitnami/airflow/secrets/airflow-secret-key"
-{{- if eq (.Values.image.majorVersion | toString) "3" }}
+{{- if (include "airflow.isImageMajorVersion3" .) }}
 - name: AIRFLOW__API_AUTH__JWT_SECRET_CMD
   value: "cat /opt/bitnami/airflow/secrets/airflow-jwt-secret-key"
 {{- end }}
@@ -367,7 +367,7 @@ Add environment variables to configure airflow common values
     secretKeyRef:
       name: {{ include "airflow.secretName" . }}
       key: airflow-secret-key
-{{- if eq (.Values.image.majorVersion | toString) "3" }}
+{{- if (include "airflow.isImageMajorVersion3" .) }}
 - name: AIRFLOW__API_AUTH__JWT_SECRET_CMD
   valueFrom:
     secretKeyRef:
@@ -526,4 +526,37 @@ Ref: https://github.com/bitnami/charts/pull/6096#issuecomment-856499047
 */}}
 {{- define "airflow.worker.executor" -}}
 {{- print (ternary "CeleryExecutor" .Values.executor (eq .Values.executor "CeleryKubernetesExecutor")) -}}
+{{- end -}}
+
+{{/*
+Validates a semver constraint
+*/}}
+{{- define "airflow.semverCondition" -}}
+{{- $constraint := .constraint -}}
+{{- $imageVersion := .imageVersion -}}
+
+{{/* tag 'latest' is an special case, where we fall to .Chart.AppVersion value */}}
+{{- if eq "latest" $imageVersion -}}
+{{- $imageVersion = .context.Chart.AppVersion -}}
+{{- else -}}
+{{- $imageVersion = (index (splitList "-" $imageVersion) 0 ) -}}
+{{- end -}}
+
+{{- if semverCompare $constraint $imageVersion -}}
+true
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validates the image tag version is equal or higher than 3.0.0
+*/}}
+{{- define "airflow.isImageMajorVersion3" -}}
+{{- include "airflow.semverCondition" (dict "constraint" "^3" "imageVersion" .Values.image.tag "context" $) -}}
+{{- end -}}
+
+{{/*
+Validates the image tag version is equal or higher than 2.0.0
+*/}}
+{{- define "airflow.isImageMajorVersion2" -}}
+{{- include "airflow.semverCondition" (dict "constraint" "^2" "imageVersion" .Values.image.tag "context" $) -}}
 {{- end -}}

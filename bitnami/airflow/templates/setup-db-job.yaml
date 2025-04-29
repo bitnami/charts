@@ -70,7 +70,7 @@ spec:
 
               if ! airflow_execute db check-migrations; then
                   info "Populating database"
-                  {{- if eq (.Values.image.majorVersion | toString) "2" }}
+                  {{- if (include "airflow.isImageMajorVersion2" .) }}
                   airflow_execute db init
                   {{- else }}
                   airflow_execute db migrate
@@ -82,7 +82,7 @@ spec:
                   true
               else
                   info "Upgrading database schema"
-                  {{- if eq (.Values.image.majorVersion | toString) "2" }}
+                  {{- if (include "airflow.isImageMajorVersion2" .) }}
                   airflow_execute db upgrade
                   {{- else }}
                   airflow_execute db migrate

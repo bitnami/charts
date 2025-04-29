@@ -14,7 +14,7 @@ ref: https://airflow.apache.org/docs/apache-airflow/stable/configurations-ref.ht
 core:
   load_examples: {{ ternary "True" "False" .Values.loadExamples | squote }}
   executor: {{ .Values.executor | quote }}
-  {{- if eq (.Values.image.majorVersion | toString) "3" }}
+  {{- if (include "airflow.isImageMajorVersion3" .) }}
   execution_api_server_url: {{ printf "http://%s:%s/execution/" (include "airflow.web.fullname" .) (.Values.service.ports.http | toString)  | quote }}
   {{- end }}
 logging:
@@ -27,7 +27,7 @@ metrics:
 scheduler:
   standalone_dag_processor: {{ ternary "True" "False" .Values.dagProcessor.enabled | squote }}
 triggerer:
-  {{- if eq (.Values.image.majorVersion | toString) "2" }}
+  {{- if (include "airflow.isImageMajorVersion2" .) }}
   default_capacity: {{ .Values.triggerer.defaultCapacity | quote }}
   {{- else }}
   capacity: {{ .Values.triggerer.defaultCapacity | quote }}
@@ -39,10 +39,10 @@ webserver:
   web_server_ssl_cert: "/opt/bitnami/airflow/certs/tls.crt"
   web_server_ssl_key: "/opt/bitnami/airflow/certs/tls.key"
   {{- end }}
-  {{- if eq (.Values.image.majorVersion | toString) "2" }}
+  {{- if (include "airflow.isImageMajorVersion2" .) }}
   web_server_port: {{ .Values.web.containerPorts.http | quote }}
   {{- end }}
-{{- if eq (.Values.image.majorVersion | toString) "3" }}
+{{- if (include "airflow.isImageMajorVersion3" .) }}
 api:
   base_url: {{ include "airflow.baseUrl" . | quote }}
   port: {{ .Values.web.containerPorts.http | quote }}

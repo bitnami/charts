@@ -125,7 +125,7 @@ spec:
             {{- end }}
             - name: PYTHONPYCACHEPREFIX
               value: "/opt/bitnami/airflow/venv/tmp"
-            {{- if eq (.Values.image.majorVersion | toString) "2" }}
+            {{- if (include "airflow.isImageMajorVersion2" .) }}
             - name: AIRFLOW_COMPONENT_TYPE
               value: "webserver"
             {{- end }}

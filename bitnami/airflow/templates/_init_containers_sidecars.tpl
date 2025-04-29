@@ -234,7 +234,7 @@ Returns an init-container that waits for db migrations to be ready
       airflow_wait_for_db_connection
       info "Waiting for db migrations to be completed"
       airflow_wait_for_db_migrations
-      {{- if eq (.Values.image.majorVersion | toString) "3" }}
+      {{- if (include "airflow.isImageMajorVersion3" .) }}
       info "Waiting for the admin user to exist"
       airflow_wait_for_admin_user
       {{- end }}

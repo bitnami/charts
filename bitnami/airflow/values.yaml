@@ -84,7 +84,6 @@ diagnosticMode:
 
 ## Bitnami Airflow image version
 ## ref: https://hub.docker.com/r/bitnami/airflow/tags
-## @param image.majorVersion [default: 3] Major version of the Airflow image
 ## @param image.registry [default: REGISTRY_NAME] Airflow image registry
 ## @param image.repository [default: REPOSITORY_NAME/airflow] Airflow image repository
 ## @skip image.tag Airflow image tag (immutable tags are recommended)
@@ -93,7 +92,6 @@ diagnosticMode:
 ## @param image.pullSecrets Airflow image pull secrets
 ## @param image.debug Enable image debug mode
 image:
-  majorVersion: "3"
   registry: docker.io
   repository: bitnami/airflow
   tag: 3.0.0-debian-12-r2

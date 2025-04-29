@@ -400,7 +400,6 @@ The Bitnami Airflow chart relies on the PostgreSQL chart persistence. This means
 
 | Name                                                                                          | Description                                                                                                                                                                                                                                                                                                                          | Value                     |
 | --------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------- |
-| `image.majorVersion`                                                                          | Major version of the Airflow image                                                                                                                                                                                                                                                                                                   | `3`                       |
 | `image.registry`                                                                              | Airflow image registry                                                                                                                                                                                                                                                                                                               | `REGISTRY_NAME`           |
 | `image.repository`                                                                            | Airflow image repository                                                                                                                                                                                                                                                                                                             | `REPOSITORY_NAME/airflow` |
 | `image.digest`                                                                                | Airflow image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                                                                                                                                              | `""`                      |
@@ -1291,7 +1290,13 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ### To 23.0.0
 
-This major release adds support for Airflow 3 versions. Additionally, previous Airflow 2 images can be deployed by setting the new `image.majorVersion=2` option and updating the rest of the image related parameters accordingly.
+This major release adds support for Airflow 3 versions. Additionally, previous Airflow 2 images can be deployed by setting the corresponding image parameters. The chart logic will detect which image version you are using and it will generate the required Airflow configuration and Kubernetes objects.
+
+We recommend following the next procedure in order to upgrade from Airflow 2 to Airflow 3 images:
+
+- Perform a Helm upgrade with the latest chart logic and the latest Airflow 2.x image version.
+- Follow the recommended steps for the database backup and the DAGs files verification available at the [official "upgrading to Airflow 3" guide](https://airflow.apache.org/docs/apache-airflow/stable/installation/upgrading_to_airflow3.html).
+- Perform a Helm upgrade using the Airflow 3.x image.
 
 ### To 22.4.0
 
