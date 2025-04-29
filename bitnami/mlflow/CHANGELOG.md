@@ -1,8 +1,12 @@
 # Changelog
 
-## 3.0.1 (2025-04-09)
+## 3.0.2 (2025-04-24)
 
-* [bitnami/mlflow] Release 3.0.1 ([#32908](https://github.com/bitnami/charts/pull/32908))
+* [bitnami/mlflow] Release 3.0.2 ([#33164](https://github.com/bitnami/charts/pull/33164))
+
+## <small>3.0.1 (2025-04-09)</small>
+
+* [bitnami/mlflow] Release 3.0.1 (#32908) ([f68a9dd](https://github.com/bitnami/charts/commit/f68a9dd6b7de5e0951339c00b8e7567f59a742d4)), closes [#32908](https://github.com/bitnami/charts/issues/32908)
 
 ## 3.0.0 (2025-04-03)
 

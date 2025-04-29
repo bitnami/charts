@@ -1,8 +1,12 @@
 # Changelog
 
-## 17.1.5 (2025-04-21)
+## 17.1.6 (2025-04-28)
 
-* [bitnami/kubeapps] Release 17.1.5 ([#33097](https://github.com/bitnami/charts/pull/33097))
+* [bitnami/kubeapps] Release 17.1.6 ([#33212](https://github.com/bitnami/charts/pull/33212))
+
+## <small>17.1.5 (2025-04-21)</small>
+
+* [bitnami/kubeapps] Release 17.1.5 (#33097) ([c28a66c](https://github.com/bitnami/charts/commit/c28a66cd17f0fd2f05d130a0ff3d275cfbc0246d)), closes [#33097](https://github.com/bitnami/charts/issues/33097)
 
 ## <small>17.1.4 (2025-03-23)</small>
 

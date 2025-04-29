@@ -21,8 +21,8 @@ data:
     {{- include "common.tplvalues.render" (dict "value" $value "context" $) | nindent 4 }}
   {{- end }}
   {{- if gt (int .Values.keeper.replicaCount) 1 }}
-  raft_configuration.xml: |
-    <clickhouse>
+  01-raft.xml: |
+    <yandex>
         <keeper_server>
             <raft_configuration>
                 {{- $fullname := include "clickhouse.keeper.fullname" . }}
@@ -33,11 +33,44 @@ data:
                 <server>
                     <id>{{ $i }}</id>
                     <hostname>{{ printf "%s-%d.%s.%s.svc.%s" $fullname $i $headlessSvcName $releaseNamespace $clusterDomain }}</hostname>
-                    <port>{{ $.Values.keeper.containerPorts.raft }}</port>
+                    <port from_env="CLICKHOUSE_KEEPER_RAFT_PORT"></port>
                 </server>
+                {{- end }}
+                {{- if .Values.tls.enabled }}
+                <secure>true</secure>
                 {{- end }}
             </raft_configuration>
         </keeper_server>
-    </clickhouse>
+    </yandex>
+  {{- end }}
+  {{- if .Values.tls.enabled }}
+  02-tls.xml: |
+    <yandex>
+        <keeper_server>
+            <tcp_port_secure from_env="CLICKHOUSE_KEEPER_TCP_SECURE_PORT"></tcp_port_secure>
+        </keeper_server>
+        <openSSL>
+            <server>
+                <certificateFile>/opt/bitnami/clickhouse-keeper/certs/keeper/tls.crt</certificateFile>
+                <privateKeyFile>/opt/bitnami/clickhouse-keeper/certs/keeper/tls.key</privateKeyFile>
+                <caConfig>/opt/bitnami/clickhouse-keeper/certs/ca/tls.crt</caConfig>
+                <cacheSessions>true</cacheSessions>
+                <disableProtocols>sslv2,sslv3</disableProtocols>
+                <preferServerCiphers>true</preferServerCiphers>
+                <verificationMode>relaxed</verificationMode>
+            </server>
+            <client>
+                <loadDefaultCAFile>false</loadDefaultCAFile>
+                <caConfig>/opt/bitnami/clickhouse-keeper/certs/ca/tls.crt</caConfig>
+                <cacheSessions>true</cacheSessions>
+                <disableProtocols>sslv2,sslv3</disableProtocols>
+                <preferServerCiphers>true</preferServerCiphers>
+                <verificationMode>relaxed</verificationMode>
+                <invalidCertificateHandler>
+                    <name>AcceptCertificateHandler</name>
+                </invalidCertificateHandler>
+            </client>
+        </openSSL>
+    </yandex>
   {{- end }}
 {{- end }}

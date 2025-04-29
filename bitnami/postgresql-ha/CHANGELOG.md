@@ -1,8 +1,16 @@
 # Changelog
 
-## 15.3.13 (2025-04-22)
+## 15.3.15 (2025-04-24)
 
-* [bitnami/postgresql-ha] Update POSTGRES_POSTGRES_PASSWORD condition ([#33102](https://github.com/bitnami/charts/pull/33102))
+* [bitnami/postgresql-ha] fix(backup): mount secrets with password file ([#33145](https://github.com/bitnami/charts/pull/33145))
+
+## <small>15.3.14 (2025-04-23)</small>
+
+* [bitnami/postgresql-ha] Fixed duplicated storage class value (#32860) ([afa34f0](https://github.com/bitnami/charts/commit/afa34f07f7db8748bdde9506ff9e9fa1a6f8fb27)), closes [#32860](https://github.com/bitnami/charts/issues/32860)
+
+## <small>15.3.13 (2025-04-22)</small>
+
+* [bitnami/postgresql-ha] Update POSTGRES_POSTGRES_PASSWORD condition (#33102) ([fe568b5](https://github.com/bitnami/charts/commit/fe568b501b50434e9918e57293eb6df040710f00)), closes [#33102](https://github.com/bitnami/charts/issues/33102)
 
 ## <small>15.3.12 (2025-04-09)</small>
 

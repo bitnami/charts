@@ -1,8 +1,13 @@
 # Changelog
 
-## 1.4.1 (2025-03-26)
+## 1.4.2 (2025-04-25)
 
-* [bitnami/janusgraph] Release 1.4.1 ([#32611](https://github.com/bitnami/charts/pull/32611))
+* [bitnami/janusgraph] Release 1.4.2 ([#33174](https://github.com/bitnami/charts/pull/33174))
+
+## <small>1.4.1 (2025-03-26)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/janusgraph] Release 1.4.1 (#32611) ([04eccb6](https://github.com/bitnami/charts/commit/04eccb60428b949baf2eb572bf823e23e65d8210)), closes [#32611](https://github.com/bitnami/charts/issues/32611)
 
 ## 1.4.0 (2025-02-24)
 

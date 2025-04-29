@@ -1,12 +1,12 @@
 # Source: https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v{version}/example/prometheus-operator-crd/monitoring.coreos.com_alertmanagers.yaml
-# Version: 0.81.0
+# Version: 0.82.0
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.17.2
-    operator.prometheus.io/version: 0.81.0
+    operator.prometheus.io/version: 0.82.0
   name: alertmanagers.monitoring.coreos.com
 spec:
   group: monitoring.coreos.com
@@ -80,6 +80,28 @@ spec:
               Specification of the desired behavior of the Alertmanager cluster. More info:
               https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#spec-and-status
             properties:
+              additionalArgs:
+                description: |-
+                  AdditionalArgs allows setting additional arguments for the 'Alertmanager' container.
+                  It is intended for e.g. activating hidden flags which are not supported by
+                  the dedicated configuration options yet. The arguments are passed as-is to the
+                  Alertmanager container which may cause issues if they are invalid or not supported
+                  by the given Alertmanager version.
+                items:
+                  description: Argument as part of the AdditionalArgs list.
+                  properties:
+                    name:
+                      description: Name of the argument, e.g. "scrape.discovery-reload-interval".
+                      minLength: 1
+                      type: string
+                    value:
+                      description: Argument value, e.g. 30s. Can be empty for name-only
+                        arguments (e.g. --storage.tsdb.no-lockfile)
+                      type: string
+                  required:
+                  - name
+                  type: object
+                type: array
               additionalPeers:
                 description: AdditionalPeers allows injecting a set of additional
                   Alertmanagers to peer with to form a highly available cluster.
@@ -1270,7 +1292,7 @@ spec:
                               that should be excluded from proxying. IP and domain names can
                               contain port numbers.
 
-                              It requires Prometheus >= v2.43.0 or Alertmanager >= 0.25.0.
+                              It requires Prometheus >= v2.43.0, Alertmanager >= v0.25.0 or Thanos >= v0.32.0.
                             type: string
                           oauth2:
                             description: OAuth2 client credentials used to fetch a
@@ -1370,7 +1392,7 @@ spec:
                                   that should be excluded from proxying. IP and domain names can
                                   contain port numbers.
 
-                                  It requires Prometheus >= v2.43.0 or Alertmanager >= 0.25.0.
+                                  It requires Prometheus >= v2.43.0, Alertmanager >= v0.25.0 or Thanos >= v0.32.0.
                                 type: string
                               proxyConnectHeader:
                                 additionalProperties:
@@ -1404,19 +1426,19 @@ spec:
                                   ProxyConnectHeader optionally specifies headers to send to
                                   proxies during CONNECT requests.
 
-                                  It requires Prometheus >= v2.43.0 or Alertmanager >= 0.25.0.
+                                  It requires Prometheus >= v2.43.0, Alertmanager >= v0.25.0 or Thanos >= v0.32.0.
                                 type: object
                                 x-kubernetes-map-type: atomic
                               proxyFromEnvironment:
                                 description: |-
                                   Whether to use the proxy configuration defined by environment variables (HTTP_PROXY, HTTPS_PROXY, and NO_PROXY).
 
-                                  It requires Prometheus >= v2.43.0 or Alertmanager >= 0.25.0.
+                                  It requires Prometheus >= v2.43.0, Alertmanager >= v0.25.0 or Thanos >= v0.32.0.
                                 type: boolean
                               proxyUrl:
                                 description: '`proxyURL` defines the HTTP proxy server
                                   to use.'
-                                pattern: ^http(s)?://.+$
+                                pattern: ^(http|https|socks5)://.+$
                                 type: string
                               scopes:
                                 description: '`scopes` defines the OAuth2 scopes used
@@ -1571,7 +1593,7 @@ spec:
                                     description: |-
                                       Maximum acceptable TLS version.
 
-                                      It requires Prometheus >= v2.41.0.
+                                      It requires Prometheus >= v2.41.0 or Thanos >= v0.31.0.
                                     enum:
                                     - TLS10
                                     - TLS11
@@ -1582,7 +1604,7 @@ spec:
                                     description: |-
                                       Minimum acceptable TLS version.
 
-                                      It requires Prometheus >= v2.35.0.
+                                      It requires Prometheus >= v2.35.0 or Thanos >= v0.28.0.
                                     enum:
                                     - TLS10
                                     - TLS11
@@ -1636,19 +1658,19 @@ spec:
                               ProxyConnectHeader optionally specifies headers to send to
                               proxies during CONNECT requests.
 
-                              It requires Prometheus >= v2.43.0 or Alertmanager >= 0.25.0.
+                              It requires Prometheus >= v2.43.0, Alertmanager >= v0.25.0 or Thanos >= v0.32.0.
                             type: object
                             x-kubernetes-map-type: atomic
                           proxyFromEnvironment:
                             description: |-
                               Whether to use the proxy configuration defined by environment variables (HTTP_PROXY, HTTPS_PROXY, and NO_PROXY).
 
-                              It requires Prometheus >= v2.43.0 or Alertmanager >= 0.25.0.
+                              It requires Prometheus >= v2.43.0, Alertmanager >= v0.25.0 or Thanos >= v0.32.0.
                             type: boolean
                           proxyUrl:
                             description: '`proxyURL` defines the HTTP proxy server
                               to use.'
-                            pattern: ^http(s)?://.+$
+                            pattern: ^(http|https|socks5)://.+$
                             type: string
                           tlsConfig:
                             description: TLS configuration for the client.
@@ -1793,7 +1815,7 @@ spec:
                                 description: |-
                                   Maximum acceptable TLS version.
 
-                                  It requires Prometheus >= v2.41.0.
+                                  It requires Prometheus >= v2.41.0 or Thanos >= v0.31.0.
                                 enum:
                                 - TLS10
                                 - TLS11
@@ -1804,7 +1826,7 @@ spec:
                                 description: |-
                                   Minimum acceptable TLS version.
 
-                                  It requires Prometheus >= v2.35.0.
+                                  It requires Prometheus >= v2.35.0 or Thanos >= v0.28.0.
                                 enum:
                                 - TLS10
                                 - TLS11
@@ -2231,7 +2253,7 @@ spec:
                         description: |-
                           Maximum acceptable TLS version.
 
-                          It requires Prometheus >= v2.41.0.
+                          It requires Prometheus >= v2.41.0 or Thanos >= v0.31.0.
                         enum:
                         - TLS10
                         - TLS11
@@ -2242,7 +2264,7 @@ spec:
                         description: |-
                           Minimum acceptable TLS version.
 
-                          It requires Prometheus >= v2.35.0.
+                          It requires Prometheus >= v2.35.0 or Thanos >= v0.28.0.
                         enum:
                         - TLS10
                         - TLS11
@@ -6679,6 +6701,16 @@ spec:
                   Version is ignored if Tag is set.
                   Deprecated: use 'image' instead. The image tag can be specified as part of the image URL.
                 type: string
+              terminationGracePeriodSeconds:
+                description: |-
+                  Optional duration in seconds the pod needs to terminate gracefully.
+                  Value must be non-negative integer. The value zero indicates stop immediately via
+                  the kill signal (no opportunity to shut down) which may lead to data corruption.
+
+                  Defaults to 120 seconds.
+                format: int64
+                minimum: 0
+                type: integer
               tolerations:
                 description: If specified, the pod's tolerations.
                 items:

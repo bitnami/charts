@@ -1,8 +1,16 @@
 # Changelog
 
-## 21.6.1 (2025-04-17)
+## 21.6.3 (2025-04-28)
 
-* [bitnami/elasticsearch] fix coordinating security.enabled ([#32840](https://github.com/bitnami/charts/pull/32840))
+* [bitnami/elasticsearch] Release 21.6.3 ([#33223](https://github.com/bitnami/charts/pull/33223))
+
+## <small>21.6.2 (2025-04-22)</small>
+
+* [bitnami/elasticsearch] tests: Enable security during testing (#33100) ([6285807](https://github.com/bitnami/charts/commit/62858076100c5e868eb3022125d1e13df29b9339)), closes [#33100](https://github.com/bitnami/charts/issues/33100)
+
+## <small>21.6.1 (2025-04-21)</small>
+
+* [bitnami/elasticsearch] fix coordinating security.enabled (#32840) ([1357e5c](https://github.com/bitnami/charts/commit/1357e5c51767e632accff2258deb4c6dd16b9d5b)), closes [#32840](https://github.com/bitnami/charts/issues/32840)
 
 ## 21.6.0 (2025-04-16)
 

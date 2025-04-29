@@ -1,12 +1,12 @@
 # Source: https://raw.githubusercontent.com/minio/operator/refs/tags/v{version}/helm/operator/templates/minio.min.io_tenants.yaml
-# Version: 7.1.0
+# Version: 7.1.1
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.17.2
-    operator.min.io/version: v7.1.0
+    operator.min.io/version: v7.1.1
   name: tenants.minio.min.io
 spec:
   group: minio.min.io

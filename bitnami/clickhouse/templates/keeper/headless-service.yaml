@@ -25,6 +25,12 @@ spec:
       port: {{ .Values.keeper.containerPorts.tcp }}
       protocol: TCP
       targetPort: tcp
+    {{- if .Values.tls.enabled }}
+    - name: tcp-secure
+      port: {{ .Values.keeper.containerPorts.tcpSecure }}
+      protocol: TCP
+      targetPort: tcp-secure
+    {{- end }}
     - name: tcp-raft
       port: {{ .Values.keeper.containerPorts.raft }}
       protocol: TCP
