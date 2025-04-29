@@ -1290,13 +1290,20 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ### To 23.0.0
 
-This major release adds support for Airflow 3 versions. Additionally, previous Airflow 2 images can be deployed by setting the corresponding image parameters. The chart logic will detect which image version you are using and it will generate the required Airflow configuration and Kubernetes objects.
+This major release adds support for Airflow `3.x.y` series. Additionally, previous Airflow `2.x.y` series can be deployed by setting the corresponding image parameters. The chart logic will detect which image version you are using, and it will generate the required Airflow configuration and Kubernetes objects.
 
-We recommend following the next procedure in order to upgrade from Airflow 2 to Airflow 3 images:
+We recommend following the next procedure in order to upgrade from `22.x.y` chart version to the `23.x.y` series, and also upgrade to Airflow `3.y.z` series:
 
-- Perform a Helm upgrade with the latest chart logic and the latest Airflow 2.x image version.
+- Upgrade your release (maintaining Airflow `2.x.y` series):
+```console
+helm upgrade airflow oci://REGISTRY_NAME/REPOSITORY_NAME/airflow --set image.tag=2
+```
+
 - Follow the recommended steps for the database backup and the DAGs files verification available at the [official "upgrading to Airflow 3" guide](https://airflow.apache.org/docs/apache-airflow/stable/installation/upgrading_to_airflow3.html).
-- Perform a Helm upgrade using the Airflow 3.x image.
+- Upgrade your release now using the default Airflow `3.x.y` series:
+```console
+helm upgrade airflow oci://REGISTRY_NAME/REPOSITORY_NAME/airflow
+```
 
 ### To 22.4.0
 
