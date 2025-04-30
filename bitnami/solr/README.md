@@ -360,18 +360,21 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 
 ### Persistence parameters
 
-| Name                        | Description                                                       | Value               |
-| --------------------------- | ----------------------------------------------------------------- | ------------------- |
-| `persistence.enabled`       | Use a PVC to persist data.                                        | `true`              |
-| `persistence.existingClaim` | A manually managed Persistent Volume and Claim                    | `""`                |
-| `persistence.storageClass`  | Storage class of backing PVC                                      | `""`                |
-| `persistence.accessModes`   | Persistent Volume Access Modes                                    | `["ReadWriteOnce"]` |
-| `persistence.size`          | Size of data volume                                               | `8Gi`               |
-| `persistence.annotations`   | Persistence annotations for Solr                                  | `{}`                |
-| `persistence.mountPath`     | Persistence mount path for Solr                                   | `/bitnami/solr`     |
-| `persistence.subPath`       | Path within the volume from which the container's                 | `""`                |
-| `persistence.subPathExpr`   | Expanded path within the volume from which                        | `""`                |
-| `persistence.selector`      | Selector to match an existing Persistent Volume for Solr data PVC | `{}`                |
+| Name                                               | Description                                                                    | Value               |
+| -------------------------------------------------- | ------------------------------------------------------------------------------ | ------------------- |
+| `persistence.enabled`                              | Use a PVC to persist data.                                                     | `true`              |
+| `persistence.existingClaim`                        | A manually managed Persistent Volume and Claim                                 | `""`                |
+| `persistence.storageClass`                         | Storage class of backing PVC                                                   | `""`                |
+| `persistence.accessModes`                          | Persistent Volume Access Modes                                                 | `["ReadWriteOnce"]` |
+| `persistence.size`                                 | Size of data volume                                                            | `8Gi`               |
+| `persistence.annotations`                          | Persistence annotations for Solr                                               | `{}`                |
+| `persistence.mountPath`                            | Persistence mount path for Solr                                                | `/bitnami/solr`     |
+| `persistence.subPath`                              | Path within the volume from which the container's                              | `""`                |
+| `persistence.subPathExpr`                          | Expanded path within the volume from which                                     | `""`                |
+| `persistence.selector`                             | Selector to match an existing Persistent Volume for Solr data PVC              | `{}`                |
+| `persistentVolumeClaimRetentionPolicy.enabled`     | Enable Persistent volume retention policy for Solr Statefulset                 | `false`             |
+| `persistentVolumeClaimRetentionPolicy.whenScaled`  | Volume retention behavior when the replica count of the StatefulSet is reduced | `Retain`            |
+| `persistentVolumeClaimRetentionPolicy.whenDeleted` | Volume retention behavior that applies when the StatefulSet is deleted         | `Retain`            |
 
 ### Volume Permissions parameters
 
