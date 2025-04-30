@@ -15,9 +15,6 @@ logging:
 provider:
   type: Kubernetes
   kubernetes:
-    rateLimitDeployment:
-      container:
-        image: {{ include "envoy-gateway.ratelimit.image" . }}
       pod:
         {{- include "envoy-gateway.imagePullSecrets" . | nindent 8 }}
       patch:
