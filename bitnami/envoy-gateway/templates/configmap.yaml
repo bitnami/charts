@@ -15,6 +15,7 @@ logging:
 provider:
   type: Kubernetes
   kubernetes:
+    rateLimitDeployment:
       pod:
         {{- include "envoy-gateway.imagePullSecrets" . | nindent 8 }}
       patch:
@@ -34,8 +35,6 @@ provider:
           - {{ $namespace }}
           {{- end }}
       {{- end }}
-    shutdownManager:
-      image: {{ include "envoy-gateway.image" . }}
 admin:
   address:
     port: {{ .Values.containerPorts.admin }}
