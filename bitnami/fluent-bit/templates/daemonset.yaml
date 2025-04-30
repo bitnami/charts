@@ -156,6 +156,12 @@ spec:
             - name: empty-dir
               mountPath: /tmp
               subPath: tmp-dir
+            {{- range $filename, $_ := .Values.config.extraFiles }}
+            - name: config
+              mountPath: /opt/bitnami/fluent-bit/etc/{{ $filename }}
+              subPath: {{ $filename }}
+              readOnly: true
+            {{- end }}
             {{- if .Values.extraVolumeMounts }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
