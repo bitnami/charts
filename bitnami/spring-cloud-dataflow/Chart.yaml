@@ -7,24 +7,22 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: kubectl
-      image: docker.io/bitnami/kubectl:1.32.3-debian-12-r1
-    - name: mariadb
-      image: docker.io/bitnami/mariadb:10.11.11-debian-12-r8
+      image: docker.io/bitnami/kubectl:1.33.0-debian-12-r0
     - name: prometheus-rsocket-proxy
-      image: docker.io/bitnami/prometheus-rsocket-proxy:1.5.3-debian-12-r40
+      image: docker.io/bitnami/prometheus-rsocket-proxy:1.5.3-debian-12-r43
     - name: spring-cloud-dataflow
-      image: docker.io/bitnami/spring-cloud-dataflow:2.11.5-debian-12-r10
+      image: docker.io/bitnami/spring-cloud-dataflow:2.11.5-debian-12-r13
     - name: spring-cloud-dataflow-composed-task-runner
-      image: docker.io/bitnami/spring-cloud-dataflow-composed-task-runner:2.11.5-debian-12-r10
+      image: docker.io/bitnami/spring-cloud-dataflow-composed-task-runner:2.11.5-debian-12-r13
     - name: spring-cloud-skipper
-      image: docker.io/bitnami/spring-cloud-skipper:2.11.5-debian-12-r11
+      image: docker.io/bitnami/spring-cloud-skipper:2.11.5-debian-12-r14
 apiVersion: v2
 appVersion: 2.11.5
 dependencies:
 - condition: rabbitmq.enabled
   name: rabbitmq
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 15.x.x
+  version: 16.x.x
 - condition: mariadb.enabled
   name: mariadb
   repository: oci://registry-1.docker.io/bitnamicharts
@@ -54,4 +52,4 @@ maintainers:
 name: spring-cloud-dataflow
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/spring-cloud-dataflow
-version: 35.0.2
+version: 37.0.0

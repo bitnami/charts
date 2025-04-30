@@ -133,7 +133,7 @@ spec:
           args: {{- include "common.tplvalues.render" (dict "value" .Values.master.args "context" $) | nindent 12 }}
           {{- else }}
           args:
-            - -c
+            - -ec
             - /opt/bitnami/scripts/start-scripts/start-master.sh
           {{- end }}
           env:
@@ -215,8 +215,8 @@ spec:
             failureThreshold: {{ .Values.master.livenessProbe.failureThreshold }}
             exec:
               command:
-                - sh
-                - -c
+                - /bin/bash
+                - -ec
                 - /health/ping_liveness_local.sh {{ .Values.master.livenessProbe.timeoutSeconds }}
           {{- end }}
           {{- if .Values.master.customReadinessProbe }}
@@ -230,8 +230,8 @@ spec:
             failureThreshold: {{ .Values.master.readinessProbe.failureThreshold }}
             exec:
               command:
-                - sh
-                - -c
+                - /bin/bash
+                - -ec
                 - /health/ping_readiness_local.sh {{ .Values.master.readinessProbe.timeoutSeconds }}
           {{- end }}
           {{- end }}
@@ -288,7 +288,7 @@ spec:
           {{- else }}
           command:
             - /bin/bash
-            - -c
+            - -ec
             - |
               {{- if and .Values.auth.enabled .Values.auth.usePasswordFiles }}
               export REDIS_PASSWORD="$(< $REDIS_PASSWORD_FILE)"

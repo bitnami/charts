@@ -744,7 +744,7 @@ gateway:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.27.5-debian-12-r1
+    tag: 1.28.0-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -3276,6 +3276,9 @@ queryFrontend:
 ## @section Query Scheduler Deployment Parameters
 ##
 queryScheduler:
+  ## @param queryScheduler.enabled Deploy Query Scheduler component
+  ##
+  enabled: false
   ## @param queryScheduler.extraEnvVars Array with extra environment variables to add to queryScheduler nodes
   ## e.g:
   ## extraEnvVars:

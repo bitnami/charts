@@ -118,7 +118,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/postgresql
-  tag: 17.4.0-debian-12-r15
+  tag: 17.4.0-debian-12-r17
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1357,9 +1357,9 @@ backup:
         type: "RuntimeDefault"
     ## @param backup.cronjob.command Set backup container's command to run
     command:
-      - /bin/sh
+      - /bin/bash
       - -c
-      - "pg_dumpall --clean --if-exists --load-via-partition-root --quote-all-identifiers --no-password --file=${PGDUMP_DIR}/pg_dumpall-$(date '+%Y-%m-%d-%H-%M').pgdump"
+      - PGPASSWORD="${PGPASSWORD:-$(< "$PGPASSWORD_FILE")}" pg_dumpall --clean --if-exists --load-via-partition-root --quote-all-identifiers --no-password --file="${PGDUMP_DIR}/pg_dumpall-$(date '+%Y-%m-%d-%H-%M').pgdump"
     ## @param backup.cronjob.labels Set the cronjob labels
     labels: {}
     ## @param backup.cronjob.annotations Set the cronjob annotations
@@ -1596,7 +1596,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r42
+    tag: 12-debian-12-r43
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1705,7 +1705,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/postgres-exporter
-    tag: 0.17.1-debian-12-r5
+    tag: 0.17.1-debian-12-r6
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

@@ -115,8 +115,8 @@ image:
 ## @param sonarqubeUsername SonarQube&trade; username
 ##
 sonarqubeUsername: user
-## @param sonarqubePassword SonarQube&trade; user password
-## Defaults to a random 10-character alphanumeric string if not set
+## @param sonarqubePassword SonarQube&trade; user password. Must be at least 12 characters
+## Defaults to a random 12-character alphanumeric string if not set
 ##
 sonarqubePassword: ""
 ## @param provisioningFolder Directory to use for provisioning content to Sonarqube

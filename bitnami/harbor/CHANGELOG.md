@@ -1,8 +1,16 @@
 # Changelog
 
+## 25.0.0 (2025-04-29)
+
+* [bitnami/harbor] Major 25.0.0: Upgrade PostgreSQL to 17.x.x ([#33242](https://github.com/bitnami/charts/pull/33242))
+
+## <small>24.6.1 (2025-04-28)</small>
+
+* [bitnami/harbor] Release 24.6.1 (#33209) ([57c27d4](https://github.com/bitnami/charts/commit/57c27d473c55998289d776a9834fd0adf9effb3c)), closes [#33209](https://github.com/bitnami/charts/issues/33209)
+
 ## 24.6.0 (2025-04-15)
 
-* [bitnami/harbor] feat(redis tls): Support connecting to SSL/TLS Redis endpoints ([#32999](https://github.com/bitnami/charts/pull/32999))
+* [bitnami/harbor] feat(redis tls): Support connecting to SSL/TLS Redis endpoints (#32999) ([2d34ef6](https://github.com/bitnami/charts/commit/2d34ef69713503a8af7263d1dc1884d815b5dafd)), closes [#32999](https://github.com/bitnami/charts/issues/32999)
 
 ## <small>24.5.1 (2025-04-11)</small>
 

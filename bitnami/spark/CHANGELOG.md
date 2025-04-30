@@ -1,8 +1,13 @@
 # Changelog
 
-## 9.3.6 (2025-03-29)
+## 9.3.7 (2025-04-28)
 
-* [bitnami/spark] Release 9.3.6 ([#32681](https://github.com/bitnami/charts/pull/32681))
+* [bitnami/spark] Release 9.3.7 ([#33233](https://github.com/bitnami/charts/pull/33233))
+
+## <small>9.3.6 (2025-03-29)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/spark] Release 9.3.6 (#32681) ([1ee0989](https://github.com/bitnami/charts/commit/1ee09894a58af50449c0a2381129b18936473ae7)), closes [#32681](https://github.com/bitnami/charts/issues/32681)
 
 ## <small>9.3.5 (2025-02-27)</small>
 

@@ -1,8 +1,12 @@
 # Changelog
 
-## 13.2.2 (2025-04-17)
+## 13.2.3 (2025-04-28)
 
-* [bitnami/milvus] Release 13.2.2 ([#33053](https://github.com/bitnami/charts/pull/33053))
+* [bitnami/milvus] Release 13.2.3 ([#33203](https://github.com/bitnami/charts/pull/33203))
+
+## <small>13.2.2 (2025-04-17)</small>
+
+* [bitnami/milvus] Release 13.2.2 (#33053) ([2cfdfba](https://github.com/bitnami/charts/commit/2cfdfba561db8c3ef1034a86f0f2340ba1a7ee1f)), closes [#33053](https://github.com/bitnami/charts/issues/33053)
 
 ## <small>13.2.1 (2025-04-10)</small>
 

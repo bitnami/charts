@@ -1,8 +1,14 @@
 # Changelog
 
-## 2.31.0 (2025-04-25)
+
+## 2.30.2 (2025-04-30)
 
 * [bitnami/common] add namespaces to extraPodAffinityTerms for affinities ([#33173](https://github.com/bitnami/charts/pull/33173))
+
+## 2.30.1 (2025-04-28)
+
+* [bitnami/common] Allows tpl in provided passwords "common.secrets.passwords.manage" ([#33196](https://github.com/bitnami/charts/pull/33196))
+
 
 ## 2.30.0 (2025-02-19)
 

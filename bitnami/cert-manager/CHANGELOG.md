@@ -1,8 +1,13 @@
 # Changelog
 
-## 1.4.13 (2025-04-01)
+## 1.4.14 (2025-04-24)
 
-* [bitnami/cert-manager] Release 1.4.13 ([#32719](https://github.com/bitnami/charts/pull/32719))
+* [bitnami/cert-manager] Release 1.4.14 ([#33162](https://github.com/bitnami/charts/pull/33162))
+
+## <small>1.4.13 (2025-04-01)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/cert-manager] Release 1.4.13 (#32719) ([0da4f79](https://github.com/bitnami/charts/commit/0da4f799bcf09d19130d28d1924222e98668fcda)), closes [#32719](https://github.com/bitnami/charts/issues/32719)
 
 ## <small>1.4.12 (2025-03-04)</small>
 

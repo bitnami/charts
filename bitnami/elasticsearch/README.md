@@ -996,6 +996,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 22.0.0
+
+This major version updates the Elasticsearch image and Kibana subchart from version 8.x to 9.x. Follow the [official instructions](https://www.elastic.co/docs/deploy-manage/upgrade/deployment-or-cluster) to upgrade to 9.x.
+
 ### To 21.4.0
 
 This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).

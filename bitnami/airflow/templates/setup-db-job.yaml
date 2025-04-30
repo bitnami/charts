@@ -70,12 +70,23 @@ spec:
 
               if ! airflow_execute db check-migrations; then
                   info "Populating database"
+                  {{- if (include "airflow.isImageMajorVersion2" .) }}
                   airflow_execute db init
+                  {{- else }}
+                  airflow_execute db migrate
+                  {{- end }}
 
                   airflow_create_admin_user
+                  info "Synchronizing internal metadata"
+                  airflow_execute sync-perm
+                  true
               else
                   info "Upgrading database schema"
+                  {{- if (include "airflow.isImageMajorVersion2" .) }}
                   airflow_execute db upgrade
+                  {{- else }}
+                  airflow_execute db migrate
+                  {{- end }}
                   true
               fi
           {{- end }}
