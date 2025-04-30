@@ -1,6 +1,6 @@
 # Changelog
 
-## 16.5.4 (2025-04-29)
+## 16.5.4 (2025-04-30)
 
 * [bitnami/mongodb] Remove extra volumeClaimTemplates fields ([#33236](https://github.com/bitnami/charts/pull/33236))
 
