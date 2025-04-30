@@ -104,7 +104,7 @@ spec:
             - name: DEFAULT_ENVOY_IMAGE
               value: {{ include "envoy-gateway.envoy.image" . }}
             - name: DEFAULT_SHUTDOWN_IMAGE
-              value: {{ include "envoy-gateway.envoy.image" . }}
+              value: {{ include "envoy-gateway.image" . }}
             - name: DEFAULT_RATELIMIT_IMAGE
               value: {{ include "envoy-gateway.ratelimit.image" . }}
             - name: KUBERNETES_CLUSTER_DOMAIN
