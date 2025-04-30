@@ -1,5 +1,5 @@
 # Source: https://github.com/kong/kubernetes-ingress-controller/config/crd?ref=v{version}
-# Version: 3.4.3
+# Version: 3.4.4
 # VersionOf: kong-ingress-controller
 # UseKustomize: true
 apiVersion: apiextensions.k8s.io/v1
@@ -7,7 +7,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     kubernetes-configuration.konghq.com/channels: ingress-controller
-    kubernetes-configuration.konghq.com/version: v1.2.0-rc.1
+    kubernetes-configuration.konghq.com/version: v1.3.0
   name: ingressclassparameterses.configuration.konghq.com
 spec:
   group: configuration.konghq.com
@@ -65,13 +65,14 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     kubernetes-configuration.konghq.com/channels: ingress-controller
-    kubernetes-configuration.konghq.com/version: v1.2.0-rc.1
+    kubernetes-configuration.konghq.com/version: v1.3.0
   name: kongclusterplugins.configuration.konghq.com
 spec:
   group: configuration.konghq.com
   names:
     categories:
     - kong-ingress-controller
+    - kong
     kind: KongClusterPlugin
     listKind: KongClusterPluginList
     plural: kongclusterplugins
@@ -372,13 +373,14 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     kubernetes-configuration.konghq.com/channels: ingress-controller,gateway-operator
-    kubernetes-configuration.konghq.com/version: v1.2.0-rc.1
+    kubernetes-configuration.konghq.com/version: v1.3.0
   name: kongconsumergroups.configuration.konghq.com
 spec:
   group: configuration.konghq.com
   names:
     categories:
     - kong-ingress-controller
+    - kong
     kind: KongConsumerGroup
     listKind: KongConsumerGroupList
     plural: kongconsumergroups
@@ -462,6 +464,8 @@ spec:
                     type: string
                 type: object
                 x-kubernetes-validations:
+                - message: '''konnectID'' type is not supported'
+                  rule: self.type != 'konnectID'
                 - message: when type is konnectNamespacedRef, konnectNamespacedRef
                     must be set
                   rule: '(has(self.type) && self.type == ''konnectNamespacedRef'')
@@ -620,13 +624,14 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     kubernetes-configuration.konghq.com/channels: ingress-controller,gateway-operator
-    kubernetes-configuration.konghq.com/version: v1.2.0-rc.1
+    kubernetes-configuration.konghq.com/version: v1.3.0
   name: kongconsumers.configuration.konghq.com
 spec:
   group: configuration.konghq.com
   names:
     categories:
     - kong-ingress-controller
+    - kong
     kind: KongConsumer
     listKind: KongConsumerList
     plural: kongconsumers
@@ -735,6 +740,8 @@ spec:
                     type: string
                 type: object
                 x-kubernetes-validations:
+                - message: '''konnectID'' type is not supported'
+                  rule: self.type != 'konnectID'
                 - message: when type is konnectNamespacedRef, konnectNamespacedRef
                     must be set
                   rule: '(has(self.type) && self.type == ''konnectNamespacedRef'')
@@ -895,13 +902,14 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     kubernetes-configuration.konghq.com/channels: ingress-controller
-    kubernetes-configuration.konghq.com/version: v1.2.0-rc.1
+    kubernetes-configuration.konghq.com/version: v1.3.0
   name: kongcustomentities.configuration.konghq.com
 spec:
   group: configuration.konghq.com
   names:
     categories:
     - kong-ingress-controller
+    - kong
     kind: KongCustomEntity
     listKind: KongCustomEntityList
     plural: kongcustomentities
@@ -1086,7 +1094,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     kubernetes-configuration.konghq.com/channels: ingress-controller
-    kubernetes-configuration.konghq.com/version: v1.2.0-rc.1
+    kubernetes-configuration.konghq.com/version: v1.3.0
   name: kongingresses.configuration.konghq.com
 spec:
   group: configuration.konghq.com
@@ -1478,13 +1486,14 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     kubernetes-configuration.konghq.com/channels: ingress-controller,gateway-operator
-    kubernetes-configuration.konghq.com/version: v1.2.0-rc.1
+    kubernetes-configuration.konghq.com/version: v1.3.0
   name: konglicenses.configuration.konghq.com
 spec:
   group: configuration.konghq.com
   names:
     categories:
     - kong-ingress-controller
+    - kong
     kind: KongLicense
     listKind: KongLicenseList
     plural: konglicenses
@@ -1677,13 +1686,14 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     kubernetes-configuration.konghq.com/channels: ingress-controller,gateway-operator
-    kubernetes-configuration.konghq.com/version: v1.2.0-rc.1
+    kubernetes-configuration.konghq.com/version: v1.3.0
   name: kongplugins.configuration.konghq.com
 spec:
   group: configuration.konghq.com
   names:
     categories:
     - kong-ingress-controller
+    - kong
     kind: KongPlugin
     listKind: KongPluginList
     plural: kongplugins
@@ -1978,7 +1988,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     kubernetes-configuration.konghq.com/channels: ingress-controller
-    kubernetes-configuration.konghq.com/version: v1.2.0-rc.1
+    kubernetes-configuration.konghq.com/version: v1.3.0
   labels:
     gateway.networking.k8s.io/policy: direct
   name: kongupstreampolicies.configuration.konghq.com
@@ -1987,6 +1997,7 @@ spec:
   names:
     categories:
     - kong-ingress-controller
+    - kong
     kind: KongUpstreamPolicy
     listKind: KongUpstreamPolicyList
     plural: kongupstreampolicies
@@ -2665,13 +2676,14 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     kubernetes-configuration.konghq.com/channels: ingress-controller,gateway-operator
-    kubernetes-configuration.konghq.com/version: v1.2.0-rc.1
+    kubernetes-configuration.konghq.com/version: v1.3.0
   name: kongvaults.configuration.konghq.com
 spec:
   group: configuration.konghq.com
   names:
     categories:
     - kong-ingress-controller
+    - kong
     kind: KongVault
     listKind: KongVaultList
     plural: kongvaults
@@ -2782,6 +2794,8 @@ spec:
                     type: string
                 type: object
                 x-kubernetes-validations:
+                - message: '''konnectID'' type is not supported'
+                  rule: self.type != 'konnectID'
                 - message: when type is konnectNamespacedRef, konnectNamespacedRef
                     must be set
                   rule: '(has(self.type) && self.type == ''konnectNamespacedRef'')
@@ -2952,13 +2966,14 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     kubernetes-configuration.konghq.com/channels: ingress-controller
-    kubernetes-configuration.konghq.com/version: v1.2.0-rc.1
+    kubernetes-configuration.konghq.com/version: v1.3.0
   name: tcpingresses.configuration.konghq.com
 spec:
   group: configuration.konghq.com
   names:
     categories:
     - kong-ingress-controller
+    - kong
     kind: TCPIngress
     listKind: TCPIngressList
     plural: tcpingresses
@@ -3162,13 +3177,14 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     kubernetes-configuration.konghq.com/channels: ingress-controller
-    kubernetes-configuration.konghq.com/version: v1.2.0-rc.1
+    kubernetes-configuration.konghq.com/version: v1.3.0
   name: udpingresses.configuration.konghq.com
 spec:
   group: configuration.konghq.com
   names:
     categories:
     - kong-ingress-controller
+    - kong
     kind: UDPIngress
     listKind: UDPIngressList
     plural: udpingresses
