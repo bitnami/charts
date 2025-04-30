@@ -1,8 +1,12 @@
 # Changelog
 
-## 3.1.1 (2025-04-23)
+## 3.1.2 (2025-04-30)
 
-* [bitnami/fluent-bit] Release 3.1.1 ([#33151](https://github.com/bitnami/charts/pull/33151))
+* [bitnami/fluent-bit] Fix mounting of extraFiles ([#33261](https://github.com/bitnami/charts/pull/33261))
+
+## <small>3.1.1 (2025-04-23)</small>
+
+* [bitnami/fluent-bit] Release 3.1.1 (#33151) ([79e0e18](https://github.com/bitnami/charts/commit/79e0e185755f4b4b058ac3697761025df6c03532)), closes [#33151](https://github.com/bitnami/charts/issues/33151)
 
 ## 3.1.0 (2025-04-21)
 
