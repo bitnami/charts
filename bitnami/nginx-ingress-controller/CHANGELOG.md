@@ -1,12 +1,12 @@
 # Changelog
 
-## 11.6.17 (2025-04-29)
+## 11.6.17 (2025-04-30)
 
 * [bitnami/nginx-ingress-controller] Fix securitycontext compatibility ([#33253](https://github.com/bitnami/charts/pull/33253))
 
 ## <small>11.6.16 (2025-04-30)</small>
 
-* [bitnami/nginx-ingress-controller] Release 11.6.16 ([#33269](https://github.com/bitnami/charts/pull/33269))
+* [bitnami/nginx-ingress-controller] Release 11.6.16 (#33269) ([3594230](https://github.com/bitnami/charts/commit/35942303a9aad0c9ebbc94fd825ca68cb1fc1a3a)), closes [#33269](https://github.com/bitnami/charts/issues/33269)
 
 ## <small>11.6.15 (2025-04-28)</small>
 
