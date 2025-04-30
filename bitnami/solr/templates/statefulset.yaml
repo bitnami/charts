@@ -431,6 +431,11 @@ spec:
         {{- if .Values.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
+  {{- if .Values.persistentVolumeClaimRetentionPolicy.enabled }}
+  persistentVolumeClaimRetentionPolicy:
+    whenDeleted: {{ .Values.persistentVolumeClaimRetentionPolicy.whenDeleted }}
+    whenScaled: {{ .Values.persistentVolumeClaimRetentionPolicy.whenScaled }}
+  {{- end }}
   {{- if and .Values.persistence.enabled (not .Values.persistence.existingClaim) }}
   volumeClaimTemplates:
     - apiVersion: v1
