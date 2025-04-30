@@ -496,7 +496,7 @@ master:
   ##  - name: your-image-name
   ##    image: your-image
   ##    imagePullPolicy: Always
-  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##    command: ['/bin/bash', '-ec', 'echo "hello world"']
   ##
   initContainers: []
   ## Persistence parameters
@@ -981,7 +981,7 @@ replica:
   ##  - name: your-image-name
   ##    image: your-image
   ##    imagePullPolicy: Always
-  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##    command: ['/bin/bash', '-c', 'echo "hello world"']
   ##
   initContainers: []
   ## Persistence Parameters
