@@ -1,8 +1,12 @@
 # Changelog
 
-## 24.6.2 (2025-04-28)
+## 24.6.3 (2025-04-30)
 
-* [bitnami/keycloak] Allow tpl of external database + external user ([#33194](https://github.com/bitnami/charts/pull/33194))
+* [bitnami/keycloak] Release 24.6.3 ([#33258](https://github.com/bitnami/charts/pull/33258))
+
+## <small>24.6.2 (2025-04-29)</small>
+
+* [bitnami/keycloak] Allow tpl of external database + external user (#33194) ([87cf760](https://github.com/bitnami/charts/commit/87cf7606054714f8ce435329285f3d0932fec595)), closes [#33194](https://github.com/bitnami/charts/issues/33194)
 
 ## <small>24.6.1 (2025-04-23)</small>
 
