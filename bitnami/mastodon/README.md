@@ -889,7 +889,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ### To 11.0.0
 
-This major updates the `elasticsearch` subchart to its newest major, 22.0.0. For more information on this subchart's major, please refer to [elasticsearch upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/elasticsearch#to-2200).
+This major updates the `elasticsearch` subchart to its newest major, 22.0.0, which uses Elasticsearch 9.x. For more information on this subchart's major, please refer to [elasticsearch upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/elasticsearch#to-2200).
 
 ### To 10.0.0
 
