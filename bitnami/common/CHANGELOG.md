@@ -1,14 +1,13 @@
 # Changelog
 
-
 ## 2.30.2 (2025-04-30)
 
 * [bitnami/common] add namespaces to extraPodAffinityTerms for affinities ([#33173](https://github.com/bitnami/charts/pull/33173))
 
-## 2.30.1 (2025-04-28)
+## <small>2.30.1 (2025-04-30)</small>
 
-* [bitnami/common] Allows tpl in provided passwords "common.secrets.passwords.manage" ([#33196](https://github.com/bitnami/charts/pull/33196))
-
+* [bitnami/common] Allows tpl in provided passwords "common.secrets.passwords.manage" (#33196) ([1f53dd8](https://github.com/bitnami/charts/commit/1f53dd862f2aca1071f5734c3ba825e3ff4fa383)), closes [#33196](https://github.com/bitnami/charts/issues/33196)
+* [bitnami/common] Restore 'Paremeters' section of the README (#32861) ([72f3f35](https://github.com/bitnami/charts/commit/72f3f353e35da99060a1662770655a12a2253887)), closes [#32861](https://github.com/bitnami/charts/issues/32861)
 
 ## 2.30.0 (2025-02-19)
 
