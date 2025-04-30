@@ -1,8 +1,12 @@
 # Changelog
 
-## 9.6.1 (2025-04-09)
+## 9.6.2 (2025-04-30)
 
-* [bitnami/solr] Release 9.6.1 ([#32893](https://github.com/bitnami/charts/pull/32893))
+* [bitnami/solr] Add persistentvolumeclaim retention on solr statefulset ([#33272](https://github.com/bitnami/charts/pull/33272))
+
+## <small>9.6.1 (2025-04-09)</small>
+
+* [bitnami/solr] Release 9.6.1 (#32893) ([0326481](https://github.com/bitnami/charts/commit/0326481eb281ec144bc172c14ed160bdd6239a25)), closes [#32893](https://github.com/bitnami/charts/issues/32893)
 
 ## 9.6.0 (2025-04-04)
 
