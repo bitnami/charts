@@ -1,8 +1,12 @@
 # Changelog
 
+## 22.0.1 (2025-04-30)
+
+* [bitnami/elasticsearch] Update kibana subchart ([#33256](https://github.com/bitnami/charts/pull/33256))
+
 ## 22.0.0 (2025-04-29)
 
-* [bitnami/elasticsearch] Release 22.0.0 ([#33246](https://github.com/bitnami/charts/pull/33246))
+* [bitnami/elasticsearch] Release 22.0.0 (#33246) ([5ff40ae](https://github.com/bitnami/charts/commit/5ff40ae91813f230cdf1e8b11e9ab5a3a1892417)), closes [#33246](https://github.com/bitnami/charts/issues/33246)
 
 ## <small>21.6.3 (2025-04-28)</small>
 
