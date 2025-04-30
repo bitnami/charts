@@ -32,7 +32,7 @@ Return the proper Envoy image name
 {{- end -}}
 
 {{/*
-Create the name of the service account to use (envoy-gateway Operator)
+Create the name of the service account to use (envoy-gateway)
 */}}
 {{- define "envoy-gateway.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create -}}
@@ -43,14 +43,14 @@ Create the name of the service account to use (envoy-gateway Operator)
 {{- end -}}
 
 {{/*
-Return the proper Kustomize Controller fullname
+Return the proper Certificate Generation init-job fullname
 */}}
 {{- define "envoy-gateway.certgen.fullname" -}}
 {{- printf "%s-%s" (include "common.names.fullname" .) "certgen" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
-Create the name of the service account to use (envoy-gateway Operator)
+Create the name of the service account to use (Certificate Generation init-job)
 */}}
 {{- define "envoy-gateway.certgen.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create -}}

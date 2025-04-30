@@ -27,9 +27,9 @@ Check the status of the pods by running this command:
 
     kubectl get pods --namespace {{ include "common.names.namespace" . | quote }} -l app.kubernetes.io/instance={{ include "common.names.namespace" . | quote }}
 
-Check the envoy-gateway documentation for instructions on how to handle routing, traffic and rate limiting.
+Check the Envoy Gateway documentation for instructions on how to handle routing, traffic and rate limiting:
 
-https://gateway.envoyproxy.io/latest/tasks/quickstart/#what-to-explore-next
+    https://gateway.envoyproxy.io/latest/tasks/quickstart/#what-to-explore-next
 
 {{- if .Values.rbac.create }}
 {{- if .Values.watchAllNamespaces }}
@@ -93,6 +93,6 @@ Access the administration interface following the steps below:
 {{- include "common.warnings.rollingTag" .Values.ratelimitImage }}
 {{- include "common.warnings.rollingTag" .Values.envoyImage }}
 {{- include "envoy-gateway.validateValues" . }}
-{{- include "common.warnings.resources" (dict "sections" (list "") "context" $) }}
+{{- include "common.warnings.resources" (dict "sections" (list "" "certgen") "context" $) }}
 {{- include "common.warnings.modifiedImages" (dict "images" (list .Values.ratelimitImage .Values.envoyImage .Values.image) "context" $) }}
 {{- include "common.errors.insecureImages" (dict "images" (list .Values.ratelimitImage .Values.envoyImage .Values.image) "context" $) }}

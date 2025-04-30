@@ -7,7 +7,7 @@ SPDX-License-Identifier: APACHE-2.0
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ printf "%s-certgen" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  name: {{ template "envoy-gateway.certgen.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   {{- $labels := include "common.tplvalues.merge" (dict "values" (list .Values.commonLabels .Values.certgen.labels) "context" .) }}
   labels: {{- include "common.labels.standard" (dict "customLabels" $labels "context" $) | nindent 4 }}

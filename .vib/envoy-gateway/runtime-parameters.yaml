@@ -54,7 +54,7 @@ extraDeploy:
           serviceAccountName: backend
           containers:
             - image: bitnami/nginx
-              imagePullPolicy: IfNotPresent
+              imagePullPolicy: Always
               name: backend
               ports:
                 - containerPort: 8080

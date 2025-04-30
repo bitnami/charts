@@ -231,7 +231,7 @@ existingConfigMap: ""
 existingTLSSecret: ""
 ## Envoy Gateway resource requests and limits
 ## ref: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
-## @param resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if operator.resources is set (operator.resources is recommended for production).
+## @param resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
 ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
 ##
 resourcesPreset: "nano"
@@ -450,13 +450,13 @@ autoscaling:
       ##
       updateMode: Auto
   hpa:
-    ## @param autoscaling.hpa.enabled Enable autoscaling for operator
+    ## @param autoscaling.hpa.enabled Enable autoscaling for Envoy Gateway
     ##
     enabled: false
-    ## @param autoscaling.hpa.minReplicas Minimum number of operator replicas
+    ## @param autoscaling.hpa.minReplicas Minimum number of Envoy Gateway replicas
     ##
     minReplicas: ""
-    ## @param autoscaling.hpa.maxReplicas Maximum number of operator replicas
+    ## @param autoscaling.hpa. maxReplicas Maximum number of Envoy Gateway replicas
     ##
     maxReplicas: ""
     ## @param autoscaling.hpa.targetCPU Target CPU utilization percentage
@@ -695,7 +695,7 @@ certgen:
   args: []
   ## Certificate Generation init-job resource requests and limits
   ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param certgen.resourcesPreset Set Certificate Generation init-job container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if init.resources is set (init.resources is recommended for production).
+  ## @param certgen.resourcesPreset Set Certificate Generation init-job container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if certgen.resources is set (certgen.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
   resourcesPreset: "nano"

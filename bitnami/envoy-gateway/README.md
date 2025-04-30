@@ -198,7 +198,7 @@ extraDeploy:
         serviceAccountName: backend
         containers:
           - image: bitnami/nginx
-            imagePullPolicy: IfNotPresent
+            imagePullPolicy: Always
             name: backend
             ports:
               - containerPort: 8080
@@ -230,7 +230,7 @@ Check the [Envoy Gateway official documentation](https://envoy-gateway.io/docume
 
 This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters inside the `operator`, `apiserver` and `cluster` sections.
+As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
 ## Parameters
 
@@ -508,13 +508,11 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```console
 helm install my-release \
-  --set apiserver.enabled=true \
+  --set metrics.enabled=true \
     REGISTRY_NAME/REPOSITORY_NAME/envoy-gateway
 ```
 
-The above command enables the envoy-gateway API Server.
-
-> NOTE: Once this chart is deployed, it is not possible to change the application's access credentials, such as usernames or passwords, using Helm. To change these application credentials after deployment, delete any persistent volumes (PVs) used by the chart and re-deploy it, or use the application's built-in administrative tools if available.
+The above command enables metrics scraping with Prometheus.
 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
