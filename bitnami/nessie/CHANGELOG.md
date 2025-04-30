@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.0.6 (2025-04-26)
+## 2.0.6 (2025-04-30)
 
 * [bitnami/nessie] Release 2.0.6 ([#33192](https://github.com/bitnami/charts/pull/33192))
 
