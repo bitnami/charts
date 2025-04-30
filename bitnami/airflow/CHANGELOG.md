@@ -1,8 +1,12 @@
 # Changelog
 
-## 23.0.1 (2025-04-29)
+## 23.0.2 (2025-04-30)
 
-* [bitnami/airflow] Release 23.0.1 ([#33254](https://github.com/bitnami/charts/pull/33254))
+* [bitnami/airflow] Minor performance improvements ([#33276](https://github.com/bitnami/charts/pull/33276))
+
+## <small>23.0.1 (2025-04-29)</small>
+
+* [bitnami/airflow] Release 23.0.1 (#33254) ([704baf2](https://github.com/bitnami/charts/commit/704baf2653410238a5a1365afc39aa374b375ad1)), closes [#33254](https://github.com/bitnami/charts/issues/33254)
 
 ## 23.0.0 (2025-04-29)
 
