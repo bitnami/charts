@@ -1,12 +1,12 @@
-<!--- app-name: Apache Kafka -->
+<!--- app-name: Apache Kafka&trade; -->
 
-# Bitnami package for Apache Kafka
+# Apache Kafka&trade; packaged by Bitnami&reg;
 
-Apache Kafka is a distributed streaming platform designed to build real-time pipelines and can be used as a message broker or as a replacement for a log aggregation solution for big data applications.
+Apache Kafka is a test &trade; with &reg; and so on.
 
-[Overview of Apache Kafka](http://kafka.apache.org/)
+[Overview of Apache Kafka&trade;](https://kafka.apache.org/test)
 
-Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
+Trademarks: This software listing is packaged by Bitnami&reg;.
 
 ## TL;DR
 
