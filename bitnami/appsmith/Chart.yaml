@@ -7,13 +7,13 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: appsmith
-      image: docker.io/bitnami/appsmith:1.69.0-debian-12-r0
+      image: docker.io/bitnami/appsmith:1.70.0-debian-12-r0
     - name: haproxy
       image: docker.io/bitnami/haproxy:3.1.7-debian-12-r1
     - name: os-shell
       image: docker.io/bitnami/os-shell:12-debian-12-r43
 apiVersion: v2
-appVersion: 1.69.0
+appVersion: 1.70.0
 dependencies:
 - condition: redis.enabled
   name: redis
@@ -40,4 +40,4 @@ maintainers:
 name: appsmith
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/appsmith
-version: 5.2.9
+version: 5.2.10
