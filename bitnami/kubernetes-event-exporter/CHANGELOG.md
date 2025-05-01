@@ -1,8 +1,12 @@
 # Changelog
 
-## 3.5.0 (2025-04-08)
+## 3.5.1 (2025-05-01)
 
-* [bitnami/kubernetes-event-exporter] Add clusterName config setting to values ([#32852](https://github.com/bitnami/charts/pull/32852))
+* [bitnami/kubernetes-event-exporter] Release 3.5.1 ([#33293](https://github.com/bitnami/charts/pull/33293))
+
+## 3.5.0 (2025-04-16)
+
+* [bitnami/kubernetes-event-exporter] Add clusterName config setting to values (#32852) ([d04b96f](https://github.com/bitnami/charts/commit/d04b96f2655d9cef448f299bdca0ab6cd1b6950f)), closes [#32852](https://github.com/bitnami/charts/issues/32852)
 
 ## <small>3.4.5 (2025-04-01)</small>
 
