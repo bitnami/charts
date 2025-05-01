@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.1.8 (2025-04-22)
+## 0.1.9 (2025-05-01)
 
-* [bitnami/cloudnative-pg] fix use Values failed in range method ([#33101](https://github.com/bitnami/charts/pull/33101))
+* [bitnami/cloudnative-pg] Release 0.1.9 ([#33288](https://github.com/bitnami/charts/pull/33288))
+
+## <small>0.1.8 (2025-04-30)</small>
+
+* [bitnami/cloudnative-pg] fix use Values failed in range method (#33101) ([d10b4af](https://github.com/bitnami/charts/commit/d10b4af2bd4fafbe00bf0e3f3ed0f115e2876cc0)), closes [#33101](https://github.com/bitnami/charts/issues/33101)
 
 ## <small>0.1.7 (2025-04-01)</small>
 
