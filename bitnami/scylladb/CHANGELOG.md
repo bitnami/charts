@@ -1,8 +1,12 @@
 # Changelog
 
+## 4.0.1 (2025-05-01)
+
+* [bitnami/scylladb] Release 4.0.1 ([#33283](https://github.com/bitnami/charts/pull/33283))
+
 ## 4.0.0 (2025-04-15)
 
-* [bitnami/scylladb] Release 4.0.0 ([#33022](https://github.com/bitnami/charts/pull/33022))
+* [bitnami/scylladb] Release 4.0.0 (#33022) ([834b80a](https://github.com/bitnami/charts/commit/834b80a2e22e5d4545d6f91e9ab80a2cb59d197b)), closes [#33022](https://github.com/bitnami/charts/issues/33022)
 
 ## 3.3.0 (2025-04-04)
 
