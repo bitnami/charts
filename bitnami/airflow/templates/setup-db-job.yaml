@@ -78,7 +78,7 @@ spec:
 
                   airflow_create_admin_user
                   info "Synchronizing internal metadata"
-                  airflow_execute sync-perm
+                  airflow_execute sync-perm --include-dags
                   true
               else
                   info "Upgrading database schema"
