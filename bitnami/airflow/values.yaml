@@ -2443,10 +2443,10 @@ setupDBJob:
   extraEnvVarsSecret: ""
   ## Airflow "setup-db" job's container resource requests and limits
   ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param setupDBJob.resourcesPreset Set Airflow "setup-db" job's container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if setupDBJob.resources is set (setupDBJob.resources is recommended for production).
+  ## @param setupDBJob.resourcesPreset Set Airflow "setup-db" job's container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if setupDBJob.resources is set (setupDBJob.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "micro"
+  resourcesPreset: "small"
   ## @param setupDBJob.resources Set Airflow "setup-db" job's container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## E.g:
   ## resources:
