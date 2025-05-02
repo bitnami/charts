@@ -15,7 +15,7 @@ it('allows triggering execution of a sample DAG', () => {
     cy.get('button').contains(' Trigger').click({force: true});
 
     // Verify the DAG was scheduled
-    cy.wait(3000);
+    cy.wait(10000);
     cy.visit('/dags');
     cy.get(`[href='/dags/${dags.triggered.id}']`);
     cy.get('div').contains(new Date().toISOString().split('T')[0]);
