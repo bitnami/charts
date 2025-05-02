@@ -1,0 +1,37 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+annotations:
+  tanzuCategory: service
+  category: Infrastructure
+  licenses: Apache-2.0
+  images: |
+    - name: envoy-gateway
+      image: docker.io/bitnami/envoy-gateway:1.3.2-debian-12-r0
+    - name: envoy-ratelimit
+      image: docker.io/bitnami/envoy-ratelimit:2025.4.9-debian-12-r0
+    - name: envoy
+      image: docker.io/bitnami/envoy:1.34.0-debian-12-r0
+apiVersion: v2
+appVersion: 1.3.2
+dependencies:
+- name: common
+  repository: oci://registry-1.docker.io/bitnamicharts
+  tags:
+  - bitnami-common
+  version: 2.x.x
+description:  Envoy Gateway simplifies traffic management by extending Envoy Proxy's features, offering Kubernetes Gateway API integration for secure, scalable, and observable application routing
+home: https://bitnami.com
+icon: https://bitnami.com/assets/stacks/envoy-gateway/img/envoy-gateway-stack-220x234.png
+keywords:
+- envoy-gateway
+- traffic
+- gateway
+- ingress
+maintainers:
+- name: Broadcom, Inc. All Rights Reserved.
+  url: https://github.com/bitnami/charts
+name: envoy-gateway
+sources:
+- https://github.com/bitnami/charts/tree/main/bitnami/envoy-gateway
+version: 0.1.0
