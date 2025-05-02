@@ -456,7 +456,7 @@ autoscaling:
     ## @param autoscaling.hpa.minReplicas Minimum number of Envoy Gateway replicas
     ##
     minReplicas: ""
-    ## @param autoscaling.hpa. maxReplicas Maximum number of Envoy Gateway replicas
+    ## @param autoscaling.hpa.maxReplicas Maximum number of Envoy Gateway replicas
     ##
     maxReplicas: ""
     ## @param autoscaling.hpa.targetCPU Target CPU utilization percentage
