@@ -1,8 +1,13 @@
 # Changelog
 
-## 4.8.3 (2025-04-02)
+## 4.8.4 (2025-05-02)
 
-* [bitnami/seaweedfs] Release 4.8.3 ([#32763](https://github.com/bitnami/charts/pull/32763))
+* [bitnami/seaweedfs] Release 4.8.4 ([#33300](https://github.com/bitnami/charts/pull/33300))
+
+## <small>4.8.3 (2025-04-02)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/seaweedfs] Release 4.8.3 (#32763) ([e6f401a](https://github.com/bitnami/charts/commit/e6f401a180a1ba2452c52072192119442b72c8a5)), closes [#32763](https://github.com/bitnami/charts/issues/32763)
 
 ## <small>4.8.2 (2025-03-10)</small>
 
