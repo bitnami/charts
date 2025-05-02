@@ -2,7 +2,7 @@
 
 # Bitnami package for Envoy Gateway
 
-Envoy Gateway simplifies traffic management by extending Envoy Proxy's features, offering Kubernetes Gateway API integration for secure, scalable, and observable application routing.
+Envoy Gateway simplifies traffic management by extending Envoy Proxy's features, offering Kubernetes Gateway API integration for secure, scalable, and observable application routing
 
 [Overview of Envoy Gateway](https://gateway.envoyproxy.io/)
 
