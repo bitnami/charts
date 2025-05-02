@@ -1,8 +1,12 @@
 # Changelog
 
-## 3.0.3 (2025-04-29)
+## 3.0.4 (2025-05-02)
 
-* Fix syntax (parameter order) for flaskServerSecretKey in template ([#33248](https://github.com/bitnami/charts/pull/33248))
+* [bitnami/mlflow] Release 3.0.4 ([#33306](https://github.com/bitnami/charts/pull/33306))
+
+## <small>3.0.3 (2025-04-29)</small>
+
+* Fix syntax (parameter order) for flaskServerSecretKey in template (#33248) ([5397041](https://github.com/bitnami/charts/commit/5397041481d28c64eb3ff5db6d3bc81441436236)), closes [#33248](https://github.com/bitnami/charts/issues/33248)
 
 ## <small>3.0.2 (2025-04-24)</small>
 
