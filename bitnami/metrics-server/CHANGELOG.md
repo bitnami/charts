@@ -1,8 +1,13 @@
 # Changelog
 
-## 7.4.2 (2025-04-09)
+## 7.4.3 (2025-05-02)
 
-* [bitnami/metrics-server] Release 7.4.2 ([#32746](https://github.com/bitnami/charts/pull/32746))
+* [bitnami/metrics-server] Release 7.4.3 ([#33296](https://github.com/bitnami/charts/pull/33296))
+
+## <small>7.4.2 (2025-04-09)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/metrics-server] Release 7.4.2 (#32746) ([3234328](https://github.com/bitnami/charts/commit/3234328aa4b5b1a18041c7dbf3364b91e8b40c74)), closes [#32746](https://github.com/bitnami/charts/issues/32746)
 
 ## <small>7.4.1 (2025-03-05)</small>
 
