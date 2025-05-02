@@ -84,7 +84,7 @@ hub:
   image:
     registry: docker.io
     repository: bitnami/jupyterhub
-    tag: 5.3.0-debian-12-r3
+    tag: 5.3.0-debian-12-r4
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
