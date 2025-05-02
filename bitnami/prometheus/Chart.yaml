@@ -11,11 +11,11 @@ annotations:
     - name: os-shell
       image: docker.io/bitnami/os-shell:12-debian-12-r43
     - name: prometheus
-      image: docker.io/bitnami/prometheus:3.3.0-debian-12-r2
+      image: docker.io/bitnami/prometheus:3.3.1-debian-12-r0
     - name: thanos
       image: docker.io/bitnami/thanos:0.38.0-debian-12-r2
 apiVersion: v2
-appVersion: 3.3.0
+appVersion: 3.3.1
 dependencies:
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
@@ -37,4 +37,4 @@ sources:
 - https://github.com/bitnami/containers/tree/main/bitnami/prometheus
 - https://github.com/prometheus/prometheus
 - https://github.com/prometheus-community/helm-charts
-version: 2.0.0
+version: 2.0.1
