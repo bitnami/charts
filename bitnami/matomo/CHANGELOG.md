@@ -1,8 +1,12 @@
 # Changelog
 
-## 9.3.5 (2025-05-03)
+## 9.3.6 (2025-05-03)
 
-* [bitnami/matomo] Release 9.3.5 ([#33313](https://github.com/bitnami/charts/pull/33313))
+* [bitnami/matomo] Release 9.3.6 ([#33314](https://github.com/bitnami/charts/pull/33314))
+
+## <small>9.3.5 (2025-05-03)</small>
+
+* [bitnami/matomo] Release 9.3.5 (#33313) ([6e5c37f](https://github.com/bitnami/charts/commit/6e5c37f30ab452838d1c3486bc45e69ca598de7c)), closes [#33313](https://github.com/bitnami/charts/issues/33313)
 
 ## <small>9.3.4 (2025-04-17)</small>
 
