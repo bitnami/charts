@@ -46,6 +46,17 @@ spec:
       {{- else if eq .Values.keeper.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
+    {{- if .Values.tls.enabled }}
+    - name: tcp-secure
+      targetPort: tcp-secure
+      port: {{ .Values.keeper.service.ports.tcpSecure }}
+      protocol: TCP
+      {{- if and (or (eq .Values.keeper.service.type "NodePort") (eq .Values.keeper.service.type "LoadBalancer")) (not (empty .Values.keeper.service.nodePorts.tcpSecure)) }}
+      nodePort: {{ .Values.keeper.service.nodePorts.tcpSecure }}
+      {{- else if eq .Values.keeper.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    {{- end }}
     - name: tcp-raft
       port: {{ .Values.keeper.service.ports.raft }}
       protocol: TCP

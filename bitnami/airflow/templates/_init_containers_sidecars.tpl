@@ -60,6 +60,8 @@ Returns an init-container that prepares the Airflow configuration files for main
     {{- end }}
       airflow_conf_set "celery" "broker_url" "redis://${redis_credentials}@${REDIS_HOST}:${REDIS_PORT_NUMBER}/${REDIS_DATABASE}"
     {{- end }}
+      # Configure authentication backend
+      airflow_conf_set "core" "auth_manager" "airflow.providers.fab.auth_manager.fab_auth_manager.FabAuthManager"
       info "Airflow configuration ready"
 
       if [[ -f "/opt/bitnami/airflow/config/airflow_local_settings.py" ]]; then
@@ -125,6 +127,9 @@ Returns an init-container that prepares the Airflow configuration files for main
           key: redis-password
     {{- end }}
     {{- end }}
+    {{- if .Values.extraEnvVars }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 4 }}
+    {{- end }}
   volumeMounts:
     - name: empty-dir
       mountPath: /emptydir
@@ -187,6 +192,9 @@ Returns an init-container that prepares the Airflow Webserver configuration file
           key: bind-password
     {{- end }}
     {{- end }}
+    {{- if .Values.extraEnvVars }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 4 }}
+    {{- end }}
   volumeMounts:
     - name: empty-dir
       mountPath: /emptydir
@@ -222,11 +230,20 @@ Returns an init-container that waits for db migrations to be ready
       . /opt/bitnami/scripts/airflow-env.sh
       . /opt/bitnami/scripts/libairflow.sh
 
+      info "Trying to connect to the database server"
+      airflow_wait_for_db_connection
       info "Waiting for db migrations to be completed"
       airflow_wait_for_db_migrations
+      {{- if (include "airflow.isImageMajorVersion3" .) }}
+      info "Waiting for the admin user to exist"
+      airflow_wait_for_admin_user
+      {{- end }}
   env:
     - name: BITNAMI_DEBUG
       value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
+    {{- if .Values.extraEnvVars }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 4 }}
+    {{- end }}
   volumeMounts:
     - name: empty-dir
       mountPath: /tmp
@@ -276,9 +293,15 @@ Returns shared structure between load-dags and load-plugins init containers
   {{- else }}
   command: ["/bin/bash"]
   {{- end }}
-  {{- if .Values.defaultInitContainers.loadDAGsPlugins.extraEnvVars }}
-  env: {{- include "common.tplvalues.render" (dict "value" .Values.defaultInitContainers.loadDAGsPlugins.extraEnvVars "context" .) | nindent 4 }}
-  {{- end }}
+  env:
+    - name: BITNAMI_DEBUG
+      value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
+    {{- if .Values.defaultInitContainers.loadDAGsPlugins.extraEnvVars }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.defaultInitContainers.loadDAGsPlugins.extraEnvVars "context" .) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.extraEnvVars }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 4 }}
+    {{- end }}
   {{- if or .Values.defaultInitContainers.loadDAGsPlugins.extraEnvVarsCM .Values.defaultInitContainers.loadDAGsPlugins.extraEnvVarsSecret }}
   envFrom:
     {{- if .Values.defaultInitContainers.loadDAGsPlugins.extraEnvVarsCM }}
@@ -417,9 +440,15 @@ Returns shared structure between sync-dags and sync-plugins sidecars
   {{- else }}
   command: ["/bin/bash"]
   {{- end }}
-  {{- if .Values.defaultSidecars.syncDAGsPlugins.extraEnvVars }}
-  env: {{- include "common.tplvalues.render" (dict "value" .Values.defaultSidecars.syncDAGsPlugins.extraEnvVars "context" .) | nindent 4 }}
-  {{- end }}
+  env:
+    - name: BITNAMI_DEBUG
+      value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
+    {{- if .Values.defaultSidecars.syncDAGsPlugins.extraEnvVars }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.defaultSidecars.syncDAGsPlugins.extraEnvVars "context" .) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.extraEnvVars }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 4 }}
+    {{- end }}
   {{- if or .Values.defaultSidecars.syncDAGsPlugins.extraEnvVarsCM .Values.defaultSidecars.syncDAGsPlugins.extraEnvVarsSecret }}
   envFrom:
     {{- if .Values.defaultSidecars.syncDAGsPlugins.extraEnvVarsCM }}

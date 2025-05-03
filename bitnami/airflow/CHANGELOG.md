@@ -1,8 +1,24 @@
 # Changelog
 
-## 22.7.2 (2025-03-25)
+## 23.0.2 (2025-05-01)
 
-* bitnami/airflow  Fix indentation error when providing setupDBJob.resources in values ([#32599](https://github.com/bitnami/charts/pull/32599))
+* [bitnami/airflow] Minor performance improvements ([#33276](https://github.com/bitnami/charts/pull/33276))
+
+## <small>23.0.1 (2025-04-29)</small>
+
+* [bitnami/airflow] Release 23.0.1 (#33254) ([704baf2](https://github.com/bitnami/charts/commit/704baf2653410238a5a1365afc39aa374b375ad1)), closes [#33254](https://github.com/bitnami/charts/issues/33254)
+
+## 23.0.0 (2025-04-29)
+
+* [bitnami/airflow] Release 23.0.0 (#33141) ([2932247](https://github.com/bitnami/charts/commit/29322473955e7aba4b46118390e8e50db219e95e)), closes [#33141](https://github.com/bitnami/charts/issues/33141)
+
+## <small>22.7.3 (2025-04-21)</small>
+
+* [bitnami/airflow] Release 22.7.3 (#33087) ([c62ad9b](https://github.com/bitnami/charts/commit/c62ad9b97dad33d09d2888d21066d9d25cafeed5)), closes [#33087](https://github.com/bitnami/charts/issues/33087)
+
+## <small>22.7.2 (2025-03-25)</small>
+
+* bitnami/airflow  Fix indentation error when providing setupDBJob.resources in values (#32599) ([96b7651](https://github.com/bitnami/charts/commit/96b76511ff0c016e787ec1dae21494591254c367)), closes [#32599](https://github.com/bitnami/charts/issues/32599)
 
 ## <small>22.7.1 (2025-03-22)</small>
 

@@ -1,8 +1,16 @@
 # Changelog
 
-## 11.2.4 (2025-04-11)
+## 11.3.1 (2025-05-01)
 
-* [bitnami/etcd] Simplify condition ([#32814](https://github.com/bitnami/charts/pull/32814))
+* [bitnami/etcd] Release 11.3.1 ([#33289](https://github.com/bitnami/charts/pull/33289))
+
+## 11.3.0 (2025-04-23)
+
+* [bitnami/etcd] Add possibility to pass extra env vars to the defrag cronjob (#32953) ([9df94d0](https://github.com/bitnami/charts/commit/9df94d083dbc03eb22202dbbc691fd687827ac66)), closes [#32953](https://github.com/bitnami/charts/issues/32953)
+
+## <small>11.2.4 (2025-04-11)</small>
+
+* [bitnami/etcd] Simplify condition (#32814) ([4b9196b](https://github.com/bitnami/charts/commit/4b9196b591ac921706c23dc47512f54d2f374beb)), closes [#32814](https://github.com/bitnami/charts/issues/32814)
 
 ## <small>11.2.3 (2025-04-09)</small>
 

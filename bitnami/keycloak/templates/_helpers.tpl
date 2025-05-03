@@ -108,7 +108,7 @@ Return the Database hostname
 Return the Database port
 */}}
 {{- define "keycloak.databasePort" -}}
-{{- ternary "5432" .Values.externalDatabase.port .Values.postgresql.enabled | quote -}}
+{{- ternary "5432" (tpl (.Values.externalDatabase.port | toString) $) .Values.postgresql.enabled | quote -}}
 {{- end -}}
 
 {{/*
@@ -126,7 +126,7 @@ Return the Database database name
         {{- .Values.postgresql.auth.database -}}
     {{- end -}}
 {{- else -}}
-    {{- .Values.externalDatabase.database -}}
+    {{- tpl .Values.externalDatabase.database $ -}}
 {{- end -}}
 {{- end -}}
 
@@ -145,7 +145,7 @@ Return the Database user
         {{- .Values.postgresql.auth.username -}}
     {{- end -}}
 {{- else -}}
-    {{- .Values.externalDatabase.user -}}
+    {{- tpl .Values.externalDatabase.user $ -}}
 {{- end -}}
 {{- end -}}
 

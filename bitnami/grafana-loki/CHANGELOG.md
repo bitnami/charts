@@ -1,8 +1,28 @@
 # Changelog
 
-## 4.8.0 (2025-04-14)
+## 4.8.5 (2025-04-29)
 
-* [bitnami/grafana-loki] Add support to override client_max_body_size in nginx ([#32955](https://github.com/bitnami/charts/pull/32955))
+* [bitnami/grafana-loki] add /otlp/v1/logs as gateway-endpoint for distributor via gateway ([#33190](https://github.com/bitnami/charts/pull/33190))
+
+## <small>4.8.4 (2025-04-28)</small>
+
+* [bitnami/grafana-loki] Release 4.8.4 (#33208) ([25336fa](https://github.com/bitnami/charts/commit/25336fa2c1a002fd7dc483f726d59bf1d416cae3)), closes [#33208](https://github.com/bitnami/charts/issues/33208)
+
+## <small>4.8.3 (2025-04-25)</small>
+
+* [bitnami/grafana-loki] add missing queryScheduler.enabled parameter (#33072) ([fd1a9e5](https://github.com/bitnami/charts/commit/fd1a9e5ec72680cfc8b0d737785fcc7203e06e1b)), closes [#33072](https://github.com/bitnami/charts/issues/33072)
+
+## <small>4.8.2 (2025-04-23)</small>
+
+* [bitnami/grafana-loki] Release 4.8.2 (#33137) ([844ebb5](https://github.com/bitnami/charts/commit/844ebb5048a830968d9053bad74f89a9a7888f52)), closes [#33137](https://github.com/bitnami/charts/issues/33137)
+
+## <small>4.8.1 (2025-04-23)</small>
+
+* [bitnami/grafana-loki] Release 4.8.1 (#33133) ([61f3ddb](https://github.com/bitnami/charts/commit/61f3ddb44d6ea09b0e64e0f0020e2b7da9479f8a)), closes [#33133](https://github.com/bitnami/charts/issues/33133)
+
+## 4.8.0 (2025-04-16)
+
+* [bitnami/grafana-loki] Add support to override client_max_body_size in nginx (#32955) ([9354dd0](https://github.com/bitnami/charts/commit/9354dd06459286bc49e29c499fe3e4774792a5b2)), closes [#32955](https://github.com/bitnami/charts/issues/32955)
 
 ## <small>4.7.10 (2025-04-09)</small>
 

@@ -1,8 +1,17 @@
 # Changelog
 
-## 20.4.2 (2025-03-21)
+## 20.5.3 (2025-04-24)
 
-* [bitnami/mariadb] Release 20.4.2 ([#32557](https://github.com/bitnami/charts/pull/32557))
+* adds spec.terminationGracePeriodSeconds to mariadb ([#33168](https://github.com/bitnami/charts/pull/33168))
+
+## <small>20.4.3 (2025-04-20)</small>
+
+* [bitnami/mariadb] Release 20.4.3 (#33085) ([3db392a](https://github.com/bitnami/charts/commit/3db392abc929bd5561bf7f4404cd3ebafd18a791)), closes [#33085](https://github.com/bitnami/charts/issues/33085)
+
+## <small>20.4.2 (2025-03-21)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/mariadb] Release 20.4.2 (#32557) ([0d7c80d](https://github.com/bitnami/charts/commit/0d7c80d002d7943850248a2d389bbbb589433009)), closes [#32557](https://github.com/bitnami/charts/issues/32557)
 
 ## <small>20.4.1 (2025-02-25)</small>
 

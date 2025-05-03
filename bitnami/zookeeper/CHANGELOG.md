@@ -1,8 +1,12 @@
 # Changelog
 
-## 13.8.0 (2025-04-02)
+## 13.8.1 (2025-04-28)
 
-* [bitnami/zookeeper] Set `usePasswordFiles=true` by default ([#32780](https://github.com/bitnami/charts/pull/32780))
+* [bitnami/zookeeper] Release 13.8.1 ([#33224](https://github.com/bitnami/charts/pull/33224))
+
+## 13.8.0 (2025-04-07)
+
+* [bitnami/zookeeper] Set `usePasswordFiles=true` by default (#32780) ([f8d5d0c](https://github.com/bitnami/charts/commit/f8d5d0c2ff7b843f9364e0a956081fff2820fed1)), closes [#32780](https://github.com/bitnami/charts/issues/32780)
 
 ## <small>13.7.5 (2025-03-29)</small>
 

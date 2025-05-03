@@ -75,7 +75,7 @@ kubeVersion: ""
 image:
   registry: docker.io
   repository: bitnami/external-dns
-  tag: 0.16.1-debian-12-r1
+  tag: 0.16.1-debian-12-r5
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -822,6 +822,10 @@ txtPrefix: ""
 ## @param txtSuffix When using the TXT registry, a suffix for ownership records that avoids collision with CNAME entries (optional)<CNAME record>.suffix (Mutual exclusive with txt-prefix)
 ##
 txtSuffix: ""
+## @param txtNewFormatOnly When using the TXT registry, use only the new format for ownership records (optional)
+## ref: https://github.com/kubernetes-sigs/external-dns/blob/master/docs/registry/txt.md#record-format-options
+##
+txtNewFormatOnly: false
 ## @param txtOwnerId A name that identifies this instance of ExternalDNS. Currently used by registry types: txt & aws-sd (optional)
 ## But other registry types might be added in the future.
 ##

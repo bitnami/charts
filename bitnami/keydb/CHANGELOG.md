@@ -1,8 +1,13 @@
 # Changelog
 
-## 0.5.4 (2025-03-21)
+## 0.5.5 (2025-04-20)
 
-* [bitnami/keydb] Release 0.5.4 ([#32554](https://github.com/bitnami/charts/pull/32554))
+* [bitnami/keydb] Release 0.5.5 ([#33084](https://github.com/bitnami/charts/pull/33084))
+
+## <small>0.5.4 (2025-03-21)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/keydb] Release 0.5.4 (#32554) ([0dcd062](https://github.com/bitnami/charts/commit/0dcd0627b23297021d46bfe89ae634bfd87fdbbd)), closes [#32554](https://github.com/bitnami/charts/issues/32554)
 
 ## <small>0.5.3 (2025-03-10)</small>
 

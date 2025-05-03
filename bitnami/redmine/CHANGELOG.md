@@ -1,8 +1,16 @@
 # Changelog
 
-## 32.2.1 (2025-04-10)
+## 32.2.3 (2025-04-21)
 
-* [bitnami/redmine] Release 32.2.1 ([#32947](https://github.com/bitnami/charts/pull/32947))
+* [bitnami/redmine] Release 32.2.3 ([#33093](https://github.com/bitnami/charts/pull/33093))
+
+## <small>32.2.2 (2025-04-20)</small>
+
+* [bitnami/redmine] Release 32.2.2 (#33081) ([5449c12](https://github.com/bitnami/charts/commit/5449c12415df3b6cd8d69753b6ef5cc04d9fb813)), closes [#33081](https://github.com/bitnami/charts/issues/33081)
+
+## <small>32.2.1 (2025-04-15)</small>
+
+* [bitnami/redmine] Release 32.2.1 (#32947) ([774ba79](https://github.com/bitnami/charts/commit/774ba7969b41654f88748a1805f5d571cd4c875b)), closes [#32947](https://github.com/bitnami/charts/issues/32947)
 
 ## 32.2.0 (2025-04-04)
 

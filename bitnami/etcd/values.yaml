@@ -89,7 +89,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/etcd
-  tag: 3.5.21-debian-12-r1
+  tag: 3.5.21-debian-12-r4
   digest: ""
   ## @param image.pullPolicy etcd image pull policy
   ## Specify a imagePullPolicy
@@ -673,7 +673,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r40
+    tag: 12-debian-12-r43
     digest: ""
     ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
     ##
@@ -1198,6 +1198,20 @@ defrag:
     ##     memory: 1024Mi
     ##
     resources: {}
+    ## @param defrag.cronjob.extraEnvVars [array] Extra environment variables to be set on defrag cronjob container
+    ## e.g:
+    ## extraEnvVars:
+    ##   - name: FOO
+    ##     value: "bar"
+    ##
+    extraEnvVars: []
+    ## @param defrag.cronjob.extraEnvVarsCM Name of existing ConfigMap containing extra env vars
+    ##
+    extraEnvVarsCM: ""
+    ## @param defrag.cronjob.extraEnvVarsSecret Name of existing Secret containing extra env vars
+    ##
+    extraEnvVarsSecret: ""
+
 ## @section Other parameters
 ##
 

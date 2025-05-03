@@ -28,21 +28,65 @@ file:
     exists: true
     contents:
       - "remote_servers"
+      {{ if .Vars.tls.enabled }}
+      - /port from_env="CLICKHOUSE_TCP_SECURE_PORT">/
+      - /secure>1</
+      {{ else }}
+      - /port from_env="CLICKHOUSE_TCP_PORT">/
+      {{ end }}
   /opt/bitnami/clickhouse/etc/config.d/05-zookeeper.xml:
     mode: "0644"
     filetype: file
     exists: true
     contents:
       - "zookeeper"
+      {{ if .Vars.tls.enabled }}
+      - /port>{{ .Vars.keeper.containerPorts.tcpSecure }}</
+      - /secure>1</
+      {{ else }}
+      - /port>{{ .Vars.keeper.containerPorts.tcp }}</
+      {{ end }}
+  {{ if .Vars.tls.enabled }}
+  /opt/bitnami/clickhouse/etc/config.d/06-tls.xml:
+    mode: "0644"
+    filetype: file
+    exists: true
+    contents:
+      - "openSSL"
+      - /certificateFile>/opt/bitnami/clickhouse/certs/server/tls.crt</
+      - /privateKeyFile>/opt/bitnami/clickhouse/certs/server/tls.key</
+      - /caConfig>/opt/bitnami/clickhouse/certs/ca/tls.crt</
+  {{ end }}
+  {{ if .Vars.metrics.enabled }}
+  /opt/bitnami/clickhouse/etc/config.d/07-prometheus.xml:
+    mode: "0644"
+    filetype: file
+    exists: true
+    contents:
+      - "prometheus"
+      - /port from_env="CLICKHOUSE_METRICS_PORT">/
+  {{ end }}
   /bitnami/clickhouse/data:
     mode: "2750"
     filetype: directory
     exists: true
 http:
+  {{ if .Vars.tls.enabled }}
+  https://clickhouse:{{ .Vars.service.ports.https }}/replicas_status:
+    status: 200
+    allow-insecure: true
+    body:
+      - Ok
+  {{ else }}
   http://clickhouse:{{ .Vars.service.ports.http }}/replicas_status:
     status: 200
     body:
       - Ok
+  {{ end }}
+  {{ if .Vars.metrics.enabled }}
+  http://clickhouse:{{ .Vars.service.ports.metrics }}/metrics:
+    status: 200
+  {{ end }}
 command:
   {{- $uid := .Vars.containerSecurityContext.runAsUser }}
   {{- $gid := .Vars.podSecurityContext.fsGroup }}
@@ -52,7 +96,7 @@ command:
     exec: if [ $(id -u) -lt {{ $uid }} ] || [ $(id -G | awk '{print $2}') -lt {{ $gid }} ]; then exit 1; fi
     exit-status: 0
   check-cluster-status:
-    exec: clickhouse-client --port {{ .Vars.containerPorts.tcp }}  --user '{{ .Vars.auth.username }}' --password '{{ .Vars.auth.password }}' --query='SELECT COUNT(*) FROM system.clusters;'
+    exec: clickhouse-client {{ if .Vars.tls.enabled }} --config /opt/bitnami/clickhouse/etc/config.d/06-tls.xml --secure --port {{ .Vars.containerPorts.tcpSecure }} {{ else }} --port {{ .Vars.containerPorts.tcp }} {{ end }} --user '{{ .Vars.auth.username }}' --password '{{ .Vars.auth.password }}' --query='SELECT COUNT(*) FROM system.clusters;'
     exit-status: 0
     {{- $expectedCount := mul .Vars.shards .Vars.replicaCount }}
     stdout:
@@ -61,7 +105,7 @@ command:
     {{- $database := printf "test_goss_%s" (randAlpha 5) }}
     {{- $table := printf "%s.table_%s" $database (randAlpha 5) }}
     {{- $insertValue := 23 }}
-    exec: clickhouse-client --host clickhouse --port {{ .Vars.service.ports.tcp }} --user '{{ .Vars.auth.username }}' --password '{{ .Vars.auth.password }}' --multiquery --query='CREATE DATABASE {{ $database }} ON CLUSTER default ENGINE = Memory; CREATE TABLE {{ $table }} (a UInt8) ENGINE = Memory;  INSERT INTO {{ $table }} VALUES({{ $insertValue }}); SELECT * FROM {{ $table }};'
+    exec: clickhouse-client --host clickhouse {{ if .Vars.tls.enabled }} --config /opt/bitnami/clickhouse/etc/config.d/06-tls.xml --secure --port {{ .Vars.service.ports.tcpSecure }} {{ else }} --port {{ .Vars.service.ports.tcp }} {{ end }} --user '{{ .Vars.auth.username }}' --password '{{ .Vars.auth.password }}' --multiquery --query='CREATE DATABASE {{ $database }} ON CLUSTER default ENGINE = Memory; CREATE TABLE {{ $table }} (a UInt8) ENGINE = Memory;  INSERT INTO {{ $table }} VALUES({{ $insertValue }}); SELECT * FROM {{ $table }};'
     exit-status: 0
     stdout:
       - "{{ $insertValue }}"

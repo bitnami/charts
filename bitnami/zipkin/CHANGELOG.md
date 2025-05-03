@@ -1,8 +1,17 @@
 # Changelog
 
-## 1.3.1 (2025-03-18)
+## 1.3.3 (2025-04-27)
 
-* [bitnami/zipkin] Release 1.3.1 ([#32502](https://github.com/bitnami/charts/pull/32502))
+* [bitnami/zipkin] Release 1.3.3 ([#33199](https://github.com/bitnami/charts/pull/33199))
+
+## <small>1.3.2 (2025-04-17)</small>
+
+* [bitnami/zipkin] Release 1.3.2 (#33065) ([ad4d926](https://github.com/bitnami/charts/commit/ad4d926dcd262d576b331b9bdca15f2c5a812dc5)), closes [#33065](https://github.com/bitnami/charts/issues/33065)
+
+## <small>1.3.1 (2025-03-18)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/zipkin] Release 1.3.1 (#32502) ([001ea6c](https://github.com/bitnami/charts/commit/001ea6c355828c523501081c53b23f4e8768fe8d)), closes [#32502](https://github.com/bitnami/charts/issues/32502)
 
 ## 1.3.0 (2025-02-24)
 

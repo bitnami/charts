@@ -1,8 +1,28 @@
 # Changelog
 
+## 22.0.1 (2025-04-30)
+
+* [bitnami/elasticsearch] Update kibana subchart ([#33256](https://github.com/bitnami/charts/pull/33256))
+
+## 22.0.0 (2025-04-29)
+
+* [bitnami/elasticsearch] Release 22.0.0 (#33246) ([5ff40ae](https://github.com/bitnami/charts/commit/5ff40ae91813f230cdf1e8b11e9ab5a3a1892417)), closes [#33246](https://github.com/bitnami/charts/issues/33246)
+
+## <small>21.6.3 (2025-04-28)</small>
+
+* [bitnami/elasticsearch] Release 21.6.3 (#33223) ([ea673bf](https://github.com/bitnami/charts/commit/ea673bfa7f91f385512dfa2dba42222fdc5e2210)), closes [#33223](https://github.com/bitnami/charts/issues/33223)
+
+## <small>21.6.2 (2025-04-22)</small>
+
+* [bitnami/elasticsearch] tests: Enable security during testing (#33100) ([6285807](https://github.com/bitnami/charts/commit/62858076100c5e868eb3022125d1e13df29b9339)), closes [#33100](https://github.com/bitnami/charts/issues/33100)
+
+## <small>21.6.1 (2025-04-21)</small>
+
+* [bitnami/elasticsearch] fix coordinating security.enabled (#32840) ([1357e5c](https://github.com/bitnami/charts/commit/1357e5c51767e632accff2258deb4c6dd16b9d5b)), closes [#32840](https://github.com/bitnami/charts/issues/32840)
+
 ## 21.6.0 (2025-04-16)
 
-* [bitnami/elasticsearch] Fixes #32794, add enableDefaultInitContainers to elasticsearch chart ([#32855](https://github.com/bitnami/charts/pull/32855))
+* [bitnami/elasticsearch] Fixes #32794, add enableDefaultInitContainers to elasticsearch chart (#32855 ([652f468](https://github.com/bitnami/charts/commit/652f4680167a2c5fd88f1978959668837ea85d33)), closes [#32794](https://github.com/bitnami/charts/issues/32794) [#32855](https://github.com/bitnami/charts/issues/32855) [#32794](https://github.com/bitnami/charts/issues/32794)
 
 ## <small>21.5.1 (2025-04-15)</small>
 

@@ -49,7 +49,7 @@ global:
 image:
   registry: docker.io
   repository: bitnami/rabbitmq
-  tag: 4.0.9-debian-12-r1
+  tag: 4.1.0-debian-12-r0
   digest: ""
   ## set to true if you would like to see extra information on logs
   ## It turns BASH and/or NAMI debugging in the image
@@ -254,7 +254,7 @@ memoryHighWatermark:
   ## Memory high watermark value.
   ## @param memoryHighWatermark.value Memory high watermark value
   ## The default value of 0.4 stands for 40% of available RAM
-  ## Note: the memory relative limit is applied to the resource.limits.memory to calculate the memory threshold
+  ## Note: the memory relative limit is applied to the resourcesPreset memory limit or the resource.limits.memory to calculate the memory threshold
   ## You can also use an absolute value, e.g.: 256Mi
   ##
   value: 0.4
@@ -1594,7 +1594,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r42
+    tag: 12-debian-12-r43
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images

@@ -1,8 +1,16 @@
 # Changelog
 
-## 6.4.7 (2025-04-15)
+## 7.0.0 (2025-04-29)
 
-* [bitnami/logstash] Release 6.4.7 ([#33013](https://github.com/bitnami/charts/pull/33013))
+* [bitnami/logstash] Release 7.0.0 ([#33245](https://github.com/bitnami/charts/pull/33245))
+
+## <small>6.4.8 (2025-04-23)</small>
+
+* [bitnami/logstash] Fix headless service does not include extra ports (#33055) ([e511f5d](https://github.com/bitnami/charts/commit/e511f5d92c0e5b5111864a253a4cd36b4ff48ade)), closes [#33055](https://github.com/bitnami/charts/issues/33055)
+
+## <small>6.4.7 (2025-04-15)</small>
+
+* [bitnami/logstash] Release 6.4.7 (#33013) ([aee7e22](https://github.com/bitnami/charts/commit/aee7e221de53c9dd8cb455527b4c37b8bda53af2)), closes [#33013](https://github.com/bitnami/charts/issues/33013)
 
 ## <small>6.4.6 (2025-03-25)</small>
 

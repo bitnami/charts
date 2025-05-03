@@ -133,7 +133,7 @@ spec:
           args: {{- include "common.tplvalues.render" (dict "value" .Values.replica.args "context" $) | nindent 12 }}
           {{- else }}
           args:
-            - -c
+            - -ec
             - /opt/bitnami/scripts/start-scripts/start-replica.sh
           {{- end }}
           env:
@@ -235,8 +235,8 @@ spec:
             failureThreshold: {{ .Values.replica.livenessProbe.failureThreshold }}
             exec:
               command:
-                - sh
-                - -c
+                - /bin/bash
+                - -ec
                 - /health/ping_liveness_local_and_master.sh {{ .Values.replica.livenessProbe.timeoutSeconds }}
           {{- end }}
           {{- if .Values.replica.customReadinessProbe }}
@@ -250,8 +250,8 @@ spec:
             failureThreshold: {{ .Values.replica.readinessProbe.failureThreshold }}
             exec:
               command:
-                - sh
-                - -c
+                - /bin/bash
+                - -ec
                 - /health/ping_readiness_local_and_master.sh {{ .Values.replica.readinessProbe.timeoutSeconds }}
           {{- end }}
           {{- end }}
@@ -278,12 +278,14 @@ spec:
               {{- end }}
             - name: config
               mountPath: /opt/bitnami/redis/mounted-etc
+            {{- if and .Values.replica.containerSecurityContext.enabled .Values.replica.containerSecurityContext.readOnlyRootFilesystem }}
             - name: empty-dir
               mountPath: /opt/bitnami/redis/etc
               subPath: app-conf-dir
             - name: empty-dir
               mountPath: /tmp
               subPath: tmp-dir
+            {{- end }}
             {{- if .Values.tls.enabled }}
             - name: redis-certificates
               mountPath: /opt/bitnami/redis/certs
@@ -306,7 +308,7 @@ spec:
           {{- else }}
           command:
             - /bin/bash
-            - -c
+            - -ec
             - |
               {{- if and .Values.auth.enabled .Values.auth.usePasswordFiles }}
               export REDIS_PASSWORD="$(< $REDIS_PASSWORD_FILE)"
@@ -385,9 +387,11 @@ spec:
           resources: {{- include "common.resources.preset" (dict "type" .Values.metrics.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            {{- if and .Values.metrics.containerSecurityContext.enabled .Values.metrics.containerSecurityContext.readOnlyRootFilesystem }}
             - name: empty-dir
               mountPath: /tmp
               subPath: tmp-dir
+            {{- end }}
             {{- if and .Values.auth.enabled .Values.auth.usePasswordFiles }}
             - name: redis-password
               mountPath: /secrets/
@@ -438,9 +442,6 @@ spec:
           resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - name: empty-dir
-              mountPath: /tmp
-              subPath: tmp-dir
             - name: redis-data
               mountPath: {{ .Values.replica.persistence.path }}
               {{- if .Values.replica.persistence.subPath }}
@@ -466,9 +467,6 @@ spec:
           {{- end }}
           {{- if .Values.sysctl.mountHostSys }}
           volumeMounts:
-            - name: empty-dir
-              mountPath: /tmp
-              subPath: tmp-dir
             - name: host-sys
               mountPath: /host-sys
           {{- end }}
@@ -503,6 +501,7 @@ spec:
           hostPath:
             path: /sys
         {{- end }}
+        {{- if or (and .Values.replica.containerSecurityContext.enabled .Values.replica.containerSecurityContext.readOnlyRootFilesystem) (and .Values.metrics.enabled .Values.metrics.containerSecurityContext.enabled .Values.metrics.containerSecurityContext.readOnlyRootFilesystem) }}
         - name: empty-dir
           {{- if or .Values.replica.persistence.medium .Values.replica.persistence.sizeLimit }}
           emptyDir:
@@ -515,6 +514,7 @@ spec:
           {{- else }}
           emptyDir: {}
           {{- end }}
+        {{- end }}
         {{- if .Values.tls.enabled }}
         - name: redis-certificates
           secret:

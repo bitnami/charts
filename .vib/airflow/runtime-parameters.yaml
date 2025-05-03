@@ -30,6 +30,7 @@ scheduler:
     periodSeconds: 30
     timeoutSeconds: 20
 web:
+  baseUrl: 'http://vmware-airflow.my'
   extraConfiguration: |
     # Theme CONFIG
     APP_THEME = "amelia.css"
@@ -39,6 +40,11 @@ web:
     fsGroup: 1002
   containerSecurityContext:
     runAsUser: 1002
+  # Give some extra time for the service to start
+  startupProbe:
+    enabled: true
+    failureThreshold: 30
+    periodSeconds: 10
 worker:
   podSecurityContext:
     fsGroup: 1002

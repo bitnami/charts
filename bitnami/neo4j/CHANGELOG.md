@@ -1,8 +1,12 @@
 # Changelog
 
+## 0.4.1 (2025-05-02)
+
+* [bitnami/neo4j] Release 0.4.1 ([#33307](https://github.com/bitnami/charts/pull/33307))
+
 ## 0.4.0 (2025-04-04)
 
-* [bitnami/neo4j] Set `usePasswordFiles=true` by default ([#32706](https://github.com/bitnami/charts/pull/32706))
+* [bitnami/neo4j] Set `usePasswordFiles=true` by default (#32706) ([5366ece](https://github.com/bitnami/charts/commit/5366ece669637c9d9dc1835e9f5eeae94af3d66a)), closes [#32706](https://github.com/bitnami/charts/issues/32706)
 
 ## <small>0.3.5 (2025-04-02)</small>
 
