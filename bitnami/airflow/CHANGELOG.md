@@ -1,8 +1,12 @@
 # Changelog
 
-## 23.0.2 (2025-05-01)
+## 23.0.3 (2025-05-05)
 
-* [bitnami/airflow] Minor performance improvements ([#33276](https://github.com/bitnami/charts/pull/33276))
+* [bitnami/airflow] Fix svc name for Ingress backend ([#33316](https://github.com/bitnami/charts/pull/33316))
+
+## <small>23.0.2 (2025-05-01)</small>
+
+* [bitnami/airflow] Minor performance improvements (#33276) ([be6729e](https://github.com/bitnami/charts/commit/be6729e5675d0bd77ab21211dad18b6ab6b7efea)), closes [#33276](https://github.com/bitnami/charts/issues/33276)
 
 ## <small>23.0.1 (2025-04-29)</small>
 
