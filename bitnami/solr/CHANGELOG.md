@@ -1,6 +1,6 @@
 # Changelog
 
-## 9.6.2 (2025-05-02)
+## 9.6.2 (2025-05-05)
 
 * [bitnami/solr] Add persistentvolumeclaim retention on solr statefulset ([#33310](https://github.com/bitnami/charts/pull/33310))
 
