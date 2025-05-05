@@ -1,8 +1,12 @@
 # Changelog
 
-## 24.6.3 (2025-04-30)
+## 24.6.4 (2025-05-05)
 
-* [bitnami/keycloak] Release 24.6.3 ([#33258](https://github.com/bitnami/charts/pull/33258))
+* [bitnami/keycloak] Improvements to Keycloak cache handling ([#32885](https://github.com/bitnami/charts/pull/32885))
+
+## <small>24.6.3 (2025-04-30)</small>
+
+* [bitnami/keycloak] Release 24.6.3 (#33258) ([442b42e](https://github.com/bitnami/charts/commit/442b42e0cbc6fc37765ff46030315d0260a01075)), closes [#33258](https://github.com/bitnami/charts/issues/33258)
 
 ## <small>24.6.2 (2025-04-29)</small>
 
