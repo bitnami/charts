@@ -1,8 +1,12 @@
 # Changelog
 
-## 9.0.13 (2025-04-25)
+## 9.0.14 (2025-05-01)
 
-* [bitnami/nats] Release 9.0.13 ([#33175](https://github.com/bitnami/charts/pull/33175))
+* [bitnami/nats] Release 9.0.14 ([#33278](https://github.com/bitnami/charts/pull/33278))
+
+## <small>9.0.13 (2025-04-25)</small>
+
+* [bitnami/nats] Release 9.0.13 (#33175) ([19560d6](https://github.com/bitnami/charts/commit/19560d62362d9efb134001006f022808aabe69b5)), closes [#33175](https://github.com/bitnami/charts/issues/33175)
 
 ## <small>9.0.12 (2025-04-24)</small>
 

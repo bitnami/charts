@@ -1,8 +1,13 @@
 # Changelog
 
-## 2.4.9 (2025-04-01)
+## 2.4.10 (2025-05-01)
 
-* [bitnami/flux] Release 2.4.9 ([#32729](https://github.com/bitnami/charts/pull/32729))
+* [bitnami/flux] Release 2.4.10 ([#33290](https://github.com/bitnami/charts/pull/33290))
+
+## <small>2.4.9 (2025-04-01)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/flux] Release 2.4.9 (#32729) ([08e35a8](https://github.com/bitnami/charts/commit/08e35a800d2d34719aa5368c7a43668d48252357)), closes [#32729](https://github.com/bitnami/charts/issues/32729)
 
 ## <small>2.4.8 (2025-03-05)</small>
 

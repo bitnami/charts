@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.2.2 (2025-04-01)
+## 4.2.3 (2025-05-01)
 
-* [bitnami/apisix] Release 4.2.2 ([#32695](https://github.com/bitnami/charts/pull/32695))
+* [bitnami/apisix] Release 4.2.3 ([#33277](https://github.com/bitnami/charts/pull/33277))
+
+## <small>4.2.2 (2025-04-01)</small>
+
+* [bitnami/apisix] Release 4.2.2 (#32695) ([1193919](https://github.com/bitnami/charts/commit/11939197e7f7cdb4c366bbb316db96ad54556c12)), closes [#32695](https://github.com/bitnami/charts/issues/32695)
 
 ## <small>4.2.1 (2025-03-20)</small>
 

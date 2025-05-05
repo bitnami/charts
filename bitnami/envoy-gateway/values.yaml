@@ -1,0 +1,968 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+## @section Global parameters
+## Global Docker image parameters
+## Please, note that this will override the image parameters, including dependencies, configured to use the global value
+## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+##
+
+## @param global.imageRegistry Global Docker image registry
+## @param global.imagePullSecrets Global Docker registry secret names as an array
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
+##
+global:
+  imageRegistry: ""
+  ## E.g.
+  ## imagePullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  imagePullSecrets: []
+  defaultStorageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: auto
+## @section Common parameters
+##
+
+## @param kubeVersion Override Kubernetes version
+##
+kubeVersion: ""
+## @param apiVersions Override Kubernetes API versions reported by .Capabilities
+##
+apiVersions: []
+## @param nameOverride String to partially override common.names.name
+##
+nameOverride: ""
+## @param fullnameOverride String to fully override common.names.fullname
+##
+fullnameOverride: ""
+## @param namespaceOverride String to fully override common.names.namespace
+##
+namespaceOverride: ""
+## Enable diagnostic mode in the deployment
+##
+diagnosticMode:
+  ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+  ##
+  enabled: false
+  ## @param diagnosticMode.command Command to override all containers in the deployment
+  ##
+  command:
+    - sleep
+  ## @param diagnosticMode.args Args to override all containers in the deployment
+  ##
+  args:
+    - infinity
+## @param commonLabels Labels to add to all deployed objects
+##
+commonLabels: {}
+## @param commonAnnotations Annotations to add to all deployed objects
+##
+commonAnnotations: {}
+## @param clusterDomain Kubernetes cluster domain name
+##
+clusterDomain: cluster.local
+## @param extraDeploy Array of extra objects to deploy with the release
+##
+extraDeploy: []
+## @section Envoy Gateway parameters
+##
+## Bitnami Envoy Gateway image
+## ref: https://hub.docker.com/r/bitnami/envoy-gateway/tags/
+## @param image.registry [default: REGISTRY_NAME] Envoy Gateway image registry
+## @param image.repository [default: REPOSITORY_NAME/envoy-gateway] Envoy Gateway image repository
+## @skip image.tag Envoy Gateway image tag (immutable tags are recommended)
+## @param image.digest Envoy Gateway image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
+## @param image.pullPolicy Envoy Gateway image pull policy
+## @param image.pullSecrets Envoy Gateway image pull secrets
+##
+image:
+  registry: docker.io
+  repository: bitnami/envoy-gateway
+  tag: 1.3.2-debian-12-r0
+  digest: ""
+  ## Specify a imagePullPolicy
+  ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
+  ##
+  pullPolicy: IfNotPresent
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## e.g:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  pullSecrets: []
+## Bitnami Envoy Rate Limit image version
+## ref: https://hub.docker.com/r/bitnami/postgresql/tags/
+## @param ratelimitImage.registry [default: REGISTRY_NAME] Envoy Rate Limit image registry
+## @param ratelimitImage.repository [default: REPOSITORY_NAME/postgresql] Envoy Rate Limit image repository
+## @skip ratelimitImage.tag Envoy Rate Limit image tag (immutable tags are recommended)
+## @param ratelimitImage.digest Envoy Rate Limit image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+## @param ratelimitImage.pullPolicy Rate Limit image pull policy
+##
+ratelimitImage:
+  registry: docker.io
+  repository: bitnami/envoy-ratelimit
+  tag: 2025.4.9-debian-12-r1
+  digest: ""
+  ## Specify a imagePullPolicy
+  ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
+  ##
+  pullPolicy: IfNotPresent
+## Bitnami Envoy image version
+## ref: https://hub.docker.com/r/bitnami/postgresql/tags/
+## @param envoyImage.registry [default: REGISTRY_NAME] Envoy image registry
+## @param envoyImage.repository [default: REPOSITORY_NAME/postgresql] Envoy image repository
+## @skip envoyImage.tag Envoy image tag (immutable tags are recommended)
+## @param envoyImage.digest Envoy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+##
+envoyImage:
+  registry: docker.io
+  repository: bitnami/envoy
+  tag: 1.34.0-debian-12-r0
+  digest: ""
+## @param replicaCount Number of Envoy Gateway replicas to deploy
+##
+replicaCount: 1
+## Configure extra options for Envoy Gateway containers' liveness and readiness probes
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+## @param livenessProbe.enabled Enable livenessProbe on Envoy Gateway containers
+## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+## @param livenessProbe.periodSeconds Period seconds for livenessProbe
+## @param livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+## @param livenessProbe.failureThreshold Failure threshold for livenessProbe
+## @param livenessProbe.successThreshold Success threshold for livenessProbe
+##
+livenessProbe:
+  enabled: true
+  initialDelaySeconds: 5
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 5
+  successThreshold: 1
+## @param readinessProbe.enabled Enable readinessProbe on Envoy Gateway containers
+## @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+## @param readinessProbe.periodSeconds Period seconds for readinessProbe
+## @param readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+## @param readinessProbe.failureThreshold Failure threshold for readinessProbe
+## @param readinessProbe.successThreshold Success threshold for readinessProbe
+##
+readinessProbe:
+  enabled: true
+  initialDelaySeconds: 5
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 5
+  successThreshold: 1
+## @param startupProbe.enabled Enable startupProbe on Envoy Gateway containers
+## @param startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+## @param startupProbe.periodSeconds Period seconds for startupProbe
+## @param startupProbe.timeoutSeconds Timeout seconds for startupProbe
+## @param startupProbe.failureThreshold Failure threshold for startupProbe
+## @param startupProbe.successThreshold Success threshold for startupProbe
+##
+startupProbe:
+  enabled: false
+  initialDelaySeconds: 5
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 5
+  successThreshold: 1
+## @param customLivenessProbe Custom livenessProbe that overrides the default one
+##
+customLivenessProbe: {}
+## @param customReadinessProbe Custom readinessProbe that overrides the default one
+##
+customReadinessProbe: {}
+## @param customStartupProbe Custom startupProbe that overrides the default one
+##
+customStartupProbe: {}
+## @param watchAllNamespaces Watch for envoy-gateway resources in all namespaces
+##
+watchAllNamespaces: true
+## @param watchNamespaces [array] Watch for envoy-gateway resources in the given namespaces
+##
+watchNamespaces: []
+## @param logLevel Set logging level
+##
+logLevel: "info"
+## @param exposeAdmin Expose admin port
+##
+exposeAdmin: false
+## @param controllerName Gateway Controller name
+##
+controllerName: gateway.envoyproxy.io/gatewayclass-controller
+## @param containerPorts.admin Container port for the admin interface
+##
+containerPorts:
+  admin: 19000
+## @param extraContainerPorts Optionally specify extra list of additional ports for Envoy Gateway container
+## e.g:
+## extraContainerPorts:
+##   - name: myservice
+##     containerPort: 9090
+##
+extraContainerPorts: []
+## @param overrideConfiguration Add configuration settings to a configmap
+## Ref: https://gateway.envoyproxy.io/docs/tasks/operations/
+##
+overrideConfiguration: {}
+## @param existingConfigMap Name of a ConfigMap containing the operator configuration
+## Ref: https://gateway.envoyproxy.io/docs/tasks/operations/
+##
+existingConfigMap: ""
+## @param existingTLSSecret Name of a Secret containing the control plane
+## TODO: Review broken links
+## Ref: https://gateway.envoyproxy.io/docs/tasks/operations/
+##
+existingTLSSecret: ""
+## Envoy Gateway resource requests and limits
+## ref: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
+## @param resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
+## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+##
+resourcesPreset: "nano"
+## @param resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+## Example:
+## resources:
+##   requests:
+##     cpu: 2
+##     memory: 512Mi
+##   limits:
+##     cpu: 3
+##     memory: 1024Mi
+##
+resources: {}
+## Configure Pods Security Context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+## @param podSecurityContext.enabled Enabled Envoy Gateway pods' Security Context
+## @param podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+## @param podSecurityContext.sysctls Set kernel settings using the sysctl interface
+## @param podSecurityContext.supplementalGroups Set filesystem extra groups
+## @param podSecurityContext.fsGroup Set Envoy Gateway pod's Security Context fsGroup
+##
+podSecurityContext:
+  enabled: true
+  fsGroupChangePolicy: Always
+  sysctls: []
+  supplementalGroups: []
+  fsGroup: 1001
+## Configure Container Security Context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+## @param containerSecurityContext.enabled Enabled containers' Security Context
+## @param containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+## @param containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+## @param containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+## @param containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+## @param containerSecurityContext.privileged Set container's Security Context privileged
+## @param containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+## @param containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+## @param containerSecurityContext.capabilities.drop List of capabilities to be dropped
+## @param containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
+##
+containerSecurityContext:
+  enabled: true
+  seLinuxOptions: {}
+  runAsUser: 1001
+  runAsGroup: 1001
+  runAsNonRoot: true
+  privileged: false
+  readOnlyRootFilesystem: true
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop: ["ALL"]
+  seccompProfile:
+    type: "RuntimeDefault"
+## @param command Override default container command (useful when using custom images)
+##
+command: []
+## @param args Override default container args (useful when using custom images)
+##
+args: []
+## @param automountServiceAccountToken Mount Service Account token in pod
+##
+automountServiceAccountToken: true
+## @param hostAliases Envoy Gateway pods host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases: []
+## @param podLabels Extra labels for Envoy Gateway pods
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+##
+podLabels: {}
+## @param podAnnotations Annotations for Envoy Gateway pods
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+##
+podAnnotations: {}
+## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+##
+podAffinityPreset: ""
+## @param podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+##
+podAntiAffinityPreset: soft
+## Pod Disruption Budget configuration
+## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+## @param pdb.create Enable/disable a Pod Disruption Budget creation
+## @param pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+## @param pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+##
+pdb:
+  create: true
+  minAvailable: ""
+  maxUnavailable: ""
+## Node affinity preset
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+##
+nodeAffinityPreset:
+  ## @param nodeAffinityPreset.type Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+  ##
+  type: ""
+  ## @param nodeAffinityPreset.key Node label key to match. Ignored if `affinity` is set
+  ##
+  key: ""
+  ## @param nodeAffinityPreset.values Node label values to match. Ignored if `affinity` is set
+  ## E.g.
+  ## values:
+  ##   - e2e-az1
+  ##   - e2e-az2
+  ##
+  values: []
+## @param affinity Affinity for Envoy Gateway pods assignment
+## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+## NOTE: `podAffinityPreset`, `podAntiAffinityPreset`, and `nodeAffinityPreset` will be ignored when it's set
+##
+affinity: {}
+## @param nodeSelector Node labels for Envoy Gateway pods assignment
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/assign-pods-nodes/
+##
+nodeSelector: {}
+## @param tolerations Tolerations for Envoy Gateway pods assignment
+## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+##
+tolerations: []
+## @param updateStrategy.type Envoy Gateway statefulset strategy type
+## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+##
+updateStrategy:
+  ## StrategyType
+  ## Can be set to RollingUpdate or OnDelete
+  ##
+  type: RollingUpdate
+## @param priorityClassName Envoy Gateway pods' priorityClassName
+##
+priorityClassName: ""
+## @param topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
+## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+##
+topologySpreadConstraints: []
+## @param schedulerName Name of the k8s scheduler (other than default) for Envoy Gateway pods
+## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+##
+schedulerName: ""
+## @param terminationGracePeriodSeconds Seconds Redmine pod needs to terminate gracefully
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+##
+terminationGracePeriodSeconds: ""
+## @param lifecycleHooks for the Envoy Gateway container(s) to automate configuration before or after startup
+##
+lifecycleHooks: {}
+## @param extraEnvVars Array with extra environment variables to add to Envoy Gateway nodes
+## e.g:
+## extraEnvVars:
+##   - name: FOO
+##     value: "bar"
+##
+extraEnvVars: []
+## @param extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Envoy Gateway nodes
+##
+extraEnvVarsCM: ""
+## @param extraEnvVarsSecret Name of existing Secret containing extra env vars for Envoy Gateway nodes
+##
+extraEnvVarsSecret: ""
+## @param extraVolumes Optionally specify extra list of additional volumes for the Envoy Gateway pod(s)
+##
+extraVolumes: []
+## @param extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Envoy Gateway container(s)
+##
+extraVolumeMounts: []
+## @param sidecars Add additional sidecar containers to the Envoy Gateway pod(s)
+## e.g:
+## sidecars:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
+##
+sidecars: []
+## @param initContainers Add additional init containers to the Envoy Gateway pod(s)
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+## e.g:
+## initContainers:
+##  - name: your-image-name
+##    image: your-image
+##    imagePullPolicy: Always
+##    command: ['sh', '-c', 'echo "hello world"']
+##
+initContainers: []
+
+## Autoscaling configuration
+## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
+##
+autoscaling:
+  vpa:
+    ## @param autoscaling.vpa.enabled Enable VPA
+    ##
+    enabled: false
+    ## @param autoscaling.vpa.annotations Annotations for VPA resource
+    ##
+    annotations: {}
+    ## @param autoscaling.vpa.controlledResources VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory
+    ##
+    controlledResources: []
+    ## @param autoscaling.vpa.maxAllowed VPA Max allowed resources for the pod
+    ## cpu: 200m
+    ## memory: 100Mi
+    maxAllowed: {}
+    ## @param autoscaling.vpa.minAllowed VPA Min allowed resources for the pod
+    ## cpu: 200m
+    ## memory: 100Mi
+    minAllowed: {}
+    updatePolicy:
+      ## @param autoscaling.vpa.updatePolicy.updateMode Autoscaling update policy Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod
+      ## Possible values are "Off", "Initial", "Recreate", and "Auto".
+      ##
+      updateMode: Auto
+  hpa:
+    ## @param autoscaling.hpa.enabled Enable autoscaling for Envoy Gateway
+    ##
+    enabled: false
+    ## @param autoscaling.hpa.minReplicas Minimum number of Envoy Gateway replicas
+    ##
+    minReplicas: ""
+    ## @param autoscaling.hpa.maxReplicas Maximum number of Envoy Gateway replicas
+    ##
+    maxReplicas: ""
+    ## @param autoscaling.hpa.targetCPU Target CPU utilization percentage
+    ##
+    targetCPU: ""
+    ## @param autoscaling.hpa.targetMemory Target Memory utilization percentage
+    ##
+    targetMemory: ""
+## @section Envoy Gateway Traffic Exposure Parameters
+##
+service:
+  ## @param service.type Envoy Gateway service type
+  ##
+  type: ClusterIP
+  ## @param service.ports.admin Envoy Gateway service admin port
+  ## @param service.ports.metrics Envoy Gateway service metrics port
+  ##
+  ports:
+    admin: 19000
+    metrics: 19001
+  ## Node ports to expose
+  ## @param service.nodePorts.grpc Node port for grpc
+  ## @param service.nodePorts.ratelimit Node port for rate limit
+  ## @param service.nodePorts.wasm Node port for wasm
+  ## @param service.nodePorts.metrics Node port for metrics
+  ## @param service.nodePorts.admin Node port for admin
+  ## NOTE: choose port between <30000-32767>
+  ##
+  nodePorts:
+    grpc: ""
+    ratelimit: ""
+    wasm: ""
+    metrics: ""
+    admin: ""
+  ## @param service.clusterIP Envoy Gateway service Cluster IP
+  ## e.g.:
+  ## clusterIP: None
+  ##
+  clusterIP: ""
+  ## @param service.loadBalancerIP Envoy Gateway service Load Balancer IP
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+  ##
+  loadBalancerIP: ""
+  ## @param service.loadBalancerSourceRanges Envoy Gateway service Load Balancer sources
+  ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+  ## e.g:
+  ## loadBalancerSourceRanges:
+  ##   - 10.10.10.0/24
+  ##
+  loadBalancerSourceRanges: []
+  ## @param service.externalTrafficPolicy Envoy Gateway service external traffic policy
+  ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-web-source-ip
+  ##
+  externalTrafficPolicy: Cluster
+  ## @param service.labels [object] Labels for the service
+  ##
+  labels: {}
+  ## @param service.annotations Additional custom annotations for Envoy Gateway service
+  ##
+  annotations: {}
+  ## @param service.extraPorts Extra ports to expose in Envoy Gateway service (normally used with the `sidecars` value)
+  ##
+  extraPorts: []
+  ## @param service.sessionAffinity Control where web requests go, to the same pod or round-robin
+  ## Values: WebIP or None
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
+  ##
+  sessionAffinity: None
+  ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
+  ## sessionAffinityConfig:
+  ##   webIP:
+  ##     timeoutSeconds: 300
+  ##
+  sessionAffinityConfig: {}
+## Network Policies
+## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+##
+networkPolicy:
+  ## @param networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+  ##
+  enabled: true
+  ## @param networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
+  ##
+  kubeAPIServerPorts: [443, 6443, 8443]
+  ## @param networkPolicy.allowExternal Don't require server label for connections
+  ## The Policy model to apply. When set to false, only pods with the correct
+  ## server label will have network access to the ports server is listening
+  ## on. When true, server will accept connections from any source
+  ## (with the correct destination port).
+  ##
+  allowExternal: true
+  ## @param networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+  ##
+  allowExternalEgress: true
+  ## @param networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+  ## e.g:
+  ## extraIngress:
+  ##   - ports:
+  ##       - port: 1234
+  ##     from:
+  ##       - podSelector:
+  ##           - matchLabels:
+  ##               - role: frontend
+  ##       - podSelector:
+  ##           - matchExpressions:
+  ##               - key: role
+  ##                 operator: In
+  ##                 values:
+  ##                   - frontend
+  extraIngress: []
+  ## @param networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+  ## e.g:
+  ## extraEgress:
+  ##   - ports:
+  ##       - port: 1234
+  ##     to:
+  ##       - podSelector:
+  ##           - matchLabels:
+  ##               - role: frontend
+  ##       - podSelector:
+  ##           - matchExpressions:
+  ##               - key: role
+  ##                 operator: In
+  ##                 values:
+  ##                   - frontend
+  ##
+  extraEgress: []
+  ## @param networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+  ## @param networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+  ##
+  ingressNSMatchLabels: {}
+  ingressNSPodMatchLabels: {}
+
+## @section Envoy Gateway RBAC Parameters
+##
+
+## RBAC configuration
+##
+rbac:
+  ## @param rbac.create Specifies whether RBAC resources should be created
+  ##
+  create: true
+  ## @param rbac.rules Custom RBAC rules to set
+  ## e.g:
+  ## rules:
+  ##   - apiGroups:
+  ##       - ""
+  ##     resources:
+  ##       - pods
+  ##     verbs:
+  ##       - get
+  ##       - list
+  ##
+  rules: []
+## ServiceAccount configuration
+##
+serviceAccount:
+  ## @param serviceAccount.create Specifies whether a ServiceAccount should be created
+  ##
+  create: true
+  ## @param serviceAccount.name The name of the ServiceAccount to use.
+  ## If not set and create is true, a name is generated using the common.names.fullname template
+  ##
+  name: ""
+  ## @param serviceAccount.annotations Additional Service Account annotations (evaluated as a template)
+  ##
+  annotations: {}
+  ## @param serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+  ##
+  automountServiceAccountToken: false
+
+## @section Certificate Job parameters
+##
+certgen:
+  ## @param certgen.enabled Enables the Certificate Generation init job, which is in charge of initialising the database, admin user credentials, DB upgrade, etc.
+  ##
+  enabled: true
+  ## @param certgen.extraEnvVars Array with extra environment variables to add to Certificate Generation init-job containers
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param certgen.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Certificate Generation init-job containers
+  ##
+  extraEnvVarsCM: ""
+  ## @param certgen.extraEnvVarsSecret Name of existing Secret containing extra env vars for Certificate Generation init-job containers
+  ##
+  extraEnvVarsSecret: ""
+  ## @param certgen.extraVolumes Optionally specify extra list of additional volumes for the Certificate Generation init-job pods
+  ##
+  extraVolumes: []
+  ## @param certgen.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Certificate Generation init-job containers
+  ##
+  extraVolumeMounts: []
+  ## @param certgen.tolerations Tolerations for certgen pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param certgen.sidecars Add additional sidecar containers to the Certificate Generation init-job pods
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param certgen.initContainers Add additional init containers to the Certificate Generation init-job pods
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
+  ## @param certgen.affinity Affinity for certgen pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `podAffinityPreset`, `podAntiAffinityPreset`, and `nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param certgen.nodeSelector Node labels for certgen pods assignment
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/assign-pods-nodes/
+  ##
+  nodeSelector: {}
+  ## @param certgen.command Override default Certificate Generation init-job container command (useful when using custom images)
+  ##
+  command: []
+  ## @param certgen.args Override default Certificate Generation init-job container args (useful when using custom images)
+  ##
+  args: []
+  ## Certificate Generation init-job resource requests and limits
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param certgen.resourcesPreset Set Certificate Generation init-job container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if certgen.resources is set (certgen.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "nano"
+  ## @param certgen.resources Set Certificate Generation init-job container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
+  ## Configure extra options for certgen containers' liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param certgen.livenessProbe.enabled Enable livenessProbe on certgen containers
+  ## @param certgen.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param certgen.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param certgen.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param certgen.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param certgen.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 5
+    successThreshold: 1
+  ## @param certgen.readinessProbe.enabled Enable readinessProbe on certgen containers
+  ## @param certgen.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param certgen.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param certgen.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param certgen.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param certgen.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 5
+    successThreshold: 1
+  ## @param certgen.startupProbe.enabled Enable startupProbe on certgen containers
+  ## @param certgen.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param certgen.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param certgen.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param certgen.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param certgen.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 5
+    successThreshold: 1
+  ## @param certgen.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param certgen.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param certgen.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param certgen.podSecurityContext.enabled Enable Certificate Generation init-job pods' Security Context
+  ## @param certgen.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy for Certificate Generation init-job pods
+  ## @param certgen.podSecurityContext.sysctls Set kernel settings using the sysctl interface for Certificate Generation init-job pods
+  ## @param certgen.podSecurityContext.supplementalGroups Set filesystem extra groups for Certificate Generation init-job pods
+  ## @param certgen.podSecurityContext.fsGroup Set fsGroup in Certificate Generation init-job pods' Security Context
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
+    fsGroup: 1001
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param certgen.containerSecurityContext.enabled Enabled Certificate Generation init-job container' Security Context
+  ## @param certgen.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in Certificate Generation init-job container
+  ## @param certgen.containerSecurityContext.runAsUser Set runAsUser in Certificate Generation init-job container' Security Context
+  ## @param certgen.containerSecurityContext.runAsGroup Set runAsGroup in Certificate Generation init-job container' Security Context
+  ## @param certgen.containerSecurityContext.runAsNonRoot Set runAsNonRoot in Certificate Generation init-job container' Security Context
+  ## @param certgen.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in Certificate Generation init-job container' Security Context
+  ## @param certgen.containerSecurityContext.privileged Set privileged in Certificate Generation init-job container' Security Context
+  ## @param certgen.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in Certificate Generation init-job container' Security Context
+  ## @param certgen.containerSecurityContext.capabilities.drop List of capabilities to be dropped in Certificate Generation init-job container
+  ## @param certgen.containerSecurityContext.seccompProfile.type Set seccomp profile in Certificate Generation init-job container
+  ##
+  containerSecurityContext:
+    enabled: true
+    seLinuxOptions: {}
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    readOnlyRootFilesystem: false
+    privileged: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
+  ## @param certgen.backoffLimit set backoff limit of the job
+  ##
+  backoffLimit: 10
+  ## @param certgen.parallelism set parallelism limit of the job
+  ##
+  parallelism: 1
+  ## @param certgen.completions set completions limit of the job
+  ##
+  completions: 1
+  ## @param certgen.automountServiceAccountToken Mount Service Account token in Certificate Generation init-job pods
+  ##
+  automountServiceAccountToken: true
+  ## @param certgen.hostAliases Certificate Generation init-job pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param certgen.annotations [object] Annotations for Certificate Generation object
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  annotations:
+    helm.sh/hook: pre-install, pre-upgrade
+    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+    # This should be executed after the minio provisioning job
+    helm.sh/hook-weight: "10"
+  ## @param certgen.labels Extra labels for Certificate Generation
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  labels: {}
+  ## @param certgen.podLabels Extra labels for Certificate Generation init-job pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param certgen.podAnnotations Annotations for Certificate Generation init-job pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## ServiceAccount configuration
+  ##
+  serviceAccount:
+    ## @param certgen.serviceAccount.create Specifies whether a ServiceAccount should be created
+    ##
+    create: true
+    ## @param certgen.serviceAccount.name The name of the ServiceAccount to use.
+    ## If not set and create is true, a name is generated using the common.names.fullname template
+    ##
+    name: ""
+    ## @param certgen.serviceAccount.annotations Additional Service Account annotations (evaluated as a template)
+    ##
+    annotations: {}
+    ## @param certgen.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+    ##
+    automountServiceAccountToken: false
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param certgen.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param certgen.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
+    ##
+    kubeAPIServerPorts: [443, 6443, 8443]
+    ## @param certgen.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param certgen.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param certgen.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param certgen.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy (ignored if allowExternalEgress=true)
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+
+## @section Envoy Gateway Metrics Parameters
+##
+
+## Prometheus metrics
+##
+metrics:
+  ## @param metrics.enabled Enable the export of Prometheus metrics
+  ##
+  enabled: false
+  ## @param metrics.annotations Add extra annotations to the resources
+  ##
+  annotations: {}
+  ## Prometheus Operator ServiceMonitor configuration
+  ##
+  serviceMonitor:
+    ## @param metrics.serviceMonitor.enabled if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)
+    ##
+    enabled: false
+    ## @param metrics.serviceMonitor.namespace Namespace in which Prometheus is running
+    ##
+    namespace: ""
+    ## @param metrics.serviceMonitor.annotations Additional custom annotations for the ServiceMonitor
+    ##
+    annotations: {}
+    ## @param metrics.serviceMonitor.labels Extra labels for the ServiceMonitor
+    ##
+    labels: {}
+    ## @param metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in Prometheus
+    ##
+    jobLabel: ""
+    ## @param metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
+    ##
+    honorLabels: false
+    ## @param metrics.serviceMonitor.interval Interval at which metrics should be scraped.
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    ## e.g:
+    ## interval: 10s
+    ##
+    interval: ""
+    ## @param metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    ## e.g:
+    ## scrapeTimeout: 10s
+    ##
+    scrapeTimeout: ""
+    ## @param metrics.serviceMonitor.metricRelabelings Specify additional relabeling of metrics
+    ##
+    metricRelabelings: []
+    ## @param metrics.serviceMonitor.relabelings Specify general relabeling
+    ##
+    relabelings: []
+    ## @param metrics.serviceMonitor.selector Prometheus instance selector labels
+    ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
+    ## selector:
+    ##   prometheus: my-prometheus
+    ##
+    selector: {}

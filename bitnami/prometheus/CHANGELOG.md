@@ -1,8 +1,8 @@
 # Changelog
 
-## 2.0.0 (2025-04-29)
+## 2.0.2 (2025-05-02)
 
-* [bitnami/prometheus] Release 2.0.0 ([#33240](https://github.com/bitnami/charts/pull/33240))
+* [bitnami/prometheus] Release 2.0.2 ([#33312](https://github.com/bitnami/charts/pull/33312))
 
 ## <small>1.4.10 (2025-04-02)</small>
 

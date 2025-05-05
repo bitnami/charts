@@ -1,8 +1,13 @@
 # Changelog
 
-## 2.3.8 (2025-04-01)
+## 2.3.9 (2025-05-01)
 
-* [bitnami/kiam] Release 2.3.8 ([#32744](https://github.com/bitnami/charts/pull/32744))
+* [bitnami/kiam] Release 2.3.9 ([#33294](https://github.com/bitnami/charts/pull/33294))
+
+## <small>2.3.8 (2025-04-01)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/kiam] Release 2.3.8 (#32744) ([e2ffb1f](https://github.com/bitnami/charts/commit/e2ffb1f3034dec24b40b563300a41b8c441c56e9)), closes [#32744](https://github.com/bitnami/charts/issues/32744)
 
 ## <small>2.3.7 (2025-03-05)</small>
 
