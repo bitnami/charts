@@ -1,6 +1,6 @@
 # Changelog
 
-## 3.1.2 (2025-04-30)
+## 3.1.2 (2025-05-05)
 
 * [bitnami/fluent-bit] Fix mounting of extraFiles ([#33261](https://github.com/bitnami/charts/pull/33261))
 
