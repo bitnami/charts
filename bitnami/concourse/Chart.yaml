@@ -2,14 +2,14 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
-  tanzuCategory: application
   category: Infrastructure
-  licenses: Apache-2.0
   images: |
     - name: concourse
-      image: docker.io/bitnami/concourse:7.13.1-debian-12-r5
+      image: docker.io/bitnami/concourse:7.13.1-debian-12-r6
     - name: os-shell
       image: docker.io/bitnami/os-shell:12-debian-12-r43
+  licenses: Apache-2.0
+  tanzuCategory: application
 apiVersion: v2
 appVersion: 7.13.1
 dependencies:
@@ -22,7 +22,9 @@ dependencies:
   tags:
   - bitnami-common
   version: 2.x.x
-description: Concourse is an automation system written in Go. It is most commonly used for CI/CD, and is built to scale to any kind of automation pipeline, from simple to complex.
+description: Concourse is an automation system written in Go. It is most commonly
+  used for CI/CD, and is built to scale to any kind of automation pipeline, from simple
+  to complex.
 home: https://bitnami.com
 icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/concourse/img/concourse-stack-220x234.png
 keywords:
@@ -38,4 +40,4 @@ maintainers:
 name: concourse
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/concourse
-version: 5.1.26
+version: 5.1.27
