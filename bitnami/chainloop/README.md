@@ -22,7 +22,7 @@ This chart bootstraps a [Chainloop](https://github.com/chainloop-dev/chainloop) 
 
 ## Prerequisites
 
-- Kubernetes 1.19+
+- Kubernetes 1.23+
 - Helm 3.2.0+
 - PV provisioner support in the underlying infrastructure (If built-in PostgreSQL is enabled)
 
@@ -1027,6 +1027,10 @@ service_registration "kubernetes" {}` |
 | `dex.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `dex.pdb.minAvailable` and `dex.pdb.maxUnavailable` are empty.                                                                    | `""`                                                                                     |
 
 ## Upgrading
+
+### To 3.0.0
+
+This version increases minimum Kubernetes version to 1.23. Follow the [official docs](https://kubernetes.io/docs/tasks/administer-cluster/cluster-upgrade/) to upgrade your Kubernetes cluster. If the Kubernetes version is already >=1.23 no major issues are expected during the upgrade operation.
 
 ### To 2.1.0
 
