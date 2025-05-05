@@ -14,7 +14,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 data:
-  {{- $savedObjectsUrl := printf "localhost:%d%s/api/saved_objects/_import" (int .Values.containerPorts.http) (include "kibana.basePath" .)  }}
+  {{- $savedObjectsUrl := printf "localhost:%d%s/api/saved_objects/_import%s" (int .Values.containerPorts.http) (include "kibana.basePath" .) (ternary "?overwrite=true" "" .Values.savedObjects.SavedObjectsOverWrite) }}
   import-saved-objects.sh: |
     #!/bin/bash
     echo "==> Saved objects import"
