@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.0.2 (2025-05-03)
+## 2.0.2 (2025-05-05)
 
 * [bitnami/superset] fix ingress with extraHosts failed to deploy ([#33052](https://github.com/bitnami/charts/pull/33052))
 
