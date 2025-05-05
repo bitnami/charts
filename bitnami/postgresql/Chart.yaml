@@ -9,7 +9,7 @@ annotations:
     - name: postgres-exporter
       image: docker.io/bitnami/postgres-exporter:0.17.1-debian-12-r6
     - name: postgresql
-      image: docker.io/bitnami/postgresql:17.4.0-debian-12-r18
+      image: docker.io/bitnami/postgresql:17.4.0-debian-12-r19
   licenses: Apache-2.0
   tanzuCategory: service
 apiVersion: v2
