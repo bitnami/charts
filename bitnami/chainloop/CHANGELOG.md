@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.2.24 (2025-04-24)
+## 3.0.0 (2025-05-05)
 
-* [bitnami/chainloop] Release 2.2.24 ([#33154](https://github.com/bitnami/charts/pull/33154))
+* [bitnami/chainloop] chore!: :recycle: :boom: :arrow_up: Bump k8s requirements to 1.23 ([#33322](https://github.com/bitnami/charts/pull/33322))
+
+## <small>2.2.24 (2025-04-24)</small>
+
+* [bitnami/chainloop] Release 2.2.24 (#33154) ([b0dcaf6](https://github.com/bitnami/charts/commit/b0dcaf6f4452fd21550adfe50805e6748e3fa07d)), closes [#33154](https://github.com/bitnami/charts/issues/33154)
 
 ## <small>2.2.23 (2025-04-01)</small>
 
