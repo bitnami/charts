@@ -1,6 +1,6 @@
 # Changelog
 
-## 12.0.1 (2025-05-01)
+## 12.0.1 (2025-05-05)
 
 * [bitnami/kibana] Add overwrite parameter to import saved objects managing ([#33282](https://github.com/bitnami/charts/pull/33282))
 
