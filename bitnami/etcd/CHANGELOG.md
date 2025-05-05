@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.3.1 (2025-05-01)
+## 11.3.2 (2025-05-05)
 
-* [bitnami/etcd] Release 11.3.1 ([#33289](https://github.com/bitnami/charts/pull/33289))
+* [bitnami/etcd]fix(cronjob-defrag):Remove JWT restrictions ([#33321](https://github.com/bitnami/charts/pull/33321))
+
+## <small>11.3.1 (2025-05-01)</small>
+
+* [bitnami/etcd] Release 11.3.1 (#33289) ([831c6a5](https://github.com/bitnami/charts/commit/831c6a597f8d157f8e7e25e3d52872860fc49691)), closes [#33289](https://github.com/bitnami/charts/issues/33289)
 
 ## 11.3.0 (2025-04-23)
 
