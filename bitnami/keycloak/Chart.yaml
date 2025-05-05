@@ -2,16 +2,16 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
-  tanzuCategory: application
   category: DeveloperTools
-  licenses: Apache-2.0
   images: |
     - name: keycloak
-      image: docker.io/bitnami/keycloak:26.2.2-debian-12-r0
+      image: docker.io/bitnami/keycloak:26.2.3-debian-12-r0
     - name: keycloak-config-cli
       image: docker.io/bitnami/keycloak-config-cli:6.4.0-debian-12-r5
+  licenses: Apache-2.0
+  tanzuCategory: application
 apiVersion: v2
-appVersion: 26.2.2
+appVersion: 26.2.3
 dependencies:
 - condition: postgresql.enabled
   name: postgresql
@@ -22,7 +22,9 @@ dependencies:
   tags:
   - bitnami-common
   version: 2.x.x
-description: Keycloak is a high performance Java-based identity and access management solution. It lets developers add an authentication layer to their applications with minimum effort.
+description: Keycloak is a high performance Java-based identity and access management
+  solution. It lets developers add an authentication layer to their applications with
+  minimum effort.
 home: https://bitnami.com
 icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/keycloak/img/keycloak-stack-220x234.png
 keywords:
@@ -34,4 +36,4 @@ maintainers:
 name: keycloak
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/keycloak
-version: 24.6.3
+version: 24.6.4
