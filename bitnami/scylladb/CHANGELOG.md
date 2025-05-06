@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.0.1 (2025-05-01)
+## 4.0.2 (2025-05-06)
 
-* [bitnami/scylladb] Release 4.0.1 ([#33283](https://github.com/bitnami/charts/pull/33283))
+* [bitnami/scylladb] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33432](https://github.com/bitnami/charts/pull/33432))
+
+## <small>4.0.1 (2025-05-01)</small>
+
+* [bitnami/scylladb] Release 4.0.1 (#33283) ([379064a](https://github.com/bitnami/charts/commit/379064a0cd45ee361b356b558e18e305f687e528)), closes [#33283](https://github.com/bitnami/charts/issues/33283)
 
 ## 4.0.0 (2025-04-15)
 
