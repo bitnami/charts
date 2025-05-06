@@ -401,7 +401,7 @@ See [#15075](https://github.com/bitnami/charts/issues/15075)
 | `global.security.allowInsecureImages`                 | Allows skipping image verification                                                                                                                                                                                                                                                                                                                                  | `false` |
 | `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto`  |
 
-### Redis&reg; Cluster Common parameters
+### Redis(R) Cluster Common parameters
 
 | Name                                                        | Description                                                                                                                                                                                                                                           | Value                           |
 | ----------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------- |
@@ -609,7 +609,7 @@ See [#15075](https://github.com/bitnami/charts/issues/15075)
 
 | Name                                                      | Description                                                                                                | Value          |
 | --------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | -------------- |
-| `cluster.init`                                            | Enable the initialization of the Redis&reg; Cluster                                                        | `true`         |
+| `cluster.init`                                            | Enable the initialization of the Redis(R) Cluster                                                          | `true`         |
 | `cluster.nodes`                                           | The number of master nodes should always be >= 3, otherwise cluster creation will fail                     | `6`            |
 | `cluster.replicas`                                        | Number of replicas for every master in the cluster                                                         | `1`            |
 | `cluster.externalAccess.enabled`                          | Enable access to the Redis                                                                                 | `false`        |
@@ -621,7 +621,7 @@ See [#15075](https://github.com/bitnami/charts/issues/15075)
 | `cluster.externalAccess.service.loadBalancerIP`           | Array of load balancer IPs for each Redis&reg; node. Length must be the same as cluster.nodes              | `[]`           |
 | `cluster.externalAccess.service.loadBalancerClass`        | Load Balancer class if service type is `LoadBalancer` (optional, cloud specific)                           | `""`           |
 | `cluster.externalAccess.service.loadBalancerSourceRanges` | Service Load Balancer sources                                                                              | `[]`           |
-| `cluster.externalAccess.service.annotations`              | Annotations to add to the services used to expose every Pod of the Redis&reg; Cluster                      | `{}`           |
+| `cluster.externalAccess.service.annotations`              | Annotations to add to the services used to expose every Pod of the Redis(R) Cluster                        | `{}`           |
 | `cluster.update.addNodes`                                 | Boolean to specify if you want to add nodes after the upgrade                                              | `false`        |
 | `cluster.update.currentNumberOfNodes`                     | Number of currently deployed Redis&reg; nodes                                                              | `6`            |
 | `cluster.update.currentNumberOfReplicas`                  | Number of currently deployed Redis&reg; replicas                                                           | `1`            |
