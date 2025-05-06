@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.2.11 (2025-05-02)
+## 2.2.12 (2025-05-06)
 
-* [bitnami/multus-cni] Release 2.2.11 ([#33298](https://github.com/bitnami/charts/pull/33298))
+* [bitnami/multus-cni] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33408](https://github.com/bitnami/charts/pull/33408))
+
+## <small>2.2.11 (2025-05-02)</small>
+
+* [bitnami/multus-cni] Release 2.2.11 (#33298) ([d858725](https://github.com/bitnami/charts/commit/d85872573d1ebdcbecdce6a63b7e72eb6dc0ce3f)), closes [#33298](https://github.com/bitnami/charts/issues/33298)
 
 ## <small>2.2.10 (2025-04-02)</small>
 
