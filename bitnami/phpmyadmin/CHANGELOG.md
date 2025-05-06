@@ -1,8 +1,12 @@
 # Changelog
 
-## 18.1.6 (2025-04-22)
+## 18.1.7 (2025-05-06)
 
-* [bitnami/phpmyadmin] Release 18.1.6 ([#33105](https://github.com/bitnami/charts/pull/33105))
+* [bitnami/phpmyadmin] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33420](https://github.com/bitnami/charts/pull/33420))
+
+## <small>18.1.6 (2025-04-22)</small>
+
+* [bitnami/phpmyadmin] Release 18.1.6 (#33105) ([49fb6e8](https://github.com/bitnami/charts/commit/49fb6e8fb842f28432f366965a2f0862be0c1907)), closes [#33105](https://github.com/bitnami/charts/issues/33105)
 
 ## <small>18.1.5 (2025-03-23)</small>
 
