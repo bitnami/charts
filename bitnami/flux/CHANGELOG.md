@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.4.10 (2025-05-01)
+## 2.4.11 (2025-05-06)
 
-* [bitnami/flux] Release 2.4.10 ([#33290](https://github.com/bitnami/charts/pull/33290))
+* [bitnami/flux] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33363](https://github.com/bitnami/charts/pull/33363))
+
+## <small>2.4.10 (2025-05-01)</small>
+
+* [bitnami/flux] Release 2.4.10 (#33290) ([a3e199c](https://github.com/bitnami/charts/commit/a3e199cd22b6fd081c7bc1b79ed38a8e6d89d7e9)), closes [#33290](https://github.com/bitnami/charts/issues/33290)
 
 ## <small>2.4.9 (2025-04-01)</small>
 
