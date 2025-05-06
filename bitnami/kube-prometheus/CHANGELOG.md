@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.1.7 (2025-04-30)
+## 11.1.8 (2025-05-06)
 
-* [bitnami/kube-prometheus] Release 11.1.7 ([#33238](https://github.com/bitnami/charts/pull/33238))
+* [bitnami/kube-prometheus] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33387](https://github.com/bitnami/charts/pull/33387))
+
+## <small>11.1.7 (2025-04-30)</small>
+
+* [bitnami/kube-prometheus] Release 11.1.7 (#33238) ([50ade8a](https://github.com/bitnami/charts/commit/50ade8aeceaa7346b83ad037d266a637d8f7439b)), closes [#33238](https://github.com/bitnami/charts/issues/33238)
 
 ## <small>11.1.6 (2025-04-23)</small>
 
