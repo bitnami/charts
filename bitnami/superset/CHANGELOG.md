@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.0.1 (2025-04-28)
+## 2.0.2 (2025-05-06)
 
-* [bitnami/superset] Release 2.0.1 ([#33222](https://github.com/bitnami/charts/pull/33222))
+* [bitnami/superset] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33439](https://github.com/bitnami/charts/pull/33439))
+
+## <small>2.0.1 (2025-04-28)</small>
+
+* [bitnami/superset] Release 2.0.1 (#33222) ([20821a5](https://github.com/bitnami/charts/commit/20821a5961f08a9db2dd9ecb2ac62a1cfad60c51)), closes [#33222](https://github.com/bitnami/charts/issues/33222)
 
 ## 2.0.0 (2025-04-04)
 
