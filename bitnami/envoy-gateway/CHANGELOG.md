@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.1.2 (2025-05-05)
+## 0.1.3 (2025-05-06)
 
-* [bitnami/envoy-gateway] Release 0.1.2 ([#33319](https://github.com/bitnami/charts/pull/33319))
+* [bitnami/envoy-gateway] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33357](https://github.com/bitnami/charts/pull/33357))
+
+## <small>0.1.2 (2025-05-05)</small>
+
+* [bitnami/envoy-gateway] Release 0.1.2 (#33319) ([9653f11](https://github.com/bitnami/charts/commit/9653f11546f005c0e51c7589e0d29f2230f3debf)), closes [#33319](https://github.com/bitnami/charts/issues/33319)
 
 ## <small>0.1.1 (2025-05-02)</small>
 
