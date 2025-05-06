@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.9.1 (2025-04-09)
+## 1.9.2 (2025-05-06)
 
-* [bitnami/opensearch] Release 1.9.1 ([#32916](https://github.com/bitnami/charts/pull/32916))
+* [bitnami/opensearch] Release 1.9.2 ([#33452](https://github.com/bitnami/charts/pull/33452))
+
+## <small>1.9.1 (2025-04-09)</small>
+
+* [bitnami/opensearch] Release 1.9.1 (#32916) ([a25c6c7](https://github.com/bitnami/charts/commit/a25c6c738c83407d2c29d61cd9bd48d97f29fb74)), closes [#32916](https://github.com/bitnami/charts/issues/32916)
 
 ## 1.9.0 (2025-04-04)
 
