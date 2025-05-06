@@ -1,8 +1,13 @@
 # Changelog
 
-## 6.4.9 (2025-04-02)
+## 6.4.10 (2025-05-02)
 
-* [bitnami/metallb] Release 6.4.9 ([#32750](https://github.com/bitnami/charts/pull/32750))
+* [bitnami/metallb] Release 6.4.10 ([#33297](https://github.com/bitnami/charts/pull/33297))
+
+## <small>6.4.9 (2025-04-02)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/metallb] Release 6.4.9 (#32750) ([2d75cde](https://github.com/bitnami/charts/commit/2d75cde070fb339d4635c2c77e0a63fdf6c76c86)), closes [#32750](https://github.com/bitnami/charts/issues/32750)
 
 ## <small>6.4.8 (2025-03-05)</small>
 

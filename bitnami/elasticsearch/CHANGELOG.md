@@ -1,8 +1,20 @@
 # Changelog
 
-## 21.6.2 (2025-04-22)
+## 22.0.1 (2025-04-30)
 
-* [bitnami/elasticsearch] tests: Enable security during testing ([#33100](https://github.com/bitnami/charts/pull/33100))
+* [bitnami/elasticsearch] Update kibana subchart ([#33256](https://github.com/bitnami/charts/pull/33256))
+
+## 22.0.0 (2025-04-29)
+
+* [bitnami/elasticsearch] Release 22.0.0 (#33246) ([5ff40ae](https://github.com/bitnami/charts/commit/5ff40ae91813f230cdf1e8b11e9ab5a3a1892417)), closes [#33246](https://github.com/bitnami/charts/issues/33246)
+
+## <small>21.6.3 (2025-04-28)</small>
+
+* [bitnami/elasticsearch] Release 21.6.3 (#33223) ([ea673bf](https://github.com/bitnami/charts/commit/ea673bfa7f91f385512dfa2dba42222fdc5e2210)), closes [#33223](https://github.com/bitnami/charts/issues/33223)
+
+## <small>21.6.2 (2025-04-22)</small>
+
+* [bitnami/elasticsearch] tests: Enable security during testing (#33100) ([6285807](https://github.com/bitnami/charts/commit/62858076100c5e868eb3022125d1e13df29b9339)), closes [#33100](https://github.com/bitnami/charts/issues/33100)
 
 ## <small>21.6.1 (2025-04-21)</small>
 

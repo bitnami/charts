@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.0.2 (2025-04-01)
+## 4.0.3 (2025-05-01)
 
-* [bitnami/grafana-tempo] Release 4.0.2 ([#32738](https://github.com/bitnami/charts/pull/32738))
+* [bitnami/grafana-tempo] Release 4.0.3 ([#33291](https://github.com/bitnami/charts/pull/33291))
+
+## <small>4.0.2 (2025-04-01)</small>
+
+* [bitnami/grafana-tempo] Release 4.0.2 (#32738) ([4f9b827](https://github.com/bitnami/charts/commit/4f9b827acb409ae1951a8a2e4c54324490c1edf1)), closes [#32738](https://github.com/bitnami/charts/issues/32738)
 
 ## <small>4.0.1 (2025-03-25)</small>
 

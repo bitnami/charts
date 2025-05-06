@@ -120,7 +120,7 @@ spec:
               exec:
                 command:
                   - /bin/bash
-                  - -c
+                  - -ec
                   - /opt/bitnami/scripts/start-scripts/prestop-redis.sh
           {{- end }}
           {{- end }}
@@ -132,7 +132,7 @@ spec:
           {{- else if .Values.replica.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.replica.command "context" $) | nindent 12 }}
           {{- else }}
-          command: ['/bin/bash', '-c']
+          command: ['/bin/bash', '-ec']
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
@@ -259,8 +259,8 @@ spec:
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.replica.startupProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command:
-                - sh
-                - -c
+                - /bin/bash
+                - -ec
                 - /health/ping_liveness_local.sh {{ .Values.replica.livenessProbe.timeoutSeconds }}
           {{- end }}
           {{- if .Values.replica.customLivenessProbe }}
@@ -274,8 +274,8 @@ spec:
             failureThreshold: {{ .Values.replica.livenessProbe.failureThreshold }}
             exec:
               command:
-                - sh
-                - -c
+                - /bin/bash
+                - -ec
                 - /health/ping_liveness_local.sh {{ .Values.replica.livenessProbe.timeoutSeconds }}
           {{- end }}
           {{- if .Values.replica.customReadinessProbe }}
@@ -289,8 +289,8 @@ spec:
             failureThreshold: {{ .Values.replica.readinessProbe.failureThreshold }}
             exec:
               command:
-                - sh
-                - -c
+                - /bin/bash
+                - -ec
                 - /health/ping_readiness_local.sh {{ .Values.replica.readinessProbe.timeoutSeconds }}
           {{- end }}
           {{- end }}
@@ -347,7 +347,7 @@ spec:
               exec:
                 command:
                   - /bin/bash
-                  - -c
+                  - -ec
                   - /opt/bitnami/scripts/start-scripts/prestop-sentinel.sh
           {{- end }}
           {{- end }}
@@ -359,7 +359,7 @@ spec:
           {{- else if .Values.sentinel.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.sentinel.command "context" $) | nindent 12 }}
           {{- else }}
-          command: ['/bin/bash', '-c']
+          command: ['/bin/bash', '-ec']
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
@@ -453,8 +453,8 @@ spec:
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.sentinel.startupProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command:
-                - sh
-                - -c
+                - /bin/bash
+                - -ec
                 - /health/ping_sentinel.sh {{ .Values.sentinel.livenessProbe.timeoutSeconds }}
           {{- end }}
           {{- if .Values.sentinel.customLivenessProbe }}
@@ -468,8 +468,8 @@ spec:
             failureThreshold: {{ .Values.sentinel.livenessProbe.failureThreshold }}
             exec:
               command:
-                - sh
-                - -c
+                - /bin/bash
+                - -ec
                 - /health/ping_sentinel.sh {{ .Values.sentinel.livenessProbe.timeoutSeconds }}
           {{- end }}
           {{- end }}
@@ -485,8 +485,8 @@ spec:
             failureThreshold: {{ .Values.sentinel.readinessProbe.failureThreshold }}
             exec:
               command:
-                - sh
-                - -c
+                - /bin/bash
+                - -ec
                 - /health/ping_sentinel.sh {{ .Values.sentinel.readinessProbe.timeoutSeconds }}
           {{- end }}
           {{- end }}
@@ -544,7 +544,7 @@ spec:
           {{- else }}
           command:
             - /bin/bash
-            - -c
+            - -ec
             - |
               {{- if and .Values.auth.enabled .Values.auth.usePasswordFiles }}
               export REDIS_PASSWORD="$(< $REDIS_PASSWORD_FILE)"

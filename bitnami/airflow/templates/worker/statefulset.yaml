@@ -114,6 +114,8 @@ spec:
               value: "worker"
             - name: AIRFLOW_EXECUTOR
               value: {{ include "airflow.worker.executor" . }}
+            - name: PYTHONPYCACHEPREFIX
+              value: "/opt/bitnami/airflow/venv/tmp"
             {{- if or (eq .Values.executor "CeleryExecutor") (eq .Values.executor "CeleryKubernetesExecutor") }}
             - name: REDIS_HOST
               value: {{ include "airflow.redis.host" . | quote }}
@@ -172,6 +174,13 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.worker.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.worker.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.worker.livenessProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: worker
+          {{- end }}
+          {{- if .Values.worker.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.worker.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.worker.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.worker.readinessProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command:
                 - sh
@@ -179,13 +188,6 @@ spec:
                 - |
                   . /opt/bitnami/airflow/venv/bin/activate && \
                   CONNECTION_CHECK_MAX_COUNT=0 python -m celery --app airflow.providers.celery.executors.celery_executor.app inspect ping -d celery@$(hostname)
-          {{- end }}
-          {{- if .Values.worker.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.worker.customReadinessProbe "context" $) | nindent 12 }}
-          {{- else if .Values.worker.readinessProbe.enabled }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.worker.readinessProbe "enabled") "context" $) | nindent 12 }}
-            tcpSocket:
-              port: worker
           {{- end }}
           {{- end }}
           {{- if .Values.worker.lifecycleHooks }}
@@ -221,6 +223,11 @@ spec:
             - name: empty-dir
               mountPath: /opt/bitnami/airflow/webserver_config.py
               subPath: app-base-dir/webserver_config.py
+            {{- if and .Values.web.containerSecurityContext.enabled .Values.web.containerSecurityContext.readOnlyRootFilesystem }}
+            - name: empty-dir
+              mountPath: /opt/bitnami/airflow/venv/tmp
+              subPath: app-pyc-cache-dir
+            {{- end }}
             {{- if  .Values.usePasswordFiles }}
             - name: airflow-secrets
               mountPath: /opt/bitnami/airflow/secrets

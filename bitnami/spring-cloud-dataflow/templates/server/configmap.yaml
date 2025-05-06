@@ -103,12 +103,10 @@ data:
           {{- end }}
         task:
           closecontextEnabled: true
-      {{- if .Values.externalDatabase.hibernateDialect }}
       jpa:
         properties:
           hibernate:
-            dialect: {{- printf "%s" .Values.externalDatabase.hibernateDialect -}}
-      {{- end }}
+            dialect: {{ include "scdf.database.dialect" . }}
       datasource:
         url: '{{ include "scdf.database.dataflow.url" . }}'
         driverClassName: {{ include "scdf.database.driver" . }}

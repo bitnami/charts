@@ -1,8 +1,16 @@
 # Changelog
 
-## 9.0.3 (2025-04-16)
+## 9.0.5 (2025-05-02)
 
-* [bitnami/jupyterhub] Release 9.0.3 ([#33046](https://github.com/bitnami/charts/pull/33046))
+* [bitnami/jupyterhub] Release 9.0.5 ([#33304](https://github.com/bitnami/charts/pull/33304))
+
+## <small>9.0.4 (2025-05-02)</small>
+
+* [bitnami/jupyterhub] Release 9.0.4 (#33303) ([5972ed9](https://github.com/bitnami/charts/commit/5972ed96a412ee74df71bc10c7418276744ef6cd)), closes [#33303](https://github.com/bitnami/charts/issues/33303)
+
+## <small>9.0.3 (2025-04-16)</small>
+
+* [bitnami/jupyterhub] Release 9.0.3 (#33046) ([4d95659](https://github.com/bitnami/charts/commit/4d95659a2b163f32ff6623f1c4b70a9df4cd8142)), closes [#33046](https://github.com/bitnami/charts/issues/33046)
 
 ## <small>9.0.2 (2025-04-16)</small>
 

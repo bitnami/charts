@@ -17,11 +17,6 @@ Params:
   - context - Dict - Required. The context for the template evaluation.
 */}}
 {{- define "common.ingress.backend" -}}
-{{- $apiVersion := (include "common.capabilities.ingress.apiVersion" .context) -}}
-{{- if or (eq $apiVersion "extensions/v1beta1") (eq $apiVersion "networking.k8s.io/v1beta1") -}}
-serviceName: {{ .serviceName }}
-servicePort: {{ .servicePort }}
-{{- else -}}
 service:
   name: {{ .serviceName }}
   port:
@@ -31,32 +26,25 @@ service:
     number: {{ .servicePort | int }}
     {{- end }}
 {{- end -}}
-{{- end -}}
 
 {{/*
+TODO: Remove as soon it is removed from the rest of the charts
 Print "true" if the API pathType field is supported
 Usage:
 {{ include "common.ingress.supportsPathType" . }}
 */}}
 {{- define "common.ingress.supportsPathType" -}}
-{{- if (semverCompare "<1.18-0" (include "common.capabilities.kubeVersion" .)) -}}
-{{- print "false" -}}
-{{- else -}}
 {{- print "true" -}}
-{{- end -}}
 {{- end -}}
 
 {{/*
+TODO: Remove as soon it is removed from the rest of the charts
 Returns true if the ingressClassname field is supported
 Usage:
 {{ include "common.ingress.supportsIngressClassname" . }}
 */}}
 {{- define "common.ingress.supportsIngressClassname" -}}
-{{- if semverCompare "<1.18-0" (include "common.capabilities.kubeVersion" .) -}}
-{{- print "false" -}}
-{{- else -}}
 {{- print "true" -}}
-{{- end -}}
 {{- end -}}
 
 {{/*

@@ -1,8 +1,13 @@
 # Changelog
 
-## 5.0.5 (2025-04-02)
+## 5.0.6 (2025-05-02)
 
-* [bitnami/kube-state-metrics] Release 5.0.5 ([#32745](https://github.com/bitnami/charts/pull/32745))
+* [bitnami/kube-state-metrics] Release 5.0.6 ([#33295](https://github.com/bitnami/charts/pull/33295))
+
+## <small>5.0.5 (2025-04-02)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/kube-state-metrics] Release 5.0.5 (#32745) ([923099a](https://github.com/bitnami/charts/commit/923099aaf08be9df766b3399efa49b16a6b20f73)), closes [#32745](https://github.com/bitnami/charts/issues/32745)
 
 ## <small>5.0.4 (2025-03-05)</small>
 

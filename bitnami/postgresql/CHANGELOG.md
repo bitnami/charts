@@ -4,6 +4,10 @@
 
 * [bitnami/postgresql] Global postgres fullname override, needed when the fullname needs to be shared across subcharts. ([#33198](https://github.com/bitnami/charts/pull/33198))
 
+## 16.6.7 (2025-05-06)
+
+* [bitnami/postgresql] Release 16.6.7 ([#33384](https://github.com/bitnami/charts/pull/33384))
+
 ## <small>16.6.6 (2025-04-25)</small>
 
 * [bitnami/postgresql] fix(backup): mount secrets with password file (#33144) ([121d54e](https://github.com/bitnami/charts/commit/121d54ed2dae38cf311ef7a70287e20e7b68bd3e)), closes [#33144](https://github.com/bitnami/charts/issues/33144)

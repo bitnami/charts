@@ -1,8 +1,17 @@
 # Changelog
 
-## 11.1.11 (2025-04-01)
+## 11.1.13 (2025-04-29)
 
-* [bitnami/argo-workflows] Release 11.1.11 ([#32718](https://github.com/bitnami/charts/pull/32718))
+* [bitnami/argo-workflows] Release 11.1.13 ([#33251](https://github.com/bitnami/charts/pull/33251))
+
+## <small>11.1.12 (2025-04-28)</small>
+
+* [bitnami/argo-workflows] Release 11.1.12 (#33230) ([c4f0308](https://github.com/bitnami/charts/commit/c4f03080b936f33da9874043c863ce3817d8df7d)), closes [#33230](https://github.com/bitnami/charts/issues/33230)
+
+## <small>11.1.11 (2025-04-01)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/argo-workflows] Release 11.1.11 (#32718) ([c7a0b15](https://github.com/bitnami/charts/commit/c7a0b153bb32c5f5985cf70801b869be71a94d8d)), closes [#32718](https://github.com/bitnami/charts/issues/32718)
 
 ## <small>11.1.10 (2025-03-11)</small>
 

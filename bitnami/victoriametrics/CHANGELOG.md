@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.1.6 (2025-04-09)
+## 0.1.7 (2025-04-28)
 
-* [bitnami/victoriametrics] Release 0.1.6 ([#32922](https://github.com/bitnami/charts/pull/32922))
+* [bitnami/victoriametrics] Release 0.1.7 ([#33227](https://github.com/bitnami/charts/pull/33227))
+
+## <small>0.1.6 (2025-04-09)</small>
+
+* [bitnami/victoriametrics] Release 0.1.6 (#32922) ([9b3d228](https://github.com/bitnami/charts/commit/9b3d2289ce723d5f31592dfd528afd2e568a537b)), closes [#32922](https://github.com/bitnami/charts/issues/32922)
 
 ## <small>0.1.5 (2025-04-07)</small>
 

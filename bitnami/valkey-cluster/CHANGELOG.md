@@ -1,8 +1,12 @@
 # Changelog
 
-## 3.0.3 (2025-04-23)
+## 3.0.4 (2025-04-29)
 
-* [bitnami/valkey-cluster] Release 3.0.3 ([#33149](https://github.com/bitnami/charts/pull/33149))
+* [bitnami/valkey-cluster] only use password files if auth is enabled ([#33239](https://github.com/bitnami/charts/pull/33239))
+
+## <small>3.0.3 (2025-04-23)</small>
+
+* [bitnami/valkey-cluster] Release 3.0.3 (#33149) ([20426a5](https://github.com/bitnami/charts/commit/20426a51276475f4e7c6844ccb86044e35cbcf61)), closes [#33149](https://github.com/bitnami/charts/issues/33149)
 
 ## <small>3.0.2 (2025-04-09)</small>
 

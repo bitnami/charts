@@ -1,8 +1,12 @@
 # Changelog
 
-## 32.2.1 (2025-04-24)
+## 32.2.2 (2025-04-28)
 
-* [bitnami/kafka] Release 32.2.1 ([#33159](https://github.com/bitnami/charts/pull/33159))
+* [bitnami/kafka] Release 32.2.2 ([#33220](https://github.com/bitnami/charts/pull/33220))
+
+## <small>32.2.1 (2025-04-24)</small>
+
+* [bitnami/kafka] Release 32.2.1 (#33159) ([c03b265](https://github.com/bitnami/charts/commit/c03b265fd1dc007f70789f8de1f78adc497273d9)), closes [#33159](https://github.com/bitnami/charts/issues/33159)
 
 ## 32.2.0 (2025-04-15)
 
