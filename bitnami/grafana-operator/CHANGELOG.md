@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.9.13 (2025-04-17)
+## 4.9.14 (2025-05-06)
 
-* [bitnami/grafana-operator] don't add common labels to Grafana resources ([#33049](https://github.com/bitnami/charts/pull/33049))
+* [bitnami/grafana-operator] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33370](https://github.com/bitnami/charts/pull/33370))
+
+## <small>4.9.13 (2025-04-22)</small>
+
+* [bitnami/grafana-operator] don't add common labels to Grafana resources (#33049) ([e76b535](https://github.com/bitnami/charts/commit/e76b535ed1b8a16135540a5588eac2370c3b1c06)), closes [#33049](https://github.com/bitnami/charts/issues/33049)
 
 ## <small>4.9.12 (2025-04-10)</small>
 
