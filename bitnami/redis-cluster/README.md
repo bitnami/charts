@@ -1,8 +1,8 @@
 <!--- app-name: Redis&reg; Cluster -->
 
-# Bitnami package for Redis(R) Cluster
+# Bitnami package for Redis&reg; Cluster
 
-Redis(R) is an open source, scalable, distributed in-memory cache for applications. It can be used to store and serve data in the form of strings, hashes, lists, sets and sorted sets.
+Redis&reg; is an open source, scalable, distributed in-memory cache for applications. It can be used to store and serve data in the form of strings, hashes, lists, sets and sorted sets.
 
 [Overview of Redis&reg; Cluster](http://redis.io)
 
