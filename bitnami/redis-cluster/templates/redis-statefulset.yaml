@@ -236,8 +236,8 @@ spec:
             failureThreshold: {{ .Values.redis.livenessProbe.failureThreshold }}
             exec:
               command:
-                - sh
-                - -c
+                - /bin/bash
+                - -ec
                 - /scripts/ping_liveness_local.sh {{ .Values.redis.livenessProbe.timeoutSeconds }}
           {{- end }}
           {{- if .Values.redis.customReadinessProbe }}
@@ -252,8 +252,8 @@ spec:
             failureThreshold: {{ .Values.redis.readinessProbe.failureThreshold }}
             exec:
               command:
-                - sh
-                - -c
+                - /bin/bash
+                - -ec
                 - /scripts/ping_readiness_local.sh {{ .Values.redis.readinessProbe.timeoutSeconds }}
           {{- end }}
           {{- if .Values.redis.customStartupProbe }}

@@ -1,8 +1,12 @@
 # Changelog
 
-## 16.0.5 (2025-04-29)
+## 16.0.6 (2025-04-29)
 
 * [bitnami/thanos] Allow custom objstore secret key in receive component ([#33180](https://github.com/bitnami/charts/pull/33180))
+
+## 16.0.5 (2025-05-06)
+
+* [bitnami/thanos] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33441](https://github.com/bitnami/charts/pull/33441))
 
 ## <small>16.0.4 (2025-04-22)</small>
 

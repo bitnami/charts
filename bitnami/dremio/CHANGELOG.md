@@ -1,8 +1,12 @@
 # Changelog
 
+## 1.0.1 (2025-04-25)
+
+* [bitnami/dremio] Release 1.0.1 ([#33188](https://github.com/bitnami/charts/pull/33188))
+
 ## 1.0.0 (2025-04-01)
 
-* [bitnami/dremio] Bump MinIO major version 16.x.x ([#32698](https://github.com/bitnami/charts/pull/32698))
+* [bitnami/dremio] Bump MinIO major version 16.x.x (#32698) ([371ddca](https://github.com/bitnami/charts/commit/371ddcabf6c8be0b2cd6d90c340aa264682ba405)), closes [#32698](https://github.com/bitnami/charts/issues/32698)
 
 ## <small>0.6.3 (2025-03-26)</small>
 

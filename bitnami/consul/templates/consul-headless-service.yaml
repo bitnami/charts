@@ -27,13 +27,13 @@ spec:
       port: {{ .Values.containerPorts.serfLAN }}
     - name: serflan-udp
       protocol: UDP
-      port: {{ .Values.containerPorts.serfWAN }}
+      port: {{ .Values.containerPorts.serfLAN }}
     - name: serfwan-tcp
       protocol: TCP
       port: {{ .Values.containerPorts.serfWAN }}
     - name: serfwan-udp
       protocol: UDP
-      port: {{ .Values.containerPorts.serfLAN }}
+      port: {{ .Values.containerPorts.serfWAN }}
     - name: rpc-server
       port: {{ .Values.containerPorts.rpcServer }}
     - name: dns-tcp

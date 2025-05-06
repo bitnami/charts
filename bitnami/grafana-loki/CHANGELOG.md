@@ -1,8 +1,16 @@
 # Changelog
 
-## 4.8.3 (2025-04-25)
+## 4.8.5 (2025-04-29)
 
-* [bitnami/grafana-loki] add missing queryScheduler.enabled parameter ([#33072](https://github.com/bitnami/charts/pull/33072))
+* [bitnami/grafana-loki] add /otlp/v1/logs as gateway-endpoint for distributor via gateway ([#33190](https://github.com/bitnami/charts/pull/33190))
+
+## <small>4.8.4 (2025-04-28)</small>
+
+* [bitnami/grafana-loki] Release 4.8.4 (#33208) ([25336fa](https://github.com/bitnami/charts/commit/25336fa2c1a002fd7dc483f726d59bf1d416cae3)), closes [#33208](https://github.com/bitnami/charts/issues/33208)
+
+## <small>4.8.3 (2025-04-25)</small>
+
+* [bitnami/grafana-loki] add missing queryScheduler.enabled parameter (#33072) ([fd1a9e5](https://github.com/bitnami/charts/commit/fd1a9e5ec72680cfc8b0d737785fcc7203e06e1b)), closes [#33072](https://github.com/bitnami/charts/issues/33072)
 
 ## <small>4.8.2 (2025-04-23)</small>
 

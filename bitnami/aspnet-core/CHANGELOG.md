@@ -1,8 +1,16 @@
 # Changelog
 
-## 6.3.8 (2025-04-09)
+## 7.0.1 (2025-04-30)
 
-* [bitnami/aspnet-core] Release 6.3.8 ([#32925](https://github.com/bitnami/charts/pull/32925))
+* [bitnami/aspnet-core] Release 7.0.1 ([#33274](https://github.com/bitnami/charts/pull/33274))
+
+## 7.0.0 (2025-04-30)
+
+* [bitnami/aspnet-core] Release 7.0.0 (#33266) ([ee7edfe](https://github.com/bitnami/charts/commit/ee7edfeb563ca02927b3878f9dad96c468992b17)), closes [#33266](https://github.com/bitnami/charts/issues/33266)
+
+## <small>6.3.8 (2025-04-09)</small>
+
+* [bitnami/aspnet-core] Release 6.3.8 (#32925) ([cb28cd2](https://github.com/bitnami/charts/commit/cb28cd23289d76cfb853f96fb20b796268dd202d)), closes [#32925](https://github.com/bitnami/charts/issues/32925)
 
 ## <small>6.3.7 (2025-04-09)</small>
 

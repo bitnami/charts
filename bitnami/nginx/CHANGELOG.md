@@ -1,8 +1,12 @@
 # Changelog
 
+## 20.0.1 (2025-05-06)
+
+* [bitnami/nginx] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33413](https://github.com/bitnami/charts/pull/33413))
+
 ## 20.0.0 (2025-04-24)
 
-* [bitnami/nginx] Release 20.0.0 ([#33169](https://github.com/bitnami/charts/pull/33169))
+* [bitnami/nginx] Release 20.0.0 (#33169) ([c935715](https://github.com/bitnami/charts/commit/c9357150af548e9982f711e7b68b82dc77487031)), closes [#33169](https://github.com/bitnami/charts/issues/33169)
 
 ## <small>19.1.1 (2025-04-16)</small>
 

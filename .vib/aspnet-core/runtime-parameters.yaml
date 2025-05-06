@@ -5,8 +5,8 @@ appFromExternalRepo:
     revision: main
     depth: 1
   publish:
-    subFolder: aspnetcore/performance/caching/output/samples/8.x/
-  startCommand: [dotnet, OCMinimal.dll]
+    subFolder: aspnetcore/performance/caching/output/samples/9.x/OCControllers/
+  startCommand: [dotnet, OCControllers.dll]
 containerPorts:
   http: 8080
 serviceAccount:

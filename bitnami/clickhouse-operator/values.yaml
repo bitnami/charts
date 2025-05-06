@@ -159,7 +159,7 @@ keeperImage:
 ## @param auth.existingSecretPasswordKey Name of the key inside the existing secret containing the Admin password
 ##
 auth:
-  username: default
+  username: clickhouse_operator
   password: ""
   existingSecret: ""
   existingSecretUsernameKey: ""

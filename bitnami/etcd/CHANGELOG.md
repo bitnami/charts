@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.3.0 (2025-04-16)
+## 11.3.1 (2025-05-01)
 
-* [bitnami/etcd] Add possibility to pass extra env vars to the defrag cronjob ([#32953](https://github.com/bitnami/charts/pull/32953))
+* [bitnami/etcd] Release 11.3.1 ([#33289](https://github.com/bitnami/charts/pull/33289))
+
+## 11.3.0 (2025-04-23)
+
+* [bitnami/etcd] Add possibility to pass extra env vars to the defrag cronjob (#32953) ([9df94d0](https://github.com/bitnami/charts/commit/9df94d083dbc03eb22202dbbc691fd687827ac66)), closes [#32953](https://github.com/bitnami/charts/issues/32953)
 
 ## <small>11.2.4 (2025-04-11)</small>
 

@@ -1,8 +1,12 @@
 # Changelog
 
-## 10.1.1 (2025-04-09)
+## 11.0.0 (2025-04-30)
 
-* [bitnami/mastodon] Release 10.1.1 ([#32909](https://github.com/bitnami/charts/pull/32909))
+* [bitnami/mastodon] major: Upgrade elasticsearch subchart to 22.x.x (ES 9.x) ([#33264](https://github.com/bitnami/charts/pull/33264))
+
+## <small>10.1.1 (2025-04-09)</small>
+
+* [bitnami/mastodon] Release 10.1.1 (#32909) ([42032e2](https://github.com/bitnami/charts/commit/42032e24c96811e5809ba6991bd1b59d43c075fb)), closes [#32909](https://github.com/bitnami/charts/issues/32909)
 
 ## 10.1.0 (2025-04-04)
 

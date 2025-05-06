@@ -76,7 +76,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/cloudnative-pg
-  tag: 1.25.1-debian-12-r4
+  tag: 1.25.1-debian-12-r5
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -103,7 +103,7 @@ image:
 postgresqlImage:
   registry: docker.io
   repository: bitnami/postgresql
-  tag: 17.4.0-debian-12-r11
+  tag: 17.4.0-debian-12-r17
   digest: ""
 ## @param replicaCount Number of cloudnative-pg Operator replicas to deploy
 ##

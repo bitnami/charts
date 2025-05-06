@@ -1,8 +1,17 @@
 # Changelog
 
-## 20.13.2 (2025-04-24)
+## 21.0.0 (2025-05-06)
 
-* [bitnami/redis] Release 20.13.2 ([#33157](https://github.com/bitnami/charts/pull/33157))
+* [bitnami/redis] Release 21.0.0 ([#33455](https://github.com/bitnami/charts/pull/33455))
+
+## <small>20.13.4 (2025-04-30)</small>
+
+* [bitnami/redis] Release 20.13.3 (#33217) ([f2b8c65](https://github.com/bitnami/charts/commit/f2b8c6511d38015371555fefb53aaca189c8c2de)), closes [#33217](https://github.com/bitnami/charts/issues/33217)
+* [bitnami/redis] Switch shell from /bin/sh to /bin/bash to improve process handling (#33181) ([cfe2165](https://github.com/bitnami/charts/commit/cfe21650167fb27f415edc6268b67c4ec91217f0)), closes [#33181](https://github.com/bitnami/charts/issues/33181)
+
+## <small>20.13.2 (2025-04-24)</small>
+
+* [bitnami/redis] Release 20.13.2 (#33157) ([98a2ec9](https://github.com/bitnami/charts/commit/98a2ec9cce9ab777eea217ff76dae19ccfe519f2)), closes [#33157](https://github.com/bitnami/charts/issues/33157)
 
 ## <small>20.13.1 (2025-04-23)</small>
 

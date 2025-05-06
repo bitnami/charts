@@ -67,23 +67,3 @@ Create the name of the service account to use
     {{ default "default" .Values.serviceAccount.name }}
 {{- end -}}
 {{- end -}}
-
-{{/*
-Return the appropriate apiGroup for PodSecurityPolicy.
-*/}}
-{{- define "nginx-ingress-controller.podSecurityPolicy.apiGroup" -}}
-{{- if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
-{{- print "policy" -}}
-{{- else -}}
-{{- print "extensions" -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Require extensions API group based on Kubernetes version
-*/}}
-{{- define "nginx-ingress-controller.role.extensions.apiGroup" -}}
-{{- if semverCompare "<1.16-0" .Capabilities.KubeVersion.GitVersion -}}
-{{- print "- extensions" -}}
-{{- end -}}
-{{- end -}}

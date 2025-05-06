@@ -16,7 +16,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  {{- if and .Values.master.ingress.ingressClassName (eq "true" (include "common.ingress.supportsIngressClassname" .)) }}
+  {{- if .Values.master.ingress.ingressClassName }}
   ingressClassName: {{ .Values.master.ingress.ingressClassName | quote }}
   {{- end }}
   rules:
@@ -27,9 +27,7 @@ spec:
           {{- toYaml .Values.master.ingress.extraPaths | nindent 10 }}
           {{- end }}
           - path: {{ .Values.master.ingress.path }}
-            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
             pathType: {{ .Values.master.ingress.pathType }}
-            {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (include "seaweedfs.master.fullname" .) "servicePort" "http" "context" $)  | nindent 14 }}
       {{- if not (empty .Values.master.ingress.hostname )}}
       host: {{ .Values.master.ingress.hostname }}
@@ -40,9 +38,7 @@ spec:
       http:
         paths:
           - path: {{ default "/" .path }}
-            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
             pathType: {{ default "ImplementationSpecific" .pathType }}
-            {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (include "seaweedfs.master.fullname" $) "servicePort" "http" "context" $) | nindent 14 }}
     {{- end }}
     {{- if .Values.master.ingress.extraRules }}

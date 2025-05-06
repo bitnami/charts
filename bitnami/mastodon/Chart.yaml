@@ -24,7 +24,7 @@ dependencies:
 - condition: elasticsearch.enabled
   name: elasticsearch
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 21.x.x
+  version: 22.x.x
 - condition: minio.enabled
   name: minio
   repository: oci://registry-1.docker.io/bitnamicharts
@@ -50,4 +50,4 @@ maintainers:
 name: mastodon
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/mastodon
-version: 10.1.1
+version: 11.0.0

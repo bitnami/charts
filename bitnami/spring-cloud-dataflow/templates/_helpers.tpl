@@ -194,6 +194,17 @@ Return the database driver
 {{- end -}}
 
 {{/*
+Return the database dialect
+*/}}
+{{- define "scdf.database.dialect" -}}
+  {{- if .Values.mariadb.enabled -}}
+    {{- printf "org.hibernate.dialect.MariaDB106Dialect" -}}
+  {{- else -}}
+    {{- .Values.externalDatabase.hibernateDialect -}}
+  {{- end -}}
+{{- end -}}
+
+{{/*
 Return the database scheme
 */}}
 {{- define "scdf.database.scheme" -}}

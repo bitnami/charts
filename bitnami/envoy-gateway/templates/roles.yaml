@@ -1,0 +1,197 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.rbac.create }}
+{{- if (not .Values.watchAllNamespaces) }}
+{{- $watchNamespaces := default (list (include "common.names.namespace" .)) .Values.watchNamespaces }}
+{{- range $namespace := $watchNamespaces }}
+---
+kind: Role
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" $ }}
+metadata:
+  name: {{ include "common.names.fullname" $ }}
+  namespace: {{ $namespace | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $.Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: envoy-gateway
+    app.kubernetes.io/component: envoy-gateway
+  {{- if $.Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $.Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - configmaps
+      - secrets
+      - services
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - apps
+    resources:
+      - deployments
+      - daemonsets
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - discovery.k8s.io
+    resources:
+      - endpointslices
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - gateway.envoyproxy.io
+    resources:
+      - envoyproxies
+      - envoypatchpolicies
+      - clienttrafficpolicies
+      - backendtrafficpolicies
+      - securitypolicies
+      - envoyextensionpolicies
+      - backends
+      - httproutefilters
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - gateway.envoyproxy.io
+    resources:
+      - envoypatchpolicies/status
+      - clienttrafficpolicies/status
+      - backendtrafficpolicies/status
+      - securitypolicies/status
+      - envoyextensionpolicies/status
+      - backends/status
+    verbs:
+      - update
+  - apiGroups:
+      - gateway.networking.k8s.io
+    resources:
+      - gateways
+      - grpcroutes
+      - httproutes
+      - referencegrants
+      - tcproutes
+      - tlsroutes
+      - udproutes
+      - backendtlspolicies
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - gateway.networking.k8s.io
+    resources:
+      - gateways/status
+      - grpcroutes/status
+      - httproutes/status
+      - tcproutes/status
+      - tlsroutes/status
+      - udproutes/status
+      - backendtlspolicies/status
+    verbs:
+      - update
+{{- end }}
+{{- end }}
+---
+kind: Role
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
+metadata:
+  name: {{ printf "%s-infra-manager" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: envoy-gateway
+    app.kubernetes.io/component: envoy-gateway
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - serviceaccounts
+      - services
+      - configmaps
+    verbs:
+      - create
+      - get
+      - delete
+      - deletecollection
+      - patch
+  - apiGroups:
+      - apps
+    resources:
+      - deployments
+      - daemonsets
+    verbs:
+      - create
+      - get
+      - delete
+      - deletecollection
+      - patch
+  - apiGroups:
+      - autoscaling
+      - policy
+    resources:
+      - horizontalpodautoscalers
+      - poddisruptionbudgets
+    verbs:
+      - create
+      - get
+      - delete
+      - deletecollection
+      - patch
+---
+kind: Role
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
+metadata:
+  name: {{ printf "%s-leader-election" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: envoy-gateway
+    app.kubernetes.io/component: envoy-gateway
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - configmaps
+    verbs:
+      - get
+      - list
+      - watch
+      - create
+      - update
+      - patch
+      - delete
+  - apiGroups:
+      - coordination.k8s.io
+    resources:
+      - leases
+    verbs:
+      - get
+      - list
+      - watch
+      - create
+      - update
+      - patch
+      - delete
+  - apiGroups:
+      - ""
+    resources:
+      - events
+    verbs:
+      - create
+      - patch
+{{- end }}

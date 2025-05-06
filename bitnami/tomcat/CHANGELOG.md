@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.7.2 (2025-04-09)
+## 11.7.3 (2025-05-06)
 
-* [bitnami/tomcat] Release 11.7.2 ([#32918](https://github.com/bitnami/charts/pull/32918))
+* [bitnami/tomcat] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33442](https://github.com/bitnami/charts/pull/33442))
+
+## <small>11.7.2 (2025-04-09)</small>
+
+* [bitnami/tomcat] Release 11.7.2 (#32918) ([eefe9c5](https://github.com/bitnami/charts/commit/eefe9c57d08c6f24a94b0873f35341b5162402cb)), closes [#32918](https://github.com/bitnami/charts/issues/32918)
 
 ## <small>11.7.1 (2025-04-08)</small>
 

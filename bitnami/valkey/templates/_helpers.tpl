@@ -48,17 +48,6 @@ Return the proper Docker Image Registry Secret Names
 {{- end -}}
 
 {{/*
-Return the appropriate apiGroup for PodSecurityPolicy.
-*/}}
-{{- define "podSecurityPolicy.apiGroup" -}}
-{{- if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
-{{- print "policy" -}}
-{{- else -}}
-{{- print "extensions" -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
 Return true if a TLS secret object should be created
 */}}
 {{- define "valkey.createTlsSecret" -}}
@@ -216,7 +205,6 @@ Compile all warnings into a single message, and call fail.
 */}}
 {{- define "valkey.validateValues" -}}
 {{- $messages := list -}}
-{{- $messages := append $messages (include "valkey.validateValues.topologySpreadConstraints" .) -}}
 {{- $messages := append $messages (include "valkey.validateValues.architecture" .) -}}
 {{- $messages := append $messages (include "valkey.validateValues.podSecurityPolicy.create" .) -}}
 {{- $messages := append $messages (include "valkey.validateValues.tls" .) -}}
@@ -226,15 +214,6 @@ Compile all warnings into a single message, and call fail.
 
 {{- if $message -}}
 {{-   printf "\nVALUES VALIDATION:\n%s" $message | fail -}}
-{{- end -}}
-{{- end -}}
-
-{{/* Validate values of Valkey - spreadConstrainsts K8s version */}}
-{{- define "valkey.validateValues.topologySpreadConstraints" -}}
-{{- if and (semverCompare "<1.16-0" .Capabilities.KubeVersion.GitVersion) .Values.replica.topologySpreadConstraints -}}
-valkey: topologySpreadConstraints
-    Pod Topology Spread Constraints are only available on K8s  >= 1.16
-    Find more information at https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
 {{- end -}}
 {{- end -}}
 

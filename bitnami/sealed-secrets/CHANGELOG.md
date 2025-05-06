@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.5.10 (2025-04-24)
+## 2.5.11 (2025-05-06)
 
-* [bitnami/sealed-secrets] Release 2.5.10 ([#33153](https://github.com/bitnami/charts/pull/33153))
+* [bitnami/sealed-secrets] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33433](https://github.com/bitnami/charts/pull/33433))
+
+## <small>2.5.10 (2025-04-24)</small>
+
+* [bitnami/sealed-secrets] Release 2.5.10 (#33153) ([51fc030](https://github.com/bitnami/charts/commit/51fc030d329581bcf37b9069d3488800d5becb29)), closes [#33153](https://github.com/bitnami/charts/issues/33153)
 
 ## <small>2.5.9 (2025-04-02)</small>
 

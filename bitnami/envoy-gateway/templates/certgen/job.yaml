@@ -1,0 +1,153 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.certgen.enabled }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ template "envoy-gateway.certgen.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- $labels := include "common.tplvalues.merge" (dict "values" (list .Values.commonLabels .Values.certgen.labels) "context" .) }}
+  labels: {{- include "common.labels.standard" (dict "customLabels" $labels "context" $) | nindent 4 }}
+    app.kubernetes.io/part-of: envoy-gateway
+    app.kubernetes.io/component: certgen
+  {{- if or .Values.certgen.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.certgen.annotations .Values.commonAnnotations) "context" .) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  parallelism: {{ .Values.certgen.parallelism }}
+  completions: {{ .Values.certgen.completions }}
+  backoffLimit: {{ .Values.certgen.backoffLimit }}
+  template:
+    metadata:
+    {{- $labels = include "common.tplvalues.merge" ( dict "values" (list .Values.commonLabels .Values.certgen.podLabels) "context" . ) }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/part-of: envoy-gateway
+        app.kubernetes.io/component: certgen
+      {{- if or .Values.commonAnnotations .Values.certgen.podAnnotations }}
+      annotations:
+        {{- if .Values.certgen.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.certgen.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+      {{- end }}
+    spec:
+      {{- include "envoy-gateway.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.certgen.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.certgen.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.certgen.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.certgen.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.certgen.affinity }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.certgen.affinity "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.certgen.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.certgen.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.certgen.podSecurityContext.enabled }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.certgen.podSecurityContext "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.certgen.initContainers }}
+      initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.certgen.initContainers "context" $) | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: certgen
+          image: {{ template "envoy-gateway.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.certgen.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.certgen.args "context" $) | nindent 12 }}
+          {{- else }}
+          args:
+            - certgen
+          {{- end }}
+          env:
+            - name: ENVOY_GATEWAY_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.namespace
+            - name: KUBERNETES_CLUSTER_DOMAIN
+              value: {{ .Values.clusterDomain }}
+            {{- if .Values.certgen.extraEnvVars }}
+              {{- include "common.tplvalues.render" (dict "value" .Values.certgen.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if or .Values.certgen.extraEnvVarsCM .Values.certgen.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.certgen.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" ( dict "value" .Values.certgen.extraEnvVarsCM "context" $ ) }}
+            {{- end }}
+            {{- if .Values.certgen.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" ( dict "value" .Values.certgen.extraEnvVarsSecret "context" $ ) }}
+            {{- end }}
+          {{- end }}
+          {{- if .Values.certgen.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.certgen.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.certgen.resources }}
+          resources: {{ toYaml .Values.certgen.resources | nindent 12 }}
+          {{- else if ne .Values.certgen.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.certgen.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.certgen.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.certgen.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.certgen.startupProbe.enabled }}
+          startupProbe:
+            exec:
+              command:
+                - pgrep
+                - certgen
+            initialDelaySeconds: {{ .Values.certgen.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.certgen.startupProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.certgen.startupProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.certgen.startupProbe.successThreshold }}
+            failureThreshold: {{ .Values.certgen.startupProbe.failureThreshold }}
+          {{- end }}
+          {{- if .Values.certgen.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.certgen.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.certgen.livenessProbe.enabled }}
+          livenessProbe:
+            exec:
+              command:
+                - pgrep
+                - certgen
+            initialDelaySeconds: {{ .Values.certgen.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.certgen.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.certgen.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.certgen.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.certgen.livenessProbe.failureThreshold }}
+          {{- end }}
+          {{- if .Values.certgen.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.certgen.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.certgen.readinessProbe.enabled }}
+          readinessProbe:
+            exec:
+              command:
+                - pgrep
+                - certgen
+            initialDelaySeconds: {{ .Values.certgen.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.certgen.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.certgen.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.certgen.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.certgen.readinessProbe.failureThreshold }}
+          {{- end }}
+          {{- if .Values.certgen.extraVolumeMounts }}
+          volumeMounts: {{- include "common.tplvalues.render" (dict "value" .Values.certgen.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+        {{- if .Values.certgen.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.certgen.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.certgen.extraVolumes }}
+        volumes: {{- include "common.tplvalues.render" (dict "value" .Values.certgen.extraVolumes "context" $) | nindent 10 }}
+        {{- end }}
+      restartPolicy: Never
+      serviceAccountName: {{ include "envoy-gateway.certgen.serviceAccountName" . }}
+      automountServiceAccountToken: {{ .Values.certgen.automountServiceAccountToken }}
+{{- end }}

@@ -1,8 +1,12 @@
 # Changelog
 
-## 12.3.4 (2025-04-15)
+## 12.3.5 (2025-05-06)
 
-* [bitnami/mysql] Release 12.3.4 ([#33017](https://github.com/bitnami/charts/pull/33017))
+* [bitnami/mysql] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33409](https://github.com/bitnami/charts/pull/33409))
+
+## <small>12.3.4 (2025-04-15)</small>
+
+* [bitnami/mysql] Release 12.3.4 (#33017) ([86aa183](https://github.com/bitnami/charts/commit/86aa183ab6017410cdf02ade4ac9449791e5fb1b)), closes [#33017](https://github.com/bitnami/charts/issues/33017)
 
 ## <small>12.3.3 (2025-04-09)</small>
 

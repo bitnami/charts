@@ -1,8 +1,16 @@
 # Changelog
 
+## 2.0.2 (2025-05-06)
+
+* [bitnami/superset] fix(wait-for-examples): Support 429 errors in examples load ([#33458](https://github.com/bitnami/charts/pull/33458))
+
+## <small>2.0.1 (2025-04-28)</small>
+
+* [bitnami/superset] Release 2.0.1 (#33222) ([20821a5](https://github.com/bitnami/charts/commit/20821a5961f08a9db2dd9ecb2ac62a1cfad60c51)), closes [#33222](https://github.com/bitnami/charts/issues/33222)
+
 ## 2.0.0 (2025-04-04)
 
-* [bitnami/superset] Set `usePasswordFiles=true` by default ([#32778](https://github.com/bitnami/charts/pull/32778))
+* [bitnami/superset] Set `usePasswordFiles=true` by default (#32778) ([89677d4](https://github.com/bitnami/charts/commit/89677d409181b014153179e4aa709cb9ffe79035)), closes [#32778](https://github.com/bitnami/charts/issues/32778)
 
 ## <small>1.1.3 (2025-04-02)</small>
 

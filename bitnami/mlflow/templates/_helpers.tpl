@@ -78,7 +78,7 @@ Return the MLflow Tracking Secret key for the user
 Return the MLflow Tracking Secret key for the Flask Server secret key
 */}}
 {{- define "mlflow.v0.tracking.flaskServerSecretKey" -}}
-{{- default .Values.tracking.auth.existingSecretFlaskServerSecretKey "flask-server-secret-key" -}}
+{{- default "flask-server-secret-key" .Values.tracking.auth.existingSecretFlaskServerSecretKey -}}
 {{- end -}}
 
 {{/*

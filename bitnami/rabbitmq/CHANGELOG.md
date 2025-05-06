@@ -1,8 +1,12 @@
 # Changelog
 
+## 16.0.2 (2025-05-06)
+
+* [bitnami/rabbitmq] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33426](https://github.com/bitnami/charts/pull/33426))
+
 ## 16.0.0 (2025-04-23)
 
-* [bitnami/rabbitmq] Release 16.0.0 ([#33138](https://github.com/bitnami/charts/pull/33138))
+* [bitnami/rabbitmq] Release 16.0.0 (#33138) ([7ba0ac5](https://github.com/bitnami/charts/commit/7ba0ac515175806c1617f5509d18e395cc4ddb6b)), closes [#33138](https://github.com/bitnami/charts/issues/33138)
 
 ## <small>15.5.3 (2025-04-14)</small>
 

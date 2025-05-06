@@ -1,8 +1,19 @@
 # Changelog
 
-## 1.4.10 (2025-04-02)
+## 2.0.3 (2025-05-06)
 
-* [bitnami/prometheus] Release 1.4.10 ([#32760](https://github.com/bitnami/charts/pull/32760))
+* [bitnami/prometheus] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33424](https://github.com/bitnami/charts/pull/33424))
+
+## <small>2.0.2 (2025-05-02)</small>
+
+* [bitnami/prometheus] Release 2.0.0 (#33240) ([123eb4e](https://github.com/bitnami/charts/commit/123eb4e36bb3852dc166ebfa53738cf0be581058)), closes [#33240](https://github.com/bitnami/charts/issues/33240)
+* [bitnami/prometheus] Release 2.0.1 (#33311) ([4e0c474](https://github.com/bitnami/charts/commit/4e0c474059d9f1ee163f9e315df0874978c9768e)), closes [#33311](https://github.com/bitnami/charts/issues/33311)
+* [bitnami/prometheus] Release 2.0.2 (#33312) ([a62fc07](https://github.com/bitnami/charts/commit/a62fc075b2e7428c8624cf2725180deeef12099a)), closes [#33312](https://github.com/bitnami/charts/issues/33312)
+
+## <small>1.4.10 (2025-04-02)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/prometheus] Release 1.4.10 (#32760) ([7e61b38](https://github.com/bitnami/charts/commit/7e61b38f61e3fa35e6b86b7319e9c1c4c7bba88e)), closes [#32760](https://github.com/bitnami/charts/issues/32760)
 
 ## <small>1.4.9 (2025-03-10)</small>
 

@@ -26,7 +26,7 @@ data:
 
     host="{{ include "common.names.fullname" . }}.{{ include "common.names.namespace" . }}.svc"
 
-    export INFLUX_TOKEN={{ ternary "cat $(INFLUXDB_ADMIN_USER_TOKEN_FILE)" "${INFLUXDB_ADMIN_USER_TOKEN}" .Values.auth.usePasswordFiles }}
+    export INFLUX_TOKEN={{ ternary "$(cat \"${INFLUXDB_ADMIN_USER_TOKEN_FILE}\")" "${INFLUXDB_ADMIN_USER_TOKEN}" .Values.auth.usePasswordFiles }}
 
     get_orgs() {
       influx org list --host "http://${host}:{{ coalesce .Values.influxdb.service.ports.http .Values.influxdb.service.port }}" 2> /dev/null | grep -v 'ID' | awk -F '\t' 'BEGIN{ORS=" "} {print $2}'

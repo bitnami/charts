@@ -6,7 +6,7 @@ Did you know there are enterprise versions of the Bitnami catalog? For enhanced 
 
 {{- $releaseNamespace := include "common.names.namespace" . }}
 {{- $clusterDomain := .Values.clusterDomain }}
-{{- $fullname := include "common.names.fullname" . }}
+{{- $airflowWebServiceName := include "airflow.web.fullname" . }}
 {{- $airflowSecretName := include "airflow.secretName" . }}
 {{- $baseUrl := (include "airflow.baseUrl" .) }}
 
@@ -46,14 +46,14 @@ host. To configure Airflow with the URL of your service:
   {{- if eq "NodePort" .Values.service.type }}
 
     export AIRFLOW_HOST=$(kubectl get nodes --namespace {{ $releaseNamespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
-    export AIRFLOW_PORT=$(kubectl get --namespace {{ $releaseNamespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ $fullname }})
+    export AIRFLOW_PORT=$(kubectl get --namespace {{ $releaseNamespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ $airflowWebServiceName }})
 
   {{- else if eq "LoadBalancer" .Values.service.type }}
 
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-        Watch the status with: 'kubectl get svc --namespace {{ $releaseNamespace }} -w {{ $fullname }}'
+        Watch the status with: 'kubectl get svc --namespace {{ $releaseNamespace }} -w {{ $airflowWebServiceName }}'
 
-    export AIRFLOW_HOST=$(kubectl get svc --namespace {{ $releaseNamespace }} {{ $fullname }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
+    export AIRFLOW_HOST=$(kubectl get svc --namespace {{ $releaseNamespace }} {{ $airflowWebServiceName }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
     export AIRFLOW_PORT=80
 
   {{- end }}
@@ -74,7 +74,7 @@ host. To configure Airflow with the URL of your service:
 
 Airflow can be accessed via port {{ .Values.service.ports.http }} on the following DNS name from within your cluster:
 
-    {{ printf "%s.%s.svc.%s" $fullname $releaseNamespace $clusterDomain }}
+    {{ printf "%s.%s.svc.%s" $airflowWebServiceName $releaseNamespace $clusterDomain }}
 
 To connect to Airflow from outside the cluster, perform the following steps:
 
@@ -90,7 +90,7 @@ To connect to Airflow from outside the cluster, perform the following steps:
 
 1.  Create a port-forward to the service:
 
-    kubectl port-forward --namespace {{ $releaseNamespace }} svc/{{ $fullname }} {{ .Values.service.ports.http }}:{{ .Values.service.ports.http }} &
+    kubectl port-forward --namespace {{ $releaseNamespace }} svc/{{ $airflowWebServiceName }} {{ .Values.service.ports.http }}:{{ .Values.service.ports.http }} &
     echo "Airflow URL: http{{ if .Values.web.tls }}s{{ end }}://127.0.0.1:{{ .Values.service.ports.http }}"
 
 {{- else if eq .Values.service.type "NodePort" }}
@@ -98,7 +98,7 @@ To connect to Airflow from outside the cluster, perform the following steps:
 1. Obtain the NodePort IP and port:
 
     export NODE_IP=$(kubectl get nodes --namespace {{ $releaseNamespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
-    export NODE_PORT=$(kubectl get svc --namespace {{ $releaseNamespace }} {{ $fullname }} -o jsonpath="{.spec.ports[0].nodePort}")
+    export NODE_PORT=$(kubectl get svc --namespace {{ $releaseNamespace }} {{ $airflowWebServiceName }} -o jsonpath="{.spec.ports[0].nodePort}")
     echo "Airflow URL: http{{ if .Values.web.tls }}s{{ end }}://${NODE_IP}:$NODE_PORT"
 
 {{- else if eq .Values.service.type "LoadBalancer" }}
@@ -106,9 +106,9 @@ To connect to Airflow from outside the cluster, perform the following steps:
 1. Obtain the LoadBalancer IP:
 
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ $fullname }}'
+        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ $airflowWebServiceName }}'
 
-    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ $fullname }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
+    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ $airflowWebServiceName }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
     echo "Airflow URL: http{{ if .Values.web.tls }}s{{ end }}://${SERVICE_IP}:{{ .Values.service.ports.http }}"
 
 {{- end }}

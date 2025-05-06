@@ -405,11 +405,13 @@ Init container definition to wait for Redis
         {{- end }}
 
         check_examples_database() {
-            echo "SELECT dashboard_title FROM dashboards" | postgresql_remote_execute_print_output "$SUPERSET_DATABASE_HOST" "$SUPERSET_DATABASE_PORT_NUMBER" "$SUPERSET_DATABASE_NAME" "$SUPERSET_DATABASE_USER" "$SUPERSET_DATABASE_PASSWORD" | grep "Dashboard"
+            # deck.gl Demo is one of the latest dashboards loaded.
+            echo "SELECT dashboard_title FROM dashboards" | postgresql_remote_execute_print_output "$SUPERSET_DATABASE_HOST" "$SUPERSET_DATABASE_PORT_NUMBER" "$SUPERSET_DATABASE_NAME" "$SUPERSET_DATABASE_USER" "$SUPERSET_DATABASE_PASSWORD" | grep "deck.gl Demo"
         }
 
         info "Checking if the 'examples' database exists at $SUPERSET_DATABASE_HOST:$SUPERSET_DATABASE_PORT_NUMBER"
-        if ! retry_while "check_examples_database"; then
+        # Retry 5 min
+        if ! retry_while "check_examples_database" 60; then
             error "Examples database not ready yet"
             exit 1
         else

@@ -103,6 +103,10 @@ data:
             proxy_pass       http://{{ include "grafana-loki.distributor.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}:3100$request_uri;
           }
 
+          location = /otlp/v1/logs {
+            proxy_pass       http://{{ include "grafana-loki.distributor.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}:3100$request_uri;
+          }
+
           location = /loki/api/v1/tail {
             proxy_pass       http://{{ include "grafana-loki.querier.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}:3100$request_uri;
             proxy_set_header Upgrade $http_upgrade;

@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.7.5 (2025-04-18)
+## 1.7.6 (2025-04-30)
 
-* [bitnami/vault] Release 1.7.5 ([#33075](https://github.com/bitnami/charts/pull/33075))
+* [bitnami/vault] Release 1.7.6 ([#33273](https://github.com/bitnami/charts/pull/33273))
+
+## <small>1.7.5 (2025-04-18)</small>
+
+* [bitnami/vault] Release 1.7.5 (#33075) ([9dfede7](https://github.com/bitnami/charts/commit/9dfede72bb0df747cf0bb2e3c3db210e4447fe80)), closes [#33075](https://github.com/bitnami/charts/issues/33075)
 
 ## <small>1.7.4 (2025-04-14)</small>
 

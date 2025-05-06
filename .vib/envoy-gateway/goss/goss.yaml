@@ -1,0 +1,26 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+http:
+  # No special API endpoint documented in the admin interface
+  http://envoy-gateway:{{ .Vars.service.ports.admin }}:
+    status: 404
+  http://127.0.0.1:{{ .Vars.containerPorts.admin }}:
+    status: 404
+  http://envoy-gateway:{{ .Vars.service.ports.metrics }}/metrics:
+    status: 200
+    body:
+      - /gatewayclass-status/
+  # Use the deployed fixed service that points to the envoy instance. This verifies
+  # that envoy has the correct configuration
+  http://vib-envoy-gateway:80:
+    status: 200
+    request-headers:
+      - "Host: bitnami-envoy.my"
+    body:
+      - /nginx/
+file:
+  /config/envoy-gateway.yaml:
+    exists: true
+    contents:
+      - /enableDumpConfig.*{{.Vars.overrideConfiguration.admin.enableDumpConfig}}/

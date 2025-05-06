@@ -274,7 +274,7 @@ spec:
           volumeMounts:
             - name: scripts
               mountPath: /scripts
-            {{- if .Values.usePasswordFiles }}
+            {{- if and .Values.usePassword .Values.usePasswordFiles }}
             - name: valkey-password
               mountPath: /opt/bitnami/valkey/secrets/
             {{- end }}
@@ -319,7 +319,7 @@ spec:
             - /bin/bash
             - -c
             - |
-              {{- if .Values.usePasswordFiles }}
+              {{- if and .Values.usePassword .Values.usePasswordFiles }}
               export REDIS_PASSWORD="$(< "${REDIS_PASSWORD_FILE}")"
               {{- end }}
               redis_exporter{{- range $key, $value := .Values.metrics.extraArgs }} --{{ $key }}={{ $value }}{{- end }}
@@ -356,12 +356,12 @@ spec:
             {{- if .Values.metrics.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.metrics.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
-          {{- if or .Values.usePasswordFiles .Values.tls.enabled }}
+          {{- if or (and .Values.usePassword .Values.usePasswordFiles) .Values.tls.enabled }}
           volumeMounts:
             - name: empty-dir
               mountPath: /tmp
               subPath: tmp-dir
-            {{- if .Values.usePasswordFiles }}
+            {{- if and .Values.usePassword .Values.usePasswordFiles }}
             - name: valkey-password
               mountPath: /opt/bitnami/valkey/secrets/
             {{- end }}
@@ -438,7 +438,7 @@ spec:
           configMap:
             name: {{ include "common.names.fullname" . }}-scripts
             defaultMode: 0755
-        {{- if .Values.usePasswordFiles }}
+        {{- if and .Values.usePassword .Values.usePasswordFiles }}
         - name: valkey-password
           secret:
             secretName: {{ include "valkey-cluster.secretName" . }}
