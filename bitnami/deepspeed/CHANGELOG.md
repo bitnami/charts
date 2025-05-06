@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.3.10 (2025-04-18)
+## 2.3.11 (2025-05-06)
 
-* [bitnami/deepspeed] Release 2.3.10 ([#33077](https://github.com/bitnami/charts/pull/33077))
+* [bitnami/deepspeed] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33351](https://github.com/bitnami/charts/pull/33351))
+
+## <small>2.3.10 (2025-04-18)</small>
+
+* [bitnami/deepspeed] Release 2.3.10 (#33077) ([2e8fdba](https://github.com/bitnami/charts/commit/2e8fdba7e71cc52e12076ef3c58bcb51519c0fce)), closes [#33077](https://github.com/bitnami/charts/issues/33077)
 
 ## <small>2.3.9 (2025-04-16)</small>
 
