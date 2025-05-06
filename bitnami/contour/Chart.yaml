@@ -33,4 +33,4 @@ maintainers:
 name: contour
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/contour
-version: 19.5.11
+version: 19.5.12
