@@ -1,8 +1,12 @@
 # Changelog
 
-## 23.0.3 (2025-05-05)
+## 23.0.4 (2025-05-06)
 
-* [bitnami/airflow] Fix svc name for Ingress backend ([#33316](https://github.com/bitnami/charts/pull/33316))
+* [bitnami/airflow] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33333](https://github.com/bitnami/charts/pull/33333))
+
+## <small>23.0.3 (2025-05-05)</small>
+
+* [bitnami/airflow] Fix svc name for Ingress backend (#33316) ([d814a50](https://github.com/bitnami/charts/commit/d814a50bfb2756a817cbd4f66abbba71d1b74b63)), closes [#33316](https://github.com/bitnami/charts/issues/33316)
 
 ## <small>23.0.2 (2025-05-01)</small>
 
