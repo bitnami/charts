@@ -8,6 +8,8 @@ NATS is an open source, lightweight and high-performance messaging system. It is
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
+The official NATS Helm Chart is maintained [here](https://github.com/nats-io/k8s/tree/main/helm/charts/nats)
+
 ## TL;DR
 
 ```console
