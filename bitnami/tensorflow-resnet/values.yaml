@@ -106,7 +106,7 @@ client:
   image:
     registry: docker.io
     repository: bitnami/tensorflow-resnet
-    tag: 2.18.1-debian-12-r3
+    tag: 2.19.0-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
