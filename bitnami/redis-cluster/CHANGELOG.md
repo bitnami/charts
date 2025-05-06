@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.5.4 (2025-04-29)
+## 11.5.5 (2025-05-06)
 
-* [bitnami/redis-cluster] Switch shell from /bin/sh to /bin/bash to improve process handling ([#33250](https://github.com/bitnami/charts/pull/33250))
+* [bitnami/redis-cluster] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33429](https://github.com/bitnami/charts/pull/33429))
+
+## <small>11.5.4 (2025-04-30)</small>
+
+* [bitnami/redis-cluster] Switch shell from /bin/sh to /bin/bash to improve process handling (#33250) ([69aea26](https://github.com/bitnami/charts/commit/69aea26249970f032782d60e19446e7209b32bce)), closes [#33250](https://github.com/bitnami/charts/issues/33250)
 
 ## <small>11.5.3 (2025-04-24)</small>
 
