@@ -2,23 +2,24 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
-  tanzuCategory: application
   category: MachineLearning
-  licenses: Apache-2.0
   images: |
     - name: tensorflow-resnet
-      image: docker.io/bitnami/tensorflow-resnet:2.18.1-debian-12-r3
+      image: docker.io/bitnami/tensorflow-resnet:2.19.0-debian-12-r0
     - name: tensorflow-serving
       image: docker.io/bitnami/tensorflow-serving:2.18.1-debian-12-r3
+  licenses: Apache-2.0
+  tanzuCategory: application
 apiVersion: v2
-appVersion: 2.18.1
+appVersion: 2.19.0
 dependencies:
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
   tags:
   - bitnami-common
   version: 2.x.x
-description: TensorFlow ResNet is a client utility for use with TensorFlow Serving and ResNet models.
+description: TensorFlow ResNet is a client utility for use with TensorFlow Serving
+  and ResNet models.
 home: https://bitnami.com
 icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/tensorflow-inception/img/tensorflow-inception-stack-220x234.png
 keywords:
@@ -34,4 +35,4 @@ maintainers:
 name: tensorflow-resnet
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/tensorflow-resnet
-version: 4.3.6
+version: 4.3.7
