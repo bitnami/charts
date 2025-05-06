@@ -40,25 +40,17 @@ spec:
     - type: Resource
       resource:
         name: memory
-        {{- if semverCompare "<1.23-0" (include "common.capabilities.kubeVersion" $) }}
-        targetAverageUtilization: {{ $executorValues.autoscaling.hpa.targetMemory  }}
-        {{- else }}
         target:
           type: Utilization
           averageUtilization: {{ $executorValues.autoscaling.hpa.targetMemory }}
-        {{- end }}
     {{- end }}
     {{- if $executorValues.autoscaling.hpa.targetCPU }}
     - type: Resource
       resource:
         name: cpu
-        {{- if semverCompare "<1.23-0" (include "common.capabilities.kubeVersion" $) }}
-        targetAverageUtilization: {{ $executorValues.autoscaling.hpa.targetCPU }}
-        {{- else }}
         target:
           type: Utilization
           averageUtilization: {{ $executorValues.autoscaling.hpa.targetCPU }}
-        {{- end }}
     {{- end }}
 {{- end }}
 {{- end }}
