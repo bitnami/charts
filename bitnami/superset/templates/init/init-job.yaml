@@ -68,6 +68,8 @@ spec:
             {{- include "superset.configure.common" . | nindent 12 }}
             {{- include "superset.configure.database" . | nindent 12 }}
             {{- include "superset.configure.redis" . | nindent 12 }}
+            - name: BITNAMI_DEBUG
+              value: "yes"
             - name: SUPERSET_ROLE
               value: "init"
             - name: SUPERSET_USERNAME
