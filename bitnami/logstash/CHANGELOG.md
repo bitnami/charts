@@ -1,8 +1,12 @@
 # Changelog
 
-## 7.0.1 (2025-05-06)
+## 7.0.2 (2025-05-06)
 
-* [bitnami/logstash] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33392](https://github.com/bitnami/charts/pull/33392))
+* [bitnami/logstash] Release 7.0.2 ([#33465](https://github.com/bitnami/charts/pull/33465))
+
+## <small>7.0.1 (2025-05-06)</small>
+
+* [bitnami/logstash] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#3339 ([4c4b1d7](https://github.com/bitnami/charts/commit/4c4b1d78f7b00fb73129b1fb6c7b2a0033c521a1)), closes [#33392](https://github.com/bitnami/charts/issues/33392)
 
 ## 7.0.0 (2025-04-29)
 
