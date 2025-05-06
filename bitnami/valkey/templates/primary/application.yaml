@@ -33,7 +33,7 @@ spec:
   {{- else }}
   updateStrategy: {{- toYaml .Values.primary.updateStrategy | nindent 4 }}
   {{- end }}
-  {{- if and .Values.primary.minReadySeconds (semverCompare ">= 1.23-0" (include "common.capabilities.kubeVersion" .)) }}
+  {{- if .Values.primary.minReadySeconds }}
   minReadySeconds: {{ .Values.primary.minReadySeconds }}
   {{- end }}
   {{- end }}
