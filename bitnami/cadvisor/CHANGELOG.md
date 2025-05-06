@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.1.2 (2025-04-15)
+## 0.1.3 (2025-05-06)
 
-* [bitnami/cadvisor] Release 0.1.2 ([#33011](https://github.com/bitnami/charts/pull/33011))
+* [bitnami/cadvisor] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33340](https://github.com/bitnami/charts/pull/33340))
+
+## <small>0.1.2 (2025-04-15)</small>
+
+* [bitnami/cadvisor] Release 0.1.2 (#33011) ([ab8bedd](https://github.com/bitnami/charts/commit/ab8bedd06117288192f11747787f287afe212c76)), closes [#33011](https://github.com/bitnami/charts/issues/33011)
 
 ## <small>0.1.1 (2025-04-15)</small>
 
