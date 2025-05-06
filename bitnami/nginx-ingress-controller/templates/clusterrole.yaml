@@ -60,7 +60,6 @@ rules:
       - update
       - watch
   - apiGroups:
-      {{- include "nginx-ingress-controller.role.extensions.apiGroup" . | nindent 6 }}
       - networking.k8s.io
     resources:
       - ingresses
@@ -76,14 +75,12 @@ rules:
       - create
       - patch
   - apiGroups:
-      {{- include "nginx-ingress-controller.role.extensions.apiGroup" . | nindent 6 }}
       - networking.k8s.io
     resources:
       - ingresses/status
     verbs:
       - update
   - apiGroups:
-      {{- include "nginx-ingress-controller.role.extensions.apiGroup" . | nindent 6 }}
       - networking.k8s.io
     resources:
       - ingressclasses
