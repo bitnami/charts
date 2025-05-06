@@ -1,8 +1,12 @@
 # Changelog
 
-## 7.3.6 (2025-04-22)
+## 7.3.7 (2025-05-06)
 
-* [bitnami/argo-cd] Release 7.3.6 ([#33128](https://github.com/bitnami/charts/pull/33128))
+* [bitnami/argo-cd] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33337](https://github.com/bitnami/charts/pull/33337))
+
+## <small>7.3.6 (2025-04-22)</small>
+
+* [bitnami/argo-cd] Release 7.3.6 (#33128) ([5468fc3](https://github.com/bitnami/charts/commit/5468fc3144ea9ccc2733c21b030cf5c0c11474ef)), closes [#33128](https://github.com/bitnami/charts/issues/33128)
 
 ## <small>7.3.5 (2025-04-09)</small>
 
