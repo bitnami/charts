@@ -1,8 +1,13 @@
 # Changelog
 
-## 20.13.4 (2025-04-29)
+## 20.13.5 (2025-05-06)
 
-* [bitnami/redis] Switch shell from /bin/sh to /bin/bash to improve process handling ([#33181](https://github.com/bitnami/charts/pull/33181))
+* [bitnami/redis] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33428](https://github.com/bitnami/charts/pull/33428))
+
+## <small>20.13.4 (2025-04-30)</small>
+
+* [bitnami/redis] Release 20.13.3 (#33217) ([f2b8c65](https://github.com/bitnami/charts/commit/f2b8c6511d38015371555fefb53aaca189c8c2de)), closes [#33217](https://github.com/bitnami/charts/issues/33217)
+* [bitnami/redis] Switch shell from /bin/sh to /bin/bash to improve process handling (#33181) ([cfe2165](https://github.com/bitnami/charts/commit/cfe21650167fb27f415edc6268b67c4ec91217f0)), closes [#33181](https://github.com/bitnami/charts/issues/33181)
 
 ## <small>20.13.2 (2025-04-24)</small>
 
