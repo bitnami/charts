@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.8.5 (2025-04-29)
+## 4.8.6 (2025-05-06)
 
-* [bitnami/grafana-loki] add /otlp/v1/logs as gateway-endpoint for distributor via gateway ([#33190](https://github.com/bitnami/charts/pull/33190))
+* [bitnami/grafana-loki] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33368](https://github.com/bitnami/charts/pull/33368))
+
+## <small>4.8.5 (2025-04-30)</small>
+
+* [bitnami/grafana-loki] add /otlp/v1/logs as gateway-endpoint for distributor via gateway (#33190) ([130ffd1](https://github.com/bitnami/charts/commit/130ffd163382dffd5762034291203a3ac2792fba)), closes [#33190](https://github.com/bitnami/charts/issues/33190)
 
 ## <small>4.8.4 (2025-04-28)</small>
 
