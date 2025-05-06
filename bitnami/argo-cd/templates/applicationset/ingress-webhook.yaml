@@ -23,7 +23,7 @@ metadata:
     {{- end }}
   {{- end }}
 spec:
-  {{- if and .Values.applicationSet.webhook.ingress.ingressClassName (eq "true" (include "common.webhook.ingress.supportsIngressClassname" .)) }}
+  {{- if .Values.applicationSet.webhook.ingress.ingressClassName }}
   ingressClassName: {{ .Values.applicationSet.webhook.ingress.ingressClassName | quote }}
   {{- end }}
   rules:
@@ -35,9 +35,7 @@ spec:
           {{- toYaml .Values.applicationSet.webhook.ingress.extraPaths | nindent 10 }}
           {{- end }}
           - path: {{ .Values.applicationSet.webhook.ingress.path }}
-            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
             pathType: {{ .Values.applicationSet.webhook.ingress.pathType }}
-            {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (include "argocd.server" .) "servicePort" (ternary "https" "http" .Values.applicationSet.webhook.ingress.tls) "context" $)  | nindent 14 }}
     {{- end }}
     {{- range .Values.applicationSet.webhook.ingress.extraHosts }}
@@ -45,9 +43,7 @@ spec:
       http:
         paths:
           - path: {{ default "/" .path }}
-            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
             pathType: {{ default "ImplementationSpecific" .pathType }}
-            {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (include "argocd.server" $) "servicePort" (ternary "https" "http" $.Values.applicationSet.webhook.ingress.tls) "context" $) | nindent 14 }}
     {{- end }}
   tls:
