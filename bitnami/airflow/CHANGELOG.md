@@ -1,8 +1,12 @@
 # Changelog
 
-## 23.0.4 (2025-05-06)
+## 23.1.0 (2025-05-06)
 
-* [bitnami/airflow] Fix baseUrl generation with ingress enabled ([#33399](https://github.com/bitnami/charts/pull/33399))
+* [bitnami/airflow] Expose topologyKey for all objects ([#33461](https://github.com/bitnami/charts/pull/33461))
+
+## <small>23.0.4 (2025-05-06)</small>
+
+* [bitnami/airflow] Fix baseUrl generation with ingress enabled (#33399) ([461bc9f](https://github.com/bitnami/charts/commit/461bc9face35a3b6339f012c60cf4622c3d18ac6)), closes [#33399](https://github.com/bitnami/charts/issues/33399)
 
 ## <small>23.0.3 (2025-05-05)</small>
 
