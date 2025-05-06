@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.0.3 (2025-05-01)
+## 4.0.4 (2025-05-06)
 
-* [bitnami/grafana-tempo] Release 4.0.3 ([#33291](https://github.com/bitnami/charts/pull/33291))
+* [bitnami/grafana-tempo] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33371](https://github.com/bitnami/charts/pull/33371))
+
+## <small>4.0.3 (2025-05-01)</small>
+
+* [bitnami/grafana-tempo] Release 4.0.3 (#33291) ([010e8c6](https://github.com/bitnami/charts/commit/010e8c6e33b5c0cb0c1cf429f17d8b05cae97c59)), closes [#33291](https://github.com/bitnami/charts/issues/33291)
 
 ## <small>4.0.2 (2025-04-01)</small>
 
