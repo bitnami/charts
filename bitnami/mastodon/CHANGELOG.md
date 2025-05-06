@@ -1,8 +1,12 @@
 # Changelog
 
+## 11.0.1 (2025-05-06)
+
+* [bitnami/mastodon] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33395](https://github.com/bitnami/charts/pull/33395))
+
 ## 11.0.0 (2025-04-30)
 
-* [bitnami/mastodon] major: Upgrade elasticsearch subchart to 22.x.x (ES 9.x) ([#33264](https://github.com/bitnami/charts/pull/33264))
+* [bitnami/mastodon] major: Upgrade elasticsearch subchart to 22.x.x (ES 9.x) (#33264) ([ffb165a](https://github.com/bitnami/charts/commit/ffb165a2535d93a78333d01aaea1a37bb7141490)), closes [#33264](https://github.com/bitnami/charts/issues/33264)
 
 ## <small>10.1.1 (2025-04-09)</small>
 
