@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.1.7 (2025-05-06)
+## 0.1.8 (2025-05-06)
 
-* [bitnami/clickhouse-operator] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33346](https://github.com/bitnami/charts/pull/33346))
+* [bitnami/clickhouse-operator] Release 0.1.8 ([#33470](https://github.com/bitnami/charts/pull/33470))
+
+## <small>0.1.7 (2025-05-06)</small>
+
+* [bitnami/clickhouse-operator] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 refere ([6e26520](https://github.com/bitnami/charts/commit/6e265202caf4130181697af3fc28ae680a786e4f)), closes [#33346](https://github.com/bitnami/charts/issues/33346)
 
 ## <small>0.1.6 (2025-04-29)</small>
 
