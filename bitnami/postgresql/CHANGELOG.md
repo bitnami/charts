@@ -1,6 +1,6 @@
 # Changelog
 
-## 16.6.7 (2025-05-05)
+## 16.6.7 (2025-05-06)
 
 * [bitnami/postgresql] Release 16.6.7 ([#33329](https://github.com/bitnami/charts/pull/33329))
 
