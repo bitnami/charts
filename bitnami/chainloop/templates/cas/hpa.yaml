@@ -28,7 +28,6 @@ spec:
         target:
           type: Utilization
           averageUtilization: {{ .Values.cas.autoscaling.hpa.targetMemory }}
-    {{- end }}
     {{- if .Values.cas.autoscaling.hpa.targetCPU }}
     - type: Resource
       resource:
@@ -36,5 +35,4 @@ spec:
         target:
           type: Utilization
           averageUtilization: {{ .Values.cas.autoscaling.hpa.targetCPU }}
-    {{- end }}
 {{- end }}
