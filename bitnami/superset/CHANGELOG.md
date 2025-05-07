@@ -1,6 +1,12 @@
 # Changelog
 
-## 2.0.2 (2025-05-06)
+## 2.0.3 (2025-05-07)
+
+* [bitnami/superset] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33439](https://github.com/bitnami/charts/pull/33439))
+
+## <small>2.0.2 (2025-05-06)</small>
+
+* [bitnami/superset] fix(wait-for-examples): Support 429 errors in examples load (#33458) ([e01e70b](https://github.com/bitnami/charts/commit/e01e70b87ef128aa92db1c7f2cd79d16afbc42e5)), closes [#33458](https://github.com/bitnami/charts/issues/33458)
 
 ## <small>2.0.1 (2025-04-28)</small>
 
