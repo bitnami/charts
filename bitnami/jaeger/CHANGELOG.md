@@ -1,6 +1,6 @@
 # Changelog
 
-## 5.1.15 (2025-05-06)
+## 5.1.15 (2025-05-07)
 
 * [bitnami/jaeger] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33375](https://github.com/bitnami/charts/pull/33375))
 
