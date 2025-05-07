@@ -43,7 +43,7 @@ web:
   # Give some extra time for the service to start
   startupProbe:
     enabled: true
-    failureThreshold: 30
+    failureThreshold: 60
     periodSeconds: 10
 worker:
   podSecurityContext:
@@ -91,3 +91,6 @@ metrics:
     ports:
       ingest: 9125
       metrics: 9102
+postgresql:
+  primary:
+    resourcesPreset: "micro"

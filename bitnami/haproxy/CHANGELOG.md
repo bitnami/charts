@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.2.19 (2025-04-22)
+## 2.2.20 (2025-05-06)
 
-* [bitnami/haproxy] Release 2.2.19 ([#33116](https://github.com/bitnami/charts/pull/33116))
+* [bitnami/haproxy] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33372](https://github.com/bitnami/charts/pull/33372))
+
+## <small>2.2.19 (2025-04-22)</small>
+
+* [bitnami/haproxy] Release 2.2.19 (#33116) ([0a86886](https://github.com/bitnami/charts/commit/0a868860a0ab8500f1aaff75e2c9d0d667ddeef4)), closes [#33116](https://github.com/bitnami/charts/issues/33116)
 
 ## <small>2.2.18 (2025-04-17)</small>
 
