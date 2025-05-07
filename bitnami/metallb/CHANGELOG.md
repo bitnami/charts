@@ -1,8 +1,12 @@
 # Changelog
 
-## 6.4.10 (2025-05-02)
+## 6.4.11 (2025-05-06)
 
-* [bitnami/metallb] Release 6.4.10 ([#33297](https://github.com/bitnami/charts/pull/33297))
+* [bitnami/metallb] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33398](https://github.com/bitnami/charts/pull/33398))
+
+## <small>6.4.10 (2025-05-02)</small>
+
+* [bitnami/metallb] Release 6.4.10 (#33297) ([c6b47ee](https://github.com/bitnami/charts/commit/c6b47ee4d2a3e0b0a56109ff2414114a506f233f)), closes [#33297](https://github.com/bitnami/charts/issues/33297)
 
 ## <small>6.4.9 (2025-04-02)</small>
 

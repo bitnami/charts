@@ -1,8 +1,12 @@
 # Changelog
 
-## 15.3.15 (2025-04-24)
+## 15.3.16 (2025-05-06)
 
-* [bitnami/postgresql-ha] fix(backup): mount secrets with password file ([#33145](https://github.com/bitnami/charts/pull/33145))
+* [bitnami/postgresql-ha] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33423](https://github.com/bitnami/charts/pull/33423))
+
+## <small>15.3.15 (2025-04-24)</small>
+
+* [bitnami/postgresql-ha] fix(backup): mount secrets with password file (#33145) ([85f3869](https://github.com/bitnami/charts/commit/85f38696cd142418ebcd431651041e70644ca664)), closes [#33145](https://github.com/bitnami/charts/issues/33145)
 
 ## <small>15.3.14 (2025-04-23)</small>
 

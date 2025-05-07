@@ -1,8 +1,12 @@
 # Changelog
 
-## 6.2.12 (2025-04-28)
+## 6.2.13 (2025-05-06)
 
-* [bitnami/oauth2-proxy] Release 6.2.12 ([#33229](https://github.com/bitnami/charts/pull/33229))
+* [bitnami/oauth2-proxy] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33416](https://github.com/bitnami/charts/pull/33416))
+
+## <small>6.2.12 (2025-04-28)</small>
+
+* [bitnami/oauth2-proxy] Release 6.2.12 (#33229) ([4cda3c6](https://github.com/bitnami/charts/commit/4cda3c63f74239944e3cd4f2ab20f43c2395125e)), closes [#33229](https://github.com/bitnami/charts/issues/33229)
 
 ## <small>6.2.11 (2025-04-02)</small>
 

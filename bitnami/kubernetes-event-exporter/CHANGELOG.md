@@ -1,8 +1,12 @@
 # Changelog
 
-## 3.5.1 (2025-05-01)
+## 3.5.2 (2025-05-06)
 
-* [bitnami/kubernetes-event-exporter] Release 3.5.1 ([#33293](https://github.com/bitnami/charts/pull/33293))
+* [bitnami/kubernetes-event-exporter] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33391](https://github.com/bitnami/charts/pull/33391))
+
+## <small>3.5.1 (2025-05-01)</small>
+
+* [bitnami/kubernetes-event-exporter] Release 3.5.1 (#33293) ([18969d9](https://github.com/bitnami/charts/commit/18969d97dd900f78bdd004b774954dbc65c5e09c)), closes [#33293](https://github.com/bitnami/charts/issues/33293)
 
 ## 3.5.0 (2025-04-16)
 

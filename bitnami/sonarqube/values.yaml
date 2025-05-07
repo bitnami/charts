@@ -76,23 +76,23 @@ diagnosticMode:
   ##
   args:
     - infinity
-## @section SonarQube&trade; Image parameters
+## @section SonarQube(TM) Image parameters
 ##
 
-## Bitnami SonarQube&trade; image
+## Bitnami SonarQube(TM) image
 ## ref: https://hub.docker.com/r/bitnami/sonarqube/tags/
-## @param image.registry [default: REGISTRY_NAME] SonarQube&trade; image registry
-## @param image.repository [default: REPOSITORY_NAME/sonarqube] SonarQube&trade; image repository
-## @skip image.tag SonarQube&trade; image tag (immutable tags are recommended)
-## @param image.digest SonarQube&trade; image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
-## @param image.pullPolicy SonarQube&trade; image pull policy
-## @param image.pullSecrets SonarQube&trade; image pull secrets
-## @param image.debug Enable SonarQube&trade; image debug mode
+## @param image.registry [default: REGISTRY_NAME] SonarQube(TM) image registry
+## @param image.repository [default: REPOSITORY_NAME/sonarqube] SonarQube(TM) image repository
+## @skip image.tag SonarQube(TM) image tag (immutable tags are recommended)
+## @param image.digest SonarQube(TM) image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+## @param image.pullPolicy SonarQube(TM) image pull policy
+## @param image.pullSecrets SonarQube(TM) image pull secrets
+## @param image.debug Enable SonarQube(TM) image debug mode
 ##
 image:
   registry: docker.io
   repository: bitnami/sonarqube
-  tag: 25.4.0-debian-12-r0
+  tag: 25.5.0-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -109,31 +109,31 @@ image:
   ## Enable debug mode
   ##
   debug: false
-## @section SonarQube&trade; Configuration parameters
-## SonarQube&trade; settings based on environment variables
+## @section SonarQube(TM) Configuration parameters
+## SonarQube(TM) settings based on environment variables
 ## ref: https://github.com/bitnami/containers/tree/main/bitnami/sonarqube#environment-variables
-## @param sonarqubeUsername SonarQube&trade; username
+## @param sonarqubeUsername SonarQube(TM) username
 ##
 sonarqubeUsername: user
-## @param sonarqubePassword SonarQube&trade; user password. Must be at least 12 characters
+## @param sonarqubePassword SonarQube(TM) user password. Must be at least 12 characters
 ## Defaults to a random 12-character alphanumeric string if not set
 ##
 sonarqubePassword: ""
 ## @param provisioningFolder Directory to use for provisioning content to Sonarqube
 ##
 provisioningFolder: "/bitnami/sonarqube-provisioning"
-## @param existingSecret Name of existing secret containing SonarQube&trade; credentials
+## @param existingSecret Name of existing secret containing SonarQube(TM) credentials
 ## NOTE: Must contain key `sonarqube-password`
 ## NOTE: When it's set, the `sonarqubePassword` parameter is ignored
 ##
 existingSecret: ""
-## @param sonarqubeEmail SonarQube&trade; user email
+## @param sonarqubeEmail SonarQube(TM) user email
 ##
 sonarqubeEmail: user@example.com
-## @param minHeapSize Minimum heap size for SonarQube&trade;
+## @param minHeapSize Minimum heap size for SonarQube(TM)
 ##
 minHeapSize: 1024m
-## @param maxHeapSize Maximum heap size for SonarQube&trade;
+## @param maxHeapSize Maximum heap size for SonarQube(TM)
 ##
 maxHeapSize: 2048m
 ## @param jvmOpts Values to add to SONARQUBE_WEB_JAVA_ADD_OPTS
@@ -153,12 +153,12 @@ startTimeout: 300
 ##
 extraProperties: []
 ## @param sonarqubeSkipInstall Skip wizard installation
-## NOTE: useful if you use an external database that already contains SonarQube&trade; data
+## NOTE: useful if you use an external database that already contains SonarQube(TM) data
 ## ref: https://github.com/bitnami/containers/tree/main/bitnami/sonarqube#connect-sonarqube-container-to-an-existing-database
 ##
 sonarqubeSkipInstall: false
 ## @param sonarSecurityRealm Set this to LDAP authenticate first against the external sytem. If the external system is not
-## reachable or if the user is not defined in the external system, authentication will be performed against SonarQube&trade;'s internal database.
+## reachable or if the user is not defined in the external system, authentication will be performed against SonarQube(TM)'s internal database.
 ##
 sonarSecurityRealm: ""
 ## @param sonarAuthenticatorDowncase Set to true when connecting to a LDAP server using a case-insensitive setup.
@@ -235,35 +235,35 @@ command: []
 ## @param args Override default container args (useful when using custom images)
 ##
 args: []
-## @param extraEnvVars Array with extra environment variables to add to SonarQube&trade; nodes
+## @param extraEnvVars Array with extra environment variables to add to SonarQube(TM) nodes
 ## e.g:
 ## extraEnvVars:
 ##   - name: FOO
 ##     value: "bar"
 ##
 extraEnvVars: []
-## @param extraEnvVarsCM Name of existing ConfigMap containing extra env vars for SonarQube&trade; nodes
+## @param extraEnvVarsCM Name of existing ConfigMap containing extra env vars for SonarQube(TM) nodes
 ##
 extraEnvVarsCM: ""
-## @param extraEnvVarsSecret Name of existing Secret containing extra env vars for SonarQube&trade; nodes
+## @param extraEnvVarsSecret Name of existing Secret containing extra env vars for SonarQube(TM) nodes
 ##
 extraEnvVarsSecret: ""
-## @section SonarQube&trade; deployment parameters
+## @section SonarQube(TM) deployment parameters
 ##
 
-## @param replicaCount Number of SonarQube&trade; replicas to deploy
+## @param replicaCount Number of SonarQube(TM) replicas to deploy
 ## NOTE: ReadWriteMany PVC(s) are required if replicaCount > 1
 ##
 replicaCount: 1
-## @param containerPorts.http SonarQube&trade; HTTP container port
-## @param containerPorts.elastic SonarQube&trade; Elasticsearch container port
+## @param containerPorts.http SonarQube(TM) HTTP container port
+## @param containerPorts.elastic SonarQube(TM) Elasticsearch container port
 ##
 containerPorts:
   http: 9000
   elastic: 9001
-## Configure extra options for SonarQube&trade; containers' liveness and readiness probes
+## Configure extra options for SonarQube(TM) containers' liveness and readiness probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
-## @param livenessProbe.enabled Enable livenessProbe on SonarQube&trade; containers
+## @param livenessProbe.enabled Enable livenessProbe on SonarQube(TM) containers
 ## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
 ## @param livenessProbe.periodSeconds Period seconds for livenessProbe
 ## @param livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
@@ -277,7 +277,7 @@ livenessProbe:
   timeoutSeconds: 5
   failureThreshold: 6
   successThreshold: 1
-## @param readinessProbe.enabled Enable readinessProbe on SonarQube&trade; containers
+## @param readinessProbe.enabled Enable readinessProbe on SonarQube(TM) containers
 ## @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
 ## @param readinessProbe.periodSeconds Period seconds for readinessProbe
 ## @param readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
@@ -291,7 +291,7 @@ readinessProbe:
   timeoutSeconds: 5
   failureThreshold: 6
   successThreshold: 1
-## @param startupProbe.enabled Enable startupProbe on SonarQube&trade; containers
+## @param startupProbe.enabled Enable startupProbe on SonarQube(TM) containers
 ## @param startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
 ## @param startupProbe.periodSeconds Period seconds for startupProbe
 ## @param startupProbe.timeoutSeconds Timeout seconds for startupProbe
@@ -314,7 +314,7 @@ customReadinessProbe: {}
 ## @param customStartupProbe Custom startupProbe that overrides the default one
 ##
 customStartupProbe: {}
-## SonarQube&trade; resource requests and limits
+## SonarQube(TM) resource requests and limits
 ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
 ## @param resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
 ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
@@ -333,11 +333,11 @@ resourcesPreset: "xlarge"
 resources: {}
 ## Configure Pods Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-## @param podSecurityContext.enabled Enabled SonarQube&trade; pods' Security Context
+## @param podSecurityContext.enabled Enabled SonarQube(TM) pods' Security Context
 ## @param podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
 ## @param podSecurityContext.sysctls Set kernel settings using the sysctl interface
 ## @param podSecurityContext.supplementalGroups Set filesystem extra groups
-## @param podSecurityContext.fsGroup Set SonarQube&trade; pod's Security Context fsGroup
+## @param podSecurityContext.fsGroup Set SonarQube(TM) pod's Security Context fsGroup
 ##
 podSecurityContext:
   enabled: true
@@ -374,15 +374,15 @@ containerSecurityContext:
 ## @param automountServiceAccountToken Mount Service Account token in pod
 ##
 automountServiceAccountToken: false
-## @param hostAliases SonarQube&trade; pods host aliases
+## @param hostAliases SonarQube(TM) pods host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
 hostAliases: []
-## @param podLabels Extra labels for SonarQube&trade; pods
+## @param podLabels Extra labels for SonarQube(TM) pods
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##
 podLabels: {}
-## @param podAnnotations Annotations for SonarQube&trade; pods
+## @param podAnnotations Annotations for SonarQube(TM) pods
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
 podAnnotations: {}
@@ -411,20 +411,20 @@ nodeAffinityPreset:
   ##   - e2e-az2
   ##
   values: []
-## @param affinity Affinity for SonarQube&trade; pods assignment
+## @param affinity Affinity for SonarQube(TM) pods assignment
 ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 ## NOTE: `podAffinityPreset`, `podAntiAffinityPreset`, and `nodeAffinityPreset` will be ignored when it's set
 ##
 affinity: {}
-## @param nodeSelector Node labels for SonarQube&trade; pods assignment
+## @param nodeSelector Node labels for SonarQube(TM) pods assignment
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
 ##
 nodeSelector: {}
-## @param tolerations Tolerations for SonarQube&trade; pods assignment
+## @param tolerations Tolerations for SonarQube(TM) pods assignment
 ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: []
-## @param updateStrategy.type SonarQube&trade; deployment strategy type
+## @param updateStrategy.type SonarQube(TM) deployment strategy type
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
 ##
 updateStrategy:
@@ -432,23 +432,23 @@ updateStrategy:
   ## Can be set to RollingUpdate or Recreate
   ##
   type: RollingUpdate
-## @param priorityClassName SonarQube&trade; pods' priorityClassName
+## @param priorityClassName SonarQube(TM) pods' priorityClassName
 ##
 priorityClassName: ""
-## @param schedulerName Name of the k8s scheduler (other than default) for SonarQube&trade; pods
+## @param schedulerName Name of the k8s scheduler (other than default) for SonarQube(TM) pods
 ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
 ##
 schedulerName: ""
-## @param lifecycleHooks for the SonarQube&trade; container(s) to automate configuration before or after startup
+## @param lifecycleHooks for the SonarQube(TM) container(s) to automate configuration before or after startup
 ##
 lifecycleHooks: {}
-## @param extraVolumes Optionally specify extra list of additional volumes for the SonarQube&trade; pod(s)
+## @param extraVolumes Optionally specify extra list of additional volumes for the SonarQube(TM) pod(s)
 ##
 extraVolumes: []
-## @param extraVolumeMounts Optionally specify extra list of additional volumeMounts for the SonarQube&trade; container(s)
+## @param extraVolumeMounts Optionally specify extra list of additional volumeMounts for the SonarQube(TM) container(s)
 ##
 extraVolumeMounts: []
-## @param sidecars Add additional sidecar containers to the SonarQube&trade; pod(s)
+## @param sidecars Add additional sidecar containers to the SonarQube(TM) pod(s)
 ## e.g:
 ## sidecars:
 ##   - name: your-image-name
@@ -459,7 +459,7 @@ extraVolumeMounts: []
 ##         containerPort: 1234
 ##
 sidecars: []
-## @param initContainers Add additional init containers to the SonarQube&trade; pod(s)
+## @param initContainers Add additional init containers to the SonarQube(TM) pod(s)
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
 ## e.g:
 ## initContainers:
@@ -482,14 +482,14 @@ pdb:
 ## @section Traffic Exposure Parameters
 ##
 
-## SonarQube&trade; service parameters
+## SonarQube(TM) service parameters
 ##
 service:
-  ## @param service.type SonarQube&trade; service type
+  ## @param service.type SonarQube(TM) service type
   ##
   type: LoadBalancer
-  ## @param service.ports.http SonarQube&trade; service HTTP port
-  ## @param service.ports.elastic SonarQube&trade; service ElasticSearch port
+  ## @param service.ports.http SonarQube(TM) service HTTP port
+  ## @param service.ports.elastic SonarQube(TM) service ElasticSearch port
   ##
   ports:
     http: 80
@@ -502,30 +502,30 @@ service:
   nodePorts:
     http: ""
     elastic: ""
-  ## @param service.clusterIP SonarQube&trade; service Cluster IP
+  ## @param service.clusterIP SonarQube(TM) service Cluster IP
   ## e.g.:
   ## clusterIP: None
   ##
   clusterIP: ""
-  ## @param service.loadBalancerIP SonarQube&trade; service Load Balancer IP
+  ## @param service.loadBalancerIP SonarQube(TM) service Load Balancer IP
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
   ##
   loadBalancerIP: ""
-  ## @param service.loadBalancerSourceRanges SonarQube&trade; service Load Balancer sources
+  ## @param service.loadBalancerSourceRanges SonarQube(TM) service Load Balancer sources
   ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
   ## e.g:
   ## loadBalancerSourceRanges:
   ##   - 10.10.10.0/24
   ##
   loadBalancerSourceRanges: []
-  ## @param service.externalTrafficPolicy SonarQube&trade; service external traffic policy
+  ## @param service.externalTrafficPolicy SonarQube(TM) service external traffic policy
   ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
   externalTrafficPolicy: Cluster
-  ## @param service.annotations Additional custom annotations for SonarQube&trade; service
+  ## @param service.annotations Additional custom annotations for SonarQube(TM) service
   ##
   annotations: {}
-  ## @param service.extraPorts Extra ports to expose in SonarQube&trade; service (normally used with the `sidecars` value)
+  ## @param service.extraPorts Extra ports to expose in SonarQube(TM) service (normally used with the `sidecars` value)
   ##
   extraPorts: []
   ## @param service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
@@ -594,11 +594,11 @@ networkPolicy:
   ##
   ingressNSMatchLabels: {}
   ingressNSPodMatchLabels: {}
-## SonarQube&trade; ingress parameters
+## SonarQube(TM) ingress parameters
 ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
 ##
 ingress:
-  ## @param ingress.enabled Enable ingress record generation for SonarQube&trade;
+  ## @param ingress.enabled Enable ingress record generation for SonarQube(TM)
   ##
   enabled: false
   ## @param ingress.pathType Ingress path type
@@ -724,7 +724,7 @@ caCerts:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r42
+    tag: 12-debian-12-r43
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -813,7 +813,7 @@ plugins:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r42
+    tag: 12-debian-12-r43
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -922,7 +922,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r42
+    tag: 12-debian-12-r43
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -984,7 +984,7 @@ sysctl:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r42
+    tag: 12-debian-12-r43
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1046,11 +1046,11 @@ serviceAccount:
   name: ""
   automountServiceAccountToken: false
   annotations: {}
-## SonarQube&trade; Autoscaling configuration
+## SonarQube(TM) Autoscaling configuration
 ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
-## @param autoscaling.enabled Enable Horizontal POD autoscaling for SonarQube&trade;
-## @param autoscaling.minReplicas Minimum number of SonarQube&trade; replicas
-## @param autoscaling.maxReplicas Maximum number of SonarQube&trade; replicas
+## @param autoscaling.enabled Enable Horizontal POD autoscaling for SonarQube(TM)
+## @param autoscaling.minReplicas Minimum number of SonarQube(TM) replicas
+## @param autoscaling.maxReplicas Maximum number of SonarQube(TM) replicas
 ## @param autoscaling.targetCPU Target CPU utilization percentage
 ## @param autoscaling.targetMemory Target Memory utilization percentage
 ##
@@ -1066,7 +1066,7 @@ autoscaling:
 ## Prometheus Exporters / Metrics
 ##
 metrics:
-  ## Prometheus JMX Exporter: exposes the majority of SonarQube&trade; metrics
+  ## Prometheus JMX Exporter: exposes the majority of SonarQube(TM) metrics
   ##
   jmx:
     ## @param metrics.jmx.enabled Whether or not to expose JMX metrics to Prometheus
@@ -1084,7 +1084,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/jmx-exporter
-      tag: 1.2.0-debian-12-r3
+      tag: 1.2.0-debian-12-r4
       digest: ""
       pullPolicy: IfNotPresent
       ## Optionally specify an array of imagePullSecrets.
