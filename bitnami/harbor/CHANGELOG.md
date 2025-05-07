@@ -1,8 +1,12 @@
 # Changelog
 
-## 25.0.1 (2025-05-06)
+## 26.0.0 (2025-05-07)
 
-* [bitnami/harbor] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33373](https://github.com/bitnami/charts/pull/33373))
+* [bitnami/harbor] feat!: :arrow_up: :boom: Bump Redis(R) to 8.0 ([#33502](https://github.com/bitnami/charts/pull/33502))
+
+## <small>25.0.1 (2025-05-06)</small>
+
+* [bitnami/harbor] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33373) ([77d860c](https://github.com/bitnami/charts/commit/77d860cfc93b3fa321ab0ed047914fbe9f4b04a7)), closes [#33373](https://github.com/bitnami/charts/issues/33373)
 
 ## 25.0.0 (2025-04-29)
 
