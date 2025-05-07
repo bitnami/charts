@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.4.15 (2025-05-06)
+## 2.4.16 (2025-05-07)
 
-* [bitnami/pinniped] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33421](https://github.com/bitnami/charts/pull/33421))
+* [bitnami/pinniped] Release 2.4.16 ([#33493](https://github.com/bitnami/charts/pull/33493))
+
+## <small>2.4.15 (2025-05-06)</small>
+
+* [bitnami/pinniped] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#3342 ([e13f1bc](https://github.com/bitnami/charts/commit/e13f1bc4ee09a47f5b3558dbfd81654b37ee41ec)), closes [#33421](https://github.com/bitnami/charts/issues/33421)
 
 ## <small>2.4.14 (2025-04-22)</small>
 
