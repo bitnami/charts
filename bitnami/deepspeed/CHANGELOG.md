@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.3.11 (2025-05-06)
+## 2.3.11 (2025-05-07)
 
 * [bitnami/deepspeed] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33351](https://github.com/bitnami/charts/pull/33351))
 
