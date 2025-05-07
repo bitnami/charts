@@ -80,6 +80,9 @@ spec:
       {{- if .Values.master.podSecurityContext.enabled }}
       securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.master.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.master.shareProcessNamespace }}
+      shareProcessNamespace: {{ .Values.master.shareProcessNamespace }}
+      {{- end }}
       {{- if .Values.master.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.master.terminationGracePeriodSeconds }}
       {{- end }}
