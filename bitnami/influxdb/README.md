@@ -1,12 +1,12 @@
 <!--- app-name: InfluxDB&trade; -->
 
-# Bitnami Stack for InfluxDB(TM)
+# Bitnami Stack for InfluxDB&trade;
 
-InfluxDB(TM) is an open source time-series database. It is a core component of the TICK (Telegraf, InfluxDB(TM), Chronograf, Kapacitor) stack.
+InfluxDB&trade; is an open source time-series database. It is a core component of the TICK (Telegraf, InfluxDB&trade;, Chronograf, Kapacitor) stack.
 
 [Overview of InfluxDB&trade;](https://www.influxdata.com/products/influxdb-overview)
 
-InfluxDB(TM) is a trademark owned by InfluxData, which is not affiliated with, and does not endorse, this site.
+InfluxDB&trade; is a trademark owned by InfluxData, which is not affiliated with, and does not endorse, this site.
 
 ## TL;DR
 
