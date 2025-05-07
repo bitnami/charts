@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.0.1 (2025-05-07)
+
+* [bitnami/chainloop] Release 3.0.1 ([#33472](https://github.com/bitnami/charts/pull/33472))
+
 ## 3.0.0 (2025-05-05)
 
 * [bitnami/chainloop] chore!: :recycle: :boom: :arrow_up: Bump k8s requirements to 1.23 (#33322) ([0d4828e](https://github.com/bitnami/charts/commit/0d4828ee1afc36208f34fc34166a73a77196defe)), closes [#33322](https://github.com/bitnami/charts/issues/33322)
