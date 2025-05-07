@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.1.10 (2025-05-06)
+## 0.1.11 (2025-05-07)
 
-* [bitnami/kube-arangodb] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33386](https://github.com/bitnami/charts/pull/33386))
+* [bitnami/kube-arangodb] Release 0.1.11 ([#33517](https://github.com/bitnami/charts/pull/33517))
+
+## <small>0.1.10 (2025-05-06)</small>
+
+* [bitnami/kube-arangodb] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ( ([6132136](https://github.com/bitnami/charts/commit/6132136a1c80de7cf4ac0fa58e6a01114f0dbc59)), closes [#33386](https://github.com/bitnami/charts/issues/33386)
 
 ## <small>0.1.9 (2025-05-01)</small>
 
