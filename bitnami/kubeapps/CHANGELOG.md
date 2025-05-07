@@ -1,8 +1,12 @@
 # Changelog
 
-## 17.1.6 (2025-04-28)
+## 17.1.7 (2025-05-06)
 
-* [bitnami/kubeapps] Release 17.1.6 ([#33212](https://github.com/bitnami/charts/pull/33212))
+* [bitnami/kubeapps] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33389](https://github.com/bitnami/charts/pull/33389))
+
+## <small>17.1.6 (2025-04-28)</small>
+
+* [bitnami/kubeapps] Release 17.1.6 (#33212) ([1ead8af](https://github.com/bitnami/charts/commit/1ead8af0f7a0c75aba2f13270b3504769c43c987)), closes [#33212](https://github.com/bitnami/charts/issues/33212)
 
 ## <small>17.1.5 (2025-04-21)</small>
 

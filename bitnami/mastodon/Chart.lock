@@ -7,7 +7,7 @@ dependencies:
   version: 16.6.6
 - name: elasticsearch
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 22.0.0
+  version: 22.0.1
 - name: minio
   repository: oci://registry-1.docker.io/bitnamicharts
   version: 16.0.8
@@ -16,6 +16,6 @@ dependencies:
   version: 11.3.6
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 2.30.1
-digest: sha256:43efaa6d221b032d3ef779e3391340356a5bd3204ca76de8e04ee74987a7a0a1
-generated: "2025-04-30T13:12:16.396108+02:00"
+  version: 2.31.0
+digest: sha256:dc31c493cd18c5590c24505bafd5a61047f0082b5cbfb294e7c890af075e45c0
+generated: "2025-05-06T10:35:35.476418141+02:00"
