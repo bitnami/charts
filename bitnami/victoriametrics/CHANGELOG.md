@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.1.8 (2025-05-06)
+## 0.1.9 (2025-05-07)
 
-* [bitnami/victoriametrics] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33446](https://github.com/bitnami/charts/pull/33446))
+* [bitnami/victoriametrics] Release 0.1.9 ([#33527](https://github.com/bitnami/charts/pull/33527))
+
+## <small>0.1.8 (2025-05-07)</small>
+
+* [bitnami/victoriametrics] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([9c4b391](https://github.com/bitnami/charts/commit/9c4b391a094af71dbfec77be180600db7504378c)), closes [#33446](https://github.com/bitnami/charts/issues/33446)
 
 ## <small>0.1.7 (2025-04-28)</small>
 
