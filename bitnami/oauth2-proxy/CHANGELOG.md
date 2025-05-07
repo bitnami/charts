@@ -1,8 +1,12 @@
 # Changelog
 
-## 6.2.14 (2025-05-07)
+## 7.0.0 (2025-05-07)
 
-* [bitnami/oauth2-proxy] Release 6.2.14 ([#33487](https://github.com/bitnami/charts/pull/33487))
+* [bitnami/oauth2-proxy] feat!: :arrow_up: :boom: Bump Redis(R) to 8.0 ([#33507](https://github.com/bitnami/charts/pull/33507))
+
+## <small>6.2.14 (2025-05-07)</small>
+
+* [bitnami/oauth2-proxy] Release 6.2.14 (#33487) ([a4f0f8d](https://github.com/bitnami/charts/commit/a4f0f8d94ef4b7efc07f32c6a83eb9b72904718c)), closes [#33487](https://github.com/bitnami/charts/issues/33487)
 
 ## <small>6.2.13 (2025-05-06)</small>
 
