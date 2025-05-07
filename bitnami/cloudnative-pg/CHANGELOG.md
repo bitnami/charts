@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.1.9 (2025-05-01)
+## 0.1.10 (2025-05-06)
 
-* [bitnami/cloudnative-pg] Release 0.1.9 ([#33288](https://github.com/bitnami/charts/pull/33288))
+* [bitnami/cloudnative-pg] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33347](https://github.com/bitnami/charts/pull/33347))
+
+## <small>0.1.9 (2025-05-01)</small>
+
+* [bitnami/cloudnative-pg] Release 0.1.9 (#33288) ([3f91ddd](https://github.com/bitnami/charts/commit/3f91ddd256a23a12350fe8a8eea7a91dc026bc2a)), closes [#33288](https://github.com/bitnami/charts/issues/33288)
 
 ## <small>0.1.8 (2025-04-30)</small>
 
