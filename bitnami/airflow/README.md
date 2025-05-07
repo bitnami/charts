@@ -1307,6 +1307,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 24.0.0
+
+This major updates the Redis&reg; subchart to its newest major, 21.0.0, which updates Redis&reg; from 7.4 to 8.0. [Here](https://redis.io/docs/latest/operate/oss_and_stack/install/upgrade/cluster/) you can find more information about the changes introduced in that version. No major issues are expected during the upgrade.
+
 ### To 23.0.0
 
 This major release adds support for Airflow `3.x.y` series. Additionally, previous Airflow `2.x.y` series can be deployed by setting the corresponding image parameters. The chart logic will detect which image version you are using, and it will generate the required Airflow configuration and Kubernetes objects.
