@@ -1,8 +1,12 @@
 # Changelog
 
-## 24.2.4 (2025-04-30)
+## 24.2.5 (2025-05-06)
 
-* [bitnami/wordpress] Release 24.2.4 ([#33275](https://github.com/bitnami/charts/pull/33275))
+* [bitnami/wordpress] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33449](https://github.com/bitnami/charts/pull/33449))
+
+## <small>24.2.4 (2025-04-30)</small>
+
+* [bitnami/wordpress] Release 24.2.4 (#33275) ([91e8cda](https://github.com/bitnami/charts/commit/91e8cda781e3c04f9692cb0e76e2dc76c28e352c)), closes [#33275](https://github.com/bitnami/charts/issues/33275)
 
 ## <small>24.2.3 (2025-04-23)</small>
 

@@ -1,8 +1,12 @@
 # Changelog
 
-## 9.2.4 (2025-05-01)
+## 9.2.5 (2025-05-06)
 
-* [bitnami/mongodb-sharded] Release 9.2.4 ([#33285](https://github.com/bitnami/charts/pull/33285))
+* [bitnami/mongodb-sharded] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33406](https://github.com/bitnami/charts/pull/33406))
+
+## <small>9.2.4 (2025-05-01)</small>
+
+* [bitnami/mongodb-sharded] Release 9.2.4 (#33285) ([7f09123](https://github.com/bitnami/charts/commit/7f0912397bd85bef38951545f9fefd1b15a815a0)), closes [#33285](https://github.com/bitnami/charts/issues/33285)
 
 ## <small>9.2.3 (2025-04-14)</small>
 

@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.30.2 (2025-04-30)
+## 2.31.0 (2025-05-05)
 
-* [bitnami/common] add namespaces to extraPodAffinityTerms for affinities ([#33173](https://github.com/bitnami/charts/pull/33173))
+* [bitnami/common] chore: :recycle: Remove deprecated APIs (<1.23.0) ([#33320](https://github.com/bitnami/charts/pull/33320))
+
+## <small>2.30.2 (2025-04-30)</small>
+
+* [bitnami/common] add namespaces to extraPodAffinityTerms for affinities (#33173) ([4e35d60](https://github.com/bitnami/charts/commit/4e35d6016945db7b9fd4eef72b177d4826d69ece)), closes [#33173](https://github.com/bitnami/charts/issues/33173)
 
 ## <small>2.30.1 (2025-04-30)</small>
 

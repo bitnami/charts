@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.5.4 (2025-04-29)
+## 12.0.0 (2025-05-06)
 
-* [bitnami/redis-cluster] Switch shell from /bin/sh to /bin/bash to improve process handling ([#33250](https://github.com/bitnami/charts/pull/33250))
+* [bitnami/redis-cluster] Release 12.0.0 ([#33456](https://github.com/bitnami/charts/pull/33456))
+
+## <small>11.5.4 (2025-04-30)</small>
+
+* [bitnami/redis-cluster] Switch shell from /bin/sh to /bin/bash to improve process handling (#33250) ([69aea26](https://github.com/bitnami/charts/commit/69aea26249970f032782d60e19446e7209b32bce)), closes [#33250](https://github.com/bitnami/charts/issues/33250)
 
 ## <small>11.5.3 (2025-04-24)</small>
 
