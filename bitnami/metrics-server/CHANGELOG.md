@@ -1,8 +1,12 @@
 # Changelog
 
-## 7.4.4 (2025-05-06)
+## 7.4.5 (2025-05-07)
 
-* [bitnami/metrics-server] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33400](https://github.com/bitnami/charts/pull/33400))
+* [bitnami/metrics-server] Release 7.4.5 ([#33482](https://github.com/bitnami/charts/pull/33482))
+
+## <small>7.4.4 (2025-05-06)</small>
+
+* [bitnami/metrics-server] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references  ([b36fa86](https://github.com/bitnami/charts/commit/b36fa8666c311b9e49bacf982a3844e98f7c60d7)), closes [#33400](https://github.com/bitnami/charts/issues/33400)
 
 ## <small>7.4.3 (2025-05-02)</small>
 
