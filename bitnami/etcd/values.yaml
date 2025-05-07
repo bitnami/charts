@@ -47,6 +47,9 @@ nameOverride: ""
 ## @param fullnameOverride String to fully override common.names.fullname template
 ##
 fullnameOverride: ""
+## @param namespaceOverride String to fully override common.names.namespace template
+##
+namespaceOverride: ""
 ## @param commonLabels [object] Labels to add to all deployed objects
 ##
 commonLabels: {}
