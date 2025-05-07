@@ -1,8 +1,12 @@
 # Changelog
 
+## 2.31.1 (2025-05-07)
+
+* [bitnami/common] chore: :recycle: Remove unused helpers ([#33496](https://github.com/bitnami/charts/pull/33496))
+
 ## 2.31.0 (2025-05-05)
 
-* [bitnami/common] chore: :recycle: Remove deprecated APIs (<1.23.0) ([#33320](https://github.com/bitnami/charts/pull/33320))
+* [bitnami/common] chore: :recycle: Remove deprecated APIs (<1.23.0) (#33320) ([3826a9e](https://github.com/bitnami/charts/commit/3826a9e1488c12545f11cf8cb1a11d23daf90602)), closes [#33320](https://github.com/bitnami/charts/issues/33320)
 
 ## <small>2.30.2 (2025-04-30)</small>
 
