@@ -1,8 +1,13 @@
 # Changelog
 
-## 13.8.1 (2025-04-28)
+## 13.8.2 (2025-05-06)
 
-* [bitnami/zookeeper] Release 13.8.1 ([#33224](https://github.com/bitnami/charts/pull/33224))
+* [bitnami/zookeeper] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33451](https://github.com/bitnami/charts/pull/33451))
+
+## <small>13.8.1 (2025-04-28)</small>
+
+* [bitnami/zookeeper] Release 13.8.1 (#33224) ([b0baf91](https://github.com/bitnami/charts/commit/b0baf91deede6a070a5305a80100d31ec3881f27)), closes [#33224](https://github.com/bitnami/charts/issues/33224)
+* Fix typo mentioning Geode in Solr and Zookeeper (#32987) ([9dd4289](https://github.com/bitnami/charts/commit/9dd42891c2c9f5ed339e5dbc1506a13f29e0d45c)), closes [#32987](https://github.com/bitnami/charts/issues/32987)
 
 ## 13.8.0 (2025-04-07)
 

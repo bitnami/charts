@@ -1,8 +1,12 @@
 # Changelog
 
-## 24.6.4 (2025-05-05)
+## 24.6.5 (2025-05-06)
 
-* [bitnami/keycloak] Release 24.6.4 ([#33327](https://github.com/bitnami/charts/pull/33327))
+* [bitnami/keycloak] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33380](https://github.com/bitnami/charts/pull/33380))
+
+## <small>24.6.4 (2025-05-05)</small>
+
+* [bitnami/keycloak] Release 24.6.4 (#33327) ([848d1fd](https://github.com/bitnami/charts/commit/848d1fd7d3d1c44af4e2f098a1d367b79d3cb9d5)), closes [#33327](https://github.com/bitnami/charts/issues/33327)
 
 ## <small>24.6.3 (2025-04-30)</small>
 

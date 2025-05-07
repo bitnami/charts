@@ -1,8 +1,8 @@
 # Changelog
 
-## 16.0.1 (2025-04-29)
+## 16.0.2 (2025-05-06)
 
-* [bitnami/rabbitmq] fixed validation for memoryHighWatermark using resourcesPreset ([#33186](https://github.com/bitnami/charts/pull/33186))
+* [bitnami/rabbitmq] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33426](https://github.com/bitnami/charts/pull/33426))
 
 ## 16.0.0 (2025-04-23)
 

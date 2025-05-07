@@ -84,9 +84,7 @@ spec:
       {{- if .Values.dnsConfig }}
       dnsConfig: {{- include "common.tplvalues.render" (dict "value" .Values.dnsConfig "context" .) | nindent 8 }}
       {{- end }}
-      {{- if semverCompare ">= 1.13" (include "common.capabilities.kubeVersion" .) }}
       enableServiceLinks: {{ .Values.enableServiceLinks }}
-      {{- end }}
       {{- if .Values.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
       {{- end }}
